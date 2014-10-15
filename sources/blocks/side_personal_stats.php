@@ -20,77 +20,67 @@
 
 class Block_side_personal_stats
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array();
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array();
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		require_css('personal_stats');
+    public function run($map)
+    {
+        require_css('personal_stats');
 
-		$member_id=get_member();
+        $member_id = get_member();
 
-		if (!is_guest($member_id))
-		{
-			$avatar_url='';
-			if (!has_no_forum())
-			{
-				if (get_option('show_avatar')==='1')
-				{
-					$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-				}
-			}
+        if (!is_guest($member_id)) {
+            $avatar_url = '';
+            if (!has_no_forum()) {
+                if (get_option('show_avatar') === '1') {
+                    $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+                }
+            }
 
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+            $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
-			require_code('global4');
-			list($links,$details,$num_unread_pps)=member_personal_links_and_details($member_id);
+            require_code('global4');
+            list($links,$details,$num_unread_pps) = member_personal_links_and_details($member_id);
 
-			return do_template('BLOCK_SIDE_PERSONAL_STATS',array('_GUID'=>'99f9bc3387102daaeeedf99843b0502e','NUM_UNREAD_PTS'=>strval($num_unread_pps),'AVATAR_URL'=>$avatar_url,'MEMBER_ID'=>strval($member_id),'USERNAME'=>$username,'LINKS'=>$links,'DETAILS'=>$details));
-		} else
-		{
-			$title=do_lang_tempcode('NOT_LOGGED_IN');
+            return do_template('BLOCK_SIDE_PERSONAL_STATS',array('_GUID' => '99f9bc3387102daaeeedf99843b0502e','NUM_UNREAD_PTS' => strval($num_unread_pps),'AVATAR_URL' => $avatar_url,'MEMBER_ID' => strval($member_id),'USERNAME' => $username,'LINKS' => $links,'DETAILS' => $details));
+        } else {
+            $title = do_lang_tempcode('NOT_LOGGED_IN');
 
-			if ((get_page_name()!='join') && (get_page_name()!='login'))
-			{
-				if (count($_POST)>0)
-				{
-					$_this_url=build_url(array('page'=>''),'',array('keep_session'=>1,'redirect'=>1));
-				} else
-				{
-					$_this_url=build_url(array('page'=>'_SELF'),'_SELF',array('keep_session'=>1,'redirect'=>1),true);
-				}
-			} else
-			{
-				$_this_url=build_url(array('page'=>''),'',array('keep_session'=>1,'redirect'=>1));
-			}
-			$this_url=$_this_url->evaluate();
-			$login_url=build_url(array('page'=>'login','type'=>'login','redirect'=>$this_url),get_module_zone('login'));
-			$full_link=build_url(array('page'=>'login','type'=>'misc','redirect'=>$this_url),get_module_zone('login'));
-			$join_url=(get_forum_type()!='none')?$GLOBALS['FORUM_DRIVER']->join_url():'';
-			return do_template('BLOCK_SIDE_PERSONAL_STATS_NO',array('_GUID'=>'32aade68b98dfd191f0f84c6648f7dde','TITLE'=>$title,'FULL_LOGIN_URL'=>$full_link,'JOIN_URL'=>$join_url,'LOGIN_URL'=>$login_url));
-		}
-	}
+            if ((get_page_name() != 'join') && (get_page_name() != 'login')) {
+                if (count($_POST)>0) {
+                    $_this_url = build_url(array('page' => ''),'',array('keep_session' => 1,'redirect' => 1));
+                } else {
+                    $_this_url = build_url(array('page' => '_SELF'),'_SELF',array('keep_session' => 1,'redirect' => 1),true);
+                }
+            } else {
+                $_this_url = build_url(array('page' => ''),'',array('keep_session' => 1,'redirect' => 1));
+            }
+            $this_url = $_this_url->evaluate();
+            $login_url = build_url(array('page' => 'login','type' => 'login','redirect' => $this_url),get_module_zone('login'));
+            $full_link = build_url(array('page' => 'login','type' => 'misc','redirect' => $this_url),get_module_zone('login'));
+            $join_url = (get_forum_type() != 'none')?$GLOBALS['FORUM_DRIVER']->join_url():'';
+            return do_template('BLOCK_SIDE_PERSONAL_STATS_NO',array('_GUID' => '32aade68b98dfd191f0f84c6648f7dde','TITLE' => $title,'FULL_LOGIN_URL' => $full_link,'JOIN_URL' => $join_url,'LOGIN_URL' => $login_url));
+        }
+    }
 }
-
-

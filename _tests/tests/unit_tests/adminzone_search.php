@@ -18,13 +18,15 @@
  */
 class adminzone_search_test_set extends ocp_test_case
 {
-	function testAdminZoneSearch()
-	{
-		require_code('adminzone/pages/modules/admin.php');
-		$ob=new Module_admin();
-		$_GET['type']='search';
-		$_GET['content']='test';
-		if (method_exists($ob,'pre_run')) $ob->pre_run();
-		$ob->run();
-	}
+    public function testAdminZoneSearch()
+    {
+        require_code('adminzone/pages/modules/admin.php');
+        $ob = new Module_admin();
+        $_GET['type'] = 'search';
+        $_GET['content'] = 'test';
+        if (method_exists($ob,'pre_run')) {
+            $ob->pre_run();
+        }
+        $ob->run();
+    }
 }

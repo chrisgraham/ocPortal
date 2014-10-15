@@ -1,13 +1,13 @@
 <?php
 
-function init__hooks__systems__ecommerce__cart_orders($in=NULL)
+function init__hooks__systems__ecommerce__cart_orders($in = null)
 {
-	require_code('referrals');
+    require_code('referrals');
 
-	return str_replace(
-		'purchase_done_staff_mail($purchase_id);',
+    return str_replace(
+        'purchase_done_staff_mail($purchase_id);',
 
-		'
+        '
 		purchase_done_staff_mail($purchase_id);
 		$member_id=$GLOBALS[\'SITE_DB\']->query_select_value(\'shopping_order\',\'c_member\',array(\'id\'=>$purchase_id));
 		if (!is_null($member_id))
@@ -21,6 +21,6 @@ function init__hooks__systems__ecommerce__cart_orders($in=NULL)
 		}
 		',
 
-		$in
-	);
+        $in
+    );
 }

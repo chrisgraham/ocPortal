@@ -20,17 +20,15 @@
 
 class Hook_ocf_cpf_filter_notifications
 {
-	/**
+    /**
 	 * Find which special CPFs to enable.
 	 *
 	 * @return array			A list of CPFs to enable
 	 */
-	function to_enable()
-	{
-		$cpf=array(/*'smart_topic_notification'=>1*/); // Actually, don't make this editable
+    public function to_enable()
+    {
+        $cpf = array(/*'smart_topic_notification'=>1*/); // Actually, don't make this editable
 
-		return $cpf;
-	}
+        return $cpf;
+    }
 }
-
-

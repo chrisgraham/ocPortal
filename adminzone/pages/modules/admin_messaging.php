@@ -23,56 +23,54 @@
  */
 class Module_admin_messaging
 {
-	/**
+    /**
 	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Uninstall the module.
 	 */
-	function uninstall()
-	{
-	}
+    public function uninstall()
+    {
+    }
 
-	/**
+    /**
 	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
 	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if ((get_forum_type()=='ocf') && (!running_script('upgrader')))
-		{
-			$moderator_groups=$GLOBALS['FORUM_DRIVER']->get_moderator_groups();
-			$staff_access=array();
-			foreach ($moderator_groups as $id)
-			{
-				$staff_access[$id]=5;
-			}
-			ocf_require_all_forum_stuff();
-			require_code('ocf_forums_action');
-			require_code('ocf_forums_action2');
-			$GLOBALS['OCF_DRIVER']=$GLOBALS['FORUM_DRIVER'];
-			require_lang('messaging');
-			ocf_make_forum(do_lang('MESSAGING_FORUM_NAME'),'',db_get_first_id()+1,$staff_access,db_get_first_id());
-		}
-	}
+    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    {
+        if ((get_forum_type() == 'ocf') && (!running_script('upgrader'))) {
+            $moderator_groups = $GLOBALS['FORUM_DRIVER']->get_moderator_groups();
+            $staff_access = array();
+            foreach ($moderator_groups as $id) {
+                $staff_access[$id] = 5;
+            }
+            ocf_require_all_forum_stuff();
+            require_code('ocf_forums_action');
+            require_code('ocf_forums_action2');
+            $GLOBALS['OCF_DRIVER'] = $GLOBALS['FORUM_DRIVER'];
+            require_lang('messaging');
+            ocf_make_forum(do_lang('MESSAGING_FORUM_NAME'),'',db_get_first_id()+1,$staff_access,db_get_first_id());
+        }
+    }
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -81,216 +79,224 @@ class Module_admin_messaging
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		return array(
-			'misc'=>array('CONTACT_US_MESSAGING','menu/adminzone/audit/messaging'),
-		);
-	}
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        return array(
+            'misc' => array('CONTACT_US_MESSAGING','menu/adminzone/audit/messaging'),
+        );
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		$type=get_param('type','misc');
+    public function pre_run()
+    {
+        $type = get_param('type','misc');
 
-		require_lang('messaging');
+        require_lang('messaging');
 
-		set_helper_panel_tutorial('tut_support_desk');
+        set_helper_panel_tutorial('tut_support_desk');
 
-		if ($type=='view')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING'))));
-			breadcrumb_set_self(do_lang_tempcode('MESSAGE'));
-		}
+        if ($type == 'view') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING'))));
+            breadcrumb_set_self(do_lang_tempcode('MESSAGE'));
+        }
 
-		if ($type=='take')
-		{
-			$id=get_param('id');
-			$message_type=get_param('message_type');
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING')),array('_SELF:_SELF:view:'.$id.':message_type='.$message_type,do_lang_tempcode('MESSAGE'))));
-			breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));
-		}
+        if ($type == 'take') {
+            $id = get_param('id');
+            $message_type = get_param('message_type');
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('CONTACT_US_MESSAGING')),array('_SELF:_SELF:view:' . $id . ':message_type=' . $message_type,do_lang_tempcode('MESSAGE'))));
+            breadcrumb_set_self(do_lang_tempcode('_TAKE_RESPONSIBILITY'));
+        }
 
-		$this->title=get_screen_title('CONTACT_US_MESSAGING');
+        $this->title = get_screen_title('CONTACT_US_MESSAGING');
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		if (get_forum_type()=='none') warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
+    public function run()
+    {
+        if (get_forum_type() == 'none') {
+            warn_exit(do_lang_tempcode('NO_FORUM_INSTALLED'));
+        }
 
-		$type=get_param('type','misc');
+        $type = get_param('type','misc');
 
-		if ($type=='misc') return $this->choose_message();
-		if ($type=='view') return $this->view_message();
-		if ($type=='take') return $this->take_responsibility();
+        if ($type == 'misc') {
+            return $this->choose_message();
+        }
+        if ($type == 'view') {
+            return $this->view_message();
+        }
+        if ($type == 'take') {
+            return $this->take_responsibility();
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * Choose a message.
 	 *
 	 * @return tempcode	The message choose screen.
 	 */
-	function choose_message()
-	{
-		$fields=new ocp_tempcode();
+    public function choose_message()
+    {
+        $fields = new ocp_tempcode();
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',30);
+        $start = get_param_integer('start',0);
+        $max = get_param_integer('max',30);
 
-		require_code('templates_results_table');
+        require_code('templates_results_table');
 
-		$max_rows=0;
-		$rows=$GLOBALS['FORUM_DRIVER']->show_forum_topics(get_option('messaging_forum_name'),$max,$start,$max_rows);
-		if (!is_null($rows))
-		{
-			foreach ($rows as $i=>$row)
-			{
-				$name=$row['firsttitle'];
-				if (trim($name)=='') $name=do_lang('UNKNOWN');
-				$looking_at=$row['title'];
-				if ($row['description']!='') $looking_at=$row['description'];
-				$id=substr($looking_at,strrpos($looking_at,'_')+1);
-				$message_type=substr($looking_at,strpos($looking_at,'#')+1,strrpos($looking_at,'_')-strpos($looking_at,'#')-1);
-				if ($message_type=='') continue;
-				$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id,'message_type'=>$message_type),'_SELF');
+        $max_rows = 0;
+        $rows = $GLOBALS['FORUM_DRIVER']->show_forum_topics(get_option('messaging_forum_name'),$max,$start,$max_rows);
+        if (!is_null($rows)) {
+            foreach ($rows as $i => $row) {
+                $name = $row['firsttitle'];
+                if (trim($name) == '') {
+                    $name = do_lang('UNKNOWN');
+                }
+                $looking_at = $row['title'];
+                if ($row['description'] != '') {
+                    $looking_at = $row['description'];
+                }
+                $id = substr($looking_at,strrpos($looking_at,'_')+1);
+                $message_type = substr($looking_at,strpos($looking_at,'#')+1,strrpos($looking_at,'_')-strpos($looking_at,'#')-1);
+                if ($message_type == '') {
+                    continue;
+                }
+                $url = build_url(array('page' => '_SELF','type' => 'view','id' => $id,'message_type' => $message_type),'_SELF');
 
-				$fields->attach(results_entry(array(hyperlink($url,$name,false,true),get_timezoned_date($row['firsttime']),$message_type),true));
-			}
-		}
+                $fields->attach(results_entry(array(hyperlink($url,$name,false,true),get_timezoned_date($row['firsttime']),$message_type),true));
+            }
+        }
 
-		$fields_title=results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE'),do_lang_tempcode('TYPE')));
-		$results_table=results_table('messages',$start,'start',$max,'max',$max_rows,$fields_title,$fields,NULL,NULL,NULL,NULL,paragraph(do_lang_tempcode('SELECT_A_MESSAGE')));
+        $fields_title = results_field_title(array(do_lang_tempcode('TITLE'),do_lang_tempcode('DATE'),do_lang_tempcode('TYPE')));
+        $results_table = results_table('messages',$start,'start',$max,'max',$max_rows,$fields_title,$fields,null,null,null,null,paragraph(do_lang_tempcode('SELECT_A_MESSAGE')));
 
-		$tpl=do_template('RESULTS_TABLE_SCREEN',array('_GUID'=>'6ced89e25a12a45deb6cf10bd42869ee','TITLE'=>$this->title,'RESULTS_TABLE'=>$results_table));
+        $tpl = do_template('RESULTS_TABLE_SCREEN',array('_GUID' => '6ced89e25a12a45deb6cf10bd42869ee','TITLE' => $this->title,'RESULTS_TABLE' => $results_table));
 
-		require_code('templates_internalise_screen');
-		return internalise_own_screen($tpl);
-	}
+        require_code('templates_internalise_screen');
+        return internalise_own_screen($tpl);
+    }
 
-	/**
+    /**
 	 * View a message.
 	 *
 	 * @return tempcode	The message view screen.
 	 */
-	function view_message()
-	{
-		$id=get_param('id');
-		$message_type=get_param('message_type');
+    public function view_message()
+    {
+        $id = get_param('id');
+        $message_type = get_param('message_type');
 
-		require_css('messaging');
-		require_javascript('javascript_validation');
+        require_css('messaging');
+        require_javascript('javascript_validation');
 
-		$take_responsibility_url=build_url(array('page'=>'_SELF','type'=>'take','id'=>$id,'message_type'=>$message_type),'_SELF');
-		$responsible=NULL;
+        $take_responsibility_url = build_url(array('page' => '_SELF','type' => 'take','id' => $id,'message_type' => $message_type),'_SELF');
+        $responsible = null;
 
-		$forum=get_option('messaging_forum_name');
+        $forum = get_option('messaging_forum_name');
 
-		// Filter/read comments
-		require_code('feedback');
-		actualise_post_comment(true,$message_type,$id,build_url(array('page'=>'_SELF','type'=>'view','id'=>$id),'_SELF',NULL,false,false,true),NULL,$forum);
-		$count=0;
-		$_comments=$GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type.'_'.$id),$count);
-		if ((is_array($_comments)) && (array_key_exists(0,$_comments)))
-		{
-			$message_title=$_comments[0]['title'];
-			$message=$_comments[0]['message'];
-			if (isset($_comments[0]['message_comcode']))
-			{
-				$GLOBALS['LAX_COMCODE']=true;
-				$message=comcode_to_tempcode(str_replace('[/staff_note]','',str_replace('[staff_note]','',$_comments[0]['message_comcode'])),$GLOBALS['FORUM_DRIVER']->get_guest_id());
-			}
-			$by=$_comments[0]['username'];
+        // Filter/read comments
+        require_code('feedback');
+        actualise_post_comment(true,$message_type,$id,build_url(array('page' => '_SELF','type' => 'view','id' => $id),'_SELF',null,false,false,true),null,$forum);
+        $count = 0;
+        $_comments = $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type . '_' . $id),$count);
+        if ((is_array($_comments)) && (array_key_exists(0,$_comments))) {
+            $message_title = $_comments[0]['title'];
+            $message = $_comments[0]['message'];
+            if (isset($_comments[0]['message_comcode'])) {
+                $GLOBALS['LAX_COMCODE'] = true;
+                $message = comcode_to_tempcode(str_replace('[/staff_note]','',str_replace('[staff_note]','',$_comments[0]['message_comcode'])),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+            }
+            $by = $_comments[0]['username'];
 
-			foreach ($_comments as $i=>$comment)
-			{
-				if (is_object($comment['message'])) $comment['message']=$comment['message']->evaluate();
-				if (substr($comment['message'],0,strlen(do_lang('AUTO_SPACER_STUB')))==do_lang('AUTO_SPACER_STUB'))
-				{
-					$matches=array();
-					if (preg_match('#'.str_replace('\\{1\\}','(.+)',preg_quote(do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY'))).'#',$comment['message'],$matches)!=0)
-					{
-						$responsible=$matches[1];
-					}
-					$_comments[$i]=NULL;
-				}
-			}
-			$_comments[0]=NULL;
-		} else warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$comment_details=get_comments($message_type,true,$id,false,$forum,NULL,$_comments,true);
+            foreach ($_comments as $i => $comment) {
+                if (is_object($comment['message'])) {
+                    $comment['message'] = $comment['message']->evaluate();
+                }
+                if (substr($comment['message'],0,strlen(do_lang('AUTO_SPACER_STUB'))) == do_lang('AUTO_SPACER_STUB')) {
+                    $matches = array();
+                    if (preg_match('#' . str_replace('\\{1\\}','(.+)',preg_quote(do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY'))) . '#',$comment['message'],$matches) != 0) {
+                        $responsible = $matches[1];
+                    }
+                    $_comments[$i] = null;
+                }
+            }
+            $_comments[0] = null;
+        } else {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $comment_details = get_comments($message_type,true,$id,false,$forum,null,$_comments,true);
 
-		// Find who's read this
-		$whos_read=array();
-		if (get_forum_type()=='ocf')
-		{
-			// Read - who has, and when
-			$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type.'_'.$id);
-			$rows=$GLOBALS['FORUM_DB']->query_select('f_read_logs',array('l_member_id','l_time'),array('l_topic_id'=>$topic_id));
-			foreach ($rows as $row)
-			{
-				if (is_guest($row['l_member_id'])) continue;
+        // Find who's read this
+        $whos_read = array();
+        if (get_forum_type() == 'ocf') {
+            // Read - who has, and when
+            $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$message_type . '_' . $id);
+            $rows = $GLOBALS['FORUM_DB']->query_select('f_read_logs',array('l_member_id','l_time'),array('l_topic_id' => $topic_id));
+            foreach ($rows as $row) {
+                if (is_guest($row['l_member_id'])) {
+                    continue;
+                }
 
-				$username=$GLOBALS['FORUM_DRIVER']->get_username($row['l_member_id']);
-				$member_link=$GLOBALS['FORUM_DRIVER']->member_profile_url($row['l_member_id'],false,true);
-				$date=get_timezoned_date($row['l_time']);
-				$whos_read[]=array('USERNAME'=>$username,'MEMBER_ID'=>strval($row['l_member_id']),'MEMBER_URL'=>$member_link,'DATE'=>$date);
-			}
-		}
+                $username = $GLOBALS['FORUM_DRIVER']->get_username($row['l_member_id']);
+                $member_link = $GLOBALS['FORUM_DRIVER']->member_profile_url($row['l_member_id'],false,true);
+                $date = get_timezoned_date($row['l_time']);
+                $whos_read[] = array('USERNAME' => $username,'MEMBER_ID' => strval($row['l_member_id']),'MEMBER_URL' => $member_link,'DATE' => $date);
+            }
+        }
 
-		return do_template('MESSAGING_MESSAGE_SCREEN',array(
-			'_GUID'=>'61561f1a333b88370ceb66dbbcc0ea4c',
-			'TITLE'=>$this->title,
-			'MESSAGE_TITLE'=>$message_title,
-			'MESSAGE'=>$message,
-			'BY'=>$by,
-			'WHOS_READ'=>$whos_read,
-			'COMMENT_DETAILS'=>$comment_details,
-			'TAKE_RESPONSIBILITY_URL'=>$take_responsibility_url,
-			'RESPONSIBLE'=>$responsible,
-		));
-	}
+        return do_template('MESSAGING_MESSAGE_SCREEN',array(
+            '_GUID' => '61561f1a333b88370ceb66dbbcc0ea4c',
+            'TITLE' => $this->title,
+            'MESSAGE_TITLE' => $message_title,
+            'MESSAGE' => $message,
+            'BY' => $by,
+            'WHOS_READ' => $whos_read,
+            'COMMENT_DETAILS' => $comment_details,
+            'TAKE_RESPONSIBILITY_URL' => $take_responsibility_url,
+            'RESPONSIBLE' => $responsible,
+        ));
+    }
 
-	/**
+    /**
 	 * Take responsibility for handling a message.
 	 *
 	 * @return tempcode	Success message.
 	 */
-	function take_responsibility()
-	{
-		$id=get_param('id');
-		$message_type=get_param('message_type');
+    public function take_responsibility()
+    {
+        $id = get_param('id');
+        $message_type = get_param('message_type');
 
-		// Save as responsibility taken
-		$forum=get_option('messaging_forum_name');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-		$displayname=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
-		$GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
-			$forum,
-			$message_type.'_'.$id,
-			get_member(),
-			'',
-			do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username,$displayname),
-			'',
-			do_lang('COMMENT')
-		);
+        // Save as responsibility taken
+        $forum = get_option('messaging_forum_name');
+        $username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
+        $displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
+        $GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+            $forum,
+            $message_type . '_' . $id,
+            get_member(),
+            '',
+            do_lang('AUTO_SPACER_TAKE_RESPONSIBILITY',$username,$displayname),
+            '',
+            do_lang('COMMENT')
+        );
 
-		// Redirect them back to view screen
-		$url=build_url(array('page'=>'_SELF','type'=>'view','id'=>$id,'message_type'=>$message_type),'_SELF');
-		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-	}
+        // Redirect them back to view screen
+        $url = build_url(array('page' => '_SELF','type' => 'view','id' => $id,'message_type' => $message_type),'_SELF');
+        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+    }
 }
-

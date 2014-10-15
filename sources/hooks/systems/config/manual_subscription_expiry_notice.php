@@ -20,35 +20,33 @@
 
 class Hook_config_manual_subscription_expiry_notice
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MANUAL_SUBSCRIPTION_EXPIRY_NOTICE',
-			'type'=>'integer',
-			'category'=>'ECOMMERCE',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_manual_subscription_expiry_notice',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MANUAL_SUBSCRIPTION_EXPIRY_NOTICE',
+            'type' => 'integer',
+            'category' => 'ECOMMERCE',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_manual_subscription_expiry_notice',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'ecommerce',
-		);
-	}
+            'addon' => 'ecommerce',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

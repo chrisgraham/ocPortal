@@ -2,14 +2,15 @@
 
 function init__users()
 {
-	//if (addon_installed('Facebook Support',true))
-	if (is_file(get_file_base().'/sources/facebook_connect.php'))
-		require_code('facebook_connect');
+    //if (addon_installed('Facebook Support',true))
+    if (is_file(get_file_base() . '/sources/facebook_connect.php')) {
+        require_code('facebook_connect');
+    }
 }
 
 function unused_other_func()
 {
-	// Just works as a flag that this isn't a "pure" file and hence to run the original's init function
+    // Just works as a flag that this isn't a "pure" file and hence to run the original's init function
 }
 
 /**
@@ -19,17 +20,20 @@ function unused_other_func()
  */
 function is_httpauth_login()
 {
-	if (get_forum_type()!='ocf') return false;
-	if (is_guest()) return false;
+    if (get_forum_type() != 'ocf') {
+        return false;
+    }
+    if (is_guest()) {
+        return false;
+    }
 
-	$ret=non_overridden__is_httpauth_login();
+    $ret = non_overridden__is_httpauth_login();
 
-	$compat=$GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_password_compat_scheme');
-	if (($compat=='facebook') || ($compat=='openid'))
-	{
-		global $SESSION_CONFIRMED_CACHE;
-		$SESSION_CONFIRMED_CACHE=1;
-	}
+    $compat = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_password_compat_scheme');
+    if (($compat == 'facebook') || ($compat == 'openid')) {
+        global $SESSION_CONFIRMED_CACHE;
+        $SESSION_CONFIRMED_CACHE = 1;
+    }
 
-	return $ret;
+    return $ret;
 }

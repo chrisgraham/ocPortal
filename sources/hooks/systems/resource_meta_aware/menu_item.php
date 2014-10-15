@@ -20,71 +20,71 @@
 
 class Hook_resource_meta_aware_menu_item
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>false,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => false,
 
-			'content_type_label'=>'MENU_ITEMS',
+            'content_type_label' => 'MENU_ITEMS',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'menu_items',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>'i_menu',
-			'parent_category_meta_aware_type'=>NULL,
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>NULL, // For category permissions
-			'category_type'=>NULL, // For category permissions
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_is_string'=>true,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'menu_items',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => 'i_menu',
+            'parent_category_meta_aware_type' => NULL,
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => NULL, // For category permissions
+            'category_type' => NULL, // For category permissions
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_is_string' => true,
 
-			'title_field'=>'i_caption',
-			'title_field_dereference'=>true,
+            'title_field' => 'i_caption',
+            'title_field_dereference' => true,
 
-			'view_page_link_pattern'=>NULL,
-			'edit_page_link_pattern'=>NULL,
-			'view_category_page_link_pattern'=>NULL,
-			'add_url'=>NULL,
-			'archive_url'=>NULL,
+            'view_page_link_pattern' => NULL,
+            'edit_page_link_pattern' => NULL,
+            'view_category_page_link_pattern' => NULL,
+            'add_url' => NULL,
+            'archive_url' => NULL,
 
-			'support_url_monikers'=>false,
+            'support_url_monikers' => false,
 
-			'views_field'=>NULL,
-			'submitter_field'=>NULL,
-			'add_time_field'=>NULL,
-			'edit_time_field'=>NULL,
-			'date_field'=>NULL,
-			'validated_field'=>NULL,
+            'views_field' => NULL,
+            'submitter_field' => NULL,
+            'add_time_field' => NULL,
+            'edit_time_field' => NULL,
+            'date_field' => NULL,
+            'validated_field' => NULL,
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>NULL,
+            'search_hook' => NULL,
 
-			'addon_name'=>'core_menus',
+            'addon_name' => 'core_menus',
 
-			'cms_page'=>'admin_menus',
-			'module'=>NULL,
+            'cms_page' => 'admin_menus',
+            'module' => NULL,
 
-			'occle_filesystem_hook'=>'menus',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'menus',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_MENU_ITEM',
-		);
-	}
+            'actionlog_regexp' => '\w+_MENU_ITEM',
+        );
+    }
 }

@@ -20,85 +20,85 @@
 
 class Hook_addon_registry_ocf_member_titles
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Member titles.';
-	}
+    public function get_description()
+    {
+        return 'Member titles.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_members',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_members',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/tabs/member_account/edit/title.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/tabs/member_account/edit/title.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/tabs/member_account/edit/title.png',
-			'themes/default/images/icons/48x48/tabs/member_account/edit/title.png',
-			'sources/hooks/systems/addon_registry/ocf_member_titles.php',
-			'sources/hooks/systems/profiles_tabs_edit/title.php',
-			'sources/hooks/systems/config/max_member_title_length.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/tabs/member_account/edit/title.png',
+            'themes/default/images/icons/48x48/tabs/member_account/edit/title.png',
+            'sources/hooks/systems/addon_registry/ocf_member_titles.php',
+            'sources/hooks/systems/profiles_tabs_edit/title.php',
+            'sources/hooks/systems/config/max_member_title_length.php',
+        );
+    }
 }

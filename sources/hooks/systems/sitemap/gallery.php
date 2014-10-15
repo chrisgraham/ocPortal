@@ -20,26 +20,26 @@
 
 class Hook_sitemap_gallery extends Hook_sitemap_content
 {
-	protected $content_type='gallery';
-	protected $screen_type='misc';
+    protected $content_type = 'gallery';
+    protected $screen_type = 'misc';
 
-	// If we have a different content type of entries, under this content type
-	protected $entry_content_type=array('image','video');
-	protected $entry_sitetree_hook=array('image','video');
+    // If we have a different content type of entries, under this content type
+    protected $entry_content_type = array('image','video');
+    protected $entry_sitetree_hook = array('image','video');
 
-	/**
+    /**
 	 * Get the permission page that nodes matching $page_link in this hook are tied to.
 	 * The permission page is where privileges may be overridden against.
 	 *
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_privilege_page($page_link)
-	{
-		return 'cms_galleries';
-	}
+    public function get_privilege_page($page_link)
+    {
+        return 'cms_galleries';
+    }
 
-	/**
+    /**
 	 * Find details of a virtual position in the sitemap. Virtual positions have no structure of their own, but can find child structures to be absorbed down the tree. We do this for modularity reasons.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -57,47 +57,45 @@ class Hook_sitemap_gallery extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
-	{
-		$nodes=($callback===NULL || $return_anyway)?array():mixed();
+    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    {
+        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
 
-		if (($valid_node_types!==NULL) && (!in_array($this->content_type,$valid_node_types)))
-		{
-			return $nodes;
-		}
+        if (($valid_node_types !== NULL) && (!in_array($this->content_type,$valid_node_types))) {
+            return $nodes;
+        }
 
-		if ($require_permission_support)
-		{
-			return $nodes;
-		}
+        if ($require_permission_support) {
+            return $nodes;
+        }
 
-		$page=$this->_make_zone_concrete($zone,$page_link);
+        $page = $this->_make_zone_concrete($zone,$page_link);
 
-		if ($child_cutoff!==NULL)
-		{
-			$count=$GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)',array('parent_id'=>''));
-			if ($count>$child_cutoff) return $nodes;
-		}
+        if ($child_cutoff !== NULL) {
+            $count = $GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)',array('parent_id' => ''));
+            if ($count>$child_cutoff) {
+                return $nodes;
+            }
+        }
 
-		$start=0;
-		do
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id'=>''),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
-			foreach ($rows as $row)
-			{
-				$child_page_link=$zone.':'.$page.':'.$this->screen_type.':'.$row['name'];
-				$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-				if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
-			}
+        $start = 0;
+        do {
+            $rows = $GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('parent_id' => ''),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+            foreach ($rows as $row) {
+                $child_page_link = $zone . ':' . $page . ':' . $this->screen_type . ':' . $row['name'];
+                $node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+                if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+                    $nodes[] = $node;
+                }
+            }
 
-			$start+=SITEMAP_MAX_ROWS_PER_LOOP;
-		}
-		while (count($rows)==SITEMAP_MAX_ROWS_PER_LOOP);
+            $start += SITEMAP_MAX_ROWS_PER_LOOP;
+        } while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
 
-		return $nodes;
-	}
+        return $nodes;
+    }
 
-	/**
+    /**
 	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -116,28 +114,33 @@ class Hook_sitemap_gallery extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
-	{
-		$_=$this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-		if ($_===NULL) return NULL;
-		list($content_id,$row,$partial_struct)=$_;
+    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    {
+        $_ = $this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+        if ($_ === NULL) {
+            return NULL;
+        }
+        list($content_id,$row,$partial_struct) = $_;
 
-		$struct=array(
-			'sitemap_priority'=>SITEMAP_IMPORTANCE_MEDIUM,
-			'sitemap_refreshfreq'=>'monthly',
+        $struct = array(
+            'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
+            'sitemap_refreshfreq' => 'monthly',
 
-			'privilege_page'=>$this->get_privilege_page($page_link),
-		)+$partial_struct;
+            'privilege_page' => $this->get_privilege_page($page_link),
+        )+$partial_struct;
 
-		if (!$this->_check_node_permissions($struct)) return NULL;
+        if (!$this->_check_node_permissions($struct)) {
+            return NULL;
+        }
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
+        if ($callback !== NULL) {
+            call_user_func($callback,$struct);
+        }
 
-		// Categories done after node callback, to ensure sensible ordering
-		$children=$this->_get_children_nodes($content_id,$page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-		$struct['children']=$children;
+        // Categories done after node callback, to ensure sensible ordering
+        $children = $this->_get_children_nodes($content_id,$page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+        $struct['children'] = $children;
 
-		return ($callback===NULL || $return_anyway)?$struct:NULL;
-	}
+        return ($callback === NULL || $return_anyway)?$struct:null;
+    }
 }

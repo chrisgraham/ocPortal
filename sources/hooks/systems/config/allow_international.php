@@ -20,36 +20,34 @@
 
 class Hook_config_allow_international
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ALLOW_INTERNATIONAL',
-			'type'=>'tick',
-			'category'=>'SITE',
-			'group'=>'INTERNATIONALISATION',
-			'explanation'=>'CONFIG_OPTION_allow_international',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ALLOW_INTERNATIONAL',
+            'type' => 'tick',
+            'category' => 'SITE',
+            'group' => 'INTERNATIONALISATION',
+            'explanation' => 'CONFIG_OPTION_allow_international',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return (get_forum_type()!='ocf')?NULL:'1';
-	}
+    public function get_default()
+    {
+        return (get_forum_type() != 'ocf')?null:'1';
+    }
 }
-
-

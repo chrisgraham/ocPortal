@@ -20,35 +20,33 @@
 
 class Hook_config_chat_default_post_font
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CHAT_OPTIONS_TEXT_NAME',
-			'type'=>'list',
-			'category'=>'FEATURE',
-			'group'=>'SECTION_CHAT',
-			'explanation'=>'CONFIG_OPTION_chat_default_post_font',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'Arial|Courier|Georgia|Impact|Times| Trebuchet|Verdana|Tahoma|Geneva|Helvetica',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CHAT_OPTIONS_TEXT_NAME',
+            'type' => 'list',
+            'category' => 'FEATURE',
+            'group' => 'SECTION_CHAT',
+            'explanation' => 'CONFIG_OPTION_chat_default_post_font',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'Arial|Courier|Georgia|Impact|Times| Trebuchet|Verdana|Tahoma|Geneva|Helvetica',
 
-			'addon'=>'chat',
-		);
-	}
+            'addon' => 'chat',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'Verdana';
-	}
+    public function get_default()
+    {
+        return 'Verdana';
+    }
 }
-
-

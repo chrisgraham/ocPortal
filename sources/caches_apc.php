@@ -26,39 +26,44 @@
  */
 class ocp_apccache
 {
-	var $objects_list=NULL;
+    public $objects_list = null;
 
-	/**
+    /**
 	 * Instruction to load up the objects list.
 	 *
 	 * @return array			The list of objects
 	 */
-	function load_objects_list()
-	{
-		if (is_null($this->objects_list))
-		{
-			$this->objects_list=apc_fetch(get_file_base().'PERSISTENT_CACHE_OBJECTS');
-			if ($this->objects_list===false) $this->objects_list=array();
-		}
-		return $this->objects_list;
-	}
+    public function load_objects_list()
+    {
+        if (is_null($this->objects_list)) {
+            $this->objects_list = apc_fetch(get_file_base() . 'PERSISTENT_CACHE_OBJECTS');
+            if ($this->objects_list === false) {
+                $this->objects_list = array();
+            }
+        }
+        return $this->objects_list;
+    }
 
-	/**
+    /**
 	 * Get data from the persistent cache.
 	 *
 	 * @param  string			Key
 	 * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
 	 * @return ?mixed			The data (NULL: not found / NULL entry)
 	 */
-	function get($key,$min_cache_date=NULL)
-	{
-		$data=apc_fetch($key);
-		if ($data===false) return NULL;
-		if (($min_cache_date!==NULL) && ($data[0]<$min_cache_date)) return NULL;
-		return $data[1];
-	}
+    public function get($key,$min_cache_date = null)
+    {
+        $data = apc_fetch($key);
+        if ($data === false) {
+            return NULL;
+        }
+        if (($min_cache_date !== NULL) && ($data[0]<$min_cache_date)) {
+            return NULL;
+        }
+        return $data[1];
+    }
 
-	/**
+    /**
 	 * Put data into the persistent cache.
 	 *
 	 * @param  string			Key
@@ -66,43 +71,42 @@ class ocp_apccache
 	 * @param  integer		Various flags (parameter not used)
 	 * @param  ?integer		The expiration time in seconds (NULL: no expiry)
 	 */
-	function set($key,$data,$flags=0,$expire_secs=NULL)
-	{
-		// Update list of persistent-objects
-		$objects_list=$this->load_objects_list();
-		if (!array_key_exists($key,$objects_list))
-		{
-			$objects_list[$key]=true;
-			@apc_store(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list);
-		}
+    public function set($key,$data,$flags = 0,$expire_secs = null)
+    {
+        // Update list of persistent-objects
+        $objects_list = $this->load_objects_list();
+        if (!array_key_exists($key,$objects_list)) {
+            $objects_list[$key] = true;
+            @apc_store(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        }
 
-		@apc_store($key,array(time(),$data),$expire_secs);
-	}
+        @apc_store($key,array(time(),$data),$expire_secs);
+    }
 
-	/**
+    /**
 	 * Delete data from the persistent cache.
 	 *
 	 * @param  string			Key
 	 */
-	function delete($key)
-	{
-		// Update list of persistent-objects
-		$objects_list=$this->load_objects_list();
-		unset($objects_list[$key]);
-		@apc_store(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list);
+    public function delete($key)
+    {
+        // Update list of persistent-objects
+        $objects_list = $this->load_objects_list();
+        unset($objects_list[$key]);
+        @apc_store(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
 
-		apc_delete($key);
-	}
+        apc_delete($key);
+    }
 
-	/**
+    /**
 	 * Remove all data from the persistent cache.
 	 */
-	function flush()
-	{
-		// Update list of persistent-objects
-		$objects_list=array();
-		@apc_store(get_file_base().'PERSISTENT_CACHE_OBJECTS',$objects_list);
+    public function flush()
+    {
+        // Update list of persistent-objects
+        $objects_list = array();
+        @apc_store(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
 
-		apc_clear_cache('user');
-	}
+        apc_clear_cache('user');
+    }
 }

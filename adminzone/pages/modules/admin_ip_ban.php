@@ -23,63 +23,61 @@
  */
 class Module_admin_ip_ban
 {
-	/**
+    /**
 	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=5;
-		$info['locked']=true;
-		$info['update_require_upgrade']=1;
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 5;
+        $info['locked'] = true;
+        $info['update_require_upgrade'] = 1;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Uninstall the module.
 	 */
-	function uninstall()
-	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('banned_ip');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('usersubmitban_member');
-	}
+    public function uninstall()
+    {
+        $GLOBALS['SITE_DB']->drop_table_if_exists('banned_ip');
+        $GLOBALS['SITE_DB']->drop_table_if_exists('usersubmitban_member');
+    }
 
-	/**
+    /**
 	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
 	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			$GLOBALS['SITE_DB']->create_table('banned_ip',array(
-				'ip'=>'*IP',
-				'i_descrip'=>'LONG_TEXT',
-				'i_ban_until'=>'?TIME',
-				'i_ban_positive'=>'BINARY',
-			));
+    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    {
+        if (is_null($upgrade_from)) {
+            $GLOBALS['SITE_DB']->create_table('banned_ip',array(
+                'ip' => '*IP',
+                'i_descrip' => 'LONG_TEXT',
+                'i_ban_until' => '?TIME',
+                'i_ban_positive' => 'BINARY',
+            ));
 
-			$GLOBALS['SITE_DB']->create_table('usersubmitban_member',array(
-				'the_member'=>'*MEMBER',
-			));
-		}
+            $GLOBALS['SITE_DB']->create_table('usersubmitban_member',array(
+                'the_member' => '*MEMBER',
+            ));
+        }
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<5))
-		{
-			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_until','?TIME');
-			$GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_positive','BINARY',1);
-		}
-	}
+        if ((!is_null($upgrade_from)) && ($upgrade_from<5)) {
+            $GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_until','?TIME');
+            $GLOBALS['SITE_DB']->add_table_field('banned_ip','i_ban_positive','BINARY',1);
+        }
+    }
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -88,420 +86,397 @@ class Module_admin_ip_ban
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		return array(
-			'misc'=>array('IP_BANS','menu/adminzone/security/ip_ban'),
-		);
-	}
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        return array(
+            'misc' => array('IP_BANS','menu/adminzone/security/ip_ban'),
+        );
+    }
 
-	var $title;
-	var $test;
+    public $title;
+    public $test;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		$type=get_param('type','misc');
+    public function pre_run()
+    {
+        $type = get_param('type','misc');
 
-		require_lang('submitban');
+        require_lang('submitban');
 
-		set_helper_panel_tutorial('tut_censor');
+        set_helper_panel_tutorial('tut_censor');
 
-		if ($type=='misc')
-		{
-			$lookup_url=build_url(array('page'=>'admin_lookup'),get_module_zone('admin_lookup'));
-			set_helper_panel_text(comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate())));
-		}
+        if ($type == 'misc') {
+            $lookup_url = build_url(array('page' => 'admin_lookup'),get_module_zone('admin_lookup'));
+            set_helper_panel_text(comcode_to_tempcode(do_lang('IP_BANNING_WILDCARDS',$lookup_url->evaluate())));
+        }
 
-		if ($type=='misc')
-		{
-			$this->title=get_screen_title('IP_BANS');
-		}
+        if ($type == 'misc') {
+            $this->title = get_screen_title('IP_BANS');
+        }
 
-		if ($type=='actual')
-		{
-			$this->title=get_screen_title('IP_BANS');
-		}
+        if ($type == 'actual') {
+            $this->title = get_screen_title('IP_BANS');
+        }
 
-		if ($type=='syndicate_ip_ban')
-		{
-			$this->title=get_screen_title('SYNDICATE_TO_STOPFORUMSPAM');
-		}
+        if ($type == 'syndicate_ip_ban') {
+            $this->title = get_screen_title('SYNDICATE_TO_STOPFORUMSPAM');
+        }
 
-		if ($type=='multi_ban')
-		{
-			$this->title=get_screen_title('BAN_MEMBER');
-		}
+        if ($type == 'multi_ban') {
+            $this->title = get_screen_title('BAN_MEMBER');
+        }
 
-		if ($type=='toggle_ip_ban')
-		{
-			$ip=get_param('id');
+        if ($type == 'toggle_ip_ban') {
+            $ip = get_param('id');
 
-			$test=ip_banned($ip,true);
+            $test = ip_banned($ip,true);
 
-			if (!$test)
-			{
-				$this->title=get_screen_title('IP_BANNED');
-			} else
-			{
-				$this->title=get_screen_title('IP_UNBANNED');
-			}
+            if (!$test) {
+                $this->title = get_screen_title('IP_BANNED');
+            } else {
+                $this->title = get_screen_title('IP_UNBANNED');
+            }
 
-			$this->test=$test;
-		}
+            $this->test = $test;
+        }
 
-		if ($type=='toggle_member_ban')
-		{
-			$id=get_param_integer('id');
+        if ($type == 'toggle_member_ban') {
+            $id = get_param_integer('id');
 
-			$test=$GLOBALS['FORUM_DRIVER']->is_banned($id);
+            $test = $GLOBALS['FORUM_DRIVER']->is_banned($id);
 
-			if (!$test)
-			{
-				$this->title=get_screen_title('MEMBER_BANNED');
-			} else
-			{
-				$this->title=get_screen_title('MEMBER_UNBANNED');
-			}
+            if (!$test) {
+                $this->title = get_screen_title('MEMBER_BANNED');
+            } else {
+                $this->title = get_screen_title('MEMBER_UNBANNED');
+            }
 
-			$this->test=$test;
-		}
+            $this->test = $test;
+        }
 
-		if ($type=='toggle_submitter_ban')
-		{
-			$id=get_param_integer('id');
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member'=>$id));
+        if ($type == 'toggle_submitter_ban') {
+            $id = get_param_integer('id');
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('usersubmitban_member','the_member',array('the_member' => $id));
 
-			if (is_null($test))
-			{
-				$this->title=get_screen_title('SUBMITTER_BANNED');
-			} else
-			{
-				$this->title=get_screen_title('SUBMITTER_UNBANNED');
-			}
+            if (is_null($test)) {
+                $this->title = get_screen_title('SUBMITTER_BANNED');
+            } else {
+                $this->title = get_screen_title('SUBMITTER_UNBANNED');
+            }
 
-			$this->test=$test;
-		}
+            $this->test = $test;
+        }
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		require_code('submit');
+    public function run()
+    {
+        require_code('submit');
 
-		// What are we doing?
-		$type=get_param('type','misc');
+        // What are we doing?
+        $type = get_param('type','misc');
 
-		if ($type=='misc') return $this->gui();
-		if ($type=='actual') return $this->actual();
-		if ($type=='syndicate_ip_ban') return $this->syndicate_ip_ban();
-		if ($type=='toggle_ip_ban') return $this->toggle_ip_ban();
-		if ($type=='toggle_submitter_ban') return $this->toggle_submitter_ban();
-		if ($type=='toggle_member_ban') return $this->toggle_member_ban();
-		if ($type=='multi_ban') return $this->multi_ban();
+        if ($type == 'misc') {
+            return $this->gui();
+        }
+        if ($type == 'actual') {
+            return $this->actual();
+        }
+        if ($type == 'syndicate_ip_ban') {
+            return $this->syndicate_ip_ban();
+        }
+        if ($type == 'toggle_ip_ban') {
+            return $this->toggle_ip_ban();
+        }
+        if ($type == 'toggle_submitter_ban') {
+            return $this->toggle_submitter_ban();
+        }
+        if ($type == 'toggle_member_ban') {
+            return $this->toggle_member_ban();
+        }
+        if ($type == 'multi_ban') {
+            return $this->multi_ban();
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * The UI for managing banned IPs.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function gui()
-	{
-		$bans='';
-		$locked_bans='';
-		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip,i_ban_until FROM '.get_table_prefix().'banned_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL'.' OR i_ban_until>'.strval(time()).')');
-		foreach ($rows as $row)
-		{
-			if (is_null($row['i_ban_until']))
-			{
-				$bans.=$row['ip'].' '.str_replace("\n",' ',$row['i_descrip'])."\n";
-			} else
-			{
-				$locked_bans.=do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],str_replace("\n",' ',$row['i_descrip']),get_timezoned_date($row['i_ban_until']))."\n";
-			}
-		}
+    public function gui()
+    {
+        $bans = '';
+        $locked_bans = '';
+        $rows = $GLOBALS['SITE_DB']->query('SELECT ip,i_descrip,i_ban_until FROM ' . get_table_prefix() . 'banned_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL' . ' OR i_ban_until>' . strval(time()) . ')');
+        foreach ($rows as $row) {
+            if (is_null($row['i_ban_until'])) {
+                $bans .= $row['ip'] . ' ' . str_replace("\n",' ',$row['i_descrip']) . "\n";
+            } else {
+                $locked_bans .= do_lang('SPAM_AUTO_BAN_TIMEOUT',$row['ip'],str_replace("\n",' ',$row['i_descrip']),get_timezoned_date($row['i_ban_until'])) . "\n";
+            }
+        }
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'actual'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF','type' => 'actual'),'_SELF');
 
-		require_code('form_templates');
+        require_code('form_templates');
 
-		list($warning_details,$ping_url)=handle_conflict_resolution();
+        list($warning_details,$ping_url) = handle_conflict_resolution();
 
-		return do_template('IP_BAN_SCREEN',array('_GUID'=>'963d24852ba87e9aa84e588862bcfecb','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TITLE'=>$this->title,'LOCKED_BANS'=>$locked_bans,'BANS'=>$bans,'URL'=>$post_url));
-	}
+        return do_template('IP_BAN_SCREEN',array('_GUID' => '963d24852ba87e9aa84e588862bcfecb','PING_URL' => $ping_url,'WARNING_DETAILS' => $warning_details,'TITLE' => $this->title,'LOCKED_BANS' => $locked_bans,'BANS' => $bans,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The actualiser for managing banned IPs.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function actual()
-	{
-		require_code('failure');
+    public function actual()
+    {
+        require_code('failure');
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM '.get_table_prefix().'banned_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/,NULL,NULL,false,true);
-		$old_bans=collapse_1d_complexity('ip',$rows);
-		$bans=post_param('bans');
-		$_bans=explode("\n",$bans);
-		foreach ($old_bans as $ban)
-		{
-			if (!in_array($ban,$_bans)) remove_ip_ban($ban);
-		}
-		$matches=array();
-		foreach ($_bans as $ban)
-		{
-			if (trim($ban)=='') continue;
-			if (!in_array($ban,$old_bans))
-			{
-				if ($ban==get_ip_address())
-				{
-					attach_message(do_lang_tempcode('WONT_BAN_SELF',$ban),'warn');
-				}
-				elseif ($ban==ocp_srv('SERVER_ADDR'))
-				{
-					attach_message(do_lang_tempcode('WONT_BAN_SERVER',$ban),'warn');
-				}
-				elseif (preg_match('#^(\d+|\*)\.(\d+|\*)\.(\d+|\*)\.(\d+|\*)(.*)#',$ban,$matches)==0)
-				{
-					attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
-				} else
-				{
-					$ban=$matches[1].'.'.$matches[2].'.'.$matches[3].'.'.$matches[4];
-					ban_ip($ban,trim($matches[5]));
-					$old_bans[]=$ban;
-				}
-			}
-		}
+        $rows = $GLOBALS['SITE_DB']->query('SELECT ip,i_descrip FROM ' . get_table_prefix() . 'banned_ip WHERE i_ban_until IS NULL'/*.' OR i_ban_until>'.strval(time())*/,null,null,false,true);
+        $old_bans = collapse_1d_complexity('ip',$rows);
+        $bans = post_param('bans');
+        $_bans = explode("\n",$bans);
+        foreach ($old_bans as $ban) {
+            if (!in_array($ban,$_bans)) {
+                remove_ip_ban($ban);
+            }
+        }
+        $matches = array();
+        foreach ($_bans as $ban) {
+            if (trim($ban) == '') {
+                continue;
+            }
+            if (!in_array($ban,$old_bans)) {
+                if ($ban == get_ip_address()) {
+                    attach_message(do_lang_tempcode('WONT_BAN_SELF',$ban),'warn');
+                } elseif ($ban == ocp_srv('SERVER_ADDR')) {
+                    attach_message(do_lang_tempcode('WONT_BAN_SERVER',$ban),'warn');
+                } elseif (preg_match('#^(\d+|\*)\.(\d+|\*)\.(\d+|\*)\.(\d+|\*)(.*)#',$ban,$matches) == 0) {
+                    attach_message(do_lang_tempcode('IP_ADDRESS_NOT_VALID',$ban),'warn');
+                } else {
+                    $ban = $matches[1] . '.' . $matches[2] . '.' . $matches[3] . '.' . $matches[4];
+                    ban_ip($ban,trim($matches[5]));
+                    $old_bans[] = $ban;
+                }
+            }
+        }
 
-		// Show it worked / Refresh
-		$refresh_url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
-		return redirect_screen($this->title,$refresh_url,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $refresh_url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
+        return redirect_screen($this->title,$refresh_url,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The actualiser to toggle a member ban. Only works with OCF.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function toggle_member_ban()
-	{
-		$id=get_param_integer('id');
-		$test=$this->test;
+    public function toggle_member_ban()
+    {
+        $id = get_param_integer('id');
+        $test = $this->test;
 
-		if (!$test)
-		{
-			if ($id==get_member())
-				warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
+        if (!$test) {
+            if ($id == get_member()) {
+                warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
+            }
 
-			if (post_param_integer('confirm',0)==0)
-			{
-				$preview=do_lang_tempcode('BAN_MEMBER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
-				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'4f8c5443497e60e9d636cd45283f2d59','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-			}
+            if (post_param_integer('confirm',0) == 0) {
+                $preview = do_lang_tempcode('BAN_MEMBER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
+                $url = get_self_url(false,false);
+                return do_template('CONFIRM_SCREEN',array('_GUID' => '4f8c5443497e60e9d636cd45283f2d59','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+            }
 
-			require_code('ocf_members_action');
-			require_code('ocf_members_action2');
-			ocf_ban_member($id);
-		} else
-		{
-			if (post_param_integer('confirm',0)==0)
-			{
-				$preview=do_lang_tempcode('UNBAN_MEMBER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
-				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'6a21b101d5c0621572d0f80606258963','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-			}
+            require_code('ocf_members_action');
+            require_code('ocf_members_action2');
+            ocf_ban_member($id);
+        } else {
+            if (post_param_integer('confirm',0) == 0) {
+                $preview = do_lang_tempcode('UNBAN_MEMBER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
+                $url = get_self_url(false,false);
+                return do_template('CONFIRM_SCREEN',array('_GUID' => '6a21b101d5c0621572d0f80606258963','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+            }
 
-			require_code('ocf_members_action');
-			require_code('ocf_members_action2');
-			ocf_unban_member($id);
-		}
+            require_code('ocf_members_action');
+            require_code('ocf_members_action2');
+            ocf_unban_member($id);
+        }
 
-		persistent_cache_delete('IP_BANS');
+        persistent_cache_delete('IP_BANS');
 
-		// Show it worked / Refresh
-		$_url=get_param('redirect',NULL);
-		if (!is_null($_url))
-		{
-			$url=make_string_tempcode($_url);
-			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-		}
-		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $_url = get_param('redirect',null);
+        if (!is_null($_url)) {
+            $url = make_string_tempcode($_url);
+            return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        }
+        return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The actualiser to toggle a submitter ban.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function toggle_submitter_ban()
-	{
-		$id=get_param_integer('id');
-		$test=$this->test;
+    public function toggle_submitter_ban()
+    {
+        $id = get_param_integer('id');
+        $test = $this->test;
 
-		if (is_null($test))
-		{
-			$this->title=get_screen_title('SUBMITTER_BANNED');
+        if (is_null($test)) {
+            $this->title = get_screen_title('SUBMITTER_BANNED');
 
-			if ($id==get_member())
-				warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
+            if ($id == get_member()) {
+                warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
+            }
 
-			if (post_param_integer('confirm',0)==0)
-			{
-				$preview=do_lang_tempcode('BAN_SUBMITTER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
-				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'c1b82528e4f86be64484097adb60fdf2','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-			}
+            if (post_param_integer('confirm',0) == 0) {
+                $preview = do_lang_tempcode('BAN_SUBMITTER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
+                $url = get_self_url(false,false);
+                return do_template('CONFIRM_SCREEN',array('_GUID' => 'c1b82528e4f86be64484097adb60fdf2','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+            }
 
-			$GLOBALS['SITE_DB']->query_insert('usersubmitban_member',array('the_member'=>$id));
-			log_it('SUBMITTER_BANNED',strval($id));
-		} else
-		{
-			$this->title=get_screen_title('SUBMITTER_UNBANNED');
+            $GLOBALS['SITE_DB']->query_insert('usersubmitban_member',array('the_member' => $id));
+            log_it('SUBMITTER_BANNED',strval($id));
+        } else {
+            $this->title = get_screen_title('SUBMITTER_UNBANNED');
 
-			if (post_param_integer('confirm',0)==0)
-			{
-				$preview=do_lang_tempcode('UNBAN_SUBMITTER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
-				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'3abb432a4d9ef0a812307f8681f3e3fe','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-			}
+            if (post_param_integer('confirm',0) == 0) {
+                $preview = do_lang_tempcode('UNBAN_SUBMITTER_DESCRIPTION',escape_html($GLOBALS['FORUM_DRIVER']->get_username($id)));
+                $url = get_self_url(false,false);
+                return do_template('CONFIRM_SCREEN',array('_GUID' => '3abb432a4d9ef0a812307f8681f3e3fe','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+            }
 
-			$GLOBALS['SITE_DB']->query_delete('usersubmitban_member',array('the_member'=>$id),'',1);
-			log_it('SUBMITTER_UNBANNED',strval($id));
-		}
+            $GLOBALS['SITE_DB']->query_delete('usersubmitban_member',array('the_member' => $id),'',1);
+            log_it('SUBMITTER_UNBANNED',strval($id));
+        }
 
-		persistent_cache_delete('IP_BANS');
+        persistent_cache_delete('IP_BANS');
 
-		// Show it worked / Refresh
-		$_url=get_param('redirect',NULL);
-		if (!is_null($_url))
-		{
-			$url=make_string_tempcode($_url);
-			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-		}
-		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $_url = get_param('redirect',null);
+        if (!is_null($_url)) {
+            $url = make_string_tempcode($_url);
+            return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        }
+        return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The actualiser to syndicate an IP ban.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function syndicate_ip_ban()
-	{
-		$ip=either_param('ip');
-		$member_id=either_param_integer('member_id');
+    public function syndicate_ip_ban()
+    {
+        $ip = either_param('ip');
+        $member_id = either_param_integer('member_id');
 
-		if (post_param_integer('confirm',0)==0)
-		{
-			$preview=do_lang_tempcode('DESCRIPTION_SYNDICATE_TO_STOPFORUMSPAM');
-			$url=get_self_url(false,false,NULL,true);
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'5dcc3d19a71be9e948d7d3668325ef90','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-		}
+        if (post_param_integer('confirm',0) == 0) {
+            $preview = do_lang_tempcode('DESCRIPTION_SYNDICATE_TO_STOPFORUMSPAM');
+            $url = get_self_url(false,false,null,true);
+            return do_template('CONFIRM_SCREEN',array('_GUID' => '5dcc3d19a71be9e948d7d3668325ef90','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+        }
 
-		require_code('failure');
-		syndicate_spammer_report($ip,is_guest($member_id)?'':$GLOBALS['FORUM_DRIVER']->get_username($member_id),$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),get_param('reason'),true);
-		log_it('SYNDICATED_IP_BAN',$ip);
+        require_code('failure');
+        syndicate_spammer_report($ip,is_guest($member_id)?'':$GLOBALS['FORUM_DRIVER']->get_username($member_id),$GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),get_param('reason'),true);
+        log_it('SYNDICATED_IP_BAN',$ip);
 
-		// Show it worked / Refresh
-		$_url=get_param('redirect',NULL);
-		if (!is_null($_url))
-		{
-			$url=make_string_tempcode($_url);
-			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-		}
-		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $_url = get_param('redirect',null);
+        if (!is_null($_url)) {
+            $url = make_string_tempcode($_url);
+            return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        }
+        return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The actualiser to toggle an IP ban.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function toggle_ip_ban()
-	{
-		$ip=get_param('id');
-		$test=$this->test;
+    public function toggle_ip_ban()
+    {
+        $ip = get_param('id');
+        $test = $this->test;
 
-		if (!$test)
-		{
-			if ($ip==get_ip_address())
-				warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
+        if (!$test) {
+            if ($ip == get_ip_address()) {
+                warn_exit(do_lang_tempcode('AVOIDING_BANNING_SELF'));
+            }
 
-			if (post_param_integer('confirm',0)==0)
-			{
-				$preview=do_lang_tempcode('BAN_IP_DESCRIPTION',escape_html($ip));
-				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'f6c2c7cacdb014fcca278865fbd663fe','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-			}
+            if (post_param_integer('confirm',0) == 0) {
+                $preview = do_lang_tempcode('BAN_IP_DESCRIPTION',escape_html($ip));
+                $url = get_self_url(false,false);
+                return do_template('CONFIRM_SCREEN',array('_GUID' => 'f6c2c7cacdb014fcca278865fbd663fe','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+            }
 
-			require_code('failure');
-			add_ip_ban($ip);
-			log_it('IP_BANNED',$ip);
-		} else
-		{
-			if (post_param_integer('confirm',0)==0)
-			{
-				$preview=do_lang_tempcode('UNBAN_IP_DESCRIPTION',escape_html($ip));
-				$url=get_self_url(false,false);
-				return do_template('CONFIRM_SCREEN',array('_GUID'=>'19f4bee88709ba8e2534eec083abbafb','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-			}
+            require_code('failure');
+            add_ip_ban($ip);
+            log_it('IP_BANNED',$ip);
+        } else {
+            if (post_param_integer('confirm',0) == 0) {
+                $preview = do_lang_tempcode('UNBAN_IP_DESCRIPTION',escape_html($ip));
+                $url = get_self_url(false,false);
+                return do_template('CONFIRM_SCREEN',array('_GUID' => '19f4bee88709ba8e2534eec083abbafb','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+            }
 
-			require_code('failure');
-			remove_ip_ban($ip);
-			log_it('IP_UNBANNED',$ip);
-		}
+            require_code('failure');
+            remove_ip_ban($ip);
+            log_it('IP_UNBANNED',$ip);
+        }
 
-		persistent_cache_delete('IP_BANS');
+        persistent_cache_delete('IP_BANS');
 
-		// Show it worked / Refresh
-		$_url=get_param('redirect',NULL);
-		if (!is_null($_url))
-		{
-			$url=make_string_tempcode($_url);
-			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-		}
-		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $_url = get_param('redirect',null);
+        if (!is_null($_url)) {
+            $url = make_string_tempcode($_url);
+            return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        }
+        return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The actualiser to toggle a combined IP/member ban.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function multi_ban()
-	{
-		$id=either_param('id',NULL);
-		$_ip=explode(':',strrev($id),2);
-		$ip=strrev($_ip[0]);
-		$member=array_key_exists(1,$_ip)?strrev($_ip[1]):NULL;
+    public function multi_ban()
+    {
+        $id = either_param('id',null);
+        $_ip = explode(':',strrev($id),2);
+        $ip = strrev($_ip[0]);
+        $member = array_key_exists(1,$_ip)?strrev($_ip[1]):null;
 
-		if (post_param_integer('confirm',0)==0)
-		{
-			$preview=do_lang_tempcode('BAN_MEMBER_DESCRIPTION',is_null($member)?do_lang_tempcode('NA_EM'):make_string_tempcode(strval($member)),make_string_tempcode(escape_html($ip)));
-			$url=get_self_url(false,false);
-			return do_template('CONFIRM_SCREEN',array('_GUID'=>'3840c52b23d9034cb6f9dd529b236c97','TITLE'=>$this->title,'PREVIEW'=>$preview,'FIELDS'=>form_input_hidden('confirm','1'),'URL'=>$url));
-		}
+        if (post_param_integer('confirm',0) == 0) {
+            $preview = do_lang_tempcode('BAN_MEMBER_DESCRIPTION',is_null($member)?do_lang_tempcode('NA_EM'):make_string_tempcode(strval($member)),make_string_tempcode(escape_html($ip)));
+            $url = get_self_url(false,false);
+            return do_template('CONFIRM_SCREEN',array('_GUID' => '3840c52b23d9034cb6f9dd529b236c97','TITLE' => $this->title,'PREVIEW' => $preview,'FIELDS' => form_input_hidden('confirm','1'),'URL' => $url));
+        }
 
-		if (!is_null($member)) ocf_ban_member(intval($member));
-		require_code('failure');
-		add_ip_ban($ip);
+        if (!is_null($member)) {
+            ocf_ban_member(intval($member));
+        }
+        require_code('failure');
+        add_ip_ban($ip);
 
-		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-	}
+        return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
+    }
 }
-
-

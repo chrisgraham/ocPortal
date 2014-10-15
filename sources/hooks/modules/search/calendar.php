@@ -20,45 +20,50 @@
 
 class Hook_search_calendar
 {
-	/**
+    /**
 	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
-	function info($check_permissions=true)
-	{
-		if (!module_installed('calendar')) return NULL;
+    public function info($check_permissions = true)
+    {
+        if (!module_installed('calendar')) {
+            return NULL;
+        }
 
-		if ($check_permissions)
-		{
-			if (!has_actual_page_access(get_member(),'calendar')) return NULL;
-		}
+        if ($check_permissions) {
+            if (!has_actual_page_access(get_member(),'calendar')) {
+                return NULL;
+            }
+        }
 
-		if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)')==0) return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)') == 0) {
+            return NULL;
+        }
 
-		require_lang('calendar');
+        require_lang('calendar');
 
-		$info=array();
-		$info['lang']=do_lang_tempcode('CALENDAR');
-		$info['default']=false;
+        $info = array();
+        $info['lang'] = do_lang_tempcode('CALENDAR');
+        $info['default'] = false;
 
-		$info['permissions']=array(
-			array(
-				'type'=>'zone',
-				'zone_name'=>get_module_zone('calendar'),
-			),
-			array(
-				'type'=>'page',
-				'zone_name'=>get_module_zone('calendar'),
-				'page_name'=>'calendar',
-			),
-		);
+        $info['permissions'] = array(
+            array(
+                'type' => 'zone',
+                'zone_name' => get_module_zone('calendar'),
+            ),
+            array(
+                'type' => 'page',
+                'zone_name' => get_module_zone('calendar'),
+                'page_name' => 'calendar',
+            ),
+        );
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run function for search results.
 	 *
 	 * @param  string			Search string
@@ -81,80 +86,80 @@ class Hook_search_calendar
 	 * @param  boolean		Whether it is a boolean search
 	 * @return array			List of maps (template, orderer)
 	 */
-	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
-	{
-		require_lang('calendar');
+    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    {
+        require_lang('calendar');
 
-		$table='calendar_events r';
+        $table = 'calendar_events r';
 
-		$remapped_orderer='';
-		switch ($sort)
-		{
-			case 'title':
-				$remapped_orderer='e_title';
-				break;
+        $remapped_orderer = '';
+        switch ($sort) {
+            case 'title':
+                $remapped_orderer = 'e_title';
+                break;
 
-			case 'add_date':
-				$remapped_orderer='e_add_date';
-				break;
-		}
+            case 'add_date':
+                $remapped_orderer = 'e_add_date';
+                break;
+        }
 
-		// Calculate our where clause (search)
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('event','r',NULL,'r.e_member_calendar='.strval(get_member()));
-			$table.=$privacy_join;
-			$where_clause.=$privacy_where;
-		}
-		$where_clause.=' AND ';
-		$where_clause.='(e_member_calendar IS NULL'; // Not a privacy thing, more of a relevance thing
-		if (!is_guest())
-		{
-			$where_clause.=' OR e_submitter='.strval(get_member());
-			$where_clause.=' OR e_member_calendar='.strval(get_member());
-		}
-		$where_clause.=')';
-		$sq=build_search_submitter_clauses('e_submitter',$author_id,$author);
-		if (is_null($sq)) return array(); else $where_clause.=$sq;
-		if (!is_null($cutoff))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='e_add_date>'.strval(intval($cutoff));
-		}
-		$where_clause.=' AND ';
-		$where_clause.='e_type<>'.strval(db_get_first_id());
-		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='validated=1';
-		}
+        // Calculate our where clause (search)
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            list($privacy_join,$privacy_where) = get_privacy_where_clause('event','r',null,'r.e_member_calendar=' . strval(get_member()));
+            $table .= $privacy_join;
+            $where_clause .= $privacy_where;
+        }
+        $where_clause .= ' AND ';
+        $where_clause .= '(e_member_calendar IS NULL'; // Not a privacy thing, more of a relevance thing
+        if (!is_guest()) {
+            $where_clause .= ' OR e_submitter=' . strval(get_member());
+            $where_clause .= ' OR e_member_calendar=' . strval(get_member());
+        }
+        $where_clause .= ')';
+        $sq = build_search_submitter_clauses('e_submitter',$author_id,$author);
+        if (is_null($sq)) {
+            return array();
+        } else {
+            $where_clause .= $sq;
+        }
+        if (!is_null($cutoff)) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'e_add_date>' . strval(intval($cutoff));
+        }
+        $where_clause .= ' AND ';
+        $where_clause .= 'e_type<>' . strval(db_get_first_id());
+        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'validated=1';
+        }
 
-		// Calculate and perform query
-		$rows=get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,array('r.e_title'=>'SHORT_TRANS','r.e_content'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'calendar','e_type');
+        // Calculate and perform query
+        $rows = get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,array('r.e_title' => 'SHORT_TRANS','r.e_content' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'calendar','e_type');
 
-		$out=array();
-		foreach ($rows as $i=>$row)
-		{
-			$out[$i]['data']=$row;
-			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
-		}
+        $out = array();
+        foreach ($rows as $i => $row) {
+            $out[$i]['data'] = $row;
+            unset($rows[$i]);
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	/**
+    /**
 	 * Run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
 	 * @return tempcode	The output
 	 */
-	function render($row)
-	{
-		require_code('calendar');
-		return render_event_box($row);
-	}
+    public function render($row)
+    {
+        require_code('calendar');
+        return render_event_box($row);
+    }
 }
-
-

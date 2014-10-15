@@ -20,77 +20,77 @@
 
 class Hook_content_meta_aware_wiki_page
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'wiki:_WIKI_PAGE',
+            'content_type_label' => 'wiki:_WIKI_PAGE',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'wiki_pages',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>'wiki_page',
-			'is_category'=>true,
-			'is_entry'=>false,
-			'category_field'=>'id', // For category permissions
-			'category_type'=>'wiki_page', // For category permissions
-			'parent_spec__table_name'=>'wiki_children',
-			'parent_spec__parent_name'=>'parent_id',
-			'parent_spec__field_name'=>'child_id',
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'wiki_pages',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => NULL,
+            'parent_category_meta_aware_type' => 'wiki_page',
+            'is_category' => true,
+            'is_entry' => false,
+            'category_field' => 'id', // For category permissions
+            'category_type' => 'wiki_page', // For category permissions
+            'parent_spec__table_name' => 'wiki_children',
+            'parent_spec__parent_name' => 'parent_id',
+            'parent_spec__field_name' => 'child_id',
+            'category_is_string' => false,
 
-			'title_field'=>'title',
-			'title_field_dereference'=>true,
-			'description_field'=>'description',
-			'thumb_field'=>NULL,
+            'title_field' => 'title',
+            'title_field_dereference' => true,
+            'description_field' => 'description',
+            'thumb_field' => NULL,
 
-			'view_page_link_pattern'=>'_SEARCH:wiki:misc:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_wiki:edit_page:_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:wiki:misc:_WILD',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('cat_low',get_member(),get_ip_address(),'cms_wiki'))?(get_module_zone('cms_wiki').':cms_wiki:add_page'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('wiki')).':wiki',
+            'view_page_link_pattern' => '_SEARCH:wiki:misc:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_wiki:edit_page:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:wiki:misc:_WILD',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('cat_low',get_member(),get_ip_address(),'cms_wiki'))?(get_module_zone('cms_wiki') . ':cms_wiki:add_page'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('wiki')) . ':wiki',
 
-			'support_url_monikers'=>false,
+            'support_url_monikers' => false,
 
-			'views_field'=>'wiki_views',
-			'submitter_field'=>'submitter',
-			'add_time_field'=>'add_date',
-			'edit_time_field'=>NULL,
-			'date_field'=>'add_date',
-			'validated_field'=>NULL,
+            'views_field' => 'wiki_views',
+            'submitter_field' => 'submitter',
+            'add_time_field' => 'add_date',
+            'edit_time_field' => NULL,
+            'date_field' => 'add_date',
+            'validated_field' => NULL,
 
-			'seo_type_code'=>'wiki_page',
+            'seo_type_code' => 'wiki_page',
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>'wiki_pages',
+            'search_hook' => 'wiki_pages',
 
-			'addon_name'=>'wiki',
+            'addon_name' => 'wiki',
 
-			'cms_page'=>'wiki',
-			'module'=>'wiki',
+            'cms_page' => 'wiki',
+            'module' => 'wiki',
 
-			'occle_filesystem_hook'=>'wiki',
-			'occle_filesystem__is_folder'=>true,
+            'occle_filesystem_hook' => 'wiki',
+            'occle_filesystem__is_folder' => true,
 
-			'rss_hook'=>'wiki',
+            'rss_hook' => 'wiki',
 
-			'actionlog_regexp'=>'\w+_WIKI_PAGE',
-		);
-	}
+            'actionlog_regexp' => '\w+_WIKI_PAGE',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -102,10 +102,10 @@ class Hook_content_meta_aware_wiki_page
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('wiki');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('wiki');
 
-		return render_wiki_page_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$guid);
-	}
+        return render_wiki_page_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+    }
 }

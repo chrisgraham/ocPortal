@@ -20,35 +20,33 @@
 
 class Hook_config_ldap_login_qualifier
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'LDAP_LOGIN_QUALIFIER',
-			'type'=>'line',
-			'category'=>'USERS',
-			'group'=>'LDAP',
-			'explanation'=>'CONFIG_OPTION_ldap_login_qualifier',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'LDAP_LOGIN_QUALIFIER',
+            'type' => 'line',
+            'category' => 'USERS',
+            'group' => 'LDAP',
+            'explanation' => 'CONFIG_OPTION_ldap_login_qualifier',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'ldap',
-		);
-	}
+            'addon' => 'ldap',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

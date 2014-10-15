@@ -26,46 +26,56 @@
  * @param  ?mixed			Data. A refresh will only happen if an AJAX-check indicates this data has changed (NULL: no check)
  * @return tempcode		The screen output, wrapped with some AJAX code
  */
-function internalise_own_screen($screen_content,$refresh_time=NULL,$refresh_if_changed=NULL)
+function internalise_own_screen($screen_content,$refresh_time = null,$refresh_if_changed = null)
 {
-	if (!has_js()) return $screen_content; // We need JS to make this a seamless process
-	if (!is_null(get_bot_type())) return $screen_content;
+    if (!has_js()) {
+        return $screen_content;
+    } // We need JS to make this a seamless process
+    if (!is_null(get_bot_type())) {
+        return $screen_content;
+    }
 
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_internalised_ajax_screen');
+    require_javascript('javascript_ajax');
+    require_javascript('javascript_internalised_ajax_screen');
 
-	$params='';
-	foreach ($_GET as $key=>$param)
-	{
-		if (!is_string($param)) continue;
-		if (($key=='ajax') || ($key=='zone') || ($key=='utheme')) continue;
-		if ((substr($key,0,5)=='keep_') && (skippable_keep($key,$param))) continue;
-		if (get_magic_quotes_gpc()) $param=stripslashes($param);
-		$params.=(($params=='')?'?':'&').$key.'='.urlencode($param);
-	}
-	$params.=(($params=='')?'?':'&').'ajax=1';
-	if (get_param('utheme','')!='') $params.='&utheme='.urlencode(get_param('utheme',$GLOBALS['FORUM_DRIVER']->get_theme()));
-	$params.='&zone='.urlencode(get_zone_name());
+    $params = '';
+    foreach ($_GET as $key => $param) {
+        if (!is_string($param)) {
+            continue;
+        }
+        if (($key == 'ajax') || ($key == 'zone') || ($key == 'utheme')) {
+            continue;
+        }
+        if ((substr($key,0,5) == 'keep_') && (skippable_keep($key,$param))) {
+            continue;
+        }
+        if (get_magic_quotes_gpc()) {
+            $param = stripslashes($param);
+        }
+        $params .= (($params == '')?'?':'&') . $key . '=' . urlencode($param);
+    }
+    $params .= (($params == '')?'?':'&') . 'ajax=1';
+    if (get_param('utheme','') != '') {
+        $params .= '&utheme=' . urlencode(get_param('utheme',$GLOBALS['FORUM_DRIVER']->get_theme()));
+    }
+    $params .= '&zone=' . urlencode(get_zone_name());
 
-	$url=find_script('iframe').$params;
+    $url = find_script('iframe') . $params;
 
-	if (!is_null($refresh_if_changed))
-	{
-		require_javascript('javascript_sound');
-		$change_detection_url=find_script('change_detection').$params;
-	} else
-	{
-		$refresh_if_changed='';
-		$change_detection_url='';
-	}
+    if (!is_null($refresh_if_changed)) {
+        require_javascript('javascript_sound');
+        $change_detection_url = find_script('change_detection') . $params;
+    } else {
+        $refresh_if_changed = '';
+        $change_detection_url = '';
+    }
 
-	return do_template('INTERNALISED_AJAX_SCREEN',array(
-		'_GUID'=>'06554eb227428fd5c648dee3c5b38185',
-		'SCREEN_CONTENT'=>$screen_content,
-		'REFRESH_IF_CHANGED'=>md5(serialize($refresh_if_changed)),
-		'CHANGE_DETECTION_URL'=>$change_detection_url,
-		'URL'=>$url,
-		'REFRESH_TIME'=>is_null($refresh_time)?'':strval($refresh_time),
-	));
+    return do_template('INTERNALISED_AJAX_SCREEN',array(
+        '_GUID' => '06554eb227428fd5c648dee3c5b38185',
+        'SCREEN_CONTENT' => $screen_content,
+        'REFRESH_IF_CHANGED' => md5(serialize($refresh_if_changed)),
+        'CHANGE_DETECTION_URL' => $change_detection_url,
+        'URL' => $url,
+        'REFRESH_TIME' => is_null($refresh_time)?'':strval($refresh_time),
+    ));
 }
-

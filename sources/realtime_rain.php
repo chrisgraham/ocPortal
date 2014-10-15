@@ -23,68 +23,64 @@
  */
 function realtime_rain_script()
 {
-	prepare_for_known_ajax_response();
+    prepare_for_known_ajax_response();
 
-	@ini_set('ocproducts.xss_detect','0');
+    @ini_set('ocproducts.xss_detect','0');
 
-	header('Content-Type: text/xml');
-	echo '<?xml version="1.0" encoding="'.get_charset().'"?'.'>';
-	echo '<request><result>';
-	require_code('realtime_rain');
-	require_lang('realtime_rain');
+    header('Content-Type: text/xml');
+    echo '<?xml version="1.0" encoding="' . get_charset() . '"?' . '>';
+    echo '<request><result>';
+    require_code('realtime_rain');
+    require_lang('realtime_rain');
 
-	$time_now=time();
-	$from=get_param_integer('from',$time_now-10);
-	$to=get_param_integer('to',$time_now);
+    $time_now = time();
+    $from = get_param_integer('from',$time_now-10);
+    $to = get_param_integer('to',$time_now);
 
-	if (get_param_integer('keep_realtime_test',0)==1)
-	{
-		$types=array('post','news','recommend','polls','ecommerce','actionlog','security','chat','stats','join','calendar','search','point_charges','banners','point_gifts');
-		shuffle($types);
+    if (get_param_integer('keep_realtime_test',0) == 1) {
+        $types = array('post','news','recommend','polls','ecommerce','actionlog','security','chat','stats','join','calendar','search','point_charges','banners','point_gifts');
+        shuffle($types);
 
-		$events=array();
-		$cnt=count($types);
-		for ($i=0;$i<max($cnt,5);$i++)
-		{
-			$timestamp=mt_rand($from,$to);
-			$type=array_pop($types);
+        $events = array();
+        $cnt = count($types);
+        for ($i = 0;$i<max($cnt,5);$i++) {
+            $timestamp = mt_rand($from,$to);
+            $type = array_pop($types);
 
-			$event=rain_get_special_icons(get_ip_address(),$timestamp)+array(
-				'TYPE'=>$type,
-				'FROM_MEMBER_ID'=>NULL,
-				'TO_MEMBER_ID'=>NULL,
-				'TITLE'=>'Test',
-				'IMAGE'=>rain_get_country_image(get_ip_address()),
-				'TIMESTAMP'=>strval($timestamp),
-				'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
-				'TICKER_TEXT'=>NULL,
-				'URL'=>NULL,
-				'IS_POSITIVE'=>($type=='ecommerce' || $type=='join'),
-				'IS_NEGATIVE'=>($type=='security' || $type=='point_charges'),
+            $event = rain_get_special_icons(get_ip_address(),$timestamp)+array(
+                'TYPE' => $type,
+                'FROM_MEMBER_ID' => NULL,
+                'TO_MEMBER_ID' => NULL,
+                'TITLE' => 'Test',
+                'IMAGE' => rain_get_country_image(get_ip_address()),
+                'TIMESTAMP' => strval($timestamp),
+                'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
+                'TICKER_TEXT' => NULL,
+                'URL' => NULL,
+                'IS_POSITIVE' => ($type == 'ecommerce' || $type == 'join'),
+                'IS_NEGATIVE' => ($type == 'security' || $type == 'point_charges'),
 
-				// These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-				'FROM_ID'=>NULL,
-				'TO_ID'=>NULL,
-				'GROUP_ID'=>'example_'.strval(mt_rand(0,4)),
-			);
-			$event['SPECIAL_ICON']='email-icon';
-			$event['MULTIPLICITY']='10';
-			$events[]=$event;
-		}
-	} else
-	{
-		$events=get_realtime_events($from,$to);
-	}
+                // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                'FROM_ID' => NULL,
+                'TO_ID' => NULL,
+                'GROUP_ID' => 'example_' . strval(mt_rand(0,4)),
+            );
+            $event['SPECIAL_ICON'] = 'email-icon';
+            $event['MULTIPLICITY'] = '10';
+            $events[] = $event;
+        }
+    } else {
+        $events = get_realtime_events($from,$to);
+    }
 
-	shuffle($events);
+    shuffle($events);
 
-	$out=new ocp_tempcode();
-	foreach ($events as $event)
-	{
-		$out->attach(do_template('REALTIME_RAIN_BUBBLE',$event));
-	}
-	$out->evaluate_echo();
-	echo '</result></request>';
+    $out = new ocp_tempcode();
+    foreach ($events as $event) {
+        $out->attach(do_template('REALTIME_RAIN_BUBBLE',$event));
+    }
+    $out->evaluate_echo();
+    echo '</result></request>';
 }
 
 /**
@@ -96,19 +92,18 @@ function realtime_rain_script()
  */
 function get_realtime_events($from,$to)
 {
-	//restrictify();
+    //restrictify();
 
-	$drops=array();
+    $drops = array();
 
-	$hooks=find_all_hooks('systems','realtime_rain');
-	foreach (array_keys($hooks) as $hook)
-	{
-		require_code('hooks/systems/realtime_rain/'.filter_naughty($hook));
-		$ob=object_factory('Hook_realtime_rain_'.$hook);
-		$drops=array_merge($drops,$ob->run($from,$to));
-	}
+    $hooks = find_all_hooks('systems','realtime_rain');
+    foreach (array_keys($hooks) as $hook) {
+        require_code('hooks/systems/realtime_rain/' . filter_naughty($hook));
+        $ob = object_factory('Hook_realtime_rain_' . $hook);
+        $drops = array_merge($drops,$ob->run($from,$to));
+    }
 
-	return $drops;
+    return $drops;
 }
 
 /**
@@ -119,7 +114,7 @@ function get_realtime_events($from,$to)
  */
 function rain_truncate_for_title($text)
 {
-	return symbol_truncator(array($text,'40','1'),'left');
+    return symbol_truncator(array($text,'40','1'),'left');
 }
 
 /**
@@ -130,13 +125,17 @@ function rain_truncate_for_title($text)
  */
 function rain_get_country_image($ip_address)
 {
-	if ($ip_address=='') return '';
+    if ($ip_address == '') {
+        return '';
+    }
 
-	require_code('global4');
-	$country=geolocate_ip($ip_address);
-	if (is_null($country)) return '';
+    require_code('global4');
+    $country = geolocate_ip($ip_address);
+    if (is_null($country)) {
+        return '';
+    }
 
-	return find_theme_image('flags/'.$country);
+    return find_theme_image('flags/' . $country);
 }
 
 /**
@@ -148,37 +147,31 @@ function rain_get_country_image($ip_address)
  * @param  ?string		News ticker news (NULL: no news ticker news).
  * @return array			Map with an icon and multiplicity parameter.
  */
-function rain_get_special_icons($ip_address,$timestamp,$user_agent=NULL,$news=NULL)
+function rain_get_special_icons($ip_address,$timestamp,$user_agent = null,$news = null)
 {
-	$icon=NULL;
-	$tooltip='';
-	$multiplicity=1;
-	$bot=get_bot_type();
-	if (!is_null($bot))
-	{
-		$icon='searchengine-icon';
-		$tooltip=do_lang('RTEV_BOT');
-	} else
-	{
-		if ((!is_null($user_agent)) && (is_mobile($user_agent)))
-		{
-			$icon='phone-icon';
-			$tooltip=do_lang('RTEV_PHONE');
-		} else
-		{
-			$mails_sent=$GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)',array('m_date_and_time'=>$timestamp));
-			if ($mails_sent>0)
-			{
-				$multiplicity=$mails_sent;
-				$icon='email-icon';
-				$tooltip=do_lang('RTEV_EMAILS',integer_format($multiplicity));
-			} elseif (!is_null($news))
-			{
-				$icon='news-icon';
-				$tooltip=do_lang('RTEV_NEWS');
-			}
-		}
-	}
+    $icon = null;
+    $tooltip = '';
+    $multiplicity = 1;
+    $bot = get_bot_type();
+    if (!is_null($bot)) {
+        $icon = 'searchengine-icon';
+        $tooltip = do_lang('RTEV_BOT');
+    } else {
+        if ((!is_null($user_agent)) && (is_mobile($user_agent))) {
+            $icon = 'phone-icon';
+            $tooltip = do_lang('RTEV_PHONE');
+        } else {
+            $mails_sent = $GLOBALS['SITE_DB']->query_select_value('logged_mail_messages','COUNT(*)',array('m_date_and_time' => $timestamp));
+            if ($mails_sent>0) {
+                $multiplicity = $mails_sent;
+                $icon = 'email-icon';
+                $tooltip = do_lang('RTEV_EMAILS',integer_format($multiplicity));
+            } elseif (!is_null($news)) {
+                $icon = 'news-icon';
+                $tooltip = do_lang('RTEV_NEWS');
+            }
+        }
+    }
 
-	return array('SPECIAL_ICON'=>$icon,'SPECIAL_TOOLTIP'=>$tooltip,'MULTIPLICITY'=>strval(min(20,$multiplicity)));
+    return array('SPECIAL_ICON' => $icon,'SPECIAL_TOOLTIP' => $tooltip,'MULTIPLICITY' => strval(min(20,$multiplicity)));
 }

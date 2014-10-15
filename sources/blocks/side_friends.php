@@ -20,47 +20,50 @@
 
 class Block_side_friends
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('max');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('max');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (is_guest()) return new ocp_tempcode(); // Guest has no friends
+    public function run($map)
+    {
+        if (is_guest()) {
+            return new ocp_tempcode();
+        } // Guest has no friends
 
-		if ((get_page_name()=='chat') && (get_param('type','misc')=='misc')) // Don't want to show if actually on chat lobby, which already has this functionality
-			return new ocp_tempcode();
+        if ((get_page_name() == 'chat') && (get_param('type','misc') == 'misc')) {// Don't want to show if actually on chat lobby, which already has this functionality
+            return new ocp_tempcode();
+        }
 
-		require_code('chat');
-		require_code('chat_lobby');
-		require_lang('chat');
-		require_css('chat');
-		require_javascript('javascript_chat');
+        require_code('chat');
+        require_code('chat_lobby');
+        require_lang('chat');
+        require_css('chat');
+        require_javascript('javascript_chat');
 
-		$max=array_key_exists('max',$map)?intval($map['max']):15;
+        $max = array_key_exists('max',$map)?intval($map['max']):15;
 
-		$friends=show_im_contacts(NULL,true,$max);
+        $friends = show_im_contacts(null,true,$max);
 
-		return do_template('BLOCK_SIDE_FRIENDS',array('_GUID'=>'ce94db14f9a212f38d0fce1658866e2c','FRIENDS'=>$friends));
-	}
+        return do_template('BLOCK_SIDE_FRIENDS',array('_GUID' => 'ce94db14f9a212f38d0fce1658866e2c','FRIENDS' => $friends));
+    }
 }

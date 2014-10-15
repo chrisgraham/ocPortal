@@ -15,40 +15,35 @@
 
 class Hook_page_groupings_referrals
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		$ret=array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        $ret = array();
 
-		$path=get_custom_file_base().'/text_custom/referrals.txt';
-		if (is_file($path))
-		{
-			$ini_file=parse_ini_file($path,true);
+        $path = get_custom_file_base() . '/text_custom/referrals.txt';
+        if (is_file($path)) {
+            $ini_file = parse_ini_file($path,true);
 
-			foreach ($ini_file as $ini_file_section_name=>$ini_file_section)
-			{
-				if ($ini_file_section_name!='global')
-				{
-					$scheme_name=$ini_file_section_name;
-					$scheme=$ini_file_section;
+            foreach ($ini_file as $ini_file_section_name => $ini_file_section) {
+                if ($ini_file_section_name != 'global') {
+                    $scheme_name = $ini_file_section_name;
+                    $scheme = $ini_file_section;
 
-					$scheme_title=isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
+                    $scheme_title = isset($scheme['title'])?$scheme['title']:$ini_file_section_name;
 
-					$ret[]=array('audit','menu/referrals',array('admin_referrals',array('type'=>'misc','scheme'=>$scheme_name),get_page_zone('admin_referrals')),$scheme_title,'referrals:DOC_REFERRALS');
-				}
-			}
-		}
+                    $ret[] = array('audit','menu/referrals',array('admin_referrals',array('type' => 'misc','scheme' => $scheme_name),get_page_zone('admin_referrals')),$scheme_title,'referrals:DOC_REFERRALS');
+                }
+            }
+        }
 
-		$ret[]=array('setup','menu/referrals',array('referrals',array(),get_page_zone('referrals')),do_lang_tempcode('referrals:REFERRALS'),'referrals:DOC_REFERRALS');
+        $ret[] = array('setup','menu/referrals',array('referrals',array(),get_page_zone('referrals')),do_lang_tempcode('referrals:REFERRALS'),'referrals:DOC_REFERRALS');
 
-		return $ret;
-	}
+        return $ret;
+    }
 }
-
-

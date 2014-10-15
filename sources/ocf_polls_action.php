@@ -32,49 +32,50 @@
  * @param  boolean		Whether to check there are permissions to make the poll.
  * @return AUTO_LINK 	The ID of the newly created forum poll.
  */
-function ocf_make_poll($topic_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$check_permissions=true)
+function ocf_make_poll($topic_id,$question,$is_private,$is_open,$minimum_selections,$maximum_selections,$requires_reply,$answers,$check_permissions = true)
 {
-	require_code('ocf_polls');
+    require_code('ocf_polls');
 
-	if (($check_permissions) && (!ocf_may_attach_poll($topic_id)))
-		access_denied('I_ERROR');
+    if (($check_permissions) && (!ocf_may_attach_poll($topic_id))) {
+        access_denied('I_ERROR');
+    }
 
-	$poll_id=$GLOBALS['FORUM_DB']->query_insert('f_polls',array(
-		'po_question'=>$question,
-		'po_cache_total_votes'=>0,
-		'po_is_private'=>$is_private,
-		'po_is_open'=>$is_open,
-		'po_minimum_selections'=>$minimum_selections,
-		'po_maximum_selections'=>$maximum_selections,
-		'po_requires_reply'=>$requires_reply
-	),true);
+    $poll_id = $GLOBALS['FORUM_DB']->query_insert('f_polls',array(
+        'po_question' => $question,
+        'po_cache_total_votes' => 0,
+        'po_is_private' => $is_private,
+        'po_is_open' => $is_open,
+        'po_minimum_selections' => $minimum_selections,
+        'po_maximum_selections' => $maximum_selections,
+        'po_requires_reply' => $requires_reply
+    ),true);
 
-	foreach ($answers as $answer)
-	{
-		if (is_array($answer))
-		{
-			list($answer,$num_votes)=$answer;
-		} else $num_votes=0;
+    foreach ($answers as $answer) {
+        if (is_array($answer)) {
+            list($answer,$num_votes) = $answer;
+        } else {
+            $num_votes = 0;
+        }
 
-		$GLOBALS['FORUM_DB']->query_insert('f_poll_answers',array(
-			'pa_poll_id'=>$poll_id,
-			'pa_answer'=>$answer,
-			'pa_cache_num_votes'=>$num_votes
-		));
-	}
+        $GLOBALS['FORUM_DB']->query_insert('f_poll_answers',array(
+            'pa_poll_id' => $poll_id,
+            'pa_answer' => $answer,
+            'pa_cache_num_votes' => $num_votes
+        ));
+    }
 
-	$map=array('t_poll_id'=>$poll_id);
+    $map = array('t_poll_id' => $poll_id);
 
-	// Now make the topic validated if this is attaching immediately
-	if (get_param_integer('re_validate',0)==1)
-	{
-		$forum_id=$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_forum_id',array('id'=>$topic_id));
+    // Now make the topic validated if this is attaching immediately
+    if (get_param_integer('re_validate',0) == 1) {
+        $forum_id = $GLOBALS['FORUM_DB']->query_select_value('f_topics','t_forum_id',array('id' => $topic_id));
 
-		if ((is_null($forum_id)) || (has_privilege(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id))))
-			$map['t_validated']=1;
-	}
+        if ((is_null($forum_id)) || (has_privilege(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) {
+            $map['t_validated'] = 1;
+        }
+    }
 
-	$GLOBALS['FORUM_DB']->query_update('f_topics',$map,array('id'=>$topic_id),'',1);
+    $GLOBALS['FORUM_DB']->query_update('f_topics',$map,array('id' => $topic_id),'',1);
 
-	return $poll_id;
+    return $poll_id;
 }

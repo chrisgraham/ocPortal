@@ -20,7 +20,7 @@
 
 class Hook_task_send_newsletter
 {
-	/**
+    /**
 	 * Run the task hook.
 	 *
 	 * @param  LONG_TEXT			The newsletter message
@@ -36,90 +36,87 @@ class Hook_task_send_newsletter
 	 * @param  ID_TEXT			The template used to show the email
 	 * @return ?array				A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
 	 */
-	function run($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$mail_template)
-	{
-		require_code('newsletter');
-		require_code('mail');
+    public function run($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$mail_template)
+    {
+        require_code('newsletter');
+        require_code('mail');
 
-		//mail_wrap($subject,$message,$addresses,$usernames,$from_email,$from_name,3,null,true,null,true,$html_only==1);  Not so easy any more as message needs tailoring per subscriber
+        //mail_wrap($subject,$message,$addresses,$usernames,$from_email,$from_name,3,null,true,null,true,$html_only==1);  Not so easy any more as message needs tailoring per subscriber
 
-		$last_cron=get_value('last_cron');
+        $last_cron = get_value('last_cron');
 
-		// These variables are for optimisation, we detect if we can avoid work on the loop iterations via looking at what happened on the first
-		$needs_substitutions=mixed();
-		$needs_tempcode=mixed();
+        // These variables are for optimisation, we detect if we can avoid work on the loop iterations via looking at what happened on the first
+        $needs_substitutions = mixed();
+        $needs_tempcode = mixed();
 
-		$blocked=newsletter_block_list();
+        $blocked = newsletter_block_list();
 
-		$start=0;
-		do
-		{
-			list($addresses,$hashes,$usernames,$forenames,$surnames,$ids,)=newsletter_who_send_to($send_details,$lang,$start,100,false,$csv_data);
+        $start = 0;
+        do {
+            list($addresses,$hashes,$usernames,$forenames,$surnames,$ids,) = newsletter_who_send_to($send_details,$lang,$start,100,false,$csv_data);
 
-			// Send to all
-			foreach ($addresses as $i=>$email_address)
-			{
-				if (isset($blocked[$email_address])) continue;
+            // Send to all
+            foreach ($addresses as $i => $email_address) {
+                if (isset($blocked[$email_address])) {
+                    continue;
+                }
 
-				// Variable substitution in body
-				if ($needs_substitutions===NULL || $needs_substitutions)
-				{
-					$newsletter_message_substituted=(strpos($message,'{')===false)?$message:newsletter_variable_substitution($message,$subject,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+                // Variable substitution in body
+                if ($needs_substitutions === NULL || $needs_substitutions) {
+                    $newsletter_message_substituted = (strpos($message,'{') === false)?$message:newsletter_variable_substitution($message,$subject,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
 
-					if ($needs_substitutions===NULL) $needs_substitutions=($newsletter_message_substituted!=$message);
-				} else
-				{
-					$newsletter_message_substituted=$message;
-				}
-				$in_html=false;
-				if (strpos($newsletter_message_substituted,'<html')===false)
-				{
-					if ($html_only==1)
-					{
-						$_m=comcode_to_tempcode($newsletter_message_substituted,get_member(),true);
-						$newsletter_message_substituted=$_m->evaluate($lang);
-						$in_html=true;
-					}
-				} else
-				{
-					if ($needs_tempcode===NULL || $needs_tempcode)
-					{
-						require_code('tempcode_compiler');
-						$_m=template_to_tempcode($newsletter_message_substituted);
-						$temp=$_m->evaluate($lang);
+                    if ($needs_substitutions === NULL) {
+                        $needs_substitutions = ($newsletter_message_substituted != $message);
+                    }
+                } else {
+                    $newsletter_message_substituted = $message;
+                }
+                $in_html = false;
+                if (strpos($newsletter_message_substituted,'<html') === false) {
+                    if ($html_only == 1) {
+                        $_m = comcode_to_tempcode($newsletter_message_substituted,get_member(),true);
+                        $newsletter_message_substituted = $_m->evaluate($lang);
+                        $in_html = true;
+                    }
+                } else {
+                    if ($needs_tempcode === NULL || $needs_tempcode) {
+                        require_code('tempcode_compiler');
+                        $_m = template_to_tempcode($newsletter_message_substituted);
+                        $temp = $_m->evaluate($lang);
 
-						if ($needs_tempcode===NULL) $needs_tempcode=(trim($temp)!=trim($newsletter_message_substituted));
+                        if ($needs_tempcode === NULL) {
+                            $needs_tempcode = (trim($temp) != trim($newsletter_message_substituted));
+                        }
 
-						$newsletter_message_substituted=$temp;
-					}
-					$in_html=true;
-				}
+                        $newsletter_message_substituted = $temp;
+                    }
+                    $in_html = true;
+                }
 
-				if (!is_null($last_cron))
-				{
-					$GLOBALS['SITE_DB']->query_insert('newsletter_drip_send',array(
-						'd_inject_time'=>time(),
-						'd_subject'=>$subject,
-						'd_message'=>$newsletter_message_substituted,
-						'd_html_only'=>$html_only,
-						'd_to_email'=>$email_address,
-						'd_to_name'=>$usernames[$i],
-						'd_from_email'=>$from_email,
-						'd_from_name'=>$from_name,
-						'd_priority'=>$priority,
-						'd_template'=>$mail_template,
-					));
-				} else
-				{
-					mail_wrap($subject,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$from_email,$from_name,$priority,nULL,true,NULL,true,$in_html,false,$mail_template);
-				}
+                if (!is_null($last_cron)) {
+                    $GLOBALS['SITE_DB']->query_insert('newsletter_drip_send',array(
+                        'd_inject_time' => time(),
+                        'd_subject' => $subject,
+                        'd_message' => $newsletter_message_substituted,
+                        'd_html_only' => $html_only,
+                        'd_to_email' => $email_address,
+                        'd_to_name' => $usernames[$i],
+                        'd_from_email' => $from_email,
+                        'd_from_name' => $from_name,
+                        'd_priority' => $priority,
+                        'd_template' => $mail_template,
+                    ));
+                } else {
+                    mail_wrap($subject,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$from_email,$from_name,$priority,null,true,null,true,$in_html,false,$mail_template);
+                }
 
-				if (function_exists('gc_collect_cycles')) gc_collect_cycles(); // Stop problem with PHP leaking memory
-			}
-			$start+=100;
-		}
-		while (array_key_exists(0,$addresses));
+                if (function_exists('gc_collect_cycles')) {
+                    gc_collect_cycles();
+                } // Stop problem with PHP leaking memory
+            }
+            $start += 100;
+        } while (array_key_exists(0,$addresses));
 
-		return array('text/html',do_lang_tempcode('SENDING_NEWSLETTER'));
-	}
+        return array('text/html',do_lang_tempcode('SENDING_NEWSLETTER'));
+    }
 }

@@ -7,40 +7,44 @@
 
 */
 
-if (!function_exists('init__forum__ocf'))
-{
-	function init__forum__ocf($in=NULL)
-	{
-		$option=get_option('ocjester_name_changes');
-		if ($option=='') return $in;
+if (!function_exists('init__forum__ocf')) {
+    function init__forum__ocf($in = null)
+    {
+        $option = get_option('ocjester_name_changes');
+        if ($option == '') {
+            return $in;
+        }
 
-		$in=str_replace("return \$this->get_member_row_field(\$member,'m_username');","return ocjester_name_filter(\$this->get_member_row_field(\$member,'m_username'));",$in);
+        $in = str_replace("return \$this->get_member_row_field(\$member,'m_username');","return ocjester_name_filter(\$this->get_member_row_field(\$member,'m_username'));",$in);
 
-		$in=str_replace(
-			'$avatar=$this->get_member_row_field($member,\'m_avatar_url\');',
-			'require_code(\'ocfiltering\'); $passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option(\'ocjester_avatar_switch_shown_for\',true),$GLOBALS[\'FORUM_DRIVER\']->get_usergroup_list()),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member())))!=0);
+        $in = str_replace(
+            '$avatar=$this->get_member_row_field($member,\'m_avatar_url\');',
+            'require_code(\'ocfiltering\'); $passes=(count(array_intersect(@ocfilter_to_idlist_using_memory(get_option(\'ocjester_avatar_switch_shown_for\',true),$GLOBALS[\'FORUM_DRIVER\']->get_usergroup_list()),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member())))!=0);
 			if ($passes) $avatar=($member==get_member())?\'\':$this->get_member_row_field(get_member(),\'m_avatar_url\'); else $avatar=$this->get_member_row_field($member,\'m_avatar_url\');',
-			$in);
+            $in);
 
-		return $in;
-	}
+        return $in;
+    }
 }
 
 function ocjester_name_filter($in)
 {
-	$option=get_option('ocjester_name_changes');
-	if ($option=='') return $in;
+    $option = get_option('ocjester_name_changes');
+    if ($option == '') {
+        return $in;
+    }
 
-	require_code('ocfiltering');
+    require_code('ocfiltering');
 
-	$passes=(count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member())))!=0);
-	if (!$passes) return $in;
+    $passes = (count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()))) != 0);
+    if (!$passes) {
+        return $in;
+    }
 
-	$alphabetic=@explode("\n",$option);
+    $alphabetic = @explode("\n",$option);
 
-	if (strtoupper($in[0])!=strtolower($in[0]))
-	{
-		return $alphabetic[ord(strtoupper($in[0]))-ord('A')].' '.$in;
-	}
-	return $in;
+    if (strtoupper($in[0]) != strtolower($in[0])) {
+        return $alphabetic[ord(strtoupper($in[0]))-ord('A')] . ' ' . $in;
+    }
+    return $in;
 }

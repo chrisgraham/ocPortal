@@ -20,36 +20,34 @@
 
 class Hook_config_reported_posts_forum
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'REPORTED_POSTS_FORUM',
-			'type'=>'forum',
-			'category'=>'FORUMS',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_reported_posts_forum',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'REPORTED_POSTS_FORUM',
+            'type' => 'forum',
+            'category' => 'FORUMS',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_reported_posts_forum',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'ocf_reported_posts',
-		);
-	}
+            'addon' => 'ocf_reported_posts',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return do_lang('ocf_config:REPORTED_POSTS_FORUM','','','',get_site_default_lang());
-	}
+    public function get_default()
+    {
+        return do_lang('ocf_config:REPORTED_POSTS_FORUM','','','',get_site_default_lang());
+    }
 }
-
-

@@ -18,31 +18,31 @@
  */
 class user_banunban_test_set extends ocp_test_case
 {
-	function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		require_code('ocf_members_action');
-		require_code('ocf_members_action2');
-		require_lang('ocf');
+        require_code('ocf_members_action');
+        require_code('ocf_members_action2');
+        require_lang('ocf');
 
-		ocf_ban_member(3);
+        ocf_ban_member(3);
 
-		// Test the forum was actually created
-		$this->assertTrue(1==$GLOBALS['FORUM_DB']->query_select_value('f_members','m_is_perm_banned',array('id'=>3)));
-	}
+        // Test the forum was actually created
+        $this->assertTrue(1 == $GLOBALS['FORUM_DB']->query_select_value('f_members','m_is_perm_banned',array('id' => 3)));
+    }
 
-	function testEdituser_banunban()
-	{
-		// Test the forum edits
-		ocf_unban_member(3);
+    public function testEdituser_banunban()
+    {
+        // Test the forum edits
+        ocf_unban_member(3);
 
-		// Test the forum was actually created
-		$this->assertTrue(0==$GLOBALS['FORUM_DB']->query_select_value('f_members','m_is_perm_banned',array('id'=>3)));
-	}
+        // Test the forum was actually created
+        $this->assertTrue(0 == $GLOBALS['FORUM_DB']->query_select_value('f_members','m_is_perm_banned',array('id' => 3)));
+    }
 
-	function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 }

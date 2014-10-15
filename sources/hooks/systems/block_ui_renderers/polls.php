@@ -20,7 +20,7 @@
 
 class Hook_block_ui_renderers_polls
 {
-	/**
+    /**
 	 * See if a particular block parameter's UI input can be rendered by this.
 	 *
 	 * @param  ID_TEXT		The block
@@ -30,19 +30,17 @@ class Hook_block_ui_renderers_polls
 	 * @param  tempcode		Field description
 	 * @return ?tempcode		Rendered field (NULL: not handled).
 	 */
-	function render_block_ui($block,$parameter,$has_default,$default,$description)
-	{
-		if ($block.':'.$parameter=='main_poll:param') // special case for polls
-		{
-			$list=new ocp_tempcode();
-			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('id','question'),NULL,'ORDER BY id DESC',100/*In case insane number*/);
-			$list->attach(form_input_list_entry('',false,do_lang('NA')));
-			foreach ($rows as $row)
-			{
-				$list->attach(form_input_list_entry(strval($row['id']),$has_default && strval($row['id'])==$default,get_translated_text($row['question'])));
-			}
-			return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false);
-		}
-		return NULL;
-	}
+    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    {
+        if ($block . ':' . $parameter == 'main_poll:param') { // special case for polls
+            $list = new ocp_tempcode();
+            $rows = $GLOBALS['SITE_DB']->query_select('poll',array('id','question'),null,'ORDER BY id DESC',100/*In case insane number*/);
+            $list->attach(form_input_list_entry('',false,do_lang('NA')));
+            foreach ($rows as $row) {
+                $list->attach(form_input_list_entry(strval($row['id']),$has_default && strval($row['id']) == $default,get_translated_text($row['question'])));
+            }
+            return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false);
+        }
+        return NULL;
+    }
 }

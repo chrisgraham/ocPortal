@@ -20,25 +20,27 @@
 
 class Hook_sitemap_root extends Hook_sitemap_base
 {
-	/**
+    /**
 	 * Find if a page-link will be covered by this node.
 	 *
 	 * @param  ID_TEXT		The page-link.
 	 * @return integer		A SITEMAP_NODE_* constant.
 	 */
-	function handles_page_link($page_link)
-	{
-		if (get_option('collapse_user_zones')=='0')
-		{
-			if ($page_link=='') return SITEMAP_NODE_HANDLED; // Imaginery node
-		} else
-		{
-			if ($page_link==':') return SITEMAP_NODE_HANDLED; // Welcome zone
-		}
-		return SITEMAP_NODE_NOT_HANDLED;
-	}
+    public function handles_page_link($page_link)
+    {
+        if (get_option('collapse_user_zones') == '0') {
+            if ($page_link == '') {
+                return SITEMAP_NODE_HANDLED;
+            } // Imaginery node
+        } else {
+            if ($page_link == ':') {
+                return SITEMAP_NODE_HANDLED;
+            } // Welcome zone
+        }
+        return SITEMAP_NODE_NOT_HANDLED;
+    }
 
-	/**
+    /**
 	 * Find details of a virtual position in the sitemap. Virtual positions have no structure of their own, but can find child structures to be absorbed down the tree. We do this for modularity reasons.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -56,17 +58,19 @@ class Hook_sitemap_root extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
-	{
-		$nodes=($callback===NULL || $return_anyway)?array():mixed();
+    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    {
+        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
 
-		$node=$this->get_node(':',$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-		if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
+        $node = $this->get_node(':',$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+        if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+            $nodes[] = $node;
+        }
 
-		return $nodes;
-	}
+        return $nodes;
+    }
 
-	/**
+    /**
 	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -85,127 +89,122 @@ class Hook_sitemap_root extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
-	{
-		$struct=array(
-			'title'=>do_lang_tempcode('ROOT'),
-			'content_type'=>'root',
-			'content_id'=>NULL,
-			'modifiers'=>array(),
-			'only_on_page'=>'',
-			'page_link'=>'',
-			'url'=>NULL,
-			'extra_meta'=>array(
-				'description'=>NULL,
-				'image'=>NULL,
-				'image_2x'=>NULL,
-				'add_date'=>(($meta_gather & SITEMAP_GATHER_TIMES)!=0)?filemtime(get_file_base().'/index.php'):NULL,
-				'edit_date'=>NULL,
-				'submitter'=>NULL,
-				'views'=>NULL,
-				'rating'=>NULL,
-				'meta_keywords'=>NULL,
-				'meta_description'=>NULL,
-				'categories'=>NULL,
-				'validated'=>NULL,
-				'db_row'=>NULL,
-			),
-			'permissions'=>array(),
-			'has_possible_children'=>true,
+    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    {
+        $struct = array(
+            'title' => do_lang_tempcode('ROOT'),
+            'content_type' => 'root',
+            'content_id' => NULL,
+            'modifiers' => array(),
+            'only_on_page' => '',
+            'page_link' => '',
+            'url' => NULL,
+            'extra_meta' => array(
+                'description' => NULL,
+                'image' => NULL,
+                'image_2x' => NULL,
+                'add_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0)?filemtime(get_file_base() . '/index.php'):null,
+                'edit_date' => NULL,
+                'submitter' => NULL,
+                'views' => NULL,
+                'rating' => NULL,
+                'meta_keywords' => NULL,
+                'meta_description' => NULL,
+                'categories' => NULL,
+                'validated' => NULL,
+                'db_row' => NULL,
+            ),
+            'permissions' => array(),
+            'has_possible_children' => true,
 
-			// These are likely to be changed in individual hooks
-			'sitemap_priority'=>SITEMAP_IMPORTANCE_ULTRA,
-			'sitemap_refreshfreq'=>'daily',
-		);
+            // These are likely to be changed in individual hooks
+            'sitemap_priority' => SITEMAP_IMPORTANCE_ULTRA,
+            'sitemap_refreshfreq' => 'daily',
+        );
 
-		if (get_option('collapse_user_zones')=='0')
-		{
-			$struct['title']=do_lang_tempcode('_WELCOME');
-			$struct['page_link']=':';
-			if (($meta_gather & SITEMAP_GATHER_IMAGE)!=0)
-			{
-				$struct['extra_meta']['image']=find_theme_image('icons/24x24/menu/welcome');
-				$struct['extra_meta']['image_2x']=find_theme_image('icons/48x48/menu/welcome');
-			}
+        if (get_option('collapse_user_zones') == '0') {
+            $struct['title'] = do_lang_tempcode('_WELCOME');
+            $struct['page_link'] = ':';
+            if (($meta_gather & SITEMAP_GATHER_IMAGE) != 0) {
+                $struct['extra_meta']['image'] = find_theme_image('icons/24x24/menu/welcome');
+                $struct['extra_meta']['image_2x'] = find_theme_image('icons/48x48/menu/welcome');
+            }
 
-			if ($callback!==NULL)
-				call_user_func($callback,$struct);
-		}
+            if ($callback !== NULL) {
+                call_user_func($callback,$struct);
+            }
+        }
 
-		// Categories done after node callback, to ensure sensible ordering
-		if (($max_recurse_depth===NULL) || ($recurse_level<$max_recurse_depth))
-		{
-			$zone_sitemap_ob=$this->_get_sitemap_object('zone');
+        // Categories done after node callback, to ensure sensible ordering
+        if (($max_recurse_depth === NULL) || ($recurse_level<$max_recurse_depth)) {
+            $zone_sitemap_ob = $this->_get_sitemap_object('zone');
 
-			$children=array();
+            $children = array();
 
-			// Ones going first
-			$first_zones=find_all_zones(false,true,false,0,SITEMAP_MAX_ROWS_PER_LOOP);
-			foreach ($first_zones as $_zone)
-			{
-				list($zone)=$_zone;
-				if ($zone==((get_option('collapse_user_zones')=='0')?'site':''))
-				{
-					$child_page_link=$zone.':';
-					$child_node=$zone_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
-					if ($child_node!==NULL)
-						$children[]=$child_node;
-				}
-			}
+            // Ones going first
+            $first_zones = find_all_zones(false,true,false,0,SITEMAP_MAX_ROWS_PER_LOOP);
+            foreach ($first_zones as $_zone) {
+                list($zone) = $_zone;
+                if ($zone == ((get_option('collapse_user_zones') == '0')?'site':'')) {
+                    $child_page_link = $zone . ':';
+                    $child_node = $zone_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+                    if ($child_node !== NULL) {
+                        $children[] = $child_node;
+                    }
+                }
+            }
 
-			$last_ones=array();
+            $last_ones = array();
 
-			// Middle ones
-			$start=0;
-			do
-			{
-				if ($start==0)
-				{
-					$zones=$first_zones;
-				} else
-				{
-					$zones=find_all_zones(false,true,false,$start,SITEMAP_MAX_ROWS_PER_LOOP);
-				}
-				foreach ($zones as $_zone)
-				{
-					list($zone)=$_zone;
+            // Middle ones
+            $start = 0;
+            do {
+                if ($start == 0) {
+                    $zones = $first_zones;
+                } else {
+                    $zones = find_all_zones(false,true,false,$start,SITEMAP_MAX_ROWS_PER_LOOP);
+                }
+                foreach ($zones as $_zone) {
+                    list($zone) = $_zone;
 
-					// We force a certain order for some
-					if ($zone=='') continue;
-					if ($zone=='site') continue;
-					if ($zone=='cms')
-					{
-						array_unshift($last_ones,$_zone);
-						continue;
-					}
-					if ($zone=='adminzone')
-					{
-						array_push($last_ones,$_zone);
-						continue;
-					}
+                    // We force a certain order for some
+                    if ($zone == '') {
+                        continue;
+                    }
+                    if ($zone == 'site') {
+                        continue;
+                    }
+                    if ($zone == 'cms') {
+                        array_unshift($last_ones,$_zone);
+                        continue;
+                    }
+                    if ($zone == 'adminzone') {
+                        array_push($last_ones,$_zone);
+                        continue;
+                    }
 
-					$child_page_link=$zone.':';
-					$child_node=$zone_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
-					if ($child_node!==NULL)
-						$children[]=$child_node;
-				}
-				$start+=SITEMAP_MAX_ROWS_PER_LOOP;
-			}
-			while (count($zones)>0);
+                    $child_page_link = $zone . ':';
+                    $child_node = $zone_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+                    if ($child_node !== NULL) {
+                        $children[] = $child_node;
+                    }
+                }
+                $start += SITEMAP_MAX_ROWS_PER_LOOP;
+            } while (count($zones)>0);
 
-			// Ones going last
-			foreach ($last_ones as $_zone)
-			{
-				list($zone)=$_zone;
-				$child_page_link=$zone.':';
-				$child_node=$zone_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
-				if ($child_node!==NULL)
-					$children[]=$child_node;
-			}
+            // Ones going last
+            foreach ($last_ones as $_zone) {
+                list($zone) = $_zone;
+                $child_page_link = $zone . ':';
+                $child_node = $zone_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$_zone);
+                if ($child_node !== NULL) {
+                    $children[] = $child_node;
+                }
+            }
 
-			$struct['children']=$children;
-		}
+            $struct['children'] = $children;
+        }
 
-		return ($callback===NULL || $return_anyway)?$struct:NULL;
-	}
+        return ($callback === NULL || $return_anyway)?$struct:null;
+    }
 }

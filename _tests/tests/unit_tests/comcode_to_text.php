@@ -18,9 +18,9 @@
  */
 class comcode_to_text_test_set extends ocp_test_case
 {
-	function testComcodeToText()
-	{
-		$text='
+    public function testComcodeToText()
+    {
+        $text = '
 [title]header 1[/title]
 
 under header 1
@@ -49,9 +49,9 @@ blah[/indent]
 
 [abbr="Cascading Style Sheets"]CSS[/abbr]
 ';
-		$got=strip_comcode($text);
+        $got = strip_comcode($text);
 
-		$expected='
+        $expected = '
 header 1
 ========
 
@@ -81,6 +81,6 @@ Want
 
 Cascading Style Sheets
 			';
-		$this->assertTrue(trim($got)==trim($expected));
-	}
+        $this->assertTrue(trim($got) == trim($expected));
+    }
 }

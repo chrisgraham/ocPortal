@@ -20,26 +20,25 @@
 
 class Hook_calendar_recurrence_suggest
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		require_code('calendar');
+    public function run()
+    {
+        require_code('calendar');
 
-		$day_of_month=get_param_integer('day');
-		$month=get_param_integer('month');
-		$year=get_param_integer('year');
-		$hour=get_param_integer('hour');
-		$minute=get_param_integer('minute');
-		$do_timezone_conv=get_param_integer('do_timezone_conv');
-		$all_day_event=get_param_integer('all_day_event');
+        $day_of_month = get_param_integer('day');
+        $month = get_param_integer('month');
+        $year = get_param_integer('year');
+        $hour = get_param_integer('hour');
+        $minute = get_param_integer('minute');
+        $do_timezone_conv = get_param_integer('do_timezone_conv');
+        $all_day_event = get_param_integer('all_day_event');
 
-		$default_monthly_spec_type=get_param('monthly_spec_type');
+        $default_monthly_spec_type = get_param('monthly_spec_type');
 
-		return monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_spec_type);
-	}
+        return monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_spec_type);
+    }
 }
-

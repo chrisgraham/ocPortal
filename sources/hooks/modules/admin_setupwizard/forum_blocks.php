@@ -20,21 +20,20 @@
 
 class Hook_sw_forum_blocks
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('forum_blocks')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('forum_blocks')) {
+            return array();
+        }
 
-		if (!has_no_forum())
-		{
-			return array(array('main_forum_news'=>array('NO','NO'),'main_forum_topics'=>array('YES','NO')),array('side_forum_news'=>array('PANEL_NONE','PANEL_NONE'),'side_users_online'=>array('PANEL_LEFT','PANEL_RIGHT')));
-		}
-		return array(array(),array());
-	}
+        if (!has_no_forum()) {
+            return array(array('main_forum_news' => array('NO','NO'),'main_forum_topics' => array('YES','NO')),array('side_forum_news' => array('PANEL_NONE','PANEL_NONE'),'side_users_online' => array('PANEL_LEFT','PANEL_RIGHT')));
+        }
+        return array(array(),array());
+    }
 }
-
-

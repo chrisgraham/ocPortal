@@ -20,19 +20,19 @@
 
 class Hook_Profiles_Tabs_points
 {
-	/**
+    /**
 	 * Find whether this hook is active.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @return boolean		Whether this hook is active
 	 */
-	function is_active($member_id_of,$member_id_viewing)
-	{
-		return true;
-	}
+    public function is_active($member_id_of,$member_id_viewing)
+    {
+        return true;
+    }
 
-	/**
+    /**
 	 * Render function for profile tab hooks.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
@@ -40,23 +40,23 @@ class Hook_Profiles_Tabs_points
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return array			A tuple: The tab title, the tab contents, the suggested tab order, the icon
 	 */
-	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
-	{
-		require_lang('points');
+    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    {
+        require_lang('points');
 
-		$title=do_lang_tempcode('POINTS');
+        $title = do_lang_tempcode('POINTS');
 
-		$order=40;
+        $order = 40;
 
-		if ($leave_to_ajax_if_possible) return array($title,NULL,$order,'menu/social/points');
+        if ($leave_to_ajax_if_possible) {
+            return array($title,null,$order,'menu/social/points');
+        }
 
-		require_code('points3');
-		require_css('points');
+        require_code('points3');
+        require_css('points');
 
-		$content=points_profile($member_id_of,$member_id_viewing);
+        $content = points_profile($member_id_of,$member_id_viewing);
 
-		return array($title,$content,$order,'menu/social/points');
-	}
+        return array($title,$content,$order,'menu/social/points');
+    }
 }
-
-

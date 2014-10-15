@@ -18,26 +18,27 @@
  */
 class blocks_test_set extends ocp_test_case
 {
-	function setUp()
-	{
-		parent::setUp();
-	}
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
-	function testBlocksRender()
-	{
-		require_code('zones2');
-		$blocks=find_all_blocks();
-		foreach ($blocks as $block=>$type)
-		{
-			if (strpos($type,'_custom')!==false) continue;
+    public function testBlocksRender()
+    {
+        require_code('zones2');
+        $blocks = find_all_blocks();
+        foreach ($blocks as $block => $type) {
+            if (strpos($type,'_custom') !== false) {
+                continue;
+            }
 
-			$test=do_block($block,array());
-			$this->assertTrue(is_object($test));
-		}
-	}
+            $test = do_block($block,array());
+            $this->assertTrue(is_object($test));
+        }
+    }
 
-	function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 }

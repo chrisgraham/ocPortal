@@ -20,11 +20,11 @@ use Sabre\DAV;
  */
 function init__webdav()
 {
-	global $OCCLEFS_LISTING_CACHE;
-	$OCCLEFS_LISTING_CACHE=array();
+    global $OCCLEFS_LISTING_CACHE;
+    $OCCLEFS_LISTING_CACHE = array();
 
-	global $WEBDAV_LOG_FILE;
-	$WEBDAV_LOG_FILE=NULL;
+    global $WEBDAV_LOG_FILE;
+    $WEBDAV_LOG_FILE = null;
 }
 
 /**
@@ -32,54 +32,55 @@ function init__webdav()
  */
 function webdav_script()
 {
-	require_code('sabredav/vendor/autoload');
+    require_code('sabredav/vendor/autoload');
 
-	require_code('webdav_occlefs');
+    require_code('webdav_occlefs');
 
-	// Optional logging (create this file and give write access to it)
-	$log_path=get_custom_file_base().'/data_custom/modules/webdav/tmp/debug.log';
-	global $WEBDAV_LOG_FILE;
-	if (is_file($log_path))
-	{
-		$WEBDAV_LOG_FILE=fopen($log_path,'a');
-		$log_message='Request... '.ocp_srv('REQUEST_METHOD').': '.ocp_srv('REQUEST_URI');
-		//$log_message.="\n".file_get_contents('php://input'); // Only enable when debugging, as breaks PUT requests (see http://stackoverflow.com/questions/3107624/why-can-php-input-be-read-more-than-once-despite-the-documentation-saying-othe)
-		webdav_log($log_message);
-	}
+    // Optional logging (create this file and give write access to it)
+    $log_path = get_custom_file_base() . '/data_custom/modules/webdav/tmp/debug.log';
+    global $WEBDAV_LOG_FILE;
+    if (is_file($log_path)) {
+        $WEBDAV_LOG_FILE = fopen($log_path,'a');
+        $log_message = 'Request... ' . ocp_srv('REQUEST_METHOD') . ': ' . ocp_srv('REQUEST_URI');
+        //$log_message.="\n".file_get_contents('php://input'); // Only enable when debugging, as breaks PUT requests (see http://stackoverflow.com/questions/3107624/why-can-php-input-be-read-more-than-once-despite-the-documentation-saying-othe)
+        webdav_log($log_message);
+    }
 
-	// Initialise...
+    // Initialise...
 
-	$root_dir=new webdav_occlefs\Directory('');
-	$server=new DAV\Server($root_dir);
+    $root_dir = new webdav_occlefs\Directory('');
+    $server = new DAV\Server($root_dir);
 
-	$parsed=parse_url(get_base_url());
-	if (substr($parsed['path'],-1)!='/') $parsed['path'].='/';
-	$webdav_root=get_value('webdav_root');
-	if (is_null($webdav_root)) $webdav_root='webdav';
-	$server->setBaseUri($parsed['path'].$webdav_root);
+    $parsed = parse_url(get_base_url());
+    if (substr($parsed['path'],-1) != '/') {
+        $parsed['path'] .= '/';
+    }
+    $webdav_root = get_value('webdav_root');
+    if (is_null($webdav_root)) {
+        $webdav_root = 'webdav';
+    }
+    $server->setBaseUri($parsed['path'] . $webdav_root);
 
-	if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // If already admin (e.g. backdoor_ip), no need for access check
-	{
-		$auth_backend=new webdav_occlefs\Auth();
-		$auth_plugin=new DAV\Auth\Plugin($auth_backend,get_site_name()/*the auth realm*/);
-		$server->addPlugin($auth_plugin);
-	}
+    if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) { // If already admin (e.g. backdoor_ip), no need for access check
+        $auth_backend = new webdav_occlefs\Auth();
+        $auth_plugin = new DAV\Auth\Plugin($auth_backend,get_site_name()/*the auth realm*/);
+        $server->addPlugin($auth_plugin);
+    }
 
-	$lock_backend=new DAV\Locks\Backend\File(get_custom_file_base().'/data_custom/modules/webdav/locks/locks.dat');
-	$lock_plugin=new DAV\Locks\Plugin($lock_backend);
-	$server->addPlugin($lock_plugin);
+    $lock_backend = new DAV\Locks\Backend\File(get_custom_file_base() . '/data_custom/modules/webdav/locks/locks.dat');
+    $lock_plugin = new DAV\Locks\Plugin($lock_backend);
+    $server->addPlugin($lock_plugin);
 
-	$tffp=new DAV\TemporaryFileFilterPlugin(get_custom_file_base().'/data_custom/modules/webdav/tmp');
-	$server->addPlugin($tffp);
+    $tffp = new DAV\TemporaryFileFilterPlugin(get_custom_file_base() . '/data_custom/modules/webdav/tmp');
+    $server->addPlugin($tffp);
 
-	$server->exec();
+    $server->exec();
 
-	// Close off log
-	if (!is_null($WEBDAV_LOG_FILE))
-	{
-		fclose($WEBDAV_LOG_FILE);
-		$WEBDAV_LOG_FILE=NULL;
-	}
+    // Close off log
+    if (!is_null($WEBDAV_LOG_FILE)) {
+        fclose($WEBDAV_LOG_FILE);
+        $WEBDAV_LOG_FILE = null;
+    }
 }
 
 /**
@@ -89,9 +90,8 @@ function webdav_script()
  */
 function webdav_log($str)
 {
-	global $WEBDAV_LOG_FILE;
-	if (!is_null($WEBDAV_LOG_FILE))
-	{
-		fwrite($WEBDAV_LOG_FILE,$str."\n\n");
-	}
+    global $WEBDAV_LOG_FILE;
+    if (!is_null($WEBDAV_LOG_FILE)) {
+        fwrite($WEBDAV_LOG_FILE,$str . "\n\n");
+    }
 }

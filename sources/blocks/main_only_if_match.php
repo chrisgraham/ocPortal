@@ -20,41 +20,40 @@
 
 class Block_main_only_if_match
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('param','caption');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','caption');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (!array_key_exists('param',$map)) return new ocp_tempcode();
+    public function run($map)
+    {
+        if (!array_key_exists('param',$map)) {
+            return new ocp_tempcode();
+        }
 
-		if (match_key_match($map['param']))
-		{
-			$caption=array_key_exists('caption',$map)?$map['caption']:'';
-			return comcode_to_tempcode($caption,get_member(),true);
-		}
-		return new ocp_tempcode();
-	}
+        if (match_key_match($map['param'])) {
+            $caption = array_key_exists('caption',$map)?$map['caption']:'';
+            return comcode_to_tempcode($caption,get_member(),true);
+        }
+        return new ocp_tempcode();
+    }
 }
-
-

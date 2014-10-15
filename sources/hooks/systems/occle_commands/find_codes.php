@@ -20,7 +20,7 @@
 
 class Hook_occle_command_find_codes
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,36 +28,36 @@ class Hook_occle_command_find_codes
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('find_codes',array('h'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','find_codes'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('find_codes',array('h'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','find_codes'));
+            }
 
-			$path=get_custom_file_base().'/sources/';
-			$files=array();
+            $path = get_custom_file_base() . '/sources/';
+            $files = array();
 
-			if (is_dir($path))
-			{
-				$dh=opendir($path);
-				while (($file=readdir($dh))!==false)
-				{
-					if (($file!='.') && ($file!='..'))
-					{
-						if (!is_dir($path.$file))
-						{
-							$contents=file_get_contents($path.$file);
-							if (strpos($contents,$parameters[0])!==false) $files[]=$path.$file;
-						}
-						unset($contents); // Got to be careful with that memory :-(
-					}
-				}
+            if (is_dir($path)) {
+                $dh = opendir($path);
+                while (($file = readdir($dh)) !== false) {
+                    if (($file != '.') && ($file != '..')) {
+                        if (!is_dir($path . $file)) {
+                            $contents = file_get_contents($path . $file);
+                            if (strpos($contents,$parameters[0]) !== false) {
+                                $files[] = $path . $file;
+                            }
+                        }
+                        unset($contents); // Got to be careful with that memory :-(
+                    }
+                }
 
-				return array('',do_template('OCCLE_FIND_CODES',array('_GUID'=>'3374d1a80727aecc271722f2184743d0','FILES'=>$files)),'','');
-			}
-			else return array('','','',do_lang('INCOMPLETE_ERROR')); // Directory doesn't exist
-		}
-	}
+                return array('',do_template('OCCLE_FIND_CODES',array('_GUID' => '3374d1a80727aecc271722f2184743d0','FILES' => $files)),'','');
+            } else {
+                return array('','','',do_lang('INCOMPLETE_ERROR'));
+            } // Directory doesn't exist
+        }
+    }
 }
-

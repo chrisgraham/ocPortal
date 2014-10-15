@@ -20,35 +20,33 @@
 
 class Hook_config_activity_show_stats_count_users_online_forum
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'COUNT_ONFORUMS',
-			'type'=>'tick',
-			'category'=>'BLOCKS',
-			'group'=>'STATISTICS',
-			'explanation'=>'CONFIG_OPTION_activity_show_stats_count_users_online_forum',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'COUNT_ONFORUMS',
+            'type' => 'tick',
+            'category' => 'BLOCKS',
+            'group' => 'STATISTICS',
+            'explanation' => 'CONFIG_OPTION_activity_show_stats_count_users_online_forum',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'stats_block',
-		);
-	}
+            'addon' => 'stats_block',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return ((get_forum_type()!='ocf') && (addon_installed('stats_block')))?'0':NULL;
-	}
+    public function get_default()
+    {
+        return ((get_forum_type() != 'ocf') && (addon_installed('stats_block')))?'0':null;
+    }
 }
-
-

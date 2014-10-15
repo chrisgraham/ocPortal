@@ -20,80 +20,82 @@
 
 class Hook_content_meta_aware_group
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function info($zone = null)
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		return array(
-			'supports_custom_fields'=>true,
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'GROUP',
+            'content_type_label' => 'GROUP',
 
-			'connection'=>$GLOBALS['FORUM_DB'],
-			'table'=>'f_groups',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>NULL,
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_type'=>NULL, // For category permissions
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_field'=>NULL, // For category permissions
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['FORUM_DB'],
+            'table' => 'f_groups',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => NULL,
+            'parent_category_meta_aware_type' => NULL,
+            'is_category' => false,
+            'is_entry' => true,
+            'category_type' => NULL, // For category permissions
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_field' => NULL, // For category permissions
+            'category_is_string' => false,
 
-			'title_field'=>'g_name',
-			'title_field_dereference'=>true,
-			'description_field'=>NULL,
-			'thumb_field'=>'g_rank_image',
-			'thumb_field_is_theme_image'=>true,
+            'title_field' => 'g_name',
+            'title_field_dereference' => true,
+            'description_field' => NULL,
+            'thumb_field' => 'g_rank_image',
+            'thumb_field_is_theme_image' => true,
 
-			'view_page_link_pattern'=>'_SEARCH:groups:view:_WILD',
-			'edit_page_link_pattern'=>'adminzone:admin_ocf_groups:_ed:_WILD',
-			'view_category_page_link_pattern'=>NULL,
-			'add_url'=>'',
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('groups')).':groups',
+            'view_page_link_pattern' => '_SEARCH:groups:view:_WILD',
+            'edit_page_link_pattern' => 'adminzone:admin_ocf_groups:_ed:_WILD',
+            'view_category_page_link_pattern' => NULL,
+            'add_url' => '',
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('groups')) . ':groups',
 
-			'support_url_monikers'=>true,
+            'support_url_monikers' => true,
 
-			'views_field'=>NULL,
-			'submitter_field'=>'g_group_leader',
-			'add_time_field'=>NULL,
-			'edit_time_field'=>NULL,
-			'date_field'=>NULL,
-			'validated_field'=>NULL,
+            'views_field' => NULL,
+            'submitter_field' => 'g_group_leader',
+            'add_time_field' => NULL,
+            'edit_time_field' => NULL,
+            'date_field' => NULL,
+            'validated_field' => NULL,
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>NULL,
+            'search_hook' => NULL,
 
-			'addon_name'=>'core_ocf',
+            'addon_name' => 'core_ocf',
 
-			'cms_page'=>'groups',
-			'module'=>'groups',
+            'cms_page' => 'groups',
+            'module' => 'groups',
 
-			'occle_filesystem_hook'=>'groups',
-			'occle_filesystem__is_folder'=>true,
+            'occle_filesystem_hook' => 'groups',
+            'occle_filesystem__is_folder' => true,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_GROUP',
-		);
-	}
+            'actionlog_regexp' => '\w+_GROUP',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -105,10 +107,10 @@ class Hook_content_meta_aware_group
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('ocf_groups');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('ocf_groups');
 
-		return render_group_box($row,$zone,$give_context);
-	}
+        return render_group_box($row,$zone,$give_context);
+    }
 }

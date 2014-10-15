@@ -20,35 +20,33 @@
 
 class Hook_config_bottom_show_rules_link
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'RULES_LINK',
-			'type'=>'tick',
-			'category'=>'THEME',
-			'group'=>'FOOTER_LINKS',
-			'explanation'=>'CONFIG_OPTION_bottom_show_rules_link',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'RULES_LINK',
+            'type' => 'tick',
+            'category' => 'THEME',
+            'group' => 'FOOTER_LINKS',
+            'explanation' => 'CONFIG_OPTION_bottom_show_rules_link',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

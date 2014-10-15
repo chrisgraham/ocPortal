@@ -20,27 +20,31 @@
 
 class Hook_cron_sitemap
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		if (!is_guest()) return; // Bad idea
+    public function run()
+    {
+        if (!is_guest()) {
+            return;
+        } // Bad idea
 
-		$time=time();
-		$last_time=intval(get_long_value('last_sitemap_time_calc'));
+        $time = time();
+        $last_time = intval(get_long_value('last_sitemap_time_calc'));
 
-		if (get_long_value('sitemap_building_in_progress')=='1' && intval(get_long_value('last_sitemap_time_calc'))>time()-60*60*24*3/*in case it stalled a few days back - force a re-try*/) return;
+        if (get_long_value('sitemap_building_in_progress') == '1' && intval(get_long_value('last_sitemap_time_calc'))>time()-60*60*24*3/*in case it stalled a few days back - force a re-try*/) {
+            return;
+        }
 
-		if (($last_time>time()-60*60*24) && (@filesize(get_custom_file_base().'/ocp_sitemap.xml')>10)) return; // Every day
+        if (($last_time>time()-60*60*24) && (@filesize(get_custom_file_base() . '/ocp_sitemap.xml')>10)) {
+            return;
+        } // Every day
 
-		set_long_value('last_sitemap_time_calc',strval($time));
+        set_long_value('last_sitemap_time_calc',strval($time));
 
-		require_lang('menus');
+        require_lang('menus');
 
-		require_code('tasks');
-		call_user_func_array__long_task(do_lang('GENERATE_SITEMAP'),get_screen_title('GENERATE_SITEMAP'),'sitemap',array(),false,false,false);
-	}
+        require_code('tasks');
+        call_user_func_array__long_task(do_lang('GENERATE_SITEMAP'),get_screen_title('GENERATE_SITEMAP'),'sitemap',array(),false,false,false);
+    }
 }
-
-

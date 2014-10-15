@@ -15,36 +15,34 @@
 
 class Hook_config_support_day_priority
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'SUPPORT_PRIORITY_DAY_MINUTES',
-			'type'=>'float',
-			'category'=>'FEATURE',
-			'group'=>'SECTION_CUSTOMERS',
-			'explanation'=>'CONFIG_OPTION_support_day_priority',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>7,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'SUPPORT_PRIORITY_DAY_MINUTES',
+            'type' => 'float',
+            'category' => 'FEATURE',
+            'group' => 'SECTION_CUSTOMERS',
+            'explanation' => 'CONFIG_OPTION_support_day_priority',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 7,
 
-			'addon'=>'ocportalcom_support_credits',
-		);
-	}
+            'addon' => 'ocportalcom_support_credits',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '7';
-	}
+    public function get_default()
+    {
+        return '7';
+    }
 }
-
-

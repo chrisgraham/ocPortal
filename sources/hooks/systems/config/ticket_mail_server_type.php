@@ -20,37 +20,37 @@
 
 class Hook_config_ticket_mail_server_type
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TICKET_MAIL_SERVER_TYPE',
-			'type'=>'list',
-			'category'=>'FEATURE',
-			'group'=>'SUPPORT_TICKETS_MAIL',
-			'explanation'=>'CONFIG_OPTION_ticket_mail_server_type',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'pop3|pop3s|imap|imaps',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TICKET_MAIL_SERVER_TYPE',
+            'type' => 'list',
+            'category' => 'FEATURE',
+            'group' => 'SUPPORT_TICKETS_MAIL',
+            'explanation' => 'CONFIG_OPTION_ticket_mail_server_type',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'pop3|pop3s|imap|imaps',
 
-			'addon'=>'tickets',
-		);
-	}
+            'addon' => 'tickets',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (GOOGLE_APPENGINE) return NULL;
+    public function get_default()
+    {
+        if (GOOGLE_APPENGINE) {
+            return NULL;
+        }
 
-		return 'imap';
-	}
+        return 'imap';
+    }
 }
-
-

@@ -20,35 +20,37 @@
 
 class Hook_orphaned_lang_strings
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!multi_lang_content()) return NULL;
+    public function info()
+    {
+        if (!multi_lang_content()) {
+            return NULL;
+        }
 
-		if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) return NULL; // Too much, and we don't have much use for it outside development anyway
+        if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) {
+            return NULL;
+        } // Too much, and we don't have much use for it outside development anyway
 
-		$info=array();
-		$info['title']=do_lang_tempcode('ORPHANED_LANG_STRINGS');
-		$info['description']=do_lang_tempcode('DESCRIPTION_ORPHANED_LANG_STRINGS');
-		$info['type']='optimise';
+        $info = array();
+        $info['title'] = do_lang_tempcode('ORPHANED_LANG_STRINGS');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_ORPHANED_LANG_STRINGS');
+        $info['type'] = 'optimise';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('ORPHANED_LANG_STRINGS'),NULL,'find_orphaned_lang_strings');
-	}
+    public function run()
+    {
+        require_code('tasks');
+        return call_user_func_array__long_task(do_lang('ORPHANED_LANG_STRINGS'),null,'find_orphaned_lang_strings');
+    }
 }
-
-

@@ -20,7 +20,7 @@
 
 class Hook_occle_command_watch_chatroom
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,36 +28,38 @@ class Hook_occle_command_watch_chatroom
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('watch_chatroom',array('h','u'),array(true)),'','');
-		else
-		{
-			require_code('chat');
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('watch_chatroom',array('h','u'),array(true)),'','');
+        } else {
+            require_code('chat');
 
-			if ((array_key_exists('u',$options)) || (array_key_exists('unwatch',$options)))
-			{
-				delete_value('occle_watched_chatroom');
-				$_chatroom=do_lang('SUCCESS');
-			}
-			elseif (array_key_exists(0,$parameters))
-			{
-				if (is_numeric($parameters[0])) $chatroom=$parameters[0];
-				else $chatroom=get_chatroom_id($parameters[0]);
+            if ((array_key_exists('u',$options)) || (array_key_exists('unwatch',$options))) {
+                delete_value('occle_watched_chatroom');
+                $_chatroom = do_lang('SUCCESS');
+            } elseif (array_key_exists(0,$parameters)) {
+                if (is_numeric($parameters[0])) {
+                    $chatroom = $parameters[0];
+                } else {
+                    $chatroom = get_chatroom_id($parameters[0]);
+                }
 
-				if (is_null($chatroom)) return array('','','',do_lang('MISSING_RESOURCE'));
+                if (is_null($chatroom)) {
+                    return array('','','',do_lang('MISSING_RESOURCE'));
+                }
 
-				set_value('occle_watched_chatroom',$chatroom);
+                set_value('occle_watched_chatroom',$chatroom);
 
-				$_chatroom=get_chatroom_name($chatroom);
-			} else
-			{
-				$_chatroom=get_chatroom_name(intval(get_value('occle_watched_chatroom')),true);
-				if (is_null($_chatroom)) return array('','','',do_lang('MISSING_RESOURCE'));
-			}
+                $_chatroom = get_chatroom_name($chatroom);
+            } else {
+                $_chatroom = get_chatroom_name(intval(get_value('occle_watched_chatroom')),true);
+                if (is_null($_chatroom)) {
+                    return array('','','',do_lang('MISSING_RESOURCE'));
+                }
+            }
 
-			return array('','',$_chatroom,'');
-		}
-	}
+            return array('','',$_chatroom,'');
+        }
+    }
 }
-

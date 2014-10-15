@@ -18,27 +18,27 @@
  */
 class ticket_type_test_set extends ocp_test_case
 {
-	var $ticket_type_id;
+    public $ticket_type_id;
 
-	function setUp()
-	{
-		parent::setUp();
-		require_code('tickets2');
-		$this->ticket_type_id=add_ticket_type('platinum',0,0);
-		$ticket_type_name=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id'=>$this->ticket_type_id));
-		$this->assertTrue('platinum'==get_translated_text($ticket_type_name));
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        require_code('tickets2');
+        $this->ticket_type_id = add_ticket_type('platinum',0,0);
+        $ticket_type_name = $GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id' => $this->ticket_type_id));
+        $this->assertTrue('platinum' == get_translated_text($ticket_type_name));
+    }
 
-	function testEditTicketType()
-	{
-		edit_ticket_type($this->ticket_type_id,'gold',0,0);
-		$ticket_type_name=$GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id'=>$this->ticket_type_id));
-		$this->assertTrue('gold'==get_translated_text($ticket_type_name));
-	}
+    public function testEditTicketType()
+    {
+        edit_ticket_type($this->ticket_type_id,'gold',0,0);
+        $ticket_type_name = $GLOBALS['SITE_DB']->query_select_value('ticket_types','ticket_type_name',array('id' => $this->ticket_type_id));
+        $this->assertTrue('gold' == get_translated_text($ticket_type_name));
+    }
 
-	function tearDown()
-	{
-		delete_ticket_type($this->ticket_type_id);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        delete_ticket_type($this->ticket_type_id);
+        parent::tearDown();
+    }
 }

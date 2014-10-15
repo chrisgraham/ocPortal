@@ -20,18 +20,18 @@
 
 class Hook_attachments_ocf_signature
 {
-	/**
+    /**
 	 * Run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
 	 * @param  ID_TEXT		The ID
 	 * @param  object			The database connection to check on
 	 * @return boolean		Whether there is permission
 	 */
-	function run($id,$connection)
-	{
-		if (get_forum_type()!='ocf') return false; // Shouldn't be here, but maybe it's left over somehow
-		return true;
-	}
+    public function run($id,$connection)
+    {
+        if (get_forum_type() != 'ocf') {
+            return false;
+        } // Shouldn't be here, but maybe it's left over somehow
+        return true;
+    }
 }
-
-

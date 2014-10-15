@@ -15,76 +15,76 @@
 
 class Hook_addon_registry_xmppchat
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the addon category
 	 *
 	 * @return string			The category
 	 */
-	function get_category()
-	{
-		return 'Development';
-	}
+    public function get_category()
+    {
+        return 'Development';
+    }
 
-	/**
+    /**
 	 * Get the addon author
 	 *
 	 * @return string			The author
 	 */
-	function get_author()
-	{
-		return 'Chris Graham';
-	}
+    public function get_author()
+    {
+        return 'Chris Graham';
+    }
 
-	/**
+    /**
 	 * Find other authors
 	 *
 	 * @return array			A list of co-authors that should be attributed
 	 */
-	function get_copyright_attribution()
-	{
-		return array(
-			'Harlan Iverson',
-		);
-	}
+    public function get_copyright_attribution()
+    {
+        return array(
+            'Harlan Iverson',
+        );
+    }
 
-	/**
+    /**
 	 * Get the addon licence (one-line summary only)
 	 *
 	 * @return string			The licence
 	 */
-	function get_licence()
-	{
-		return 'LGPL';
-	}
+    public function get_licence()
+    {
+        return 'LGPL';
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Replaces the standard ocPortal chat room with any Jabber chatrooms running on your server.
+    public function get_description()
+    {
+        return 'Replaces the standard ocPortal chat room with any Jabber chatrooms running on your server.
 		
 Usage Instructions:
 1) You will need a dedicated server; we assume it is Linux and Apache.
@@ -98,73 +98,73 @@ Usage Instructions:
 9) In ocPortal you should deny access to Guests to the chat module, they are not supported at this time.
 10) Instructions for XMPP usage by users have been placed on the chat lobby screen. Note that as an administrator you now need to manage chat rooms via a normal XMPP client: the admin/CMS chat modules will no longer be functional.
 11) You may need to set up Proxy server (we\'re not sure why, but on some PHP configurations our proxying script does not work). Something similar to the following needs to be in the Apache configuration to workaround the problem: LoadModule proxy_module /usr/lib/apache2/modules/mod_proxy.so LoadModule proxy_http_module /usr/lib/apache2/modules/mod_proxy_http.so ProxyRequests Off ProxyPass /data_custom/xmpp_proxy.php http://<yourdomainname>:5280/http-bind/ Credits: We used xmpp4js to integrate with our chat frontend, and the ocP/jabber authentication was based on lissyx\'s work.';
-	}
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(
-				'Dedicated server running ejabberd',
-				'chat',
-			),
-			'recommends'=>array(
-			),
-			'conflicts_with'=>array(
-			)
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(
+                'Dedicated server running ejabberd',
+                'chat',
+            ),
+            'recommends' => array(
+            ),
+            'conflicts_with' => array(
+            )
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources_custom/hooks/systems/addon_registry/xmppchat.php',
-			'data_custom/jabber-logs/index.html',
-			'data_custom/jabber-logs/.htaccess',
-			'themes/default/templates_custom/JAVASCRIPT_XMPP_CRYPTO.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_XMPP_DOM-ALL.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_XMPP_PROTOTYPE.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_XMPP_XMPP4JS.tpl',
-			'data_custom/xmpp_proxy.php',
-			'data_custom/modules/chat/ejabberd_auth.php',
-			'themes/default/templates_custom/CHAT_LOBBY_SCREEN.tpl',
-			'themes/default/templates_custom/CHAT_ROOM_LINK.tpl',
-			'themes/default/templates_custom/CHAT_ROOM_SCREEN.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_CHAT.tpl',
-			'sources_custom/chat.php',
-			'sources_custom/hooks/systems/content_meta_aware/chat.php',
-			'site/pages/modules_custom/chat.php',
-			'data_custom/get_avatar.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources_custom/hooks/systems/addon_registry/xmppchat.php',
+            'data_custom/jabber-logs/index.html',
+            'data_custom/jabber-logs/.htaccess',
+            'themes/default/templates_custom/JAVASCRIPT_XMPP_CRYPTO.tpl',
+            'themes/default/templates_custom/JAVASCRIPT_XMPP_DOM-ALL.tpl',
+            'themes/default/templates_custom/JAVASCRIPT_XMPP_PROTOTYPE.tpl',
+            'themes/default/templates_custom/JAVASCRIPT_XMPP_XMPP4JS.tpl',
+            'data_custom/xmpp_proxy.php',
+            'data_custom/modules/chat/ejabberd_auth.php',
+            'themes/default/templates_custom/CHAT_LOBBY_SCREEN.tpl',
+            'themes/default/templates_custom/CHAT_ROOM_LINK.tpl',
+            'themes/default/templates_custom/CHAT_ROOM_SCREEN.tpl',
+            'themes/default/templates_custom/JAVASCRIPT_CHAT.tpl',
+            'sources_custom/chat.php',
+            'sources_custom/hooks/systems/content_meta_aware/chat.php',
+            'site/pages/modules_custom/chat.php',
+            'data_custom/get_avatar.php',
+        );
+    }
 }

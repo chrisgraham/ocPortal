@@ -20,33 +20,31 @@
 
 class Hook_blocks
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['title']=do_lang_tempcode('BLOCK_CACHE');
-		$info['description']=do_lang_tempcode('DESCRIPTION_BLOCK_CACHE');
-		$info['type']='cache';
+    public function info()
+    {
+        $info = array();
+        $info['title'] = do_lang_tempcode('BLOCK_CACHE');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_BLOCK_CACHE');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		erase_block_cache();
-		erase_persistent_cache();
+    public function run()
+    {
+        erase_block_cache();
+        erase_persistent_cache();
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }
-
-

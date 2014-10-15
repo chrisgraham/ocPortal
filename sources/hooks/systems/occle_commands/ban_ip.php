@@ -20,7 +20,7 @@
 
 class Hook_occle_command_ban_ip
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,18 +28,22 @@ class Hook_occle_command_ban_ip
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('ban_ip',array('h','u'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','ban_ip'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('ban_ip',array('h','u'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','ban_ip'));
+            }
 
-			require_code('submit');
-			if ((array_key_exists('u',$options)) || (array_key_exists('unban',$options))) unban_ip($parameters[0]);
-			else ban_ip($parameters[0],array_key_exists(1,$parameters)?$parameters[1]:'');
-			return array('','',do_lang('SUCCESS'),'');
-		}
-	}
+            require_code('submit');
+            if ((array_key_exists('u',$options)) || (array_key_exists('unban',$options))) {
+                unban_ip($parameters[0]);
+            } else {
+                ban_ip($parameters[0],array_key_exists(1,$parameters)?$parameters[1]:'');
+            }
+            return array('','',do_lang('SUCCESS'),'');
+        }
+    }
 }
-

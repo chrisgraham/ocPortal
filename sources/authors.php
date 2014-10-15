@@ -27,21 +27,21 @@
  * @param  ID_TEXT		Overridden GUID to send to templates (blank: none)
  * @return tempcode		The author box
  */
-function render_author_box($row,$zone='_SEARCH',$give_context=true,$guid='')
+function render_author_box($row,$zone = '_SEARCH',$give_context = true,$guid = '')
 {
-	require_lang('authors');
+    require_lang('authors');
 
-	$url=build_url(array('page'=>'authors','type'=>'misc','id'=>$row['author']),$zone);
+    $url = build_url(array('page' => 'authors','type' => 'misc','id' => $row['author']),$zone);
 
-	$title=$give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('AUTHOR'),$row['author']):$row['author'];
+    $title = $give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('AUTHOR'),$row['author']):$row['author'];
 
-	return do_template('SIMPLE_PREVIEW_BOX',array(
-		'_GUID'=>($guid!='')?$guid:'e597aef1818f5610402d6e5f478735a1',
-		'ID'=>$row['author'],
-		'TITLE'=>$title,
-		'SUMMARY'=>get_translated_text($row['description']),
-		'URL'=>$url,
-	));
+    return do_template('SIMPLE_PREVIEW_BOX',array(
+        '_GUID' => ($guid != '')?$guid:'e597aef1818f5610402d6e5f478735a1',
+        'ID' => $row['author'],
+        'TITLE' => $title,
+        'SUMMARY' => get_translated_text($row['description']),
+        'URL' => $url,
+    ));
 }
 
 /**
@@ -49,65 +49,57 @@ function render_author_box($row,$zone='_SEARCH',$give_context=true,$guid='')
  */
 function authors_script()
 {
-	require_lang('authors');
-	require_css('authors');
+    require_lang('authors');
+    require_css('authors');
 
-	inform_non_canonical_parameter('max');
+    inform_non_canonical_parameter('max');
 
-	$start=get_param_integer('start',0);
-	$max=get_param_integer('max',300);
+    $start = get_param_integer('start',0);
+    $max = get_param_integer('max',300);
 
-	$author_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta WHERE m_name LIKE \''.db_encode_like('%author').'\'');
-	$rows=array();
-	foreach ($author_fields as $field)
-	{
-		if (($field['m_table']!='addons') && ($field['m_table']!='blocks') && ($field['m_table']!='modules'))
-		{
-			$rows_new=$GLOBALS['SITE_DB']->query('SELECT DISTINCT '.$field['m_name'].' AS author FROM '.$GLOBALS['SITE_DB']->get_table_prefix().$field['m_table'].' WHERE '.db_string_not_equal_to($field['m_name'],'').' ORDER BY '.$field['m_name'],$max+$start);
-			foreach ($rows_new as $a)
-			{
-				if ((!array_key_exists($a['author'],$rows)) || ($field['m_table']=='authors'))
-					$rows[$a['author']]=$field['m_table'];
-			}
-		}
-	}
+    $author_fields = $GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'db_meta WHERE m_name LIKE \'' . db_encode_like('%author') . '\'');
+    $rows = array();
+    foreach ($author_fields as $field) {
+        if (($field['m_table'] != 'addons') && ($field['m_table'] != 'blocks') && ($field['m_table'] != 'modules')) {
+            $rows_new = $GLOBALS['SITE_DB']->query('SELECT DISTINCT ' . $field['m_name'] . ' AS author FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . $field['m_table'] . ' WHERE ' . db_string_not_equal_to($field['m_name'],'') . ' ORDER BY ' . $field['m_name'],$max+$start);
+            foreach ($rows_new as $a) {
+                if ((!array_key_exists($a['author'],$rows)) || ($field['m_table'] == 'authors')) {
+                    $rows[$a['author']] = $field['m_table'];
+                }
+            }
+        }
+    }
 
-	$rows=array_unique($rows);
+    $rows = array_unique($rows);
 
-	$field_name=get_param('field_name');
+    $field_name = get_param('field_name');
 
-	$content=new ocp_tempcode();
-	$i=0;
-	foreach ($rows as $author=>$table)
-	{
-		if (($i>=$start) && ($i<$start+$max))
-		{
-			if ($table=='authors')
-			{
-				$content->attach(do_template('AUTHOR_POPUP_WINDOW_DEFINED',array('_GUID'=>'cffa9926cebd3ec2920677266a3299ea','FIELD_NAME'=>$field_name,'AUTHOR'=>$author)));
-			} else
-			{
-				$content->attach(do_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array('_GUID'=>'6210be6d1eef4bc2bda7f49947301f97','FIELD_NAME'=>$field_name,'AUTHOR'=>$author)));
-			}
-		}
+    $content = new ocp_tempcode();
+    $i = 0;
+    foreach ($rows as $author => $table) {
+        if (($i >= $start) && ($i<$start+$max)) {
+            if ($table == 'authors') {
+                $content->attach(do_template('AUTHOR_POPUP_WINDOW_DEFINED',array('_GUID' => 'cffa9926cebd3ec2920677266a3299ea','FIELD_NAME' => $field_name,'AUTHOR' => $author)));
+            } else {
+                $content->attach(do_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array('_GUID' => '6210be6d1eef4bc2bda7f49947301f97','FIELD_NAME' => $field_name,'AUTHOR' => $author)));
+            }
+        }
 
-		$i++;
-	}
+        $i++;
+    }
 
-	if ($i>=$start+$max)
-	{
-		$keep=symbol_tempcode('KEEP');
-		$next_url=find_script('authors').'?field_name='.urlencode($field_name).'&start='.strval($start+$max).'&max='.strval($max).$keep->evaluate();
-	} else
-	{
-		$next_url=NULL;
-	}
+    if ($i >= $start+$max) {
+        $keep = symbol_tempcode('KEEP');
+        $next_url = find_script('authors') . '?field_name=' . urlencode($field_name) . '&start=' . strval($start+$max) . '&max=' . strval($max) . $keep->evaluate();
+    } else {
+        $next_url = null;
+    }
 
-	$content=do_template('AUTHOR_POPUP',array('_GUID'=>'e18411d1bf24c6ed945b4d9064774884','CONTENT'=>$content,'NEXT_URL'=>$next_url));
+    $content = do_template('AUTHOR_POPUP',array('_GUID' => 'e18411d1bf24c6ed945b4d9064774884','CONTENT' => $content,'NEXT_URL' => $next_url));
 
-	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'ab8d8c9d276530d82ddd84202aacf32f','TITLE'=>do_lang_tempcode('CHOOSE_AUTHOR'),'CONTENT'=>$content,'POPUP'=>true));
-	$echo->handle_symbol_preprocessing();
-	$echo->evaluate_echo();
+    $echo = do_template('STANDALONE_HTML_WRAP',array('_GUID' => 'ab8d8c9d276530d82ddd84202aacf32f','TITLE' => do_lang_tempcode('CHOOSE_AUTHOR'),'CONTENT' => $content,'POPUP' => true));
+    $echo->handle_symbol_preprocessing();
+    $echo->evaluate_echo();
 }
 
 /**
@@ -118,8 +110,8 @@ function authors_script()
  */
 function get_author_id_from_name($author)
 {
-	$handle=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','member_id',array('author'=>$author));
-	return $handle;
+    $handle = $GLOBALS['SITE_DB']->query_select_value_if_there('authors','member_id',array('author' => $author));
+    return $handle;
 }
 
 /**
@@ -133,41 +125,37 @@ function get_author_id_from_name($author)
  * @param  ?SHORT_TEXT	Meta keywords for this resource (NULL: do not edit) (blank: implicit)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  */
-function add_author($author,$url,$member_id,$description,$skills,$meta_keywords='',$meta_description='')
+function add_author($author,$url,$member_id,$description,$skills,$meta_keywords = '',$meta_description = '')
 {
-	log_it('DEFINE_AUTHOR',$author,is_null($member_id)?'':strval($member_id));
+    log_it('DEFINE_AUTHOR',$author,is_null($member_id)?'':strval($member_id));
 
-	$rows=$GLOBALS['SITE_DB']->query_select('authors',array('description','skills'),array('author'=>$author),'',1);
-	if (array_key_exists(0,$rows))
-	{
-		delete_lang($rows[0]['description']);
-		delete_lang($rows[0]['skills']);
-		$GLOBALS['SITE_DB']->query_delete('authors',array('author'=>$author),'',1);
-	}
+    $rows = $GLOBALS['SITE_DB']->query_select('authors',array('description','skills'),array('author' => $author),'',1);
+    if (array_key_exists(0,$rows)) {
+        delete_lang($rows[0]['description']);
+        delete_lang($rows[0]['skills']);
+        $GLOBALS['SITE_DB']->query_delete('authors',array('author' => $author),'',1);
+    }
 
-	require_code('seo2');
-	if (($meta_keywords=='') && ($meta_description==''))
-	{
-		seo_meta_set_for_implicit('authors',$author,array($author,$description,$skills),$description);
-	} else
-	{
-		seo_meta_set_for_explicit('authors',$author,$meta_keywords,$meta_description);
-	}
+    require_code('seo2');
+    if (($meta_keywords == '') && ($meta_description == '')) {
+        seo_meta_set_for_implicit('authors',$author,array($author,$description,$skills),$description);
+    } else {
+        seo_meta_set_for_explicit('authors',$author,$meta_keywords,$meta_description);
+    }
 
-	$map=array(
-		'author'=>$author,
-		'url'=>$url,
-		'member_id'=>$member_id,
-	);
-	$map+=insert_lang_comcode('description',$description,3);
-	$map+=insert_lang_comcode('skills',$skills,3);
-	$GLOBALS['SITE_DB']->query_insert('authors',$map);
+    $map = array(
+        'author' => $author,
+        'url' => $url,
+        'member_id' => $member_id,
+    );
+    $map += insert_lang_comcode('description',$description,3);
+    $map += insert_lang_comcode('skills',$skills,3);
+    $GLOBALS['SITE_DB']->query_insert('authors',$map);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('author',$author,NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('author',$author,null,null,true);
+    }
 }
 
 /**
@@ -177,26 +165,25 @@ function add_author($author,$url,$member_id,$description,$skills,$meta_keywords=
  */
 function delete_author($author)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('authors',array('description','skills'),array('author'=>$author),'',1);
-	if (array_key_exists(0,$rows))
-	{
-		delete_lang($rows[0]['description']);
-		delete_lang($rows[0]['skills']);
-		$GLOBALS['SITE_DB']->query_delete('authors',array('author'=>$author),'',1);
-	} else warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    $rows = $GLOBALS['SITE_DB']->query_select('authors',array('description','skills'),array('author' => $author),'',1);
+    if (array_key_exists(0,$rows)) {
+        delete_lang($rows[0]['description']);
+        delete_lang($rows[0]['skills']);
+        $GLOBALS['SITE_DB']->query_delete('authors',array('author' => $author),'',1);
+    } else {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('author',$author,'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('author',$author,'');
+    }
 
-	log_it('DELETE_AUTHOR',$author);
+    log_it('DELETE_AUTHOR',$author);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('author',$author);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('author',$author);
+    }
 }
 
 /**
@@ -208,10 +195,16 @@ function delete_author($author)
  */
 function has_edit_author_permission($member,$author)
 {
-	if (is_guest($member)) return false;
-	if ((get_author_id_from_name($author)==$member) && (has_privilege($member,'set_own_author_profile'))) return true;
-	if (has_privilege($member,'edit_midrange_content','cms_authors')) return true;
-	return false;
+    if (is_guest($member)) {
+        return false;
+    }
+    if ((get_author_id_from_name($author) == $member) && (has_privilege($member,'set_own_author_profile'))) {
+        return true;
+    }
+    if (has_privilege($member,'edit_midrange_content','cms_authors')) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -223,10 +216,16 @@ function has_edit_author_permission($member,$author)
  */
 function has_delete_author_permission($member,$author)
 {
-	if (is_guest($member)) return false;
-	if ((get_author_id_from_name($author)==$member) && (has_privilege($member,'delete_own_midrange_content'))) return true;
-	if (has_privilege($member,'delete_midrange_content','cms_authors')) return true;
-	return false;
+    if (is_guest($member)) {
+        return false;
+    }
+    if ((get_author_id_from_name($author) == $member) && (has_privilege($member,'delete_own_midrange_content'))) {
+        return true;
+    }
+    if (has_privilege($member,'delete_midrange_content','cms_authors')) {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -237,17 +236,15 @@ function has_delete_author_permission($member,$author)
  */
 function merge_authors($from,$to)
 {
-	$author_fields=$GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'db_meta WHERE m_name LIKE \''.db_encode_like('%author').'\'');
-	foreach ($author_fields as $field)
-	{
-		if ($field['m_table']!='authors')
-		{
-			$GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name']=>$to),array($field['m_name']=>$from));
-		}
-	}
-	if ($from!=$to) $GLOBALS['SITE_DB']->query_delete('authors',array('author'=>$from),'',1);
+    $author_fields = $GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'db_meta WHERE m_name LIKE \'' . db_encode_like('%author') . '\'');
+    foreach ($author_fields as $field) {
+        if ($field['m_table'] != 'authors') {
+            $GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name'] => $to),array($field['m_name'] => $from));
+        }
+    }
+    if ($from != $to) {
+        $GLOBALS['SITE_DB']->query_delete('authors',array('author' => $from),'',1);
+    }
 
-	log_it('MERGE_AUTHORS',$from,$to);
+    log_it('MERGE_AUTHORS',$from,$to);
 }
-
-

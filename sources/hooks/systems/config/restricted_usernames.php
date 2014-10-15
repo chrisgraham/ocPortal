@@ -20,35 +20,33 @@
 
 class Hook_config_restricted_usernames
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'RESTRICTED_USERNAMES',
-			'type'=>'line',
-			'category'=>'USERS',
-			'group'=>'USERNAMES_AND_PASSWORDS',
-			'explanation'=>'CONFIG_OPTION_restricted_usernames',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'RESTRICTED_USERNAMES',
+            'type' => 'line',
+            'category' => 'USERS',
+            'group' => 'USERNAMES_AND_PASSWORDS',
+            'explanation' => 'CONFIG_OPTION_restricted_usernames',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return do_lang('GUEST').', '.do_lang('STAFF').', '.do_lang('ADMIN').', '.do_lang('MODERATOR').', googlebot';
-	}
+    public function get_default()
+    {
+        return do_lang('GUEST') . ', ' . do_lang('STAFF') . ', ' . do_lang('ADMIN') . ', ' . do_lang('MODERATOR') . ', googlebot';
+    }
 }
-
-

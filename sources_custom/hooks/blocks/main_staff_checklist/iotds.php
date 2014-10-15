@@ -15,57 +15,59 @@
 
 class Hook_checklist_iotds
 {
-	/**
+    /**
 	 * Find items to include on the staff checklist.
 	 *
 	 * @return array		An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
 	 */
-	function run()
-	{
-		if (!addon_installed('iotds')) return array();
+    public function run()
+    {
+        if (!addon_installed('iotds')) {
+            return array();
+        }
 
-		if (get_option('iotd_update_time')=='') return array();
+        if (get_option('iotd_update_time') == '') {
+            return array();
+        }
 
-		require_lang('iotds');
+        require_lang('iotds');
 
-		$date=$GLOBALS['SITE_DB']->query_select_value_if_there('iotd','date_and_time',array('is_current'=>1));
+        $date = $GLOBALS['SITE_DB']->query_select_value_if_there('iotd','date_and_time',array('is_current' => 1));
 
-		$limit_hours=intval(get_option('iotd_update_time'));
+        $limit_hours = intval(get_option('iotd_update_time'));
 
-		$seconds_ago=mixed();
-		if (!is_null($date))
-		{
-			$seconds_ago=time()-$date;
-			$status=($seconds_ago>$limit_hours*60*60)?0:1;
-		} else
-		{
-			$status=0;
-		}
+        $seconds_ago = mixed();
+        if (!is_null($date)) {
+            $seconds_ago = time()-$date;
+            $status = ($seconds_ago>$limit_hours*60*60)?0:1;
+        } else {
+            $status = 0;
+        }
 
-		$_status=($status==0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
+        $_status = ($status == 0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
-		require_code('config2');
-		$config_url=config_option_url('iotd_update_time');
+        require_code('config2');
+        $config_url = config_option_url('iotd_update_time');
 
-		$url=build_url(array('page'=>'cms_iotds','type'=>'ed'),get_module_zone('cms_iotds'));
-		$num_queue=$this->get_num_iotd_queue();
-		list($info,$seconds_due_in)=staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);
-		$info->attach(do_lang_tempcode('NUM_QUEUE',integer_format($num_queue)));
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'5c55aed7bedca565c8aa553548b88e64','CONFIG_URL'=>$config_url,'URL'=>$url,'STATUS'=>$_status,'TASK'=>do_lang_tempcode('PRIVILEGE_choose_iotd'),'INFO'=>$info));
-		return array(array($tpl,$seconds_due_in,NULL,'iotd_update_time'));
-	}
+        $url = build_url(array('page' => 'cms_iotds','type' => 'ed'),get_module_zone('cms_iotds'));
+        $num_queue = $this->get_num_iotd_queue();
+        list($info,$seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);
+        $info->attach(do_lang_tempcode('NUM_QUEUE',integer_format($num_queue)));
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => '5c55aed7bedca565c8aa553548b88e64','CONFIG_URL' => $config_url,'URL' => $url,'STATUS' => $_status,'TASK' => do_lang_tempcode('PRIVILEGE_choose_iotd'),'INFO' => $info));
+        return array(array($tpl,$seconds_due_in,null,'iotd_update_time'));
+    }
 
-	/**
+    /**
 	 * Get the number of IOTDs in the queue.
 	 *
 	 * @return integer		Number in queue
 	 */
-	function get_num_iotd_queue()
-	{
-		$c=$GLOBALS['SITE_DB']->query_select_value_if_there('iotd','COUNT(*)',array('is_current'=>0,'used'=>0));
-		if (is_null($c)) return 0;
-		return $c;
-	}
+    public function get_num_iotd_queue()
+    {
+        $c = $GLOBALS['SITE_DB']->query_select_value_if_there('iotd','COUNT(*)',array('is_current' => 0,'used' => 0));
+        if (is_null($c)) {
+            return 0;
+        }
+        return $c;
+    }
 }
-
-

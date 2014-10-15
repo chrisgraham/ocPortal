@@ -20,125 +20,125 @@
 
 class Hook_addon_registry_content_reviews
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Regularly review content for accuracy.';
-	}
+    public function get_description()
+    {
+        return 'Regularly review content for accuracy.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_adminzone',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_adminzone',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array('unvalidated','occle'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array('unvalidated','occle'),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/tool.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/tool.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources/hooks/systems/addon_registry/content_reviews.php',
-			'sources/hooks/systems/cron/content_reviews.php',
-			'sources/hooks/blocks/main_staff_checklist/content_reviews.php',
-			'sources/hooks/systems/notifications/content_reviews.php',
-			'adminzone/pages/modules/admin_content_reviews.php',
-			'sources/content_reviews.php',
-			'sources/content_reviews2.php',
-			'lang/EN/content_reviews.ini',
-			'themes/default/templates/REVIEW_STATUS.tpl',
-			'themes/default/images/icons/24x24/menu/adminzone/audit/content_reviews.png',
-			'themes/default/images/icons/48x48/menu/adminzone/audit/content_reviews.png',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources/hooks/systems/addon_registry/content_reviews.php',
+            'sources/hooks/systems/cron/content_reviews.php',
+            'sources/hooks/blocks/main_staff_checklist/content_reviews.php',
+            'sources/hooks/systems/notifications/content_reviews.php',
+            'adminzone/pages/modules/admin_content_reviews.php',
+            'sources/content_reviews.php',
+            'sources/content_reviews2.php',
+            'lang/EN/content_reviews.ini',
+            'themes/default/templates/REVIEW_STATUS.tpl',
+            'themes/default/images/icons/24x24/menu/adminzone/audit/content_reviews.png',
+            'themes/default/images/icons/48x48/menu/adminzone/audit/content_reviews.png',
+        );
+    }
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'REVIEW_STATUS.tpl'=>'review_status',
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'REVIEW_STATUS.tpl' => 'review_status',
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__review_status()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('REVIEW_STATUS',array(
-				'LAST_REVIEWED_TIME'=>placeholder_time(),
-				'NEXT_REVIEW_TIME'=>placeholder_time(),
-				'_LAST_REVIEWED_TIME'=>placeholder_date_raw(),
-				'_NEXT_REVIEW_TIME'=>placeholder_date_raw(),
-				'CONTENT_TYPE'=>placeholder_id(),
-				'CONTENT_ID'=>placeholder_id(),
-				'DISPLAY'=>true,
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__review_status()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('REVIEW_STATUS',array(
+                'LAST_REVIEWED_TIME' => placeholder_time(),
+                'NEXT_REVIEW_TIME' => placeholder_time(),
+                '_LAST_REVIEWED_TIME' => placeholder_date_raw(),
+                '_NEXT_REVIEW_TIME' => placeholder_date_raw(),
+                'CONTENT_TYPE' => placeholder_id(),
+                'CONTENT_ID' => placeholder_id(),
+                'DISPLAY' => true,
+            )),null,'',true)
+        );
+    }
 }

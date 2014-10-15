@@ -20,37 +20,41 @@
 
 class Hook_ocf_topics
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (get_forum_type()!='ocf') return NULL; else ocf_require_all_forum_stuff();
+    public function info()
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        } else {
+            ocf_require_all_forum_stuff();
+        }
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		$info=array();
-		$info['title']=do_lang_tempcode('FORUM_TOPICS');
-		$info['description']=do_lang_tempcode('DESCRIPTION_CACHE_TOPICS');
-		$info['type']='cache';
+        $info = array();
+        $info['title'] = do_lang_tempcode('FORUM_TOPICS');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_CACHE_TOPICS');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		if (get_forum_type()!='ocf') return new ocp_tempcode();
+    public function run()
+    {
+        if (get_forum_type() != 'ocf') {
+            return new ocp_tempcode();
+        }
 
-		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('CACHE_TOPICS'),NULL,'ocf_topics_recache');
-	}
+        require_code('tasks');
+        return call_user_func_array__long_task(do_lang('CACHE_TOPICS'),null,'ocf_topics_recache');
+    }
 }
-
-

@@ -20,35 +20,33 @@
 
 class Hook_config_backup_overwrite
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'BACKUP_OVERWRITE',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'BACKUPS',
-			'explanation'=>'CONFIG_OPTION_backup_overwrite',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'BACKUP_OVERWRITE',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => 'BACKUPS',
+            'explanation' => 'CONFIG_OPTION_backup_overwrite',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'backup',
-		);
-	}
+            'addon' => 'backup',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

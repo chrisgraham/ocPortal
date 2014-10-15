@@ -20,7 +20,7 @@
 
 class Hook_occle_command_passwd
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,48 +28,49 @@ class Hook_occle_command_passwd
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return ~array Array of stdcommand, stdhtml, stdout, and stderr responses (false: error)
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('passwd',array('h','u'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','passwd'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('passwd',array('h','u'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','passwd'));
+            }
 
-			if (get_forum_type()!='ocf') return array('','','',do_lang('NO_OCF'));
+            if (get_forum_type() != 'ocf') {
+                return array('','','',do_lang('NO_OCF'));
+            }
 
-			require_code('ocf_members_action');
-			require_code('ocf_members_action2');
+            require_code('ocf_members_action');
+            require_code('ocf_members_action2');
 
-			if (array_key_exists('u',$options))
-			{
-				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($options['u']);
-			}
-			elseif (array_key_exists('username',$options))
-			{
-				$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($options['username']);
-			}
-			else $member_id=get_member();
+            if (array_key_exists('u',$options)) {
+                $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($options['u']);
+            } elseif (array_key_exists('username',$options)) {
+                $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($options['username']);
+            } else {
+                $member_id = get_member();
+            }
 
-			$update=array();
-			$update['m_password_change_code']='';
-			$salt=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
-			if (is_null($salt)) return array('','','',do_lang('_MEMBER_NO_EXIST',array_key_exists('username',$options)?$options['username']:$options['u']));
+            $update = array();
+            $update['m_password_change_code'] = '';
+            $salt = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_pass_salt');
+            if (is_null($salt)) {
+                return array('','','',do_lang('_MEMBER_NO_EXIST',array_key_exists('username',$options)?$options['username']:$options['u']));
+            }
 
-			if (get_value('no_password_hashing')==='1')
-			{
-				$update['m_password_compat_scheme']='plain';
-				$update['m_pass_salt']='';
-				$update['m_pass_hash_salted']=$parameters[0];
-			} else
-			{
-				$update['m_password_compat_scheme']='';
-				require_code('crypt');
-				$update['m_pass_hash_salted']=ratchet_hash($parameters[0],$salt);
-			}
+            if (get_value('no_password_hashing') === '1') {
+                $update['m_password_compat_scheme'] = 'plain';
+                $update['m_pass_salt'] = '';
+                $update['m_pass_hash_salted'] = $parameters[0];
+            } else {
+                $update['m_password_compat_scheme'] = '';
+                require_code('crypt');
+                $update['m_pass_hash_salted'] = ratchet_hash($parameters[0],$salt);
+            }
 
-			$GLOBALS['SITE_DB']->query_update('f_members',$update,array('id'=>$member_id),'',1);
-			return array('','',do_lang('SUCCESS'),'');
-		}
-	}
+            $GLOBALS['SITE_DB']->query_update('f_members',$update,array('id' => $member_id),'',1);
+            return array('','',do_lang('SUCCESS'),'');
+        }
+    }
 }
-

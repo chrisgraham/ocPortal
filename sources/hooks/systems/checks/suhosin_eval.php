@@ -20,16 +20,17 @@
 
 class Hook_check_suhosin_eval
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
-		if (ini_get('suhosin.executor.disable_eval')=='1')
-			$warning[]=do_lang_tempcode('DISABLED_FUNCTION','eval');
-		return $warning;
-	}
+    public function run()
+    {
+        $warning = array();
+        if (ini_get('suhosin.executor.disable_eval') == '1') {
+            $warning[] = do_lang_tempcode('DISABLED_FUNCTION','eval');
+        }
+        return $warning;
+    }
 }

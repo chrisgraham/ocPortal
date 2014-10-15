@@ -20,7 +20,7 @@
 
 class Hook_occle_command_untar
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,28 +28,28 @@ class Hook_occle_command_untar
 	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('untar',array('h'),array(true,true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','untar'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('untar',array('h'),array(true,true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','untar'));
+            }
 
-			$path=$parameters[0];
+            $path = $parameters[0];
 
-			if (!is_file(get_custom_file_base().'/'.$path))
-			{
-				return array('','','',do_lang('MISSING_RESOURCE'));
-			}
+            if (!is_file(get_custom_file_base() . '/' . $path)) {
+                return array('','','',do_lang('MISSING_RESOURCE'));
+            }
 
-			require_code('tar');
+            require_code('tar');
 
-			$myfile=tar_open(get_custom_file_base().'/'.$path,'rb');
-			tar_extract_to_folder($myfile,'');
-			tar_close($myfile);
+            $myfile = tar_open(get_custom_file_base() . '/' . $path,'rb');
+            tar_extract_to_folder($myfile,'');
+            tar_close($myfile);
 
-			return array('','',do_lang('SUCCESS'),'');
-		}
-	}
+            return array('','',do_lang('SUCCESS'),'');
+        }
+    }
 }
-

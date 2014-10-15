@@ -20,35 +20,33 @@
 
 class Hook_config_enable_spell_check
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_SPELL_CHECK',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'PREVIEW',
-			'explanation'=>'CONFIG_OPTION_enable_spell_check',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_SPELL_CHECK',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => 'PREVIEW',
+            'explanation' => 'CONFIG_OPTION_enable_spell_check',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return function_exists('pspell_check')?'0':NULL;
-	}
+    public function get_default()
+    {
+        return function_exists('pspell_check')?'0':null;
+    }
 }
-
-

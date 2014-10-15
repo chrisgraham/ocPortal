@@ -20,57 +20,55 @@
 
 class Block_main_staff_new_version
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array();
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array();
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='array()';
-		$info['ttl']=60*3;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'array()';
+        $info['ttl'] = 60*3;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		require_lang('version');
-		require_code('version2');
-		require_css('adminzone_dashboard');
+    public function run($map)
+    {
+        require_lang('version');
+        require_code('version2');
+        require_css('adminzone_dashboard');
 
-		$table=get_future_version_information();
+        $table = get_future_version_information();
 
-		require_code('addons2');
-		$updated_addons=find_updated_addons();
-		$has_updated_addons=(count($updated_addons)!=0);
+        require_code('addons2');
+        $updated_addons = find_updated_addons();
+        $has_updated_addons = (count($updated_addons) != 0);
 
-		return do_template('BLOCK_MAIN_STAFF_NEW_VERSION',array('_GUID'=>'43c7b18d3d44e825247579df23a2ad9c','VERSION'=>ocp_version_pretty(),'VERSION_TABLE'=>$table,'HAS_UPDATED_ADDONS'=>$has_updated_addons));
-	}
+        return do_template('BLOCK_MAIN_STAFF_NEW_VERSION',array('_GUID' => '43c7b18d3d44e825247579df23a2ad9c','VERSION' => ocp_version_pretty(),'VERSION_TABLE' => $table,'HAS_UPDATED_ADDONS' => $has_updated_addons));
+    }
 }
-
-

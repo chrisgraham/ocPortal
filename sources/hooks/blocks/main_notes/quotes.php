@@ -20,15 +20,15 @@
 
 class Hook_notes_quotes
 {
-	/**
+    /**
 	 * Decacheing trigger for main_notes saves. See if we have to decache based on the passed filename.
 	 *
 	 * @param PATH		Filename.
 	 */
-	function run($file)
-	{
-		if ((strpos($file,'/quotes')!==false) || ($file=='quotes')) decache('main_quotes');
-	}
+    public function run($file)
+    {
+        if ((strpos($file,'/quotes') !== false) || ($file == 'quotes')) {
+            decache('main_quotes');
+        }
+    }
 }
-
-

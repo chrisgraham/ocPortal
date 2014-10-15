@@ -20,23 +20,25 @@
 
 class Hook_gu_downloads
 {
-	/**
+    /**
 	 * Add in new icons to a worked-within gallery.
 	 *
 	 * @param  ID_TEXT	Gallery name
 	 * @return array		Results
 	 */
-	function new_donext_icons($cat)
-	{
-		if (!addon_installed('downloads')) return array();
+    public function new_donext_icons($cat)
+    {
+        if (!addon_installed('downloads')) {
+            return array();
+        }
 
-		if (substr($cat,0,9)!='download_') return array();
+        if (substr($cat,0,9) != 'download_') {
+            return array();
+        }
 
-		$id=intval(substr($cat,9));
-		return array(
-			array('menu/rich_content/downloads',array('downloads',array('type'=>'entry','id'=>$id),get_module_zone('downloads')),do_lang('VIEW'))
-		);
-	}
+        $id = intval(substr($cat,9));
+        return array(
+            array('menu/rich_content/downloads',array('downloads',array('type' => 'entry','id' => $id),get_module_zone('downloads')),do_lang('VIEW'))
+        );
+    }
 }
-
-

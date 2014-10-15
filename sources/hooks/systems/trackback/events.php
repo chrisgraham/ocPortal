@@ -20,18 +20,18 @@
 
 class Hook_trackback_events
 {
-	/**
+    /**
 	 * Run function for trackback hooks. They see if content of an ID relating to this content has trackback enabled.
 	 *
 	 * @param  ID_TEXT		The ID
 	 * @return boolean		Whether trackback is enabled
 	 */
-	function run($id)
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('calendar_events',array('allow_trackbacks'),array('id'=>intval($id)),'',1);
-		if (!array_key_exists(0,$rows)) return false;
-		return $rows[0]['allow_trackbacks']==1;
-	}
+    public function run($id)
+    {
+        $rows = $GLOBALS['SITE_DB']->query_select('calendar_events',array('allow_trackbacks'),array('id' => intval($id)),'',1);
+        if (!array_key_exists(0,$rows)) {
+            return false;
+        }
+        return $rows[0]['allow_trackbacks'] == 1;
+    }
 }
-
-

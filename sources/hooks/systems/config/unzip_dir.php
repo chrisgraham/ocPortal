@@ -20,36 +20,36 @@
 
 class Hook_config_unzip_dir
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'UNZIP_DIR',
-			'type'=>'line',
-			'category'=>'SERVER',
-			'group'=>'ARCHIVES',
-			'explanation'=>'CONFIG_OPTION_unzip_dir',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'UNZIP_DIR',
+            'type' => 'line',
+            'category' => 'SERVER',
+            'group' => 'ARCHIVES',
+            'explanation' => 'CONFIG_OPTION_unzip_dir',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (function_exists('zip_open')) return NULL;
-		return (DIRECTORY_SEPARATOR=='/')?'/tmp/':ocp_srv('TMP');
-	}
+    public function get_default()
+    {
+        if (function_exists('zip_open')) {
+            return NULL;
+        }
+        return (DIRECTORY_SEPARATOR == '/')?'/tmp/':ocp_srv('TMP');
+    }
 }
-
-

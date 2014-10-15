@@ -20,61 +20,58 @@
 
 class Hook_image_thumbs
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!function_exists('imagetypes')) return NULL;
+    public function info()
+    {
+        if (!function_exists('imagetypes')) {
+            return NULL;
+        }
 
-		$info=array();
-		$info['title']=do_lang_tempcode('IMAGE_THUMBNAILS');
-		$info['description']=do_lang_tempcode('DESCRIPTION_IMAGE_THUMBNAILS');
-		$info['type']='optimise';
+        $info = array();
+        $info['title'] = do_lang_tempcode('IMAGE_THUMBNAILS');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_IMAGE_THUMBNAILS');
+        $info['type'] = 'optimise';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		erase_thumb_cache();
-		erase_comcode_cache();
+    public function run()
+    {
+        erase_thumb_cache();
+        erase_comcode_cache();
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * Create filename-mirrored thumbnails for the given directory stub (mirrors stub/foo with stub_thumbs/foo).
 	 *
 	 * @param  string		Directory to mirror
 	 */
-	function directory_thumb_mirror($dir)
-	{
-		require_code('images');
+    public function directory_thumb_mirror($dir)
+    {
+        require_code('images');
 
-		$full=get_custom_file_base().'/uploads/'.$dir;
-		$dh=@opendir($full);
-		if ($dh!==false)
-		{
-			while (($file=readdir($dh))!==false)
-			{
-				$target=get_custom_file_base().'/'.$dir.'_thumbs/'.$file;
-				if ((!file_exists($target)) && (is_image($full.'/'.$file)))
-				{
-					require_code('images');
-					convert_image($full.'/'.$file,$target,-1,-1,intval(get_option('thumb_width')));
-				}
-			}
-		}
-		closedir($dh);
-	}
+        $full = get_custom_file_base() . '/uploads/' . $dir;
+        $dh = @opendir($full);
+        if ($dh !== false) {
+            while (($file = readdir($dh)) !== false) {
+                $target = get_custom_file_base() . '/' . $dir . '_thumbs/' . $file;
+                if ((!file_exists($target)) && (is_image($full . '/' . $file))) {
+                    require_code('images');
+                    convert_image($full . '/' . $file,$target,-1,-1,intval(get_option('thumb_width')));
+                }
+            }
+        }
+        closedir($dh);
+    }
 }
-
-

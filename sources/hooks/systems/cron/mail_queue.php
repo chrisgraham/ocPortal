@@ -20,46 +20,45 @@
 
 class Hook_cron_mail_queue
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		if (get_option('mail_queue_debug')=='0')
-		{
-			$mails=$GLOBALS['SITE_DB']->query_select(
-				'logged_mail_messages',
-				array('*'),
-				array('m_queued'=>1),
-				'',
-				100
-			);
+    public function run()
+    {
+        if (get_option('mail_queue_debug') == '0') {
+            $mails = $GLOBALS['SITE_DB']->query_select(
+                'logged_mail_messages',
+                array('*'),
+                array('m_queued' => 1),
+                '',
+                100
+            );
 
-			if (count($mails)!=0)
-			{
-				require_code('mail');
+            if (count($mails) != 0) {
+                require_code('mail');
 
-				foreach ($mails as $row)
-				{
-					$subject=$row['m_subject'];
-					$message=$row['m_message'];
-					$to_email=@unserialize($row['m_to_email']);
-					$extra_cc_addresses=($row['m_extra_cc_addresses']=='')?array():@unserialize($row['m_extra_cc_addresses']);
-					$extra_bcc_addresses=($row['m_extra_bcc_addresses']=='')?array():@unserialize($row['m_extra_bcc_addresses']);
-					$to_name=@unserialize($row['m_to_name']);
-					$from_email=$row['m_from_email'];
-					$from_name=$row['m_from_name'];
-					$join_time=$row['m_join_time'];
+                foreach ($mails as $row) {
+                    $subject = $row['m_subject'];
+                    $message = $row['m_message'];
+                    $to_email = @unserialize($row['m_to_email']);
+                    $extra_cc_addresses = ($row['m_extra_cc_addresses'] == '')?array():@unserialize($row['m_extra_cc_addresses']);
+                    $extra_bcc_addresses = ($row['m_extra_bcc_addresses'] == '')?array():@unserialize($row['m_extra_bcc_addresses']);
+                    $to_name = @unserialize($row['m_to_name']);
+                    $from_email = $row['m_from_email'];
+                    $from_name = $row['m_from_name'];
+                    $join_time = $row['m_join_time'];
 
-					if (!is_array($to_email)) continue;
+                    if (!is_array($to_email)) {
+                        continue;
+                    }
 
-					mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc']==1,$row['m_as'],$row['m_as_admin']==1,$row['m_in_html']==1,true,$row['m_template'],false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);
+                    mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc'] == 1,$row['m_as'],$row['m_as_admin'] == 1,$row['m_in_html'] == 1,true,$row['m_template'],false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);
 
-					$GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued'=>0),array('id'=>$row['id']),'',1);
-				}
+                    $GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued' => 0),array('id' => $row['id']),'',1);
+                }
 
-				decache('main_staff_checklist');
-			}
-		}
-	}
+                decache('main_staff_checklist');
+            }
+        }
+    }
 }

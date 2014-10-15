@@ -20,16 +20,17 @@
 
 class Hook_check_xml
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
-		if (!function_exists('xml_parser_create'))
-			$warning[]=do_lang_tempcode('NO_XML_ON_SERVER');
-		return $warning;
-	}
+    public function run()
+    {
+        $warning = array();
+        if (!function_exists('xml_parser_create')) {
+            $warning[] = do_lang_tempcode('NO_XML_ON_SERVER');
+        }
+        return $warning;
+    }
 }

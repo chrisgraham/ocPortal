@@ -18,29 +18,29 @@
  */
 class authors_test_set extends ocp_test_case
 {
-	function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		require_code('authors');
+        require_code('authors');
 
-		add_author('author1','www.google.com',3,'happy','play','','');
+        add_author('author1','www.google.com',3,'happy','play','','');
 
-		add_author('author2','www.yahoo.com',3,'welcome','drama','','');
+        add_author('author2','www.yahoo.com',3,'welcome','drama','','');
 
-		// Test the forum was actually created
-		$this->assertTrue('author1'==$GLOBALS['FORUM_DB']->query_select_value('authors','author',array('author'=>'author1')));
-	}
+        // Test the forum was actually created
+        $this->assertTrue('author1' == $GLOBALS['FORUM_DB']->query_select_value('authors','author',array('author' => 'author1')));
+    }
 
-	function testMergeauthors()
-	{
-		// Test the forum edits
-		merge_authors('author1','author2');
-	}
+    public function testMergeauthors()
+    {
+        // Test the forum edits
+        merge_authors('author1','author2');
+    }
 
-	function tearDown()
-	{
-		delete_author('author2');
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        delete_author('author2');
+        parent::tearDown();
+    }
 }

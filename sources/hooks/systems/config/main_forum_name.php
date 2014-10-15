@@ -20,36 +20,34 @@
 
 class Hook_config_main_forum_name
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MAIN_FORUM_NAME',
-			'type'=>'forum',
-			'category'=>'FEATURE',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_main_forum_name',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MAIN_FORUM_NAME',
+            'type' => 'forum',
+            'category' => 'FEATURE',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_main_forum_name',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return has_no_forum()?NULL:do_lang('DEFAULT_FORUM_TITLE','','','',get_site_default_lang());
-	}
+    public function get_default()
+    {
+        return has_no_forum()?null:do_lang('DEFAULT_FORUM_TITLE','','','',get_site_default_lang());
+    }
 }
-
-

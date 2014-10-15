@@ -20,35 +20,33 @@
 
 class Hook_config_forum_in_portal
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'FORUM_IN_PORTAL',
-			'type'=>'tick',
-			'category'=>'SITE',
-			'group'=>'ADVANCED',
-			'explanation'=>(get_forum_type()=='ocf')?'CONFIG_OPTION_forum_in_portal__ocf':'CONFIG_OPTION_forum_in_portal',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'FORUM_IN_PORTAL',
+            'type' => 'tick',
+            'category' => 'SITE',
+            'group' => 'ADVANCED',
+            'explanation' => (get_forum_type() == 'ocf')?'CONFIG_OPTION_forum_in_portal__ocf':'CONFIG_OPTION_forum_in_portal',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return ((has_no_forum()) || (get_forum_type()=='ocf'))?NULL:'0';
-	}
+    public function get_default()
+    {
+        return ((has_no_forum()) || (get_forum_type() == 'ocf'))?null:'0';
+    }
 }
-
-

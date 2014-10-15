@@ -20,20 +20,22 @@
 
 class Hook_email_exists
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$val=get_param('name');
+    public function run()
+    {
+        $val = get_param('name');
 
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('m_email_address'=>$val));
-		if (is_null($test)) return new ocp_tempcode();
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('m_email_address' => $val));
+        if (is_null($test)) {
+            return new ocp_tempcode();
+        }
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		return make_string_tempcode(strip_tags(strip_html(do_lang('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name())))));
-	}
+        return make_string_tempcode(strip_tags(strip_html(do_lang('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name())))));
+    }
 }

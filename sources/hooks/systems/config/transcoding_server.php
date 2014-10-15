@@ -20,35 +20,33 @@
 
 class Hook_config_transcoding_server
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TRANSCODING_SERVER',
-			'type'=>'line',
-			'category'=>'GALLERY',
-			'group'=>'TRANSCODING',
-			'explanation'=>'CONFIG_OPTION_transcoding_server',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TRANSCODING_SERVER',
+            'type' => 'line',
+            'category' => 'GALLERY',
+            'group' => 'TRANSCODING',
+            'explanation' => 'CONFIG_OPTION_transcoding_server',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'galleries',
-		);
-	}
+            'addon' => 'galleries',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

@@ -20,36 +20,34 @@
 
 class Hook_config_club_forum_parent_forum_grouping
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CLUB_FORUM_PARENT_FORUM_GROUPING',
-			'type'=>'forum_grouping',
-			'category'=>'FORUMS',
-			'group'=>'CLUBS',
-			'explanation'=>'CONFIG_OPTION_club_forum_parent_forum_grouping',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CLUB_FORUM_PARENT_FORUM_GROUPING',
+            'type' => 'forum_grouping',
+            'category' => 'FORUMS',
+            'group' => 'CLUBS',
+            'explanation' => 'CONFIG_OPTION_club_forum_parent_forum_grouping',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'ocf_clubs',
-		);
-	}
+            'addon' => 'ocf_clubs',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return strval(db_get_first_id());
-	}
+    public function get_default()
+    {
+        return strval(db_get_first_id());
+    }
 }
-
-

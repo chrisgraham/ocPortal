@@ -18,17 +18,20 @@
  */
 class addon_setupwizard_test_set extends ocp_test_case
 {
-	function testPresenceDefinedForAllAddons()
-	{
-		$admin_setupwizard=file_get_contents(get_file_base().'/adminzone/pages/modules/admin_setupwizard.php');
+    public function testPresenceDefinedForAllAddons()
+    {
+        $admin_setupwizard = file_get_contents(get_file_base() . '/adminzone/pages/modules/admin_setupwizard.php');
 
-		$hooks=find_all_hooks('systems','addon_registry');
-		foreach ($hooks as $hook=>$type)
-		{
-			if ($type=='sources_custom') continue;
-			if (substr($hook,0,5)=='core_') continue;
+        $hooks = find_all_hooks('systems','addon_registry');
+        foreach ($hooks as $hook => $type) {
+            if ($type == 'sources_custom') {
+                continue;
+            }
+            if (substr($hook,0,5) == 'core_') {
+                continue;
+            }
 
-			$this->assertTrue(strpos($admin_setupwizard,'\''.$hook.'\'')!==false,'Addon presence not defined in Setup Wizard: '.$hook);
-		}
-	}
+            $this->assertTrue(strpos($admin_setupwizard,'\'' . $hook . '\'') !== false,'Addon presence not defined in Setup Wizard: ' . $hook);
+        }
+    }
 }

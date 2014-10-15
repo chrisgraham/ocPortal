@@ -20,17 +20,17 @@
 
 class Hook_sw_calendar
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('calendar')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('calendar')) {
+            return array();
+        }
 
-		return array(array(),array('side_calendar'=>array('PANEL_NONE','PANEL_RIGHT')));
-	}
+        return array(array(),array('side_calendar' => array('PANEL_NONE','PANEL_RIGHT')));
+    }
 }
-
-

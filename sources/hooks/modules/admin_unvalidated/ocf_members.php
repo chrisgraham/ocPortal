@@ -20,33 +20,33 @@
 
 class Hook_unvalidated_ocf_members
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function info()
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		$info=array();
-		$info['db_table']='f_members';
-		$info['db_identifier']='id';
-		$info['db_validated']='m_validated';
-		$info['db_title']='m_username';
-		$info['db_title_dereference']=false;
-		$info['db_add_date']='m_join_time';
-		$info['db_edit_date']='m_join_time';
-		$info['edit_module']='members';
-		$info['edit_type']='view';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('MEMBERS');
-		$info['db']=$GLOBALS['FORUM_DB'];
+        $info = array();
+        $info['db_table'] = 'f_members';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'm_validated';
+        $info['db_title'] = 'm_username';
+        $info['db_title_dereference'] = false;
+        $info['db_add_date'] = 'm_join_time';
+        $info['db_edit_date'] = 'm_join_time';
+        $info['edit_module'] = 'members';
+        $info['edit_type'] = 'view';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('MEMBERS');
+        $info['db'] = $GLOBALS['FORUM_DB'];
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

@@ -20,80 +20,80 @@
 
 class Hook_content_meta_aware_image
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'IMAGE',
+            'content_type_label' => 'IMAGE',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'where'=>'cat NOT LIKE \''.db_encode_like('download\_%').'\'',
-			'table'=>'images',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>'cat',
-			'parent_category_meta_aware_type'=>'gallery',
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>'cat', // For category permissions
-			'category_type'=>'galleries', // For category permissions
-			'parent_spec__table_name'=>'galleries',
-			'parent_spec__parent_name'=>'parent_id',
-			'parent_spec__field_name'=>'name',
-			'category_is_string'=>true,
+            'connection' => $GLOBALS['SITE_DB'],
+            'where' => 'cat NOT LIKE \'' . db_encode_like('download\_%') . '\'',
+            'table' => 'images',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => 'cat',
+            'parent_category_meta_aware_type' => 'gallery',
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => 'cat', // For category permissions
+            'category_type' => 'galleries', // For category permissions
+            'parent_spec__table_name' => 'galleries',
+            'parent_spec__parent_name' => 'parent_id',
+            'parent_spec__field_name' => 'name',
+            'category_is_string' => true,
 
-			'title_field'=>'title',
-			'title_field_dereference'=>true,
-			'description_field'=>'description',
-			'thumb_field'=>'thumb_url',
+            'title_field' => 'title',
+            'title_field_dereference' => true,
+            'description_field' => 'description',
+            'thumb_field' => 'thumb_url',
 
-			'view_page_link_pattern'=>'_SEARCH:galleries:image:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_galleries:_ed:_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:galleries:misc:_WILD',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries').':cms_galleries:ad'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('galleries')).':galleries',
+            'view_page_link_pattern' => '_SEARCH:galleries:image:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_galleries:_ed:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:galleries:misc:_WILD',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries') . ':cms_galleries:ad'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('galleries')) . ':galleries',
 
-			'support_url_monikers'=>true,
+            'support_url_monikers' => true,
 
-			'views_field'=>'image_views',
-			'submitter_field'=>'submitter',
-			'add_time_field'=>'add_date',
-			'edit_time_field'=>'edit_date',
-			'date_field'=>'add_date',
-			'validated_field'=>'validated',
+            'views_field' => 'image_views',
+            'submitter_field' => 'submitter',
+            'add_time_field' => 'add_date',
+            'edit_time_field' => 'edit_date',
+            'date_field' => 'add_date',
+            'validated_field' => 'validated',
 
-			'seo_type_code'=>'image',
+            'seo_type_code' => 'image',
 
-			'feedback_type_code'=>'images',
+            'feedback_type_code' => 'images',
 
-			'permissions_type_code'=>'galleries', // NULL if has no permissions
+            'permissions_type_code' => 'galleries', // NULL if has no permissions
 
-			'search_hook'=>'images',
+            'search_hook' => 'images',
 
-			'addon_name'=>'galleries',
+            'addon_name' => 'galleries',
 
-			'cms_page'=>'cms_galleries',
-			'module'=>'galleries',
+            'cms_page' => 'cms_galleries',
+            'module' => 'galleries',
 
-			'occle_filesystem_hook'=>'galleries',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'galleries',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>'galleries',
+            'rss_hook' => 'galleries',
 
-			'actionlog_regexp'=>'\w+_IMAGE',
+            'actionlog_regexp' => '\w+_IMAGE',
 
-			'supports_privacy'=>true,
-		);
-	}
+            'supports_privacy' => true,
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -105,10 +105,10 @@ class Hook_content_meta_aware_image
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('galleries');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('galleries');
 
-		return render_image_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:$root,$guid);
-	}
+        return render_image_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:$root,$guid);
+    }
 }

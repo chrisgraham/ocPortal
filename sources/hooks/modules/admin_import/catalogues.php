@@ -20,20 +20,18 @@
 
 class Hook_catalogues
 {
-	/**
+    /**
 	 * Standard importer hook info function.
 	 *
 	 * @return ?array	Importer handling details (NULL: importer is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['product']='Catalogues (CSV files)';
-		$info['hook_type']='redirect';
-		$info['import_module']='cms_catalogues';
-		$info['import_method_name']='import';
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['product'] = 'Catalogues (CSV files)';
+        $info['hook_type'] = 'redirect';
+        $info['import_module'] = 'cms_catalogues';
+        $info['import_method_name'] = 'import';
+        return $info;
+    }
 }
-
-

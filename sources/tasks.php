@@ -23,23 +23,25 @@
  */
 function tasks_script()
 {
-	$id=get_param_integer('id');
-	$secure_ref=get_param('secure_ref');
+    $id = get_param_integer('id');
+    $secure_ref = get_param('secure_ref');
 
-	$task_rows=$GLOBALS['SITE_DB']->query_select('task_queue',array('*'),array(
-		'id'=>$id,
-		't_secure_ref'=>$secure_ref,
-		't_locked'=>0,
-	),'',1);
-	if (!array_key_exists(0,$task_rows)) return; // Missing / locked / secure_ref error
-	$GLOBALS['SITE_DB']->query_update('task_queue',array(
-		't_locked'=>1,
-	),array(
-		'id'=>$id,
-	),'',1);
-	$task_row=$task_rows[0];
+    $task_rows = $GLOBALS['SITE_DB']->query_select('task_queue',array('*'),array(
+        'id' => $id,
+        't_secure_ref' => $secure_ref,
+        't_locked' => 0,
+    ),'',1);
+    if (!array_key_exists(0,$task_rows)) {
+        return;
+    } // Missing / locked / secure_ref error
+    $GLOBALS['SITE_DB']->query_update('task_queue',array(
+        't_locked' => 1,
+    ),array(
+        'id' => $id,
+    ),'',1);
+    $task_row = $task_rows[0];
 
-	execute_task_background($task_row);
+    execute_task_background($task_row);
 }
 
 /**
@@ -49,93 +51,84 @@ function tasks_script()
  */
 function execute_task_background($task_row)
 {
-	require_code('failure');
+    require_code('failure');
 
-	global $RUNNING_TASK;
-	$RUNNING_TASK=true;
+    global $RUNNING_TASK;
+    $RUNNING_TASK = true;
 
-	require_lang('tasks');
+    require_lang('tasks');
 
-	require_code('users_inactive_occasionals');
-	$requester=$task_row['t_member_id'];
-	create_session($requester,1);
+    require_code('users_inactive_occasionals');
+    $requester = $task_row['t_member_id'];
+    create_session($requester,1);
 
-	disable_php_memory_limit();
-	if (function_exists('set_time_limit')) @set_time_limit(0);
+    disable_php_memory_limit();
+    if (function_exists('set_time_limit')) {
+        @set_time_limit(0);
+    }
 
-	$hook=$task_row['t_hook'];
-	$args=unserialize($task_row['t_args']);
-	require_code('hooks/systems/tasks/'.filter_naughty($hook));
-	$ob=object_factory('Hook_task_'.$hook);
-	$result=call_user_func_array(array($ob,'run'),$args);
+    $hook = $task_row['t_hook'];
+    $args = unserialize($task_row['t_args']);
+    require_code('hooks/systems/tasks/' . filter_naughty($hook));
+    $ob = object_factory('Hook_task_' . $hook);
+    $result = call_user_func_array(array($ob,'run'),$args);
 
-	if ($task_row['t_send_notification']==1)
-	{
-		$attachments=array();
+    if ($task_row['t_send_notification'] == 1) {
+        $attachments = array();
 
-		if (is_null($result))
-		{
-			$subject=do_lang('TASK_COMPLETED_SUBJECT',$task_row['t_title']);
-			$message=do_lang('TASK_COMPLETED_BODY_SIMPLE');
-		} else
-		{
-			list($mime_type,$content_result)=$result;
+        if (is_null($result)) {
+            $subject = do_lang('TASK_COMPLETED_SUBJECT',$task_row['t_title']);
+            $message = do_lang('TASK_COMPLETED_BODY_SIMPLE');
+        } else {
+            list($mime_type,$content_result) = $result;
 
-			// Handle error results
-			if (is_null($mime_type))
-			{
-				$subject=do_lang('TASK_FAILED_SUBJECT',$task_row['t_title']);
-				$_content_result=is_object($content_result)?('[semihtml]'.$content_result->evaluate().'[/semihtml]'):$content_result;
-				$message=do_lang('TASK_FAILED_SIMPLE',$_content_result);
-			} else
-			{
-				$subject=do_lang('TASK_COMPLETED_SUBJECT',$task_row['t_title']);
+            // Handle error results
+            if (is_null($mime_type)) {
+                $subject = do_lang('TASK_FAILED_SUBJECT',$task_row['t_title']);
+                $_content_result = is_object($content_result)?('[semihtml]' . $content_result->evaluate() . '[/semihtml]'):$content_result;
+                $message = do_lang('TASK_FAILED_SIMPLE',$_content_result);
+            } else {
+                $subject = do_lang('TASK_COMPLETED_SUBJECT',$task_row['t_title']);
 
-				// HTML result
-				if ($mime_type=='text/html')
-				{
-					if (is_array($content_result))
-					{
-						$path=$content_result[1];
-						$content_result=file_get_contents($path);
-						@unlink($path);
-						sync_file($path);
-					}
+                // HTML result
+                if ($mime_type == 'text/html') {
+                    if (is_array($content_result)) {
+                        $path = $content_result[1];
+                        $content_result = file_get_contents($path);
+                        @unlink($path);
+                        sync_file($path);
+                    }
 
-					$_content_result=is_object($content_result)?('[semihtml]'.$content_result->evaluate().'[/semihtml]'):$content_result;
-					$message=do_lang('TASK_COMPLETED_SIMPLE',$_content_result);
-				} else
-				{
-					// Some downloaded result
-					if (is_array($content_result))
-					{
-						$attachments[$content_result[1]]=$content_result[0];
-					} else
-					{
-						fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-					}
+                    $_content_result = is_object($content_result)?('[semihtml]' . $content_result->evaluate() . '[/semihtml]'):$content_result;
+                    $message = do_lang('TASK_COMPLETED_SIMPLE',$_content_result);
+                } else {
+                    // Some downloaded result
+                    if (is_array($content_result)) {
+                        $attachments[$content_result[1]] = $content_result[0];
+                    } else {
+                        fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+                    }
 
-					$message=do_lang('TASK_COMPLETED_BODY_ATTACHMENT');
-				}
-			}
-		}
+                    $message = do_lang('TASK_COMPLETED_BODY_ATTACHMENT');
+                }
+            }
+        }
 
-		require_code('notifications');
-		dispatch_notification('task_completed',NULL,$subject,$message,array($requester),A_FROM_SYSTEM_PRIVILEGED,2,false,false,NULL,NULL,'','','','',$attachments);
+        require_code('notifications');
+        dispatch_notification('task_completed',null,$subject,$message,array($requester),A_FROM_SYSTEM_PRIVILEGED,2,false,false,null,null,'','','','',$attachments);
 
-		if (is_null(!$result))
-		{
-			list($mime_type,$content_result)=$result;
-			@unlink($content_result[1]);
-			sync_file($content_result[1]);
-		}
-	}
+        if (is_null(!$result)) {
+            list($mime_type,$content_result) = $result;
+            @unlink($content_result[1]);
+            sync_file($content_result[1]);
+        }
+    }
 
-	$GLOBALS['SITE_DB']->query_delete('task_queue',array(
-		'id'=>$task_row['id'],
-	),'',1);
+    $GLOBALS['SITE_DB']->query_delete('task_queue',array(
+        'id' => $task_row['id'],
+    ),'',1);
 
-	$RUNNING_TASK=false;
+    $RUNNING_TASK = false;
 }
 
 /**
@@ -150,129 +143,135 @@ function execute_task_background($task_row)
  * @param  boolean			Whether to send a notification of the task having come out of the queue
  * @return tempcode			UI (function may not return if the task is immediate and doesn't have a text/html result)
  */
-function call_user_func_array__long_task($plain_title,$title,$hook,$args=NULL,$run_at_end_of_script=false,$force_immediate=false,$send_notification=true)
+function call_user_func_array__long_task($plain_title,$title,$hook,$args = null,$run_at_end_of_script = false,$force_immediate = false,$send_notification = true)
 {
-	if (is_null($args)) $args=array();
+    if (is_null($args)) {
+        $args = array();
+    }
 
-	if (
-		(get_param_integer('keep_debug_tasks',0)==1) || 
-		(get_option('tasks_background')=='0') || 
-		((is_guest()) && ($send_notification))
-	)
-		$force_immediate=true;
+    if (
+        (get_param_integer('keep_debug_tasks',0) == 1) ||
+        (get_option('tasks_background') == '0') ||
+        ((is_guest()) && ($send_notification))
+    ) {
+        $force_immediate = true;
+    }
 
-	require_lang('tasks');
+    require_lang('tasks');
 
-	if ($force_immediate)
-	{
-		if ($run_at_end_of_script)
-		{
-			@ignore_user_abort(true); // Must keep going till completion
+    if ($force_immediate) {
+        if ($run_at_end_of_script) {
+            @ignore_user_abort(true); // Must keep going till completion
 
-			register_shutdown_function('call_user_func_array__long_task',$plain_title,$title,$hook,$args,false,$force_immediate,$send_notification);
-			return new ocp_tempcode();
-		}
+            register_shutdown_function('call_user_func_array__long_task',$plain_title,$title,$hook,$args,false,$force_immediate,$send_notification);
+            return new ocp_tempcode();
+        }
 
-		// Disable limits, as tasks can be resource-intensive
-		disable_php_memory_limit();
-		if (function_exists('set_time_limit')) @set_time_limit(0);
+        // Disable limits, as tasks can be resource-intensive
+        disable_php_memory_limit();
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
 
-		// Run task
-		require_code('hooks/systems/tasks/'.filter_naughty($hook));
-		$ob=object_factory('Hook_task_'.$hook);
-		$result=call_user_func_array(array($ob,'run'),$args);
-		if (is_null($result))
-		{
-			if (is_null($title)) return new ocp_tempcode();
-			return inform_screen($title,do_lang_tempcode('SUCCESS'));
-		}
-		if (!isset($result[2])) $result[2]=array();
-		if (!isset($result[3])) $result[3]=array();
-		list($mime_type,$content_result,$headers,$ini_set)=$result;
+        // Run task
+        require_code('hooks/systems/tasks/' . filter_naughty($hook));
+        $ob = object_factory('Hook_task_' . $hook);
+        $result = call_user_func_array(array($ob,'run'),$args);
+        if (is_null($result)) {
+            if (is_null($title)) {
+                return new ocp_tempcode();
+            }
+            return inform_screen($title,do_lang_tempcode('SUCCESS'));
+        }
+        if (!isset($result[2])) {
+            $result[2] = array();
+        }
+        if (!isset($result[3])) {
+            $result[3] = array();
+        }
+        list($mime_type,$content_result,$headers,$ini_set) = $result;
 
-		// Action ini_set commands
-		foreach ($ini_set as $key=>$val)
-		{
-			ini_set($key,$val);
-		}
+        // Action ini_set commands
+        foreach ($ini_set as $key => $val) {
+            ini_set($key,$val);
+        }
 
-		// Action HTTP headers
-		foreach ($headers as $key=>$val)
-		{
-			header($key.': '.$val);
-		}
+        // Action HTTP headers
+        foreach ($headers as $key => $val) {
+            header($key . ': ' . $val);
+        }
 
-		// Handle error results
-		if (is_null($mime_type))
-		{
-			if (is_null($title)) return $content_result;
-			return warn_screen($title,$content_result);
-		}
+        // Handle error results
+        if (is_null($mime_type)) {
+            if (is_null($title)) {
+                return $content_result;
+            }
+            return warn_screen($title,$content_result);
+        }
 
-		// HTML result
-		if ($mime_type=='text/html')
-		{
-			if (is_array($content_result))
-			{
-				$path=$content_result[1];
-				$content_result=file_get_contents($path);
-				@unlink($path);
-				sync_file($path);
-			}
+        // HTML result
+        if ($mime_type == 'text/html') {
+            if (is_array($content_result)) {
+                $path = $content_result[1];
+                $content_result = file_get_contents($path);
+                @unlink($path);
+                sync_file($path);
+            }
 
-			if (is_null($title)) return is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result);
-			return do_template('FULL_MESSAGE_SCREEN',array('_GUID'=>'20e67ceb86e3bbd1e889c6ca116d7a77','TITLE'=>$title,
-				'TEXT'=>is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result),
-			));
-		}
+            if (is_null($title)) {
+                return is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result);
+            }
+            return do_template('FULL_MESSAGE_SCREEN',array('_GUID' => '20e67ceb86e3bbd1e889c6ca116d7a77','TITLE' => $title,
+                'TEXT' => is_object($content_result)?protect_from_escaping($content_result):make_string_tempcode($content_result),
+            ));
+        }
 
-		// Some downloaded result
-		if (is_array($content_result))
-		{
-			readfile($content_result[1]);
-			@unlink($content_result[1]);
-			sync_file($content_result[1]);
-		}/* elseif (is_object($content_result))
+        // Some downloaded result
+        if (is_array($content_result)) {
+            readfile($content_result[1]);
+            @unlink($content_result[1]);
+            sync_file($content_result[1]);
+        }/* elseif (is_object($content_result))
 		{
 			$content_result->evaluate_echo(NULL);
 		} else
 		{
 			echo $content_result;
 		}*/
-		else
-		{
-			fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		}
-		$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-		exit();
+        else {
+            fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        }
+        $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
+        exit();
 
-		return new ocp_tempcode(); // Will never get here
-	}
+        return new ocp_tempcode(); // Will never get here
+    }
 
-	// Enqueue...
+    // Enqueue...
 
-	require_code('crypt');
-	$secure_ref=produce_salt();
+    require_code('crypt');
+    $secure_ref = produce_salt();
 
-	$id=$GLOBALS['SITE_DB']->query_insert('task_queue',array(
-		't_title'=>$plain_title,
-		't_hook'=>$hook,
-		't_args'=>serialize($args),
-		't_member_id'=>get_member(),
-		't_secure_ref'=>$secure_ref, // Used like a temporary password to initiate the task
-		't_send_notification'=>$send_notification?1:0,
-		't_locked'=>0,
-	),true);
+    $id = $GLOBALS['SITE_DB']->query_insert('task_queue',array(
+        't_title' => $plain_title,
+        't_hook' => $hook,
+        't_args' => serialize($args),
+        't_member_id' => get_member(),
+        't_secure_ref' => $secure_ref, // Used like a temporary password to initiate the task
+        't_send_notification' => $send_notification?1:0,
+        't_locked' => 0,
+    ),true);
 
-	if (GOOGLE_APPENGINE)
-	{
-		require_once('google/appengine/api/taskqueue/PushTask.php');
+    if (GOOGLE_APPENGINE) {
+        require_once('google/appengine/api/taskqueue/PushTask.php');
 
-		$pushtask='\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
-		$task=new $pushtask('/data/tasks.php',array('id'=>strval($id),'secure_ref'=>$secure_ref),array('name'=>$hook.'_'.$secure_ref));
-		$task_name=$task->add();
-	}
+        $pushtask = '\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
+        $task = new $pushtask('/data/tasks.php',array('id' => strval($id),'secure_ref' => $secure_ref),array('name' => $hook . '_' . $secure_ref));
+        $task_name = $task->add();
+    }
 
-	if (is_null($title)) return do_lang_tempcode('NEW_TASK_RUNNING');
-	return inform_screen($title,do_lang_tempcode('NEW_TASK_RUNNING'));
+    if (is_null($title)) {
+        return do_lang_tempcode('NEW_TASK_RUNNING');
+    }
+    return inform_screen($title,do_lang_tempcode('NEW_TASK_RUNNING'));
 }

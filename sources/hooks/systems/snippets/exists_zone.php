@@ -20,21 +20,25 @@
 
 class Hook_exists_zone
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$zone=get_param('name');
+    public function run()
+    {
+        $zone = get_param('name');
 
-		$test=file_exists(get_file_base().'/'.$zone);
-		if (!$test) return new ocp_tempcode();
+        $test = file_exists(get_file_base() . '/' . $zone);
+        if (!$test) {
+            return new ocp_tempcode();
+        }
 
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name'=>$zone));
-		if (is_null($test)) return new ocp_tempcode();
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name' => $zone));
+        if (is_null($test)) {
+            return new ocp_tempcode();
+        }
 
-		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($zone))));
-	}
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($zone))));
+    }
 }

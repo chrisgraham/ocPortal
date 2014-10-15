@@ -26,35 +26,37 @@
  */
 function ocf_list_multi_moderations($forum_id)
 {
-	if (!addon_installed('ocf_multi_moderations')) return array();
+    if (!addon_installed('ocf_multi_moderations')) {
+        return array();
+    }
 
-	$rows=$GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),NULL,'ORDER BY '.$GLOBALS['FORUM_DB']->translate_field_ref('mm_name'));
-	$out=array();
-	if (count($rows)==0) return $out;
+    $rows = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),null,'ORDER BY ' . $GLOBALS['FORUM_DB']->translate_field_ref('mm_name'));
+    $out = array();
+    if (count($rows) == 0) {
+        return $out;
+    }
 
-	$lots_of_forums=$GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>200;
-	if (!$lots_of_forums)
-	{
-		$all_forums=collapse_2d_complexity('id','f_parent_forum',$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum')));
-	}
-	foreach ($rows as $row)
-	{
-		$row['_mm_name']=get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']);
+    $lots_of_forums = $GLOBALS['FORUM_DB']->query_select_value('f_forums','COUNT(*)')>200;
+    if (!$lots_of_forums) {
+        $all_forums = collapse_2d_complexity('id','f_parent_forum',$GLOBALS['FORUM_DB']->query_select('f_forums',array('id','f_parent_forum')));
+    }
+    foreach ($rows as $row) {
+        $row['_mm_name'] = get_translated_text($row['mm_name'],$GLOBALS['FORUM_DB']);
 
-		require_code('ocfiltering');
-		if ($lots_of_forums)
-		{
-			$sql=ocfilter_to_sqlfragment($row['mm_forum_multi_code'],'id','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
-			if (!is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_forums WHERE id='.strval($forum_id).' AND ('.$sql.')',false,true)))
-				$out[$row['id']]=$row['_mm_name'];
-		} else
-		{
-			$idlist=ocfilter_to_idlist_using_memory($row['mm_forum_multi_code'],$all_forums,'f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
-			if (in_array($forum_id,$idlist))
-				$out[$row['id']]=$row['_mm_name'];
-		}
-	}
-	return $out;
+        require_code('ocfiltering');
+        if ($lots_of_forums) {
+            $sql = ocfilter_to_sqlfragment($row['mm_forum_multi_code'],'id','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
+            if (!is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE id=' . strval($forum_id) . ' AND (' . $sql . ')',false,true))) {
+                $out[$row['id']] = $row['_mm_name'];
+            }
+        } else {
+            $idlist = ocfilter_to_idlist_using_memory($row['mm_forum_multi_code'],$all_forums,'f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
+            if (in_array($forum_id,$idlist)) {
+                $out[$row['id']] = $row['_mm_name'];
+            }
+        }
+    }
+    return $out;
 }
 
 /**
@@ -64,13 +66,17 @@ function ocf_list_multi_moderations($forum_id)
  * @param  ?MEMBER	The member (NULL: current member).
  * @return boolean	Answer.
  */
-function ocf_may_perform_multi_moderation($forum_id,$member_id=NULL)
+function ocf_may_perform_multi_moderation($forum_id,$member_id = null)
 {
-	if (is_null($member_id)) $member_id=get_member();
+    if (is_null($member_id)) {
+        $member_id = get_member();
+    }
 
-	if (!ocf_may_moderate_forum($forum_id,$member_id)) return false;
+    if (!ocf_may_moderate_forum($forum_id,$member_id)) {
+        return false;
+    }
 
-	return has_privilege($member_id,'run_multi_moderations');
+    return has_privilege($member_id,'run_multi_moderations');
 }
 
 /**
@@ -79,11 +85,13 @@ function ocf_may_perform_multi_moderation($forum_id,$member_id=NULL)
  * @param  ?MEMBER	The member (NULL: current member).
  * @return boolean	Answer.
  */
-function ocf_may_warn_members($member_id=NULL)
+function ocf_may_warn_members($member_id = null)
 {
-	if (is_null($member_id)) $member_id=get_member();
+    if (is_null($member_id)) {
+        $member_id = get_member();
+    }
 
-	return has_privilege($member_id,'warn_members');
+    return has_privilege($member_id,'warn_members');
 }
 
 /**
@@ -94,7 +102,9 @@ function ocf_may_warn_members($member_id=NULL)
  */
 function ocf_get_warnings($member_id)
 {
-	if (!addon_installed('ocf_warnings')) return array();
+    if (!addon_installed('ocf_warnings')) {
+        return array();
+    }
 
-	return $GLOBALS['FORUM_DB']->query_select('f_warnings',array('*'),array('w_member_id'=>$member_id,'w_is_warning'=>1));
+    return $GLOBALS['FORUM_DB']->query_select('f_warnings',array('*'),array('w_member_id' => $member_id,'w_is_warning' => 1));
 }

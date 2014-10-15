@@ -20,7 +20,7 @@
 
 class Hook_occle_command_read
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,20 +28,27 @@ class Hook_occle_command_read
 	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('read',array('h'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','read'));
-			else $parameters[0]=$occle_fs->_pwd_to_array($parameters[0]);
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('read',array('h'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','read'));
+            } else {
+                $parameters[0] = $occle_fs->_pwd_to_array($parameters[0]);
+            }
 
-			if (!$occle_fs->_is_file($parameters[0])) return array('','','',do_lang('NOT_A_FILE','1'));
+            if (!$occle_fs->_is_file($parameters[0])) {
+                return array('','','',do_lang('NOT_A_FILE','1'));
+            }
 
-			$success=$occle_fs->read_file($parameters[0]);
-			if ($success!==false) return array('','',$success,'');
-			else return array('','','',do_lang('INCOMPLETE_ERROR'));
-		}
-	}
+            $success = $occle_fs->read_file($parameters[0]);
+            if ($success !== false) {
+                return array('','',$success,'');
+            } else {
+                return array('','','',do_lang('INCOMPLETE_ERROR'));
+            }
+        }
+    }
 }
-

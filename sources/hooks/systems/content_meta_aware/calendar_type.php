@@ -20,78 +20,78 @@
 
 class Hook_content_meta_aware_calendar_type
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>false,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => false,
 
-			'content_type_label'=>'calendar:EVENT_TYPE',
+            'content_type_label' => 'calendar:EVENT_TYPE',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'calendar_types',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>NULL,
-			'is_category'=>true,
-			'is_entry'=>false,
-			'category_field'=>NULL, // For category permissions
-			'category_type'=>NULL, // For category permissions
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'calendar_types',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => NULL,
+            'parent_category_meta_aware_type' => NULL,
+            'is_category' => true,
+            'is_entry' => false,
+            'category_field' => NULL, // For category permissions
+            'category_type' => NULL, // For category permissions
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_is_string' => false,
 
-			'title_field'=>'t_title',
-			'title_field_dereference'=>true,
-			'description_field'=>NULL,
-			'thumb_field'=>'t_logo',
-			'thumb_field_is_theme_image'=>true,
+            'title_field' => 't_title',
+            'title_field_dereference' => true,
+            'description_field' => NULL,
+            'thumb_field' => 't_logo',
+            'thumb_field_is_theme_image' => true,
 
-			'view_page_link_pattern'=>'_SEARCH:calendar:misc:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_calendar:_ec:_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:calendar:misc:_WILD',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_calendar'))?(get_module_zone('cms_calendar').':cms_calendar:ad'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('calendar')).':calendar',
+            'view_page_link_pattern' => '_SEARCH:calendar:misc:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_calendar:_ec:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:calendar:misc:_WILD',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_calendar'))?(get_module_zone('cms_calendar') . ':cms_calendar:ad'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('calendar')) . ':calendar',
 
-			'support_url_monikers'=>false,
+            'support_url_monikers' => false,
 
-			'views_field'=>NULL,
-			'submitter_field'=>NULL,
-			'add_time_field'=>NULL,
-			'edit_time_field'=>NULL,
-			'date_field'=>NULL,
-			'validated_field'=>NULL,
+            'views_field' => NULL,
+            'submitter_field' => NULL,
+            'add_time_field' => NULL,
+            'edit_time_field' => NULL,
+            'date_field' => NULL,
+            'validated_field' => NULL,
 
-			'seo_type_code'=>'calendar_type',
+            'seo_type_code' => 'calendar_type',
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>NULL,
+            'search_hook' => NULL,
 
-			'addon_name'=>'calendar',
+            'addon_name' => 'calendar',
 
-			'cms_page'=>'cms_calendar',
-			'module'=>'calendar',
+            'cms_page' => 'cms_calendar',
+            'module' => 'calendar',
 
-			'occle_filesystem_hook'=>'calendar',
-			'occle_filesystem__is_folder'=>true,
+            'occle_filesystem_hook' => 'calendar',
+            'occle_filesystem__is_folder' => true,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_CALENDAR_TYPE',
-		);
-	}
+            'actionlog_regexp' => '\w+_CALENDAR_TYPE',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -103,10 +103,10 @@ class Hook_content_meta_aware_calendar_type
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('authors');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('authors');
 
-		return render_calendar_type_box($row,$zone,$give_context,$guid);
-	}
+        return render_calendar_type_box($row,$zone,$give_context,$guid);
+    }
 }

@@ -20,139 +20,147 @@
 
 class Block_side_tag_cloud
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=3;
-		$info['locked']=false;
-		$info['parameters']=array('param','title','zone','max');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 3;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','title','zone','max');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:do_lang(\'search:TAG_CLOUD\'),array_key_exists(\'max\',$map)?intval($map[\'max\']):30,array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
-		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*1;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'array(array_key_exists(\'title\',$map)?$map[\'title\']:do_lang(\'search:TAG_CLOUD\'),array_key_exists(\'max\',$map)?intval($map[\'max\']):30,array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\',array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*1;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		require_lang('search');
-		require_css('search');
-		require_code('content');
+    public function run($map)
+    {
+        require_lang('search');
+        require_css('search');
+        require_code('content');
 
-		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('search');
-		$max_tags=array_key_exists('max',$map)?intval($map['max']):30;
+        $zone = array_key_exists('zone',$map)?$map['zone']:get_module_zone('search');
+        $max_tags = array_key_exists('max',$map)?intval($map['max']):30;
 
-		$tags=array();
-		$largest_num=0;
-		$smallest_num=mixed();
+        $tags = array();
+        $largest_num = 0;
+        $smallest_num = mixed();
 
-		$search_limiter=array('all_defaults'=>'1');
+        $search_limiter = array('all_defaults' => '1');
 
-		// Find all keywords, hence all tags
-		$limit_to=array_key_exists('param',$map)?$map['param']:'';
-		if ($limit_to!='')
-		{
-			$where='';
-			foreach (explode(',',$limit_to) as $l)
-			{
-				if ($where!='') $where.=' OR ';
-				$where.=db_string_equal_to('meta_for_type',$l);
+        // Find all keywords, hence all tags
+        $limit_to = array_key_exists('param',$map)?$map['param']:'';
+        if ($limit_to != '') {
+            $where = '';
+            foreach (explode(',',$limit_to) as $l) {
+                if ($where != '') {
+                    $where .= ' OR ';
+                }
+                $where .= db_string_equal_to('meta_for_type',$l);
 
-				$l2=convert_ocportal_type_codes('seo_type_code',$l,'search_hook');
-				$search_limiter['search_'.$l2]=1;
-			}
-			$search_limiter['all_defaults']='0';
-		} else
-		{
-			$where='1=1';
-		}
-		$where.=' AND '.db_string_not_equal_to($GLOBALS['SITE_DB']->translate_field_ref('meta_keywords'),'');
-		$meta_rows=$GLOBALS['SITE_DB']->query('SELECT meta_for_type,meta_for_id,meta_keywords FROM '.get_table_prefix().'seo_meta m WHERE '.$where.' ORDER BY m.id DESC',300/*reasonable limit*/,NULL,false,false,array('meta_keywords'=>'LONG_TRANS'));
-		foreach ($meta_rows as $mr)
-		{
-			$keywords=explode(',',get_translated_text($mr['meta_keywords']));
-			foreach ($keywords as $keyword)
-			{
-				$keyword=trim($keyword);
-				if ($keyword=='') continue;
-				if (strlen(is_numeric($keyword)?strval(intval($keyword)):$keyword)<4) continue; // Won't be indexed, plus will uglify the tag list
-				if (!array_key_exists($keyword,$tags)) $tags[$keyword]=0;
-				$tags[$keyword]++;
-			}
-		}
-		arsort($tags);
-		$_tags=$tags;
-		$tags=array();
-		foreach ($_tags as $tag=>$count)
-		{
-			if (!is_string($tag)) $tag=strval($tag);
-			$tags[$tag]=$count;
-			if (count($tags)==$max_tags) break;
-		}
-		ksort($tags);
+                $l2 = convert_ocportal_type_codes('seo_type_code',$l,'search_hook');
+                $search_limiter['search_' . $l2] = 1;
+            }
+            $search_limiter['all_defaults'] = '0';
+        } else {
+            $where = '1=1';
+        }
+        $where .= ' AND ' . db_string_not_equal_to($GLOBALS['SITE_DB']->translate_field_ref('meta_keywords'),'');
+        $meta_rows = $GLOBALS['SITE_DB']->query('SELECT meta_for_type,meta_for_id,meta_keywords FROM ' . get_table_prefix() . 'seo_meta m WHERE ' . $where . ' ORDER BY m.id DESC',300/*reasonable limit*/,null,false,false,array('meta_keywords' => 'LONG_TRANS'));
+        foreach ($meta_rows as $mr) {
+            $keywords = explode(',',get_translated_text($mr['meta_keywords']));
+            foreach ($keywords as $keyword) {
+                $keyword = trim($keyword);
+                if ($keyword == '') {
+                    continue;
+                }
+                if (strlen(is_numeric($keyword)?strval(intval($keyword)):$keyword)<4) {
+                    continue;
+                } // Won't be indexed, plus will uglify the tag list
+                if (!array_key_exists($keyword,$tags)) {
+                    $tags[$keyword] = 0;
+                }
+                $tags[$keyword]++;
+            }
+        }
+        arsort($tags);
+        $_tags = $tags;
+        $tags = array();
+        foreach ($_tags as $tag => $count) {
+            if (!is_string($tag)) {
+                $tag = strval($tag);
+            }
+            $tags[$tag] = $count;
+            if (count($tags) == $max_tags) {
+                break;
+            }
+        }
+        ksort($tags);
 
-		if (count($tags)==0) return new ocp_tempcode();
+        if (count($tags) == 0) {
+            return new ocp_tempcode();
+        }
 
-		// Work out variation in sizings
-		foreach ($tags as $tag=>$count)
-		{
-			if ((is_null($smallest_num)) || ($count<$smallest_num)) $smallest_num=$count;
-			if ($count>$largest_num) $largest_num=$count;
-		}
+        // Work out variation in sizings
+        foreach ($tags as $tag => $count) {
+            if ((is_null($smallest_num)) || ($count<$smallest_num)) {
+                $smallest_num = $count;
+            }
+            if ($count>$largest_num) {
+                $largest_num = $count;
+            }
+        }
 
-		// Scale tag sizings into em figures, and generally prepare for templating
-		$max_em=2.5;
-		$min_em=0.85;
-		$tpl_tags=array();
-		foreach ($tags as $tag=>$count)
-		{
-			if (!is_string($tag)) $tag=strval($tag);
+        // Scale tag sizings into em figures, and generally prepare for templating
+        $max_em = 2.5;
+        $min_em = 0.85;
+        $tpl_tags = array();
+        foreach ($tags as $tag => $count) {
+            if (!is_string($tag)) {
+                $tag = strval($tag);
+            }
 
-			if ($smallest_num==$largest_num)
-			{
-				$em=1.0;
-			} else
-			{
-				$fraction=floatval($count-$smallest_num)/floatval($largest_num);
-				$em=$min_em+$fraction*($max_em-$min_em);
-			}
+            if ($smallest_num == $largest_num) {
+                $em = 1.0;
+            } else {
+                $fraction = floatval($count-$smallest_num)/floatval($largest_num);
+                $em = $min_em+$fraction*($max_em-$min_em);
+            }
 
-			$tpl_tags[]=array(
-				'TAG'=>$tag,
-				'COUNT'=>strval($count),
-				'EM'=>float_to_raw_string($em),
-				'LINK'=>build_url(array('page'=>'search','type'=>'results','content'=>'"'.$tag.'"','days'=>-1,'only_search_meta'=>'1')+$search_limiter,$zone),
-			);
-		}
+            $tpl_tags[] = array(
+                'TAG' => $tag,
+                'COUNT' => strval($count),
+                'EM' => float_to_raw_string($em),
+                'LINK' => build_url(array('page' => 'search','type' => 'results','content' => '"' . $tag . '"','days' => -1,'only_search_meta' => '1')+$search_limiter,$zone),
+            );
+        }
 
-		$title=array_key_exists('title',$map)?$map['title']:do_lang('TAG_CLOUD');
+        $title = array_key_exists('title',$map)?$map['title']:do_lang('TAG_CLOUD');
 
-		return do_template('BLOCK_SIDE_TAG_CLOUD',array('_GUID'=>'5cd3ece0f5c087fe1ce7db26d5356989','TAGS'=>$tpl_tags,'TITLE'=>$title));
-	}
+        return do_template('BLOCK_SIDE_TAG_CLOUD',array('_GUID' => '5cd3ece0f5c087fe1ce7db26d5356989','TAGS' => $tpl_tags,'TITLE' => $title));
+    }
 }
-
-

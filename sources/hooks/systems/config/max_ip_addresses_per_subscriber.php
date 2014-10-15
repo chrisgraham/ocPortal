@@ -20,40 +20,46 @@
 
 class Hook_config_max_ip_addresses_per_subscriber
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MAX_IP_ADDRESSES_PER_SUBSCRIBER',
-			'type'=>'integer',
-			'category'=>'SECURITY',
-			'group'=>'ECOMMERCE',
-			'explanation'=>'CONFIG_OPTION_max_ip_addresses_per_subscriber',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MAX_IP_ADDRESSES_PER_SUBSCRIBER',
+            'type' => 'integer',
+            'category' => 'SECURITY',
+            'group' => 'ECOMMERCE',
+            'explanation' => 'CONFIG_OPTION_max_ip_addresses_per_subscriber',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'ecommerce',
-		);
-	}
+            'addon' => 'ecommerce',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (get_forum_type()!='ocf') return NULL;
-		if (!addon_installed('stats')) return NULL;
-		if (is_ocf_satellite_site()) return NULL;
-		if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_write)) return NULL;
+    public function get_default()
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
+        if (!addon_installed('stats')) {
+            return NULL;
+        }
+        if (is_ocf_satellite_site()) {
+            return NULL;
+        }
+        if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_write)) {
+            return NULL;
+        }
 
-		return '';
-	}
+        return '';
+    }
 }
-
-

@@ -20,52 +20,51 @@
 
 class Block_top_personal_stats
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array();
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array();
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (is_guest()) return new ocp_tempcode();
+    public function run($map)
+    {
+        if (is_guest()) {
+            return new ocp_tempcode();
+        }
 
-		require_css('personal_stats');
-		require_javascript('javascript_notification_poller');
+        require_css('personal_stats');
+        require_javascript('javascript_notification_poller');
 
-		$member_id=get_member();
+        $member_id = get_member();
 
-		$avatar_url='';
-		if (!has_no_forum())
-		{
-			$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-		}
+        $avatar_url = '';
+        if (!has_no_forum()) {
+            $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+        }
 
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
-		require_code('global4');
-		list($links,$details,$num_unread_pps)=member_personal_links_and_details($member_id);
+        require_code('global4');
+        list($links,$details,$num_unread_pps) = member_personal_links_and_details($member_id);
 
-		return do_template('BLOCK_TOP_PERSONAL_STATS',array('NUM_UNREAD_PTS'=>strval($num_unread_pps),'AVATAR_URL'=>$avatar_url,'MEMBER_ID'=>strval($member_id),'USERNAME'=>$username,'LINKS'=>$links,'DETAILS'=>$details));
-	}
+        return do_template('BLOCK_TOP_PERSONAL_STATS',array('NUM_UNREAD_PTS' => strval($num_unread_pps),'AVATAR_URL' => $avatar_url,'MEMBER_ID' => strval($member_id),'USERNAME' => $username,'LINKS' => $links,'DETAILS' => $details));
+    }
 }
-
-

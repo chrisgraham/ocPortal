@@ -22,110 +22,107 @@
 
 function find_wiki_disk_meta_set()
 {
-	$set=array();
+    $set = array();
 
-	$dir=get_custom_file_base().'/'.get_option('wiki_sync_page_directory');
-	$dh=opendir($dir);
-	while (($f=readdir($dh))!==false)
-	{
-		$matches=array();
-		if (preg_match('#^(.*)\.txt$#',$f,$matches)!=0)
-		{
-			$name=$matches[1];
+    $dir = get_custom_file_base() . '/' . get_option('wiki_sync_page_directory');
+    $dh = opendir($dir);
+    while (($f = readdir($dh)) !== false) {
+        $matches = array();
+        if (preg_match('#^(.*)\.txt$#',$f,$matches) != 0) {
+            $name = $matches[1];
 
-			$contents=file_get_contents($dir.'/'.$f);
+            $contents = file_get_contents($dir . '/' . $f);
 
-			$matches2=array();
-			preg_match('#\[title sub="Written by ([^"]*)"\](.*)\[/title\]#U',$contents,$matches2);
-			$page_title=$matches2[2];
+            $matches2 = array();
+            preg_match('#\[title sub="Written by ([^"]*)"\](.*)\[/title\]#U',$contents,$matches2);
+            $page_title = $matches2[2];
 
-			$submitters=array();
-			$authors=explode(',',$matches2[1]);
-			foreach ($authors as $author)
-			{
-				$author=trim($author);
-				if ($author!='ocProducts') // Sneakily added this for ocPortal.com
-				{
-					$submitter=$GLOBALS['FORUM_DRIVER']->get_member_from_username($author);
-					if (!is_null($submitter)) $submitters[]=$submitter;
-				}
-			}
+            $submitters = array();
+            $authors = explode(',',$matches2[1]);
+            foreach ($authors as $author) {
+                $author = trim($author);
+                if ($author != 'ocProducts') { // Sneakily added this for ocPortal.com
+                    $submitter = $GLOBALS['FORUM_DRIVER']->get_member_from_username($author);
+                    if (!is_null($submitter)) {
+                        $submitters[] = $submitter;
+                    }
+                }
+            }
 
-			$matches3=array();
-			preg_match('#\{\$SET,keywords,(.*)\}#U',$contents,$matches3);
-			$keywords=explode(',',$matches[3][1]);
+            $matches3 = array();
+            preg_match('#\{\$SET,keywords,(.*)\}#U',$contents,$matches3);
+            $keywords = explode(',',$matches[3][1]);
 
-			$set[$name]=array(
-				'page_title'=>$page_title,
-				'submitters'=>$submitters,
-				'keywords'=>$keywords,
-			);
-		}
-	}
-	closedir($dh);
+            $set[$name] = array(
+                'page_title' => $page_title,
+                'submitters' => $submitters,
+                'keywords' => $keywords,
+            );
+        }
+    }
+    closedir($dh);
 
-	return $set;
+    return $set;
 }
 
 function find_filename_for_wiki_page($page_id)
 {
-	$page_title=TODO;
-	// TODO
+    $page_title = TODO;
+    // TODO
 }
 
 function find_matching_wiki_page($filename)
 {
-	// TODO
+    // TODO
 }
 
 function export_wiki_to_disk()
 {
-	// TODO
+    // TODO
 }
 
 function import_wiki_from_disk()
 {
-	// TODO
-	// For each page
-		// Try to bind to existing
-			// Edit
-		// Or add new
-	// Any existing pages not referenced
-		// Delete
+    // TODO
+    // For each page
+        // Try to bind to existing
+            // Edit
+        // Or add new
+    // Any existing pages not referenced
+        // Delete
 }
 
 function wiki_git_commit_and_push()
 {
-	// TODO: Only if not in conflicted state
+    // TODO: Only if not in conflicted state
 
-	git_pull();
-	// TODO
-	// TODO git add .
-	// "Website edit by <username>"
+    git_pull();
+    // TODO
+    // TODO git add .
+    // "Website edit by <username>"
 }
 
 // Call this from a CRON hook
 function wiki_git_pull()
 {
-	chdir(get_custom_file_base().'/'.get_option('wiki_page_directory'));
-	$errors=shell_exec('git pull 2>&1 1> /dev/null');
-	chdir(get_file_base());
-	if ($errors!='')
-	{
-		// TODO
-		// Send notification
-	}
+    chdir(get_custom_file_base() . '/' . get_option('wiki_page_directory'));
+    $errors = shell_exec('git pull 2>&1 1> /dev/null');
+    chdir(get_file_base());
+    if ($errors != '') {
+        // TODO
+        // Send notification
+    }
 }
 
 // Call this when adding/editing pages ; plus also from a unit test
 function enforce_wiki_constraints($page_id,$new_page_title)
 {
-	// TODO
-	// Ensure is unique
+    // TODO
+    // Ensure is unique
 }
 
 function convert_attachments_to_media_tags($page_id)
 {
-	// TODO
-	// Remember to use page name prefixing.
+    // TODO
+    // Remember to use page name prefixing.
 }

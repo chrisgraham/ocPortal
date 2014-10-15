@@ -23,9 +23,9 @@
  */
 function init__occle()
 {
-	require_lang('occle');
-	require_code('users_active_actions');
-	require_code('occle_fs');
+    require_lang('occle');
+    require_code('users_active_actions');
+    require_code('occle_fs');
 }
 
 /**
@@ -33,96 +33,101 @@ function init__occle()
  */
 function occle_script()
 {
-	$cli=((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'),'php_sapi_name')===false) && (php_sapi_name()=='cli') && (ocp_srv('REMOTE_ADDR')==''));
+    $cli = ((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'),'php_sapi_name') === false) && (php_sapi_name() == 'cli') && (ocp_srv('REMOTE_ADDR') == ''));
 
-	if ($cli)
-	{
-		if (function_exists('set_time_limit')) @set_time_limit(0);
-	}
+    if ($cli) {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
+    }
 
-	// Closed site
-	if (!$cli)
-	{
-		prepare_for_known_ajax_response();
+    // Closed site
+    if (!$cli) {
+        prepare_for_known_ajax_response();
 
-		$site_closed=get_option('site_closed');
-		if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
-		{
-			header('Content-Type: text/plain');
-			@exit(get_option('closed'));
-		}
+        $site_closed = get_option('site_closed');
+        if (($site_closed == '1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
+            header('Content-Type: text/plain');
+            @exit(get_option('closed'));
+        }
 
-		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+        if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
+            warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+        }
 
-		if (!has_actual_page_access(get_member(),'admin_occle')) fatal_exit(do_lang_tempcode('ACCESS_DENIED__PAGE_ACCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
-	}
+        if (!has_actual_page_access(get_member(),'admin_occle')) {
+            fatal_exit(do_lang_tempcode('ACCESS_DENIED__PAGE_ACCESS',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))));
+        }
+    }
 
-	// Check the action
-	$action=get_param('action','occle');
+    // Check the action
+    $action = get_param('action','occle');
 
-	if ($action=='message')
-	{
-		// We're receiving an OcCLEchat message
-		$url=get_param('base_url').'/data/occle.php?action=confirm&message='.urlencode(get_param('message'));
-		$return=http_download_file($url,NULL,false);
-		if ($return=='1')
-		{
-			if (ocp_srv('HTTP_USER_AGENT')=='ocPortal')
-			{
-				$GLOBALS['SITE_DB']->query_insert('occlechat',array('c_message'=>get_param('message'),'c_url'=>get_param('base_url'),'c_incoming'=>1,'c_timestamp'=>time()));
-				echo '1';
-			}
-			else echo '0';
-		}
-		else echo '0';
-	}
-	elseif ($action=='confirm')
-	{
-		// We're confirming a received message
-		if (ocp_srv('HTTP_USER_AGENT')=='ocPortal')
-		{
-			$results=$GLOBALS['SITE_DB']->query_select_value_if_there('occlechat','COUNT(*)',array('c_message'=>get_param('message'),'c_incoming'=>false));
-			if (!is_null($results)) echo '1';
-			else echo '0';
-		}
-		else echo '0';
-	}
-	else
-	{
-		// Executing a command from the command-line
-		$command=post_param('command',$cli?NULL:false);
-		if (is_null($command))
-		{
-			require_code('comcode_from_html');
-			require_code('mail');
+    if ($action == 'message') {
+        // We're receiving an OcCLEchat message
+        $url = get_param('base_url') . '/data/occle.php?action=confirm&message=' . urlencode(get_param('message'));
+        $return = http_download_file($url,null,false);
+        if ($return == '1') {
+            if (ocp_srv('HTTP_USER_AGENT') == 'ocPortal') {
+                $GLOBALS['SITE_DB']->query_insert('occlechat',array('c_message' => get_param('message'),'c_url' => get_param('base_url'),'c_incoming' => 1,'c_timestamp' => time()));
+                echo '1';
+            } else {
+                echo '0';
+            }
+        } else {
+            echo '0';
+        }
+    } elseif ($action == 'confirm') {
+        // We're confirming a received message
+        if (ocp_srv('HTTP_USER_AGENT') == 'ocPortal') {
+            $results = $GLOBALS['SITE_DB']->query_select_value_if_there('occlechat','COUNT(*)',array('c_message' => get_param('message'),'c_incoming' => false));
+            if (!is_null($results)) {
+                echo '1';
+            } else {
+                echo '0';
+            }
+        } else {
+            echo '0';
+        }
+    } else {
+        // Executing a command from the command-line
+        $command = post_param('command',$cli?null:false);
+        if (is_null($command)) {
+            require_code('comcode_from_html');
+            require_code('mail');
 
-			$stdin=@fopen('php://stdin',GOOGLE_APPENGINE?'rb':'rt');
-			$stderr=@fopen('php://stderr',GOOGLE_APPENGINE?'wb':'wt');
-			$stdout=@fopen('php://stdout',GOOGLE_APPENGINE?'wb':'wt');
-			while (true) // Goes on until ctrl+C
-			{
-				fwrite($stdout,"\n> ");
+            $stdin = @fopen('php://stdin',GOOGLE_APPENGINE?'rb':'rt');
+            $stderr = @fopen('php://stderr',GOOGLE_APPENGINE?'wb':'wt');
+            $stdout = @fopen('php://stdout',GOOGLE_APPENGINE?'wb':'wt');
+            while (true) { // Goes on until ctrl+C
+                fwrite($stdout,"\n> ");
 
-				$command=fgets($stdin,102400);
-				if (trim($command)=='exit') break;
-				$temp=new virtual_bash(trim($command));
-				if (trim($temp->output[STREAM_STDHTML])!='') fwrite($stdout,trim(comcode_to_clean_text(semihtml_to_comcode(preg_replace('#<(\w+) [^<>]*>#','<${1}>',$temp->output[STREAM_STDHTML])))));
-				if (trim($temp->output[STREAM_STDOUT])!='') fwrite($stdout,trim($temp->output[STREAM_STDOUT]));
-				if (trim($temp->output[STREAM_STDERR])!='') fwrite($stderr,trim($temp->output[STREAM_STDERR]));
-			}
-			fclose($stdin);
-			fclose($stderr);
-			fclose($stdout);
-		} else
-		{
-			$temp=new virtual_bash(trim($command));
-			$temp->output_xml();
-		}
-		if (get_option('occle_chat_announce')=='1')
-		{
-			http_download_file('http://ocportal.com/data_custom/occle.php?title='.urlencode(get_site_name()).'&url='.urlencode(get_custom_base_url()),NULL,false,true);
-		}
-	}
+                $command = fgets($stdin,102400);
+                if (trim($command) == 'exit') {
+                    break;
+                }
+                $temp = new virtual_bash(trim($command));
+                if (trim($temp->output[STREAM_STDHTML]) != '') {
+                    fwrite($stdout,trim(comcode_to_clean_text(semihtml_to_comcode(preg_replace('#<(\w+) [^<>]*>#','<${1}>',$temp->output[STREAM_STDHTML])))));
+                }
+                if (trim($temp->output[STREAM_STDOUT]) != '') {
+                    fwrite($stdout,trim($temp->output[STREAM_STDOUT]));
+                }
+                if (trim($temp->output[STREAM_STDERR]) != '') {
+                    fwrite($stderr,trim($temp->output[STREAM_STDERR]));
+                }
+            }
+            fclose($stdin);
+            fclose($stderr);
+            fclose($stdout);
+        } else {
+            $temp = new virtual_bash(trim($command));
+            $temp->output_xml();
+        }
+        if (get_option('occle_chat_announce') == '1') {
+            http_download_file('http://ocportal.com/data_custom/occle.php?title=' . urlencode(get_site_name()) . '&url=' . urlencode(get_custom_base_url()),null,false,true);
+        }
+    }
 }
 
 /**
@@ -131,715 +136,675 @@ function occle_script()
  */
 class virtual_bash
 {
-	var $current_input;
-	var $parsed_input;
-	var $parse_runtime;
-	var $output;
-	var $input_parameters;
-	var $fs;
+    public $current_input;
+    public $parsed_input;
+    public $parse_runtime;
+    public $output;
+    public $input_parameters;
+    public $fs;
 
-	/**
+    /**
 	 * Constructor function. Starts command parsing on the supplied command.
 	 *
 	 * @param  string	The inputted command, unparsed
 	 * @param  ?array	An array of prior output to be prepended (NULL: none)
 	 * @param  ?array	An array of prior parameters (NULL: none)
 	 */
-	function virtual_bash($inputted_command,$prior_output=NULL,$parameters=NULL)
-	{
-		if (!defined('MODE_NORMAL'))
-		{
-			define('MODE_NORMAL',0); // Not in quotes
-			define('MODE_QUOTES',1); // In some quotes
+    public function virtual_bash($inputted_command,$prior_output = null,$parameters = null)
+    {
+        if (!defined('MODE_NORMAL')) {
+            define('MODE_NORMAL',0); // Not in quotes
+            define('MODE_QUOTES',1); // In some quotes
 
-			define('STREAM_IDENTIFIER',0); // The stream identifier (optional): e.g. 3&2
-			define('ASSIGNMENT',1); // The stream assignment: e.g. >>
-			define('REDIRECT_IDENTIFIER',2); // The stream identifier: myfile
+            define('STREAM_IDENTIFIER',0); // The stream identifier (optional): e.g. 3&2
+            define('ASSIGNMENT',1); // The stream assignment: e.g. >>
+            define('REDIRECT_IDENTIFIER',2); // The stream identifier: myfile
 
-			define('REDIRECT_OVERWRITE',0); // Overwrite redirect (>)
-			define('REDIRECT_APPEND',1); // Append redirect (>>)
-			define('REDIRECT_INPUT',2); // Input redirect (<)
-			define('REDIRECT_PIPE',3); // Pipe (|)
+            define('REDIRECT_OVERWRITE',0); // Overwrite redirect (>)
+            define('REDIRECT_APPEND',1); // Append redirect (>>)
+            define('REDIRECT_INPUT',2); // Input redirect (<)
+            define('REDIRECT_PIPE',3); // Pipe (|)
 
-			define('STREAM_STDOUT',2); // STDOUT (text-only) stream
-			define('STREAM_STDHTML',1); // STDHTML (XHTML) stream
-			define('STREAM_STDCOMMAND',0); // STDCOMMAND (JavaScript) stream
-			define('STREAM_STDERR',3); // STDERR (text-only error) stream
+            define('STREAM_STDOUT',2); // STDOUT (text-only) stream
+            define('STREAM_STDHTML',1); // STDHTML (XHTML) stream
+            define('STREAM_STDCOMMAND',0); // STDCOMMAND (JavaScript) stream
+            define('STREAM_STDERR',3); // STDERR (text-only error) stream
 
-			define('SECTION_COMMAND',0); // The command section: e.g. echo
-			define('SECTION_OPTIONS',1); // The options section: e.g. -r
-			define('SECTION_PARAMETERS',2); // The parameters section: e.g. "hello world!"
-			define('SECTION_EXTRAS',3); // The extras section (redirects): e.g. >>2
+            define('SECTION_COMMAND',0); // The command section: e.g. echo
+            define('SECTION_OPTIONS',1); // The options section: e.g. -r
+            define('SECTION_PARAMETERS',2); // The parameters section: e.g. "hello world!"
+            define('SECTION_EXTRAS',3); // The extras section (redirects): e.g. >>2
 
-			define('COMMAND_NATIVE',0); // Either a lone command or a script
-			define('COMMAND_LONE',1); // A lone command
-			define('COMMAND_SCRIPT',2); // A script
-			define('COMMAND_PHP',3); // A PHP command
-			define('COMMAND_SQL',4); // An SQL query
-		}
+            define('COMMAND_NATIVE',0); // Either a lone command or a script
+            define('COMMAND_LONE',1); // A lone command
+            define('COMMAND_SCRIPT',2); // A script
+            define('COMMAND_PHP',3); // A PHP command
+            define('COMMAND_SQL',4); // An SQL query
+        }
 
-		$this->current_input=$inputted_command;
-		$this->parsed_input=NULL;
-		$this->parse_runtime=NULL;
-		$this->output=array(STREAM_STDCOMMAND=>'',STREAM_STDHTML=>'',STREAM_STDOUT=>'',STREAM_STDERR=>'');
-		$this->input_parameters=array();
+        $this->current_input = $inputted_command;
+        $this->parsed_input = null;
+        $this->parse_runtime = null;
+        $this->output = array(STREAM_STDCOMMAND => '',STREAM_STDHTML => '',STREAM_STDOUT => '',STREAM_STDERR => '');
+        $this->input_parameters = array();
 
-		if (!is_null($parameters))
-		{
-			foreach ($parameters as $parameter_key=>$parameter_value) $this->input_parameters['{P'.$parameter_key.'}']=$parameter_value;
-		}
+        if (!is_null($parameters)) {
+            foreach ($parameters as $parameter_key => $parameter_value) {
+                $this->input_parameters['{P' . $parameter_key . '}'] = $parameter_value;
+            }
+        }
 
-		$this->parse_input();
+        $this->parse_input();
 
-		// Remember not to return anything. Output should be collected using appropriate member functions
-	}
+        // Remember not to return anything. Output should be collected using appropriate member functions
+    }
 
-	/**
+    /**
 	 * Returns the parse tree for the command just parsed.
 	 *
 	 * @return ~array			The parse tree (false: failure)
 	 */
-	function return_parse_tree()
-	{
-		if (count($this->parsed_input)>=1) return $this->parsed_input;
-		else return false;
-	}
+    public function return_parse_tree()
+    {
+        if (count($this->parsed_input) >= 1) {
+            return $this->parsed_input;
+        } else {
+            return false;
+        }
+    }
 
-	/**
+    /**
 	 * Returns the output for the command just parsed.
 	 *
 	 * @return ~array			The output (false: failure)
 	 */
-	function return_output()
-	{
-		if (count($this->output)>=1) return $this->output;
-		else return false;
-	}
+    public function return_output()
+    {
+        if (count($this->output) >= 1) {
+            return $this->output;
+        } else {
+            return false;
+        }
+    }
 
-	/**
+    /**
 	 * Output an XML-RPC packet (hopefully) to the AJAX in the frontend.
 	 *
 	 * @return boolean			Success?
 	 */
-	function output_xml()
-	{
-		require_code('xml');
+    public function output_xml()
+    {
+        require_code('xml');
 
-		if (count($this->parsed_input)<1) return false;
+        if (count($this->parsed_input)<1) {
+            return false;
+        }
 
-		header('Content-Type: text/xml');
-		header('HTTP/1.0 200 Ok');
+        header('Content-Type: text/xml');
+        header('HTTP/1.0 200 Ok');
 
-		if (is_object($this->output[STREAM_STDCOMMAND])) $this->output[STREAM_STDCOMMAND]=$this->output[STREAM_STDCOMMAND]->evaluate();
-		if (is_object($this->output[STREAM_STDHTML])) $this->output[STREAM_STDHTML]=$this->output[STREAM_STDHTML]->evaluate();
-		if (is_object($this->output[STREAM_STDOUT])) $this->output[STREAM_STDOUT]=$this->output[STREAM_STDOUT]->evaluate();
-		if (is_object($this->output[STREAM_STDERR])) $this->output[STREAM_STDERR]=$this->output[STREAM_STDERR]->evaluate();
+        if (is_object($this->output[STREAM_STDCOMMAND])) {
+            $this->output[STREAM_STDCOMMAND] = $this->output[STREAM_STDCOMMAND]->evaluate();
+        }
+        if (is_object($this->output[STREAM_STDHTML])) {
+            $this->output[STREAM_STDHTML] = $this->output[STREAM_STDHTML]->evaluate();
+        }
+        if (is_object($this->output[STREAM_STDOUT])) {
+            $this->output[STREAM_STDOUT] = $this->output[STREAM_STDOUT]->evaluate();
+        }
+        if (is_object($this->output[STREAM_STDERR])) {
+            $this->output[STREAM_STDERR] = $this->output[STREAM_STDERR]->evaluate();
+        }
 
-		// Make the HTML not use non-XML entities
-		$html_bak=$this->output[STREAM_STDHTML];
-		require_code('xml');
-		$this->output[STREAM_STDHTML]=convert_bad_entities($this->output[STREAM_STDHTML],get_charset());
+        // Make the HTML not use non-XML entities
+        $html_bak = $this->output[STREAM_STDHTML];
+        require_code('xml');
+        $this->output[STREAM_STDHTML] = convert_bad_entities($this->output[STREAM_STDHTML],get_charset());
 
-		$output='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+        $output = '<' . '?xml version="1.0" encoding="' . get_charset() . '" ?' . '>
 <response>
 	<result>
-		<command>'.xmlentities($this->current_input).'</command>
-		<stdcommand>'.$this->output[STREAM_STDCOMMAND].'</stdcommand>
-		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">'.$this->output[STREAM_STDHTML].'</div></stdhtml>
-		<stdout>'.xmlentities($this->output[STREAM_STDOUT]).'</stdout>
-		<stderr>'.xmlentities($this->output[STREAM_STDERR]).'</stderr>
-		<stdnotifications>'.get_queued_messages().'</stdnotifications>
+		<command>' . xmlentities($this->current_input) . '</command>
+		<stdcommand>' . $this->output[STREAM_STDCOMMAND] . '</stdcommand>
+		<stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . $this->output[STREAM_STDHTML] . '</div></stdhtml>
+		<stdout>' . xmlentities($this->output[STREAM_STDOUT]) . '</stdout>
+		<stderr>' . xmlentities($this->output[STREAM_STDERR]) . '</stderr>
+		<stdnotifications>' . get_queued_messages() . '</stdnotifications>
 	</result>
 </response>';
 
-		if ($GLOBALS['XSS_DETECT'])
-			if (ocp_is_escaped($html_bak)) ocp_mark_as_escaped($output);
+        if ($GLOBALS['XSS_DETECT']) {
+            if (ocp_is_escaped($html_bak)) {
+                ocp_mark_as_escaped($output);
+            }
+        }
 
-		echo $output;
+        echo $output;
 
-		set_value('last_occle_command',strval(time()));
-		return true;
-	}
+        set_value('last_occle_command',strval(time()));
+        return true;
+    }
 
-	/**
+    /**
 	 * Return the HTML rendering of the parsed command's output.
 	 *
 	 * @param  boolean		  Whether it is okay to have blank output
 	 * @return ~tempcode		  The HTML (false: error)
 	 */
-	function output_html($blank_ok=false)
-	{
-		if (count($this->parsed_input)<1) return false;
+    public function output_html($blank_ok = false)
+    {
+        if (count($this->parsed_input)<1) {
+            return false;
+        }
 
-		if (($this->output[STREAM_STDCOMMAND]=='') && ($this->output[STREAM_STDHTML]=='') && ($this->output[STREAM_STDOUT]==''))
-		{
-			// Exit with an error
-			if ($this->output[STREAM_STDERR]!='')
-				$this->output[STREAM_STDERR]=do_lang('PROBLEM_ACCESSING_RESPONSE')."\n".$this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for JavaScript
-			else
-				$this->output[STREAM_STDERR]=do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
+        if (($this->output[STREAM_STDCOMMAND] == '') && ($this->output[STREAM_STDHTML] == '') && ($this->output[STREAM_STDOUT] == '')) {
+            // Exit with an error
+            if ($this->output[STREAM_STDERR] != '') {
+                $this->output[STREAM_STDERR] = do_lang('PROBLEM_ACCESSING_RESPONSE') . "\n" . $this->output[STREAM_STDERR];
+            } // Ugh...got to work with language strings designed for JavaScript
+            else {
+                $this->output[STREAM_STDERR] = do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
+            }
 
-			if ($blank_ok) return new ocp_tempcode();
-		}
-		elseif ($this->output[STREAM_STDERR]!='')
-			$this->output[STREAM_STDERR]=do_lang('ERROR_NON_TERMINAL')."\n".$this->output[STREAM_STDERR]; // And again :-(
+            if ($blank_ok) {
+                return new ocp_tempcode();
+            }
+        } elseif ($this->output[STREAM_STDERR] != '') {
+            $this->output[STREAM_STDERR] = do_lang('ERROR_NON_TERMINAL') . "\n" . $this->output[STREAM_STDERR];
+        } // And again :-(
 
-		$notifications=get_queued_messages(false);
+        $notifications = get_queued_messages(false);
 
-		$output=do_template('OCCLE_COMMAND',array(
-			'_GUID'=>'a05ee6b75302f8ccd5ec9f3a24207521',
-			'NOTIFICATIONS'=>$notifications,
-			'METHOD'=>$this->current_input,
-			'STDOUT'=>$this->output[STREAM_STDOUT],
-			'STDHTML'=>$this->output[STREAM_STDHTML],
-			'STDCOMMAND'=>$this->output[STREAM_STDCOMMAND],
-			'STDERR'=>$this->output[STREAM_STDERR],
-		));
+        $output = do_template('OCCLE_COMMAND',array(
+            '_GUID' => 'a05ee6b75302f8ccd5ec9f3a24207521',
+            'NOTIFICATIONS' => $notifications,
+            'METHOD' => $this->current_input,
+            'STDOUT' => $this->output[STREAM_STDOUT],
+            'STDHTML' => $this->output[STREAM_STDHTML],
+            'STDCOMMAND' => $this->output[STREAM_STDCOMMAND],
+            'STDERR' => $this->output[STREAM_STDERR],
+        ));
 
-		set_value('last_occle_command',strval(time()));
-		return $output;
-	}
+        set_value('last_occle_command',strval(time()));
+        return $output;
+    }
 
-	/**
+    /**
 	 * Extract the command name from the input.
 	 */
-	function _extract_command()
-	{
-		if ($this->current_input=='')
-		{
-			$this->parsed_input[SECTION_COMMAND]='';
-			return;
-		}
+    public function _extract_command()
+    {
+        if ($this->current_input == '') {
+            $this->parsed_input[SECTION_COMMAND] = '';
+            return;
+        }
 
-		// Extract the command (whatever type of command it may be)
-		if ($this->current_input[$this->parse_runtime['parse_position']]==':')
-		{
-			// It's PHP code
-			if (strrpos($this->current_input,';')===false)
-				$this->current_input.=';';
-			$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position']+1);
+        // Extract the command (whatever type of command it may be)
+        if ($this->current_input[$this->parse_runtime['parse_position']] == ':') {
+            // It's PHP code
+            if (strrpos($this->current_input,';') === false) {
+                $this->current_input .= ';';
+            }
+            $this->parsed_input[SECTION_COMMAND] = substr($this->current_input,$this->parse_runtime['parse_position']+1);
 
-			$this->parse_runtime['parse_position']=strlen($this->current_input);
-			$this->parse_runtime['occle_command']=COMMAND_PHP;
-		}
-		elseif ($this->current_input[$this->parse_runtime['parse_position']]=='@')
-		{
-			// It's an SQL query
-			$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position']+1);
+            $this->parse_runtime['parse_position'] = strlen($this->current_input);
+            $this->parse_runtime['occle_command'] = COMMAND_PHP;
+        } elseif ($this->current_input[$this->parse_runtime['parse_position']] == '@') {
+            // It's an SQL query
+            $this->parsed_input[SECTION_COMMAND] = substr($this->current_input,$this->parse_runtime['parse_position']+1);
 
-			$this->parse_runtime['parse_position']=strlen($this->current_input);
-			$this->parse_runtime['occle_command']=COMMAND_SQL;
-		}
-		else
-		{
-			// It's a normal command or a script...just fetch up to the next space: a command *should not* have spaces
-			$next_space=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+            $this->parse_runtime['parse_position'] = strlen($this->current_input);
+            $this->parse_runtime['occle_command'] = COMMAND_SQL;
+        } else {
+            // It's a normal command or a script...just fetch up to the next space: a command *should not* have spaces
+            $next_space = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
-			if ($next_space!==false)
-			{
-				$this->parsed_input[SECTION_COMMAND]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Fetch up to the next space
-				$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_COMMAND])+1; // We're assuming there's a space after the command
-			}
-			else
-			{
-				$this->parsed_input[SECTION_COMMAND]=$this->current_input; // Fetch the entire input
-				$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_COMMAND]); // This really is pointless
-			}
-			if (substr($this->parsed_input[SECTION_COMMAND],0,5)=='/bin/')
-			{
-				$this->parsed_input[SECTION_COMMAND]=substr($this->parsed_input[SECTION_COMMAND],5);
-			}	
-			if (strpos($this->parsed_input[SECTION_COMMAND],'/')!==false)
-			{
-				$this->parsed_input[SECTION_COMMAND]='';
-			}
+            if ($next_space !== false) {
+                $this->parsed_input[SECTION_COMMAND] = substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Fetch up to the next space
+                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_COMMAND])+1; // We're assuming there's a space after the command
+            } else {
+                $this->parsed_input[SECTION_COMMAND] = $this->current_input; // Fetch the entire input
+                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_COMMAND]); // This really is pointless
+            }
+            if (substr($this->parsed_input[SECTION_COMMAND],0,5) == '/bin/') {
+                $this->parsed_input[SECTION_COMMAND] = substr($this->parsed_input[SECTION_COMMAND],5);
+            }
+            if (strpos($this->parsed_input[SECTION_COMMAND],'/') !== false) {
+                $this->parsed_input[SECTION_COMMAND] = '';
+            }
 
-			$this->parse_runtime['occle_command']=COMMAND_NATIVE;
-		}
+            $this->parse_runtime['occle_command'] = COMMAND_NATIVE;
+        }
 
-		// Parameter replacement
-		$this->parsed_input[SECTION_COMMAND]=strtr($this->parsed_input[SECTION_COMMAND],$this->input_parameters);
-	}
+        // Parameter replacement
+        $this->parsed_input[SECTION_COMMAND] = strtr($this->parsed_input[SECTION_COMMAND],$this->input_parameters);
+    }
 
-	/**
+    /**
 	 * Extract options (switches) from the input.
 	 */
-	function _extract_options()
-	{
-		// Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
-		if (!defined('OUT_OPTION'))
-		{
-			define('OUT_OPTION',-1);
-			define('IN_OPTION',0);
-			define('IN_OPTION_SYNTAX',1);
-			define('IN_OPTION_VALUE',2);
-		}
+    public function _extract_options()
+    {
+        // Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
+        if (!defined('OUT_OPTION')) {
+            define('OUT_OPTION',-1);
+            define('IN_OPTION',0);
+            define('IN_OPTION_SYNTAX',1);
+            define('IN_OPTION_VALUE',2);
+        }
 
-		$current_option=NULL;
-		$option_mode=OUT_OPTION;
+        $current_option = null;
+        $option_mode = OUT_OPTION;
 
-		while ($this->parse_runtime['parse_position']<$this->parse_runtime['command_length'])
-		{
-			$next_char=$this->current_input[$this->parse_runtime['parse_position']];
+        while ($this->parse_runtime['parse_position']<$this->parse_runtime['command_length']) {
+            $next_char = $this->current_input[$this->parse_runtime['parse_position']];
 
-			switch($option_mode)
-			{
-				case OUT_OPTION:
-					// Options parsing hasn't started yet; the next character should be a dash ('-')
-					if ($next_char!='-') break 2; // This is *not* an option!
-					$option_mode=IN_OPTION;
-					$this->parse_runtime['parse_position']++;
+            switch ($option_mode) {
+                case OUT_OPTION:
+                    // Options parsing hasn't started yet; the next character should be a dash ('-')
+                    if ($next_char != '-') {
+                        break 2;
+                    } // This is *not* an option!
+                    $option_mode = IN_OPTION;
+                    $this->parse_runtime['parse_position']++;
 
-					break;
-				case IN_OPTION:
-					// Get the name of the option, and add it to the options array
-					$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
-					$equals_pos=strpos($this->current_input,'=',$this->parse_runtime['parse_position']);
+                    break;
+                case IN_OPTION:
+                    // Get the name of the option, and add it to the options array
+                    $space_pos = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+                    $equals_pos = strpos($this->current_input,'=',$this->parse_runtime['parse_position']);
 
-					if (($space_pos!==false) && ($equals_pos!==false))
-					{
-						// Get the option name, using string functions (deciding where to cut the option name out, based upon whether the next equals is before the next space)
-						if ($equals_pos<$space_pos)
-						{
-							$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']);
-						}
-						else
-						{
-							$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']);
-							$current_option=strtr($current_option,$this->input_parameters); // Parameter replacement
+                    if (($space_pos !== false) && ($equals_pos !== false)) {
+                        // Get the option name, using string functions (deciding where to cut the option name out, based upon whether the next equals is before the next space)
+                        if ($equals_pos<$space_pos) {
+                            $current_option = substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']);
+                        } else {
+                            $current_option = substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']);
+                            $current_option = strtr($current_option,$this->input_parameters); // Parameter replacement
 
-							$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
-							$option_mode=OUT_OPTION;
-							$this->parse_runtime['parse_position']+=strlen($current_option)+1;
+                            $this->parsed_input[SECTION_OPTIONS][$current_option] = null;
+                            $option_mode = OUT_OPTION;
+                            $this->parse_runtime['parse_position'] += strlen($current_option)+1;
 
-							break;
-						}
-					}
-					elseif ($space_pos!==false)
-					{
-						$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']); // Just take it up to the space
-						$current_option=strtr($current_option,$this->input_parameters); // Parameter replacement
+                            break;
+                        }
+                    } elseif ($space_pos !== false) {
+                        $current_option = substr($this->current_input,$this->parse_runtime['parse_position'],$space_pos-$this->parse_runtime['parse_position']); // Just take it up to the space
+                        $current_option = strtr($current_option,$this->input_parameters); // Parameter replacement
 
-						$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
-						$option_mode=OUT_OPTION;
-						$this->parse_runtime['parse_position']+=strlen($current_option)+1; // Because there won't be an equals
+                        $this->parsed_input[SECTION_OPTIONS][$current_option] = null;
+                        $option_mode = OUT_OPTION;
+                        $this->parse_runtime['parse_position'] += strlen($current_option)+1; // Because there won't be an equals
 
-						break;
-					}
-					elseif ($equals_pos!==false)
-					{
-						$current_option=substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']); // Just take it up to the equals
-					}
-					else
-					{
-						$current_option=substr($this->current_input,$this->parse_runtime['parse_position']); // Just assume there's nothing else there, and grab the lot
-					}
+                        break;
+                    } elseif ($equals_pos !== false) {
+                        $current_option = substr($this->current_input,$this->parse_runtime['parse_position'],$equals_pos-$this->parse_runtime['parse_position']); // Just take it up to the equals
+                    } else {
+                        $current_option = substr($this->current_input,$this->parse_runtime['parse_position']); // Just assume there's nothing else there, and grab the lot
+                    }
 
-					// Parameter replacement
-					$current_option=strtr($current_option,$this->input_parameters);
+                    // Parameter replacement
+                    $current_option = strtr($current_option,$this->input_parameters);
 
-					$this->parsed_input[SECTION_OPTIONS][$current_option]=NULL;
+                    $this->parsed_input[SECTION_OPTIONS][$current_option] = null;
 
-					$option_mode=IN_OPTION_SYNTAX;
-					$this->parse_runtime['parse_position']+=strlen($current_option);
+                    $option_mode = IN_OPTION_SYNTAX;
+                    $this->parse_runtime['parse_position'] += strlen($current_option);
 
-					break;
-				case IN_OPTION_SYNTAX:
-					// Look for that elusive '='
-					if ($next_char!='=') break 2; // PANIC!!
-					$option_mode=IN_OPTION_VALUE;
-					$this->parse_runtime['parse_position']++;
+                    break;
+                case IN_OPTION_SYNTAX:
+                    // Look for that elusive '='
+                    if ($next_char != '=') {
+                        break 2;
+                    } // PANIC!!
+                    $option_mode = IN_OPTION_VALUE;
+                    $this->parse_runtime['parse_position']++;
 
-					break;
-				case IN_OPTION_VALUE:
-					// Get the value, if applicable
-					if ($next_char=='"')
-					{
-						// Quotes!
-						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-						{
-							// We are entering a quote system
-							$this->parse_runtime['current_mode']=MODE_QUOTES;
-							$this->parse_runtime['parse_position']++;
-						}
-						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && (!$this->parse_runtime['escape_used']))
-						{
-							// We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
-							$this->parse_runtime['current_mode']=MODE_NORMAL;
-							$this->parse_runtime['parse_position']+=2; // Assuming there is only '" ' between here and the next option
-							$option_mode=OUT_OPTION;
-						}
-						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && ($this->parse_runtime['escape_used']))
-						{
-							// We are adding an escaped quote to the current option value
-							$this->parsed_input[SECTION_OPTIONS][$current_option].=$next_char;
-							$this->parse_runtime['parse_position']++;
-							$this->parse_runtime['escape_used']=false;
-						}
-						else break 2; // PANIC!!
-					}
-					elseif ($next_char=='\\')
-					{
-						// An escape character (currently only backslash ('\')) has been used
-						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_OPTIONS][$current_option].='\\'; // Add the backslash to the option value, as it has been escaped
-						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
-						$this->parse_runtime['parse_position']++;
-					}
-					else
-					{
-						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-						{
-							// Normal mode; business as usual (quotes have not been used, so we can just strip out the option value using string functions)
-							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+                    break;
+                case IN_OPTION_VALUE:
+                    // Get the value, if applicable
+                    if ($next_char == '"') {
+                        // Quotes!
+                        if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                            // We are entering a quote system
+                            $this->parse_runtime['current_mode'] = MODE_QUOTES;
+                            $this->parse_runtime['parse_position']++;
+                        } elseif (($this->parse_runtime['current_mode'] == MODE_QUOTES) && (!$this->parse_runtime['escape_used'])) {
+                            // We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
+                            $this->parse_runtime['current_mode'] = MODE_NORMAL;
+                            $this->parse_runtime['parse_position'] += 2; // Assuming there is only '" ' between here and the next option
+                            $option_mode = OUT_OPTION;
+                        } elseif (($this->parse_runtime['current_mode'] == MODE_QUOTES) && ($this->parse_runtime['escape_used'])) {
+                            // We are adding an escaped quote to the current option value
+                            $this->parsed_input[SECTION_OPTIONS][$current_option] .= $next_char;
+                            $this->parse_runtime['parse_position']++;
+                            $this->parse_runtime['escape_used'] = false;
+                        } else {
+                            break 2;
+                        } // PANIC!!
+                    } elseif ($next_char == '\\') {
+                        // An escape character (currently only backslash ('\')) has been used
+                        if ($this->parse_runtime['escape_used']) {
+                            $this->parsed_input[SECTION_OPTIONS][$current_option] .= '\\';
+                        } // Add the backslash to the option value, as it has been escaped
+                        $this->parse_runtime['escape_used'] = !$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
+                        $this->parse_runtime['parse_position']++;
+                    } else {
+                        if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                            // Normal mode; business as usual (quotes have not been used, so we can just strip out the option value using string functions)
+                            $space_pos = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
-							if ($space_pos!==false)
-							{
-								$this->parsed_input[SECTION_OPTIONS][$current_option]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_OPTIONS][$current_option])+1; // Add the length of the option value, and one for the assumed space between here and the next option
-							}
-							else
-							{
-								$this->parsed_input[SECTION_OPTIONS][$current_option]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_OPTIONS][$current_option]); // Pretty pointless
-							}
+                            if ($space_pos !== false) {
+                                $this->parsed_input[SECTION_OPTIONS][$current_option] = substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+                                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_OPTIONS][$current_option])+1; // Add the length of the option value, and one for the assumed space between here and the next option
+                            } else {
+                                $this->parsed_input[SECTION_OPTIONS][$current_option] = substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+                                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_OPTIONS][$current_option]); // Pretty pointless
+                            }
 
-							$option_mode=OUT_OPTION;
-						}
-						elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
-						{
-							// We are adding the current letter to the quote system
-							$this->parsed_input[SECTION_OPTIONS][$current_option].=$next_char;
-							$this->parse_runtime['parse_position']++;
-						}
-						else break 2; // PANIC!!
-					}
+                            $option_mode = OUT_OPTION;
+                        } elseif ($this->parse_runtime['current_mode'] == MODE_QUOTES) {
+                            // We are adding the current letter to the quote system
+                            $this->parsed_input[SECTION_OPTIONS][$current_option] .= $next_char;
+                            $this->parse_runtime['parse_position']++;
+                        } else {
+                            break 2;
+                        } // PANIC!!
+                    }
 
-					// Parameter replacement
-					$this->parsed_input[SECTION_OPTIONS][$current_option]=strtr($this->parsed_input[SECTION_OPTIONS][$current_option],$this->input_parameters);
+                    // Parameter replacement
+                    $this->parsed_input[SECTION_OPTIONS][$current_option] = strtr($this->parsed_input[SECTION_OPTIONS][$current_option],$this->input_parameters);
 
-					break;
-				default:
-					break 2; // PANIC!!
-			}
-		}
-	}
+                    break;
+                default:
+                    break 2; // PANIC!!
+            }
+        }
+    }
 
-	/**
+    /**
 	 * Extract parameters from the input.
 	 */
-	function _extract_parameters()
-	{
-		// Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
-		if (!defined('OUT_PARAMETER'))
-		{
-			define('OUT_PARAMETER',-1);
-			define('IN_PARAMETER',0);
-		}
+    public function _extract_parameters()
+    {
+        // Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
+        if (!defined('OUT_PARAMETER')) {
+            define('OUT_PARAMETER',-1);
+            define('IN_PARAMETER',0);
+        }
 
-		$current_parameter=0;
-		$parameter_mode=OUT_PARAMETER;
+        $current_parameter = 0;
+        $parameter_mode = OUT_PARAMETER;
 
-		while ($this->parse_runtime['parse_position']<$this->parse_runtime['command_length'])
-		{
-			$next_char=$this->current_input[$this->parse_runtime['parse_position']];
+        while ($this->parse_runtime['parse_position']<$this->parse_runtime['command_length']) {
+            $next_char = $this->current_input[$this->parse_runtime['parse_position']];
 
-			switch($parameter_mode)
-			{
-				case OUT_PARAMETER:
-					// Parameter parsing hasn't started yet; the next character should be a quote ('"'), or any other character apart from a space, really
-					$parameter_mode=IN_PARAMETER;
+            switch ($parameter_mode) {
+                case OUT_PARAMETER:
+                    // Parameter parsing hasn't started yet; the next character should be a quote ('"'), or any other character apart from a space, really
+                    $parameter_mode = IN_PARAMETER;
 
-					break;
-				case IN_PARAMETER:
-					// Get the value, if applicable
-					if ($next_char=='"')
-					{
-						// Quotes!
-						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-						{
-							// We are entering a quote system
-							$this->parse_runtime['current_mode']=MODE_QUOTES;
-							$this->parsed_input[SECTION_PARAMETERS][$current_parameter]='';
-							$this->parse_runtime['parse_position']++;
-						}
-						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && (!$this->parse_runtime['escape_used']))
-						{
-							// We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
-							$this->parse_runtime['current_mode']=MODE_NORMAL;
-							$this->parse_runtime['parse_position']+=2; // Assuming there is only '" ' between here and the next parameter
-							$parameter_mode=OUT_PARAMETER;
-							$current_parameter++;
-						}
-						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && ($this->parse_runtime['escape_used']))
-						{
-							// We are adding an escaped quote to the current parameter value
-							$this->parsed_input[SECTION_PARAMETERS][$current_parameter].=$next_char;
-							$this->parse_runtime['parse_position']++;
-							$this->parse_runtime['escape_used']=false;
-						}
-						else break 2; // PANIC!!
-					}
-					elseif ($next_char=='\\')
-					{
-						// An escape character (currently only backslash ('\')) has been used
-						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_PARAMETERS][$current_parameter].='\\'; // Add the backslash to the parameter value, as it has been escaped
-						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
-						$this->parse_runtime['parse_position']++;
-					}
-					elseif ((($next_char=='>') || ($next_char=='<') || ($next_char=='1') || ($next_char=='2') || ($next_char=='3') || ($next_char=='4') || ($next_char=='|')) && ($this->current_input[$this->parse_runtime['parse_position']-1]==' ') && (!$this->parse_runtime['escape_used']) && ($this->parse_runtime['current_mode']!=MODE_QUOTES))
-					{
-						// A character that is probably (hopefully) the precursor to some form of redirection, and is the first character in a block (i.e. it has a space in front of it)
-						if ($this->_check_is_redirection())
-						{
-							// This is indeed the precursor to some form of redirection
-							break 2;
-						}
-						else
-						{
-							// This is not part of redirection, assume it's just a normal character
-							if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-							{
-								// Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
-								$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+                    break;
+                case IN_PARAMETER:
+                    // Get the value, if applicable
+                    if ($next_char == '"') {
+                        // Quotes!
+                        if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                            // We are entering a quote system
+                            $this->parse_runtime['current_mode'] = MODE_QUOTES;
+                            $this->parsed_input[SECTION_PARAMETERS][$current_parameter] = '';
+                            $this->parse_runtime['parse_position']++;
+                        } elseif (($this->parse_runtime['current_mode'] == MODE_QUOTES) && (!$this->parse_runtime['escape_used'])) {
+                            // We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
+                            $this->parse_runtime['current_mode'] = MODE_NORMAL;
+                            $this->parse_runtime['parse_position'] += 2; // Assuming there is only '" ' between here and the next parameter
+                            $parameter_mode = OUT_PARAMETER;
+                            $current_parameter++;
+                        } elseif (($this->parse_runtime['current_mode'] == MODE_QUOTES) && ($this->parse_runtime['escape_used'])) {
+                            // We are adding an escaped quote to the current parameter value
+                            $this->parsed_input[SECTION_PARAMETERS][$current_parameter] .= $next_char;
+                            $this->parse_runtime['parse_position']++;
+                            $this->parse_runtime['escape_used'] = false;
+                        } else {
+                            break 2;
+                        } // PANIC!!
+                    } elseif ($next_char == '\\') {
+                        // An escape character (currently only backslash ('\')) has been used
+                        if ($this->parse_runtime['escape_used']) {
+                            $this->parsed_input[SECTION_PARAMETERS][$current_parameter] .= '\\';
+                        } // Add the backslash to the parameter value, as it has been escaped
+                        $this->parse_runtime['escape_used'] = !$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
+                        $this->parse_runtime['parse_position']++;
+                    } elseif ((($next_char == '>') || ($next_char == '<') || ($next_char == '1') || ($next_char == '2') || ($next_char == '3') || ($next_char == '4') || ($next_char == '|')) && ($this->current_input[$this->parse_runtime['parse_position']-1] == ' ') && (!$this->parse_runtime['escape_used']) && ($this->parse_runtime['current_mode'] != MODE_QUOTES)) {
+                        // A character that is probably (hopefully) the precursor to some form of redirection, and is the first character in a block (i.e. it has a space in front of it)
+                        if ($this->_check_is_redirection()) {
+                            // This is indeed the precursor to some form of redirection
+                            break 2;
+                        } else {
+                            // This is not part of redirection, assume it's just a normal character
+                            if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                                // Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
+                                $space_pos = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
-								if ($space_pos!==false)
-								{
-									$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
-									$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; // Add the length of the parameter value, and one for the assumed space between here and the next parameter
-								}
-								else
-								{
-									$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
-									$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); // Pretty pointless
-								}
+                                if ($space_pos !== false) {
+                                    $this->parsed_input[SECTION_PARAMETERS][$current_parameter] = substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+                                    $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; // Add the length of the parameter value, and one for the assumed space between here and the next parameter
+                                } else {
+                                    $this->parsed_input[SECTION_PARAMETERS][$current_parameter] = substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+                                    $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); // Pretty pointless
+                                }
 
-								$parameter_mode=OUT_PARAMETER;
-								$current_parameter++;
-							}
-							else break 2; // PANIC!!
-						}
-					}
-					else
-					{
-						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-						{
-							// Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
-							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+                                $parameter_mode = OUT_PARAMETER;
+                                $current_parameter++;
+                            } else {
+                                break 2;
+                            } // PANIC!!
+                        }
+                    } else {
+                        if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                            // Normal mode; business as usual (quotes have not been used, so we can just strip out the parameter value using string functions)
+                            $space_pos = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
-							if ($space_pos!==false)
-							{
-								$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; // Add the length of the parameter value, and one for the assumed space between here and the next parameter
-							}
-							else
-							{
-								$this->parsed_input[SECTION_PARAMETERS][$current_parameter]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); // Pretty pointless
-							}
+                            if ($space_pos !== false) {
+                                $this->parsed_input[SECTION_PARAMETERS][$current_parameter] = substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+                                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter])+1; // Add the length of the parameter value, and one for the assumed space between here and the next parameter
+                            } else {
+                                $this->parsed_input[SECTION_PARAMETERS][$current_parameter] = substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+                                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_PARAMETERS][$current_parameter]); // Pretty pointless
+                            }
 
-							$parameter_mode=OUT_PARAMETER;
-							$current_parameter++;
-						}
-						elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
-						{
-							// We are adding the current letter to the quote system
-							$this->parsed_input[SECTION_PARAMETERS][$current_parameter].=$next_char;
-							$this->parse_runtime['parse_position']++;
-						}
-						else break 2; // PANIC!!
+                            $parameter_mode = OUT_PARAMETER;
+                            $current_parameter++;
+                        } elseif ($this->parse_runtime['current_mode'] == MODE_QUOTES) {
+                            // We are adding the current letter to the quote system
+                            $this->parsed_input[SECTION_PARAMETERS][$current_parameter] .= $next_char;
+                            $this->parse_runtime['parse_position']++;
+                        } else {
+                            break 2;
+                        } // PANIC!!
 
-						$this->parse_runtime['escape_used']=false;
-					}
+                        $this->parse_runtime['escape_used'] = false;
+                    }
 
-					// Parameter replacement
-					if (isset($this->parsed_input[SECTION_PARAMETERS][$current_parameter-1])) $this->parsed_input[SECTION_PARAMETERS][$current_parameter-1]=strtr($this->parsed_input[SECTION_PARAMETERS][$current_parameter-1],$this->input_parameters);
+                    // Parameter replacement
+                    if (isset($this->parsed_input[SECTION_PARAMETERS][$current_parameter-1])) {
+                        $this->parsed_input[SECTION_PARAMETERS][$current_parameter-1] = strtr($this->parsed_input[SECTION_PARAMETERS][$current_parameter-1],$this->input_parameters);
+                    }
 
-					break;
-				default:
-					break 2; // PANIC!!
-			}
-		}
-	}
+                    break;
+                default:
+                    break 2; // PANIC!!
+            }
+        }
+    }
 
-	/**
+    /**
 	 * Extract extra tokens from the input.
 	 */
-	function _extract_extras()
-	{
-		// Add the extra instructions to the extras array
-		if (!defined('OUT_EXTRA'))
-		{
-			define('OUT_EXTRA',-1);
-			define('IN_EXTRA_SYNTAX_STREAM',0);
-			define('IN_EXTRA_SYNTAX_ASSIGNMENT',1);
-			define('IN_EXTRA_VALUE',2);
-		}
+    public function _extract_extras()
+    {
+        // Add the extra instructions to the extras array
+        if (!defined('OUT_EXTRA')) {
+            define('OUT_EXTRA',-1);
+            define('IN_EXTRA_SYNTAX_STREAM',0);
+            define('IN_EXTRA_SYNTAX_ASSIGNMENT',1);
+            define('IN_EXTRA_VALUE',2);
+        }
 
-		$current_extra=0;
-		$extra_mode=OUT_EXTRA;
+        $current_extra = 0;
+        $extra_mode = OUT_EXTRA;
 
-		while ($this->parse_runtime['parse_position']<$this->parse_runtime['command_length'])
-		{
-			$next_char=$this->current_input[$this->parse_runtime['parse_position']];
+        while ($this->parse_runtime['parse_position']<$this->parse_runtime['command_length']) {
+            $next_char = $this->current_input[$this->parse_runtime['parse_position']];
 
-			switch($extra_mode)
-			{
-				case OUT_EXTRA:
-					// Extra parsing hasn't started yet; the next character should be a stream identifier, or assignment operator
-					if (($next_char!='>') && ($next_char!='<') && ($next_char!='1') && ($next_char!='2') && ($next_char!='3') && ($next_char!='4') && ($next_char!='|')) break 2;
-					$extra_mode=IN_EXTRA_SYNTAX_STREAM;
+            switch ($extra_mode) {
+                case OUT_EXTRA:
+                    // Extra parsing hasn't started yet; the next character should be a stream identifier, or assignment operator
+                    if (($next_char != '>') && ($next_char != '<') && ($next_char != '1') && ($next_char != '2') && ($next_char != '3') && ($next_char != '4') && ($next_char != '|')) {
+                        break 2;
+                    }
+                    $extra_mode = IN_EXTRA_SYNTAX_STREAM;
 
-					break;
-				case IN_EXTRA_SYNTAX_STREAM:
-					// Fetch the stream identifiers, if they're present. If no stream identifier is present, default to stdout
-					if ($next_char=='1') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDOUT;
-					elseif ($next_char=='2') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDHTML;
-					elseif ($next_char=='3') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDCOMMAND;
-					elseif ($next_char=='4') $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][]=STREAM_STDERR;
-					elseif ($next_char!='&')
-					{
-						// If we have anything other than an ampersand ('&'), continue to the ASSIGNMENT stage
-						$extra_mode=IN_EXTRA_SYNTAX_ASSIGNMENT;
+                    break;
+                case IN_EXTRA_SYNTAX_STREAM:
+                    // Fetch the stream identifiers, if they're present. If no stream identifier is present, default to stdout
+                    if ($next_char == '1') {
+                        $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][] = STREAM_STDOUT;
+                    } elseif ($next_char == '2') {
+                        $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][] = STREAM_STDHTML;
+                    } elseif ($next_char == '3') {
+                        $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][] = STREAM_STDCOMMAND;
+                    } elseif ($next_char == '4') {
+                        $this->parsed_input[SECTION_EXTRAS][$current_extra][STREAM_IDENTIFIER][] = STREAM_STDERR;
+                    } elseif ($next_char != '&') {
+                        // If we have anything other than an ampersand ('&'), continue to the ASSIGNMENT stage
+                        $extra_mode = IN_EXTRA_SYNTAX_ASSIGNMENT;
 
-						break;
-					}
+                        break;
+                    }
 
-					$this->parse_runtime['parse_position']++;
+                    $this->parse_runtime['parse_position']++;
 
-					break;
-				case IN_EXTRA_SYNTAX_ASSIGNMENT:
-					// Fetch the assignment operator
-					if ($next_char=='>')
-					{
-						if ($this->current_input[$this->parse_runtime['parse_position']+1]=='>')
-						{
-							// Append ('>>')
-							$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_APPEND;
-							$this->parse_runtime['parse_position']++;
-						}
-						else
-						{
-							// Overwrite ('>')
-							$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_OVERWRITE;
-						}
-					}
-					elseif ($next_char=='<')
-					{
-						// Input ('<')
-						$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_INPUT;
-					}
-					elseif ($next_char=='|')
-					{
-						// Pipe ('|')
-						$this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT]=REDIRECT_PIPE;
-					}
-					else
-					{
-						// If we have anything other than a greater-than ('>') or a less-than ('<'), continue to the REDIRECT_IDENTIFIER stage
-						$extra_mode=IN_EXTRA_VALUE;
-					}
+                    break;
+                case IN_EXTRA_SYNTAX_ASSIGNMENT:
+                    // Fetch the assignment operator
+                    if ($next_char == '>') {
+                        if ($this->current_input[$this->parse_runtime['parse_position']+1] == '>') {
+                            // Append ('>>')
+                            $this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT] = REDIRECT_APPEND;
+                            $this->parse_runtime['parse_position']++;
+                        } else {
+                            // Overwrite ('>')
+                            $this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT] = REDIRECT_OVERWRITE;
+                        }
+                    } elseif ($next_char == '<') {
+                        // Input ('<')
+                        $this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT] = REDIRECT_INPUT;
+                    } elseif ($next_char == '|') {
+                        // Pipe ('|')
+                        $this->parsed_input[SECTION_EXTRAS][$current_extra][ASSIGNMENT] = REDIRECT_PIPE;
+                    } else {
+                        // If we have anything other than a greater-than ('>') or a less-than ('<'), continue to the REDIRECT_IDENTIFIER stage
+                        $extra_mode = IN_EXTRA_VALUE;
+                    }
 
-					$this->parse_runtime['parse_position']++;
+                    $this->parse_runtime['parse_position']++;
 
-					break;	
-				case IN_EXTRA_VALUE:
-					// Get the value, if applicable
-					if ($next_char=='"')
-					{
-						// Quotes!
-						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-						{
-							// We are entering a quote system
-							$this->parse_runtime['current_mode']=MODE_QUOTES;
-							$this->parse_runtime['parse_position']++;
-						}
-						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && (!$this->parse_runtime['escape_used']))
-						{
-							// We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
-							$this->parse_runtime['current_mode']=MODE_NORMAL;
-							$this->parse_runtime['parse_position']+=2; // Assuming there is only '" ' between here and the next extra
-							$extra_mode=OUT_EXTRA;
-							$current_extra++;
-						}
-						elseif (($this->parse_runtime['current_mode']==MODE_QUOTES) && ($this->parse_runtime['escape_used']))
-						{
-							// We are adding an escaped quote to the current extra value
-							$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].=$next_char;
-							$this->parse_runtime['parse_position']++;
-							$this->parse_runtime['escape_used']=false;
-						}
-						else break 2; // PANIC!!
-					}
-					elseif ($next_char=='\\')
-					{
-						// An escape character (currently only backslash ('\')) has been used
-						if ($this->parse_runtime['escape_used']) $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].='\\'; // Add the backslash to the extra value, as it has been escaped
-						$this->parse_runtime['escape_used']=!$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
-						$this->parse_runtime['parse_position']++;
-					}
-					else
-					{
-						if ($this->parse_runtime['current_mode']==MODE_NORMAL)
-						{
-							// Normal mode; business as usual (quotes have not been used, so we can just strip out the extra value using string functions)
-							$space_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+                    break;
+                case IN_EXTRA_VALUE:
+                    // Get the value, if applicable
+                    if ($next_char == '"') {
+                        // Quotes!
+                        if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                            // We are entering a quote system
+                            $this->parse_runtime['current_mode'] = MODE_QUOTES;
+                            $this->parse_runtime['parse_position']++;
+                        } elseif (($this->parse_runtime['current_mode'] == MODE_QUOTES) && (!$this->parse_runtime['escape_used'])) {
+                            // We are leaving a quote system, and the current (closing) quotes have *not* been escaped!
+                            $this->parse_runtime['current_mode'] = MODE_NORMAL;
+                            $this->parse_runtime['parse_position'] += 2; // Assuming there is only '" ' between here and the next extra
+                            $extra_mode = OUT_EXTRA;
+                            $current_extra++;
+                        } elseif (($this->parse_runtime['current_mode'] == MODE_QUOTES) && ($this->parse_runtime['escape_used'])) {
+                            // We are adding an escaped quote to the current extra value
+                            $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] .= $next_char;
+                            $this->parse_runtime['parse_position']++;
+                            $this->parse_runtime['escape_used'] = false;
+                        } else {
+                            break 2;
+                        } // PANIC!!
+                    } elseif ($next_char == '\\') {
+                        // An escape character (currently only backslash ('\')) has been used
+                        if ($this->parse_runtime['escape_used']) {
+                            $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] .= '\\';
+                        } // Add the backslash to the extra value, as it has been escaped
+                        $this->parse_runtime['escape_used'] = !$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
+                        $this->parse_runtime['parse_position']++;
+                    } else {
+                        if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
+                            // Normal mode; business as usual (quotes have not been used, so we can just strip out the extra value using string functions)
+                            $space_pos = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
 
-							if ($space_pos!==false)
-							{
-								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])+1; // Add the length of the extra value, and one for the assumed space between here and the next extra
-							}
-							else
-							{
-								$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]=substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
-								$this->parse_runtime['parse_position']+=strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]); // Pretty pointless
-							}
+                            if ($space_pos !== false) {
+                                $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] = substr($this->current_input,$this->parse_runtime['parse_position'],strpos($this->current_input,' ',$this->parse_runtime['parse_position'])-$this->parse_runtime['parse_position']); // Get the value; up to the next space
+                                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])+1; // Add the length of the extra value, and one for the assumed space between here and the next extra
+                            } else {
+                                $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] = substr($this->current_input,$this->parse_runtime['parse_position']); // Just take until the end; there doesn't seem to be anything else
+                                $this->parse_runtime['parse_position'] += strlen($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]); // Pretty pointless
+                            }
 
-							$extra_mode=OUT_EXTRA;
-							$current_extra++;
-						}
-						elseif ($this->parse_runtime['current_mode']==MODE_QUOTES)
-						{
-							// We are adding the current letter to the quote system
-							if (!isset($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])) $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER]='';
-							$this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER].=$next_char;
-							$this->parse_runtime['parse_position']++;
-						}
-						else break 2; // PANIC!!
-					}
+                            $extra_mode = OUT_EXTRA;
+                            $current_extra++;
+                        } elseif ($this->parse_runtime['current_mode'] == MODE_QUOTES) {
+                            // We are adding the current letter to the quote system
+                            if (!isset($this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER])) {
+                                $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] = '';
+                            }
+                            $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] .= $next_char;
+                            $this->parse_runtime['parse_position']++;
+                        } else {
+                            break 2;
+                        } // PANIC!!
+                    }
 
-					break;
-				default:
-					break 2; // PANIC!!
-			}
-		}
-	}
+                    break;
+                default:
+                    break 2; // PANIC!!
+            }
+        }
+    }
 
-	/**
+    /**
 	 * Is the current block a valid redirection instruction?
 	 *
 	 * @return boolean			Redirection instruction?
 	 */
-	function _check_is_redirection()
-	{
-		// Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
-		$start_pos=$this->parse_runtime['parse_position'];
-		$end_pos=strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
-		if ($end_pos===false) return false;
+    public function _check_is_redirection()
+    {
+        // Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
+        $start_pos = $this->parse_runtime['parse_position'];
+        $end_pos = strpos($this->current_input,' ',$this->parse_runtime['parse_position']);
+        if ($end_pos === false) {
+            return false;
+        }
 
-		$block=substr($this->current_input,$start_pos,$end_pos-$start_pos);
+        $block = substr($this->current_input,$start_pos,$end_pos-$start_pos);
 
-		if (($block=='<') || ($block=='>') || ($block=='>>') || ($block=='|')) return true; // These are all simple redirect instructions that are easy to check
-		if (preg_match('#[1-4](&[1-4])*>(>)?#',$block)===1) return true;
-		return false;
-	}
+        if (($block == '<') || ($block == '>') || ($block == '>>') || ($block == '|')) {
+            return true;
+        } // These are all simple redirect instructions that are easy to check
+        if (preg_match('#[1-4](&[1-4])*>(>)?#',$block) === 1) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
+    /**
 	 * Parses input setup in constructor, and creates a parse tree.
 	 */
-	function parse_input()
-	{
-		/*We need to break the $this->parsed_input[SECTION_COMMAND] up into several distinct parts:
+    public function parse_input()
+    {
+        /*We need to break the $this->parsed_input[SECTION_COMMAND] up into several distinct parts:
 			- Command
 			- Options
 			- Parameters
@@ -849,474 +814,469 @@ class virtual_bash
 			COMMAND	OPTION	PARAMETER	PARAMETER	EXTRA
 		*/
 
-		/*Output redirection:
+        /*Output redirection:
 			2&1> output.txt
 
 			2&1			>		output.txt
 			STREAM_IDENTIFIER	ASSIGNMENT	REDIRECT_IDENTIFIER
 		*/
 
-		$this->parse_runtime['command_length']=strlen($this->current_input);
-		$this->parse_runtime['parse_position']=0;
-		$this->parse_runtime['current_mode']=MODE_NORMAL;
-		$this->parse_runtime['escape_used']=false;
-		$this->parse_runtime['occle_command']=COMMAND_NATIVE;
+        $this->parse_runtime['command_length'] = strlen($this->current_input);
+        $this->parse_runtime['parse_position'] = 0;
+        $this->parse_runtime['current_mode'] = MODE_NORMAL;
+        $this->parse_runtime['escape_used'] = false;
+        $this->parse_runtime['occle_command'] = COMMAND_NATIVE;
 
-		$this->parsed_input[SECTION_COMMAND]=NULL;
-		$this->parsed_input[SECTION_OPTIONS]=array();
-		$this->parsed_input[SECTION_PARAMETERS]=array();
-		$this->parsed_input[SECTION_EXTRAS]=array();
+        $this->parsed_input[SECTION_COMMAND] = null;
+        $this->parsed_input[SECTION_OPTIONS] = array();
+        $this->parsed_input[SECTION_PARAMETERS] = array();
+        $this->parsed_input[SECTION_EXTRAS] = array();
 
-		$this->fs=object_factory('occle_fs');
+        $this->fs = object_factory('occle_fs');
 
-		// Start parsing with the command
-		$this->_extract_command();
-		if (trim($this->parsed_input[SECTION_COMMAND])=='')
-		{
-			$this->output[STREAM_STDCOMMAND]='';
-			$this->output[STREAM_STDHTML]='';
-			$this->output[STREAM_STDOUT]='';
-			$this->output[STREAM_STDERR]=do_lang('NON_COMMAND');
-			return;
-		}
+        // Start parsing with the command
+        $this->_extract_command();
+        if (trim($this->parsed_input[SECTION_COMMAND]) == '') {
+            $this->output[STREAM_STDCOMMAND] = '';
+            $this->output[STREAM_STDHTML] = '';
+            $this->output[STREAM_STDOUT] = '';
+            $this->output[STREAM_STDERR] = do_lang('NON_COMMAND');
+            return;
+        }
 
-		if ($this->parse_runtime['occle_command']==COMMAND_NATIVE)
-		{
-			// Options (it's an OcCLE command; not a PHP command)
-			$this->_extract_options();
-			$this->_extract_parameters();
-		}
-		// Extras
-		$this->_extract_extras();
+        if ($this->parse_runtime['occle_command'] == COMMAND_NATIVE) {
+            // Options (it's an OcCLE command; not a PHP command)
+            $this->_extract_options();
+            $this->_extract_parameters();
+        }
+        // Extras
+        $this->_extract_extras();
 
-		// Pre-processing: follow any extras provided
-		$i=0;
-		foreach ($this->parsed_input[SECTION_EXTRAS] as $extra)
-		{
-			if (($extra[ASSIGNMENT]==REDIRECT_PIPE) || ($extra[ASSIGNMENT]==REDIRECT_INPUT))
-			{
-				$replacements=0;
+        // Pre-processing: follow any extras provided
+        $i = 0;
+        foreach ($this->parsed_input[SECTION_EXTRAS] as $extra) {
+            if (($extra[ASSIGNMENT] == REDIRECT_PIPE) || ($extra[ASSIGNMENT] == REDIRECT_INPUT)) {
+                $replacements = 0;
 
-				if ($extra[ASSIGNMENT]==REDIRECT_PIPE)
-				{
-					if (!isset($extra[STREAM_IDENTIFIER][0])) $extra[STREAM_IDENTIFIER]=array(STREAM_STDOUT);
-					$virtual_bash=new virtual_bash($extra[REDIRECT_IDENTIFIER]);
-					$virtual_output=$virtual_bash->return_output();
-					$pertinant_output=$virtual_output[$extra[STREAM_IDENTIFIER][count($extra[STREAM_IDENTIFIER])-1]];
-					if ($virtual_output[STREAM_STDERR]!='') $this->output[STREAM_STDERR]=$virtual_output[STREAM_STDERR];
-				} else
-				{
-					$pertinant_output=$this->fs->read_file($this->fs->_pwd_to_array($extra[REDIRECT_IDENTIFIER]));
-					if ($pertinant_output===false) $pertinant_output='';
-				}
+                if ($extra[ASSIGNMENT] == REDIRECT_PIPE) {
+                    if (!isset($extra[STREAM_IDENTIFIER][0])) {
+                        $extra[STREAM_IDENTIFIER] = array(STREAM_STDOUT);
+                    }
+                    $virtual_bash = new virtual_bash($extra[REDIRECT_IDENTIFIER]);
+                    $virtual_output = $virtual_bash->return_output();
+                    $pertinant_output = $virtual_output[$extra[STREAM_IDENTIFIER][count($extra[STREAM_IDENTIFIER])-1]];
+                    if ($virtual_output[STREAM_STDERR] != '') {
+                        $this->output[STREAM_STDERR] = $virtual_output[STREAM_STDERR];
+                    }
+                } else {
+                    $pertinant_output = $this->fs->read_file($this->fs->_pwd_to_array($extra[REDIRECT_IDENTIFIER]));
+                    if ($pertinant_output === false) {
+                        $pertinant_output = '';
+                    }
+                }
 
-				foreach ($this->parsed_input[SECTION_PARAMETERS] as $param_no=>$parameter)
-				{
-					// Do we have any "{".$i."}" parameters?
-					if ($parameter=='{'.strval($i).'}')
-					{
-						// NOTE: Might want to change this somehow so that other streams can be put through
-						$this->parsed_input[SECTION_PARAMETERS][$param_no]=$pertinant_output;
-						$replacements++;
-					}
-				}
+                foreach ($this->parsed_input[SECTION_PARAMETERS] as $param_no => $parameter) {
+                    // Do we have any "{".$i."}" parameters?
+                    if ($parameter == '{' . strval($i) . '}') {
+                        // NOTE: Might want to change this somehow so that other streams can be put through
+                        $this->parsed_input[SECTION_PARAMETERS][$param_no] = $pertinant_output;
+                        $replacements++;
+                    }
+                }
 
-				if ($replacements==0)
-				{
-					// Just tag the input onto the end of the parameters array
-					// NOTE: See above
-					$this->parsed_input[SECTION_PARAMETERS][]=$pertinant_output;
-				}
+                if ($replacements == 0) {
+                    // Just tag the input onto the end of the parameters array
+                    // NOTE: See above
+                    $this->parsed_input[SECTION_PARAMETERS][] = $pertinant_output;
+                }
 
-				$i++;
-			}
-		}
+                $i++;
+            }
+        }
 
-		// Handle the command: load up the relevant hook
-		if ($this->parse_runtime['occle_command']==COMMAND_NATIVE)
-		{
-			// See if it's a lone command first
-			$hooks=find_all_hooks('systems','occle_commands');
-			$hook_return=NULL;
-			foreach (array_keys($hooks) as $hook)
-			{
-				if ($hook==$this->parsed_input[SECTION_COMMAND])
-				{
-					require_code('hooks/systems/occle_commands/'.filter_naughty_harsh($hook));
-					$object=object_factory('Hook_occle_command_'.filter_naughty_harsh($hook));
-					$hook_return=$object->run($this->parsed_input[SECTION_OPTIONS],$this->parsed_input[SECTION_PARAMETERS],$this->fs);
-					$this->parse_runtime['occle_command']=COMMAND_LONE;
-					break;
-				}
-			}
+        // Handle the command: load up the relevant hook
+        if ($this->parse_runtime['occle_command'] == COMMAND_NATIVE) {
+            // See if it's a lone command first
+            $hooks = find_all_hooks('systems','occle_commands');
+            $hook_return = null;
+            foreach (array_keys($hooks) as $hook) {
+                if ($hook == $this->parsed_input[SECTION_COMMAND]) {
+                    require_code('hooks/systems/occle_commands/' . filter_naughty_harsh($hook));
+                    $object = object_factory('Hook_occle_command_' . filter_naughty_harsh($hook));
+                    $hook_return = $object->run($this->parsed_input[SECTION_OPTIONS],$this->parsed_input[SECTION_PARAMETERS],$this->fs);
+                    $this->parse_runtime['occle_command'] = COMMAND_LONE;
+                    break;
+                }
+            }
 
-			if (!is_null($hook_return))
-			{
-				$this->output[STREAM_STDCOMMAND]=$hook_return[0];
-				if (is_object($hook_return[1])) $this->output[STREAM_STDHTML]=$hook_return[1]->evaluate();
-				else $this->output[STREAM_STDHTML]=$hook_return[1];
-				$this->output[STREAM_STDOUT]=array_key_exists(2,$hook_return)?$hook_return[2]:'';
-				$this->output[STREAM_STDERR]=array_key_exists(2,$hook_return)?$hook_return[3]:'';
-			}
-			else
-			{
-				// It's not a lone command; see if it's a script - check first in the main script dir
-				if (file_exists(get_custom_file_base().'/data/modules/admin_occle/'.filter_naughty_harsh($this->parsed_input[SECTION_COMMAND],true))) $script_file=get_custom_file_base().'/data/modules/admin_occle/'.filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); // It's in the main script dir
-				else $script_file=$this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND])); // Exhaustive search
+            if (!is_null($hook_return)) {
+                $this->output[STREAM_STDCOMMAND] = $hook_return[0];
+                if (is_object($hook_return[1])) {
+                    $this->output[STREAM_STDHTML] = $hook_return[1]->evaluate();
+                } else {
+                    $this->output[STREAM_STDHTML] = $hook_return[1];
+                }
+                $this->output[STREAM_STDOUT] = array_key_exists(2,$hook_return)?$hook_return[2]:'';
+                $this->output[STREAM_STDERR] = array_key_exists(2,$hook_return)?$hook_return[3]:'';
+            } else {
+                // It's not a lone command; see if it's a script - check first in the main script dir
+                if (file_exists(get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND],true))) {
+                    $script_file = get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]);
+                } // It's in the main script dir
+                else {
+                    $script_file = $this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]));
+                } // Exhaustive search
 
-				if (($script_file!==false) && (is_readable($script_file)))
-				{
-					// It *is* a script, so let's run it :)
-					$this->parse_runtime['occle_command']=COMMAND_SCRIPT;
-					$script_contents=unixify_line_format(file_get_contents($script_file));
-					$script_lines=explode("\n",$script_contents);
+                if (($script_file !== false) && (is_readable($script_file))) {
+                    // It *is* a script, so let's run it :)
+                    $this->parse_runtime['occle_command'] = COMMAND_SCRIPT;
+                    $script_contents = unixify_line_format(file_get_contents($script_file));
+                    $script_lines = explode("\n",$script_contents);
 
-					foreach ($script_lines as $script_line)
-					{
-						if (strlen($script_line)>0)
-						{
-							$virtual_bash=new virtual_bash($script_line,$this->parsed_input[SECTION_PARAMETERS]);
-							$script_output=$virtual_bash->return_output();
-							$this->output=$this->_combine_streams($this->output,$script_output);
-						}
-					}
-				}
-				else
-				{
-					// Give up: it's not a command
-					$this->output[STREAM_STDCOMMAND]='';
-					$this->output[STREAM_STDHTML]='';
-					$this->output[STREAM_STDOUT]='';
-					$this->output[STREAM_STDERR]=do_lang('NON_COMMAND');
-					return;
-				}
-			}
-		}
-		elseif ($this->parse_runtime['occle_command']==COMMAND_PHP)
-		{
-			// NOTE: This is done in a separate function to limit variable interaction (due to the PHP memory implemented)
-			$this->_handle_php_command();
-		}
-		elseif ($this->parse_runtime['occle_command']==COMMAND_SQL)
-		{
-			// SQL command
-			$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-			$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],NULL,NULL);
-			$GLOBALS['NO_DB_SCOPE_CHECK']=false;
-			if ((is_array($occle_output)) && (count($occle_output)>100))
-			{
-				$occle_output=$GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,NULL);
-				$occle_output[]=array('...'=>'...');
-			}
+                    foreach ($script_lines as $script_line) {
+                        if (strlen($script_line)>0) {
+                            $virtual_bash = new virtual_bash($script_line,$this->parsed_input[SECTION_PARAMETERS]);
+                            $script_output = $virtual_bash->return_output();
+                            $this->output = $this->_combine_streams($this->output,$script_output);
+                        }
+                    }
+                } else {
+                    // Give up: it's not a command
+                    $this->output[STREAM_STDCOMMAND] = '';
+                    $this->output[STREAM_STDHTML] = '';
+                    $this->output[STREAM_STDOUT] = '';
+                    $this->output[STREAM_STDERR] = do_lang('NON_COMMAND');
+                    return;
+                }
+            }
+        } elseif ($this->parse_runtime['occle_command'] == COMMAND_PHP) {
+            // NOTE: This is done in a separate function to limit variable interaction (due to the PHP memory implemented)
+            $this->_handle_php_command();
+        } elseif ($this->parse_runtime['occle_command'] == COMMAND_SQL) {
+            // SQL command
+            $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
+            $occle_output = $GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],null,null);
+            $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
+            if ((is_array($occle_output)) && (count($occle_output)>100)) {
+                $occle_output = $GLOBALS['SITE_DB']->query($this->parsed_input[SECTION_COMMAND],100,null);
+                $occle_output[] = array('...' => '...');
+            }
 
-			$this->output[STREAM_STDCOMMAND]='';
-			$this->output[STREAM_STDHTML]='';
-			$this->output[STREAM_STDOUT]='';
-			$this->output[STREAM_STDERR]='';
+            $this->output[STREAM_STDCOMMAND] = '';
+            $this->output[STREAM_STDHTML] = '';
+            $this->output[STREAM_STDOUT] = '';
+            $this->output[STREAM_STDERR] = '';
 
-			if (is_null($occle_output))
-			{
-				$this->output[STREAM_STDERR]=do_lang('SUCCESS');
-			} else
-			{
-				$this->output[STREAM_STDHTML]=$this->_array_to_html($occle_output);
-			}
-		}
+            if (is_null($occle_output)) {
+                $this->output[STREAM_STDERR] = do_lang('SUCCESS');
+            } else {
+                $this->output[STREAM_STDHTML] = $this->_array_to_html($occle_output);
+            }
+        }
 
-		// Post-processing: follow any extras provided
-		$old_output=$this->output;
+        // Post-processing: follow any extras provided
+        $old_output = $this->output;
 
-		foreach ($this->parsed_input[SECTION_EXTRAS] as $extra)
-		{
-			if (!isset($extra[STREAM_IDENTIFIER][0])) $extra[STREAM_IDENTIFIER]=array(STREAM_STDOUT);
+        foreach ($this->parsed_input[SECTION_EXTRAS] as $extra) {
+            if (!isset($extra[STREAM_IDENTIFIER][0])) {
+                $extra[STREAM_IDENTIFIER] = array(STREAM_STDOUT);
+            }
 
-			if (!isset($this->output[$extra[REDIRECT_IDENTIFIER]]))
-			{
-				// It's a file... so read in if it exists, else blank
-				$this->output[$extra[REDIRECT_IDENTIFIER]]=$this->fs->read_file($this->fs->_pwd_to_array($extra[REDIRECT_IDENTIFIER]));
-				if ($this->output[$extra[REDIRECT_IDENTIFIER]]===false)
-				{
-					$this->output[$extra[REDIRECT_IDENTIFIER]]='';
-				}
-			}
+            if (!isset($this->output[$extra[REDIRECT_IDENTIFIER]])) {
+                // It's a file... so read in if it exists, else blank
+                $this->output[$extra[REDIRECT_IDENTIFIER]] = $this->fs->read_file($this->fs->_pwd_to_array($extra[REDIRECT_IDENTIFIER]));
+                if ($this->output[$extra[REDIRECT_IDENTIFIER]] === false) {
+                    $this->output[$extra[REDIRECT_IDENTIFIER]] = '';
+                }
+            }
 
-			$extra[ASSIGNMENT]=intval($extra[ASSIGNMENT]);
+            $extra[ASSIGNMENT] = intval($extra[ASSIGNMENT]);
 
-			foreach ($extra[STREAM_IDENTIFIER] as $stream_identifier) // Multiple ones are always stored, but it only really makes sense for '>>'; otherwise we're just overwriting
-			{
-				if ($extra[ASSIGNMENT]==REDIRECT_OVERWRITE)
-				{
-					$this->output[$stream_identifier]=''; // Because it's been taken away from here
+            foreach ($extra[STREAM_IDENTIFIER] as $stream_identifier) { // Multiple ones are always stored, but it only really makes sense for '>>'; otherwise we're just overwriting
+                if ($extra[ASSIGNMENT] == REDIRECT_OVERWRITE) {
+                    $this->output[$stream_identifier] = ''; // Because it's been taken away from here
 
-					$this->output[$extra[REDIRECT_IDENTIFIER]]=$old_output[$stream_identifier];
-				}
-				elseif ($extra[ASSIGNMENT]==REDIRECT_APPEND)
-				{
-					$this->output[$stream_identifier]=''; // Because it's been taken away from here
+                    $this->output[$extra[REDIRECT_IDENTIFIER]] = $old_output[$stream_identifier];
+                } elseif ($extra[ASSIGNMENT] == REDIRECT_APPEND) {
+                    $this->output[$stream_identifier] = ''; // Because it's been taken away from here
 
-					if ((is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) && (is_object($old_output[$stream_identifier])))
-						$this->output[$extra[REDIRECT_IDENTIFIER]]->append($old_output[$stream_identifier]);
-					elseif ((!is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) && (is_object($old_output[$stream_identifier])))
-					{
-						$this->output[$extra[REDIRECT_IDENTIFIER]]=make_string_tempcode($this->output[$extra[REDIRECT_IDENTIFIER]]);
-						$this->output[$extra[REDIRECT_IDENTIFIER]]->append($old_output[$stream_identifier]);
-						$this->output[$extra[REDIRECT_IDENTIFIER]]=$this->output[$extra[REDIRECT_IDENTIFIER]]->evaluate();
-					}
-					elseif ((is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) && (!is_object($old_output[$stream_identifier])))
-					{
-						$old_output[$stream_identifier]=make_string_tempcode($old_output[$stream_identifier]);
-						$this->output[$extra[REDIRECT_IDENTIFIER]]->append($old_output[$stream_identifier]);
-					}
-					else
-					{
-						$this->output[$extra[REDIRECT_IDENTIFIER]].=$old_output[$stream_identifier];
-					}
-				}
-			}
+                    if ((is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) && (is_object($old_output[$stream_identifier]))) {
+                        $this->output[$extra[REDIRECT_IDENTIFIER]]->append($old_output[$stream_identifier]);
+                    } elseif ((!is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) && (is_object($old_output[$stream_identifier]))) {
+                        $this->output[$extra[REDIRECT_IDENTIFIER]] = make_string_tempcode($this->output[$extra[REDIRECT_IDENTIFIER]]);
+                        $this->output[$extra[REDIRECT_IDENTIFIER]]->append($old_output[$stream_identifier]);
+                        $this->output[$extra[REDIRECT_IDENTIFIER]] = $this->output[$extra[REDIRECT_IDENTIFIER]]->evaluate();
+                    } elseif ((is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) && (!is_object($old_output[$stream_identifier]))) {
+                        $old_output[$stream_identifier] = make_string_tempcode($old_output[$stream_identifier]);
+                        $this->output[$extra[REDIRECT_IDENTIFIER]]->append($old_output[$stream_identifier]);
+                    } else {
+                        $this->output[$extra[REDIRECT_IDENTIFIER]] .= $old_output[$stream_identifier];
+                    }
+                }
+            }
 
-			if (($extra[ASSIGNMENT]==REDIRECT_OVERWRITE) || ($extra[ASSIGNMENT]==REDIRECT_APPEND))
-			{
-				if (is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) $this->output[$extra[REDIRECT_IDENTIFIER]]=$this->output[$extra[REDIRECT_IDENTIFIER]]->evaluate();
-				$this->fs->write_file($this->fs->_pwd_to_array($extra[REDIRECT_IDENTIFIER]),$this->output[$extra[REDIRECT_IDENTIFIER]]);
-			}
-		}
-	}
+            if (($extra[ASSIGNMENT] == REDIRECT_OVERWRITE) || ($extra[ASSIGNMENT] == REDIRECT_APPEND)) {
+                if (is_object($this->output[$extra[REDIRECT_IDENTIFIER]])) {
+                    $this->output[$extra[REDIRECT_IDENTIFIER]] = $this->output[$extra[REDIRECT_IDENTIFIER]]->evaluate();
+                }
+                $this->fs->write_file($this->fs->_pwd_to_array($extra[REDIRECT_IDENTIFIER]),$this->output[$extra[REDIRECT_IDENTIFIER]]);
+            }
+        }
+    }
 
-	/**
+    /**
 	 * Combine two streams regardless of their format.
 	 *
 	 * @param  array				Stream 1
 	 * @param  array				Stream 2
 	 * @return array				Combined streams
 	 */
-	function _combine_streams($stream1,$stream2)
-	{
-		// Combine two streams, taking account of arrays, tempcode and other stuff
-		$stream_identifiers=array(STREAM_STDCOMMAND,STREAM_STDHTML,STREAM_STDOUT,STREAM_STDERR);
+    public function _combine_streams($stream1,$stream2)
+    {
+        // Combine two streams, taking account of arrays, tempcode and other stuff
+        $stream_identifiers = array(STREAM_STDCOMMAND,STREAM_STDHTML,STREAM_STDOUT,STREAM_STDERR);
 
-		foreach ($stream_identifiers as $identifier)
-		{
-			if ((is_array($stream1[$identifier])) && (is_array($stream2[$identifier])))
-			{
-				$stream1[$identifier]=array_merge($stream1[$identifier],$stream2[$identifier]);
-			}
-			else
-			{
-				if (is_array($stream1[$identifier]))
-				{
-					if ($identifier==STREAM_STDHTML) $stream1[$identifier]=$this->_array_to_html($stream1[$identifier]);
-					else $stream1[$identifier]=$this->_array_to_text($stream1[$identifier]);
-				}
-				elseif (is_array($stream2[$identifier]))
-				{
-					if ($identifier==STREAM_STDHTML) $stream2[$identifier]=$this->_array_to_html($stream2[$identifier]);
-					else $stream2[$identifier]=$this->_array_to_text($stream2[$identifier]);
-				}
+        foreach ($stream_identifiers as $identifier) {
+            if ((is_array($stream1[$identifier])) && (is_array($stream2[$identifier]))) {
+                $stream1[$identifier] = array_merge($stream1[$identifier],$stream2[$identifier]);
+            } else {
+                if (is_array($stream1[$identifier])) {
+                    if ($identifier == STREAM_STDHTML) {
+                        $stream1[$identifier] = $this->_array_to_html($stream1[$identifier]);
+                    } else {
+                        $stream1[$identifier] = $this->_array_to_text($stream1[$identifier]);
+                    }
+                } elseif (is_array($stream2[$identifier])) {
+                    if ($identifier == STREAM_STDHTML) {
+                        $stream2[$identifier] = $this->_array_to_html($stream2[$identifier]);
+                    } else {
+                        $stream2[$identifier] = $this->_array_to_text($stream2[$identifier]);
+                    }
+                }
 
-				if ((is_object($stream1[$identifier])) && (is_object($stream2[$identifier])))
-				{
-					$stream1[$identifier]->append($stream2[$identifier]);
-				}
-				elseif ((!is_object($stream1[$identifier])) && (is_object($stream2[$identifier])))
-				{
-					$stream1[$identifier]=make_string_tempcode($stream1[$identifier]);
-					$stream1[$identifier]->append($stream2[$identifier]);
-					$stream1[$identifier]=$stream1[$identifier]->evaluate();
-				}
-				elseif ((is_object($stream1[$identifier])) && (!is_object($stream2[$identifier])))
-				{
-					$stream2[$identifier]=make_string_tempcode($stream2[$identifier]);
-					$stream1[$identifier]->append($stream2[$identifier]);
-				}
-				else
-				{
-					$stream1[$identifier].=$stream2[$identifier];
-				}
-			}
-		}
+                if ((is_object($stream1[$identifier])) && (is_object($stream2[$identifier]))) {
+                    $stream1[$identifier]->append($stream2[$identifier]);
+                } elseif ((!is_object($stream1[$identifier])) && (is_object($stream2[$identifier]))) {
+                    $stream1[$identifier] = make_string_tempcode($stream1[$identifier]);
+                    $stream1[$identifier]->append($stream2[$identifier]);
+                    $stream1[$identifier] = $stream1[$identifier]->evaluate();
+                } elseif ((is_object($stream1[$identifier])) && (!is_object($stream2[$identifier]))) {
+                    $stream2[$identifier] = make_string_tempcode($stream2[$identifier]);
+                    $stream1[$identifier]->append($stream2[$identifier]);
+                } else {
+                    $stream1[$identifier] .= $stream2[$identifier];
+                }
+            }
+        }
 
-		// *Insert ghostbusters reference about crossing the streams*
+        // *Insert ghostbusters reference about crossing the streams*
 
-		return $stream1;
-	}
+        return $stream1;
+    }
 
-	/**
+    /**
 	 * Convert an array to tempcode for display.
 	 *
 	 * @param  array				Array to display
 	 * @return tempcode			Tempcode for array
 	 */
-	function _array_to_html($array)
-	{
-		// Convert an array to an HTML format
-		$output=new ocp_tempcode();
-		$key=mixed();
-		foreach ($array as $key=>$value)
-		{
-			if (is_array($value)) $value=protect_from_escaping($this->_array_to_html($value));
-			$output->attach(do_template('OCCLE_ARRAY_ELEMENT',array('_GUID'=>'18c9700c05fbe9c8b45f454376deda05','KEY'=>is_string($key)?$key:strval($key),'VALUE'=>is_string($value)?$value:(is_null($value)?'NULL':(is_object($value)?$value:strval($value))))));
-		}
-		return do_template('OCCLE_ARRAY',array('_GUID'=>'ab75cdb77fa797d2e42185b51e34d857','ELEMENTS'=>$output));
-	}
+    public function _array_to_html($array)
+    {
+        // Convert an array to an HTML format
+        $output = new ocp_tempcode();
+        $key = mixed();
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $value = protect_from_escaping($this->_array_to_html($value));
+            }
+            $output->attach(do_template('OCCLE_ARRAY_ELEMENT',array('_GUID' => '18c9700c05fbe9c8b45f454376deda05','KEY' => is_string($key)?$key:strval($key),'VALUE' => is_string($value)?$value:(is_null($value)?'NULL':(is_object($value)?$value:strval($value))))));
+        }
+        return do_template('OCCLE_ARRAY',array('_GUID' => 'ab75cdb77fa797d2e42185b51e34d857','ELEMENTS' => $output));
+    }
 
-	/**
+    /**
 	 * Convert an array to text for display.
 	 *
 	 * @param  array				Array to display
 	 * @param  integer			Global indentation
 	 * @return string				Text representation of array
 	 */
-	function _array_to_text($array,$indentation=0)
-	{
-		// Convert an array to a text format
-		$output=$this->_do_indentation($indentation).'array(';
-		foreach ($array as $key=>$value)
-		{
-			if (is_array($value)) $output.="\n".$this->_array_to_text($value,$indentation+1);
-			else $output.="\n".$this->_do_indentation($indentation+1).$key.' -> '.$value;
-		}
-		$output.="\n".$this->_do_indentation($indentation).')';
-		return $output;
-	}
+    public function _array_to_text($array,$indentation = 0)
+    {
+        // Convert an array to a text format
+        $output = $this->_do_indentation($indentation) . 'array(';
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $output .= "\n" . $this->_array_to_text($value,$indentation+1);
+            } else {
+                $output .= "\n" . $this->_do_indentation($indentation+1) . $key . ' -> ' . $value;
+            }
+        }
+        $output .= "\n" . $this->_do_indentation($indentation) . ')';
+        return $output;
+    }
 
-	/**
+    /**
 	 * Return a specified number of tabs.
 	 *
 	 * @param  integer			Number of tabs to return
 	 * @return string				Tabs
 	 */
-	function _do_indentation($indentation)
-	{
-		// Return some tabs
-		$output='';
-		for ($i=0;$i<$indentation;$i++) $output.="\t";
-		return $output;
-	}
+    public function _do_indentation($indentation)
+    {
+        // Return some tabs
+        $output = '';
+        for ($i = 0;$i<$indentation;$i++) {
+            $output .= "\t";
+        }
+        return $output;
+    }
 
-	/**
+    /**
 	 * Handle a PHP command by executing it, dealing with variables from the class.
 	 */
-	function _handle_php_command()
-	{
-		// NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
-		if (is_null($GLOBALS['CURRENT_SHARE_USER']))
-		{
-			if (array_key_exists('occle_state',$_COOKIE))
-			{
-				if (get_magic_quotes_gpc()) $_COOKIE['occle_state']=stripslashes($_COOKIE['occle_state']);
-				$occle_state_diff=unserialize($_COOKIE['occle_state']);
-			}
-			else $occle_state_diff=array();
+    public function _handle_php_command()
+    {
+        // NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
+        if (is_null($GLOBALS['CURRENT_SHARE_USER'])) {
+            if (array_key_exists('occle_state',$_COOKIE)) {
+                if (get_magic_quotes_gpc()) {
+                    $_COOKIE['occle_state'] = stripslashes($_COOKIE['occle_state']);
+                }
+                $occle_state_diff = unserialize($_COOKIE['occle_state']);
+            } else {
+                $occle_state_diff = array();
+            }
 
-			if (array_key_exists('occle_state_lang',$_COOKIE))
-			{
-				if (get_magic_quotes_gpc()) $_COOKIE['occle_state_lang']=stripslashes($_COOKIE['occle_state_lang']);
-				$occle_state_lang_diff=unserialize($_COOKIE['occle_state_lang']);
-			}
-			else $occle_state_lang_diff=array();
+            if (array_key_exists('occle_state_lang',$_COOKIE)) {
+                if (get_magic_quotes_gpc()) {
+                    $_COOKIE['occle_state_lang'] = stripslashes($_COOKIE['occle_state_lang']);
+                }
+                $occle_state_lang_diff = unserialize($_COOKIE['occle_state_lang']);
+            } else {
+                $occle_state_lang_diff = array();
+            }
 
-			if (array_key_exists('occle_state_code',$_COOKIE))
-			{
-				if (get_magic_quotes_gpc()) $_COOKIE['occle_state_code']=stripslashes($_COOKIE['occle_state_code']);
-				$occle_state_code_diff=unserialize($_COOKIE['occle_state_code']);
-			}
-			else $occle_state_code_diff=array();
+            if (array_key_exists('occle_state_code',$_COOKIE)) {
+                if (get_magic_quotes_gpc()) {
+                    $_COOKIE['occle_state_code'] = stripslashes($_COOKIE['occle_state_code']);
+                }
+                $occle_state_code_diff = unserialize($_COOKIE['occle_state_code']);
+            } else {
+                $occle_state_code_diff = array();
+            }
 
-			foreach ($occle_state_diff as $occle_key=>$occle_val)
-			{
-				if (!is_scalar($occle_val)) continue;
+            foreach ($occle_state_diff as $occle_key => $occle_val) {
+                if (!is_scalar($occle_val)) {
+                    continue;
+                }
 
-				if (is_bool($occle_val)) eval('$'.$occle_key.'='.($occle_val?'true':'false').';');
-				elseif ((!is_integer($occle_val)) && (!is_float($occle_val))) eval('$'.$occle_key.'=\''.addslashes($occle_val).'\';');
-				else eval('$'.$occle_key.'='.strval($occle_val).';');
-			}
+                if (is_bool($occle_val)) {
+                    eval('$' . $occle_key . '=' . ($occle_val?'true':'false') . ';');
+                } elseif ((!is_integer($occle_val)) && (!is_float($occle_val))) {
+                    eval('$' . $occle_key . '=\'' . addslashes($occle_val) . '\';');
+                } else {
+                    eval('$' . $occle_key . '=' . strval($occle_val) . ';');
+                }
+            }
 
-			foreach ($occle_state_lang_diff as $occle_lang)
-			{
-				if ((file_exists(get_custom_file_base().'/lang_custom/'.fallback_lang().'/'.$occle_lang.'.ini')) || (file_exists(get_file_base().'/lang/'.fallback_lang().'/'.$occle_lang.'.ini')))
-					require_lang($occle_lang,NULL,NULL,true);
-			}
+            foreach ($occle_state_lang_diff as $occle_lang) {
+                if ((file_exists(get_custom_file_base() . '/lang_custom/' . fallback_lang() . '/' . $occle_lang . '.ini')) || (file_exists(get_file_base() . '/lang/' . fallback_lang() . '/' . $occle_lang . '.ini'))) {
+                    require_lang($occle_lang,null,null,true);
+                }
+            }
 
-			foreach ($occle_state_code_diff as $occle_code)
-			{
-				if ((file_exists(get_file_base().'/sources_custom/'.$occle_code.'.php')) || (file_exists(get_file_base().'/sources/'.$occle_code.'.php')))
-					require_code($occle_code);
-			}
-			require_code('database_action');
-			require_code('config2');
+            foreach ($occle_state_code_diff as $occle_code) {
+                if ((file_exists(get_file_base() . '/sources_custom/' . $occle_code . '.php')) || (file_exists(get_file_base() . '/sources/' . $occle_code . '.php'))) {
+                    require_code($occle_code);
+                }
+            }
+            require_code('database_action');
+            require_code('config2');
 
-			global $SITE_DB,$FORUM_DB,$FORUM_DRIVER;
+            global $SITE_DB,$FORUM_DB,$FORUM_DRIVER;
 
-			$this->output[STREAM_STDERR]='';
+            $this->output[STREAM_STDERR] = '';
 
-			@ini_set('ocproducts.xss_detect','0');
-			ob_start();
-			$occle_eval_output=eval($this->parsed_input[SECTION_COMMAND]);
-			$occle_output=ob_get_contents();
-			if (($occle_output=='') && ($occle_eval_output!==false)) $occle_output=@strval($occle_eval_output);
-			ob_end_clean();
+            @ini_set('ocproducts.xss_detect','0');
+            ob_start();
+            $occle_eval_output = eval($this->parsed_input[SECTION_COMMAND]);
+            $occle_output = ob_get_contents();
+            if (($occle_output == '') && ($occle_eval_output !== false)) {
+                $occle_output = @strval($occle_eval_output);
+            }
+            ob_end_clean();
 
-			$occle_env_neglect=array('SITE_DB','FORUM_DB','FORUM_DRIVER','GLOBALS','_SERVER','_COOKIE','_GET','_POST','_ENV','_FILES','_REQUEST','_SESSION','this','php_errormsg');
-			$occle_env_after=get_defined_vars();
-			$occle_env_changes=array_diff(array_keys($occle_env_after),$occle_env_neglect);
-			$occle_state_diff=array();
-			foreach ($occle_env_changes as $occle_change)
-			{
-				if ((substr($occle_change,0,6)!='occle_') && (is_scalar($occle_env_after[$occle_change])))
-					$occle_state_diff[$occle_change]=$occle_env_after[$occle_change];
-			}
+            $occle_env_neglect = array('SITE_DB','FORUM_DB','FORUM_DRIVER','GLOBALS','_SERVER','_COOKIE','_GET','_POST','_ENV','_FILES','_REQUEST','_SESSION','this','php_errormsg');
+            $occle_env_after = get_defined_vars();
+            $occle_env_changes = array_diff(array_keys($occle_env_after),$occle_env_neglect);
+            $occle_state_diff = array();
+            foreach ($occle_env_changes as $occle_change) {
+                if ((substr($occle_change,0,6) != 'occle_') && (is_scalar($occle_env_after[$occle_change]))) {
+                    $occle_state_diff[$occle_change] = $occle_env_after[$occle_change];
+                }
+            }
 
-			ocp_setcookie('occle_state',serialize($occle_state_diff));
-			ocp_setcookie('occle_state_code',serialize(array_keys($GLOBALS['REQUIRED_CODE'])));
-			ocp_setcookie('occle_state_lang',serialize(array_keys($GLOBALS['LANGS_REQUESTED'])));
-		}
-		else
-		{
-			// Fake the PHP evaluation, because it's prohibited by a shared install
-			$this->output[STREAM_STDERR]=do_lang('SHARED_INSTALL_PROHIBIT');
-			$occle_eval_output=true;
-			$occle_output='';
-		}
+            ocp_setcookie('occle_state',serialize($occle_state_diff));
+            ocp_setcookie('occle_state_code',serialize(array_keys($GLOBALS['REQUIRED_CODE'])));
+            ocp_setcookie('occle_state_lang',serialize(array_keys($GLOBALS['LANGS_REQUESTED'])));
+        } else {
+            // Fake the PHP evaluation, because it's prohibited by a shared install
+            $this->output[STREAM_STDERR] = do_lang('SHARED_INSTALL_PROHIBIT');
+            $occle_eval_output = true;
+            $occle_output = '';
+        }
 
-		$this->output[STREAM_STDCOMMAND]='';
-		$this->output[STREAM_STDHTML]='';
-		$this->output[STREAM_STDOUT]='';
+        $this->output[STREAM_STDCOMMAND] = '';
+        $this->output[STREAM_STDHTML] = '';
+        $this->output[STREAM_STDOUT] = '';
 
-		if (is_object($occle_output)) $this->output[STREAM_STDHTML]=$occle_output->evaluate();
-		elseif (is_array($occle_output)) $this->output[STREAM_STDHTML]=$this->_array_to_html($occle_output);
-		else $this->output[STREAM_STDOUT]=$occle_output;
-		if ($occle_eval_output===false) $this->output[STREAM_STDERR]=do_lang('EVAL_ERROR');
-		if (is_null($occle_output)) $this->output[STREAM_STDERR]=do_lang('NO_RESULTS');
-	}
+        if (is_object($occle_output)) {
+            $this->output[STREAM_STDHTML] = $occle_output->evaluate();
+        } elseif (is_array($occle_output)) {
+            $this->output[STREAM_STDHTML] = $this->_array_to_html($occle_output);
+        } else {
+            $this->output[STREAM_STDOUT] = $occle_output;
+        }
+        if ($occle_eval_output === false) {
+            $this->output[STREAM_STDERR] = do_lang('EVAL_ERROR');
+        }
+        if (is_null($occle_output)) {
+            $this->output[STREAM_STDERR] = do_lang('NO_RESULTS');
+        }
+    }
 
-	/**
+    /**
 	 * Find a script file.
 	 *
 	 * @param  string					Script name
 	 * @param  ?string				Directory (NULL: OcCLE module data dir)
 	 * @return ~string				Path or failure (false: failure)
 	 */
-	function _find_script_file($script_name,$dir=NULL)
-	{
-		require_code('files');
+    public function _find_script_file($script_name,$dir = null)
+    {
+        require_code('files');
 
-		if (is_null($dir)) $dir=get_custom_file_base().'/data/modules/admin_occle/';
-		$dh=@opendir($dir);
-		if ($dh!==false)
-		{
-			while (($file=readdir($dh))!==false)
-			{
-				if ($file==$script_name) return $dir.$script_name;
-				if ((is_dir($dir.$file)) && ($file!='.') && (!should_ignore_file('data/modules/admin_occle/'.$file,IGNORE_ACCESS_CONTROLLERS)))
-				{
-					$return=$this->_find_script_file($script_name,$dir.$file.'/');
-					if ($return) return $return;
-				}
-			}
-			closedir($dh);
-		}
-		return false;
-	}
+        if (is_null($dir)) {
+            $dir = get_custom_file_base() . '/data/modules/admin_occle/';
+        }
+        $dh = @opendir($dir);
+        if ($dh !== false) {
+            while (($file = readdir($dh)) !== false) {
+                if ($file == $script_name) {
+                    return $dir . $script_name;
+                }
+                if ((is_dir($dir . $file)) && ($file != '.') && (!should_ignore_file('data/modules/admin_occle/' . $file,IGNORE_ACCESS_CONTROLLERS))) {
+                    $return = $this->_find_script_file($script_name,$dir . $file . '/');
+                    if ($return) {
+                        return $return;
+                    }
+                }
+            }
+            closedir($dh);
+        }
+        return false;
+    }
 }
 
 /**
@@ -1325,34 +1285,42 @@ class virtual_bash
  * @param  boolean	Output as XML or tempcode?
  * @return string		The queued message XML
 */
-function get_queued_messages($xml=true)
+function get_queued_messages($xml = true)
 {
-	$hooks=find_all_hooks('systems','occle_notifications');
-	$output=mixed();
-	if ($xml) $output='';
-	else $output=new ocp_tempcode();
+    $hooks = find_all_hooks('systems','occle_notifications');
+    $output = mixed();
+    if ($xml) {
+        $output = '';
+    } else {
+        $output = new ocp_tempcode();
+    }
 
-	$_loc=get_value('last_occle_command');
-	$loc=is_null($_loc)?NULL:intval($_loc);
+    $_loc = get_value('last_occle_command');
+    $loc = is_null($_loc)?null:intval($_loc);
 
-	foreach (array_keys($hooks) as $hook)
-	{
-		require_code('hooks/systems/occle_notifications/'.filter_naughty_harsh($hook));
-		$object=object_factory('Hook_occle_notification_'.filter_naughty_harsh($hook));
-		$object_values=$object->run($loc);
-		if ($object_values===false) continue;
+    foreach (array_keys($hooks) as $hook) {
+        require_code('hooks/systems/occle_notifications/' . filter_naughty_harsh($hook));
+        $object = object_factory('Hook_occle_notification_' . filter_naughty_harsh($hook));
+        $object_values = $object->run($loc);
+        if ($object_values === false) {
+            continue;
+        }
 
-		if ($xml)
-		{
-			if (is_object($object_values[2])) $object_values[2]=$object_values[2]->evaluate();
-			$output.='<notification section="'.escape_html($object_values[0]).'" type="'.escape_html($object_values[1]).'">'.$object_values[2].'</notification>';
-		}
-		else $output->attach(do_template('OCCLE_NOTIFICATION',array('_GUID'=>'0254d84dfbb2ce7b7410bdc0c2989833','SECTION'=>$object_values[0],'TYPE'=>$object_values[1],'NOTIFICATION_CONTENT'=>$object_values[2])));
-	}
+        if ($xml) {
+            if (is_object($object_values[2])) {
+                $object_values[2] = $object_values[2]->evaluate();
+            }
+            $output .= '<notification section="' . escape_html($object_values[0]) . '" type="' . escape_html($object_values[1]) . '">' . $object_values[2] . '</notification>';
+        } else {
+            $output->attach(do_template('OCCLE_NOTIFICATION',array('_GUID' => '0254d84dfbb2ce7b7410bdc0c2989833','SECTION' => $object_values[0],'TYPE' => $object_values[1],'NOTIFICATION_CONTENT' => $object_values[2])));
+        }
+    }
 
-	if ($xml) $output='<div xmlns="http://www.w3.org/1999/xhtml">'.$output.'</div>';
+    if ($xml) {
+        $output = '<div xmlns="http://www.w3.org/1999/xhtml">' . $output . '</div>';
+    }
 
-	return $output;
+    return $output;
 }
 
 /**
@@ -1365,35 +1333,38 @@ function get_queued_messages($xml=true)
 */
 function do_command_help($command,$options,$parameters)
 {
-	$_options=array();
-	$_parameters=array();
+    $_options = array();
+    $_parameters = array();
 
-	foreach ($options as $option_name)
-	{
-		if ($option_name=='h') $_options['-h']=do_lang('GENERAL_HELP');
-		else $_options['-'.$option_name]=do_lang('CMD_'.strtoupper($command).'_HELP_'.strtoupper($option_name));
-	}
+    foreach ($options as $option_name) {
+        if ($option_name == 'h') {
+            $_options['-h'] = do_lang('GENERAL_HELP');
+        } else {
+            $_options['-' . $option_name] = do_lang('CMD_' . strtoupper($command) . '_HELP_' . strtoupper($option_name));
+        }
+    }
 
-	foreach (array_keys($parameters) as $parameter_number)
-	{
-		$_parameter=do_lang('CMD_'.strtoupper($command).'_HELP_PARAM_'.strval($parameter_number),NULL,NULL,NULL,NULL,false);
-		if (is_null($_parameter)) continue;
-		$matches=array();
-		if (preg_match('#/sources/hooks/(.*)/(.*)/#',$_parameter,$matches)!=0)
-		{
-			$hooks=find_all_hooks($matches[1],$matches[2]);
-			$_parameter.=' (';
-			foreach (array_keys($hooks) as $i=>$hook)
-			{
-				if ($i!=0) $_parameter.=', ';
-				$_parameter.=$hook;
-			}
-			$_parameter.=')';
-		}
-		$_parameters[]=$_parameter;
-	}
+    foreach (array_keys($parameters) as $parameter_number) {
+        $_parameter = do_lang('CMD_' . strtoupper($command) . '_HELP_PARAM_' . strval($parameter_number),null,null,null,null,false);
+        if (is_null($_parameter)) {
+            continue;
+        }
+        $matches = array();
+        if (preg_match('#/sources/hooks/(.*)/(.*)/#',$_parameter,$matches) != 0) {
+            $hooks = find_all_hooks($matches[1],$matches[2]);
+            $_parameter .= ' (';
+            foreach (array_keys($hooks) as $i => $hook) {
+                if ($i != 0) {
+                    $_parameter .= ', ';
+                }
+                $_parameter .= $hook;
+            }
+            $_parameter .= ')';
+        }
+        $_parameters[] = $_parameter;
+    }
 
-	return do_template('OCCLE_HELP',array('_GUID'=>'6abdbac52ae2a63f219f5d2e44687bb9','INTRODUCTION'=>do_lang_tempcode('CMD_'.strtoupper($command).'_HELP'),'OPTIONS'=>$_options,'PARAMETERS'=>$_parameters));
+    return do_template('OCCLE_HELP',array('_GUID' => '6abdbac52ae2a63f219f5d2e44687bb9','INTRODUCTION' => do_lang_tempcode('CMD_' . strtoupper($command) . '_HELP'),'OPTIONS' => $_options,'PARAMETERS' => $_parameters));
 }
 
 /**
@@ -1404,5 +1375,5 @@ function do_command_help($command,$options,$parameters)
 */
 function occle_make_normal_html_visible($html)
 {
-	return do_template('OCCLE_BOX',array('_GUID'=>'1a77370b0230fafda432c2d325d83ef1','HTML'=>$html));
+    return do_template('OCCLE_BOX',array('_GUID' => '1a77370b0230fafda432c2d325d83ef1','HTML' => $html));
 }

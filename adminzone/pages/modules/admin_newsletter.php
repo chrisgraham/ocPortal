@@ -27,15 +27,15 @@ require_code('crud_module');
  */
 class Module_admin_newsletter extends standard_crud_module
 {
-	var $lang_type='NEWSLETTER';
-	var $select_name='TITLE';
-	var $do_preview=NULL;
-	var $cache_level_counts;
-	var $menu_label='NEWSLETTER';
-	var $table='newsletters';
-	var $title_is_multi_lang=true;
+    public $lang_type = 'NEWSLETTER';
+    public $select_name = 'TITLE';
+    public $do_preview = null;
+    public $cache_level_counts;
+    public $menu_label = 'NEWSLETTER';
+    public $table = 'newsletters';
+    public $title_is_multi_lang = true;
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -44,188 +44,200 @@ class Module_admin_newsletter extends standard_crud_module
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		$ret=array(
-			'misc'=>array('MANAGE_NEWSLETTER','menu/site_meta/newsletters'),
-			'new'=>array('NEWSLETTER_SEND','menu/site_meta/newsletters'),
-			'whatsnew'=>array('NEW_CONTENT','menu/adminzone/tools/newsletter/newsletter_from_changes'),
-			'subscribers'=>array('VIEW_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/subscribers'),
-			'import_subscribers'=>array('IMPORT_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/import_subscribers'),
-			'archive'=>array('NEWSLETTER_ARCHIVE','menu/_generic_admin/view_archive'),
-		);
-		if (!GOOGLE_APPENGINE)
-			$ret['bounce_filter_a']=array('BOUNCE_FILTER','menu/adminzone/tools/newsletter/newsletter_email_bounce');
-		$ret+=parent::get_entry_points();
-		return $ret;
-	}
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        $ret = array(
+            'misc' => array('MANAGE_NEWSLETTER','menu/site_meta/newsletters'),
+            'new' => array('NEWSLETTER_SEND','menu/site_meta/newsletters'),
+            'whatsnew' => array('NEW_CONTENT','menu/adminzone/tools/newsletter/newsletter_from_changes'),
+            'subscribers' => array('VIEW_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/subscribers'),
+            'import_subscribers' => array('IMPORT_NEWSLETTER_SUBSCRIBERS','menu/adminzone/tools/newsletter/import_subscribers'),
+            'archive' => array('NEWSLETTER_ARCHIVE','menu/_generic_admin/view_archive'),
+        );
+        if (!GOOGLE_APPENGINE) {
+            $ret['bounce_filter_a'] = array('BOUNCE_FILTER','menu/adminzone/tools/newsletter/newsletter_email_bounce');
+        }
+        $ret += parent::get_entry_points();
+        return $ret;
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true,$type=NULL)
-	{
-		$type=get_param('type','misc');
+    public function pre_run($top_level = true,$type = null)
+    {
+        $type = get_param('type','misc');
 
-		require_lang('newsletter');
+        require_lang('newsletter');
 
-		set_helper_panel_tutorial('tut_newsletter');
-		if ($type=='whatsnew')
-		{
-		} else
-		{
-		}
+        set_helper_panel_tutorial('tut_newsletter');
+        if ($type == 'whatsnew') {
+        } else {
+        }
 
-		if ($type=='confirm')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:new',do_lang_tempcode('NEWSLETTER_SEND'))));
-			breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
-		}
+        if ($type == 'confirm') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:new',do_lang_tempcode('NEWSLETTER_SEND'))));
+            breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
+        }
 
-		if ($type=='send')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:new',do_lang_tempcode('NEWSLETTER_SEND'))));
-			breadcrumb_set_self(do_lang_tempcode('DONE'));
-		}
+        if ($type == 'send') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:new',do_lang_tempcode('NEWSLETTER_SEND'))));
+            breadcrumb_set_self(do_lang_tempcode('DONE'));
+        }
 
-		if ($type=='view')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:archive',do_lang_tempcode('NEWSLETTER_ARCHIVE'))));
-			breadcrumb_set_self(do_lang_tempcode('VIEW'));
-		}
+        if ($type == 'view') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_NEWSLETTER')),array('_SELF:_SELF:archive',do_lang_tempcode('NEWSLETTER_ARCHIVE'))));
+            breadcrumb_set_self(do_lang_tempcode('VIEW'));
+        }
 
-		if ($type=='import_subscribers')
-		{
-			$this->title=get_screen_title('IMPORT_NEWSLETTER_SUBSCRIBERS');
-		}
+        if ($type == 'import_subscribers') {
+            $this->title = get_screen_title('IMPORT_NEWSLETTER_SUBSCRIBERS');
+        }
 
-		if ($type=='bounce_filter_a' || $type=='bounce_filter_v' || $type=='bounce_filter_c' || $type=='bounce_filter_d')
-		{
-			$this->title=get_screen_title('BOUNCE_FILTER');
-		}
+        if ($type == 'bounce_filter_a' || $type == 'bounce_filter_v' || $type == 'bounce_filter_c' || $type == 'bounce_filter_d') {
+            $this->title = get_screen_title('BOUNCE_FILTER');
+        }
 
-		if ($type=='subscribers')
-		{
-			$this->title=get_screen_title('VIEW_NEWSLETTER_SUBSCRIBERS');
-		}
+        if ($type == 'subscribers') {
+            $this->title = get_screen_title('VIEW_NEWSLETTER_SUBSCRIBERS');
+        }
 
-		if ($type=='whatsnew')
-		{
-			if (post_param('message','')!='')
-			{
-				$this->title=get_screen_title('NEWSLETTER_SEND');
-			} else
-			{
-				$this->title=get_screen_title('NEW_CONTENT');
-			}
-		}
+        if ($type == 'whatsnew') {
+            if (post_param('message','') != '') {
+                $this->title = get_screen_title('NEWSLETTER_SEND');
+            } else {
+                $this->title = get_screen_title('NEW_CONTENT');
+            }
+        }
 
-		if ($type=='new' || $type=='confirm' || $type=='send')
-		{
-			$this->title=get_screen_title('NEWSLETTER_SEND');
-		}
+        if ($type == 'new' || $type == 'confirm' || $type == 'send') {
+            $this->title = get_screen_title('NEWSLETTER_SEND');
+        }
 
-		if ($type=='archive')
-		{
-			$this->title=get_screen_title('NEWSLETTER_ARCHIVE');
-		}
+        if ($type == 'archive') {
+            $this->title = get_screen_title('NEWSLETTER_ARCHIVE');
+        }
 
-		if (either_param_integer('csv',0)==1)
-		{
-			$GLOBALS['OUTPUT_STREAMING']=false; // Too complex to do a pre_run for this properly
-		}
+        if (either_param_integer('csv',0) == 1) {
+            $GLOBALS['OUTPUT_STREAMING'] = false; // Too complex to do a pre_run for this properly
+        }
 
-		return parent::pre_run($top_level);
-	}
+        return parent::pre_run($top_level);
+    }
 
-	/**
+    /**
 	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
-	function run_start($type)
-	{
-		$GLOBALS['NO_QUERY_LIMIT']=true;
+    public function run_start($type)
+    {
+        $GLOBALS['NO_QUERY_LIMIT'] = true;
 
-		require_code('newsletter');
-		require_css('newsletter');
+        require_code('newsletter');
+        require_css('newsletter');
 
-		$this->cache_level_counts=array();
+        $this->cache_level_counts = array();
 
-		$this->extra_donext_entries=array(
-			array('menu/site_meta/newsletters',array('_SELF',array('type'=>'new'),'_SELF'),do_lang('NEWSLETTER_SEND')),
-			array('menu/adminzone/tools/newsletter/newsletter_from_changes',array('_SELF',array('type'=>'whatsnew'),'_SELF'),do_lang('NEW_CONTENT'),'DOC_NEWSLETTER_CONTENT'),
-			array('menu/_generic_admin/view_archive',array('_SELF',array('type'=>'archive'),'_SELF'),do_lang('NEWSLETTER_ARCHIVE')),
-			array('menu/adminzone/tools/newsletter/subscribers',array('_SELF',array('type'=>'subscribers'),'_SELF'),do_lang('VIEW_SUBSCRIBERS')),
-			array('menu/adminzone/tools/newsletter/import_subscribers',array('_SELF',array('type'=>'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
-		);
+        $this->extra_donext_entries = array(
+            array('menu/site_meta/newsletters',array('_SELF',array('type' => 'new'),'_SELF'),do_lang('NEWSLETTER_SEND')),
+            array('menu/adminzone/tools/newsletter/newsletter_from_changes',array('_SELF',array('type' => 'whatsnew'),'_SELF'),do_lang('NEW_CONTENT'),'DOC_NEWSLETTER_CONTENT'),
+            array('menu/_generic_admin/view_archive',array('_SELF',array('type' => 'archive'),'_SELF'),do_lang('NEWSLETTER_ARCHIVE')),
+            array('menu/adminzone/tools/newsletter/subscribers',array('_SELF',array('type' => 'subscribers'),'_SELF'),do_lang('VIEW_SUBSCRIBERS')),
+            array('menu/adminzone/tools/newsletter/import_subscribers',array('_SELF',array('type' => 'import_subscribers'),'_SELF'),do_lang('IMPORT_NEWSLETTER_SUBSCRIBERS')),
+        );
 
-		if (!GOOGLE_APPENGINE)
-		{
-			$this->extra_donext_entries[]=array('menu/adminzone/tools/newsletter/newsletter_email_bounce',array('_SELF',array('type'=>'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER'));
-		}
+        if (!GOOGLE_APPENGINE) {
+            $this->extra_donext_entries[] = array('menu/adminzone/tools/newsletter/newsletter_email_bounce',array('_SELF',array('type' => 'bounce_filter_a'),'_SELF'),do_lang('BOUNCE_FILTER'));
+        }
 
-		$this->add_one_label=do_lang_tempcode('ADD_NEWSLETTER');
-		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_NEWSLETTER');
-		$this->edit_one_label=do_lang_tempcode('EDIT_NEWSLETTER');
+        $this->add_one_label = do_lang_tempcode('ADD_NEWSLETTER');
+        $this->edit_this_label = do_lang_tempcode('EDIT_THIS_NEWSLETTER');
+        $this->edit_one_label = do_lang_tempcode('EDIT_NEWSLETTER');
 
-		$this->add_text=do_lang_tempcode('HELP_ADD_NEWSLETTER',escape_html(static_evaluate_tempcode(build_url(array('page'=>'_SELF','type'=>'new'),'_SELF'))));
+        $this->add_text = do_lang_tempcode('HELP_ADD_NEWSLETTER',escape_html(static_evaluate_tempcode(build_url(array('page' => '_SELF','type' => 'new'),'_SELF'))));
 
-		if ($type=='misc') return $this->misc();
+        if ($type == 'misc') {
+            return $this->misc();
+        }
 
-		if ($type=='import_subscribers') return $this->import_subscribers();
-		if ($type=='subscribers') return $this->view_subscribers();
+        if ($type == 'import_subscribers') {
+            return $this->import_subscribers();
+        }
+        if ($type == 'subscribers') {
+            return $this->view_subscribers();
+        }
 
-		if ($type=='whatsnew') return $this->automatic_whats_new();
-		if ($type=='new') return $this->send_gui();
-		if ($type=='confirm') return $this->confirm_send();
-		if ($type=='send') return $this->send_message();
+        if ($type == 'whatsnew') {
+            return $this->automatic_whats_new();
+        }
+        if ($type == 'new') {
+            return $this->send_gui();
+        }
+        if ($type == 'confirm') {
+            return $this->confirm_send();
+        }
+        if ($type == 'send') {
+            return $this->send_message();
+        }
 
-		if ($type=='archive') return $this->archive();
-		if ($type=='view') return $this->view();
-		if ($type=='new') return $this->send_gui();
-		if (!GOOGLE_APPENGINE)
-		{
-			if ($type=='bounce_filter_a') return $this->bounce_filter_a();
-			if ($type=='bounce_filter_b') return $this->bounce_filter_b();
-			if ($type=='bounce_filter_c') return $this->bounce_filter_c();
-			if ($type=='bounce_filter_d') return $this->bounce_filter_d();
-		}
+        if ($type == 'archive') {
+            return $this->archive();
+        }
+        if ($type == 'view') {
+            return $this->view();
+        }
+        if ($type == 'new') {
+            return $this->send_gui();
+        }
+        if (!GOOGLE_APPENGINE) {
+            if ($type == 'bounce_filter_a') {
+                return $this->bounce_filter_a();
+            }
+            if ($type == 'bounce_filter_b') {
+                return $this->bounce_filter_b();
+            }
+            if ($type == 'bounce_filter_c') {
+                return $this->bounce_filter_c();
+            }
+            if ($type == 'bounce_filter_d') {
+                return $this->bounce_filter_d();
+            }
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * The do-next manager for before content management.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function misc()
-	{
-		$num_in_queue=$GLOBALS['SITE_DB']->query_select_value('newsletter_drip_send','COUNT(*)');
-		if ($num_in_queue>0)
-		{
-			attach_message(do_lang_tempcode('NEWSLETTER_DRIP_SEND_QUEUE',integer_format($num_in_queue)),'inform');
-		}
+    public function misc()
+    {
+        $num_in_queue = $GLOBALS['SITE_DB']->query_select_value('newsletter_drip_send','COUNT(*)');
+        if ($num_in_queue>0) {
+            attach_message(do_lang_tempcode('NEWSLETTER_DRIP_SEND_QUEUE',integer_format($num_in_queue)),'inform');
+        }
 
-		require_code('templates_donext');
-		return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
-			array_merge(array(
-				array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_NEWSLETTER')),
-				array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_NEWSLETTER')),
-			),$this->extra_donext_entries),
-			do_lang('MANAGE_NEWSLETTER')
-		);
-	}
+        require_code('templates_donext');
+        return do_next_manager(get_screen_title('MANAGE_NEWSLETTER'),comcode_lang_string('DOC_NEWSLETTER'),
+            array_merge(array(
+                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_NEWSLETTER')),
+                array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_NEWSLETTER')),
+            ),$this->extra_donext_entries),
+            do_lang('MANAGE_NEWSLETTER')
+        );
+    }
 
-	/**
+    /**
 	 * Count the number of users on a certain level and language of the newsletter.
 	 *
 	 * @param  AUTO_LINK		The newsletter
@@ -234,801 +246,796 @@ class Module_admin_newsletter extends standard_crud_module
 	 * @param  ID_TEXT		The language
 	 * @return integer		The count
 	 */
-	function _count_level($id,$level,$lang)
-	{
-		$map=array();
-		$map[strval($id)]=$level;
-		$results=newsletter_who_send_to($map,$lang,0,0);
-		return $results[6][strval($id)];
-	}
+    public function _count_level($id,$level,$lang)
+    {
+        $map = array();
+        $map[strval($id)] = $level;
+        $results = newsletter_who_send_to($map,$lang,0,0);
+        return $results[6][strval($id)];
+    }
 
-	/**
+    /**
 	 * The UI to import subscribers into the newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function import_subscribers()
-	{
-		$_lang=choose_language($this->title);
-		if (is_object($_lang)) return $_lang;
+    public function import_subscribers()
+    {
+        $_lang = choose_language($this->title);
+        if (is_object($_lang)) {
+            return $_lang;
+        }
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		$newsletter_id=post_param('id',NULL);
-		$level=post_param_integer('level',4);
+        $newsletter_id = post_param('id',null);
+        $level = post_param_integer('level',4);
 
-		// Select newsletter and attach CSV
-		if (is_null($newsletter_id))
-		{
-			$fields=new ocp_tempcode();
-			$hidden=new ocp_tempcode();
-			require_code('form_templates');
+        // Select newsletter and attach CSV
+        if (is_null($newsletter_id)) {
+            $fields = new ocp_tempcode();
+            $hidden = new ocp_tempcode();
+            require_code('form_templates');
 
-			// Selection
-			$newsletters=new ocp_tempcode();
-			$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
-			foreach ($rows as $newsletter)
-				$newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,get_translated_text($newsletter['title'])));
-			if ($newsletters->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
-			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
-			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_2'),'file',true,NULL,NULL,true,'csv,txt'));
-			// Choose level
-			if (get_option('interest_levels')=='0')
-			{
-				$l=new ocp_tempcode();
-				$l->attach(form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0')));
-				$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NEWSLETTER_IMPORT')));
-				$fields->attach(form_input_list(do_lang_tempcode('SETTINGS'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_3'),'level',$l));
-			} else
-			{
-				$l=new ocp_tempcode();
-				$l->attach(form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0')));
-				$l->attach(form_input_list_entry('1',$level==1,do_lang_tempcode('NEWSLETTER_1')));
-				$l->attach(form_input_list_entry('2',$level==2,do_lang_tempcode('NEWSLETTER_2')));
-				$l->attach(form_input_list_entry('3',$level==3,do_lang_tempcode('NEWSLETTER_3')));
-				$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NEWSLETTER_4')));
-				$fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_2'),'level',$l));
-			}
+            // Selection
+            $newsletters = new ocp_tempcode();
+            $rows = $GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+            foreach ($rows as $newsletter) {
+                $newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,get_translated_text($newsletter['title'])));
+            }
+            if ($newsletters->is_empty()) {
+                inform_exit(do_lang_tempcode('NO_CATEGORIES'));
+            }
+            $fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
+            $fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_2'),'file',true,null,null,true,'csv,txt'));
+            // Choose level
+            if (get_option('interest_levels') == '0') {
+                $l = new ocp_tempcode();
+                $l->attach(form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0')));
+                $l->attach(form_input_list_entry('4',$level == 4,do_lang_tempcode('NEWSLETTER_IMPORT')));
+                $fields->attach(form_input_list(do_lang_tempcode('SETTINGS'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_3'),'level',$l));
+            } else {
+                $l = new ocp_tempcode();
+                $l->attach(form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0')));
+                $l->attach(form_input_list_entry('1',$level == 1,do_lang_tempcode('NEWSLETTER_1')));
+                $l->attach(form_input_list_entry('2',$level == 2,do_lang_tempcode('NEWSLETTER_2')));
+                $l->attach(form_input_list_entry('3',$level == 3,do_lang_tempcode('NEWSLETTER_3')));
+                $l->attach(form_input_list_entry('4',$level == 4,do_lang_tempcode('NEWSLETTER_4')));
+                $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL'),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_2'),'level',$l));
+            }
 
-			$submit_name=do_lang_tempcode('IMPORT_NEWSLETTER_SUBSCRIBERS');
-			$post_url=get_self_url();
+            $submit_name = do_lang_tempcode('IMPORT_NEWSLETTER_SUBSCRIBERS');
+            $post_url = get_self_url();
 
-			$hidden->attach(form_input_hidden('lang',$_lang));
-			handle_max_file_size($hidden);
+            $hidden->attach(form_input_hidden('lang',$_lang));
+            handle_max_file_size($hidden);
 
-			return do_template('FORM_SCREEN',array('_GUID'=>'7e0387bcc4a1b7e2846ba357d36dbc15','SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-		}
+            return do_template('FORM_SCREEN',array('_GUID' => '7e0387bcc4a1b7e2846ba357d36dbc15','SKIP_VALIDATION' => true,'HIDDEN' => $hidden,'TITLE' => $this->title,'TEXT' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__import','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+        }
 
-		// Read data
-		$ok=false;
-		require_code('uploads');
-		if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
-		{
-			if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) // Cleanup possible line ending problems, but only if file not too big
-			{
-				$fixed_contents=unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
-				$myfile=@fopen($_FILES['file']['tmp_name'],'wb');
-				if ($myfile!==false)
-				{
-					fwrite($myfile,$fixed_contents);
-					fclose($myfile);
-				}
-			}
+        // Read data
+        $ok = false;
+        require_code('uploads');
+        if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name'])))) {
+            if (filesize($_FILES['file']['tmp_name'])<1024*1024*3) { // Cleanup possible line ending problems, but only if file not too big
+                $fixed_contents = unixify_line_format(file_get_contents($_FILES['file']['tmp_name']));
+                $myfile = @fopen($_FILES['file']['tmp_name'],'wb');
+                if ($myfile !== false) {
+                    fwrite($myfile,$fixed_contents);
+                    fclose($myfile);
+                }
+            }
 
-			@ini_set('auto_detect_line_endings','1');
-			$myfile=fopen($_FILES['file']['tmp_name'],'rt');
-			$del=',';
-			$csv_test_line=fgetcsv($myfile,4096,$del);
-			if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
-				$del=';';
-			rewind($myfile);
+            @ini_set('auto_detect_line_endings','1');
+            $myfile = fopen($_FILES['file']['tmp_name'],'rt');
+            $del = ',';
+            $csv_test_line = fgetcsv($myfile,4096,$del);
+            if ((count($csv_test_line) == 1) && (strpos($csv_test_line[0],';') !== false)) {
+                $del = ';';
+            }
+            rewind($myfile);
 
-			$email_index=0;
-			$forename_index=1;
-			$surname_index=2;
-			$username_index=3;
-			$hash_index=6;
-			$salt_index=7;
-			$lang_index=8;
-			$code_confirm_index=9;
-			$jointime_index=10;
+            $email_index = 0;
+            $forename_index = 1;
+            $surname_index = 2;
+            $username_index = 3;
+            $hash_index = 6;
+            $salt_index = 7;
+            $lang_index = 8;
+            $code_confirm_index = 9;
+            $jointime_index = 10;
 
-			$count=0;
-			$count2=0;
+            $count = 0;
+            $count2 = 0;
 
-			do
-			{
-				$i=0;
-				$_csv_data=array();
-				while (($csv_line=fgetcsv($myfile,4096,$del))!==false)
-				{
-					$_csv_data[]=$csv_line;
-					$i++;
-					if ($i==500) break;
-				}
+            do {
+                $i = 0;
+                $_csv_data = array();
+                while (($csv_line = fgetcsv($myfile,4096,$del)) !== false) {
+                    $_csv_data[] = $csv_line;
+                    $i++;
+                    if ($i == 500) {
+                        break;
+                    }
+                }
 
-				// Process data
-				foreach ($_csv_data as $i=>$csv_line)
-				{
-					if (($i<=1) && (count($csv_line)>=1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@')===false))
-					{
-						foreach ($csv_line as $j=>$val)
-						{
-							if (in_array(strtolower($val),array('e-mail','email','email address','e-mail address',strtolower(do_lang('EMAIL_ADDRESS'))))) $email_index=$j;
-							if (in_array(strtolower($val),array('forename','forenames','first name',strtolower(do_lang('FORENAME'))))) $forename_index=$j;
-							if (in_array(strtolower($val),array('surname','surnames','last name',strtolower(do_lang('SURNAME'))))) $surname_index=$j;
-							if (in_array(strtolower($val),array('username',strtolower(do_lang('NAME'))))) $username_index=$j;
-							if (in_array(strtolower($val),array('hash','password','pass','code','secret',strtolower(do_lang('PASSWORD_HASH'))))) $hash_index=$j;
-							if (in_array(strtolower($val),array('salt',strtolower(do_lang('SALT'))))) $salt_index=$j;
-							if (in_array(strtolower($val),array('lang','language',strtolower(do_lang('LANGUAGE'))))) $hash_index=$j;
-							if (in_array(strtolower($val),array('confirm code',strtolower(do_lang('CONFIRM_CODE'))))) $code_confirm_index=$j;
-							if ((strpos(strtolower($val),'time')!==false) || (strpos(strtolower($val),'date')!==false) || (strtolower($val)==do_lang('JOIN_DATE'))) $jointime_index=$j;
-						}
-						continue;
-					}
+                // Process data
+                foreach ($_csv_data as $i => $csv_line) {
+                    if (($i <= 1) && (count($csv_line) >= 1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@') === false)) {
+                        foreach ($csv_line as $j => $val) {
+                            if (in_array(strtolower($val),array('e-mail','email','email address','e-mail address',strtolower(do_lang('EMAIL_ADDRESS'))))) {
+                                $email_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('forename','forenames','first name',strtolower(do_lang('FORENAME'))))) {
+                                $forename_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('surname','surnames','last name',strtolower(do_lang('SURNAME'))))) {
+                                $surname_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('username',strtolower(do_lang('NAME'))))) {
+                                $username_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('hash','password','pass','code','secret',strtolower(do_lang('PASSWORD_HASH'))))) {
+                                $hash_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('salt',strtolower(do_lang('SALT'))))) {
+                                $salt_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('lang','language',strtolower(do_lang('LANGUAGE'))))) {
+                                $hash_index = $j;
+                            }
+                            if (in_array(strtolower($val),array('confirm code',strtolower(do_lang('CONFIRM_CODE'))))) {
+                                $code_confirm_index = $j;
+                            }
+                            if ((strpos(strtolower($val),'time') !== false) || (strpos(strtolower($val),'date') !== false) || (strtolower($val) == do_lang('JOIN_DATE'))) {
+                                $jointime_index = $j;
+                            }
+                        }
+                        continue;
+                    }
 
-					if ((count($csv_line)>=1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@')!==false))
-					{
-						$email=$csv_line[$email_index];
-						$forename=array_key_exists($forename_index,$csv_line)?$csv_line[$forename_index]:'';
-						if ($forename==$email)
-						{
-							$forename=ucfirst(strtolower(preg_replace('#^(\w+)([^\w].*)?$#','\\1',$forename)));
-							if (in_array($forename,array('Sales','Info','Business','Enquiries','Admin'))) $forename='';
-						}
-						$surname=array_key_exists($surname_index,$csv_line)?$csv_line[$surname_index]:'';
-						$username=array_key_exists($username_index,$csv_line)?$csv_line[$username_index]:'';
-						$hash=array_key_exists($hash_index,$csv_line)?$csv_line[$hash_index]:'';
-						$salt=array_key_exists($salt_index,$csv_line)?$csv_line[$salt_index]:'';
-						$lang=(array_key_exists($lang_index,$csv_line) && ((file_exists(get_custom_file_base().'/lang/'.$csv_line[$lang_index])) || (file_exists(get_custom_file_base().'/lang_custom/'.$csv_line[$lang_index]))))?$csv_line[$lang_index]:$_lang;
-						if ($lang=='') $lang=$_lang;
-						$code_confirm=array_key_exists($code_confirm_index,$csv_line)?intval($csv_line[$code_confirm_index]):0;
-						$jointime=array_key_exists($jointime_index,$csv_line)?strtotime($csv_line[$jointime_index]):time();
-						if ($jointime===false) $jointime=time();
+                    if ((count($csv_line) >= 1) && (!is_null($csv_line[$email_index])) && (strpos($csv_line[$email_index],'@') !== false)) {
+                        $email = $csv_line[$email_index];
+                        $forename = array_key_exists($forename_index,$csv_line)?$csv_line[$forename_index]:'';
+                        if ($forename == $email) {
+                            $forename = ucfirst(strtolower(preg_replace('#^(\w+)([^\w].*)?$#','\\1',$forename)));
+                            if (in_array($forename,array('Sales','Info','Business','Enquiries','Admin'))) {
+                                $forename = '';
+                            }
+                        }
+                        $surname = array_key_exists($surname_index,$csv_line)?$csv_line[$surname_index]:'';
+                        $username = array_key_exists($username_index,$csv_line)?$csv_line[$username_index]:'';
+                        $hash = array_key_exists($hash_index,$csv_line)?$csv_line[$hash_index]:'';
+                        $salt = array_key_exists($salt_index,$csv_line)?$csv_line[$salt_index]:'';
+                        $lang = (array_key_exists($lang_index,$csv_line) && ((file_exists(get_custom_file_base() . '/lang/' . $csv_line[$lang_index])) || (file_exists(get_custom_file_base() . '/lang_custom/' . $csv_line[$lang_index]))))?$csv_line[$lang_index]:$_lang;
+                        if ($lang == '') {
+                            $lang = $_lang;
+                        }
+                        $code_confirm = array_key_exists($code_confirm_index,$csv_line)?intval($csv_line[$code_confirm_index]):0;
+                        $jointime = array_key_exists($jointime_index,$csv_line)?strtotime($csv_line[$jointime_index]):time();
+                        if ($jointime === false) {
+                            $jointime = time();
+                        }
 
-						$test=$GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','id',array('email'=>$email));
-						if (is_null($test))
-						{
-							$GLOBALS['SITE_DB']->query_insert('newsletter',array(
-								'email'=>$email,
-								'join_time'=>$jointime,
-								'code_confirm'=>$code_confirm,
-								'the_password'=>$hash,
-								'pass_salt'=>$salt,
-								'language'=>$lang,
-								'n_forename'=>$forename,
-								'n_surname'=>$surname,
-							));
-							$count++;
-						} else
-						{
-							$GLOBALS['SITE_DB']->query_update('newsletter',array(
-								'n_forename'=>$forename,
-								'n_surname'=>$surname,
-							),array(
-								'email'=>$email,
-							),'',1);
-						}
+                        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','id',array('email' => $email));
+                        if (is_null($test)) {
+                            $GLOBALS['SITE_DB']->query_insert('newsletter',array(
+                                'email' => $email,
+                                'join_time' => $jointime,
+                                'code_confirm' => $code_confirm,
+                                'the_password' => $hash,
+                                'pass_salt' => $salt,
+                                'language' => $lang,
+                                'n_forename' => $forename,
+                                'n_surname' => $surname,
+                            ));
+                            $count++;
+                        } else {
+                            $GLOBALS['SITE_DB']->query_update('newsletter',array(
+                                'n_forename' => $forename,
+                                'n_surname' => $surname,
+                            ),array(
+                                'email' => $email,
+                            ),'',1);
+                        }
 
-						// In case $email is already a subscriber, we delete first
-						$GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array(
-							'newsletter_id'=>$newsletter_id,
-							'email'=>$email,
-						),'',1);
-						if ($level!=0) // Allow deletion CSV via setting subscription level to 0. So we only reinsert if NOT deletion.
-						{
-							$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array(
-								'newsletter_id'=>$newsletter_id,
-								'the_level'=>$level,
-								'email'=>$email,
-							));
-						}
-						$count2++;
-					}
-				}
-			}
-			while (count($_csv_data)!=0);
+                        // In case $email is already a subscriber, we delete first
+                        $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array(
+                            'newsletter_id' => $newsletter_id,
+                            'email' => $email,
+                        ),'',1);
+                        if ($level != 0) { // Allow deletion CSV via setting subscription level to 0. So we only reinsert if NOT deletion.
+                            $GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array(
+                                'newsletter_id' => $newsletter_id,
+                                'the_level' => $level,
+                                'email' => $email,
+                            ));
+                        }
+                        $count2++;
+                    }
+                }
+            } while (count($_csv_data) != 0);
 
-			fclose($myfile);
-		} else
-		{
-			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
-		}
+            fclose($myfile);
+        } else {
+            warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+        }
 
-		return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_IMPORTED_THIS',integer_format($count),integer_format($count2)));
-	}
+        return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_IMPORTED_THIS',integer_format($count),integer_format($count2)));
+    }
 
-	/**
+    /**
 	 * The UI to select an IMAP server for bounce filtering.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function bounce_filter_a()
-	{
-		if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
+    public function bounce_filter_a()
+    {
+        if (!function_exists('imap_open')) {
+            warn_exit(do_lang_tempcode('IMAP_NEEDED'));
+        }
 
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
 
-		url_default_parameters__enable();
+        url_default_parameters__enable();
 
-		$fields->attach(form_input_line(do_lang_tempcode('HOST'),new ocp_tempcode(),'server','localhost',true));
-		$fields->attach(form_input_line(do_lang_tempcode('USERNAME'),new ocp_tempcode(),'username','',true));
-		$fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),new ocp_tempcode(),'password',true));
-		$fields->attach(form_input_integer(do_lang_tempcode('PORT'),new ocp_tempcode(),'port',143,true));
+        $fields->attach(form_input_line(do_lang_tempcode('HOST'),new ocp_tempcode(),'server','localhost',true));
+        $fields->attach(form_input_line(do_lang_tempcode('USERNAME'),new ocp_tempcode(),'username','',true));
+        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'),new ocp_tempcode(),'password',true));
+        $fields->attach(form_input_integer(do_lang_tempcode('PORT'),new ocp_tempcode(),'port',143,true));
 
-		url_default_parameters__disable();
+        url_default_parameters__disable();
 
-		$submit_name=do_lang_tempcode('PROCEED');
-		$post_url=get_self_url();
+        $submit_name = do_lang_tempcode('PROCEED');
+        $post_url = get_self_url();
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_b'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'87f79d177931bab13f614b9cb24fb877','SKIP_VALIDATION'=>true,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	}
+        $post_url = build_url(array('page' => '_SELF','type' => 'bounce_filter_b'),'_SELF');
+        return do_template('FORM_SCREEN',array('_GUID' => '87f79d177931bab13f614b9cb24fb877','SKIP_VALIDATION' => true,'HIDDEN' => '','TITLE' => $this->title,'TEXT' => do_lang_tempcode('ENTER_IMAP_DETAILS'),'FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The UI to select an inbox for bounce filtering.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function bounce_filter_b()
-	{
-		if (!function_exists('imap_open')) warn_exit(do_lang_tempcode('IMAP_NEEDED'));
+    public function bounce_filter_b()
+    {
+        if (!function_exists('imap_open')) {
+            warn_exit(do_lang_tempcode('IMAP_NEEDED'));
+        }
 
-		$username=post_param('username');
-		$password=post_param('password');
-		$server=post_param('server');
-		$port=post_param_integer('port');
+        $username = post_param('username');
+        $password = post_param('password');
+        $server = post_param('server');
+        $port = post_param_integer('port');
 
-		if (strpos($server,'pop')!==false)
-		{
-			$server_special_details=($server=='pop.gmail.com')?'/pop3/ssl':'/pop3';
-			$server_spec='{'.$server.':'.strval($port).''.$server_special_details.'}';
-		} else
-		{
-			$server_special_details=($server=='imap.gmail.com' || $port==993)?'/ssl/novalidate-cert':'/novalidate-cert';
-			$server_spec='{'.$server.':'.strval($port).'/imap/readonly'.$server_special_details.'}';
-		}
-		$mbox=@imap_open($server_spec.'INBOX',$username,$password);
-		if ($mbox===false)
-		{
-		   warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
-		}
-		$_folders=imap_list($mbox,$server_spec,'*');
+        if (strpos($server,'pop') !== false) {
+            $server_special_details = ($server == 'pop.gmail.com')?'/pop3/ssl':'/pop3';
+            $server_spec = '{' . $server . ':' . strval($port) . '' . $server_special_details . '}';
+        } else {
+            $server_special_details = ($server == 'imap.gmail.com' || $port == 993)?'/ssl/novalidate-cert':'/novalidate-cert';
+            $server_spec = '{' . $server . ':' . strval($port) . '/imap/readonly' . $server_special_details . '}';
+        }
+        $mbox = @imap_open($server_spec . 'INBOX',$username,$password);
+        if ($mbox === false) {
+            warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
+        }
+        $_folders = imap_list($mbox,$server_spec,'*');
 
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
 
-		$folders=new ocp_tempcode();
-		foreach ($_folders as $folder)
-		{
-			$label=preg_replace('#@.*$#','',preg_replace('#\{[^{}]+\}#','',$folder));
-			$folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce')!==false,$label));
-		}
-		$fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'),new ocp_tempcode(),'box',$folders));
+        $folders = new ocp_tempcode();
+        foreach ($_folders as $folder) {
+            $label = preg_replace('#@.*$#','',preg_replace('#\{[^{}]+\}#','',$folder));
+            $folders->attach(form_input_list_entry($folder,strpos(strtolower($folder),'bounce') !== false,$label));
+        }
+        $fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'),new ocp_tempcode(),'box',$folders));
 
-		$submit_name=do_lang_tempcode('PROCEED');
-		$post_url=get_self_url();
+        $submit_name = do_lang_tempcode('PROCEED');
+        $post_url = get_self_url();
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_c'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'69437ad3611c0ee55d09907985df8205','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	}
+        $post_url = build_url(array('page' => '_SELF','type' => 'bounce_filter_c'),'_SELF');
+        return do_template('FORM_SCREEN',array('_GUID' => '69437ad3611c0ee55d09907985df8205','SKIP_VALIDATION' => true,'HIDDEN' => build_keep_post_fields(),'TITLE' => $this->title,'TEXT' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The UI to confirm which subscribers to prune.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function bounce_filter_c()
-	{
-		disable_php_memory_limit(); // In case of a huge number
+    public function bounce_filter_c()
+    {
+        disable_php_memory_limit(); // In case of a huge number
 
-		$username=post_param('username');
-		$password=post_param('password');
-		$server=post_param('server');
-		$port=post_param_integer('port');
-		$box=post_param('box');
+        $username = post_param('username');
+        $password = post_param('password');
+        $server = post_param('server');
+        $port = post_param_integer('port');
+        $box = post_param('box');
 
-		$mbox=@imap_open($box,$username,$password);
-		if ($mbox===false)
-		{
-			warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
-		}
+        $mbox = @imap_open($box,$username,$password);
+        if ($mbox === false) {
+            warn_exit(do_lang_tempcode('IMAP_ERROR',imap_last_error()));
+        }
 
-		$fields='';//new ocp_tempcode();
-		require_code('form_templates');
+        $fields = '';//new ocp_tempcode();
+        require_code('form_templates');
 
-		$all_subscribers=array();
-		$all_subscribers+=collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
-		if (get_forum_type()=='ocf')
-			$all_subscribers+=collapse_2d_complexity('m_email_address','id',$GLOBALS['FORUM_DB']->query_select('f_members',array('m_email_address','id'),array('m_allow_emails_from_staff'=>1)));
+        $all_subscribers = array();
+        $all_subscribers += collapse_2d_complexity('email','id',$GLOBALS['SITE_DB']->query_select('newsletter',array('email','id')));
+        if (get_forum_type() == 'ocf') {
+            $all_subscribers += collapse_2d_complexity('m_email_address','id',$GLOBALS['FORUM_DB']->query_select('f_members',array('m_email_address','id'),array('m_allow_emails_from_staff' => 1)));
+        }
 
-		$headers=imap_search($mbox,'UNDELETED');
-		if ($headers===false) $headers=array();
-		$num=0;
-		foreach ($headers as $val)
-		{
-		   $msg=imap_body($mbox,$val);
-		   $matches=array();
-		   $num_matches=preg_match_all("#(?<!(Message-ID|Content-ID): )<([^\"\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
-		   if ($num_matches!=0)
-		   {
-				$overview=imap_headerinfo($mbox,$val);
-				$body=imap_body($mbox,$val);
-				$checked=(strpos($body,'X-Failed-Recipients')!==false) || (strpos($body,'5.1.1')!==false) || (strpos($body,'5.1.6')!==false) || (strpos($body,'5.7.1')!==false);
+        $headers = imap_search($mbox,'UNDELETED');
+        if ($headers === false) {
+            $headers = array();
+        }
+        $num = 0;
+        foreach ($headers as $val) {
+            $msg = imap_body($mbox,$val);
+            $matches = array();
+            $num_matches = preg_match_all("#(?<!(Message-ID|Content-ID): )<([^\"\n<>@]+@[^\n<>@]+)>#",$msg,$matches);
+            if ($num_matches != 0) {
+                $overview = imap_headerinfo($mbox,$val);
+                $body = imap_body($mbox,$val);
+                $checked = (strpos($body,'X-Failed-Recipients') !== false) || (strpos($body,'5.1.1') !== false) || (strpos($body,'5.1.6') !== false) || (strpos($body,'5.7.1') !== false);
 
-		      for ($i=0;$i<$num_matches;$i++)
-		      {
-		         $m=$matches[2][$i];
-		         $m=str_replace('@localhost.localdomain','',$m);
-		         if (($m!=get_option('staff_address')) && (array_key_exists($m,$all_subscribers)))
-		         {
-						$tick=form_input_tick($m,$overview->subject.'.','email_'.strval($num),$checked,NULL,$m);
-						$fields.=$tick->evaluate(); // HTMLHTML
-						//$fields->attach($tick);
-						$num++;
-						unset($all_subscribers[$m]); // So as to make the list no longer than needed; each subscriber only considered once
-		         }
-		      }
-		   }
-		}
-		imap_close($mbox);
+                for ($i = 0;$i<$num_matches;$i++) {
+                    $m = $matches[2][$i];
+                    $m = str_replace('@localhost.localdomain','',$m);
+                    if (($m != get_option('staff_address')) && (array_key_exists($m,$all_subscribers))) {
+                        $tick = form_input_tick($m,$overview->subject . '.','email_' . strval($num),$checked,null,$m);
+                        $fields .= $tick->evaluate(); // HTMLHTML
+                        //$fields->attach($tick);
+                        $num++;
+                        unset($all_subscribers[$m]); // So as to make the list no longer than needed; each subscriber only considered once
+                    }
+                }
+            }
+        }
+        imap_close($mbox);
 
-		if ($num==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
+        if ($num == 0) {
+            inform_exit(do_lang_tempcode('NO_ENTRIES'));
+        }
 
-		$submit_name=do_lang_tempcode('PROCEED');
-		$post_url=get_self_url();
+        $submit_name = do_lang_tempcode('PROCEED');
+        $post_url = get_self_url();
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_d'),'_SELF');
-		return do_template('FORM_SCREEN',array('_GUID'=>'a517b87e2080204262d0bcf7fcebdf99','SKIP_VALIDATION'=>true,'HIDDEN'=>build_keep_post_fields(),'TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('BOUNCE_WHICH'),'FIELDS'=>$fields,'SUBMIT_ICON'=>'buttons__proceed','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	}
+        $post_url = build_url(array('page' => '_SELF','type' => 'bounce_filter_d'),'_SELF');
+        return do_template('FORM_SCREEN',array('_GUID' => 'a517b87e2080204262d0bcf7fcebdf99','SKIP_VALIDATION' => true,'HIDDEN' => build_keep_post_fields(),'TITLE' => $this->title,'TEXT' => do_lang_tempcode('BOUNCE_WHICH'),'FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The actualiser to prune subscribers.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function bounce_filter_d()
-	{
-		$title=get_screen_title('BOUNCE_FILTER');
+    public function bounce_filter_d()
+    {
+        $title = get_screen_title('BOUNCE_FILTER');
 
-		$delete_sql='';
-		$delete_sql_members='';
+        $delete_sql = '';
+        $delete_sql_members = '';
 
-		foreach (array_keys($_POST) as $key)
-		{
-			if (substr($key,0,6)=='email_')
-			{
-			   if ($delete_sql!='')
-				{
-					$delete_sql.=' OR ';
-					$delete_sql_members.=' OR ';
-				}
-			   $delete_sql.=db_string_equal_to('email',post_param($key));
-			   $delete_sql_members.=db_string_equal_to('m_email_address',post_param($key));
-			}
-		}
-		if ($delete_sql=='') warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+        foreach (array_keys($_POST) as $key) {
+            if (substr($key,0,6) == 'email_') {
+                if ($delete_sql != '') {
+                    $delete_sql .= ' OR ';
+                    $delete_sql_members .= ' OR ';
+                }
+                $delete_sql .= db_string_equal_to('email',post_param($key));
+                $delete_sql_members .= db_string_equal_to('m_email_address',post_param($key));
+            }
+        }
+        if ($delete_sql == '') {
+            warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+        }
 
-		$query='DELETE FROM '.get_table_prefix().'newsletter WHERE '.$delete_sql;
-		$GLOBALS['SITE_DB']->query($query);
+        $query = 'DELETE FROM ' . get_table_prefix() . 'newsletter WHERE ' . $delete_sql;
+        $GLOBALS['SITE_DB']->query($query);
 
-		$query='DELETE FROM '.get_table_prefix().'newsletter_subscribe WHERE '.$delete_sql;
-		$GLOBALS['SITE_DB']->query($query);
+        $query = 'DELETE FROM ' . get_table_prefix() . 'newsletter_subscribe WHERE ' . $delete_sql;
+        $GLOBALS['SITE_DB']->query($query);
 
-		if (get_forum_type()=='ocf')
-		{
-			$query='UPDATE '.get_table_prefix().'f_members SET m_allow_emails_from_staff=0 WHERE '.$delete_sql_members;
-			$GLOBALS['FORUM_DB']->query($query);
-		}
+        if (get_forum_type() == 'ocf') {
+            $query = 'UPDATE ' . get_table_prefix() . 'f_members SET m_allow_emails_from_staff=0 WHERE ' . $delete_sql_members;
+            $GLOBALS['FORUM_DB']->query($query);
+        }
 
-		return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
-	}
+        return inform_screen($this->title,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The UI to view subscribers on the newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function view_subscribers()
-	{
-		$lang=choose_language($this->title);
-		if (is_object($lang)) return $lang;
+    public function view_subscribers()
+    {
+        $lang = choose_language($this->title);
+        if (is_object($lang)) {
+            return $lang;
+        }
 
-		$id=either_param('id',NULL);
-		$level=get_param_integer('level',NULL);
+        $id = either_param('id',null);
+        $level = get_param_integer('level',null);
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		require_code('crypt');
+        require_code('crypt');
 
-		// Select newsletter
-		if (is_null($id))
-		{
-			$fields=new ocp_tempcode();
-			require_code('form_templates');
+        // Select newsletter
+        if (is_null($id)) {
+            $fields = new ocp_tempcode();
+            require_code('form_templates');
 
-			// Selection
-			$newsletters=new ocp_tempcode();
-			$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
-			foreach ($rows as $newsletter)
-				$newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,get_translated_text($newsletter['title'])));
-			if (get_forum_type()=='ocf')
-			{
-				$newsletters->attach(form_input_list_entry('-1',false,do_lang_tempcode('NEWSLETTER_OCF')));
-				$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-				foreach ($groups as $group_id=>$group)
-				{
-					if ($group_id!=db_get_first_id())
-					{
-						$map=array();
-						$map['g'.strval($group_id)]=1;
-						$_c=newsletter_who_send_to($map,$lang,0,0);
-						$c6=$_c[6]['g'.strval($group_id)];
-						if ($c6!=0)
-							$newsletters->attach(form_input_list_entry('g'.strval($group_id),false,do_lang_tempcode('THIS_WITH',do_lang_tempcode('GROUP'),make_string_tempcode(escape_html($group)))));
-					}
-				}
-			}
-			if ($newsletters->is_empty()) inform_exit(do_lang_tempcode('NO_CATEGORIES'));
-			$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
+            // Selection
+            $newsletters = new ocp_tempcode();
+            $rows = $GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+            foreach ($rows as $newsletter) {
+                $newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,get_translated_text($newsletter['title'])));
+            }
+            if (get_forum_type() == 'ocf') {
+                $newsletters->attach(form_input_list_entry('-1',false,do_lang_tempcode('NEWSLETTER_OCF')));
+                $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+                foreach ($groups as $group_id => $group) {
+                    if ($group_id != db_get_first_id()) {
+                        $map = array();
+                        $map['g' . strval($group_id)] = 1;
+                        $_c = newsletter_who_send_to($map,$lang,0,0);
+                        $c6 = $_c[6]['g' . strval($group_id)];
+                        if ($c6 != 0) {
+                            $newsletters->attach(form_input_list_entry('g' . strval($group_id),false,do_lang_tempcode('THIS_WITH',do_lang_tempcode('GROUP'),make_string_tempcode(escape_html($group)))));
+                        }
+                    }
+                }
+            }
+            if ($newsletters->is_empty()) {
+                inform_exit(do_lang_tempcode('NO_CATEGORIES'));
+            }
+            $fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters));
 
-			// CSV option
-			$fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_AS_CSV'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_AS_CSV'),'csv',false));
+            // CSV option
+            $fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_AS_CSV'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_AS_CSV'),'csv',false));
 
-			$submit_name=do_lang_tempcode('VIEW_SUBSCRIBERS');
-			$post_url=get_self_url();
+            $submit_name = do_lang_tempcode('VIEW_SUBSCRIBERS');
+            $post_url = get_self_url();
 
-			$hidden=new ocp_tempcode();
-			$hidden->attach(form_input_hidden('lang',$lang));
+            $hidden = new ocp_tempcode();
+            $hidden->attach(form_input_hidden('lang',$lang));
 
-			$prune_url=build_url(array('page'=>'_SELF','type'=>'bounce_filter_a'),'_SELF');
-			return do_template('FORM_SCREEN',array(
-				'_GUID'=>'0100ae6565474bca0669de1654b6efcf',
-				'GET'=>true,
-				'SKIP_VALIDATION'=>true,
-				'HIDDEN'=>$hidden,
-				'TITLE'=>$this->title,
-				'TEXT'=>do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),
-				'FIELDS'=>$fields,
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>$submit_name,
-				'URL'=>$post_url,
-			));
-		}
+            $prune_url = build_url(array('page' => '_SELF','type' => 'bounce_filter_a'),'_SELF');
+            return do_template('FORM_SCREEN',array(
+                '_GUID' => '0100ae6565474bca0669de1654b6efcf',
+                'GET' => true,
+                'SKIP_VALIDATION' => true,
+                'HIDDEN' => $hidden,
+                'TITLE' => $this->title,
+                'TEXT' => do_lang_tempcode('NEWSLETTER_SUBSCRIBERS_FORM',escape_html($prune_url->evaluate())),
+                'FIELDS' => $fields,
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => $submit_name,
+                'URL' => $post_url,
+            ));
+        }
 
-		// Send to CSV file?
-		$csv=either_param_integer('csv',0);
-		if ($csv==1)
-		{
-			$filename='subscribers_'.$id.'.csv';
+        // Send to CSV file?
+        $csv = either_param_integer('csv',0);
+        if ($csv == 1) {
+            $filename = 'subscribers_' . $id . '.csv';
 
-			header('Content-type: text/csv');
-			header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($filename))).'"');
+            header('Content-type: text/csv');
+            header('Content-Disposition: attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($filename))) . '"');
 
-			if (ocp_srv('REQUEST_METHOD')=='HEAD') exit();
+            if (ocp_srv('REQUEST_METHOD') == 'HEAD') {
+                exit();
+            }
 
-			@ini_set('ocproducts.xss_detect','0');
-		}
+            @ini_set('ocproducts.xss_detect','0');
+        }
 
-		// Show subscribers
-		$levels=is_null($level)?(($id=='-1' || substr($id,0,1)=='g')?array(4):((get_option('interest_levels')=='1')?array(1,2,3,4):array(4))):array($level);
-		$outs=array();
-		foreach ($levels as $level)
-		{
-			$max=get_param_integer('max_'.(is_null($level)?'':strval($level)),100);
-			$start=get_param_integer('start_'.(is_null($level)?'':strval($level)),0);
+        // Show subscribers
+        $levels = is_null($level)?(($id == '-1' || substr($id,0,1) == 'g')?array(4):((get_option('interest_levels') == '1')?array(1,2,3,4):array(4))):array($level);
+        $outs = array();
+        foreach ($levels as $level) {
+            $max = get_param_integer('max_' . (is_null($level)?'':strval($level)),100);
+            $start = get_param_integer('start_' . (is_null($level)?'':strval($level)),0);
 
-			$max_rows=0;
-			if (is_null($level)) // implies all OCF members
-			{
-				$map[$id]=1; // $id will be -1
-				$_c=newsletter_who_send_to($map,$lang,0,0,true);
-				if (isset($_c[6][$id])) $max_rows=$_c[6][$id];
-			} else // implies normal newsletter / usergroup
-			{
-				$map[$id]=$level; // We're requesting that we probe subscribers of $id on $level
-				$_c=newsletter_who_send_to($map,$lang,0,0,true);
-				if (isset($_c[6][$id])) $max_rows=$_c[6][$id];
-			}
+            $max_rows = 0;
+            if (is_null($level)) { // implies all OCF members
+                $map[$id] = 1; // $id will be -1
+                $_c = newsletter_who_send_to($map,$lang,0,0,true);
+                if (isset($_c[6][$id])) {
+                    $max_rows = $_c[6][$id];
+                }
+            } else { // implies normal newsletter / usergroup
+                $map[$id] = $level; // We're requesting that we probe subscribers of $id on $level
+                $_c = newsletter_who_send_to($map,$lang,0,0,true);
+                if (isset($_c[6][$id])) {
+                    $max_rows = $_c[6][$id];
+                }
+            }
 
-			$num=0;
+            $num = 0;
 
-			$start2=0;
+            $start2 = 0;
 
-			do
-			{
-				$map=array();
-				if (is_null($level)) // implies all OCF members
-				{
-					$map[$id]=1; // $id will be -1
-					$_c=newsletter_who_send_to($map,$lang,$start+$start2,$max,true);
-				} else // implies normal newsletter / usergroup
-				{
-					$map[$id]=$level; // We're requesting that we probe subscribers of $id on $level
-					$_c=newsletter_who_send_to($map,$lang,$start+$start2,$max,true);
-				}
-				$rows=$_c[7];
+            do {
+                $map = array();
+                if (is_null($level)) { // implies all OCF members
+                    $map[$id] = 1; // $id will be -1
+                    $_c = newsletter_who_send_to($map,$lang,$start+$start2,$max,true);
+                } else { // implies normal newsletter / usergroup
+                    $map[$id] = $level; // We're requesting that we probe subscribers of $id on $level
+                    $_c = newsletter_who_send_to($map,$lang,$start+$start2,$max,true);
+                }
+                $rows = $_c[7];
 
-				if ($csv==1)
-				{
-					if ($start2==0)
-					{
-						if (!is_null($level)) echo '"LEVEL '.do_lang('NEWSLETTER_'.strval($level)).'"'."\n";
-						echo '"'.str_replace('"','""',do_lang('EMAIL_ADDRESS')).'",'.'"'.str_replace('"','""',do_lang('FORENAME')).'",'.'"'.str_replace('"','""',do_lang('SURNAME')).'",'.'"'.str_replace('"','""',do_lang('NAME')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_SEND_ID')).'",'.'"'.str_replace('"','""',do_lang('NEWSLETTER_HASH')).'",'.'"'.str_replace('"','""',do_lang('PASSWORD_HASH')).'",'.'"'.str_replace('"','""',do_lang('SALT')).'",'.'"'.str_replace('"','""',do_lang('LANGUAGE')).'",'.'"'.str_replace('"','""',do_lang('CONFIRM_CODE')).'",'.'"'.str_replace('"','""',do_lang('JOIN_DATE')).'"'."\n";
-					}
-				} else
-				{
-					$out='';
-				}
+                if ($csv == 1) {
+                    if ($start2 == 0) {
+                        if (!is_null($level)) {
+                            echo '"LEVEL ' . do_lang('NEWSLETTER_' . strval($level)) . '"' . "\n";
+                        }
+                        echo '"' . str_replace('"','""',do_lang('EMAIL_ADDRESS')) . '",' . '"' . str_replace('"','""',do_lang('FORENAME')) . '",' . '"' . str_replace('"','""',do_lang('SURNAME')) . '",' . '"' . str_replace('"','""',do_lang('NAME')) . '",' . '"' . str_replace('"','""',do_lang('NEWSLETTER_SEND_ID')) . '",' . '"' . str_replace('"','""',do_lang('NEWSLETTER_HASH')) . '",' . '"' . str_replace('"','""',do_lang('PASSWORD_HASH')) . '",' . '"' . str_replace('"','""',do_lang('SALT')) . '",' . '"' . str_replace('"','""',do_lang('LANGUAGE')) . '",' . '"' . str_replace('"','""',do_lang('CONFIRM_CODE')) . '",' . '"' . str_replace('"','""',do_lang('JOIN_DATE')) . '"' . "\n";
+                    }
+                } else {
+                    $out = '';
+                }
 
-				foreach ($rows as $r)
-				{
-					$email=array_key_exists('email',$r)?$r['email']:$r['m_email_address'];
-					$forename=array_key_exists('n_forename',$r)?$r['n_forename']:'';
-					$surname=array_key_exists('n_surname',$r)?$r['n_surname']:'';
-					$name=array_key_exists('m_username',$r)?$r['m_username']:'';
+                foreach ($rows as $r) {
+                    $email = array_key_exists('email',$r)?$r['email']:$r['m_email_address'];
+                    $forename = array_key_exists('n_forename',$r)?$r['n_forename']:'';
+                    $surname = array_key_exists('n_surname',$r)?$r['n_surname']:'';
+                    $name = array_key_exists('m_username',$r)?$r['m_username']:'';
 
-					$salt=array_key_exists('pass_salt',$r)?$r['pass_salt']:'';
-					$_lang=array_key_exists('language',$r)?$r['language']:'';
-					$confirm_code=array_key_exists('confirm_code',$r)?$r['confirm_code']:0;
-					$join_time=array_key_exists('join_time',$r)?$r['join_time']:time();
+                    $salt = array_key_exists('pass_salt',$r)?$r['pass_salt']:'';
+                    $_lang = array_key_exists('language',$r)?$r['language']:'';
+                    $confirm_code = array_key_exists('confirm_code',$r)?$r['confirm_code']:0;
+                    $join_time = array_key_exists('join_time',$r)?$r['join_time']:time();
 
-					$send_id=(array_key_exists('m_username',$r)?'m':'n').(array_key_exists('id',$r)?strval($r['id']):$email);
-					$hash=array_key_exists('the_password',$r)?$r['the_password']:'';
-					$unsub=array_key_exists('the_password',$r)?ratchet_hash($r['the_password'],'xunsub'):'';
+                    $send_id = (array_key_exists('m_username',$r)?'m':'n') . (array_key_exists('id',$r)?strval($r['id']):$email);
+                    $hash = array_key_exists('the_password',$r)?$r['the_password']:'';
+                    $unsub = array_key_exists('the_password',$r)?ratchet_hash($r['the_password'],'xunsub'):'';
 
-					if ($csv==1)
-					{
-						echo '"'.str_replace('"','""',$email).'",'.'"'.str_replace('"','""',$forename).'",'.'"'.str_replace('"','""',$surname).'",'.'"'.str_replace('"','""',$name).'",'.'"'.str_replace('"','""',$send_id).'",'.'"'.str_replace('"','""',$unsub).'",'.'"'.str_replace('"','""',$hash).'",'.'"'.str_replace('"','""',$salt).'",'.'"'.str_replace('"','""',$_lang).'",'.'"'.str_replace('"','""',strval($confirm_code)).'",'.'"'.str_replace('"','""',date('Y-m-d h:i:s',$join_time)).'"'."\n";
-					} else
-					{
-						$tpl=do_template('NEWSLETTER_SUBSCRIBER',array('_GUID'=>'ca45867a23cbaa7c6788d3cd2ba2793c','EMAIL'=>$email,'FORENAME'=>$forename,'SURNAME'=>$surname,'NAME'=>$name,'NEWSLETTER_SEND_ID'=>$send_id,'NEWSLETTER_HASH'=>$hash));
-						$out.=$tpl->evaluate();
-					}
-				}
+                    if ($csv == 1) {
+                        echo '"' . str_replace('"','""',$email) . '",' . '"' . str_replace('"','""',$forename) . '",' . '"' . str_replace('"','""',$surname) . '",' . '"' . str_replace('"','""',$name) . '",' . '"' . str_replace('"','""',$send_id) . '",' . '"' . str_replace('"','""',$unsub) . '",' . '"' . str_replace('"','""',$hash) . '",' . '"' . str_replace('"','""',$salt) . '",' . '"' . str_replace('"','""',$_lang) . '",' . '"' . str_replace('"','""',strval($confirm_code)) . '",' . '"' . str_replace('"','""',date('Y-m-d h:i:s',$join_time)) . '"' . "\n";
+                    } else {
+                        $tpl = do_template('NEWSLETTER_SUBSCRIBER',array('_GUID' => 'ca45867a23cbaa7c6788d3cd2ba2793c','EMAIL' => $email,'FORENAME' => $forename,'SURNAME' => $surname,'NAME' => $name,'NEWSLETTER_SEND_ID' => $send_id,'NEWSLETTER_HASH' => $hash));
+                        $out .= $tpl->evaluate();
+                    }
+                }
 
-				$start2+=$max;
-			}
-			while (($csv==1) && (array_key_exists(0,$rows)));
+                $start2 += $max;
+            } while (($csv == 1) && (array_key_exists(0,$rows)));
 
-			if ((count($rows)==0) && ($start2==0))
-			{
-				if ($csv==1)
-				{
-					echo '"('.do_lang('NONE').')"'."\n";
-				} else
-				{
-				}
-			}
+            if ((count($rows) == 0) && ($start2 == 0)) {
+                if ($csv == 1) {
+                    echo '"(' . do_lang('NONE') . ')"' . "\n";
+                } else {
+                }
+            }
 
-			$text=do_lang_tempcode('NEWSLETTER_PEOPLE_ON_LEVEL',((is_numeric($level)) && (intval($level)>0))?make_string_tempcode(escape_html(do_lang('NEWSLETTER_'.strval($level)))):do_lang_tempcode('NA_EM'));
+            $text = do_lang_tempcode('NEWSLETTER_PEOPLE_ON_LEVEL',((is_numeric($level)) && (intval($level)>0))?make_string_tempcode(escape_html(do_lang('NEWSLETTER_' . strval($level)))):do_lang_tempcode('NA_EM'));
 
-			if ($csv==1)
-			{
-			} else
-			{
-				require_code('templates_pagination');
-				$pagination=pagination(do_lang_tempcode('VIEW_NEWSLETTER_SUBSCRIBERS'),$start,'start_'.(is_null($level)?'':strval($level)),$max,'max_'.(is_null($level)?'':strval($level)),$max_rows);
+            if ($csv == 1) {
+            } else {
+                require_code('templates_pagination');
+                $pagination = pagination(do_lang_tempcode('VIEW_NEWSLETTER_SUBSCRIBERS'),$start,'start_' . (is_null($level)?'':strval($level)),$max,'max_' . (is_null($level)?'':strval($level)),$max_rows);
 
-				$outs[]=array('PAGINATION'=>$pagination,'SUB'=>$out,'TEXT'=>$text);
-			}
-		}
+                $outs[] = array('PAGINATION' => $pagination,'SUB' => $out,'TEXT' => $text);
+            }
+        }
 
-		if ($csv==1)
-		{
-			$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
-			exit();
-		}
+        if ($csv == 1) {
+            $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
+            exit();
+        }
 
-		// Work out stats of what domains are used
-		$domains=array();
-		$start=0;
-		do
-		{
-			if (strpos(get_db_type(),'mysql')!==false)
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email','COUNT(*) as cnt'),NULL,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
-			} else
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email'),NULL,500,$start);
-			}
-			foreach ($rows as $row)
-			{
-			   $email=$row['email'];
-			   if (strpos($email,'@')===false) continue;
-			   $domain=substr($email,strpos($email,'@')+1);
-			   if (!is_string($domain)) continue;
-				$cnt=array_key_exists('cnt',$row)?$row['cnt']:1;
-				if (!array_key_exists($domain,$domains)) $domains[$domain]=0;
-			   $domains[$domain]+=$cnt;
-			}
+        // Work out stats of what domains are used
+        $domains = array();
+        $start = 0;
+        do {
+            if (strpos(get_db_type(),'mysql') !== false) {
+                $rows = $GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email','COUNT(*) as cnt'),null,'GROUP BY SUBSTRING_INDEX(email,\'@\',-1)'); // Far less PHP processing
+            } else {
+                $rows = $GLOBALS['SITE_DB']->query_select('newsletter_subscribe',array('DISTINCT email'),null,500,$start);
+            }
+            foreach ($rows as $row) {
+                $email = $row['email'];
+                if (strpos($email,'@') === false) {
+                    continue;
+                }
+                $domain = substr($email,strpos($email,'@')+1);
+                if (!is_string($domain)) {
+                    continue;
+                }
+                $cnt = array_key_exists('cnt',$row)?$row['cnt']:1;
+                if (!array_key_exists($domain,$domains)) {
+                    $domains[$domain] = 0;
+                }
+                $domains[$domain] += $cnt;
+            }
 
-			$start+=500;
-		}
-		while ((array_key_exists(0,$rows)) && (strpos(get_db_type(),'mysql')===false));
-		arsort($domains);
-		foreach ($domains as $key=>$val)
-		{
-			$domains[$key]=strval($val);
-			if (count($domains)>100)
-			{
-				if ($val==1) unset($domains[$key]);
-			}
-		}
+            $start += 500;
+        } while ((array_key_exists(0,$rows)) && (strpos(get_db_type(),'mysql') === false));
+        arsort($domains);
+        foreach ($domains as $key => $val) {
+            $domains[$key] = strval($val);
+            if (count($domains)>100) {
+                if ($val == 1) {
+                    unset($domains[$key]);
+                }
+            }
+        }
 
-		$tpl=do_template('NEWSLETTER_SUBSCRIBERS_SCREEN',array('_GUID'=>'52e5d97d451b622d59f87f021a5b8f01','DOMAINS'=>$domains,'SUBSCRIBERS'=>$outs,'TITLE'=>$this->title));
+        $tpl = do_template('NEWSLETTER_SUBSCRIBERS_SCREEN',array('_GUID' => '52e5d97d451b622d59f87f021a5b8f01','DOMAINS' => $domains,'SUBSCRIBERS' => $outs,'TITLE' => $this->title));
 
-		require_code('templates_internalise_screen');
-		return internalise_own_screen($tpl);
-	}
+        require_code('templates_internalise_screen');
+        return internalise_own_screen($tpl);
+    }
 
-	/**
+    /**
 	 * The UI to create an automated what's new newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function automatic_whats_new()
-	{
-		$lang=choose_language($this->title);
-		if (is_object($lang)) return $lang;
+    public function automatic_whats_new()
+    {
+        $lang = choose_language($this->title);
+        if (is_object($lang)) {
+            return $lang;
+        }
 
-		if (post_param('message','')!='')
-		{
-			return $this->send_gui(post_param('message'));
-		}
+        if (post_param('message','') != '') {
+            return $this->send_gui(post_param('message'));
+        }
 
-		$_hooks=find_all_hooks('modules','admin_newsletter');
+        $_hooks = find_all_hooks('modules','admin_newsletter');
 
-		$chosen_content=post_param_integer('chosen_content',0);
-		if ($chosen_content==0) // Content selection
-		{
-			require_code('form_templates');
+        $chosen_content = post_param_integer('chosen_content',0);
+        if ($chosen_content == 0) { // Content selection
+            require_code('form_templates');
 
-			require_lang('menus');
+            require_lang('menus');
 
-			$fields=new ocp_tempcode();
+            $fields = new ocp_tempcode();
 
-			$_cutoff_time=get_value('newsletter_whatsnew');
-			$cutoff_time=is_null($_cutoff_time)?NULL:intval($_cutoff_time);
-			if (is_null($cutoff_time)) $cutoff_time=time()-60*60*24*365*3;
-			$fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',true,false,true,$cutoff_time,3,intval(date('Y'))-3,NULL));
+            $_cutoff_time = get_value('newsletter_whatsnew');
+            $cutoff_time = is_null($_cutoff_time)?null:intval($_cutoff_time);
+            if (is_null($cutoff_time)) {
+                $cutoff_time = time()-60*60*24*365*3;
+            }
+            $fields->attach(form_input_date(do_lang_tempcode('CUTOFF_DATE'),do_lang_tempcode('DESCRIPTION_CUTOFF_DATE'),'cutoff',true,false,true,$cutoff_time,3,intval(date('Y'))-3,null));
 
-			$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0)==1));
+            $fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0) == 1));
 
-			$chosen_categories='';
-			foreach (array_keys($_hooks) as $hook)
-			{
-				require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
-				$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
-				if (is_null($object)) continue;
+            $chosen_categories = '';
+            foreach (array_keys($_hooks) as $hook) {
+                require_code('hooks/modules/admin_newsletter/' . filter_naughty_harsh($hook));
+                $object = object_factory('Hook_whats_news_' . filter_naughty_harsh($hook),true);
+                if (is_null($object)) {
+                    continue;
+                }
 
-				$done=false;
-				if (method_exists($object,'choose_categories'))
-				{
-					list($cats,$_title)=$object->choose_categories();
-					if (is_object($cats)) $cats=$cats->evaluate($lang);
-					$matches=array();
-					$num_matches=preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#',$cats,$matches);
-					if ($num_matches<500) /*reasonable limit*/
-					{
-						for ($i=0;$i<$num_matches;$i++)
-						{
-							$hook_result=$object->run(0,$lang,$matches[1][$i]);
-							if ($hook_result==array()) continue;
-							list($hook_content,$_title)=$hook_result;
-							if (!$hook_content->is_empty())
-							{
-								$decoded=@html_entity_decode($matches[2][$i],ENT_QUOTES,get_charset());
-								$chosen_categories.=$_title.': '.trim($decoded).' ['.$hook.'/'.$matches[1][$i]."]\n";
-							}
-						}
-						$done=true;
-					}
-				}
-				if (!$done)
-				{
-					$new=$object->run(0,$lang,'');
-					if ($new!=array())
-					{
-						list($hook_content,$_title)=$new;
-						if (!$hook_content->is_empty())
-						{
-							$chosen_categories.=$_title.' ['.$hook."]\n";
-						}
-					}
-				}
-			}
-			$fields->attach(form_input_huge(do_lang_tempcode('CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
+                $done = false;
+                if (method_exists($object,'choose_categories')) {
+                    list($cats,$_title) = $object->choose_categories();
+                    if (is_object($cats)) {
+                        $cats = $cats->evaluate($lang);
+                    }
+                    $matches = array();
+                    $num_matches = preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#',$cats,$matches);
+                    if ($num_matches<500) { /*reasonable limit*/
+                        for ($i = 0;$i<$num_matches;$i++) {
+                            $hook_result = $object->run(0,$lang,$matches[1][$i]);
+                            if ($hook_result == array()) {
+                                continue;
+                            }
+                            list($hook_content,$_title) = $hook_result;
+                            if (!$hook_content->is_empty()) {
+                                $decoded = @html_entity_decode($matches[2][$i],ENT_QUOTES,get_charset());
+                                $chosen_categories .= $_title . ': ' . trim($decoded) . ' [' . $hook . '/' . $matches[1][$i] . "]\n";
+                            }
+                        }
+                        $done = true;
+                    }
+                }
+                if (!$done) {
+                    $new = $object->run(0,$lang,'');
+                    if ($new != array()) {
+                        list($hook_content,$_title) = $new;
+                        if (!$hook_content->is_empty()) {
+                            $chosen_categories .= $_title . ' [' . $hook . "]\n";
+                        }
+                    }
+                }
+            }
+            $fields->attach(form_input_huge(do_lang_tempcode('CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
 
-			$hidden=new ocp_tempcode();
-			$hidden->attach(form_input_hidden('chosen_content','1'));
+            $hidden = new ocp_tempcode();
+            $hidden->attach(form_input_hidden('chosen_content','1'));
 
-			if (cron_installed())
-			{
-				$periodic_options=new ocp_tempcode();
+            if (cron_installed()) {
+                $periodic_options = new ocp_tempcode();
 
-				$current_periodic_newsletters=$GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'));
-				if (count($current_periodic_newsletters)==0)
-				{
-					$extra_help=do_lang('PERIODIC_NEWSLETTER_EMPTY');
-					$periodic_choice_name=do_lang('PERIODIC_CREATE');
-					$periodic_choice_help=do_lang('PERIODIC_CREATE_HELP');
-					$periodic_options->attach(form_input_list_entry('no_change',true,do_lang('DONT_MAKE_PERIODIC_NEWSLETTER'),false,false));
-					$periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
-				}
-				else
-				{
-					$extra_help=do_lang('PERIODIC_NEWSLETTER_EXISTS');
-					$periodic_choice_name=do_lang('PERIODIC_REPLACE');
-					$periodic_choice_help=do_lang('PERIODIC_REPLACE_HELP');
-					$periodic_options->attach(form_input_list_entry('no_change',true,do_lang('LEAVE_PERIODIC_NEWSLETTER'),false,false));
-					$periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
-					foreach ($current_periodic_newsletters as $current_periodic_newsletter)
-					{
-						$periodic_options->attach(form_input_list_entry('remove_existing_'.strval($current_periodic_newsletter['id']),false,do_lang('REMOVE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
-						$periodic_options->attach(form_input_list_entry('replace_existing_'.strval($current_periodic_newsletter['id']),false,do_lang('REPLACE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
-					}
-				}
-				$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
-					'_GUID'=>'9360e476c6fd8ed95176d05b866ee553',
-					'TITLE'=>do_lang('PERIODIC_NEWSLETTER_SETTINGS'),
-					'HELP'=>do_lang('PERIODIC_NEWSLETTER_HELP',$extra_help),
-				)));
+                $current_periodic_newsletters = $GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'));
+                if (count($current_periodic_newsletters) == 0) {
+                    $extra_help = do_lang('PERIODIC_NEWSLETTER_EMPTY');
+                    $periodic_choice_name = do_lang('PERIODIC_CREATE');
+                    $periodic_choice_help = do_lang('PERIODIC_CREATE_HELP');
+                    $periodic_options->attach(form_input_list_entry('no_change',true,do_lang('DONT_MAKE_PERIODIC_NEWSLETTER'),false,false));
+                    $periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
+                } else {
+                    $extra_help = do_lang('PERIODIC_NEWSLETTER_EXISTS');
+                    $periodic_choice_name = do_lang('PERIODIC_REPLACE');
+                    $periodic_choice_help = do_lang('PERIODIC_REPLACE_HELP');
+                    $periodic_options->attach(form_input_list_entry('no_change',true,do_lang('LEAVE_PERIODIC_NEWSLETTER'),false,false));
+                    $periodic_options->attach(form_input_list_entry('make_periodic',false,do_lang('MAKE_PERIODIC_NEWSLETTER'),false,false));
+                    foreach ($current_periodic_newsletters as $current_periodic_newsletter) {
+                        $periodic_options->attach(form_input_list_entry('remove_existing_' . strval($current_periodic_newsletter['id']),false,do_lang('REMOVE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
+                        $periodic_options->attach(form_input_list_entry('replace_existing_' . strval($current_periodic_newsletter['id']),false,do_lang('REPLACE_PERIODIC',$current_periodic_newsletter['np_subject'],strval($current_periodic_newsletter['id'])),false,false));
+                    }
+                }
+                $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+                    '_GUID' => '9360e476c6fd8ed95176d05b866ee553',
+                    'TITLE' => do_lang('PERIODIC_NEWSLETTER_SETTINGS'),
+                    'HELP' => do_lang('PERIODIC_NEWSLETTER_HELP',$extra_help),
+                )));
 
-				$fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,NULL,false,false));
-			}
+                $fields->attach(form_input_list($periodic_choice_name,$periodic_choice_help,'periodic_choice',$periodic_options,null,false,false));
+            }
 
-			return do_template('FORM_SCREEN',array(
-				'_GUID'=>'ce1af424e01219c8dee2a7867c1647ef',
-				'SKIP_VALIDATION'=>true,
-				'HIDDEN'=>$hidden,
-				'TITLE'=>$this->title,
-				'TEXT'=>do_lang_tempcode('SELECT_CATEGORIES_WANTED'),
-				'FIELDS'=>$fields,
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>do_lang_tempcode('NEXT'),
-				'URL'=>get_self_url(false,false,array('lang'=>$lang)),
-			));
-		} else
-		{
-			$cutoff_time=get_input_date('cutoff');
-		}
+            return do_template('FORM_SCREEN',array(
+                '_GUID' => 'ce1af424e01219c8dee2a7867c1647ef',
+                'SKIP_VALIDATION' => true,
+                'HIDDEN' => $hidden,
+                'TITLE' => $this->title,
+                'TEXT' => do_lang_tempcode('SELECT_CATEGORIES_WANTED'),
+                'FIELDS' => $fields,
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => do_lang_tempcode('NEXT'),
+                'URL' => get_self_url(false,false,array('lang' => $lang)),
+            ));
+        } else {
+            $cutoff_time = get_input_date('cutoff');
+        }
 
-		$matches=array();
+        $matches = array();
 
-		// Bit of a hack, but we include the remove option here for simplicity
-		// It has a confirm screen
-		if (preg_match('#^remove\_existing\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
-		{
-			$hidden=new ocp_tempcode();
-			$hidden->attach(form_input_hidden('chosen_content','1'));
-			$hidden->attach(form_input_hidden('periodic_choice','periodic_remove_confirmed_'.$matches[1]));
-			return do_template('PERIODIC_NEWSLETTER_REMOVE',array(
-				'_GUID'=>'4fe61ba93e2a05ae9f987e462687d6d5',
-				'TITLE'=>get_screen_title('REMOVE_PERIODIC_NEWSLETTER'),
-				'URL'=>get_self_url(),
-				'HIDDEN'=>$hidden,
-			));
-		}
-		// It has an actualiser
-		if (preg_match('#^periodic\_remove\_confirmed\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
-		{
-			$GLOBALS['SITE_DB']->query_delete('newsletter_periodic',array('id'=>intval($matches[1])),'',1);
+        // Bit of a hack, but we include the remove option here for simplicity
+        // It has a confirm screen
+        if (preg_match('#^remove\_existing\_(\d+)$#',post_param('periodic_choice',''),$matches) != 0) {
+            $hidden = new ocp_tempcode();
+            $hidden->attach(form_input_hidden('chosen_content','1'));
+            $hidden->attach(form_input_hidden('periodic_choice','periodic_remove_confirmed_' . $matches[1]));
+            return do_template('PERIODIC_NEWSLETTER_REMOVE',array(
+                '_GUID' => '4fe61ba93e2a05ae9f987e462687d6d5',
+                'TITLE' => get_screen_title('REMOVE_PERIODIC_NEWSLETTER'),
+                'URL' => get_self_url(),
+                'HIDDEN' => $hidden,
+            ));
+        }
+        // It has an actualiser
+        if (preg_match('#^periodic\_remove\_confirmed\_(\d+)$#',post_param('periodic_choice',''),$matches) != 0) {
+            $GLOBALS['SITE_DB']->query_delete('newsletter_periodic',array('id' => intval($matches[1])),'',1);
 
-			// We redirect back to the admin_newsletter main page
-			$url=build_url(array('page'=>'admin_newsletter','type'=>'misc','redirected'=>'1'),get_module_zone('admin_newsletter'));
-			return redirect_screen(do_lang('PERIODIC_REMOVED'),$url,do_lang('PERIODIC_REMOVED_TEXT'));
-		}
+            // We redirect back to the admin_newsletter main page
+            $url = build_url(array('page' => 'admin_newsletter','type' => 'misc','redirected' => '1'),get_module_zone('admin_newsletter'));
+            return redirect_screen(do_lang('PERIODIC_REMOVED'),$url,do_lang('PERIODIC_REMOVED_TEXT'));
+        }
 
-		$in_full=post_param_integer('in_full',0);
-		$chosen_categories=post_param('chosen_categories');
-		$message=$this->_generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
+        $in_full = post_param_integer('in_full',0);
+        $chosen_categories = post_param('chosen_categories');
+        $message = $this->_generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time);
 
-		return $this->send_gui($message);
-	}
+        return $this->send_gui($message);
+    }
 
-	/**
+    /**
 	 * Generate Comcode for a what's new newsletter.
 	 *
 	 * @param  LONG_TEXT				Category selection
@@ -1037,879 +1044,866 @@ class Module_admin_newsletter extends standard_crud_module
 	 * @param  TIME					When to cut off content from
 	 * @return tempcode				The Comcode, in template form
 	 */
-	function _generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
-	{
-		$_hooks=find_all_hooks('modules','admin_newsletter');
+    public function _generate_whats_new_comcode($chosen_categories,$in_full,$lang,$cutoff_time)
+    {
+        $_hooks = find_all_hooks('modules','admin_newsletter');
 
-		// Generate Comcode for content selected, drawing on hooks
-		$automatic=array();
-		$i=0;
-		$catarr=explode("\n",$chosen_categories);
-		foreach (array_keys($_hooks) as $hook)
-		{
-			require_code('hooks/modules/admin_newsletter/'.filter_naughty_harsh($hook));
-			$object=object_factory('Hook_whats_news_'.filter_naughty_harsh($hook),true);
-			if (is_null($object)) continue;
-			$found_one_match=false;
-			$last_find_id=mixed();
-			$last_cat_id=NULL;
-			$filter='';
-			foreach ($catarr as $find_id=>$line)
-			{
-				$matches=array();
-				if (preg_match('#\['.preg_quote($hook,'#').'/(.*)\]#',$line,$matches)!=0)
-				{
-					$found_one_match=true;
+        // Generate Comcode for content selected, drawing on hooks
+        $automatic = array();
+        $i = 0;
+        $catarr = explode("\n",$chosen_categories);
+        foreach (array_keys($_hooks) as $hook) {
+            require_code('hooks/modules/admin_newsletter/' . filter_naughty_harsh($hook));
+            $object = object_factory('Hook_whats_news_' . filter_naughty_harsh($hook),true);
+            if (is_null($object)) {
+                continue;
+            }
+            $found_one_match = false;
+            $last_find_id = mixed();
+            $last_cat_id = null;
+            $filter = '';
+            foreach ($catarr as $find_id => $line) {
+                $matches = array();
+                if (preg_match('#\[' . preg_quote($hook,'#') . '/(.*)\]#',$line,$matches) != 0) {
+                    $found_one_match = true;
 
-					if ((!is_null($last_find_id)) && (($find_id!=$last_find_id+1)/* || ($last_cat_id>intval($matches[1]))*/))
-					{
-						$last_cat_id=intval($matches[1]);
+                    if ((!is_null($last_find_id)) && (($find_id != $last_find_id+1)/* || ($last_cat_id>intval($matches[1]))*/)) {
+                        $last_cat_id = intval($matches[1]);
 
-						$temp=$object->run(intval($cutoff_time),$lang,$filter);
-						if ((is_null($temp)) || (count($temp)==0)) continue;
-						if (!$temp[0]->is_empty())
-						{
-							$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
-								'_GUID'=>'bd228cdeafacfffac2d8d98d5f2da565',
-								'I'=>strval($i+1),
-								'TITLE'=>$temp[1],
-								'CONTENT'=>$temp[0],
-								'THUMBNAIL'=>array_key_exists(2,$temp)?$temp[2]:''
-							));
-							$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
-							$i++;
-						}
+                        $temp = $object->run(intval($cutoff_time),$lang,$filter);
+                        if ((is_null($temp)) || (count($temp) == 0)) {
+                            continue;
+                        }
+                        if (!$temp[0]->is_empty()) {
+                            $tmp = do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
+                                '_GUID' => 'bd228cdeafacfffac2d8d98d5f2da565',
+                                'I' => strval($i+1),
+                                'TITLE' => $temp[1],
+                                'CONTENT' => $temp[0],
+                                'THUMBNAIL' => array_key_exists(2,$temp)?$temp[2]:''
+                            ));
+                            $automatic[$last_find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
+                            $i++;
+                        }
 
-						$filter=$matches[1];
-					} else
-					{
-						if ($filter!='') $filter.=',';
-						$filter.=$matches[1];
-					}
+                        $filter = $matches[1];
+                    } else {
+                        if ($filter != '') {
+                            $filter .= ',';
+                        }
+                        $filter .= $matches[1];
+                    }
 
-					$last_find_id=$find_id;
-				}
-			}
-			if (!$found_one_match)
-			{
-				$found=false;
-				foreach ($catarr as $find_id=>$line)
-				{
-					if (strpos($line,'['.$hook.']')!==false)
-					{
-						$found=true;
-						break;
-					}
-				}
-				if (!$found) continue;
+                    $last_find_id = $find_id;
+                }
+            }
+            if (!$found_one_match) {
+                $found = false;
+                foreach ($catarr as $find_id => $line) {
+                    if (strpos($line,'[' . $hook . ']') !== false) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    continue;
+                }
 
-				$temp=$object->run(intval($cutoff_time),$lang,$filter,$in_full);
-				if ((is_null($temp)) || (count($temp)==0)) continue;
-				if (!$temp[0]->is_empty())
-				{
-					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'64c8870e7c75354c07b2e94f299cd38c','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
-					$automatic[$find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
-					$i++;
-				}
-			} elseif ($filter!='')
-			{
-				$temp=$object->run(intval($cutoff_time),$lang,$filter,$in_full);
-				if ((is_null($temp)) || (count($temp)==0)) continue;
-				if (!$temp[0]->is_empty())
-				{
-					$tmp=do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID'=>'8d1e7f448d11853b675a0949b8a0c2c9','I'=>strval($i+1),'TITLE'=>$temp[1],'CONTENT'=>$temp[0]));
-					$automatic[$last_find_id]=$tmp->evaluate($lang); /*FUDGEFUDGE*/
-					$i++;
-				}
-			}
-		}
-		ksort($automatic);
-		$_automatic='';
-		foreach ($automatic as $tp)
-		{
-			$_automatic.=$tp;
-		}
-		$completed=do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID'=>'20f6adc244b04d9e5206682ec4e0cc0f','CONTENT'=>$_automatic));
-		return $completed->evaluate($lang);
-	}
+                $temp = $object->run(intval($cutoff_time),$lang,$filter,$in_full);
+                if ((is_null($temp)) || (count($temp) == 0)) {
+                    continue;
+                }
+                if (!$temp[0]->is_empty()) {
+                    $tmp = do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID' => '64c8870e7c75354c07b2e94f299cd38c','I' => strval($i+1),'TITLE' => $temp[1],'CONTENT' => $temp[0]));
+                    $automatic[$find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
+                    $i++;
+                }
+            } elseif ($filter != '') {
+                $temp = $object->run(intval($cutoff_time),$lang,$filter,$in_full);
+                if ((is_null($temp)) || (count($temp) == 0)) {
+                    continue;
+                }
+                if (!$temp[0]->is_empty()) {
+                    $tmp = do_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array('_GUID' => '8d1e7f448d11853b675a0949b8a0c2c9','I' => strval($i+1),'TITLE' => $temp[1],'CONTENT' => $temp[0]));
+                    $automatic[$last_find_id] = $tmp->evaluate($lang); /*FUDGEFUDGE*/
+                    $i++;
+                }
+            }
+        }
+        ksort($automatic);
+        $_automatic = '';
+        foreach ($automatic as $tp) {
+            $_automatic .= $tp;
+        }
+        $completed = do_template('NEWSLETTER_AUTOMATED_FCOMCODE',array('_GUID' => '20f6adc244b04d9e5206682ec4e0cc0f','CONTENT' => $_automatic));
+        return $completed->evaluate($lang);
+    }
 
-	/**
+    /**
 	 * The UI to send a newsletter.
 	 *
 	 * @param  LONG_TEXT		Default newsletter to put in
 	 * @return tempcode		The UI
 	 */
-	function send_gui($_existing='')
-	{
-		$blocked=newsletter_block_list();
-		if (count($blocked)!=0)
-		{
-			attach_message(do_lang_tempcode('BLOCK_LIST_IN_PLACE',escape_html(number_format(count($blocked)))),'notice');
-		}
+    public function send_gui($_existing = '')
+    {
+        $blocked = newsletter_block_list();
+        if (count($blocked) != 0) {
+            attach_message(do_lang_tempcode('BLOCK_LIST_IN_PLACE',escape_html(number_format(count($blocked)))),'notice');
+        }
 
-		// If this is a periodic newsletter, we make some changes to the regular
-		// language strings.
-		$periodic_action_raw=post_param('periodic_choice','');
-		$periodic_subject='';
-		$defaults=mixed();
-		switch (preg_replace('#\_\d+$#','',$periodic_action_raw))
-		{
-			case 'remove_existing':
-				// Remove whatever is already set. We don't need any changes for
-				// this, but we do need a hidden form field.
-				$periodic_action='remove';
-				break;
-			case 'replace_existing':
-				// Make the current newsletter periodic. This requires language
-				// fiddling.
-				$periodic_action='replace';
-				$periodic_subject=do_lang('PERIODIC_SUBJECT_HELP');
-				$periodic_id=intval(preg_replace('#^[^\d]+#','',$periodic_action_raw));
-				$_defaults=$GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'),array('id'=>$periodic_id),'',1);
-				if (!array_key_exists(0,$_defaults)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-				$defaults=$_defaults[0];
-				break;
-			case 'make_periodic':
-				// Make the current newsletter periodic. This requires language
-				// fiddling.
-				$periodic_action='make';
-				$periodic_subject=do_lang('PERIODIC_SUBJECT_HELP');
-				break;
-			case 'no_change':
-			default:
-				// The default action is to leave the current settings as-is.
-				$periodic_action='none';
-				break;
-		}
+        // If this is a periodic newsletter, we make some changes to the regular
+        // language strings.
+        $periodic_action_raw = post_param('periodic_choice','');
+        $periodic_subject = '';
+        $defaults = mixed();
+        switch (preg_replace('#\_\d+$#','',$periodic_action_raw)) {
+            case 'remove_existing':
+                // Remove whatever is already set. We don't need any changes for
+                // this, but we do need a hidden form field.
+                $periodic_action = 'remove';
+                break;
+            case 'replace_existing':
+                // Make the current newsletter periodic. This requires language
+                // fiddling.
+                $periodic_action = 'replace';
+                $periodic_subject = do_lang('PERIODIC_SUBJECT_HELP');
+                $periodic_id = intval(preg_replace('#^[^\d]+#','',$periodic_action_raw));
+                $_defaults = $GLOBALS['SITE_DB']->query_select('newsletter_periodic',array('*'),array('id' => $periodic_id),'',1);
+                if (!array_key_exists(0,$_defaults)) {
+                    warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+                }
+                $defaults = $_defaults[0];
+                break;
+            case 'make_periodic':
+                // Make the current newsletter periodic. This requires language
+                // fiddling.
+                $periodic_action = 'make';
+                $periodic_subject = do_lang('PERIODIC_SUBJECT_HELP');
+                break;
+            case 'no_change':
+            default:
+                // The default action is to leave the current settings as-is.
+                $periodic_action = 'none';
+                break;
+        }
 
-		$lang=choose_language($this->title);
-		if (is_object($lang)) return $lang;
+        $lang = choose_language($this->title);
+        if (is_object($lang)) {
+            return $lang;
+        }
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'confirm','old_type'=>get_param('type','')),'_SELF');
+        $post_url = build_url(array('page' => '_SELF','type' => 'confirm','old_type' => get_param('type','')),'_SELF');
 
-		$submit_name=do_lang_tempcode('PREVIEW');
+        $submit_name = do_lang_tempcode('PREVIEW');
 
-		$hidden=new ocp_tempcode();
-		$hidden->attach(form_input_hidden('lang',$lang));
+        $hidden = new ocp_tempcode();
+        $hidden->attach(form_input_hidden('lang',$lang));
 
-		// Build up form...
-		// ================
+        // Build up form...
+        // ================
 
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
 
-		$default_subject=get_option('newsletter_title');
-		if (!is_null($defaults)) $default_subject=$defaults['np_subject'];
-		if ($periodic_action!='make' && $periodic_action!='replace')
-			$default_subject.=' - '.get_timezoned_date(time(),false,false,false,true);
-		$default_subject=post_param('subject',$default_subject);
+        $default_subject = get_option('newsletter_title');
+        if (!is_null($defaults)) {
+            $default_subject = $defaults['np_subject'];
+        }
+        if ($periodic_action != 'make' && $periodic_action != 'replace') {
+            $default_subject .= ' - ' . get_timezoned_date(time(),false,false,false,true);
+        }
+        $default_subject = post_param('subject',$default_subject);
 
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('SUBJECT'),do_lang_tempcode('NEWSLETTER_DESCRIPTION_TITLE',$periodic_subject),'subject',$default_subject,true));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('SUBJECT'),do_lang_tempcode('NEWSLETTER_DESCRIPTION_TITLE',$periodic_subject),'subject',$default_subject,true));
 
-		$in_full=post_param_integer('in_full',0);
-		$chosen_categories=post_param('chosen_categories','');
+        $in_full = post_param_integer('in_full',0);
+        $chosen_categories = post_param('chosen_categories','');
 
-		// Newsletter message (complex, as will depend if an automatic periodicial being made, meaning no message defined now)
-		$comcode_given=($_existing!='') && (strpos($_existing,'<html')!==false);
-		$_existing=post_param('message',$_existing);
-		if ($_existing=='')
-		{
-			$from_news=get_param_integer('from_news',-1);
-			if (($from_news!=-1) && (addon_installed('news')))
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('news',array('*'),array('id'=>$from_news),'ORDER BY id DESC',1);
-				if (!array_key_exists(0,$rows))
-				{
-					require_lang('news');
-					return warn_screen(get_screen_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
-				}
-				$myrow=$rows[0];
+        // Newsletter message (complex, as will depend if an automatic periodicial being made, meaning no message defined now)
+        $comcode_given = ($_existing != '') && (strpos($_existing,'<html') !== false);
+        $_existing = post_param('message',$_existing);
+        if ($_existing == '') {
+            $from_news = get_param_integer('from_news',-1);
+            if (($from_news != -1) && (addon_installed('news'))) {
+                $rows = $GLOBALS['SITE_DB']->query_select('news',array('*'),array('id' => $from_news),'ORDER BY id DESC',1);
+                if (!array_key_exists(0,$rows)) {
+                    require_lang('news');
+                    return warn_screen(get_screen_title('NEWS'),do_lang_tempcode('MISSING_RESOURCE'));
+                }
+                $myrow = $rows[0];
 
-				$_existing=get_translated_text($myrow['news_article'],NULL,$lang);
-				if ($_existing=='') $_existing=get_translated_text($myrow['news'],NULL,$lang);
-			}
-			$existing=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f42','CONTENT'=>$_existing,'LANG'=>$lang,'SUBJECT'=>$default_subject));
-		} else
-		{
-			$default=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f44','CONTENT'=>$_existing,'LANG'=>$lang,'SUBJECT'=>$default_subject));
-			if (strpos($default->evaluate(),'<html')!==false && strpos($_existing,'<html')===false) // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
-			{
-				if ($comcode_given)
-				{
-					$default=do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID'=>'53c02947915806e519fe14c318813f46','CONTENT'=>comcode_to_tempcode($_existing),'LANG'=>$lang,'SUBJECT'=>$default_subject));
-				}
-				$existing=$default;
-			} else
-			{
-				$existing=make_string_tempcode($_existing);
-			}
-		}
-		if ($periodic_action=='make' || $periodic_action=='replace')
-		{
-			// We are making a periodic newsletter. This means we need to pass
-			// through the chosen categories
-			if (!is_null($defaults))
-			{
-				$chosen_categories=$defaults['np_message'];
-				$in_full=$defaults['np_in_full'];
+                $_existing = get_translated_text($myrow['news_article'],null,$lang);
+                if ($_existing == '') {
+                    $_existing = get_translated_text($myrow['news'],null,$lang);
+                }
+            }
+            $existing = do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID' => '53c02947915806e519fe14c318813f42','CONTENT' => $_existing,'LANG' => $lang,'SUBJECT' => $default_subject));
+        } else {
+            $default = do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID' => '53c02947915806e519fe14c318813f44','CONTENT' => $_existing,'LANG' => $lang,'SUBJECT' => $default_subject));
+            if (strpos($default->evaluate(),'<html') !== false && strpos($_existing,'<html') === false) { // Our template contains HTML, so we need to pull in that HTML to the edit field (it's a full design email, not a simple encapsulation)
+                if ($comcode_given) {
+                    $default = do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID' => '53c02947915806e519fe14c318813f46','CONTENT' => comcode_to_tempcode($_existing),'LANG' => $lang,'SUBJECT' => $default_subject));
+                }
+                $existing = $default;
+            } else {
+                $existing = make_string_tempcode($_existing);
+            }
+        }
+        if ($periodic_action == 'make' || $periodic_action == 'replace') {
+            // We are making a periodic newsletter. This means we need to pass
+            // through the chosen categories
+            if (!is_null($defaults)) {
+                $chosen_categories = $defaults['np_message'];
+                $in_full = $defaults['np_in_full'];
 
-				$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',$in_full==1));
-				$fields->attach(form_input_huge(do_lang_tempcode('NEWSLETTER_CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
-			} else
-			{
-				$hidden->attach(form_input_hidden('chosen_categories',$chosen_categories));
-				$hidden->attach(form_input_hidden('in_full',strval($in_full)));
-			}
-			if (!is_null(post_param('cutoff',NULL)))
-			{
-				$hidden->attach(form_input_hidden('cutoff',post_param('cutoff')));
-				$hidden->attach(form_input_hidden('cutoff_time',post_param('cutoff_time')));
-			} else
-			{
-				$hidden->attach(form_input_hidden('cutoff_day',post_param('cutoff_day')));
-				$hidden->attach(form_input_hidden('cutoff_month',post_param('cutoff_month')));
-				$hidden->attach(form_input_hidden('cutoff_year',post_param('cutoff_year')));
-				$hidden->attach(form_input_hidden('cutoff_hour',post_param('cutoff_hour')));
-				$hidden->attach(form_input_hidden('cutoff_minute',post_param('cutoff_minute')));
-			}
+                $fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',$in_full == 1));
+                $fields->attach(form_input_huge(do_lang_tempcode('NEWSLETTER_CONTENT'),do_lang('NEWSLETTER_CONTENT_SELECT'),'chosen_categories',$chosen_categories,true));
+            } else {
+                $hidden->attach(form_input_hidden('chosen_categories',$chosen_categories));
+                $hidden->attach(form_input_hidden('in_full',strval($in_full)));
+            }
+            if (!is_null(post_param('cutoff',null))) {
+                $hidden->attach(form_input_hidden('cutoff',post_param('cutoff')));
+                $hidden->attach(form_input_hidden('cutoff_time',post_param('cutoff_time')));
+            } else {
+                $hidden->attach(form_input_hidden('cutoff_day',post_param('cutoff_day')));
+                $hidden->attach(form_input_hidden('cutoff_month',post_param('cutoff_month')));
+                $hidden->attach(form_input_hidden('cutoff_year',post_param('cutoff_year')));
+                $hidden->attach(form_input_hidden('cutoff_hour',post_param('cutoff_hour')));
+                $hidden->attach(form_input_hidden('cutoff_minute',post_param('cutoff_minute')));
+            }
 
-			$hidden->attach(form_input_hidden('message',$existing->evaluate()));
-		} else
-		{
-			$hidden->attach(form_input_hidden('in_full',strval($in_full)));
+            $hidden->attach(form_input_hidden('message',$existing->evaluate()));
+        } else {
+            $hidden->attach(form_input_hidden('in_full',strval($in_full)));
 
-			if (strpos($existing->evaluate(),'<html')===false)
-			{
-				$fields->attach(form_input_huge_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE_NEWSLETTER'),'message',$existing->evaluate(),true));
-			} else
-			{
-				$fields->attach(form_input_huge(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE_NEWSLETTER'),'message',$existing->evaluate(),true));
-			}
-		}
+            if (strpos($existing->evaluate(),'<html') === false) {
+                $fields->attach(form_input_huge_comcode(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE_NEWSLETTER'),'message',$existing->evaluate(),true));
+            } else {
+                $fields->attach(form_input_huge(do_lang_tempcode('MESSAGE'),do_lang_tempcode('DESCRIPTION_MESSAGE_NEWSLETTER'),'message',$existing->evaluate(),true));
+            }
+        }
 
-		// Some general details of how to send
-		if ((addon_installed('calendar')) && ($periodic_action=='none') && (cron_installed()))
-			$fields->attach(form_input_date__scheduler(do_lang_tempcode('DEFER_TIME'),do_lang_tempcode('DESCRIPTION_DEFER_TIME'),'schedule',false,true,true));
-		$from_email=post_param('from_email',get_option('staff_address'));
-		if (!is_null($defaults)) $from_email=post_param('from_email',$defaults['np_from_email']);
-		$fields->attach(form_input_email(do_lang_tempcode('FROM_EMAIL'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_FROM_EMAIL'),'from_email',$from_email,true));
-		$from_name=post_param('from_name',get_site_name());
-		if (!is_null($defaults)) $from_name=post_param('from_name',$defaults['np_from_name']);
-		$fields->attach(form_input_line(do_lang_tempcode('FROM_NAME'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_FROM_NAME'),'from_name',$from_name,true));
-		$_html_only=post_param_integer('html_only',NULL);
-		if (is_null($_html_only))
-		{
-			$html_only=(strpos($existing->evaluate(),'<html')!==false);
-			if (!is_null($defaults)) $html_only=$defaults['np_html_only'];
-		} else $html_only=($_html_only==1);
-		if (get_option('dual_format_newsletters')=='0')
-			$hidden->attach(form_input_hidden('html_only','1'));
-		else
-			$fields->attach(form_input_tick(do_lang_tempcode('HTML_ONLY'),do_lang_tempcode('DESCRIPTION_HTML_ONLY'),'html_only',$html_only));
-		$l=new ocp_tempcode();
-		$priority=post_param_integer('priority',3);
-		if (!is_null($defaults)) $priority=post_param_integer('priority',$defaults['np_priority']);
-		for ($i=1;$i<=5;$i++)
-			$l->attach(form_input_list_entry(strval($i),$i==$priority,do_lang_tempcode('PRIORITY_'.strval($i))));
-		$fields->attach(form_input_list(do_lang_tempcode('PRIORITY'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_PRIORITY'),'priority',$l));
+        // Some general details of how to send
+        if ((addon_installed('calendar')) && ($periodic_action == 'none') && (cron_installed())) {
+            $fields->attach(form_input_date__scheduler(do_lang_tempcode('DEFER_TIME'),do_lang_tempcode('DESCRIPTION_DEFER_TIME'),'schedule',false,true,true));
+        }
+        $from_email = post_param('from_email',get_option('staff_address'));
+        if (!is_null($defaults)) {
+            $from_email = post_param('from_email',$defaults['np_from_email']);
+        }
+        $fields->attach(form_input_email(do_lang_tempcode('FROM_EMAIL'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_FROM_EMAIL'),'from_email',$from_email,true));
+        $from_name = post_param('from_name',get_site_name());
+        if (!is_null($defaults)) {
+            $from_name = post_param('from_name',$defaults['np_from_name']);
+        }
+        $fields->attach(form_input_line(do_lang_tempcode('FROM_NAME'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_FROM_NAME'),'from_name',$from_name,true));
+        $_html_only = post_param_integer('html_only',null);
+        if (is_null($_html_only)) {
+            $html_only = (strpos($existing->evaluate(),'<html') !== false);
+            if (!is_null($defaults)) {
+                $html_only = $defaults['np_html_only'];
+            }
+        } else {
+            $html_only = ($_html_only == 1);
+        }
+        if (get_option('dual_format_newsletters') == '0') {
+            $hidden->attach(form_input_hidden('html_only','1'));
+        } else {
+            $fields->attach(form_input_tick(do_lang_tempcode('HTML_ONLY'),do_lang_tempcode('DESCRIPTION_HTML_ONLY'),'html_only',$html_only));
+        }
+        $l = new ocp_tempcode();
+        $priority = post_param_integer('priority',3);
+        if (!is_null($defaults)) {
+            $priority = post_param_integer('priority',$defaults['np_priority']);
+        }
+        for ($i = 1;$i <= 5;$i++) {
+            $l->attach(form_input_list_entry(strval($i),$i == $priority,do_lang_tempcode('PRIORITY_' . strval($i))));
+        }
+        $fields->attach(form_input_list(do_lang_tempcode('PRIORITY'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_PRIORITY'),'priority',$l));
 
-		// Where to send to
-		$csv_data=post_param('csv_data',NULL);
-		$send_to_help=mixed();
-		if (is_null($csv_data)) // Maybe discern it from passed parameters from search module
-		{
-			$_csv_data=array();
-			$_csv_data[]=array(do_lang('EMAIL_ADDRESS'),do_lang('NAME'),do_lang('NEWSLETTER_SEND_ID'));
-			foreach (array_keys($_POST) as $post_key)
-			{
-				if (!is_string($post_key)) $post_key=strval($post_key);
+        // Where to send to
+        $csv_data = post_param('csv_data',null);
+        $send_to_help = mixed();
+        if (is_null($csv_data)) { // Maybe discern it from passed parameters from search module
+            $_csv_data = array();
+            $_csv_data[] = array(do_lang('EMAIL_ADDRESS'),do_lang('NAME'),do_lang('NEWSLETTER_SEND_ID'));
+            foreach (array_keys($_POST) as $post_key) {
+                if (!is_string($post_key)) {
+                    $post_key = strval($post_key);
+                }
 
-				$matches=array();
-				if ((preg_match('#^result\_\_member_(\d+)$#',$post_key,$matches)!=0) && (post_param_integer($post_key,0)==1))
-				{
-					$member_id=intval($matches[1]);
-					$_csv_data[]=array($GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id),'m'.strval($member_id));
-				}
-			}
-			if (count($_csv_data)>1)
-				$csv_data=serialize($_csv_data);
-		}
-		if (!is_null($csv_data))
-		{
-			$hidden->attach(form_input_hidden('csv_data',$csv_data));
-			secure_serialized_data($csv_data,array());
-			$_csv_data=unserialize($csv_data);
-			$num_csv_data=count($_csv_data)-1;
-			$send_to_help=do_lang_tempcode('SOME_NEWSLETTER_TARGETS_KNOWN',escape_html(integer_format($num_csv_data)));
-		}
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'7e1c75fef01054164abfa72f55e5ba86','TITLE'=>do_lang_tempcode('CHOOSE_SEND_TO'),'HELP'=>$send_to_help)));
-		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
-		foreach ($newsletters as $newsletter)
-		{
-			$level=post_param_integer(strval($newsletter['id']),post_param_integer('level',-1));
+                $matches = array();
+                if ((preg_match('#^result\_\_member_(\d+)$#',$post_key,$matches) != 0) && (post_param_integer($post_key,0) == 1)) {
+                    $member_id = intval($matches[1]);
+                    $_csv_data[] = array($GLOBALS['FORUM_DRIVER']->get_member_email_address($member_id),$GLOBALS['FORUM_DRIVER']->get_username($member_id),'m' . strval($member_id));
+                }
+            }
+            if (count($_csv_data)>1) {
+                $csv_data = serialize($_csv_data);
+            }
+        }
+        if (!is_null($csv_data)) {
+            $hidden->attach(form_input_hidden('csv_data',$csv_data));
+            secure_serialized_data($csv_data,array());
+            $_csv_data = unserialize($csv_data);
+            $num_csv_data = count($_csv_data)-1;
+            $send_to_help = do_lang_tempcode('SOME_NEWSLETTER_TARGETS_KNOWN',escape_html(integer_format($num_csv_data)));
+        }
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '7e1c75fef01054164abfa72f55e5ba86','TITLE' => do_lang_tempcode('CHOOSE_SEND_TO'),'HELP' => $send_to_help)));
+        $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
+        foreach ($newsletters as $newsletter) {
+            $level = post_param_integer(strval($newsletter['id']),post_param_integer('level',-1));
 
-			$c4=$this->_count_level($newsletter['id'],4,$lang);
-			$c3=$this->_count_level($newsletter['id'],3,$lang);
-			$c2=$this->_count_level($newsletter['id'],2,$lang);
-			$c1=$this->_count_level($newsletter['id'],1,$lang);
-			//if ($c1!=0)	Actually, this just confuses people if we don't show it
-			{
-				$newsletter_title=get_translated_text($newsletter['title']);
-				$newsletter_description=get_translated_text($newsletter['description']);
+            $c4 = $this->_count_level($newsletter['id'],4,$lang);
+            $c3 = $this->_count_level($newsletter['id'],3,$lang);
+            $c2 = $this->_count_level($newsletter['id'],2,$lang);
+            $c1 = $this->_count_level($newsletter['id'],1,$lang);
+            //if ($c1!=0)	Actually, this just confuses people if we don't show it
+            {
+                $newsletter_title = get_translated_text($newsletter['title']);
+                $newsletter_description = get_translated_text($newsletter['description']);
 
-				if (($c1==$c2) && ($c1==$c3) && ($c1==$c4))
-				{
-					$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX',escape_html($newsletter_title)),do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL',escape_html(integer_format($c4)),escape_html($newsletter_description)),strval($newsletter['id']),$level>=1,NULL,'4'));
-				} else
-				{
-					$l=new ocp_tempcode();
-					$l->attach(form_input_list_entry('0',$level==0,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_0_ALT'),do_lang_tempcode('NUM_READERS',integer_format(0)))));
-					$l->attach(form_input_list_entry('1',$level==1,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_1'),do_lang_tempcode('NUM_READERS',integer_format($c1)))));
-					$l->attach(form_input_list_entry('2',$level==2,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_2'),do_lang_tempcode('NUM_READERS',integer_format($c2)))));
-					$l->attach(form_input_list_entry('3',$level==3,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_3'),do_lang_tempcode('NUM_READERS',integer_format($c3)))));
-					$l->attach(form_input_list_entry('4',$level==4,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_4'),do_lang_tempcode('NUM_READERS',integer_format($c4)))));
+                if (($c1 == $c2) && ($c1 == $c3) && ($c1 == $c4)) {
+                    $fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX',escape_html($newsletter_title)),do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL',escape_html(integer_format($c4)),escape_html($newsletter_description)),strval($newsletter['id']),$level >= 1,null,'4'));
+                } else {
+                    $l = new ocp_tempcode();
+                    $l->attach(form_input_list_entry('0',$level == 0,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_0_ALT'),do_lang_tempcode('NUM_READERS',integer_format(0)))));
+                    $l->attach(form_input_list_entry('1',$level == 1,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_1'),do_lang_tempcode('NUM_READERS',integer_format($c1)))));
+                    $l->attach(form_input_list_entry('2',$level == 2,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_2'),do_lang_tempcode('NUM_READERS',integer_format($c2)))));
+                    $l->attach(form_input_list_entry('3',$level == 3,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_3'),do_lang_tempcode('NUM_READERS',integer_format($c3)))));
+                    $l->attach(form_input_list_entry('4',$level == 4,do_lang_tempcode('NNR',do_lang_tempcode('NEWSLETTER_4'),do_lang_tempcode('NUM_READERS',integer_format($c4)))));
 
-					$fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR',escape_html($newsletter_title)),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL',escape_html($newsletter_description)),strval($newsletter['id']),$l));
-				}
-			}
-		}
-		if (get_forum_type()=='ocf')
-		{
-			$c5=$this->_count_level(-1,5,$lang);
-			$fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_OCF'),do_lang_tempcode('NUM_READERS',integer_format($c5)),'-1',false));
-			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			foreach ($groups as $group_id=>$group)
-			{
-				if ($group_id!=db_get_first_id())
-				{
-					$map=array();
-					$map['g'.strval($group_id)]=1;
-					$_c=newsletter_who_send_to($map,$lang,0,0);
-					$c6=$_c[6]['g'.strval($group_id)];
-					if ($c6!=0)
-						$fields->attach(form_input_tick(do_lang_tempcode('THIS_WITH',do_lang_tempcode('GROUP'),make_string_tempcode(escape_html($group))),do_lang_tempcode('NUM_READERS',integer_format($c6)),'g'.strval($group_id),post_param_integer('g'.strval($group_id),0)==1));
-				}
-			}
-		}
-		if (is_null($csv_data))
-		{
-			$fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,NULL,NULL,true,'csv,txt'));
-		}
+                    $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR',escape_html($newsletter_title)),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL',escape_html($newsletter_description)),strval($newsletter['id']),$l));
+                }
+            }
+        }
+        if (get_forum_type() == 'ocf') {
+            $c5 = $this->_count_level(-1,5,$lang);
+            $fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_OCF'),do_lang_tempcode('NUM_READERS',integer_format($c5)),'-1',false));
+            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+            foreach ($groups as $group_id => $group) {
+                if ($group_id != db_get_first_id()) {
+                    $map = array();
+                    $map['g' . strval($group_id)] = 1;
+                    $_c = newsletter_who_send_to($map,$lang,0,0);
+                    $c6 = $_c[6]['g' . strval($group_id)];
+                    if ($c6 != 0) {
+                        $fields->attach(form_input_tick(do_lang_tempcode('THIS_WITH',do_lang_tempcode('GROUP'),make_string_tempcode(escape_html($group))),do_lang_tempcode('NUM_READERS',integer_format($c6)),'g' . strval($group_id),post_param_integer('g' . strval($group_id),0) == 1));
+                    }
+                }
+            }
+        }
+        if (is_null($csv_data)) {
+            $fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_UPLOAD_CSV'),'file',false,null,null,true,'csv,txt'));
+        }
 
-		handle_max_file_size($hidden);
+        handle_max_file_size($hidden);
 
-		// Which newsletter template?
-		$template_choices=new ocp_tempcode();
-		$dh=opendir(get_custom_file_base().'/themes/default/templates_custom');
-		while (($f=readdir($dh))!==false)
-		{
-			if (preg_match('#^MAIL.*\.tpl$#',$f)!=0)
-			{
-				$tpl=basename($f,'.tpl');
-				$template_choices->attach(form_input_list_entry($tpl,post_param('template','MAIL')==$tpl,$tpl));
-			}
-		}
-		if (!file_exists(get_custom_file_base().'/themes/default/templates_custom/MAIL.tpl'))
-			$template_choices->attach(form_input_list_entry('MAIL',true,'MAIL'));
-		closedir($dh);
-		$fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER_TEMPLATE'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_TEMPLATE'),'template',$template_choices,NULL,false,true));
+        // Which newsletter template?
+        $template_choices = new ocp_tempcode();
+        $dh = opendir(get_custom_file_base() . '/themes/default/templates_custom');
+        while (($f = readdir($dh)) !== false) {
+            if (preg_match('#^MAIL.*\.tpl$#',$f) != 0) {
+                $tpl = basename($f,'.tpl');
+                $template_choices->attach(form_input_list_entry($tpl,post_param('template','MAIL') == $tpl,$tpl));
+            }
+        }
+        if (!file_exists(get_custom_file_base() . '/themes/default/templates_custom/MAIL.tpl')) {
+            $template_choices->attach(form_input_list_entry('MAIL',true,'MAIL'));
+        }
+        closedir($dh);
+        $fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER_TEMPLATE'),do_lang_tempcode('DESCRIPTION_NEWSLETTER_TEMPLATE'),'template',$template_choices,null,false,true));
 
-		// If we're making a periodic newsletter then we need to know when it
-		// should be sent
-		if ($periodic_action=='make' || $periodic_action=='replace')
-		{
-			$hidden->attach(form_input_hidden('make_periodic','1'));
-			$hidden->attach(form_input_hidden('periodic_choice',post_param('periodic_choice')));
-			$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'1e6e0f900f85aa4ed54318801a1810bb','TITLE'=>do_lang('PERIODIC_WHEN'),'HELP'=>do_lang('PERIODIC_WHEN_HELP'))));
+        // If we're making a periodic newsletter then we need to know when it
+        // should be sent
+        if ($periodic_action == 'make' || $periodic_action == 'replace') {
+            $hidden->attach(form_input_hidden('make_periodic','1'));
+            $hidden->attach(form_input_hidden('periodic_choice',post_param('periodic_choice')));
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '1e6e0f900f85aa4ed54318801a1810bb','TITLE' => do_lang('PERIODIC_WHEN'),'HELP' => do_lang('PERIODIC_WHEN_HELP'))));
 
-			// The choices are given as radio buttons: weekly or bi-weekly or monthly?
-			// In the labels for these radio buttons, we put a dropdown for day of
-			// the week and day of the month.
+            // The choices are given as radio buttons: weekly or bi-weekly or monthly?
+            // In the labels for these radio buttons, we put a dropdown for day of
+            // the week and day of the month.
 
-			$frequency=post_param('periodic_when','weekly');
-			if (!is_null($defaults)) $frequency=post_param('periodic_when',$defaults['np_frequency']);
-			$current_day_weekly=post_param_integer('periodic_weekly',5);
-			if (!is_null($defaults)) $current_day_weekly=post_param_integer('periodic_weekly',$defaults['np_day']);
-			$current_day_biweekly=post_param_integer('periodic_biweekly',5);
-			if (!is_null($defaults)) $current_day_biweekly=post_param_integer('periodic_biweekly',$defaults['np_day']);
-			$current_day_of_month=post_param_integer('periodic_monthly',1);
-			if (!is_null($defaults)) $current_day_of_month=post_param_integer('periodic_monthly',$defaults['np_day']);
+            $frequency = post_param('periodic_when','weekly');
+            if (!is_null($defaults)) {
+                $frequency = post_param('periodic_when',$defaults['np_frequency']);
+            }
+            $current_day_weekly = post_param_integer('periodic_weekly',5);
+            if (!is_null($defaults)) {
+                $current_day_weekly = post_param_integer('periodic_weekly',$defaults['np_day']);
+            }
+            $current_day_biweekly = post_param_integer('periodic_biweekly',5);
+            if (!is_null($defaults)) {
+                $current_day_biweekly = post_param_integer('periodic_biweekly',$defaults['np_day']);
+            }
+            $current_day_of_month = post_param_integer('periodic_monthly',1);
+            if (!is_null($defaults)) {
+                $current_day_of_month = post_param_integer('periodic_monthly',$defaults['np_day']);
+            }
 
-			$radios=new ocp_tempcode();
+            $radios = new ocp_tempcode();
 
-			$week_days_weekly=new ocp_tempcode();
-			$week_days_biweekly=new ocp_tempcode();
-			require_lang('dates');
-			$week_days=array(1=>do_lang('MONDAY'),2=>do_lang('TUESDAY'),3=>do_lang('WEDNESDAY'),4=>do_lang('THURSDAY'),5=>do_lang('FRIDAY'),6=>do_lang('SATURDAY'),7=>do_lang('SUNDAY'));
-			foreach ($week_days as $i=>$this_day)
-			{
-				$week_days_weekly->attach(form_input_list_entry(strval($i),($i==$current_day_weekly),$this_day,false,false));
-				$week_days_biweekly->attach(form_input_list_entry(strval($i),($i==$current_day_biweekly),$this_day,false,false));
-			}
+            $week_days_weekly = new ocp_tempcode();
+            $week_days_biweekly = new ocp_tempcode();
+            require_lang('dates');
+            $week_days = array(1 => do_lang('MONDAY'),2 => do_lang('TUESDAY'),3 => do_lang('WEDNESDAY'),4 => do_lang('THURSDAY'),5 => do_lang('FRIDAY'),6 => do_lang('SATURDAY'),7 => do_lang('SUNDAY'));
+            foreach ($week_days as $i => $this_day) {
+                $week_days_weekly->attach(form_input_list_entry(strval($i),($i == $current_day_weekly),$this_day,false,false));
+                $week_days_biweekly->attach(form_input_list_entry(strval($i),($i == $current_day_biweekly),$this_day,false,false));
+            }
 
-			$weekly_desc=new ocp_tempcode();
-			$weekly_desc->attach(do_lang('PERIODIC_WEEKLY_ON'));
-			$weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'b0c43b5f6883be80af5911a587fc85bf','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_weekly','CONTENT'=>$week_days_weekly,'INLINE_LIST'=>'0')));
-			$radios->attach(form_input_radio_entry('periodic_when','weekly',$frequency=='weekly',$weekly_desc,NULL,''));
+            $weekly_desc = new ocp_tempcode();
+            $weekly_desc->attach(do_lang('PERIODIC_WEEKLY_ON'));
+            $weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID' => 'b0c43b5f6883be80af5911a587fc85bf','TABINDEX' => strval(get_form_field_tabindex(null)),'REQUIRED' => '0','NAME' => 'periodic_weekday_weekly','CONTENT' => $week_days_weekly,'INLINE_LIST' => '0')));
+            $radios->attach(form_input_radio_entry('periodic_when','weekly',$frequency == 'weekly',$weekly_desc,null,''));
 
-			$biweekly_desc=new ocp_tempcode();
-			$biweekly_desc->attach(do_lang('PERIODIC_BIWEEKLY_ON'));
-			$biweekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'533afb6cdf1da813dd55ae694b962151','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_weekday_biweekly','CONTENT'=>$week_days_biweekly,'INLINE_LIST'=>'0')));
-			$radios->attach(form_input_radio_entry('periodic_when','biweekly',$frequency=='biweekly',$biweekly_desc,NULL,''));
+            $biweekly_desc = new ocp_tempcode();
+            $biweekly_desc->attach(do_lang('PERIODIC_BIWEEKLY_ON'));
+            $biweekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID' => '533afb6cdf1da813dd55ae694b962151','TABINDEX' => strval(get_form_field_tabindex(null)),'REQUIRED' => '0','NAME' => 'periodic_weekday_biweekly','CONTENT' => $week_days_biweekly,'INLINE_LIST' => '0')));
+            $radios->attach(form_input_radio_entry('periodic_when','biweekly',$frequency == 'biweekly',$biweekly_desc,null,''));
 
-			$month_days=new ocp_tempcode();
-			foreach (range(1,28) as $this_day)
-			{
-				$suffix=gmdate('S',gmmktime(0,0,0,1,$this_day,1990));
-				$month_days->attach(form_input_list_entry(strval($this_day),($this_day==1),strval($this_day).$suffix,$current_day_of_month==$this_day));
-			}
-			$monthly_desc=new ocp_tempcode();
-			$monthly_desc->attach(do_lang('PERIODIC_MONTHLY_ON'));
-			$monthly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'352012c3153342f5a954fcfa16c5503b','TABINDEX'=>strval(get_form_field_tabindex(NULL)),'REQUIRED'=>'0','NAME'=>'periodic_monthly','CONTENT'=>$month_days,'INLINE_LIST'=>'0')));
-			$radios->attach(form_input_radio_entry('periodic_when','monthly',$frequency=='monthly',$monthly_desc,NULL,''));
-			$fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'),'','periodic_when',$radios,true));
+            $month_days = new ocp_tempcode();
+            foreach (range(1,28) as $this_day) {
+                $suffix = gmdate('S',gmmktime(0,0,0,1,$this_day,1990));
+                $month_days->attach(form_input_list_entry(strval($this_day),($this_day == 1),strval($this_day) . $suffix,$current_day_of_month == $this_day));
+            }
+            $monthly_desc = new ocp_tempcode();
+            $monthly_desc->attach(do_lang('PERIODIC_MONTHLY_ON'));
+            $monthly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST',array('_GUID' => '352012c3153342f5a954fcfa16c5503b','TABINDEX' => strval(get_form_field_tabindex(null)),'REQUIRED' => '0','NAME' => 'periodic_monthly','CONTENT' => $month_days,'INLINE_LIST' => '0')));
+            $radios->attach(form_input_radio_entry('periodic_when','monthly',$frequency == 'monthly',$monthly_desc,null,''));
+            $fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'),'','periodic_when',$radios,true));
 
-			$radios=new ocp_tempcode();
-			$radios->attach(form_input_radio_entry('periodic_for','all',false,do_lang_tempcode('CREATE_PERIODIC_FOR_ALL'),NULL,''));
-			$radios->attach(form_input_radio_entry('periodic_for','future',true,do_lang_tempcode('CREATE_PERIODIC_FOR_FUTURE'),NULL,''));
-			$fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'','periodic_for',$radios,true));
-		}
+            $radios = new ocp_tempcode();
+            $radios->attach(form_input_radio_entry('periodic_for','all',false,do_lang_tempcode('CREATE_PERIODIC_FOR_ALL'),null,''));
+            $radios->attach(form_input_radio_entry('periodic_for','future',true,do_lang_tempcode('CREATE_PERIODIC_FOR_FUTURE'),null,''));
+            $fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'),'','periodic_for',$radios,true));
+        }
 
-		return do_template('FORM_SCREEN',array(
-			'_GUID'=>'0b2a4825ec586d9ff557026d9a1e0cca',
-			'TITLE'=>$this->title,
-			'TEXT'=>(($periodic_action=='make' || $periodic_action=='replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),
-			'HIDDEN'=>$hidden,
-			'FIELDS'=>$fields->evaluate()/*FUDGEFUDGE*/,
-			'SUBMIT_ICON'=>'tabs__preview',
-			'SUBMIT_NAME'=>$submit_name,
-			'URL'=>$post_url,
-		));
-	}
+        return do_template('FORM_SCREEN',array(
+            '_GUID' => '0b2a4825ec586d9ff557026d9a1e0cca',
+            'TITLE' => $this->title,
+            'TEXT' => (($periodic_action == 'make' || $periodic_action == 'replace')? do_lang_tempcode('PERIODIC_NO_EDIT') : do_lang_tempcode('NEWSLETTER_SEND_TEXT')),
+            'HIDDEN' => $hidden,
+            'FIELDS' => $fields->evaluate()/*FUDGEFUDGE*/,
+            'SUBMIT_ICON' => 'tabs__preview',
+            'SUBMIT_NAME' => $submit_name,
+            'URL' => $post_url,
+        ));
+    }
 
-	/**
+    /**
 	 * The UI to confirm sending of our newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function confirm_send()
-	{
-		$message=post_param('message');
-		$subject=post_param('subject');
-		$lang=choose_language($this->title);
+    public function confirm_send()
+    {
+        $message = post_param('message');
+        $subject = post_param('subject');
+        $lang = choose_language($this->title);
 
-		$template=post_param('template','MAIL');
-		$in_full=post_param_integer('in_full',0);
+        $template = post_param('template','MAIL');
+        $in_full = post_param_integer('in_full',0);
 
-		$html_only=post_param_integer('html_only',0);
-		$from_email=post_param('from_email','');
-		$from_name=post_param('from_name','');
+        $html_only = post_param_integer('html_only',0);
+        $from_email = post_param('from_email','');
+        $from_name = post_param('from_name','');
 
-		$extra_post_data=array();
-		require_code('uploads');
-		$_csv_data=post_param('csv_data',NULL);
-		if (!is_null($_csv_data))
-		{
-			$extra_post_data['csv_data']=$_csv_data;
-		} else
-		{
-			if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name']))))
-			{
-				$__csv_data=array();
-				@ini_set('auto_detect_line_endings','1');
-				$myfile=fopen($_FILES['file']['tmp_name'],GOOGLE_APPENGINE?'rb':'rt');
-				$del=',';
-				$csv_test_line=fgetcsv($myfile,4096,$del);
-				if ((count($csv_test_line)==1) && (strpos($csv_test_line[0],';')!==false))
-					$del=';';
-				rewind($myfile);
-				while (($csv_line=fgetcsv($myfile,4096,$del))!==false)
-				{
-					$__csv_data[]=$csv_line;
-				}
-				fclose($myfile);
+        $extra_post_data = array();
+        require_code('uploads');
+        $_csv_data = post_param('csv_data',null);
+        if (!is_null($_csv_data)) {
+            $extra_post_data['csv_data'] = $_csv_data;
+        } else {
+            if (((is_plupload(true)) && (array_key_exists('file',$_FILES))) || ((array_key_exists('file',$_FILES)) && (is_uploaded_file($_FILES['file']['tmp_name'])))) {
+                $__csv_data = array();
+                @ini_set('auto_detect_line_endings','1');
+                $myfile = fopen($_FILES['file']['tmp_name'],GOOGLE_APPENGINE?'rb':'rt');
+                $del = ',';
+                $csv_test_line = fgetcsv($myfile,4096,$del);
+                if ((count($csv_test_line) == 1) && (strpos($csv_test_line[0],';') !== false)) {
+                    $del = ';';
+                }
+                rewind($myfile);
+                while (($csv_line = fgetcsv($myfile,4096,$del)) !== false) {
+                    $__csv_data[] = $csv_line;
+                }
+                fclose($myfile);
 
-				$extra_post_data['csv_data']=serialize($__csv_data);
-			}
-		}
+                $extra_post_data['csv_data'] = serialize($__csv_data);
+            }
+        }
 
-		if (post_param_integer('make_periodic',0)==1)
-		{
-			// We're making a periodic newsletter. Thus we need to pass this info
-			// through to the next step
-			$extra_post_data['make_periodic']='1';
+        if (post_param_integer('make_periodic',0) == 1) {
+            // We're making a periodic newsletter. Thus we need to pass this info
+            // through to the next step
+            $extra_post_data['make_periodic'] = '1';
 
-			// Re-generate preview from latest chosen_categories
-			$message=$this->_generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
-		}
+            // Re-generate preview from latest chosen_categories
+            $message = $this->_generate_whats_new_comcode(post_param('chosen_categories',''),$in_full,$lang,get_input_date('cutoff'));
+        }
 
-		$address=$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-		if ($address=='') $address=get_option('staff_address');
-		$username=$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
+        $address = $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
+        if ($address == '') {
+            $address = get_option('staff_address');
+        }
+        $username = $GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
 
-		$message=newsletter_variable_substitution($message,$subject,'','',do_lang('EXAMPLE'),$address,'test','');
+        $message = newsletter_variable_substitution($message,$subject,'','',do_lang('EXAMPLE'),$address,'test','');
 
-		require_code('mail');
+        require_code('mail');
 
-		require_code('tempcode_compiler');
-		$in_html=false;
-		if (strpos($message,'<html')!==false)
-		{
-			$_preview=template_to_tempcode($message);
-			$in_html=true;
-		} else
-		{
-			$comcode_version=comcode_to_tempcode($message,get_member(),true);
-			$_preview=do_template(
-				'MAIL',
-				array(
-					'_GUID'=>'b081cf9104748b090f63b6898027985e',
-					'TITLE'=>$subject,
-					'CSS'=>css_tempcode(true,true,$comcode_version->evaluate()),
-					'LANG'=>get_site_default_lang(),
-					'LOGOURL'=>get_logo_url(''),
-					'CONTENT'=>$comcode_version
-				),
-				NULL,
-				false,
-				NULL,
-				'.tpl',
-				'templates',
-				$GLOBALS['FORUM_DRIVER']->get_theme('')
-			);
-			$in_html=($html_only==1);
-		}
-		$text_preview=($html_only==1)?'':comcode_to_clean_text(static_evaluate_tempcode(template_to_tempcode($message)));
-		require_code('mail');
-		$preview_subject=$subject;
-		if (post_param_integer('make_periodic',0)==1)
-			$preview_subject.=' - '.get_timezoned_date(time(),false,false,false,true);
-		$preview_subject=do_lang('NEWSLETTER_PREVIEW_SUBJECT',$preview_subject);
-		require_code('comcode_compiler');
-		$preview=do_template('NEWSLETTER_CONFIRM_WRAP',array('_GUID'=>'02bd5a782620141f8589e647e2c6d90b','TEXT_PREVIEW'=>$text_preview,'PREVIEW'=>$_preview,'SUBJECT'=>$subject));
+        require_code('tempcode_compiler');
+        $in_html = false;
+        if (strpos($message,'<html') !== false) {
+            $_preview = template_to_tempcode($message);
+            $in_html = true;
+        } else {
+            $comcode_version = comcode_to_tempcode($message,get_member(),true);
+            $_preview = do_template(
+                'MAIL',
+                array(
+                    '_GUID' => 'b081cf9104748b090f63b6898027985e',
+                    'TITLE' => $subject,
+                    'CSS' => css_tempcode(true,true,$comcode_version->evaluate()),
+                    'LANG' => get_site_default_lang(),
+                    'LOGOURL' => get_logo_url(''),
+                    'CONTENT' => $comcode_version
+                ),
+                null,
+                false,
+                null,
+                '.tpl',
+                'templates',
+                $GLOBALS['FORUM_DRIVER']->get_theme('')
+            );
+            $in_html = ($html_only == 1);
+        }
+        $text_preview = ($html_only == 1)?'':comcode_to_clean_text(static_evaluate_tempcode(template_to_tempcode($message)));
+        require_code('mail');
+        $preview_subject = $subject;
+        if (post_param_integer('make_periodic',0) == 1) {
+            $preview_subject .= ' - ' . get_timezoned_date(time(),false,false,false,true);
+        }
+        $preview_subject = do_lang('NEWSLETTER_PREVIEW_SUBJECT',$preview_subject);
+        require_code('comcode_compiler');
+        $preview = do_template('NEWSLETTER_CONFIRM_WRAP',array('_GUID' => '02bd5a782620141f8589e647e2c6d90b','TEXT_PREVIEW' => $text_preview,'PREVIEW' => $_preview,'SUBJECT' => $subject));
 
-		mail_wrap($preview_subject,($html_only==1)?$_preview->evaluate():$message,array($address),$username/*do_lang('NEWSLETTER_SUBSCRIBER',get_site_name())*/,$from_email,$from_name,3,NULL,true,NULL,true,$in_html);
+        mail_wrap($preview_subject,($html_only == 1)?$_preview->evaluate():$message,array($address),$username/*do_lang('NEWSLETTER_SUBSCRIBER',get_site_name())*/,$from_email,$from_name,3,null,true,null,true,$in_html);
 
-		require_code('templates_confirm_screen');
-		return confirm_screen($this->title,$preview,'send',get_param('old_type','new'),$extra_post_data);
-	}
+        require_code('templates_confirm_screen');
+        return confirm_screen($this->title,$preview,'send',get_param('old_type','new'),$extra_post_data);
+    }
 
-	/**
+    /**
 	 * The actualiser to send a newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function send_message()
-	{
-		$lang=choose_language($this->title);
-		if (is_object($lang)) return $lang;
+    public function send_message()
+    {
+        $lang = choose_language($this->title);
+        if (is_object($lang)) {
+            return $lang;
+        }
 
-		if (get_param('old_type','')=='whatsnew')
-		{
-			set_value('newsletter_whatsnew',strval(time()));
-		}
+        if (get_param('old_type','') == 'whatsnew') {
+            set_value('newsletter_whatsnew',strval(time()));
+        }
 
-		$message=post_param('message');
-		$subject=post_param('subject');
-		$csv_data=post_param('csv_data',''); // serialized PHP array
+        $message = post_param('message');
+        $subject = post_param('subject');
+        $csv_data = post_param('csv_data',''); // serialized PHP array
 
-		$template=post_param('template','MAIL');
-		$in_full=post_param_integer('in_full',0);
+        $template = post_param('template','MAIL');
+        $in_full = post_param_integer('in_full',0);
 
-		$html_only=post_param_integer('html_only',0);
-		$from_email=post_param('from_email','');
-		$from_name=post_param('from_name','');
-		$priority=post_param_integer('priority',3);
+        $html_only = post_param_integer('html_only',0);
+        $from_email = post_param('from_email','');
+        $from_name = post_param('from_name','');
+        $priority = post_param_integer('priority',3);
 
-		$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
-		$send_details=array();
-		foreach ($newsletters as $newsletter)
-		{
-			$send_details[strval($newsletter['id'])]=post_param_integer(strval($newsletter['id']),0);
-		}
-		if (get_forum_type()=='ocf')
-		{
-			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			foreach (array_keys($groups) as $id)
-			{
-				$send_details['g'.strval($id)]=post_param_integer('g'.strval($id),0);
-			}
-			$send_details['-1']=post_param_integer('-1',0);
-		}
+        $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
+        $send_details = array();
+        foreach ($newsletters as $newsletter) {
+            $send_details[strval($newsletter['id'])] = post_param_integer(strval($newsletter['id']),0);
+        }
+        if (get_forum_type() == 'ocf') {
+            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+            foreach (array_keys($groups) as $id) {
+                $send_details['g' . strval($id)] = post_param_integer('g' . strval($id),0);
+            }
+            $send_details['-1'] = post_param_integer('-1',0);
+        }
 
-		if (post_param_integer('make_periodic',0)==1)
-		{
-			// We're a periodic newsletter, so we don't actually want to be sent
-			// out now. Rather, we store the newsletter settings so that it can be
-			// regenerated as needed.
+        if (post_param_integer('make_periodic',0) == 1) {
+            // We're a periodic newsletter, so we don't actually want to be sent
+            // out now. Rather, we store the newsletter settings so that it can be
+            // regenerated as needed.
 
-			// Next we store all of our settings in the newsletter_periodic table
-			$when=post_param('periodic_when');
-			$day=1;
-			if ($when=='monthly')
-				$day=post_param_integer('periodic_monthly')%29;
-			elseif ($when=='biweekly')
-				$day=post_param_integer('periodic_weekday_biweekly',5);
-			elseif ($when=='weekly')
-				$day=post_param_integer('periodic_weekday_weekly',5);
-			$map=array(
-				'np_message'=>post_param('chosen_categories',''),
-				'np_subject'=>$subject,
-				'np_lang'=>$lang,
-				'np_send_details'=>serialize($send_details),
-				'np_html_only'=>$html_only,
-				'np_from_email'=>$from_email,
-				'np_from_name'=>$from_name,
-				'np_priority'=>$priority,
-				'np_csv_data'=>$csv_data,
-				'np_frequency'=>$when,
-				'np_day'=>$day,
-				'np_in_full'=>$in_full,
-				'np_template'=>$template,
-			);
-			require_lang('dates');
-			$week_days=array(1=>do_lang('MONDAY'),2=>do_lang('TUESDAY'),3=>do_lang('WEDNESDAY'),4=>do_lang('THURSDAY'),5=>do_lang('FRIDAY'),6=>do_lang('SATURDAY'),7=>do_lang('SUNDAY'));
-			if ($when=='weekly')
-			{
-				$each=$week_days[$day];
-			}
-			elseif ($when=='biweekly')
-			{
-				$each=$week_days[$day];
-			}
-			else
-			{
-				$suffix=gmdate('S',gmmktime(0,0,0,1,$day,1990));
-				$each=strval($day).$suffix;
-			}
+            // Next we store all of our settings in the newsletter_periodic table
+            $when = post_param('periodic_when');
+            $day = 1;
+            if ($when == 'monthly') {
+                $day = post_param_integer('periodic_monthly')%29;
+            } elseif ($when == 'biweekly') {
+                $day = post_param_integer('periodic_weekday_biweekly',5);
+            } elseif ($when == 'weekly') {
+                $day = post_param_integer('periodic_weekday_weekly',5);
+            }
+            $map = array(
+                'np_message' => post_param('chosen_categories',''),
+                'np_subject' => $subject,
+                'np_lang' => $lang,
+                'np_send_details' => serialize($send_details),
+                'np_html_only' => $html_only,
+                'np_from_email' => $from_email,
+                'np_from_name' => $from_name,
+                'np_priority' => $priority,
+                'np_csv_data' => $csv_data,
+                'np_frequency' => $when,
+                'np_day' => $day,
+                'np_in_full' => $in_full,
+                'np_template' => $template,
+            );
+            require_lang('dates');
+            $week_days = array(1 => do_lang('MONDAY'),2 => do_lang('TUESDAY'),3 => do_lang('WEDNESDAY'),4 => do_lang('THURSDAY'),5 => do_lang('FRIDAY'),6 => do_lang('SATURDAY'),7 => do_lang('SUNDAY'));
+            if ($when == 'weekly') {
+                $each = $week_days[$day];
+            } elseif ($when == 'biweekly') {
+                $each = $week_days[$day];
+            } else {
+                $suffix = gmdate('S',gmmktime(0,0,0,1,$day,1990));
+                $each = strval($day) . $suffix;
+            }
 
-			$matches=array();
-			if (preg_match('#^replace_existing\_(\d+)$#',post_param('periodic_choice',''),$matches)!=0)
-			{
-				if (post_param('periodic_for')!='future')
-					$map['np_last_sent']=0;
-				$GLOBALS['SITE_DB']->query_update('newsletter_periodic',$map,array('id'=>intval($matches[1])),'',1);
-				$message=do_lang('PERIODIC_SUCCESS_MESSAGE_EDIT',$when,$each);
-			} else
-			{
-				$last_sent=(post_param('periodic_for')=='future')?time():0;
-				$map['np_last_sent']=$last_sent;
+            $matches = array();
+            if (preg_match('#^replace_existing\_(\d+)$#',post_param('periodic_choice',''),$matches) != 0) {
+                if (post_param('periodic_for') != 'future') {
+                    $map['np_last_sent'] = 0;
+                }
+                $GLOBALS['SITE_DB']->query_update('newsletter_periodic',$map,array('id' => intval($matches[1])),'',1);
+                $message = do_lang('PERIODIC_SUCCESS_MESSAGE_EDIT',$when,$each);
+            } else {
+                $last_sent = (post_param('periodic_for') == 'future')?time():0;
+                $map['np_last_sent'] = $last_sent;
 
-				$GLOBALS['SITE_DB']->query_insert('newsletter_periodic',$map,true);
-				$message=do_lang('PERIODIC_SUCCESS_MESSAGE_ADD',$when,$each);
-			}
+                $GLOBALS['SITE_DB']->query_insert('newsletter_periodic',$map,true);
+                $message = do_lang('PERIODIC_SUCCESS_MESSAGE_ADD',$when,$each);
+            }
 
-			$url=build_url(array('page'=>'admin_newsletter','type'=>'misc','redirected'=>'1'),get_module_zone('admin_newsletter'));
-			return redirect_screen(do_lang('SUCCESS'),$url,$message,false,'inform');
-		}
+            $url = build_url(array('page' => 'admin_newsletter','type' => 'misc','redirected' => '1'),get_module_zone('admin_newsletter'));
+            return redirect_screen(do_lang('SUCCESS'),$url,$message,false,'inform');
+        }
 
-		if (addon_installed('calendar'))
-		{
-			$schedule=get_input_date('schedule');
-			if (!is_null($schedule))
-			{
-				require_code('calendar');
-				require_code('calendar2');
-				$send_details_string_exp='';
-				foreach ($send_details as $key=>$val)
-				{
-					$send_details_string_exp.='"'.str_replace("\n",'\n',addslashes($key)).'"=>"'.str_replace("\n",'\n',addslashes($val)).'",';
-				}
-				$schedule_code=':require_code(\'newsletter\'); actual_send_newsletter("'.php_addslashes($message).'","'.php_addslashes($subject).'","'.php_addslashes($lang).'",array('.$send_details_string_exp.'),'.strval($html_only).',"'.php_addslashes($from_email).'","'.php_addslashes($from_name).'",'.strval($priority).',"'.php_addslashes($csv_data).'","'.php_addslashes($template).'");';
-				$start_year=intval(date('Y',$schedule));
-				$start_month=intval(date('m',$schedule));
-				$start_day=intval(date('d',$schedule));
-				$start_hour=intval(date('H',$schedule));
-				$start_minute=intval(date('i',$schedule));
-				$event_id=add_calendar_event(db_get_first_id(),'',NULL,0,do_lang('NEWSLETTER_SEND',$subject),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
-				regenerate_event_reminder_jobs($event_id);
+        if (addon_installed('calendar')) {
+            $schedule = get_input_date('schedule');
+            if (!is_null($schedule)) {
+                require_code('calendar');
+                require_code('calendar2');
+                $send_details_string_exp = '';
+                foreach ($send_details as $key => $val) {
+                    $send_details_string_exp .= '"' . str_replace("\n",'\n',addslashes($key)) . '"=>"' . str_replace("\n",'\n',addslashes($val)) . '",';
+                }
+                $schedule_code = ':require_code(\'newsletter\'); actual_send_newsletter("' . php_addslashes($message) . '","' . php_addslashes($subject) . '","' . php_addslashes($lang) . '",array(' . $send_details_string_exp . '),' . strval($html_only) . ',"' . php_addslashes($from_email) . '","' . php_addslashes($from_name) . '",' . strval($priority) . ',"' . php_addslashes($csv_data) . '","' . php_addslashes($template) . '");';
+                $start_year = intval(date('Y',$schedule));
+                $start_month = intval(date('m',$schedule));
+                $start_day = intval(date('d',$schedule));
+                $start_hour = intval(date('H',$schedule));
+                $start_minute = intval(date('i',$schedule));
+                $event_id = add_calendar_event(db_get_first_id(),'',null,0,do_lang('NEWSLETTER_SEND',$subject),$schedule_code,3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute);
+                regenerate_event_reminder_jobs($event_id);
 
-				return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_DEFERRED',get_timezoned_date($schedule)));
-			}
-		}
-		return actual_send_newsletter($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$template);
-	}
+                return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_DEFERRED',get_timezoned_date($schedule)));
+            }
+        }
+        return actual_send_newsletter($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$template);
+    }
 
-	/**
+    /**
 	 * The UI to select to view a past newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function archive()
-	{
-		$lang=choose_language($this->title);
-		if (is_object($lang)) return $lang;
+    public function archive()
+    {
+        $lang = choose_language($this->title);
+        if (is_object($lang)) {
+            return $lang;
+        }
 
-		$newsletters=new ocp_tempcode();
-		$where=multi_lang()?array('language'=>$lang):NULL;
-		$rows=$GLOBALS['SITE_DB']->query_select('newsletter_archive',array('id','subject','date_and_time'),$where,'ORDER BY date_and_time DESC');
-		foreach ($rows as $newsletter)
-		{
-			$newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,$newsletter['subject']));
-		}
-		if ($newsletters->is_empty()) inform_exit(do_lang_tempcode('NO_ENTRIES'));
-		require_code('form_templates');
-		$fields=form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters,NULL,true);
-		$hidden=form_input_hidden('lang',$lang);
+        $newsletters = new ocp_tempcode();
+        $where = multi_lang()?array('language' => $lang):null;
+        $rows = $GLOBALS['SITE_DB']->query_select('newsletter_archive',array('id','subject','date_and_time'),$where,'ORDER BY date_and_time DESC');
+        foreach ($rows as $newsletter) {
+            $newsletters->attach(form_input_list_entry(strval($newsletter['id']),false,$newsletter['subject']));
+        }
+        if ($newsletters->is_empty()) {
+            inform_exit(do_lang_tempcode('NO_ENTRIES'));
+        }
+        require_code('form_templates');
+        $fields = form_input_list(do_lang_tempcode('NEWSLETTER'),'','id',$newsletters,null,true);
+        $hidden = form_input_hidden('lang',$lang);
 
-		$submit_name=do_lang_tempcode('VIEW');
-		$post_url=build_url(array('page'=>'_SELF','type'=>'view'),'_SELF',NULL,false,true);
+        $submit_name = do_lang_tempcode('VIEW');
+        $post_url = build_url(array('page' => '_SELF','type' => 'view'),'_SELF',null,false,true);
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'ee295e41dc86c4583c123e6e0e445380','GET'=>true,'SKIP_VALIDATION'=>true,'HIDDEN'=>$hidden,'TITLE'=>$this->title,'TEXT'=>'','FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__view_archive','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	}
+        return do_template('FORM_SCREEN',array('_GUID' => 'ee295e41dc86c4583c123e6e0e445380','GET' => true,'SKIP_VALIDATION' => true,'HIDDEN' => $hidden,'TITLE' => $this->title,'TEXT' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__view_archive','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The UI to view a past newsletter.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function view()
-	{
-		$id=get_param_integer('id');
+    public function view()
+    {
+        $id = get_param_integer('id');
 
-		$rows=$GLOBALS['SITE_DB']->query_select('newsletter_archive',array('*'),array('id'=>$id));
+        $rows = $GLOBALS['SITE_DB']->query_select('newsletter_archive',array('*'),array('id' => $id));
 
-		$time=get_timezoned_date($rows[0]['date_and_time']);
-		$subject=$rows[0]['subject'];
-		$message=$rows[0]['newsletter'];
-		$language=$rows[0]['language'];
-		$level=$rows[0]['importance_level'];
-		require_code('lang2');
-		$language=lookup_language_full_name($rows[0]['language']);
+        $time = get_timezoned_date($rows[0]['date_and_time']);
+        $subject = $rows[0]['subject'];
+        $message = $rows[0]['newsletter'];
+        $language = $rows[0]['language'];
+        $level = $rows[0]['importance_level'];
+        require_code('lang2');
+        $language = lookup_language_full_name($rows[0]['language']);
 
-		require_code('templates_map_table');
-		return map_table(get_screen_title('NEWSLETTER'),array('DATE_TIME'=>$time,'LANGUAGE'=>$language,'SUBSCRIPTION_LEVEL'=>integer_format($level),'SUBJECT'=>$subject,'MESSAGE'=>comcode_to_tempcode($message)));
-	}
+        require_code('templates_map_table');
+        return map_table(get_screen_title('NEWSLETTER'),array('DATE_TIME' => $time,'LANGUAGE' => $language,'SUBSCRIPTION_LEVEL' => integer_format($level),'SUBJECT' => $subject,'MESSAGE' => comcode_to_tempcode($message)));
+    }
 
-	/**
+    /**
 	 * Get tempcode for adding/editing form.
 	 *
 	 * @param  SHORT_TEXT	The title
 	 * @param  LONG_TEXT		The description
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($title='',$description='')
-	{
-		$fields=new ocp_tempcode();
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-		$fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));
+    public function get_form_fields($title = '',$description = '')
+    {
+        $fields = new ocp_tempcode();
+        $fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
+        $fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,true));
 
-		return array($fields,new ocp_tempcode());
-	}
+        return array($fields,new ocp_tempcode());
+    }
 
-	/**
+    /**
 	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A pair: The choose table, Whether re-ordering is supported from this screen.
 	 */
-	function create_selection_list_choose_table($url_map)
-	{
-		require_code('templates_results_table');
+    public function create_selection_list_choose_table($url_map)
+    {
+        require_code('templates_results_table');
 
-		$current_ordering=get_param('sort','title ASC',true);
-		list($sortable,$sort_order)=array(substr($current_ordering,0,strrpos($current_ordering,' ')),substr($current_ordering,strrpos($current_ordering,' ')+1));
-		$sortables=array(
-			'title'=>do_lang_tempcode('TITLE'),
-		);
-		if (db_has_subqueries($GLOBALS['SITE_DB']->connection_read))
-		{
-			$sortables['(SELECT COUNT(*) FROM '.get_table_prefix().'newsletter n JOIN '.get_table_prefix().'newsletter_subscribe s ON n.id=s.newsletter_id WHERE code_confirm=0)']=do_lang_tempcode('COUNT_MEMBERS');
-		}
-		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
-			log_hack_attack_and_exit('ORDERBY_HACK');
+        $current_ordering = get_param('sort','title ASC',true);
+        list($sortable,$sort_order) = array(substr($current_ordering,0,strrpos($current_ordering,' ')),substr($current_ordering,strrpos($current_ordering,' ')+1));
+        $sortables = array(
+            'title' => do_lang_tempcode('TITLE'),
+        );
+        if (db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) {
+            $sortables['(SELECT COUNT(*) FROM ' . get_table_prefix() . 'newsletter n JOIN ' . get_table_prefix() . 'newsletter_subscribe s ON n.id=s.newsletter_id WHERE code_confirm=0)'] = do_lang_tempcode('COUNT_MEMBERS');
+        }
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+            log_hack_attack_and_exit('ORDERBY_HACK');
+        }
 
-		$header_row=results_field_title(array(
-			do_lang_tempcode('TITLE'),
-			do_lang_tempcode('COUNT_MEMBERS'),
-			do_lang_tempcode('ACTIONS'),
-		),$sortables,'sort',$sortable.' '.$sort_order);
+        $header_row = results_field_title(array(
+            do_lang_tempcode('TITLE'),
+            do_lang_tempcode('COUNT_MEMBERS'),
+            do_lang_tempcode('ACTIONS'),
+        ),$sortables,'sort',$sortable . ' ' . $sort_order);
 
-		$fields=new ocp_tempcode();
+        $fields = new ocp_tempcode();
 
-		require_code('form_templates');
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering);
-		foreach ($rows as $row)
-		{
-			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
+        require_code('form_templates');
+        list($rows,$max_rows) = $this->get_entry_rows(false,$current_ordering);
+        foreach ($rows as $row) {
+            $edit_link = build_url($url_map+array('id' => $row['id']),'_SELF');
 
-			$num_readers=$GLOBALS['SITE_DB']->query_select_value('newsletter n JOIN '.get_table_prefix().'newsletter_subscribe s ON n.id=s.newsletter_id','COUNT(*)',array('code_confirm'=>0));
+            $num_readers = $GLOBALS['SITE_DB']->query_select_value('newsletter n JOIN ' . get_table_prefix() . 'newsletter_subscribe s ON n.id=s.newsletter_id','COUNT(*)',array('code_confirm' => 0));
 
-			$fields->attach(results_entry(array(get_translated_text($row['title']),integer_format($num_readers),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
-		}
+            $fields->attach(results_entry(array(get_translated_text($row['title']),integer_format($num_readers),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT') . ' #' . strval($row['id']))))),true);
+        }
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
-	}
+        return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+    }
 
-	/**
+    /**
 	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function create_selection_list_entries()
-	{
-		$_m=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
-		$entries=new ocp_tempcode();
-		foreach ($_m as $m)
-		{
-			$entries->attach(form_input_list_entry(strval($m['id']),false,get_translated_text($m['title'],$GLOBALS['SITE_DB'])));
-		}
+    public function create_selection_list_entries()
+    {
+        $_m = $GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+        $entries = new ocp_tempcode();
+        foreach ($_m as $m) {
+            $entries->attach(form_input_list_entry(strval($m['id']),false,get_translated_text($m['title'],$GLOBALS['SITE_DB'])));
+        }
 
-		return $entries;
-	}
+        return $entries;
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function fill_in_edit_form($id)
-	{
-		$m=$GLOBALS['SITE_DB']->query_select('newsletters',array('*'),array('id'=>intval($id)),'',1);
-		if (!array_key_exists(0,$m)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$r=$m[0];
+    public function fill_in_edit_form($id)
+    {
+        $m = $GLOBALS['SITE_DB']->query_select('newsletters',array('*'),array('id' => intval($id)),'',1);
+        if (!array_key_exists(0,$m)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $r = $m[0];
 
-		return $this->get_form_fields(get_translated_text($r['title']),get_translated_text($r['description']));
-	}
+        return $this->get_form_fields(get_translated_text($r['title']),get_translated_text($r['description']));
+    }
 
-	/**
+    /**
 	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
-	function add_actualisation()
-	{
-		$title=post_param('title');
-		$description=post_param('description');
+    public function add_actualisation()
+    {
+        $title = post_param('title');
+        $description = post_param('description');
 
-		$id=add_newsletter($title,$description);
+        $id = add_newsletter($title,$description);
 
-		return strval($id);
-	}
+        return strval($id);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
-	function edit_actualisation($id)
-	{
-		$title=post_param('title');
-		$description=post_param('description');
+    public function edit_actualisation($id)
+    {
+        $title = post_param('title');
+        $description = post_param('description');
 
-		edit_newsletter(intval($id),$title,$description);
-	}
+        edit_newsletter(intval($id),$title,$description);
+    }
 
-	/**
+    /**
 	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
-	function delete_actualisation($id)
-	{
-		delete_newsletter(intval($id));
-	}
+    public function delete_actualisation($id)
+    {
+        delete_newsletter(intval($id));
+    }
 }
-
-

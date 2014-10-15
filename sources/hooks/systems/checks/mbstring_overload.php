@@ -20,17 +20,18 @@
 
 class Hook_check_mbstring_overload
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
-		$test=ini_get('mbstring.func_overload');
-		if (($test!==false) && ($test!=='') && ($test!=='0'))
-			$warning[]=do_lang_tempcode('WARNING_MBSTRING_FUNC_OVERLOAD');
-		return $warning;
-	}
+    public function run()
+    {
+        $warning = array();
+        $test = ini_get('mbstring.func_overload');
+        if (($test !== false) && ($test !== '') && ($test !== '0')) {
+            $warning[] = do_lang_tempcode('WARNING_MBSTRING_FUNC_OVERLOAD');
+        }
+        return $warning;
+    }
 }

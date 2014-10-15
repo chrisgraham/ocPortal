@@ -20,20 +20,22 @@
 
 class Hook_whats_news_ocf_forumview
 {
-	/**
+    /**
 	 * Find selectable (filterable) categories.
 	 *
 	 * @return ?array				Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
 	 */
-	function choose_categories()
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function choose_categories()
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		require_code('ocf_forums2');
-		return array(ocf_get_forum_tree_secure(NULL,NULL,true),do_lang('SECTION_FORUMS'));
-	}
+        require_code('ocf_forums2');
+        return array(ocf_get_forum_tree_secure(null,null,true),do_lang('SECTION_FORUMS'));
+    }
 
-	/**
+    /**
 	 * Run function for newsletter hooks.
 	 *
 	 * @param  TIME				The time that the entries found must be newer than
@@ -41,33 +43,33 @@ class Hook_whats_news_ocf_forumview
 	 * @param  string				Category filter to apply
 	 * @return array				Tuple of result details
 	 */
-	function run($cutoff_time,$lang,$filter)
-	{
-		$max=intval(get_option('max_newsletter_whatsnew'));
+    public function run($cutoff_time,$lang,$filter)
+    {
+        $max = intval(get_option('max_newsletter_whatsnew'));
 
-		$new=new ocp_tempcode();
+        $new = new ocp_tempcode();
 
-		if (get_forum_type()!='ocf') return array();
+        if (get_forum_type() != 'ocf') {
+            return array();
+        }
 
-		require_code('ocfiltering');
-		$or_list=ocfilter_to_sqlfragment($filter,'t_forum_id');
-		$rows=$GLOBALS['FORUM_DB']->query('SELECT * FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE t_cache_last_time>'.strval($cutoff_time).' AND t_validated=1 AND t_pt_to IS NULL AND t_pt_from IS NULL AND ('.$or_list.') ORDER BY t_cache_last_time DESC',$max);
-		if (count($rows)==$max) return array();
-		foreach ($rows as $row)
-		{
-			if (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',strval($row['t_forum_id'])))
-			{
-				$id=$row['id'];
-				$_url=build_url(array('page'=>'topicview','type'=>'misc','id'=>$row['id']),get_module_zone('topicview'),NULL,false,false,true);
-				$url=$_url->evaluate();
-				$name=$row['t_cache_first_title'];
-				$member_id=(is_guest($row['t_cache_first_member_id']))?NULL:strval($row['t_cache_first_member_id']);
-				$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'14a328f973ac44eb54aa9b31e5a4ae34','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'CONTENT_TYPE'=>'topic','CONTENT_ID'=>strval($id))));
-			}
-		}
+        require_code('ocfiltering');
+        $or_list = ocfilter_to_sqlfragment($filter,'t_forum_id');
+        $rows = $GLOBALS['FORUM_DB']->query('SELECT * FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics WHERE t_cache_last_time>' . strval($cutoff_time) . ' AND t_validated=1 AND t_pt_to IS NULL AND t_pt_from IS NULL AND (' . $or_list . ') ORDER BY t_cache_last_time DESC',$max);
+        if (count($rows) == $max) {
+            return array();
+        }
+        foreach ($rows as $row) {
+            if (has_category_access($GLOBALS['FORUM_DRIVER']->get_guest_id(),'forums',strval($row['t_forum_id']))) {
+                $id = $row['id'];
+                $_url = build_url(array('page' => 'topicview','type' => 'misc','id' => $row['id']),get_module_zone('topicview'),null,false,false,true);
+                $url = $_url->evaluate();
+                $name = $row['t_cache_first_title'];
+                $member_id = (is_guest($row['t_cache_first_member_id']))?null:strval($row['t_cache_first_member_id']);
+                $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => '14a328f973ac44eb54aa9b31e5a4ae34','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'CONTENT_TYPE' => 'topic','CONTENT_ID' => strval($id))));
+            }
+        }
 
-		return array($new,do_lang('SECTION_FORUMS','','','',$lang));
-	}
+        return array($new,do_lang('SECTION_FORUMS','','','',$lang));
+    }
 }
-
-

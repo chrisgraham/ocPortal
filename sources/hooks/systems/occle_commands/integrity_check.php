@@ -20,7 +20,7 @@
 
 class Hook_occle_command_integrity_check
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,16 +28,18 @@ class Hook_occle_command_integrity_check
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('integrity_check',array('h'),array()),'','');
-		else
-		{
-			require_code('upgrade');
-			$result=run_integrity_check(true,false,true);
-			if ($result=='') $result=do_lang('NO_ACTION_REQUIRED');
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('integrity_check',array('h'),array()),'','');
+        } else {
+            require_code('upgrade');
+            $result = run_integrity_check(true,false,true);
+            if ($result == '') {
+                $result = do_lang('NO_ACTION_REQUIRED');
+            }
 
-			return array('',$result,'','');
-		}
-	}
+            return array('',$result,'','');
+        }
+    }
 }

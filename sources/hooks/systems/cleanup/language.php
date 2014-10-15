@@ -20,32 +20,30 @@
 
 class Hook_language
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['title']=do_lang_tempcode('LANGUAGE_CACHE');
-		$info['description']=do_lang_tempcode('DESCRIPTION_LANGUAGE_CACHE');
-		$info['type']='cache';
+    public function info()
+    {
+        $info = array();
+        $info['title'] = do_lang_tempcode('LANGUAGE_CACHE');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_LANGUAGE_CACHE');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		erase_cached_language();
+    public function run()
+    {
+        erase_cached_language();
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }
-
-

@@ -15,44 +15,49 @@
 
 class Hook_search_iotds
 {
-	/**
+    /**
 	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
-	function info($check_permissions=true)
-	{
-		if (!module_installed('iotds')) return NULL;
+    public function info($check_permissions = true)
+    {
+        if (!module_installed('iotds')) {
+            return NULL;
+        }
 
-		if ($check_permissions)
-		{
-			if (!has_actual_page_access(get_member(),'iotds')) return NULL;
-		}
-		if ($GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)')==0) return NULL;
+        if ($check_permissions) {
+            if (!has_actual_page_access(get_member(),'iotds')) {
+                return NULL;
+            }
+        }
+        if ($GLOBALS['SITE_DB']->query_select_value('iotd','COUNT(*)') == 0) {
+            return NULL;
+        }
 
-		require_lang('iotds');
+        require_lang('iotds');
 
-		$info=array();
-		$info['lang']=do_lang_tempcode('IOTD_ARCHIVE');
-		$info['default']=true;
+        $info = array();
+        $info['lang'] = do_lang_tempcode('IOTD_ARCHIVE');
+        $info['default'] = true;
 
-		$info['permissions']=array(
-			array(
-				'type'=>'zone',
-				'zone_name'=>get_module_zone('iotds'),
-			),
-			array(
-				'type'=>'page',
-				'zone_name'=>get_module_zone('iotds'),
-				'page_name'=>'iotds',
-			),
-		);
+        $info['permissions'] = array(
+            array(
+                'type' => 'zone',
+                'zone_name' => get_module_zone('iotds'),
+            ),
+            array(
+                'type' => 'page',
+                'zone_name' => get_module_zone('iotds'),
+                'page_name' => 'iotds',
+            ),
+        );
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run function for search results.
 	 *
 	 * @param  string			Search string
@@ -75,63 +80,66 @@ class Hook_search_iotds
 	 * @param  boolean		Whether it is a boolean search
 	 * @return array			List of maps (template, orderer)
 	 */
-	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
-	{
-		$remapped_orderer='';
-		switch ($sort)
-		{
-			case 'average_rating':
-			case 'compound_rating':
-				$remapped_orderer=$sort.':iotds:id';
-				break;
+    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    {
+        $remapped_orderer = '';
+        switch ($sort) {
+            case 'average_rating':
+            case 'compound_rating':
+                $remapped_orderer = $sort . ':iotds:id';
+                break;
 
-			case 'title':
-				$remapped_orderer='caption';
-				break;
+            case 'title':
+                $remapped_orderer = 'caption';
+                break;
 
-			case 'add_date':
-				$remapped_orderer='add_date';
-				break;
-		}
+            case 'add_date':
+                $remapped_orderer = 'add_date';
+                break;
+        }
 
-		require_code('iotds');
-		require_lang('iotds');
+        require_code('iotds');
+        require_lang('iotds');
 
-		// Calculate our where clause (search)
-		$sq=build_search_submitter_clauses('submitter',$author_id,$author);
-		if (is_null($sq)) return array(); else $where_clause.=$sq;
+        // Calculate our where clause (search)
+        $sq = build_search_submitter_clauses('submitter',$author_id,$author);
+        if (is_null($sq)) {
+            return array();
+        } else {
+            $where_clause .= $sq;
+        }
 
-		if (!is_null($cutoff))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='add_date>'.strval($cutoff);
-		}
+        if (!is_null($cutoff)) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'add_date>' . strval($cutoff);
+        }
 
-		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'iotd r',array(''=>'','r.caption'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
+        // Calculate and perform query
+        $rows = get_search_rows(null,null,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'iotd r',array('' => '','r.caption' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
 
-		$out=array();
-		foreach ($rows as $i=>$row)
-		{
-			$out[$i]['data']=$row;
-			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
-		}
+        $out = array();
+        foreach ($rows as $i => $row) {
+            $out[$i]['data'] = $row;
+            unset($rows[$i]);
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	/**
+    /**
 	 * Run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
 	 * @return tempcode	The output
 	 */
-	function render($row)
-	{
-		require_code('iotds');
-		return render_iotd_box($row);
-	}
+    public function render($row)
+    {
+        require_code('iotds');
+        return render_iotd_box($row);
+    }
 }
-
-

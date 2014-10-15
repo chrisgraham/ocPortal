@@ -20,36 +20,34 @@
 
 class Hook_config_proxy_password
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'PROXY_PASSWORD',
-			'type'=>'line',
-			'category'=>'SERVER',
-			'group'=>'NETWORKING',
-			'explanation'=>'CONFIG_OPTION_proxy_password',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>3,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'PROXY_PASSWORD',
+            'type' => 'line',
+            'category' => 'SERVER',
+            'group' => 'NETWORKING',
+            'explanation' => 'CONFIG_OPTION_proxy_password',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 3,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

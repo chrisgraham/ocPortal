@@ -20,31 +20,31 @@
 
 class Hook_occle_notification_occlechat
 {
-	/**
+    /**
 	* Run function for OcCLE notification hooks.
 	*
 	* @param  ?integer	The "current" time on which to base queries (NULL: now)
 	* @return ~array 		Array of section, type and message responses (false: nothing)
 	*/
-	function run($timestamp=NULL)
-	{
-		if (is_null($timestamp)) $timestamp=time();
-		$messages=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'occlechat WHERE c_incoming=1 AND c_timestamp>='.strval($timestamp));
+    public function run($timestamp = null)
+    {
+        if (is_null($timestamp)) {
+            $timestamp = time();
+        }
+        $messages = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'occlechat WHERE c_incoming=1 AND c_timestamp>=' . strval($timestamp));
 
-		require_code('comcode_compiler');
+        require_code('comcode_compiler');
 
-		if (count($messages)>0)
-		{
-			$_messages=array();
-			foreach ($messages as $message)
-			{
-				$_messages[apply_emoticons($message['c_message'])]=$message['c_url'];
-			}
-			$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'occlechat WHERE c_timestamp>='.strval($timestamp));
+        if (count($messages)>0) {
+            $_messages = array();
+            foreach ($messages as $message) {
+                $_messages[apply_emoticons($message['c_message'])] = $message['c_url'];
+            }
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'occlechat WHERE c_timestamp>=' . strval($timestamp));
 
-			return array(do_lang('OCCLE'),do_lang('_NEW_OCCLECHAT_MESSAGES'),do_template('OCCLE_OCCLECHAT_NOTIFICATION',array('_GUID'=>'f6a3a17ace63675690319f6a7540c86a','MESSAGE_COUNT'=>integer_format(count($messages)),'MESSAGES'=>$_messages)));
-		}
-		else return false;
-	}
+            return array(do_lang('OCCLE'),do_lang('_NEW_OCCLECHAT_MESSAGES'),do_template('OCCLE_OCCLECHAT_NOTIFICATION',array('_GUID' => 'f6a3a17ace63675690319f6a7540c86a','MESSAGE_COUNT' => integer_format(count($messages)),'MESSAGES' => $_messages)));
+        } else {
+            return false;
+        }
+    }
 }
-

@@ -30,41 +30,36 @@
  */
 function ocf_field_editable($field_name,$special_type)
 {
-	switch ($field_name)
-	{
-		case 'username':
-			switch ($special_type)
-			{
-				case 'ldap':
-					return false;
-			}
-			break;
+    switch ($field_name) {
+        case 'username':
+            switch ($special_type) {
+                case 'ldap':
+                    return false;
+            }
+            break;
 
-		case 'password':
-			switch ($special_type)
-			{
-				case 'ldap':
-				case 'httpauth':
-					return false;
-			}
-			break;
+        case 'password':
+            switch ($special_type) {
+                case 'ldap':
+                case 'httpauth':
+                    return false;
+            }
+            break;
 
-		case 'primary_group':
-			switch ($special_type)
-			{
-				case 'ldap':
-					return false;
-			}
-			break;
+        case 'primary_group':
+            switch ($special_type) {
+                case 'ldap':
+                    return false;
+            }
+            break;
 
-		case 'secondary_groups':
-			switch ($special_type)
-			{
-				case 'ldap':
-					return false;
-			}
-			break;
-	}
+        case 'secondary_groups':
+            switch ($special_type) {
+                case 'ldap':
+                    return false;
+            }
+            break;
+    }
 
-	return true;
+    return true;
 }

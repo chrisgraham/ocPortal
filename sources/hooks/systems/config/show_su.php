@@ -20,35 +20,33 @@
 
 class Hook_config_show_su
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'SU',
-			'type'=>'tick',
-			'category'=>'THEME',
-			'group'=>'FOOTER_LINKS',
-			'explanation'=>'CONFIG_OPTION_show_su',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'SU',
+            'type' => 'tick',
+            'category' => 'THEME',
+            'group' => 'FOOTER_LINKS',
+            'explanation' => 'CONFIG_OPTION_show_su',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return has_no_forum()?NULL:'1';
-	}
+    public function get_default()
+    {
+        return has_no_forum()?null:'1';
+    }
 }
-
-

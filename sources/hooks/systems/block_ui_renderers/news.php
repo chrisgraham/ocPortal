@@ -20,7 +20,7 @@
 
 class Hook_block_ui_renderers_news
 {
-	/**
+    /**
 	 * See if a particular block parameter's UI input can be rendered by this.
 	 *
 	 * @param  ID_TEXT		The block
@@ -30,14 +30,13 @@ class Hook_block_ui_renderers_news
 	 * @param  tempcode		Field description
 	 * @return ?tempcode		Rendered field (NULL: not handled).
 	 */
-	function render_block_ui($block,$parameter,$has_default,$default,$description)
-	{
-		if ((($default=='') || (is_numeric(str_replace(',','',$default)))) && ($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) // news category list
-		{
-			require_code('news');
-			$list=create_selection_list_news_categories(($default=='')?-1:intval($default));
-			return form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list);
-		}
-		return NULL;
-	}
+    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    {
+        if ((($default == '') || (is_numeric(str_replace(',','',$default)))) && ($parameter == 'filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) { // news category list
+            require_code('news');
+            $list = create_selection_list_news_categories(($default == '')?-1:intval($default));
+            return form_input_multi_list(titleify($parameter),escape_html($description),$parameter,$list);
+        }
+        return NULL;
+    }
 }

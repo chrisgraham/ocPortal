@@ -20,77 +20,77 @@
 
 class Hook_content_meta_aware_comcode_page
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'zones:COMCODE_PAGE',
+            'content_type_label' => 'zones:COMCODE_PAGE',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'comcode_pages',
-			'id_field'=>array('the_page','the_zone'),
-			'id_field_numeric'=>false,
-			'parent_category_field'=>'the_zone',
-			'parent_category_meta_aware_type'=>NULL,
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>array('the_zone','the_page'), // For category permissions
-			'category_type'=>'<page>', // For category permissions ("<page>" means use page permissions)
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_is_string'=>true,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'comcode_pages',
+            'id_field' => array('the_page','the_zone'),
+            'id_field_numeric' => false,
+            'parent_category_field' => 'the_zone',
+            'parent_category_meta_aware_type' => NULL,
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => array('the_zone','the_page'), // For category permissions
+            'category_type' => '<page>', // For category permissions ("<page>" means use page permissions)
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_is_string' => true,
 
-			'title_field'=>'the_page',
-			'title_field_dereference'=>false,
-			'description_field'=>NULL,
-			'thumb_field'=>NULL,
+            'title_field' => 'the_page',
+            'title_field_dereference' => false,
+            'description_field' => NULL,
+            'thumb_field' => NULL,
 
-			'view_page_link_pattern'=>'_WILD:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_comcode_pages:_ed:page_link=_WILD',
-			'view_category_page_link_pattern'=>'_WILD:',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_comcode_pages'))?(get_module_zone('cms_comcode_pages').':cms_comcode_pages:ed'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_page_zone('sitemap')).':sitemap',
+            'view_page_link_pattern' => '_WILD:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_comcode_pages:_ed:page_link=_WILD',
+            'view_category_page_link_pattern' => '_WILD:',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_comcode_pages'))?(get_module_zone('cms_comcode_pages') . ':cms_comcode_pages:ed'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_page_zone('sitemap')) . ':sitemap',
 
-			'support_url_monikers'=>true,
+            'support_url_monikers' => true,
 
-			'views_field'=>NULL,
-			'submitter_field'=>'p_submitter',
-			'add_time_field'=>'p_add_date',
-			'edit_time_field'=>'p_edit_date',
-			'date_field'=>'p_add_date',
-			'validated_field'=>'p_validated',
+            'views_field' => NULL,
+            'submitter_field' => 'p_submitter',
+            'add_time_field' => 'p_add_date',
+            'edit_time_field' => 'p_edit_date',
+            'date_field' => 'p_add_date',
+            'validated_field' => 'p_validated',
 
-			'seo_type_code'=>'comcode_page',
+            'seo_type_code' => 'comcode_page',
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL,
+            'permissions_type_code' => NULL,
 
-			'search_hook'=>'comcode_pages',
+            'search_hook' => 'comcode_pages',
 
-			'addon_name'=>'core_comcode_pages',
+            'addon_name' => 'core_comcode_pages',
 
-			'module'=>NULL,
-			'cms_page'=>'cms_comcode_pages',
+            'module' => NULL,
+            'cms_page' => 'cms_comcode_pages',
 
-			'occle_filesystem_hook'=>'comcode_pages',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'comcode_pages',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>'comcode_pages',
+            'rss_hook' => 'comcode_pages',
 
-			'actionlog_regexp'=>'\w+_COMCODE_PAGE',
-		);
-	}
+            'actionlog_regexp' => '\w+_COMCODE_PAGE',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -102,12 +102,12 @@ class Hook_content_meta_aware_comcode_page
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		unset($zone); // Meaningless here
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        unset($zone); // Meaningless here
 
-		require_code('zones2');
+        require_code('zones2');
 
-		return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root,$guid);
-	}
+        return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root,$guid);
+    }
 }

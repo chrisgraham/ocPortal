@@ -20,55 +20,55 @@
 
 class Hook_Preview_block_comcode
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		if (!has_privilege(get_member(),'comcode_dangerous')) return array(false,NULL,false);
+    public function applies()
+    {
+        if (!has_privilege(get_member(),'comcode_dangerous')) {
+            return array(false,null,false);
+        }
 
-		$applies=!is_null(post_param('block',NULL));
-		return array($applies,NULL,false);
-	}
+        $applies = !is_null(post_param('block',null));
+        return array($applies,null,false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		if (!has_privilege(get_member(),'comcode_dangerous')) access_denied('I_ERROR');
+    public function run()
+    {
+        if (!has_privilege(get_member(),'comcode_dangerous')) {
+            access_denied('I_ERROR');
+        }
 
-		require_code('zones2');
-		require_code('zones3');
+        require_code('zones2');
+        require_code('zones3');
 
-		$bparameters='';
-		$bparameters_xml='';
-		$block=post_param('block');
-		$parameters=get_block_parameters($block);
-		foreach ($parameters as $parameter)
-		{
-			if (($parameter=='filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive'))))
-			{
-				$value=post_param($parameter,'');
-			} else
-			{
-				$value=post_param($parameter,'0');
-			}
-			if ($value!='')
-			{
-				$bparameters.=' '.$parameter.'="'.str_replace('"','\"',$value).'"';
-				$bparameters_xml='<blockParam key="'.escape_html($parameter).'" val="'.escape_html($value).'" />';
-			}
-		}
+        $bparameters = '';
+        $bparameters_xml = '';
+        $block = post_param('block');
+        $parameters = get_block_parameters($block);
+        foreach ($parameters as $parameter) {
+            if (($parameter == 'filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) {
+                $value = post_param($parameter,'');
+            } else {
+                $value = post_param($parameter,'0');
+            }
+            if ($value != '') {
+                $bparameters .= ' ' . $parameter . '="' . str_replace('"','\"',$value) . '"';
+                $bparameters_xml = '<blockParam key="' . escape_html($parameter) . '" val="' . escape_html($value) . '" />';
+            }
+        }
 
-		$comcode='[block'.$bparameters.']'.$block.'[/block]';
+        $comcode = '[block' . $bparameters . ']' . $block . '[/block]';
 
-		$preview=comcode_to_tempcode($comcode);
+        $preview = comcode_to_tempcode($comcode);
 
-		return array($preview,NULL);
-	}
+        return array($preview,null);
+    }
 }

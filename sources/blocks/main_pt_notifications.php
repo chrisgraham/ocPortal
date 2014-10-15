@@ -20,54 +20,51 @@
 
 class Block_main_pt_notifications
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array();
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array();
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (get_forum_type()!='ocf') return new ocp_tempcode();
+    public function run($map)
+    {
+        if (get_forum_type() != 'ocf') {
+            return new ocp_tempcode();
+        }
 
-		require_code('ocf_general');
-		require_css('ocf');
-		require_lang('ocf');
+        require_code('ocf_general');
+        require_css('ocf');
+        require_lang('ocf');
 
-		if (!is_guest())
-		{
-			require_code('ocf_notifications');
-			list($notifications,$num_unread_pps)=generate_notifications(get_member());
-			if (!$notifications->is_empty())
-			{
-				require_javascript('javascript_ajax');
-			}
-		} else
-		{
-			$notifications=new ocp_tempcode();
-			$num_unread_pps=0;
-		}
+        if (!is_guest()) {
+            require_code('ocf_notifications');
+            list($notifications,$num_unread_pps) = generate_notifications(get_member());
+            if (!$notifications->is_empty()) {
+                require_javascript('javascript_ajax');
+            }
+        } else {
+            $notifications = new ocp_tempcode();
+            $num_unread_pps = 0;
+        }
 
-		return do_template('BLOCK_MAIN_PT_NOTIFICATIONS',array('_GUID'=>'7606c3bf73f059ec5b194bc33d881763','NOTIFICATIONS'=>$notifications));
-	}
+        return do_template('BLOCK_MAIN_PT_NOTIFICATIONS',array('_GUID' => '7606c3bf73f059ec5b194bc33d881763','NOTIFICATIONS' => $notifications));
+    }
 }
-
-

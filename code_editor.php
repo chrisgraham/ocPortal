@@ -17,33 +17,28 @@
 
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE,$RELATIVE_PATH;
-$FILE_BASE=(strpos(__FILE__,'./')===false)?__FILE__:realpath(__FILE__);
-$FILE_BASE=dirname($FILE_BASE);
-if (!is_file($FILE_BASE.'/sources/global.php')) // Need to navigate up a level further perhaps?
-{
-	$RELATIVE_PATH=basename($FILE_BASE);
-	$FILE_BASE=dirname($FILE_BASE);
-} else
-{
-	$RELATIVE_PATH='';
+$FILE_BASE = (strpos(__FILE__,'./') === false)?__FILE__:realpath(__FILE__);
+$FILE_BASE = dirname($FILE_BASE);
+if (!is_file($FILE_BASE . '/sources/global.php')) {
+    $RELATIVE_PATH = basename($FILE_BASE);
+    $FILE_BASE = dirname($FILE_BASE);
+} else {
+    $RELATIVE_PATH = '';
 }
 @chdir($FILE_BASE);
 
-if (get_magic_quotes_gpc())
-{
-	foreach ($_POST as $key=>$val)
-	{
-		$_POST[$key]=stripslashes($val);
-	}
-	foreach ($_GET as $key=>$val)
-	{
-		$_GET[$key]=stripslashes($val);
-	}
+if (get_magic_quotes_gpc()) {
+    foreach ($_POST as $key => $val) {
+        $_POST[$key] = stripslashes($val);
+    }
+    foreach ($_GET as $key => $val) {
+        $_GET[$key] = stripslashes($val);
+    }
 }
 
 global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-$HTML_ESCAPE_1_STRREP=array('&'/*,'�','�'*/,'"','\'','<','>'/*,'�'*/);
-$HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
+$HTML_ESCAPE_1_STRREP = array('&'/*,'�','�'*/,'"','\'','<','>'/*,'�'*/);
+$HTML_ESCAPE_2 = array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
 
 /**
  * Escape HTML text. Heavily optimised! Ended up with preg_replace after trying lots of things.
@@ -53,29 +48,32 @@ $HTML_ESCAPE_2=array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt
  */
 function code_editor_escape_html($string)
 {
-	if ($string==='') return ''; // Optimisation
+    if ($string === '') {
+        return '';
+    } // Optimisation
 
-	return str_replace($GLOBALS['HTML_ESCAPE_1_STRREP'],$GLOBALS['HTML_ESCAPE_2'],$string);
+    return str_replace($GLOBALS['HTML_ESCAPE_1_STRREP'],$GLOBALS['HTML_ESCAPE_2'],$string);
 }
 
-require_once($FILE_BASE.'/_config.php');
+require_once($FILE_BASE . '/_config.php');
 
-if ((array_key_exists('given_password',$_POST)))
-{
-	$given_password=$_POST['given_password'];
-	if (ce_check_master_password($given_password))
-	{
-		if ((!array_key_exists('path',$_POST)) && (!array_key_exists('path',$_GET))) do_get_path($given_password);
-		else
-		{
-			if (!isset($_POST['path_new'])) $_POST['path_new']='';
-			$path=($_POST['path_new']!='')?$_POST['path_new']:(array_key_exists('path',$_POST)?$_POST['path']:$_GET['path']);
-			do_page($given_password,$path);
-		}
-	} else code_editor_do_login();
-} else
-{
-	code_editor_do_login();
+if ((array_key_exists('given_password',$_POST))) {
+    $given_password = $_POST['given_password'];
+    if (ce_check_master_password($given_password)) {
+        if ((!array_key_exists('path',$_POST)) && (!array_key_exists('path',$_GET))) {
+            do_get_path($given_password);
+        } else {
+            if (!isset($_POST['path_new'])) {
+                $_POST['path_new'] = '';
+            }
+            $path = ($_POST['path_new'] != '')?$_POST['path_new']:(array_key_exists('path',$_POST)?$_POST['path']:$_GET['path']);
+            do_page($given_password,$path);
+        }
+    } else {
+        code_editor_do_login();
+    }
+} else {
+    code_editor_do_login();
 }
 code_editor_do_footer();
 
@@ -85,9 +83,9 @@ code_editor_do_footer();
  * @param  ID_TEXT		The type our form clicks are.
  * @param  ID_TEXT		The target our form clicks get sent to.
  */
-function code_editor_do_header($type,$target='_top')
+function code_editor_do_header($type,$target = '_top')
 {
-	echo '
+    echo '
 <!DOCTYPE html>
 <html lang="EN">
 <head>
@@ -95,21 +93,21 @@ function code_editor_do_header($type,$target='_top')
 	<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 	<style>
 ';
-@print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'].'/themes/default/css/global.css')))))));
-echo '
+    @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
+    echo '
 		.screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
 		.button_screen { padding: 0.5em 0.3em !important; }
 		a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
 	</style>';
-	echo '
+    echo '
 		<script src="data/editarea/edit_area_full.js"></script>
 
 		<meta name="robots" content="noindex, nofollow" />
 		';
-	echo '
+    echo '
 </head>
 <body class="website_body" style="margin: 1em"><div class="global_middle">
-<form target="'.$target.'" action="code_editor.php?type='.$type.'" method="post">
+<form target="' . $target . '" action="code_editor.php?type=' . $type . '" method="post">
 ';
 }
 
@@ -118,7 +116,7 @@ echo '
  */
 function code_editor_do_footer()
 {
-	echo <<<END
+    echo <<<END
 </form>
 
 <script>// <![CDATA[
@@ -144,46 +142,67 @@ END;
  */
 function code_editor_do_login()
 {
-	code_editor_do_header('gui');
-	if (array_key_exists('path',$_GET))
-	{
-		echo '<input type="hidden" name="path" value="'.code_editor_escape_html($_GET['path']).'" />';
-		echo '<input type="hidden" name="path_new" value="" />';
-		if (array_key_exists('line',$_GET)) echo '<input type="hidden" name="line" value="'.code_editor_escape_html($_GET['line']).'" />';
-	}
-	global $SITE_INFO;
-	$ftp_domain=array_key_exists('ftp_domain',$SITE_INFO)?$SITE_INFO['ftp_domain']:'localhost';
-	if (!array_key_exists('ftp_username',$SITE_INFO))
-	{
-		if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'),'posix_getpwuid')===false))
-		{
-			$file_owner=fileowner($GLOBALS['FILE_BASE'].'/code_editor.php');
-			if ($file_owner!==false)
-			{
-				$u_info=posix_getpwuid($file_owner);
-				if ($u_info!==false) $ftp_username=$u_info['name']; else $ftp_username='';
-			} else $ftp_username='';
-		} else $ftp_username='';
-		if (is_null($ftp_username)) $ftp_username='';
-	} else $ftp_username=$SITE_INFO['ftp_username'];
-	if (!array_key_exists('ftp_folder',$SITE_INFO))
-	{
-		$dr=array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
-		if (strpos($dr,'/')!==false) $dr_parts=explode('/',$dr); else $dr_parts=explode('\\',$dr);
-		$webdir_stub=$dr_parts[count($dr_parts)-1];
-		$script_name=isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
-		$pos=strpos($script_name,'code_editor.php');
-		if ($pos===false) $pos=strlen($script_name); else $pos--;
-		$ftp_folder='/'.$webdir_stub.substr($script_name,0,$pos);
-	} else $ftp_folder=$SITE_INFO['ftp_folder'];
-	echo <<<END
+    code_editor_do_header('gui');
+    if (array_key_exists('path',$_GET)) {
+        echo '<input type="hidden" name="path" value="' . code_editor_escape_html($_GET['path']) . '" />';
+        echo '<input type="hidden" name="path_new" value="" />';
+        if (array_key_exists('line',$_GET)) {
+            echo '<input type="hidden" name="line" value="' . code_editor_escape_html($_GET['line']) . '" />';
+        }
+    }
+    global $SITE_INFO;
+    $ftp_domain = array_key_exists('ftp_domain',$SITE_INFO)?$SITE_INFO['ftp_domain']:'localhost';
+    if (!array_key_exists('ftp_username',$SITE_INFO)) {
+        if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'),'posix_getpwuid') === false)) {
+            $file_owner = fileowner($GLOBALS['FILE_BASE'] . '/code_editor.php');
+            if ($file_owner !== false) {
+                $u_info = posix_getpwuid($file_owner);
+                if ($u_info !== false) {
+                    $ftp_username = $u_info['name'];
+                } else {
+                    $ftp_username = '';
+                }
+            } else {
+                $ftp_username = '';
+            }
+        } else {
+            $ftp_username = '';
+        }
+        if (is_null($ftp_username)) {
+            $ftp_username = '';
+        }
+    } else {
+        $ftp_username = $SITE_INFO['ftp_username'];
+    }
+    if (!array_key_exists('ftp_folder',$SITE_INFO)) {
+        $dr = array_key_exists('DOCUMENT_ROOT',$_SERVER)?$_SERVER['DOCUMENT_ROOT']:(array_key_exists('DOCUMENT_ROOT',$_ENV)?$_ENV['DOCUMENT_ROOT']:'');
+        if (strpos($dr,'/') !== false) {
+            $dr_parts = explode('/',$dr);
+        } else {
+            $dr_parts = explode('\\',$dr);
+        }
+        $webdir_stub = $dr_parts[count($dr_parts)-1];
+        $script_name = isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
+        $pos = strpos($script_name,'code_editor.php');
+        if ($pos === false) {
+            $pos = strlen($script_name);
+        } else {
+            $pos--;
+        }
+        $ftp_folder = '/' . $webdir_stub . substr($script_name,0,$pos);
+    } else {
+        $ftp_folder = $SITE_INFO['ftp_folder'];
+    }
+    echo <<<END
 	<h1 class="screen_title">ocPortal Code Editor</h1>
 END;
-	if (@$_POST['given_password']) echo '<p><strong>Invalid password</strong></p>';
-	$_ftp_domain=code_editor_escape_html($ftp_domain);
-	$_ftp_folder=code_editor_escape_html($ftp_folder);
-	$_ftp_username=code_editor_escape_html($ftp_username);
-	echo <<<END
+    if (@$_POST['given_password']) {
+        echo '<p><strong>Invalid password</strong></p>';
+    }
+    $_ftp_domain = code_editor_escape_html($ftp_domain);
+    $_ftp_folder = code_editor_escape_html($ftp_folder);
+    $_ftp_username = code_editor_escape_html($ftp_username);
+    echo <<<END
 	<p>
 		<label for="given_password">Master Password: <input type="password" name="given_password" id="given_password" /></label>
 	</p>
@@ -202,14 +221,13 @@ END;
 	<ul class="actions_list" role="navigation">
 		<li><a title="ocProducts programming tutorial (this link will open in a new window)" target="_blank" href="http://ocportal.com/docs/tut_programming.htm">Read the ocProducts programming tutorial</a></li>
 END;
-if (array_key_exists('base_url',$SITE_INFO))
-{
-$_base_url=code_editor_escape_html($SITE_INFO['base_url']);
-echo <<<END
+    if (array_key_exists('base_url',$SITE_INFO)) {
+        $_base_url = code_editor_escape_html($SITE_INFO['base_url']);
+        echo <<<END
 		<li><a href="{$_base_url}/adminzone/index.php">Go to Admin Zone</a></li>
 END;
-}
-echo <<<END
+    }
+    echo <<<END
 	</ul>
 END;
 }
@@ -222,32 +240,27 @@ END;
  */
 function do_dir($dir)
 {
-	$out=array();
-	$_dir=($dir=='')?'.':$dir;
-	$dh=@opendir($_dir);
-	if ($dh!==false)
-	{
-		while (($file=readdir($dh))!==false)
-		{
-			if ($file[0]!='.')
-			{
-				if (is_file($_dir.'/'.$file))
-				{
-					if ((substr($file,-4,4)=='.php') || (substr($file,-4,4)=='.ini'))
-					{
-						$path=$dir.(($dir!='')?'/':'').$file;
-						$alt=str_replace('lang/','lang_custom/',str_replace('pages/modules/','pages/modules_custom/',str_replace('sources/','sources_custom/',$path)));
-						if (($alt==$path) || (!file_exists($alt)))
-							$out[]='<option>'.code_editor_escape_html($path).'</option>';
-					}
-				} elseif (is_dir($_dir.'/'.$file))
-				{
-					$out=array_merge($out,do_dir($dir.(($dir!='')?'/':'').$file));
-				}
-			}
-		}
-	}
-	return $out;
+    $out = array();
+    $_dir = ($dir == '')?'.':$dir;
+    $dh = @opendir($_dir);
+    if ($dh !== false) {
+        while (($file = readdir($dh)) !== false) {
+            if ($file[0] != '.') {
+                if (is_file($_dir . '/' . $file)) {
+                    if ((substr($file,-4,4) == '.php') || (substr($file,-4,4) == '.ini')) {
+                        $path = $dir . (($dir != '')?'/':'') . $file;
+                        $alt = str_replace('lang/','lang_custom/',str_replace('pages/modules/','pages/modules_custom/',str_replace('sources/','sources_custom/',$path)));
+                        if (($alt == $path) || (!file_exists($alt))) {
+                            $out[] = '<option>' . code_editor_escape_html($path) . '</option>';
+                        }
+                    }
+                } elseif (is_dir($_dir . '/' . $file)) {
+                    $out = array_merge($out,do_dir($dir . (($dir != '')?'/':'') . $file));
+                }
+            }
+        }
+    }
+    return $out;
 }
 
 /**
@@ -257,28 +270,26 @@ function do_dir($dir)
  */
 function do_get_path($given_password)
 {
-	// Just to test a connection if one was requested
-	$test=open_up_ftp_connection();
-	if (is_string($test))
-	{
-		echo '<h1 class="screen_title">An FTP error occurred</h1>';
-		echo '<p>'.code_editor_escape_html($test).'</p>';
-		return;
-	}
+    // Just to test a connection if one was requested
+    $test = open_up_ftp_connection();
+    if (is_string($test)) {
+        echo '<h1 class="screen_title">An FTP error occurred</h1>';
+        echo '<p>' . code_editor_escape_html($test) . '</p>';
+        return;
+    }
 
-	code_editor_do_header('gui');
-	$files=do_dir('');
-	sort($files);
-	$paths=implode('',$files);
-foreach ($_POST as $key=>$val)
-{
-$_key=code_editor_escape_html($key);
-$_val=code_editor_escape_html($val);
-echo <<<END
+    code_editor_do_header('gui');
+    $files = do_dir('');
+    sort($files);
+    $paths = implode('',$files);
+    foreach ($_POST as $key => $val) {
+        $_key = code_editor_escape_html($key);
+        $_val = code_editor_escape_html($val);
+        echo <<<END
 <input type="hidden" name="{$_key}" value="{$_val}" />
 END;
-}
-	echo <<<END
+    }
+    echo <<<END
 	<h1 class="screen_title">ocPortal Code Editor</h1>
 	<p>
 		New File: <input type="text" name="path_new" />
@@ -298,18 +309,20 @@ END;
  * @param  PATH			The full pathname to the file/directory
  * @param  integer		The permissions to make (not the permissions are reduced if the function finds that the file is owned by the web user [doesn't need world permissions then])
  */
-function ce_fix_permissions($path,$perms=0666) // We call this function assuming we are giving world permissions
+function ce_fix_permissions($path,$perms = 0666) // We call this function assuming we are giving world permissions
 {
-	// If the file user is different to the FTP user, we need to make it world writeable
-	if ((!function_exists('posix_getuid')) || (strpos(@ini_get('disable_functions'),'posix_getuid')!==false) || (@posix_getuid()!=@fileowner($GLOBALS['FILE_BASE'].'/index.php')))
-	{
-		@chmod($path,$perms);
-	} else // Otherwise we do not
-	{
-		if ($perms==0666) @chmod($path,0644);
-		elseif ($perms==0777) @chmod($path,0744);
-		else @chmod($path,$perms);
-	}
+    // If the file user is different to the FTP user, we need to make it world writeable
+    if ((!function_exists('posix_getuid')) || (strpos(@ini_get('disable_functions'),'posix_getuid') !== false) || (@posix_getuid() != @fileowner($GLOBALS['FILE_BASE'] . '/index.php'))) {
+        @chmod($path,$perms);
+    } else { // Otherwise we do not
+        if ($perms == 0666) {
+            @chmod($path,0644);
+        } elseif ($perms == 0777) {
+            @chmod($path,0744);
+        } else {
+            @chmod($path,$perms);
+        }
+    }
 }
 
 /**
@@ -319,50 +332,53 @@ function ce_fix_permissions($path,$perms=0666) // We call this function assuming
  */
 function open_up_ftp_connection()
 {
-	if ((!isset($_POST['ftp_username'])) || ($_POST['ftp_username']=='')) return NULL;
+    if ((!isset($_POST['ftp_username'])) || ($_POST['ftp_username'] == '')) {
+        return NULL;
+    }
 
-	$conn=false;
-	$domain=$_POST['ftp_domain'];
-	$port=21;
-	if (strpos($domain,':')!==false)
-	{
-		list($domain,$_port)=explode(':',$domain,2);
-		$port=intval($_port);
-	}
-	if (function_exists('ftp_ssl_connect')) $conn=@ftp_ssl_connect($domain,$port);
-	$ssl=($conn!==false);
-	if (($ssl) && (@ftp_login($conn,$_POST['ftp_username'],$_POST['ftp_password'])===false))
-	{
-		$conn=false;
-		$ssl=false;
-	}
-	if ($conn===false) $conn=@ftp_connect($domain,$port);
-	if ($conn===false)
-	{
-		return 'Could not connection to host '.$_POST['ftp_domain'];
-	}
+    $conn = false;
+    $domain = $_POST['ftp_domain'];
+    $port = 21;
+    if (strpos($domain,':') !== false) {
+        list($domain,$_port) = explode(':',$domain,2);
+        $port = intval($_port);
+    }
+    if (function_exists('ftp_ssl_connect')) {
+        $conn = @ftp_ssl_connect($domain,$port);
+    }
+    $ssl = ($conn !== false);
+    if (($ssl) && (@ftp_login($conn,$_POST['ftp_username'],$_POST['ftp_password']) === false)) {
+        $conn = false;
+        $ssl = false;
+    }
+    if ($conn === false) {
+        $conn = @ftp_connect($domain,$port);
+    }
+    if ($conn === false) {
+        return 'Could not connection to host ' . $_POST['ftp_domain'];
+    }
 
-	if ((!$ssl) && (@ftp_login($conn,$_POST['ftp_username'],$_POST['ftp_password'])===false))
-	{
-		return 'Could connect to the FTP server but not log in. ['.@strval($php_errormsg).']';
-	}
+    if ((!$ssl) && (@ftp_login($conn,$_POST['ftp_username'],$_POST['ftp_password']) === false)) {
+        return 'Could connect to the FTP server but not log in. [' . @strval($php_errormsg) . ']';
+    }
 
-	if (substr($_POST['ftp_folder'],-1)!='/') $_POST['ftp_folder'].='/';
-	if (@ftp_chdir($conn,$_POST['ftp_folder'])===false)
-	{
-		return 'The FTP folder given was invalid or can not otherwise be accessed. ['.@strval($php_errormsg).']';
-	}
-	$files=@ftp_nlist($conn,'.');
-	if ($files===false) // :(. Weird bug on some systems
-	{
-		$files=array();
-		if (@ftp_rename($conn,'_config.php','_config.php')) $files=array('_config.php');
-	}
-	if (!in_array('_config.php',$files))
-	{
-		return 'This does not appear to be the correct FTP directory.';
-	}
-	return $conn;
+    if (substr($_POST['ftp_folder'],-1) != '/') {
+        $_POST['ftp_folder'] .= '/';
+    }
+    if (@ftp_chdir($conn,$_POST['ftp_folder']) === false) {
+        return 'The FTP folder given was invalid or can not otherwise be accessed. [' . @strval($php_errormsg) . ']';
+    }
+    $files = @ftp_nlist($conn,'.');
+    if ($files === false) { // :(. Weird bug on some systems
+        $files = array();
+        if (@ftp_rename($conn,'_config.php','_config.php')) {
+            $files = array('_config.php');
+        }
+    }
+    if (!in_array('_config.php',$files)) {
+        return 'This does not appear to be the correct FTP directory.';
+    }
+    return $conn;
 }
 
 /**
@@ -373,40 +389,41 @@ function open_up_ftp_connection()
  */
 function do_page($given_password,$path)
 {
-	if ($path[0]=='/') $path=substr($path,1);
-	if (strpos($path,'..')!==false) exit('Suspected hacking attempt');
+    if ($path[0] == '/') {
+        $path = substr($path,1);
+    }
+    if (strpos($path,'..') !== false) {
+        exit('Suspected hacking attempt');
+    }
 
-	$type=array_key_exists('type',$_GET)?$_GET['type']:'gui';
+    $type = array_key_exists('type',$_GET)?$_GET['type']:'gui';
 
-	code_editor_do_header('edit','results');
-	if ($type=='gui')
-	{
-		$save_path=convert_to_save_path($path);
+    code_editor_do_header('edit','results');
+    if ($type == 'gui') {
+        $save_path = convert_to_save_path($path);
 
-		$contents=@file_get_contents($path);
-		$lines=substr_count($contents,"\n")+1;
-		$line=(array_key_exists('line',$_POST)?intval($_POST['line']):(array_key_exists('line',$_POST)?intval($_POST['line']):0));
-		$_path=code_editor_escape_html($path);
-echo <<<END
+        $contents = @file_get_contents($path);
+        $lines = substr_count($contents,"\n")+1;
+        $line = (array_key_exists('line',$_POST)?intval($_POST['line']):(array_key_exists('line',$_POST)?intval($_POST['line']):0));
+        $_path = code_editor_escape_html($path);
+        echo <<<END
 <h1 class="screen_title">ocPortal <a onclick="window.back(); return false;" href="code_editor.php">Code Editor</a>: Editing {$_path}</h1>
 <input type="hidden" name="path" value="{$_path}" />
 END;
-foreach ($_POST as $key=>$val)
-{
-if (($key!='path') && ($key!='path_new'))
-{
-$_key=code_editor_escape_html($key);
-$_val=code_editor_escape_html($val);
-echo <<<END
+        foreach ($_POST as $key => $val) {
+            if (($key != 'path') && ($key != 'path_new')) {
+                $_key = code_editor_escape_html($key);
+                $_val = code_editor_escape_html($val);
+                echo <<<END
 <input type="hidden" name="{$_key}" value="{$_val}" />
 END;
-}
-}
-echo <<<END
+            }
+        }
+        echo <<<END
 <textarea id="file" name="file" rows="35" cols="50" style="width: 100%;">
 END;
-echo code_editor_escape_html($contents).'</textarea>';
-echo <<<END
+        echo code_editor_escape_html($contents) . '</textarea>';
+        echo <<<END
 <script>// <![CDATA[
 	var file=document.getElementById('file');
 	file.scrollTop=Math.round((file.scrollHeight/{$lines})*{$line});
@@ -415,55 +432,50 @@ echo <<<END
 	Jump to (line number or search phrase): <input name="jmp" type="text" value="" /> <input onclick="var val=form.elements['jmp'].value; if (!(window.parseInt(val)>0)) val=file.value.substr(0,file.value.indexOf(val)).split('\\n').length-1; file.scrollTop=Math.round((file.scrollHeight/{$lines})*window.parseInt(val)); return false;" type="submit" value="Jump" />
 </p>
 END;
-if (strpos($path,'_custom/')!==false)
-{
-echo <<<END
+        if (strpos($path,'_custom/') !== false) {
+            echo <<<END
 <p><input id="delete" name="delete" type="checkbox" value="1" /><label for="delete">Delete this override/custom-file. If you choose this, nothing will be edited, only deleted.</label></p>
 END;
-} elseif ($save_path==$path)
-{
-echo <<<END
+        } elseif ($save_path == $path) {
+            echo <<<END
 <p>This file is not overridable - it will be edited directly.</p>
 END;
-}
-else
-{
-echo <<<END
+        } else {
+            echo <<<END
 <p>This file is not yet overridden. <input id="override" name="override" checked="checked" type="checkbox" value="1" /> <label for="override">Use this edit to specify the override (as opposed to saving over the original).</label></p>
 END;
-}
-echo <<<END
+        }
+        echo <<<END
 <p class="proceed_button">
 <input type="submit" value="Edit" />
 </p>
 <iframe name="results" src="" style="display: none"></iframe>
 END;
-	} else
-	{
-		$save_path=$_POST['path'];
-		if (isset($_POST['override'])) $save_path=convert_to_save_path($save_path);
+    } else {
+        $save_path = $_POST['path'];
+        if (isset($_POST['override'])) {
+            $save_path = convert_to_save_path($save_path);
+        }
 
-		$file=$_POST['file'];
+        $file = $_POST['file'];
 
-		// Make backup
-		if (file_exists($save_path))
-		{
-			$backup_path=$save_path.'.'.strval(time());
-			$c_success=@copy($save_path,$backup_path);
-			if ($c_success!==false) ce_sync_file($backup_path);
-		}
+        // Make backup
+        if (file_exists($save_path)) {
+            $backup_path = $save_path . '.' . strval(time());
+            $c_success = @copy($save_path,$backup_path);
+            if ($c_success !== false) {
+                ce_sync_file($backup_path);
+            }
+        }
 
-		$conn=open_up_ftp_connection();
+        $conn = open_up_ftp_connection();
 
-		// Edit
-		if (!isset($_POST['delete']))
-		{
-			if (is_null($conn)) // Via direct access
-			{
-				$myfile=@fopen($save_path,'at');
-				if ($myfile===false)
-				{
-					echo <<<END
+        // Edit
+        if (!isset($_POST['delete'])) {
+            if (is_null($conn)) { // Via direct access
+                $myfile = @fopen($save_path,'at');
+                if ($myfile === false) {
+                    echo <<<END
 <script>
 var msg='Access denied. You probably should have specified FTP details.';
 if (window.alert!==null)
@@ -475,14 +487,13 @@ if (window.alert!==null)
 }
 </script>
 END;
-					return;
-				}
-				@flock($myfile,LOCK_EX);
-				ftruncate($myfile,0);
-				if (fwrite($myfile,$file)===false)
-				{
-					fclose($myfile);
-					echo <<<END
+                    return;
+                }
+                @flock($myfile,LOCK_EX);
+                ftruncate($myfile,0);
+                if (fwrite($myfile,$file) === false) {
+                    fclose($myfile);
+                    echo <<<END
 <script>
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
@@ -494,21 +505,20 @@ if (window.alert!==null)
 }
 </script>
 END;
-					return;
-				}
-				@flock($myfile,LOCK_UN);
-				fclose($myfile);
-			} else // Via FTP
-			{
-				$path2=tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)))?get_custom_file_base().'/safe_mode_temp/':'/tmp/'),'ocpce');
-				if ($path2===false)
-					$path2=tempnam(get_custom_file_base().'/safe_mode_temp/','ocpce');
+                    return;
+                }
+                @flock($myfile,LOCK_UN);
+                fclose($myfile);
+            } else { // Via FTP
+                $path2 = tempnam((((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1') || ((@strval(ini_get('open_basedir')) != '') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir')) == 0)))?get_custom_file_base() . '/safe_mode_temp/':'/tmp/'),'ocpce');
+                if ($path2 === false) {
+                    $path2 = tempnam(get_custom_file_base() . '/safe_mode_temp/','ocpce');
+                }
 
-				$h=fopen($path2,'wt');
-				if (fwrite($h,$file)===false)
-				{
-					fclose($h);
-					echo <<<END
+                $h = fopen($path2,'wt');
+                if (fwrite($h,$file) === false) {
+                    fclose($h);
+                    echo <<<END
 <script>
 var msg='Could not write to file, out of disk space?';
 if (window.alert!==null)
@@ -520,15 +530,14 @@ if (window.alert!==null)
 }
 </script>
 END;
-					return;
-				}
-				fclose($h);
+                    return;
+                }
+                fclose($h);
 
-				$h=fopen($path2,'rt');
-				$ftp_success=@ftp_fput($conn,$save_path,$h,FTP_BINARY);
-				if ($ftp_success===false)
-				{
-					echo <<<END
+                $h = fopen($path2,'rt');
+                $ftp_success = @ftp_fput($conn,$save_path,$h,FTP_BINARY);
+                if ($ftp_success === false) {
+                    echo <<<END
 <script>
 var msg='Could not save via FTP ['.@strval($php_errormsg).'].';
 if (window.alert!==null)
@@ -540,61 +549,55 @@ if (window.alert!==null)
 }
 </script>
 END;
-					return;
-				}
-				fclose($h);
+                    return;
+                }
+                fclose($h);
 
-				unlink($path2);
-			}
-		} else // Delete
-		{
-			unlink($save_path);
-		}
+                unlink($path2);
+            }
+        } else { // Delete
+            unlink($save_path);
+        }
 
-		ce_fix_permissions($save_path);
-		ce_sync_file($save_path);
+        ce_fix_permissions($save_path);
+        ce_sync_file($save_path);
 
-		// Make base-hash-thingy
-		if (!isset($_POST['delete']))
-		{
-			if (file_exists(str_replace('_custom/','/',$save_path)))
-			{
-				$hash=file_get_contents(str_replace('_custom/','/',$save_path));
-				if (is_null($conn)) // Via direct access
-				{
-					$myfile=@fopen($save_path.'.editfrom','wt');
-					if ($myfile!==false)
-					{
-						fwrite($myfile,$hash);
-						fclose($myfile);
-					}
-				} else // Via FTP
-				{
-					$path2=ce_ocp_tempnam('ocpce');
+        // Make base-hash-thingy
+        if (!isset($_POST['delete'])) {
+            if (file_exists(str_replace('_custom/','/',$save_path))) {
+                $hash = file_get_contents(str_replace('_custom/','/',$save_path));
+                if (is_null($conn)) { // Via direct access
+                    $myfile = @fopen($save_path . '.editfrom','wt');
+                    if ($myfile !== false) {
+                        fwrite($myfile,$hash);
+                        fclose($myfile);
+                    }
+                } else { // Via FTP
+                    $path2 = ce_ocp_tempnam('ocpce');
 
-					$h=fopen($path2,'wt');
-					fwrite($h,$hash);
-					fclose($h);
+                    $h = fopen($path2,'wt');
+                    fwrite($h,$hash);
+                    fclose($h);
 
-					$h=fopen($path2,'rt');
-					@ftp_fput($conn,$save_path.'.editfrom',$h,FTP_BINARY);
-					fclose($h);
+                    $h = fopen($path2,'rt');
+                    @ftp_fput($conn,$save_path . '.editfrom',$h,FTP_BINARY);
+                    fclose($h);
 
-					unlink($path2);
-				}
-			}
-		} else
-		{
-			@unlink($save_path.'.editfrom');
-		}
-		ce_fix_permissions($save_path.'.editfrom');
-		ce_sync_file($save_path.'.editfrom');
+                    unlink($path2);
+                }
+            }
+        } else {
+            @unlink($save_path . '.editfrom');
+        }
+        ce_fix_permissions($save_path . '.editfrom');
+        ce_sync_file($save_path . '.editfrom');
 
-		if (!isset($_POST['delete']))
-			$message="Saved ".code_editor_escape_html($save_path)." (and if applicable, placed a backup in its directory)!";
-		else
-			$message="Deleted ".code_editor_escape_html($save_path).". You may edit to recreate the file if you wish however.";
-		echo <<<END
+        if (!isset($_POST['delete'])) {
+            $message = "Saved " . code_editor_escape_html($save_path) . " (and if applicable, placed a backup in its directory)!";
+        } else {
+            $message = "Deleted " . code_editor_escape_html($save_path) . ". You may edit to recreate the file if you wish however.";
+        }
+        echo <<<END
 <script>
 var msg='{$message}';
 if (window.alert!==null)
@@ -606,7 +609,7 @@ if (window.alert!==null)
 }
 </script>
 END;
-	}
+    }
 }
 
 /**
@@ -617,10 +620,14 @@ END;
  */
 function convert_to_save_path($save_path)
 {
-	if (substr($save_path,0,8)=='sources/') $save_path='sources_custom/'.substr($save_path,8);
-	elseif (substr($save_path,0,5)=='lang/') $save_path='lang_custom/'.substr($save_path,5);
-	else $save_path=str_replace('pages/modules/','pages/modules_custom/',$save_path);
-	return $save_path;
+    if (substr($save_path,0,8) == 'sources/') {
+        $save_path = 'sources_custom/' . substr($save_path,8);
+    } elseif (substr($save_path,0,5) == 'lang/') {
+        $save_path = 'lang_custom/' . substr($save_path,5);
+    } else {
+        $save_path = str_replace('pages/modules/','pages/modules_custom/',$save_path);
+    }
+    return $save_path;
 }
 
 /**
@@ -630,16 +637,16 @@ function convert_to_save_path($save_path)
  */
 function ce_sync_file($filename)
 {
-	global $FILE_BASE;
-	if (file_exists($FILE_BASE.'/data_custom/sync_script.php'))
-	{
-		require_once($FILE_BASE.'/data_custom/sync_script.php');
-		if (substr($filename,0,strlen($FILE_BASE))==$FILE_BASE)
-		{
-			$filename=substr($filename,strlen($FILE_BASE));
-		}
-		if (function_exists('master__sync_file')) master__sync_file($filename);
-	}
+    global $FILE_BASE;
+    if (file_exists($FILE_BASE . '/data_custom/sync_script.php')) {
+        require_once($FILE_BASE . '/data_custom/sync_script.php');
+        if (substr($filename,0,strlen($FILE_BASE)) == $FILE_BASE) {
+            $filename = substr($filename,strlen($FILE_BASE));
+        }
+        if (function_exists('master__sync_file')) {
+            master__sync_file($filename);
+        }
+    }
 }
 
 /**
@@ -650,20 +657,19 @@ function ce_sync_file($filename)
  */
 function ce_sync_file_move($old,$new)
 {
-	global $FILE_BASE;
-	if (file_exists($FILE_BASE.'/data_custom/sync_script.php'))
-	{
-		require_once($FILE_BASE.'/data_custom/sync_script.php');
-		if (substr($old,0,strlen($FILE_BASE))==$FILE_BASE)
-		{
-			$old=substr($old,strlen($FILE_BASE));
-		}
-		if (substr($new,0,strlen($FILE_BASE))==$FILE_BASE)
-		{
-			$new=substr($new,strlen($FILE_BASE));
-		}
-		if (function_exists('master__sync_file_move')) master__sync_file_move($old,$new);
-	}
+    global $FILE_BASE;
+    if (file_exists($FILE_BASE . '/data_custom/sync_script.php')) {
+        require_once($FILE_BASE . '/data_custom/sync_script.php');
+        if (substr($old,0,strlen($FILE_BASE)) == $FILE_BASE) {
+            $old = substr($old,strlen($FILE_BASE));
+        }
+        if (substr($new,0,strlen($FILE_BASE)) == $FILE_BASE) {
+            $new = substr($new,strlen($FILE_BASE));
+        }
+        if (function_exists('master__sync_file_move')) {
+            master__sync_file_move($old,$new);
+        }
+    }
 }
 
 /**
@@ -674,26 +680,25 @@ function ce_sync_file_move($old,$new)
  */
 function ce_check_master_password($password_given)
 {
-	if (isset($GLOBALS['SITE_INFO']['admin_password'])) // LEGACY
-	{
-		$GLOBALS['SITE_INFO']['master_password']=$GLOBALS['SITE_INFO']['admin_password'];
-		unset($GLOBALS['SITE_INFO']['admin_password']);
-	}
+    if (isset($GLOBALS['SITE_INFO']['admin_password'])) { // LEGACY
+        $GLOBALS['SITE_INFO']['master_password'] = $GLOBALS['SITE_INFO']['admin_password'];
+        unset($GLOBALS['SITE_INFO']['admin_password']);
+    }
 
-	global $SITE_INFO;
-	if (!array_key_exists('master_password',$SITE_INFO)) exit('No master password defined in _config.php currently so cannot authenticate');
-	$actual_password_hashed=$SITE_INFO['master_password'];
-	if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$')!==false))
-	{
-		return password_verify($password_given,$actual_password_hashed);
-	}
-	$salt='';
-	if ((substr($actual_password_hashed,0,1)=='!') && (strlen($actual_password_hashed)==33))
-	{
-		$actual_password_hashed=substr($actual_password_hashed,1);
-		$salt='ocp';
-	}
-	return (((strlen($password_given)!=32) && ($actual_password_hashed==$password_given)) || ($actual_password_hashed==md5($password_given.$salt)));
+    global $SITE_INFO;
+    if (!array_key_exists('master_password',$SITE_INFO)) {
+        exit('No master password defined in _config.php currently so cannot authenticate');
+    }
+    $actual_password_hashed = $SITE_INFO['master_password'];
+    if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$') !== false)) {
+        return password_verify($password_given,$actual_password_hashed);
+    }
+    $salt = '';
+    if ((substr($actual_password_hashed,0,1) == '!') && (strlen($actual_password_hashed) == 33)) {
+        $actual_password_hashed = substr($actual_password_hashed,1);
+        $salt = 'ocp';
+    }
+    return (((strlen($password_given) != 32) && ($actual_password_hashed == $password_given)) || ($actual_password_hashed == md5($password_given . $salt)));
 }
 
 /**
@@ -704,23 +709,20 @@ function ce_check_master_password($password_given)
  */
 function ce_ocp_tempnam($prefix)
 {
-	global $FILE_BASE;
-	$problem_saving=((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1') || ((function_exists('get_option')) && (get_option('force_local_temp_dir')=='1')) || ((@strval(ini_get('open_basedir'))!='') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir'))==0)));
-	$local_path=$FILE_BASE.'/safe_mode_temp/';
-	$server_path='/tmp/';
-	$tmp_path=$problem_saving?$local_path:$server_path;
-	if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam')===false))
-	{
-		$tempnam=tempnam($tmp_path,'tmpfile__'.$prefix);
-		if (($tempnam===false) && (!$problem_saving))
-		{
-			$tempnam=tempnam($local_path,$prefix);
-		}
-	} else
-	{
-		$tempnam=$prefix.strval(mt_rand(0,min(2147483647,mt_getrandmax())));
-		$myfile=fopen($local_path.'/'.$tempnam,'wb');
-		fclose($myfile);
-	}
-	return $tempnam;
+    global $FILE_BASE;
+    $problem_saving = ((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1') || ((function_exists('get_option')) && (get_option('force_local_temp_dir') == '1')) || ((@strval(ini_get('open_basedir')) != '') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir')) == 0)));
+    $local_path = $FILE_BASE . '/safe_mode_temp/';
+    $server_path = '/tmp/';
+    $tmp_path = $problem_saving?$local_path:$server_path;
+    if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam') === false)) {
+        $tempnam = tempnam($tmp_path,'tmpfile__' . $prefix);
+        if (($tempnam === false) && (!$problem_saving)) {
+            $tempnam = tempnam($local_path,$prefix);
+        }
+    } else {
+        $tempnam = $prefix . strval(mt_rand(0,min(2147483647,mt_getrandmax())));
+        $myfile = fopen($local_path . '/' . $tempnam,'wb');
+        fclose($myfile);
+    }
+    return $tempnam;
 }

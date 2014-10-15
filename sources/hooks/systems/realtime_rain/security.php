@@ -20,49 +20,47 @@
 
 class Hook_realtime_rain_security
 {
-	/**
+    /**
 	 * Run function for realtime-rain hooks.
 	 *
 	 * @param  TIME			Start of time range.
 	 * @param  TIME			End of time range.
 	 * @return array			A list of template parameter sets for rendering a 'drop'.
 	 */
-	function run($from,$to)
-	{
-		$drops=array();
+    public function run($from,$to)
+    {
+        $drops = array();
 
-		if (has_actual_page_access(get_member(),'admin_security'))
-		{
-			$rows=$GLOBALS['SITE_DB']->query('SELECT id,reason,ip,date_and_time AS timestamp,member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'hackattack WHERE date_and_time BETWEEN '.strval($from).' AND '.strval($to));
+        if (has_actual_page_access(get_member(),'admin_security')) {
+            $rows = $GLOBALS['SITE_DB']->query('SELECT id,reason,ip,date_and_time AS timestamp,member_id FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'hackattack WHERE date_and_time BETWEEN ' . strval($from) . ' AND ' . strval($to));
 
-			foreach ($rows as $row)
-			{
-				require_lang('security');
+            foreach ($rows as $row) {
+                require_lang('security');
 
-				$timestamp=$row['timestamp'];
-				$member_id=$row['member_id'];
+                $timestamp = $row['timestamp'];
+                $member_id = $row['member_id'];
 
-				$drops[]=rain_get_special_icons($row['ip'],$timestamp)+array(
-					'TYPE'=>'security',
-					'FROM_MEMBER_ID'=>strval($member_id),
-					'TO_MEMBER_ID'=>NULL,
-					'TITLE'=>rain_truncate_for_title(do_lang('HACKER_DETECTED',do_lang($row['reason']))),
-					'IMAGE'=>is_guest($member_id)?rain_get_country_image($row['ip']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
-					'TIMESTAMP'=>strval($timestamp),
-					'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
-					'TICKER_TEXT'=>NULL,
-					'URL'=>build_url(array('page'=>'admin_security','type'=>'view','id'=>$row['id']),'_SEARCH'),
-					'IS_POSITIVE'=>false,
-					'IS_NEGATIVE'=>true,
+                $drops[] = rain_get_special_icons($row['ip'],$timestamp)+array(
+                    'TYPE' => 'security',
+                    'FROM_MEMBER_ID' => strval($member_id),
+                    'TO_MEMBER_ID' => NULL,
+                    'TITLE' => rain_truncate_for_title(do_lang('HACKER_DETECTED',do_lang($row['reason']))),
+                    'IMAGE' => is_guest($member_id)?rain_get_country_image($row['ip']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
+                    'TIMESTAMP' => strval($timestamp),
+                    'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
+                    'TICKER_TEXT' => NULL,
+                    'URL' => build_url(array('page' => 'admin_security','type' => 'view','id' => $row['id']),'_SEARCH'),
+                    'IS_POSITIVE' => false,
+                    'IS_NEGATIVE' => true,
 
-					// These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-					'FROM_ID'=>'member_'.strval($member_id),
-					'TO_ID'=>NULL,
-					'GROUP_ID'=>'hack_type_'.$row['reason'],
-				);
-			}
-		}
+                    // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                    'FROM_ID' => 'member_' . strval($member_id),
+                    'TO_ID' => NULL,
+                    'GROUP_ID' => 'hack_type_' . $row['reason'],
+                );
+            }
+        }
 
-		return $drops;
-	}
+        return $drops;
+    }
 }

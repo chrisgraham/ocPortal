@@ -15,28 +15,31 @@
 
 class Hook_members_ocworld
 {
-	/**
+    /**
 	 * Find member-related links to inject.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting link hooks for
 	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
 	 */
-	function run($member_id)
-	{
-		if (!addon_installed('ocworld')) return array();
+    public function run($member_id)
+    {
+        if (!addon_installed('ocworld')) {
+            return array();
+        }
 
-		$zone=get_page_zone('ocworld',false);
-		if (is_null($zone)) return array();
-		if (!has_zone_access(get_member(),$zone)) return array();
+        $zone = get_page_zone('ocworld',false);
+        if (is_null($zone)) {
+            return array();
+        }
+        if (!has_zone_access(get_member(),$zone)) {
+            return array();
+        }
 
-		$id=$GLOBALS['SITE_DB']->query_select_value_if_there('w_members','id',array('id'=>$member_id),'',true);
-		if (!is_null($id))
-		{
-			require_lang('ocworld');
-			return array(array('audit',do_lang_tempcode('OCWORLD'),build_url(array('page'=>'ocworld','type'=>'inventory','member'=>$member_id),get_page_zone('ocworld')),'menu/ocworld'));
-		}
-		return array();
-	}
+        $id = $GLOBALS['SITE_DB']->query_select_value_if_there('w_members','id',array('id' => $member_id),'',true);
+        if (!is_null($id)) {
+            require_lang('ocworld');
+            return array(array('audit',do_lang_tempcode('OCWORLD'),build_url(array('page' => 'ocworld','type' => 'inventory','member' => $member_id),get_page_zone('ocworld')),'menu/ocworld'));
+        }
+        return array();
+    }
 }
-
-

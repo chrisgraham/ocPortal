@@ -20,36 +20,34 @@
 
 class Hook_config_is_on_rss
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_RSS',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'_FEEDS',
-			'explanation'=>'CONFIG_OPTION_is_on_rss',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_RSS',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => '_FEEDS',
+            'explanation' => 'CONFIG_OPTION_is_on_rss',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'syndication_blocks',
-		);
-	}
+            'addon' => 'syndication_blocks',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

@@ -15,74 +15,74 @@
 
 class Hook_addon_registry_oc_for_the_win
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the addon category
 	 *
 	 * @return string			The category
 	 */
-	function get_category()
-	{
-		return 'Information Display';
-	}
+    public function get_category()
+    {
+        return 'Information Display';
+    }
 
-	/**
+    /**
 	 * Get the addon author
 	 *
 	 * @return string			The author
 	 */
-	function get_author()
-	{
-		return 'Kamen Blaginov';
-	}
+    public function get_author()
+    {
+        return 'Kamen Blaginov';
+    }
 
-	/**
+    /**
 	 * Find other authors
 	 *
 	 * @return array			A list of co-authors that should be attributed
 	 */
-	function get_copyright_attribution()
-	{
-		return array();
-	}
+    public function get_copyright_attribution()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the addon licence (one-line summary only)
 	 *
 	 * @return string			The licence
 	 */
-	function get_licence()
-	{
-		return 'Licensed on the same terms as ocPortal';
-	}
+    public function get_licence()
+    {
+        return 'Licensed on the same terms as ocPortal';
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Automatically creates a [tt]button[/tt] banner type and banners for it and set them in a main (or side) block. Administrator could enable/disable banners, and also add custom banners.
+    public function get_description()
+    {
+        return 'Automatically creates a [tt]button[/tt] banner type and banners for it and set them in a main (or side) block. Administrator could enable/disable banners, and also add custom banners.
 
 The auto-created bundled banners are for \'causes\' and are: ocPortal, Firefox, W3C XHTML, W3C CSS, W3C WCAG, CancerResearch, RSPCA, PETA, Unicef, WWF, Greenpeace, HelpTheAged, NSPCC, Oxfam, BringDownIE6, CND, Amnesty International, British Heart Foundation, GNU.
 
@@ -103,71 +103,71 @@ If you want to delete some of the banners:
 5) Repeat till only the banners you want are showing
 
 You can add more banners through this section, just make sure they are 120px &times; 60px.';
-	}
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(
-				'OCF',
-				'banners',
-			),
-			'recommends'=>array(
-			),
-			'conflicts_with'=>array(
-			)
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(
+                'OCF',
+                'banners',
+            ),
+            'recommends' => array(
+            ),
+            'conflicts_with' => array(
+            )
+        );
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources_custom/hooks/systems/addon_registry/oc_for_the_win.php',
-			'data_custom/causes/index.html',
-			'sources_custom/blocks/main_buttons.php',
-			'data_custom/causes/amnestyinternational.gif',
-			'data_custom/causes/bhf.gif',
-			'data_custom/causes/bringdownie6.gif',
-			'data_custom/causes/cancerresearch.gif',
-			'data_custom/causes/cnd.gif',
-			'data_custom/causes/firefox.gif',
-			'data_custom/causes/GNU.gif',
-			'data_custom/causes/greenpeace.gif',
-			'data_custom/causes/helptheaged.gif',
-			'data_custom/causes/nspcc.gif',
-			'data_custom/causes/ocportal.gif',
-			'data_custom/causes/oxfam.gif',
-			'data_custom/causes/peta.gif',
-			'data_custom/causes/rspca.gif',
-			'data_custom/causes/unicef.gif',
-			'data_custom/causes/w3c-css.gif',
-			'data_custom/causes/w3c-xhtml.gif',
-			'data_custom/causes/wwf.gif',
-			'themes/default/templates_custom/BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM.tpl',
-			'themes/default/templates_custom/BLOCK_MAIN_BUTTONS.tpl',
-			'sources_custom/banners3.php',
-			'lang_custom/EN/buttons.ini',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources_custom/hooks/systems/addon_registry/oc_for_the_win.php',
+            'data_custom/causes/index.html',
+            'sources_custom/blocks/main_buttons.php',
+            'data_custom/causes/amnestyinternational.gif',
+            'data_custom/causes/bhf.gif',
+            'data_custom/causes/bringdownie6.gif',
+            'data_custom/causes/cancerresearch.gif',
+            'data_custom/causes/cnd.gif',
+            'data_custom/causes/firefox.gif',
+            'data_custom/causes/GNU.gif',
+            'data_custom/causes/greenpeace.gif',
+            'data_custom/causes/helptheaged.gif',
+            'data_custom/causes/nspcc.gif',
+            'data_custom/causes/ocportal.gif',
+            'data_custom/causes/oxfam.gif',
+            'data_custom/causes/peta.gif',
+            'data_custom/causes/rspca.gif',
+            'data_custom/causes/unicef.gif',
+            'data_custom/causes/w3c-css.gif',
+            'data_custom/causes/w3c-xhtml.gif',
+            'data_custom/causes/wwf.gif',
+            'themes/default/templates_custom/BLOCK_MAIN_BANNER_WAVE_BWRAP_CUSTOM.tpl',
+            'themes/default/templates_custom/BLOCK_MAIN_BUTTONS.tpl',
+            'sources_custom/banners3.php',
+            'lang_custom/EN/buttons.ini',
+        );
+    }
 }

@@ -20,16 +20,17 @@
 
 class Hook_check_file_uploads
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
-		if (ini_get('file_uploads')=='0')
-			$warning[]=do_lang_tempcode('NO_UPLOAD');
-		return $warning;
-	}
+    public function run()
+    {
+        $warning = array();
+        if (ini_get('file_uploads') == '0') {
+            $warning[] = do_lang_tempcode('NO_UPLOAD');
+        }
+        return $warning;
+    }
 }

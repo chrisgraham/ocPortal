@@ -20,33 +20,30 @@
 
 class Hook_change_detection_tickets
 {
-	/**
+    /**
 	 * Run function for change_detection hooks. They see if their own something has changed in comparison to sample data.
 	 *
 	 * @param  string			The sample data, serialised and then MD5'd
 	 * @return boolean		Whether the something has changed
 	 */
-	function run($data)
-	{
-		if (get_param('type','misc')=='misc')
-		{
-			require_code('tickets');
-			require_code('tickets2');
-			$ticket_type_id=get_param_integer('ticket_type_id',NULL);
-			$tickets=get_tickets(get_member(),$ticket_type_id);
-			return md5(serialize($tickets))!=$data;
-		}
+    public function run($data)
+    {
+        if (get_param('type','misc') == 'misc') {
+            require_code('tickets');
+            require_code('tickets2');
+            $ticket_type_id = get_param_integer('ticket_type_id',null);
+            $tickets = get_tickets(get_member(),$ticket_type_id);
+            return md5(serialize($tickets)) != $data;
+        }
 
-		$id=get_param('id',NULL);
-		require_code('tickets');
-		require_code('tickets2');
-		$forum=0;
-		$topic_id=0;
-		$ticket_type_id=0;
-		$_comments=get_ticket_posts($id,$forum,$topic_id,$ticket_type_id);
+        $id = get_param('id',null);
+        require_code('tickets');
+        require_code('tickets2');
+        $forum = 0;
+        $topic_id = 0;
+        $ticket_type_id = 0;
+        $_comments = get_ticket_posts($id,$forum,$topic_id,$ticket_type_id);
 
-		return md5(serialize($_comments))!=$data;
-	}
+        return md5(serialize($_comments)) != $data;
+    }
 }
-
-

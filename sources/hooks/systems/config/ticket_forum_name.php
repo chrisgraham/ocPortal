@@ -20,37 +20,35 @@
 
 class Hook_config_ticket_forum_name
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TICKET_FORUM_NAME',
-			'type'=>'forum',
-			'category'=>'FEATURE',
-			'group'=>'SUPPORT_TICKETS',
-			'explanation'=>'CONFIG_OPTION_ticket_forum_name',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>2,
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TICKET_FORUM_NAME',
+            'type' => 'forum',
+            'category' => 'FEATURE',
+            'group' => 'SUPPORT_TICKETS',
+            'explanation' => 'CONFIG_OPTION_ticket_forum_name',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 2,
+            'required' => true,
 
-			'addon'=>'tickets',
-		);
-	}
+            'addon' => 'tickets',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return do_lang('tickets:TICKET_FORUM_NAME','','','',get_site_default_lang());
-	}
+    public function get_default()
+    {
+        return do_lang('tickets:TICKET_FORUM_NAME','','','',get_site_default_lang());
+    }
 }
-
-

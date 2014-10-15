@@ -20,24 +20,34 @@
 
 class Hook_Notification_ip_address_sharing extends Hook_Notification__Staff
 {
-	/**
+    /**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *
 	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
 	 */
-	function list_handled_codes()
-	{
-		$limit=get_option('max_ip_addresses_per_subscriber');
-		if ($limit=='') return array();
+    public function list_handled_codes()
+    {
+        $limit = get_option('max_ip_addresses_per_subscriber');
+        if ($limit == '') {
+            return array();
+        }
 
-		if (get_forum_type()!='ocf') return array();
-		if (!addon_installed('stats')) return array();
-		if (is_ocf_satellite_site()) return array();
-		if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_write)) return array();
+        if (get_forum_type() != 'ocf') {
+            return array();
+        }
+        if (!addon_installed('stats')) {
+            return array();
+        }
+        if (is_ocf_satellite_site()) {
+            return array();
+        }
+        if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_write)) {
+            return array();
+        }
 
-		$list=array();
-		$list['ip_address_sharing']=array(do_lang('MEMBERS'),do_lang('ecommerce:NOTIFICATION_TYPE_ip_address_sharing'));
-		return $list;
-	}
+        $list = array();
+        $list['ip_address_sharing'] = array(do_lang('MEMBERS'),do_lang('ecommerce:NOTIFICATION_TYPE_ip_address_sharing'));
+        return $list;
+    }
 }

@@ -20,35 +20,33 @@
 
 class Hook_config_forum_show_stats_count_topics
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'COUNT_TOPICS',
-			'type'=>'tick',
-			'category'=>'BLOCKS',
-			'group'=>'STATISTICS',
-			'explanation'=>'CONFIG_OPTION_forum_show_stats_count_topics',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'COUNT_TOPICS',
+            'type' => 'tick',
+            'category' => 'BLOCKS',
+            'group' => 'STATISTICS',
+            'explanation' => 'CONFIG_OPTION_forum_show_stats_count_topics',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'stats_block',
-		);
-	}
+            'addon' => 'stats_block',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

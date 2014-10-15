@@ -20,17 +20,15 @@
 
 class Hook_Preview_calendar
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		require_code('uploads');
-		$applies=(get_param('page','')=='cms_calendar') && ((get_param('type')=='_ed') || (get_param('type')=='ad')) && ((is_plupload()) || (count($_FILES)!=0));
-		return array($applies,'calendar',false);
-	}
+    public function applies()
+    {
+        require_code('uploads');
+        $applies = (get_param('page','') == 'cms_calendar') && ((get_param('type') == '_ed') || (get_param('type') == 'ad')) && ((is_plupload()) || (count($_FILES) != 0));
+        return array($applies,'calendar',false);
+    }
 }
-
-

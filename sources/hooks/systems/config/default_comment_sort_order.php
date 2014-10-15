@@ -20,35 +20,33 @@
 
 class Hook_config_default_comment_sort_order
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'DEFAULT_COMMENT_SORT_ORDER',
-			'type'=>'list',
-			'category'=>'FEATURE',
-			'group'=>'USER_INTERACTION_COMMENTING',
-			'explanation'=>'CONFIG_OPTION_default_comment_sort_order',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'newest|oldest|relevance',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'DEFAULT_COMMENT_SORT_ORDER',
+            'type' => 'list',
+            'category' => 'FEATURE',
+            'group' => 'USER_INTERACTION_COMMENTING',
+            'explanation' => 'CONFIG_OPTION_default_comment_sort_order',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'newest|oldest|relevance',
 
-			'addon'=>'core_feedback_features',
-		);
-	}
+            'addon' => 'core_feedback_features',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'newest';
-	}
+    public function get_default()
+    {
+        return 'newest';
+    }
 }
-
-

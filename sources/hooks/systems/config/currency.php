@@ -20,37 +20,37 @@
 
 class Hook_config_currency
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CURRENCY',
-			'type'=>'special',
-			'category'=>'ECOMMERCE',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_currency',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CURRENCY',
+            'type' => 'special',
+            'category' => 'ECOMMERCE',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_currency',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'ecommerce',
-		);
-	}
+            'addon' => 'ecommerce',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'GBP';
-	}
+    public function get_default()
+    {
+        return 'GBP';
+    }
 
-	/**
+    /**
 	 * Field inputter (because the_type=special).
 	 *
 	 * @param  ID_TEXT		The config option name
@@ -59,17 +59,14 @@ class Hook_config_currency
 	 * @param  tempcode		The field description
 	 * @return tempcode		The inputter
 	 */
-	function field_inputter($name,$myrow,$human_name,$explanation)
-	{
-		$list='';
-		require_code('currency');
-		$currencies=array_keys(get_currency_map());
-		foreach ($currencies as $currency)
-		{
-			$list.=static_evaluate_tempcode(form_input_list_entry($currency,$currency==get_option($name)));
-		}
-		return form_input_list($human_name,$explanation,$name,make_string_tempcode($list));
-	}
+    public function field_inputter($name,$myrow,$human_name,$explanation)
+    {
+        $list = '';
+        require_code('currency');
+        $currencies = array_keys(get_currency_map());
+        foreach ($currencies as $currency) {
+            $list .= static_evaluate_tempcode(form_input_list_entry($currency,$currency == get_option($name)));
+        }
+        return form_input_list($human_name,$explanation,$name,make_string_tempcode($list));
+    }
 }
-
-

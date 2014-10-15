@@ -20,7 +20,7 @@
 
 class Hook_occle_command_feedback
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,19 +28,20 @@ class Hook_occle_command_feedback
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('feedback',array('h'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','feedback'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('feedback',array('h'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','feedback'));
+            }
 
-			$url=get_brand_page_url(array('page'=>'feedback'),'');
-			$post=array('title'=>'OcCLE feedback','post'=>'(From "'.get_custom_base_url().'" via OcCLE.)[quote]'.$parameters[0].'[/quote]');
-			http_download_file($url,NULL,true,true,'ocPortal',$post);
+            $url = get_brand_page_url(array('page' => 'feedback'),'');
+            $post = array('title' => 'OcCLE feedback','post' => '(From "' . get_custom_base_url() . '" via OcCLE.)[quote]' . $parameters[0] . '[/quote]');
+            http_download_file($url,null,true,true,'ocPortal',$post);
 
-			return array('','',do_lang('SUCCESS'),'');
-		}
-	}
+            return array('','',do_lang('SUCCESS'),'');
+        }
+    }
 }
-

@@ -23,9 +23,9 @@
  */
 function init__notification_poller()
 {
-	define('NOTIFICATION_POLL_FREQUENCY',intval(get_option('notification_poll_frequency')));
+    define('NOTIFICATION_POLL_FREQUENCY',intval(get_option('notification_poll_frequency')));
 
-	define('NOTIFICATION_POLL_SAFETY_LAG_SECS',8); // Assume a request could have taken this long to happen, so we look back a little further even than NOTIFICATION_POLL_FREQUENCY
+    define('NOTIFICATION_POLL_SAFETY_LAG_SECS',8); // Assume a request could have taken this long to happen, so we look back a little further even than NOTIFICATION_POLL_FREQUENCY
 }
 
 /**
@@ -33,19 +33,18 @@ function init__notification_poller()
  */
 function notification_script()
 {
-	$type=get_param('type');
-	switch ($type)
-	{
-		case 'mark_all_read':
-			notification_mark_all_read_script();
-			//break;	Intentionally continue on
-		case 'poller':
-			notification_poller_script();
-			break;
-		case 'display':
-			notification_display_script();
-			break;
-	}
+    $type = get_param('type');
+    switch ($type) {
+        case 'mark_all_read':
+            notification_mark_all_read_script();
+            //break;	Intentionally continue on
+        case 'poller':
+            notification_poller_script();
+            break;
+        case 'display':
+            notification_display_script();
+            break;
+    }
 }
 
 /**
@@ -53,7 +52,7 @@ function notification_script()
  */
 function notification_mark_all_read_script()
 {
-	$GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read'=>1),array('d_read'=>0,'d_to_member_id'=>get_member()));
+    $GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read' => 1),array('d_read' => 0,'d_to_member_id' => get_member()));
 }
 
 /**
@@ -61,14 +60,14 @@ function notification_mark_all_read_script()
  */
 function notification_display_script()
 {
-	header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
-	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-	header('Content-Type: text/plain');
+    header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header('Content-Type: text/plain');
 
-	$max=post_param_integer('max',NULL);
+    $max = post_param_integer('max',null);
 
-	list($tpl,)=get_web_notifications($max);
-	$tpl->evaluate_echo();
+    list($tpl,) = get_web_notifications($max);
+    $tpl->evaluate_echo();
 }
 
 /**
@@ -76,12 +75,12 @@ function notification_display_script()
  */
 function notification_poller_script()
 {
-	$xml='';
+    $xml = '';
 
-	header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
-	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
-	header('Content-Type: application/xml');
-	$xml.='<'.'?xml version="1.0" encoding="'.get_charset().'" ?'.'>
+    header('Cache-Control: no-cache, must-revalidate'); // HTTP/1.1
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header('Content-Type: application/xml');
+    $xml .= '<' . '?xml version="1.0" encoding="' . get_charset() . '" ?' . '>
 <!DOCTYPE xc:content [
 <!ENTITY euro "&#8364;">
 <!ENTITY ldquo "&#8220;">
@@ -110,88 +109,77 @@ function notification_poller_script()
 
 <response>
 	<result>
-		<time>'.strval(time()).'</time>
+		<time>' . strval(time()) . '</time>
 	';
 
-	$time_barrier=get_param_integer('time_barrier',time()-NOTIFICATION_POLL_FREQUENCY-NOTIFICATION_POLL_SAFETY_LAG_SECS);
+    $time_barrier = get_param_integer('time_barrier',time()-NOTIFICATION_POLL_FREQUENCY-NOTIFICATION_POLL_SAFETY_LAG_SECS);
 
-	$max=get_param_integer('max',NULL);
+    $max = get_param_integer('max',null);
 
-	$forced_update=(get_param_integer('forced_update',0)==1);
+    $forced_update = (get_param_integer('forced_update',0) == 1);
 
-	// Notifications
+    // Notifications
 
-	if (is_guest())
-	{
-		$rows=array();
-	} else
-	{
-		$query='SELECT * FROM '.get_table_prefix().'digestives_tin WHERE d_to_member_id='.strval(get_member());
-		$query.=' AND d_date_and_time>='.strval($time_barrier);
-		$query.=' AND d_read=0';
-		$query.=' AND d_frequency='.strval(A_WEB_NOTIFICATION);
-		$rows=$GLOBALS['SITE_DB']->query($query);
-	}
+    if (is_guest()) {
+        $rows = array();
+    } else {
+        $query = 'SELECT * FROM ' . get_table_prefix() . 'digestives_tin WHERE d_to_member_id=' . strval(get_member());
+        $query .= ' AND d_date_and_time>=' . strval($time_barrier);
+        $query .= ' AND d_read=0';
+        $query .= ' AND d_frequency=' . strval(A_WEB_NOTIFICATION);
+        $rows = $GLOBALS['SITE_DB']->query($query);
+    }
 
-	if ((count($rows)>0) || ($forced_update))
-	{
-		foreach ($rows as $row)
-		{
-			$xml.=web_notification_to_xml($row);
-		}
+    if ((count($rows)>0) || ($forced_update)) {
+        foreach ($rows as $row) {
+            $xml .= web_notification_to_xml($row);
+        }
 
-		if (!is_null($max))
-		{
-			list($display,$unread)=get_web_notifications($max);
-			$xml.='
-				<display_web_notifications>'.$display->evaluate().'</display_web_notifications>
-				<unread_web_notifications>'.strval($unread).'</unread_web_notifications>
+        if (!is_null($max)) {
+            list($display,$unread) = get_web_notifications($max);
+            $xml .= '
+				<display_web_notifications>' . $display->evaluate() . '</display_web_notifications>
+				<unread_web_notifications>' . strval($unread) . '</unread_web_notifications>
 			';
-		}
+        }
 
-		// Only keep around for X days
-		$sql='d_frequency='.strval(A_WEB_NOTIFICATION).' AND d_date_and_time<'.strval(time()-60*60*24*intval(get_option('notification_keep_days')));
-		$rows=$GLOBALS['SITE_DB']->query('SELECT d_message FROM '.get_table_prefix().'digestives_tin WHERE '.$sql);
-		foreach ($rows as $row)
-		{
-			delete_lang($row['d_message']);
-		}
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.get_table_prefix().'digestives_tin WHERE '.$sql);
-	}
+        // Only keep around for X days
+        $sql = 'd_frequency=' . strval(A_WEB_NOTIFICATION) . ' AND d_date_and_time<' . strval(time()-60*60*24*intval(get_option('notification_keep_days')));
+        $rows = $GLOBALS['SITE_DB']->query('SELECT d_message FROM ' . get_table_prefix() . 'digestives_tin WHERE ' . $sql);
+        foreach ($rows as $row) {
+            delete_lang($row['d_message']);
+        }
+        $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'digestives_tin WHERE ' . $sql);
+    }
 
-	// Private topics
+    // Private topics
 
-	if (get_forum_type()=='ocf')
-	{
-		if (get_option('pt_notifications_as_web')=='0')
-		{
-			require_code('ocf_notifications');
-			$rows=ocf_get_pp_rows(NULL,true,false,$time_barrier);
+    if (get_forum_type() == 'ocf') {
+        if (get_option('pt_notifications_as_web') == '0') {
+            require_code('ocf_notifications');
+            $rows = ocf_get_pp_rows(null,true,false,$time_barrier);
 
-			if ((count($rows)>0) || ($forced_update))
-			{
-				foreach ($rows as $row)
-				{
-					$xml.=pt_to_xml($row);
-				}
+            if ((count($rows)>0) || ($forced_update)) {
+                foreach ($rows as $row) {
+                    $xml .= pt_to_xml($row);
+                }
 
-				if (!is_null($max))
-				{
-					list($display,$unread)=get_pts($max);
-					$xml.='
-						<display_pts>'.$display->evaluate().'</display_pts>
-						<unread_pts>'.strval($unread).'</unread_pts>
+                if (!is_null($max)) {
+                    list($display,$unread) = get_pts($max);
+                    $xml .= '
+						<display_pts>' . $display->evaluate() . '</display_pts>
+						<unread_pts>' . strval($unread) . '</unread_pts>
 					';
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
-	$xml.='
+    $xml .= '
 	</result>
 </response>
 ';
-	echo $xml;
+    echo $xml;
 }
 
 /**
@@ -201,66 +189,63 @@ function notification_poller_script()
  * @param  integer		Start offset
  * @return array			A pair: Templating, Max rows
  */
-function get_web_notifications($max=NULL,$start=0)
+function get_web_notifications($max = null,$start = 0)
 {
-	if (is_guest()) return array(new ocp_tempcode(),0);
+    if (is_guest()) {
+        return array(new ocp_tempcode(),0);
+    }
 
-	$where=array(
-		'd_to_member_id'=>get_member(),
-		'd_frequency'=>A_WEB_NOTIFICATION,
-	);
+    $where = array(
+        'd_to_member_id' => get_member(),
+        'd_frequency' => A_WEB_NOTIFICATION,
+    );
 
-	$rows=$GLOBALS['SITE_DB']->query_select('digestives_tin',array('*'),$where,'ORDER BY d_date_and_time DESC',$max,$start);
-	$out=new ocp_tempcode();
-	foreach ($rows as $row)
-	{
-		$member_id=$row['d_from_member_id'];
-		if ($member_id<0)
-		{
-			$username=do_lang('SYSTEM');
-			$from_url='';
-			$avatar_url=find_theme_image('ocf_default_avatars/default');
-		} else
-		{
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-			$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
-			$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-		}
+    $rows = $GLOBALS['SITE_DB']->query_select('digestives_tin',array('*'),$where,'ORDER BY d_date_and_time DESC',$max,$start);
+    $out = new ocp_tempcode();
+    foreach ($rows as $row) {
+        $member_id = $row['d_from_member_id'];
+        if ($member_id<0) {
+            $username = do_lang('SYSTEM');
+            $from_url = '';
+            $avatar_url = find_theme_image('ocf_default_avatars/default');
+        } else {
+            $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+            $from_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
+            $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+        }
 
-		$_message=get_translated_tempcode('digestives_tin',$row,'d_message');
+        $_message = get_translated_tempcode('digestives_tin',$row,'d_message');
 
-		$url=mixed();
-		switch ($row['d_notification_code'])
-		{
-			case 'ocf_topic':
-				if (is_numeric($row['d_code_category'])) // Straight forward topic notification
-				{
-					$url=$GLOBALS['FORUM_DRIVER']->topic_url(intval($row['d_code_category']),'',true);
-				}
-				break;
-		}
+        $url = mixed();
+        switch ($row['d_notification_code']) {
+            case 'ocf_topic':
+                if (is_numeric($row['d_code_category'])) { // Straight forward topic notification
+                    $url = $GLOBALS['FORUM_DRIVER']->topic_url(intval($row['d_code_category']),'',true);
+                }
+                break;
+        }
 
-		$rendered=do_template('NOTIFICATION_WEB',array('_GUID'=>'314db5380aecd610c7ad2a013743f614','ID'=>strval($row['id']),
-			'SUBJECT'=>$row['d_subject'],
-			'MESSAGE'=>$_message,
-			'FROM_USERNAME'=>$username,
-			'FROM_MEMBER_ID'=>strval($member_id),
-			'URL'=>$url,
-			'FROM_URL'=>$from_url,
-			'FROM_AVATAR_URL'=>$avatar_url,
-			'PRIORITY'=>strval($row['d_priority']),
-			'DATE_TIMESTAMP'=>strval($row['d_date_and_time']),
-			'DATE_WRITTEN_TIME'=>get_timezoned_time($row['d_date_and_time']),
-			'NOTIFICATION_CODE'=>$row['d_notification_code'],
-			'CODE_CATEGORY'=>$row['d_code_category'],
-			'HAS_READ'=>($row['d_read']==1),
-		));
-		$out->attach($rendered);
-	}
+        $rendered = do_template('NOTIFICATION_WEB',array('_GUID' => '314db5380aecd610c7ad2a013743f614','ID' => strval($row['id']),
+            'SUBJECT' => $row['d_subject'],
+            'MESSAGE' => $_message,
+            'FROM_USERNAME' => $username,
+            'FROM_MEMBER_ID' => strval($member_id),
+            'URL' => $url,
+            'FROM_URL' => $from_url,
+            'FROM_AVATAR_URL' => $avatar_url,
+            'PRIORITY' => strval($row['d_priority']),
+            'DATE_TIMESTAMP' => strval($row['d_date_and_time']),
+            'DATE_WRITTEN_TIME' => get_timezoned_time($row['d_date_and_time']),
+            'NOTIFICATION_CODE' => $row['d_notification_code'],
+            'CODE_CATEGORY' => $row['d_code_category'],
+            'HAS_READ' => ($row['d_read'] == 1),
+        ));
+        $out->attach($rendered);
+    }
 
-	$max_rows=$GLOBALS['SITE_DB']->query_select_value('digestives_tin','COUNT(*)',$where+array('d_read'=>0));
+    $max_rows = $GLOBALS['SITE_DB']->query_select_value('digestives_tin','COUNT(*)',$where+array('d_read' => 0));
 
-	return array($out,$max_rows);
+    return array($out,$max_rows);
 }
 
 /**
@@ -271,44 +256,46 @@ function get_web_notifications($max=NULL,$start=0)
  */
 function web_notification_to_xml($row)
 {
-	$member_id=$row['d_from_member_id'];
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-	if (is_null($username)) $username=do_lang('UNKNOWN');
-	$from_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
-	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+    $member_id = $row['d_from_member_id'];
+    $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+    if (is_null($username)) {
+        $username = do_lang('UNKNOWN');
+    }
+    $from_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
+    $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-	$_message=get_translated_tempcode('digestives_tin',$row,'d_message');
+    $_message = get_translated_tempcode('digestives_tin',$row,'d_message');
 
-	$rendered=do_template('NOTIFICATION_WEB_DESKTOP',array('_GUID'=>'1641fa5c5b62421ae535680859e89636','ID'=>strval($row['id']),
-		'SUBJECT'=>$row['d_subject'],
-		'MESSAGE'=>$_message,
-		'FROM_USERNAME'=>$username,
-		'FROM_MEMBER_ID'=>strval($member_id),
-		'FROM_URL'=>$from_url,
-		'FROM_AVATAR_URL'=>$avatar_url,
-		'PRIORITY'=>strval($row['d_priority']),
-		'DATE_TIMESTAMP'=>strval($row['d_date_and_time']),
-		'DATE_WRITTEN_TIME'=>get_timezoned_time($row['d_date_and_time']),
-		'NOTIFICATION_CODE'=>$row['d_notification_code'],
-		'CODE_CATEGORY'=>$row['d_code_category'],
-	));
+    $rendered = do_template('NOTIFICATION_WEB_DESKTOP',array('_GUID' => '1641fa5c5b62421ae535680859e89636','ID' => strval($row['id']),
+        'SUBJECT' => $row['d_subject'],
+        'MESSAGE' => $_message,
+        'FROM_USERNAME' => $username,
+        'FROM_MEMBER_ID' => strval($member_id),
+        'FROM_URL' => $from_url,
+        'FROM_AVATAR_URL' => $avatar_url,
+        'PRIORITY' => strval($row['d_priority']),
+        'DATE_TIMESTAMP' => strval($row['d_date_and_time']),
+        'DATE_WRITTEN_TIME' => get_timezoned_time($row['d_date_and_time']),
+        'NOTIFICATION_CODE' => $row['d_notification_code'],
+        'CODE_CATEGORY' => $row['d_code_category'],
+    ));
 
-	//sound="'.(($row['d_priority']<3)?'on':'off').'"
-	return '
+    //sound="'.(($row['d_priority']<3)?'on':'off').'"
+    return '
 		<web_notification
-			id="'.strval($row['id']).'"
-			subject="'.escape_html($row['d_subject']).'"
-			rendered="'.escape_html($rendered->evaluate()).'"
-			message="'.escape_html(static_evaluate_tempcode($_message)).'"
-			from_username="'.escape_html($username).'"
-			from_member_id="'.escape_html(strval($member_id)).'"
-			from_url="'.escape_html($from_url).'"
-			from_avatar_url="'.escape_html($avatar_url).'"
-			priority="'.escape_html(strval($row['d_priority'])).'"
-			date_timestamp="'.escape_html(strval($row['d_date_and_time'])).'"
-			date_written_time="'.escape_html(get_timezoned_time($row['d_date_and_time'])).'"
-			notification_code="'.escape_html($row['d_notification_code']).'"
-			code_category="'.escape_html($row['d_code_category']).'"
+			id="' . strval($row['id']) . '"
+			subject="' . escape_html($row['d_subject']) . '"
+			rendered="' . escape_html($rendered->evaluate()) . '"
+			message="' . escape_html(static_evaluate_tempcode($_message)) . '"
+			from_username="' . escape_html($username) . '"
+			from_member_id="' . escape_html(strval($member_id)) . '"
+			from_url="' . escape_html($from_url) . '"
+			from_avatar_url="' . escape_html($avatar_url) . '"
+			priority="' . escape_html(strval($row['d_priority'])) . '"
+			date_timestamp="' . escape_html(strval($row['d_date_and_time'])) . '"
+			date_written_time="' . escape_html(get_timezoned_time($row['d_date_and_time'])) . '"
+			notification_code="' . escape_html($row['d_notification_code']) . '"
+			code_category="' . escape_html($row['d_code_category']) . '"
 			sound="on"
 		/>
 	';
@@ -321,56 +308,61 @@ function web_notification_to_xml($row)
  * @param  integer		Start offset
  * @return array			A pair: Templating, Max rows
  */
-function get_pts($max=NULL,$start=0)
+function get_pts($max = null,$start = 0)
 {
-	if (get_forum_type()!='ocf') return array(new ocp_tempcode(),0);
+    if (get_forum_type() != 'ocf') {
+        return array(new ocp_tempcode(),0);
+    }
 
-	if (is_guest()) return array(new ocp_tempcode(),0);
+    if (is_guest()) {
+        return array(new ocp_tempcode(),0);
+    }
 
-	ocf_require_all_forum_stuff();
+    ocf_require_all_forum_stuff();
 
-	require_code('ocf_notifications');
-	$rows=ocf_get_pp_rows($max,false,false);
-	$max_rows=count(ocf_get_pp_rows(intval(get_option('general_safety_listing_limit')),true,false));
+    require_code('ocf_notifications');
+    $rows = ocf_get_pp_rows($max,false,false);
+    $max_rows = count(ocf_get_pp_rows(intval(get_option('general_safety_listing_limit')),true,false));
 
-	$out=new ocp_tempcode();
-	foreach ($rows as $i=>$topic)
-	{
-		$topic_url=build_url(array('page'=>'topicview','id'=>$topic['id'],'type'=>'findpost'),get_module_zone('topicview'));
-		$topic_url->attach('#post_'.strval($topic['id']));
-		$title=$topic['t_cache_first_title'];
-		$date=get_timezoned_date($topic['t_cache_last_time'],true);
-		$num_posts=$topic['t_cache_num_posts'];
+    $out = new ocp_tempcode();
+    foreach ($rows as $i => $topic) {
+        $topic_url = build_url(array('page' => 'topicview','id' => $topic['id'],'type' => 'findpost'),get_module_zone('topicview'));
+        $topic_url->attach('#post_' . strval($topic['id']));
+        $title = $topic['t_cache_first_title'];
+        $date = get_timezoned_date($topic['t_cache_last_time'],true);
+        $num_posts = $topic['t_cache_num_posts'];
 
-		$last_post_by_username=$topic['t_cache_last_username'];
-		$last_post_by_member_url=$GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
+        $last_post_by_username = $topic['t_cache_last_username'];
+        $last_post_by_member_url = $GLOBALS['OCF_DRIVER']->member_profile_url($topic['t_cache_last_member_id'],false,true);
 
-		$with_poster_id=($topic['t_pt_from']==get_member())?$topic['t_pt_to']:$topic['t_pt_from'];
-		$with_username=$GLOBALS['FORUM_DRIVER']->get_username($with_poster_id);
-		$with_member_url=$GLOBALS['OCF_DRIVER']->member_profile_url($with_poster_id,false,true);
+        $with_poster_id = ($topic['t_pt_from'] == get_member())?$topic['t_pt_to']:$topic['t_pt_from'];
+        $with_username = $GLOBALS['FORUM_DRIVER']->get_username($with_poster_id);
+        $with_member_url = $GLOBALS['OCF_DRIVER']->member_profile_url($with_poster_id,false,true);
 
-		$is_unread=($topic['t_cache_last_time']>time()-60*60*24*intval(get_option('post_history_days'))) && ((is_null($topic['l_time'])) || ($topic['l_time']<$topic['p_time']));
+        $is_unread = ($topic['t_cache_last_time']>time()-60*60*24*intval(get_option('post_history_days'))) && ((is_null($topic['l_time'])) || ($topic['l_time']<$topic['p_time']));
 
-		$out->attach(do_template('OCF_PRIVATE_TOPIC_LINK',array(
-			'_GUID'=>'6a36e785b05d10f53e7ee76acdfb9f80',
-			'TOPIC_URL'=>$topic_url,
-			'TITLE'=>$title,
-			'DATE'=>$date,
-			'DATE_RAW'=>strval($topic['t_cache_last_time']),
-			'LAST_POST_BY_POSTER_URL'=>$last_post_by_member_url,
-			'LAST_POST_BY_USERNAME'=>$last_post_by_username,
-			'LAST_POST_BY_POSTER_ID'=>strval($topic['t_cache_last_member_id']),
-			'WITH_POSTER_URL'=>$with_member_url,
-			'WITH_USERNAME'=>$with_username,
-			'WITH_POSTER_ID'=>strval($with_poster_id),
-			'NUM_POSTS'=>integer_format($num_posts),
-			'HAS_READ'=>!$is_unread,
-		)));
+        $out->attach(do_template('OCF_PRIVATE_TOPIC_LINK',array(
+            '_GUID' => '6a36e785b05d10f53e7ee76acdfb9f80',
+            'TOPIC_URL' => $topic_url,
+            'TITLE' => $title,
+            'DATE' => $date,
+            'DATE_RAW' => strval($topic['t_cache_last_time']),
+            'LAST_POST_BY_POSTER_URL' => $last_post_by_member_url,
+            'LAST_POST_BY_USERNAME' => $last_post_by_username,
+            'LAST_POST_BY_POSTER_ID' => strval($topic['t_cache_last_member_id']),
+            'WITH_POSTER_URL' => $with_member_url,
+            'WITH_USERNAME' => $with_username,
+            'WITH_POSTER_ID' => strval($with_poster_id),
+            'NUM_POSTS' => integer_format($num_posts),
+            'HAS_READ' => !$is_unread,
+        )));
 
-		if ($i===$max) break;
-	}
+        if ($i === $max) {
+            break;
+        }
+    }
 
-	return array($out,$max_rows);
+    return array($out,$max_rows);
 }
 
 /**
@@ -381,36 +373,36 @@ function get_pts($max=NULL,$start=0)
  */
 function pt_to_xml($row)
 {
-	$member_id=$row['p_poster'];
-	$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-	$url=$GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
-	$avatar_url=$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+    $member_id = $row['p_poster'];
+    $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+    $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
+    $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-	$_message=get_translated_tempcode('f_forums',$row,'p_post',$GLOBALS['SITE_DB']);
+    $_message = get_translated_tempcode('f_forums',$row,'p_post',$GLOBALS['SITE_DB']);
 
-	$rendered=do_template('NOTIFICATION_PT_DESKTOP',array('_GUID'=>'624df70cf0cbb796c5d5ce1d18ae39f7','ID'=>strval($row['p_id']),
-		'SUBJECT'=>$row['t_cache_first_title'],
-		'MESSAGE'=>$_message,
-		'FROM_USERNAME'=>$username,
-		'FROM_MEMBER_ID'=>strval($member_id),
-		'URL'=>$url,
-		'FROM_AVATAR_URL'=>$avatar_url,
-		'DATE_TIMESTAMP'=>strval($row['p_time']),
-		'DATE_WRITTEN_TIME'=>get_timezoned_time($row['p_time']),
-	));
+    $rendered = do_template('NOTIFICATION_PT_DESKTOP',array('_GUID' => '624df70cf0cbb796c5d5ce1d18ae39f7','ID' => strval($row['p_id']),
+        'SUBJECT' => $row['t_cache_first_title'],
+        'MESSAGE' => $_message,
+        'FROM_USERNAME' => $username,
+        'FROM_MEMBER_ID' => strval($member_id),
+        'URL' => $url,
+        'FROM_AVATAR_URL' => $avatar_url,
+        'DATE_TIMESTAMP' => strval($row['p_time']),
+        'DATE_WRITTEN_TIME' => get_timezoned_time($row['p_time']),
+    ));
 
-	return '
+    return '
 		<pt
-			id="'.strval($row['p_id']).'"
-			subject="'.escape_html($row['t_cache_first_title']).'"
-			rendered="'.escape_html($rendered->evaluate()).'"
-			message="'.escape_html(static_evaluate_tempcode($_message)).'"
-			from_username="'.escape_html($username).'"
-			from_member_id="'.escape_html(strval($member_id)).'"
-			url="'.escape_html($url).'"
-			from_avatar_url="'.escape_html($avatar_url).'"
-			date_timestamp="'.escape_html(strval($row['p_time'])).'"
-			date_written_time="'.escape_html(get_timezoned_time($row['p_time'])).'"
+			id="' . strval($row['p_id']) . '"
+			subject="' . escape_html($row['t_cache_first_title']) . '"
+			rendered="' . escape_html($rendered->evaluate()) . '"
+			message="' . escape_html(static_evaluate_tempcode($_message)) . '"
+			from_username="' . escape_html($username) . '"
+			from_member_id="' . escape_html(strval($member_id)) . '"
+			url="' . escape_html($url) . '"
+			from_avatar_url="' . escape_html($avatar_url) . '"
+			date_timestamp="' . escape_html(strval($row['p_time'])) . '"
+			date_written_time="' . escape_html(get_timezoned_time($row['p_time'])) . '"
 			sound="on"
 		/>
 	';

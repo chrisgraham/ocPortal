@@ -20,18 +20,18 @@
 
 class Hook_occle_fs_extended_config__match_key_message
 {
-	/**
+    /**
 	 * Standard occle_fs date fetch function for resource-fs hooks. Defined when getting an edit date is not easy.
 	 *
 	 * @return ?TIME			The edit date or add date, whichever is higher (NULL: could not find one)
 	 */
-	function _get_edit_date()
-	{
-		$query='SELECT MAX(date_and_time) FROM '.get_table_prefix().'adminlogs WHERE '.db_string_equal_to('the_type','PAGE_MATCH_KEY_ACCESS');
-		return $GLOBALS['SITE_DB']->query_value_if_there($query);
-	}
+    public function _get_edit_date()
+    {
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','PAGE_MATCH_KEY_ACCESS');
+        return $GLOBALS['SITE_DB']->query_value_if_there($query);
+    }
 
-	/**
+    /**
 	 * Standard occle_fs file reading function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
@@ -40,21 +40,20 @@ class Hook_occle_fs_extended_config__match_key_message
 	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return ~string	The file contents (false: failure)
 	 */
-	function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
-	{
-		require_code('xml_storage');
+    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    {
+        require_code('xml_storage');
 
-		$rows=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'),NULL,'ORDER BY id');
-		$rows2=array();
-		foreach ($rows as $row)
-		{
-			$row2=array('message'=>'<lang>'.get_translated_text_xml($row['k_message'],'message',$GLOBALS['SITE_DB']).'</lang>','match_key'=>$row['k_match_key']);
-			$rows2[]=$row2;
-		}
-		return serialize($rows2);
-	}
+        $rows = $GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'),null,'ORDER BY id');
+        $rows2 = array();
+        foreach ($rows as $row) {
+            $row2 = array('message' => '<lang>' . get_translated_text_xml($row['k_message'],'message',$GLOBALS['SITE_DB']) . '</lang>','match_key' => $row['k_match_key']);
+            $rows2[] = $row2;
+        }
+        return serialize($rows2);
+    }
 
-	/**
+    /**
 	 * Standard occle_fs file writing function for OcCLE FS hooks.
 	 *
 	 * @param  array		The current meta-directory path
@@ -64,25 +63,25 @@ class Hook_occle_fs_extended_config__match_key_message
 	 * @param  object		A reference to the OcCLE filesystem object
 	 * @return boolean	Success?
 	 */
-	function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
-	{
-		require_code('xml_storage');
+    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    {
+        require_code('xml_storage');
 
-		$rows=$GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message'));
-		foreach ($rows as $row)
-		{
-			delete_lang($row['k_message']);
-		}
-		$GLOBALS['SITE_DB']->query_delete('match_key_messages');
+        $rows = $GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message'));
+        foreach ($rows as $row) {
+            delete_lang($row['k_message']);
+        }
+        $GLOBALS['SITE_DB']->query_delete('match_key_messages');
 
-		$rows=@unserialize($contents);
-		if ($rows===false) return false;
-		foreach ($rows as $row)
-		{
-			$row2=array('k_match_key'=>$row['k_match_key']);
-			$row2+=insert_lang_xml('k_message',$row['k_message']);
-			$GLOBALS['SITE_DB']->query_insert('match_key_messages',$row2);
-		}
-		return true;
-	}
+        $rows = @unserialize($contents);
+        if ($rows === false) {
+            return false;
+        }
+        foreach ($rows as $row) {
+            $row2 = array('k_match_key' => $row['k_match_key']);
+            $row2 += insert_lang_xml('k_message',$row['k_message']);
+            $GLOBALS['SITE_DB']->query_insert('match_key_messages',$row2);
+        }
+        return true;
+    }
 }

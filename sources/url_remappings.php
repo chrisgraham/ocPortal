@@ -33,52 +33,46 @@ build_rewrite_rules.php is in git / the ocportal_release_build addon.
  */
 function get_remappings($url_scheme)
 {
-	// The target mapping... upper case means variable substitution, lower case means constant-string
-	// The source mapping... NULL means 'anything' (we'll use it in a variable substitution), else we require a certain value
-	// These have to be in longest to shortest number of bindings order, to reduce the potential for &'d attributes
+    // The target mapping... upper case means variable substitution, lower case means constant-string
+    // The source mapping... NULL means 'anything' (we'll use it in a variable substitution), else we require a certain value
+    // These have to be in longest to shortest number of bindings order, to reduce the potential for &'d attributes
 
-	$rules=array();
-	switch ($url_scheme)
-	{
-		case 'PG':
-			if (addon_installed('wiki'))
-			{
-				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'pg/s/ID',false);
-			}
-			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'pg/PAGE/TYPE/ID',false);
-			$rules[]=array(array('page'=>NULL,'type'=>NULL),'pg/PAGE/TYPE',false);
-			$rules[]=array(array('page'=>NULL),'pg/PAGE',false);
-			$rules[]=array(array('page'=>''),'pg',false);
-			$rules[]=array(array(),'pg',true);
-			break;
+    $rules = array();
+    switch ($url_scheme) {
+        case 'PG':
+            if (addon_installed('wiki')) {
+                $rules[] = array(array('page' => 'wiki','type' => 'misc','id' => NULL),'pg/s/ID',false);
+            }
+            $rules[] = array(array('page' => NULL,'type' => NULL,'id' => NULL),'pg/PAGE/TYPE/ID',false);
+            $rules[] = array(array('page' => NULL,'type' => NULL),'pg/PAGE/TYPE',false);
+            $rules[] = array(array('page' => NULL),'pg/PAGE',false);
+            $rules[] = array(array('page' => ''),'pg',false);
+            $rules[] = array(array(),'pg',true);
+            break;
 
-		case 'HTM':
-			if (addon_installed('wiki'))
-			{
-				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID.htm',false);
-			}
-			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID.htm',false);
-			$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE.htm',false);
-			$rules[]=array(array('page'=>NULL),'PAGE.htm',false);
-			$rules[]=array(array('page'=>''),'',false);
-			$rules[]=array(array(),'',false);
-			break;
+        case 'HTM':
+            if (addon_installed('wiki')) {
+                $rules[] = array(array('page' => 'wiki','type' => 'misc','id' => NULL),'s/ID.htm',false);
+            }
+            $rules[] = array(array('page' => NULL,'type' => NULL,'id' => NULL),'PAGE/TYPE/ID.htm',false);
+            $rules[] = array(array('page' => NULL,'type' => NULL),'PAGE/TYPE.htm',false);
+            $rules[] = array(array('page' => NULL),'PAGE.htm',false);
+            $rules[] = array(array('page' => ''),'',false);
+            $rules[] = array(array(),'',false);
+            break;
 
-		case 'SIMPLE':
-			if (addon_installed('wiki'))
-			{
-				$rules[]=array(array('page'=>'wiki','type'=>'misc','id'=>NULL),'s/ID',false);
-			}
-			$rules[]=array(array('page'=>NULL,'type'=>NULL,'id'=>NULL),'PAGE/TYPE/ID',false);
-			$rules[]=array(array('page'=>NULL,'type'=>'misc'),'PAGE',false);
-			$rules[]=array(array('page'=>NULL,'type'=>NULL),'PAGE/TYPE',false);
-			$rules[]=array(array('page'=>NULL),'PAGE',false);
-			$rules[]=array(array('page'=>''),'',false);
-			$rules[]=array(array(),'',false);
-			break;
-	}
+        case 'SIMPLE':
+            if (addon_installed('wiki')) {
+                $rules[] = array(array('page' => 'wiki','type' => 'misc','id' => NULL),'s/ID',false);
+            }
+            $rules[] = array(array('page' => NULL,'type' => NULL,'id' => NULL),'PAGE/TYPE/ID',false);
+            $rules[] = array(array('page' => NULL,'type' => 'misc'),'PAGE',false);
+            $rules[] = array(array('page' => NULL,'type' => NULL),'PAGE/TYPE',false);
+            $rules[] = array(array('page' => NULL),'PAGE',false);
+            $rules[] = array(array('page' => ''),'',false);
+            $rules[] = array(array(),'',false);
+            break;
+    }
 
-	return $rules;
+    return $rules;
 }
-
-

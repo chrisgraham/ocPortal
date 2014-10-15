@@ -20,7 +20,7 @@
 
 class Hook_occle_command_version
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,23 +28,26 @@ class Hook_occle_command_version
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		require_code('version');
-		require_code('version2');
-		require_lang('version');
+    public function run($options,$parameters,&$occle_fs)
+    {
+        require_code('version');
+        require_code('version2');
+        require_lang('version');
 
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('version',array('h','f','t','v','m'),array()),'','');
-		elseif ((array_key_exists('f',$options)) || (array_key_exists('future',$options))) return array('',get_future_version_information(),'','');
-		elseif ((array_key_exists('t',$options)) || (array_key_exists('time',$options))) return array('','',ocp_version_time(),'');
-		elseif (((array_key_exists('v',$options)) || (array_key_exists('major-version',$options))) && ((!array_key_exists('m',$options)) && (!array_key_exists('minor-version',$options))))
-			return array('','',ocp_version(),'');
-		elseif (((array_key_exists('m',$options)) || (array_key_exists('minor-version',$options))) && ((!array_key_exists('v',$options)) && (!array_key_exists('major-version',$options))))
-			return array('','',ocp_version_minor(),'');
-		elseif (((array_key_exists('g',$options)) || (array_key_exists('general-version',$options))) && ((!array_key_exists('v',$options)) && (!array_key_exists('major-version',$options))))
-			return array('','',ocp_version_number(),'');
-		else
-			return array('','',ocp_version_pretty(),'');
-	}
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('version',array('h','f','t','v','m'),array()),'','');
+        } elseif ((array_key_exists('f',$options)) || (array_key_exists('future',$options))) {
+            return array('',get_future_version_information(),'','');
+        } elseif ((array_key_exists('t',$options)) || (array_key_exists('time',$options))) {
+            return array('','',ocp_version_time(),'');
+        } elseif (((array_key_exists('v',$options)) || (array_key_exists('major-version',$options))) && ((!array_key_exists('m',$options)) && (!array_key_exists('minor-version',$options)))) {
+            return array('','',ocp_version(),'');
+        } elseif (((array_key_exists('m',$options)) || (array_key_exists('minor-version',$options))) && ((!array_key_exists('v',$options)) && (!array_key_exists('major-version',$options)))) {
+            return array('','',ocp_version_minor(),'');
+        } elseif (((array_key_exists('g',$options)) || (array_key_exists('general-version',$options))) && ((!array_key_exists('v',$options)) && (!array_key_exists('major-version',$options)))) {
+            return array('','',ocp_version_number(),'');
+        } else {
+            return array('','',ocp_version_pretty(),'');
+        }
+    }
 }
-

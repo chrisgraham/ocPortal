@@ -14,26 +14,30 @@
 
 class Hook_members_filedump
 {
-	/**
+    /**
 	 * Find member-related links to inject.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting link hooks for
 	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
 	 */
-	function run($member_id)
-	{
-		if (!addon_installed('filedump')) return array();
+    public function run($member_id)
+    {
+        if (!addon_installed('filedump')) {
+            return array();
+        }
 
-		$zone=get_page_zone('filedump',false);
-		if (is_null($zone)) return array();
-		if (!has_zone_access(get_member(),$zone)) return array();
+        $zone = get_page_zone('filedump',false);
+        if (is_null($zone)) {
+            return array();
+        }
+        if (!has_zone_access(get_member(),$zone)) {
+            return array();
+        }
 
-		require_lang('filedump');
+        require_lang('filedump');
 
-		$path=$GLOBALS['FORUM_DRIVER']->get_username($member_id);
+        $path = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
-		return array(array('content',do_lang_tempcode('FILEDUMP'),build_url(array('page'=>'filedump','type'=>'misc','place'=>'/'.$path.'/'),$zone),'menu/cms/filedump'));
-	}
+        return array(array('content',do_lang_tempcode('FILEDUMP'),build_url(array('page' => 'filedump','type' => 'misc','place' => '/' . $path . '/'),$zone),'menu/cms/filedump'));
+    }
 }
-
-

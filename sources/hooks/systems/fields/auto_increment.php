@@ -20,38 +20,38 @@
 
 class Hook_fields_auto_increment
 {
-	// ==============
-	// Module: search
-	// ==============
+    // ==============
+    // Module: search
+    // ==============
 
-	/**
+    /**
 	 * Get special Tempcode for inputting this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @return ?array			List of specially encoded input detail rows (NULL: nothing special)
 	 */
-	function get_search_inputter($row)
-	{
-		return NULL;
-	}
+    public function get_search_inputter($row)
+    {
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Get special SQL from POSTed parameters for this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @param  integer		We're processing for the ith row
 	 * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
 	 */
-	function inputted_to_sql_for_search($row,$i)
-	{
-		return exact_match_sql($row,$i);
-	}
+    public function inputted_to_sql_for_search($row,$i)
+    {
+        return exact_match_sql($row,$i);
+    }
 
-	// ===================
-	// Backend: fields API
-	// ===================
+    // ===================
+    // Backend: fields API
+    // ===================
 
-	/**
+    /**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
 	 * @param  ?array			The field details (NULL: new field)
@@ -59,34 +59,37 @@ class Hook_fields_auto_increment
 	 * @param  ?string		The given default value as a string (NULL: don't "lock in" a new default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
-	{
-		if (((is_null($default)) || ($default=='')) && (!is_null($field)) && (!is_null($field['id']))) // We need to calculate a default even if not required, because the defaults are progmattic
-		{
-			$default=is_null($field)?'0':$this->get_field_auto_increment($field['id'],intval($default));
-		}
-		return array('integer_unescaped',$default,'integer');
-	}
+    public function get_field_value_row_bits($field,$required = null,$default = null)
+    {
+        if (((is_null($default)) || ($default == '')) && (!is_null($field)) && (!is_null($field['id']))) { // We need to calculate a default even if not required, because the defaults are progmattic
+            $default = is_null($field)?'0':$this->get_field_auto_increment($field['id'],intval($default));
+        }
+        return array('integer_unescaped',$default,'integer');
+    }
 
-	/**
+    /**
 	 * Convert a field value to something renderable.
 	 *
 	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev)
-	{
-		if (is_object($ev)) return $ev;
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($ev))) ocp_mark_as_escaped($ev);
-		return $ev;
-	}
+    public function render_field_value($field,$ev)
+    {
+        if (is_object($ev)) {
+            return $ev;
+        }
+        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($ev))) {
+            ocp_mark_as_escaped($ev);
+        }
+        return $ev;
+    }
 
-	// ======================
-	// Frontend: fields input
-	// ======================
+    // ======================
+    // Frontend: fields input
+    // ======================
 
-	/**
+    /**
 	 * Get form inputter.
 	 *
 	 * @param  string			The field name
@@ -96,14 +99,16 @@ class Hook_fields_auto_increment
 	 * @param  boolean		Whether this is for a new entry
 	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
 	 */
-	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
-	{
-		if ($new) return NULL;
+    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    {
+        if ($new) {
+            return NULL;
+        }
 
-		return form_input_integer($_cf_name,$_cf_description,'field_'.strval($field['id']),is_null($actual_value)?NULL:intval($actual_value),$field['cf_required']==1);
-	}
+        return form_input_integer($_cf_name,$_cf_description,'field_' . strval($field['id']),is_null($actual_value)?null:intval($actual_value),$field['cf_required'] == 1);
+    }
 
-	/**
+    /**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
@@ -112,46 +117,42 @@ class Hook_fields_auto_increment
 	 * @param  ?array			Former value of field (NULL: none)
 	 * @return ?string		The value (NULL: could not process)
 	 */
-	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
-	{
-		$id=$field['id'];
-		$tmp_name='field_'.strval($id);
-		if (!$editing)
-		{
-			return $this->get_field_auto_increment($id,$field['cf_default']);
-		}
-		$ret=post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
-		if ($ret!=STRING_MAGIC_NULL) $ret=str_pad($ret,10,'0',STR_PAD_LEFT);
-		return $ret;
-	}
+    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    {
+        $id = $field['id'];
+        $tmp_name = 'field_' . strval($id);
+        if (!$editing) {
+            return $this->get_field_auto_increment($id,$field['cf_default']);
+        }
+        $ret = post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        if ($ret != STRING_MAGIC_NULL) {
+            $ret = str_pad($ret,10,'0',STR_PAD_LEFT);
+        }
+        return $ret;
+    }
 
-	/**
+    /**
 	 * Get a fresh value for an auto_increment valued field.
 	 *
 	 * @param  AUTO_LINK		The field ID
 	 * @param  string			The field default
 	 * @return ?string		The value (NULL: could not process)
 	 */
-	function get_field_auto_increment($field_id,$default='')
-	{
-		// Get most recent value, to start with- we will iterate forward on it
-		$value=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_integer','cv_value',array('cf_id'=>$field_id),'ORDER BY ce_id DESC');
-		if (is_null($value))
-		{
-			$value=strval(intval($default)-1);
-		}
+    public function get_field_auto_increment($field_id,$default = '')
+    {
+        // Get most recent value, to start with- we will iterate forward on it
+        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_integer','cv_value',array('cf_id' => $field_id),'ORDER BY ce_id DESC');
+        if (is_null($value)) {
+            $value = strval(intval($default)-1);
+        }
 
-		$test=NULL;
-		do
-		{
-			$value=strval(intval($value)+1);
+        $test = null;
+        do {
+            $value = strval(intval($value)+1);
 
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_integer','ce_id',array('cv_value'=>$value,'cf_id'=>$field_id));
-		}
-		while (!is_null($test));
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_integer','ce_id',array('cv_value' => $value,'cf_id' => $field_id));
+        } while (!is_null($test));
 
-		return $value;
-	}
+        return $value;
+    }
 }
-
-

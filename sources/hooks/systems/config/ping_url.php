@@ -20,38 +20,36 @@
 
 class Hook_config_ping_url
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'PING_URL',
-			'type'=>'text',
-			'category'=>'FEATURE',
-			'group'=>'NEWS',
-			'explanation'=>'CONFIG_OPTION_ping_url',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'PING_URL',
+            'type' => 'text',
+            'category' => 'FEATURE',
+            'group' => 'NEWS',
+            'explanation' => 'CONFIG_OPTION_ping_url',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'news',
-		);
-	}
+            'addon' => 'news',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		// http://blogsearch.google.com/ping?url={url} is the direct Google Blog search one
-		// Note that we also ping the major search engines directly with the RSS feed, as a sitemap; those do not need specifying in the ping URLs
-		return 'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}';
-	}
+    public function get_default()
+    {
+        // http://blogsearch.google.com/ping?url={url} is the direct Google Blog search one
+        // Note that we also ping the major search engines directly with the RSS feed, as a sitemap; those do not need specifying in the ping URLs
+        return 'http://pingomatic.com/ping/?title={title}&blogurl={url}&rssurl={rss}';
+    }
 }
-
-

@@ -20,35 +20,33 @@
 
 class Hook_config_points_ADD_NEWS
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ADD_NEWS',
-			'type'=>'integer',
-			'category'=>'POINTS',
-			'group'=>'COUNT_POINTS_GIVEN',
-			'explanation'=>'CONFIG_OPTION_points_ADD_NEWS',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ADD_NEWS',
+            'type' => 'integer',
+            'category' => 'POINTS',
+            'group' => 'COUNT_POINTS_GIVEN',
+            'explanation' => 'CONFIG_OPTION_points_ADD_NEWS',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'news',
-		);
-	}
+            'addon' => 'news',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return addon_installed('points')?'225':NULL;
-	}
+    public function get_default()
+    {
+        return addon_installed('points')?'225':null;
+    }
 }
-
-

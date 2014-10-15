@@ -20,36 +20,34 @@
 
 class Hook_config_valid_audios
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'AUDIO_TYPES',
-			'type'=>'line',
-			'category'=>'SECURITY',
-			'group'=>'UPLOADED_FILES',
-			'explanation'=>'CONFIG_OPTION_valid_audios',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'AUDIO_TYPES',
+            'type' => 'line',
+            'category' => 'SECURITY',
+            'group' => 'UPLOADED_FILES',
+            'explanation' => 'CONFIG_OPTION_valid_audios',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'ra,mid,mp3,wav,wma,aif,aifc,aiff';
-	}
+    public function get_default()
+    {
+        return 'ra,mid,mp3,wav,wma,aif,aifc,aiff';
+    }
 }
-
-

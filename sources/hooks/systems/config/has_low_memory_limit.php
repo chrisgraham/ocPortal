@@ -20,35 +20,33 @@
 
 class Hook_config_has_low_memory_limit
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'HAS_LOW_MEMORY_LIMIT',
-			'type'=>'tick',
-			'category'=>'SERVER',
-			'group'=>'ADVANCED',
-			'explanation'=>'CONFIG_OPTION_has_low_memory_limit',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'HAS_LOW_MEMORY_LIMIT',
+            'type' => 'tick',
+            'category' => 'SERVER',
+            'group' => 'ADVANCED',
+            'explanation' => 'CONFIG_OPTION_has_low_memory_limit',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return ((ini_get('memory_limit')=='-1' || ini_get('memory_limit')=='0' || ini_get('memory_limit')=='')?'0':NULL);
-	}
+    public function get_default()
+    {
+        return ((ini_get('memory_limit') == '-1' || ini_get('memory_limit') == '0' || ini_get('memory_limit') == '')?'0':null);
+    }
 }
-
-

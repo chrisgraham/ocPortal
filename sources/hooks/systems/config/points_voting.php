@@ -20,35 +20,33 @@
 
 class Hook_config_points_voting
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'VOTING',
-			'type'=>'integer',
-			'category'=>'POINTS',
-			'group'=>'COUNT_POINTS_GIVEN',
-			'explanation'=>'CONFIG_OPTION_points_voting',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'VOTING',
+            'type' => 'integer',
+            'category' => 'POINTS',
+            'group' => 'COUNT_POINTS_GIVEN',
+            'explanation' => 'CONFIG_OPTION_points_voting',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'points',
-		);
-	}
+            'addon' => 'points',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '5';
-	}
+    public function get_default()
+    {
+        return '5';
+    }
 }
-
-

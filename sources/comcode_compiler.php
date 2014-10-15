@@ -23,88 +23,87 @@
  */
 function init__comcode_compiler()
 {
-	if (!defined('CCP_NO_MANS_LAND'))
-	{
-		define('CCP_NO_MANS_LAND',0);
-		define('CCP_IN_TAG_NAME',1);
-		define('CCP_STARTING_TAG',2);
-		define('CCP_IN_TAG_BETWEEN_ATTRIBUTES',3);
-		define('CCP_IN_TAG_ATTRIBUTE_NAME',4);
-		define('CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT',5);
-		define('CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT',6);
-		define('CCP_IN_TAG_ATTRIBUTE_VALUE',7);
-		define('CCP_IN_TAG_ATTRIBUTE_VALUE_NO_QUOTE',8);
+    if (!defined('CCP_NO_MANS_LAND')) {
+        define('CCP_NO_MANS_LAND',0);
+        define('CCP_IN_TAG_NAME',1);
+        define('CCP_STARTING_TAG',2);
+        define('CCP_IN_TAG_BETWEEN_ATTRIBUTES',3);
+        define('CCP_IN_TAG_ATTRIBUTE_NAME',4);
+        define('CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT',5);
+        define('CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT',6);
+        define('CCP_IN_TAG_ATTRIBUTE_VALUE',7);
+        define('CCP_IN_TAG_ATTRIBUTE_VALUE_NO_QUOTE',8);
 
-		define('MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH',30);
-	}
+        define('MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH',30);
+    }
 
-	// In theory, almost any tag is reversable. However these tags can be converted ROBUSTLY and hence the WYSIWYG editor can manipulate them as HTML rather than having to display as Comcode
-	// If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
-	global $REVERSABLE_TAGS;
-	$REVERSABLE_TAGS=array(
-		'surround'=>1,'attachment_safe'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'highlight'=>1,'indent'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,
-		'title'=>1,'size'=>1,'color'=>1,'font'=>1,'tt'=>1,'img'=>'#\s(rollover|refresh\_time)=#','url'=>1,'email'=>1,
-		'semihtml'=>1,'html'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,
+    // In theory, almost any tag is reversable. However these tags can be converted ROBUSTLY and hence the WYSIWYG editor can manipulate them as HTML rather than having to display as Comcode
+    // If the tag is mapped to a string that provides a regexp to say when it is NOT reversible. Usually this is done for certain parameters.
+    global $REVERSABLE_TAGS;
+    $REVERSABLE_TAGS = array(
+        'surround' => 1,'attachment_safe' => 1,'cite' => 1,'ins' => 1,'del' => 1,'dfn' => 1,'address' => 1,'abbr' => 1,'acronym' => 1,'list' => 1,'highlight' => 1,'indent' => 1,'b' => 1,'i' => 1,'u' => 1,'s' => 1,'sup' => 1,'sub' => 1,
+        'title' => 1,'size' => 1,'color' => 1,'font' => 1,'tt' => 1,'img' => '#\s(rollover|refresh\_time)=#','url' => 1,'email' => 1,
+        'semihtml' => 1,'html' => 1,'align' => 1,'left' => 1,'center' => 1,'right' => 1,
 
-		/*Handled in special way*/
-		'block'=>1,'contents'=>1,'concepts'=>1,'attachment'=>1,'flash'=>1,'media'=>1,'menu'=>1,'reference'=>1,'page'=>1,'thumb'=>1,'topic'=>1,'include'=>1,'random'=>1,'jumping'=>1,'shocker'=>1,
-	);
-	// These are not reversable, but we want them WYSIWYGABLE
-	global $PUREHTML_TAGS;
-	$PUREHTML_TAGS=array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
-	// The following could conceivably not need to be reversed, as they're pure HTML. However, it's better not to let the WYSIWYG'd HTML get too complex.
-	// 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'media'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
+        /*Handled in special way*/
+        'block' => 1,'contents' => 1,'concepts' => 1,'attachment' => 1,'flash' => 1,'media' => 1,'menu' => 1,'reference' => 1,'page' => 1,'thumb' => 1,'topic' => 1,'include' => 1,'random' => 1,'jumping' => 1,'shocker' => 1,
+    );
+    // These are not reversable, but we want them WYSIWYGABLE
+    global $PUREHTML_TAGS;
+    $PUREHTML_TAGS = array(/*'attachment_safe'=>'1*/); // Actually: there is some dynamicness even in this ($KEEP and $SESSION in particular -- and we couldn't even have them preserved inside a WYSIWYG-edit)
+    // The following could conceivably not need to be reversed, as they're pure HTML. However, it's better not to let the WYSIWYG'd HTML get too complex.
+    // 'tooltip'=>1,'section'=>1,'section_controller'=>1,'big_tab'=>1,'big_tab_controller'=>1,'tabs'=>1,'tab'=>1,'carousel'=>1,'flash'=>1,'media'=>1,'hide'=>1,'quote'=>1,'ticker'=>1,'jumping'=>1
 
-	// Any of these will cause free-for-all blacklist-filtered HTML to be disallowed, even if enabled via the hidden option
-	global $POTENTIALLY_EMPTY_TAGS;
-	$POTENTIALLY_EMPTY_TAGS=array('concepts'=>1,'staff_note'=>1,'if_in_group'=>1,'no_parse'=>1,'concept'=>1,'include'=>1,'random'=>1,'jumping'=>1);
+    // Any of these will cause free-for-all blacklist-filtered HTML to be disallowed, even if enabled via the hidden option
+    global $POTENTIALLY_EMPTY_TAGS;
+    $POTENTIALLY_EMPTY_TAGS = array('concepts' => 1,'staff_note' => 1,'if_in_group' => 1,'no_parse' => 1,'concept' => 1,'include' => 1,'random' => 1,'jumping' => 1);
 
-	// The contents of these tags is human readable text. It may be altered for reasons of bork, or word-wrapping, or textcode; they have hard white space
-	global $TEXTUAL_TAGS;
-	$TEXTUAL_TAGS=array('overlay'=>1,'tooltip'=>1,'section'=>1,'surround'=>1,'if_in_group'=>1,'cite'=>1,'ins'=>1,'del'=>1,'dfn'=>1,'address'=>1,'abbr'=>1,'acronym'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'b'=>1,'i'=>1,'u'=>1,'s'=>1,'sup'=>1,'sub'=>1,'title'=>1,'size'=>1,'color'=>1,'highlight'=>1,'font'=>1,'box'=>1,'hide'=>1,'quote'=>1,'tab'=>1,'big_tab'=>1);
+    // The contents of these tags is human readable text. It may be altered for reasons of bork, or word-wrapping, or textcode; they have hard white space
+    global $TEXTUAL_TAGS;
+    $TEXTUAL_TAGS = array('overlay' => 1,'tooltip' => 1,'section' => 1,'surround' => 1,'if_in_group' => 1,'cite' => 1,'ins' => 1,'del' => 1,'dfn' => 1,'address' => 1,'abbr' => 1,'acronym' => 1,'list' => 1,'indent' => 1,'align' => 1,'left' => 1,'center' => 1,'right' => 1,'b' => 1,'i' => 1,'u' => 1,'s' => 1,'sup' => 1,'sub' => 1,'title' => 1,'size' => 1,'color' => 1,'highlight' => 1,'font' => 1,'box' => 1,'hide' => 1,'quote' => 1,'tab' => 1,'big_tab' => 1);
 
-	// These tags don't have <br />'s done right after them because they are their own block-end (like a paragraph). They may contain textcode lists and rules
-	global $BLOCK_TAGS;
-	$BLOCK_TAGS=array('section'=>1,'section_controller'=>1,'tabs'=>1,'tab'=>1,'big_tab'=>1,'big_tab_controller'=>1,'carousel'=>1,'surround'=>1,'if_in_group'=>1,'contents'=>1,'concepts'=>1,'codebox'=>1,'code'=>1,'list'=>1,'indent'=>1,'align'=>1,'left'=>1,'center'=>1,'right'=>1,'staff_note'=>1,'reference'=>1,'menu'=>1,'title'=>1,'box'=>1,'quote'=>1,'block'=>1,'hide'=>1);
+    // These tags don't have <br />'s done right after them because they are their own block-end (like a paragraph). They may contain textcode lists and rules
+    global $BLOCK_TAGS;
+    $BLOCK_TAGS = array('section' => 1,'section_controller' => 1,'tabs' => 1,'tab' => 1,'big_tab' => 1,'big_tab_controller' => 1,'carousel' => 1,'surround' => 1,'if_in_group' => 1,'contents' => 1,'concepts' => 1,'codebox' => 1,'code' => 1,'list' => 1,'indent' => 1,'align' => 1,'left' => 1,'center' => 1,'right' => 1,'staff_note' => 1,'reference' => 1,'menu' => 1,'title' => 1,'box' => 1,'quote' => 1,'block' => 1,'hide' => 1);
 
-	// These tags can only be used by privileged members
-	global $DANGEROUS_TAGS;
-	$DANGEROUS_TAGS=array('overlay'=>1,'if_in_group'=>1,'concepts'=>1,'random'=>1,'include'=>1,'block'=>1,'menu'=>1); // Don't want people putting menus around, plus the captions aren't escaped
+    // These tags can only be used by privileged members
+    global $DANGEROUS_TAGS;
+    $DANGEROUS_TAGS = array('overlay' => 1,'if_in_group' => 1,'concepts' => 1,'random' => 1,'include' => 1,'block' => 1,'menu' => 1); // Don't want people putting menus around, plus the captions aren't escaped
 
-	// These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
-	global $CODE_TAGS;
-	$CODE_TAGS=array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash'=>1,'media'=>1,'thumb'=>1,'menu'=>1,'no_parse'=>1,'code'=>1,'tt'=>1,'samp'=>1,'codebox'=>1,'staff_note'=>1);
+    // These tags have contents that are not interpreted as Comcode (so no HTML tags either), but are formatted for white-space
+    global $CODE_TAGS;
+    $CODE_TAGS = array(/*'img'=>1 - no, can be a symbol for legacy reasons,*/'flash' => 1,'media' => 1,'thumb' => 1,'menu' => 1,'no_parse' => 1,'code' => 1,'tt' => 1,'samp' => 1,'codebox' => 1,'staff_note' => 1);
 
-	// ALSO:
-	// See $non_text_tags list in comcode_renderer.php
-	// See non_text_tags in JAVASCRIPT_EDITING.tpl
-	// See _get_details_comcode_tags function in comcode_add.php
+    // ALSO:
+    // See $non_text_tags list in comcode_renderer.php
+    // See non_text_tags in JAVASCRIPT_EDITING.tpl
+    // See _get_details_comcode_tags function in comcode_add.php
 
-	// We're not allowed to specify any of these as entities
-	global $POTENTIAL_JS_NAUGHTY_ARRAY;
-	$POTENTIAL_JS_NAUGHTY_ARRAY=array('d'=>1,/*'a'=>1,'t'=>1,'a'=>1,*/'j'=>1,'a'=>1,'v'=>1,'s'=>1,'c'=>1,'r'=>1,'i'=>1,'p'=>1,'t'=>1,'J'=>1,'A'=>1,'V'=>1,'S'=>1,'C'=>1,'R'=>1,'I'=>1,'P'=>1,'T'=>1,' '=>1,"\t"=>1,"\n"=>1,"\r"=>1,':'=>1,'/'=>1,'*'=>1,'\\'=>1);
-	$POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)]=1;
+    // We're not allowed to specify any of these as entities
+    global $POTENTIAL_JS_NAUGHTY_ARRAY;
+    $POTENTIAL_JS_NAUGHTY_ARRAY = array('d' => 1,/*'a'=>1,'t'=>1,'a'=>1,*/'j' => 1,'a' => 1,'v' => 1,'s' => 1,'c' => 1,'r' => 1,'i' => 1,'p' => 1,'t' => 1,'J' => 1,'A' => 1,'V' => 1,'S' => 1,'C' => 1,'R' => 1,'I' => 1,'P' => 1,'T' => 1,' ' => 1,"\t" => 1,"\n" => 1,"\r" => 1,':' => 1,'/' => 1,'*' => 1,'\\' => 1);
+    $POTENTIAL_JS_NAUGHTY_ARRAY[chr(0)] = 1;
 
-	// Hehe
-	global $LEET_FILTER;
-	$LEET_FILTER=NULL;
+    // Hehe
+    global $LEET_FILTER;
+    $LEET_FILTER = null;
 
-	global $ALLOWED_ENTITIES;
-	//$ALLOWED_ENTITIES=array('raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'ndash'=>1,'mdash'=>1,'ldquo'=>1,'rdquo'=>1);
-	$ALLOWED_ENTITIES=array('OElig'=>1,'oelig'=>1,'Scaron'=>1,'scaron'=>1,'Yuml'=>1,'circ'=>1,'tilde'=>1,'ensp'=>1,'emsp'=>1,'thinsp'=>1,'zwnj'=>1,'zwj'=>1,'lrm'=>1,'rlm'=>1,'ndash'=>1,'mdash'=>1,'lsquo'=>1,'rsquo'=>1,'sbquo'=>1,'ldquo'=>1,'rdquo'=>1,'bdquo'=>1,'dagger'=>1,'Dagger'=>1,'hellip'=>1,'permil'=>1,'lsaquo'=>1,'rsaquo'=>1,'euro'=>1,'Agrave'=>1,'Aacute'=>1,'Acirc'=>1,'Atilde'=>1,'Auml'=>1,'Aring'=>1,'AElig'=>1,'Ccedil'=>1,'Egrave'=>1,'Eacute'=>1,'Ecirc'=>1,'Euml'=>1,'Igrave'=>1,'Iacute'=>1,'Icirc'=>1,'Iuml'=>1,'ETH'=>1,'Ntilde'=>1,'Ograve'=>1,'Oacute'=>1,'Ocirc'=>1,'Otilde'=>1,'Ouml'=>1,'Oslash'=>1,'Ugrave'=>1,'Uacute'=>1,'Ucirc'=>1,'Uuml'=>1,'Yacute'=>1,'THORN'=>1,'szlig'=>1,'agrave'=>1,'aacute'=>1,'acirc'=>1,'atilde'=>1,'auml'=>1,'aring'=>1,'aelig'=>1,'ccedil'=>1,'egrave'=>1,'eacute'=>1,'ecirc'=>1,'euml'=>1,'igrave'=>1,'iacute'=>1,'icirc'=>1,'iuml'=>1,'eth'=>1,'ntilde'=>1,'ograve'=>1,'oacute'=>1,'ocirc'=>1,'otilde'=>1,'ouml'=>1,'oslash'=>1,'ugrave'=>1,'uacute'=>1,'ucirc'=>1,'uuml'=>1,'yacute'=>1,'thorn'=>1,'yuml'=>1,'nbsp'=>1,'iexcl'=>1,'curren'=>1,'cent'=>1,'pound'=>1,'yen'=>1,'brvbar'=>1,'sect'=>1,'uml'=>1,'copy'=>1,'ordf'=>1,'laquo'=>1,'not'=>1,'shy'=>1,'reg'=>1,'trade'=>1,'macr'=>1,'deg'=>1,'plusmn'=>1,'sup2'=>1,'sup3'=>1,'acute'=>1,'micro'=>1,'para'=>1,'middot'=>1,'cedil'=>1,'sup1'=>1,'ordm'=>1,'raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'iquest'=>1,'times'=>1,'divide'=>1,'amp'=>1,'lt'=>1,'gt'=>1,'quot'=>1);
+    global $ALLOWED_ENTITIES;
+    //$ALLOWED_ENTITIES=array('raquo'=>1,'frac14'=>1,'frac12'=>1,'frac34'=>1,'ndash'=>1,'mdash'=>1,'ldquo'=>1,'rdquo'=>1);
+    $ALLOWED_ENTITIES = array('OElig' => 1,'oelig' => 1,'Scaron' => 1,'scaron' => 1,'Yuml' => 1,'circ' => 1,'tilde' => 1,'ensp' => 1,'emsp' => 1,'thinsp' => 1,'zwnj' => 1,'zwj' => 1,'lrm' => 1,'rlm' => 1,'ndash' => 1,'mdash' => 1,'lsquo' => 1,'rsquo' => 1,'sbquo' => 1,'ldquo' => 1,'rdquo' => 1,'bdquo' => 1,'dagger' => 1,'Dagger' => 1,'hellip' => 1,'permil' => 1,'lsaquo' => 1,'rsaquo' => 1,'euro' => 1,'Agrave' => 1,'Aacute' => 1,'Acirc' => 1,'Atilde' => 1,'Auml' => 1,'Aring' => 1,'AElig' => 1,'Ccedil' => 1,'Egrave' => 1,'Eacute' => 1,'Ecirc' => 1,'Euml' => 1,'Igrave' => 1,'Iacute' => 1,'Icirc' => 1,'Iuml' => 1,'ETH' => 1,'Ntilde' => 1,'Ograve' => 1,'Oacute' => 1,'Ocirc' => 1,'Otilde' => 1,'Ouml' => 1,'Oslash' => 1,'Ugrave' => 1,'Uacute' => 1,'Ucirc' => 1,'Uuml' => 1,'Yacute' => 1,'THORN' => 1,'szlig' => 1,'agrave' => 1,'aacute' => 1,'acirc' => 1,'atilde' => 1,'auml' => 1,'aring' => 1,'aelig' => 1,'ccedil' => 1,'egrave' => 1,'eacute' => 1,'ecirc' => 1,'euml' => 1,'igrave' => 1,'iacute' => 1,'icirc' => 1,'iuml' => 1,'eth' => 1,'ntilde' => 1,'ograve' => 1,'oacute' => 1,'ocirc' => 1,'otilde' => 1,'ouml' => 1,'oslash' => 1,'ugrave' => 1,'uacute' => 1,'ucirc' => 1,'uuml' => 1,'yacute' => 1,'thorn' => 1,'yuml' => 1,'nbsp' => 1,'iexcl' => 1,'curren' => 1,'cent' => 1,'pound' => 1,'yen' => 1,'brvbar' => 1,'sect' => 1,'uml' => 1,'copy' => 1,'ordf' => 1,'laquo' => 1,'not' => 1,'shy' => 1,'reg' => 1,'trade' => 1,'macr' => 1,'deg' => 1,'plusmn' => 1,'sup2' => 1,'sup3' => 1,'acute' => 1,'micro' => 1,'para' => 1,'middot' => 1,'cedil' => 1,'sup1' => 1,'ordm' => 1,'raquo' => 1,'frac14' => 1,'frac12' => 1,'frac34' => 1,'iquest' => 1,'times' => 1,'divide' => 1,'amp' => 1,'lt' => 1,'gt' => 1,'quot' => 1);
 
-	global $ADVERTISING_BANNERS_CACHE;
-	$ADVERTISING_BANNERS_CACHE=NULL;
+    global $ADVERTISING_BANNERS_CACHE;
+    $ADVERTISING_BANNERS_CACHE = null;
 
-	global $NO_LINK_TITLES;
-	$NO_LINK_TITLES=false;
+    global $NO_LINK_TITLES;
+    $NO_LINK_TITLES = false;
 
-	global $COMCODE_ATTACHMENTS,$ATTACHMENTS_ALREADY_REFERENCED;
-	$COMCODE_ATTACHMENTS=array();
-	$ATTACHMENTS_ALREADY_REFERENCED=array();
+    global $COMCODE_ATTACHMENTS,$ATTACHMENTS_ALREADY_REFERENCED;
+    $COMCODE_ATTACHMENTS = array();
+    $ATTACHMENTS_ALREADY_REFERENCED = array();
 
-	global $MEMBER_MENTIONS_IN_COMCODE;
-	$MEMBER_MENTIONS_IN_COMCODE=array();
+    global $MEMBER_MENTIONS_IN_COMCODE;
+    $MEMBER_MENTIONS_IN_COMCODE = array();
 }
 
 /**
@@ -125,1684 +124,1654 @@ function init__comcode_compiler()
  * @param  ?MEMBER		The member we are running on behalf of, with respect to how attachments are handled; we may use this members attachments that are already within this post, and our new attachments will be handed to this member (NULL: member evaluating)
  * @return tempcode		The tempcode generated
  */
-function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits=NULL,$on_behalf_of_member=NULL)
+function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$is_all_semihtml,$structure_sweep,$check_only,$highlight_bits = null,$on_behalf_of_member = null)
 {
-	global $LAX_COMCODE;
-	if ($LAX_COMCODE===NULL && function_exists('get_option')) $LAX_COMCODE=(get_option('lax_comcode')=='1');
-
-	global $ADVERTISING_BANNERS_CACHE,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
-
-	$wml=false; // removed feature from ocPortal now
-	$print_mode=get_param_integer('wide_print',0)==1;
-
-	$len=strlen($comcode);
-
-	if ((function_exists('set_time_limit')) && (ini_get('max_execution_time')!='0')) @set_time_limit(300);
-
-	$allowed_html_seqs=array( // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
-		'<table>',
-		'<table( class="[^"<>]*")?( summary="[^"<>]*")?'.'>',
-		'</table>',
-		'<tr>',
-		'</tr>',
-		'<td>',
-		'</td>',
-		'<th>',
-		'</th>',
-		'<pre>',
-		'</pre>',
-		'<address>',
-		'</address>',
-		'<br\s*/?'.'>',
-		'<p>',
-		'</p>',
-		'<p\s*/>',
-		'<div( style=".*")?'.'>',
-		'</div>',
-		'<b>',
-		'</b>',
-		'<u>',
-		'</u>',
-		'<i>',
-		'</i>',
-		'<em>',
-		'</em>',
-		'<strong>',
-		'</strong>',
-		'<li>',
-		'</li>',
-		'<ul>',
-		'</ul>',
-		'<ol>',
-		'</ol>',
-		'<dir>',
-		'</dir>',
-		'<del>',
-		'</del>',
-		'<s>',
-		'</s>',
-		'<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?'.'>',
-		'</font>',
-		'<!--',
-		'<h1( class="screen_title")?( id="screen_title")?'.'>',
-		'</h1>',
-		'<h2>',
-		'</h2>',
-		'<h3>',
-		'</h3>',
-		'<h4>',
-		'</h4>',
-		'<h5>',
-		'</h5>',
-		'<h6>',
-		'</h6>',
-		'<img( alt="[^"<>]*")?( border="[^"<>]*")?( class="vertical_alignment")? src="[^"<>]*"( style="vertical-align: (top|middle|bottom|baseline)")?( title="[^"<>]*")?\s*/?'.'>',
-		'<a( class="[^"<>]*")? href="[^"<>]*"( rel="[^"<>]*")?( target="[^"<>]*")?( title="[^"<>]*")?'.'>',
-		'</a>',
-		'<span>',
-		'<span style="color:\s*\#[A-Fa-f0-9]+;?">',
-		'<span style="font-family:\s*[\w-\s,]+;?">',
-		'<span style="font-size:\s*[\d\.]+(em|px|pt)?;?">',
-		'</span>',
-	);
-
-	if ($as_admin)
-	{
-		$comcode_dangerous=true;
-		$comcode_dangerous_html=true;
-	} else
-	{
-		$comcode_dangerous=(!$GLOBALS['MICRO_BOOTUP']) && (has_privilege($source_member,'comcode_dangerous'));
-		$comcode_dangerous_html=false;
-		if ((has_privilege($source_member,'allow_html')) && (($is_all_semihtml) || (strpos($comcode,'[html')!==false) || (strpos($comcode,'[semihtml')!==false)))
-		{
-			$comcode_dangerous_html=true;
-		}
-	}
-	if ($pass_id===NULL) $pass_id=strval(mt_rand(0,32000)); // This is a unique ID that refers to this specific piece of comcode
-	global $COMCODE_ATTACHMENTS;
-	if (!array_key_exists($pass_id,$COMCODE_ATTACHMENTS)) $COMCODE_ATTACHMENTS[$pass_id]=array();
-
-	// Tag level
-	$current_tag='';
-	$attribute_map=array();
-	$tag_output=new ocp_tempcode();
-	$continuation='';
-	$close=mixed();
-
-	// Properties that come from our tag
-	$white_space_area=true;
-	$textual_area=true;
-	$formatting_allowed=true;
-	$in_html=false;
-	$in_semihtml=$is_all_semihtml;
-	$in_separate_parse_section=false; // Not escaped because it has to be passed to a secondary filter
-	$in_code_tag=false;
-	$code_nest_stack=0;
-
-	// Our state
-	$status=CCP_NO_MANS_LAND;
-	$lax=$GLOBALS['LAX_COMCODE'] || function_exists('get_member') && $source_member!=get_member() || count($_POST)==0; // if we don't want to produce errors for technically invalid Comcode
-	if ((!$lax) && (substr($comcode,0,10)=='[semihtml]')) $lax=true;
-	$tag_stack=array();
-	$pos=0;
-	$line_starting=true;
-	$just_ended=false;
-	$none_wrap_length=0;
-	$just_new_line=true; // So we can detect lists starting right away
-	$just_title=false;
-	global $NUM_COMCODE_LINES_PARSED;
-	$NUM_COMCODE_LINES_PARSED=0;
-	$queued_tempcode=new ocp_tempcode();
-	$mindless_mode=false; // If we're doing a semi parse mode and going over a tag we don't actually process
-	$tag_raw='';
-
-	$stupidity_mode=get_value('stupidity_mode'); // bork or leet
-	if ($comcode_dangerous) $stupidity_mode=get_param('stupidity_mode','');
-	if ($stupidity_mode=='leet')
-	{
-		$LEET_FILTER=array(
-		'B'=>'8',
-		'C'=>'(',
-		'E'=>'3',
-		'G'=>'9',
-		'I'=>'1',
-		'L'=>'1',
-		'O'=>'0',
-		'P'=>'9',
-		'S'=>'5',
-		'U'=>'0',
-		'V'=>'\/',
-		'Z'=>'2'
-		);
-	}
-
-	$smilies=$GLOBALS['FORUM_DRIVER']->find_emoticons(); // We'll be needing the smiley array
-	$shortcuts=array('(EUR-)'=>'&euro;','{f.}'=>'&fnof;','-|-'=>'&dagger;','=|='=>'&Dagger;','{%o}'=>'&permil;','{~S}'=>'&Scaron;','{~Z}'=>'&#x17D;','(TM)'=>'&trade;','{~s}'=>'&scaron;','{~z}'=>'&#x17E;','{.Y.}'=>'&Yuml;','(c)'=>'&copy;','(r)'=>'&reg;','---'=>'&mdash;','--'=>'&ndash;','...'=>'&hellip;','-->'=>'&rarr;','<--'=>'&larr;');
-
-	// Text syntax possibilities, that get maintained as our cursor moves through the text block
-	$list_indent=0;
-	$list_type='ul';
-
-	if ($is_all_semihtml) filter_html($as_admin,$source_member,$pos,$len,$comcode,false,false); // Pre-filter the whole lot (note that this means during general output we do no additional filtering)
-
-	while ($pos<$len)
-	{
-		$next=$comcode[$pos];
-		++$pos;
-
-		// State machine
-		switch ($status)
-		{
-			case CCP_NO_MANS_LAND:
-				if ($next=='[')
-				{
-					// Look ahead to make sure it's a valid tag. If it's not then it's considered normal user input, not a tag at all
-					$dif=(($pos<$len) && ($comcode[$pos]=='/'))?1:0; // '0' if it's an opening tag, '1' if it's a closing tag
-					$ahead=substr($comcode,$pos+$dif,MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH);
-					$equal_pos=strpos($ahead,'=');
-					$space_pos=strpos($ahead,' ');
-					$end_pos=strpos($ahead,']');
-					$lax_end_pos=strpos($ahead,'[');
-					$cl_pos=strpos($ahead,"\n");
-					if ($equal_pos===false) $equal_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
-					if ($space_pos===false) $space_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
-					if ($end_pos===false) $end_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
-					if ($lax_end_pos===false) $lax_end_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
-					if ($cl_pos===false) $cl_pos=MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
-					$use_pos=min($equal_pos,$space_pos,$end_pos,$lax_end_pos,$cl_pos);
-
-					$potential_tag=strtolower(substr($ahead,0,$use_pos));
-					if (($use_pos!=22) && ((!$in_semihtml) || ($dif==1) || (($potential_tag!='html') && ($potential_tag!='semihtml'))) && ((!$in_html) || (($dif==1) && ($potential_tag=='html'))) && ((!$in_code_tag) || ((isset($CODE_TAGS[$potential_tag])) && ($potential_tag==$current_tag))) && ((!$structure_sweep) || ($potential_tag!='contents')))
-					{
-						if ($in_code_tag)
-						{
-							if ($dif==1)
-							{
-								$code_nest_stack--;
-							} else
-							{
-								$code_nest_stack++;
-							}
-							$ok=($code_nest_stack==-1);
-						} else $ok=true;
-
-						if ($ok)
-						{
-							if (!isset($VALID_COMCODE_TAGS[$potential_tag]))
-							{
-								if (!$IMPORTED_CUSTOM_COMCODE)
-									_custom_comcode_import($connection);
-							}
-							if ((isset($VALID_COMCODE_TAGS[$potential_tag])) && (strtolower(substr($ahead,0,2))!='i ')) // The "i" bit is just there to block a common annoyance: [i] doesn't take parameters and we don't want "[i think]" (for example) being parsed.
-							{
-								if (($comcode[$pos]!='/') || (count($tag_stack)==0))
-									$mindless_mode=($semiparse_mode) && ((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100))!=0))) && (!isset($PUREHTML_TAGS[$potential_tag]));
-								else $mindless_mode=$tag_stack[count($tag_stack)-1][7];
-
-								$close=false;
-								$current_tag='';
-								if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-								$tag_output->attach($continuation);
-								$continuation='';
-								if ((($just_new_line)) || (isset($BLOCK_TAGS[$potential_tag])))
-								{
-									list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-									if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-									$tag_output->attach($close_list);
-								}
-								$status=CCP_STARTING_TAG;
-								if ($mindless_mode)
-								{
-									if ($comcode[$pos]!='/')
-									{
-										if (array_key_exists($potential_tag,$BLOCK_TAGS))
-										{
-											$tag_raw='&#8203;<kbd title="'.escape_html($potential_tag).'" class="ocp_keep_block">[';
-										} else
-										{
-											$tag_raw='&#8203;<kbd title="'.escape_html($potential_tag).'" class="ocp_keep">[';
-										}
-									} else
-									{
-										$tag_raw='[';
-									}
-								} else
-								{
-									$tag_raw='';
-								}
-								continue;
-							}
-						}
-					} else
-					{
-						if (($use_pos!=22) && ((($in_semihtml) || ($in_html)) && (($potential_tag=='html') || ($potential_tag=='semihtml'))) && (!$in_code_tag))
-						{
-							$ahc=strpos($ahead,']');
-							if ($ahc!==false)
-							{
-								$pos+=$ahc+1;
-								continue;
-							}
-						}
-					}
-				}
-
-				if ((($in_html) || ((($in_semihtml) && (!$in_code_tag)) && (($next=='<') || ($next=='>') || ($next=='"')))))
-				{
-					if ($next=="\n") ++$NUM_COMCODE_LINES_PARSED;
-
-					if ((!$comcode_dangerous_html) && ($next=='<')) // Special filtering required
-					{
-						$close=strpos($comcode,'>',$pos-1);
-						$portion=substr($comcode,$pos-1,$close-$pos+2);
-						$seq_ok=false;
-						foreach ($allowed_html_seqs as $allowed_html_seq)
-						{
-							if (preg_match('#^'.$allowed_html_seq.'$#',$portion)!=0) $seq_ok=true;
-						}
-						if (!$seq_ok)
-						{
-							$unstrippable_tags=array(
-								'table','tr','th','td','ul','ol','dl','dir','li', // Stop big structural problems causing out-of-scope corruptions (e.g. orphaned tr making preceding text move away completely when there's a wider surrounding table)
-								'div','p', // Stop disallowed opening tags paired with allowed closing tags causing mess up of surrounding layout
-							);
-							foreach ($unstrippable_tags as $unstrippable_tag)
-							{
-								if (preg_match('#^<'.$unstrippable_tag.'(\s[^<>]*|)>$#i',$portion)!=0)
-								{
-									$continuation.='<'.$unstrippable_tag.'>';
-									break;
-								}
-							}
-
-							if ($close!==false) $pos=$close+1;
-							continue;
-						}
-					}
-
-					if ((isset($comcode[$pos])) && ($comcode[$pos]=='!') && (substr($comcode,$pos-1,4)=='<!--')) // To stop shortcut interpretation
-					{
-						$continuation.='<!--';
-						$pos+=3;
-					} else
-					{
-						$continuation.=($mindless_mode && $in_code_tag)?escape_html($next):$next;
-					}
-				}
-				else  // Not in HTML
-				{
-					// Text-format possibilities
-					if (($just_new_line) && ($formatting_allowed) && (!$wml))
-					{
-						if ($continuation!='')
-						{
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-							$tag_output->attach($continuation);
-							$continuation='';
-						}
-
-						// List
-						$found_list=false;
-						$old_list_indent=$list_indent;
-						if (($pos+2<$len) && (is_numeric($next)) && (((is_numeric($comcode[$pos])) && ($comcode[$pos+1]==')') && ($comcode[$pos+2]==' ')) || (($comcode[$pos]==')') && ($comcode[$pos+1]==' '))) && ((($list_type=='1') && ($list_indent!=0)) || (preg_match('#^[^\n]*\n\d+\) #',substr($comcode,$pos+1))!=0)))
-						{
-							if (($list_indent!=0) && ($list_type!='1'))
-							{
-								list($temp_tpl,$old_list_indent)=_close_open_lists($list_indent,$list_type);
-								if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-								$tag_output->attach($temp_tpl);
-							}
-							$list_indent=1;
-							$found_list=true;
-							$scan_pos=$pos;
-							$list_type='1';
-						}
-						elseif (($pos+2<$len) && (ord($next)>=ord('a')) && (ord($next)<=ord('z')) && ($comcode[$pos]==')') && ($comcode[$pos+1]==' ') && ((($list_type=='a') && ($list_indent!=0)) || (preg_match('#^[^\n]*\n\d+\) #',substr($comcode,$pos+1))!=0)))
-						{
-							if (($list_indent!=0) && ($list_type!='a'))
-							{
-								list($temp_tpl,$old_list_indent)=_close_open_lists($list_indent,$list_type);
-								if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-								$tag_output->attach($temp_tpl);
-							}
-							$list_indent=1;
-							$found_list=true;
-							$scan_pos=$pos;
-							$list_type='a';
-						}
-						elseif ($next==' ')
-						{
-							if (($old_list_indent!=0) && ($list_type!='ul'))
-							{
-								list($temp_tpl,$old_list_indent)=_close_open_lists($list_indent,$list_type);
-								if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-								$tag_output->attach($temp_tpl);
-							}
-
-							$scan_pos=$pos-1;
-							$list_indent=0;
-							while ($scan_pos<$len)
-							{
-								$scan_next=$comcode[$scan_pos];
-								if (($scan_next=='-') && ($scan_pos+1<$len) && ($comcode[$scan_pos+1]==' '))
-								{
-									$found_list=true;
-									break;
-								} else
-								{
-									if ($scan_next==' ') ++$list_indent; else break;
-								}
-								++$scan_pos;
-							}
-							if (!$found_list) $list_indent=0; else $list_type='ul';
-						}
-						// Rule?
-						else
-						{
-							list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-							$tag_output->attach($close_list);
-							$old_list_indent=0;
-
-							if (($next=='-') && (!$just_title))
-							{
-								$scan_pos=$pos;
-								$found_rule=true;
-								while ($scan_pos<$len)
-								{
-									$scan_next=$comcode[$scan_pos];
-									if ($scan_next!='-')
-									{
-										if ($scan_next=="\n")
-										{
-											++$NUM_COMCODE_LINES_PARSED;
-											break;
-										} else $found_rule=false;
-									}
-									++$scan_pos;
-								}
-								if ($found_rule)
-								{
-									$_temp_tpl=do_template('COMCODE_TEXTCODE_LINE');
-									$tag_output->attach($_temp_tpl);
-									$pos=$scan_pos+1;
-									$just_ended=true;
-									$none_wrap_length=0;
-									continue;
-								}
-							}
-						}
-
-						// List handling
-						if (($list_indent==$old_list_indent) && ($old_list_indent!=0))
-						{
-							$temp_tpl='</li>';
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-							$tag_output->attach($temp_tpl);
-						}
-						for ($i=$list_indent;$i<$old_list_indent;++$i) // Close any ended
-						{
-							$temp_tpl='</li>';
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-							$tag_output->attach($temp_tpl);
-							$temp_tpl=($list_type=='ul')?'</ul>':'</ol>';
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-							$tag_output->attach($temp_tpl);
-						}
-						if (($list_indent<$old_list_indent) && ($list_indent!=0)) // Go down one final level, because the list tag must have been nested within an li tag (we closed open li tags recursively except for the final one)
-						{
-							$temp_tpl='</li>';
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-							$tag_output->attach($temp_tpl);
-						}
-						if ($found_list)
-						{
-							if ((($list_indent-$old_list_indent)>1) && (!$lax))
-							{
-								return comcode_parse_error($preparse_mode,array('CCP_LIST_JUMPYNESS'),$pos,$comcode,$check_only);
-							}
-							for ($i=$old_list_indent;$i<$list_indent;++$i) // Or open any started
-							{
-								switch ($list_type)
-								{
-									case 'ul':
-										if ($i<$list_indent-1) $temp_tpl='<ul><li>'; else $temp_tpl='<ul>';
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-										$tag_output->attach($temp_tpl);
-										break;
-									case '1':
-										if ($i<$list_indent-1) $temp_tpl='<ol type="1"><li>'; else $temp_tpl='<ol type="1">';
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-										$tag_output->attach($temp_tpl);
-										break;
-									case 'a':
-										if ($i<$list_indent-1) $temp_tpl='<ol type="a"><li>'; else $temp_tpl='<ol type="a">';
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-										$tag_output->attach($temp_tpl);
-										break;
-								}
-							}
-							$temp_tpl='<li>';
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-							$tag_output->attach($temp_tpl);
-							$just_ended=true;
-							$none_wrap_length=0;
-							$next='';
-							$pos=$scan_pos+2;
-						}
-					}
-
-					if (($next=="\n") && ($white_space_area) && ($print_mode) && ($list_indent==0)) // We might need to put some queued up stuff here: when we print, we can't float thumbnails
-					{
-						$tag_output->attach($queued_tempcode);
-						$queued_tempcode=new ocp_tempcode();
-					}
-					if (($next=="\n") && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3)==' - '))) // Hard-new-lines
-					{
-						++$NUM_COMCODE_LINES_PARSED;
-						$line_starting=true;
-						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-						$tag_output->attach($continuation);
-						$continuation='';
-						$just_new_line=true;
-						$none_wrap_length=0;
-						if (($list_indent==0) && (!$just_ended))
-						{
-							$temp_tpl='<br />';
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-							$tag_output->attach($temp_tpl);
-						}
-					}
-					else
-					{
-						$just_new_line=false;
-
-						if (($next==' ') && ($white_space_area) && (!$in_semihtml))
-						{
-							if (($line_starting) || (($pos>1) && ($comcode[$pos-2]==' '))) // Hard spaces
-							{
-								$next='&nbsp;';
-								++$none_wrap_length;
-							} else $none_wrap_length=0;
-							$continuation.=($mindless_mode && $in_code_tag)?escape_html($next):$next;
-						}
-						elseif (($next=="\t") && ($white_space_area) && (!$in_semihtml))
-						{
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-							$tag_output->attach($continuation);
-							$continuation='';
-							$tab_tpl=do_template('COMCODE_TEXTCODE_TAB');
-							$_tab_tpl=$tab_tpl->evaluate();
-							$none_wrap_length+=strlen($_tab_tpl);
-							$tag_output->attach($tab_tpl);
-						} else
-						{
-							if (($next==' ') || ($next=="\t") || ($just_ended))
-							{
-								$none_wrap_length=0;
-							} else
-							{
-								if (($wrap_pos!==NULL) && ($none_wrap_length>=$wrap_pos) && ((strtolower(get_charset())!='utf-8') || (preg_replace(array('#[\x09\x0A\x0D\x20-\x7E]#','#[\xC2-\xDF][\x80-\xBF]#','#\xE0[\xA0-\xBF][\x80-\xBF]#','#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','#\xED[\x80-\x9F][\x80-\xBF]#','#\xF0[\x90-\xBF][\x80-\xBF]{2}#','#[\xF1-\xF3][\x80-\xBF]{3}#','#\xF4[\x80-\x8F][\x80-\xBF]{2}#'),array('','','','','','','',''),$continuation)=='')) && ($textual_area) && (!$in_semihtml))
-								{
-									if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-									$tag_output->attach($continuation);
-									$continuation='';
-									$temp_tpl='<br />';
-									if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-									$tag_output->attach($temp_tpl);
-									$none_wrap_length=0;
-								} elseif ($textual_area) ++$none_wrap_length;
-							}
-							$line_starting=false;
-							$just_ended=false;
-
-							$differented=false; // If somehow via lookahead we've changed this to HTML and thus won't use it in raw form
-
-							// Variable lookahead
-							if ((!$in_code_tag) && (($next=='{') && (isset($comcode[$pos])) && (($comcode[$pos]=='$') || ($comcode[$pos]=='+') || ($comcode[$pos]=='!'))))
-							{
-								if ($comcode_dangerous)
-								{
-									if ((!$in_code_tag) && ((!$semiparse_mode) || (in_tag_stack($tag_stack,array('url','img','flash','media')))))
-									{
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-										$tag_output->attach($continuation);
-										$continuation='';
-										if ($comcode[$pos]=='+')
-										{
-											$p_end=$pos+5;
-											while ($p_end<$len)
-											{
-												$p_portion=substr($comcode,$pos-1,$p_end-($pos-1)+5);
-												if (substr_count($p_portion,'{+START')==substr_count($p_portion,'{+END')) break;
-												$p_end++;
-											}
-											$p_len=1;
-											while ($pos+$p_len<$len)
-											{
-												$p_portion=substr($comcode,$pos-1,$p_len);
-												if (substr_count(str_replace('{',' { ',$p_portion),'{')==substr_count(str_replace('}',' } ',$p_portion),'}')) break; // str_replace is to workaround a Quercus bug #4494
-												$p_len++;
-											}
-											$p_len--;
-											$p_portion=substr($comcode,$pos+$p_len,$p_end-($pos+$p_len));
-											require_code('tempcode_compiler');
-											$ret=template_to_tempcode(substr($comcode,$pos-1,$p_len+1).'{DIRECTIVE_EMBEDMENT}'.substr($comcode,$p_end,6));
-											if (substr($comcode,$pos-1,strlen('{+START,CASES,'))=='{+START,CASES,')
-											{
-												$ret->singular_bind('DIRECTIVE_EMBEDMENT',make_string_tempcode($p_portion));
-											} else
-											{
-												$p_portion_comcode=comcode_to_tempcode($p_portion,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
-												$ret->singular_bind('DIRECTIVE_EMBEDMENT',$p_portion_comcode);
-											}
-											$pos=$p_end+6;
-										}
-										elseif ($comcode[$pos]=='!')
-										{
-											$p_len=$pos;
-											$balance=1;
-											while (($p_len<$len) && ($balance!=0))
-											{
-												if ($comcode[$p_len]=='{') $balance++; elseif ($comcode[$p_len]=='}') $balance--;
-												$p_len++;
-											}
-											$ret=new ocp_tempcode();
-											$less_pos=$pos-1;
-											$ret->parse_from($comcode,$less_pos,$p_len);
-											$pos=$p_len;
-											if (($ret->parameterless(0)) && ($pos<$len)) // We want to take the lang string reference as Comcode if it's a simple lang string reference with no parameters
-											{
-												$matches=array();
-												if (preg_match('#\{\!([\w\d\_\:]+)(\}|$)#U',substr($comcode,$less_pos,$p_len-$less_pos),$matches)!=0) // Hacky code to extract the lang string name
-												{
-													$temp_lang_string=$matches[1];
-													$ret=new ocp_tempcode(); // Put into new Tempcode object to attach to, as what comcode_lang_string returns may be cached yet we may append to $ret
-													$ret->attach(static_evaluate_tempcode(comcode_lang_string($temp_lang_string))); // Recreate as a Comcode lang string
-												}
-											}
-										} else
-										{
-											$p_len=$pos;
-											$balance=1;
-											while (($p_len<$len) && ($balance!=0))
-											{
-												if ($comcode[$p_len]=='{') $balance++; elseif ($comcode[$p_len]=='}') $balance--;
-												$p_len++;
-											}
-											$ret=new ocp_tempcode();
-											$less_pos=$pos-1;
-											$ret->parse_from($comcode,$less_pos,$p_len);
-											$pos=$p_len;
-										}
-										$differented=true;
-										if (($pos<=$len) || (!$lax))
-										{
-											$tag_output->attach($ret);
-										}
-									}
-								} else
-								{
-									if (($comcode[$pos]=='$') && ($pos<$len-2) && ($comcode[$pos+1]==',') && (strpos($comcode,'}',$pos)!==false))
-									{
-										$pos=strpos($comcode,'}',$pos)+1;
-										$differented=true;
-									}
-								}
-							}
-
-							// Escaping of comcode tag starts lookahead
-							if (($next=='\\') && (!$in_code_tag)) // We are changing \[ to [ with the side-effect of blocking a tag start. To get \[ literal, we need the symbols \\[... and add extra \-pairs as needed. We are only dealing with \ and [ (update: and now {) here, it's not a further extended means of escaping.
-							{
-								if (($pos!=$len) && (($comcode[$pos]=='"') || (substr($comcode,$pos-1,6)=='&quot;')))
-								{
-									if ($semiparse_mode) $continuation.='\\';
-									if ($comcode[$pos]=='"')
-									{
-										$continuation.=$mindless_mode?'&quot;':'"';
-										++$pos;
-									} else
-									{
-										$continuation.='&quot;';
-										$pos+=6;
-									}
-									$differented=true;
-								}
-								elseif (($pos!=$len) && ($comcode[$pos]=='['))
-								{
-									if ($semiparse_mode) $continuation.='\\';
-									$continuation.='[';
-									++$pos;
-									$differented=true;
-								}
-								elseif (($pos!=$len) && ($comcode[$pos]=='{'))
-								{
-									if ($semiparse_mode) $continuation.='\\';
-									$continuation.='{';
-									++$pos;
-									$differented=true;
-								}
-								elseif (($pos==$len) || ($comcode[$pos]=='\\'))
-								{
-									if ($semiparse_mode) $continuation.='\\';
-									$continuation.='\\';
-									++$pos;
-									$differented=true;
-								}
-							}
-
-							if (!$differented)
-							{
-								if ((($textual_area) || ($in_semihtml)) && (trim($next)!='') && (!$wml))
-								{
-									// Emoticon lookahead
-									foreach ($smilies as $smiley=>$imgcode)
-									{
-										if ($in_semihtml) $smiley=' '.$smiley.' ';
-
-										if ($next==$smiley[0]) // optimisation
-										{
-											if (substr($comcode,$pos-1,strlen($smiley))==$smiley)
-											{
-												if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-												$tag_output->attach($continuation);
-												$continuation='';
-												$pos+=strlen($smiley)-1;
-												$differented=true;
-												$tag_output->attach(do_emoticon($imgcode));
-												break;
-											}
-										}
-									}
-								}
-							}
-							if ((trim($next)!='') && (!$in_code_tag) && (!$differented))
-							{
-								// Wiki pages
-								if (($pos<$len) && ($next=='[') && ($pos+1<$len) && ($comcode[$pos]=='[') && (!$semiparse_mode) && (addon_installed('wiki')))
-								{
-									$matches=array();
-									if (preg_match('#^\[([^\[\]]*)\]\]#',substr($comcode,$pos,200),$matches)!=0)
-									{
-										$wiki_page_name=$matches[1];
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-										$tag_output->attach($continuation);
-										$continuation='';
-										$hash_pos=strpos($wiki_page_name,'#');
-										if ($hash_pos!==false)
-										{
-											$jump_to=substr($wiki_page_name,$hash_pos+1);
-											$wiki_page_name=substr($wiki_page_name,0,$hash_pos);
-										} else $jump_to='';
-										$wiki_page_url=build_url(array('page'=>'wiki','type'=>'misc','find'=>$wiki_page_name),get_module_zone('wiki'));
-										if ($jump_to!='')
-										{
-											$wiki_page_url->attach('#'.$jump_to);
-										}
-										$tag_output->attach(do_template('COMCODE_WIKI_LINK',array('_GUID'=>'ebcd7ba5290c5b2513272a53b4d666e5','URL'=>$wiki_page_url,'TEXT'=>$wiki_page_name)));
-										$pos+=strlen($matches[1])+3;
-										$differented=true;
-									}
-								}
-
-								// Usernames
-								if (($pos<$len) && ((($next=='{') && ($pos+1<$len) && ($comcode[$pos]=='{')) || (($next=='@') && (get_forum_type()=='ocf'))) && (!$in_code_tag) && (!$semiparse_mode))
-								{
-									$matches=array();
-									$explicit_username=($next=='{');
-									if (preg_match($explicit_username?'#^\{([^"{}&\'\$<>]+)\}\}#':'#^(\w[^\n]*)#',substr($comcode,$pos,80),$matches)!=0)
-									{
-										$username=$matches[1];
-
-										if ($explicit_username)
-										{
-											if ($username[0]=='?')
-											{
-												$username_info=true;
-												$username=substr($username,1);
-											} else $username_info=false;
-										} else
-										{
-											$username_info=true;
-										}
-
-										if (!$explicit_username)
-										{
-											$parts=preg_split('#([^\w])#',$username,-1,PREG_SPLIT_DELIM_CAPTURE);
-											$username_part='';
-											$username_sql='1=0';
-											for ($i=0;$i<count($parts);$i+=2)
-											{
-												if ($i!=0)
-												{
-													$delim=$parts[$i-1];
-													for ($j=0;$j<strlen($delim);$j++)
-													{
-														$username_part.=$delim[$j];
-														$username_sql.=' OR '.db_string_equal_to('m_username',$username_part);
-													}
-												}
-												$username_part.=$parts[$i];
-												$username_sql.=' OR '.db_string_equal_to('m_username',$username_part);
-											}
-
-											$this_member_id=mixed();
-											$results=$GLOBALS['FORUM_DB']->query('SELECT id,m_username FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.$username_sql.' ORDER BY LENGTH(m_username) DESC',1);
-											if (isset($results[0]))
-											{
-												$this_member_id=$results[0]['id'];
-												$username=$results[0]['m_username'];
-											}
-										} else
-										{
-											$this_member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-										}
-
-										if (!is_null($this_member_id))
-										{
-											if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-											$tag_output->attach($continuation);
-											$continuation='';
-
-											if (!is_guest($this_member_id))
-											{
-												$member_url=$GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
-												if ((get_forum_type()=='ocf') && ($username_info))
-												{
-													require_lang('ocf');
-													require_code('ocf_members2');
-													$details=render_member_box($this_member_id);
-													$comcode_member_link=do_template('COMCODE_MEMBER_LINK',array(
-														'_GUID'=>'d8f4f4ac70bd52b3ef9ee74ae9c5e085',
-														'DETAILS'=>$details,
-														'MEMBER_ID'=>strval($this_member_id),
-														'USERNAME'=>$username,
-														'MEMBER_URL'=>$member_url,
-													));
-													$tag_output->attach($comcode_member_link);
-
-													global $MEMBER_MENTIONS_IN_COMCODE;
-													$MEMBER_MENTIONS_IN_COMCODE[]=$this_member_id;
-												} else
-												{
-													$tag_output->attach(hyperlink($member_url,$username));
-												}
-											} else
-											{
-												$tag_output->attach(escape_html($username));
-											}
-
-											if ($explicit_username)
-											{
-												$pos+=strlen($matches[1])+3;
-											} else
-											{
-												$pos+=strlen($username);
-											}
-											$differented=true;
-										}
-									}
-								}
-							}
-
-							// Shortcut lookahead
-							if (!$differented)
-							{
-								if (($in_semihtml) && (substr($comcode,$pos-1,3)=='-->')) // To stop shortcut interpretation
-								{
-									$continuation.='-->';
-									$pos+=2;
-									break;
-								}
-								foreach ($shortcuts as $code=>$replacement)
-								{
-									if (($next==$code[0]) && (substr($comcode,$pos-1,strlen($code))==$code))
-									{
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-										$tag_output->attach($continuation);
-										$continuation='';
-										$pos+=strlen($code)-1;
-										$differented=true;
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($replacement);
-										$tag_output->attach($replacement);
-										break;
-									}
-								}
-							}
-
-							// Table syntax
-							if (!$differented)
-							{
-								if (($pos<$len) && ($comcode[$pos]=='|'))
-								{
-									$end_tbl=strpos($comcode,"\n".'|}',$pos);
-									if ($end_tbl!==false)
-									{
-										$end_fst_line_pos=strpos($comcode,"\n",$pos);
-										$caption=substr($comcode,$pos+2,max($end_fst_line_pos-$pos-2,0));
-										$pos+=strlen($caption)+1;
-
-										$rows=preg_split('#(\|-|\|\})#Um',substr($comcode,$pos,$end_tbl-$pos));
-										if (preg_match('#(^|\s)floats($|\s)#',$caption)!=0)
-										{
-											$caption=preg_replace('#(^|\s)floats($|\s)#','',$caption);
-
-											$ratios=array();
-											$ratios_matches=array();
-											if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
-											{
-												$ratios=explode(':',$ratios_matches[2]);
-												$caption=str_replace($ratios_matches[0],'',$caption);
-											}
-
-											foreach ($rows as $h=>$row)
-											{
-												$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
-												array_shift($cells); // First one is non-existent empty
-												$spec=true;
-												// Find which to float
-												$to_float=NULL;
-												foreach ($cells as $i=>$cell)
-												{
-													if (!$spec)
-													{
-														if ((strpos($cell,'!')!==false) || (is_null($to_float))) $to_float=$i;
-													}
-													$spec=!$spec;
-												}
-
-												$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_START'));
-
-												// Do floated one
-												$i_dir_1=(($to_float==1)?'left':'right');
-												$i_dir_2=(($to_float!=1)?'left':'right');
-												if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
-												{
-													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START',array(
-														'_GUID'=>'ced8c3a142f74296a464b085ba6891c9',
-														'WIDTH'=>array_key_exists(($to_float==1)?0:(count($cells)-1),
-														$ratios)?$ratios[($to_float==1)?0:(count($cells)-1)]:((count($cells)==2)?'0':float_to_raw_string(97.0/(floatval(count($cells))/2.0-1.0),2).'%'),
-														'FLOAT'=>$i_dir_1,
-														'PADDING'=>($to_float==1)?'':'-left',
-														'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
-													)));
-												} else
-												{
-													$tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array(
-														'_GUID'=>'90be72fcbb6b9d8a312da0bee5b86cb3',
-														'WIDTH'=>array_key_exists($to_float,$ratios)?$ratios[$to_float]:'',
-														'FLOAT'=>$i_dir_1,
-														'PADDING'=>($to_float==1)?'':'-left',
-														'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2.0)/2.0),2),
-													)));
-												}
-												$tag_output->attach(comcode_to_tempcode(isset($cells[$to_float])?rtrim($cells[$to_float]):'',$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-												$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
-												// Do non-floated ones
-												$cell_i=0;
-												foreach ($cells as $i=>$cell)
-												{
-													if ($i%2==1)
-													{
-														if ($i!=$to_float)
-														{
-															if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
-															{
-																$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
-																	'_GUID'=>'9bac42a1b62c5c9a2f758639fcb3bb2f',
-																	'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:(float_to_raw_string(97.0/(floatval(count($cells))/2.0),2).'%'),
-																	'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
-																	'FLOAT'=>$i_dir_1,
-																	'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'',
-																)));
-															} else
-															{
-																$tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array(
-																	'_GUID'=>'0f15f9d5554635ed7ac154c9dc5c72b8',
-																	'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
-																	'FLOAT'=>$i_dir_1,
-																	'PADDING'=>(($to_float==1)||($cell_i!=0))?'-left':'',
-																	'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
-																)));
-															}
-															$tag_output->attach(comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
-															$tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
-														}
-														$cell_i++;
-													}
-												}
-
-												$tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
-											}
-										} else
-										{
-											$ratios=array();
-											$ratios_matches=array();
-											if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches)!=0)
-											{
-												$ratios=explode(':',$ratios_matches[2]);
-												$caption=str_replace($ratios_matches[0],'',$caption);
-											}
-
-											if (preg_match('#(^|\s)wide($|\s)#',$caption)!=0)
-											{
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_START',array('_GUID'=>'9fca9672b9d069a0c8a40ebc6e88602b','SUMMARY'=>preg_replace('#(^|\s)wide($|\s)#','',$caption))));
-											} else
-											{
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID'=>'0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION'=>$caption)));
-											}
-											$finished_thead=false;
-											foreach ($rows as $table_row)
-											{
-												$cells=preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
-												array_shift($cells); // First one is non-existent empty
-												$spec=true;
-												$c_type='';
-												$cell_i=0;
-												$finished_thead_prior=$finished_thead;
-												foreach ($cells as $i=>$cell)
-												{
-													if ($spec)
-													{
-														if (strpos($cell,'!')===false) $finished_thead=true;
-													}
-													$spec=!$spec;
-												}
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('_GUID'=>'98f20d57692f0bded555a0acb7d55024','START_HEAD'=>!$finished_thead,'START_BODY'=>(!$finished_thead_prior) && ($finished_thead))));
-												$spec=true;
-												foreach ($cells as $i=>$cell)
-												{
-													if ($spec)
-													{
-														$c_type=(strpos($cell,'!')!==false)?'th':'td';
-													} else
-													{
-														$_mid=comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
-
-														$tag_output->attach(do_template('COMCODE_REAL_TABLE_CELL',array(
-															'_GUID'=>'6640df8b503f65e3d36f595b0acf7600',
-															'WIDTH'=>array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
-															'C_TYPE'=>$c_type,
-															'MID'=>$_mid,
-															'PADDING'=>($cell_i==0)?'':'-left',
-															'PADDING_AMOUNT'=>(count($cells)==2)?'0':float_to_raw_string(5.0/(floatval(count($cells)-2)/2.0),2),
-														)));
-
-														$cell_i++;
-													}
-													$spec=!$spec;
-												}
-
-												$tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('_GUID'=>'c3abce83ec5bdbc10d0e80f646c91c23','END_HEAD'=>!$finished_thead)));
-											}
-
-											$tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID'=>'6a843e072e92b60cc950f69576231fe1','END_BODY'=>$finished_thead)));
-										}
-
-										$pos=$end_tbl+3;
-										$differented=true;
-									}
-								}
-
-								// Advertising
-								$b_all=true; // leave true - for test purposes only
-								if ((!$semiparse_mode) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member,'banner_free'))))
-								{
-									// Pick up correctly, including permission filtering
-									if (is_null($ADVERTISING_BANNERS_CACHE))
-									{
-										$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'banners b LEFT JOIN '.get_table_prefix().'banner_types t ON b.b_type=t.id WHERE t_comcode_inline=1 AND '.db_string_not_equal_to('b_title_text',''),NULL,NULL,true);
-										if (!is_null($rows))
-										{
-											// Filter out what we don't have permission for
-											if (get_option('use_banner_permissions',true)=='1')
-											{
-												require_code('permissions');
-												$groups=_get_where_clause_groups($source_member);
-												if (!is_null($groups))
-												{
-													$perhaps=collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT DISTINCT category_name FROM '.get_table_prefix().'group_category_access WHERE '.db_string_equal_to('module_the_name','banners').' AND ('.$groups.')',NULL,NULL,false,true));
-													$new_rows=array();
-													foreach ($rows as $row)
-													{
-														if (in_array($row['name'],$perhaps)) $new_rows[]=$row;
-													}
-													$rows=$new_rows;
-												}
-											}
-
-											$ADVERTISING_BANNERS_CACHE=array();
-											foreach ($rows as $row)
-											{
-												$trigger_text=$row['b_title_text'];
-												foreach (explode(',',$trigger_text) as $t)
-													if (trim($t)!='') $ADVERTISING_BANNERS_CACHE[trim($t)]=$row;
-											}
-										}
-									}
-
-									// Apply
-									if (!is_null($ADVERTISING_BANNERS_CACHE))
-									{
-										foreach ($ADVERTISING_BANNERS_CACHE as $ad_trigger=>$ad_bits)
-										{
-											if (strtolower($next)==strtolower($ad_trigger[0])) // optimisation
-											{
-												if (strtolower(substr($comcode,$pos-1,strlen($ad_trigger)))==strtolower($ad_trigger))
-												{
-													$just_banner_row=db_map_restrict($ad_bits,array('name','caption'));
-
-													require_code('banners');
-													if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-													$tag_output->attach($continuation);
-													$continuation='';
-													$differented=true;
-													$ad_text=show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode('banners',$just_banner_row,'caption'),$ad_bits['b_direct_code'],$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type'],$ad_bits['submitter']);
-													$embed_output=_do_tags_comcode('tooltip',array('param'=>$ad_text,'url'=>(url_is_local($ad_bits['site_url']) && ($ad_bits['site_url']!=''))?(get_custom_base_url().'/'.$ad_bits['site_url']):$ad_bits['site_url']),substr($comcode,$pos-1,strlen($ad_trigger)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
-													$pos+=strlen($ad_trigger)-1;
-													$tag_output->attach($embed_output);
-												}
-											}
-										}
-									}
-								}
-
-								// Search highlighting lookahead
-								if ($highlight_bits!==NULL)
-								{
-									foreach ($highlight_bits as $highlight_bit)
-									{
-										if (strtolower($next)==strtolower($highlight_bit[0])) // optimisation
-										{
-											if (strtolower(substr($comcode,$pos-1,strlen($highlight_bit)))==strtolower($highlight_bit))
-											{
-												if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-												$tag_output->attach($continuation);
-												$continuation='';
-												$differented=true;
-												$embed_output=_do_tags_comcode('highlight',array(),escape_html(substr($comcode,$pos-1,strlen($highlight_bit))),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
-												$pos+=strlen($highlight_bit)-1;
-												$tag_output->attach($embed_output);
-												break;
-											}
-										}
-									}
-								}
-							}
-
-							// Link lookahead
-							if ($in_semihtml)
-							{
-								$until_now=substr($comcode,0,$pos-1);
-								$a=strrpos($until_now,'<');
-								$b=strrpos($until_now,'>');
-								$in_html_tag=($a!==false) && (($b===false) || ($a>$b));
-							}
-							if (($textual_area) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && (trim($next)!='') && (!$differented) && ($next=='h') && ((substr($comcode,$pos-1,strlen('http://'))=='http://') || (substr($comcode,$pos-1,strlen('https://'))=='https://') || (substr($comcode,$pos-1,strlen('ftp://'))=='ftp://')))
-							{
-								// Find the full link portion in the upcoming Comcode
-								$link_end_pos=strlen($comcode);
-								foreach (array(' ',"\n",'[',')','"','>','<',".\n",', ','. ',"'",) as $link_terminator_str)
-								{
-									$link_end_pos_x=strpos($comcode,$link_terminator_str,$pos-1);
-									if (($link_end_pos_x!==false) && ($link_end_pos_x<$link_end_pos)) $link_end_pos=$link_end_pos_x;
-								}
-								$auto_link=substr($comcode,$pos-1,$link_end_pos-$pos+1);
-
-								// Strip down the link, for security reasons
-								$auto_link=preg_replace('#([?&])(keep|for)_session=\w*#','${1}',$auto_link);
-
-								if (substr($auto_link,-3)!='://') // If it's not just a hanging protocol
-								{
-									if (substr($auto_link,-1)=='.') // Strip trailing dot (dots may be within, but not at the end)
-									{
-										$auto_link=substr($auto_link,0,strlen($auto_link)-1);
-										$link_end_pos--;
-									}
-
-									// Find a media renderer for this link
-									$embed_output=mixed();
-									if (!$check_only)
-									{
-										$link_handlers=find_all_hooks('systems','comcode_link_handlers');
-										foreach (array_keys($link_handlers) as $link_handler)
-										{
-											require_code('hooks/systems/comcode_link_handlers/'.$link_handler);
-											$link_handler_ob=object_factory('Hook_comcode_link_handler_'.$link_handler,true);
-											if (is_null($link_handler_ob)) continue;
-											$embed_output=$link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
-											if (!is_null($embed_output)) break;
-										}
-									}
-
-									// If it was successfully rendered as media, put this into the output stream rather than the written link
-									if (!is_null($embed_output))
-									{
-										if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-										$tag_output->attach($continuation);
-										$continuation='';
-										if (!$semiparse_mode)
-										{
-											$tag_output->attach($embed_output);
-										} else
-										{
-											$tag_output->attach(escape_html($auto_link));
-										}
-										$pos+=$link_end_pos-$pos;
-										$differented=true;
-									}
-								}
-							}
-
-							if (!$differented)
-							{
-								if (($stupidity_mode!='') && ($textual_area))
-								{
-									if (($stupidity_mode=='leet') && (mt_rand(0,1)==1))
-									{
-										if (array_key_exists(strtoupper($next),$LEET_FILTER)) $next=$LEET_FILTER[strtoupper($next)];
-									}
-									elseif (($stupidity_mode=='bork') && (mt_rand(0,60)==1))
-									{
-										$next.='-bork-bork-bork-';
-									}
-								}
-								if ((!$in_separate_parse_section) && ((!$in_semihtml) || ((!$comcode_dangerous_html)/*If we don't support HTML and we haven't done the all_semihtml pre-filter at the top*/ && (!$is_all_semihtml)))) // Display char. We try and support entities
-								{
-									if ($next=='&')
-									{
-										$ahead=substr($comcode,$pos,20);
-										$ahead_lower=strtolower($ahead);
-										$matches=array();
-										$entity=preg_match('#^(\#)?([\w]*);#',$ahead_lower,$matches)!=0; // If it is a SAFE entity, use it
-
-										if (($entity) && (!$in_code_tag))
-										{
-											if (($matches[1]=='') && (($in_semihtml) || (isset($ALLOWED_ENTITIES[$matches[2]]))))
-											{
-												$pos+=strlen($matches[2])+1;
-												$continuation.='&'.$matches[2].';';
-											} elseif ((is_numeric($matches[2])) && ($matches[1]=='#'))
-											{
-												$matched_entity=intval(base_convert($matches[2],16,10));
-												if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
-												{
-													$continuation.=escape_html($next);
-												} else
-												{
-													$pos+=strlen($matches[2])+2;
-													$continuation.='&#'.$matches[2].';';
-												}
-											} else
-											{
-												$continuation.='&amp;';
-											}
-										} else
-										{
-											$continuation.='&amp;';
-										}
-									} else
-									{
-										$continuation.=escape_html($next);
-									}
-								} else
-								{
-									$continuation.=$next;
-								}
-							}
-						}
-					}
-				}
-				break;
-			case CCP_IN_TAG_NAME:
-				if (($mindless_mode) && ($next!='[')) $tag_raw.=($next);
-
-				if ($next=='=')
-				{
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
-					$current_attribute_name='param';
-				}
-				elseif (trim($next)=='')
-				{
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-				}
-				elseif ($next=='[')
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
-
-					$next=']';
-					$pos--;
-				}
-				if ($next==']')
-				{
-					if ($close)
-					{
-						if ($formatting_allowed)
-						{
-							list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-							$tag_output->attach($close_list);
-						}
-
-						if (count($tag_stack)==0)
-						{
-							if ($current_tag=='semihtml') // Ignore, as people in WYSIWYG often incorrectly try and nest semihtml tags
-							{
-								$status=CCP_NO_MANS_LAND;
-								break;
-							}
-
-							if ($lax)
-							{
-								$status=CCP_NO_MANS_LAND;
-								break;
-							}
-							return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE',$current_tag),strrpos(substr($comcode,0,$pos),'['),$comcode,$check_only);
-						}
-						$has_it=false;
-						foreach (array_reverse($tag_stack) as $t)
-						{
-							if ($t[0]==$current_tag)
-							{
-								$has_it=true;
-								break;
-							}
-							if (($in_semihtml) && (($current_tag=='html') || ($current_tag=='semihtml'))) // Only search one level for this
-								break;
-						}
-						if ($has_it)
-						{
-							$_last=array_pop($tag_stack);
-							if ($_last[0]!=$current_tag)
-							{
-								if (!$lax)
-								{
-									return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
-								}
-								do
-								{
-									$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
-									$in_code_tag=false;
-									$white_space_area=$_last[3];
-									$in_separate_parse_section=$_last[4];
-									$formatting_allowed=$_last[5];
-									$textual_area=$_last[6];
-									$tag_output=$_last[2];
-									$tag_output->attach($embed_output);
-									$mindless_mode=$_last[7];
-									$comcode_dangerous=$_last[8];
-									$comcode_dangerous_html=$_last[9];
-
-									if (count($tag_stack)==0) // Hmm, it was never open. So let's pretend this tag close never happened
-									{
-										$status=CCP_NO_MANS_LAND;
-										break 2;
-									}
-									$_last=array_pop($tag_stack);
-								}
-								while ($_last[0]!=$current_tag);
-							}
-						} else
-						{
-							$extraneous_semihtml=((!$is_all_semihtml) && (!$in_semihtml)) || (($current_tag!='html') && ($current_tag!='semihtml'));
-							if ((!$lax) && ($extraneous_semihtml))
-							{
-								$_last=array_pop($tag_stack);
-								return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
-							}
-							$status=CCP_NO_MANS_LAND;
-							break;
-						}
-
-						// Do the comcode for this tag
-						if ($in_semihtml) // We need to perform some work to clean up the Comcode tag's attributes, as they generally do not support Comcode/HTML themselves (are plain text)
-						{
-							foreach ($_last[1] as $index=>$conv)
-							{
-								$_last[1][$index]=@html_entity_decode(str_replace('<br />',"\n",$conv),ENT_QUOTES,get_charset());
-							}
-						}
-
-						$mindless_mode=$_last[7];
-
-						if ($mindless_mode)
-						{
-							$embed_output=$tag_output;
-						}
-						elseif (!$check_only)
-						{
-							$_structure_sweep=false;
-							if ($structure_sweep)
-							{
-								$_structure_sweep=!in_tag_stack($tag_stack,array('title'));
-							}
-							$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$_structure_sweep,$semiparse_mode,$highlight_bits,NULL,$in_semihtml,$is_all_semihtml);
-						} else $embed_output=new ocp_tempcode();
-
-						$in_code_tag=false;
-						$white_space_area=$_last[3];
-						$in_separate_parse_section=$_last[4];
-						$formatting_allowed=$_last[5];
-						$textual_area=$_last[6];
-						$tag_output=$_last[2];
-						$comcode_dangerous=$_last[8];
-						$comcode_dangerous_html=$_last[9];
-						$tag_output->attach($embed_output);
-						$just_ended=isset($BLOCK_TAGS[$current_tag]);
-
-						if ($current_tag=='title')
-						{
-							if ((strlen($comcode)>$pos+1) && ($comcode[$pos]=="\n") && ($comcode[$pos+1]=="\n")) // Linux newline
-							{
-								$NUM_COMCODE_LINES_PARSED+=2;
-								$pos+=2;
-								$just_new_line=true;
-							}
-						}
-
-						if ($current_tag=='html') $in_html=false;
-						elseif ($current_tag=='semihtml') $in_semihtml=false;
-						$status=CCP_NO_MANS_LAND;
-					} else
-					{
-						if ($current_tag=='title')
-						{
-							$just_new_line=false;
-							list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-							if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-							$tag_output->attach($close_list);
-						}
-
-						array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
-
-						list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
-						if ($in_code_tag) $code_nest_stack=0;
-					}
-
-					$tag_output->attach($tag_raw);
-
-					if (($close) && ($mindless_mode))
-					{
-						$temp_tpl='</kbd>&#8203;';
-						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($temp_tpl);
-						$tag_output->attach($temp_tpl);
-					}
-				}
-				elseif ($status==CCP_IN_TAG_NAME) $current_tag.=strtolower($next);
-				break;
-			case CCP_STARTING_TAG:
-				if (($mindless_mode) && ($next!='[')) $tag_raw.=($next);
-
-				if ($next=='[') // Can't actually occur though
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
-
-					$status=CCP_NO_MANS_LAND;
-					$pos--;
-				}
-				elseif ($next==']') // Can't actual occur though
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_CLOSE_ANOMALY'),$pos,$comcode,$check_only);
-
-					$status=CCP_NO_MANS_LAND;
-				}
-				elseif ($next=='/')
-				{
-					$close=true;
-				}
-				else
-				{
-					$current_tag.=strtolower($next);
-					$status=CCP_IN_TAG_NAME;
-				}
-				break;
-			case CCP_IN_TAG_BETWEEN_ATTRIBUTES:
-				if (($mindless_mode) && ($next!='[')) $tag_raw.=($next);
-
-				if ($next==']')
-				{
-					if ($current_tag=='title')
-					{
-						$just_new_line=false;
-						list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-						$tag_output->attach($close_list);
-					}
-
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
-
-					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
-					if ($in_code_tag) $code_nest_stack=0;
-
-					$tag_output->attach($tag_raw);
-				}
-				elseif ($next=='[')
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
-
-					if ($current_tag=='title')
-					{
-						$just_new_line=false;
-						list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-						$tag_output->attach($close_list);
-					}
-
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
-
-					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
-					if ($in_code_tag) $code_nest_stack=0;
-
-					$tag_output->attach($tag_raw);
-
-					$pos--;
-				}
-				elseif (trim($next)!='')
-				{
-					$status=CCP_IN_TAG_ATTRIBUTE_NAME;
-					$current_attribute_name=$next;
-				}
-				break;
-			case CCP_IN_TAG_ATTRIBUTE_NAME:
-				if (($mindless_mode) && ($next!='[')) $tag_raw.=($next);
-
-				if ($next=='[')
-				{
-					$status=CCP_NO_MANS_LAND;
-					$pos--;
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
-
-					if ($current_tag=='title')
-					{
-						$just_new_line=false;
-						list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-						if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-						$tag_output->attach($close_list);
-					}
-
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
-
-					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
-					if ($in_code_tag) $code_nest_stack=0;
-
-					$tag_output->attach($tag_raw);
-				}
-				elseif ($next==']')
-				{
-					if (($attribute_map==array()) && (!$lax))
-					{
-						return comcode_parse_error($preparse_mode,array('CCP_TAG_CLOSE_ANOMALY'),$pos,$comcode,$check_only);
-					}
-
-					if ($attribute_map!=array())
-					{
-						$at_map_keys=array_keys($attribute_map);
-						$old_attribute_name=$at_map_keys[count($at_map_keys)-1];
-						$attribute_map[$old_attribute_name].=' '.$current_attribute_name;
-					}
-
-					array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
-
-					list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag)=_opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
-					if ($in_code_tag) $code_nest_stack=0;
-
-					$tag_output->attach($tag_raw);
-				}
-				elseif ($next=='=') $status=CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
-				elseif ($next!=' ') $current_attribute_name.=strtolower($next);
-				else $status=CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT;
-				break;
-			case CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT:
-				if (($mindless_mode) && ($next!='[') && ($next!=']')) $tag_raw.=($next);
-
-				if ($next=='=') $status=CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
-				elseif (trim($next)!='')
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_ATTRIBUTE_ERROR',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
-
-					if ($next=='[')
-					{
-						$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-						$pos--;
-					}
-					elseif ($next==']')
-					{
-						$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-						$pos--;
-					}
-				}
-				break;
-			case CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT:
-				if (($mindless_mode) && ($next!='[') && ($next!=']')) $tag_raw.=($next);
-
-				if ($next=='[') // Can't actually occur though
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
-
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-					$pos--;
-				}
-				elseif ($next==']') // Can't actually occur though
-				{
-					if (!$lax) return comcode_parse_error($preparse_mode,array('CCP_TAG_CLOSE_ANOMALY'),$pos,$comcode,$check_only);
-
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-					$pos--;
-				}
-				elseif (($next=='"') || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
-				{
-					if ($next!='"')
-					{
-						$pos+=5;
-						if ($mindless_mode) $tag_raw.='quot;';
-					}
-					$status=CCP_IN_TAG_ATTRIBUTE_VALUE;
-					$current_attribute_value='';
-				}
-				elseif ($next!='')
-				{
-					$status=CCP_IN_TAG_ATTRIBUTE_VALUE_NO_QUOTE;
-					$current_attribute_value=$next;
-				}
-				break;
-			case CCP_IN_TAG_ATTRIBUTE_VALUE_NO_QUOTE:
-				if (($mindless_mode) && ($next!=']')) $tag_raw.=($next);
-
-				if ($next==' ')
-				{
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-					if ((isset($attribute_map[$current_attribute_name])) && (!$lax)) return comcode_parse_error($preparse_mode,array('CCP_DUPLICATE_ATTRIBUTES',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
-					$attribute_map[$current_attribute_name]=$current_attribute_value;
-				}
-				elseif ($next==']')
-				{
-					if ((isset($attribute_map[$current_attribute_name])) && (!$lax)) return comcode_parse_error($preparse_mode,array('CCP_DUPLICATE_ATTRIBUTES',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
-
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-					$attribute_map[$current_attribute_name]=$current_attribute_value;
-					$pos--;
-				}
-				else
-				{
-					$current_attribute_value.=$next;
-				}
-				break;
-			case CCP_IN_TAG_ATTRIBUTE_VALUE:
-				if ($mindless_mode) $tag_raw.=($next);
-
-				if (($next=='"') || (($in_semihtml) && (substr($comcode,$pos-1,6)=='&quot;')))
-				{
-					if ($next!='"')
-					{
-						$pos+=5;
-						if ($mindless_mode) $tag_raw.='quot;';
-					}
-					$status=CCP_IN_TAG_BETWEEN_ATTRIBUTES;
-					if ((isset($attribute_map[$current_attribute_name])) && (!$lax)) return comcode_parse_error($preparse_mode,array('CCP_DUPLICATE_ATTRIBUTES',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
-					$attribute_map[$current_attribute_name]=$current_attribute_value;
-				}
-				else
-				{
-					if ($next=='\\')
-					{
-						if ($comcode[$pos]=='"')
-						{
-							if ($mindless_mode) $tag_raw.='&quot;';
-							$current_attribute_value.='"';
-							++$pos;
-						} elseif (substr($comcode,$pos-1,6)=='&quot;')
-						{
-							if ($mindless_mode) $tag_raw.='&quot;';
-							$current_attribute_value.='&quot;';
-							$pos+=6;
-						}
-						elseif ($comcode[$pos]=='\\')
-						{
-							if ($mindless_mode) $tag_raw.='\\';
-							$current_attribute_value.='\\';
-							++$pos;
-						} else $current_attribute_value.=$next;
-					} else $current_attribute_value.=$next;
-				}
-				break;
-		}
-	}
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($continuation);
-	$tag_output->attach($continuation);
-	$continuation='';
-
-	list($close_list,$list_indent)=_close_open_lists($list_indent,$list_type);
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($close_list);
-	$tag_output->attach($close_list);
-
-	if (($status!=CCP_NO_MANS_LAND) || (count($tag_stack)!=0))
-	{
-		if (!$lax)
-		{
-			$stack_top=array_pop($tag_stack);
-			return comcode_parse_error($preparse_mode,array('CCP_BROKEN_END',is_null($stack_top)?$current_tag:$stack_top[0]),$pos,$comcode,$check_only);
-		} else
-		{
-			while (count($tag_stack)>0)
-			{
-				$_last=array_pop($tag_stack);
-				$embed_output=_do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,NULL,NULL,$in_semihtml,$is_all_semihtml);
-				$in_code_tag=false;
-				$white_space_area=$_last[3];
-				$in_separate_parse_section=$_last[4];
-				$formatting_allowed=$_last[5];
-				$textual_area=$_last[6];
-				$tag_output=$_last[2];
-				$tag_output->attach($embed_output);
-				$mindless_mode=$_last[7];
-				$comcode_dangerous=$_last[8];
-				$comcode_dangerous_html=$_last[9];
-			}
-		}
-	}
-
-	return $tag_output;
+    global $LAX_COMCODE;
+    if ($LAX_COMCODE === NULL && function_exists('get_option')) {
+        $LAX_COMCODE = (get_option('lax_comcode') == '1');
+    }
+
+    global $ADVERTISING_BANNERS_CACHE,$ALLOWED_ENTITIES,$POTENTIALLY_EMPTY_TAGS,$CODE_TAGS,$REVERSABLE_TAGS,$PUREHTML_TAGS,$DANGEROUS_TAGS,$VALID_COMCODE_TAGS,$BLOCK_TAGS,$POTENTIAL_JS_NAUGHTY_ARRAY,$TEXTUAL_TAGS,$LEET_FILTER,$IMPORTED_CUSTOM_COMCODE;
+
+    $wml = false; // removed feature from ocPortal now
+    $print_mode = get_param_integer('wide_print',0) == 1;
+
+    $len = strlen($comcode);
+
+    if ((function_exists('set_time_limit')) && (ini_get('max_execution_time') != '0')) {
+        @set_time_limit(300);
+    }
+
+    $allowed_html_seqs = array( // HTML tag may actually be used in very limited conditions: only the following HTML seqs will come out as HTML. This is, unless the blacklist filter is used instead.
+        '<table>',
+        '<table( class="[^"<>]*")?( summary="[^"<>]*")?' . '>',
+        '</table>',
+        '<tr>',
+        '</tr>',
+        '<td>',
+        '</td>',
+        '<th>',
+        '</th>',
+        '<pre>',
+        '</pre>',
+        '<address>',
+        '</address>',
+        '<br\s*/?' . '>',
+        '<p>',
+        '</p>',
+        '<p\s*/>',
+        '<div( style=".*")?' . '>',
+        '</div>',
+        '<b>',
+        '</b>',
+        '<u>',
+        '</u>',
+        '<i>',
+        '</i>',
+        '<em>',
+        '</em>',
+        '<strong>',
+        '</strong>',
+        '<li>',
+        '</li>',
+        '<ul>',
+        '</ul>',
+        '<ol>',
+        '</ol>',
+        '<dir>',
+        '</dir>',
+        '<del>',
+        '</del>',
+        '<s>',
+        '</s>',
+        '<font( color="[^"<>]*")?( face="[^"<>]*")?( size="[^"<>]*")?' . '>',
+        '</font>',
+        '<!--',
+        '<h1( class="screen_title")?( id="screen_title")?' . '>',
+        '</h1>',
+        '<h2>',
+        '</h2>',
+        '<h3>',
+        '</h3>',
+        '<h4>',
+        '</h4>',
+        '<h5>',
+        '</h5>',
+        '<h6>',
+        '</h6>',
+        '<img( alt="[^"<>]*")?( border="[^"<>]*")?( class="vertical_alignment")? src="[^"<>]*"( style="vertical-align: (top|middle|bottom|baseline)")?( title="[^"<>]*")?\s*/?' . '>',
+        '<a( class="[^"<>]*")? href="[^"<>]*"( rel="[^"<>]*")?( target="[^"<>]*")?( title="[^"<>]*")?' . '>',
+        '</a>',
+        '<span>',
+        '<span style="color:\s*\#[A-Fa-f0-9]+;?">',
+        '<span style="font-family:\s*[\w-\s,]+;?">',
+        '<span style="font-size:\s*[\d\.]+(em|px|pt)?;?">',
+        '</span>',
+    );
+
+    if ($as_admin) {
+        $comcode_dangerous = true;
+        $comcode_dangerous_html = true;
+    } else {
+        $comcode_dangerous = (!$GLOBALS['MICRO_BOOTUP']) && (has_privilege($source_member,'comcode_dangerous'));
+        $comcode_dangerous_html = false;
+        if ((has_privilege($source_member,'allow_html')) && (($is_all_semihtml) || (strpos($comcode,'[html') !== false) || (strpos($comcode,'[semihtml') !== false))) {
+            $comcode_dangerous_html = true;
+        }
+    }
+    if ($pass_id === NULL) {
+        $pass_id = strval(mt_rand(0,32000));
+    } // This is a unique ID that refers to this specific piece of comcode
+    global $COMCODE_ATTACHMENTS;
+    if (!array_key_exists($pass_id,$COMCODE_ATTACHMENTS)) {
+        $COMCODE_ATTACHMENTS[$pass_id] = array();
+    }
+
+    // Tag level
+    $current_tag = '';
+    $attribute_map = array();
+    $tag_output = new ocp_tempcode();
+    $continuation = '';
+    $close = mixed();
+
+    // Properties that come from our tag
+    $white_space_area = true;
+    $textual_area = true;
+    $formatting_allowed = true;
+    $in_html = false;
+    $in_semihtml = $is_all_semihtml;
+    $in_separate_parse_section = false; // Not escaped because it has to be passed to a secondary filter
+    $in_code_tag = false;
+    $code_nest_stack = 0;
+
+    // Our state
+    $status = CCP_NO_MANS_LAND;
+    $lax = $GLOBALS['LAX_COMCODE'] || function_exists('get_member') && $source_member != get_member() || count($_POST) == 0; // if we don't want to produce errors for technically invalid Comcode
+    if ((!$lax) && (substr($comcode,0,10) == '[semihtml]')) {
+        $lax = true;
+    }
+    $tag_stack = array();
+    $pos = 0;
+    $line_starting = true;
+    $just_ended = false;
+    $none_wrap_length = 0;
+    $just_new_line = true; // So we can detect lists starting right away
+    $just_title = false;
+    global $NUM_COMCODE_LINES_PARSED;
+    $NUM_COMCODE_LINES_PARSED = 0;
+    $queued_tempcode = new ocp_tempcode();
+    $mindless_mode = false; // If we're doing a semi parse mode and going over a tag we don't actually process
+    $tag_raw = '';
+
+    $stupidity_mode = get_value('stupidity_mode'); // bork or leet
+    if ($comcode_dangerous) {
+        $stupidity_mode = get_param('stupidity_mode','');
+    }
+    if ($stupidity_mode == 'leet') {
+        $LEET_FILTER = array(
+        'B' => '8',
+        'C' => '(',
+        'E' => '3',
+        'G' => '9',
+        'I' => '1',
+        'L' => '1',
+        'O' => '0',
+        'P' => '9',
+        'S' => '5',
+        'U' => '0',
+        'V' => '\/',
+        'Z' => '2'
+        );
+    }
+
+    $smilies = $GLOBALS['FORUM_DRIVER']->find_emoticons(); // We'll be needing the smiley array
+    $shortcuts = array('(EUR-)' => '&euro;','{f.}' => '&fnof;','-|-' => '&dagger;','=|=' => '&Dagger;','{%o}' => '&permil;','{~S}' => '&Scaron;','{~Z}' => '&#x17D;','(TM)' => '&trade;','{~s}' => '&scaron;','{~z}' => '&#x17E;','{.Y.}' => '&Yuml;','(c)' => '&copy;','(r)' => '&reg;','---' => '&mdash;','--' => '&ndash;','...' => '&hellip;','-->' => '&rarr;','<--' => '&larr;');
+
+    // Text syntax possibilities, that get maintained as our cursor moves through the text block
+    $list_indent = 0;
+    $list_type = 'ul';
+
+    if ($is_all_semihtml) {
+        filter_html($as_admin,$source_member,$pos,$len,$comcode,false,false);
+    } // Pre-filter the whole lot (note that this means during general output we do no additional filtering)
+
+    while ($pos<$len) {
+        $next = $comcode[$pos];
+        ++$pos;
+
+        // State machine
+        switch ($status) {
+            case CCP_NO_MANS_LAND:
+                if ($next == '[') {
+                    // Look ahead to make sure it's a valid tag. If it's not then it's considered normal user input, not a tag at all
+                    $dif = (($pos<$len) && ($comcode[$pos] == '/'))?1:0; // '0' if it's an opening tag, '1' if it's a closing tag
+                    $ahead = substr($comcode,$pos+$dif,MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH);
+                    $equal_pos = strpos($ahead,'=');
+                    $space_pos = strpos($ahead,' ');
+                    $end_pos = strpos($ahead,']');
+                    $lax_end_pos = strpos($ahead,'[');
+                    $cl_pos = strpos($ahead,"\n");
+                    if ($equal_pos === false) {
+                        $equal_pos = MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
+                    }
+                    if ($space_pos === false) {
+                        $space_pos = MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
+                    }
+                    if ($end_pos === false) {
+                        $end_pos = MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
+                    }
+                    if ($lax_end_pos === false) {
+                        $lax_end_pos = MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
+                    }
+                    if ($cl_pos === false) {
+                        $cl_pos = MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH+3;
+                    }
+                    $use_pos = min($equal_pos,$space_pos,$end_pos,$lax_end_pos,$cl_pos);
+
+                    $potential_tag = strtolower(substr($ahead,0,$use_pos));
+                    if (($use_pos != 22) && ((!$in_semihtml) || ($dif == 1) || (($potential_tag != 'html') && ($potential_tag != 'semihtml'))) && ((!$in_html) || (($dif == 1) && ($potential_tag == 'html'))) && ((!$in_code_tag) || ((isset($CODE_TAGS[$potential_tag])) && ($potential_tag == $current_tag))) && ((!$structure_sweep) || ($potential_tag != 'contents'))) {
+                        if ($in_code_tag) {
+                            if ($dif == 1) {
+                                $code_nest_stack--;
+                            } else {
+                                $code_nest_stack++;
+                            }
+                            $ok = ($code_nest_stack == -1);
+                        } else {
+                            $ok = true;
+                        }
+
+                        if ($ok) {
+                            if (!isset($VALID_COMCODE_TAGS[$potential_tag])) {
+                                if (!$IMPORTED_CUSTOM_COMCODE) {
+                                    _custom_comcode_import($connection);
+                                }
+                            }
+                            if ((isset($VALID_COMCODE_TAGS[$potential_tag])) && (strtolower(substr($ahead,0,2)) != 'i ')) { // The "i" bit is just there to block a common annoyance: [i] doesn't take parameters and we don't want "[i think]" (for example) being parsed.
+                                if (($comcode[$pos] != '/') || (count($tag_stack) == 0)) {
+                                    $mindless_mode = ($semiparse_mode) && ((!isset($REVERSABLE_TAGS[$potential_tag])) || ((is_string($REVERSABLE_TAGS[$potential_tag])) && (preg_match($REVERSABLE_TAGS[$potential_tag],substr($comcode,$pos,100)) != 0))) && (!isset($PUREHTML_TAGS[$potential_tag]));
+                                } else {
+                                    $mindless_mode = $tag_stack[count($tag_stack)-1][7];
+                                }
+
+                                $close = false;
+                                $current_tag = '';
+                                if ($GLOBALS['XSS_DETECT']) {
+                                    ocp_mark_as_escaped($continuation);
+                                }
+                                $tag_output->attach($continuation);
+                                $continuation = '';
+                                if ((($just_new_line)) || (isset($BLOCK_TAGS[$potential_tag]))) {
+                                    list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                                    if ($GLOBALS['XSS_DETECT']) {
+                                        ocp_mark_as_escaped($close_list);
+                                    }
+                                    $tag_output->attach($close_list);
+                                }
+                                $status = CCP_STARTING_TAG;
+                                if ($mindless_mode) {
+                                    if ($comcode[$pos] != '/') {
+                                        if (array_key_exists($potential_tag,$BLOCK_TAGS)) {
+                                            $tag_raw = '&#8203;<kbd title="' . escape_html($potential_tag) . '" class="ocp_keep_block">[';
+                                        } else {
+                                            $tag_raw = '&#8203;<kbd title="' . escape_html($potential_tag) . '" class="ocp_keep">[';
+                                        }
+                                    } else {
+                                        $tag_raw = '[';
+                                    }
+                                } else {
+                                    $tag_raw = '';
+                                }
+                                continue;
+                            }
+                        }
+                    } else {
+                        if (($use_pos != 22) && ((($in_semihtml) || ($in_html)) && (($potential_tag == 'html') || ($potential_tag == 'semihtml'))) && (!$in_code_tag)) {
+                            $ahc = strpos($ahead,']');
+                            if ($ahc !== false) {
+                                $pos += $ahc+1;
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+                if ((($in_html) || ((($in_semihtml) && (!$in_code_tag)) && (($next == '<') || ($next == '>') || ($next == '"'))))) {
+                    if ($next == "\n") {
+                        ++$NUM_COMCODE_LINES_PARSED;
+                    }
+
+                    if ((!$comcode_dangerous_html) && ($next == '<')) { // Special filtering required
+                        $close = strpos($comcode,'>',$pos-1);
+                        $portion = substr($comcode,$pos-1,$close-$pos+2);
+                        $seq_ok = false;
+                        foreach ($allowed_html_seqs as $allowed_html_seq) {
+                            if (preg_match('#^' . $allowed_html_seq . '$#',$portion) != 0) {
+                                $seq_ok = true;
+                            }
+                        }
+                        if (!$seq_ok) {
+                            $unstrippable_tags = array(
+                                'table','tr','th','td','ul','ol','dl','dir','li', // Stop big structural problems causing out-of-scope corruptions (e.g. orphaned tr making preceding text move away completely when there's a wider surrounding table)
+                                'div','p', // Stop disallowed opening tags paired with allowed closing tags causing mess up of surrounding layout
+                            );
+                            foreach ($unstrippable_tags as $unstrippable_tag) {
+                                if (preg_match('#^<' . $unstrippable_tag . '(\s[^<>]*|)>$#i',$portion) != 0) {
+                                    $continuation .= '<' . $unstrippable_tag . '>';
+                                    break;
+                                }
+                            }
+
+                            if ($close !== false) {
+                                $pos = $close+1;
+                            }
+                            continue;
+                        }
+                    }
+
+                    if ((isset($comcode[$pos])) && ($comcode[$pos] == '!') && (substr($comcode,$pos-1,4) == '<!--')) { // To stop shortcut interpretation
+                        $continuation .= '<!--';
+                        $pos += 3;
+                    } else {
+                        $continuation .= ($mindless_mode && $in_code_tag)?escape_html($next):$next;
+                    }
+                } else { // Not in HTML
+                    // Text-format possibilities
+                    if (($just_new_line) && ($formatting_allowed) && (!$wml)) {
+                        if ($continuation != '') {
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($continuation);
+                            }
+                            $tag_output->attach($continuation);
+                            $continuation = '';
+                        }
+
+                        // List
+                        $found_list = false;
+                        $old_list_indent = $list_indent;
+                        if (($pos+2<$len) && (is_numeric($next)) && (((is_numeric($comcode[$pos])) && ($comcode[$pos+1] == ')') && ($comcode[$pos+2] == ' ')) || (($comcode[$pos] == ')') && ($comcode[$pos+1] == ' '))) && ((($list_type == '1') && ($list_indent != 0)) || (preg_match('#^[^\n]*\n\d+\) #',substr($comcode,$pos+1)) != 0))) {
+                            if (($list_indent != 0) && ($list_type != '1')) {
+                                list($temp_tpl,$old_list_indent) = _close_open_lists($list_indent,$list_type);
+                                if ($GLOBALS['XSS_DETECT']) {
+                                    ocp_mark_as_escaped($temp_tpl);
+                                }
+                                $tag_output->attach($temp_tpl);
+                            }
+                            $list_indent = 1;
+                            $found_list = true;
+                            $scan_pos = $pos;
+                            $list_type = '1';
+                        } elseif (($pos+2<$len) && (ord($next) >= ord('a')) && (ord($next) <= ord('z')) && ($comcode[$pos] == ')') && ($comcode[$pos+1] == ' ') && ((($list_type == 'a') && ($list_indent != 0)) || (preg_match('#^[^\n]*\n\d+\) #',substr($comcode,$pos+1)) != 0))) {
+                            if (($list_indent != 0) && ($list_type != 'a')) {
+                                list($temp_tpl,$old_list_indent) = _close_open_lists($list_indent,$list_type);
+                                if ($GLOBALS['XSS_DETECT']) {
+                                    ocp_mark_as_escaped($temp_tpl);
+                                }
+                                $tag_output->attach($temp_tpl);
+                            }
+                            $list_indent = 1;
+                            $found_list = true;
+                            $scan_pos = $pos;
+                            $list_type = 'a';
+                        } elseif ($next == ' ') {
+                            if (($old_list_indent != 0) && ($list_type != 'ul')) {
+                                list($temp_tpl,$old_list_indent) = _close_open_lists($list_indent,$list_type);
+                                if ($GLOBALS['XSS_DETECT']) {
+                                    ocp_mark_as_escaped($temp_tpl);
+                                }
+                                $tag_output->attach($temp_tpl);
+                            }
+
+                            $scan_pos = $pos-1;
+                            $list_indent = 0;
+                            while ($scan_pos<$len) {
+                                $scan_next = $comcode[$scan_pos];
+                                if (($scan_next == '-') && ($scan_pos+1<$len) && ($comcode[$scan_pos+1] == ' ')) {
+                                    $found_list = true;
+                                    break;
+                                } else {
+                                    if ($scan_next == ' ') {
+                                        ++$list_indent;
+                                    } else {
+                                        break;
+                                    }
+                                }
+                                ++$scan_pos;
+                            }
+                            if (!$found_list) {
+                                $list_indent = 0;
+                            } else {
+                                $list_type = 'ul';
+                            }
+                        }
+                        // Rule?
+                        else {
+                            list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($close_list);
+                            }
+                            $tag_output->attach($close_list);
+                            $old_list_indent = 0;
+
+                            if (($next == '-') && (!$just_title)) {
+                                $scan_pos = $pos;
+                                $found_rule = true;
+                                while ($scan_pos<$len) {
+                                    $scan_next = $comcode[$scan_pos];
+                                    if ($scan_next != '-') {
+                                        if ($scan_next == "\n") {
+                                            ++$NUM_COMCODE_LINES_PARSED;
+                                            break;
+                                        } else {
+                                            $found_rule = false;
+                                        }
+                                    }
+                                    ++$scan_pos;
+                                }
+                                if ($found_rule) {
+                                    $_temp_tpl = do_template('COMCODE_TEXTCODE_LINE');
+                                    $tag_output->attach($_temp_tpl);
+                                    $pos = $scan_pos+1;
+                                    $just_ended = true;
+                                    $none_wrap_length = 0;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        // List handling
+                        if (($list_indent == $old_list_indent) && ($old_list_indent != 0)) {
+                            $temp_tpl = '</li>';
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($temp_tpl);
+                            }
+                            $tag_output->attach($temp_tpl);
+                        }
+                        for ($i = $list_indent;$i<$old_list_indent;++$i) { // Close any ended
+                            $temp_tpl = '</li>';
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($temp_tpl);
+                            }
+                            $tag_output->attach($temp_tpl);
+                            $temp_tpl = ($list_type == 'ul')?'</ul>':'</ol>';
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($temp_tpl);
+                            }
+                            $tag_output->attach($temp_tpl);
+                        }
+                        if (($list_indent<$old_list_indent) && ($list_indent != 0)) { // Go down one final level, because the list tag must have been nested within an li tag (we closed open li tags recursively except for the final one)
+                            $temp_tpl = '</li>';
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($temp_tpl);
+                            }
+                            $tag_output->attach($temp_tpl);
+                        }
+                        if ($found_list) {
+                            if ((($list_indent-$old_list_indent)>1) && (!$lax)) {
+                                return comcode_parse_error($preparse_mode,array('CCP_LIST_JUMPYNESS'),$pos,$comcode,$check_only);
+                            }
+                            for ($i = $old_list_indent;$i<$list_indent;++$i) { // Or open any started
+                                switch ($list_type) {
+                                    case 'ul':
+                                        if ($i<$list_indent-1) {
+                                            $temp_tpl = '<ul><li>';
+                                        } else {
+                                            $temp_tpl = '<ul>';
+                                        }
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($temp_tpl);
+                                        }
+                                        $tag_output->attach($temp_tpl);
+                                        break;
+                                    case '1':
+                                        if ($i<$list_indent-1) {
+                                            $temp_tpl = '<ol type="1"><li>';
+                                        } else {
+                                            $temp_tpl = '<ol type="1">';
+                                        }
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($temp_tpl);
+                                        }
+                                        $tag_output->attach($temp_tpl);
+                                        break;
+                                    case 'a':
+                                        if ($i<$list_indent-1) {
+                                            $temp_tpl = '<ol type="a"><li>';
+                                        } else {
+                                            $temp_tpl = '<ol type="a">';
+                                        }
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($temp_tpl);
+                                        }
+                                        $tag_output->attach($temp_tpl);
+                                        break;
+                                }
+                            }
+                            $temp_tpl = '<li>';
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($temp_tpl);
+                            }
+                            $tag_output->attach($temp_tpl);
+                            $just_ended = true;
+                            $none_wrap_length = 0;
+                            $next = '';
+                            $pos = $scan_pos+2;
+                        }
+                    }
+
+                    if (($next == "\n") && ($white_space_area) && ($print_mode) && ($list_indent == 0)) { // We might need to put some queued up stuff here: when we print, we can't float thumbnails
+                        $tag_output->attach($queued_tempcode);
+                        $queued_tempcode = new ocp_tempcode();
+                    }
+                    if (($next == "\n") && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode,$pos,3) == ' - '))) { // Hard-new-lines
+                        ++$NUM_COMCODE_LINES_PARSED;
+                        $line_starting = true;
+                        if ($GLOBALS['XSS_DETECT']) {
+                            ocp_mark_as_escaped($continuation);
+                        }
+                        $tag_output->attach($continuation);
+                        $continuation = '';
+                        $just_new_line = true;
+                        $none_wrap_length = 0;
+                        if (($list_indent == 0) && (!$just_ended)) {
+                            $temp_tpl = '<br />';
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($temp_tpl);
+                            }
+                            $tag_output->attach($temp_tpl);
+                        }
+                    } else {
+                        $just_new_line = false;
+
+                        if (($next == ' ') && ($white_space_area) && (!$in_semihtml)) {
+                            if (($line_starting) || (($pos>1) && ($comcode[$pos-2] == ' '))) { // Hard spaces
+                                $next = '&nbsp;';
+                                ++$none_wrap_length;
+                            } else {
+                                $none_wrap_length = 0;
+                            }
+                            $continuation .= ($mindless_mode && $in_code_tag)?escape_html($next):$next;
+                        } elseif (($next == "\t") && ($white_space_area) && (!$in_semihtml)) {
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($continuation);
+                            }
+                            $tag_output->attach($continuation);
+                            $continuation = '';
+                            $tab_tpl = do_template('COMCODE_TEXTCODE_TAB');
+                            $_tab_tpl = $tab_tpl->evaluate();
+                            $none_wrap_length += strlen($_tab_tpl);
+                            $tag_output->attach($tab_tpl);
+                        } else {
+                            if (($next == ' ') || ($next == "\t") || ($just_ended)) {
+                                $none_wrap_length = 0;
+                            } else {
+                                if (($wrap_pos !== NULL) && ($none_wrap_length >= $wrap_pos) && ((strtolower(get_charset()) != 'utf-8') || (preg_replace(array('#[\x09\x0A\x0D\x20-\x7E]#','#[\xC2-\xDF][\x80-\xBF]#','#\xE0[\xA0-\xBF][\x80-\xBF]#','#[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}#','#\xED[\x80-\x9F][\x80-\xBF]#','#\xF0[\x90-\xBF][\x80-\xBF]{2}#','#[\xF1-\xF3][\x80-\xBF]{3}#','#\xF4[\x80-\x8F][\x80-\xBF]{2}#'),array('','','','','','','',''),$continuation) == '')) && ($textual_area) && (!$in_semihtml)) {
+                                    if ($GLOBALS['XSS_DETECT']) {
+                                        ocp_mark_as_escaped($continuation);
+                                    }
+                                    $tag_output->attach($continuation);
+                                    $continuation = '';
+                                    $temp_tpl = '<br />';
+                                    if ($GLOBALS['XSS_DETECT']) {
+                                        ocp_mark_as_escaped($temp_tpl);
+                                    }
+                                    $tag_output->attach($temp_tpl);
+                                    $none_wrap_length = 0;
+                                } elseif ($textual_area) {
+                                    ++$none_wrap_length;
+                                }
+                            }
+                            $line_starting = false;
+                            $just_ended = false;
+
+                            $differented = false; // If somehow via lookahead we've changed this to HTML and thus won't use it in raw form
+
+                            // Variable lookahead
+                            if ((!$in_code_tag) && (($next == '{') && (isset($comcode[$pos])) && (($comcode[$pos] == '$') || ($comcode[$pos] == '+') || ($comcode[$pos] == '!')))) {
+                                if ($comcode_dangerous) {
+                                    if ((!$in_code_tag) && ((!$semiparse_mode) || (in_tag_stack($tag_stack,array('url','img','flash','media'))))) {
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($continuation);
+                                        }
+                                        $tag_output->attach($continuation);
+                                        $continuation = '';
+                                        if ($comcode[$pos] == '+') {
+                                            $p_end = $pos+5;
+                                            while ($p_end<$len) {
+                                                $p_portion = substr($comcode,$pos-1,$p_end-($pos-1)+5);
+                                                if (substr_count($p_portion,'{+START') == substr_count($p_portion,'{+END')) {
+                                                    break;
+                                                }
+                                                $p_end++;
+                                            }
+                                            $p_len = 1;
+                                            while ($pos+$p_len<$len) {
+                                                $p_portion = substr($comcode,$pos-1,$p_len);
+                                                if (substr_count(str_replace('{',' { ',$p_portion),'{') == substr_count(str_replace('}',' } ',$p_portion),'}')) {
+                                                    break;
+                                                } // str_replace is to workaround a Quercus bug #4494
+                                                $p_len++;
+                                            }
+                                            $p_len--;
+                                            $p_portion = substr($comcode,$pos+$p_len,$p_end-($pos+$p_len));
+                                            require_code('tempcode_compiler');
+                                            $ret = template_to_tempcode(substr($comcode,$pos-1,$p_len+1) . '{DIRECTIVE_EMBEDMENT}' . substr($comcode,$p_end,6));
+                                            if (substr($comcode,$pos-1,strlen('{+START,CASES,')) == '{+START,CASES,') {
+                                                $ret->singular_bind('DIRECTIVE_EMBEDMENT',make_string_tempcode($p_portion));
+                                            } else {
+                                                $p_portion_comcode = comcode_to_tempcode($p_portion,$source_member,$as_admin,$wrap_pos,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+                                                $ret->singular_bind('DIRECTIVE_EMBEDMENT',$p_portion_comcode);
+                                            }
+                                            $pos = $p_end+6;
+                                        } elseif ($comcode[$pos] == '!') {
+                                            $p_len = $pos;
+                                            $balance = 1;
+                                            while (($p_len<$len) && ($balance != 0)) {
+                                                if ($comcode[$p_len] == '{') {
+                                                    $balance++;
+                                                } elseif ($comcode[$p_len] == '}') {
+                                                    $balance--;
+                                                }
+                                                $p_len++;
+                                            }
+                                            $ret = new ocp_tempcode();
+                                            $less_pos = $pos-1;
+                                            $ret->parse_from($comcode,$less_pos,$p_len);
+                                            $pos = $p_len;
+                                            if (($ret->parameterless(0)) && ($pos<$len)) { // We want to take the lang string reference as Comcode if it's a simple lang string reference with no parameters
+                                                $matches = array();
+                                                if (preg_match('#\{\!([\w\d\_\:]+)(\}|$)#U',substr($comcode,$less_pos,$p_len-$less_pos),$matches) != 0) { // Hacky code to extract the lang string name
+                                                    $temp_lang_string = $matches[1];
+                                                    $ret = new ocp_tempcode(); // Put into new Tempcode object to attach to, as what comcode_lang_string returns may be cached yet we may append to $ret
+                                                    $ret->attach(static_evaluate_tempcode(comcode_lang_string($temp_lang_string))); // Recreate as a Comcode lang string
+                                                }
+                                            }
+                                        } else {
+                                            $p_len = $pos;
+                                            $balance = 1;
+                                            while (($p_len<$len) && ($balance != 0)) {
+                                                if ($comcode[$p_len] == '{') {
+                                                    $balance++;
+                                                } elseif ($comcode[$p_len] == '}') {
+                                                    $balance--;
+                                                }
+                                                $p_len++;
+                                            }
+                                            $ret = new ocp_tempcode();
+                                            $less_pos = $pos-1;
+                                            $ret->parse_from($comcode,$less_pos,$p_len);
+                                            $pos = $p_len;
+                                        }
+                                        $differented = true;
+                                        if (($pos <= $len) || (!$lax)) {
+                                            $tag_output->attach($ret);
+                                        }
+                                    }
+                                } else {
+                                    if (($comcode[$pos] == '$') && ($pos<$len-2) && ($comcode[$pos+1] == ',') && (strpos($comcode,'}',$pos) !== false)) {
+                                        $pos = strpos($comcode,'}',$pos)+1;
+                                        $differented = true;
+                                    }
+                                }
+                            }
+
+                            // Escaping of comcode tag starts lookahead
+                            if (($next == '\\') && (!$in_code_tag)) { // We are changing \[ to [ with the side-effect of blocking a tag start. To get \[ literal, we need the symbols \\[... and add extra \-pairs as needed. We are only dealing with \ and [ (update: and now {) here, it's not a further extended means of escaping.
+                                if (($pos != $len) && (($comcode[$pos] == '"') || (substr($comcode,$pos-1,6) == '&quot;'))) {
+                                    if ($semiparse_mode) {
+                                        $continuation .= '\\';
+                                    }
+                                    if ($comcode[$pos] == '"') {
+                                        $continuation .= $mindless_mode?'&quot;':'"';
+                                        ++$pos;
+                                    } else {
+                                        $continuation .= '&quot;';
+                                        $pos += 6;
+                                    }
+                                    $differented = true;
+                                } elseif (($pos != $len) && ($comcode[$pos] == '[')) {
+                                    if ($semiparse_mode) {
+                                        $continuation .= '\\';
+                                    }
+                                    $continuation .= '[';
+                                    ++$pos;
+                                    $differented = true;
+                                } elseif (($pos != $len) && ($comcode[$pos] == '{')) {
+                                    if ($semiparse_mode) {
+                                        $continuation .= '\\';
+                                    }
+                                    $continuation .= '{';
+                                    ++$pos;
+                                    $differented = true;
+                                } elseif (($pos == $len) || ($comcode[$pos] == '\\')) {
+                                    if ($semiparse_mode) {
+                                        $continuation .= '\\';
+                                    }
+                                    $continuation .= '\\';
+                                    ++$pos;
+                                    $differented = true;
+                                }
+                            }
+
+                            if (!$differented) {
+                                if ((($textual_area) || ($in_semihtml)) && (trim($next) != '') && (!$wml)) {
+                                    // Emoticon lookahead
+                                    foreach ($smilies as $smiley => $imgcode) {
+                                        if ($in_semihtml) {
+                                            $smiley = ' ' . $smiley . ' ';
+                                        }
+
+                                        if ($next == $smiley[0]) { // optimisation
+                                            if (substr($comcode,$pos-1,strlen($smiley)) == $smiley) {
+                                                if ($GLOBALS['XSS_DETECT']) {
+                                                    ocp_mark_as_escaped($continuation);
+                                                }
+                                                $tag_output->attach($continuation);
+                                                $continuation = '';
+                                                $pos += strlen($smiley)-1;
+                                                $differented = true;
+                                                $tag_output->attach(do_emoticon($imgcode));
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if ((trim($next) != '') && (!$in_code_tag) && (!$differented)) {
+                                // Wiki pages
+                                if (($pos<$len) && ($next == '[') && ($pos+1<$len) && ($comcode[$pos] == '[') && (!$semiparse_mode) && (addon_installed('wiki'))) {
+                                    $matches = array();
+                                    if (preg_match('#^\[([^\[\]]*)\]\]#',substr($comcode,$pos,200),$matches) != 0) {
+                                        $wiki_page_name = $matches[1];
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($continuation);
+                                        }
+                                        $tag_output->attach($continuation);
+                                        $continuation = '';
+                                        $hash_pos = strpos($wiki_page_name,'#');
+                                        if ($hash_pos !== false) {
+                                            $jump_to = substr($wiki_page_name,$hash_pos+1);
+                                            $wiki_page_name = substr($wiki_page_name,0,$hash_pos);
+                                        } else {
+                                            $jump_to = '';
+                                        }
+                                        $wiki_page_url = build_url(array('page' => 'wiki','type' => 'misc','find' => $wiki_page_name),get_module_zone('wiki'));
+                                        if ($jump_to != '') {
+                                            $wiki_page_url->attach('#' . $jump_to);
+                                        }
+                                        $tag_output->attach(do_template('COMCODE_WIKI_LINK',array('_GUID' => 'ebcd7ba5290c5b2513272a53b4d666e5','URL' => $wiki_page_url,'TEXT' => $wiki_page_name)));
+                                        $pos += strlen($matches[1])+3;
+                                        $differented = true;
+                                    }
+                                }
+
+                                // Usernames
+                                if (($pos<$len) && ((($next == '{') && ($pos+1<$len) && ($comcode[$pos] == '{')) || (($next == '@') && (get_forum_type() == 'ocf'))) && (!$in_code_tag) && (!$semiparse_mode)) {
+                                    $matches = array();
+                                    $explicit_username = ($next == '{');
+                                    if (preg_match($explicit_username?'#^\{([^"{}&\'\$<>]+)\}\}#':'#^(\w[^\n]*)#',substr($comcode,$pos,80),$matches) != 0) {
+                                        $username = $matches[1];
+
+                                        if ($explicit_username) {
+                                            if ($username[0] == '?') {
+                                                $username_info = true;
+                                                $username = substr($username,1);
+                                            } else {
+                                                $username_info = false;
+                                            }
+                                        } else {
+                                            $username_info = true;
+                                        }
+
+                                        if (!$explicit_username) {
+                                            $parts = preg_split('#([^\w])#',$username,-1,PREG_SPLIT_DELIM_CAPTURE);
+                                            $username_part = '';
+                                            $username_sql = '1=0';
+                                            for ($i = 0;$i<count($parts);$i += 2) {
+                                                if ($i != 0) {
+                                                    $delim = $parts[$i-1];
+                                                    for ($j = 0;$j<strlen($delim);$j++) {
+                                                        $username_part .= $delim[$j];
+                                                        $username_sql .= ' OR ' . db_string_equal_to('m_username',$username_part);
+                                                    }
+                                                }
+                                                $username_part .= $parts[$i];
+                                                $username_sql .= ' OR ' . db_string_equal_to('m_username',$username_part);
+                                            }
+
+                                            $this_member_id = mixed();
+                                            $results = $GLOBALS['FORUM_DB']->query('SELECT id,m_username FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE ' . $username_sql . ' ORDER BY LENGTH(m_username) DESC',1);
+                                            if (isset($results[0])) {
+                                                $this_member_id = $results[0]['id'];
+                                                $username = $results[0]['m_username'];
+                                            }
+                                        } else {
+                                            $this_member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+                                        }
+
+                                        if (!is_null($this_member_id)) {
+                                            if ($GLOBALS['XSS_DETECT']) {
+                                                ocp_mark_as_escaped($continuation);
+                                            }
+                                            $tag_output->attach($continuation);
+                                            $continuation = '';
+
+                                            if (!is_guest($this_member_id)) {
+                                                $member_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($this_member_id,false,true);
+                                                if ((get_forum_type() == 'ocf') && ($username_info)) {
+                                                    require_lang('ocf');
+                                                    require_code('ocf_members2');
+                                                    $details = render_member_box($this_member_id);
+                                                    $comcode_member_link = do_template('COMCODE_MEMBER_LINK',array(
+                                                        '_GUID' => 'd8f4f4ac70bd52b3ef9ee74ae9c5e085',
+                                                        'DETAILS' => $details,
+                                                        'MEMBER_ID' => strval($this_member_id),
+                                                        'USERNAME' => $username,
+                                                        'MEMBER_URL' => $member_url,
+                                                    ));
+                                                    $tag_output->attach($comcode_member_link);
+
+                                                    global $MEMBER_MENTIONS_IN_COMCODE;
+                                                    $MEMBER_MENTIONS_IN_COMCODE[] = $this_member_id;
+                                                } else {
+                                                    $tag_output->attach(hyperlink($member_url,$username));
+                                                }
+                                            } else {
+                                                $tag_output->attach(escape_html($username));
+                                            }
+
+                                            if ($explicit_username) {
+                                                $pos += strlen($matches[1])+3;
+                                            } else {
+                                                $pos += strlen($username);
+                                            }
+                                            $differented = true;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Shortcut lookahead
+                            if (!$differented) {
+                                if (($in_semihtml) && (substr($comcode,$pos-1,3) == '-->')) { // To stop shortcut interpretation
+                                    $continuation .= '-->';
+                                    $pos += 2;
+                                    break;
+                                }
+                                foreach ($shortcuts as $code => $replacement) {
+                                    if (($next == $code[0]) && (substr($comcode,$pos-1,strlen($code)) == $code)) {
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($continuation);
+                                        }
+                                        $tag_output->attach($continuation);
+                                        $continuation = '';
+                                        $pos += strlen($code)-1;
+                                        $differented = true;
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($replacement);
+                                        }
+                                        $tag_output->attach($replacement);
+                                        break;
+                                    }
+                                }
+                            }
+
+                            // Table syntax
+                            if (!$differented) {
+                                if (($pos<$len) && ($comcode[$pos] == '|')) {
+                                    $end_tbl = strpos($comcode,"\n" . '|}',$pos);
+                                    if ($end_tbl !== false) {
+                                        $end_fst_line_pos = strpos($comcode,"\n",$pos);
+                                        $caption = substr($comcode,$pos+2,max($end_fst_line_pos-$pos-2,0));
+                                        $pos += strlen($caption)+1;
+
+                                        $rows = preg_split('#(\|-|\|\})#Um',substr($comcode,$pos,$end_tbl-$pos));
+                                        if (preg_match('#(^|\s)floats($|\s)#',$caption) != 0) {
+                                            $caption = preg_replace('#(^|\s)floats($|\s)#','',$caption);
+
+                                            $ratios = array();
+                                            $ratios_matches = array();
+                                            if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches) != 0) {
+                                                $ratios = explode(':',$ratios_matches[2]);
+                                                $caption = str_replace($ratios_matches[0],'',$caption);
+                                            }
+
+                                            foreach ($rows as $h => $row) {
+                                                $cells = preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$row,-1,PREG_SPLIT_DELIM_CAPTURE);
+                                                array_shift($cells); // First one is non-existent empty
+                                                $spec = true;
+                                                // Find which to float
+                                                $to_float = null;
+                                                foreach ($cells as $i => $cell) {
+                                                    if (!$spec) {
+                                                        if ((strpos($cell,'!') !== false) || (is_null($to_float))) {
+                                                            $to_float = $i;
+                                                        }
+                                                    }
+                                                    $spec = !$spec;
+                                                }
+
+                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_START'));
+
+                                                // Do floated one
+                                                $i_dir_1 = (($to_float == 1)?'left':'right');
+                                                $i_dir_2 = (($to_float != 1)?'left':'right');
+                                                if (preg_match('#(^|\s)wide($|\s)#',$caption) != 0) {
+                                                    $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE_START',array(
+                                                        '_GUID' => 'ced8c3a142f74296a464b085ba6891c9',
+                                                        'WIDTH' => array_key_exists(($to_float == 1)?0:(count($cells)-1),
+                                                        $ratios)?$ratios[($to_float == 1)?0:(count($cells)-1)]:((count($cells) == 2)?'0':float_to_raw_string(97.0/(floatval(count($cells))/2.0-1.0),2) . '%'),
+                                                        'FLOAT' => $i_dir_1,
+                                                        'PADDING' => ($to_float == 1)?'':'-left',
+                                                        'PADDING_AMOUNT' => (count($cells) == 2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
+                                                    )));
+                                                } else {
+                                                    $tag_output->attach(do_template('COMCODE_FAKE_TABLE_START',array(
+                                                        '_GUID' => '90be72fcbb6b9d8a312da0bee5b86cb3',
+                                                        'WIDTH' => array_key_exists($to_float,$ratios)?$ratios[$to_float]:'',
+                                                        'FLOAT' => $i_dir_1,
+                                                        'PADDING' => ($to_float == 1)?'':'-left',
+                                                        'PADDING_AMOUNT' => (count($cells) == 2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2.0)/2.0),2),
+                                                    )));
+                                                }
+                                                $tag_output->attach(comcode_to_tempcode(isset($cells[$to_float])?rtrim($cells[$to_float]):'',$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
+                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+                                                // Do non-floated ones
+                                                $cell_i = 0;
+                                                foreach ($cells as $i => $cell) {
+                                                    if ($i%2 == 1) {
+                                                        if ($i != $to_float) {
+                                                            if (preg_match('#(^|\s)wide($|\s)#',$caption) != 0) {
+                                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WIDE2_START',array(
+                                                                    '_GUID' => '9bac42a1b62c5c9a2f758639fcb3bb2f',
+                                                                    'WIDTH' => array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:(float_to_raw_string(97.0/(floatval(count($cells))/2.0),2) . '%'),
+                                                                    'PADDING_AMOUNT' => (count($cells) == 2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
+                                                                    'FLOAT' => $i_dir_1,
+                                                                    'PADDING' => (($to_float == 1) || ($cell_i != 0))?'-left':'',
+                                                                )));
+                                                            } else {
+                                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_2_START',array(
+                                                                    '_GUID' => '0f15f9d5554635ed7ac154c9dc5c72b8',
+                                                                    'WIDTH' => array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
+                                                                    'FLOAT' => $i_dir_1,
+                                                                    'PADDING' => (($to_float == 1) || ($cell_i != 0))?'-left':'',
+                                                                    'PADDING_AMOUNT' => (count($cells) == 2)?'0':float_to_raw_string(3.0/(floatval(count($cells)-2)/2.0),2),
+                                                                )));
+                                                            }
+                                                            $tag_output->attach(comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member));
+                                                            $tag_output->attach(do_template('COMCODE_FAKE_TABLE_END'));
+                                                        }
+                                                        $cell_i++;
+                                                    }
+                                                }
+
+                                                $tag_output->attach(do_template('COMCODE_FAKE_TABLE_WRAP_END'));
+                                            }
+                                        } else {
+                                            $ratios = array();
+                                            $ratios_matches = array();
+                                            if (preg_match('#(^|\s)([\d\.]+%(:[\d\.]+%)*)($|\s)#',$caption,$ratios_matches) != 0) {
+                                                $ratios = explode(':',$ratios_matches[2]);
+                                                $caption = str_replace($ratios_matches[0],'',$caption);
+                                            }
+
+                                            if (preg_match('#(^|\s)wide($|\s)#',$caption) != 0) {
+                                                $tag_output->attach(do_template('COMCODE_REAL_TABLE_START',array('_GUID' => '9fca9672b9d069a0c8a40ebc6e88602b','SUMMARY' => preg_replace('#(^|\s)wide($|\s)#','',$caption))));
+                                            } else {
+                                                $tag_output->attach(do_template('COMCODE_REAL_TABLE_START_SUMMARY',array('_GUID' => '0c5674fba61ba14b4b9fa39ea31ff54f','CAPTION' => $caption)));
+                                            }
+                                            $finished_thead = false;
+                                            foreach ($rows as $table_row) {
+                                                $cells = preg_split('/(\n\! | \!\! |\n\| | \|\| )/',$table_row,-1,PREG_SPLIT_DELIM_CAPTURE);
+                                                array_shift($cells); // First one is non-existent empty
+                                                $spec = true;
+                                                $c_type = '';
+                                                $cell_i = 0;
+                                                $finished_thead_prior = $finished_thead;
+                                                foreach ($cells as $i => $cell) {
+                                                    if ($spec) {
+                                                        if (strpos($cell,'!') === false) {
+                                                            $finished_thead = true;
+                                                        }
+                                                    }
+                                                    $spec = !$spec;
+                                                }
+                                                $tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_START',array('_GUID' => '98f20d57692f0bded555a0acb7d55024','START_HEAD' => !$finished_thead,'START_BODY' => (!$finished_thead_prior) && ($finished_thead))));
+                                                $spec = true;
+                                                foreach ($cells as $i => $cell) {
+                                                    if ($spec) {
+                                                        $c_type = (strpos($cell,'!') !== false)?'th':'td';
+                                                    } else {
+                                                        $_mid = comcode_to_tempcode(rtrim($cell),$source_member,$as_admin,60,$pass_id,$connection,$semiparse_mode,$preparse_mode,$in_semihtml,$structure_sweep,$check_only,$highlight_bits,$on_behalf_of_member);
+
+                                                        $tag_output->attach(do_template('COMCODE_REAL_TABLE_CELL',array(
+                                                            '_GUID' => '6640df8b503f65e3d36f595b0acf7600',
+                                                            'WIDTH' => array_key_exists($cell_i,$ratios)?$ratios[$cell_i]:'',
+                                                            'C_TYPE' => $c_type,
+                                                            'MID' => $_mid,
+                                                            'PADDING' => ($cell_i == 0)?'':'-left',
+                                                            'PADDING_AMOUNT' => (count($cells) == 2)?'0':float_to_raw_string(5.0/(floatval(count($cells)-2)/2.0),2),
+                                                        )));
+
+                                                        $cell_i++;
+                                                    }
+                                                    $spec = !$spec;
+                                                }
+
+                                                $tag_output->attach(do_template('COMCODE_REAL_TABLE_ROW_END',array('_GUID' => 'c3abce83ec5bdbc10d0e80f646c91c23','END_HEAD' => !$finished_thead)));
+                                            }
+
+                                            $tag_output->attach(do_template('COMCODE_REAL_TABLE_END',array('_GUID' => '6a843e072e92b60cc950f69576231fe1','END_BODY' => $finished_thead)));
+                                        }
+
+                                        $pos = $end_tbl+3;
+                                        $differented = true;
+                                    }
+                                }
+
+                                // Advertising
+                                $b_all = true; // leave true - for test purposes only
+                                if ((!$semiparse_mode) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member,'banner_free')))) {
+                                    // Pick up correctly, including permission filtering
+                                    if (is_null($ADVERTISING_BANNERS_CACHE)) {
+                                        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'banners b LEFT JOIN ' . get_table_prefix() . 'banner_types t ON b.b_type=t.id WHERE t_comcode_inline=1 AND ' . db_string_not_equal_to('b_title_text',''),null,null,true);
+                                        if (!is_null($rows)) {
+                                            // Filter out what we don't have permission for
+                                            if (get_option('use_banner_permissions',true) == '1') {
+                                                require_code('permissions');
+                                                $groups = _get_where_clause_groups($source_member);
+                                                if (!is_null($groups)) {
+                                                    $perhaps = collapse_1d_complexity('category_name',$GLOBALS['SITE_DB']->query('SELECT DISTINCT category_name FROM ' . get_table_prefix() . 'group_category_access WHERE ' . db_string_equal_to('module_the_name','banners') . ' AND (' . $groups . ')',null,null,false,true));
+                                                    $new_rows = array();
+                                                    foreach ($rows as $row) {
+                                                        if (in_array($row['name'],$perhaps)) {
+                                                            $new_rows[] = $row;
+                                                        }
+                                                    }
+                                                    $rows = $new_rows;
+                                                }
+                                            }
+
+                                            $ADVERTISING_BANNERS_CACHE = array();
+                                            foreach ($rows as $row) {
+                                                $trigger_text = $row['b_title_text'];
+                                                foreach (explode(',',$trigger_text) as $t) {
+                                                    if (trim($t) != '') {
+                                                        $ADVERTISING_BANNERS_CACHE[trim($t)] = $row;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // Apply
+                                    if (!is_null($ADVERTISING_BANNERS_CACHE)) {
+                                        foreach ($ADVERTISING_BANNERS_CACHE as $ad_trigger => $ad_bits) {
+                                            if (strtolower($next) == strtolower($ad_trigger[0])) { // optimisation
+                                                if (strtolower(substr($comcode,$pos-1,strlen($ad_trigger))) == strtolower($ad_trigger)) {
+                                                    $just_banner_row = db_map_restrict($ad_bits,array('name','caption'));
+
+                                                    require_code('banners');
+                                                    if ($GLOBALS['XSS_DETECT']) {
+                                                        ocp_mark_as_escaped($continuation);
+                                                    }
+                                                    $tag_output->attach($continuation);
+                                                    $continuation = '';
+                                                    $differented = true;
+                                                    $ad_text = show_banner($ad_bits['name'],$ad_bits['b_title_text'],get_translated_tempcode('banners',$just_banner_row,'caption'),$ad_bits['b_direct_code'],$ad_bits['img_url'],'',$ad_bits['site_url'],$ad_bits['b_type'],$ad_bits['submitter']);
+                                                    $embed_output = _do_tags_comcode('tooltip',array('param' => $ad_text,'url' => (url_is_local($ad_bits['site_url']) && ($ad_bits['site_url'] != ''))?(get_custom_base_url() . '/' . $ad_bits['site_url']):$ad_bits['site_url']),substr($comcode,$pos-1,strlen($ad_trigger)),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
+                                                    $pos += strlen($ad_trigger)-1;
+                                                    $tag_output->attach($embed_output);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Search highlighting lookahead
+                                if ($highlight_bits !== NULL) {
+                                    foreach ($highlight_bits as $highlight_bit) {
+                                        if (strtolower($next) == strtolower($highlight_bit[0])) { // optimisation
+                                            if (strtolower(substr($comcode,$pos-1,strlen($highlight_bit))) == strtolower($highlight_bit)) {
+                                                if ($GLOBALS['XSS_DETECT']) {
+                                                    ocp_mark_as_escaped($continuation);
+                                                }
+                                                $tag_output->attach($continuation);
+                                                $continuation = '';
+                                                $differented = true;
+                                                $embed_output = _do_tags_comcode('highlight',array(),escape_html(substr($comcode,$pos-1,strlen($highlight_bit))),$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
+                                                $pos += strlen($highlight_bit)-1;
+                                                $tag_output->attach($embed_output);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Link lookahead
+                            if ($in_semihtml) {
+                                $until_now = substr($comcode,0,$pos-1);
+                                $a = strrpos($until_now,'<');
+                                $b = strrpos($until_now,'>');
+                                $in_html_tag = ($a !== false) && (($b === false) || ($a>$b));
+                            }
+                            if (($textual_area) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && (trim($next) != '') && (!$differented) && ($next == 'h') && ((substr($comcode,$pos-1,strlen('http://')) == 'http://') || (substr($comcode,$pos-1,strlen('https://')) == 'https://') || (substr($comcode,$pos-1,strlen('ftp://')) == 'ftp://'))) {
+                                // Find the full link portion in the upcoming Comcode
+                                $link_end_pos = strlen($comcode);
+                                foreach (array(' ',"\n",'[',')','"','>','<',".\n",', ','. ',"'",) as $link_terminator_str) {
+                                    $link_end_pos_x = strpos($comcode,$link_terminator_str,$pos-1);
+                                    if (($link_end_pos_x !== false) && ($link_end_pos_x<$link_end_pos)) {
+                                        $link_end_pos = $link_end_pos_x;
+                                    }
+                                }
+                                $auto_link = substr($comcode,$pos-1,$link_end_pos-$pos+1);
+
+                                // Strip down the link, for security reasons
+                                $auto_link = preg_replace('#([?&])(keep|for)_session=\w*#','${1}',$auto_link);
+
+                                if (substr($auto_link,-3) != '://') { // If it's not just a hanging protocol
+                                    if (substr($auto_link,-1) == '.') { // Strip trailing dot (dots may be within, but not at the end)
+                                        $auto_link = substr($auto_link,0,strlen($auto_link)-1);
+                                        $link_end_pos--;
+                                    }
+
+                                    // Find a media renderer for this link
+                                    $embed_output = mixed();
+                                    if (!$check_only) {
+                                        $link_handlers = find_all_hooks('systems','comcode_link_handlers');
+                                        foreach (array_keys($link_handlers) as $link_handler) {
+                                            require_code('hooks/systems/comcode_link_handlers/' . $link_handler);
+                                            $link_handler_ob = object_factory('Hook_comcode_link_handler_' . $link_handler,true);
+                                            if (is_null($link_handler_ob)) {
+                                                continue;
+                                            }
+                                            $embed_output = $link_handler_ob->bind($auto_link,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits);
+                                            if (!is_null($embed_output)) {
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    // If it was successfully rendered as media, put this into the output stream rather than the written link
+                                    if (!is_null($embed_output)) {
+                                        if ($GLOBALS['XSS_DETECT']) {
+                                            ocp_mark_as_escaped($continuation);
+                                        }
+                                        $tag_output->attach($continuation);
+                                        $continuation = '';
+                                        if (!$semiparse_mode) {
+                                            $tag_output->attach($embed_output);
+                                        } else {
+                                            $tag_output->attach(escape_html($auto_link));
+                                        }
+                                        $pos += $link_end_pos-$pos;
+                                        $differented = true;
+                                    }
+                                }
+                            }
+
+                            if (!$differented) {
+                                if (($stupidity_mode != '') && ($textual_area)) {
+                                    if (($stupidity_mode == 'leet') && (mt_rand(0,1) == 1)) {
+                                        if (array_key_exists(strtoupper($next),$LEET_FILTER)) {
+                                            $next = $LEET_FILTER[strtoupper($next)];
+                                        }
+                                    } elseif (($stupidity_mode == 'bork') && (mt_rand(0,60) == 1)) {
+                                        $next .= '-bork-bork-bork-';
+                                    }
+                                }
+                                if ((!$in_separate_parse_section) && ((!$in_semihtml) || ((!$comcode_dangerous_html)/*If we don't support HTML and we haven't done the all_semihtml pre-filter at the top*/ && (!$is_all_semihtml)))) { // Display char. We try and support entities
+                                    if ($next == '&') {
+                                        $ahead = substr($comcode,$pos,20);
+                                        $ahead_lower = strtolower($ahead);
+                                        $matches = array();
+                                        $entity = preg_match('#^(\#)?([\w]*);#',$ahead_lower,$matches) != 0; // If it is a SAFE entity, use it
+
+                                        if (($entity) && (!$in_code_tag)) {
+                                            if (($matches[1] == '') && (($in_semihtml) || (isset($ALLOWED_ENTITIES[$matches[2]])))) {
+                                                $pos += strlen($matches[2])+1;
+                                                $continuation .= '&' . $matches[2] . ';';
+                                            } elseif ((is_numeric($matches[2])) && ($matches[1] == '#')) {
+                                                $matched_entity = intval(base_convert($matches[2],16,10));
+                                                if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY))) {
+                                                    $continuation .= escape_html($next);
+                                                } else {
+                                                    $pos += strlen($matches[2])+2;
+                                                    $continuation .= '&#' . $matches[2] . ';';
+                                                }
+                                            } else {
+                                                $continuation .= '&amp;';
+                                            }
+                                        } else {
+                                            $continuation .= '&amp;';
+                                        }
+                                    } else {
+                                        $continuation .= escape_html($next);
+                                    }
+                                } else {
+                                    $continuation .= $next;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            case CCP_IN_TAG_NAME:
+                if (($mindless_mode) && ($next != '[')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == '=') {
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
+                    $current_attribute_name = 'param';
+                } elseif (trim($next) == '') {
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                } elseif ($next == '[') {
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    $next = ']';
+                    $pos--;
+                }
+                if ($next == ']') {
+                    if ($close) {
+                        if ($formatting_allowed) {
+                            list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($close_list);
+                            }
+                            $tag_output->attach($close_list);
+                        }
+
+                        if (count($tag_stack) == 0) {
+                            if ($current_tag == 'semihtml') { // Ignore, as people in WYSIWYG often incorrectly try and nest semihtml tags
+                                $status = CCP_NO_MANS_LAND;
+                                break;
+                            }
+
+                            if ($lax) {
+                                $status = CCP_NO_MANS_LAND;
+                                break;
+                            }
+                            return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE',$current_tag),strrpos(substr($comcode,0,$pos),'['),$comcode,$check_only);
+                        }
+                        $has_it = false;
+                        foreach (array_reverse($tag_stack) as $t) {
+                            if ($t[0] == $current_tag) {
+                                $has_it = true;
+                                break;
+                            }
+                            if (($in_semihtml) && (($current_tag == 'html') || ($current_tag == 'semihtml'))) {// Only search one level for this
+                                break;
+                            }
+                        }
+                        if ($has_it) {
+                            $_last = array_pop($tag_stack);
+                            if ($_last[0] != $current_tag) {
+                                if (!$lax) {
+                                    return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+                                }
+                                do {
+                                    $embed_output = _do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,null,null,$in_semihtml,$is_all_semihtml);
+                                    $in_code_tag = false;
+                                    $white_space_area = $_last[3];
+                                    $in_separate_parse_section = $_last[4];
+                                    $formatting_allowed = $_last[5];
+                                    $textual_area = $_last[6];
+                                    $tag_output = $_last[2];
+                                    $tag_output->attach($embed_output);
+                                    $mindless_mode = $_last[7];
+                                    $comcode_dangerous = $_last[8];
+                                    $comcode_dangerous_html = $_last[9];
+
+                                    if (count($tag_stack) == 0) { // Hmm, it was never open. So let's pretend this tag close never happened
+                                        $status = CCP_NO_MANS_LAND;
+                                        break 2;
+                                    }
+                                    $_last = array_pop($tag_stack);
+                                } while ($_last[0] != $current_tag);
+                            }
+                        } else {
+                            $extraneous_semihtml = ((!$is_all_semihtml) && (!$in_semihtml)) || (($current_tag != 'html') && ($current_tag != 'semihtml'));
+                            if ((!$lax) && ($extraneous_semihtml)) {
+                                $_last = array_pop($tag_stack);
+                                return comcode_parse_error($preparse_mode,array('CCP_NO_CLOSE_MATCH',$current_tag,$_last[0]),$pos,$comcode,$check_only);
+                            }
+                            $status = CCP_NO_MANS_LAND;
+                            break;
+                        }
+
+                        // Do the comcode for this tag
+                        if ($in_semihtml) { // We need to perform some work to clean up the Comcode tag's attributes, as they generally do not support Comcode/HTML themselves (are plain text)
+                            foreach ($_last[1] as $index => $conv) {
+                                $_last[1][$index] = @html_entity_decode(str_replace('<br />',"\n",$conv),ENT_QUOTES,get_charset());
+                            }
+                        }
+
+                        $mindless_mode = $_last[7];
+
+                        if ($mindless_mode) {
+                            $embed_output = $tag_output;
+                        } elseif (!$check_only) {
+                            $_structure_sweep = false;
+                            if ($structure_sweep) {
+                                $_structure_sweep = !in_tag_stack($tag_stack,array('title'));
+                            }
+                            $embed_output = _do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$_structure_sweep,$semiparse_mode,$highlight_bits,null,$in_semihtml,$is_all_semihtml);
+                        } else {
+                            $embed_output = new ocp_tempcode();
+                        }
+
+                        $in_code_tag = false;
+                        $white_space_area = $_last[3];
+                        $in_separate_parse_section = $_last[4];
+                        $formatting_allowed = $_last[5];
+                        $textual_area = $_last[6];
+                        $tag_output = $_last[2];
+                        $comcode_dangerous = $_last[8];
+                        $comcode_dangerous_html = $_last[9];
+                        $tag_output->attach($embed_output);
+                        $just_ended = isset($BLOCK_TAGS[$current_tag]);
+
+                        if ($current_tag == 'title') {
+                            if ((strlen($comcode)>$pos+1) && ($comcode[$pos] == "\n") && ($comcode[$pos+1] == "\n")) { // Linux newline
+                                $NUM_COMCODE_LINES_PARSED += 2;
+                                $pos += 2;
+                                $just_new_line = true;
+                            }
+                        }
+
+                        if ($current_tag == 'html') {
+                            $in_html = false;
+                        } elseif ($current_tag == 'semihtml') {
+                            $in_semihtml = false;
+                        }
+                        $status = CCP_NO_MANS_LAND;
+                    } else {
+                        if ($current_tag == 'title') {
+                            $just_new_line = false;
+                            list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                            if ($GLOBALS['XSS_DETECT']) {
+                                ocp_mark_as_escaped($close_list);
+                            }
+                            $tag_output->attach($close_list);
+                        }
+
+                        array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
+
+                        list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag) = _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+                        if ($in_code_tag) {
+                            $code_nest_stack = 0;
+                        }
+                    }
+
+                    $tag_output->attach($tag_raw);
+
+                    if (($close) && ($mindless_mode)) {
+                        $temp_tpl = '</kbd>&#8203;';
+                        if ($GLOBALS['XSS_DETECT']) {
+                            ocp_mark_as_escaped($temp_tpl);
+                        }
+                        $tag_output->attach($temp_tpl);
+                    }
+                } elseif ($status == CCP_IN_TAG_NAME) {
+                    $current_tag .= strtolower($next);
+                }
+                break;
+            case CCP_STARTING_TAG:
+                if (($mindless_mode) && ($next != '[')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == '[') { // Can't actually occur though
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    $status = CCP_NO_MANS_LAND;
+                    $pos--;
+                } elseif ($next == ']') { // Can't actual occur though
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_CLOSE_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    $status = CCP_NO_MANS_LAND;
+                } elseif ($next == '/') {
+                    $close = true;
+                } else {
+                    $current_tag .= strtolower($next);
+                    $status = CCP_IN_TAG_NAME;
+                }
+                break;
+            case CCP_IN_TAG_BETWEEN_ATTRIBUTES:
+                if (($mindless_mode) && ($next != '[')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == ']') {
+                    if ($current_tag == 'title') {
+                        $just_new_line = false;
+                        list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                        if ($GLOBALS['XSS_DETECT']) {
+                            ocp_mark_as_escaped($close_list);
+                        }
+                        $tag_output->attach($close_list);
+                    }
+
+                    array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
+
+                    list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag) = _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+                    if ($in_code_tag) {
+                        $code_nest_stack = 0;
+                    }
+
+                    $tag_output->attach($tag_raw);
+                } elseif ($next == '[') {
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    if ($current_tag == 'title') {
+                        $just_new_line = false;
+                        list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                        if ($GLOBALS['XSS_DETECT']) {
+                            ocp_mark_as_escaped($close_list);
+                        }
+                        $tag_output->attach($close_list);
+                    }
+
+                    array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
+
+                    list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag) = _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+                    if ($in_code_tag) {
+                        $code_nest_stack = 0;
+                    }
+
+                    $tag_output->attach($tag_raw);
+
+                    $pos--;
+                } elseif (trim($next) != '') {
+                    $status = CCP_IN_TAG_ATTRIBUTE_NAME;
+                    $current_attribute_name = $next;
+                }
+                break;
+            case CCP_IN_TAG_ATTRIBUTE_NAME:
+                if (($mindless_mode) && ($next != '[')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == '[') {
+                    $status = CCP_NO_MANS_LAND;
+                    $pos--;
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    if ($current_tag == 'title') {
+                        $just_new_line = false;
+                        list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+                        if ($GLOBALS['XSS_DETECT']) {
+                            ocp_mark_as_escaped($close_list);
+                        }
+                        $tag_output->attach($close_list);
+                    }
+
+                    array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
+
+                    list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag) = _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+                    if ($in_code_tag) {
+                        $code_nest_stack = 0;
+                    }
+
+                    $tag_output->attach($tag_raw);
+                } elseif ($next == ']') {
+                    if (($attribute_map == array()) && (!$lax)) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_CLOSE_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    if ($attribute_map != array()) {
+                        $at_map_keys = array_keys($attribute_map);
+                        $old_attribute_name = $at_map_keys[count($at_map_keys)-1];
+                        $attribute_map[$old_attribute_name] .= ' ' . $current_attribute_name;
+                    }
+
+                    array_push($tag_stack,array($current_tag,$attribute_map,$tag_output,$white_space_area,$in_separate_parse_section,$formatting_allowed,$textual_area,$mindless_mode,$comcode_dangerous,$comcode_dangerous_html));
+
+                    list($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag) = _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,$len,$comcode);
+                    if ($in_code_tag) {
+                        $code_nest_stack = 0;
+                    }
+
+                    $tag_output->attach($tag_raw);
+                } elseif ($next == '=') {
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
+                } elseif ($next != ' ') {
+                    $current_attribute_name .= strtolower($next);
+                } else {
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT;
+                }
+                break;
+            case CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT:
+                if (($mindless_mode) && ($next != '[') && ($next != ']')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == '=') {
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
+                } elseif (trim($next) != '') {
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_ATTRIBUTE_ERROR',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
+                    }
+
+                    if ($next == '[') {
+                        $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                        $pos--;
+                    } elseif ($next == ']') {
+                        $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                        $pos--;
+                    }
+                }
+                break;
+            case CCP_IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT:
+                if (($mindless_mode) && ($next != '[') && ($next != ']')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == '[') { // Can't actually occur though
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_OPEN_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                    $pos--;
+                } elseif ($next == ']') { // Can't actually occur though
+                    if (!$lax) {
+                        return comcode_parse_error($preparse_mode,array('CCP_TAG_CLOSE_ANOMALY'),$pos,$comcode,$check_only);
+                    }
+
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                    $pos--;
+                } elseif (($next == '"') || (($in_semihtml) && (substr($comcode,$pos-1,6) == '&quot;'))) {
+                    if ($next != '"') {
+                        $pos += 5;
+                        if ($mindless_mode) {
+                            $tag_raw .= 'quot;';
+                        }
+                    }
+                    $status = CCP_IN_TAG_ATTRIBUTE_VALUE;
+                    $current_attribute_value = '';
+                } elseif ($next != '') {
+                    $status = CCP_IN_TAG_ATTRIBUTE_VALUE_NO_QUOTE;
+                    $current_attribute_value = $next;
+                }
+                break;
+            case CCP_IN_TAG_ATTRIBUTE_VALUE_NO_QUOTE:
+                if (($mindless_mode) && ($next != ']')) {
+                    $tag_raw .= ($next);
+                }
+
+                if ($next == ' ') {
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                    if ((isset($attribute_map[$current_attribute_name])) && (!$lax)) {
+                        return comcode_parse_error($preparse_mode,array('CCP_DUPLICATE_ATTRIBUTES',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
+                    }
+                    $attribute_map[$current_attribute_name] = $current_attribute_value;
+                } elseif ($next == ']') {
+                    if ((isset($attribute_map[$current_attribute_name])) && (!$lax)) {
+                        return comcode_parse_error($preparse_mode,array('CCP_DUPLICATE_ATTRIBUTES',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
+                    }
+
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                    $attribute_map[$current_attribute_name] = $current_attribute_value;
+                    $pos--;
+                } else {
+                    $current_attribute_value .= $next;
+                }
+                break;
+            case CCP_IN_TAG_ATTRIBUTE_VALUE:
+                if ($mindless_mode) {
+                    $tag_raw .= ($next);
+                }
+
+                if (($next == '"') || (($in_semihtml) && (substr($comcode,$pos-1,6) == '&quot;'))) {
+                    if ($next != '"') {
+                        $pos += 5;
+                        if ($mindless_mode) {
+                            $tag_raw .= 'quot;';
+                        }
+                    }
+                    $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
+                    if ((isset($attribute_map[$current_attribute_name])) && (!$lax)) {
+                        return comcode_parse_error($preparse_mode,array('CCP_DUPLICATE_ATTRIBUTES',$current_attribute_name,$current_tag),$pos,$comcode,$check_only);
+                    }
+                    $attribute_map[$current_attribute_name] = $current_attribute_value;
+                } else {
+                    if ($next == '\\') {
+                        if ($comcode[$pos] == '"') {
+                            if ($mindless_mode) {
+                                $tag_raw .= '&quot;';
+                            }
+                            $current_attribute_value .= '"';
+                            ++$pos;
+                        } elseif (substr($comcode,$pos-1,6) == '&quot;') {
+                            if ($mindless_mode) {
+                                $tag_raw .= '&quot;';
+                            }
+                            $current_attribute_value .= '&quot;';
+                            $pos += 6;
+                        } elseif ($comcode[$pos] == '\\') {
+                            if ($mindless_mode) {
+                                $tag_raw .= '\\';
+                            }
+                            $current_attribute_value .= '\\';
+                            ++$pos;
+                        } else {
+                            $current_attribute_value .= $next;
+                        }
+                    } else {
+                        $current_attribute_value .= $next;
+                    }
+                }
+                break;
+        }
+    }
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($continuation);
+    }
+    $tag_output->attach($continuation);
+    $continuation = '';
+
+    list($close_list,$list_indent) = _close_open_lists($list_indent,$list_type);
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($close_list);
+    }
+    $tag_output->attach($close_list);
+
+    if (($status != CCP_NO_MANS_LAND) || (count($tag_stack) != 0)) {
+        if (!$lax) {
+            $stack_top = array_pop($tag_stack);
+            return comcode_parse_error($preparse_mode,array('CCP_BROKEN_END',is_null($stack_top)?$current_tag:$stack_top[0]),$pos,$comcode,$check_only);
+        } else {
+            while (count($tag_stack)>0) {
+                $_last = array_pop($tag_stack);
+                $embed_output = _do_tags_comcode($_last[0],$_last[1],$tag_output,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,null,null,$in_semihtml,$is_all_semihtml);
+                $in_code_tag = false;
+                $white_space_area = $_last[3];
+                $in_separate_parse_section = $_last[4];
+                $formatting_allowed = $_last[5];
+                $textual_area = $_last[6];
+                $tag_output = $_last[2];
+                $tag_output->attach($embed_output);
+                $mindless_mode = $_last[7];
+                $comcode_dangerous = $_last[8];
+                $comcode_dangerous_html = $_last[9];
+            }
+        }
+    }
+
+    return $tag_output;
 }
 
 /**
@@ -1814,14 +1783,12 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
  */
 function in_tag_stack($tag_stack,$tags)
 {
-	foreach ($tag_stack as $_temp)
-	{
-		if (in_array($_temp[0],$tags))
-		{
-			return true;
-		}
-	}
-	return false;
+    foreach ($tag_stack as $_temp) {
+        if (in_array($_temp[0],$tags)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -1845,61 +1812,59 @@ function in_tag_stack($tag_stack,$tags)
  */
 function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$current_tag,$pos,$comcode_dangerous,$comcode_dangerous_html,$in_separate_parse_section,$in_html,$in_semihtml,$close,&$len,&$comcode)
 {
-	global $BLOCK_TAGS,$TEXTUAL_TAGS,$CODE_TAGS;
+    global $BLOCK_TAGS,$TEXTUAL_TAGS,$CODE_TAGS;
 
-	$block_tag=isset($BLOCK_TAGS[$current_tag]);
+    $block_tag = isset($BLOCK_TAGS[$current_tag]);
 
-	if (($block_tag) && ($pos<$len) && ($comcode[$pos]=="\n"))
-	{
-		++$pos;
-		global $NUM_COMCODE_LINES_PARSED;
-		++$NUM_COMCODE_LINES_PARSED;
-	}
+    if (($block_tag) && ($pos<$len) && ($comcode[$pos] == "\n")) {
+        ++$pos;
+        global $NUM_COMCODE_LINES_PARSED;
+        ++$NUM_COMCODE_LINES_PARSED;
+    }
 
-	$tag_output=new ocp_tempcode();
-	$textual_area=isset($TEXTUAL_TAGS[$current_tag]);
+    $tag_output = new ocp_tempcode();
+    $textual_area = isset($TEXTUAL_TAGS[$current_tag]);
 
-	$white_space_area=$textual_area;
-	if (((($current_tag=='code') || ($current_tag=='codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param'])=='php') || (file_exists(get_file_base().'/sources/geshi/'.filter_naughty(($attribute_map['param']=='HTML')?'html4strict':strtolower($attribute_map['param'])).'.php')) || (file_exists(get_file_base().'/sources_custom/geshi/'.filter_naughty(($attribute_map['param']=='HTML')?'html4strict':strtolower($attribute_map['param'])).'.php')))) || ($current_tag=='attachment') || ($current_tag=='attachment_safe') || ($current_tag=='menu'))
-	{
-		$in_separate_parse_section=true;
-	} else
-	{
-		// Code tags are white space area, but not textual area
-		if (isset($CODE_TAGS[$current_tag])) $white_space_area=true;
-	}
+    $white_space_area = $textual_area;
+    if (((($current_tag == 'code') || ($current_tag == 'codebox')) && (isset($attribute_map['param'])) && ((strtolower($attribute_map['param']) == 'php') || (file_exists(get_file_base() . '/sources/geshi/' . filter_naughty(($attribute_map['param'] == 'HTML')?'html4strict':strtolower($attribute_map['param'])) . '.php')) || (file_exists(get_file_base() . '/sources_custom/geshi/' . filter_naughty(($attribute_map['param'] == 'HTML')?'html4strict':strtolower($attribute_map['param'])) . '.php')))) || ($current_tag == 'attachment') || ($current_tag == 'attachment_safe') || ($current_tag == 'menu')) {
+        $in_separate_parse_section = true;
+    } else {
+        // Code tags are white space area, but not textual area
+        if (isset($CODE_TAGS[$current_tag])) {
+            $white_space_area = true;
+        }
+    }
 
-	$in_code_tag=isset($CODE_TAGS[$current_tag]);
+    $in_code_tag = isset($CODE_TAGS[$current_tag]);
 
-	$attribute_map=array();
+    $attribute_map = array();
 
-	$formatting_allowed=(($textual_area?1:0) & ($block_tag?1:0))!=0;
+    $formatting_allowed = (($textual_area?1:0) & ($block_tag?1:0)) != 0;
 
-	if ($current_tag=='html') $in_html=!$close;
-	elseif ($current_tag=='semihtml') $in_semihtml=!$close;
-	$status=CCP_NO_MANS_LAND;
+    if ($current_tag == 'html') {
+        $in_html = !$close;
+    } elseif ($current_tag == 'semihtml') {
+        $in_semihtml = !$close;
+    }
+    $status = CCP_NO_MANS_LAND;
 
-	if (($current_tag=='html') || ($current_tag=='semihtml')) // New state meaning we need to filter the contents
-	{
-		if (($in_html) || ($in_semihtml))
-		{
-			filter_html($as_admin,$source_member,$pos,$len,$comcode,$in_html,$in_semihtml);
-		}
-	}
+    if (($current_tag == 'html') || ($current_tag == 'semihtml')) { // New state meaning we need to filter the contents
+        if (($in_html) || ($in_semihtml)) {
+            filter_html($as_admin,$source_member,$pos,$len,$comcode,$in_html,$in_semihtml);
+        }
+    }
 
-	if ($mindless_mode)
-	{
-		$white_space_area=true;
-		$in_separate_parse_section=false;
-	}
+    if ($mindless_mode) {
+        $white_space_area = true;
+        $in_separate_parse_section = false;
+    }
 
-	if (($current_tag=='quote') && (count($attribute_map)>0))
-	{
-		$comcode_dangerous=false;
-		$comcode_dangerous_html=false;
-	}
+    if (($current_tag == 'quote') && (count($attribute_map)>0)) {
+        $comcode_dangerous = false;
+        $comcode_dangerous_html = false;
+    }
 
-	return array($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag);
+    return array($tag_output,$comcode_dangerous,$comcode_dangerous_html,$white_space_area,$formatting_allowed,$in_separate_parse_section,$textual_area,$attribute_map,$status,$in_html,$in_semihtml,$pos,$in_code_tag);
 }
 
 /**
@@ -1915,102 +1880,102 @@ function _opened_tag($mindless_mode,$as_admin,$source_member,$attribute_map,$cur
  */
 function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_semihtml)
 {
-	if ((!$as_admin) && (!has_privilege($source_member,'use_very_dangerous_comcode')))
-	{
-		global $POTENTIAL_JS_NAUGHTY_ARRAY;
+    if ((!$as_admin) && (!has_privilege($source_member,'use_very_dangerous_comcode'))) {
+        global $POTENTIAL_JS_NAUGHTY_ARRAY;
 
-		$comcode=preg_replace('#(\\\\)+(\[/(html|semihtml)\])#','\2',$comcode); // Stops sneaky trying to trick the end of the HTML tag to hack this function
+        $comcode = preg_replace('#(\\\\)+(\[/(html|semihtml)\])#','\2',$comcode); // Stops sneaky trying to trick the end of the HTML tag to hack this function
 
-		if (($in_html) && ($in_semihtml)) $ahead_end=max(strpos($comcode,'[/html]',$pos),strpos($comcode,'[/semihtml]',$pos));
-		elseif ($in_html) $ahead_end=strpos($comcode,'[/html]',$pos);
-		elseif ($in_semihtml) $ahead_end=strpos($comcode,'[/semihtml]',$pos);
-		else $ahead_end=false;
-		if ($ahead_end===false) $ahead_end=strlen($comcode);
-		$ahead=substr($comcode,$pos,$ahead_end-$pos);
+        if (($in_html) && ($in_semihtml)) {
+            $ahead_end = max(strpos($comcode,'[/html]',$pos),strpos($comcode,'[/semihtml]',$pos));
+        } elseif ($in_html) {
+            $ahead_end = strpos($comcode,'[/html]',$pos);
+        } elseif ($in_semihtml) {
+            $ahead_end = strpos($comcode,'[/semihtml]',$pos);
+        } else {
+            $ahead_end = false;
+        }
+        if ($ahead_end === false) {
+            $ahead_end = strlen($comcode);
+        }
+        $ahead = substr($comcode,$pos,$ahead_end-$pos);
 
-		// Null vector
-		$ahead=str_replace(chr(0),'',$ahead);
+        // Null vector
+        $ahead = str_replace(chr(0),'',$ahead);
 
-		// Comment vector
-		$old_ahead='';
-		do
-		{
-			$old_ahead=$ahead;
-			$ahead=preg_replace('#/\*.*\*/#Us','',$ahead);
-		}
-		while ($old_ahead!=$ahead);
+        // Comment vector
+        $old_ahead = '';
+        do {
+            $old_ahead = $ahead;
+            $ahead = preg_replace('#/\*.*\*/#Us','',$ahead);
+        } while ($old_ahead != $ahead);
 
-		// Entity vector
-		$matches=array();
-		do
-		{
-			$old_ahead=$ahead;
-			$count=preg_match_all('#&\#(\d+)#i',$ahead,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
-			for ($i=0;$i<$count;$i++)
-			{
-				$matched_entity=intval($matches[1][$i]);
-				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
-				{
-					if ($matched_entity==0) $matched_entity=ord(' ');
-					$ahead=str_replace($matches[0][$i].';',chr($matched_entity),$ahead);
-					$ahead=str_replace($matches[0][$i],chr($matched_entity),$ahead);
-				}
-			}
-			$count=preg_match_all('#&\#x([\da-f]+)#i',$ahead,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
-			for ($i=0;$i<$count;$i++)
-			{
-				$matched_entity=intval(base_convert($matches[1][$i],16,10));
-				if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY)))
-				{
-					if ($matched_entity==0) $matched_entity=ord(' ');
-					$ahead=str_replace($matches[0][$i].';',chr($matched_entity),$ahead);
-					$ahead=str_replace($matches[0][$i],chr($matched_entity),$ahead);
-				}
-			}
-		}
-		while ($old_ahead!=$ahead);
+        // Entity vector
+        $matches = array();
+        do {
+            $old_ahead = $ahead;
+            $count = preg_match_all('#&\#(\d+)#i',$ahead,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
+            for ($i = 0;$i<$count;$i++) {
+                $matched_entity = intval($matches[1][$i]);
+                if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY))) {
+                    if ($matched_entity == 0) {
+                        $matched_entity = ord(' ');
+                    }
+                    $ahead = str_replace($matches[0][$i] . ';',chr($matched_entity),$ahead);
+                    $ahead = str_replace($matches[0][$i],chr($matched_entity),$ahead);
+                }
+            }
+            $count = preg_match_all('#&\#x([\da-f]+)#i',$ahead,$matches); // No one would use this for an html tag unless it was malicious. The ASCII could have been put in directly.
+            for ($i = 0;$i<$count;$i++) {
+                $matched_entity = intval(base_convert($matches[1][$i],16,10));
+                if (($matched_entity<127) && (array_key_exists(chr($matched_entity),$POTENTIAL_JS_NAUGHTY_ARRAY))) {
+                    if ($matched_entity == 0) {
+                        $matched_entity = ord(' ');
+                    }
+                    $ahead = str_replace($matches[0][$i] . ';',chr($matched_entity),$ahead);
+                    $ahead = str_replace($matches[0][$i],chr($matched_entity),$ahead);
+                }
+            }
+        } while ($old_ahead != $ahead);
 
-		// Tag vectors
-		$ahead=preg_replace('#\<(noscript|script|link|style|meta|iframe|frame|object|embed|applet|html|xml)#i','<span',$ahead);
-		$ahead=preg_replace('#\<(/noscript|/script|/link|/style|/meta|/iframe|/frame|/object|/embed|/applet|/html|/xml)#i','</span',$ahead);
+        // Tag vectors
+        $ahead = preg_replace('#\<(noscript|script|link|style|meta|iframe|frame|object|embed|applet|html|xml)#i','<span',$ahead);
+        $ahead = preg_replace('#\<(/noscript|/script|/link|/style|/meta|/iframe|/frame|/object|/embed|/applet|/html|/xml)#i','</span',$ahead);
 
-		// CSS attack vectors
-		$ahead=preg_replace('#\\\\(\d+)#i','${1}',$ahead); // CSS escaping
-		$ahead=preg_replace('#e\s*(x\s*p\s*r\s*e\s*s\s*s\s*i\s*o\s*n\()#i','&eacute;${1}',$ahead);
-		$ahead=preg_replace('#b\s*(e\s*h\s*a\s*v\s*i\s*o\s*r\s*\()#i','&szlig;${1}',$ahead);
-		$ahead=preg_replace('#b\s*(i\s*n\s*d\s*i\s*n\s*g\s*\()#i','&szlig;${1}',$ahead);
+        // CSS attack vectors
+        $ahead = preg_replace('#\\\\(\d+)#i','${1}',$ahead); // CSS escaping
+        $ahead = preg_replace('#e\s*(x\s*p\s*r\s*e\s*s\s*s\s*i\s*o\s*n\()#i','&eacute;${1}',$ahead);
+        $ahead = preg_replace('#b\s*(e\s*h\s*a\s*v\s*i\s*o\s*r\s*\()#i','&szlig;${1}',$ahead);
+        $ahead = preg_replace('#b\s*(i\s*n\s*d\s*i\s*n\s*g\s*\()#i','&szlig;${1}',$ahead);
 
-		// Script-URL vectors
-		$ahead=preg_replace('#((j[\\\\\s]*a[\\\\\s]*v[\\\\\s]*a[\\\\\s]*|v[\\\\\s]*b[\\\\\s]*)s[\\\\\s]*c[\\\\\s]*r[\\\\\s]*i[\\\\\s]*p[\\\\\s]*t[\\\\\s]*):#i','${1};',$ahead);
+        // Script-URL vectors
+        $ahead = preg_replace('#((j[\\\\\s]*a[\\\\\s]*v[\\\\\s]*a[\\\\\s]*|v[\\\\\s]*b[\\\\\s]*)s[\\\\\s]*c[\\\\\s]*r[\\\\\s]*i[\\\\\s]*p[\\\\\s]*t[\\\\\s]*):#i','${1};',$ahead);
 
-		// Event vectors
-		$ahead=preg_replace('#\so(n|N)#',' &#111;${1}',$ahead);
-		$ahead=preg_replace('#\sO(n|N)#',' &#79;${1}',$ahead);
+        // Event vectors
+        $ahead = preg_replace('#\so(n|N)#',' &#111;${1}',$ahead);
+        $ahead = preg_replace('#\sO(n|N)#',' &#79;${1}',$ahead);
 
-		// Check tag balancing (we don't want to allow partial tags to compound together against separately checked chunks)
-		$len=strlen($ahead);
-		$depth=0;
-		for ($i=0;$i<$len;$i++)
-		{
-			$at=$ahead[$i];
-			if ($at=='<')
-			{
-				$depth++;
-			} elseif ($at=='>')
-			{
-				$depth--;
-			}
-			if ($depth<0) break;
-		}
-		if ($depth>=1)
-		{
-			$ahead.='">'; // Ugly way to make sure all is closed off
-		}
+        // Check tag balancing (we don't want to allow partial tags to compound together against separately checked chunks)
+        $len = strlen($ahead);
+        $depth = 0;
+        for ($i = 0;$i<$len;$i++) {
+            $at = $ahead[$i];
+            if ($at == '<') {
+                $depth++;
+            } elseif ($at == '>') {
+                $depth--;
+            }
+            if ($depth<0) {
+                break;
+            }
+        }
+        if ($depth >= 1) {
+            $ahead .= '">'; // Ugly way to make sure all is closed off
+        }
 
-		// Tidy up
-		$comcode=substr($comcode,0,$pos).$ahead.substr($comcode,$ahead_end);
-		$len=strlen($comcode);
-	}
+        // Tidy up
+        $comcode = substr($comcode,0,$pos) . $ahead . substr($comcode,$ahead_end);
+        $len = strlen($comcode);
+    }
 }
 
 /**
@@ -2023,15 +1988,14 @@ function filter_html($as_admin,$source_member,$pos,&$len,&$comcode,$in_html,$in_
  */
 function _close_open_lists($list_indent,$list_type)
 {
-	$tag_output='';
-	for ($i=0;$i<$list_indent;++$i) // Close any lists that exist
-	{
-		$tag_output.='</li>';
-		$temp_tpl=($list_type=='ul')?'</ul>':'</ol>';
-		$tag_output.=$temp_tpl;
-	}
-	$list_indent=0;
-	return array($tag_output,$list_indent);
+    $tag_output = '';
+    for ($i = 0;$i<$list_indent;++$i) { // Close any lists that exist
+        $tag_output .= '</li>';
+        $temp_tpl = ($list_type == 'ul')?'</ul>':'</ol>';
+        $tag_output .= $temp_tpl;
+    }
+    $list_indent = 0;
+    return array($tag_output,$list_indent);
 }
 
 /**
@@ -2041,49 +2005,46 @@ function _close_open_lists($list_indent,$list_type)
  * @param  string			The tag we're expecting to see here / a regexp
  * @return array			A map of parsed attributes
  */
-function parse_single_comcode_tag($data,$tag='\w+')
+function parse_single_comcode_tag($data,$tag = '\w+')
 {
-	$attributes=array();
-	$_attributes=preg_replace('#^\['.$tag.'\s*#','',preg_replace('#\[/'.$tag.'\]$#Us','',$data));
-	if (($_attributes!='') && ($_attributes!=$data/*if it matched*/))
-	{
-		if (substr($_attributes,0,1)=='=') $_attributes='param'.$_attributes;
-		$current_attribute='';
-		$current_value='';
-		$in_attribute=false;
-		for ($i=0;$i<strlen($_attributes);$i++)
-		{
-			$next=$_attributes[$i];
-			if (!$in_attribute)
-			{
-				if ($next=='=')
-				{
-					$in_attribute=true;
-					if (($i!=strlen($_attributes)-1) && ($_attributes[$i+1]=='"')) $i++; // Skip opening "
-					$current_value='';
-				} elseif ($next==']')
-				{
-					$attributes['']=substr($_attributes,$i+1);
-					break;
-				} else
-				{
-					$current_attribute.=$next;
-				}
-			} else
-			{
-				if ($next=='"')
-				{
-					$in_attribute=false;
-					if (($i!=strlen($_attributes)-1) && ($_attributes[$i+1]==' ')) $i++; // Skip space
-					$attributes[$current_attribute]=str_replace(array('\\[','\\]','\\{','\\}','\\\''),array('[',']','{','}','\''),$current_value);
-					$current_attribute='';
-				} else
-				{
-					$current_value.=$next;
-				}
-			}
-		}
-	}
+    $attributes = array();
+    $_attributes = preg_replace('#^\[' . $tag . '\s*#','',preg_replace('#\[/' . $tag . '\]$#Us','',$data));
+    if (($_attributes != '') && ($_attributes != $data/*if it matched*/)) {
+        if (substr($_attributes,0,1) == '=') {
+            $_attributes = 'param' . $_attributes;
+        }
+        $current_attribute = '';
+        $current_value = '';
+        $in_attribute = false;
+        for ($i = 0;$i<strlen($_attributes);$i++) {
+            $next = $_attributes[$i];
+            if (!$in_attribute) {
+                if ($next == '=') {
+                    $in_attribute = true;
+                    if (($i != strlen($_attributes)-1) && ($_attributes[$i+1] == '"')) {
+                        $i++;
+                    } // Skip opening "
+                    $current_value = '';
+                } elseif ($next == ']') {
+                    $attributes[''] = substr($_attributes,$i+1);
+                    break;
+                } else {
+                    $current_attribute .= $next;
+                }
+            } else {
+                if ($next == '"') {
+                    $in_attribute = false;
+                    if (($i != strlen($_attributes)-1) && ($_attributes[$i+1] == ' ')) {
+                        $i++;
+                    } // Skip space
+                    $attributes[$current_attribute] = str_replace(array('\\[','\\]','\\{','\\}','\\\''),array('[',']','{','}','\''),$current_value);
+                    $current_attribute = '';
+                } else {
+                    $current_value .= $next;
+                }
+            }
+        }
+    }
 
-	return $attributes;
+    return $attributes;
 }

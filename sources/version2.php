@@ -25,27 +25,32 @@
  */
 function get_future_version_information()
 {
-	require_lang('version');
+    require_lang('version');
 
-	$url='http://ocportal.com/version.php?version='.rawurlencode(get_version_dotted()).'&lang='.rawurlencode(user_lang());
+    $url = 'http://ocportal.com/version.php?version=' . rawurlencode(get_version_dotted()) . '&lang=' . rawurlencode(user_lang());
 
-	static $data=NULL; // Cache
-	if (is_null($data)) $data=http_download_file($url,NULL,false);
-	if (!is_null($data))
-	{
-		$data=str_replace('"../upgrader.php"','"'.get_base_url().'/upgrader.php"',$data);
+    static $data = null; // Cache
+    if (is_null($data)) {
+        $data = http_download_file($url,null,false);
+    }
+    if (!is_null($data)) {
+        $data = str_replace('"../upgrader.php"','"' . get_base_url() . '/upgrader.php"',$data);
 
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($data);
+        if ($GLOBALS['XSS_DETECT']) {
+            ocp_mark_as_escaped($data);
+        }
 
-		require_code('character_sets');
+        require_code('character_sets');
 
-		$data=convert_to_internal_encoding($data);
+        $data = convert_to_internal_encoding($data);
 
-		$table=make_string_tempcode($data);
-	} else $table=paragraph(do_lang_tempcode('CANNOT_CONNECT_HOME'),'dfsdff32ffd');
+        $table = make_string_tempcode($data);
+    } else {
+        $table = paragraph(do_lang_tempcode('CANNOT_CONNECT_HOME'),'dfsdff32ffd');
+    }
 
-	require_code('xhtml');
-	return make_string_tempcode(xhtmlise_html($table->evaluate()));
+    require_code('xhtml');
+    return make_string_tempcode(xhtmlise_html($table->evaluate()));
 }
 
 /**
@@ -54,11 +59,13 @@ function get_future_version_information()
  * @param  ?float			General version number (NULL: on disk version)
  * @return string			Branch version number (NULL: on disk version)
  */
-function get_version_branch($general=NULL)
+function get_version_branch($general = null)
 {
-	if (is_null($general)) $general=ocp_version_number();
+    if (is_null($general)) {
+        $general = ocp_version_number();
+    }
 
-	return float_to_raw_string($general,10,true).'.x';
+    return float_to_raw_string($general,10,true) . '.x';
 }
 
 /**
@@ -68,12 +75,16 @@ function get_version_branch($general=NULL)
  * @param  ?string		Minor version number (NULL: on disk version)
  * @return string			Dotted version number
  */
-function get_version_dotted($main=NULL,$minor=NULL)
+function get_version_dotted($main = null,$minor = null)
 {
-	if (is_null($main)) $main=ocp_version();
-	if (is_null($minor)) $minor=ocp_version_minor();
+    if (is_null($main)) {
+        $main = ocp_version();
+    }
+    if (is_null($minor)) {
+        $minor = ocp_version_minor();
+    }
 
-	return strval($main).(($minor=='0')?'':('.'.$minor));
+    return strval($main) . (($minor == '0')?'':('.' . $minor));
 }
 
 /**
@@ -85,25 +96,24 @@ function get_version_dotted($main=NULL,$minor=NULL)
  */
 function get_version_dotted__from_anything($any_format)
 {
-	$pretty=$any_format;
+    $pretty = $any_format;
 
-	// Strip useless bits
-	$pretty=preg_replace('#[-\s]*(final|gold)#i','',$pretty);
-	$pretty=preg_replace('#(ocPortal |version )*#i','',$pretty);
-	$pretty=trim($pretty);
+    // Strip useless bits
+    $pretty = preg_replace('#[-\s]*(final|gold)#i','',$pretty);
+    $pretty = preg_replace('#(ocPortal |version )*#i','',$pretty);
+    $pretty = trim($pretty);
 
-	// Change dashes and spaces to dots
-	$pretty=str_replace(array('-',' '),array('.','.'),$pretty);
+    // Change dashes and spaces to dots
+    $pretty = str_replace(array('-',' '),array('.','.'),$pretty);
 
-	foreach (array('alpha','beta','RC') as $qualifier)
-	{
-		$pretty=preg_replace('#\.?'.preg_quote($qualifier,'#').'\.?#i','.'.$qualifier,$pretty);
-	}
+    foreach (array('alpha','beta','RC') as $qualifier) {
+        $pretty = preg_replace('#\.?' . preg_quote($qualifier,'#') . '\.?#i','.' . $qualifier,$pretty);
+    }
 
-	// Canonical to not have extra .0's on end. Don't really care about what ocPortal stores as we clean this up in our server's version.php - it is crucial that news post and download names are canonical though so version.php works. NB: Latest recommended versions are done via download name and description labelling.
-	$pretty=preg_replace('#(\.0)+($|\.alpha|\.beta|\.RC)#','',$pretty);
+    // Canonical to not have extra .0's on end. Don't really care about what ocPortal stores as we clean this up in our server's version.php - it is crucial that news post and download names are canonical though so version.php works. NB: Latest recommended versions are done via download name and description labelling.
+    $pretty = preg_replace('#(\.0)+($|\.alpha|\.beta|\.RC)#','',$pretty);
 
-	return $pretty;
+    return $pretty;
 }
 
 /**
@@ -114,28 +124,25 @@ function get_version_dotted__from_anything($any_format)
  */
 function get_version_components__from_dotted($dotted)
 {
-	// Now split it up version number
-	$qualifier=mixed();
-	$qualifier_number=mixed();
-	$basis_dotted_number=mixed();
-	foreach (array('RC','beta','alpha') as $type)
-	{
-		if (strpos($dotted,'.'.$type)!==false)
-		{
-			$qualifier=$type;
-			$qualifier_number=intval(substr($dotted,strrpos($dotted,'.'.$type)+strlen('.'.$type)));
-			$basis_dotted_number=substr($dotted,0,strrpos($dotted,'.'.$type));
-			break;
-		}
-	}
-	if (is_null($basis_dotted_number))
-	{
-		$basis_dotted_number=$dotted;
-	}
+    // Now split it up version number
+    $qualifier = mixed();
+    $qualifier_number = mixed();
+    $basis_dotted_number = mixed();
+    foreach (array('RC','beta','alpha') as $type) {
+        if (strpos($dotted,'.' . $type) !== false) {
+            $qualifier = $type;
+            $qualifier_number = intval(substr($dotted,strrpos($dotted,'.' . $type)+strlen('.' . $type)));
+            $basis_dotted_number = substr($dotted,0,strrpos($dotted,'.' . $type));
+            break;
+        }
+    }
+    if (is_null($basis_dotted_number)) {
+        $basis_dotted_number = $dotted;
+    }
 
-	$long_dotted_number=$basis_dotted_number.str_repeat('.0',max(0,2-substr_count($basis_dotted_number,'.')));
+    $long_dotted_number = $basis_dotted_number . str_repeat('.0',max(0,2-substr_count($basis_dotted_number,'.')));
 
-	return array($basis_dotted_number,$qualifier,$qualifier_number,$long_dotted_number);
+    return array($basis_dotted_number,$qualifier,$qualifier_number,$long_dotted_number);
 }
 
 /**
@@ -147,5 +154,5 @@ function get_version_components__from_dotted($dotted)
  */
 function get_version_pretty__from_dotted($pretty)
 {
-	return preg_replace('#\.(alpha|beta|RC)#',' ${1}',$pretty);
+    return preg_replace('#\.(alpha|beta|RC)#',' ${1}',$pretty);
 }

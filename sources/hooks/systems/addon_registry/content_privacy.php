@@ -20,85 +20,85 @@
 
 class Hook_addon_registry_content_privacy
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Allows users to specify privacy level for their content.';
-	}
+    public function get_description()
+    {
+        return 'Allows users to specify privacy level for their content.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_censor',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_censor',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/pages/privacy_policy.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/pages/privacy_policy.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources/hooks/systems/addon_registry/content_privacy.php',
-			'sources/content_privacy2.php',
-			'sources/content_privacy.php',
-			'sources/hooks/systems/notifications/invited_content.php',
-			'lang/EN/content_privacy.ini',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources/hooks/systems/addon_registry/content_privacy.php',
+            'sources/content_privacy2.php',
+            'sources/content_privacy.php',
+            'sources/hooks/systems/notifications/invited_content.php',
+            'lang/EN/content_privacy.ini',
+        );
+    }
 }

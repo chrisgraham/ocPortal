@@ -20,35 +20,33 @@
 
 class Hook_config_enable_theme_img_buttons
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_THEME_IMG_BUTTONS',
-			'type'=>'tick',
-			'category'=>'THEME',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_enable_theme_img_buttons',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_THEME_IMG_BUTTONS',
+            'type' => 'tick',
+            'category' => 'THEME',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_enable_theme_img_buttons',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_themeing',
-		);
-	}
+            'addon' => 'core_themeing',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

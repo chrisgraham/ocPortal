@@ -20,77 +20,77 @@
 
 class Hook_content_meta_aware_catalogue_category
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'catalogues:CATALOGUE_CATEGORY',
+            'content_type_label' => 'catalogues:CATALOGUE_CATEGORY',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'catalogue_categories',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>'cc_parent_id',
-			'parent_category_meta_aware_type'=>'catalogue_category',
-			'is_category'=>true,
-			'is_entry'=>false,
-			'category_field'=>array('c_name','id'), // For category permissions
-			'category_type'=>array('catalogues_catalogue','cc_parent_id'), // For category permissions
-			'parent_spec__table_name'=>'catalogue_categories',
-			'parent_spec__parent_name'=>'cc_parent_id',
-			'parent_spec__field_name'=>'id',
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'catalogue_categories',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => 'cc_parent_id',
+            'parent_category_meta_aware_type' => 'catalogue_category',
+            'is_category' => true,
+            'is_entry' => false,
+            'category_field' => array('c_name','id'), // For category permissions
+            'category_type' => array('catalogues_catalogue','cc_parent_id'), // For category permissions
+            'parent_spec__table_name' => 'catalogue_categories',
+            'parent_spec__parent_name' => 'cc_parent_id',
+            'parent_spec__field_name' => 'id',
+            'category_is_string' => false,
 
-			'title_field'=>'cc_title',
-			'title_field_dereference'=>true,
-			'description_field'=>'cc_description',
-			'thumb_field'=>'rep_image',
+            'title_field' => 'cc_title',
+            'title_field_dereference' => true,
+            'description_field' => 'cc_description',
+            'thumb_field' => 'rep_image',
 
-			'view_page_link_pattern'=>'_SEARCH:catalogues:category:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_catalogues:_ec:_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:catalogues:category:_WILD',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?(get_module_zone('cms_catalogues').':cms_catalogues:add_category:catalogue_name=!'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('catalogues')).':catalogues',
+            'view_page_link_pattern' => '_SEARCH:catalogues:category:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_catalogues:_ec:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:catalogues:category:_WILD',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?(get_module_zone('cms_catalogues') . ':cms_catalogues:add_category:catalogue_name=!'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('catalogues')) . ':catalogues',
 
-			'support_url_monikers'=>true,
+            'support_url_monikers' => true,
 
-			'views_field'=>NULL,
-			'submitter_field'=>NULL,
-			'add_time_field'=>'cc_add_date',
-			'edit_time_field'=>NULL,
-			'date_field'=>'cc_add_date',
-			'validated_field'=>NULL,
+            'views_field' => NULL,
+            'submitter_field' => NULL,
+            'add_time_field' => 'cc_add_date',
+            'edit_time_field' => NULL,
+            'date_field' => 'cc_add_date',
+            'validated_field' => NULL,
 
-			'seo_type_code'=>'catalogue_category',
+            'seo_type_code' => 'catalogue_category',
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>(get_value('disable_cat_cat_perms')==='1')?NULL:'catalogues_category', // NULL if has no permissions
+            'permissions_type_code' => (get_value('disable_cat_cat_perms') === '1')?null:'catalogues_category', // NULL if has no permissions
 
-			'search_hook'=>'catalogue_categories',
+            'search_hook' => 'catalogue_categories',
 
-			'addon_name'=>'catalogues',
+            'addon_name' => 'catalogues',
 
-			'cms_page'=>'cms_catalogues',
-			'module'=>'catalogues',
+            'cms_page' => 'cms_catalogues',
+            'module' => 'catalogues',
 
-			'occle_filesystem_hook'=>'catalogues',
-			'occle_filesystem__is_folder'=>true,
+            'occle_filesystem_hook' => 'catalogues',
+            'occle_filesystem__is_folder' => true,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_CATALOGUE_CATEGORY',
-		);
-	}
+            'actionlog_regexp' => '\w+_CATALOGUE_CATEGORY',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -102,10 +102,10 @@ class Hook_content_meta_aware_catalogue_category
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('catalogues');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('catalogues');
 
-		return render_catalogue_category_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$attach_to_url_filter,$guid);
-	}
+        return render_catalogue_category_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$attach_to_url_filter,$guid);
+    }
 }

@@ -20,36 +20,39 @@
 
 class Hook_config_website_email
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'WEBSITE_EMAIL',
-			'type'=>'line',
-			'category'=>'SITE',
-			'group'=>'EMAIL',
-			'explanation'=>'CONFIG_OPTION_website_email',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>2,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'WEBSITE_EMAIL',
+            'type' => 'line',
+            'category' => 'SITE',
+            'group' => 'EMAIL',
+            'explanation' => 'CONFIG_OPTION_website_email',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 2,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		$staff_address=get_option('staff_address'); $website_email='website@'.get_domain(); if (substr($staff_address,-strlen(get_domain())-1)=='@'.get_domain()) $website_email=$staff_address; return $website_email;
-	}
+    public function get_default()
+    {
+        $staff_address = get_option('staff_address');
+        $website_email = 'website@' . get_domain();
+        if (substr($staff_address,-strlen(get_domain())-1) == '@' . get_domain()) {
+            $website_email = $staff_address;
+        }
+        return $website_email;
+    }
 }
-
-

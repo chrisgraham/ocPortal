@@ -20,35 +20,33 @@
 
 class Hook_config_remember_me_by_default
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'REMEMBER_ME_BY_DEFAULT',
-			'type'=>'tick',
-			'category'=>(get_forum_type()=='ocf')?'USERS':'FEATURE',
-			'group'=>'_LOGIN',
-			'explanation'=>'CONFIG_OPTION_remember_me_by_default',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'REMEMBER_ME_BY_DEFAULT',
+            'type' => 'tick',
+            'category' => (get_forum_type() == 'ocf')?'USERS':'FEATURE',
+            'group' => '_LOGIN',
+            'explanation' => 'CONFIG_OPTION_remember_me_by_default',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

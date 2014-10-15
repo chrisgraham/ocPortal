@@ -20,36 +20,34 @@
 
 class Hook_config_pop_url
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'POP3_MAINTAIN_URL',
-			'type'=>'line',
-			'category'=>'POINTSTORE',
-			'group'=>'POP3',
-			'explanation'=>'CONFIG_OPTION_pop_url',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
-			'order_in_category_group'=>3,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'POP3_MAINTAIN_URL',
+            'type' => 'line',
+            'category' => 'POINTSTORE',
+            'group' => 'POP3',
+            'explanation' => 'CONFIG_OPTION_pop_url',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
+            'order_in_category_group' => 3,
 
-			'addon'=>'pointstore',
-		);
-	}
+            'addon' => 'pointstore',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'http://'.get_domain().':2082/frontend/x/mail/addpop2.html';
-	}
+    public function get_default()
+    {
+        return 'http://' . get_domain() . ':2082/frontend/x/mail/addpop2.html';
+    }
 }
-
-

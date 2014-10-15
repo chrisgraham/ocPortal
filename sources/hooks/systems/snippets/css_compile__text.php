@@ -20,18 +20,17 @@
 
 class Hook_css_compile__text
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		if (has_actual_page_access(get_member(),'admin_themes'))
-		{
-			require_code('tempcode_compiler');
-			return template_to_tempcode(post_param('css'));
-		}
-		return new ocp_tempcode();
-	}
+    public function run()
+    {
+        if (has_actual_page_access(get_member(),'admin_themes')) {
+            require_code('tempcode_compiler');
+            return template_to_tempcode(post_param('css'));
+        }
+        return new ocp_tempcode();
+    }
 }

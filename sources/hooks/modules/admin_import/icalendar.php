@@ -20,20 +20,18 @@
 
 class Hook_icalendar
 {
-	/**
+    /**
 	 * Standard importer hook info function.
 	 *
 	 * @return ?array	Importer handling details (NULL: importer is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['product']='iCalendar file';
-		$info['hook_type']='redirect';
-		$info['import_module']='cms_calendar';
-		$info['import_method_name']='import';
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['product'] = 'iCalendar file';
+        $info['hook_type'] = 'redirect';
+        $info['import_module'] = 'cms_calendar';
+        $info['import_method_name'] = 'import';
+        return $info;
+    }
 }
-
-

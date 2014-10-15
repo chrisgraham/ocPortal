@@ -18,17 +18,15 @@
  */
 class lang_ini_size_test_set extends ocp_test_case
 {
-	function testMaxSize()
-	{
-		$path=get_file_base().'/lang/'.fallback_lang();
-		$dh=opendir($path);
-		while (($f=readdir($dh))!==false)
-		{
-			if (substr($f,-4)=='.ini')
-			{
-				$contents=file_get_contents($path.'/'.$f);
-				$this->assertTrue(substr_count($contents,"\n")<980,$f.' is too big'); // default max_input_vars=1000
-			}
-		}
-	}
+    public function testMaxSize()
+    {
+        $path = get_file_base() . '/lang/' . fallback_lang();
+        $dh = opendir($path);
+        while (($f = readdir($dh)) !== false) {
+            if (substr($f,-4) == '.ini') {
+                $contents = file_get_contents($path . '/' . $f);
+                $this->assertTrue(substr_count($contents,"\n")<980,$f . ' is too big'); // default max_input_vars=1000
+            }
+        }
+    }
 }

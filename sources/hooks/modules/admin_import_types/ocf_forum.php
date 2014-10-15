@@ -20,28 +20,26 @@
 
 class Hook_admin_import_types_ocf_forum
 {
-	/**
+    /**
 	 * Get a map of valid import types.
 	 *
 	 * @return array		A map from codename to the language string that names them to the user.
 	 */
-	function run()
-	{
-		return array(
-			'ocf_post_history'=>'POST_HISTORY',
-			'ocf_post_templates'=>'POST_TEMPLATES',
-			'ocf_announcements'=>'ANNOUNCEMENTS',
-			'ocf_forum_groupings'=>'MODULE_TRANS_NAME_admin_ocf_forum_groupings',
-			'ocf_forums'=>'SECTION_FORUMS',
-			'ocf_topics'=>'FORUM_TOPICS',
-			'ocf_polls_and_votes'=>'TOPIC_POLLS',
-			'ocf_posts'=>'FORUM_POSTS',
-			'ocf_post_files'=>'POST_FILES',
-			'ocf_multi_moderations'=>'MULTI_MODERATIONS',
-			'ocf_private_topics'=>'PRIVATE_TOPICS',
-			'ocf_saved_warnings'=>'SAVED_WARNINGS',
-		);
-	}
+    public function run()
+    {
+        return array(
+            'ocf_post_history' => 'POST_HISTORY',
+            'ocf_post_templates' => 'POST_TEMPLATES',
+            'ocf_announcements' => 'ANNOUNCEMENTS',
+            'ocf_forum_groupings' => 'MODULE_TRANS_NAME_admin_ocf_forum_groupings',
+            'ocf_forums' => 'SECTION_FORUMS',
+            'ocf_topics' => 'FORUM_TOPICS',
+            'ocf_polls_and_votes' => 'TOPIC_POLLS',
+            'ocf_posts' => 'FORUM_POSTS',
+            'ocf_post_files' => 'POST_FILES',
+            'ocf_multi_moderations' => 'MULTI_MODERATIONS',
+            'ocf_private_topics' => 'PRIVATE_TOPICS',
+            'ocf_saved_warnings' => 'SAVED_WARNINGS',
+        );
+    }
 }
-
-

@@ -15,33 +15,35 @@
 
 class Hook_unvalidated_images
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!module_installed('galleries')) return NULL;
+    public function info()
+    {
+        if (!module_installed('galleries')) {
+            return NULL;
+        }
 
-		require_lang('galleries');
+        require_lang('galleries');
 
-		$info=array();
-		$info['db_table']='images';
-		$info['db_identifier']='id';
-		$info['db_validated']='validated';
-		$info['db_title']='title';
-		$info['db_title_dereference']=true;
-		$info['db_add_date']='add_date';
-		$info['db_edit_date']='edit_date';
-		$info['edit_module']='cms_galleries';
-		$info['edit_type']='_ed';
-		$info['view_module']='galleries';
-		$info['view_type']='image';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('IMAGES');
-		$info['uses_workflow']=true;
+        $info = array();
+        $info['db_table'] = 'images';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'validated';
+        $info['db_title'] = 'title';
+        $info['db_title_dereference'] = true;
+        $info['db_add_date'] = 'add_date';
+        $info['db_edit_date'] = 'edit_date';
+        $info['edit_module'] = 'cms_galleries';
+        $info['edit_type'] = '_ed';
+        $info['view_module'] = 'galleries';
+        $info['view_type'] = 'image';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('IMAGES');
+        $info['uses_workflow'] = true;
 
-		return $info;
-	}
+        return $info;
+    }
 }

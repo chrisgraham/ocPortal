@@ -20,47 +20,45 @@
 
 class Hook_Preview_setupwizard_blocks
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=(get_param('page','')=='admin_setupwizard') && (get_param('type')=='step6');
-		return array($applies,NULL,false);
-	}
+    public function applies()
+    {
+        $applies = (get_param('page','') == 'admin_setupwizard') && (get_param('type') == 'step6');
+        return array($applies,null,false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		require_code('setupwizard');
+    public function run()
+    {
+        require_code('setupwizard');
 
-		$collapse_zones=post_param_integer('collapse_user_zones',0)==1;
+        $collapse_zones = post_param_integer('collapse_user_zones',0) == 1;
 
-		$installprofile=post_param('installprofile','');
-		if ($installprofile!='')
-		{
-			require_code('hooks/modules/admin_setupwizard_installprofiles/'.$installprofile);
-			$object=object_factory('Hook_admin_setupwizard_installprofiles_'.$installprofile);
-			$installprofileblocks=$object->default_blocks();
-			$block_options=$object->block_options();
-		} else
-		{
-			$installprofileblocks=array();
-			$block_options=array();
-		}
+        $installprofile = post_param('installprofile','');
+        if ($installprofile != '') {
+            require_code('hooks/modules/admin_setupwizard_installprofiles/' . $installprofile);
+            $object = object_factory('Hook_admin_setupwizard_installprofiles_' . $installprofile);
+            $installprofileblocks = $object->default_blocks();
+            $block_options = $object->block_options();
+        } else {
+            $installprofileblocks = array();
+            $block_options = array();
+        }
 
-		$page_structure=_get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$installprofile);
+        $page_structure = _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$installprofile);
 
-		$zone_structure=array_pop($page_structure);
+        $zone_structure = array_pop($page_structure);
 
-		$preview=do_template('SETUPWIZARD_BLOCK_PREVIEW',array('_GUID'=>'77c2952691ead0a834a18fccfb6319d9','LEFT'=>$zone_structure['left'],'RIGHT'=>$zone_structure['right'],'START'=>$zone_structure['start']));
+        $preview = do_template('SETUPWIZARD_BLOCK_PREVIEW',array('_GUID' => '77c2952691ead0a834a18fccfb6319d9','LEFT' => $zone_structure['left'],'RIGHT' => $zone_structure['right'],'START' => $zone_structure['start']));
 
-		return array($preview,NULL);
-	}
+        return array($preview,null);
+    }
 }

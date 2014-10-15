@@ -20,23 +20,21 @@
 
 class Hook_admin_import_types_catalogues
 {
-	/**
+    /**
 	 * Get a map of valid import types.
 	 *
 	 * @return array		A map from codename to the language string that names them to the user.
 	 */
-	function run()
-	{
-		return array(
-			'catalogue_links'=>'DEFAULT_CATALOGUE_LINKS_TITLE',
-			'catalogue_projects'=>'DEFAULT_CATALOGUE_PROJECTS_TITLE',
-			'catalogue_faqs'=>'DEFAULT_CATALOGUE_FAQS_TITLE',
-			'catalogues'=>'CATALOGUES',
-			'ephems'=>'EPHEMS',
-			'contacts'=>'CONTACTS',
-			'reviews'=>'REVIEWS',
-		);
-	}
+    public function run()
+    {
+        return array(
+            'catalogue_links' => 'DEFAULT_CATALOGUE_LINKS_TITLE',
+            'catalogue_projects' => 'DEFAULT_CATALOGUE_PROJECTS_TITLE',
+            'catalogue_faqs' => 'DEFAULT_CATALOGUE_FAQS_TITLE',
+            'catalogues' => 'CATALOGUES',
+            'ephems' => 'EPHEMS',
+            'contacts' => 'CONTACTS',
+            'reviews' => 'REVIEWS',
+        );
+    }
 }
-
-

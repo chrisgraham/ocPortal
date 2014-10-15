@@ -20,35 +20,33 @@
 
 class Hook_config_show_conceded_mode_link
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CONCEDED_MODE_LINK',
-			'type'=>'tick',
-			'category'=>'BLOCKS',
-			'group'=>'PERSONAL_BLOCK',
-			'explanation'=>'CONFIG_OPTION_show_conceded_mode_link',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CONCEDED_MODE_LINK',
+            'type' => 'tick',
+            'category' => 'BLOCKS',
+            'group' => 'PERSONAL_BLOCK',
+            'explanation' => 'CONFIG_OPTION_show_conceded_mode_link',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

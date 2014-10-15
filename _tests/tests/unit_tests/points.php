@@ -18,13 +18,13 @@
  */
 class points_test_set extends ocp_test_case
 {
-	function setUp()
-	{
-		parent::setUp();
-		require_once(get_file_base()."/_tests/simpletest/browser.php");
-	}
+    public function setUp()
+    {
+        parent::setUp();
+        require_once(get_file_base() . "/_tests/simpletest/browser.php");
+    }
 
-	/*
+    /*
 
 	All these tests are poor - the set up needed is not done and they are too sensitive to version/language changes!
 
@@ -118,8 +118,8 @@ class points_test_set extends ocp_test_case
 	}
 	*/
 
-	function tearDown()
-	{
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        parent::tearDown();
+    }
 }

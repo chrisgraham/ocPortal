@@ -20,35 +20,33 @@
 
 class Block_side_printer_friendly
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array();
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array();
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		$url=get_self_url(true,false,array('wide_print'=>1));
-		return do_template('BLOCK_SIDE_PRINTER_FRIENDLY',array('_GUID'=>'db1d2db67f07a3d6bd130f4cef4c5e9d','URL'=>$url));
-	}
+    public function run($map)
+    {
+        $url = get_self_url(true,false,array('wide_print' => 1));
+        return do_template('BLOCK_SIDE_PRINTER_FRIENDLY',array('_GUID' => 'db1d2db67f07a3d6bd130f4cef4c5e9d','URL' => $url));
+    }
 }
-
-

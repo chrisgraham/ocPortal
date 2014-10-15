@@ -3,15 +3,15 @@ root = true
 [*]
 end_of_line = lf
 insert_final_newline = false
-indent_style = tab
+indent_style = space
 indent_size = tab
-indent_brace_style = Allman
-tab_width = 3
+indent_brace_style = K&R
+tab_width = 4
 charset = utf-8
 trim_trailing_whitespace = false
 max_line_length = 10000
 quote_type = single
 curly_bracket_next_line = true
-spaces_around_operators = false
+spaces_around_operators = true
 spaces_around_brackets = outside
 

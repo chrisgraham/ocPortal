@@ -28,89 +28,93 @@
  * @param  boolean		Whether to skip over errored files instead of dying. We don't currently make use of this as our readers aren't sophisticard enough to properly spot erroneous situations.
  * @return ~array			The triplet of width/height/length (possibly containing NULL's for when we can't detect properties) (false: error)
  */
-function get_video_details($file_path,$filename,$delay_errors=false)
+function get_video_details($file_path,$filename,$delay_errors = false)
 {
-	$info=NULL;
+    $info = null;
 
-	$extension=get_file_extension($filename);
+    $extension = get_file_extension($filename);
 
-	$file=@fopen($file_path,'rb');
-	if ($file===false) return false;
+    $file = @fopen($file_path,'rb');
+    if ($file === false) {
+        return false;
+    }
 
-	switch ($extension)
-	{
-		case 'wmv':
-			$info=_get_wmv_details($file);
-			break;
-		case 'asf':
-			$info=_get_wmv_details($file);
-			break;
-		case 'avi':
-			$info=_get_avi_details($file);
-			break;
-		case 'rm':
-			$info=_get_ram_details($file);
-			break;
-		case 'ram':
-			$info=_get_ram_details($file);
-			break;
-		case 'qt':
-			$info=_get_mov_details($file);
-			break;
-		case 'mov':
-			$info=_get_mov_details($file);
-			break;
-		case 'f4v':
-		case 'mp4':
-		case 'm4v':
-			$info=_get_mov_details($file);
-			break;
-		default:
-			if ((file_exists(get_file_base().'/sources_custom/getid3/getid3.php')) && (!in_safe_mode()))
-			{
-				error_reporting(0);
+    switch ($extension) {
+        case 'wmv':
+            $info = _get_wmv_details($file);
+            break;
+        case 'asf':
+            $info = _get_wmv_details($file);
+            break;
+        case 'avi':
+            $info = _get_avi_details($file);
+            break;
+        case 'rm':
+            $info = _get_ram_details($file);
+            break;
+        case 'ram':
+            $info = _get_ram_details($file);
+            break;
+        case 'qt':
+            $info = _get_mov_details($file);
+            break;
+        case 'mov':
+            $info = _get_mov_details($file);
+            break;
+        case 'f4v':
+        case 'mp4':
+        case 'm4v':
+            $info = _get_mov_details($file);
+            break;
+        default:
+            if ((file_exists(get_file_base() . '/sources_custom/getid3/getid3.php')) && (!in_safe_mode())) {
+                error_reporting(0);
 
-				if (!defined('GETID3_HELPERAPPSDIR')) define('GETID3_HELPERAPPSDIR',get_file_base().'/sources_custom/getid3/helperapps');
+                if (!defined('GETID3_HELPERAPPSDIR')) {
+                    define('GETID3_HELPERAPPSDIR',get_file_base() . '/sources_custom/getid3/helperapps');
+                }
 
-				require_code('getid3/getid3');
-				if (class_exists('getID3'))
-				{
-					$id3_ob=new getID3();
-					$_info=$id3_ob->analyze($file_path);
-					$info=array(
-						isset($_info['video']['resolution_x'])?$_info['video']['resolution_x']:NULL,
-						isset($_info['video']['resolution_y'])?$_info['video']['resolution_y']:NULL,
-						array_key_exists('playtime_seconds',$_info)?intval($_info['playtime_seconds']):NULL,
-					);
-					if (isset($_info['meta']['onMetaData']['width'])) $info[0]=intval($_info['meta']['onMetaData']['width']);
-					if (isset($_info['meta']['onMetaData']['height'])) $info[1]=intval($_info['meta']['onMetaData']['height']);
+                require_code('getid3/getid3');
+                if (class_exists('getID3')) {
+                    $id3_ob = new getID3();
+                    $_info = $id3_ob->analyze($file_path);
+                    $info = array(
+                        isset($_info['video']['resolution_x'])?$_info['video']['resolution_x']:null,
+                        isset($_info['video']['resolution_y'])?$_info['video']['resolution_y']:null,
+                        array_key_exists('playtime_seconds',$_info)?intval($_info['playtime_seconds']):null,
+                    );
+                    if (isset($_info['meta']['onMetaData']['width'])) {
+                        $info[0] = intval($_info['meta']['onMetaData']['width']);
+                    }
+                    if (isset($_info['meta']['onMetaData']['height'])) {
+                        $info[1] = intval($_info['meta']['onMetaData']['height']);
+                    }
 
-					require_code('mime_types');
-					$mime_type=get_mime_type($extension,true);
-					if (substr($mime_type,0,6)=='audio/')
-					{
-						$info[0]=NULL;
-						$info[1]=NULL;
-					}
-				}
-			}
-			break;
-	}
+                    require_code('mime_types');
+                    $mime_type = get_mime_type($extension,true);
+                    if (substr($mime_type,0,6) == 'audio/') {
+                        $info[0] = null;
+                        $info[1] = null;
+                    }
+                }
+            }
+            break;
+    }
 
-	fclose($file);
+    fclose($file);
 
-	if (is_null($info))
-	{
-		require_code('mime_types');
-		$mime_type=get_mime_type($extension,true);
-		if (substr($mime_type,0,6)=='audio/')
-		{
-			$info=array(intval(get_option('video_width_setting')),20,NULL);
-		}
-	}
+    if (is_null($info)) {
+        require_code('mime_types');
+        $mime_type = get_mime_type($extension,true);
+        if (substr($mime_type,0,6) == 'audio/') {
+            $info = array(intval(get_option('video_width_setting')),20,null);
+        }
+    }
 
-	if (is_null($info)) return array(NULL,NULL,NULL);
-	return $info;
+    if (is_null($info)) {
+        return array(null,null,null);
+    }
+    return $info;
 }
 
 /**
@@ -121,12 +125,13 @@ function get_video_details($file_path,$filename,$delay_errors=false)
  */
 function read_intel_endian_int($buffer)
 {
-	if (strlen($buffer)==2)
-	{
-		return ord($buffer[0])|(ord($buffer[1])<<8);
-	}
-	if (strlen($buffer)<4) warn_exit(do_lang_tempcode('CORRUPT_FILE',do_lang('VIDEO'))); // Error
-	return ord($buffer[0])|(ord($buffer[1])<<8)|(ord($buffer[2])<<16)|(ord($buffer[3])<<24);
+    if (strlen($buffer) == 2) {
+        return ord($buffer[0])|(ord($buffer[1]) << 8);
+    }
+    if (strlen($buffer)<4) {
+        warn_exit(do_lang_tempcode('CORRUPT_FILE',do_lang('VIDEO')));
+    } // Error
+    return ord($buffer[0])|(ord($buffer[1]) << 8)|(ord($buffer[2]) << 16)|(ord($buffer[3]) << 24);
 }
 
 /**
@@ -137,12 +142,13 @@ function read_intel_endian_int($buffer)
  */
 function read_network_endian_int($buffer)
 {
-	if (strlen($buffer)==2)
-	{
-		return ord($buffer[1])|(ord($buffer[0])<<8);
-	}
-	if (strlen($buffer)<4) warn_exit(do_lang_tempcode('CORRUPT_FILE',do_lang('VIDEO'))); // Error
-	return ord($buffer[3])|(ord($buffer[2])<<8)|(ord($buffer[1])<<16)|(ord($buffer[0])<<24);
+    if (strlen($buffer) == 2) {
+        return ord($buffer[1])|(ord($buffer[0]) << 8);
+    }
+    if (strlen($buffer)<4) {
+        warn_exit(do_lang_tempcode('CORRUPT_FILE',do_lang('VIDEO')));
+    } // Error
+    return ord($buffer[3])|(ord($buffer[2]) << 8)|(ord($buffer[1]) << 16)|(ord($buffer[0]) << 24);
 }
 
 /**
@@ -153,9 +159,9 @@ function read_network_endian_int($buffer)
  */
 function _get_wmv_details($file)
 {
-	// Read in chunks
-	list($_,$width,$height,$length)=_get_wmv_details_do_chunk_list($file);
-	return array($width,$height,$length);
+    // Read in chunks
+    list($_,$width,$height,$length) = _get_wmv_details_do_chunk_list($file);
+    return array($width,$height,$length);
 }
 
 /**
@@ -165,65 +171,68 @@ function _get_wmv_details($file)
  * @param  ?integer		The length of the current chunk list (NULL: covers full file)
  * @return ?array			The quartet (possibly containing NULL's for when we can't detect properties) (NULL: error)
  */
-function _get_wmv_details_do_chunk_list($file,$chunk_length=NULL)
+function _get_wmv_details_do_chunk_list($file,$chunk_length = null)
 {
-	$length=NULL;
-	$width=NULL;
-	$height=NULL;
+    $length = null;
+    $width = null;
+    $height = null;
 
-	$count=0;
-	while ((!feof($file)) && ((is_null($chunk_length)) || ($count<$chunk_length)) && ((is_null($length)) || (is_null($width)) || (is_null($height))))
-	{
-		// Read in chunk info
-		$a=read_intel_endian_int(fread($file,4));
-		$b=read_intel_endian_int(fread($file,4));
-		$c=read_intel_endian_int(fread($file,4));
-		$d=read_intel_endian_int(fread($file,4));
-		$sub_chunk_length=read_intel_endian_int(fread($file,4));
-		$count+=$sub_chunk_length;
-		if ($sub_chunk_length<=24) return NULL; // Some kind of error that would cause mayhem
-		fseek($file,4,SEEK_CUR); // Can't read 64 bit
+    $count = 0;
+    while ((!feof($file)) && ((is_null($chunk_length)) || ($count<$chunk_length)) && ((is_null($length)) || (is_null($width)) || (is_null($height)))) {
+        // Read in chunk info
+        $a = read_intel_endian_int(fread($file,4));
+        $b = read_intel_endian_int(fread($file,4));
+        $c = read_intel_endian_int(fread($file,4));
+        $d = read_intel_endian_int(fread($file,4));
+        $sub_chunk_length = read_intel_endian_int(fread($file,4));
+        $count += $sub_chunk_length;
+        if ($sub_chunk_length <= 24) {
+            return NULL;
+        } // Some kind of error that would cause mayhem
+        fseek($file,4,SEEK_CUR); // Can't read 64 bit
 
-		// Header chunk
-		if (($a==intval(0x75B22630)) && ($b==intval(0x11CF668E)) && ($c==intval(0xAA00D9A6)) && ($d==intval(0x6CCE6200)))
-		{
-			fseek($file,6,SEEK_CUR);
-			$info=_get_wmv_details_do_chunk_list($file,$sub_chunk_length-30);
-			$sub_chunk_length=24;
-			if (!is_null($info[1])) $width=$info[1];
-			if (!is_null($info[2])) $height=$info[2];
-			if (!is_null($info[3])) $length=$info[3];
-		}
+        // Header chunk
+        if (($a == intval(0x75B22630)) && ($b == intval(0x11CF668E)) && ($c == intval(0xAA00D9A6)) && ($d == intval(0x6CCE6200))) {
+            fseek($file,6,SEEK_CUR);
+            $info = _get_wmv_details_do_chunk_list($file,$sub_chunk_length-30);
+            $sub_chunk_length = 24;
+            if (!is_null($info[1])) {
+                $width = $info[1];
+            }
+            if (!is_null($info[2])) {
+                $height = $info[2];
+            }
+            if (!is_null($info[3])) {
+                $length = $info[3];
+            }
+        }
 
-		// Header object
-		if (($a==intval(0x8CABDCA1)) && ($b==intval(0x11CFA947)) && ($c==intval(0xC000E48E)) && ($d==intval(0x6553200C)))
-		{
-			fseek($file,48,SEEK_CUR);
-			$length=intval(round(read_intel_endian_int(fread($file,4))/10000000));
-			$sub_chunk_length-=52;
-		}
+        // Header object
+        if (($a == intval(0x8CABDCA1)) && ($b == intval(0x11CFA947)) && ($c == intval(0xC000E48E)) && ($d == intval(0x6553200C))) {
+            fseek($file,48,SEEK_CUR);
+            $length = intval(round(read_intel_endian_int(fread($file,4))/10000000));
+            $sub_chunk_length -= 52;
+        }
 
-		// Stream header object
-		if (($a==intval(0xB7DC0791)) && ($b==intval(0x11CFA9B7)) && ($c==intval(0xC000E68E)) && ($d==intval(0x6553200C)))
-		{
-			// Read in chunk info
-			$a=read_intel_endian_int(fread($file,4));
-			$b=read_intel_endian_int(fread($file,4));
-			$c=read_intel_endian_int(fread($file,4));
-			$d=read_intel_endian_int(fread($file,4));
-			$sub_chunk_length-=16;
-			if (($a==intval(0xBC19EFC0)) && ($b==intval(0x11CF5B4D)) && ($c==intval(0x8000FDA8)) && ($d==intval(0x2B445C5F))) // Video chunk
-			{
-				fseek($file,38,SEEK_CUR);
-				$width=read_intel_endian_int(fread($file,4));
-				$height=read_intel_endian_int(fread($file,4));
-				$sub_chunk_length-=46;
-			}
-		}
-		fseek($file,$sub_chunk_length-24,SEEK_CUR);
-	}
+        // Stream header object
+        if (($a == intval(0xB7DC0791)) && ($b == intval(0x11CFA9B7)) && ($c == intval(0xC000E68E)) && ($d == intval(0x6553200C))) {
+            // Read in chunk info
+            $a = read_intel_endian_int(fread($file,4));
+            $b = read_intel_endian_int(fread($file,4));
+            $c = read_intel_endian_int(fread($file,4));
+            $d = read_intel_endian_int(fread($file,4));
+            $sub_chunk_length -= 16;
+            if (($a == intval(0xBC19EFC0)) && ($b == intval(0x11CF5B4D)) && ($c == intval(0x8000FDA8)) && ($d == intval(0x2B445C5F))) { // Video chunk
+                fseek($file,38,SEEK_CUR);
+                $width = read_intel_endian_int(fread($file,4));
+                $height = read_intel_endian_int(fread($file,4));
+                $sub_chunk_length -= 46;
+            }
+        }
+        fseek($file,$sub_chunk_length-24,SEEK_CUR);
+    }
 
-	return array($count,$width,$height,$length);
+    return array($count,$width,$height,$length);
 }
 
 /**
@@ -234,15 +243,15 @@ function _get_wmv_details_do_chunk_list($file,$chunk_length=NULL)
  */
 function _get_avi_details($file)
 {
-	fseek($file,32,SEEK_CUR);
-	$microseconds_per_frame=read_intel_endian_int(fread($file,4));
-	fseek($file,12,SEEK_CUR);
-	$num_frames=read_intel_endian_int(fread($file,4));
-	$length=intval(round(floatval($num_frames*$microseconds_per_frame)/1000/1000));
-	fseek($file,12,SEEK_CUR);
-	$width=read_intel_endian_int(fread($file,4));
-	$height=read_intel_endian_int(fread($file,4));
-	return array($width,$height,$length);
+    fseek($file,32,SEEK_CUR);
+    $microseconds_per_frame = read_intel_endian_int(fread($file,4));
+    fseek($file,12,SEEK_CUR);
+    $num_frames = read_intel_endian_int(fread($file,4));
+    $length = intval(round(floatval($num_frames*$microseconds_per_frame)/1000/1000));
+    fseek($file,12,SEEK_CUR);
+    $width = read_intel_endian_int(fread($file,4));
+    $height = read_intel_endian_int(fread($file,4));
+    return array($width,$height,$length);
 }
 
 /**
@@ -253,26 +262,28 @@ function _get_avi_details($file)
  */
 function _get_ram_details($file) // + rm
 {
-	$length=NULL;
-	$width=NULL;
-	$height=NULL;
+    $length = null;
+    $width = null;
+    $height = null;
 
-	// Read in chunks
-	while ((!feof($file)) && ((is_null($length)) || (is_null($width)) || (is_null($height))))
-	{
-		$type=fread($file,4);
-		$size=read_network_endian_int(fread($file,4));
-		if ($size<=8) return NULL;
+    // Read in chunks
+    while ((!feof($file)) && ((is_null($length)) || (is_null($width)) || (is_null($height)))) {
+        $type = fread($file,4);
+        $size = read_network_endian_int(fread($file,4));
+        if ($size <= 8) {
+            return NULL;
+        }
 
-		if ($type=='PROP')
-		{
-			fseek($file,22,SEEK_CUR);
-			$length=intval(round(read_network_endian_int(fread($file,4))/1000));
-			return array($width,$height,$length);
-		} else fseek($file,$size-8,SEEK_CUR);
-	}
+        if ($type == 'PROP') {
+            fseek($file,22,SEEK_CUR);
+            $length = intval(round(read_network_endian_int(fread($file,4))/1000));
+            return array($width,$height,$length);
+        } else {
+            fseek($file,$size-8,SEEK_CUR);
+        }
+    }
 
-	return array($width,$height,$length);
+    return array($width,$height,$length);
 }
 
 /**
@@ -283,11 +294,13 @@ function _get_ram_details($file) // + rm
  */
 function _get_mov_details($file)
 {
-	// Read in atoms
-	$info=_get_mov_details_do_atom_list($file);
-	if (is_null($info)) return NULL;
-	list($_,$width,$height,$length)=$info;
-	return array($width,$height,$length);
+    // Read in atoms
+    $info = _get_mov_details_do_atom_list($file);
+    if (is_null($info)) {
+        return NULL;
+    }
+    list($_,$width,$height,$length) = $info;
+    return array($width,$height,$length);
 }
 
 /**
@@ -297,76 +310,83 @@ function _get_mov_details($file)
  * @param  ?integer		The length of the current atom list (NULL: covers full file)
  * @return array			The quartet (possibly containing NULL's for when we can't detect properties)
  */
-function _get_mov_details_do_atom_list($file,$atom_size=NULL)
+function _get_mov_details_do_atom_list($file,$atom_size = null)
 {
-	$length=NULL;
-	$width=NULL;
-	$height=NULL;
+    $length = null;
+    $width = null;
+    $height = null;
 
-	$count=0;
-	while ((!feof($file)) && ((is_null($atom_size)) || ($count<$atom_size)) && ((is_null($length)) || (is_null($width)) || (is_null($height))))
-	{
-		$next_read=fread($file,4);
-		if (strlen($next_read)<4) return array($count,$width,$height,$length); // END / problem
-		$size=read_network_endian_int($next_read);
-		if ($size<8) // NB: uuid atom can be of size 8 (i.e. empty) on some rare files
-		{
-			return array($count,$width,$height,$length); // END / problem
-		}
-		$count+=4;
-		if ($size==0)
-		{
-//			$qt_atom=true;
-			fseek($file,8,SEEK_CUR);
-			$size=read_network_endian_int(fread($file,4));
-			$count+=12;
-		}// else $qt_atom=false;
+    $count = 0;
+    while ((!feof($file)) && ((is_null($atom_size)) || ($count<$atom_size)) && ((is_null($length)) || (is_null($width)) || (is_null($height)))) {
+        $next_read = fread($file,4);
+        if (strlen($next_read)<4) {
+            return array($count,$width,$height,$length);
+        } // END / problem
+        $size = read_network_endian_int($next_read);
+        if ($size<8) { // NB: uuid atom can be of size 8 (i.e. empty) on some rare files
+            return array($count,$width,$height,$length); // END / problem
+        }
+        $count += 4;
+        if ($size == 0) {
+            //			$qt_atom=true;
+            fseek($file,8,SEEK_CUR);
+            $size = read_network_endian_int(fread($file,4));
+            $count += 12;
+        }// else $qt_atom=false;
 
-		$type=fread($file,4);
-		$count+=4;
-		if ($type=='mvhd')
-		{
-			fseek($file,12,SEEK_CUR);
-			$time_scale=read_network_endian_int(fread($file,4));
-			$duration=read_network_endian_int(fread($file,4));
-			$length=intval(round(floatval($duration)/floatval($time_scale)));
-			fseek($file,80,SEEK_CUR);
-			$count+=20+80;
-		}
-		elseif ($type=='tkhd')
-		{
-			fseek($file,76,SEEK_CUR);
-			$_width=read_network_endian_int(fread($file,2));
-			fseek($file,2,SEEK_CUR); // fixed point - but we don't want decimal fraction part
-			$_height=read_network_endian_int(fread($file,2));
-			fseek($file,2,SEEK_CUR); // fixed point - but we don't want decimal fraction part
-			$count+=76+8;
-			if ($_width>0) $width=$_width;
-			if ($_height>0) $height=$_height;
-		}
-		elseif ($type=='moov') // moov contains more atoms, and the one we need for length
-		{
-			$info=_get_mov_details_do_atom_list($file,$size-$count);
-			$count+=$info[0];
-			if (!is_null($info[1])) $width=$info[1];
-			if (!is_null($info[2])) $height=$info[2];
-			if (!is_null($info[3])) $length=$info[3];
-		}
-		elseif ($type=='trak') // trak contains more atoms, and the one we need for width and height
-		{
-			$info=_get_mov_details_do_atom_list($file,$size-$count);
-			$count+=$info[0];
-			if (!is_null($info[1])) $width=$info[1];
-			if (!is_null($info[2])) $height=$info[2];
-			if (!is_null($info[3])) $length=$info[3];
-		} else
-		{
-			fseek($file,$size-8,SEEK_CUR);
-			$count+=$size-8;
-		}
-	}
+        $type = fread($file,4);
+        $count += 4;
+        if ($type == 'mvhd') {
+            fseek($file,12,SEEK_CUR);
+            $time_scale = read_network_endian_int(fread($file,4));
+            $duration = read_network_endian_int(fread($file,4));
+            $length = intval(round(floatval($duration)/floatval($time_scale)));
+            fseek($file,80,SEEK_CUR);
+            $count += 20+80;
+        } elseif ($type == 'tkhd') {
+            fseek($file,76,SEEK_CUR);
+            $_width = read_network_endian_int(fread($file,2));
+            fseek($file,2,SEEK_CUR); // fixed point - but we don't want decimal fraction part
+            $_height = read_network_endian_int(fread($file,2));
+            fseek($file,2,SEEK_CUR); // fixed point - but we don't want decimal fraction part
+            $count += 76+8;
+            if ($_width>0) {
+                $width = $_width;
+            }
+            if ($_height>0) {
+                $height = $_height;
+            }
+        } elseif ($type == 'moov') { // moov contains more atoms, and the one we need for length
+            $info = _get_mov_details_do_atom_list($file,$size-$count);
+            $count += $info[0];
+            if (!is_null($info[1])) {
+                $width = $info[1];
+            }
+            if (!is_null($info[2])) {
+                $height = $info[2];
+            }
+            if (!is_null($info[3])) {
+                $length = $info[3];
+            }
+        } elseif ($type == 'trak') { // trak contains more atoms, and the one we need for width and height
+            $info = _get_mov_details_do_atom_list($file,$size-$count);
+            $count += $info[0];
+            if (!is_null($info[1])) {
+                $width = $info[1];
+            }
+            if (!is_null($info[2])) {
+                $height = $info[2];
+            }
+            if (!is_null($info[3])) {
+                $length = $info[3];
+            }
+        } else {
+            fseek($file,$size-8,SEEK_CUR);
+            $count += $size-8;
+        }
+    }
 
-	return array($count,$width,$height,$length);
+    return array($count,$width,$height,$length);
 }
 
 /**
@@ -391,79 +411,81 @@ function _get_mov_details_do_atom_list($file,$atom_size=NULL)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the new entry
  */
-function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
+function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter = null,$add_date = null,$edit_date = null,$views = 0,$id = null,$meta_keywords = '',$meta_description = '')
 {
-	require_code('global4');
-	prevent_double_submit('ADD_IMAGE',NULL,$title);
+    require_code('global4');
+    prevent_double_submit('ADD_IMAGE',null,$title);
 
-	if (is_null($submitter)) $submitter=get_member();
-	if (is_null($add_date)) $add_date=time();
+    if (is_null($submitter)) {
+        $submitter = get_member();
+    }
+    if (is_null($add_date)) {
+        $add_date = time();
+    }
 
-	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array(
-		'edit_date'=>$edit_date,
-		'image_views'=>$views,
-		'add_date'=>$add_date,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'submitter'=>$submitter,
-		'url'=>$url,
-		'thumb_url'=>$thumb_url,
-		'cat'=>$cat,
-		'validated'=>$validated,
-	);
-	$map+=insert_lang('title',$title,2);
-	$map+=insert_lang_comcode('description',$description,3);
-	if (!is_null($id)) $map['id']=$id;
-	$id=$GLOBALS['SITE_DB']->query_insert('images',$map,true);
+    if (!addon_installed('unvalidated')) {
+        $validated = 1;
+    }
+    $map = array(
+        'edit_date' => $edit_date,
+        'image_views' => $views,
+        'add_date' => $add_date,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'submitter' => $submitter,
+        'url' => $url,
+        'thumb_url' => $thumb_url,
+        'cat' => $cat,
+        'validated' => $validated,
+    );
+    $map += insert_lang('title',$title,2);
+    $map += insert_lang_comcode('description',$description,3);
+    if (!is_null($id)) {
+        $map['id'] = $id;
+    }
+    $id = $GLOBALS['SITE_DB']->query_insert('images',$map,true);
 
-	log_it('ADD_IMAGE',strval($id),$title);
+    log_it('ADD_IMAGE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('image',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('image',strval($id),null,null,true);
+    }
 
-	require_code('seo2');
-	if (($meta_keywords=='') && ($meta_description==''))
-	{
-		seo_meta_set_for_implicit('image',strval($id),array($description),$description);
-	} else
-	{
-		seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
-	}
+    require_code('seo2');
+    if (($meta_keywords == '') && ($meta_description == '')) {
+        seo_meta_set_for_implicit('image',strval($id),array($description),$description);
+    } else {
+        seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
+    }
 
-	if ($validated==1)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			$privacy_limits=privacy_limits_for('image',strval($id));
-		} else
-		{
-			$privacy_limits=array();
-		}
+    if ($validated == 1) {
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            $privacy_limits = privacy_limits_for('image',strval($id));
+        } else {
+            $privacy_limits = array();
+        }
 
-		require_lang('galleries');
-		require_code('notifications');
-		$subject=do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
-		$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
-		$mail=do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
-	}
+        require_lang('galleries');
+        require_code('notifications');
+        $subject = do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+        $self_url = build_url(array('page' => 'galleries','type' => 'image','id' => $id),get_module_zone('galleries'),null,false,false,true);
+        $mail = do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+        dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
+    }
 
-	decache('side_galleries');
-	decache('main_personal_galleries_list');
-	decache('main_gallery_embed');
-	decache('main_image_fader');
+    decache('side_galleries');
+    decache('main_personal_galleries_list');
+    decache('main_gallery_embed');
+    decache('main_image_fader');
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('image',strval($id),$submitter);
+    require_code('member_mentions');
+    dispatch_member_mention_notifications('image',strval($id),$submitter);
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -488,98 +510,100 @@ function add_image($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
  * @param  ?MEMBER		Submitter (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
-	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+    if (is_null($edit_time)) {
+        $edit_time = $null_is_literal?null:time();
+    }
 
-	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','image',strval($id),'',($title=='')?$description:$title);
+    require_code('urls2');
+    suggest_new_idmoniker_for('galleries','image',strval($id),'',($title == '')?$description:$title);
 
-	$_description=$GLOBALS['SITE_DB']->query_select_value('images','description',array('id'=>$id));
-	$_title=$GLOBALS['SITE_DB']->query_select_value('images','title',array('id'=>$id));
-	$old_cat=$GLOBALS['SITE_DB']->query_select_value('images','cat',array('id'=>$id));
+    $_description = $GLOBALS['SITE_DB']->query_select_value('images','description',array('id' => $id));
+    $_title = $GLOBALS['SITE_DB']->query_select_value('images','title',array('id' => $id));
+    $old_cat = $GLOBALS['SITE_DB']->query_select_value('images','cat',array('id' => $id));
 
-	decache('main_gallery_embed');
+    decache('main_gallery_embed');
 
-	require_code('files2');
-	delete_upload('uploads/galleries','images','url','id',$id,$url);
-	delete_upload('uploads/galleries_thumbs','images','thumb_url','id',$id,$thumb_url);
+    require_code('files2');
+    delete_upload('uploads/galleries','images','url','id',$id,$url);
+    delete_upload('uploads/galleries_thumbs','images','thumb_url','id',$id,$thumb_url);
 
-	if (!addon_installed('unvalidated')) $validated=1;
+    if (!addon_installed('unvalidated')) {
+        $validated = 1;
+    }
 
-	require_code('submit');
-	$just_validated=(!content_validated('image',strval($id))) && ($validated==1);
-	if ($just_validated)
-	{
-		send_content_validated_notification('image',strval($id));
-	}
+    require_code('submit');
+    $just_validated = (!content_validated('image',strval($id))) && ($validated == 1);
+    if ($just_validated) {
+        send_content_validated_notification('image',strval($id));
+    }
 
-	$update_map=array(
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'validated'=>$validated,
-		'cat'=>$cat,
-		'url'=>$url,
-		'thumb_url'=>$thumb_url,
-	);
-	$update_map+=lang_remap('title',$_title,$title);
-	$update_map+=lang_remap_comcode('description',$_description,$description);
+    $update_map = array(
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'validated' => $validated,
+        'cat' => $cat,
+        'url' => $url,
+        'thumb_url' => $thumb_url,
+    );
+    $update_map += lang_remap('title',$_title,$title);
+    $update_map += lang_remap_comcode('description',$_description,$description);
 
-	$update_map['edit_date']=$edit_time;
-	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
-	if (!is_null($views))
-		$update_map['image_views']=$views;
-	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
+    $update_map['edit_date'] = $edit_time;
+    if (!is_null($add_time)) {
+        $update_map['add_date'] = $add_time;
+    }
+    if (!is_null($views)) {
+        $update_map['image_views'] = $views;
+    }
+    if (!is_null($submitter)) {
+        $update_map['submitter'] = $submitter;
+    }
 
-	$GLOBALS['SITE_DB']->query_update('images',$update_map,array('id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_update('images',$update_map,array('id' => $id),'',1);
 
-	$self_url=build_url(array('page'=>'galleries','type'=>'image','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
+    $self_url = build_url(array('page' => 'galleries','type' => 'image','id' => $id),get_module_zone('galleries'),null,false,false,true);
 
-	if ($just_validated)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			$privacy_limits=privacy_limits_for('image',strval($id));
-		} else
-		{
-			$privacy_limits=array();
-		}
+    if ($just_validated) {
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            $privacy_limits = privacy_limits_for('image',strval($id));
+        } else {
+            $privacy_limits = array();
+        }
 
-		require_lang('galleries');
-		require_code('notifications');
-		$subject=do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
-		$mail=do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
-	}
+        require_lang('galleries');
+        require_code('notifications');
+        $subject = do_lang('IMAGE_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+        $mail = do_lang('IMAGE_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+        dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
+    }
 
-	log_it('EDIT_IMAGE',strval($id),$title);
+    log_it('EDIT_IMAGE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('image',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('image',strval($id));
+    }
 
-	require_code('seo2');
-	seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
+    require_code('seo2');
+    seo_meta_set_for_explicit('image',strval($id),$meta_keywords,$meta_description);
 
-	decache('main_image_fader');
+    decache('main_image_fader');
 
-	require_lang('galleries');
-	require_code('feedback');
-	update_spacer_post(
-		$allow_comments!=0,
-		'images',
-		strval($id),
-		$self_url,
-		do_lang('VIEW_IMAGE','','','',get_site_default_lang()),
-		process_overridden_comment_forum('images',strval($id),$cat,$old_cat)
-	);
+    require_lang('galleries');
+    require_code('feedback');
+    update_spacer_post(
+        $allow_comments != 0,
+        'images',
+        strval($id),
+        $self_url,
+        do_lang('VIEW_IMAGE','','','',get_site_default_lang()),
+        process_overridden_comment_forum('images',strval($id),$cat,$old_cat)
+    );
 }
 
 /**
@@ -588,52 +612,51 @@ function edit_image($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
  * @param  AUTO_LINK		The ID of the image
  * @param  boolean		Whether to delete the actual file also
  */
-function delete_image($id,$delete_full=true)
+function delete_image($id,$delete_full = true)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('images',array('title','description','cat'),array('id'=>$id));
-	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$title=$rows[0]['title'];
-	$description=$rows[0]['description'];
-	$cat=$rows[0]['cat'];
+    $rows = $GLOBALS['SITE_DB']->query_select('images',array('title','description','cat'),array('id' => $id));
+    if (!array_key_exists(0,$rows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $title = $rows[0]['title'];
+    $description = $rows[0]['description'];
+    $cat = $rows[0]['cat'];
 
-	delete_lang($title);
-	delete_lang($description);
+    delete_lang($title);
+    delete_lang($description);
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('image',strval($id),'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('image',strval($id),'');
+    }
 
-	// Delete file
-	if ($delete_full)
-	{
-		require_code('files2');
-		delete_upload('uploads/galleries','images','url','id',$id);
-		delete_upload('uploads/galleries_thumbs','images','thumb_url','id',$id);
-	}
+    // Delete file
+    if ($delete_full) {
+        require_code('files2');
+        delete_upload('uploads/galleries','images','url','id',$id);
+        delete_upload('uploads/galleries_thumbs','images','thumb_url','id',$id);
+    }
 
-	// Delete from database
-	$GLOBALS['SITE_DB']->query_delete('images',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'images','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'images','trackback_for_id'=>$id));
-	require_code('notifications');
-	delete_all_notifications_on('comment_posted','images_'.strval($id));
+    // Delete from database
+    $GLOBALS['SITE_DB']->query_delete('images',array('id' => $id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => 'images','rating_for_id' => $id));
+    $GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type' => 'images','trackback_for_id' => $id));
+    require_code('notifications');
+    delete_all_notifications_on('comment_posted','images_' . strval($id));
 
-	require_code('seo2');
-	seo_meta_erase_storage('image',strval($id));
+    require_code('seo2');
+    seo_meta_erase_storage('image',strval($id));
 
-	decache('side_galleries');
-	decache('main_personal_galleries_list');
-	decache('main_gallery_embed');
-	decache('main_image_fader');
+    decache('side_galleries');
+    decache('main_personal_galleries_list');
+    decache('main_gallery_embed');
+    decache('main_image_fader');
 
-	log_it('DELETE_IMAGE',strval($id),get_translated_text($title));
+    log_it('DELETE_IMAGE',strval($id),get_translated_text($title));
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('image',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('image',strval($id));
+    }
 }
 
 /**
@@ -643,162 +666,153 @@ function delete_image($id,$delete_full=true)
  * @param  ?PATH			Where to save to (NULL: decide for ourselves)
  * @return URLPATH		Thumbnail, only valid if expected_output_path was passed as NULL (blank: could not generate)
  */
-function create_video_thumb($src_url,$expected_output_path=NULL)
+function create_video_thumb($src_url,$expected_output_path = null)
 {
-	// Try to find a hook that can get a thumbnail easily
-	require_code('media_renderer');
-	$hooks=find_media_renderers($src_url,array(),true,NULL);
-	if (!is_null($hooks))
-	{
-		foreach ($hooks as $hook)
-		{
-			$ve_ob=object_factory('Hook_media_rendering_'.$hook);
-			if (method_exists($ve_ob,'get_video_thumbnail'))
-			{
-				$ret=$ve_ob->get_video_thumbnail($src_url);
-				if (!is_null($ret))
-				{
-					if (is_null($expected_output_path))
-					{
-						$filename='thumb_'.md5(uniqid('',true)).'.png';
-						$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
-					}
-					require_code('files');
-					$_expected_output_path=fopen($expected_output_path,'wb');
-					http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
-					fclose($_expected_output_path);
+    // Try to find a hook that can get a thumbnail easily
+    require_code('media_renderer');
+    $hooks = find_media_renderers($src_url,array(),true,null);
+    if (!is_null($hooks)) {
+        foreach ($hooks as $hook) {
+            $ve_ob = object_factory('Hook_media_rendering_' . $hook);
+            if (method_exists($ve_ob,'get_video_thumbnail')) {
+                $ret = $ve_ob->get_video_thumbnail($src_url);
+                if (!is_null($ret)) {
+                    if (is_null($expected_output_path)) {
+                        $filename = 'thumb_' . md5(uniqid('',true)) . '.png';
+                        $expected_output_path = get_custom_file_base() . '/uploads/galleries/' . $filename;
+                    }
+                    require_code('files');
+                    $_expected_output_path = fopen($expected_output_path,'wb');
+                    http_download_file($ret,null,true,false,'ocPortal',null,null,null,null,null,$_expected_output_path);
+                    fclose($_expected_output_path);
 
-					return $ret;
-				}
-			}
-		}
-	}
+                    return $ret;
+                }
+            }
+        }
+    }
 
-	// oEmbed etc
-	require_code('files2');
-	$meta_details=get_webpage_meta_details($src_url);
-	if ($meta_details['t_image_url']!='')
-	{
-		return $meta_details['t_image_url'];
-	}
+    // oEmbed etc
+    require_code('files2');
+    $meta_details = get_webpage_meta_details($src_url);
+    if ($meta_details['t_image_url'] != '') {
+        return $meta_details['t_image_url'];
+    }
 
-	// Audio ones should have automatic thumbnails
-	require_code('images');
-	if (is_audio($src_url,true))
-	{
-		$ret=find_theme_image('audio_thumb',true);
-		if ($ret!='')
-		{
-			if (!is_null($expected_output_path))
-			{
-				require_code('files');
-				$_expected_output_path=@fopen($expected_output_path,'wb');
-				if ($_expected_output_path!==false)
-				{
-					http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
-					fclose($_expected_output_path);
-				}
-			}
-		}
-		return $ret;
-	}
+    // Audio ones should have automatic thumbnails
+    require_code('images');
+    if (is_audio($src_url,true)) {
+        $ret = find_theme_image('audio_thumb',true);
+        if ($ret != '') {
+            if (!is_null($expected_output_path)) {
+                require_code('files');
+                $_expected_output_path = @fopen($expected_output_path,'wb');
+                if ($_expected_output_path !== false) {
+                    http_download_file($ret,null,true,false,'ocPortal',null,null,null,null,null,$_expected_output_path);
+                    fclose($_expected_output_path);
+                }
+            }
+        }
+        return $ret;
+    }
 
-	// Ok, gonna try hard using what FFMPEG techniques we can...
+    // Ok, gonna try hard using what FFMPEG techniques we can...
 
-	if (substr($src_url,0,strlen(get_custom_base_url().'/'))==get_custom_base_url().'/')
-		$src_url=substr($src_url,strlen(get_custom_base_url().'/'));
-	if (url_is_local($src_url))
-	{
-		$src_file=get_custom_file_base().'/'.rawurldecode($src_url);
-		$src_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$src_file);
+    if (substr($src_url,0,strlen(get_custom_base_url() . '/')) == get_custom_base_url() . '/') {
+        $src_url = substr($src_url,strlen(get_custom_base_url() . '/'));
+    }
+    if (url_is_local($src_url)) {
+        $src_file = get_custom_file_base() . '/' . rawurldecode($src_url);
+        $src_file = preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$src_file);
 
-		if (class_exists('ffmpeg_movie'))
-		{
-			$filename='thumb_'.md5(uniqid('',true)).'1.jpg';
-			if (is_null($expected_output_path))
-				$expected_output_path=get_custom_file_base().'/uploads/galleries/'.$filename;
-			if (file_exists($expected_output_path))
-				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
+        if (class_exists('ffmpeg_movie')) {
+            $filename = 'thumb_' . md5(uniqid('',true)) . '1.jpg';
+            if (is_null($expected_output_path)) {
+                $expected_output_path = get_custom_file_base() . '/uploads/galleries/' . $filename;
+            }
+            if (file_exists($expected_output_path)) {
+                return 'uploads/galleries/' . rawurlencode(basename($expected_output_path));
+            }
 
-			$movie=@(new ffmpeg_movie($src_file,false));
-			if ($movie!==false)
-			{
-				if ($movie->getFrameCount()==0) return '';
+            $movie = @(new ffmpeg_movie($src_file,false));
+            if ($movie !== false) {
+                if ($movie->getFrameCount() == 0) {
+                    return '';
+                }
 
-				$frame=$movie->getFrame(min($movie->getFrameCount(),25));
-				$gd_img=$frame->toGDImage();
+                $frame = $movie->getFrame(min($movie->getFrameCount(),25));
+                $gd_img = $frame->toGDImage();
 
-				@imagejpeg($gd_img,$expected_output_path,intval(get_option('jpeg_quality')));
+                @imagejpeg($gd_img,$expected_output_path,intval(get_option('jpeg_quality')));
 
-				if (file_exists($expected_output_path))
-				{
-					require_code('images');
-					if (function_exists('imagecreatefromstring'))
-						convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
+                if (file_exists($expected_output_path)) {
+                    require_code('images');
+                    if (function_exists('imagecreatefromstring')) {
+                        convert_image($expected_output_path,$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,null,true);
+                    }
 
-					return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
-				}
-			}
-		}
+                    return 'uploads/galleries/' . rawurlencode(basename($expected_output_path));
+                }
+            }
+        }
 
-		$ffmpeg_path=get_option('ffmpeg_path');
+        $ffmpeg_path = get_option('ffmpeg_path');
 
-		if (($ffmpeg_path!='') && (strpos(@ini_get('disable_functions'),'shell_exec')===false))
-		{
-			$filename='thumb_'.md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)),true)).'%d.jpg';
-			$dest_file=get_custom_file_base().'/uploads/galleries/'.$filename;
-			if (is_null($expected_output_path))
-				$expected_output_path=str_replace('%d','1',$dest_file);
+        if (($ffmpeg_path != '') && (strpos(@ini_get('disable_functions'),'shell_exec') === false)) {
+            $filename = 'thumb_' . md5(uniqid(strval(post_param_integer('thumbnail_auto_position',1)),true)) . '%d.jpg';
+            $dest_file = get_custom_file_base() . '/uploads/galleries/' . $filename;
+            if (is_null($expected_output_path)) {
+                $expected_output_path = str_replace('%d','1',$dest_file);
+            }
 
-			if ((file_exists($dest_file)) && (is_null(post_param_integer('thumbnail_auto_position',NULL))))
-				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
-			@unlink($dest_file); // So "if (@filesize($expected_output_path)) break;" will definitely fail if error
+            if ((file_exists($dest_file)) && (is_null(post_param_integer('thumbnail_auto_position',null)))) {
+                return 'uploads/galleries/' . rawurlencode(basename($expected_output_path));
+            }
+            @unlink($dest_file); // So "if (@filesize($expected_output_path)) break;" will definitely fail if error
 
-			$dest_file=preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$dest_file);
+            $dest_file = preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$dest_file);
 
-			$at=display_seconds_period(post_param_integer('thumbnail_auto_position',1));
-			if (strlen($at)==5) $at='00:'.$at;
+            $at = display_seconds_period(post_param_integer('thumbnail_auto_position',1));
+            if (strlen($at) == 5) {
+                $at = '00:' . $at;
+            }
 
-			$shell_command='"'.$ffmpeg_path.'ffmpeg" -i '.escapeshellarg_wrap($src_file).' -an -ss '.$at.' -r 1 -vframes 1 -y '.escapeshellarg_wrap($dest_file);
+            $shell_command = '"' . $ffmpeg_path . 'ffmpeg" -i ' . escapeshellarg_wrap($src_file) . ' -an -ss ' . $at . ' -r 1 -vframes 1 -y ' . escapeshellarg_wrap($dest_file);
 
-			$shell_commands=array($shell_command,$shell_command.' -map 0.0:0.0',$shell_command.' -map 0.1:0.0');
-			foreach ($shell_commands as $shell_command)
-			{
-				shell_exec($shell_command);
-				if (@filesize($expected_output_path)) break;
-			}
+            $shell_commands = array($shell_command,$shell_command . ' -map 0.0:0.0',$shell_command . ' -map 0.1:0.0');
+            foreach ($shell_commands as $shell_command) {
+                shell_exec($shell_command);
+                if (@filesize($expected_output_path)) {
+                    break;
+                }
+            }
 
-			if (file_exists(str_replace('%d','1',$dest_file)))
-			{
-				require_code('images');
-				if (function_exists('imagecreatefromstring'))
-				{
-					convert_image(str_replace('%d','1',$dest_file),$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,NULL,true);
-				} else
-				{
-					copy(str_replace('%d','1',$dest_file),$expected_output_path);
-					fix_permissions($expected_output_path);
-					sync_file($expected_output_path);
-				}
+            if (file_exists(str_replace('%d','1',$dest_file))) {
+                require_code('images');
+                if (function_exists('imagecreatefromstring')) {
+                    convert_image(str_replace('%d','1',$dest_file),$expected_output_path,-1,-1,intval(get_option('thumb_width')),true,null,true);
+                } else {
+                    copy(str_replace('%d','1',$dest_file),$expected_output_path);
+                    fix_permissions($expected_output_path);
+                    sync_file($expected_output_path);
+                }
 
-				return 'uploads/galleries/'.rawurlencode(basename($expected_output_path));
-			}
-		}
-	}
+                return 'uploads/galleries/' . rawurlencode(basename($expected_output_path));
+            }
+        }
+    }
 
-	// Default
-	$ret=find_theme_image('video_thumb',true);
-	if ($ret!='')
-	{
-		if (!is_null($expected_output_path))
-		{
-			require_code('files');
-			$_expected_output_path=fopen($expected_output_path,'wb');
-			http_download_file($ret,NULL,true,false,'ocPortal',NULL,NULL,NULL,NULL,NULL,$_expected_output_path);
-			fclose($_expected_output_path);
-		}
-	}
-	return $ret;
+    // Default
+    $ret = find_theme_image('video_thumb',true);
+    if ($ret != '') {
+        if (!is_null($expected_output_path)) {
+            require_code('files');
+            $_expected_output_path = fopen($expected_output_path,'wb');
+            http_download_file($ret,null,true,false,'ocPortal',null,null,null,null,null,$_expected_output_path);
+            fclose($_expected_output_path);
+        }
+    }
+    return $ret;
 }
 
 /**
@@ -826,94 +840,94 @@ function create_video_thumb($src_url,$expected_output_path=NULL)
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the new entry
  */
-function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter=NULL,$add_date=NULL,$edit_date=NULL,$views=0,$id=NULL,$meta_keywords='',$meta_description='')
+function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter = null,$add_date = null,$edit_date = null,$views = 0,$id = null,$meta_keywords = '',$meta_description = '')
 {
-	require_code('global4');
-	prevent_double_submit('ADD_VIDEO',NULL,$title);
+    require_code('global4');
+    prevent_double_submit('ADD_VIDEO',null,$title);
 
-	if (is_null($submitter)) $submitter=get_member();
-	if (is_null($add_date)) $add_date=time();
+    if (is_null($submitter)) {
+        $submitter = get_member();
+    }
+    if (is_null($add_date)) {
+        $add_date = time();
+    }
 
-	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array(
-		'edit_date'=>$edit_date,
-		'video_views'=>$views,
-		'add_date'=>$add_date,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'submitter'=>$submitter,
-		'url'=>$url,
-		'thumb_url'=>$thumb_url,
-		'cat'=>$cat,
-		'validated'=>$validated,
-		'video_length'=>$video_length,
-		'video_width'=>$video_width,
-		'video_height'=>$video_height,
-	);
-	$map+=insert_lang('title',$title,2);
-	$map+=insert_lang_comcode('description',$description,3);
-	if (!is_null($id)) $map['id']=$id;
-	$id=$GLOBALS['SITE_DB']->query_insert('videos',$map,true);
+    if (!addon_installed('unvalidated')) {
+        $validated = 1;
+    }
+    $map = array(
+        'edit_date' => $edit_date,
+        'video_views' => $views,
+        'add_date' => $add_date,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'submitter' => $submitter,
+        'url' => $url,
+        'thumb_url' => $thumb_url,
+        'cat' => $cat,
+        'validated' => $validated,
+        'video_length' => $video_length,
+        'video_width' => $video_width,
+        'video_height' => $video_height,
+    );
+    $map += insert_lang('title',$title,2);
+    $map += insert_lang_comcode('description',$description,3);
+    if (!is_null($id)) {
+        $map['id'] = $id;
+    }
+    $id = $GLOBALS['SITE_DB']->query_insert('videos',$map,true);
 
-	require_code('transcoding');
-	transcode_video($url,'videos',$id,'id','url',NULL,'video_width','video_height');
+    require_code('transcoding');
+    transcode_video($url,'videos',$id,'id','url',null,'video_width','video_height');
 
-	log_it('ADD_VIDEO',strval($id),$title);
+    log_it('ADD_VIDEO',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('video',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('video',strval($id),null,null,true);
+    }
 
-	if ($validated==1)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			$privacy_limits=privacy_limits_for('video',strval($id));
-		} else
-		{
-			$privacy_limits=array();
-		}
+    if ($validated == 1) {
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            $privacy_limits = privacy_limits_for('video',strval($id));
+        } else {
+            $privacy_limits = array();
+        }
 
-		require_lang('galleries');
-		require_code('notifications');
-		$subject=do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
-		$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
-		$mail=do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
-	}
+        require_lang('galleries');
+        require_code('notifications');
+        $subject = do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+        $self_url = build_url(array('page' => 'galleries','type' => 'video','id' => $id),get_module_zone('galleries'),null,false,false,true);
+        $mail = do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+        dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
+    }
 
-	require_code('seo2');
-	if (($meta_keywords=='') && ($meta_description==''))
-	{
-		seo_meta_set_for_implicit('video',strval($id),array($description),$description);
-	} else
-	{
-		seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
-	}
+    require_code('seo2');
+    if (($meta_keywords == '') && ($meta_description == '')) {
+        seo_meta_set_for_implicit('video',strval($id),array($description),$description);
+    } else {
+        seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
+    }
 
-	decache('side_galleries');
-	decache('main_personal_galleries_list');
-	decache('main_gallery_embed');
+    decache('side_galleries');
+    decache('main_personal_galleries_list');
+    decache('main_gallery_embed');
 
-	if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
-	{
-		require_code('gallery_syndication');
-		if (function_exists('sync_video_syndication'))
-		{
-			$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
-			sync_video_syndication($id,true,false,$consider_deferring);
-		}
-	}
+    if ((is_file(get_file_base() . '/sources_custom/gallery_syndication.php')) && (!in_safe_mode())) {
+        require_code('gallery_syndication');
+        if (function_exists('sync_video_syndication')) {
+            $consider_deferring = (!url_is_local($url)) || (filesize(get_custom_file_base() . '/' . rawurldecode($url))>1024*1024*20);
+            sync_video_syndication($id,true,false,$consider_deferring);
+        }
+    }
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('video',strval($id),$submitter);
+    require_code('member_mentions');
+    dispatch_member_mention_notifications('video',strval($id),$submitter);
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -941,113 +955,113 @@ function add_video($title,$cat,$description,$url,$thumb_url,$validated,$allow_ra
  * @param  ?MEMBER		Submitter (NULL: do not change)
  * @param  boolean		Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
-	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+    if (is_null($edit_time)) {
+        $edit_time = $null_is_literal?null:time();
+    }
 
-	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','video',strval($id),'',($title=='')?$description:$title);
+    require_code('urls2');
+    suggest_new_idmoniker_for('galleries','video',strval($id),'',($title == '')?$description:$title);
 
-	$_title=$GLOBALS['SITE_DB']->query_select_value('videos','title',array('id'=>$id));
-	$_description=$GLOBALS['SITE_DB']->query_select_value('videos','description',array('id'=>$id));
-	$orig_url=$GLOBALS['SITE_DB']->query_select_value('videos','url',array('id'=>$id));
-	$old_cat=$GLOBALS['SITE_DB']->query_select_value('videos','cat',array('id'=>$id));
+    $_title = $GLOBALS['SITE_DB']->query_select_value('videos','title',array('id' => $id));
+    $_description = $GLOBALS['SITE_DB']->query_select_value('videos','description',array('id' => $id));
+    $orig_url = $GLOBALS['SITE_DB']->query_select_value('videos','url',array('id' => $id));
+    $old_cat = $GLOBALS['SITE_DB']->query_select_value('videos','cat',array('id' => $id));
 
-	require_code('files2');
-	delete_upload('uploads/galleries','videos','url','id',$id,$url);
-	delete_upload('uploads/galleries_thumbs','videos','thumb_url','id',$id,$thumb_url);
+    require_code('files2');
+    delete_upload('uploads/galleries','videos','url','id',$id,$url);
+    delete_upload('uploads/galleries_thumbs','videos','thumb_url','id',$id,$thumb_url);
 
-	if (!addon_installed('unvalidated')) $validated=1;
+    if (!addon_installed('unvalidated')) {
+        $validated = 1;
+    }
 
-	require_code('submit');
-	$just_validated=(!content_validated('video',strval($id))) && ($validated==1);
-	if ($just_validated)
-	{
-		send_content_validated_notification('video',strval($id));
-	}
+    require_code('submit');
+    $just_validated = (!content_validated('video',strval($id))) && ($validated == 1);
+    if ($just_validated) {
+        send_content_validated_notification('video',strval($id));
+    }
 
-	$update_map=array(
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'validated'=>$validated,
-		'cat'=>$cat,
-		'url'=>$url,
-		'thumb_url'=>$thumb_url,
-		'video_length'=>$video_length,
-		'video_width'=>$video_width,
-		'video_height'=>$video_height,
-	);
-	$update_map+=lang_remap('title',$_title,$title);
-	$update_map+=lang_remap_comcode('description',$_description,$description);
+    $update_map = array(
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'validated' => $validated,
+        'cat' => $cat,
+        'url' => $url,
+        'thumb_url' => $thumb_url,
+        'video_length' => $video_length,
+        'video_width' => $video_width,
+        'video_height' => $video_height,
+    );
+    $update_map += lang_remap('title',$_title,$title);
+    $update_map += lang_remap_comcode('description',$_description,$description);
 
-	$update_map['edit_date']=$edit_time;
-	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
-	if (!is_null($views))
-		$update_map['video_views']=$views;
-	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
+    $update_map['edit_date'] = $edit_time;
+    if (!is_null($add_time)) {
+        $update_map['add_date'] = $add_time;
+    }
+    if (!is_null($views)) {
+        $update_map['video_views'] = $views;
+    }
+    if (!is_null($submitter)) {
+        $update_map['submitter'] = $submitter;
+    }
 
-	$GLOBALS['SITE_DB']->query_update('videos',$update_map,array('id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_update('videos',$update_map,array('id' => $id),'',1);
 
-	require_code('transcoding');
-	transcode_video($url,'videos',$id,'id','url',NULL,'video_width','video_height');
+    require_code('transcoding');
+    transcode_video($url,'videos',$id,'id','url',null,'video_width','video_height');
 
-	$self_url=build_url(array('page'=>'galleries','type'=>'video','id'=>$id),get_module_zone('galleries'),NULL,false,false,true);
+    $self_url = build_url(array('page' => 'galleries','type' => 'video','id' => $id),get_module_zone('galleries'),null,false,false,true);
 
-	if ($just_validated)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			$privacy_limits=privacy_limits_for('video',strval($id));
-		} else
-		{
-			$privacy_limits=array();
-		}
+    if ($just_validated) {
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            $privacy_limits = privacy_limits_for('video',strval($id));
+        } else {
+            $privacy_limits = array();
+        }
 
-		require_lang('galleries');
-		require_code('notifications');
-		$subject=do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
-		$mail=do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
-	}
+        require_lang('galleries');
+        require_code('notifications');
+        $subject = do_lang('VIDEO_NOTIFICATION_MAIL_SUBJECT',get_site_name(),strip_comcode($title));
+        $mail = do_lang('VIDEO_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($title),array(comcode_escape($self_url->evaluate())));
+        dispatch_notification('gallery_entry',$cat,$subject,$mail,$privacy_limits);
+    }
 
-	log_it('EDIT_VIDEO',strval($id),$title);
+    log_it('EDIT_VIDEO',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('video',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('video',strval($id));
+    }
 
-	require_code('seo2');
-	seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
+    require_code('seo2');
+    seo_meta_set_for_explicit('video',strval($id),$meta_keywords,$meta_description);
 
-	decache('main_gallery_embed');
+    decache('main_gallery_embed');
 
-	require_lang('galleries');
-	require_code('feedback');
-	update_spacer_post(
-		$allow_comments!=0,
-		'videos',
-		strval($id),
-		$self_url,
-		do_lang('VIEW_VIDEO','','','',get_site_default_lang()),
-		process_overridden_comment_forum('videos',strval($id),$cat,$old_cat)
-	);
+    require_lang('galleries');
+    require_code('feedback');
+    update_spacer_post(
+        $allow_comments != 0,
+        'videos',
+        strval($id),
+        $self_url,
+        do_lang('VIEW_VIDEO','','','',get_site_default_lang()),
+        process_overridden_comment_forum('videos',strval($id),$cat,$old_cat)
+    );
 
-	if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
-	{
-		require_code('gallery_syndication');
-		if (function_exists('sync_video_syndication'))
-		{
-			$consider_deferring=(!url_is_local($url)) || (filesize(get_custom_file_base().'/'.rawurldecode($url))>1024*1024*20);
-			sync_video_syndication($id,false,$orig_url!=$url,$orig_url!=$url && $consider_deferring);
-		}
-	}
+    if ((is_file(get_file_base() . '/sources_custom/gallery_syndication.php')) && (!in_safe_mode())) {
+        require_code('gallery_syndication');
+        if (function_exists('sync_video_syndication')) {
+            $consider_deferring = (!url_is_local($url)) || (filesize(get_custom_file_base() . '/' . rawurldecode($url))>1024*1024*20);
+            sync_video_syndication($id,false,$orig_url != $url,$orig_url != $url && $consider_deferring);
+        }
+    }
 }
 
 /**
@@ -1056,58 +1070,53 @@ function edit_video($id,$title,$cat,$description,$url,$thumb_url,$validated,$all
  * @param  AUTO_LINK		The ID of the entry to delete
  * @param  boolean		Whether to delete the actual video file from disk as well as the entry
  */
-function delete_video($id,$delete_full=true)
+function delete_video($id,$delete_full = true)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('videos',array('title','description','cat'),array('id'=>$id));
-	$title=$rows[0]['title'];
-	$description=$rows[0]['description'];
-	$cat=$rows[0]['cat'];
+    $rows = $GLOBALS['SITE_DB']->query_select('videos',array('title','description','cat'),array('id' => $id));
+    $title = $rows[0]['title'];
+    $description = $rows[0]['description'];
+    $cat = $rows[0]['cat'];
 
-	delete_lang($title);
-	delete_lang($description);
+    delete_lang($title);
+    delete_lang($description);
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('video',strval($id),'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('video',strval($id),'');
+    }
 
-	if ($delete_full)
-	{
-		require_code('files2');
-		delete_upload('uploads/galleries','videos','url','id',$id);
-		delete_upload('uploads/galleries_thumbs','videos','thumb_url','id',$id);
-	}
+    if ($delete_full) {
+        require_code('files2');
+        delete_upload('uploads/galleries','videos','url','id',$id);
+        delete_upload('uploads/galleries_thumbs','videos','thumb_url','id',$id);
+    }
 
-	// Delete from database
-	$GLOBALS['SITE_DB']->query_delete('videos',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'videos','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'videos','trackback_for_id'=>$id));
-	require_code('notifications');
-	delete_all_notifications_on('comment_posted','videos_'.strval($id));
+    // Delete from database
+    $GLOBALS['SITE_DB']->query_delete('videos',array('id' => $id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => 'videos','rating_for_id' => $id));
+    $GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type' => 'videos','trackback_for_id' => $id));
+    require_code('notifications');
+    delete_all_notifications_on('comment_posted','videos_' . strval($id));
 
-	require_code('seo2');
-	seo_meta_erase_storage('video',strval($id));
+    require_code('seo2');
+    seo_meta_erase_storage('video',strval($id));
 
-	decache('side_galleries');
-	decache('main_personal_galleries_list');
-	decache('main_gallery_embed');
+    decache('side_galleries');
+    decache('main_personal_galleries_list');
+    decache('main_gallery_embed');
 
-	if ((is_file(get_file_base().'/sources_custom/gallery_syndication.php')) && (!in_safe_mode()))
-	{
-		require_code('gallery_syndication');
-		if (function_exists('sync_video_syndication'))
-		{
-			sync_video_syndication($id,false,false);
-		}
-	}
+    if ((is_file(get_file_base() . '/sources_custom/gallery_syndication.php')) && (!in_safe_mode())) {
+        require_code('gallery_syndication');
+        if (function_exists('sync_video_syndication')) {
+            sync_video_syndication($id,false,false);
+        }
+    }
 
-	log_it('DELETE_VIDEO',strval($id),get_translated_text($title));
+    log_it('DELETE_VIDEO',strval($id),get_translated_text($title));
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('video',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('video',strval($id));
+    }
 }
 
 /**
@@ -1119,60 +1128,63 @@ function delete_video($id,$delete_full=true)
  */
 function watermark_gallery_image($gallery,$file_path,$filename)
 {
-	// We can't watermark an image we can't save
-	require_code('images');
-	if (!function_exists('imagecreatefromstring')) return;
-	if (!is_saveable_image($filename)) return;
+    // We can't watermark an image we can't save
+    require_code('images');
+    if (!function_exists('imagecreatefromstring')) {
+        return;
+    }
+    if (!is_saveable_image($filename)) {
+        return;
+    }
 
-	// We need to find the most applicable gallery watermarks
-	$watermark_top_left='';
-	$watermark_top_right='';
-	$watermark_bottom_left='';
-	$watermark_bottom_right='';
-	do
-	{
-		if ($gallery=='') return; // We couldn't find any matermarks
+    // We need to find the most applicable gallery watermarks
+    $watermark_top_left = '';
+    $watermark_top_right = '';
+    $watermark_bottom_left = '';
+    $watermark_bottom_right = '';
+    do {
+        if ($gallery == '') {
+            return;
+        } // We couldn't find any matermarks
 
-		$_gallery=$GLOBALS['SITE_DB']->query_select('galleries',array('parent_id','watermark_top_left','watermark_top_right','watermark_bottom_left','watermark_bottom_right'),array('name'=>$gallery),'',1);
-		$watermark_top_left=$_gallery[0]['watermark_top_left'];
-		$watermark_top_right=$_gallery[0]['watermark_top_right'];
-		$watermark_bottom_left=$_gallery[0]['watermark_bottom_left'];
-		$watermark_bottom_right=$_gallery[0]['watermark_bottom_right'];
-		$gallery=$_gallery[0]['parent_id'];
-	}
-	while (($watermark_top_left=='') && ($watermark_top_right=='') && ($watermark_bottom_left=='') && ($watermark_bottom_right==''));
+        $_gallery = $GLOBALS['SITE_DB']->query_select('galleries',array('parent_id','watermark_top_left','watermark_top_right','watermark_bottom_left','watermark_bottom_right'),array('name' => $gallery),'',1);
+        $watermark_top_left = $_gallery[0]['watermark_top_left'];
+        $watermark_top_right = $_gallery[0]['watermark_top_right'];
+        $watermark_bottom_left = $_gallery[0]['watermark_bottom_left'];
+        $watermark_bottom_right = $_gallery[0]['watermark_bottom_right'];
+        $gallery = $_gallery[0]['parent_id'];
+    } while (($watermark_top_left == '') && ($watermark_top_right == '') && ($watermark_bottom_left == '') && ($watermark_bottom_right == ''));
 
-	// Now we must apply the watermarks
-	$ext=get_file_extension($filename);
-	$source=@imagecreatefromstring(file_get_contents($file_path));
-	if ($source===false) return; // We couldn't load it for some reason
+    // Now we must apply the watermarks
+    $ext = get_file_extension($filename);
+    $source = @imagecreatefromstring(file_get_contents($file_path));
+    if ($source === false) {
+        return;
+    } // We couldn't load it for some reason
 
-	// Apply the watermarks
-	_watermark_corner($source,$watermark_top_left,0,0);
-	_watermark_corner($source,$watermark_top_right,1,0);
-	_watermark_corner($source,$watermark_bottom_left,0,1);
-	_watermark_corner($source,$watermark_bottom_right,1,1);
+    // Apply the watermarks
+    _watermark_corner($source,$watermark_top_left,0,0);
+    _watermark_corner($source,$watermark_top_right,1,0);
+    _watermark_corner($source,$watermark_bottom_left,0,1);
+    _watermark_corner($source,$watermark_bottom_right,1,1);
 
-	// Save
-	imagealphablending($source,false);
-	if (function_exists('imagesavealpha')) imagesavealpha($source,true);
-	if ($ext=='png')
-	{
-		imagepng($source,$file_path,9);
-		require_code('images_png');
-		png_compress($file_path);
-	}
-	elseif (($ext=='jpg') || ($ext=='jpeg'))
-	{
-		imagejpeg($source,$file_path,intval(get_option('jpeg_quality')));
-	}
-	elseif ((function_exists('imagegif')) && ($ext=='gif'))
-	{
-		imagegif($source,$file_path);
-	}
+    // Save
+    imagealphablending($source,false);
+    if (function_exists('imagesavealpha')) {
+        imagesavealpha($source,true);
+    }
+    if ($ext == 'png') {
+        imagepng($source,$file_path,9);
+        require_code('images_png');
+        png_compress($file_path);
+    } elseif (($ext == 'jpg') || ($ext == 'jpeg')) {
+        imagejpeg($source,$file_path,intval(get_option('jpeg_quality')));
+    } elseif ((function_exists('imagegif')) && ($ext == 'gif')) {
+        imagegif($source,$file_path);
+    }
 
-	// Clean up
-	imagedestroy($source);
+    // Clean up
+    imagedestroy($source);
 }
 
 /**
@@ -1185,18 +1197,20 @@ function watermark_gallery_image($gallery,$file_path,$filename)
  */
 function _watermark_corner(/*&*/$source,$watermark_url,$x,$y)
 {
-	if ($watermark_url!='')
-	{
-		$watermark=@imagecreatefromstring(file_get_contents(rawurldecode($watermark_url)));
-		if ($watermark!==false)
-		{
-			imagecolortransparent($watermark,imagecolorallocate($watermark,255,0,255));
-			if ($x==1) $x=imagesx($source)-imagesx($watermark);
-			if ($y==1) $y=imagesy($source)-imagesy($watermark);
-			imagecopy($source,$watermark,$x,$y,0,0,imagesx($watermark),imagesy($watermark));
-			imagedestroy($watermark);
-		}
-	}
+    if ($watermark_url != '') {
+        $watermark = @imagecreatefromstring(file_get_contents(rawurldecode($watermark_url)));
+        if ($watermark !== false) {
+            imagecolortransparent($watermark,imagecolorallocate($watermark,255,0,255));
+            if ($x == 1) {
+                $x = imagesx($source)-imagesx($watermark);
+            }
+            if ($y == 1) {
+                $y = imagesy($source)-imagesy($watermark);
+            }
+            imagecopy($source,$watermark,$x,$y,0,0,imagesx($watermark),imagesy($watermark));
+            imagedestroy($watermark);
+        }
+    }
 }
 
 /**
@@ -1208,12 +1222,15 @@ function _watermark_corner(/*&*/$source,$watermark_url,$x,$y)
  */
 function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
 {
-	// We can't watermark an image we can't save
-	require_code('images');
-	if (!is_saveable_image($filename)) return;
+    // We can't watermark an image we can't save
+    require_code('images');
+    if (!is_saveable_image($filename)) {
+        return;
+    }
 
-	if (function_exists('imagecreatefromstring'))
-		convert_image($file_path,$file_path,-1,-1,$box_width,false,get_file_extension($filename),true,true);
+    if (function_exists('imagecreatefromstring')) {
+        convert_image($file_path,$file_path,-1,-1,$box_width,false,get_file_extension($filename),true,true);
+    }
 }
 
 /**
@@ -1243,87 +1260,82 @@ function constrain_gallery_image_to_max_size($file_path,$filename,$box_width)
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT		The name
  */
-function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$allow_rating=1,$allow_comments=1,$skip_exists_check=false,$add_date=NULL,$g_owner=NULL,$meta_keywords='',$meta_description='',$uniqify=false)
+function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_images = 1,$accept_videos = 1,$is_member_synched = 0,$flow_mode_interface = 0,$rep_image = '',$watermark_top_left = '',$watermark_top_right = '',$watermark_bottom_left = '',$watermark_bottom_right = '',$allow_rating = 1,$allow_comments = 1,$skip_exists_check = false,$add_date = null,$g_owner = null,$meta_keywords = '',$meta_description = '',$uniqify = false)
 {
-	if (is_null($add_date)) $add_date=time();
+    if (is_null($add_date)) {
+        $add_date = time();
+    }
 
-	require_code('type_validation');
-	if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    require_code('type_validation');
+    if (!is_alphanumeric($name,true)) {
+        warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    }
 
-	if (!$skip_exists_check)
-	{
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$name));
-		if (!is_null($test))
-		{
-			if ($uniqify)
-			{
-				$name.='_'.uniqid('',true);
-			} else
-			{
-				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
-			}
-		}
-	}
+    if (!$skip_exists_check) {
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name' => $name));
+        if (!is_null($test)) {
+            if ($uniqify) {
+                $name .= '_' . uniqid('',true);
+            } else {
+                warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+            }
+        }
+    }
 
-	$map=array(
-		'name'=>$name,
-		'add_date'=>$add_date,
-		'notes'=>$notes,
-		'watermark_top_left'=>$watermark_top_left,
-		'watermark_top_right'=>$watermark_top_right,
-		'watermark_bottom_left'=>$watermark_bottom_left,
-		'watermark_bottom_right'=>$watermark_bottom_right,
-		'parent_id'=>$parent_id,
-		'accept_images'=>$accept_images,
-		'rep_image'=>$rep_image,
-		'accept_videos'=>$accept_videos,
-		'is_member_synched'=>$is_member_synched,
-		'flow_mode_interface'=>$flow_mode_interface,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'g_owner'=>$g_owner,
-		'gallery_views'=>0,
-	);
-	$map+=insert_lang_comcode('description',$description,2);
-	$map+=insert_lang_comcode('fullname',$fullname,1);
-	$GLOBALS['SITE_DB']->query_insert('galleries',$map);
+    $map = array(
+        'name' => $name,
+        'add_date' => $add_date,
+        'notes' => $notes,
+        'watermark_top_left' => $watermark_top_left,
+        'watermark_top_right' => $watermark_top_right,
+        'watermark_bottom_left' => $watermark_bottom_left,
+        'watermark_bottom_right' => $watermark_bottom_right,
+        'parent_id' => $parent_id,
+        'accept_images' => $accept_images,
+        'rep_image' => $rep_image,
+        'accept_videos' => $accept_videos,
+        'is_member_synched' => $is_member_synched,
+        'flow_mode_interface' => $flow_mode_interface,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'g_owner' => $g_owner,
+        'gallery_views' => 0,
+    );
+    $map += insert_lang_comcode('description',$description,2);
+    $map += insert_lang_comcode('fullname',$fullname,1);
+    $GLOBALS['SITE_DB']->query_insert('galleries',$map);
 
-	log_it('ADD_GALLERY',$name,$fullname);
+    log_it('ADD_GALLERY',$name,$fullname);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('gallery',$name,NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('gallery',$name,null,null,true);
+    }
 
-	if ($parent_id!='')
-	{
-		require_code('notifications2');
-		copy_notifications_to_new_child('gallery_entry',$parent_id,$name);
-	}
+    if ($parent_id != '') {
+        require_code('notifications2');
+        copy_notifications_to_new_child('gallery_entry',$parent_id,$name);
+    }
 
-	require_code('seo2');
-	seo_meta_set_for_implicit('gallery',$name,array($fullname,$description),$description);
+    require_code('seo2');
+    seo_meta_set_for_implicit('gallery',$name,array($fullname,$description),$description);
 
-	require_code('seo2');
-	if (($meta_keywords=='') && ($meta_description==''))
-	{
-		seo_meta_set_for_implicit('gallery',$name,array($description),$description);
-	} else
-	{
-		seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
-	}
+    require_code('seo2');
+    if (($meta_keywords == '') && ($meta_description == '')) {
+        seo_meta_set_for_implicit('gallery',$name,array($description),$description);
+    } else {
+        seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
+    }
 
-	if (function_exists('decache'))
-	{
-		decache('side_galleries');
-		decache('main_personal_galleries_list');
-	}
+    if (function_exists('decache')) {
+        decache('side_galleries');
+        decache('main_personal_galleries_list');
+    }
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('gallery',$name,$g_owner);
+    require_code('member_mentions');
+    dispatch_member_mention_notifications('gallery',$name,$g_owner);
 
-	return $name;
+    return $name;
 }
 
 /**
@@ -1354,137 +1366,135 @@ function add_gallery($name,$fullname,$description,$notes,$parent_id,$accept_imag
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT		The name
  */
-function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=NULL,$accept_images=1,$accept_videos=1,$is_member_synched=0,$flow_mode_interface=0,$rep_image='',$watermark_top_left='',$watermark_top_right='',$watermark_bottom_left='',$watermark_bottom_right='',$meta_keywords=NULL,$meta_description=NULL,$allow_rating=1,$allow_comments=1,$g_owner=NULL,$add_time=NULL,$null_is_literal=false,$uniqify=false)
+function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id = null,$accept_images = 1,$accept_videos = 1,$is_member_synched = 0,$flow_mode_interface = 0,$rep_image = '',$watermark_top_left = '',$watermark_top_right = '',$watermark_bottom_left = '',$watermark_bottom_right = '',$meta_keywords = null,$meta_description = null,$allow_rating = 1,$allow_comments = 1,$g_owner = null,$add_time = null,$null_is_literal = false,$uniqify = false)
 {
-	require_code('urls2');
-	suggest_new_idmoniker_for('galleries','misc',$name,'',$name);
+    require_code('urls2');
+    suggest_new_idmoniker_for('galleries','misc',$name,'',$name);
 
-	$under_category_id=$parent_id;
-	while (($under_category_id!='') && ($under_category_id!=STRING_MAGIC_NULL))
-	{
-		if ($name==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name'=>$under_category_id));
-	}
+    $under_category_id = $parent_id;
+    while (($under_category_id != '') && ($under_category_id != STRING_MAGIC_NULL)) {
+        if ($name == $under_category_id) {
+            warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
+        }
+        $under_category_id = $GLOBALS['SITE_DB']->query_select_value('galleries','parent_id',array('name' => $under_category_id));
+    }
 
-	if (is_null($parent_id)) $parent_id='';
+    if (is_null($parent_id)) {
+        $parent_id = '';
+    }
 
-	require_code('seo2');
+    require_code('seo2');
 
-	if ($old_name!=$name)
-	{
-		require_code('type_validation');
-		if (!is_alphanumeric($name,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    if ($old_name != $name) {
+        require_code('type_validation');
+        if (!is_alphanumeric($name,true)) {
+            warn_exit(do_lang_tempcode('BAD_CODENAME'));
+        }
 
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$name));
-		if (!is_null($test))
-		{
-			if ($uniqify)
-			{
-				$name.='_'.uniqid('',true);
-			} else
-			{
-				warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
-			}
-		}
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name' => $name));
+        if (!is_null($test)) {
+            if ($uniqify) {
+                $name .= '_' . uniqid('',true);
+            } else {
+                warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+            }
+        }
 
-		seo_meta_erase_storage('gallery',$old_name);
-		$GLOBALS['SITE_DB']->query_update('images',array('cat'=>$name),array('cat'=>$old_name));
-		$GLOBALS['SITE_DB']->query_update('videos',array('cat'=>$name),array('cat'=>$old_name));
-		$GLOBALS['SITE_DB']->query_update('galleries',array('parent_id'=>$name),array('parent_id'=>$old_name));
-		if (addon_installed('awards'))
-		{
-			$types=$GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type'=>'gallery'));
-			foreach ($types as $type)
-			{
-				$GLOBALS['SITE_DB']->query_update('award_archive',array('content_id'=>$name),array('content_id'=>$old_name,'a_type_id'=>$type['id']));
-			}
-		}
+        seo_meta_erase_storage('gallery',$old_name);
+        $GLOBALS['SITE_DB']->query_update('images',array('cat' => $name),array('cat' => $old_name));
+        $GLOBALS['SITE_DB']->query_update('videos',array('cat' => $name),array('cat' => $old_name));
+        $GLOBALS['SITE_DB']->query_update('galleries',array('parent_id' => $name),array('parent_id' => $old_name));
+        if (addon_installed('awards')) {
+            $types = $GLOBALS['SITE_DB']->query_select('award_types',array('id'),array('a_content_type' => 'gallery'));
+            foreach ($types as $type) {
+                $GLOBALS['SITE_DB']->query_update('award_archive',array('content_id' => $name),array('content_id' => $old_name,'a_type_id' => $type['id']));
+            }
+        }
 
-		if (addon_installed('catalogues'))
-		{
-			update_catalogue_content_ref('gallery',$old_name,$name);
-		}
-	}
+        if (addon_installed('catalogues')) {
+            update_catalogue_content_ref('gallery',$old_name,$name);
+        }
+    }
 
-	if (!is_null($meta_keywords)) seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
+    if (!is_null($meta_keywords)) {
+        seo_meta_set_for_explicit('gallery',$name,$meta_keywords,$meta_description);
+    }
 
-	$myrows=$GLOBALS['SITE_DB']->query_select('galleries',array('fullname','description'),array('name'=>$old_name),'',1);
-	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$myrow=$myrows[0];
+    $myrows = $GLOBALS['SITE_DB']->query_select('galleries',array('fullname','description'),array('name' => $old_name),'',1);
+    if (!array_key_exists(0,$myrows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $myrow = $myrows[0];
 
-	$update_map=array(
-		'name'=>$name,
-		'notes'=>$notes,
-		'parent_id'=>$parent_id,
-		'accept_images'=>$accept_images,
-		'accept_videos'=>$accept_videos,
-		'is_member_synched'=>$is_member_synched,
-		'flow_mode_interface'=>$flow_mode_interface,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-	);
-	$update_map+=lang_remap_comcode('fullname',$myrow['fullname'],$fullname);
-	$update_map+=lang_remap_comcode('description',$myrow['description'],$description);
+    $update_map = array(
+        'name' => $name,
+        'notes' => $notes,
+        'parent_id' => $parent_id,
+        'accept_images' => $accept_images,
+        'accept_videos' => $accept_videos,
+        'is_member_synched' => $is_member_synched,
+        'flow_mode_interface' => $flow_mode_interface,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+    );
+    $update_map += lang_remap_comcode('fullname',$myrow['fullname'],$fullname);
+    $update_map += lang_remap_comcode('description',$myrow['description'],$description);
 
-	require_code('files2');
+    require_code('files2');
 
-	if (!is_null($rep_image))
-	{
-		$update_map['rep_image']=$rep_image;
-		delete_upload('uploads/repimages','galleries','rep_image','name',$old_name,$rep_image);
-	}
-	if (!is_null($watermark_top_left))
-	{
-		$update_map['watermark_top_left']=$watermark_top_left;
-		delete_upload('uploads/watermarks','galleries','watermark_top_left','name',$old_name,$watermark_top_left);
-	}
-	if (!is_null($watermark_top_right))
-	{
-		$update_map['watermark_top_right']=$watermark_top_right;
-		delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$old_name,$watermark_top_right);
-	}
-	if (!is_null($watermark_bottom_left))
-	{
-		$update_map['watermark_bottom_left']=$watermark_bottom_left;
-		delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$old_name,$watermark_bottom_left);
-	}
-	if (!is_null($watermark_bottom_right))
-	{
-		$update_map['watermark_bottom_right']=$watermark_bottom_right;
-		delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$old_name,$watermark_bottom_right);
-	}
+    if (!is_null($rep_image)) {
+        $update_map['rep_image'] = $rep_image;
+        delete_upload('uploads/repimages','galleries','rep_image','name',$old_name,$rep_image);
+    }
+    if (!is_null($watermark_top_left)) {
+        $update_map['watermark_top_left'] = $watermark_top_left;
+        delete_upload('uploads/watermarks','galleries','watermark_top_left','name',$old_name,$watermark_top_left);
+    }
+    if (!is_null($watermark_top_right)) {
+        $update_map['watermark_top_right'] = $watermark_top_right;
+        delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$old_name,$watermark_top_right);
+    }
+    if (!is_null($watermark_bottom_left)) {
+        $update_map['watermark_bottom_left'] = $watermark_bottom_left;
+        delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$old_name,$watermark_bottom_left);
+    }
+    if (!is_null($watermark_bottom_right)) {
+        $update_map['watermark_bottom_right'] = $watermark_bottom_right;
+        delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$old_name,$watermark_bottom_right);
+    }
 
-	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
-	if (!is_null($g_owner))
-		$update_map['g_owner']=$g_owner;
+    if (!is_null($add_time)) {
+        $update_map['add_date'] = $add_time;
+    }
+    if (!is_null($g_owner)) {
+        $update_map['g_owner'] = $g_owner;
+    }
 
-	$GLOBALS['SITE_DB']->query_update('galleries',$update_map,array('name'=>$old_name),'',1);
+    $GLOBALS['SITE_DB']->query_update('galleries',$update_map,array('name' => $old_name),'',1);
 
-	log_it('EDIT_GALLERY',$name,$fullname);
+    log_it('EDIT_GALLERY',$name,$fullname);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('gallery',$name);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('gallery',$name);
+    }
 
-	$GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name'=>$name),array('module_the_name'=>'galleries','category_name'=>$old_name));
+    $GLOBALS['SITE_DB']->query_update('group_category_access',array('category_name' => $name),array('module_the_name' => 'galleries','category_name' => $old_name));
 
-	decache('side_galleries');
-	decache('main_personal_galleries_list');
+    decache('side_galleries');
+    decache('main_personal_galleries_list');
 
-	require_code('feedback');
-	update_spacer_post(
-		$allow_comments!=0,
-		'galleries',
-		$name,
-		build_url(array('page'=>'galleries','type'=>'misc','id'=>$name),get_module_zone('galleries'),NULL,false,false,true),
-		$fullname,
-		process_overridden_comment_forum('galleries',$name,$name,$old_name)
-	);
+    require_code('feedback');
+    update_spacer_post(
+        $allow_comments != 0,
+        'galleries',
+        $name,
+        build_url(array('page' => 'galleries','type' => 'misc','id' => $name),get_module_zone('galleries'),null,false,false,true),
+        $fullname,
+        process_overridden_comment_forum('galleries',$name,$name,$old_name)
+    );
 
-	return $name;
+    return $name;
 }
 
 /**
@@ -1494,70 +1504,68 @@ function edit_gallery($old_name,$name,$fullname,$description,$notes,$parent_id=N
  */
 function delete_gallery($name)
 {
-	if ($name=='') warn_exit(do_lang_tempcode('NO_DELETE_ROOT'));
+    if ($name == '') {
+        warn_exit(do_lang_tempcode('NO_DELETE_ROOT'));
+    }
 
-	$rows=$GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name'=>$name),'',1);
-	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    $rows = $GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name' => $name),'',1);
+    if (!array_key_exists(0,$rows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
 
-	require_code('files2');
-	delete_upload('uploads/repimages','galleries','rep_image','name',$name);
-	delete_upload('uploads/watermarks','galleries','watermark_top_left','name',$name);
-	delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$name);
-	delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$name);
-	delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$name);
+    require_code('files2');
+    delete_upload('uploads/repimages','galleries','rep_image','name',$name);
+    delete_upload('uploads/watermarks','galleries','watermark_top_left','name',$name);
+    delete_upload('uploads/watermarks','galleries','watermark_top_right','name',$name);
+    delete_upload('uploads/watermarks','galleries','watermark_bottom_left','name',$name);
+    delete_upload('uploads/watermarks','galleries','watermark_bottom_right','name',$name);
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('gallery',$name,'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('gallery',$name,'');
+    }
 
-	delete_lang($rows[0]['fullname']);
-	delete_lang($rows[0]['description']);
+    delete_lang($rows[0]['fullname']);
+    delete_lang($rows[0]['description']);
 
-	// Images and videos are deleted, because we are deleting the _gallery_, not just a category (nobody is going to be deleting galleries with the expectation of moving the image to a different one in bulk - unlike download categories, for example).
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-	do
-	{
-		$images=$GLOBALS['SITE_DB']->query_select('images',array('id'),array('cat'=>$name),'',200);
-		foreach ($images as $image)
-		{
-			delete_image($image['id'],false);
-		}
-	}
-	while ($images!=array());
-	do
-	{
-		$videos=$GLOBALS['SITE_DB']->query_select('videos',array('id'),array('cat'=>$name),'',200);
-		foreach ($videos as $video)
-		{
-			delete_video($video['id'],false);
-		}
-	}
-	while ($images!=array());
-	//... but the subgalleries remain
-	$GLOBALS['SITE_DB']->query_update('galleries',array('parent_id'=>$rows[0]['parent_id']),array('parent_id'=>$name));
+    // Images and videos are deleted, because we are deleting the _gallery_, not just a category (nobody is going to be deleting galleries with the expectation of moving the image to a different one in bulk - unlike download categories, for example).
+    if (function_exists('set_time_limit')) {
+        @set_time_limit(0);
+    }
+    do {
+        $images = $GLOBALS['SITE_DB']->query_select('images',array('id'),array('cat' => $name),'',200);
+        foreach ($images as $image) {
+            delete_image($image['id'],false);
+        }
+    } while ($images != array());
+    do {
+        $videos = $GLOBALS['SITE_DB']->query_select('videos',array('id'),array('cat' => $name),'',200);
+        foreach ($videos as $video) {
+            delete_video($video['id'],false);
+        }
+    } while ($images != array());
+    //... but the subgalleries remain
+    $GLOBALS['SITE_DB']->query_update('galleries',array('parent_id' => $rows[0]['parent_id']),array('parent_id' => $name));
 
-	$GLOBALS['SITE_DB']->query_delete('galleries',array('name'=>$name),'',1);
+    $GLOBALS['SITE_DB']->query_delete('galleries',array('name' => $name),'',1);
 
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'images','rating_for_id'=>$name));
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'videos','rating_for_id'=>$name));
+    $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => 'images','rating_for_id' => $name));
+    $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => 'videos','rating_for_id' => $name));
 
-	require_code('seo2');
-	seo_meta_erase_storage('gallery',$name);
+    require_code('seo2');
+    seo_meta_erase_storage('gallery',$name);
 
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>$name));
-	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>$name));
+    $GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name' => 'galleries','category_name' => $name));
+    $GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name' => 'galleries','category_name' => $name));
 
-	decache('side_galleries');
-	decache('main_personal_galleries_list');
+    decache('side_galleries');
+    decache('main_personal_galleries_list');
 
-	log_it('DELETE_GALLERY',$name,get_translated_text($rows[0]['fullname']));
+    log_it('DELETE_GALLERY',$name,get_translated_text($rows[0]['fullname']));
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('gallery',$name);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('gallery',$name);
+    }
 }
 
 /**
@@ -1567,31 +1575,35 @@ function delete_gallery($name)
  */
 function make_member_gallery_if_needed($cat)
 {
-	// If it is a non-member gallery, it must surely exist, as we have no interface to choose non-existent ones (it's safe enough to assume it hasn't been deleted suddenly)
+    // If it is a non-member gallery, it must surely exist, as we have no interface to choose non-existent ones (it's safe enough to assume it hasn't been deleted suddenly)
 
-	if (substr($cat,0,7)!='member_') return;
+    if (substr($cat,0,7) != 'member_') {
+        return;
+    }
 
-	// Test to see if it exists
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>$cat));
-	if (is_null($test))
-	{
-		$parts=explode('_',$cat,3);
-		$member=intval($parts[1]);
-		$parent_id=$parts[2];
-		if (!has_privilege($member,'have_personal_category','cms_galleries')) return;
-		$_parent_info=$GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos','flow_mode_interface','fullname'),array('name'=>$parent_id),'',1);
-		if (!array_key_exists(0,$_parent_info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		$parent_info=$_parent_info[0];
+    // Test to see if it exists
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name' => $cat));
+    if (is_null($test)) {
+        $parts = explode('_',$cat,3);
+        $member = intval($parts[1]);
+        $parent_id = $parts[2];
+        if (!has_privilege($member,'have_personal_category','cms_galleries')) {
+            return;
+        }
+        $_parent_info = $GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos','flow_mode_interface','fullname'),array('name' => $parent_id),'',1);
+        if (!array_key_exists(0,$_parent_info)) {
+            fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        }
+        $parent_info = $_parent_info[0];
 
-		$member_gallery_title=get_potential_gallery_title($cat);
-		add_gallery($cat,$member_gallery_title,'','',$parent_id,$parent_info['accept_images'],$parent_info['accept_videos'],0,$parent_info['flow_mode_interface']);
+        $member_gallery_title = get_potential_gallery_title($cat);
+        add_gallery($cat,$member_gallery_title,'','',$parent_id,$parent_info['accept_images'],$parent_info['accept_videos'],0,$parent_info['flow_mode_interface']);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('group_category_access',array('group_id'),array('module_the_name'=>'galleries','category_name'=>$parent_id));
-		foreach ($rows as $row)
-		{
-			$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'galleries','category_name'=>$cat,'group_id'=>$row['group_id']));
-		}
-	}
+        $rows = $GLOBALS['SITE_DB']->query_select('group_category_access',array('group_id'),array('module_the_name' => 'galleries','category_name' => $parent_id));
+        foreach ($rows as $row) {
+            $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'galleries','category_name' => $cat,'group_id' => $row['group_id']));
+        }
+    }
 }
 
 /**
@@ -1602,32 +1614,35 @@ function make_member_gallery_if_needed($cat)
  */
 function get_potential_gallery_title($cat)
 {
-	// Test to see if it exists
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name'=>$cat));
-	if ((is_null($test)) && (substr($cat,0,7)=='member_'))
-	{
-		// Does not exist but is a potential member gallery
-		$parts=explode('_',$cat,3);
-		$member=intval($parts[1]); // Almost certainly going to be same as get_member(), but we might as well be general here
+    // Test to see if it exists
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name' => $cat));
+    if ((is_null($test)) && (substr($cat,0,7) == 'member_')) {
+        // Does not exist but is a potential member gallery
+        $parts = explode('_',$cat,3);
+        $member = intval($parts[1]); // Almost certainly going to be same as get_member(), but we might as well be general here
 
-		// Find about parent (new gallery inherits)
-		$parent_id=$parts[2];
-		$_parent_info=$GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos','flow_mode_interface','fullname'),array('name'=>$parent_id),'',1);
-		if (!array_key_exists(0,$_parent_info)) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		$parent_info=$_parent_info[0];
+        // Find about parent (new gallery inherits)
+        $parent_id = $parts[2];
+        $_parent_info = $GLOBALS['SITE_DB']->query_select('galleries',array('accept_images','accept_videos','flow_mode_interface','fullname'),array('name' => $parent_id),'',1);
+        if (!array_key_exists(0,$_parent_info)) {
+            fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        }
+        $parent_info = $_parent_info[0];
 
-		// Work out name
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member,true);
-		if (is_null($username)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
-		$fullname=get_translated_text($parent_info['fullname']);
-		if ($fullname==do_lang('GALLERIES_HOME')) $fullname=do_lang('GALLERY');
-		return do_lang('PERSONAL_GALLERY_OF',$username,$fullname);
-	} else
-	{
-		// Does exist
-		return get_translated_text($test);
-	}
+        // Work out name
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($member,true);
+        if (is_null($username)) {
+            warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
+        }
+        $fullname = get_translated_text($parent_info['fullname']);
+        if ($fullname == do_lang('GALLERIES_HOME')) {
+            $fullname = do_lang('GALLERY');
+        }
+        return do_lang('PERSONAL_GALLERY_OF',$username,$fullname);
+    } else {
+        // Does exist
+        return get_translated_text($test);
+    }
 
-	return NULL; // Non-existent
+    return NULL; // Non-existent
 }
-

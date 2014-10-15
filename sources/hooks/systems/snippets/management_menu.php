@@ -20,20 +20,17 @@
 
 class Hook_management_menu
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		if (has_zone_access(get_member(),'adminzone'))
-		{
-			require_code('menus');
-			return build_stored_menu('popup','_management');
-		}
-		return new ocp_tempcode();
-	}
+    public function run()
+    {
+        if (has_zone_access(get_member(),'adminzone')) {
+            require_code('menus');
+            return build_stored_menu('popup','_management');
+        }
+        return new ocp_tempcode();
+    }
 }
-
-

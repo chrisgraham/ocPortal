@@ -20,1976 +20,1959 @@
 
 class Hook_addon_registry_core_form_interfaces
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Core rendering functionality for forms.';
-	}
+    public function get_description()
+    {
+        return 'Core rendering functionality for forms.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_themes',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_themes',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/EN/1x/editor/off.png',
-			'themes/default/images/EN/1x/editor/on.png',
-			'themes/default/images/EN/2x/editor/off.png',
-			'themes/default/images/EN/2x/editor/on.png',
-			'themes/default/images/1x/treefield/category.png',
-			'themes/default/images/1x/treefield/entry.png',
-			'themes/default/images/2x/treefield/category.png',
-			'themes/default/images/2x/treefield/entry.png',
-			'themes/default/images/1x/treefield/collapse.png',
-			'themes/default/images/1x/treefield/expand.png',
-			'themes/default/images/1x/treefield/index.html',
-			'themes/default/images/2x/treefield/collapse.png',
-			'themes/default/images/2x/treefield/expand.png',
-			'themes/default/images/2x/treefield/index.html',
-			'sources/hooks/systems/addon_registry/core_form_interfaces.php',
-			'themes/default/templates/POSTING_FORM.tpl',
-			'themes/default/templates/POSTING_SCREEN.tpl',
-			'themes/default/templates/WYSIWYG_LOAD.tpl',
-			'themes/default/templates/JAVASCRIPT_POSTING.tpl',
-			'themes/default/templates/JAVASCRIPT_EDITING.tpl',
-			'themes/default/templates/WYSIWYG_SETTINGS.tpl',
-			'themes/default/templates/ATTACHMENT_UI_DEFAULTS.tpl',
-			'themes/default/templates/JAVASCRIPT_MULTI.tpl',
-			'themes/default/templates/JAVASCRIPT_VALIDATION.tpl',
-			'themes/default/templates/FORM_FIELD_SET_GROUPER.tpl',
-			'themes/default/templates/FORM.tpl',
-			'themes/default/templates/FORM_SINGLE_FIELD.tpl',
-			'themes/default/templates/FORM_DESCRIP_SEP.tpl',
-			'themes/default/templates/FORM_GROUP.tpl',
-			'themes/default/templates/FORM_GROUPED.tpl',
-			'themes/default/templates/FORM_SCREEN.tpl',
-			'themes/default/templates/COMCODE_EDITOR.tpl',
-			'themes/default/templates/FORM_SCREEN_FIELD.tpl',
-			'themes/default/templates/FORM_SCREEN_FIELDS_SET_ITEM.tpl',
-			'themes/default/templates/FORM_SCREEN_FIELDS_SET.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_ALL_AND_NOT.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_DATE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_FLOAT.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_HIDDEN.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_HIDDEN_2.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_HUGE_COMCODE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_HUGE_LIST.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_INTEGER.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_DIMENSIONS.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_LINE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_URL.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_CODENAME.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_LINE_MULTI.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_TEXT_MULTI.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_LIST.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_LIST_GROUP.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_MULTI_LIST.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_HUGE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_MATRIX.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_OVERRIDE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_USERNAME_MULTI.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_PASSWORD.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_RADIO_LIST.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_RADIO_LIST_ENTRY.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_TEXT.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_TICK.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_TIME.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_TREE_LIST.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_UPLOAD.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl',
-			'themes/default/templates/FORM_SCREEN_FIELD_SPACER.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_AUTHOR.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_COLOUR.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_EMAIL.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_ADMIN.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_USERNAME.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl',
-			'themes/default/templates/FORM_STANDARD_END.tpl',
-			'themes/default/templates/BLOCK_HELPER_DONE.tpl',
-			'themes/default/templates/BLOCK_HELPER_START.tpl',
-			'themes/default/templates/BLOCK_HELPER_BLOCK_GROUP.tpl',
-			'themes/default/templates/BLOCK_HELPER_BLOCK_CHOICE.tpl',
-			'themes/default/templates/FORM_SCREEN_INPUT_COMBO.tpl',
-			'themes/default/templates/FORM_SCREEN_FIELD_DESCRIPTION.tpl',
-			'themes/default/templates/FORM_SCREEN_ARE_REQUIRED.tpl',
-			'data/block_helper.php',
-			'themes/default/templates/JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl',
-			'themes/default/templates/PREVIEW_SCRIPT.tpl',
-			'themes/default/templates/PREVIEW_SCRIPT_CODE.tpl',
-			'themes/default/templates/PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl',
-			'themes/default/templates/PREVIEW_SCRIPT_SPELLING.tpl',
-			'data/preview.php',
-			'sources/preview.php',
-			'data/ckeditor/.htaccess',
-			'data/ckeditor/build-config.js',
-			'data/ckeditor/ckeditor.js',
-			'data/ckeditor/contents.css',
-			'data/ckeditor/lang/af.js',
-			'data/ckeditor/lang/ar.js',
-			'data/ckeditor/lang/bg.js',
-			'data/ckeditor/lang/bn.js',
-			'data/ckeditor/lang/bs.js',
-			'data/ckeditor/lang/ca.js',
-			'data/ckeditor/lang/cs.js',
-			'data/ckeditor/lang/cy.js',
-			'data/ckeditor/lang/da.js',
-			'data/ckeditor/lang/de.js',
-			'data/ckeditor/lang/el.js',
-			'data/ckeditor/lang/en-au.js',
-			'data/ckeditor/lang/en-ca.js',
-			'data/ckeditor/lang/en-gb.js',
-			'data/ckeditor/lang/en.js',
-			'data/ckeditor/lang/eo.js',
-			'data/ckeditor/lang/es.js',
-			'data/ckeditor/lang/et.js',
-			'data/ckeditor/lang/eu.js',
-			'data/ckeditor/lang/fa.js',
-			'data/ckeditor/lang/fi.js',
-			'data/ckeditor/lang/fo.js',
-			'data/ckeditor/lang/fr-ca.js',
-			'data/ckeditor/lang/fr.js',
-			'data/ckeditor/lang/gl.js',
-			'data/ckeditor/lang/gu.js',
-			'data/ckeditor/lang/he.js',
-			'data/ckeditor/lang/hi.js',
-			'data/ckeditor/lang/hr.js',
-			'data/ckeditor/lang/hu.js',
-			'data/ckeditor/lang/id.js',
-			'data/ckeditor/lang/is.js',
-			'data/ckeditor/lang/it.js',
-			'data/ckeditor/lang/ja.js',
-			'data/ckeditor/lang/ka.js',
-			'data/ckeditor/lang/km.js',
-			'data/ckeditor/lang/ko.js',
-			'data/ckeditor/lang/ku.js',
-			'data/ckeditor/lang/lt.js',
-			'data/ckeditor/lang/lv.js',
-			'data/ckeditor/lang/mk.js',
-			'data/ckeditor/lang/mn.js',
-			'data/ckeditor/lang/ms.js',
-			'data/ckeditor/lang/nb.js',
-			'data/ckeditor/lang/nl.js',
-			'data/ckeditor/lang/no.js',
-			'data/ckeditor/lang/pl.js',
-			'data/ckeditor/lang/pt-br.js',
-			'data/ckeditor/lang/pt.js',
-			'data/ckeditor/lang/ro.js',
-			'data/ckeditor/lang/ru.js',
-			'data/ckeditor/lang/si.js',
-			'data/ckeditor/lang/sk.js',
-			'data/ckeditor/lang/sl.js',
-			'data/ckeditor/lang/sq.js',
-			'data/ckeditor/lang/sr-latn.js',
-			'data/ckeditor/lang/sr.js',
-			'data/ckeditor/lang/sv.js',
-			'data/ckeditor/lang/th.js',
-			'data/ckeditor/lang/tr.js',
-			'data/ckeditor/lang/ug.js',
-			'data/ckeditor/lang/uk.js',
-			'data/ckeditor/lang/vi.js',
-			'data/ckeditor/lang/zh-cn.js',
-			'data/ckeditor/lang/zh.js',
-			'data/ckeditor/LICENSE.md',
-			'data/ckeditor/ocproducts_patch.sh',
-			'data/ckeditor/plugins/a11yhelp/dialogs/a11yhelp.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/_translationstatus.txt',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ar.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/bg.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ca.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/cs.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/da.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/de.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/el.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/en.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/eo.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/es.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/et.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/fa.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/fi.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/fr-ca.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/fr.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/gl.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/gu.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/he.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/hi.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/hr.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/hu.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/id.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/it.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ja.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/km.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ko.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ku.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/lt.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/lv.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/mk.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/mn.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/nb.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/nl.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/no.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/pl.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/pt-br.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/pt.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ro.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ru.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/si.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/sk.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/sl.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/sq.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/sr-latn.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/sr.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/sv.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/th.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/tr.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/ug.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/uk.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/vi.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/zh-cn.js',
-			'data/ckeditor/plugins/a11yhelp/dialogs/lang/zh.js',
-			'data/ckeditor/plugins/base64image/dialogs/base64image.js',
-			'data/ckeditor/plugins/base64image/LICENSE.md',
-			'data/ckeditor/plugins/base64image/README.md',
-			'data/ckeditor/plugins/clipboard/dialogs/paste.js',
-			'data/ckeditor/plugins/colordialog/dialogs/colordialog.js',
-			'data/ckeditor/plugins/dialog/dialogDefinition.js',
-			'data/ckeditor/plugins/fakeobjects/images/spacer.gif',
-			'data/ckeditor/plugins/find/dialogs/find.js',
-			'data/ckeditor/plugins/icons.png',
-			'data/ckeditor/plugins/icons_hidpi.png',
-			'data/ckeditor/plugins/image/dialogs/image.js',
-			'data/ckeditor/plugins/image/images/noimage.png',
-			'data/ckeditor/plugins/link/dialogs/anchor.js',
-			'data/ckeditor/plugins/link/dialogs/link.js',
-			'data/ckeditor/plugins/link/images/anchor.png',
-			'data/ckeditor/plugins/link/images/hidpi/anchor.png',
-			'data/ckeditor/plugins/liststyle/dialogs/liststyle.js',
-			'data/ckeditor/plugins/magicline/images/hidpi/icon.png',
-			'data/ckeditor/plugins/magicline/images/icon.png',
-			'data/ckeditor/plugins/ocportal/images/block.png',
-			'data/ckeditor/plugins/ocportal/images/box.png',
-			'data/ckeditor/plugins/ocportal/images/code.png',
-			'data/ckeditor/plugins/ocportal/images/comcode.png',
-			'data/ckeditor/plugins/ocportal/images/page.png',
-			'data/ckeditor/plugins/ocportal/images/quote.png',
-			'data/ckeditor/plugins/ocportal/plugin.js',
-			'data/ckeditor/plugins/pastefromword/filter/default.js',
-			'data/ckeditor/plugins/showblocks/images/block_address.png',
-			'data/ckeditor/plugins/showblocks/images/block_blockquote.png',
-			'data/ckeditor/plugins/showblocks/images/block_div.png',
-			'data/ckeditor/plugins/showblocks/images/block_h1.png',
-			'data/ckeditor/plugins/showblocks/images/block_h2.png',
-			'data/ckeditor/plugins/showblocks/images/block_h3.png',
-			'data/ckeditor/plugins/showblocks/images/block_h4.png',
-			'data/ckeditor/plugins/showblocks/images/block_h5.png',
-			'data/ckeditor/plugins/showblocks/images/block_h6.png',
-			'data/ckeditor/plugins/showblocks/images/block_p.png',
-			'data/ckeditor/plugins/showblocks/images/block_pre.png',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/_translationstatus.txt',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/ar.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/bg.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/ca.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/cs.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/cy.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/de.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/el.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/en.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/eo.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/es.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/et.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/fa.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/fi.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/fr-ca.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/fr.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/gl.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/he.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/hr.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/hu.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/id.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/it.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/ja.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/km.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/ku.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/lv.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/nb.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/nl.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/no.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/pl.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/pt-br.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/pt.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/ru.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/si.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/sk.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/sl.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/sq.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/sv.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/th.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/tr.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/ug.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/uk.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/vi.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/zh-cn.js',
-			'data/ckeditor/plugins/specialchar/dialogs/lang/zh.js',
-			'data/ckeditor/plugins/specialchar/dialogs/specialchar.js',
-			'data/ckeditor/plugins/table/dialogs/table.js',
-			'data/ckeditor/plugins/tabletools/dialogs/tableCell.js',
-			'data/ckeditor/README.md',
-			'data/ckeditor/skins/kama/dialog.css',
-			'data/ckeditor/skins/kama/dialog_ie.css',
-			'data/ckeditor/skins/kama/dialog_ie7.css',
-			'data/ckeditor/skins/kama/dialog_ie8.css',
-			'data/ckeditor/skins/kama/dialog_iequirks.css',
-			'data/ckeditor/skins/kama/dialog_opera.css',
-			'data/ckeditor/skins/kama/editor.css',
-			'data/ckeditor/skins/kama/editor_ie.css',
-			'data/ckeditor/skins/kama/editor_ie7.css',
-			'data/ckeditor/skins/kama/editor_ie8.css',
-			'data/ckeditor/skins/kama/editor_iequirks.css',
-			'data/ckeditor/skins/kama/icons.png',
-			'data/ckeditor/skins/kama/icons_hidpi.png',
-			'data/ckeditor/skins/kama/images/dialog_sides.gif',
-			'data/ckeditor/skins/kama/images/dialog_sides.png',
-			'data/ckeditor/skins/kama/images/dialog_sides_rtl.png',
-			'data/ckeditor/skins/kama/images/mini.gif',
-			'data/ckeditor/skins/kama/images/sprites.png',
-			'data/ckeditor/skins/kama/images/sprites_ie6.png',
-			'data/ckeditor/skins/kama/images/toolbar_start.gif',
-			'data/ckeditor/skins/kama/readme.md',
-			'data/ckeditor/styles.js',
-			'data_custom/spelling/index.html',
-			'data_custom/spelling/personal_dicts/.htaccess',
-			'data_custom/spelling/personal_dicts/index.html',
-			'themes/default/css/widget_date.css',
-			'themes/default/templates/JAVASCRIPT_WIDGET_DATE.tpl',
-			'themes/default/css/widget_color.css',
-			'themes/default/templates/JAVASCRIPT_WIDGET_COLOR.tpl',
-			'themes/default/css/widget_select2.css',
-			'themes/default/images/select2/index.html',
-			'themes/default/images/select2/select2-spinner.gif',
-			'themes/default/images/select2/select2.png',
-			'themes/default/images/select2/select2x2.png',
-			'themes/default/templates/JAVASCRIPT_SELECT2.tpl',
-			'themes/default/css/forms.css',
-			'data/spelling/aspell/.htaccess',
-			'data/spelling/aspell/index.html',
-			'data/spelling/index.html',
-			'data/spelling/spell-check-logic.php',
-			'themes/default/images/EN/comcodeeditor/apply_changes.png',
-			'themes/default/images/EN/comcodeeditor/b.png',
-			'themes/default/images/EN/comcodeeditor/quote.png',
-			'themes/default/images/EN/comcodeeditor/block.png',
-			'themes/default/images/EN/comcodeeditor/box.png',
-			'themes/default/images/EN/comcodeeditor/code.png',
-			'themes/default/images/EN/comcodeeditor/comcode.png',
-			'themes/default/images/EN/comcodeeditor/email.png',
-			'themes/default/images/EN/comcodeeditor/hide.png',
-			'themes/default/images/EN/comcodeeditor/html.png',
-			'themes/default/images/EN/comcodeeditor/i.png',
-			'themes/default/images/EN/comcodeeditor/img.png',
-			'themes/default/images/EN/comcodeeditor/index.html',
-			'themes/default/images/EN/comcodeeditor/list.png',
-			'themes/default/images/EN/comcodeeditor/page.png',
-			'themes/default/images/EN/comcodeeditor/s.png',
-			'themes/default/images/EN/comcodeeditor/thumb.png',
-			'themes/default/images/EN/comcodeeditor/u.png',
-			'themes/default/images/EN/comcodeeditor/url.png',
-			'sources/form_templates.php',
-			'data/namelike.php',
-			'data/username_exists.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/EN/1x/editor/off.png',
+            'themes/default/images/EN/1x/editor/on.png',
+            'themes/default/images/EN/2x/editor/off.png',
+            'themes/default/images/EN/2x/editor/on.png',
+            'themes/default/images/1x/treefield/category.png',
+            'themes/default/images/1x/treefield/entry.png',
+            'themes/default/images/2x/treefield/category.png',
+            'themes/default/images/2x/treefield/entry.png',
+            'themes/default/images/1x/treefield/collapse.png',
+            'themes/default/images/1x/treefield/expand.png',
+            'themes/default/images/1x/treefield/index.html',
+            'themes/default/images/2x/treefield/collapse.png',
+            'themes/default/images/2x/treefield/expand.png',
+            'themes/default/images/2x/treefield/index.html',
+            'sources/hooks/systems/addon_registry/core_form_interfaces.php',
+            'themes/default/templates/POSTING_FORM.tpl',
+            'themes/default/templates/POSTING_SCREEN.tpl',
+            'themes/default/templates/WYSIWYG_LOAD.tpl',
+            'themes/default/templates/JAVASCRIPT_POSTING.tpl',
+            'themes/default/templates/JAVASCRIPT_EDITING.tpl',
+            'themes/default/templates/WYSIWYG_SETTINGS.tpl',
+            'themes/default/templates/ATTACHMENT_UI_DEFAULTS.tpl',
+            'themes/default/templates/JAVASCRIPT_MULTI.tpl',
+            'themes/default/templates/JAVASCRIPT_VALIDATION.tpl',
+            'themes/default/templates/FORM_FIELD_SET_GROUPER.tpl',
+            'themes/default/templates/FORM.tpl',
+            'themes/default/templates/FORM_SINGLE_FIELD.tpl',
+            'themes/default/templates/FORM_DESCRIP_SEP.tpl',
+            'themes/default/templates/FORM_GROUP.tpl',
+            'themes/default/templates/FORM_GROUPED.tpl',
+            'themes/default/templates/FORM_SCREEN.tpl',
+            'themes/default/templates/COMCODE_EDITOR.tpl',
+            'themes/default/templates/FORM_SCREEN_FIELD.tpl',
+            'themes/default/templates/FORM_SCREEN_FIELDS_SET_ITEM.tpl',
+            'themes/default/templates/FORM_SCREEN_FIELDS_SET.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_ALL_AND_NOT.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_DATE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_FLOAT.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_HIDDEN.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_HIDDEN_2.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_HUGE_COMCODE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_HUGE_LIST.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_INTEGER.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_DIMENSIONS.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_LINE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_URL.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_CODENAME.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_LINE_MULTI.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_TEXT_MULTI.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_LIST.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_LIST_ENTRY.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_LIST_GROUP.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_MULTI_LIST.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_HUGE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_MATRIX.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_OVERRIDE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_USERNAME_MULTI.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_PASSWORD.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_RADIO_LIST.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_RADIO_LIST_ENTRY.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_TEXT.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_TICK.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_TIME.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_TREE_LIST.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_UPLOAD.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl',
+            'themes/default/templates/FORM_SCREEN_FIELD_SPACER.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_AUTHOR.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_COLOUR.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_EMAIL.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_PERMISSION_ADMIN.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_USERNAME.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl',
+            'themes/default/templates/FORM_STANDARD_END.tpl',
+            'themes/default/templates/BLOCK_HELPER_DONE.tpl',
+            'themes/default/templates/BLOCK_HELPER_START.tpl',
+            'themes/default/templates/BLOCK_HELPER_BLOCK_GROUP.tpl',
+            'themes/default/templates/BLOCK_HELPER_BLOCK_CHOICE.tpl',
+            'themes/default/templates/FORM_SCREEN_INPUT_COMBO.tpl',
+            'themes/default/templates/FORM_SCREEN_FIELD_DESCRIPTION.tpl',
+            'themes/default/templates/FORM_SCREEN_ARE_REQUIRED.tpl',
+            'data/block_helper.php',
+            'themes/default/templates/JAVASCRIPT_AJAX_PEOPLE_LISTS.tpl',
+            'themes/default/templates/PREVIEW_SCRIPT.tpl',
+            'themes/default/templates/PREVIEW_SCRIPT_CODE.tpl',
+            'themes/default/templates/PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl',
+            'themes/default/templates/PREVIEW_SCRIPT_SPELLING.tpl',
+            'data/preview.php',
+            'sources/preview.php',
+            'data/ckeditor/.htaccess',
+            'data/ckeditor/build-config.js',
+            'data/ckeditor/ckeditor.js',
+            'data/ckeditor/contents.css',
+            'data/ckeditor/lang/af.js',
+            'data/ckeditor/lang/ar.js',
+            'data/ckeditor/lang/bg.js',
+            'data/ckeditor/lang/bn.js',
+            'data/ckeditor/lang/bs.js',
+            'data/ckeditor/lang/ca.js',
+            'data/ckeditor/lang/cs.js',
+            'data/ckeditor/lang/cy.js',
+            'data/ckeditor/lang/da.js',
+            'data/ckeditor/lang/de.js',
+            'data/ckeditor/lang/el.js',
+            'data/ckeditor/lang/en-au.js',
+            'data/ckeditor/lang/en-ca.js',
+            'data/ckeditor/lang/en-gb.js',
+            'data/ckeditor/lang/en.js',
+            'data/ckeditor/lang/eo.js',
+            'data/ckeditor/lang/es.js',
+            'data/ckeditor/lang/et.js',
+            'data/ckeditor/lang/eu.js',
+            'data/ckeditor/lang/fa.js',
+            'data/ckeditor/lang/fi.js',
+            'data/ckeditor/lang/fo.js',
+            'data/ckeditor/lang/fr-ca.js',
+            'data/ckeditor/lang/fr.js',
+            'data/ckeditor/lang/gl.js',
+            'data/ckeditor/lang/gu.js',
+            'data/ckeditor/lang/he.js',
+            'data/ckeditor/lang/hi.js',
+            'data/ckeditor/lang/hr.js',
+            'data/ckeditor/lang/hu.js',
+            'data/ckeditor/lang/id.js',
+            'data/ckeditor/lang/is.js',
+            'data/ckeditor/lang/it.js',
+            'data/ckeditor/lang/ja.js',
+            'data/ckeditor/lang/ka.js',
+            'data/ckeditor/lang/km.js',
+            'data/ckeditor/lang/ko.js',
+            'data/ckeditor/lang/ku.js',
+            'data/ckeditor/lang/lt.js',
+            'data/ckeditor/lang/lv.js',
+            'data/ckeditor/lang/mk.js',
+            'data/ckeditor/lang/mn.js',
+            'data/ckeditor/lang/ms.js',
+            'data/ckeditor/lang/nb.js',
+            'data/ckeditor/lang/nl.js',
+            'data/ckeditor/lang/no.js',
+            'data/ckeditor/lang/pl.js',
+            'data/ckeditor/lang/pt-br.js',
+            'data/ckeditor/lang/pt.js',
+            'data/ckeditor/lang/ro.js',
+            'data/ckeditor/lang/ru.js',
+            'data/ckeditor/lang/si.js',
+            'data/ckeditor/lang/sk.js',
+            'data/ckeditor/lang/sl.js',
+            'data/ckeditor/lang/sq.js',
+            'data/ckeditor/lang/sr-latn.js',
+            'data/ckeditor/lang/sr.js',
+            'data/ckeditor/lang/sv.js',
+            'data/ckeditor/lang/th.js',
+            'data/ckeditor/lang/tr.js',
+            'data/ckeditor/lang/ug.js',
+            'data/ckeditor/lang/uk.js',
+            'data/ckeditor/lang/vi.js',
+            'data/ckeditor/lang/zh-cn.js',
+            'data/ckeditor/lang/zh.js',
+            'data/ckeditor/LICENSE.md',
+            'data/ckeditor/ocproducts_patch.sh',
+            'data/ckeditor/plugins/a11yhelp/dialogs/a11yhelp.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/_translationstatus.txt',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ar.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/bg.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ca.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/cs.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/cy.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/da.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/de.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/el.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/en.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/eo.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/es.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/et.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/fa.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/fi.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/fr-ca.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/fr.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/gl.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/gu.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/he.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/hi.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/hr.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/hu.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/id.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/it.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ja.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/km.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ko.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ku.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/lt.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/lv.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/mk.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/mn.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/nb.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/nl.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/no.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/pl.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/pt-br.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/pt.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ro.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ru.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/si.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/sk.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/sl.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/sq.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/sr-latn.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/sr.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/sv.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/th.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/tr.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/ug.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/uk.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/vi.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/zh-cn.js',
+            'data/ckeditor/plugins/a11yhelp/dialogs/lang/zh.js',
+            'data/ckeditor/plugins/base64image/dialogs/base64image.js',
+            'data/ckeditor/plugins/base64image/LICENSE.md',
+            'data/ckeditor/plugins/base64image/README.md',
+            'data/ckeditor/plugins/clipboard/dialogs/paste.js',
+            'data/ckeditor/plugins/colordialog/dialogs/colordialog.js',
+            'data/ckeditor/plugins/dialog/dialogDefinition.js',
+            'data/ckeditor/plugins/fakeobjects/images/spacer.gif',
+            'data/ckeditor/plugins/find/dialogs/find.js',
+            'data/ckeditor/plugins/icons.png',
+            'data/ckeditor/plugins/icons_hidpi.png',
+            'data/ckeditor/plugins/image/dialogs/image.js',
+            'data/ckeditor/plugins/image/images/noimage.png',
+            'data/ckeditor/plugins/link/dialogs/anchor.js',
+            'data/ckeditor/plugins/link/dialogs/link.js',
+            'data/ckeditor/plugins/link/images/anchor.png',
+            'data/ckeditor/plugins/link/images/hidpi/anchor.png',
+            'data/ckeditor/plugins/liststyle/dialogs/liststyle.js',
+            'data/ckeditor/plugins/magicline/images/hidpi/icon.png',
+            'data/ckeditor/plugins/magicline/images/icon.png',
+            'data/ckeditor/plugins/ocportal/images/block.png',
+            'data/ckeditor/plugins/ocportal/images/box.png',
+            'data/ckeditor/plugins/ocportal/images/code.png',
+            'data/ckeditor/plugins/ocportal/images/comcode.png',
+            'data/ckeditor/plugins/ocportal/images/page.png',
+            'data/ckeditor/plugins/ocportal/images/quote.png',
+            'data/ckeditor/plugins/ocportal/plugin.js',
+            'data/ckeditor/plugins/pastefromword/filter/default.js',
+            'data/ckeditor/plugins/showblocks/images/block_address.png',
+            'data/ckeditor/plugins/showblocks/images/block_blockquote.png',
+            'data/ckeditor/plugins/showblocks/images/block_div.png',
+            'data/ckeditor/plugins/showblocks/images/block_h1.png',
+            'data/ckeditor/plugins/showblocks/images/block_h2.png',
+            'data/ckeditor/plugins/showblocks/images/block_h3.png',
+            'data/ckeditor/plugins/showblocks/images/block_h4.png',
+            'data/ckeditor/plugins/showblocks/images/block_h5.png',
+            'data/ckeditor/plugins/showblocks/images/block_h6.png',
+            'data/ckeditor/plugins/showblocks/images/block_p.png',
+            'data/ckeditor/plugins/showblocks/images/block_pre.png',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/_translationstatus.txt',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/ar.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/bg.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/ca.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/cs.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/cy.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/de.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/el.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/en.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/eo.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/es.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/et.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/fa.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/fi.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/fr-ca.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/fr.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/gl.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/he.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/hr.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/hu.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/id.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/it.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/ja.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/km.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/ku.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/lv.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/nb.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/nl.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/no.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/pl.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/pt-br.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/pt.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/ru.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/si.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/sk.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/sl.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/sq.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/sv.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/th.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/tr.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/ug.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/uk.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/vi.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/zh-cn.js',
+            'data/ckeditor/plugins/specialchar/dialogs/lang/zh.js',
+            'data/ckeditor/plugins/specialchar/dialogs/specialchar.js',
+            'data/ckeditor/plugins/table/dialogs/table.js',
+            'data/ckeditor/plugins/tabletools/dialogs/tableCell.js',
+            'data/ckeditor/README.md',
+            'data/ckeditor/skins/kama/dialog.css',
+            'data/ckeditor/skins/kama/dialog_ie.css',
+            'data/ckeditor/skins/kama/dialog_ie7.css',
+            'data/ckeditor/skins/kama/dialog_ie8.css',
+            'data/ckeditor/skins/kama/dialog_iequirks.css',
+            'data/ckeditor/skins/kama/dialog_opera.css',
+            'data/ckeditor/skins/kama/editor.css',
+            'data/ckeditor/skins/kama/editor_ie.css',
+            'data/ckeditor/skins/kama/editor_ie7.css',
+            'data/ckeditor/skins/kama/editor_ie8.css',
+            'data/ckeditor/skins/kama/editor_iequirks.css',
+            'data/ckeditor/skins/kama/icons.png',
+            'data/ckeditor/skins/kama/icons_hidpi.png',
+            'data/ckeditor/skins/kama/images/dialog_sides.gif',
+            'data/ckeditor/skins/kama/images/dialog_sides.png',
+            'data/ckeditor/skins/kama/images/dialog_sides_rtl.png',
+            'data/ckeditor/skins/kama/images/mini.gif',
+            'data/ckeditor/skins/kama/images/sprites.png',
+            'data/ckeditor/skins/kama/images/sprites_ie6.png',
+            'data/ckeditor/skins/kama/images/toolbar_start.gif',
+            'data/ckeditor/skins/kama/readme.md',
+            'data/ckeditor/styles.js',
+            'data_custom/spelling/index.html',
+            'data_custom/spelling/personal_dicts/.htaccess',
+            'data_custom/spelling/personal_dicts/index.html',
+            'themes/default/css/widget_date.css',
+            'themes/default/templates/JAVASCRIPT_WIDGET_DATE.tpl',
+            'themes/default/css/widget_color.css',
+            'themes/default/templates/JAVASCRIPT_WIDGET_COLOR.tpl',
+            'themes/default/css/widget_select2.css',
+            'themes/default/images/select2/index.html',
+            'themes/default/images/select2/select2-spinner.gif',
+            'themes/default/images/select2/select2.png',
+            'themes/default/images/select2/select2x2.png',
+            'themes/default/templates/JAVASCRIPT_SELECT2.tpl',
+            'themes/default/css/forms.css',
+            'data/spelling/aspell/.htaccess',
+            'data/spelling/aspell/index.html',
+            'data/spelling/index.html',
+            'data/spelling/spell-check-logic.php',
+            'themes/default/images/EN/comcodeeditor/apply_changes.png',
+            'themes/default/images/EN/comcodeeditor/b.png',
+            'themes/default/images/EN/comcodeeditor/quote.png',
+            'themes/default/images/EN/comcodeeditor/block.png',
+            'themes/default/images/EN/comcodeeditor/box.png',
+            'themes/default/images/EN/comcodeeditor/code.png',
+            'themes/default/images/EN/comcodeeditor/comcode.png',
+            'themes/default/images/EN/comcodeeditor/email.png',
+            'themes/default/images/EN/comcodeeditor/hide.png',
+            'themes/default/images/EN/comcodeeditor/html.png',
+            'themes/default/images/EN/comcodeeditor/i.png',
+            'themes/default/images/EN/comcodeeditor/img.png',
+            'themes/default/images/EN/comcodeeditor/index.html',
+            'themes/default/images/EN/comcodeeditor/list.png',
+            'themes/default/images/EN/comcodeeditor/page.png',
+            'themes/default/images/EN/comcodeeditor/s.png',
+            'themes/default/images/EN/comcodeeditor/thumb.png',
+            'themes/default/images/EN/comcodeeditor/u.png',
+            'themes/default/images/EN/comcodeeditor/url.png',
+            'sources/form_templates.php',
+            'data/namelike.php',
+            'data/username_exists.php',
+        );
+    }
 
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'FORM_SCREEN_INPUT_COMBO.tpl'=>'form_screen_2',
-			'FORM_SCREEN.tpl'=>'form_screen_2',
-			'FORM_SCREEN_FIELD_SPACER.tpl'=>'form_screen_1',
-			'FORM_STANDARD_END.tpl'=>'form_screen_1',
-			'FORM.tpl'=>'form_screen_1',
-			'FORM_SINGLE_FIELD.tpl'=>'form_single_field',
-			'POSTING_SCREEN.tpl'=>'posting_screen',
-			'FORM_SCREEN_INPUT_LIST_ENTRY.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_LIST_GROUP.tpl'=>'form_screen_1',
-			'FORM_GROUP.tpl'=>'form_group',
-			'FORM_GROUPED.tpl'=>'form_grouped',
-			'FORM_FIELD_SET_GROUPER.tpl'=>'form_field_set_grouper',
-			'PREVIEW_SCRIPT_SPELLING.tpl'=>'preview_script_spelling',
-			'PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl'=>'preview_script_keyword_density',
-			'PREVIEW_SCRIPT_CODE.tpl'=>'preview_script_code',
-			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl'=>'form_screen',
-			'WYSIWYG_LOAD.tpl'=>'wysiwyg_load',
-			'POSTING_FORM.tpl'=>'posting_form',
-			'COMCODE_MESSAGE.tpl'=>'form_screen_1',
-			'COMCODE_EDITOR.tpl'=>'posting_form',
-			'COMCODE_EDITOR_BUTTON.tpl'=>'posting_form',
-			'COMCODE_EDITOR_MICRO_BUTTON.tpl'=>'posting_form',
-			'FORM_SCREEN_INPUT_CODENAME.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_LINE.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_URL.tpl'=>'form_screen_1',
-			'FORM_SCREEN_FIELDS_SET_ITEM.tpl'=>'form_screen_1',
-			'FORM_SCREEN_FIELDS_SET.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_USERNAME.tpl'=>'form_screen_2',
-			'FORM_DESCRIP_SEP.tpl'=>'form_descrip_sep',
-			'FORM_SCREEN_INPUT_AUTHOR.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_EMAIL.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_COLOUR.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_LINE_MULTI.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_TEXT_MULTI.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_USERNAME_MULTI.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_TEXT.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_HUGE_COMCODE.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_HUGE.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_PASSWORD.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_TICK.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_UPLOAD.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_LIST.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_TREE_LIST.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_HUGE_LIST.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_MULTI_LIST.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_ALL_AND_NOT.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_RADIO_LIST.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl'=>'form_screen',
-			'FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl'=>'form_screen',
-			'FORM_SCREEN_FIELD_DESCRIPTION.tpl'=>'form_screen',
-			'FORM_SCREEN_ARE_REQUIRED.tpl'=>'form_screen',
-			'POSTING_FIELD.tpl'=>'form_screen',
-			'FORM_SCREEN_INPUT_TIME.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_DATE.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_INTEGER.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_DIMENSIONS.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_FLOAT.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_HIDDEN_2.tpl'=>'form_screen_2',
-			'FORM_SCREEN_FIELD.tpl'=>'form_screen_1',
-			'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY.tpl'=>'form_screen_2',
-			'FORM_SCREEN_INPUT_PERMISSION_OVERRIDE.tpl'=>'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION.tpl'=>'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION_ADMIN.tpl'=>'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION_MATRIX.tpl'=>'administrative__form_screen_input_permission',
-			'FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER.tpl'=>'administrative__form_screen_input_permission_outer',
-			'FORM_SCREEN_INPUT_HIDDEN.tpl'=>'form_screen_2',
-			'PREVIEW_SCRIPT.tpl'=>'preview_script',
-			'BLOCK_HELPER_BLOCK_CHOICE.tpl'=>'administrative__block_helper_block_group',
-			'BLOCK_HELPER_BLOCK_GROUP.tpl'=>'administrative__block_helper_block_group',
-			'BLOCK_HELPER_START.tpl'=>'administrative__block_helper_start',
-			'BLOCK_HELPER_DONE.tpl'=>'administrative__block_helper_done',
-			'WYSIWYG_SETTINGS.tpl'=>'wysiwyg_settings',
-			'ATTACHMENT_UI_DEFAULTS.tpl'=>'attachment_ui_defaults',
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'FORM_SCREEN_INPUT_COMBO.tpl' => 'form_screen_2',
+            'FORM_SCREEN.tpl' => 'form_screen_2',
+            'FORM_SCREEN_FIELD_SPACER.tpl' => 'form_screen_1',
+            'FORM_STANDARD_END.tpl' => 'form_screen_1',
+            'FORM.tpl' => 'form_screen_1',
+            'FORM_SINGLE_FIELD.tpl' => 'form_single_field',
+            'POSTING_SCREEN.tpl' => 'posting_screen',
+            'FORM_SCREEN_INPUT_LIST_ENTRY.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_LIST_GROUP.tpl' => 'form_screen_1',
+            'FORM_GROUP.tpl' => 'form_group',
+            'FORM_GROUPED.tpl' => 'form_grouped',
+            'FORM_FIELD_SET_GROUPER.tpl' => 'form_field_set_grouper',
+            'PREVIEW_SCRIPT_SPELLING.tpl' => 'preview_script_spelling',
+            'PREVIEW_SCRIPT_KEYWORD_DENSITY.tpl' => 'preview_script_keyword_density',
+            'PREVIEW_SCRIPT_CODE.tpl' => 'preview_script_code',
+            'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE.tpl' => 'form_screen',
+            'WYSIWYG_LOAD.tpl' => 'wysiwyg_load',
+            'POSTING_FORM.tpl' => 'posting_form',
+            'COMCODE_MESSAGE.tpl' => 'form_screen_1',
+            'COMCODE_EDITOR.tpl' => 'posting_form',
+            'COMCODE_EDITOR_BUTTON.tpl' => 'posting_form',
+            'COMCODE_EDITOR_MICRO_BUTTON.tpl' => 'posting_form',
+            'FORM_SCREEN_INPUT_CODENAME.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_LINE.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_URL.tpl' => 'form_screen_1',
+            'FORM_SCREEN_FIELDS_SET_ITEM.tpl' => 'form_screen_1',
+            'FORM_SCREEN_FIELDS_SET.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_USERNAME.tpl' => 'form_screen_2',
+            'FORM_DESCRIP_SEP.tpl' => 'form_descrip_sep',
+            'FORM_SCREEN_INPUT_AUTHOR.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_EMAIL.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_COLOUR.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_LINE_MULTI.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_TEXT_MULTI.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_USERNAME_MULTI.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_TEXT.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_HUGE_COMCODE.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_HUGE.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_PASSWORD.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_TICK.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_VARIOUS_TICKS.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_UPLOAD.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_UPLOAD_MULTI.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_LIST.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_TREE_LIST.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_HUGE_LIST.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_MULTI_LIST.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_ALL_AND_NOT.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_RADIO_LIST.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY.tpl' => 'form_screen',
+            'FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY.tpl' => 'form_screen',
+            'FORM_SCREEN_FIELD_DESCRIPTION.tpl' => 'form_screen',
+            'FORM_SCREEN_ARE_REQUIRED.tpl' => 'form_screen',
+            'POSTING_FIELD.tpl' => 'form_screen',
+            'FORM_SCREEN_INPUT_TIME.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_DATE.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_INTEGER.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_DIMENSIONS.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_FLOAT.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_HIDDEN_2.tpl' => 'form_screen_2',
+            'FORM_SCREEN_FIELD.tpl' => 'form_screen_1',
+            'FORM_SCREEN_INPUT_RADIO_LIST_ENTRY.tpl' => 'form_screen_2',
+            'FORM_SCREEN_INPUT_PERMISSION_OVERRIDE.tpl' => 'administrative__form_screen_input_permission',
+            'FORM_SCREEN_INPUT_PERMISSION.tpl' => 'administrative__form_screen_input_permission',
+            'FORM_SCREEN_INPUT_PERMISSION_ADMIN.tpl' => 'administrative__form_screen_input_permission',
+            'FORM_SCREEN_INPUT_PERMISSION_MATRIX.tpl' => 'administrative__form_screen_input_permission',
+            'FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER.tpl' => 'administrative__form_screen_input_permission_outer',
+            'FORM_SCREEN_INPUT_HIDDEN.tpl' => 'form_screen_2',
+            'PREVIEW_SCRIPT.tpl' => 'preview_script',
+            'BLOCK_HELPER_BLOCK_CHOICE.tpl' => 'administrative__block_helper_block_group',
+            'BLOCK_HELPER_BLOCK_GROUP.tpl' => 'administrative__block_helper_block_group',
+            'BLOCK_HELPER_START.tpl' => 'administrative__block_helper_start',
+            'BLOCK_HELPER_DONE.tpl' => 'administrative__block_helper_done',
+            'WYSIWYG_SETTINGS.tpl' => 'wysiwyg_settings',
+            'ATTACHMENT_UI_DEFAULTS.tpl' => 'attachment_ui_defaults',
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__wysiwyg_settings()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS',array()),NULL,'',true)
-		);
-	}
+    public function tpl_preview__wysiwyg_settings()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS',array()),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__attachment_ui_defaults()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS',array()),NULL,'',true)
-		);
-	}
+    public function tpl_preview__attachment_ui_defaults()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS',array()),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_single_field()
-	{
-		$fields=new ocp_tempcode();
+    public function tpl_preview__form_single_field()
+    {
+        $fields = new ocp_tempcode();
 
-		$name=placeholder_random_id();
-		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		)));
+        $name = placeholder_random_id();
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        )));
 
-		return array(
-			lorem_globalise(do_lorem_template('FORM_SINGLE_FIELD',array(
-				'GET'=>NULL,
-				'HIDDEN'=>'',
-				'TITLE'=>lorem_title(),
-				'LABEL'=>lorem_phrase(),
-				'NAME'=>$name,
-				'URL'=>placeholder_url(),
-				'FIELD'=>$fields,
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word(),
-				'TEXT'=>lorem_sentence_html(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('FORM_SINGLE_FIELD',array(
+                'GET' => NULL,
+                'HIDDEN' => '',
+                'TITLE' => lorem_title(),
+                'LABEL' => lorem_phrase(),
+                'NAME' => $name,
+                'URL' => placeholder_url(),
+                'FIELD' => $fields,
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word(),
+                'TEXT' => lorem_sentence_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_screen_1()
-	{
-		require_lang('comcode');
-		require_lang('dates');
-		require_javascript('javascript_theme_colours');
+    public function tpl_preview__form_screen_1()
+    {
+        require_lang('comcode');
+        require_lang('dates');
+        require_javascript('javascript_theme_colours');
 
-		$fields=new ocp_tempcode();
+        $fields = new ocp_tempcode();
 
-		$name=placeholder_random_id();
-		$_input1=do_lorem_template('FORM_SCREEN_INPUT_LINE',array(
-			'MAXLENGTH'=>placeholder_number(),
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name.'1',
-			'DEFAULT'=>'',
-		));
-		$input1=do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
-			'SET_NAME'=>$name,
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name.'1',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$_input1,
-			'COMCODE'=>'',
-		));
-		$_input2=do_lorem_template('FORM_SCREEN_INPUT_URL',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name.'2',
-			'DEFAULT'=>'',
-		));
-		$input2=do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
-			'SET_NAME'=>$name,
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name.'2',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$_input2,
-			'COMCODE'=>'',
-		));
-		$inputs=new ocp_tempcode();
-		$inputs->attach($input1);
-		$inputs->attach($input2);
-		$fieldset=do_lorem_template('FORM_SCREEN_FIELDS_SET',array(
-			'SET_NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'FIELDS'=>$inputs,
-			'REQUIRED'=>true,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$fieldset,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $_input1 = do_lorem_template('FORM_SCREEN_INPUT_LINE',array(
+            'MAXLENGTH' => placeholder_number(),
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name . '1',
+            'DEFAULT' => '',
+        ));
+        $input1 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
+            'SET_NAME' => $name,
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name . '1',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $_input1,
+            'COMCODE' => '',
+        ));
+        $_input2 = do_lorem_template('FORM_SCREEN_INPUT_URL',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name . '2',
+            'DEFAULT' => '',
+        ));
+        $input2 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
+            'SET_NAME' => $name,
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name . '2',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $_input2,
+            'COMCODE' => '',
+        ));
+        $inputs = new ocp_tempcode();
+        $inputs->attach($input1);
+        $inputs->attach($input2);
+        $fieldset = do_lorem_template('FORM_SCREEN_FIELDS_SET',array(
+            'SET_NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'FIELDS' => $inputs,
+            'REQUIRED' => true,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $fieldset,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TEXT',array(
-			'RAW'=>true,
-			'SCROLLS'=>'',
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TEXT',array(
+            'RAW' => true,
+            'SCROLLS' => '',
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_CODENAME',array(
-			'MAXLENGTH'=>placeholder_number(),
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-			'EXTRA_CHARS'=>array(),
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_CODENAME',array(
+            'MAXLENGTH' => placeholder_number(),
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+            'EXTRA_CHARS' => array(),
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
-			'CHECKED'=>true,
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
+            'CHECKED' => true,
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array(
-			'SECTION_HIDDEN'=>false,
-			'TITLE'=>lorem_phrase(),
-			'THEME_ALSO_INCLUDE_PAGES'=>false,
-		)));
-		$list=new ocp_tempcode();
-		foreach (placeholder_array() as $key=>$value)
-		{
-			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
-				'SELECTED'=>false,
-				'DISABLED'=>false,
-				'CLASS'=>'',
-				'NAME'=>placeholder_random_id(),
-				'TEXT'=>lorem_phrase(),
-			)));
-		}
-		$list=do_lorem_template('FORM_SCREEN_INPUT_LIST_GROUP',array(
-			'ENTRIES'=>$list,
-			'TITLE'=>lorem_phrase(),
-		));
-		$radios=new ocp_tempcode();
-		$name=placeholder_random_id();
-		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
-			'DESCRIPTION'=>lorem_sentence(),
-			'CHECKED'=>true,
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'VALUE'=>placeholder_random(),
-			'TEXT'=>lorem_phrase(),
-		)));
-		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
-			'DESCRIPTION'=>lorem_sentence(),
-			'CHECKED'=>'false',
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'VALUE'=>placeholder_random(),
-			'TEXT'=>lorem_phrase(),
-		)));
-		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
-			'DESCRIPTION'=>lorem_sentence(),
-			'CHECKED'=>'false',
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'VALUE'=>placeholder_random(),
-			'TEXT'=>lorem_phrase(),
-		)));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array(
+            'SECTION_HIDDEN' => false,
+            'TITLE' => lorem_phrase(),
+            'THEME_ALSO_INCLUDE_PAGES' => false,
+        )));
+        $list = new ocp_tempcode();
+        foreach (placeholder_array() as $key => $value) {
+            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+                'SELECTED' => false,
+                'DISABLED' => false,
+                'CLASS' => '',
+                'NAME' => placeholder_random_id(),
+                'TEXT' => lorem_phrase(),
+            )));
+        }
+        $list = do_lorem_template('FORM_SCREEN_INPUT_LIST_GROUP',array(
+            'ENTRIES' => $list,
+            'TITLE' => lorem_phrase(),
+        ));
+        $radios = new ocp_tempcode();
+        $name = placeholder_random_id();
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+            'DESCRIPTION' => lorem_sentence(),
+            'CHECKED' => true,
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'VALUE' => placeholder_random(),
+            'TEXT' => lorem_phrase(),
+        )));
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+            'DESCRIPTION' => lorem_sentence(),
+            'CHECKED' => 'false',
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'VALUE' => placeholder_random(),
+            'TEXT' => lorem_phrase(),
+        )));
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+            'DESCRIPTION' => lorem_sentence(),
+            'CHECKED' => 'false',
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'VALUE' => placeholder_random(),
+            'TEXT' => lorem_phrase(),
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_ALL_AND_NOT',array(
-			'TABINDEX'=>placeholder_number(),
-			'BASE'=>$name,
-			'RADIOS'=>$radios,
-			'LIST'=>$list,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name.'_list',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_ALL_AND_NOT',array(
+            'TABINDEX' => placeholder_number(),
+            'BASE' => $name,
+            'RADIOS' => $radios,
+            'LIST' => $list,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name . '_list',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_AUTHOR',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		));
-		$_description=new ocp_tempcode();
-		$_description->attach(lorem_phrase());
-		$_description->attach(do_lorem_template('FORM_DESCRIP_SEP'));
-		$extra=do_lorem_template('HYPERLINK_POPUP_WINDOW',array(
-			'URL'=>placeholder_url(),
-			'TITLE'=>lorem_phrase(),
-			'CAPTION'=>lorem_phrase(),
-		));
-		$_description->attach($extra);
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_AUTHOR',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        ));
+        $_description = new ocp_tempcode();
+        $_description->attach(lorem_phrase());
+        $_description->attach(do_lorem_template('FORM_DESCRIP_SEP'));
+        $extra = do_lorem_template('HYPERLINK_POPUP_WINDOW',array(
+            'URL' => placeholder_url(),
+            'TITLE' => lorem_phrase(),
+            'CAPTION' => lorem_phrase(),
+        ));
+        $_description->attach($extra);
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>$_description,
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => $_description,
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_COLOUR',array(
-			'RAW_FIELD'=>false,
-			'REQUIRED'=>'',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence(),
-			'TABINDEX'=>placeholder_number(),
-			'_REQUIRED'=>'',
-			'NAME'=>lorem_word(),
-			'DEFAULT'=>'',
-		)));
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_COLOUR',array(
+            'RAW_FIELD' => false,
+            'REQUIRED' => '',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence(),
+            'TABINDEX' => placeholder_number(),
+            '_REQUIRED' => '',
+            'NAME' => lorem_word(),
+            'DEFAULT' => '',
+        )));
 
-		// Dates
-		$start_year=intval(date('Y')) - 1;
-		$start_month=intval(date('m'));
-		$start_day=intval(date('d'));
-		$start_hour=intval(date('H'));
-		$start_minute=intval(date('i'));
+        // Dates
+        $start_year = intval(date('Y')) - 1;
+        $start_month = intval(date('m'));
+        $start_day = intval(date('d'));
+        $start_hour = intval(date('H'));
+        $start_minute = intval(date('i'));
 
-		$name=placeholder_random_id();
-		$time=do_lorem_template('FORM_SCREEN_INPUT_TIME',array(
-			'REQUIRED'=>true,
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>placeholder_random_id(),
+        $name = placeholder_random_id();
+        $time = do_lorem_template('FORM_SCREEN_INPUT_TIME',array(
+            'REQUIRED' => true,
+            'TABINDEX' => placeholder_number(),
+            'NAME' => placeholder_random_id(),
 
-			'MINUTE'=>placeholder_number(),
-			'HOUR'=>placeholder_number(),
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+            'MINUTE' => placeholder_number(),
+            'HOUR' => placeholder_number(),
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$input=do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
-			'REQUIRED'=>true,
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'TYPE'=>'date',
+        $input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
+            'REQUIRED' => true,
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'TYPE' => 'date',
 
-			'YEAR'=>placeholder_number(),
-			'MONTH'=>placeholder_number(),
-			'DAY'=>placeholder_number(),
-			'MINUTE'=>placeholder_number(),
-			'HOUR'=>placeholder_number(),
+            'YEAR' => placeholder_number(),
+            'MONTH' => placeholder_number(),
+            'DAY' => placeholder_number(),
+            'MINUTE' => placeholder_number(),
+            'HOUR' => placeholder_number(),
 
-			'MIN_DATE_DAY'=>'',
-			'MIN_DATE_MONTH'=>'',
-			'MIN_DATE_YEAR'=>'',
-			'MAX_DATE_DAY'=>'',
-			'MAX_DATE_MONTH'=>'',
-			'MAX_DATE_YEAR'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+            'MIN_DATE_DAY' => '',
+            'MIN_DATE_MONTH' => '',
+            'MIN_DATE_YEAR' => '',
+            'MAX_DATE_DAY' => '',
+            'MAX_DATE_MONTH' => '',
+            'MAX_DATE_YEAR' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_EMAIL',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_EMAIL',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE',array(
-			'RAW'=>true,
-			'SCROLLS'=>'',
-			'DESCRIPTION_SIDE'=>lorem_sentence(),
-			'REQUIRED'=>'',
-			'_REQUIRED'=>'',
-			'TABINDEX'=>placeholder_number(),
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence(),
-			'NAME'=>placeholder_random_id(),
-			'DEFAULT'=>'',
-			'ROWS'=>'20',
-		)));
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE',array(
+            'RAW' => true,
+            'SCROLLS' => '',
+            'DESCRIPTION_SIDE' => lorem_sentence(),
+            'REQUIRED' => '',
+            '_REQUIRED' => '',
+            'TABINDEX' => placeholder_number(),
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence(),
+            'NAME' => placeholder_random_id(),
+            'DEFAULT' => '',
+            'ROWS' => '20',
+        )));
 
-		$_comcode=do_lorem_template('COMCODE_MESSAGE',array(
-			'NAME'=>lorem_word(),
-			'W'=>'',
-			'URL'=>placeholder_url(),
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
-			'SCROLLS'=>'',
-			'DESCRIPTION_SIDE'=>lorem_sentence(),
-			'REQUIRED'=>'wysiwyg',
-			'_REQUIRED'=>'wysiwyg',
-			'TABINDEX'=>placeholder_number(),
-			'COMCODE'=>$_comcode,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_phrase(),
-			'NAME'=>placeholder_random_id(),
-			'DEFAULT'=>lorem_word(),
-			'DEFAULT_PARSED'=>lorem_word(),
-			'ROWS'=>'20',
-		)));
+        $_comcode = do_lorem_template('COMCODE_MESSAGE',array(
+            'NAME' => lorem_word(),
+            'W' => '',
+            'URL' => placeholder_url(),
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
+            'SCROLLS' => '',
+            'DESCRIPTION_SIDE' => lorem_sentence(),
+            'REQUIRED' => 'wysiwyg',
+            '_REQUIRED' => 'wysiwyg',
+            'TABINDEX' => placeholder_number(),
+            'COMCODE' => $_comcode,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_phrase(),
+            'NAME' => placeholder_random_id(),
+            'DEFAULT' => lorem_word(),
+            'DEFAULT_PARSED' => lorem_word(),
+            'ROWS' => '20',
+        )));
 
-		return array(
-			lorem_globalise(do_lorem_template('FORM',array(
-				'GET'=>NULL,
-				'SKIP_VALIDATION'=>true,
-				'HIDDEN'=>'',
-				'TITLE'=>lorem_title(),
-				'URL'=>placeholder_url(),
-				'FIELDS'=>$fields,
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word(),
-				'TEXT'=>lorem_sentence_html(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('FORM',array(
+                'GET' => NULL,
+                'SKIP_VALIDATION' => true,
+                'HIDDEN' => '',
+                'TITLE' => lorem_title(),
+                'URL' => placeholder_url(),
+                'FIELDS' => $fields,
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word(),
+                'TEXT' => lorem_sentence_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_screen_2()
-	{
-		require_lang('comcode');
-		require_lang('dates');
+    public function tpl_preview__form_screen_2()
+    {
+        require_lang('comcode');
+        require_lang('dates');
 
-		$fields=new ocp_tempcode();
-		$list=new ocp_tempcode();
+        $fields = new ocp_tempcode();
+        $list = new ocp_tempcode();
 
-		$entries=new ocp_tempcode();
-		foreach (placeholder_array() as $val)
-		{
-			$entries->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
-				'SELECTED'=>'',
-				'DISABLED'=>'',
-				'CLASS'=>'',
-				'NAME'=>placeholder_random_id(),
-				'TEXT'=>lorem_phrase(),
-			)));
-		}
-		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence(),
-			'NAME'=>placeholder_random_id(),
-			'CONTENT'=>$entries,
-			'INLINE_LIST'=>false,
-		)));
+        $entries = new ocp_tempcode();
+        foreach (placeholder_array() as $val) {
+            $entries->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+                'SELECTED' => '',
+                'DISABLED' => '',
+                'CLASS' => '',
+                'NAME' => placeholder_random_id(),
+                'TEXT' => lorem_phrase(),
+            )));
+        }
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence(),
+            'NAME' => placeholder_random_id(),
+            'CONTENT' => $entries,
+            'INLINE_LIST' => false,
+        )));
 
-		$name_width=placeholder_random_id();
-		$name_height=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_DIMENSIONS', array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME_WIDTH'=>$name_width,
-			'DEFAULT_WIDTH'=>'',
-			'NAME_HEIGHT'=>$name_height,
-			'DEFAULT_HEIGHT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name_width,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name_width = placeholder_random_id();
+        $name_height = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_DIMENSIONS', array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME_WIDTH' => $name_width,
+            'DEFAULT_WIDTH' => '',
+            'NAME_HEIGHT' => $name_height,
+            'DEFAULT_HEIGHT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name_width,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$input=new ocp_tempcode();
-		foreach (placeholder_array(1) as $k=>$v)
-		{
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
-				'CLASS'=>'',
-				'MAXLENGTH'=>'10',
-				'PRETTY_NAME'=>$v,
-				'TABINDEX'=>placeholder_random_id(),
-				'NAME_STUB'=>placeholder_random_id(),
-				'I'=>strval($k),
-				'REQUIRED'=>'_required',
-				'DEFAULT'=>'',
-			)));
-		}
+        $input = new ocp_tempcode();
+        foreach (placeholder_array(1) as $k => $v) {
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
+                'CLASS' => '',
+                'MAXLENGTH' => '10',
+                'PRETTY_NAME' => $v,
+                'TABINDEX' => placeholder_random_id(),
+                'NAME_STUB' => placeholder_random_id(),
+                'I' => strval($k),
+                'REQUIRED' => '_required',
+                'DEFAULT' => '',
+            )));
+        }
 
-		foreach (placeholder_array(2) as $k=>$v)
-		{
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI',array(
-				'PRETTY_NAME'=>lorem_word(),
-				'TABINDEX'=>placeholder_number(),
-				'NAME_STUB'=>placeholder_random_id(),
-				'I'=>strval($k),
-				'REQUIRED'=>'_required',
-				'DEFAULT'=>'',
-			)));
-		}
-		$name=placeholder_random_id();
-		$hidden=do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2',array(
-			'NAME'=>$name,
-			'VALUE'=>lorem_phrase(),
-		));
+        foreach (placeholder_array(2) as $k => $v) {
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI',array(
+                'PRETTY_NAME' => lorem_word(),
+                'TABINDEX' => placeholder_number(),
+                'NAME_STUB' => placeholder_random_id(),
+                'I' => strval($k),
+                'REQUIRED' => '_required',
+                'DEFAULT' => '',
+            )));
+        }
+        $name = placeholder_random_id();
+        $hidden = do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2',array(
+            'NAME' => $name,
+            'VALUE' => lorem_phrase(),
+        ));
 
-		foreach (placeholder_array() as $key=>$value)
-		{
-			$list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
-				'SELECTED'=>'',
-				'DISABLED'=>'',
-				'CLASS'=>'',
-				'NAME'=>$value,
-				'TEXT'=>lorem_phrase(),
-			)));
-		}
+        foreach (placeholder_array() as $key => $value) {
+            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+                'SELECTED' => '',
+                'DISABLED' => '',
+                'CLASS' => '',
+                'NAME' => $value,
+                'TEXT' => lorem_phrase(),
+            )));
+        }
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_COMBO',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'CONTENT'=>$list,
-			'DEFAULT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_COMBO',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'CONTENT' => $list,
+            'DEFAULT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_LIST',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'CONTENT'=>$list,
-			'INLINE_LIST'=>false,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_LIST',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'CONTENT' => $list,
+            'INLINE_LIST' => false,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_MULTI_LIST',array(
-			'TABINDEX'=>placeholder_number(),
-			'SIZE'=>'5',
-			'NAME'=>$name,
-			'CONTENT'=>$list,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_MULTI_LIST',array(
+            'TABINDEX' => placeholder_number(),
+            'SIZE' => '5',
+            'NAME' => $name,
+            'CONTENT' => $list,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'VALUE'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'VALUE' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$radios=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
-			'DESCRIPTION'=>lorem_phrase(),
-			'CHECKED'=>true,
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'VALUE'=>lorem_word(),
-			'TEXT'=>lorem_phrase(),
-		));
-		$radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
-			'DESCRIPTION'=>lorem_phrase(),
-			'CHECKED'=>true,
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'VALUE'=>lorem_word_2(),
-			'TEXT'=>lorem_phrase(),
-		)));
-		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
-			'CONTENT'=>$radios,
-			'NAME'=>$name,
-			'REQUIRED'=>true,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>'',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $radios = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+            'DESCRIPTION' => lorem_phrase(),
+            'CHECKED' => true,
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'VALUE' => lorem_word(),
+            'TEXT' => lorem_phrase(),
+        ));
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+            'DESCRIPTION' => lorem_phrase(),
+            'CHECKED' => true,
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'VALUE' => lorem_word_2(),
+            'TEXT' => lorem_phrase(),
+        )));
+        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
+            'CONTENT' => $radios,
+            'NAME' => $name,
+            'REQUIRED' => true,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => '',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_TREE_LIST',array(
-			'NICE_LABEL'=>'',
-			'USE_SERVER_ID'=>placeholder_id(),
-			'TABINDEX'=>placeholder_number(),
-			'NAME'=>$name,
-			'REQUIRED'=>'',
-			'DEFAULT'=>'',
-			'HOOK'=>'',
-			'ROOT_ID'=>'',
-			'OPTIONS'=>serialize(''),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'MULTI_SELECT'=>false,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>'',
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TREE_LIST',array(
+            'NICE_LABEL' => '',
+            'USE_SERVER_ID' => placeholder_id(),
+            'TABINDEX' => placeholder_number(),
+            'NAME' => $name,
+            'REQUIRED' => '',
+            'DEFAULT' => '',
+            'HOOK' => '',
+            'ROOT_ID' => '',
+            'OPTIONS' => serialize(''),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'MULTI_SELECT' => false,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => '',
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_UPLOAD',array(
-			'FILTER'=>'',
-			'EXISTING_URL'=>placeholder_url(),
-			'IS_IMAGE'=>'',
-			'PLUPLOAD'=>false,
-			'EDIT'=>'',
-			'TABINDEX'=>placeholder_number(),
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD',array(
+            'FILTER' => '',
+            'EXISTING_URL' => placeholder_url(),
+            'IS_IMAGE' => '',
+            'PLUPLOAD' => false,
+            'EDIT' => '',
+            'TABINDEX' => placeholder_number(),
+            'REQUIRED' => '',
+            'NAME' => $name,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
-			'TABINDEX'=>placeholder_number(),
-			'FILTER'=>'',
-			'PLUPLOAD'=>false,
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'I'=>$name,
-			'NAME_STUB'=>lorem_word(),
-			'EDIT'=>array(),
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
+            'TABINDEX' => placeholder_number(),
+            'FILTER' => '',
+            'PLUPLOAD' => false,
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'I' => $name,
+            'NAME_STUB' => lorem_word(),
+            'EDIT' => array(),
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_USERNAME',array(
-			'TABINDEX'=>placeholder_number(),
-			'NEEDS_MATCH'=>true,
-			'REQUIRED'=>'',
-			'NAME'=>$name,
-			'DEFAULT'=>'',
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>false,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_USERNAME',array(
+            'TABINDEX' => placeholder_number(),
+            'NEEDS_MATCH' => true,
+            'REQUIRED' => '',
+            'NAME' => $name,
+            'DEFAULT' => '',
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => false,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$name=placeholder_random_id();
-		$input=new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array(
-				'PRETTY_NAME'=>lorem_word(),
-				'TABINDEX'=>placeholder_number(),
-				'NEEDS_MATCH'=>true,
-				'NAME_STUB'=>$name,
-				'I'=>strval($k),
-				'REQUIRED'=>'',
-				'DEFAULT'=>'',
-			)));
-		}
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>placeholder_random_id(),
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = new ocp_tempcode();
+        foreach (placeholder_array() as $k => $v) {
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array(
+                'PRETTY_NAME' => lorem_word(),
+                'TABINDEX' => placeholder_number(),
+                'NEEDS_MATCH' => true,
+                'NAME_STUB' => $name,
+                'I' => strval($k),
+                'REQUIRED' => '',
+                'DEFAULT' => '',
+            )));
+        }
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => placeholder_random_id(),
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$input=new ocp_tempcode();
-		$options=array(
-			array(
-				'option1',
-				'opt1',
-				true,
-				''
-			),
-			array(
-				'option2',
-				'opt2',
-				true,
-				''
-			),
-			array(
-				'option3',
-				'opt3',
-				true,
-				''
-			)
-		);
-		if (count($options[0]) != 3)
-		{
-			$options=array(
-				array(
-					$options,
-					NULL,
-					new ocp_tempcode()
-				)
-			);
-		}
+        $input = new ocp_tempcode();
+        $options = array(
+            array(
+                'option1',
+                'opt1',
+                true,
+                ''
+            ),
+            array(
+                'option2',
+                'opt2',
+                true,
+                ''
+            ),
+            array(
+                'option3',
+                'opt3',
+                true,
+                ''
+            )
+        );
+        if (count($options[0]) != 3) {
+            $options = array(
+                array(
+                    $options,
+                    null,
+                    new ocp_tempcode()
+                )
+            );
+        }
 
-		foreach ($options as $_option)
-		{
-			$out=array();
-			foreach ($_option[0] as $option)
-			{
-				$out[]=array(
-					'DISABLED'=>false,
-					'CHECKED'=>lorem_word(),
-					'TABINDEX'=>placeholder_number(),
-					'NAME'=>placeholder_random_id(),
-					'PRETTY_NAME'=>lorem_word(),
-					'DESCRIPTION'=>lorem_sentence(),
-				);
-			}
+        foreach ($options as $_option) {
+            $out = array();
+            foreach ($_option[0] as $option) {
+                $out[] = array(
+                    'DISABLED' => false,
+                    'CHECKED' => lorem_word(),
+                    'TABINDEX' => placeholder_number(),
+                    'NAME' => placeholder_random_id(),
+                    'PRETTY_NAME' => lorem_word(),
+                    'DESCRIPTION' => lorem_sentence(),
+                );
+            }
 
-			$input->attach(do_lorem_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array(
-				'SECTION_TITLE'=>$_option[2],
-				'EXPANDED'=>$_option[1],
-				'SIMPLE_STYLE'=>false,
-				'BRETHREN_COUNT'=>'3',
-				'CUSTOM_NAME'=>placeholder_random_id(),
-				'OUT'=>$out,
-			)));
-		}
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array(
+                'SECTION_TITLE' => $_option[2],
+                'EXPANDED' => $_option[1],
+                'SIMPLE_STYLE' => false,
+                'BRETHREN_COUNT' => '3',
+                'CUSTOM_NAME' => placeholder_random_id(),
+                'OUT' => $out,
+            )));
+        }
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => $name,
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$hidden->attach(do_lorem_template('FORM_SCREEN_INPUT_HIDDEN',array(
-			'NAME'=>lorem_word(),
-			'VALUE'=>lorem_word(),
-		)));
+        $hidden->attach(do_lorem_template('FORM_SCREEN_INPUT_HIDDEN',array(
+            'NAME' => lorem_word(),
+            'VALUE' => lorem_word(),
+        )));
 
-		return array(
-			lorem_globalise(do_lorem_template('FORM_SCREEN',array(
-				'GET'=>NULL,
-				'SKIP_VALIDATION'=>true,
-				'HIDDEN'=>$hidden,
-				'TITLE'=>lorem_title(),
-				'URL'=>placeholder_url(),
-				'FIELDS'=>$fields,
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word(),
-				'TEXT'=>lorem_sentence_html(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('FORM_SCREEN',array(
+                'GET' => NULL,
+                'SKIP_VALIDATION' => true,
+                'HIDDEN' => $hidden,
+                'TITLE' => lorem_title(),
+                'URL' => placeholder_url(),
+                'FIELDS' => $fields,
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word(),
+                'TEXT' => lorem_sentence_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__posting_screen()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('POSTING_SCREEN',array(
-				'POSTING_FORM'=>placeholder_form(),
-				'HIDDEN'=>'',
-				'TITLE'=>lorem_title(),
-				'TEXT'=>lorem_sentence_html(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__posting_screen()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('POSTING_SCREEN',array(
+                'POSTING_FORM' => placeholder_form(),
+                'HIDDEN' => '',
+                'TITLE' => lorem_title(),
+                'TEXT' => lorem_sentence_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_group()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('FORM_GROUP',array(
-				'FIELDS'=>placeholder_fields(),
-				'HIDDEN'=>'',
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__form_group()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('FORM_GROUP',array(
+                'FIELDS' => placeholder_fields(),
+                'HIDDEN' => '',
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_grouped()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('FORM_GROUPED',array(
-				'TEXT'=>lorem_sentence_html(),
-				'FIELD_GROUPS'=>lorem_phrase(),
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word(),
-				'SUBMIT_BUTTON_CLASS'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__form_grouped()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('FORM_GROUPED',array(
+                'TEXT' => lorem_sentence_html(),
+                'FIELD_GROUPS' => lorem_phrase(),
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word(),
+                'SUBMIT_BUTTON_CLASS' => lorem_phrase(),
+                'URL' => placeholder_url(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_field_set_grouper()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('FORM_FIELD_SET_GROUPER',array(
-				'NAME'=>lorem_word(),
-				'ID'=>placeholder_random_id(),
-				'FIELDS'=>placeholder_fields(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__form_field_set_grouper()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('FORM_FIELD_SET_GROUPER',array(
+                'NAME' => lorem_word(),
+                'ID' => placeholder_random_id(),
+                'FIELDS' => placeholder_fields(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__preview_script_spelling()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_SPELLING',array(
-				'FIELD'=>lorem_phrase(),
-				'MISSPELLINGS'=>array(
-					array(
-						'WORD'=>'batt',
-						'CORRECTIONS'=>'bat',
-					),
-					array(
-						'WORD'=>'caat',
-						'CORRECTIONS'=>'cat',
-					)
-				)
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__preview_script_spelling()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_SPELLING',array(
+                'FIELD' => lorem_phrase(),
+                'MISSPELLINGS' => array(
+                    array(
+                        'WORD' => 'batt',
+                        'CORRECTIONS' => 'bat',
+                    ),
+                    array(
+                        'WORD' => 'caat',
+                        'CORRECTIONS' => 'cat',
+                    )
+                )
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__preview_script_keyword_density()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_KEYWORD_DENSITY',array(
-				'FIELD'=>lorem_phrase(),
-				'KEYWORDS'=>placeholder_array(),
-				'KEYWORD'=>lorem_word(),
-				'DENSITY'=>placeholder_id(),
-				'IDEAL_DENSITY'=>placeholder_number(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__preview_script_keyword_density()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_KEYWORD_DENSITY',array(
+                'FIELD' => lorem_phrase(),
+                'KEYWORDS' => placeholder_array(),
+                'KEYWORD' => lorem_word(),
+                'DENSITY' => placeholder_id(),
+                'IDEAL_DENSITY' => placeholder_number(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__preview_script_code()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_CODE',array(
-				'NEW_POST_VALUE_HTML'=>lorem_phrase(),
-				'NEW_POST_VALUE'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__preview_script_code()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_CODE',array(
+                'NEW_POST_VALUE_HTML' => lorem_phrase(),
+                'NEW_POST_VALUE' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_screen()
-	{
-		require_lang('comcode');
-		require_lang('dates');
-		$input=new ocp_tempcode();
-		$fields=new ocp_tempcode();
-		foreach (placeholder_array(1) as $key=>$val)
-		{
-			$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE',array(
-				'CHECKED'=>true,
-				'NAME'=>'path',
-				'VALUE'=>$val,
-				'URL'=>placeholder_image_url(),
-				'PRETTY'=>strval($key),
-			));
-			$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-				'REQUIRED'=>true,
-				'SKIP_LABEL'=>false,
-				'NAME'=>'path_'.$val,
-				'PRETTY_NAME'=>lorem_word(),
-				'DESCRIPTION'=>lorem_sentence_html(),
-				'DESCRIPTION_SIDE'=>'',
-				'INPUT'=>$input,
-				'COMCODE'=>'',
-			)));
-		}
-		$content=new ocp_tempcode();
-		$i=0;
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$cells=new ocp_tempcode();
-			foreach (placeholder_array() as $_k=>$_v)
-			{
-				$temp=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array(
-					'CHECKED'=>true,
-					'PRETTY'=>lorem_phrase(),
-					'NAME'=>placeholder_random_id(),
-					'CODE'=>$_v,
-					'URL'=>placeholder_image_url(),
-				));
-				$cells->attach($temp);
-			}
+    public function tpl_preview__form_screen()
+    {
+        require_lang('comcode');
+        require_lang('dates');
+        $input = new ocp_tempcode();
+        $fields = new ocp_tempcode();
+        foreach (placeholder_array(1) as $key => $val) {
+            $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE',array(
+                'CHECKED' => true,
+                'NAME' => 'path',
+                'VALUE' => $val,
+                'URL' => placeholder_image_url(),
+                'PRETTY' => strval($key),
+            ));
+            $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+                'REQUIRED' => true,
+                'SKIP_LABEL' => false,
+                'NAME' => 'path_' . $val,
+                'PRETTY_NAME' => lorem_word(),
+                'DESCRIPTION' => lorem_sentence_html(),
+                'DESCRIPTION_SIDE' => '',
+                'INPUT' => $input,
+                'COMCODE' => '',
+            )));
+        }
+        $content = new ocp_tempcode();
+        $i = 0;
+        foreach (placeholder_array() as $k => $v) {
+            $cells = new ocp_tempcode();
+            foreach (placeholder_array() as $_k => $_v) {
+                $temp = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array(
+                    'CHECKED' => true,
+                    'PRETTY' => lorem_phrase(),
+                    'NAME' => placeholder_random_id(),
+                    'CODE' => $_v,
+                    'URL' => placeholder_image_url(),
+                ));
+                $cells->attach($temp);
+            }
 
-			$input=do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array(
-				'DISPLAY'=>'block',
-				'CATEGORY'=>$cells,
-				'FIELD_NAME'=>placeholder_id(),
-				'CATEGORY_NAME'=>lorem_word(),
-			));
-			$content->attach($input);
-		}
+            $input = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array(
+                'DISPLAY' => 'block',
+                'CATEGORY' => $cells,
+                'FIELD_NAME' => placeholder_id(),
+                'CATEGORY_NAME' => lorem_word(),
+            ));
+            $content->attach($input);
+        }
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
-			'NAME'=>$name,
-			'CODE'=>'',
-			'TABINDEX'=>placeholder_number(),
-			'CONTENT'=>$content,
-			'REQUIRED'=>true,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>'',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
+            'NAME' => $name,
+            'CODE' => '',
+            'TABINDEX' => placeholder_number(),
+            'CONTENT' => $content,
+            'REQUIRED' => true,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => '',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$fields->attach(do_lorem_template('POSTING_FIELD',array(
-			'REQUIRED'=>true,
-			'DESCRIPTION'=>lorem_phrase(),
-			'HIDDEN_FIELDS'=>'',
-			'PRETTY_NAME'=>lorem_word(),
-			'NAME'=>placeholder_random_id(),
-			'TABINDEX_PF'=>placeholder_random(),
-			'COMCODE_EDITOR'=>placeholder_blank(),
-			'COMCODE_EDITOR_SMALL'=>placeholder_blank(),
-			'CLASS'=>lorem_word(),
-			'COMCODE_URL'=>placeholder_url(),
-			'EMOTICON_CHOOSER'=>placeholder_emoticon_chooser(),
-			'POST'=>placeholder_blank(),
-			'DEFAULT_PARSED'=>placeholder_blank(),
-			'ATTACHMENTS'=>placeholder_blank(),
-		)));
+        $fields->attach(do_lorem_template('POSTING_FIELD',array(
+            'REQUIRED' => true,
+            'DESCRIPTION' => lorem_phrase(),
+            'HIDDEN_FIELDS' => '',
+            'PRETTY_NAME' => lorem_word(),
+            'NAME' => placeholder_random_id(),
+            'TABINDEX_PF' => placeholder_random(),
+            'COMCODE_EDITOR' => placeholder_blank(),
+            'COMCODE_EDITOR_SMALL' => placeholder_blank(),
+            'CLASS' => lorem_word(),
+            'COMCODE_URL' => placeholder_url(),
+            'EMOTICON_CHOOSER' => placeholder_emoticon_chooser(),
+            'POST' => placeholder_blank(),
+            'DEFAULT_PARSED' => placeholder_blank(),
+            'ATTACHMENTS' => placeholder_blank(),
+        )));
 
-		return array(
-			lorem_globalise(do_lorem_template('FORM_SCREEN',array(
-				'GET'=>NULL,
-				'HIDDEN'=>'',
-				'TITLE'=>lorem_title(),
-				'URL'=>placeholder_url(),
-				'FIELDS'=>$fields,
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word(),
-				'TEXT'=>lorem_sentence_html(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('FORM_SCREEN',array(
+                'GET' => NULL,
+                'HIDDEN' => '',
+                'TITLE' => lorem_title(),
+                'URL' => placeholder_url(),
+                'FIELDS' => $fields,
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word(),
+                'TEXT' => lorem_sentence_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__wysiwyg_load()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('WYSIWYG_LOAD',array()),NULL,'',true)
-		);
-	}
+    public function tpl_preview__wysiwyg_load()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('WYSIWYG_LOAD',array()),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__posting_form()
-	{
-		require_lang('comcode');
-		require_lang('dates');
+    public function tpl_preview__posting_form()
+    {
+        require_lang('comcode');
+        require_lang('dates');
 
 
-		$buttons=new ocp_tempcode();
-		$_buttons=array(
-			'img',
-			'thumb',
-			'url',
-			'page',
-			'code',
-			'quote',
-			'hide',
-			'box',
-			'block',
-			'list',
-			'html'
-		);
-		foreach ($_buttons as $button)
-		{
-			$buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON',array(
-				'DIVIDER'=>true,
-				'FIELD_NAME'=>lorem_word(),
-				'TITLE'=>lorem_phrase(),
-				'B'=>$button,
-			)));
-		}
+        $buttons = new ocp_tempcode();
+        $_buttons = array(
+            'img',
+            'thumb',
+            'url',
+            'page',
+            'code',
+            'quote',
+            'hide',
+            'box',
+            'block',
+            'list',
+            'html'
+        );
+        foreach ($_buttons as $button) {
+            $buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON',array(
+                'DIVIDER' => true,
+                'FIELD_NAME' => lorem_word(),
+                'TITLE' => lorem_phrase(),
+                'B' => $button,
+            )));
+        }
 
-		$micro_buttons=new ocp_tempcode();
-		$_micro_buttons=array(
-			array(
-				't'=>'b',
-			),
-			array(
-				't'=>'i',
-			)
-		);
+        $micro_buttons = new ocp_tempcode();
+        $_micro_buttons = array(
+            array(
+                't' => 'b',
+            ),
+            array(
+                't' => 'i',
+            )
+        );
 
-		foreach ($_micro_buttons as $button)
-		{
-			$micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
-				'FIELD_NAME'=>lorem_word(),
-				'TITLE'=>lorem_phrase(),
-				'B'=>$button['t'],
-			)));
-		}
+        foreach ($_micro_buttons as $button) {
+            $micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
+                'FIELD_NAME' => lorem_word(),
+                'TITLE' => lorem_phrase(),
+                'B' => $button['t'],
+            )));
+        }
 
-		$comcode=do_lorem_template('COMCODE_EDITOR',array(
-			'POSTING_FIELD'=>lorem_word(),
-			'BUTTONS'=>$buttons,
-			'MICRO_BUTTONS'=>$micro_buttons,
-		));
+        $comcode = do_lorem_template('COMCODE_EDITOR',array(
+            'POSTING_FIELD' => lorem_word(),
+            'BUTTONS' => $buttons,
+            'MICRO_BUTTONS' => $micro_buttons,
+        ));
 
 
-		return array(
-			lorem_globalise(do_lorem_template('POSTING_FORM',array(
-				'TABINDEX_PF'=>placeholder_number(),
-				'JAVASCRIPT'=>'',
-				'PREVIEW'=>lorem_phrase(),
-				'COMCODE_EDITOR'=>$comcode,
-				'COMCODE_EDITOR_SMALL'=>lorem_phrase(),
-				'CLASS'=>lorem_phrase(),
-				'COMCODE_URL'=>placeholder_url(),
-				'EXTRA'=>lorem_phrase(),
-				'POST_COMMENT'=>lorem_phrase(),
-				'EMOTICON_CHOOSER'=>lorem_phrase(),
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word(),
-				'HIDDEN_FIELDS'=>'',
-				'URL'=>placeholder_url(),
-				'POST'=>lorem_phrase(),
-				'DEFAULT_PARSED'=>lorem_phrase(),
-				'CONTINUE_URL'=>placeholder_url(),
-				'ATTACHMENTS'=>lorem_phrase(),
-				'SPECIALISATION'=>placeholder_fields(),
-				'SPECIALISATION2'=>placeholder_fields(),
-				'REQUIRED'=>true,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('POSTING_FORM',array(
+                'TABINDEX_PF' => placeholder_number(),
+                'JAVASCRIPT' => '',
+                'PREVIEW' => lorem_phrase(),
+                'COMCODE_EDITOR' => $comcode,
+                'COMCODE_EDITOR_SMALL' => lorem_phrase(),
+                'CLASS' => lorem_phrase(),
+                'COMCODE_URL' => placeholder_url(),
+                'EXTRA' => lorem_phrase(),
+                'POST_COMMENT' => lorem_phrase(),
+                'EMOTICON_CHOOSER' => lorem_phrase(),
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word(),
+                'HIDDEN_FIELDS' => '',
+                'URL' => placeholder_url(),
+                'POST' => lorem_phrase(),
+                'DEFAULT_PARSED' => lorem_phrase(),
+                'CONTINUE_URL' => placeholder_url(),
+                'ATTACHMENTS' => lorem_phrase(),
+                'SPECIALISATION' => placeholder_fields(),
+                'SPECIALISATION2' => placeholder_fields(),
+                'REQUIRED' => true,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__form_descrip_sep()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('FORM_DESCRIP_SEP',array()),NULL,'',true)
-		);
-	}
+    public function tpl_preview__form_descrip_sep()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('FORM_DESCRIP_SEP',array()),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__form_screen_input_permission()
-	{
-		require_lang('permissions');
-		$permission_rows=new ocp_tempcode();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$overrides=new ocp_tempcode();
-			$all_global=true;
-			foreach (placeholder_array() as $_k=>$_v)
-			{
-				$overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array(
-					'FORCE_PRESETS'=>false,
-					'GROUP_NAME'=>lorem_phrase(),
-					'VIEW_ACCESS'=>'',
-					'TABINDEX'=>placeholder_number(),
-					'GROUP_ID'=>placeholder_random_id(),
-					'PRIVILEGE'=>strval($_k),
-					'ALL_GLOBAL'=>true,
-					'TITLE'=>lorem_phrase(),
-					'DEFAULT_ACCESS'=>placeholder_number(),
-					'CODE'=>'-1',
-				)));
-			}
+    public function tpl_preview__administrative__form_screen_input_permission()
+    {
+        require_lang('permissions');
+        $permission_rows = new ocp_tempcode();
+        foreach (placeholder_array() as $k => $v) {
+            $overrides = new ocp_tempcode();
+            $all_global = true;
+            foreach (placeholder_array() as $_k => $_v) {
+                $overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array(
+                    'FORCE_PRESETS' => false,
+                    'GROUP_NAME' => lorem_phrase(),
+                    'VIEW_ACCESS' => '',
+                    'TABINDEX' => placeholder_number(),
+                    'GROUP_ID' => placeholder_random_id(),
+                    'PRIVILEGE' => strval($_k),
+                    'ALL_GLOBAL' => true,
+                    'TITLE' => lorem_phrase(),
+                    'DEFAULT_ACCESS' => placeholder_number(),
+                    'CODE' => '-1',
+                )));
+            }
 
-			$permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION',array(
-				'FORCE_PRESETS'=>false,
-				'GROUP_NAME'=>lorem_phrase(),
-				'OVERRIDES'=>$overrides->evaluate() /*FUDGEFUDGE*/ ,
-				'ALL_GLOBAL'=>true,
-				'VIEW_ACCESS'=>'',
-				'TABINDEX'=>placeholder_number(),
-				'GROUP_ID'=>placeholder_random_id(),
-				'PINTERFACE_VIEW'=>'',
-			)));
-		}
+            $permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION',array(
+                'FORCE_PRESETS' => false,
+                'GROUP_NAME' => lorem_phrase(),
+                'OVERRIDES' => $overrides->evaluate() /*FUDGEFUDGE*/ ,
+                'ALL_GLOBAL' => true,
+                'VIEW_ACCESS' => '',
+                'TABINDEX' => placeholder_number(),
+                'GROUP_ID' => placeholder_random_id(),
+                'PINTERFACE_VIEW' => '',
+            )));
+        }
 
-		$permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN',array(
-			'PINTERFACE_VIEW'=>lorem_word(),
-			'GROUP_ID'=>placeholder_random_id(),
-			'GROUP_NAME'=>lorem_phrase(),
-			'FORCE_PRESETS'=>false,
-			'OVERRIDES'=>placeholder_array(),
-		)));
+        $permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN',array(
+            'PINTERFACE_VIEW' => lorem_word(),
+            'GROUP_ID' => placeholder_random_id(),
+            'GROUP_NAME' => lorem_phrase(),
+            'FORCE_PRESETS' => false,
+            'OVERRIDES' => placeholder_array(),
+        )));
 
-		$field=do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX',array(
-			'TITLE'=>lorem_phrase(),
-			'SERVER_ID'=>placeholder_id(),
-			'COLOR'=>lorem_word(),
-			'OVERRIDES'=>placeholder_array(),
-			'PERMISSION_ROWS'=>$permission_rows,
-		));
+        $field = do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX',array(
+            'TITLE' => lorem_phrase(),
+            'SERVER_ID' => placeholder_id(),
+            'COLOR' => lorem_word(),
+            'OVERRIDES' => placeholder_array(),
+            'PERMISSION_ROWS' => $permission_rows,
+        ));
 
-		return array(
-			lorem_globalise(do_lorem_template('FORM_GROUPED',array(
-				'URL'=>'#',
-				'FIELD_GROUPS'=>$field,
-				'TEXT'=>'',
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word_2(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('FORM_GROUPED',array(
+                'URL' => '#',
+                'FIELD_GROUPS' => $field,
+                'TEXT' => '',
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word_2(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__form_screen_input_permission_outer()
-	{
-		require_lang('permissions');
+    public function tpl_preview__administrative__form_screen_input_permission_outer()
+    {
+        require_lang('permissions');
 
-		$fields=new ocp_tempcode();
+        $fields = new ocp_tempcode();
 
-		$name=placeholder_random_id();
-		$input=do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
-			'NAME'=>$name,
-			'CODE'=>'',
-			'TABINDEX'=>placeholder_number(),
-			'CONTENT'=>lorem_phrase(),
-			'REQUIRED'=>true,
-		));
-		$fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
-			'REQUIRED'=>true,
-			'SKIP_LABEL'=>true,
-			'NAME'=>'',
-			'PRETTY_NAME'=>lorem_word(),
-			'DESCRIPTION'=>lorem_sentence_html(),
-			'DESCRIPTION_SIDE'=>'',
-			'INPUT'=>$input,
-			'COMCODE'=>'',
-		)));
+        $name = placeholder_random_id();
+        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
+            'NAME' => $name,
+            'CODE' => '',
+            'TABINDEX' => placeholder_number(),
+            'CONTENT' => lorem_phrase(),
+            'REQUIRED' => true,
+        ));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            'REQUIRED' => true,
+            'SKIP_LABEL' => true,
+            'NAME' => '',
+            'PRETTY_NAME' => lorem_word(),
+            'DESCRIPTION' => lorem_sentence_html(),
+            'DESCRIPTION_SIDE' => '',
+            'INPUT' => $input,
+            'COMCODE' => '',
+        )));
 
-		$fields->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER',array(
-			'INNER'=>lorem_word(),
-		)));
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER',array(
+            'INNER' => lorem_word(),
+        )));
 
-		return array(
-			lorem_globalise(do_lorem_template('FORM',array(
-				'URL'=>'#',
-				'FIELDS'=>$fields,
-				'HIDDEN'=>'',
-				'TEXT'=>'',
-				'SUBMIT_ICON'=>'buttons__proceed',
-				'SUBMIT_NAME'=>lorem_word_2(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('FORM',array(
+                'URL' => '#',
+                'FIELDS' => $fields,
+                'HIDDEN' => '',
+                'TEXT' => '',
+                'SUBMIT_ICON' => 'buttons__proceed',
+                'SUBMIT_NAME' => lorem_word_2(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__preview_script()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('PREVIEW_SCRIPT',array(
-				'OUTPUT'=>lorem_phrase(),
-				'HIDDEN'=>'',
-				'VALIDATION'=>lorem_phrase(),
-				'KEYWORD_DENSITY'=>lorem_phrase(),
-				'SPELLING'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__preview_script()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT',array(
+                'OUTPUT' => lorem_phrase(),
+                'HIDDEN' => '',
+                'VALIDATION' => lorem_phrase(),
+                'KEYWORD_DENSITY' => lorem_phrase(),
+                'SPELLING' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__block_helper_block_group()
-	{
-		require_lang('blocks');
-		require_lang('comcode');
+    public function tpl_preview__administrative__block_helper_block_group()
+    {
+        require_lang('blocks');
+        require_lang('comcode');
 
-		$links=new ocp_tempcode();
-		foreach (placeholder_array() as $v)
-		{
-			$links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE',array(
-				'USAGE'=>placeholder_array(),
-				'DESCRIPTION'=>lorem_paragraph_html(),
-				'URL'=>placeholder_url(),
-				'LINK_CAPTION'=>lorem_phrase(),
-			)));
-		}
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_HELPER_BLOCK_GROUP',array(
-				'IMG'=>'themes/default/images/icons/24x24/menu/_generic_admin/add_one.png',
-				'TITLE'=>lorem_phrase(),
-				'LINKS'=>$links,
-			)),NULL,'',true)
-		);
-	}
+        $links = new ocp_tempcode();
+        foreach (placeholder_array() as $v) {
+            $links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE',array(
+                'USAGE' => placeholder_array(),
+                'DESCRIPTION' => lorem_paragraph_html(),
+                'URL' => placeholder_url(),
+                'LINK_CAPTION' => lorem_phrase(),
+            )));
+        }
+        return array(
+            lorem_globalise(do_lorem_template('BLOCK_HELPER_BLOCK_GROUP',array(
+                'IMG' => 'themes/default/images/icons/24x24/menu/_generic_admin/add_one.png',
+                'TITLE' => lorem_phrase(),
+                'LINKS' => $links,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__block_helper_start()
-	{
-		require_lang('comcode');
-		return array(
-			lorem_globalise(
-				do_lorem_template('BLOCK_HELPER_START',array(
-					'TITLE'=>lorem_phrase(),
-					'LINKS'=>lorem_paragraph_html(),
-				)
-			),NULL,'',true),
-		);
-	}
+    public function tpl_preview__administrative__block_helper_start()
+    {
+        require_lang('comcode');
+        return array(
+            lorem_globalise(
+                do_lorem_template('BLOCK_HELPER_START',array(
+                    'TITLE' => lorem_phrase(),
+                    'LINKS' => lorem_paragraph_html(),
+                )
+            ),null,'',true),
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__block_helper_done()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_HELPER_DONE',array(
-				'TITLE'=>lorem_phrase(),
-				'FIELD_NAME'=>placeholder_id(),
-				'BLOCK'=>lorem_phrase(),
-				'TAG_CONTENTS'=>'',
-				'SAVE_TO_ID'=>'',
-				'DELETE'=>false,
-				'COMCODE'=>lorem_phrase(),
-				'COMCODE_SEMIHTML'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__block_helper_done()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('BLOCK_HELPER_DONE',array(
+                'TITLE' => lorem_phrase(),
+                'FIELD_NAME' => placeholder_id(),
+                'BLOCK' => lorem_phrase(),
+                'TAG_CONTENTS' => '',
+                'SAVE_TO_ID' => '',
+                'DELETE' => false,
+                'COMCODE' => lorem_phrase(),
+                'COMCODE_SEMIHTML' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 }

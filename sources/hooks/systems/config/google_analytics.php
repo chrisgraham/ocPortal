@@ -20,35 +20,33 @@
 
 class Hook_config_google_analytics
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'GOOGLE_ANALYTICS',
-			'type'=>'line',
-			'category'=>'SITE',
-			'group'=>'LOGGING',
-			'explanation'=>'CONFIG_OPTION_google_analytics',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'GOOGLE_ANALYTICS',
+            'type' => 'line',
+            'category' => 'SITE',
+            'group' => 'LOGGING',
+            'explanation' => 'CONFIG_OPTION_google_analytics',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

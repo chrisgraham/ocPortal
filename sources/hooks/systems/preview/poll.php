@@ -20,54 +20,47 @@
 
 class Hook_Preview_poll
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=(get_param('page','')=='cms_polls');
-		return array($applies,NULL,false);
-	}
+    public function applies()
+    {
+        $applies = (get_param('page','') == 'cms_polls');
+        return array($applies,null,false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		// Our questions templated
-		$tpl=new ocp_tempcode();
-		$i=1;
-		do
-		{
-			$answer_plain=post_param('option'.strval($i));
-			if ($answer_plain!='')
-			{
-				$answer=comcode_to_tempcode($answer_plain);
-				$votes=0;
-				$width=0;
-				$tpl->attach(do_template('POLL_ANSWER_RESULT',array('_GUID'=>'0412b038bb359ce84e5732dec8a09b12','PID'=>'','I'=>strval($i),'VOTE_URL'=>'','ANSWER'=>$answer,'ANSWER_PLAIN'=>$answer_plain,'WIDTH'=>strval($width),'VOTES'=>integer_format($votes))));
-				$i++;
-			}
-		}
-		while ($answer_plain!='');
+    public function run()
+    {
+        // Our questions templated
+        $tpl = new ocp_tempcode();
+        $i = 1;
+        do {
+            $answer_plain = post_param('option' . strval($i));
+            if ($answer_plain != '') {
+                $answer = comcode_to_tempcode($answer_plain);
+                $votes = 0;
+                $width = 0;
+                $tpl->attach(do_template('POLL_ANSWER_RESULT',array('_GUID' => '0412b038bb359ce84e5732dec8a09b12','PID' => '','I' => strval($i),'VOTE_URL' => '','ANSWER' => $answer,'ANSWER_PLAIN' => $answer_plain,'WIDTH' => strval($width),'VOTES' => integer_format($votes))));
+                $i++;
+            }
+        } while ($answer_plain != '');
 
-		$submit_url=new ocp_tempcode();
+        $submit_url = new ocp_tempcode();
 
-		// Do our final template
-		$question_plain=post_param('question');
-		$question=comcode_to_tempcode($question_plain);
-		$archive_url=build_url(array('page'=>'polls','type'=>'misc'),get_module_zone('polls'));
-		$map2=array('VOTE_URL'=>'','SUBMITTER'=>strval(get_member()),'PID'=>'','FULL_URL'=>'','CONTENT'=>$tpl,'QUESTION'=>$question,'QUESTION_PLAIN'=>$question_plain,'SUBMIT_URL'=>$submit_url,'ARCHIVE_URL'=>$archive_url,'RESULT_URL'=>'','ZONE'=>'');
-		$output=do_template('POLL_BOX',$map2);
+        // Do our final template
+        $question_plain = post_param('question');
+        $question = comcode_to_tempcode($question_plain);
+        $archive_url = build_url(array('page' => 'polls','type' => 'misc'),get_module_zone('polls'));
+        $map2 = array('VOTE_URL' => '','SUBMITTER' => strval(get_member()),'PID' => '','FULL_URL' => '','CONTENT' => $tpl,'QUESTION' => $question,'QUESTION_PLAIN' => $question_plain,'SUBMIT_URL' => $submit_url,'ARCHIVE_URL' => $archive_url,'RESULT_URL' => '','ZONE' => '');
+        $output = do_template('POLL_BOX',$map2);
 
-		return array($output,NULL);
-	}
-
-
+        return array($output,null);
+    }
 }
-
-

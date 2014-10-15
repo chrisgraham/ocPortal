@@ -20,7 +20,7 @@
 
 class Hook_rss_authors
 {
-	/**
+    /**
 	 * Run function for RSS hooks.
 	 *
 	 * @param  string			A list of categories we accept from
@@ -31,43 +31,48 @@ class Hook_rss_authors
 	 * @param  integer		The maximum number of entries to return, ordering by date
 	 * @return ?array			A pair: The main syndication section, and a title (NULL: error)
 	 */
-	function run($_filters,$cutoff,$prefix,$date_string,$max)
-	{
-		if (!addon_installed('authors')) return NULL;
+    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    {
+        if (!addon_installed('authors')) {
+            return NULL;
+        }
 
-		if (!has_actual_page_access(get_member(),'authors')) return NULL;
+        if (!has_actual_page_access(get_member(),'authors')) {
+            return NULL;
+        }
 
-		$content=new ocp_tempcode();
-		$rows=$GLOBALS['SITE_DB']->query_select('authors',array('*'),NULL,'',1000);
-		if (count($rows)==1000) return NULL; // Too much
-		foreach ($rows as $i=>$row)
-		{
-			if ($i==$max) break;
+        $content = new ocp_tempcode();
+        $rows = $GLOBALS['SITE_DB']->query_select('authors',array('*'),null,'',1000);
+        if (count($rows) == 1000) {
+            return NULL;
+        } // Too much
+        foreach ($rows as $i => $row) {
+            if ($i == $max) {
+                break;
+            }
 
-			$id=strval($row['author']);
-			$author='';
+            $id = strval($row['author']);
+            $author = '';
 
-			$news_date='';
-			$edit_date='';
+            $news_date = '';
+            $edit_date = '';
 
-			$news_title=xmlentities(escape_html($row['author']));
-			$_summary=get_translated_tempcode('authors',$row,'description');
-			$summary=xmlentities($_summary->evaluate());
-			$news='';
+            $news_title = xmlentities(escape_html($row['author']));
+            $_summary = get_translated_tempcode('authors',$row,'description');
+            $summary = xmlentities($_summary->evaluate());
+            $news = '';
 
-			$category='';
-			$category_raw='';
+            $category = '';
+            $category_raw = '';
 
-			$view_url=build_url(array('page'=>'authors','type'=>'view','id'=>$row['author']),get_module_zone('authors'),NULL,false,false,true);
+            $view_url = build_url(array('page' => 'authors','type' => 'view','id' => $row['author']),get_module_zone('authors'),null,false,false,true);
 
-			$if_comments=new ocp_tempcode();
+            $if_comments = new ocp_tempcode();
 
-			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$news_title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$id,'NEWS'=>$news,'DATE'=>$news_date)));
-		}
+            $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+        }
 
-		require_lang('authors');
-		return array($content,do_lang('AUTHORS'));
-	}
+        require_lang('authors');
+        return array($content,do_lang('AUTHORS'));
+    }
 }
-
-

@@ -20,20 +20,18 @@
 
 class Hook_newsletter_subscribers
 {
-	/**
+    /**
 	 * Standard importer hook info function.
 	 *
 	 * @return ?array	Importer handling details (NULL: importer is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['product']='Newsletter subscribers (CSV files)';
-		$info['hook_type']='redirect';
-		$info['import_module']='admin_newsletter';
-		$info['import_method_name']='import_subscribers';
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['product'] = 'Newsletter subscribers (CSV files)';
+        $info['hook_type'] = 'redirect';
+        $info['import_module'] = 'admin_newsletter';
+        $info['import_method_name'] = 'import_subscribers';
+        return $info;
+    }
 }
-
-

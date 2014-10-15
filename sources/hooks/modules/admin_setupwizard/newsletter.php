@@ -20,17 +20,17 @@
 
 class Hook_sw_newsletter
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('newsletter')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('newsletter')) {
+            return array();
+        }
 
-		return array(array(),array('main_newsletter_signup'=>array('PANEL_NONE','PANEL_RIGHT')));
-	}
+        return array(array(),array('main_newsletter_signup' => array('PANEL_NONE','PANEL_RIGHT')));
+    }
 }
-
-

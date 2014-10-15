@@ -20,52 +20,56 @@
 
 class Hook_media_rendering_realmedia
 {
-	/**
+    /**
 	 * Get the label for this media rendering type.
 	 *
 	 * @return string		The label
 	 */
-	function get_type_label()
-	{
-		require_lang('comcode');
-		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
-	}
+    public function get_type_label()
+    {
+        require_lang('comcode');
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+    }
 
-	/**
+    /**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask
 	 */
-	function get_media_type()
-	{
-		return MEDIA_TYPE_VIDEO;
-	}
+    public function get_media_type()
+    {
+        return MEDIA_TYPE_VIDEO;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this mime type.
 	 *
 	 * @param  ID_TEXT	The mime type
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_mime_type($mime_type)
-	{
-		if ($mime_type=='audio/x-pn-realaudio') return MEDIA_RECOG_PRECEDENCE_HIGH;
-		return MEDIA_RECOG_PRECEDENCE_NONE;
-	}
+    public function recognises_mime_type($mime_type)
+    {
+        if ($mime_type == 'audio/x-pn-realaudio') {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
+        return MEDIA_RECOG_PRECEDENCE_NONE;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this URL pattern.
 	 *
 	 * @param  URLPATH	URL to pattern match
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_url($url)
-	{
-		if (substr($url,0,7)=='rtsp://') return MEDIA_RECOG_PRECEDENCE_HIGH;
-		return MEDIA_RECOG_PRECEDENCE_NONE;
-	}
+    public function recognises_url($url)
+    {
+        if (substr($url,0,7) == 'rtsp://') {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
+        return MEDIA_RECOG_PRECEDENCE_NONE;
+    }
 
-	/**
+    /**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
 	 * @param  mixed		URL to render
@@ -75,8 +79,8 @@ class Hook_media_rendering_realmedia
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
-	{
-		return do_template('MEDIA_REALMEDIA',array('_GUID'=>'313a28331ac2ab936b57a26dffb363c1','HOOK'=>'realmedia')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
-	}
+    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    {
+        return do_template('MEDIA_REALMEDIA',array('_GUID' => '313a28331ac2ab936b57a26dffb363c1','HOOK' => 'realmedia')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+    }
 }

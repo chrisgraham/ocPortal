@@ -20,35 +20,33 @@
 
 class Hook_config_validation_javascript
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'VALIDATION_JAVASCRIPT',
-			'type'=>'tick',
-			'category'=>'ACCESSIBILITY',
-			'group'=>'VALIDATION',
-			'explanation'=>'CONFIG_OPTION_validation_javascript',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'VALIDATION_JAVASCRIPT',
+            'type' => 'tick',
+            'category' => 'ACCESSIBILITY',
+            'group' => 'VALIDATION',
+            'explanation' => 'CONFIG_OPTION_validation_javascript',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'core_validation',
-		);
-	}
+            'addon' => 'core_validation',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return NULL; // Way too slow, and unlikely to be accurate with quickly-evolving JS standards
-	}
+    public function get_default()
+    {
+        return NULL; // Way too slow, and unlikely to be accurate with quickly-evolving JS standards
+    }
 }
-
-

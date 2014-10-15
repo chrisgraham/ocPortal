@@ -20,36 +20,34 @@
 
 class Hook_config_valid_videos
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'VIDEO_TYPES',
-			'type'=>'line',
-			'category'=>'SECURITY',
-			'group'=>'UPLOADED_FILES',
-			'explanation'=>'CONFIG_OPTION_valid_videos',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'VIDEO_TYPES',
+            'type' => 'line',
+            'category' => 'SECURITY',
+            'group' => 'UPLOADED_FILES',
+            'explanation' => 'CONFIG_OPTION_valid_videos',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '3gp,3g2,3gp2,3gpp,3p,asf,avi,flv,f4v,mov,mpa,mp4,mpe,mpeg,mpg,m2v,mpv2,mp2,m4v,qt,ram,rm,wmv,ogg,ogv,webm,pdf';
-	}
+    public function get_default()
+    {
+        return '3gp,3g2,3gp2,3gpp,3p,asf,avi,flv,f4v,mov,mpa,mp4,mpe,mpeg,mpg,m2v,mpv2,mp2,m4v,qt,ram,rm,wmv,ogg,ogv,webm,pdf';
+    }
 }
-
-

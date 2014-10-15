@@ -17,60 +17,62 @@
  * ocPortal test case class (unit testing).
  */
 class ecommerce_test_set extends ocp_test_case
-{	
-	var $admin_ecom;
-	var $item_id;
-	var $order_id;
-	var $access_mapping;
-	var $admin_orders;
+{
+    public $admin_ecom;
+    public $item_id;
+    public $order_id;
+    public $access_mapping;
+    public $admin_orders;
 
-	function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		require_code('ecommerce');
-		require_code('autosave');
-		require_code('shopping');
-		require_code('form_templates');
+        require_code('ecommerce');
+        require_code('autosave');
+        require_code('shopping');
+        require_code('form_templates');
 
-		require_lang('ecommerce');
+        require_lang('ecommerce');
 
-		$this->access_mapping=array(db_get_first_id()=>4);
-		// Creating cms catalogues object
-		require_code('adminzone/pages/modules/admin_ecommerce.php');
-		$this->admin_ecom=new Module_admin_ecommerce();
+        $this->access_mapping = array(db_get_first_id() => 4);
+        // Creating cms catalogues object
+        require_code('adminzone/pages/modules/admin_ecommerce.php');
+        $this->admin_ecom = new Module_admin_ecommerce();
 
-		/*require_code('adminzone/pages/modules/admin_shipping.php');
+        /*require_code('adminzone/pages/modules/admin_shipping.php');
 		$this->admin_shipping=new Module_admin_shipping();
 		$this->admin_shipping->run_start('misc');*/
 
-		/*require_code('adminzone/pages/modules_custom/admin_credits.php');
+        /*require_code('adminzone/pages/modules_custom/admin_credits.php');
 		$this->admin_credits=new Module_admin_credits();*/
 
-		require_code('adminzone/pages/modules/admin_orders.php');
-		$this->admin_orders=new Module_admin_orders();
-		if (method_exists($this->admin_orders,'pre_run')) $this->admin_orders->pre_run();
-		$this->admin_orders->run();
+        require_code('adminzone/pages/modules/admin_orders.php');
+        $this->admin_orders = new Module_admin_orders();
+        if (method_exists($this->admin_orders,'pre_run')) {
+            $this->admin_orders->pre_run();
+        }
+        $this->admin_orders->run();
 
-		$GLOBALS['SITE_DB']->query_insert('shopping_order',array(
-			'c_member'		=>	get_member(),
-			'session_id'		=>	get_session_id(),
-			'add_date'		=>	time(),
-			'tot_price'		=>	0.0,
-			'order_status'		=>	'NEW',
-			'notes'			=>	'',
-			'transaction_id'	=>	'ddfsfdsdfsdfs',
-			'purchase_through'	=>	'paypal',
-			'tax_opted_out'	=>	0,
-		));
+        $GLOBALS['SITE_DB']->query_insert('shopping_order',array(
+            'c_member'        =>    get_member(),
+            'session_id'        =>    get_session_id(),
+            'add_date'        =>    time(),
+            'tot_price'        =>    0.0,
+            'order_status'        =>    'NEW',
+            'notes'            =>    '',
+            'transaction_id'    =>    'ddfsfdsdfsdfs',
+            'purchase_through'    =>    'paypal',
+            'tax_opted_out'    =>    0,
+        ));
 
-		/*require_code('adminzone/pages/modules/admin_permissions_products.php');
+        /*require_code('adminzone/pages/modules/admin_permissions_products.php');
 		$this->admin_permission_products=new Module_admin_permissions_products();
 		if (method_exists($this->admin_permission_products,'pre_run')) $this->admin_permission_products->pre_run();
 		$this->admin_permission_products->run();*/
-	}
+    }
 
-	/*function testTaxrateUI()
+    /*function testTaxrateUI()
 	{
 		//Create own ecommerce store
 		$this->admin_ecom->run_start();
@@ -89,7 +91,7 @@ class ecommerce_test_set extends ocp_test_case
 	}*
 
 	/*function testAddShippingEquationUI()
-	{		
+	{
 		$this->admin_shipping->ad();
 	}
 
@@ -99,7 +101,7 @@ class ecommerce_test_set extends ocp_test_case
 
 		$_POST['title']='Standard shipping';
 		$_POST['description']='Standard shipping';
-		$_POST['equation']='3.00+(($weight>10)?(($weight-10)*0.23):0.00)';	
+		$_POST['equation']='3.00+(($weight>10)?(($weight-10)*0.23):0.00)';
 
 		$this->item_id=$this->admin_shipping->add_actualisation();
 	}
@@ -108,7 +110,7 @@ class ecommerce_test_set extends ocp_test_case
 	{
 		$_POST['title']='Standard shipping - modified';
 		$_POST['description']='Standard shipping - modified';
-		$_POST['equation']='3.00+(($weight>10)?(($weight-10)*0.23):0.00)';	
+		$_POST['equation']='3.00+(($weight>10)?(($weight-10)*0.23):0.00)';
 
 		$this->admin_shipping->edit_actualisation($this->item_id);
 	}
@@ -118,14 +120,14 @@ class ecommerce_test_set extends ocp_test_case
 		$this->admin_shipping->delete_actualisation($this->item_id);
 	}*/
 
-	//Credit points display - Admin_credits module
-	/*function testAdminCreditLogs()
+    //Credit points display - Admin_credits module
+    /*function testAdminCreditLogs()
 	{
 		$this->admin_credits->logs();
 	}
 
 	function testGiveCreditUI()
-	{	
+	{
 		$_GET['member_id']=2;
 		$this->admin_credits->credit_screen();
 	}
@@ -138,107 +140,106 @@ class ecommerce_test_set extends ocp_test_case
 		$this->admin_credits->credit_actualiser_screen();
 	}*/
 
-	//Member statuses
-	/*function testmemberStatusesUI()
+    //Member statuses
+    /*function testmemberStatusesUI()
 	{
 		return $this->admin_orders->user_orders();
 	}*/
 
-	//order module methods
-	function testShowOrders()
-	{
-		return $this->admin_orders->show_orders();
-	}	
+    //order module methods
+    public function testShowOrders()
+    {
+        return $this->admin_orders->show_orders();
+    }
 
-	function testOrderDetails()
-	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$_GET['id']=strval($this->order_id);
-		return $this->admin_orders->order_details();
-	}
+    public function testOrderDetails()
+    {
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $_GET['id'] = strval($this->order_id);
+        return $this->admin_orders->order_details();
+    }
 
-	function testAddNoteToOrderUI()
-	{	
-		$this->admin_orders->add_note();
-	}
+    public function testAddNoteToOrderUI()
+    {
+        $this->admin_orders->add_note();
+    }
 
-	function testAddNoteToOrderActuliser()
-	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$_POST['order_id']=$this->order_id;
-		$_POST['note']='Test note';	
-		$this->admin_orders->_add_note();
-	}
+    public function testAddNoteToOrderActuliser()
+    {
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $_POST['order_id'] = $this->order_id;
+        $_POST['note'] = 'Test note';
+        $this->admin_orders->_add_note();
+    }
 
-	function testorderDispatch()
-	{
-		$order_id=$GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','max(id)',array('order_status'=>'ORDER_STATUS_payment_received'));
-		if(!is_null($order_id))
-		{	
-			$this->order_id=$order_id;
-			$_GET['id']=$this->order_id;
-			$this->admin_orders->dispatch();
-		}
-	}
+    public function testorderDispatch()
+    {
+        $order_id = $GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','max(id)',array('order_status' => 'ORDER_STATUS_payment_received'));
+        if (!is_null($order_id)) {
+            $this->order_id = $order_id;
+            $_GET['id'] = $this->order_id;
+            $this->admin_orders->dispatch();
+        }
+    }
 
-	function testOrderDispatchNotification()
-	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$this->admin_orders->send_dispatch_notification($this->order_id);
-	}
+    public function testOrderDispatchNotification()
+    {
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->admin_orders->send_dispatch_notification($this->order_id);
+    }
 
-	function testDeleteOrder()
-	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$_GET['id']=$this->order_id;
-		$this->admin_orders->delete_order();
-	}
+    public function testDeleteOrder()
+    {
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $_GET['id'] = $this->order_id;
+        $this->admin_orders->delete_order();
+    }
 
-	function testReturnOrder()
-	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$_GET['id']=$this->order_id;
-		$this->admin_orders->return_order();		
-	}
+    public function testReturnOrder()
+    {
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $_GET['id'] = $this->order_id;
+        $this->admin_orders->return_order();
+    }
 
-	function testholdOrder()
-	{
-		$this->order_id=$GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
-		$_GET['id']=$this->order_id;
-		$this->admin_orders->hold_order();		
-	}
+    public function testholdOrder()
+    {
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $_GET['id'] = $this->order_id;
+        $this->admin_orders->hold_order();
+    }
 
-	function testOrderExportUI()
-	{
-		$this->admin_orders->order_export();
-	}
+    public function testOrderExportUI()
+    {
+        $this->admin_orders->order_export();
+    }
 
-	function testOrderExportActuliser()
-	{		
-		$_POST=array(			
-			'order_status'=>'ORDER_STATUS_awaiting_payment',
-			'require__order_status'=>0,
-			'start_date'=>1,
-			'start_date_day'=>10,
-			'start_date_month'=>12,
-			'start_date_year'=>2008,
-			'start_date_hour'=>7,
-			'start_date_minute'=>0,
-			'require__start_date'=>1,
-			'end_date'=>1,
-			'end_date_day'=>10,
-			'end_date_month'=>12,
-			'end_date_year'=>2009,
-			'end_date_hour'=>7,
-			'end_date_minute'=>0,
-			'require__end_date'=>1,
-			'is_from_unit_test'=>1
-		);
+    public function testOrderExportActuliser()
+    {
+        $_POST = array(
+            'order_status' => 'ORDER_STATUS_awaiting_payment',
+            'require__order_status' => 0,
+            'start_date' => 1,
+            'start_date_day' => 10,
+            'start_date_month' => 12,
+            'start_date_year' => 2008,
+            'start_date_hour' => 7,
+            'start_date_minute' => 0,
+            'require__start_date' => 1,
+            'end_date' => 1,
+            'end_date_day' => 10,
+            'end_date_month' => 12,
+            'end_date_year' => 2009,
+            'end_date_hour' => 7,
+            'end_date_minute' => 0,
+            'require__end_date' => 1,
+            'is_from_unit_test' => 1
+        );
 
-		$this->admin_orders->_order_export(true);
-	}
+        $this->admin_orders->_order_export(true);
+    }
 
-	/*function testPermissionProductsUI()
+    /*function testPermissionProductsUI()
 	{
 		$this->admin_permission_products->permissions_product_management();
 	}

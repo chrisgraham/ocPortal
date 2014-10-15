@@ -20,67 +20,67 @@
 
 class Hook_checklist_task_manage
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$type=get_param('type');
+    public function run()
+    {
+        $type = get_param('type');
 
-		if (!has_zone_access(get_member(),'adminzone')) return new ocp_tempcode();
+        if (!has_zone_access(get_member(),'adminzone')) {
+            return new ocp_tempcode();
+        }
 
-		decache('main_staff_checklist');
+        decache('main_staff_checklist');
 
-		require_lang('staff_checklist');
+        require_lang('staff_checklist');
 
-		switch ($type)
-		{
-			case 'add':
-				$recurinterval=get_param_integer('recurinterval',0);
+        switch ($type) {
+            case 'add':
+                $recurinterval = get_param_integer('recurinterval',0);
 
-				$task_title=get_param('tasktitle',false,true);
+                $task_title = get_param('tasktitle',false,true);
 
-				$id=$GLOBALS['SITE_DB']->query_insert('customtasks',array(
-					'tasktitle'=>$task_title,
-					'datetimeadded'=>time(),
-					'recurinterval'=>$recurinterval,
-					'recurevery'=>get_param('recurevery'),
-					'taskisdone'=>NULL,
-				),true);
+                $id = $GLOBALS['SITE_DB']->query_insert('customtasks',array(
+                    'tasktitle' => $task_title,
+                    'datetimeadded' => time(),
+                    'recurinterval' => $recurinterval,
+                    'recurevery' => get_param('recurevery'),
+                    'taskisdone' => NULL,
+                ),true);
 
-				require_code('notifications');
-				$subject=do_lang('CT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$task_title);
-				$mail=do_lang('CT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($task_title));
-				dispatch_notification('checklist_task',NULL,$subject,$mail);
+                require_code('notifications');
+                $subject = do_lang('CT_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$task_title);
+                $mail = do_lang('CT_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($task_title));
+                dispatch_notification('checklist_task',null,$subject,$mail);
 
-				return do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
-					'_GUID'=>'e95228a3740dc7eda2d1b0ccc7d3d9d3',
-					'TASK_TITLE'=>comcode_to_tempcode(get_param('tasktitle',false,true)),
-					'ADD_DATE'=>display_time_period(time()),
-					'RECUR_INTERVAL'=>($recurinterval==0)?'':integer_format($recurinterval),
-					'RECUR_EVERY'=>get_param('recurevery'),
-					'TASK_DONE'=>'not_completed',
-					'ID'=>strval($id),
-				));
+                return do_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
+                    '_GUID' => 'e95228a3740dc7eda2d1b0ccc7d3d9d3',
+                    'TASK_TITLE' => comcode_to_tempcode(get_param('tasktitle',false,true)),
+                    'ADD_DATE' => display_time_period(time()),
+                    'RECUR_INTERVAL' => ($recurinterval == 0)?'':integer_format($recurinterval),
+                    'RECUR_EVERY' => get_param('recurevery'),
+                    'TASK_DONE' => 'not_completed',
+                    'ID' => strval($id),
+                ));
 
-			case 'delete':
-				$GLOBALS['SITE_DB']->query_delete('customtasks',array(
-					'id'=>get_param_integer('id'),
-				),'',1);
-				break;
+            case 'delete':
+                $GLOBALS['SITE_DB']->query_delete('customtasks',array(
+                    'id' => get_param_integer('id'),
+                ),'',1);
+                break;
 
-			case 'mark_done':
-				$GLOBALS['SITE_DB']->query_update('customtasks',array('taskisdone'=>time()),array('id'=>get_param_integer('id')),'',1);
-				break;
+            case 'mark_done':
+                $GLOBALS['SITE_DB']->query_update('customtasks',array('taskisdone' => time()),array('id' => get_param_integer('id')),'',1);
+                break;
 
-			case 'mark_undone':
-				$GLOBALS['SITE_DB']->query_update('customtasks',array('taskisdone'=>NULL),array('id'=>get_param_integer('id')),'',1);
-				break;
-		}
+            case 'mark_undone':
+                $GLOBALS['SITE_DB']->query_update('customtasks',array('taskisdone' => NULL),array('id' => get_param_integer('id')),'',1);
+                break;
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }
-

@@ -20,16 +20,17 @@
 
 class Hook_check_unzip
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
-		if ((!function_exists('zip_open')) && (!@file_exists('/usr/bin/unzip')))
-			$warning[]=do_lang_tempcode('NO_ZIP_ON_SERVER');
-		return $warning;
-	}
+    public function run()
+    {
+        $warning = array();
+        if ((!function_exists('zip_open')) && (!@file_exists('/usr/bin/unzip'))) {
+            $warning[] = do_lang_tempcode('NO_ZIP_ON_SERVER');
+        }
+        return $warning;
+    }
 }

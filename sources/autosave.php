@@ -23,25 +23,23 @@
  */
 function clear_ocp_autosave()
 {
-	$or_list='';
-	foreach (array_keys($_COOKIE) as $key)
-	{
-		if (substr($key,0,13)=='ocp_autosave_')
-		{
-			require_code('users_active_actions');
+    $or_list = '';
+    foreach (array_keys($_COOKIE) as $key) {
+        if (substr($key,0,13) == 'ocp_autosave_') {
+            require_code('users_active_actions');
 
-			if (strpos($key,'page'.get_page_name())!==false)
-			{
-				// Has to do both, due to inconsistencies with how PHP reads and sets cookies -- reading de-urlencodes (although not strictly needed), whilst setting does not urlencode; may differ between versions
-				ocp_setcookie(urlencode($key),'0',false,false,0);
-				ocp_setcookie($key,'0',false,false,0);
-				if ($or_list!='') $or_list.=' OR ';
-				$or_list.=db_string_equal_to('a_key',$key);
-			}
-		}
-	}
-	if ($or_list!='')
-	{
-		$GLOBALS['SITE_DB']->query('DELETE FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'autosave WHERE a_time<'.strval(time()-60*60*24).' OR (a_member_id='.strval(intval(get_member())).' AND ('.$or_list.'))');
-	}
+            if (strpos($key,'page' . get_page_name()) !== false) {
+                // Has to do both, due to inconsistencies with how PHP reads and sets cookies -- reading de-urlencodes (although not strictly needed), whilst setting does not urlencode; may differ between versions
+                ocp_setcookie(urlencode($key),'0',false,false,0);
+                ocp_setcookie($key,'0',false,false,0);
+                if ($or_list != '') {
+                    $or_list .= ' OR ';
+                }
+                $or_list .= db_string_equal_to('a_key',$key);
+            }
+        }
+    }
+    if ($or_list != '') {
+        $GLOBALS['SITE_DB']->query('DELETE FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'autosave WHERE a_time<' . strval(time()-60*60*24) . ' OR (a_member_id=' . strval(intval(get_member())) . ' AND (' . $or_list . '))');
+    }
 }

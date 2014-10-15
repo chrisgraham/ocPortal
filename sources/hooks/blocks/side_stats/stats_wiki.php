@@ -20,26 +20,32 @@
 
 class Hook_stats_wiki
 {
-	/**
+    /**
 	 * Show a stats section.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		if (!addon_installed('wiki')) return new ocp_tempcode();
+    public function run()
+    {
+        if (!addon_installed('wiki')) {
+            return new ocp_tempcode();
+        }
 
-		require_code('wiki_stats');
-		require_lang('wiki');
+        require_code('wiki_stats');
+        require_lang('wiki');
 
-		$bits=new ocp_tempcode();
-		if (get_option('wiki_show_stats_count_pages')=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'8bbd18d5169c4e5449b252880ecda716','KEY'=>do_lang_tempcode('COUNT_PAGES'),'VALUE'=>integer_format(get_num_wiki_pages()))));
-		if (get_option('wiki_show_stats_count_posts')=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'d8cf3d5aabc18777f609760010303ace','KEY'=>do_lang_tempcode('COUNT_POSTS'),'VALUE'=>integer_format(get_num_wiki_posts()))));
-		if ($bits->is_empty_shell()) return new ocp_tempcode();
-		$wiki=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'ea19e51db4e62958843ace808016af1e','SECTION'=>do_lang_tempcode('WIKI'),'CONTENT'=>$bits));
+        $bits = new ocp_tempcode();
+        if (get_option('wiki_show_stats_count_pages') == '1') {
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => '8bbd18d5169c4e5449b252880ecda716','KEY' => do_lang_tempcode('COUNT_PAGES'),'VALUE' => integer_format(get_num_wiki_pages()))));
+        }
+        if (get_option('wiki_show_stats_count_posts') == '1') {
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => 'd8cf3d5aabc18777f609760010303ace','KEY' => do_lang_tempcode('COUNT_POSTS'),'VALUE' => integer_format(get_num_wiki_posts()))));
+        }
+        if ($bits->is_empty_shell()) {
+            return new ocp_tempcode();
+        }
+        $wiki = do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID' => 'ea19e51db4e62958843ace808016af1e','SECTION' => do_lang_tempcode('WIKI'),'CONTENT' => $bits));
 
-		return $wiki;
-	}
+        return $wiki;
+    }
 }
-
-

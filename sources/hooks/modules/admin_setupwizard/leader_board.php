@@ -20,17 +20,17 @@
 
 class Hook_sw_leader_board
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('points')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('points')) {
+            return array();
+        }
 
-		return array(array('main_leader_board'=>array('NO','YES')),array());
-	}
+        return array(array('main_leader_board' => array('NO','YES')),array());
+    }
 }
-
-

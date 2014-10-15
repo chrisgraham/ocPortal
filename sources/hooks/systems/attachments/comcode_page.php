@@ -20,21 +20,23 @@
 
 class Hook_attachments_comcode_page
 {
-	/**
+    /**
 	 * Run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
 	 * @param  ID_TEXT		The ID
 	 * @param  object			The database connection to check on
 	 * @return boolean		Whether there is permission
 	 */
-	function run($id,$connection)
-	{
-		if ($connection->connection_write!=$GLOBALS['SITE_DB']->connection_write) return false;
+    public function run($id,$connection)
+    {
+        if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {
+            return false;
+        }
 
-		$parts=explode(':',$id);
-		if (count($parts)!=2) return false;
-		return (has_actual_page_access(get_member(),$parts[1],$parts[0]));
-	}
+        $parts = explode(':',$id);
+        if (count($parts) != 2) {
+            return false;
+        }
+        return (has_actual_page_access(get_member(),$parts[1],$parts[0]));
+    }
 }
-
-

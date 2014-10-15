@@ -20,26 +20,27 @@
 
 class Hook_symbol_CATALOGUE_ENTRY_FOR
 {
-	/**
+    /**
 	 * Run function for symbol hooks. Searches for tasks to perform.
     *
     * @param  array		Symbol parameters
     * @return string		Result
 	 */
-	function run($param)
-	{
-		$value='';
-		if ((array_key_exists(1,$param)) && ($param[1]!='') && (addon_installed('catalogues')))
-		{
-			static $cache=array();
-			if (isset($cache[$param[0]][$param[1]])) return $cache[$param[0]][$param[1]];
+    public function run($param)
+    {
+        $value = '';
+        if ((array_key_exists(1,$param)) && ($param[1] != '') && (addon_installed('catalogues'))) {
+            static $cache = array();
+            if (isset($cache[$param[0]][$param[1]])) {
+                return $cache[$param[0]][$param[1]];
+            }
 
-			require_code('fields');
-			$entry_id=get_bound_content_entry($param[0],$param[1]);
-			$value=is_null($entry_id)?'':strval($entry_id);
-			$cache[$param[0]][$param[1]]=$value;
-		}
+            require_code('fields');
+            $entry_id = get_bound_content_entry($param[0],$param[1]);
+            $value = is_null($entry_id)?'':strval($entry_id);
+            $cache[$param[0]][$param[1]] = $value;
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 }

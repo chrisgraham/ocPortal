@@ -20,35 +20,33 @@
 
 class Hook_config_oembed_max_size
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'OEMBED_MAX_SIZE',
-			'type'=>'integer',
-			'category'=>'FEATURE',
-			'group'=>'MEDIA',
-			'explanation'=>'CONFIG_OPTION_oembed_max_size',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'OEMBED_MAX_SIZE',
+            'type' => 'integer',
+            'category' => 'FEATURE',
+            'group' => 'MEDIA',
+            'explanation' => 'CONFIG_OPTION_oembed_max_size',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_rich_media',
-		);
-	}
+            'addon' => 'core_rich_media',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '550'; // A good example of a wide thing is an embedded Tweet
-	}
+    public function get_default()
+    {
+        return '550'; // A good example of a wide thing is an embedded Tweet
+    }
 }
-
-

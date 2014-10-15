@@ -20,15 +20,15 @@
 
 class Hook_notes_msn
 {
-	/**
+    /**
 	 * Decacheing trigger for main_notes saves. See if we have to decache based on the passed filename.
 	 *
 	 * @param PATH		Filename.
 	 */
-	function run($file)
-	{
-		if ((strpos($file,'/netlink')!==false) || ($file=='netlink')) decache('side_network');
-	}
+    public function run($file)
+    {
+        if ((strpos($file,'/netlink') !== false) || ($file == 'netlink')) {
+            decache('side_network');
+        }
+    }
 }
-
-

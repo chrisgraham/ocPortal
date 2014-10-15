@@ -20,35 +20,33 @@
 
 class Hook_config_enable_privacy_tab
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_PRIVACY_TAB',
-			'type'=>'tick',
-			'category'=>'PRIVACY',
-			'group'=>'MEMBERS',
-			'explanation'=>'CONFIG_OPTION_enable_privacy_tab',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_PRIVACY_TAB',
+            'type' => 'tick',
+            'category' => 'PRIVACY',
+            'group' => 'MEMBERS',
+            'explanation' => 'CONFIG_OPTION_enable_privacy_tab',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return (get_forum_type()!='ocf')?NULL:'1';
-	}
+    public function get_default()
+    {
+        return (get_forum_type() != 'ocf')?null:'1';
+    }
 }
-
-

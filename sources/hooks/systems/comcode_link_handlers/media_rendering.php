@@ -25,7 +25,7 @@
 
 class Hook_comcode_link_handler_media_rendering
 {
-	/**
+    /**
 	 * Bind function for Comcode link handler hooks. They see if they can bind a pasted URL to a lump of handler Tempcode.
 	 *
 	 * @param  URLPATH		Link to use or reject
@@ -41,11 +41,9 @@ class Hook_comcode_link_handler_media_rendering
 	 * @param  ?array			A list of words to highlight (NULL: none)
 	 * @return ?tempcode		Handled link (NULL: reject due to inappropriate link pattern)
 	 */
-	function bind($url,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits)
-	{
-		require_code('media_renderer');
-		return render_media_url($url,$url,array('context'=>'comcode_link'),$as_admin,$source_member);
-	}
+    public function bind($url,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits)
+    {
+        require_code('media_renderer');
+        return render_media_url($url,$url,array('context' => 'comcode_link'),$as_admin,$source_member);
+    }
 }
-
-

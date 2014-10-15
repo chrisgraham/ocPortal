@@ -20,42 +20,36 @@
 
 class Hook_checklist_version
 {
-	/**
+    /**
 	 * Find items to include on the staff checklist.
 	 *
 	 * @return array		An array of tuples: The task row to show, the number of seconds until it is due (or NULL if not on a timer), the number of things to sort out (or NULL if not on a queue), The name of the config option that controls the schedule (or NULL if no option).
 	 */
-	function run()
-	{
-		require_code('version2');
-		$version=get_future_version_information();
-		$version_outdated=(strpos($version->evaluate(),'You are running the latest version')===false) && (strpos($version->evaluate(),'This version does not exist in our database')===false);
+    public function run()
+    {
+        require_code('version2');
+        $version = get_future_version_information();
+        $version_outdated = (strpos($version->evaluate(),'You are running the latest version') === false) && (strpos($version->evaluate(),'This version does not exist in our database') === false);
 
-		require_code('addons2');
-		$num_addons_outdated=count(find_updated_addons());
+        require_code('addons2');
+        $num_addons_outdated = count(find_updated_addons());
 
-		if (($version_outdated) || ($num_addons_outdated>0))
-		{
-			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID'=>'m578142633c6f3d37776e82a869deb91'));
-		} else
-		{	
-			$status=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID'=>'n578142633c6f3d37776e82a869deb91'));
-		}
+        if (($version_outdated) || ($num_addons_outdated>0)) {
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID' => 'm578142633c6f3d37776e82a869deb91'));
+        } else {
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID' => 'n578142633c6f3d37776e82a869deb91'));
+        }
 
-		if ($version_outdated)
-		{
-			$url=new ocp_tempcode(); // Don't want to point people to upgrade addons if on an old version
-		} else
-		{
-			$url=build_url(array('page'=>'admin_addons','type'=>'misc'),get_module_zone('admin_messaging'));
-		}
+        if ($version_outdated) {
+            $url = new ocp_tempcode(); // Don't want to point people to upgrade addons if on an old version
+        } else {
+            $url = build_url(array('page' => 'admin_addons','type' => 'misc'),get_module_zone('admin_messaging'));
+        }
 
-		require_lang('addons');
+        require_lang('addons');
 
-		$cnt=$num_addons_outdated+($version_outdated?1:0);
-		$tpl=do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID'=>'bbcf866e2ea104ac41685a8756e182f8','URL'=>$url,'STATUS'=>$status,'TASK'=>do_lang_tempcode('UPGRADE'),'INFO'=>do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($cnt)))));
-		return array(array($tpl,NULL,$cnt,NULL));
-	}
+        $cnt = $num_addons_outdated+($version_outdated?1:0);
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'bbcf866e2ea104ac41685a8756e182f8','URL' => $url,'STATUS' => $status,'TASK' => do_lang_tempcode('UPGRADE'),'INFO' => do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($cnt)))));
+        return array(array($tpl,null,$cnt,null));
+    }
 }
-
-

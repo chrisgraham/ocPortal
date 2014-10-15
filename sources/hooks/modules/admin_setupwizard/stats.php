@@ -20,48 +20,50 @@
 
 class Hook_sw_stats
 {
-	/**
+    /**
 	 * Run function for features in the setup wizard.
 	 *
 	 * @return array		Current settings.
 	 */
-	function get_current_settings()
-	{
-		$settings=array();
-		$settings['stats_store_time']=get_option('stats_store_time');
-		return $settings;
-	}
+    public function get_current_settings()
+    {
+        $settings = array();
+        $settings['stats_store_time'] = get_option('stats_store_time');
+        return $settings;
+    }
 
-	/**
+    /**
 	 * Run function for features in the setup wizard.
 	 *
 	 * @param  array		Default values for the fields, from the install-profile.
 	 * @return tempcode	An input field.
 	 */
-	function get_fields($field_defaults)
-	{
-		if (!addon_installed('stats')) return new ocp_tempcode();
+    public function get_fields($field_defaults)
+    {
+        if (!addon_installed('stats')) {
+            return new ocp_tempcode();
+        }
 
-		$field_defaults+=$this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP
+        $field_defaults += $this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP
 
-		$stats_store_time=$field_defaults['stats_store_time'];
+        $stats_store_time = $field_defaults['stats_store_time'];
 
-		require_lang('stats');
-		$fields=new ocp_tempcode();
-		$fields->attach(form_input_integer(do_lang_tempcode('STORE_TIME'),do_lang_tempcode('CONFIG_OPTION_stats_store_time'),'stats_store_time',intval($stats_store_time),true));
+        require_lang('stats');
+        $fields = new ocp_tempcode();
+        $fields->attach(form_input_integer(do_lang_tempcode('STORE_TIME'),do_lang_tempcode('CONFIG_OPTION_stats_store_time'),'stats_store_time',intval($stats_store_time),true));
 
-		return $fields;
-	}
+        return $fields;
+    }
 
-	/**
+    /**
 	 * Run function for setting features from the setup wizard.
 	 */
-	function set_fields()
-	{
-		if (!addon_installed('stats')) return;
+    public function set_fields()
+    {
+        if (!addon_installed('stats')) {
+            return;
+        }
 
-		set_option('stats_store_time',post_param('stats_store_time'));
-	}
+        set_option('stats_store_time',post_param('stats_store_time'));
+    }
 }
-
-

@@ -20,77 +20,77 @@
 
 class Hook_content_meta_aware_banner_type
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>false,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => false,
 
-			'content_type_label'=>'banners:_BANNER_TYPE',
+            'content_type_label' => 'banners:_BANNER_TYPE',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'banner_types',
-			'id_field'=>'id',
-			'id_field_numeric'=>false,
-			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>NULL,
-			'is_category'=>true,
-			'is_entry'=>false,
-			'category_field'=>NULL, // For category permissions
-			'category_type'=>NULL, // For category permissions
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_is_string'=>true,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'banner_types',
+            'id_field' => 'id',
+            'id_field_numeric' => false,
+            'parent_category_field' => NULL,
+            'parent_category_meta_aware_type' => NULL,
+            'is_category' => true,
+            'is_entry' => false,
+            'category_field' => NULL, // For category permissions
+            'category_type' => NULL, // For category permissions
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_is_string' => true,
 
-			'title_field'=>'id',
-			'title_field_dereference'=>false,
-			'description_field'=>NULL,
-			'thumb_field'=>NULL,
+            'title_field' => 'id',
+            'title_field_dereference' => false,
+            'description_field' => NULL,
+            'thumb_field' => NULL,
 
-			'view_page_link_pattern'=>NULL,
-			'edit_page_link_pattern'=>NULL,
-			'view_category_page_link_pattern'=>NULL,
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('cat_high',get_member(),get_ip_address(),'cms_banners'))?(get_module_zone('cms_banners').':cms_banners:ac'):NULL,
-			'archive_url'=>NULL,
+            'view_page_link_pattern' => NULL,
+            'edit_page_link_pattern' => NULL,
+            'view_category_page_link_pattern' => NULL,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('cat_high',get_member(),get_ip_address(),'cms_banners'))?(get_module_zone('cms_banners') . ':cms_banners:ac'):null,
+            'archive_url' => NULL,
 
-			'support_url_monikers'=>false,
+            'support_url_monikers' => false,
 
-			'views_field'=>NULL,
-			'submitter_field'=>NULL,
-			'add_time_field'=>NULL,
-			'edit_time_field'=>NULL,
-			'date_field'=>NULL,
-			'validated_field'=>NULL,
+            'views_field' => NULL,
+            'submitter_field' => NULL,
+            'add_time_field' => NULL,
+            'edit_time_field' => NULL,
+            'date_field' => NULL,
+            'validated_field' => NULL,
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>'banners', // NULL if has no permissions
+            'permissions_type_code' => 'banners', // NULL if has no permissions
 
-			'search_hook'=>NULL,
+            'search_hook' => NULL,
 
-			'addon_name'=>'banners',
+            'addon_name' => 'banners',
 
-			'cms_page'=>'cms_banners',
-			'module'=>'banners',
+            'cms_page' => 'cms_banners',
+            'module' => 'banners',
 
-			'occle_filesystem_hook'=>'banners',
-			'occle_filesystem__is_folder'=>true,
+            'occle_filesystem_hook' => 'banners',
+            'occle_filesystem__is_folder' => true,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_BANNER',
-		);
-	}
+            'actionlog_regexp' => '\w+_BANNER',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -102,10 +102,10 @@ class Hook_content_meta_aware_banner_type
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('banners');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('banners');
 
-		return render_banner_type_box($row,$zone,$give_context,$guid);
-	}
+        return render_banner_type_box($row,$zone,$give_context,$guid);
+    }
 }

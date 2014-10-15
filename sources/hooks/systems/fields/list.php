@@ -22,51 +22,50 @@
 
 class Hook_fields_list
 {
-	// ==============
-	// Module: search
-	// ==============
+    // ==============
+    // Module: search
+    // ==============
 
-	/**
+    /**
 	 * Get special Tempcode for inputting this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @return ?array			List of specially encoded input detail rows (NULL: nothing special)
 	 */
-	function get_search_inputter($row)
-	{
-		$current=get_param('option_'.strval($row['id']),'');
+    public function get_search_inputter($row)
+    {
+        $current = get_param('option_' . strval($row['id']),'');
 
-		$fields=array();
-		$type='_LIST';
-		$special=new ocp_tempcode();
-		$special->attach(form_input_list_entry('',get_param('option_'.strval($row['id']),'')=='','---'));
-		$list=($row['cf_default']=='')?array():explode('|',$row['cf_default']);
-		$display=array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
-		foreach ($list as $l)
-		{
-			$special->attach(form_input_list_entry($l,$current!='' && $current===$l));
-		}
-		$fields[]=array('NAME'=>strval($row['id']),'DISPLAY'=>$display,'TYPE'=>$type,'SPECIAL'=>$special);
-		return $fields;
-	}
+        $fields = array();
+        $type = '_LIST';
+        $special = new ocp_tempcode();
+        $special->attach(form_input_list_entry('',get_param('option_' . strval($row['id']),'') == '','---'));
+        $list = ($row['cf_default'] == '')?array():explode('|',$row['cf_default']);
+        $display = array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
+        foreach ($list as $l) {
+            $special->attach(form_input_list_entry($l,$current != '' && $current === $l));
+        }
+        $fields[] = array('NAME' => strval($row['id']),'DISPLAY' => $display,'TYPE' => $type,'SPECIAL' => $special);
+        return $fields;
+    }
 
-	/**
+    /**
 	 * Get special SQL from POSTed parameters for this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @param  integer		We're processing for the ith row
 	 * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
 	 */
-	function inputted_to_sql_for_search($row,$i)
-	{
-		return exact_match_sql($row,$i,'long');
-	}
+    public function inputted_to_sql_for_search($row,$i)
+    {
+        return exact_match_sql($row,$i,'long');
+    }
 
-	// ===================
-	// Backend: fields API
-	// ===================
+    // ===================
+    // Backend: fields API
+    // ===================
 
-	/**
+    /**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
 	 * @param  ?array			The field details (NULL: new field)
@@ -74,33 +73,36 @@ class Hook_fields_list
 	 * @param  ?string		The given default value as a string (NULL: don't "lock in" a new default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
-	{
-		if ($required!==NULL)
-		{
-			if (($required) && ($default=='')) $default=preg_replace('#\|.*#','',$default);
-		}
-		return array('long_unescaped',$default,'long');
-	}
+    public function get_field_value_row_bits($field,$required = null,$default = null)
+    {
+        if ($required !== NULL) {
+            if (($required) && ($default == '')) {
+                $default = preg_replace('#\|.*#','',$default);
+            }
+        }
+        return array('long_unescaped',$default,'long');
+    }
 
-	/**
+    /**
 	 * Convert a field value to something renderable.
 	 *
 	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev)
-	{
-		if (is_object($ev)) return $ev;
-		return escape_html($ev);
-	}
+    public function render_field_value($field,$ev)
+    {
+        if (is_object($ev)) {
+            return $ev;
+        }
+        return escape_html($ev);
+    }
 
-	// ======================
-	// Frontend: fields input
-	// ======================
+    // ======================
+    // Frontend: fields input
+    // ======================
 
-	/**
+    /**
 	 * Get form inputter.
 	 *
 	 * @param  string			The field name
@@ -109,38 +111,39 @@ class Hook_fields_list
 	 * @param  ?string		The actual current value of the field (NULL: none)
 	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
 	 */
-	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
-	{
-		$default=$field['cf_default'];
-		if ($actual_value===$default || $actual_value==='') $actual_value=NULL;
-		$list=($default=='')?array():explode('|',$default);
-		$_list=new ocp_tempcode();
-		if ((($field['cf_required']==0) || ($actual_value=='') || (is_null($actual_value))) && (!in_array('',$list)))
-		{
-			if (($field['cf_required']==0) || (!in_array(do_lang('OTHER'),$list)))
-			{
-				if ((array_key_exists(0,$list)) && ($list[0]==do_lang('NOT_DISCLOSED')))
-				{
-					$actual_value=$list[0]; // "Not Disclosed" will become the default if it is there
-				} else
-				{
-					$_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
-				}
-			}
-		}
-		$is_locations=((addon_installed('shopping')) && ($_cf_name==do_lang('shopping:SHIPPING_ADDRESS_COUNTRY')) && (is_file(get_file_base().'/sources_custom/locations.php')));
-		if ($is_locations) require_code('locations');
-		foreach ($list as $l)
-		{
-			$l_nice=$l;
-			if (($is_locations) && (strlen($l)==2)) $l_nice=find_country_name_from_iso($l);
-			$selected=($l===$actual_value || is_null($actual_value) && $l==do_lang('OTHER') && $field['cf_required']==1);
-			$_list->attach(form_input_list_entry($l,$selected,$l_nice));
-		}
-		return form_input_list($_cf_name,$_cf_description,'field_'.strval($field['id']),$_list,NULL,false,$field['cf_required']==1);
-	}
+    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
+    {
+        $default = $field['cf_default'];
+        if ($actual_value === $default || $actual_value === '') {
+            $actual_value = null;
+        }
+        $list = ($default == '')?array():explode('|',$default);
+        $_list = new ocp_tempcode();
+        if ((($field['cf_required'] == 0) || ($actual_value == '') || (is_null($actual_value))) && (!in_array('',$list))) {
+            if (($field['cf_required'] == 0) || (!in_array(do_lang('OTHER'),$list))) {
+                if ((array_key_exists(0,$list)) && ($list[0] == do_lang('NOT_DISCLOSED'))) {
+                    $actual_value = $list[0]; // "Not Disclosed" will become the default if it is there
+                } else {
+                    $_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+                }
+            }
+        }
+        $is_locations = ((addon_installed('shopping')) && ($_cf_name == do_lang('shopping:SHIPPING_ADDRESS_COUNTRY')) && (is_file(get_file_base() . '/sources_custom/locations.php')));
+        if ($is_locations) {
+            require_code('locations');
+        }
+        foreach ($list as $l) {
+            $l_nice = $l;
+            if (($is_locations) && (strlen($l) == 2)) {
+                $l_nice = find_country_name_from_iso($l);
+            }
+            $selected = ($l === $actual_value || is_null($actual_value) && $l == do_lang('OTHER') && $field['cf_required'] == 1);
+            $_list->attach(form_input_list_entry($l,$selected,$l_nice));
+        }
+        return form_input_list($_cf_name,$_cf_description,'field_' . strval($field['id']),$_list,null,false,$field['cf_required'] == 1);
+    }
 
-	/**
+    /**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
@@ -149,12 +152,10 @@ class Hook_fields_list
 	 * @param  ?array			Former value of field (NULL: none)
 	 * @return ?string		The value (NULL: could not process)
 	 */
-	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
-	{
-		$id=$field['id'];
-		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
-	}
+    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    {
+        $id = $field['id'];
+        $tmp_name = 'field_' . strval($id);
+        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+    }
 }
-
-

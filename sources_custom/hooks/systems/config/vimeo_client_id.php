@@ -15,35 +15,33 @@
 
 class Hook_config_vimeo_client_id
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'VIMEO_CLIENT_ID',
-			'type'=>'line',
-			'category'=>'GALLERY',
-			'group'=>'GALLERY_SYNDICATION',
-			'explanation'=>'CONFIG_OPTION_vimeo_client_id',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'VIMEO_CLIENT_ID',
+            'type' => 'line',
+            'category' => 'GALLERY',
+            'group' => 'GALLERY_SYNDICATION',
+            'explanation' => 'CONFIG_OPTION_vimeo_client_id',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'gallery_syndication',
-		);
-	}
+            'addon' => 'gallery_syndication',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

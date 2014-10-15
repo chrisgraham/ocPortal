@@ -20,50 +20,45 @@
 
 class Hook_Preview_calendar_type
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=(get_param('page','')=='cms_calendar') && ((get_param('type')=='_ec') || (get_param('type')=='ac'));
-		return array($applies,NULL,false);
-	}
+    public function applies()
+    {
+        $applies = (get_param('page','') == 'cms_calendar') && ((get_param('type') == '_ec') || (get_param('type') == 'ac'));
+        return array($applies,null,false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		require_code('uploads');
+    public function run()
+    {
+        require_code('uploads');
 
-		$urls=get_url('','file','safe_mode_temp',0,OCP_UPLOAD_IMAGE,false);
-		if ($urls[0]=='')
-		{
-			if (!is_null(post_param_integer('id',NULL)))
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('calendar_types',array('t_logo'),array('id'=>post_param_integer('id')),'',1);
-				$urls=$rows[0];
+        $urls = get_url('','file','safe_mode_temp',0,OCP_UPLOAD_IMAGE,false);
+        if ($urls[0] == '') {
+            if (!is_null(post_param_integer('id',null))) {
+                $rows = $GLOBALS['SITE_DB']->query_select('calendar_types',array('t_logo'),array('id' => post_param_integer('id')),'',1);
+                $urls = $rows[0];
 
-				$url=find_theme_image($urls['t_logo']);
-			} elseif (!is_null(post_param('theme_img_code',NULL)))
-			{
-				$url=find_theme_image(post_param('theme_img_code'));
-			} else
-			{
-				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
-			}
-		} else
-		{
-			$url=$urls[0];
-		}
+                $url = find_theme_image($urls['t_logo']);
+            } elseif (!is_null(post_param('theme_img_code',null))) {
+                $url = find_theme_image(post_param('theme_img_code'));
+            } else {
+                warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+            }
+        } else {
+            $url = $urls[0];
+        }
 
-		require_code('images');
-		$preview=do_image_thumb(url_is_local($url)?(get_custom_base_url().'/'.$url):$url,post_param('title'),true);
+        require_code('images');
+        $preview = do_image_thumb(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url,post_param('title'),true);
 
-		return array($preview,NULL);
-	}
+        return array($preview,null);
+    }
 }

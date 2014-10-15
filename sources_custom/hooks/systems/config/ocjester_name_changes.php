@@ -15,35 +15,33 @@
 
 class Hook_config_ocjester_name_changes
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'OCJESTER_NAME_CHANGES',
-			'type'=>'text',
-			'category'=>'FEATURE',
-			'group'=>'OCJESTER_TITLE',
-			'explanation'=>'CONFIG_OPTION_ocjester_name_changes',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'OCJESTER_NAME_CHANGES',
+            'type' => 'text',
+            'category' => 'FEATURE',
+            'group' => 'OCJESTER_TITLE',
+            'explanation' => 'CONFIG_OPTION_ocjester_name_changes',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'oc_jester',
-		);
-	}
+            'addon' => 'oc_jester',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return "Angelic\nBaubles\nChristmas\nDasher\nEvergreen\nFestive\nGifted\nHoliday\nIcicles\nJolly\nKingly\nEnlightened\nMerry\nNoel\nOrnamental\nParty\nKingly\nRudolph\nSeasonal\nTinsel\nYuletide\nVisionary\nWiseman\nXmas\nYuletide\nXmas";
-	}
+    public function get_default()
+    {
+        return "Angelic\nBaubles\nChristmas\nDasher\nEvergreen\nFestive\nGifted\nHoliday\nIcicles\nJolly\nKingly\nEnlightened\nMerry\nNoel\nOrnamental\nParty\nKingly\nRudolph\nSeasonal\nTinsel\nYuletide\nVisionary\nWiseman\nXmas\nYuletide\nXmas";
+    }
 }
-
-

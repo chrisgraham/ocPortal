@@ -27,38 +27,40 @@
  * @param  ?MEMBER		Only emoticons the given member can see (NULL: don't care)
  * @return array			The map
  */
-function _helper_apply_emoticons($this_ref,$member_id=NULL)
+function _helper_apply_emoticons($this_ref,$member_id = null)
 {
-	global $IN_MINIKERNEL_VERSION;
-	if ($IN_MINIKERNEL_VERSION) return array();
+    global $IN_MINIKERNEL_VERSION;
+    if ($IN_MINIKERNEL_VERSION) {
+        return array();
+    }
 
-	$extra='';
-	if ($member_id===NULL)
-	{
-		global $EMOTICON_LEVELS;
-		if ($this_ref->EMOTICON_CACHE!==NULL) return $this_ref->EMOTICON_CACHE;
-	} else
-	{
-		$extra=has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
-	}
-	$this_ref->EMOTICON_CACHE=array();
-	$EMOTICON_LEVELS=array();
+    $extra = '';
+    if ($member_id === NULL) {
+        global $EMOTICON_LEVELS;
+        if ($this_ref->EMOTICON_CACHE !== NULL) {
+            return $this_ref->EMOTICON_CACHE;
+        }
+    } else {
+        $extra = has_privilege(get_member(),'use_special_emoticons')?'':' AND e_is_special=0';
+    }
+    $this_ref->EMOTICON_CACHE = array();
+    $EMOTICON_LEVELS = array();
 
-	$query='SELECT e_code,e_theme_img_code,e_relevance_level FROM '.$this_ref->connection->get_table_prefix().'f_emoticons WHERE e_relevance_level<4'.$extra;
-	if (strpos(get_db_type(),'mysql')!==false) $query.=' ORDER BY LENGTH(e_code) DESC';
-	$rows=$this_ref->connection->query($query);
-	foreach ($rows as $myrow)
-	{
-		$tpl='EMOTICON_IMG_CODE_THEMED';
-		$this_ref->EMOTICON_CACHE[$myrow['e_code']]=array($tpl,$myrow['e_theme_img_code'],$myrow['e_code']);
-		$EMOTICON_LEVELS[$myrow['e_code']]=$myrow['e_relevance_level'];
-	}
-	if (strpos(get_db_type(),'mysql')===false)
-	{
-		uksort($this_ref->EMOTICON_CACHE,'strlen_sort');
-		$this_ref->EMOTICON_CACHE=array_reverse($this_ref->EMOTICON_CACHE);
-	}
-	return $this_ref->EMOTICON_CACHE;
+    $query = 'SELECT e_code,e_theme_img_code,e_relevance_level FROM ' . $this_ref->connection->get_table_prefix() . 'f_emoticons WHERE e_relevance_level<4' . $extra;
+    if (strpos(get_db_type(),'mysql') !== false) {
+        $query .= ' ORDER BY LENGTH(e_code) DESC';
+    }
+    $rows = $this_ref->connection->query($query);
+    foreach ($rows as $myrow) {
+        $tpl = 'EMOTICON_IMG_CODE_THEMED';
+        $this_ref->EMOTICON_CACHE[$myrow['e_code']] = array($tpl,$myrow['e_theme_img_code'],$myrow['e_code']);
+        $EMOTICON_LEVELS[$myrow['e_code']] = $myrow['e_relevance_level'];
+    }
+    if (strpos(get_db_type(),'mysql') === false) {
+        uksort($this_ref->EMOTICON_CACHE,'strlen_sort');
+        $this_ref->EMOTICON_CACHE = array_reverse($this_ref->EMOTICON_CACHE);
+    }
+    return $this_ref->EMOTICON_CACHE;
 }
 
 /**
@@ -90,116 +92,118 @@ function _helper_apply_emoticons($this_ref,$member_id=NULL)
  */
 function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category,$time_post,$spacer_post_member_id)
 {
-	if (is_null($time)) $time=time();
-	if (is_null($ip)) $ip=get_ip_address();
-	if (is_null($spacer_post_member_id)) $spacer_post_member_id=$this_ref->get_guest_id();
+    if (is_null($time)) {
+        $time = time();
+    }
+    if (is_null($ip)) {
+        $ip = get_ip_address();
+    }
+    if (is_null($spacer_post_member_id)) {
+        $spacer_post_member_id = $this_ref->get_guest_id();
+    }
 
-	require_code('comcode_check');
-	check_comcode($post,NULL,false,NULL,true);
+    require_code('comcode_check');
+    check_comcode($post,null,false,null,true);
 
-	require_code('ocf_topics');
-	require_code('ocf_posts');
-	require_lang('ocf');
-	require_code('ocf_posts_action');
-	require_code('ocf_posts_action2');
+    require_code('ocf_topics');
+    require_code('ocf_posts');
+    require_lang('ocf');
+    require_code('ocf_posts_action');
+    require_code('ocf_posts_action2');
 
-	if (!is_integer($forum_name))
-	{
-		$forum_id=$this_ref->forum_id_from_name($forum_name);
-		if (is_null($forum_id)) warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
-	}
-	else $forum_id=(integer)$forum_name;
+    if (!is_integer($forum_name)) {
+        $forum_id = $this_ref->forum_id_from_name($forum_name);
+        if (is_null($forum_id)) {
+            warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
+        }
+    } else {
+        $forum_id = (integer)$forum_name;
+    }
 
-	$topic_id=$this_ref->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
+    $topic_id = $this_ref->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
 
-	$update_caching=false;
-	$support_attachments=false;
-	if (!get_mass_import_mode())
-	{
-		$update_caching=true;
-		$support_attachments=true;
-	}
+    $update_caching = false;
+    $support_attachments = false;
+    if (!get_mass_import_mode()) {
+        $update_caching = true;
+        $support_attachments = true;
+    }
 
-	if (is_null($topic_id))
-	{
-		$is_starter=true;
+    if (is_null($topic_id)) {
+        $is_starter = true;
 
-		require_code('ocf_topics_action');
-		$topic_id=ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix.': #'.$topic_identifier,'',$topic_validated,1,0,0,0,NULL,NULL,false,0,NULL,$content_url);
+        require_code('ocf_topics_action');
+        $topic_id = ocf_make_topic($forum_id,$topic_identifier_encapsulation_prefix . ': #' . $topic_identifier,'',$topic_validated,1,0,0,0,null,null,false,0,null,$content_url);
 
-		if (strpos($topic_identifier,':')!==false)
-		{
-			// Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
-			$start=0;
-			$max=300;
-			require_code('notifications');
-			$ob=_get_notification_ob_for_code('comment_posted');
-			do
-			{
-				list($members,$possibly_has_more)=$ob->list_members_who_have_enabled('comment_posted',$topic_identifier,NULL,$start,$max);
+        if (strpos($topic_identifier,':') !== false) {
+            // Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
+            $start = 0;
+            $max = 300;
+            require_code('notifications');
+            $ob = _get_notification_ob_for_code('comment_posted');
+            do {
+                list($members,$possibly_has_more) = $ob->list_members_who_have_enabled('comment_posted',$topic_identifier,null,$start,$max);
 
-				foreach ($members as $to_member_id=>$setting)
-				{
-					enable_notifications('ocf_topic',strval($topic_id),$to_member_id);
-				}
+                foreach ($members as $to_member_id => $setting) {
+                    enable_notifications('ocf_topic',strval($topic_id),$to_member_id);
+                }
 
-				$start+=$max;
-			}
-			while ($possibly_has_more);
-		}
+                $start += $max;
+            } while ($possibly_has_more);
+        }
 
-		// Make spacer post
-		if (!is_null($content_url))
-		{
-			$spacer_post_title=$content_title;
-			$home_link=hyperlink($content_url,escape_html($content_title));
-			$spacer_post='[semihtml]'.do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()).'[/semihtml]';
-			$spacer_post_username=($spacer_post_member_id==($this_ref->get_guest_id())?do_lang('SYSTEM'):$this_ref->get_username($spacer_post_member_id));
-			ocf_make_post($topic_id,$spacer_post_title,$spacer_post,0,true,1,0,$spacer_post_username,$ip,$time,$spacer_post_member_id,NULL,NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,false,false,false,NULL,false);
-			$is_starter=false;
-		}
+        // Make spacer post
+        if (!is_null($content_url)) {
+            $spacer_post_title = $content_title;
+            $home_link = hyperlink($content_url,escape_html($content_title));
+            $spacer_post = '[semihtml]' . do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()) . '[/semihtml]';
+            $spacer_post_username = ($spacer_post_member_id == ($this_ref->get_guest_id())?do_lang('SYSTEM'):$this_ref->get_username($spacer_post_member_id));
+            ocf_make_post($topic_id,$spacer_post_title,$spacer_post,0,true,1,0,$spacer_post_username,$ip,$time,$spacer_post_member_id,null,null,null,false,$update_caching,$forum_id,$support_attachments,$content_title,0,null,false,false,false,false,null,false);
+            $is_starter = false;
+        }
 
-		$is_new=true;
-	} else
-	{
-		$is_starter=false;
-		$is_new=false;
-	}
-	$GLOBALS['LAST_TOPIC_ID']=$topic_id;
-	$GLOBALS['LAST_TOPIC_IS_NEW']=$is_new;
-	if ($post=='') return array(NULL,false);
-	ocf_check_post($post,$topic_id,$member_id);
-	$poster_name=$poster_name_if_guest;
-	if ($poster_name=='') $poster_name=$this_ref->get_username($member_id);
-	$post_id=ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time_post,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():NULL),NULL,NULL,false,$update_caching,$forum_id,$support_attachments,$content_title,0,NULL,false,$skip_post_checks,false,false,$parent_id,false);
-	$GLOBALS['LAST_POST_ID']=$post_id;
+        $is_new = true;
+    } else {
+        $is_starter = false;
+        $is_new = false;
+    }
+    $GLOBALS['LAST_TOPIC_ID'] = $topic_id;
+    $GLOBALS['LAST_TOPIC_IS_NEW'] = $is_new;
+    if ($post == '') {
+        return array(null,false);
+    }
+    ocf_check_post($post,$topic_id,$member_id);
+    $poster_name = $poster_name_if_guest;
+    if ($poster_name == '') {
+        $poster_name = $this_ref->get_username($member_id);
+    }
+    $post_id = ocf_make_post($topic_id,$post_title,$post,0,$is_starter,$validated,0,$poster_name,$ip,$time_post,$member_id,($staff_only?$GLOBALS['FORUM_DRIVER']->get_guest_id():null),null,null,false,$update_caching,$forum_id,$support_attachments,$content_title,0,null,false,$skip_post_checks,false,false,$parent_id,false);
+    $GLOBALS['LAST_POST_ID'] = $post_id;
 
-	if ($is_new)
-	{
-		// Broken cache now for the rest of this page view - fix by flushing
-		global $TOPIC_IDENTIFIERS_TO_IDS_CACHE;
-		$TOPIC_IDENTIFIERS_TO_IDS_CACHE=array();
-	}
+    if ($is_new) {
+        // Broken cache now for the rest of this page view - fix by flushing
+        global $TOPIC_IDENTIFIERS_TO_IDS_CACHE;
+        $TOPIC_IDENTIFIERS_TO_IDS_CACHE = array();
+    }
 
-	// Send out notifications
-	$_url=build_url(array('page'=>'topicview','type'=>'findpost','id'=>$post_id),'forum',NULL,false,false,true,'post_'.strval($post_id));
-	$url=$_url->evaluate();
-	if (addon_installed('ocf_forum'))
-		ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title,NULL,false,$no_notify_for__notification_code,$no_notify_for__code_category);
+    // Send out notifications
+    $_url = build_url(array('page' => 'topicview','type' => 'findpost','id' => $post_id),'forum',null,false,false,true,'post_' . strval($post_id));
+    $url = $_url->evaluate();
+    if (addon_installed('ocf_forum')) {
+        ocf_send_topic_notification($url,$topic_id,$forum_id,$member_id,!$is_new,$post,$content_title,null,false,$no_notify_for__notification_code,$no_notify_for__code_category);
+    }
 
-	$is_hidden=false;
-	if (!get_mass_import_mode())
-	{
-		$validated_actual=$this_ref->connection->query_select_value('f_posts','p_validated',array('id'=>$post_id));
-		if ($validated_actual==0)
-		{
-			require_code('site');
-			attach_message(do_lang_tempcode('SUBMIT_UNVALIDATED'),'inform');
-			$is_hidden=true;
-		}
-	}
+    $is_hidden = false;
+    if (!get_mass_import_mode()) {
+        $validated_actual = $this_ref->connection->query_select_value('f_posts','p_validated',array('id' => $post_id));
+        if ($validated_actual == 0) {
+            require_code('site');
+            attach_message(do_lang_tempcode('SUBMIT_UNVALIDATED'),'inform');
+            $is_hidden = true;
+        }
+    }
 
-	return array($topic_id,$is_hidden);
+    return array($topic_id,$is_hidden);
 }
 
 /**
@@ -227,143 +231,153 @@ function _helper_make_post_forum_topic($this_ref,$forum_name,$topic_identifier,$
  */
 function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$filter_topic_title,$filter_topic_description,$show_first_posts,$date_key,$hot)
 {
-	if (is_integer($name)) $id_list='t_forum_id='.strval($name);
-	elseif (!is_array($name))
-	{
-		$id=$this_ref->forum_id_from_name($name);
-		if (is_null($id)) return NULL;
-		$id_list='t_forum_id='.strval($id);
-	} else
-	{
-		$id_list='';
-		foreach (array_keys($name) as $id)
-		{
-			if ($id_list!='') $id_list.=' OR ';
-			$id_list.='t_forum_id='.strval($id);
-		}
-		if ($id_list=='') return NULL;
-	}
+    if (is_integer($name)) {
+        $id_list = 't_forum_id=' . strval($name);
+    } elseif (!is_array($name)) {
+        $id = $this_ref->forum_id_from_name($name);
+        if (is_null($id)) {
+            return NULL;
+        }
+        $id_list = 't_forum_id=' . strval($id);
+    } else {
+        $id_list = '';
+        foreach (array_keys($name) as $id) {
+            if ($id_list != '') {
+                $id_list .= ' OR ';
+            }
+            $id_list .= 't_forum_id=' . strval($id);
+        }
+        if ($id_list == '') {
+            return NULL;
+        }
+    }
 
-	$post_query_select='p.p_title,top.id,p.p_poster,p.p_poster_name_if_guest,p.id AS p_id,p_post';
-	$post_query_where='p_validated=1 AND p_topic_id=top.id '.not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
-	$post_query_sql='SELECT '.$post_query_select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p ';
-	if (strpos(get_db_type(),'mysql')!==false) $post_query_sql.='USE INDEX(in_topic) ';
-	if (multi_lang_content())
-	{
-		$post_query_sql.='LEFT JOIN '.$this_ref->connection->get_table_prefix().'translate t_p_post ON t_p_post.id=p.p_post ';
-	}
-	$post_query_sql.='WHERE '.$post_query_where;
+    $post_query_select = 'p.p_title,top.id,p.p_poster,p.p_poster_name_if_guest,p.id AS p_id,p_post';
+    $post_query_where = 'p_validated=1 AND p_topic_id=top.id ' . not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
+    $post_query_sql = 'SELECT ' . $post_query_select . ' FROM ' . $this_ref->connection->get_table_prefix() . 'f_posts p ';
+    if (strpos(get_db_type(),'mysql') !== false) {
+        $post_query_sql .= 'USE INDEX(in_topic) ';
+    }
+    if (multi_lang_content()) {
+        $post_query_sql .= 'LEFT JOIN ' . $this_ref->connection->get_table_prefix() . 'translate t_p_post ON t_p_post.id=p.p_post ';
+    }
+    $post_query_sql .= 'WHERE ' . $post_query_where;
 
-	if ($hot)
-	{
-		$hot_topic_definition=intval(get_option('hot_topic_definition'));
-		$topic_filter_sup=' AND t_cache_num_posts/((t_cache_last_time-t_cache_first_time)/60/60/24+1)>'.strval($hot_topic_definition);
-	} else $topic_filter_sup='';
-	if (($filter_topic_title=='') && ($filter_topic_description==''))
-	{
-		if (($filter_topic_title=='') && ($filter_topic_description==''))
-		{
-			$query='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top';
-			if (strpos(get_db_type(),'mysql')!==false)
-			{
-				$query.=' USE INDEX (topic_order_4)';
-			}
-			$query.=' WHERE ('.$id_list.')'.$topic_filter_sup;
-			$query_simplified=$query;
+    if ($hot) {
+        $hot_topic_definition = intval(get_option('hot_topic_definition'));
+        $topic_filter_sup = ' AND t_cache_num_posts/((t_cache_last_time-t_cache_first_time)/60/60/24+1)>' . strval($hot_topic_definition);
+    } else {
+        $topic_filter_sup = '';
+    }
+    if (($filter_topic_title == '') && ($filter_topic_description == '')) {
+        if (($filter_topic_title == '') && ($filter_topic_description == '')) {
+            $query = 'SELECT * FROM ' . $this_ref->connection->get_table_prefix() . 'f_topics top';
+            if (strpos(get_db_type(),'mysql') !== false) {
+                $query .= ' USE INDEX (topic_order_4)';
+            }
+            $query .= ' WHERE (' . $id_list . ')' . $topic_filter_sup;
+            $query_simplified = $query;
 
-			if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
-				$query.=' AND (t_cache_first_member_id>'.strval(db_get_first_id()).' OR EXISTS('.$post_query_sql.'))';
-		} else
-		{
-			$query='';
-			$query_simplified='';
-			$topic_filters=array();
-			if ($filter_topic_title!='')
-				$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
-			if ($filter_topic_description!='')
-				$topic_filters[]='t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
-			foreach ($topic_filters as $topic_filter)
-			{
-				$query_more='';
-				if ($query!='') $query_more.=' UNION ';
-				$query_more.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top';
-				if (strpos(get_db_type(),'mysql')!==false)
-				{
-					$query_more.=' USE INDEX (in_forum)';
-				}
-				$query_more.=' WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
-				$query.=$query_more;
-				$query_simplified.=$query_more;
+            if (strpos(get_db_type(),'mysql') !== false) {// So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
+                $query .= ' AND (t_cache_first_member_id>' . strval(db_get_first_id()) . ' OR EXISTS(' . $post_query_sql . '))';
+            }
+        } else {
+            $query = '';
+            $query_simplified = '';
+            $topic_filters = array();
+            if ($filter_topic_title != '') {
+                $topic_filters[] = 't_cache_first_title LIKE \'' . db_encode_like($filter_topic_title) . '\'';
+            }
+            if ($filter_topic_description != '') {
+                $topic_filters[] = 't_description LIKE \'' . db_encode_like($filter_topic_description) . '\'';
+            }
+            foreach ($topic_filters as $topic_filter) {
+                $query_more = '';
+                if ($query != '') {
+                    $query_more .= ' UNION ';
+                }
+                $query_more .= 'SELECT * FROM ' . $this_ref->connection->get_table_prefix() . 'f_topics top';
+                if (strpos(get_db_type(),'mysql') !== false) {
+                    $query_more .= ' USE INDEX (in_forum)';
+                }
+                $query_more .= ' WHERE (' . $id_list . ') AND ' . $topic_filter . $topic_filter_sup;
+                $query .= $query_more;
+                $query_simplified .= $query_more;
 
-				if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
-					$query.=' AND (t_cache_first_member_id>'.strval(db_get_first_id()).' OR EXISTS('.$post_query_sql.'))';
-			}
-		}
-	} else
-	{
-		$query='';
-		$query_simplified='';
-		$topic_filters=array();
-		if ($filter_topic_title!='')
-			$topic_filters[]='t_cache_first_title LIKE \''.db_encode_like($filter_topic_title).'\'';
-		if ($filter_topic_description!='')
-			$topic_filters[]='t_description LIKE \''.db_encode_like($filter_topic_description).'\'';
-		foreach ($topic_filters as $topic_filter)
-		{
-			$query_more='';
-			if ($query!='') $query_more.=' UNION ';
-			$query_more.='SELECT * FROM '.$this_ref->connection->get_table_prefix().'f_topics top WHERE ('.$id_list.') AND '.$topic_filter.$topic_filter_sup;
-			$query.=$query_more;
-			$query_simplified.=$query_more;
+                if (strpos(get_db_type(),'mysql') !== false) {// So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
+                    $query .= ' AND (t_cache_first_member_id>' . strval(db_get_first_id()) . ' OR EXISTS(' . $post_query_sql . '))';
+                }
+            }
+        }
+    } else {
+        $query = '';
+        $query_simplified = '';
+        $topic_filters = array();
+        if ($filter_topic_title != '') {
+            $topic_filters[] = 't_cache_first_title LIKE \'' . db_encode_like($filter_topic_title) . '\'';
+        }
+        if ($filter_topic_description != '') {
+            $topic_filters[] = 't_description LIKE \'' . db_encode_like($filter_topic_description) . '\'';
+        }
+        foreach ($topic_filters as $topic_filter) {
+            $query_more = '';
+            if ($query != '') {
+                $query_more .= ' UNION ';
+            }
+            $query_more .= 'SELECT * FROM ' . $this_ref->connection->get_table_prefix() . 'f_topics top WHERE (' . $id_list . ') AND ' . $topic_filter . $topic_filter_sup;
+            $query .= $query_more;
+            $query_simplified .= $query_more;
 
-			if (strpos(get_db_type(),'mysql')!==false) // So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
-				$query.=' AND (t_cache_first_member_id>'.strval(db_get_first_id()).' OR EXISTS('.$post_query_sql.'))';
-		}
-	}
+            if (strpos(get_db_type(),'mysql') !== false) {// So topics with no validated posts, or only spacer posts, are not drawn out only to then be filtered layer (meaning we don't get enough result). Done after $max_rows calculated as that would be slow with this clause
+                $query .= ' AND (t_cache_first_member_id>' . strval(db_get_first_id()) . ' OR EXISTS(' . $post_query_sql . '))';
+            }
+        }
+    }
 
-	$max_rows=$this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query_simplified),false,true);
+    $max_rows = $this_ref->connection->query_value_if_there(preg_replace('#(^| UNION )SELECT \* #','${1}SELECT COUNT(*) ',$query_simplified),false,true);
 
-	if ($limit==0) return array();
-	$order_by=(($date_key=='lasttime')?'t_cache_last_time':'t_cache_first_time').' DESC';
-	$rows=$this_ref->connection->query($query.' ORDER BY '.$order_by,$limit,$start,false,true);
+    if ($limit == 0) {
+        return array();
+    }
+    $order_by = (($date_key == 'lasttime')?'t_cache_last_time':'t_cache_first_time') . ' DESC';
+    $rows = $this_ref->connection->query($query . ' ORDER BY ' . $order_by,$limit,$start,false,true);
 
-	$post_query_sql.=' ORDER BY p_time,p.id';
+    $post_query_sql .= ' ORDER BY p_time,p.id';
 
-	$out=array();
-	foreach ($rows as $i=>$r)
-	{
-		$out[$i]=array();
-		$out[$i]['id']=$r['id'];
-		$out[$i]['num']=$r['t_cache_num_posts'];
-		$out[$i]['title']=$r['t_cache_first_title'];
-		$out[$i]['description']=$r['t_description'];
-		$out[$i]['firstusername']=$r['t_cache_first_username'];
-		$out[$i]['lastusername']=$r['t_cache_last_username'];
-		$out[$i]['firstmemberid']=$r['t_cache_first_member_id'];
-		$out[$i]['lastmemberid']=$r['t_cache_last_member_id'];
-		$out[$i]['firsttime']=$r['t_cache_first_time'];
-		$out[$i]['lasttime']=$r['t_cache_last_time'];
-		$out[$i]['closed']=1-$r['t_is_open'];
-		$out[$i]['forum_id']=$r['t_forum_id'];
+    $out = array();
+    foreach ($rows as $i => $r) {
+        $out[$i] = array();
+        $out[$i]['id'] = $r['id'];
+        $out[$i]['num'] = $r['t_cache_num_posts'];
+        $out[$i]['title'] = $r['t_cache_first_title'];
+        $out[$i]['description'] = $r['t_description'];
+        $out[$i]['firstusername'] = $r['t_cache_first_username'];
+        $out[$i]['lastusername'] = $r['t_cache_last_username'];
+        $out[$i]['firstmemberid'] = $r['t_cache_first_member_id'];
+        $out[$i]['lastmemberid'] = $r['t_cache_last_member_id'];
+        $out[$i]['firsttime'] = $r['t_cache_first_time'];
+        $out[$i]['lasttime'] = $r['t_cache_last_time'];
+        $out[$i]['closed'] = 1-$r['t_is_open'];
+        $out[$i]['forum_id'] = $r['t_forum_id'];
 
-		$_post_query_sql=str_replace('top.id',strval($out[$i]['id']),$post_query_sql);
-		$fp_rows=$this_ref->connection->query($_post_query_sql,1,NULL,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
-		if (!array_key_exists(0,$fp_rows))
-		{
-			unset($out[$i]);
-			continue;
-		}
-		$out[$i]['firstusername']=$fp_rows[0]['p_poster_name_if_guest'];
-		$out[$i]['firstmemberid']=$fp_rows[0]['p_poster'];
-		$out[$i]['firsttitle']=$fp_rows[0]['p_title'];
-		if ($show_first_posts)
-		{
-			$post_row=db_map_restrict($fp_rows[0],array('p_post'))+array('id'=>$fp_rows[0]['p_id']);
-			$out[$i]['firstpost']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
-		}
-	}
-	if (count($out)!=0) return $out;
-	return NULL;
+        $_post_query_sql = str_replace('top.id',strval($out[$i]['id']),$post_query_sql);
+        $fp_rows = $this_ref->connection->query($_post_query_sql,1,null,false,true,array('p_post' => 'LONG_TRANS__COMCODE'));
+        if (!array_key_exists(0,$fp_rows)) {
+            unset($out[$i]);
+            continue;
+        }
+        $out[$i]['firstusername'] = $fp_rows[0]['p_poster_name_if_guest'];
+        $out[$i]['firstmemberid'] = $fp_rows[0]['p_poster'];
+        $out[$i]['firsttitle'] = $fp_rows[0]['p_title'];
+        if ($show_first_posts) {
+            $post_row = db_map_restrict($fp_rows[0],array('p_post'))+array('id' => $fp_rows[0]['p_id']);
+            $out[$i]['firstpost'] = get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+        }
+    }
+    if (count($out) != 0) {
+        return $out;
+    }
+    return NULL;
 }
 
 /**
@@ -374,14 +388,14 @@ function _helper_show_forum_topics($this_ref,$name,$limit,$start,&$max_rows,$fil
  */
 function not_like_spacer_posts($field)
 {
-	$ret='';
-	$langs=find_all_langs();
-	foreach (array_keys($langs) as $lang)
-	{
-		if ((@filesize(get_file_base().'/lang/'.$lang.'/global.ini')) || (@filesize(get_file_base().'/lang_custom/'.$lang.'/global.ini'))) // Check it's a real lang and not a stub dir
-			$ret.=' AND '.$field.' NOT LIKE \'%'.db_encode_like(do_lang('SPACER_POST_MATCHER','','','',$lang).'%').'\'';
-	}
-	return $ret;
+    $ret = '';
+    $langs = find_all_langs();
+    foreach (array_keys($langs) as $lang) {
+        if ((@filesize(get_file_base() . '/lang/' . $lang . '/global.ini')) || (@filesize(get_file_base() . '/lang_custom/' . $lang . '/global.ini'))) {// Check it's a real lang and not a stub dir
+            $ret .= ' AND ' . $field . ' NOT LIKE \'%' . db_encode_like(do_lang('SPACER_POST_MATCHER','','','',$lang) . '%') . '\'';
+        }
+    }
+    return $ret;
 }
 
 /**
@@ -401,117 +415,107 @@ function not_like_spacer_posts($field)
  * @set date compound_rating average_rating
  * @return mixed			The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
  */
-function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read=true,$reverse=false,$light_if_threaded=false,$post_ids=NULL,$load_spacer_posts_too=false,$sort='date')
+function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$mark_read = true,$reverse = false,$light_if_threaded = false,$post_ids = null,$load_spacer_posts_too = false,$sort = 'date')
 {
-	if ($topic_id===NULL)
-	{
-		$count=0;
-		return (-2);
-	}
+    if ($topic_id === NULL) {
+        $count = 0;
+        return (-2);
+    }
 
-	require_code('ocf_topics');
+    require_code('ocf_topics');
 
-	$is_threaded=$this_ref->topic_is_threaded($topic_id);
+    $is_threaded = $this_ref->topic_is_threaded($topic_id);
 
-	$extra_where='';
-	if ($post_ids!==NULL)
-	{
-		if (count($post_ids)==0)
-		{
-			$count=0;
-			return array();
-		}
-		$extra_where=' AND (';
-		foreach ($post_ids as $i=>$id)
-		{
-			if ($i!=0) $extra_where.=' OR ';
-			$extra_where.='p.id='.strval($id);
-		}
-		$extra_where.=')';
-	}
+    $extra_where = '';
+    if ($post_ids !== NULL) {
+        if (count($post_ids) == 0) {
+            $count = 0;
+            return array();
+        }
+        $extra_where = ' AND (';
+        foreach ($post_ids as $i => $id) {
+            if ($i != 0) {
+                $extra_where .= ' OR ';
+            }
+            $extra_where .= 'p.id=' . strval($id);
+        }
+        $extra_where .= ')';
+    }
 
-	$where='('.ocf_get_topic_where($topic_id).')';
-	if (!$load_spacer_posts_too)
-		$where.=not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
-	$where.=$extra_where;
-	if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where.=' AND (p_validated=1 OR ((p_poster<>'.strval($GLOBALS['FORUM_DRIVER']->get_guest_id()).' OR '.db_string_equal_to('p_ip_address',get_ip_address()).') AND p_poster='.strval(get_member()).'))';
-	static $index=NULL;
-	if ($index===NULL)
-		$index=(strpos(get_db_type(),'mysql')!==false && ($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table'=>'f_posts','i_name'=>'in_topic'))!==NULL))?'USE INDEX (in_topic)':'';
+    $where = '(' . ocf_get_topic_where($topic_id) . ')';
+    if (!$load_spacer_posts_too) {
+        $where .= not_like_spacer_posts($GLOBALS['SITE_DB']->translate_field_ref('p_post'));
+    }
+    $where .= $extra_where;
+    if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        $where .= ' AND (p_validated=1 OR ((p_poster<>' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' OR ' . db_string_equal_to('p_ip_address',get_ip_address()) . ') AND p_poster=' . strval(get_member()) . '))';
+    }
+    static $index = null;
+    if ($index === NULL) {
+        $index = (strpos(get_db_type(),'mysql') !== false && ($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_name',array('i_table' => 'f_posts','i_name' => 'in_topic')) !== NULL))?'USE INDEX (in_topic)':'';
+    }
 
-	$order=$reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
-	if (db_has_subqueries($this_ref->connection->connection_read))
-	{
-		if ($sort=='compound_rating')
-		{
-			$order=(($reverse?'compound_rating DESC':'compound_rating ASC').','.$order);
-		}
-		elseif ($sort=='average_rating')
-		{
-			$order=(($reverse?'average_rating DESC':'average_rating ASC').','.$order);
-		}
-	}
+    $order = $reverse?'p_time DESC,p.id DESC':'p_time ASC,p.id ASC';
+    if (db_has_subqueries($this_ref->connection->connection_read)) {
+        if ($sort == 'compound_rating') {
+            $order = (($reverse?'compound_rating DESC':'compound_rating ASC') . ',' . $order);
+        } elseif ($sort == 'average_rating') {
+            $order = (($reverse?'average_rating DESC':'average_rating ASC') . ',' . $order);
+        }
+    }
 
-	if (($light_if_threaded) && ($is_threaded))
-	{
-		$select='p.id,p.p_parent_id,p.p_intended_solely_for,p.p_poster';
-	} else
-	{
-		$select='p.*';
-		if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
-		{
-			$select.=',h.h_post_id';
-		}
-	}
-	if ((($is_threaded) || ($sort=='compound_rating') || ($sort=='average_rating')) && (db_has_subqueries($this_ref->connection->connection_read)))
-	{
-		$select.=',COALESCE((SELECT AVG(rating) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),5) AS average_rating';
-		$select.=',COALESCE((SELECT SUM(rating-1) FROM '.$this_ref->connection->get_table_prefix().'rating WHERE '.db_string_equal_to('rating_for_type','post').' AND rating_for_id=p.id),0) AS compound_rating';
-	}
-	if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read))
-	{
-		$rows=$this_ref->connection->query('SELECT '.$select.' FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' LEFT JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
-	} else // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
-	{
-		$rows=$this_ref->connection->query('SELECT '.$select.', (SELECT h_post_id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where.' ORDER BY '.$order,$max,$start,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
-	}
-	$count=$this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM '.$this_ref->connection->get_table_prefix().'f_posts p '.$index.' WHERE '.$where,false,true,array('p_post'=>'LONG_TRANS__COMCODE'));
+    if (($light_if_threaded) && ($is_threaded)) {
+        $select = 'p.id,p.p_parent_id,p.p_intended_solely_for,p.p_poster';
+    } else {
+        $select = 'p.*';
+        if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read)) {
+            $select .= ',h.h_post_id';
+        }
+    }
+    if ((($is_threaded) || ($sort == 'compound_rating') || ($sort == 'average_rating')) && (db_has_subqueries($this_ref->connection->connection_read))) {
+        $select .= ',COALESCE((SELECT AVG(rating) FROM ' . $this_ref->connection->get_table_prefix() . 'rating WHERE ' . db_string_equal_to('rating_for_type','post') . ' AND rating_for_id=p.id),5) AS average_rating';
+        $select .= ',COALESCE((SELECT SUM(rating-1) FROM ' . $this_ref->connection->get_table_prefix() . 'rating WHERE ' . db_string_equal_to('rating_for_type','post') . ' AND rating_for_id=p.id),0) AS compound_rating';
+    }
+    if (!db_has_subqueries($GLOBALS['FORUM_DB']->connection_read)) {
+        $rows = $this_ref->connection->query('SELECT ' . $select . ' FROM ' . $this_ref->connection->get_table_prefix() . 'f_posts p ' . $index . ' LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_post_history h ON (h.h_post_id=p.id AND h.h_action_date_and_time=p.p_last_edit_time) WHERE ' . $where . ' ORDER BY ' . $order,$max,$start,false,true,array('p_post' => 'LONG_TRANS__COMCODE'));
+    } else { // Can use subquery to avoid having to assume p_last_edit_time was not chosen as null during avoidance of duplication of rows
+        $rows = $this_ref->connection->query('SELECT ' . $select . ', (SELECT h_post_id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_post_history h WHERE (h.h_post_id=p.id) LIMIT 1) AS h_post_id FROM ' . $this_ref->connection->get_table_prefix() . 'f_posts p ' . $index . ' WHERE ' . $where . ' ORDER BY ' . $order,$max,$start,false,true,array('p_post' => 'LONG_TRANS__COMCODE'));
+    }
+    $count = $this_ref->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this_ref->connection->get_table_prefix() . 'f_posts p ' . $index . ' WHERE ' . $where,false,true,array('p_post' => 'LONG_TRANS__COMCODE'));
 
-	$out=array();
-	foreach ($rows as $myrow)
-	{
-		if (($myrow['p_intended_solely_for']===NULL) || (($myrow['p_poster']==get_member()) && (!is_guest($myrow['p_poster']))) || ($myrow['p_intended_solely_for']==get_member()) || (($myrow['p_intended_solely_for']==$this_ref->get_guest_id()) && ($this_ref->is_staff(get_member()))))
-		{
-			$temp=$myrow; // Takes all OCF properties
+    $out = array();
+    foreach ($rows as $myrow) {
+        if (($myrow['p_intended_solely_for'] === NULL) || (($myrow['p_poster'] == get_member()) && (!is_guest($myrow['p_poster']))) || ($myrow['p_intended_solely_for'] == get_member()) || (($myrow['p_intended_solely_for'] == $this_ref->get_guest_id()) && ($this_ref->is_staff(get_member())))) {
+            $temp = $myrow; // Takes all OCF properties
 
-			// Then sanitised for normal forum driver API too (involves repetition)
-			$temp['parent_id']=$myrow['p_parent_id'];
-			if ((!$light_if_threaded) || (!$is_threaded))
-			{
-				$temp['title']=$myrow['p_title'];
-				$post_row=db_map_restrict($myrow,array('id','p_post'));
-				$temp['message']=get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
-				$temp['message_comcode']=get_translated_text($post_row['p_post'],$GLOBALS['FORUM_DB']);
-				$temp['member']=$myrow['p_poster'];
-				if ($myrow['p_poster_name_if_guest']!='') $temp['username']=$myrow['p_poster_name_if_guest'];
-				$temp['date']=$myrow['p_time'];
-			}
+            // Then sanitised for normal forum driver API too (involves repetition)
+            $temp['parent_id'] = $myrow['p_parent_id'];
+            if ((!$light_if_threaded) || (!$is_threaded)) {
+                $temp['title'] = $myrow['p_title'];
+                $post_row = db_map_restrict($myrow,array('id','p_post'));
+                $temp['message'] = get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+                $temp['message_comcode'] = get_translated_text($post_row['p_post'],$GLOBALS['FORUM_DB']);
+                $temp['member'] = $myrow['p_poster'];
+                if ($myrow['p_poster_name_if_guest'] != '') {
+                    $temp['username'] = $myrow['p_poster_name_if_guest'];
+                }
+                $temp['date'] = $myrow['p_time'];
+            }
 
-			$out[]=$temp;
-		}
-	}
+            $out[] = $temp;
+        }
+    }
 
-	if ($mark_read)
-	{
-		require_code('ocf_topics');
-		if ((get_option('post_history_days')!='0') && (get_value('avoid_normal_topic_history')!=='1'))
-		{
-			if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs'))
-				ocf_ping_topic_read($topic_id);
-		}
-	}
+    if ($mark_read) {
+        require_code('ocf_topics');
+        if ((get_option('post_history_days') != '0') && (get_value('avoid_normal_topic_history') !== '1')) {
+            if (!$GLOBALS['SITE_DB']->table_is_locked('f_read_logs')) {
+                ocf_ping_topic_read($topic_id);
+            }
+        }
+    }
 
-	return $out;
+    return $out;
 }
 
 /**
@@ -524,10 +528,12 @@ function _helper_get_forum_topic_posts($this_ref,$topic_id,&$count,$max,$start,$
  */
 function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
 {
-	$count=0;
-	$ret=_helper_get_forum_topic_posts($this_ref,$topic_id,$count,NULL,0,false,false,false,$post_ids,true);
-	if (is_integer($ret)) return array();
-	return $ret;
+    $count = 0;
+    $ret = _helper_get_forum_topic_posts($this_ref,$topic_id,$count,null,0,false,false,false,$post_ids,true);
+    if (is_integer($ret)) {
+        return array();
+    }
+    return $ret;
 }
 
 /**
@@ -539,19 +545,21 @@ function _helper_get_post_remaining_details($this_ref,$topic_id,$post_ids)
  */
 function _helper_get_emoticon_chooser($this_ref,$field_name)
 {
-	if (get_option('is_on_emoticon_choosers')=='0') return new ocp_tempcode();
+    if (get_option('is_on_emoticon_choosers') == '0') {
+        return new ocp_tempcode();
+    }
 
-	$extra_where=has_privilege(get_member(),'use_special_emoticons')?array():array('e_is_special'=>0);
-	$emoticons=$this_ref->connection->query_select('f_emoticons',array('*'),array('e_relevance_level'=>0)+$extra_where);
-	$em=new ocp_tempcode();
-	foreach ($emoticons as $emo)
-	{
-		$code=$emo['e_code'];
-		if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($code);
+    $extra_where = has_privilege(get_member(),'use_special_emoticons')?array():array('e_is_special' => 0);
+    $emoticons = $this_ref->connection->query_select('f_emoticons',array('*'),array('e_relevance_level' => 0)+$extra_where);
+    $em = new ocp_tempcode();
+    foreach ($emoticons as $emo) {
+        $code = $emo['e_code'];
+        if ($GLOBALS['XSS_DETECT']) {
+            ocp_mark_as_escaped($code);
+        }
 
-		$em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID'=>'1a75f914e09f2325ad96ad679bcffe88','FIELD_NAME'=>$field_name,'CODE'=>$code,'IMAGE'=>apply_emoticons($code))));
-	}
+        $em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID' => '1a75f914e09f2325ad96ad679bcffe88','FIELD_NAME' => $field_name,'CODE' => $code,'IMAGE' => apply_emoticons($code))));
+    }
 
-	return $em;
+    return $em;
 }
-

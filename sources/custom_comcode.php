@@ -34,61 +34,55 @@
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT		The tag name
  */
-function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
+function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify = false)
 {
-	require_code('type_validation');
-	if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    require_code('type_validation');
+    if (!is_alphanumeric($tag,true)) {
+        warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    }
 
-	require_code('comcode_compiler');
+    require_code('comcode_compiler');
 
-	global $VALID_COMCODE_TAGS;
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
-	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test)))
-	{
-		if ($uniqify)
-		{
-			$tag.='_'.uniqid('',true);
-		} else
-		{
-			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
-		}
-	}
+    global $VALID_COMCODE_TAGS;
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag' => $tag));
+    if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) {
+        if ($uniqify) {
+            $tag .= '_' . uniqid('',true);
+        } else {
+            warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
+        }
+    }
 
-	$map=array(
-		'tag_tag'=>$tag,
-		'tag_replace'=>$replace,
-		'tag_example'=>$example,
-		'tag_parameters'=>$parameters,
-		'tag_enabled'=>$enabled,
-		'tag_dangerous_tag'=>$dangerous_tag,
-		'tag_block_tag'=>$block_tag,
-		'tag_textual_tag'=>$textual_tag,
-	);
-	if (is_array($title))
-	{
-		$map+=$title;
-	} else
-	{
-		$map+=insert_lang('tag_title',$title,2);
-	}
-	if (is_array($description))
-	{
-		$map+=$description;
-	} else
-	{
-		$map+=insert_lang('tag_description',$description,2);
-	}
-	$GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
+    $map = array(
+        'tag_tag' => $tag,
+        'tag_replace' => $replace,
+        'tag_example' => $example,
+        'tag_parameters' => $parameters,
+        'tag_enabled' => $enabled,
+        'tag_dangerous_tag' => $dangerous_tag,
+        'tag_block_tag' => $block_tag,
+        'tag_textual_tag' => $textual_tag,
+    );
+    if (is_array($title)) {
+        $map += $title;
+    } else {
+        $map += insert_lang('tag_title',$title,2);
+    }
+    if (is_array($description)) {
+        $map += $description;
+    } else {
+        $map += insert_lang('tag_description',$description,2);
+    }
+    $GLOBALS['SITE_DB']->query_insert('custom_comcode',$map);
 
-	log_it('ADD_CUSTOM_COMCODE_TAG',$tag);
+    log_it('ADD_CUSTOM_COMCODE_TAG',$tag);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('custom_comcode_tag',$tag,NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('custom_comcode_tag',$tag,null,null,true);
+    }
 
-	return $tag;
+    return $tag;
 }
 
 /**
@@ -108,55 +102,57 @@ function add_custom_comcode_tag($tag,$title,$description,$replace,$example,$para
  * @param  boolean		Whether to force the name as unique, if there's a conflict
  * @return ID_TEXT		The tag name
  */
-function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify=false)
+function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag,$uniqify = false)
 {
-	require_code('type_validation');
-	if (!is_alphanumeric($tag,true)) warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    require_code('type_validation');
+    if (!is_alphanumeric($tag,true)) {
+        warn_exit(do_lang_tempcode('BAD_CODENAME'));
+    }
 
-	require_code('comcode_compiler');
+    require_code('comcode_compiler');
 
-	global $VALID_COMCODE_TAGS;
-	$test=$GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag'=>$tag));
-	if ($old_tag==$tag) $test=NULL;
-	if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test)))
-	{
-		if ($uniqify)
-		{
-			$tag.='_'.uniqid('',true);
-		} else
-		{
-			warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
-		}
-	}
+    global $VALID_COMCODE_TAGS;
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag' => $tag));
+    if ($old_tag == $tag) {
+        $test = null;
+    }
+    if ((array_key_exists($tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) {
+        if ($uniqify) {
+            $tag .= '_' . uniqid('',true);
+        } else {
+            warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($tag)));
+        }
+    }
 
-	$old=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag'=>$old_tag),'',1);
-	if (!array_key_exists(0,$old)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_title=$old[0]['tag_title'];
-	$_description=$old[0]['tag_description'];
+    $old = $GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag' => $old_tag),'',1);
+    if (!array_key_exists(0,$old)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $_title = $old[0]['tag_title'];
+    $_description = $old[0]['tag_description'];
 
-	$map=array(
-		'tag_tag'=>$tag,
-		'tag_replace'=>$replace,
-		'tag_example'=>$example,
-		'tag_parameters'=>$parameters,
-		'tag_enabled'=>$enabled,
-		'tag_dangerous_tag'=>$dangerous_tag,
-		'tag_block_tag'=>$block_tag,
-		'tag_textual_tag'=>$textual_tag,
-	);
-	$map+=lang_remap('tag_title',$_title,$title);
-	$map+=lang_remap('tag_description',$_description,$description);
-	$GLOBALS['SITE_DB']->query_update('custom_comcode',$map,array('tag_tag'=>$old_tag),'',1);
+    $map = array(
+        'tag_tag' => $tag,
+        'tag_replace' => $replace,
+        'tag_example' => $example,
+        'tag_parameters' => $parameters,
+        'tag_enabled' => $enabled,
+        'tag_dangerous_tag' => $dangerous_tag,
+        'tag_block_tag' => $block_tag,
+        'tag_textual_tag' => $textual_tag,
+    );
+    $map += lang_remap('tag_title',$_title,$title);
+    $map += lang_remap('tag_description',$_description,$description);
+    $GLOBALS['SITE_DB']->query_update('custom_comcode',$map,array('tag_tag' => $old_tag),'',1);
 
-	log_it('EDIT_CUSTOM_COMCODE_TAG',$tag,$old_tag);
+    log_it('EDIT_CUSTOM_COMCODE_TAG',$tag,$old_tag);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('custom_comcode_tag',$tag);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('custom_comcode_tag',$tag);
+    }
 
-	return $tag;
+    return $tag;
 }
 
 /**
@@ -166,22 +162,23 @@ function edit_custom_comcode_tag($old_tag,$tag,$title,$description,$replace,$exa
  */
 function delete_custom_comcode_tag($tag)
 {
-	$old=$GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag'=>$tag),'',1);
-	if (!array_key_exists(0,$old)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_title=$old[0]['tag_title'];
-	$_description=$old[0]['tag_description'];
-	delete_lang($_title);
-	delete_lang($_description);
+    $old = $GLOBALS['SITE_DB']->query_select('custom_comcode',array('tag_title','tag_description'),array('tag_tag' => $tag),'',1);
+    if (!array_key_exists(0,$old)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $_title = $old[0]['tag_title'];
+    $_description = $old[0]['tag_description'];
+    delete_lang($_title);
+    delete_lang($_description);
 
-	$GLOBALS['SITE_DB']->query_delete('custom_comcode',array(
-		'tag_tag'=>$tag,
-	),'',1);
+    $GLOBALS['SITE_DB']->query_delete('custom_comcode',array(
+        'tag_tag' => $tag,
+    ),'',1);
 
-	log_it('DELETE_CUSTOM_COMCODE_TAG',$tag);
+    log_it('DELETE_CUSTOM_COMCODE_TAG',$tag);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('custom_comcode_tag',$tag);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('custom_comcode_tag',$tag);
+    }
 }

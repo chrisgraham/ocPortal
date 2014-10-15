@@ -20,119 +20,119 @@
 
 class Hook_addon_registry_core_graphic_text
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Core rendering functionality for imagery.';
-	}
+    public function get_description()
+    {
+        return 'Core rendering functionality for imagery.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_fringe',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_fringe',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources/hooks/systems/addon_registry/core_graphic_text.php',
-			'themes/default/css/fonts.css',
-			'data/fonts/Aerial.ttf',
-			'data/fonts/AerialBd.ttf',
-			'data/fonts/AerialBdIt.ttf',
-			'data/fonts/AerialIt.ttf',
-			'data/fonts/AerialMono.ttf',
-			'data/fonts/AerialMonoBd.ttf',
-			'data/fonts/AerialMonoBdIt.ttf',
-			'data/fonts/AerialMonoIt.ttf',
-			'data/fonts/FreeMono.ttf',
-			'data/fonts/FreeMonoBold.ttf',
-			'data/fonts/FreeMonoBoldOblique.ttf',
-			'data/fonts/FreeMonoOblique.ttf',
-			'data/fonts/index.html',
-			'data/fonts/toga.ttf',
-			'data/fonts/togabd.ttf',
-			'data/fonts/togabi.ttf',
-			'data/fonts/togait.ttf',
-			'data/fonts/togase.ttf',
-			'data/fonts/togasebd.ttf',
-			'data/fonts/Tymes.ttf',
-			'data/fonts/TymesBd.ttf',
-			'data/fonts/Vera.ttf',
-			'data/fonts/VeraBd.ttf',
-			'data/fonts/VeraBI.ttf',
-			'data/fonts/VeraIt.ttf',
-			'data/fonts/VeraMoBd.ttf',
-			'data/fonts/VeraMoBI.ttf',
-			'data/fonts/VeraMoIt.ttf',
-			'data/fonts/VeraMono.ttf',
-			'data/fonts/Veranda.ttf',
-			'data/fonts/VerandaBd.ttf',
-			'data/fonts/VerandaBdIt.ttf',
-			'data/fonts/VerandaIt.ttf',
-			'data/fonts/VeraSe.ttf',
-			'data/fonts/VeraSeBd.ttf',
-			'data/gd_text.php',
-			'data_custom/fonts/index.html',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources/hooks/systems/addon_registry/core_graphic_text.php',
+            'themes/default/css/fonts.css',
+            'data/fonts/Aerial.ttf',
+            'data/fonts/AerialBd.ttf',
+            'data/fonts/AerialBdIt.ttf',
+            'data/fonts/AerialIt.ttf',
+            'data/fonts/AerialMono.ttf',
+            'data/fonts/AerialMonoBd.ttf',
+            'data/fonts/AerialMonoBdIt.ttf',
+            'data/fonts/AerialMonoIt.ttf',
+            'data/fonts/FreeMono.ttf',
+            'data/fonts/FreeMonoBold.ttf',
+            'data/fonts/FreeMonoBoldOblique.ttf',
+            'data/fonts/FreeMonoOblique.ttf',
+            'data/fonts/index.html',
+            'data/fonts/toga.ttf',
+            'data/fonts/togabd.ttf',
+            'data/fonts/togabi.ttf',
+            'data/fonts/togait.ttf',
+            'data/fonts/togase.ttf',
+            'data/fonts/togasebd.ttf',
+            'data/fonts/Tymes.ttf',
+            'data/fonts/TymesBd.ttf',
+            'data/fonts/Vera.ttf',
+            'data/fonts/VeraBd.ttf',
+            'data/fonts/VeraBI.ttf',
+            'data/fonts/VeraIt.ttf',
+            'data/fonts/VeraMoBd.ttf',
+            'data/fonts/VeraMoBI.ttf',
+            'data/fonts/VeraMoIt.ttf',
+            'data/fonts/VeraMono.ttf',
+            'data/fonts/Veranda.ttf',
+            'data/fonts/VerandaBd.ttf',
+            'data/fonts/VerandaBdIt.ttf',
+            'data/fonts/VerandaIt.ttf',
+            'data/fonts/VeraSe.ttf',
+            'data/fonts/VeraSeBd.ttf',
+            'data/gd_text.php',
+            'data_custom/fonts/index.html',
+        );
+    }
 }

@@ -15,25 +15,23 @@
 
 class Hook_symbol_DECRYPT
 {
-	/**
+    /**
 	 * Run function for symbol hooks. Searches for tasks to perform.
     *
     * @param  array		Symbol parameters
     * @return string		Result
 	 */
-	function run($param)
-	{
-		$value='';
+    public function run($param)
+    {
+        $value = '';
 
-		if ((isset($param[1])) && ($param[1]!=''))
-		{
-			require_code('encryption');
-			if (is_encryption_enabled())
-			{
-				$value=decrypt_data($param[0],$param[1]);
-			}
-		}
+        if ((isset($param[1])) && ($param[1] != '')) {
+            require_code('encryption');
+            if (is_encryption_enabled()) {
+                $value = decrypt_data($param[0],$param[1]);
+            }
+        }
 
-		return $value;
-	}
+        return $value;
+    }
 }

@@ -25,7 +25,7 @@
  */
 function is_encryption_available()
 {
-	return function_exists('openssl_pkey_get_public');
+    return function_exists('openssl_pkey_get_public');
 }
 
 /**
@@ -35,9 +35,9 @@ function is_encryption_available()
  */
 function is_encryption_enabled()
 {
-	$public_key=get_option('encryption_key');
-	$private_key=get_option('decryption_key');
-	return ((function_exists('openssl_pkey_get_public')) && ($public_key!='') && ($private_key!='') && (file_exists($public_key)) && (file_exists($private_key)));
+    $public_key = get_option('encryption_key');
+    $private_key = get_option('decryption_key');
+    return ((function_exists('openssl_pkey_get_public')) && ($public_key != '') && ($private_key != '') && (file_exists($public_key)) && (file_exists($private_key)));
 }
 
 /**
@@ -50,39 +50,46 @@ function is_encryption_enabled()
  */
 function encrypt_data($data)
 {
-	require_lang('encryption');
+    require_lang('encryption');
 
-	if (!is_encryption_enabled()) return $data;
-	if ($data=='') return $data;
-	if (is_data_encrypted($data)) return $data;
+    if (!is_encryption_enabled()) {
+        return $data;
+    }
+    if ($data == '') {
+        return $data;
+    }
+    if (is_data_encrypted($data)) {
+        return $data;
+    }
 
-	if (!function_exists('openssl_pkey_get_public')) return $data;
-	if (!function_exists('openssl_public_encrypt')) return $data;
+    if (!function_exists('openssl_pkey_get_public')) {
+        return $data;
+    }
+    if (!function_exists('openssl_public_encrypt')) {
+        return $data;
+    }
 
-	/* See http://uk.php.net/manual/en/function.openssl-pkey-get-public.php */
-	$key=openssl_pkey_get_public('file://'.get_option('encryption_key'));
-	if ($key===false)
-	{
-		attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
-		return '';
-	}
+    /* See http://uk.php.net/manual/en/function.openssl-pkey-get-public.php */
+    $key = openssl_pkey_get_public('file://' . get_option('encryption_key'));
+    if ($key === false) {
+        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
+        return '';
+    }
 
-	$maxlength=117;
-	$output='';
-	while (strlen($data)>0)
-	{
-		$input=substr($data,0,$maxlength);
-		$data=substr($data,$maxlength);
-		$encrypted='';
-		if (!openssl_public_encrypt($input,$encrypted,$key))
-		{
-			attach_message(do_lang_tempcode('ENCRYPTION_ERROR'),'warn');
-			return '';
-		}
+    $maxlength = 117;
+    $output = '';
+    while (strlen($data)>0) {
+        $input = substr($data,0,$maxlength);
+        $data = substr($data,$maxlength);
+        $encrypted = '';
+        if (!openssl_public_encrypt($input,$encrypted,$key)) {
+            attach_message(do_lang_tempcode('ENCRYPTION_ERROR'),'warn');
+            return '';
+        }
 
-		$output.=$encrypted;
-	}
-	return '(Encrypted!)'.base64_encode($output);
+        $output .= $encrypted;
+    }
+    return '(Encrypted!)' . base64_encode($output);
 }
 
 /**
@@ -93,8 +100,10 @@ function encrypt_data($data)
  */
 function is_data_encrypted($data)
 {
-	if (!is_string($data)) return false;
-	return (substr($data,0,12)=='(Encrypted!)');
+    if (!is_string($data)) {
+        return false;
+    }
+    return (substr($data,0,12) == '(Encrypted!)');
 }
 
 /**
@@ -106,8 +115,10 @@ function is_data_encrypted($data)
  */
 function remove_magic_encryption_marker($data)
 {
-	if (!is_data_encrypted($data)) return $data;
-	return substr($data,12);
+    if (!is_data_encrypted($data)) {
+        return $data;
+    }
+    return substr($data,12);
 }
 
 /**
@@ -120,56 +131,55 @@ function remove_magic_encryption_marker($data)
  */
 function decrypt_data($data,$passphrase)
 {
-	require_lang('encryption');
+    require_lang('encryption');
 
-	if ($data=='') return '';
+    if ($data == '') {
+        return '';
+    }
 
-	if (!function_exists('openssl_pkey_get_private')) return '';
-	if (!function_exists('openssl_private_decrypt')) return '';
+    if (!function_exists('openssl_pkey_get_private')) {
+        return '';
+    }
+    if (!function_exists('openssl_private_decrypt')) {
+        return '';
+    }
 
-	// Check the passphrase isn't empty (if it is legitimately empty, we're doing the site a favour by bailing out)
-	if ($passphrase=='')
-	{
-		attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
-		return '';
-	}
+    // Check the passphrase isn't empty (if it is legitimately empty, we're doing the site a favour by bailing out)
+    if ($passphrase == '') {
+        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
+        return '';
+    }
 
-	// Remove the magic encryption marker and base64-decode it first
-	$data=base64_decode(remove_magic_encryption_marker(str_replace('<br />','',$data)));
+    // Remove the magic encryption marker and base64-decode it first
+    $data = base64_decode(remove_magic_encryption_marker(str_replace('<br />','',$data)));
 
-	$key=openssl_pkey_get_private(array('file://'.get_option('decryption_key'),$passphrase));
-	if ($key===false)
-	{
-		attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
-		return '';
-	}
+    $key = openssl_pkey_get_private(array('file://' . get_option('decryption_key'),$passphrase));
+    if ($key === false) {
+        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
+        return '';
+    }
 
-	$maxlength=strlen($data);
-	$decryption_keyfile=file_get_contents(get_option('decryption_key'));
-	if (strpos($decryption_keyfile,'AES')===false)
-	{
-		$maxlength=128/*1024 bit key assumption*/;
-	} elseif (strpos($decryption_keyfile,'AES-256')!==false)
-	{
-		$maxlength=256;
-	} elseif (strpos($decryption_keyfile,'AES-512')!==false)
-	{
-		$maxlength=512;
-	}
+    $maxlength = strlen($data);
+    $decryption_keyfile = file_get_contents(get_option('decryption_key'));
+    if (strpos($decryption_keyfile,'AES') === false) {
+        $maxlength = 128/*1024 bit key assumption*/;
+    } elseif (strpos($decryption_keyfile,'AES-256') !== false) {
+        $maxlength = 256;
+    } elseif (strpos($decryption_keyfile,'AES-512') !== false) {
+        $maxlength = 512;
+    }
 
-	$output='';
-	while (strlen($data)>0)
-	{
-		$input=substr($data,0,$maxlength);
-		$data=substr($data,$maxlength);
-		$decrypted='';
-		if (!openssl_private_decrypt($input,$decrypted,$key))
-		{
-			attach_message(do_lang_tempcode('DECRYPTION_ERROR'),'warn');
-			return $output;
-		}
+    $output = '';
+    while (strlen($data)>0) {
+        $input = substr($data,0,$maxlength);
+        $data = substr($data,$maxlength);
+        $decrypted = '';
+        if (!openssl_private_decrypt($input,$decrypted,$key)) {
+            attach_message(do_lang_tempcode('DECRYPTION_ERROR'),'warn');
+            return $output;
+        }
 
-		$output.=$decrypted;
-	}
-	return $output;
+        $output .= $decrypted;
+    }
+    return $output;
 }

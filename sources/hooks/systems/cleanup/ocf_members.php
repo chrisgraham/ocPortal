@@ -20,40 +20,45 @@
 
 class Hook_ocf_members
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (get_forum_type()!='ocf') return NULL; else ocf_require_all_forum_stuff();
+    public function info()
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        } else {
+            ocf_require_all_forum_stuff();
+        }
 
-		if (($GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)')>5000) && ($GLOBALS['FORUM_DB']->query_select_value('f_members','MAX(m_cache_num_posts)')>50)) // Too much work, unless we have due to an obvious issue
-			return NULL;
+        if (($GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)')>5000) && ($GLOBALS['FORUM_DB']->query_select_value('f_members','MAX(m_cache_num_posts)')>50)) {// Too much work, unless we have due to an obvious issue
+            return NULL;
+        }
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		$info=array();
-		$info['title']=do_lang_tempcode('MEMBERS');
-		$info['description']=do_lang_tempcode('DESCRIPTION_CACHE_MEMBERS');
-		$info['type']='cache';
+        $info = array();
+        $info['title'] = do_lang_tempcode('MEMBERS');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_CACHE_MEMBERS');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		if (get_forum_type()!='ocf') return new ocp_tempcode();
+    public function run()
+    {
+        if (get_forum_type() != 'ocf') {
+            return new ocp_tempcode();
+        }
 
-		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),NULL,'ocf_members_recache');
-	}
+        require_code('tasks');
+        return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),null,'ocf_members_recache');
+    }
 }
-
-

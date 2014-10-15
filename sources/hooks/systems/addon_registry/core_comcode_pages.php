@@ -20,212 +20,211 @@
 
 class Hook_addon_registry_core_comcode_pages
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Manage new pages on the website, known as Comcode pages.';
-	}
+    public function get_description()
+    {
+        return 'Manage new pages on the website, known as Comcode pages.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_comcode_pages',
-			'tut_adv_comcode_pages',
-			'tut_information',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_comcode_pages',
+            'tut_adv_comcode_pages',
+            'tut_information',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/cms/comcode_page_edit.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/cms/comcode_page_edit.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/cms/comcode_page_edit.png',
-			'themes/default/images/icons/48x48/menu/cms/comcode_page_edit.png',
-			'sources/hooks/systems/config/number_revisions_show.php',
-			'sources/hooks/systems/config/points_COMCODE_PAGE_ADD.php',
-			'sources/hooks/systems/config/store_revisions.php',
-			'sources/hooks/systems/addon_registry/core_comcode_pages.php',
-			'themes/default/templates/COMCODE_PAGE_EDIT_ACTIONS.tpl',
-			'themes/default/templates/COMCODE_PAGE_BOX.tpl',
-			'sources/hooks/modules/search/comcode_pages.php',
-			'sources/hooks/systems/content_meta_aware/comcode_page.php',
-			'sources/hooks/systems/occle_fs/comcode_pages.php',
-			'themes/default/templates/COMCODE_PAGE_SCREEN.tpl',
-			'sources/hooks/systems/rss/comcode_pages.php',
-			'sources/hooks/systems/cleanup/comcode_pages.php',
-			'cms/pages/modules/cms_comcode_pages.php',
-			'sources/hooks/systems/preview/comcode_page.php',
-			'sources/hooks/systems/attachments/comcode_page.php',
-			'sources/hooks/modules/admin_unvalidated/comcode_pages.php',
-			'sources/hooks/modules/admin_newsletter/comcode_pages.php',
-			'sources/hooks/systems/config/comcode_page_default_review_freq.php',
-			'sources/hooks/systems/config/is_on_comcode_page_children.php',
-			'sources/hooks/systems/sitemap/comcode_page.php',
-			'themes/default/templates/COMCODE_PAGE_MANAGE_SCREEN.tpl',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/cms/comcode_page_edit.png',
+            'themes/default/images/icons/48x48/menu/cms/comcode_page_edit.png',
+            'sources/hooks/systems/config/number_revisions_show.php',
+            'sources/hooks/systems/config/points_COMCODE_PAGE_ADD.php',
+            'sources/hooks/systems/config/store_revisions.php',
+            'sources/hooks/systems/addon_registry/core_comcode_pages.php',
+            'themes/default/templates/COMCODE_PAGE_EDIT_ACTIONS.tpl',
+            'themes/default/templates/COMCODE_PAGE_BOX.tpl',
+            'sources/hooks/modules/search/comcode_pages.php',
+            'sources/hooks/systems/content_meta_aware/comcode_page.php',
+            'sources/hooks/systems/occle_fs/comcode_pages.php',
+            'themes/default/templates/COMCODE_PAGE_SCREEN.tpl',
+            'sources/hooks/systems/rss/comcode_pages.php',
+            'sources/hooks/systems/cleanup/comcode_pages.php',
+            'cms/pages/modules/cms_comcode_pages.php',
+            'sources/hooks/systems/preview/comcode_page.php',
+            'sources/hooks/systems/attachments/comcode_page.php',
+            'sources/hooks/modules/admin_unvalidated/comcode_pages.php',
+            'sources/hooks/modules/admin_newsletter/comcode_pages.php',
+            'sources/hooks/systems/config/comcode_page_default_review_freq.php',
+            'sources/hooks/systems/config/is_on_comcode_page_children.php',
+            'sources/hooks/systems/sitemap/comcode_page.php',
+            'themes/default/templates/COMCODE_PAGE_MANAGE_SCREEN.tpl',
+        );
+    }
 
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'COMCODE_PAGE_SCREEN.tpl'=>'comcode_page_screen',
-			'COMCODE_PAGE_EDIT_ACTIONS.tpl'=>'comcode_page_edit_actions',
-			'COMCODE_PAGE_BOX.tpl'=>'comcode_page_preview',
-			'COMCODE_PAGE_MANAGE_SCREEN.tpl'=>'administrative__comcode_page_manage_screen'
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'COMCODE_PAGE_SCREEN.tpl' => 'comcode_page_screen',
+            'COMCODE_PAGE_EDIT_ACTIONS.tpl' => 'comcode_page_edit_actions',
+            'COMCODE_PAGE_BOX.tpl' => 'comcode_page_preview',
+            'COMCODE_PAGE_MANAGE_SCREEN.tpl' => 'administrative__comcode_page_manage_screen'
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__comcode_page_manage_screen()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'TABLE'=>placeholder_table(),
-				'SUBMIT_NAME'=>lorem_word(),
-				'POST_URL'=>placeholder_url(),
-				'TEXT'=>lorem_paragraph_html(),
-				'LINKS'=>array(array(
-					'LINK_IMAGE'=>placeholder_image_url(),
-					'LINK_URL'=>placeholder_url(),
-					'LINK_TEXT'=>lorem_phrase(),
-				)),
-			)),NULL,'',true)
-		);
+    public function tpl_preview__administrative__comcode_page_manage_screen()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'TABLE' => placeholder_table(),
+                'SUBMIT_NAME' => lorem_word(),
+                'POST_URL' => placeholder_url(),
+                'TEXT' => lorem_paragraph_html(),
+                'LINKS' => array(array(
+                    'LINK_IMAGE' => placeholder_image_url(),
+                    'LINK_URL' => placeholder_url(),
+                    'LINK_TEXT' => lorem_phrase(),
+                )),
+            )),null,'',true)
+        );
+    }
 
-	}
-
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__comcode_page_edit_actions()
-	{
-		require_lang('zones');
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS',array(
-				'EDIT_URL'=>placeholder_url(),
-				'CLONE_URL'=>placeholder_url(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__comcode_page_edit_actions()
+    {
+        require_lang('zones');
+        return array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS',array(
+                'EDIT_URL' => placeholder_url(),
+                'CLONE_URL' => placeholder_url(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__comcode_page_screen()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN',array(
-				'BEING_INCLUDED'=>false,
-				'IS_PANEL'=>false,
-				'SUBMITTER'=>placeholder_id(),
-				'TAGS'=>lorem_word_html(),
-				'WARNING_DETAILS'=>'',
-				'EDIT_DATE_RAW'=>placeholder_date_raw(),
-				'SHOW_AS_EDIT'=>lorem_phrase(),
-				'CONTENT'=>lorem_phrase(),
-				'EDIT_URL'=>placeholder_url(),
-				'ADD_CHILD_URL'=>placeholder_url(),
-				'NAME'=>lorem_word(),
-				'NATIVE_ZONE'=>lorem_word(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__comcode_page_screen()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN',array(
+                'BEING_INCLUDED' => false,
+                'IS_PANEL' => false,
+                'SUBMITTER' => placeholder_id(),
+                'TAGS' => lorem_word_html(),
+                'WARNING_DETAILS' => '',
+                'EDIT_DATE_RAW' => placeholder_date_raw(),
+                'SHOW_AS_EDIT' => lorem_phrase(),
+                'CONTENT' => lorem_phrase(),
+                'EDIT_URL' => placeholder_url(),
+                'ADD_CHILD_URL' => placeholder_url(),
+                'NAME' => lorem_word(),
+                'NATIVE_ZONE' => lorem_word(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__comcode_page_preview()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX',array(
-				'GIVE_CONTEXT'=>true,
-				'PAGE'=>lorem_phrase(),
-				'ZONE'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-				'SUMMARY'=>lorem_paragraph_html(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__comcode_page_preview()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX',array(
+                'GIVE_CONTEXT' => true,
+                'PAGE' => lorem_phrase(),
+                'ZONE' => lorem_phrase(),
+                'URL' => placeholder_url(),
+                'SUMMARY' => lorem_paragraph_html(),
+            )),null,'',true)
+        );
+    }
 }

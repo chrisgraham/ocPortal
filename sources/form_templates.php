@@ -23,34 +23,32 @@
  */
 function init__form_templates()
 {
-	require_javascript('javascript_validation');
-	require_javascript('javascript_editing');
+    require_javascript('javascript_validation');
+    require_javascript('javascript_editing');
 
-	global $WYSIWYG_ATTACHED;
-	$WYSIWYG_ATTACHED=false;
+    global $WYSIWYG_ATTACHED;
+    $WYSIWYG_ATTACHED = false;
 
-	global $TABINDEX;
-	$TABINDEX=50; // Base
+    global $TABINDEX;
+    $TABINDEX = 50; // Base
 
-	global $NO_DEV_MODE_FULLSTOP_CHECK;
-	$NO_DEV_MODE_FULLSTOP_CHECK=false;
+    global $NO_DEV_MODE_FULLSTOP_CHECK;
+    $NO_DEV_MODE_FULLSTOP_CHECK = false;
 
-	require_code('input_filter');
+    require_code('input_filter');
 
-	global $DOING_ALTERNATE_FIELDS_SET;
-	$DOING_ALTERNATE_FIELDS_SET=mixed();
+    global $DOING_ALTERNATE_FIELDS_SET;
+    $DOING_ALTERNATE_FIELDS_SET = mixed();
 
-	require_css('forms');
+    require_css('forms');
 
-	if (function_exists('get_member'))
-	{
-		if ((has_privilege(get_member(),'allow_html')) && (get_value('edit_with_my_comcode_perms')==='1') && ((strpos(get_param('type',''),'ed')!==false) || (strpos(get_param('type',''),'ec')!==false)))
-		{
-			attach_message('You have enabled content editing to assume your permissions via a hidden option. Be VERY careful to check whatever Comcode/HTML you edit.','warn');
-		}
-	}
+    if (function_exists('get_member')) {
+        if ((has_privilege(get_member(),'allow_html')) && (get_value('edit_with_my_comcode_perms') === '1') && ((strpos(get_param('type',''),'ed') !== false) || (strpos(get_param('type',''),'ec') !== false))) {
+            attach_message('You have enabled content editing to assume your permissions via a hidden option. Be VERY careful to check whatever Comcode/HTML you edit.','warn');
+        }
+    }
 
-	@header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+    @header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
 }
 
 /**
@@ -61,11 +59,15 @@ function init__form_templates()
  */
 function read_multi_code($param)
 {
-	$type=post_param($param);
-	if ($type=='*') return $type;
-	if (!array_key_exists($param.'_list',$_POST)) return '';
-	$in=implode(',',$_POST[$param.'_list']);
-	return $type.$in;
+    $type = post_param($param);
+    if ($type == '*') {
+        return $type;
+    }
+    if (!array_key_exists($param . '_list',$_POST)) {
+        return '';
+    }
+    $in = implode(',',$_POST[$param . '_list']);
+    return $type . $in;
 }
 
 /**
@@ -74,33 +76,31 @@ function read_multi_code($param)
  * @param  integer		How much to increment the counter by
  * @param  integer		The name length being checked
  */
-function check_suhosin_request_quantity($inc=1,$name_length=0)
+function check_suhosin_request_quantity($inc = 1,$name_length = 0)
 {
-	static $count=0;
-	static $name_length_count=0;
-	$count+=$inc;
-	$name_length_count+=$name_length;
+    static $count = 0;
+    static $name_length_count = 0;
+    $count += $inc;
+    $name_length_count += $name_length;
 
-	static $failed_already=false;
-	if ($failed_already) return;
+    static $failed_already = false;
+    if ($failed_already) {
+        return;
+    }
 
-	foreach (array('max_input_vars','suhosin.post.max_vars','suhosin.request.max_vars') as $setting)
-	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count))
-		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
-			$failed_already=true;
-		}
-	}
+    foreach (array('max_input_vars','suhosin.post.max_vars','suhosin.request.max_vars') as $setting) {
+        if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$count)) {
+            attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+            $failed_already = true;
+        }
+    }
 
-	foreach (array('suhosin.post.max_totalname_length','suhosin.request.max_totalname_length') as $setting)
-	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$name_length_count))
-		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
-			$failed_already=true;
-		}
-	}
+    foreach (array('suhosin.post.max_totalname_length','suhosin.request.max_totalname_length') as $setting) {
+        if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))<$name_length_count)) {
+            attach_message(do_lang_tempcode('SUHOSIN_MAX_VARS_TOO_LOW',$setting),'warn');
+            $failed_already = true;
+        }
+    }
 }
 
 /**
@@ -110,13 +110,11 @@ function check_suhosin_request_quantity($inc=1,$name_length=0)
  */
 function check_suhosin_request_size($size)
 {
-	foreach (array('suhosin.request.max_value_length','suhosin.post.max_value_length') as $setting)
-	{
-		if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))-500<$size))
-		{
-			attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',$setting),'warn');
-		}
-	}
+    foreach (array('suhosin.request.max_value_length','suhosin.post.max_value_length') as $setting) {
+        if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))-500<$size)) {
+            attach_message(do_lang_tempcode('SUHOSIN_MAX_VALUE_TOO_SHORT',$setting),'warn');
+        }
+    }
 }
 
 /**
@@ -124,8 +122,8 @@ function check_suhosin_request_size($size)
  */
 function url_default_parameters__enable()
 {
-	global $URL_DEFAULT_PARAMETERS_ENABLED;
-	$URL_DEFAULT_PARAMETERS_ENABLED=true;
+    global $URL_DEFAULT_PARAMETERS_ENABLED;
+    $URL_DEFAULT_PARAMETERS_ENABLED = true;
 }
 
 /**
@@ -133,8 +131,8 @@ function url_default_parameters__enable()
  */
 function url_default_parameters__disable()
 {
-	global $URL_DEFAULT_PARAMETERS_ENABLED;
-	$URL_DEFAULT_PARAMETERS_ENABLED=false;
+    global $URL_DEFAULT_PARAMETERS_ENABLED;
+    $URL_DEFAULT_PARAMETERS_ENABLED = false;
 }
 
 /**
@@ -148,13 +146,17 @@ function url_default_parameters__disable()
  */
 function take_param_int_modeavg($setting,$db_property,$table,$default)
 {
-	if (!is_null($setting)) return $setting;
+    if (!is_null($setting)) {
+        return $setting;
+    }
 
-	$db=$GLOBALS[(substr($table,0,2)=='f_')?'FORUM_DB':'SITE_DB'];
-	$val=$db->query_value_if_there('SELECT '.$db_property.',count('.$db_property.') AS qty FROM '.get_table_prefix().$table.' GROUP BY '.$db_property.' ORDER BY qty DESC',false,true); // We need the mode here, not the mean
-	if (!is_null($val)) return $val;
+    $db = $GLOBALS[(substr($table,0,2) == 'f_')?'FORUM_DB':'SITE_DB'];
+    $val = $db->query_value_if_there('SELECT ' . $db_property . ',count(' . $db_property . ') AS qty FROM ' . get_table_prefix() . $table . ' GROUP BY ' . $db_property . ' ORDER BY qty DESC',false,true); // We need the mode here, not the mean
+    if (!is_null($val)) {
+        return $val;
+    }
 
-	return $default;
+    return $default;
 }
 
 /**
@@ -162,14 +164,13 @@ function take_param_int_modeavg($setting,$db_property,$table,$default)
  */
 function attach_wysiwyg()
 {
-	global $WYSIWYG_ATTACHED;
-	if (!$WYSIWYG_ATTACHED)
-	{
-		require_code('site');
-		attach_to_javascript(do_template('WYSIWYG_LOAD'));
-	}
-	$WYSIWYG_ATTACHED=true;
-	@header('Content-type: text/html; charset='.get_charset());
+    global $WYSIWYG_ATTACHED;
+    if (!$WYSIWYG_ATTACHED) {
+        require_code('site');
+        attach_to_javascript(do_template('WYSIWYG_LOAD'));
+    }
+    $WYSIWYG_ATTACHED = true;
+    @header('Content-type: text/html; charset=' . get_charset());
 }
 
 /**
@@ -179,27 +180,24 @@ function attach_wysiwyg()
  * @param  ID_TEXT			Code representing the media types we are using limits for
  * @set image file
  */
-function handle_max_file_size(&$hidden,$regular_max_size_type='file')
+function handle_max_file_size(&$hidden,$regular_max_size_type = 'file')
 {
-	require_code('files2');
-	if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member()))
-	{
-		switch ($regular_max_size_type)
-		{
-			case 'image':
-				require_code('images');
-				$regular_max_size=get_max_image_size();
-				break;
-			case 'file':
-			default:
-				$regular_max_size=get_max_file_size();
-				break;
-		}
-		$hidden->attach(form_input_hidden('MAX_FILE_SIZE',strval($regular_max_size)));
-	} else
-	{
-		$hidden->attach(form_input_hidden('MAX_FILE_SIZE',strval(get_max_file_size())));
-	}
+    require_code('files2');
+    if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
+        switch ($regular_max_size_type) {
+            case 'image':
+                require_code('images');
+                $regular_max_size = get_max_image_size();
+                break;
+            case 'file':
+            default:
+                $regular_max_size = get_max_file_size();
+                break;
+        }
+        $hidden->attach(form_input_hidden('MAX_FILE_SIZE',strval($regular_max_size)));
+    } else {
+        $hidden->attach(form_input_hidden('MAX_FILE_SIZE',strval(get_max_file_size())));
+    }
 }
 
 /**
@@ -210,75 +208,71 @@ function handle_max_file_size(&$hidden,$regular_max_size_type='file')
  */
 function get_attachments($posting_field_name)
 {
-	$image_types=str_replace(',',', ',get_option('valid_images'));
+    $image_types = str_replace(',',', ',get_option('valid_images'));
 
-	require_lang('javascript');
-	require_javascript('javascript_plupload');
-	require_css('widget_plupload');
+    require_lang('javascript');
+    require_javascript('javascript_plupload');
+    require_css('widget_plupload');
 
-	require_code('upload_syndication');
-	list($syndication_json,$filter)=get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
+    require_code('upload_syndication');
+    list($syndication_json,$filter) = get_upload_syndication_json(OCP_UPLOAD_ANYTHING);
 
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_groups');
-		require_lang('ocf');
-		$max_attachments=ocf_get_member_best_group_property(get_member(),'max_attachments_per_post');
-	} else $max_attachments=100;
-	if ($max_attachments==0)
-	{
-		return array(new ocp_tempcode(),new ocp_tempcode());
-	}
+    if (get_forum_type() == 'ocf') {
+        require_code('ocf_groups');
+        require_lang('ocf');
+        $max_attachments = ocf_get_member_best_group_property(get_member(),'max_attachments_per_post');
+    } else {
+        $max_attachments = 100;
+    }
+    if ($max_attachments == 0) {
+        return array(new ocp_tempcode(),new ocp_tempcode());
+    }
 
-	require_code('files2');
-	$max_attach_size=get_max_file_size(is_null($syndication_json)?get_member():NULL,$GLOBALS['SITE_DB']);
-	$no_quota=(ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0);
-	if ($no_quota)
-	{
-		if (is_null($syndication_json))
-		{
-			return array(new ocp_tempcode(),new ocp_tempcode());
-		}
-	} else
-	{
-		$filter=mixed();
-	}
-	$attach_size_field=form_input_hidden('MAX_FILE_SIZE',strval($max_attach_size));
+    require_code('files2');
+    $max_attach_size = get_max_file_size(is_null($syndication_json)?get_member():null,$GLOBALS['SITE_DB']);
+    $no_quota = (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb') == 0);
+    if ($no_quota) {
+        if (is_null($syndication_json)) {
+            return array(new ocp_tempcode(),new ocp_tempcode());
+        }
+    } else {
+        $filter = mixed();
+    }
+    $attach_size_field = form_input_hidden('MAX_FILE_SIZE',strval($max_attach_size));
 
-	$num_attachments=post_param_integer('num_attachments',has_js()?1:3);
+    $num_attachments = post_param_integer('num_attachments',has_js()?1:3);
 
-	$attachments=new ocp_tempcode();
-	for ($i=1;$i<=$num_attachments;$i++)
-	{
-		$attachments->attach(do_template('ATTACHMENT',array(
-			'_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed1134',
-			'POSTING_FIELD_NAME'=>$posting_field_name,
-			'I'=>strval($i),
-			'SYNDICATION_JSON'=>$syndication_json,
-			'NO_QUOTA'=>$no_quota,
-			'FILTER'=>$filter,
-		)));
-	}
+    $attachments = new ocp_tempcode();
+    for ($i = 1;$i <= $num_attachments;$i++) {
+        $attachments->attach(do_template('ATTACHMENT',array(
+            '_GUID' => 'c3b38ca70cbd1c5f9cf91bcae9ed1134',
+            'POSTING_FIELD_NAME' => $posting_field_name,
+            'I' => strval($i),
+            'SYNDICATION_JSON' => $syndication_json,
+            'NO_QUOTA' => $no_quota,
+            'FILTER' => $filter,
+        )));
+    }
 
-	$attachment_template=do_template('ATTACHMENT',array(
-		'_GUID'=>'c3b38ca70cbd1c5f9cf91bcae9ed11dsds',
-		'POSTING_FIELD_NAME'=>$posting_field_name,
-		'I'=>'__num_attachments__',
-		'SYNDICATION_JSON'=>$syndication_json,
-		'NO_QUOTA'=>$no_quota,
-		'FILTER'=>$filter,
-	));
-	$attachments=do_template('ATTACHMENTS',array(
-		'_GUID'=>'054921e7c09412be479676759accf222',
-		'POSTING_FIELD_NAME'=>$posting_field_name,
-		'ATTACHMENT_TEMPLATE'=>$attachment_template,
-		'IMAGE_TYPES'=>$image_types,
-		'ATTACHMENTS'=>$attachments,
-		'MAX_ATTACHMENTS'=>strval($max_attachments),
-		'NUM_ATTACHMENTS'=>strval($num_attachments),
-	));
+    $attachment_template = do_template('ATTACHMENT',array(
+        '_GUID' => 'c3b38ca70cbd1c5f9cf91bcae9ed11dsds',
+        'POSTING_FIELD_NAME' => $posting_field_name,
+        'I' => '__num_attachments__',
+        'SYNDICATION_JSON' => $syndication_json,
+        'NO_QUOTA' => $no_quota,
+        'FILTER' => $filter,
+    ));
+    $attachments = do_template('ATTACHMENTS',array(
+        '_GUID' => '054921e7c09412be479676759accf222',
+        'POSTING_FIELD_NAME' => $posting_field_name,
+        'ATTACHMENT_TEMPLATE' => $attachment_template,
+        'IMAGE_TYPES' => $image_types,
+        'ATTACHMENTS' => $attachments,
+        'MAX_ATTACHMENTS' => strval($max_attachments),
+        'NUM_ATTACHMENTS' => strval($num_attachments),
+    ));
 
-	return array($attachments,$attach_size_field);
+    return array($attachments,$attach_size_field);
 }
 
 /**
@@ -301,75 +295,81 @@ function get_attachments($posting_field_name)
  * @param  boolean		Whether to avoid WYSIWYG mode
  * @return tempcode		The posting form
  */
-function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fields,$specialisation,$post_comment=NULL,$extra='',$specialisation2=NULL,$default_parsed=NULL,$javascript=NULL,$tabindex=NULL,$required=true,$has_preview=true,$avoid_wysiwyg=false)
+function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fields,$specialisation,$post_comment = null,$extra = '',$specialisation2 = null,$default_parsed = null,$javascript = null,$tabindex = null,$required = true,$has_preview = true,$avoid_wysiwyg = false)
 {
-	require_lang('javascript');
-	require_javascript('javascript_posting');
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_plupload');
-	require_css('widget_plupload');
+    require_lang('javascript');
+    require_javascript('javascript_posting');
+    require_javascript('javascript_ajax');
+    require_javascript('javascript_plupload');
+    require_css('widget_plupload');
 
-	require_lang('comcode');
+    require_lang('comcode');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$post=filter_form_field_default(is_object($submit_name)?$submit_name->evaluate():$submit_name,$post);
+    $post = filter_form_field_default(is_object($submit_name)?$submit_name->evaluate():$submit_name,$post);
 
-	check_suhosin_request_size(strlen($post));
+    check_suhosin_request_size(strlen($post));
 
-	if (is_null($post_comment)) $post_comment=do_lang_tempcode('POST_COMMENT');
-	if (is_null($specialisation2)) $specialisation2=new ocp_tempcode();
+    if (is_null($post_comment)) {
+        $post_comment = do_lang_tempcode('POST_COMMENT');
+    }
+    if (is_null($specialisation2)) {
+        $specialisation2 = new ocp_tempcode();
+    }
 
-	list($attachments,$attach_size_field)=get_attachments('post');
+    list($attachments,$attach_size_field) = get_attachments('post');
 
-	$hidden_fields->attach($attach_size_field);
+    $hidden_fields->attach($attach_size_field);
 
-	$continue_url=get_self_url();
+    $continue_url = get_self_url();
 
-	$help_zone=get_comcode_zone('userguide_comcode',false);
+    $help_zone = get_comcode_zone('userguide_comcode',false);
 
-	$emoticon_chooser=$GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
+    $emoticon_chooser = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 
-	$comcode_editor=get_comcode_editor();
-	$comcode_editor_small=get_comcode_editor('post',true);
+    $comcode_editor = get_comcode_editor();
+    $comcode_editor_small = get_comcode_editor('post',true);
 
-	$w=(!$avoid_wysiwyg) && (has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}')===false));
+    $w = (!$avoid_wysiwyg) && (has_js()) && (browser_matches('wysiwyg') && (strpos($post,'{$,page hint: no_wysiwyg}') === false));
 
-	$class='';
-	attach_wysiwyg();
-	if ($w) $class.=' wysiwyg';
+    $class = '';
+    attach_wysiwyg();
+    if ($w) {
+        $class .= ' wysiwyg';
+    }
 
-	global $LAX_COMCODE;
-	$temp=$LAX_COMCODE;
-	$LAX_COMCODE=true;
-	$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-	/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($post,NULL,false,60,NULL,NULL,true);
-	$LAX_COMCODE=$temp;
+    global $LAX_COMCODE;
+    $temp = $LAX_COMCODE;
+    $LAX_COMCODE = true;
+    $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
+    /*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed = @comcode_to_tempcode($post,null,false,60,null,null,true);
+    $LAX_COMCODE = $temp;
 
-	return do_template('POSTING_FORM',array(
-		'_GUID'=>'41259424ca13c437d5bc523ce18980fe',
-		'REQUIRED'=>$required,
-		'TABINDEX_PF'=>strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,
-		'JAVASCRIPT'=>$javascript,
-		'PREVIEW'=>$has_preview,
-		'COMCODE_EDITOR'=>$comcode_editor,
-		'COMCODE_EDITOR_SMALL'=>$comcode_editor_small,
-		'CLASS'=>$class,
-		'COMCODE_URL'=>is_null($help_zone)?new ocp_tempcode():build_url(array('page'=>'userguide_comcode'),$help_zone),
-		'EXTRA'=>$extra,
-		'POST_COMMENT'=>$post_comment,
-		'EMOTICON_CHOOSER'=>$emoticon_chooser,
-		'SUBMIT_ICON'=>$submit_icon,
-		'SUBMIT_NAME'=>$submit_name,
-		'HIDDEN_FIELDS'=>$hidden_fields,
-		'URL'=>$post_url,
-		'POST'=>$post,
-		'DEFAULT_PARSED'=>$default_parsed,
-		'CONTINUE_URL'=>$continue_url,
-		'ATTACHMENTS'=>$attachments,
-		'SPECIALISATION'=>$specialisation,
-		'SPECIALISATION2'=>$specialisation2,
-	));
+    return do_template('POSTING_FORM',array(
+        '_GUID' => '41259424ca13c437d5bc523ce18980fe',
+        'REQUIRED' => $required,
+        'TABINDEX_PF' => strval($tabindex)/*not called TABINDEX due to conflict with FORM_STANDARD_END*/,
+        'JAVASCRIPT' => $javascript,
+        'PREVIEW' => $has_preview,
+        'COMCODE_EDITOR' => $comcode_editor,
+        'COMCODE_EDITOR_SMALL' => $comcode_editor_small,
+        'CLASS' => $class,
+        'COMCODE_URL' => is_null($help_zone)?new ocp_tempcode():build_url(array('page' => 'userguide_comcode'),$help_zone),
+        'EXTRA' => $extra,
+        'POST_COMMENT' => $post_comment,
+        'EMOTICON_CHOOSER' => $emoticon_chooser,
+        'SUBMIT_ICON' => $submit_icon,
+        'SUBMIT_NAME' => $submit_name,
+        'HIDDEN_FIELDS' => $hidden_fields,
+        'URL' => $post_url,
+        'POST' => $post,
+        'DEFAULT_PARSED' => $default_parsed,
+        'CONTINUE_URL' => $continue_url,
+        'ATTACHMENTS' => $attachments,
+        'SPECIALISATION' => $specialisation,
+        'SPECIALISATION2' => $specialisation2,
+    ));
 }
 
 /**
@@ -379,59 +379,64 @@ function get_posting_form($submit_name,$submit_icon,$post,$post_url,$hidden_fiel
  * @param  boolean		Whether to make a cut-down version
  * @return tempcode		The Comcode editor
  */
-function get_comcode_editor($field_name='post',$cut_down=false)
+function get_comcode_editor($field_name = 'post',$cut_down = false)
 {
-	require_lang('comcode');
+    require_lang('comcode');
 
-	$buttons=new ocp_tempcode();
-	$_buttons=array();
+    $buttons = new ocp_tempcode();
+    $_buttons = array();
 
-	// Non-wrappers
-	if (!$cut_down) $_buttons[]=(function_exists('imagecreatefromstring')?'thumb':'img');
-	if (has_privilege(get_member(),'comcode_dangerous'))
-	{
-		$_buttons[]='block';
-	}
-	$_buttons[]='comcode';
-	if (!$cut_down) $_buttons[]='list'; // NB: list isn't actually a comcode tag, it's a textcode syntax
+    // Non-wrappers
+    if (!$cut_down) {
+        $_buttons[] = (function_exists('imagecreatefromstring')?'thumb':'img');
+    }
+    if (has_privilege(get_member(),'comcode_dangerous')) {
+        $_buttons[] = 'block';
+    }
+    $_buttons[] = 'comcode';
+    if (!$cut_down) {
+        $_buttons[] = 'list';
+    } // NB: list isn't actually a comcode tag, it's a textcode syntax
 
-	// Links
-	if (!$cut_down) $_buttons[]='url';
-	if (has_zone_access(get_member(),'adminzone'))
-	{
-		$_buttons[]='page';
-	}
-	//if (!$cut_down) $_buttons[]='email';	Not enough space any more
+    // Links
+    if (!$cut_down) {
+        $_buttons[] = 'url';
+    }
+    if (has_zone_access(get_member(),'adminzone')) {
+        $_buttons[] = 'page';
+    }
+    //if (!$cut_down) $_buttons[]='email';	Not enough space any more
 
-	// Wrappers
-	$_buttons[]='quote';
-	if ((get_option('simplify_wysiwyg_by_permissions')=='0') || (has_privilege(get_member(),'allow_html')))
-		$_buttons[]='box';
-	$_buttons[]='code';
-	if (has_privilege(get_member(),'allow_html'))
-	{
-		if (!$cut_down) $_buttons[]='html';
-	}
-	foreach ($_buttons as $i=>$button)
-	{
-		$divider=false;
-		if (($button=='url') || ($button=='quote') || ($i==0)) $divider=true;
-		$buttons->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID'=>'e4fe3bc16cec070e06532fedc598d075','DIVIDER'=>$divider,'FIELD_NAME'=>$field_name,'TITLE'=>do_lang_tempcode('INPUT_COMCODE_'.$button),'B'=>$button)));
-	}
+    // Wrappers
+    $_buttons[] = 'quote';
+    if ((get_option('simplify_wysiwyg_by_permissions') == '0') || (has_privilege(get_member(),'allow_html'))) {
+        $_buttons[] = 'box';
+    }
+    $_buttons[] = 'code';
+    if (has_privilege(get_member(),'allow_html')) {
+        if (!$cut_down) {
+            $_buttons[] = 'html';
+        }
+    }
+    foreach ($_buttons as $i => $button) {
+        $divider = false;
+        if (($button == 'url') || ($button == 'quote') || ($i == 0)) {
+            $divider = true;
+        }
+        $buttons->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID' => 'e4fe3bc16cec070e06532fedc598d075','DIVIDER' => $divider,'FIELD_NAME' => $field_name,'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button),'B' => $button)));
+    }
 
-	$micro_buttons=new ocp_tempcode();
-	if (!$cut_down)
-	{
-		$_micro_buttons=array(
-			array('t'=>'b'),
-			array('t'=>'i'),
-		);
-		foreach ($_micro_buttons as $button)
-		{
-			$micro_buttons->attach(do_template('COMCODE_EDITOR_MICRO_BUTTON',array('_GUID'=>'dbab001b3fa5480bb590ffed3ca81eaf','FIELD_NAME'=>$field_name,'TITLE'=>do_lang_tempcode('INPUT_COMCODE_'.$button['t']),'B'=>$button['t'])));
-		}
-	}
-	return do_template('COMCODE_EDITOR',array('_GUID'=>'ebff3145776a0441d115f2e4e13617d6','POSTING_FIELD'=>$field_name,'BUTTONS'=>$buttons,'MICRO_BUTTONS'=>$micro_buttons));
+    $micro_buttons = new ocp_tempcode();
+    if (!$cut_down) {
+        $_micro_buttons = array(
+            array('t' => 'b'),
+            array('t' => 'i'),
+        );
+        foreach ($_micro_buttons as $button) {
+            $micro_buttons->attach(do_template('COMCODE_EDITOR_MICRO_BUTTON',array('_GUID' => 'dbab001b3fa5480bb590ffed3ca81eaf','FIELD_NAME' => $field_name,'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button['t']),'B' => $button['t'])));
+        }
+    }
+    return do_template('COMCODE_EDITOR',array('_GUID' => 'ebff3145776a0441d115f2e4e13617d6','POSTING_FIELD' => $field_name,'BUTTONS' => $buttons,'MICRO_BUTTONS' => $micro_buttons));
 }
 
 /**
@@ -441,7 +446,7 @@ function get_comcode_editor($field_name='post',$cut_down=false)
  */
 function wysiwyg_on()
 {
-	return ((browser_matches('wysiwyg')) && ((!array_key_exists('use_wysiwyg',$_COOKIE)) || ($_COOKIE['use_wysiwyg']!='0')));
+    return ((browser_matches('wysiwyg')) && ((!array_key_exists('use_wysiwyg',$_COOKIE)) || ($_COOKIE['use_wysiwyg'] != '0')));
 }
 
 /**
@@ -453,28 +458,30 @@ function wysiwyg_on()
  * @param  ?string		The page type scoped for (NULL: current type)
  * @return ?string		The property (NULL: non-existent)
  */
-function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
+function get_field_restrict_property($property,$field,$page = null,$type = null)
 {
-	if (is_null($page)) $page=get_page_name();
-	if (is_null($type)) $type=get_param('type',post_param('type','misc'));
+    if (is_null($page)) {
+        $page = get_page_name();
+    }
+    if (is_null($type)) {
+        $type = get_param('type',post_param('type','misc'));
+    }
 
-	$restrictions=load_field_restrictions($page,$type);
-	foreach ($restrictions as $_r=>$_restrictions)
-	{
-		$_r_exp=explode(',',$_r);
-		foreach ($_r_exp as $__r)
-		{
-			if (simulated_wildcard_match($field,trim($__r),true))
-			{
-				foreach ($_restrictions as $bits)
-				{
-					list($restriction,$attributes)=$bits;
-					if (strtolower($restriction)==strtolower($field)) return $bits['embed'];
-				}
-			}
-		}
-	}
-	return NULL;
+    $restrictions = load_field_restrictions($page,$type);
+    foreach ($restrictions as $_r => $_restrictions) {
+        $_r_exp = explode(',',$_r);
+        foreach ($_r_exp as $__r) {
+            if (simulated_wildcard_match($field,trim($__r),true)) {
+                foreach ($_restrictions as $bits) {
+                    list($restriction,$attributes) = $bits;
+                    if (strtolower($restriction) == strtolower($field)) {
+                        return $bits['embed'];
+                    }
+                }
+            }
+        }
+    }
+    return NULL;
 }
 
 /**
@@ -491,21 +498,27 @@ function get_field_restrict_property($property,$field,$page=NULL,$type=NULL)
  * @param  ?string		The placeholder value for this input field (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$extra_chars=NULL,$placeholder=NULL)
+function form_input_codename($pretty_name,$description,$name,$default,$required,$tabindex = null,$_maxlength = null,$extra_chars = null,$placeholder = null)
 {
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	if (is_null($extra_chars)) $extra_chars=array();
+    if (is_null($extra_chars)) {
+        $extra_chars = array();
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$maxlength=get_field_restrict_property('maxlength',$name);
-	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID'=>'4b1a3a3ebe6ac85c7c14bcec9d8ab88d','PLACEHOLDER'=>$placeholder,'MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'EXTRA_CHARS'=>$extra_chars));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $maxlength = get_field_restrict_property('maxlength',$name);
+    if ((is_null($maxlength)) && (!is_null($_maxlength))) {
+        $maxlength = strval($_maxlength);
+    }
+    $input = do_template('FORM_SCREEN_INPUT_CODENAME',array('_GUID' => '4b1a3a3ebe6ac85c7c14bcec9d8ab88d','PLACEHOLDER' => $placeholder,'MAXLENGTH' => $maxlength,'TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default,'EXTRA_CHARS' => $extra_chars));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -524,19 +537,23 @@ function form_input_codename($pretty_name,$description,$name,$default,$required,
  * @param  ?string		Custom regex pattern validation error (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$_maxlength=NULL,$type='text',$placeholder=NULL,$pattern=NULL,$pattern_error=NULL)
+function form_input_line($pretty_name,$description,$name,$default,$required,$tabindex = null,$_maxlength = null,$type = 'text',$placeholder = null,$pattern = null,$pattern_error = null)
 {
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$maxlength=get_field_restrict_property('maxlength',$name);
-	if ((is_null($maxlength)) && (!is_null($_maxlength))) $maxlength=strval($_maxlength);
-	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'02789c9af25cbc971e86bfcc0ad322d5','PLACEHOLDER'=>$placeholder,'MAXLENGTH'=>$maxlength,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'TYPE'=>$type,'PATTERN'=>$pattern));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,false,'',$pattern_error);
+    $_required = ($required)?'_required':'';
+    $maxlength = get_field_restrict_property('maxlength',$name);
+    if ((is_null($maxlength)) && (!is_null($_maxlength))) {
+        $maxlength = strval($_maxlength);
+    }
+    $input = do_template('FORM_SCREEN_INPUT_LINE',array('_GUID' => '02789c9af25cbc971e86bfcc0ad322d5','PLACEHOLDER' => $placeholder,'MAXLENGTH' => $maxlength,'TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default,'TYPE' => $type,'PATTERN' => $pattern));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,false,'',$pattern_error);
 }
 
 /**
@@ -550,17 +567,19 @@ function form_input_line($pretty_name,$description,$name,$default,$required,$tab
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_url($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_url($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_URL',array('_GUID'=>'12789c9af25cbc971e86bfcc0ad322d5','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_URL',array('_GUID' => '12789c9af25cbc971e86bfcc0ad322d5','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -575,20 +594,22 @@ function form_input_url($pretty_name,$description,$name,$default,$required,$tabi
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_username($pretty_name,$description,$name,$default,$required,$needs_match=true,$tabindex=NULL)
+function form_input_username($pretty_name,$description,$name,$default,$required,$needs_match = true,$tabindex = null)
 {
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_ajax_people_lists');
+    require_javascript('javascript_ajax');
+    require_javascript('javascript_ajax_people_lists');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_USERNAME',array('_GUID'=>'591b5fe23f0cc0a4975a52d52aa5701e','TABINDEX'=>strval($tabindex),'NEEDS_MATCH'=>$needs_match,'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_USERNAME',array('_GUID' => '591b5fe23f0cc0a4975a52d52aa5701e','TABINDEX' => strval($tabindex),'NEEDS_MATCH' => $needs_match,'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -602,32 +623,35 @@ function form_input_username($pretty_name,$description,$name,$default,$required,
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_author($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_author($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	if (!addon_installed('authors')) return form_input_username($pretty_name,$description,$name,$default,$required,true,$tabindex);
+    if (!addon_installed('authors')) {
+        return form_input_username($pretty_name,$description,$name,$default,$required,true,$tabindex);
+    }
 
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_ajax_people_lists');
+    require_javascript('javascript_ajax');
+    require_javascript('javascript_ajax_people_lists');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_description=new ocp_tempcode();
-	$_description->attach($description);
-	if (has_js())
-	{
-		$_description->attach(do_template('FORM_DESCRIP_SEP'));
-		$keep=symbol_tempcode('KEEP');
-		$extra=do_template('HYPERLINK_POPUP_WINDOW',array('_GUID'=>'fb25dc4777a166c143a1bc32ff0c3239','URL'=>find_script('authors').'?field_name='.urlencode($name).$keep->evaluate(),'TITLE'=>do_lang_tempcode('AUTHOR'),'CAPTION'=>do_lang_tempcode('BROWSE_SENTENCE')));
-		$_description->attach($extra);
-	}
+    $_description = new ocp_tempcode();
+    $_description->attach($description);
+    if (has_js()) {
+        $_description->attach(do_template('FORM_DESCRIP_SEP'));
+        $keep = symbol_tempcode('KEEP');
+        $extra = do_template('HYPERLINK_POPUP_WINDOW',array('_GUID' => 'fb25dc4777a166c143a1bc32ff0c3239','URL' => find_script('authors') . '?field_name=' . urlencode($name) . $keep->evaluate(),'TITLE' => do_lang_tempcode('AUTHOR'),'CAPTION' => do_lang_tempcode('BROWSE_SENTENCE')));
+        $_description->attach($extra);
+    }
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_AUTHOR',array('_GUID'=>'2662a51e494120078b4022915593e28a','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	return _form_input($name,$pretty_name,$_description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_AUTHOR',array('_GUID' => '2662a51e494120078b4022915593e28a','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default));
+    return _form_input($name,$pretty_name,$_description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -641,17 +665,19 @@ function form_input_author($pretty_name,$description,$name,$default,$required,$t
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_email($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_email($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_EMAIL',array('_GUID'=>'2ff1d9e21894710b8f09598fd92049c7','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_EMAIL',array('_GUID' => '2ff1d9e21894710b8f09598fd92049c7','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -665,21 +691,22 @@ function form_input_email($pretty_name,$description,$name,$default,$required,$ta
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_colour($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_colour($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	if (!has_js())
-	{
-		return form_input_line($pretty_name,$description,$name,$default,$required,$tabindex);
-	}
+    if (!has_js()) {
+        return form_input_line($pretty_name,$description,$name,$default,$required,$tabindex);
+    }
 
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	return do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID'=>'9a1a8061cebd717ea98522984d9465af','RAW_FIELD'=>false,'REQUIRED'=>$required,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'TABINDEX'=>strval($tabindex),'_REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
+    $_required = ($required)?'_required':'';
+    return do_template('FORM_SCREEN_INPUT_COLOUR',array('_GUID' => '9a1a8061cebd717ea98522984d9465af','RAW_FIELD' => false,'REQUIRED' => $required,'PRETTY_NAME' => $pretty_name,'DESCRIPTION' => $description,'TABINDEX' => strval($tabindex),'_REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default));
 }
 
 /**
@@ -696,22 +723,21 @@ function form_input_colour($pretty_name,$description,$name,$default,$required,$t
  * @param  boolean		Whether to get node titles in a website-friendly form, as opposed to a more technical explanation of what the nodes are
  * @return tempcode		The input field
  */
-function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$page_type=NULL,$get_title_too=false,$content_centric=false)
+function form_input_page_link($pretty_name,$description,$name,$default,$required,$tabindex = null,$page_type = null,$get_title_too = false,$content_centric = false)
 {
-	if (!has_js())
-	{
-		return form_input_line($pretty_name,$description,$name,$default,$required,$tabindex);
-	}
+    if (!has_js()) {
+        return form_input_line($pretty_name,$description,$name,$default,$required,$tabindex);
+    }
 
-	require_lang('menus');
+    require_lang('menus');
 
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_tree_list');
+    require_javascript('javascript_ajax');
+    require_javascript('javascript_tree_list');
 
-	// Display
-	$input=do_template('PAGE_LINK_CHOOSER',array('_GUID'=>'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD'=>true,'GET_TITLE_TOO'=>$get_title_too,'NAME'=>$name,'VALUE'=>$default,'PAGE_TYPE'=>$page_type,'CONTENT_CENTRIC'=>$content_centric));
+    // Display
+    $input = do_template('PAGE_LINK_CHOOSER',array('_GUID' => 'aabbd8e80df919afe08ca70bd24578dc','AS_FIELD' => true,'GET_TITLE_TOO' => $get_title_too,'NAME' => $name,'VALUE' => $default,'PAGE_TYPE' => $page_type,'CONTENT_CENTRIC' => $content_centric));
 
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 
 /**
@@ -725,19 +751,21 @@ function form_input_page_link($pretty_name,$description,$name,$default,$required
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_line_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_line_comcode($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	require_lang('comcode');
+    require_lang('comcode');
 
-	if (is_null($default)) $default='';
+    if (is_null($default)) {
+        $default = '';
+    }
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_LINE',array('_GUID'=>'b47034df1d68c1465d045fca822071a1','MAXLENGTH'=>get_field_restrict_property('maxlength',$name),'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default));
-	return _form_input($name,$pretty_name,$description,$input,$required,true,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_LINE',array('_GUID' => 'b47034df1d68c1465d045fca822071a1','MAXLENGTH' => get_field_restrict_property('maxlength',$name),'TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default));
+    return _form_input($name,$pretty_name,$description,$input,$required,true,$tabindex);
 }
 
 /**
@@ -755,52 +783,52 @@ function form_input_line_comcode($pretty_name,$description,$name,$default,$requi
  * @param  ?string		Custom regex pattern validation error (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_line_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL,$class='line',$pattern=NULL,$pattern_error=NULL)
+function form_input_line_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex = null,$class = 'line',$pattern = null,$pattern_error = null)
 {
-	require_javascript('javascript_multi');
+    require_javascript('javascript_multi');
 
-	if (substr($name,-1)!='_' && substr($name,-2)!='[]') $name.='_';
+    if (substr($name,-1) != '_' && substr($name,-2) != '[]') {
+        $name .= '_';
+    }
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$default_array[0]=filter_form_field_default($name,array_key_exists(0,$default_array)?$default_array[0]:'');
+    $default_array[0] = filter_form_field_default($name,array_key_exists(0,$default_array)?$default_array[0]:'');
 
-	$input=new ocp_tempcode();
-	$i=0;
-	foreach ($default_array as $default)
-	{
-		$_required=($i<$num_required)?'_required':'';
-		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
-			'_GUID'=>'e2da34b7564cebfd83da2859e4abd020',
-			'CLASS'=>$class,
-			'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),
-			'PRETTY_NAME'=>$pretty_name,
-			'TABINDEX'=>strval($tabindex),
-			'NAME_STUB'=>$name,
-			'I'=>strval($i),
-			'REQUIRED'=>$_required,
-			'DEFAULT'=>$default,
-			'PATTERN'=>$pattern,
-		)));
-		$i++;
-	}
-	$num_to_show_initially=has_js()?max($num_required,count($default_array)+1):max($num_required,10);
-	for (;$i<$num_to_show_initially;$i++)
-	{
-		$input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
-			'_GUID'=>'10fcbe72e80ea1be07c3dd1fd9e0719e',
-			'CLASS'=>$class,
-			'MAXLENGTH'=>get_field_restrict_property('maxlength',$name),
-			'PRETTY_NAME'=>$pretty_name,
-			'TABINDEX'=>strval($tabindex),
-			'NAME_STUB'=>$name,
-			'I'=>strval($i),
-			'REQUIRED'=>($i>=$num_required)?'':'_required',
-			'DEFAULT'=>'',
-			'PATTERN'=>$pattern,
-		)));
-	}
-	return _form_input(preg_replace('#\[\]$#','',$name),$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true,'',$pattern_error);
+    $input = new ocp_tempcode();
+    $i = 0;
+    foreach ($default_array as $default) {
+        $_required = ($i<$num_required)?'_required':'';
+        $input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
+            '_GUID' => 'e2da34b7564cebfd83da2859e4abd020',
+            'CLASS' => $class,
+            'MAXLENGTH' => get_field_restrict_property('maxlength',$name),
+            'PRETTY_NAME' => $pretty_name,
+            'TABINDEX' => strval($tabindex),
+            'NAME_STUB' => $name,
+            'I' => strval($i),
+            'REQUIRED' => $_required,
+            'DEFAULT' => $default,
+            'PATTERN' => $pattern,
+        )));
+        $i++;
+    }
+    $num_to_show_initially = has_js()?max($num_required,count($default_array)+1):max($num_required,10);
+    for (;$i<$num_to_show_initially;$i++) {
+        $input->attach(do_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
+            '_GUID' => '10fcbe72e80ea1be07c3dd1fd9e0719e',
+            'CLASS' => $class,
+            'MAXLENGTH' => get_field_restrict_property('maxlength',$name),
+            'PRETTY_NAME' => $pretty_name,
+            'TABINDEX' => strval($tabindex),
+            'NAME_STUB' => $name,
+            'I' => strval($i),
+            'REQUIRED' => ($i >= $num_required)?'':'_required',
+            'DEFAULT' => '',
+            'PATTERN' => $pattern,
+        )));
+    }
+    return _form_input(preg_replace('#\[\]$#','',$name),$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true,'',$pattern_error);
 }
 
 /**
@@ -815,30 +843,32 @@ function form_input_line_multi($pretty_name,$description,$name,$default_array,$n
  * @param  ?integer		The maximum length of the field (NULL: unlimited)
  * @return tempcode		The input field
  */
-function form_input_text_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex=NULL,$maxlength=NULL)
+function form_input_text_multi($pretty_name,$description,$name,$default_array,$num_required,$tabindex = null,$maxlength = null)
 {
-	require_javascript('javascript_multi');
+    require_javascript('javascript_multi');
 
-	if (substr($name,-1)!='_') $name.='_';
+    if (substr($name,-1) != '_') {
+        $name .= '_';
+    }
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$default_array[0]=filter_form_field_default($name,array_key_exists(0,$default_array)?$default_array[0]:'');
+    $default_array[0] = filter_form_field_default($name,array_key_exists(0,$default_array)?$default_array[0]:'');
 
-	$input=new ocp_tempcode();
-	$i=0;
-	foreach ($default_array as $default)
-	{
-		$_required=($i<$num_required)?'_required':'';
-		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'0d9e3c073d09d1ce3725f47813375c28','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default,'MAXLENGTH'=>is_null($maxlength)?NULL:strval($maxlength))));
-		$i++;
-	}
-	if (!has_js()) $num_required=max($num_required,10);
-	for (;$i<$num_required;$i++)
-	{
-		$input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID'=>'2e816a71ef5a9ac9e1aac4bd1c13b5bd','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>'_required','DEFAULT'=>'','MAXLENGTH'=>is_null($maxlength)?NULL:strval($maxlength))));
-	}
-	return _form_input($name,$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true);
+    $input = new ocp_tempcode();
+    $i = 0;
+    foreach ($default_array as $default) {
+        $_required = ($i<$num_required)?'_required':'';
+        $input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID' => '0d9e3c073d09d1ce3725f47813375c28','PRETTY_NAME' => $pretty_name,'TABINDEX' => strval($tabindex),'NAME_STUB' => $name,'I' => strval($i),'REQUIRED' => $_required,'DEFAULT' => $default,'MAXLENGTH' => is_null($maxlength)?null:strval($maxlength))));
+        $i++;
+    }
+    if (!has_js()) {
+        $num_required = max($num_required,10);
+    }
+    for (;$i<$num_required;$i++) {
+        $input->attach(do_template('FORM_SCREEN_INPUT_TEXT_MULTI',array('_GUID' => '2e816a71ef5a9ac9e1aac4bd1c13b5bd','PRETTY_NAME' => $pretty_name,'TABINDEX' => strval($tabindex),'NAME_STUB' => $name,'I' => strval($i),'REQUIRED' => '_required','DEFAULT' => '','MAXLENGTH' => is_null($maxlength)?null:strval($maxlength))));
+    }
+    return _form_input($name,$pretty_name,$description,$input,$num_required>0,false,$tabindex,false,true);
 }
 
 /**
@@ -853,37 +883,45 @@ function form_input_text_multi($pretty_name,$description,$name,$default_array,$n
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_username_multi($pretty_name,$description,$name,$default_array,$num_required,$needs_match=true,$tabindex=NULL)
+function form_input_username_multi($pretty_name,$description,$name,$default_array,$num_required,$needs_match = true,$tabindex = null)
 {
-	if (substr($name,-1)!='_') $name.='_';
+    if (substr($name,-1) != '_') {
+        $name .= '_';
+    }
 
-	require_javascript('javascript_multi');
-	require_javascript('javascript_ajax');
-	require_javascript('javascript_ajax_people_lists');
+    require_javascript('javascript_multi');
+    require_javascript('javascript_ajax');
+    require_javascript('javascript_ajax_people_lists');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$input=new ocp_tempcode();
-	$i=0;
-	foreach ($default_array as $default)
-	{
-		if (is_null($default)) $default='';
-		$default=filter_form_field_default($name,$default);
+    $input = new ocp_tempcode();
+    $i = 0;
+    foreach ($default_array as $default) {
+        if (is_null($default)) {
+            $default = '';
+        }
+        $default = filter_form_field_default($name,$default);
 
-		$_required=($i<$num_required)?'_required':'';
-		$input->attach(do_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array('_GUID'=>'f2adcb1464b13e339a0336db6d5228cb','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NEEDS_MATCH'=>$needs_match,'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>$default)));
-		$i++;
-	}
-	if (!has_js()) $num_required=max($num_required,10);
-	if ($num_required>$i) $_num_required=$num_required; else $_num_required=$i+1;
-	for (;$i<$_num_required;$i++)
-	{
-		$_required=($i<$num_required)?'_required':'';
+        $_required = ($i<$num_required)?'_required':'';
+        $input->attach(do_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array('_GUID' => 'f2adcb1464b13e339a0336db6d5228cb','PRETTY_NAME' => $pretty_name,'TABINDEX' => strval($tabindex),'NEEDS_MATCH' => $needs_match,'NAME_STUB' => $name,'I' => strval($i),'REQUIRED' => $_required,'DEFAULT' => $default)));
+        $i++;
+    }
+    if (!has_js()) {
+        $num_required = max($num_required,10);
+    }
+    if ($num_required>$i) {
+        $_num_required = $num_required;
+    } else {
+        $_num_required = $i+1;
+    }
+    for (;$i<$_num_required;$i++) {
+        $_required = ($i<$num_required)?'_required':'';
 
-		$input->attach(do_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array('_GUID'=>'4bc8a187ee5fac91275f66f78478a3c6','PRETTY_NAME'=>$pretty_name,'TABINDEX'=>strval($tabindex),'NEEDS_MATCH'=>$needs_match,'NAME_STUB'=>$name,'I'=>strval($i),'REQUIRED'=>$_required,'DEFAULT'=>'')));
-	}
+        $input->attach(do_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array('_GUID' => '4bc8a187ee5fac91275f66f78478a3c6','PRETTY_NAME' => $pretty_name,'TABINDEX' => strval($tabindex),'NEEDS_MATCH' => $needs_match,'NAME_STUB' => $name,'I' => strval($i),'REQUIRED' => $_required,'DEFAULT' => '')));
+    }
 
-	return _form_input($name,$pretty_name,$description,$input,$num_required>0,false,$tabindex);
+    return _form_input($name,$pretty_name,$description,$input,$num_required>0,false,$tabindex);
 }
 
 /**
@@ -899,18 +937,18 @@ function form_input_username_multi($pretty_name,$description,$name,$default_arra
  * @param  ?integer		The maximum length of the field (NULL: unlimited)
  * @return tempcode		The input field
  */
-function form_input_text($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$scrolls=false,$maxlength=NULL)
+function form_input_text($pretty_name,$description,$name,$default,$required,$tabindex = null,$scrolls = false,$maxlength = null)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	check_suhosin_request_size(strlen($default));
+    check_suhosin_request_size(strlen($default));
 
-	$_required=($required)?'_required':'';
+    $_required = ($required)?'_required':'';
 
-	$input=do_template('FORM_SCREEN_INPUT_TEXT',array('_GUID'=>'01626015c6ae36b1027e35e66a8b5d0b','RAW'=>true,'SCROLLS'=>$scrolls,'TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>$default,'MAXLENGTH'=>is_null($maxlength)?NULL:strval($maxlength)));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,true);
+    $input = do_template('FORM_SCREEN_INPUT_TEXT',array('_GUID' => '01626015c6ae36b1027e35e66a8b5d0b','RAW' => true,'SCROLLS' => $scrolls,'TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => $default,'MAXLENGTH' => is_null($maxlength)?null:strval($maxlength)));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex,true);
 }
 
 /**
@@ -928,54 +966,55 @@ function form_input_text($pretty_name,$description,$name,$default,$required,$tab
  * @param  boolean		Whether the field scrolls
  * @return tempcode		The input field
  */
-function form_input_text_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$force_non_wysiwyg=false,$description_side='',$default_parsed=NULL,$scrolls=false)
+function form_input_text_comcode($pretty_name,$description,$name,$default,$required,$tabindex = null,$force_non_wysiwyg = false,$description_side = '',$default_parsed = null,$scrolls = false)
 {
-	if ((browser_matches('wysiwyg')) && (!$force_non_wysiwyg) && (strpos($default,'{$,page hint: no_wysiwyg}')===false))
-		return form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex,10,$description_side,$default_parsed,$scrolls);
+    if ((browser_matches('wysiwyg')) && (!$force_non_wysiwyg) && (strpos($default,'{$,page hint: no_wysiwyg}') === false)) {
+        return form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex,10,$description_side,$default_parsed,$scrolls);
+    }
 
-	require_lang('comcode');
+    require_lang('comcode');
 
-	require_javascript('javascript_ajax');
+    require_javascript('javascript_ajax');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$default_parsed=new ocp_tempcode();
+    $_required = ($required)?'_required':'';
+    $default_parsed = new ocp_tempcode();
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	check_suhosin_request_size(strlen($default));
+    check_suhosin_request_size(strlen($default));
 
-	if (!$force_non_wysiwyg)
-	{
-		attach_wysiwyg();
+    if (!$force_non_wysiwyg) {
+        attach_wysiwyg();
 
-		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
-		if ($w) $_required.=' wysiwyg';
-		global $LAX_COMCODE;
-		$temp=$LAX_COMCODE;
-		$LAX_COMCODE=true;
-		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
-		$LAX_COMCODE=$temp;
-	} else
-	{
-		$w=false;
-		$default_parsed=new ocp_tempcode();
-	}
+        $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($default,'{$,page hint: no_wysiwyg}') === false));
+        if ($w) {
+            $_required .= ' wysiwyg';
+        }
+        global $LAX_COMCODE;
+        $temp = $LAX_COMCODE;
+        $LAX_COMCODE = true;
+        $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
+        /*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed = @comcode_to_tempcode($default,null,false,60,null,null,true);
+        $LAX_COMCODE = $temp;
+    } else {
+        $w = false;
+        $default_parsed = new ocp_tempcode();
+    }
 
-	$input=do_template('FORM_SCREEN_INPUT_TEXT',array(
-		'_GUID'=>'ff53196e943e7b19bc72fc3bbb3238b5',
-		'SCROLLS'=>$scrolls,
-		'ROWS'=>((is_object($description_side)) || ($description_side!=''))?'16':'8',
-		'TABINDEX'=>strval($tabindex),
-		'REQUIRED'=>$_required,
-		'NAME'=>$name,
-		'DEFAULT'=>$default,
-		'DEFAULT_PARSED'=>$default_parsed,
-	));
+    $input = do_template('FORM_SCREEN_INPUT_TEXT',array(
+        '_GUID' => 'ff53196e943e7b19bc72fc3bbb3238b5',
+        'SCROLLS' => $scrolls,
+        'ROWS' => ((is_object($description_side)) || ($description_side != ''))?'16':'8',
+        'TABINDEX' => strval($tabindex),
+        'REQUIRED' => $_required,
+        'NAME' => $name,
+        'DEFAULT' => $default,
+        'DEFAULT_PARSED' => $default_parsed,
+    ));
 
-	return _form_input($name,$pretty_name,$description,$input,$required,true,$tabindex,$w,false,$description_side);
+    return _form_input($name,$pretty_name,$description,$input,$required,true,$tabindex,$w,false,$description_side);
 }
 
 /**
@@ -994,57 +1033,57 @@ function form_input_text_comcode($pretty_name,$description,$name,$default,$requi
  * @param  boolean		Force non-WYSIWYG and non default-Comcode parsing
  * @return tempcode		The input field
  */
-function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$rows=20,$description_side='',$default_parsed=NULL,$scrolls=false,$force_non_wysiwyg=false)
+function form_input_huge_comcode($pretty_name,$description,$name,$default,$required,$tabindex = null,$rows = 20,$description_side = '',$default_parsed = null,$scrolls = false,$force_non_wysiwyg = false)
 {
-	require_lang('comcode');
+    require_lang('comcode');
 
-	require_javascript('javascript_ajax');
+    require_javascript('javascript_ajax');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	check_suhosin_request_size(strlen($default));
+    check_suhosin_request_size(strlen($default));
 
-	$_required=($required)?'_required':'';
-	$default_parsed=new ocp_tempcode();
+    $_required = ($required)?'_required':'';
+    $default_parsed = new ocp_tempcode();
 
-	attach_wysiwyg();
+    attach_wysiwyg();
 
-	if (!$force_non_wysiwyg)
-	{
-		$w=(has_js()) && (browser_matches('wysiwyg') && (strpos($default,'{$,page hint: no_wysiwyg}')===false));
-		if ($w) $_required.=' wysiwyg';
-		global $LAX_COMCODE;
-		$temp=$LAX_COMCODE;
-		$LAX_COMCODE=true;
-		$GLOBALS['COMCODE_PARSE_URLS_CHECKED']=100; // Little hack to stop it checking any URLs
-		/*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed=@comcode_to_tempcode($default,NULL,false,60,NULL,NULL,true);
-		$LAX_COMCODE=$temp;
-	} else
-	{
-		$w=false;
-		$default_parsed=new ocp_tempcode();
-	}
+    if (!$force_non_wysiwyg) {
+        $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($default,'{$,page hint: no_wysiwyg}') === false));
+        if ($w) {
+            $_required .= ' wysiwyg';
+        }
+        global $LAX_COMCODE;
+        $temp = $LAX_COMCODE;
+        $LAX_COMCODE = true;
+        $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
+        /*Actually we reparse always to ensure it is done in semiparse mode if (is_null($default_parsed)) */$default_parsed = @comcode_to_tempcode($default,null,false,60,null,null,true);
+        $LAX_COMCODE = $temp;
+    } else {
+        $w = false;
+        $default_parsed = new ocp_tempcode();
+    }
 
-	$help_zone=get_comcode_zone('userguide_comcode',false);
-	$_comcode=is_null($help_zone)?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID'=>'fbcf2413f754ca5829b9f4c908746843','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),$help_zone)));
+    $help_zone = get_comcode_zone('userguide_comcode',false);
+    $_comcode = is_null($help_zone)?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID' => 'fbcf2413f754ca5829b9f4c908746843','NAME' => $name,'W' => $w,'URL' => build_url(array('page' => 'userguide_comcode'),$help_zone)));
 
-	return do_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
-		'_GUID'=>'b8231827be2f4a00e12fcd8986119588',
-		'SCROLLS'=>$scrolls,
-		'DESCRIPTION_SIDE'=>$description_side,
-		'REQUIRED'=>$required,
-		'_REQUIRED'=>$_required,
-		'TABINDEX'=>strval($tabindex),
-		'COMCODE'=>$_comcode,
-		'PRETTY_NAME'=>$pretty_name,
-		'DESCRIPTION'=>$description,
-		'NAME'=>$name,
-		'DEFAULT'=>$default,
-		'DEFAULT_PARSED'=>$default_parsed,
-		'ROWS'=>strval($rows),
-	));
+    return do_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
+        '_GUID' => 'b8231827be2f4a00e12fcd8986119588',
+        'SCROLLS' => $scrolls,
+        'DESCRIPTION_SIDE' => $description_side,
+        'REQUIRED' => $required,
+        '_REQUIRED' => $_required,
+        'TABINDEX' => strval($tabindex),
+        'COMCODE' => $_comcode,
+        'PRETTY_NAME' => $pretty_name,
+        'DESCRIPTION' => $description,
+        'NAME' => $name,
+        'DEFAULT' => $default,
+        'DEFAULT_PARSED' => $default_parsed,
+        'ROWS' => strval($rows),
+    ));
 }
 
 /**
@@ -1061,31 +1100,31 @@ function form_input_huge_comcode($pretty_name,$description,$name,$default,$requi
  * @param  boolean		Whether the field scrolls
  * @return tempcode		The input field
  */
-function form_input_huge($pretty_name,$description,$name,$default,$required,$tabindex=NULL,$rows=20,$description_side='',$scrolls=false)
+function form_input_huge($pretty_name,$description,$name,$default,$required,$tabindex = null,$rows = 20,$description_side = '',$scrolls = false)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$default=filter_form_field_default($name,$default);
+    $default = filter_form_field_default($name,$default);
 
-	check_suhosin_request_size(strlen($default));
+    check_suhosin_request_size(strlen($default));
 
-	$_required=($required)?'_required':'';
-	$default_parsed=new ocp_tempcode();
+    $_required = ($required)?'_required':'';
+    $default_parsed = new ocp_tempcode();
 
-	return do_template('FORM_SCREEN_INPUT_HUGE',array(
-		'_GUID'=>'9d51961cd53c3fcadb8f83b905b2bbea',
-		'RAW'=>true,
-		'SCROLLS'=>$scrolls,
-		'DESCRIPTION_SIDE'=>$description_side,
-		'REQUIRED'=>$required,
-		'_REQUIRED'=>$_required,
-		'TABINDEX'=>strval($tabindex),
-		'PRETTY_NAME'=>$pretty_name,
-		'DESCRIPTION'=>$description,
-		'NAME'=>$name,
-		'DEFAULT'=>$default,
-		'ROWS'=>strval($rows),
-	));
+    return do_template('FORM_SCREEN_INPUT_HUGE',array(
+        '_GUID' => '9d51961cd53c3fcadb8f83b905b2bbea',
+        'RAW' => true,
+        'SCROLLS' => $scrolls,
+        'DESCRIPTION_SIDE' => $description_side,
+        'REQUIRED' => $required,
+        '_REQUIRED' => $_required,
+        'TABINDEX' => strval($tabindex),
+        'PRETTY_NAME' => $pretty_name,
+        'DESCRIPTION' => $description,
+        'NAME' => $name,
+        'DEFAULT' => $default,
+        'ROWS' => strval($rows),
+    ));
 }
 
 /**
@@ -1099,13 +1138,13 @@ function form_input_huge($pretty_name,$description,$name,$default,$required,$tab
  * @param  string			The default value for this input field
  * @return tempcode		The input field
  */
-function form_input_password($pretty_name,$description,$name,$required,$tabindex=NULL,$default='')
+function form_input_password($pretty_name,$description,$name,$required,$tabindex = null,$default = '')
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_PASSWORD',array('_GUID'=>'12af7290441ebf5459feefaf9daa28c6','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'VALUE'=>$default));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_PASSWORD',array('_GUID' => '12af7290441ebf5459feefaf9daa28c6','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'VALUE' => $default));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1119,14 +1158,14 @@ function form_input_password($pretty_name,$description,$name,$required,$tabindex
  * @param  ID_TEXT		The value the checkbox passes when ticked
  * @return tempcode		The input field
  */
-function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex=NULL,$value='1')
+function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex = null,$value = '1')
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$ticked=(filter_form_field_default($name,$ticked?'1':'0')=='1');
+    $ticked = (filter_form_field_default($name,$ticked?'1':'0') == '1');
 
-	$input=do_template('FORM_SCREEN_INPUT_TICK',array('_GUID'=>'340a68c271b838d327f042d101df27eb','VALUE'=>$value,'CHECKED'=>$ticked,'TABINDEX'=>strval($tabindex),'NAME'=>$name));
-	return _form_input($name,$pretty_name,$description,$input,false,false,$tabindex);
+    $input = do_template('FORM_SCREEN_INPUT_TICK',array('_GUID' => '340a68c271b838d327f042d101df27eb','VALUE' => $value,'CHECKED' => $ticked,'TABINDEX' => strval($tabindex),'NAME' => $name));
+    return _form_input($name,$pretty_name,$description,$input,false,false,$tabindex);
 }
 
 /**
@@ -1141,44 +1180,43 @@ function form_input_tick($pretty_name,$description,$name,$ticked,$tabindex=NULL,
  * @param  ?string		Value for custom value (NULL: no custom value known)
  * @return tempcode		The input field
  */
-function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty_name='',$simple_style=false,$custom_name=NULL,$custom_value=NULL)
+function form_input_various_ticks($options,$description,$_tabindex = null,$_pretty_name = '',$simple_style = false,$custom_name = null,$custom_value = null)
 {
-	if (count($options)==0) return new ocp_tempcode();
+    if (count($options) == 0) {
+        return new ocp_tempcode();
+    }
 
-	$options=array_values($options);
+    $options = array_values($options);
 
-	if (is_null($_tabindex))
-	{
-		$tabindex=get_form_field_tabindex(NULL);
-	} else
-	{
-		$_tabindex++;
-		$tabindex=$_tabindex;
-	}
+    if (is_null($_tabindex)) {
+        $tabindex = get_form_field_tabindex(null);
+    } else {
+        $_tabindex++;
+        $tabindex = $_tabindex;
+    }
 
-	if ((is_string($_pretty_name)) && ($_pretty_name=='')) $_pretty_name=do_lang_tempcode('OPTIONS');
+    if ((is_string($_pretty_name)) && ($_pretty_name == '')) {
+        $_pretty_name = do_lang_tempcode('OPTIONS');
+    }
 
-	$input=new ocp_tempcode();
+    $input = new ocp_tempcode();
 
-	if (count($options[0])!=3)
-	{
-		$options=array(array($options,NULL,new ocp_tempcode()));
-	}
-	foreach ($options as $_option)
-	{
-		$out=array();
-		foreach ($_option[0] as $option)
-		{
-			list($pretty_name,$name,$value,$_description)=$option;
+    if (count($options[0]) != 3) {
+        $options = array(array($options,null,new ocp_tempcode()));
+    }
+    foreach ($options as $_option) {
+        $out = array();
+        foreach ($_option[0] as $option) {
+            list($pretty_name,$name,$value,$_description) = $option;
 
-			$value=(filter_form_field_default($name,$value?'1':'0')=='1');
+            $value = (filter_form_field_default($name,$value?'1':'0') == '1');
 
-			$out[]=array('CHECKED'=>$value,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$_description);
-		}
+            $out[] = array('CHECKED' => $value,'TABINDEX' => strval($tabindex),'NAME' => $name,'PRETTY_NAME' => $pretty_name,'DESCRIPTION' => $_description);
+        }
 
-		$input->attach(do_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array('_GUID'=>'a6212f61304a101fb2754e334a8b4212','CUSTOM_NAME'=>$custom_name,'CUSTOM_VALUE'=>$custom_value,'SECTION_TITLE'=>$_option[2],'EXPANDED'=>$_option[1],'SIMPLE_STYLE'=>$simple_style,'BRETHREN_COUNT'=>strval(count($out)),'OUT'=>$out)));
-	}
-	return _form_input('',$_pretty_name,$description,$input,false,false,$tabindex);
+        $input->attach(do_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array('_GUID' => 'a6212f61304a101fb2754e334a8b4212','CUSTOM_NAME' => $custom_name,'CUSTOM_VALUE' => $custom_value,'SECTION_TITLE' => $_option[2],'EXPANDED' => $_option[1],'SIMPLE_STYLE' => $simple_style,'BRETHREN_COUNT' => strval(count($out)),'OUT' => $out)));
+    }
+    return _form_input('',$_pretty_name,$description,$input,false,false,$tabindex);
 }
 
 /**
@@ -1195,53 +1233,50 @@ function form_input_various_ticks($options,$description,$_tabindex=NULL,$_pretty
  * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload($pretty_name,$description,$name,$required,$default=NULL,$tabindex=NULL,$plupload=true,$filter='',$syndication_json=NULL)
+function form_input_upload($pretty_name,$description,$name,$required,$default = null,$tabindex = null,$plupload = true,$filter = '',$syndication_json = null)
 {
-	require_lang('javascript');
-	if ($plupload)
-	{
-		require_javascript('javascript_plupload');
-		require_css('widget_plupload');
-	}
+    require_lang('javascript');
+    if ($plupload) {
+        require_javascript('javascript_plupload');
+        require_css('widget_plupload');
+    }
 
-	if ($default==='') $default=NULL;
+    if ($default === '') {
+        $default = null;
+    }
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$is_image=false;
-	$existing_url='';
-	if (!is_null($default))
-	{
-		require_code('images');
-		$is_image=is_image($default);
-		$existing_url=$default;
-		if (url_is_local($existing_url))
-		{
-			$htaccess_path=get_custom_file_base().'/'.dirname(rawurldecode($existing_url)).DIRECTORY_SEPARATOR.'.htaccess';
-			if ((is_file($htaccess_path)) && (strpos(file_get_contents($htaccess_path),'deny from all')!==false))
-			{
-				$existing_url='';
-			} else
-			{
-				$existing_url=get_custom_base_url().'/'.$existing_url;
-			}
-		}
-	}
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD',array(
-		'_GUID'=>'f493edcc5298bb32fff8635f2d316d21',
-		'FILTER'=>$filter,
-		'PRETTY_NAME'=>$pretty_name,
-		'EXISTING_URL'=>$existing_url,
-		'IS_IMAGE'=>$is_image,
-		'PLUPLOAD'=>$plupload,
-		'EDIT'=>((!is_null($default)) && (!$required)),
-		'TABINDEX'=>strval($tabindex),
-		'REQUIRED'=>$_required,
-		'NAME'=>$name,
-		'SYNDICATION_JSON'=>$syndication_json,
-	));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $is_image = false;
+    $existing_url = '';
+    if (!is_null($default)) {
+        require_code('images');
+        $is_image = is_image($default);
+        $existing_url = $default;
+        if (url_is_local($existing_url)) {
+            $htaccess_path = get_custom_file_base() . '/' . dirname(rawurldecode($existing_url)) . DIRECTORY_SEPARATOR . '.htaccess';
+            if ((is_file($htaccess_path)) && (strpos(file_get_contents($htaccess_path),'deny from all') !== false)) {
+                $existing_url = '';
+            } else {
+                $existing_url = get_custom_base_url() . '/' . $existing_url;
+            }
+        }
+    }
+    $input = do_template('FORM_SCREEN_INPUT_UPLOAD',array(
+        '_GUID' => 'f493edcc5298bb32fff8635f2d316d21',
+        'FILTER' => $filter,
+        'PRETTY_NAME' => $pretty_name,
+        'EXISTING_URL' => $existing_url,
+        'IS_IMAGE' => $is_image,
+        'PLUPLOAD' => $plupload,
+        'EDIT' => ((!is_null($default)) && (!$required)),
+        'TABINDEX' => strval($tabindex),
+        'REQUIRED' => $_required,
+        'NAME' => $name,
+        'SYNDICATION_JSON' => $syndication_json,
+    ));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1258,42 +1293,44 @@ function form_input_upload($pretty_name,$description,$name,$required,$default=NU
  * @param  ?string		JSON structure of what uploader syndications there will be (NULL: none)
  * @return tempcode		The input field
  */
-function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex=NULL,$default=NULL,$plupload=true,$filter='',$syndication_json=NULL)
+function form_input_upload_multi($pretty_name,$description,$name,$required,$tabindex = null,$default = null,$plupload = true,$filter = '',$syndication_json = null)
 {
-	require_lang('javascript');
-	if ($plupload)
-	{
-		require_javascript('javascript_plupload');
-		require_css('widget_plupload');
-	}
-	require_javascript('javascript_multi');
+    require_lang('javascript');
+    if ($plupload) {
+        require_javascript('javascript_plupload');
+        require_css('widget_plupload');
+    }
+    require_javascript('javascript_multi');
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$is_image=false;
-	$existing_url='';
-	if ((!is_null($default)) && (count($default)>0))
-	{
-		require_code('images');
-		$is_image=is_image($default[0]);
-		$existing_url=$default[0];
-		if (url_is_local($existing_url)) $existing_url=get_custom_base_url().'/'.$existing_url;
-		$edit=$default;
-	} else $edit=array();
-	$input=do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
-		'_GUID'=>'e8712ede08591604738762ac03852ac1',
-		'TABINDEX'=>strval($tabindex),
-		'EDIT'=>$edit,
-		'FILTER'=>$filter,
-		'REQUIRED'=>$_required,
-		'PLUPLOAD'=>$plupload,
-		'NAME'=>$name,
-		'I'=>'1',
-		'NAME_STUB'=>$name,
-		'SYNDICATION_JSON'=>$syndication_json,
-	));
-	return _form_input('',$pretty_name,$description,$input,$required,false,$tabindex,false,true);
+    $_required = ($required)?'_required':'';
+    $is_image = false;
+    $existing_url = '';
+    if ((!is_null($default)) && (count($default)>0)) {
+        require_code('images');
+        $is_image = is_image($default[0]);
+        $existing_url = $default[0];
+        if (url_is_local($existing_url)) {
+            $existing_url = get_custom_base_url() . '/' . $existing_url;
+        }
+        $edit = $default;
+    } else {
+        $edit = array();
+    }
+    $input = do_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
+        '_GUID' => 'e8712ede08591604738762ac03852ac1',
+        'TABINDEX' => strval($tabindex),
+        'EDIT' => $edit,
+        'FILTER' => $filter,
+        'REQUIRED' => $_required,
+        'PLUPLOAD' => $plupload,
+        'NAME' => $name,
+        'I' => '1',
+        'NAME_STUB' => $name,
+        'SYNDICATION_JSON' => $syndication_json,
+    ));
+    return _form_input('',$pretty_name,$description,$input,$required,false,$tabindex,false,true);
 }
 
 /**
@@ -1308,13 +1345,13 @@ function form_input_upload_multi($pretty_name,$description,$name,$required,$tabi
  * @param  boolean		Whether this is required
  * @return tempcode		The input field
  */
-function form_input_list($pretty_name,$description,$name,$content,$tabindex=NULL,$inline_list=false,$required=true)
+function form_input_list($pretty_name,$description,$name,$content,$tabindex = null,$inline_list = false,$required = true)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_LIST',array('_GUID'=>'112dd79a8e0069aa21615594aec1e509','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'CONTENT'=>$content,'INLINE_LIST'=>$inline_list));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_LIST',array('_GUID' => '112dd79a8e0069aa21615594aec1e509','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'CONTENT' => $content,'INLINE_LIST' => $inline_list));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1334,55 +1371,55 @@ function form_input_list($pretty_name,$description,$name,$content,$tabindex=NULL
  * @param  ?string		Label for default value (NULL: just use the literal)
  * @return tempcode		The input field
  */
-function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default=NULL,$use_server_id=false,$tabindex=NULL,$multi_select=false,$nice_label=NULL)
+function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$options,$required,$default = null,$use_server_id = false,$tabindex = null,$multi_select = false,$nice_label = null)
 {
-	require_javascript('javascript_tree_list');
+    require_javascript('javascript_tree_list');
 
-	require_code('hooks/systems/ajax_tree/'.$hook);
-	$object=object_factory('Hook_'.$hook);
+    require_code('hooks/systems/ajax_tree/' . $hook);
+    $object = object_factory('Hook_' . $hook);
 
-	if ((!has_js()) || (get_option('tree_lists')=='0'))
-	{
-		$simple_content=new ocp_tempcode();
-		$simple_content->attach(form_input_list_entry('',false,do_lang('NA')));
-		$simple_content->attach($object->simple($root_id,$options,$default));
+    if ((!has_js()) || (get_option('tree_lists') == '0')) {
+        $simple_content = new ocp_tempcode();
+        $simple_content->attach(form_input_list_entry('',false,do_lang('NA')));
+        $simple_content->attach($object->simple($root_id,$options,$default));
 
-		if ($simple_content->is_empty())
-		{
-			if ($required)
-				inform_exit(do_lang_tempcode('NO_OF_THIS',$pretty_name));
-			return new ocp_tempcode();
-		}
-		if ($multi_select)
-		{
-			return form_input_multi_list($pretty_name,$description,$name,$simple_content,$tabindex,10,$required);
-		}
+        if ($simple_content->is_empty()) {
+            if ($required) {
+                inform_exit(do_lang_tempcode('NO_OF_THIS',$pretty_name));
+            }
+            return new ocp_tempcode();
+        }
+        if ($multi_select) {
+            return form_input_multi_list($pretty_name,$description,$name,$simple_content,$tabindex,10,$required);
+        }
 
-		return form_input_list($pretty_name,$description,$name,$simple_content,$tabindex,false,$required);
-	}
+        return form_input_list($pretty_name,$description,$name,$simple_content,$tabindex,false,$required);
+    }
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	require_javascript('javascript_ajax');
+    require_javascript('javascript_ajax');
 
-	if (is_null($nice_label)) $nice_label=$default;
+    if (is_null($nice_label)) {
+        $nice_label = $default;
+    }
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_TREE_LIST',array(
-		'_GUID'=>'21e9644eeac24356f38459ebe37f693a',
-		'MULTI_SELECT'=>$multi_select,
-		'NICE_LABEL'=>(is_null($nice_label) || $nice_label=='-1')?'':$nice_label,
-		'USE_SERVER_ID'=>$use_server_id,
-		'TABINDEX'=>strval($tabindex),
-		'NAME'=>$name,
-		'REQUIRED'=>$_required,
-		'DEFAULT'=>is_null($default)?'':$default,
-		'HOOK'=>$hook,
-		'ROOT_ID'=>is_null($root_id)?'':$root_id,
-		'OPTIONS'=>serialize($options),
-		'DESCRIPTION'=>$description,
-	));
-	return _form_input($name,$pretty_name,'',$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_TREE_LIST',array(
+        '_GUID' => '21e9644eeac24356f38459ebe37f693a',
+        'MULTI_SELECT' => $multi_select,
+        'NICE_LABEL' => (is_null($nice_label) || $nice_label == '-1')?'':$nice_label,
+        'USE_SERVER_ID' => $use_server_id,
+        'TABINDEX' => strval($tabindex),
+        'NAME' => $name,
+        'REQUIRED' => $_required,
+        'DEFAULT' => is_null($default)?'':$default,
+        'HOOK' => $hook,
+        'ROOT_ID' => is_null($root_id)?'':$root_id,
+        'OPTIONS' => serialize($options),
+        'DESCRIPTION' => $description,
+    ));
+    return _form_input($name,$pretty_name,'',$input,$required,false,$tabindex);
 }
 
 /**
@@ -1398,23 +1435,23 @@ function form_input_tree_list($pretty_name,$description,$name,$root_id,$hook,$op
  * @param  ?integer		Size of list (NULL: default)
  * @return tempcode		The input field
  */
-function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex=NULL,$inline_list=false,$required=true,$size=NULL)
+function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex = null,$inline_list = false,$required = true,$size = null)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_required=($required)?'_required':'';
+    $_required = ($required)?'_required':'';
 
-	return do_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
-		'_GUID'=>'b29dbbaf09bb5c36410e22feafa2f968',
-		'TABINDEX'=>strval($tabindex),
-		'SIZE'=>is_null($size)?NULL:strval($size),
-		'REQUIRED'=>$_required,
-		'PRETTY_NAME'=>$pretty_name,
-		'DESCRIPTION'=>$description,
-		'NAME'=>$name,
-		'CONTENT'=>$content,
-		'INLINE_LIST'=>$inline_list,
-	));
+    return do_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
+        '_GUID' => 'b29dbbaf09bb5c36410e22feafa2f968',
+        'TABINDEX' => strval($tabindex),
+        'SIZE' => is_null($size)?null:strval($size),
+        'REQUIRED' => $_required,
+        'PRETTY_NAME' => $pretty_name,
+        'DESCRIPTION' => $description,
+        'NAME' => $name,
+        'CONTENT' => $content,
+        'INLINE_LIST' => $inline_list,
+    ));
 }
 
 /**
@@ -1429,12 +1466,12 @@ function form_input_huge_list($pretty_name,$description,$name,$content,$tabindex
  * @param  boolean		Whether at least one must be selected
  * @return tempcode		The input field
  */
-function form_input_multi_list($pretty_name,$description,$name,$content,$tabindex=NULL,$size=5,$required=false)
+function form_input_multi_list($pretty_name,$description,$name,$content,$tabindex = null,$size = 5,$required = false)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$input=do_template('FORM_SCREEN_INPUT_MULTI_LIST',array('_GUID'=>'ed0739205c0bf5039e1d4fe2ddfc06da','TABINDEX'=>strval($tabindex),'SIZE'=>strval($size),'NAME'=>$name,'CONTENT'=>$content));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $input = do_template('FORM_SCREEN_INPUT_MULTI_LIST',array('_GUID' => 'ed0739205c0bf5039e1d4fe2ddfc06da','TABINDEX' => strval($tabindex),'SIZE' => strval($size),'NAME' => $name,'CONTENT' => $content));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1449,18 +1486,18 @@ function form_input_multi_list($pretty_name,$description,$name,$content,$tabinde
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_all_and_not($pretty_name,$description,$base,$list,$type='+',$tabindex=NULL)
+function form_input_all_and_not($pretty_name,$description,$base,$list,$type = '+',$tabindex = null)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$type=filter_form_field_default($base,$type);
+    $type = filter_form_field_default($base,$type);
 
-	$radios=new ocp_tempcode();
-	$radios->attach(form_input_radio_entry($base,'*',$type=='*',do_lang_tempcode('USE_ALL'),$tabindex));
-	$radios->attach(form_input_radio_entry($base,'-',$type=='-',do_lang_tempcode('USE_ALL_EXCEPT_SELECTED'),$tabindex));
-	$radios->attach(form_input_radio_entry($base,'+',$type=='+',do_lang_tempcode('USE_ALL_SELECTED'),$tabindex));
-	$input=do_template('FORM_SCREEN_INPUT_ALL_AND_NOT',array('_GUID'=>'32063ca0237a3b46e8fa08bb71a6e41c','TABINDEX'=>strval($tabindex),'BASE'=>$base,'RADIOS'=>$radios,'LIST'=>$list));
-	return _form_input($base.'_list',$pretty_name,$description,$input,false,false,$tabindex);
+    $radios = new ocp_tempcode();
+    $radios->attach(form_input_radio_entry($base,'*',$type == '*',do_lang_tempcode('USE_ALL'),$tabindex));
+    $radios->attach(form_input_radio_entry($base,'-',$type == '-',do_lang_tempcode('USE_ALL_EXCEPT_SELECTED'),$tabindex));
+    $radios->attach(form_input_radio_entry($base,'+',$type == '+',do_lang_tempcode('USE_ALL_SELECTED'),$tabindex));
+    $input = do_template('FORM_SCREEN_INPUT_ALL_AND_NOT',array('_GUID' => '32063ca0237a3b46e8fa08bb71a6e41c','TABINDEX' => strval($tabindex),'BASE' => $base,'RADIOS' => $radios,'LIST' => $list));
+    return _form_input($base . '_list',$pretty_name,$description,$input,false,false,$tabindex);
 }
 
 /**
@@ -1475,15 +1512,14 @@ function form_input_all_and_not($pretty_name,$description,$base,$list,$type='+',
  * @param  string			Default value (only appropriate if has picture contents)
  * @return tempcode		The input field
  */
-function form_input_radio($pretty_name,$description,$name,$content,$required=false,$picture_contents=false,$selected_path='')
+function form_input_radio($pretty_name,$description,$name,$content,$required = false,$picture_contents = false,$selected_path = '')
 {
-	$map=array('_GUID'=>'26021f9ae8a0cd83b93874bfa80052ca','NAME'=>$name,'REQUIRED'=>$required,'CONTENT'=>$content);
-	if ($picture_contents)
-	{
-		$map=array_merge($map,array('CODE'=>$selected_path,));
-	}
-	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',$map);
-	return _form_input(($GLOBALS['DOING_ALTERNATE_FIELDS_SET']!==NULL)?$name:'',$pretty_name,$description,$input,$required);
+    $map = array('_GUID' => '26021f9ae8a0cd83b93874bfa80052ca','NAME' => $name,'REQUIRED' => $required,'CONTENT' => $content);
+    if ($picture_contents) {
+        $map = array_merge($map,array('CODE' => $selected_path,));
+    }
+    $input = do_template('FORM_SCREEN_INPUT_RADIO_LIST',$map);
+    return _form_input(($GLOBALS['DOING_ALTERNATE_FIELDS_SET'] !== NULL)?$name:'',$pretty_name,$description,$input,$required);
 }
 
 /**
@@ -1497,15 +1533,17 @@ function form_input_radio($pretty_name,$description,$name,$content,$required=fal
  * @param  mixed			An additional long description (blank: no description)
  * @return tempcode		The input field
  */
-function form_input_radio_entry($name,$value,$selected=false,$text='',$tabindex=NULL,$description='')
+function form_input_radio_entry($name,$value,$selected = false,$text = '',$tabindex = null,$description = '')
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	if ((is_string($text)) && ($text=='')) $text=$name;
+    if ((is_string($text)) && ($text == '')) {
+        $text = $name;
+    }
 
-	$selected=(filter_form_field_default($name,$selected?'1':'')=='1');
+    $selected = (filter_form_field_default($name,$selected?'1':'') == '1');
 
-	return do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array('_GUID'=>'e2fe4ba6e8b3f705651dba13ea27f61d','DESCRIPTION'=>$description,'CHECKED'=>$selected,'TABINDEX'=>strval($tabindex),'NAME'=>$name,'VALUE'=>$value,'TEXT'=>$text));
+    return do_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array('_GUID' => 'e2fe4ba6e8b3f705651dba13ea27f61d','DESCRIPTION' => $description,'CHECKED' => $selected,'TABINDEX' => strval($tabindex),'NAME' => $name,'VALUE' => $value,'TEXT' => $text));
 }
 
 /**
@@ -1526,124 +1564,132 @@ function form_input_radio_entry($name,$value,$selected=false,$text='',$tabindex=
  * @param  boolean		Whether to show direct codenames, rather than trying to prettify them into titles
  * @return tempcode		The input field
  */
-function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_url=NULL,$selected_code=NULL,$tabindex=NULL,$allow_none=false,$db=NULL,$theme=NULL,$lang=NULL,$linear=false,$direct_titles=false)
+function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_url = null,$selected_code = null,$tabindex = null,$allow_none = false,$db = null,$theme = null,$lang = null,$linear = false,$direct_titles = false)
 {
-	if (is_null($db)) $db=$GLOBALS['SITE_DB'];
+    if (is_null($db)) {
+        $db = $GLOBALS['SITE_DB'];
+    }
 
-	if (count($ids)==0) return new ocp_tempcode();
+    if (count($ids) == 0) {
+        return new ocp_tempcode();
+    }
 
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$selected_code=filter_form_field_default($name,is_null($selected_code)?'':$selected_code);
-	if ($selected_code=='') $selected_code=NULL;
+    $selected_code = filter_form_field_default($name,is_null($selected_code)?'':$selected_code);
+    if ($selected_code == '') {
+        $selected_code = null;
+    }
 
-	// Split into lists of categories based on path division
-	$current_path=''; // Initialise type to string
-	$current_path=NULL;
-	$category=array();
-	$categories=array();
-	foreach ($ids as $id)
-	{
-		$slash_pos=strrpos($id,'/');
-		if ($slash_pos===false) $slash_pos=0;
-		$new_path=substr($id,0,$slash_pos);
-		if ($new_path!==$current_path)
-		{
-			if (!is_null($current_path))
-			{
-				if (!array_key_exists($current_path,$categories)) $categories[$current_path]=array();
-				$categories[$current_path]=array_merge($categories[$current_path],$category);
-				$category=array();
-			}
-			$current_path=$new_path;
-		}
-		$category[]=$id;
-	}
-	if (!is_null($current_path))
-	{
-		if (!array_key_exists($current_path,$categories)) $categories[$current_path]=array();
-		$categories[$current_path]=array_merge($categories[$current_path],$category);
-	}
+    // Split into lists of categories based on path division
+    $current_path = ''; // Initialise type to string
+    $current_path = null;
+    $category = array();
+    $categories = array();
+    foreach ($ids as $id) {
+        $slash_pos = strrpos($id,'/');
+        if ($slash_pos === false) {
+            $slash_pos = 0;
+        }
+        $new_path = substr($id,0,$slash_pos);
+        if ($new_path !== $current_path) {
+            if (!is_null($current_path)) {
+                if (!array_key_exists($current_path,$categories)) {
+                    $categories[$current_path] = array();
+                }
+                $categories[$current_path] = array_merge($categories[$current_path],$category);
+                $category = array();
+            }
+            $current_path = $new_path;
+        }
+        $category[] = $id;
+    }
+    if (!is_null($current_path)) {
+        if (!array_key_exists($current_path,$categories)) {
+            $categories[$current_path] = array();
+        }
+        $categories[$current_path] = array_merge($categories[$current_path],$category);
+    }
 
-	// Sorting but fudge it so 'ocf_default_avatars/default_set' always comes first
-	ksort($categories);
-	$avatars=(array_key_exists(0,$category)) && (substr($category[0],0,20)=='ocf_default_avatars/');
-	if ((array_key_exists('ocf_default_avatars/default_set',$categories)) && ($avatars))
-	{
-		$def=$categories['ocf_default_avatars/default_set'];
-		unset($categories['ocf_default_avatars/default_set']);
-		$categories=array_merge(array('ocf_default_avatars/default_set'=>$def),$categories);
-	}
-	// Add in the 'N/A' option
-	if (($allow_none) && (!array_key_exists('',$categories)))
-	{
-		if (count($categories)==1)
-		{
-			array_unshift($categories[$current_path],'');
-		} else
-		{
-			$categories[do_lang('NA')]=array('');
-		}
-	}
+    // Sorting but fudge it so 'ocf_default_avatars/default_set' always comes first
+    ksort($categories);
+    $avatars = (array_key_exists(0,$category)) && (substr($category[0],0,20) == 'ocf_default_avatars/');
+    if ((array_key_exists('ocf_default_avatars/default_set',$categories)) && ($avatars)) {
+        $def = $categories['ocf_default_avatars/default_set'];
+        unset($categories['ocf_default_avatars/default_set']);
+        $categories = array_merge(array('ocf_default_avatars/default_set' => $def),$categories);
+    }
+    // Add in the 'N/A' option
+    if (($allow_none) && (!array_key_exists('',$categories))) {
+        if (count($categories) == 1) {
+            array_unshift($categories[$current_path],'');
+        } else {
+            $categories[do_lang('NA')] = array('');
+        }
+    }
 
-	// Show each category
-	$content=new ocp_tempcode();
-	foreach ($categories as $cat=>$ids)
-	{
-		$cat=titleify($cat);
+    // Show each category
+    $content = new ocp_tempcode();
+    foreach ($categories as $cat => $ids) {
+        $cat = titleify($cat);
 
-		if ($avatars)
-		{
-			$cut_pos=strpos($cat,'/');
-			$cut_pos=($cut_pos===false)?($avatars?strlen($cat):0):($cut_pos+1);
-			$cat=titleify(substr($cat,$cut_pos)); // Make the category name a bit nicer
-		}
+        if ($avatars) {
+            $cut_pos = strpos($cat,'/');
+            $cut_pos = ($cut_pos === false)?($avatars?strlen($cat):0):($cut_pos+1);
+            $cat = titleify(substr($cat,$cut_pos)); // Make the category name a bit nicer
+        }
 
-		if ($cat=='') $cat=do_lang($avatars?'GENERAL':'UNNAMED');
+        if ($cat == '') {
+            $cat = do_lang($avatars?'GENERAL':'UNNAMED');
+        }
 
-		$_category=new ocp_tempcode();
-		$i=0;
-		$category_expanded=false;
-		foreach ($ids as $id)
-		{
-			if ($selected_url!==NULL)
-			{
-				$pos=strpos($selected_url,'/'.$id);
-				$selected=($pos!==false) && ($id!='');
-				if ($selected) $selected_code=$id;
-			} else
-			{
-				$selected=($selected_code==$id);
-			}
-			if ($selected) $category_expanded=true;
+        $_category = new ocp_tempcode();
+        $i = 0;
+        $category_expanded = false;
+        foreach ($ids as $id) {
+            if ($selected_url !== NULL) {
+                $pos = strpos($selected_url,'/' . $id);
+                $selected = ($pos !== false) && ($id != '');
+                if ($selected) {
+                    $selected_code = $id;
+                }
+            } else {
+                $selected = ($selected_code == $id);
+            }
+            if ($selected) {
+                $category_expanded = true;
+            }
 
-			if ($id=='')
-			{
-				if (is_null($selected_code)) $selected=true;
-				$url=find_theme_image('na',false,false,$theme,$lang,$db);
-				$pretty=do_lang_tempcode('NA_EM');
-			} else
-			{
-				$url=find_theme_image($id,$theme!='default',false,$theme,$lang,$db);
-				if ($url=='')
-					$url=find_theme_image($id,false,false,'default',$lang,$db);
-				$pretty=$direct_titles?make_string_tempcode($id):make_string_tempcode(ucfirst((strrpos($id,'/')===false)?$id:substr($id,strrpos($id,'/')+1)));
-			}
-			if ($url=='') continue;
+            if ($id == '') {
+                if (is_null($selected_code)) {
+                    $selected = true;
+                }
+                $url = find_theme_image('na',false,false,$theme,$lang,$db);
+                $pretty = do_lang_tempcode('NA_EM');
+            } else {
+                $url = find_theme_image($id,$theme != 'default',false,$theme,$lang,$db);
+                if ($url == '') {
+                    $url = find_theme_image($id,false,false,'default',$lang,$db);
+                }
+                $pretty = $direct_titles?make_string_tempcode($id):make_string_tempcode(ucfirst((strrpos($id,'/') === false)?$id:substr($id,strrpos($id,'/')+1)));
+            }
+            if ($url == '') {
+                continue;
+            }
 
-			$temp=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID'=>'10005e2f08b44bfe17fce68685b4c884','LINEAR'=>$linear,'CHECKED'=>$selected,'PRETTY'=>$pretty,'NAME'=>$name,'CODE'=>$id,'URL'=>$url));
-			$_category->attach($temp);
+            $temp = do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID' => '10005e2f08b44bfe17fce68685b4c884','LINEAR' => $linear,'CHECKED' => $selected,'PRETTY' => $pretty,'NAME' => $name,'CODE' => $id,'URL' => $url));
+            $_category->attach($temp);
 
-			$i++;
-		}
+            $i++;
+        }
 
-		$_category=do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID'=>'c2f429315b73bcaacc3bff8db11c0056','DISPLAY'=>$category_expanded?'block':'none','FIELD_NAME'=>$name,'CATEGORY'=>$_category,'CATEGORY_NAME'=>(count($categories)==1)?'':$cat));
-		$content->attach($_category);
-	}
+        $_category = do_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array('_GUID' => 'c2f429315b73bcaacc3bff8db11c0056','DISPLAY' => $category_expanded?'block':'none','FIELD_NAME' => $name,'CATEGORY' => $_category,'CATEGORY_NAME' => (count($categories) == 1)?'':$cat));
+        $content->attach($_category);
+    }
 
-	$input=do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID'=>'35fed772f022cf561f823543e56d63e8','REQUIRED'=>false,'NAME'=>$name,'CODE'=>is_null($selected_code)?'':$selected_code,'TABINDEX'=>strval($tabindex),'CONTENT'=>$content));
+    $input = do_template('FORM_SCREEN_INPUT_RADIO_LIST',array('_GUID' => '35fed772f022cf561f823543e56d63e8','REQUIRED' => false,'NAME' => $name,'CODE' => is_null($selected_code)?'':$selected_code,'TABINDEX' => strval($tabindex),'CONTENT' => $content));
 
-	return _form_input($GLOBALS['DOING_ALTERNATE_FIELDS_SET']?$name:'',$pretty_name,$description,$input,false);
+    return _form_input($GLOBALS['DOING_ALTERNATE_FIELDS_SET']?$name:'',$pretty_name,$description,$input,false);
 }
 
 /**
@@ -1661,13 +1707,12 @@ function form_input_theme_image($pretty_name,$description,$name,$ids,$selected_u
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_date__scheduler($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL)
+function form_input_date__scheduler($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time = null,$total_years_to_show = 10,$year_start = null,$tabindex = null)
 {
-	if (cron_installed())
-	{
-		return form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex);
-	}
-	return new ocp_tempcode();
+    if (cron_installed()) {
+        return form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex);
+    }
+    return new ocp_tempcode();
 }
 
 /**
@@ -1688,10 +1733,10 @@ function form_input_date__scheduler($pretty_name,$description,$name,$required,$n
  * @param  boolean		Convert $default_time to $timezone
  * @return tempcode		The input field
  */
-function form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
+function form_input_date($pretty_name,$description,$name,$required,$null_default,$do_time,$default_time = null,$total_years_to_show = 10,$year_start = null,$tabindex = null,$do_date = true,$timezone = null,$handle_timezone = true)
 {
-	$input=_form_input_date($name,$required,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex,$do_date,$timezone,$handle_timezone);
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $input = _form_input_date($name,$required,$null_default,$do_time,$default_time,$total_years_to_show,$year_start,$tabindex,$do_date,$timezone,$handle_timezone);
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1710,100 +1755,99 @@ function form_input_date($pretty_name,$description,$name,$required,$null_default
  * @param  boolean		Convert $default_time to $timezone
  * @return tempcode		The input field
  */
-function _form_input_date($name,$required,$null_default,$do_time,$default_time=NULL,$total_years_to_show=10,$year_start=NULL,$tabindex=NULL,$do_date=true,$timezone=NULL,$handle_timezone=true)
+function _form_input_date($name,$required,$null_default,$do_time,$default_time = null,$total_years_to_show = 10,$year_start = null,$tabindex = null,$do_date = true,$timezone = null,$handle_timezone = true)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$default_minute=mixed();
-	$default_hour=mixed();
-	$default_month=mixed();
-	$default_day=mixed();
-	$default_year=mixed();
+    $default_minute = mixed();
+    $default_hour = mixed();
+    $default_month = mixed();
+    $default_day = mixed();
+    $default_year = mixed();
 
-	if ((is_array($default_time)) && ($default_time[4]<1970) && (@strftime('%Y',@mktime(0,0,0,1,1,1963))!='1963')) // Some systems can't do negative timestamps. Actually the maximum negative integer size is also an issue
-	{
-		list($default_minute,$default_hour,$default_month,$default_day,$default_year)=$default_time;
-		if (is_null($default_minute)) $default_minute=0;
-		if (is_null($default_hour)) $default_hour=0;
-	} else
-	{
-		if (is_array($default_time))
-		{
-			if (is_null($default_time[4]))
-			{
-				$default_time=NULL;
-			} else
-			{
-				list($default_minute,$default_hour,$default_month,$default_day,$default_year)=$default_time;
-				$default_time=mktime($default_hour,$default_minute,0,$default_month,$default_day,$default_year);
-			}
-		}
+    if ((is_array($default_time)) && ($default_time[4]<1970) && (@strftime('%Y',@mktime(0,0,0,1,1,1963)) != '1963')) { // Some systems can't do negative timestamps. Actually the maximum negative integer size is also an issue
+        list($default_minute,$default_hour,$default_month,$default_day,$default_year) = $default_time;
+        if (is_null($default_minute)) {
+            $default_minute = 0;
+        }
+        if (is_null($default_hour)) {
+            $default_hour = 0;
+        }
+    } else {
+        if (is_array($default_time)) {
+            if (is_null($default_time[4])) {
+                $default_time = null;
+            } else {
+                list($default_minute,$default_hour,$default_month,$default_day,$default_year) = $default_time;
+                $default_time = mktime($default_hour,$default_minute,0,$default_month,$default_day,$default_year);
+            }
+        }
 
-		$_default_time=filter_form_field_default($name,is_null($default_time)?'':strval($default_time));
-		$default_time=($_default_time=='')?NULL:intval($_default_time);
+        $_default_time = filter_form_field_default($name,is_null($default_time)?'':strval($default_time));
+        $default_time = ($_default_time == '')?null:intval($_default_time);
 
-		if ((!is_null($default_time)) && ($handle_timezone))
-		{
-			if (is_null($timezone)) $timezone=get_users_timezone();
-			$default_time=tz_time($default_time,$timezone);
-		}
+        if ((!is_null($default_time)) && ($handle_timezone)) {
+            if (is_null($timezone)) {
+                $timezone = get_users_timezone();
+            }
+            $default_time = tz_time($default_time,$timezone);
+        }
 
-		$default_minute=is_null($default_time)?NULL:intval(date('i',$default_time));
-		$default_hour=is_null($default_time)?NULL:intval(date('H',$default_time));
-		$default_day=is_null($default_time)?NULL:intval(date('j',$default_time));
-		$default_month=is_null($default_time)?NULL:intval(date('n',$default_time));
-		$default_year=is_null($default_time)?NULL:intval(date('Y',$default_time));
-	}
+        $default_minute = is_null($default_time)?null:intval(date('i',$default_time));
+        $default_hour = is_null($default_time)?null:intval(date('H',$default_time));
+        $default_day = is_null($default_time)?null:intval(date('j',$default_time));
+        $default_month = is_null($default_time)?null:intval(date('n',$default_time));
+        $default_year = is_null($default_time)?null:intval(date('Y',$default_time));
+    }
 
-	if ((!is_null($year_start)) && (!is_null($default_year)))
-	{
-		if ($default_year<$year_start) $year_start=$default_year;
-	}
+    if ((!is_null($year_start)) && (!is_null($default_year))) {
+        if ($default_year<$year_start) {
+            $year_start = $default_year;
+        }
+    }
 
-	$year_end=mixed();
-	if ((!is_null($total_years_to_show)) && (!is_null($default_year)))
-	{
-		$year_end=$year_start+$total_years_to_show;
-		if ($default_year>$year_end) $year_end=$default_year;
-	}
+    $year_end = mixed();
+    if ((!is_null($total_years_to_show)) && (!is_null($default_year))) {
+        $year_end = $year_start+$total_years_to_show;
+        if ($default_year>$year_end) {
+            $year_end = $default_year;
+        }
+    }
 
-	if ($null_default)
-	{
-		$default_minute=NULL;
-		$default_hour=NULL;
-		$default_day=NULL;
-		$default_month=NULL;
-		$default_year=NULL;
-	}
+    if ($null_default) {
+        $default_minute = null;
+        $default_hour = null;
+        $default_day = null;
+        $default_month = null;
+        $default_year = null;
+    }
 
-	if ($do_date)
-	{
-		$type=$do_time?'datetime':'date';
-	} else
-	{
-		$type='time';
-	}
+    if ($do_date) {
+        $type = $do_time?'datetime':'date';
+    } else {
+        $type = 'time';
+    }
 
-	return do_template($do_date?'FORM_SCREEN_INPUT_DATE':'FORM_SCREEN_INPUT_TIME',array(
-		'_GUID'=>'5ace58dd0f540f70fb3bd440fb02a430',
-		'REQUIRED'=>$required,
-		'TABINDEX'=>strval($tabindex),
-		'NAME'=>$name,
-		'TYPE'=>$type,
+    return do_template($do_date?'FORM_SCREEN_INPUT_DATE':'FORM_SCREEN_INPUT_TIME',array(
+        '_GUID' => '5ace58dd0f540f70fb3bd440fb02a430',
+        'REQUIRED' => $required,
+        'TABINDEX' => strval($tabindex),
+        'NAME' => $name,
+        'TYPE' => $type,
 
-		'YEAR'=>is_null($default_year)?'':strval($default_year),
-		'MONTH'=>is_null($default_month)?'':strval($default_month),
-		'DAY'=>is_null($default_day)?'':strval($default_day),
-		'HOUR'=>is_null($default_hour)?'':strval($default_hour),
-		'MINUTE'=>is_null($default_minute)?'':strval($default_minute),
+        'YEAR' => is_null($default_year)?'':strval($default_year),
+        'MONTH' => is_null($default_month)?'':strval($default_month),
+        'DAY' => is_null($default_day)?'':strval($default_day),
+        'HOUR' => is_null($default_hour)?'':strval($default_hour),
+        'MINUTE' => is_null($default_minute)?'':strval($default_minute),
 
-		'MIN_DATE_DAY'=>'1',
-		'MIN_DATE_MONTH'=>'1',
-		'MIN_DATE_YEAR'=>is_null($year_start)?'':strval($year_start),
-		'MAX_DATE_DAY'=>'1',
-		'MAX_DATE_MONTH'=>'1',
-		'MAX_DATE_YEAR'=>is_null($year_end)?'':strval($year_end),
-	));
+        'MIN_DATE_DAY' => '1',
+        'MIN_DATE_MONTH' => '1',
+        'MIN_DATE_YEAR' => is_null($year_start)?'':strval($year_start),
+        'MAX_DATE_DAY' => '1',
+        'MAX_DATE_MONTH' => '1',
+        'MAX_DATE_YEAR' => is_null($year_end)?'':strval($year_end),
+    ));
 }
 
 /**
@@ -1817,16 +1861,16 @@ function _form_input_date($name,$required,$null_default,$do_time,$default_time=N
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_integer($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_integer($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_default=filter_form_field_default($name,is_null($default)?'':strval($default));
-	$default=($_default=='')?NULL:intval($_default);
+    $_default = filter_form_field_default($name,is_null($default)?'':strval($default));
+    $default = ($_default == '')?null:intval($_default);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_INTEGER',array('_GUID'=>'da09e21f329f300f71dd4dd518cb6242','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>is_null($default)?'':strval($default)));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_INTEGER',array('_GUID' => 'da09e21f329f300f71dd4dd518cb6242','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => is_null($default)?'':strval($default)));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1842,25 +1886,25 @@ function form_input_integer($pretty_name,$description,$name,$default,$required,$
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_dimensions($pretty_name,$description,$name_width,$name_height,$default_width,$default_height,$required,$tabindex=NULL)
+function form_input_dimensions($pretty_name,$description,$name_width,$name_height,$default_width,$default_height,$required,$tabindex = null)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_default_width=filter_form_field_default($name_width,is_null($default_width)?'':strval($default_width));
-	$default_width=($_default_width=='')?NULL:intval($_default_width);
-	$_default_height=filter_form_field_default($name_height,is_null($default_height)?'':strval($default_height));
-	$default_height=($_default_height=='')?NULL:intval($_default_height);
+    $_default_width = filter_form_field_default($name_width,is_null($default_width)?'':strval($default_width));
+    $default_width = ($_default_width == '')?null:intval($_default_width);
+    $_default_height = filter_form_field_default($name_height,is_null($default_height)?'':strval($default_height));
+    $default_height = ($_default_height == '')?null:intval($_default_height);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_DIMENSIONS',array(
-		'TABINDEX'=>strval($tabindex),
-		'REQUIRED'=>$_required,
-		'NAME_WIDTH'=>$name_width,
-		'DEFAULT_WIDTH'=>is_null($default_width)?'':strval($default_width),
-		'NAME_HEIGHT'=>$name_height,
-		'DEFAULT_HEIGHT'=>is_null($default_height)?'':strval($default_height),
-	));
-	return _form_input($name_width,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_DIMENSIONS',array(
+        'TABINDEX' => strval($tabindex),
+        'REQUIRED' => $_required,
+        'NAME_WIDTH' => $name_width,
+        'DEFAULT_WIDTH' => is_null($default_width)?'':strval($default_width),
+        'NAME_HEIGHT' => $name_height,
+        'DEFAULT_HEIGHT' => is_null($default_height)?'':strval($default_height),
+    ));
+    return _form_input($name_width,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1874,16 +1918,16 @@ function form_input_dimensions($pretty_name,$description,$name_width,$name_heigh
  * @param  ?integer		The tab index of the field (NULL: not specified)
  * @return tempcode		The input field
  */
-function form_input_float($pretty_name,$description,$name,$default,$required,$tabindex=NULL)
+function form_input_float($pretty_name,$description,$name,$default,$required,$tabindex = null)
 {
-	$tabindex=get_form_field_tabindex($tabindex);
+    $tabindex = get_form_field_tabindex($tabindex);
 
-	$_default=filter_form_field_default($name,is_null($default)?'':strval($default));
-	$default=($_default=='')?NULL:floatval($_default);
+    $_default = filter_form_field_default($name,is_null($default)?'':strval($default));
+    $default = ($_default == '')?null:floatval($_default);
 
-	$_required=($required)?'_required':'';
-	$input=do_template('FORM_SCREEN_INPUT_FLOAT',array('_GUID'=>'6db802ae840bfe7e87881f95c79133c4','TABINDEX'=>strval($tabindex),'REQUIRED'=>$_required,'NAME'=>$name,'DEFAULT'=>is_null($default)?'':float_to_raw_string($default,10,true)));
-	return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
+    $_required = ($required)?'_required':'';
+    $input = do_template('FORM_SCREEN_INPUT_FLOAT',array('_GUID' => '6db802ae840bfe7e87881f95c79133c4','TABINDEX' => strval($tabindex),'REQUIRED' => $_required,'NAME' => $name,'DEFAULT' => is_null($default)?'':float_to_raw_string($default,10,true)));
+    return _form_input($name,$pretty_name,$description,$input,$required,false,$tabindex);
 }
 
 /**
@@ -1896,10 +1940,12 @@ function form_input_float($pretty_name,$description,$name,$default,$required,$ta
  */
 function alternate_fields_set__start($set_name)
 {
-	global $DOING_ALTERNATE_FIELDS_SET;
-	if (!is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	$DOING_ALTERNATE_FIELDS_SET=$set_name;
-	return new ocp_tempcode();
+    global $DOING_ALTERNATE_FIELDS_SET;
+    if (!is_null($DOING_ALTERNATE_FIELDS_SET)) {
+        warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+    }
+    $DOING_ALTERNATE_FIELDS_SET = $set_name;
+    return new ocp_tempcode();
 }
 
 /**
@@ -1914,27 +1960,31 @@ function alternate_fields_set__start($set_name)
  * @param  boolean		Whether we just want the raw set contents, without any wrapper field row
  * @return tempcode		The field set
  */
-function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url=NULL,$raw=false)
+function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$required,$existing_image_preview_url = null,$raw = false)
 {
-	global $DOING_ALTERNATE_FIELDS_SET;
-	if ($DOING_ALTERNATE_FIELDS_SET===NULL) return $fields; // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
+    global $DOING_ALTERNATE_FIELDS_SET;
+    if ($DOING_ALTERNATE_FIELDS_SET === NULL) {
+        return $fields;
+    } // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
 
-	if ((!is_null($existing_image_preview_url)) && ($existing_image_preview_url!=''))
-	{
-		if (url_is_local($existing_image_preview_url))
-		{
-			$existing_image_preview_url=get_custom_base_url().'/'.$existing_image_preview_url;
-		}
-	}
+    if ((!is_null($existing_image_preview_url)) && ($existing_image_preview_url != '')) {
+        if (url_is_local($existing_image_preview_url)) {
+            $existing_image_preview_url = get_custom_base_url() . '/' . $existing_image_preview_url;
+        }
+    }
 
-	$set=do_template('FORM_SCREEN_FIELDS_SET',array('_GUID'=>'ae81cf68280aef067de1e8e71b2919a7','FIELDS'=>$fields,'PRETTY_NAME'=>$pretty_name,'SET_NAME'=>$set_name,'REQUIRED'=>$required,'EXISTING_IMAGE_PREVIEW_URL'=>$existing_image_preview_url));
+    $set = do_template('FORM_SCREEN_FIELDS_SET',array('_GUID' => 'ae81cf68280aef067de1e8e71b2919a7','FIELDS' => $fields,'PRETTY_NAME' => $pretty_name,'SET_NAME' => $set_name,'REQUIRED' => $required,'EXISTING_IMAGE_PREVIEW_URL' => $existing_image_preview_url));
 
-	if (is_null($DOING_ALTERNATE_FIELDS_SET)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-	$DOING_ALTERNATE_FIELDS_SET=NULL;
+    if (is_null($DOING_ALTERNATE_FIELDS_SET)) {
+        warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+    }
+    $DOING_ALTERNATE_FIELDS_SET = null;
 
-	if ($raw) return $set;
+    if ($raw) {
+        return $set;
+    }
 
-	return _form_input('',$pretty_name,$description,$set,$required);
+    return _form_input('',$pretty_name,$description,$set,$required);
 }
 
 /**
@@ -1942,8 +1992,8 @@ function alternate_fields_set__end($set_name,$pretty_name,$description,$fields,$
  */
 function single_field__start()
 {
-	global $DOING_ALTERNATE_FIELDS_SET;
-	$DOING_ALTERNATE_FIELDS_SET='';
+    global $DOING_ALTERNATE_FIELDS_SET;
+    $DOING_ALTERNATE_FIELDS_SET = '';
 }
 
 /**
@@ -1951,8 +2001,8 @@ function single_field__start()
  */
 function single_field__end()
 {
-	global $DOING_ALTERNATE_FIELDS_SET;
-	$DOING_ALTERNATE_FIELDS_SET=NULL;
+    global $DOING_ALTERNATE_FIELDS_SET;
+    $DOING_ALTERNATE_FIELDS_SET = null;
 }
 
 /**
@@ -1962,9 +2012,9 @@ function single_field__end()
  * @param  ?integer		The tab index (NULL: none specified)
  * @return tempcode		The field
  */
-function form_input_na($pretty_name,$tabindex=NULL)
+function form_input_na($pretty_name,$tabindex = null)
 {
-	return _form_input('',$pretty_name,new ocp_tempcode(),new ocp_tempcode(),false,false,NULL);
+    return _form_input('',$pretty_name,new ocp_tempcode(),new ocp_tempcode(),false,false,null);
 }
 
 /**
@@ -1983,44 +2033,43 @@ function form_input_na($pretty_name,$tabindex=NULL)
  * @param  ?string		Custom regex pattern validation error (NULL: none)
  * @return tempcode		The field
  */
-function _form_input($name,$pretty_name,$description,$input,$required,$comcode=false,$tabindex=NULL,$w=false,$skip_label=false,$description_side='',$pattern_error=NULL)
+function _form_input($name,$pretty_name,$description,$input,$required,$comcode = false,$tabindex = null,$w = false,$skip_label = false,$description_side = '',$pattern_error = null)
 {
-	check_suhosin_request_quantity(2,($name=='')?20:strlen($name));
+    check_suhosin_request_quantity(2,($name == '')?20:strlen($name));
 
-	if (($GLOBALS['DEV_MODE']) && (user_lang()==fallback_lang()))
-	{
-		$_description=trim(strip_tags(is_object($description)?$description->evaluate():$description));
-		if (($_description!='') && (substr($_description,-1)!='.') && (substr(is_object($description)?$description->evaluate():$description,-6)!='</kbd>') && (substr($_description,-1)!='!') && (substr($_description,-1)!='?') && (substr($_description,-1)!=']') && (substr($_description,-1)!=')') && (!$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK']))
-		{
-			fatal_exit('Description fields should end in full stops ['.$_description.'].');
-		}
-	}
+    if (($GLOBALS['DEV_MODE']) && (user_lang() == fallback_lang())) {
+        $_description = trim(strip_tags(is_object($description)?$description->evaluate():$description));
+        if (($_description != '') && (substr($_description,-1) != '.') && (substr(is_object($description)?$description->evaluate():$description,-6) != '</kbd>') && (substr($_description,-1) != '!') && (substr($_description,-1) != '?') && (substr($_description,-1) != ']') && (substr($_description,-1) != ')') && (!$GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'])) {
+            fatal_exit('Description fields should end in full stops [' . $_description . '].');
+        }
+    }
 
-	$help_zone=get_comcode_zone('userguide_comcode',false);
-	$_comcode=((is_null($help_zone)) || (!$comcode))?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID'=>'7668b8365e34b2484be7c2c271f82e79','NAME'=>$name,'W'=>$w,'URL'=>build_url(array('page'=>'userguide_comcode'),$help_zone)));
+    $help_zone = get_comcode_zone('userguide_comcode',false);
+    $_comcode = ((is_null($help_zone)) || (!$comcode))?new ocp_tempcode():do_template('COMCODE_MESSAGE',array('_GUID' => '7668b8365e34b2484be7c2c271f82e79','NAME' => $name,'W' => $w,'URL' => build_url(array('page' => 'userguide_comcode'),$help_zone)));
 
-	global $DOING_ALTERNATE_FIELDS_SET;
-	if ($DOING_ALTERNATE_FIELDS_SET!==NULL)
-	{
-		if ($DOING_ALTERNATE_FIELDS_SET=='') return $input;
+    global $DOING_ALTERNATE_FIELDS_SET;
+    if ($DOING_ALTERNATE_FIELDS_SET !== NULL) {
+        if ($DOING_ALTERNATE_FIELDS_SET == '') {
+            return $input;
+        }
 
-		$tpl=do_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
-			'_GUID'=>'23f2e2df7fcacc01d9f5158dc635e73d',
-			'SET_NAME'=>$DOING_ALTERNATE_FIELDS_SET,
-			'REQUIRED'=>$required,
-			'SKIP_LABEL'=>$skip_label,
-			'NAME'=>$name,
-			'PRETTY_NAME'=>$pretty_name,
-			'DESCRIPTION'=>$description,
-			'DESCRIPTION_SIDE'=>$description_side,
-			'INPUT'=>$input,
-			'COMCODE'=>$_comcode,
-		));
-		return $tpl;
-	}
+        $tpl = do_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
+            '_GUID' => '23f2e2df7fcacc01d9f5158dc635e73d',
+            'SET_NAME' => $DOING_ALTERNATE_FIELDS_SET,
+            'REQUIRED' => $required,
+            'SKIP_LABEL' => $skip_label,
+            'NAME' => $name,
+            'PRETTY_NAME' => $pretty_name,
+            'DESCRIPTION' => $description,
+            'DESCRIPTION_SIDE' => $description_side,
+            'INPUT' => $input,
+            'COMCODE' => $_comcode,
+        ));
+        return $tpl;
+    }
 
-	$tpl=do_template('FORM_SCREEN_FIELD',array('_GUID'=>'fa1402b7ad8319372f4bb5b152be7852','REQUIRED'=>$required,'SKIP_LABEL'=>$skip_label,'NAME'=>$name,'PRETTY_NAME'=>$pretty_name,'DESCRIPTION'=>$description,'DESCRIPTION_SIDE'=>$description_side,'INPUT'=>$input,'COMCODE'=>$_comcode,'PATTERN_ERROR'=>$pattern_error));
-	return $tpl;
+    $tpl = do_template('FORM_SCREEN_FIELD',array('_GUID' => 'fa1402b7ad8319372f4bb5b152be7852','REQUIRED' => $required,'SKIP_LABEL' => $skip_label,'NAME' => $name,'PRETTY_NAME' => $pretty_name,'DESCRIPTION' => $description,'DESCRIPTION_SIDE' => $description_side,'INPUT' => $input,'COMCODE' => $_comcode,'PATTERN_ERROR' => $pattern_error));
+    return $tpl;
 }
 
 /**
@@ -2030,28 +2079,34 @@ function _form_input($name,$pretty_name,$description,$input,$required,$comcode=f
  * @param  boolean		Whether to only care about staff conflicts
  * @return array			A pair: warning details, ping url
  */
-function handle_conflict_resolution($id=NULL,$only_staff=false)
+function handle_conflict_resolution($id = null,$only_staff = false)
 {
-	if (($only_staff) && (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) return array(NULL,NULL);
+    if (($only_staff) && (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) {
+        return array(null,null);
+    }
 
-	if (is_null($id))
-	{
-		$id=get_param('id',post_param('id',NULL),true);
-		if ($id===NULL) return array(NULL,NULL);
-	}
+    if (is_null($id)) {
+        $id = get_param('id',post_param('id',null),true);
+        if ($id === NULL) {
+            return array(null,null);
+        }
+    }
 
-	require_javascript('javascript_ajax');
-	$last_edit_screen_time=$GLOBALS['SITE_DB']->query('SELECT * FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'edit_pings WHERE '.db_string_equal_to('the_page',get_page_name()).' AND '.db_string_equal_to('the_type',get_param('type','misc')).' AND '.db_string_equal_to('the_id',$id).' AND the_member<>'.strval(get_member()).' ORDER BY the_time DESC',1);
-	if ((array_key_exists(0,$last_edit_screen_time)) && ($last_edit_screen_time[0]['the_time']>time()-20))
-	{
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($last_edit_screen_time[0]['the_member']);
-		if (is_null($username)) $username='?';
-		$warning_details=do_template('WARNING_BOX',array('_GUID'=>'10c4e7c0d16df68b38b66d162919c068','WARNING'=>do_lang_tempcode('EDIT_CONFLICT_WARNING',escape_html($username))));
-	} else $warning_details=NULL;
-	$keep=symbol_tempcode('KEEP');
-	$ping_url=find_script('edit_ping').'?page='.urlencode(get_page_name()).'&type='.urlencode(get_param('type','misc')).'&id='.urlencode($id).$keep->evaluate();
+    require_javascript('javascript_ajax');
+    $last_edit_screen_time = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'edit_pings WHERE ' . db_string_equal_to('the_page',get_page_name()) . ' AND ' . db_string_equal_to('the_type',get_param('type','misc')) . ' AND ' . db_string_equal_to('the_id',$id) . ' AND the_member<>' . strval(get_member()) . ' ORDER BY the_time DESC',1);
+    if ((array_key_exists(0,$last_edit_screen_time)) && ($last_edit_screen_time[0]['the_time']>time()-20)) {
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($last_edit_screen_time[0]['the_member']);
+        if (is_null($username)) {
+            $username = '?';
+        }
+        $warning_details = do_template('WARNING_BOX',array('_GUID' => '10c4e7c0d16df68b38b66d162919c068','WARNING' => do_lang_tempcode('EDIT_CONFLICT_WARNING',escape_html($username))));
+    } else {
+        $warning_details = null;
+    }
+    $keep = symbol_tempcode('KEEP');
+    $ping_url = find_script('edit_ping') . '?page=' . urlencode(get_page_name()) . '&type=' . urlencode(get_param('type','misc')) . '&id=' . urlencode($id) . $keep->evaluate();
 
-	return array($warning_details,$ping_url);
+    return array($warning_details,$ping_url);
 }
 
 /**
@@ -2060,14 +2115,12 @@ function handle_conflict_resolution($id=NULL,$only_staff=false)
  * @param  ?integer		Requested tab-index (NULL: no specific request)
  * @return integer		Used tab-index
  */
-function get_form_field_tabindex($tabindex=NULL)
+function get_form_field_tabindex($tabindex = null)
 {
-	if ($tabindex===NULL)
-	{
-		global $TABINDEX;
-		$tabindex=$TABINDEX;
-		$TABINDEX++;
-	}
-	return $tabindex;
+    if ($tabindex === NULL) {
+        global $TABINDEX;
+        $tabindex = $TABINDEX;
+        $TABINDEX++;
+    }
+    return $tabindex;
 }
-

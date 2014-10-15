@@ -20,20 +20,20 @@
  */
 class tempcode_test_set extends ocp_test_case
 {
-	function testTempcode()
-	{
-		$nonempty=paragraph('ignore');
-		$tpl=do_template('tempcode_test',array(
-			'_GUID'=>'1f31d5279dd6a15a9fdba9296e1b7597',
-			'EMPTY1'=>'',
-			'EMPTY2'=>new ocp_tempcode(),
-			'NONEMPTY'=>$nonempty,
-			'PASSED'=>'This is a passed parameter',
-			'SIMPLE_ARRAY'=>array('1','2','3'),
-			'ARRAY'=>array(array('a'=>'A1','b'=>'B1','c'=>'C1'),array('a'=>'A2','b'=>'B2','c'=>'C2'),array('a'=>'A3','b'=>'B3','c'=>'C3'),array('a'=>'A4','b'=>'B4','c'=>'C4')),
-		));
-		$got=$tpl->evaluate();
-		$expected='<h1>Tempcode tests</h1>
+    public function testTempcode()
+    {
+        $nonempty = paragraph('ignore');
+        $tpl = do_template('tempcode_test',array(
+            '_GUID' => '1f31d5279dd6a15a9fdba9296e1b7597',
+            'EMPTY1' => '',
+            'EMPTY2' => new ocp_tempcode(),
+            'NONEMPTY' => $nonempty,
+            'PASSED' => 'This is a passed parameter',
+            'SIMPLE_ARRAY' => array('1','2','3'),
+            'ARRAY' => array(array('a' => 'A1','b' => 'B1','c' => 'C1'),array('a' => 'A2','b' => 'B2','c' => 'C2'),array('a' => 'A3','b' => 'B3','c' => 'C3'),array('a' => 'A4','b' => 'B4','c' => 'C4')),
+        ));
+        $got = $tpl->evaluate();
+        $expected = '<h1>Tempcode tests</h1>
 
 <h2>Escaping</h2>
 
@@ -437,12 +437,11 @@ bar
 	</td>
 </tr>
 </tbody></table>';
-		$ok=preg_replace('#\s#','',$got)==preg_replace('#\s#','',$expected);
-		$this->assertTrue($ok);
-		if (!$ok)
-		{
-			require_code('diff');
-			echo diff_simple_2($got,$expected,true);
-		}
-	}
+        $ok = preg_replace('#\s#','',$got) == preg_replace('#\s#','',$expected);
+        $this->assertTrue($ok);
+        if (!$ok) {
+            require_code('diff');
+            echo diff_simple_2($got,$expected,true);
+        }
+    }
 }

@@ -23,7 +23,7 @@
  */
 function init__points2()
 {
-	require_code('points');
+    require_code('points');
 }
 
 /**
@@ -35,37 +35,43 @@ function init__points2()
  */
 function system_gift_transfer($reason,$amount,$member_id)
 {
-	require_lang('points');
-	require_code('points');
+    require_lang('points');
+    require_code('points');
 
-	if (is_guest($member_id)) return;
-	if ($amount==0) return;
+    if (is_guest($member_id)) {
+        return;
+    }
+    if ($amount == 0) {
+        return;
+    }
 
-	$map=array(
-		'date_and_time'=>time(),
-		'amount'=>$amount,
-		'gift_from'=>$GLOBALS['FORUM_DRIVER']->get_guest_id(),
-		'gift_to'=>$member_id,
-		'anonymous'=>1,
-	);
-	$map+=insert_lang_comcode('reason',$reason,4);
-	$GLOBALS['SITE_DB']->query_insert('gifts',$map);
-	$_before=point_info($member_id);
-	$before=array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
-	$new=strval($before+$amount);
-	$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id,'points_gained_given',$new);
+    $map = array(
+        'date_and_time' => time(),
+        'amount' => $amount,
+        'gift_from' => $GLOBALS['FORUM_DRIVER']->get_guest_id(),
+        'gift_to' => $member_id,
+        'anonymous' => 1,
+    );
+    $map += insert_lang_comcode('reason',$reason,4);
+    $GLOBALS['SITE_DB']->query_insert('gifts',$map);
+    $_before = point_info($member_id);
+    $before = array_key_exists('points_gained_given',$_before)?$_before['points_gained_given']:0;
+    $new = strval($before+$amount);
+    $GLOBALS['FORUM_DRIVER']->set_custom_field($member_id,'points_gained_given',$new);
 
-	global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
-	if (array_key_exists($member_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$member_id]+=$amount;
-	if ((array_key_exists($member_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$member_id])))
-		$POINT_INFO_CACHE[$member_id]['points_gained_given']+=$amount;
+    global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
+    if (array_key_exists($member_id,$TOTAL_POINTS_CACHE)) {
+        $TOTAL_POINTS_CACHE[$member_id] += $amount;
+    }
+    if ((array_key_exists($member_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$member_id]))) {
+        $POINT_INFO_CACHE[$member_id]['points_gained_given'] += $amount;
+    }
 
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_posts_action');
-		require_code('ocf_posts_action2');
-		ocf_member_handle_promotion($member_id);
-	}
+    if (get_forum_type() == 'ocf') {
+        require_code('ocf_posts_action');
+        require_code('ocf_posts_action2');
+        ocf_member_handle_promotion($member_id);
+    }
 }
 
 /**
@@ -78,72 +84,72 @@ function system_gift_transfer($reason,$amount,$member_id)
  * @param  boolean		Does the sender want to remain anonymous?
  * @param  boolean		Whether to send out an email about it
  */
-function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$send_email=true)
+function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous = false,$send_email = true)
 {
-	require_lang('points');
-	require_code('points');
+    require_lang('points');
+    require_code('points');
 
-	$your_username=$GLOBALS['FORUM_DRIVER']->get_username($sender_id);
-	$your_displayname=$GLOBALS['FORUM_DRIVER']->get_username($sender_id,true);
-	$map=array(
-		'date_and_time'=>time(),
-		'amount'=>$amount,
-		'gift_from'=>$sender_id,
-		'gift_to'=>$recipient_id,
-		'anonymous'=>$anonymous?1:0,
-	);
-	$map+=insert_lang_comcode('reason',$reason,4);
-	$GLOBALS['SITE_DB']->query_insert('gifts',$map);
-	$sender_gift_points_used=point_info($sender_id);
-	$sender_gift_points_used=array_key_exists('gift_points_used',$sender_gift_points_used)?$sender_gift_points_used['gift_points_used']:0;
-	$GLOBALS['FORUM_DRIVER']->set_custom_field($sender_id,'gift_points_used',strval($sender_gift_points_used+$amount));
-	$temp_points=point_info($recipient_id);
-	$GLOBALS['FORUM_DRIVER']->set_custom_field($recipient_id,'points_gained_given',strval((array_key_exists('points_gained_given',$temp_points)?$temp_points['points_gained_given']:0)+$amount));
-	$their_username=$GLOBALS['FORUM_DRIVER']->get_username($recipient_id);
-	if (is_null($their_username)) warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$recipient_id));
-	$their_displayname=$GLOBALS['FORUM_DRIVER']->get_username($recipient_id,true);
-	$yes=$GLOBALS['FORUM_DRIVER']->get_member_email_allowed($recipient_id);
-	if (($yes) && ($send_email))
-	{
-		$_url=build_url(array('page'=>'points','type'=>'member','id'=>$recipient_id),get_module_zone('points'),NULL,false,false,true);
-		$url=$_url->evaluate();
-		require_code('notifications');
-		if ($anonymous)
-		{
-			$message_raw=do_lang('GIVEN_POINTS_FOR_ANON',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url)),get_lang($recipient_id));
-			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),A_FROM_SYSTEM_UNPRIVILEGED);
-		} else
-		{
-			$message_raw=do_lang('GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_displayname),comcode_escape($your_username),comcode_escape($their_username)),get_lang($recipient_id));
-			dispatch_notification('received_points',NULL,do_lang('YOU_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_lang($recipient_id)),$message_raw,array($recipient_id),$sender_id,3,false,false,NULL,NULL,'','','','',NULL,true);
-		}
-		$message_raw=do_lang('MEMBER_GIVEN_POINTS_FOR',comcode_escape($their_displayname),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_displayname),comcode_escape($your_username),comcode_escape($their_username)),get_site_default_lang());
-		dispatch_notification('receive_points_staff',NULL,do_lang('MEMBER_GIVEN_POINTS',integer_format($amount),NULL,NULL,get_site_default_lang()),$message_raw,NULL,$sender_id);
-	}
+    $your_username = $GLOBALS['FORUM_DRIVER']->get_username($sender_id);
+    $your_displayname = $GLOBALS['FORUM_DRIVER']->get_username($sender_id,true);
+    $map = array(
+        'date_and_time' => time(),
+        'amount' => $amount,
+        'gift_from' => $sender_id,
+        'gift_to' => $recipient_id,
+        'anonymous' => $anonymous?1:0,
+    );
+    $map += insert_lang_comcode('reason',$reason,4);
+    $GLOBALS['SITE_DB']->query_insert('gifts',$map);
+    $sender_gift_points_used = point_info($sender_id);
+    $sender_gift_points_used = array_key_exists('gift_points_used',$sender_gift_points_used)?$sender_gift_points_used['gift_points_used']:0;
+    $GLOBALS['FORUM_DRIVER']->set_custom_field($sender_id,'gift_points_used',strval($sender_gift_points_used+$amount));
+    $temp_points = point_info($recipient_id);
+    $GLOBALS['FORUM_DRIVER']->set_custom_field($recipient_id,'points_gained_given',strval((array_key_exists('points_gained_given',$temp_points)?$temp_points['points_gained_given']:0)+$amount));
+    $their_username = $GLOBALS['FORUM_DRIVER']->get_username($recipient_id);
+    if (is_null($their_username)) {
+        warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',$recipient_id));
+    }
+    $their_displayname = $GLOBALS['FORUM_DRIVER']->get_username($recipient_id,true);
+    $yes = $GLOBALS['FORUM_DRIVER']->get_member_email_allowed($recipient_id);
+    if (($yes) && ($send_email)) {
+        $_url = build_url(array('page' => 'points','type' => 'member','id' => $recipient_id),get_module_zone('points'),null,false,false,true);
+        $url = $_url->evaluate();
+        require_code('notifications');
+        if ($anonymous) {
+            $message_raw = do_lang('GIVEN_POINTS_FOR_ANON',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url)),get_lang($recipient_id));
+            dispatch_notification('received_points',null,do_lang('YOU_GIVEN_POINTS',integer_format($amount),null,null,get_lang($recipient_id)),$message_raw,array($recipient_id),A_FROM_SYSTEM_UNPRIVILEGED);
+        } else {
+            $message_raw = do_lang('GIVEN_POINTS_FOR',comcode_escape(get_site_name()),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_displayname),comcode_escape($your_username),comcode_escape($their_username)),get_lang($recipient_id));
+            dispatch_notification('received_points',null,do_lang('YOU_GIVEN_POINTS',integer_format($amount),null,null,get_lang($recipient_id)),$message_raw,array($recipient_id),$sender_id,3,false,false,null,null,'','','','',null,true);
+        }
+        $message_raw = do_lang('MEMBER_GIVEN_POINTS_FOR',comcode_escape($their_displayname),comcode_escape(integer_format($amount)),array(comcode_escape($reason),comcode_escape($url),comcode_escape($your_displayname),comcode_escape($your_username),comcode_escape($their_username)),get_site_default_lang());
+        dispatch_notification('receive_points_staff',null,do_lang('MEMBER_GIVEN_POINTS',integer_format($amount),null,null,get_site_default_lang()),$message_raw,null,$sender_id);
+    }
 
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_posts_action');
-		require_code('ocf_posts_action2');
-		ocf_member_handle_promotion($recipient_id);
-	}
+    if (get_forum_type() == 'ocf') {
+        require_code('ocf_posts_action');
+        require_code('ocf_posts_action2');
+        ocf_member_handle_promotion($recipient_id);
+    }
 
-	global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
-	if (array_key_exists($recipient_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$recipient_id]+=$amount;
-	if ((array_key_exists($recipient_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$recipient_id])))
-		$POINT_INFO_CACHE[$recipient_id]['points_gained_given']+=$amount;
-	if ((array_key_exists($sender_id,$POINT_INFO_CACHE)) && (array_key_exists('gift_points_used',$POINT_INFO_CACHE[$sender_id])))
-		$POINT_INFO_CACHE[$sender_id]['gift_points_used']+=$amount;
+    global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
+    if (array_key_exists($recipient_id,$TOTAL_POINTS_CACHE)) {
+        $TOTAL_POINTS_CACHE[$recipient_id] += $amount;
+    }
+    if ((array_key_exists($recipient_id,$POINT_INFO_CACHE)) && (array_key_exists('points_gained_given',$POINT_INFO_CACHE[$recipient_id]))) {
+        $POINT_INFO_CACHE[$recipient_id]['points_gained_given'] += $amount;
+    }
+    if ((array_key_exists($sender_id,$POINT_INFO_CACHE)) && (array_key_exists('gift_points_used',$POINT_INFO_CACHE[$sender_id]))) {
+        $POINT_INFO_CACHE[$sender_id]['gift_points_used'] += $amount;
+    }
 
-	if (!$anonymous)
-	{
-		require_code('users2');
-		if (has_actual_page_access(get_modal_user(),'points'))
-		{
-			require_code('activities');
-			syndicate_described_activity(((is_null($recipient_id)) || (is_guest($recipient_id)))?'points:_ACTIVITY_GIVE_POINTS':'points:ACTIVITY_GIVE_POINTS',$reason,integer_format($amount),'','_SEARCH:points:member:'.strval($recipient_id),'','','points',1,NULL,false,$recipient_id);
-		}
-	}
+    if (!$anonymous) {
+        require_code('users2');
+        if (has_actual_page_access(get_modal_user(),'points')) {
+            require_code('activities');
+            syndicate_described_activity(((is_null($recipient_id)) || (is_guest($recipient_id)))?'points:_ACTIVITY_GIVE_POINTS':'points:ACTIVITY_GIVE_POINTS',$reason,integer_format($amount),'','_SEARCH:points:member:' . strval($recipient_id),'','','points',1,null,false,$recipient_id);
+        }
+    }
 }
 
 /**
@@ -155,19 +161,22 @@ function give_points($amount,$recipient_id,$sender_id,$reason,$anonymous=false,$
  */
 function charge_member($member_id,$amount,$reason)
 {
-	require_lang('points');
-	require_code('points');
+    require_lang('points');
+    require_code('points');
 
-	$_before=point_info($member_id);
-	$before=array_key_exists('points_used',$_before)?intval($_before['points_used']):0;
-	$new=$before+$amount;
-	$GLOBALS['FORUM_DRIVER']->set_custom_field($member_id,'points_used',strval($new));
-	add_to_charge_log($member_id,$amount,$reason);
+    $_before = point_info($member_id);
+    $before = array_key_exists('points_used',$_before)?intval($_before['points_used']):0;
+    $new = $before+$amount;
+    $GLOBALS['FORUM_DRIVER']->set_custom_field($member_id,'points_used',strval($new));
+    add_to_charge_log($member_id,$amount,$reason);
 
-	global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
-	if (array_key_exists($member_id,$TOTAL_POINTS_CACHE)) $TOTAL_POINTS_CACHE[$member_id]-=$amount;
-	if ((array_key_exists($member_id,$POINT_INFO_CACHE)) && (array_key_exists('points_used',$POINT_INFO_CACHE[$member_id])))
-		$POINT_INFO_CACHE[$member_id]['points_used']+=$amount;
+    global $TOTAL_POINTS_CACHE,$POINT_INFO_CACHE;
+    if (array_key_exists($member_id,$TOTAL_POINTS_CACHE)) {
+        $TOTAL_POINTS_CACHE[$member_id] -= $amount;
+    }
+    if ((array_key_exists($member_id,$POINT_INFO_CACHE)) && (array_key_exists('points_used',$POINT_INFO_CACHE[$member_id]))) {
+        $POINT_INFO_CACHE[$member_id]['points_used'] += $amount;
+    }
 }
 
 /**
@@ -178,15 +187,16 @@ function charge_member($member_id,$amount,$reason)
  * @param  SHORT_TEXT	The reason for the charging
  * @param  ?TIME			The time this is recorded to have happened (NULL: use current time)
  */
-function add_to_charge_log($member_id,$amount,$reason,$time=NULL)
+function add_to_charge_log($member_id,$amount,$reason,$time = null)
 {
-	if (is_null($time)) $time=time();
-	$map=array(
-		'member_id'=>$member_id,
-		'amount'=>$amount,
-		'date_and_time'=>$time,
-	);
-	$map+=insert_lang_comcode('reason',$reason,4);
-	$GLOBALS['SITE_DB']->query_insert('chargelog',$map);
+    if (is_null($time)) {
+        $time = time();
+    }
+    $map = array(
+        'member_id' => $member_id,
+        'amount' => $amount,
+        'date_and_time' => $time,
+    );
+    $map += insert_lang_comcode('reason',$reason,4);
+    $GLOBALS['SITE_DB']->query_insert('chargelog',$map);
 }
-

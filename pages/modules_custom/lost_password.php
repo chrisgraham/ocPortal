@@ -20,33 +20,32 @@
 
 class Mx_lost_password extends Module_lost_password
 {
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+    public function pre_run()
+    {
+        i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-		$GLOBALS['OUTPUT_STREAMING']=false;
-		parent::pre_run();
-	}
+        $GLOBALS['OUTPUT_STREAMING'] = false;
+        parent::pre_run();
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		$redirect_url=get_long_value('external_lost_password_url');
-		if (!empty($redirect_url))
-		{
-			header('Location: '.$redirect_url);
-			exit();
-		}
+    public function run()
+    {
+        $redirect_url = get_long_value('external_lost_password_url');
+        if (!empty($redirect_url)) {
+            header('Location: ' . $redirect_url);
+            exit();
+        }
 
-		return parent::run();
-	}
+        return parent::run();
+    }
 }

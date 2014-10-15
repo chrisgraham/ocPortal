@@ -25,8 +25,8 @@
  */
 function init__downloads2()
 {
-	global $PT_PAIR_CACHE;
-	$PT_PAIR_CACHE=array();
+    global $PT_PAIR_CACHE;
+    $PT_PAIR_CACHE = array();
 }
 
 /**
@@ -34,198 +34,218 @@ function init__downloads2()
  */
 function dload_script()
 {
-	// Closed site
-	$site_closed=get_option('site_closed');
-	if (($site_closed=='1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN']))
-	{
-		header('Content-Type: text/plain');
-		@exit(get_option('closed'));
-	}
+    // Closed site
+    $site_closed = get_option('site_closed');
+    if (($site_closed == '1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
+        header('Content-Type: text/plain');
+        @exit(get_option('closed'));
+    }
 
-	global $SITE_INFO;
-	if ((!is_guest()) || (!isset($SITE_INFO['any_guest_cached_too'])) || ($SITE_INFO['any_guest_cached_too']=='0'))
-	{
-		if ((get_param('for_session','')!=md5(get_session_id())) && (get_option('anti_leech')=='1') && (ocp_srv('HTTP_REFERER')!=''))
-			warn_exit(do_lang_tempcode('LEECH_BLOCK'));
-	}
+    global $SITE_INFO;
+    if ((!is_guest()) || (!isset($SITE_INFO['any_guest_cached_too'])) || ($SITE_INFO['any_guest_cached_too'] == '0')) {
+        if ((get_param('for_session','') != md5(get_session_id())) && (get_option('anti_leech') == '1') && (ocp_srv('HTTP_REFERER') != '')) {
+            warn_exit(do_lang_tempcode('LEECH_BLOCK'));
+        }
+    }
 
-	require_lang('downloads');
+    require_lang('downloads');
 
-	$id=get_param_integer('id',0);
+    $id = get_param_integer('id',0);
 
-	// Lookup
-	$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$id),'',1);
-	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$myrow=$rows[0];
+    // Lookup
+    $rows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id' => $id),'',1);
+    if (!array_key_exists(0,$rows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $myrow = $rows[0];
 
-	// Permission
-	if (!has_category_access(get_member(),'downloads',strval($myrow['category_id'])))
-		access_denied('CATEGORY_ACCESS');
-	$may_download=has_privilege(get_member(),'download','downloads',array(strval($myrow['category_id'])));
-	if (!$may_download)
-		access_denied('PRIVILEGE','download');
-	if (addon_installed('content_privacy'))
-	{
-		require_code('content_privacy');
-		check_privacy('download',strval($id));
-	}
+    // Permission
+    if (!has_category_access(get_member(),'downloads',strval($myrow['category_id']))) {
+        access_denied('CATEGORY_ACCESS');
+    }
+    $may_download = has_privilege(get_member(),'download','downloads',array(strval($myrow['category_id'])));
+    if (!$may_download) {
+        access_denied('PRIVILEGE','download');
+    }
+    if (addon_installed('content_privacy')) {
+        require_code('content_privacy');
+        check_privacy('download',strval($id));
+    }
 
-	// Cost?
-	$got_before=$GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','member_id',array('member_id'=>get_member(),'id'=>$id));
-	if (addon_installed('points'))
-	{
-		if ($myrow['download_cost']>0)
-		{
-			require_code('points2');
+    // Cost?
+    $got_before = $GLOBALS['SITE_DB']->query_select_value_if_there('download_logging','member_id',array('member_id' => get_member(),'id' => $id));
+    if (addon_installed('points')) {
+        if ($myrow['download_cost']>0) {
+            require_code('points2');
 
-			$member=get_member();
-			if (is_guest($member))
-				access_denied('NOT_AS_GUEST');
+            $member = get_member();
+            if (is_guest($member)) {
+                access_denied('NOT_AS_GUEST');
+            }
 
-			// Check they haven't downloaded this before (they only get charged once - maybe they are resuming)
-			if (is_null($got_before))
-			{
-				$cost=$myrow['download_cost'];
+            // Check they haven't downloaded this before (they only get charged once - maybe they are resuming)
+            if (is_null($got_before)) {
+                $cost = $myrow['download_cost'];
 
-				$member=get_member();
-				if (is_guest($member))
-					access_denied('NOT_AS_GUEST');
+                $member = get_member();
+                if (is_guest($member)) {
+                    access_denied('NOT_AS_GUEST');
+                }
 
-				$dif=$cost-available_points($member);
-				if (($dif>0) && (!has_privilege(get_member(),'have_negative_gift_points')))
-					warn_exit(do_lang_tempcode('LACKING_POINTS',integer_format($dif)));
-				require_code('points2');
-				charge_member($member,$cost,do_lang('DOWNLOADED_THIS',get_translated_text($myrow['name'])));
+                $dif = $cost-available_points($member);
+                if (($dif>0) && (!has_privilege(get_member(),'have_negative_gift_points'))) {
+                    warn_exit(do_lang_tempcode('LACKING_POINTS',integer_format($dif)));
+                }
+                require_code('points2');
+                charge_member($member,$cost,do_lang('DOWNLOADED_THIS',get_translated_text($myrow['name'])));
 
-				if ($myrow['download_submitter_gets_points']==1)
-				{
-					system_gift_transfer(do_lang('THEY_DOWNLOADED_THIS',get_translated_text($myrow['name'])),$cost,$myrow['submitter']);
-				}
-			}
-		}
-	}
+                if ($myrow['download_submitter_gets_points'] == 1) {
+                    system_gift_transfer(do_lang('THEY_DOWNLOADED_THIS',get_translated_text($myrow['name'])),$cost,$myrow['submitter']);
+                }
+            }
+        }
+    }
 
-	// Filename
-	$full=$myrow['url'];
-	$breakdown=@pathinfo($full) OR warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',$full));
-	//$filename=$breakdown['basename'];
-	if (!array_key_exists('extension',$breakdown)) $extension=''; else $extension=strtolower($breakdown['extension']);
-	if (url_is_local($full)) $_full=get_custom_file_base().'/'.rawurldecode(/*filter_naughty*/($full)); else $_full=rawurldecode($full);
+    // Filename
+    $full = $myrow['url'];
+    $breakdown = @pathinfo($full) or warn_exit(do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',$full));
+    //$filename=$breakdown['basename'];
+    if (!array_key_exists('extension',$breakdown)) {
+        $extension = '';
+    } else {
+        $extension = strtolower($breakdown['extension']);
+    }
+    if (url_is_local($full)) {
+        $_full = get_custom_file_base() . '/' . rawurldecode(/*filter_naughty*/($full));
+    } else {
+        $_full = rawurldecode($full);
+    }
 
-	// Send header
-	if ((strpos($myrow['original_filename'],"\n")!==false) || (strpos($myrow['original_filename'],"\r")!==false))
-		log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-	if (get_option('immediate_downloads')=='1')
-	{
-		require_code('mime_types');
-		header('Content-Type: '.get_mime_type(get_file_extension($myrow['original_filename']),false).'; authoritative=true;');
-		header('Content-Disposition: inline; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))).'"');
-	} else
-	{
-		header('Content-Type: application/octet-stream'.'; authoritative=true;');
-		header('Content-Disposition: attachment; filename="'.str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))).'"');
-	}
+    // Send header
+    if ((strpos($myrow['original_filename'],"\n") !== false) || (strpos($myrow['original_filename'],"\r") !== false)) {
+        log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+    }
+    if (get_option('immediate_downloads') == '1') {
+        require_code('mime_types');
+        header('Content-Type: ' . get_mime_type(get_file_extension($myrow['original_filename']),false) . '; authoritative=true;');
+        header('Content-Disposition: inline; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))) . '"');
+    } else {
+        header('Content-Type: application/octet-stream' . '; authoritative=true;');
+        header('Content-Disposition: attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($myrow['original_filename']))) . '"');
+    }
 
-	// Is it non-local? If so, redirect
-	if ((!url_is_local($full)) || (!file_exists(get_file_base().'/'.rawurldecode(filter_naughty($full)))))
-	{
-		if (url_is_local($full)) $full=get_custom_base_url().'/'.$full;
-		if ((strpos($full,"\n")!==false) || (strpos($full,"\r")!==false))
-			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$full);
-		log_download($id,0,!is_null($got_before)); // Bandwidth used is 0 for an external download
-		return;
-	}
+    // Is it non-local? If so, redirect
+    if ((!url_is_local($full)) || (!file_exists(get_file_base() . '/' . rawurldecode(filter_naughty($full))))) {
+        if (url_is_local($full)) {
+            $full = get_custom_base_url() . '/' . $full;
+        }
+        if ((strpos($full,"\n") !== false) || (strpos($full,"\r") !== false)) {
+            log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+        }
+        header('Location: ' . $full);
+        log_download($id,0,!is_null($got_before)); // Bandwidth used is 0 for an external download
+        return;
+    }
 
-	// Some basic security: don't fopen php files
-	if ($extension=='php') log_hack_attack_and_exit('PHP_DOWNLOAD_INNOCENT',integer_format($id));
+    // Some basic security: don't fopen php files
+    if ($extension == 'php') {
+        log_hack_attack_and_exit('PHP_DOWNLOAD_INNOCENT',integer_format($id));
+    }
 
-	// Size, bandwidth
-	$size=filesize($_full);
-	if (is_null($got_before))
-	{
-		$bandwidth=$GLOBALS['SITE_DB']->query_value_if_there('SELECT SUM(file_size) AS answer FROM '.get_table_prefix().'download_logging l LEFT JOIN '.get_table_prefix().'download_downloads d ON l.id=d.id WHERE date_and_time>'.strval(time()-24*60*60*32).' AND date_and_time<='.strval(time()));
-		if ((($bandwidth+floatval($size))>(floatval(get_option('maximum_download'))*1024*1024*1024)) && (!has_privilege(get_member(),'bypass_bandwidth_restriction')))
-			warn_exit(do_lang_tempcode('TOO_MUCH_DOWNLOAD'));
+    // Size, bandwidth
+    $size = filesize($_full);
+    if (is_null($got_before)) {
+        $bandwidth = $GLOBALS['SITE_DB']->query_value_if_there('SELECT SUM(file_size) AS answer FROM ' . get_table_prefix() . 'download_logging l LEFT JOIN ' . get_table_prefix() . 'download_downloads d ON l.id=d.id WHERE date_and_time>' . strval(time()-24*60*60*32) . ' AND date_and_time<=' . strval(time()));
+        if ((($bandwidth+floatval($size))>(floatval(get_option('maximum_download'))*1024*1024*1024)) && (!has_privilege(get_member(),'bypass_bandwidth_restriction'))) {
+            warn_exit(do_lang_tempcode('TOO_MUCH_DOWNLOAD'));
+        }
 
-		require_code('files2');
-		check_shared_bandwidth_usage($size);
-	}
+        require_code('files2');
+        check_shared_bandwidth_usage($size);
+    }
 
-	header('Accept-Ranges: bytes');
+    header('Accept-Ranges: bytes');
 
-	// Caching
-	header('Pragma: private');
-	header('Cache-Control: private');
-	header('Expires: '.gmdate('D, d M Y H:i:s',time()+60*60*24*365).' GMT');
-	$time=is_null($myrow['edit_date'])?$myrow['add_date']:$myrow['edit_date'];
-	$time=max($time,filemtime($_full));
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s',$time).' GMT');
+    // Caching
+    header('Pragma: private');
+    header('Cache-Control: private');
+    header('Expires: ' . gmdate('D, d M Y H:i:s',time()+60*60*24*365) . ' GMT');
+    $time = is_null($myrow['edit_date'])?$myrow['add_date']:$myrow['edit_date'];
+    $time = max($time,filemtime($_full));
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s',$time) . ' GMT');
 
-	// Default to no resume
-	$from=0;
-	$new_length=$size;
+    // Default to no resume
+    $from = 0;
+    $new_length = $size;
 
-	@ini_set('zlib.output_compression','Off');
+    @ini_set('zlib.output_compression','Off');
 
-	// They're trying to resume (so update our range)
-	$httprange=ocp_srv('HTTP_RANGE');
-	if (strlen($httprange)>0)
-	{
-		$_range=explode('=',ocp_srv('HTTP_RANGE'));
-		if (count($_range)==2)
-		{
-			if (strpos($_range[0],'-')===false) $_range=array_reverse($_range);
-			$range=$_range[0];
-			if (substr($range,0,1)=='-') $range=strval($size-intval(substr($range,1))-1).$range;
-			if (substr($range,-1,1)=='-') $range.=strval($size-1);
-			$bits=explode('-',$range);
-			if (count($bits)==2)
-			{
-				list($from,$to)=array_map('intval',$bits);
-				if (($to-$from!=0) || ($from==0)) // Workaround to weird behaviour on Chrome
-				{
-					$new_length=$to-$from+1;
+    // They're trying to resume (so update our range)
+    $httprange = ocp_srv('HTTP_RANGE');
+    if (strlen($httprange)>0) {
+        $_range = explode('=',ocp_srv('HTTP_RANGE'));
+        if (count($_range) == 2) {
+            if (strpos($_range[0],'-') === false) {
+                $_range = array_reverse($_range);
+            }
+            $range = $_range[0];
+            if (substr($range,0,1) == '-') {
+                $range = strval($size-intval(substr($range,1))-1) . $range;
+            }
+            if (substr($range,-1,1) == '-') {
+                $range .= strval($size-1);
+            }
+            $bits = explode('-',$range);
+            if (count($bits) == 2) {
+                list($from,$to) = array_map('intval',$bits);
+                if (($to-$from != 0) || ($from == 0)) { // Workaround to weird behaviour on Chrome
+                    $new_length = $to-$from+1;
 
-					header('HTTP/1.1 206 Partial Content');
-					header('Content-Range: bytes '.$range.'/'.strval($size));
-				} else
-				{
-					$from=0;
-				}
-			}
-		}
-	}
-	header('Content-Length: '.strval($new_length));
-	if (function_exists('set_time_limit')) @set_time_limit(0);
-	error_reporting(0);
+                    header('HTTP/1.1 206 Partial Content');
+                    header('Content-Range: bytes ' . $range . '/' . strval($size));
+                } else {
+                    $from = 0;
+                }
+            }
+        }
+    }
+    header('Content-Length: ' . strval($new_length));
+    if (function_exists('set_time_limit')) {
+        @set_time_limit(0);
+    }
+    error_reporting(0);
 
-	if (ocp_srv('REQUEST_METHOD')=='HEAD') return;
+    if (ocp_srv('REQUEST_METHOD') == 'HEAD') {
+        return;
+    }
 
-	if ($from==0) log_download($id,$size,!is_null($got_before));
+    if ($from == 0) {
+        log_download($id,$size,!is_null($got_before));
+    }
 
-	// Send actual data
-	$myfile=fopen($_full,'rb');
-	fseek($myfile,$from);
-	/*if ($size==$new_length)		Uses a lot of memory :S
+    // Send actual data
+    $myfile = fopen($_full,'rb');
+    fseek($myfile,$from);
+    /*if ($size==$new_length)		Uses a lot of memory :S
 	{
 		fpassthru($myfile);
 	} else*/
-	{
-		$i=0;
-		flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions
-		while ($i<$new_length)
-		{
-			$content=fread($myfile,min($new_length-$i,1048576));
-			echo $content;
-			$len=strlen($content);
-			if ($len==0) break;
-			$i+=$len;
-		}
-		fclose($myfile);
-	}
+    {
+        $i = 0;
+        flush(); // Works around weird PHP bug that sends data before headers, on some PHP versions
+        while ($i<$new_length) {
+            $content = fread($myfile,min($new_length-$i,1048576));
+            echo $content;
+            $len = strlen($content);
+            if ($len == 0) {
+                break;
+            }
+            $i += $len;
+        }
+        fclose($myfile);
+    }
 
-	/*
+    /*
 
 	Security note... at the download adding/editing stage, we ensured that
 	only files accessible to the web server (in raw form) could end up in
@@ -250,51 +270,51 @@ function dload_script()
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit) (blank: implicit)
  * @return AUTO_LINK		The ID of the newly added download category
  */
-function add_download_category($category,$parent_id,$description,$notes,$rep_image='',$id=NULL,$add_time=NULL,$meta_keywords='',$meta_description='')
+function add_download_category($category,$parent_id,$description,$notes,$rep_image = '',$id = null,$add_time = null,$meta_keywords = '',$meta_description = '')
 {
-	require_code('global4');
-	prevent_double_submit('ADD_DOWNLOAD_CATEGORY',NULL,$category);
+    require_code('global4');
+    prevent_double_submit('ADD_DOWNLOAD_CATEGORY',null,$category);
 
-	if (is_null($add_time)) $add_time=time();
+    if (is_null($add_time)) {
+        $add_time = time();
+    }
 
-	$map=array(
-		'rep_image'=>$rep_image,
-		'add_date'=>$add_time,
-		'notes'=>$notes,
-		'parent_id'=>$parent_id,
-	);
-	$map+=insert_lang('category',$category,2);
-	$map+=insert_lang_comcode('description',$description,2);
-	if (!is_null($id)) $map['id']=$id;
-	$id=$GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
+    $map = array(
+        'rep_image' => $rep_image,
+        'add_date' => $add_time,
+        'notes' => $notes,
+        'parent_id' => $parent_id,
+    );
+    $map += insert_lang('category',$category,2);
+    $map += insert_lang_comcode('description',$description,2);
+    if (!is_null($id)) {
+        $map['id'] = $id;
+    }
+    $id = $GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
 
-	log_it('ADD_DOWNLOAD_CATEGORY',strval($id),$category);
+    log_it('ADD_DOWNLOAD_CATEGORY',strval($id),$category);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('download_category',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('download_category',strval($id),null,null,true);
+    }
 
-	require_code('seo2');
-	if (($meta_keywords=='') && ($meta_description==''))
-	{
-		seo_meta_set_for_implicit('downloads_category',strval($id),array($category,$description),$description);
-	} else
-	{
-		seo_meta_set_for_explicit('downloads_category',strval($id),$meta_keywords,$meta_description);
-	}
+    require_code('seo2');
+    if (($meta_keywords == '') && ($meta_description == '')) {
+        seo_meta_set_for_implicit('downloads_category',strval($id),array($category,$description),$description);
+    } else {
+        seo_meta_set_for_explicit('downloads_category',strval($id),$meta_keywords,$meta_description);
+    }
 
-	if (!is_null($parent_id))
-	{
-		require_code('notifications2');
-		copy_notifications_to_new_child('download',strval($parent_id),strval($id));
-	}
+    if (!is_null($parent_id)) {
+        require_code('notifications2');
+        copy_notifications_to_new_child('download',strval($parent_id),strval($id));
+    }
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('download_category',strval($id));
+    require_code('member_mentions');
+    dispatch_member_mention_notifications('download_category',strval($id));
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -310,49 +330,51 @@ function add_download_category($category,$parent_id,$description,$notes,$rep_ima
  * @param  ?LONG_TEXT	Meta description for this resource (NULL: do not edit)
  * @param  ?TIME			Add time (NULL: do not change)
  */
-function edit_download_category($category_id,$category,$parent_id,$description,$notes,$rep_image,$meta_keywords,$meta_description,$add_time=NULL)
+function edit_download_category($category_id,$category,$parent_id,$description,$notes,$rep_image,$meta_keywords,$meta_description,$add_time = null)
 {
-	$under_category_id=$parent_id;
-	while ((!is_null($under_category_id)) && ($under_category_id!=INTEGER_MAGIC_NULL))
-	{
-		if ($category_id==$under_category_id) warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
-		$under_category_id=$GLOBALS['SITE_DB']->query_select_value('download_categories','parent_id',array('id'=>$under_category_id));
-	}
+    $under_category_id = $parent_id;
+    while ((!is_null($under_category_id)) && ($under_category_id != INTEGER_MAGIC_NULL)) {
+        if ($category_id == $under_category_id) {
+            warn_exit(do_lang_tempcode('OWN_PARENT_ERROR'));
+        }
+        $under_category_id = $GLOBALS['SITE_DB']->query_select_value('download_categories','parent_id',array('id' => $under_category_id));
+    }
 
-	require_code('urls2');
-	suggest_new_idmoniker_for('downloads','misc',strval($category_id),'',$category);
+    require_code('urls2');
+    suggest_new_idmoniker_for('downloads','misc',strval($category_id),'',$category);
 
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('category','description'),array('id'=>$category_id),'',1);
-	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_category=$rows[0]['category'];
-	$_description=$rows[0]['description'];
+    $rows = $GLOBALS['SITE_DB']->query_select('download_categories',array('category','description'),array('id' => $category_id),'',1);
+    if (!array_key_exists(0,$rows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $_category = $rows[0]['category'];
+    $_description = $rows[0]['description'];
 
-	$update_map=array(
-		'notes'=>$notes,
-		'parent_id'=>$parent_id,
-	);
-	$update_map+=lang_remap('category',$_category,$category);
-	$update_map+=lang_remap_comcode('description',$_description,$description);
-	if (!is_null($rep_image))
-	{
-		$update_map['rep_image']=$rep_image;
-		require_code('files2');
-		delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id,$rep_image);
-	}
-	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
-	$GLOBALS['SITE_DB']->query_update('download_categories',$update_map,array('id'=>$category_id),'',1);
+    $update_map = array(
+        'notes' => $notes,
+        'parent_id' => $parent_id,
+    );
+    $update_map += lang_remap('category',$_category,$category);
+    $update_map += lang_remap_comcode('description',$_description,$description);
+    if (!is_null($rep_image)) {
+        $update_map['rep_image'] = $rep_image;
+        require_code('files2');
+        delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id,$rep_image);
+    }
+    if (!is_null($add_time)) {
+        $update_map['add_date'] = $add_time;
+    }
+    $GLOBALS['SITE_DB']->query_update('download_categories',$update_map,array('id' => $category_id),'',1);
 
-	require_code('seo2');
-	seo_meta_set_for_explicit('downloads_category',strval($category_id),$meta_keywords,$meta_description);
+    require_code('seo2');
+    seo_meta_set_for_explicit('downloads_category',strval($category_id),$meta_keywords,$meta_description);
 
-	log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
+    log_it('EDIT_DOWNLOAD_CATEGORY',strval($category_id),$category);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('download_category',strval($category_id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('download_category',strval($category_id));
+    }
 }
 
 /**
@@ -362,42 +384,44 @@ function edit_download_category($category_id,$category,$parent_id,$description,$
  */
 function delete_download_category($category_id)
 {
-	$root_category=$GLOBALS['SITE_DB']->query_select_value('download_categories','MIN(id)');
-	if ($category_id==$root_category) warn_exit(do_lang_tempcode('NO_DELETE_ROOT'));
+    $root_category = $GLOBALS['SITE_DB']->query_select_value('download_categories','MIN(id)');
+    if ($category_id == $root_category) {
+        warn_exit(do_lang_tempcode('NO_DELETE_ROOT'));
+    }
 
-	$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('category','description','parent_id'),array('id'=>$category_id),'',1);
-	if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$category=$rows[0]['category'];
-	$description=$rows[0]['description'];
+    $rows = $GLOBALS['SITE_DB']->query_select('download_categories',array('category','description','parent_id'),array('id' => $category_id),'',1);
+    if (!array_key_exists(0,$rows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $category = $rows[0]['category'];
+    $description = $rows[0]['description'];
 
-	require_code('files2');
-	delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id);
+    require_code('files2');
+    delete_upload('uploads/repimages','download_categories','rep_image','id',$category_id);
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('download_category',strval($category_id),'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('download_category',strval($category_id),'');
+    }
 
-	$GLOBALS['SITE_DB']->query_delete('download_categories',array('id'=>$category_id),'',1);
-	$GLOBALS['SITE_DB']->query_update('download_downloads',array('category_id'=>$rows[0]['parent_id']),array('category_id'=>$category_id));
-	$GLOBALS['SITE_DB']->query_update('download_categories',array('parent_id'=>$rows[0]['parent_id']),array('parent_id'=>$category_id));
+    $GLOBALS['SITE_DB']->query_delete('download_categories',array('id' => $category_id),'',1);
+    $GLOBALS['SITE_DB']->query_update('download_downloads',array('category_id' => $rows[0]['parent_id']),array('category_id' => $category_id));
+    $GLOBALS['SITE_DB']->query_update('download_categories',array('parent_id' => $rows[0]['parent_id']),array('parent_id' => $category_id));
 
-	delete_lang($category);
-	delete_lang($description);
+    delete_lang($category);
+    delete_lang($description);
 
-	require_code('seo2');
-	seo_meta_erase_storage('downloads_category',strval($category_id));
+    require_code('seo2');
+    seo_meta_erase_storage('downloads_category',strval($category_id));
 
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
-	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'downloads','category_name'=>strval($category_id)));
+    $GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($category_id)));
+    $GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name' => 'downloads','category_name' => strval($category_id)));
 
-	log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
+    log_it('DELETE_DOWNLOAD_CATEGORY',strval($category_id),get_translated_text($category));
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('download_category',strval($category_id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('download_category',strval($category_id));
+    }
 }
 
 /**
@@ -409,285 +433,303 @@ function delete_download_category($category_id)
  * @param  boolean			Whether a direct file path was given instead of a URL
  * @return LONG_TEXT			The data-mash
  */
-function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
+function create_data_mash($url,$data = null,$extension = null,$direct_path = false)
 {
-	if (get_option('dload_search_index')=='0') return '';
+    if (get_option('dload_search_index') == '0') {
+        return '';
+    }
 
-	if (running_script('stress_test_loader')) return '';
+    if (running_script('stress_test_loader')) {
+        return '';
+    }
 
-	if ((function_exists('memory_get_usage')) && (ini_get('memory_usage')=='8M'))
-		return ''; // Some cowardice... don't want to tempt fate
+    if ((function_exists('memory_get_usage')) && (ini_get('memory_usage') == '8M')) {
+        return '';
+    } // Some cowardice... don't want to tempt fate
 
-	if (is_null($extension))
-		$extension=get_file_extension($url);
+    if (is_null($extension)) {
+        $extension = get_file_extension($url);
+    }
 
-	$tmp_file=NULL;
+    $tmp_file = null;
 
-	if (is_null($data))
-	{
-		if (($direct_path) || (url_is_local($url)))
-		{
-			$actual_path=$direct_path?$url:get_custom_file_base().'/'.rawurldecode($url);
+    if (is_null($data)) {
+        if (($direct_path) || (url_is_local($url))) {
+            $actual_path = $direct_path?$url:get_custom_file_base() . '/' . rawurldecode($url);
 
-			if (file_exists($actual_path))
-			{
-				switch ($extension)
-				{
-					case 'zip':
-					case 'odt':
-					case 'odp':
-					case 'docx':
-					case 'tar':
-					case 'gz':
-						if (filesize($actual_path)>1024*1024*3) return '';
-						break;
-				}
+            if (file_exists($actual_path)) {
+                switch ($extension) {
+                    case 'zip':
+                    case 'odt':
+                    case 'odp':
+                    case 'docx':
+                    case 'tar':
+                    case 'gz':
+                        if (filesize($actual_path)>1024*1024*3) {
+                            return '';
+                        }
+                        break;
+                }
 
-				$tmp_file=$actual_path;
-				if (filesize($actual_path)>1024*1024*3)
-				{
-					$myfile=fopen($actual_path,'rb');
-					$data='';
-					for ($i=0;$i<384;$i++)
-						$data.=fread($myfile,8192);
-					fclose($myfile);
-				} else
-				{
-					$data=file_get_contents($actual_path);
-				}
-			} else
-			{
-				$data='';
-			}
-		} else
-		{
-			switch ($extension)
-			{
-				case 'txt':
-				case '1st':
-				case 'rtf':
-				case 'pdf':
-				case 'htm':
-				case 'html':
-				case 'xml':
-				case 'doc':
-				case 'xls':
-					break; // Continue through to download good stuff
+                $tmp_file = $actual_path;
+                if (filesize($actual_path)>1024*1024*3) {
+                    $myfile = fopen($actual_path,'rb');
+                    $data = '';
+                    for ($i = 0;$i<384;$i++) {
+                        $data .= fread($myfile,8192);
+                    }
+                    fclose($myfile);
+                } else {
+                    $data = file_get_contents($actual_path);
+                }
+            } else {
+                $data = '';
+            }
+        } else {
+            switch ($extension) {
+                case 'txt':
+                case '1st':
+                case 'rtf':
+                case 'pdf':
+                case 'htm':
+                case 'html':
+                case 'xml':
+                case 'doc':
+                case 'xls':
+                    break; // Continue through to download good stuff
 
-				default:
-					return ''; // Don't download, it's not worth it
-					break;
-			}
+                default:
+                    return ''; // Don't download, it's not worth it
+                    break;
+            }
 
-			$data=http_download_file($url,3*1024*1024,false); // 3MB is enough
-			if (is_null($data)) return '';
-		}
-	}
+            $data = http_download_file($url,3*1024*1024,false); // 3MB is enough
+            if (is_null($data)) {
+                return '';
+            }
+        }
+    }
 
-	$mash='';
+    $mash = '';
 
-	switch ($extension)
-	{
-		case 'zip':
-		case 'odt':
-		case 'odp':
-		case 'docx':
-			require_code('m_zip');
-			$tmp_file=ocp_tempnam('dcdm');
-			$myfile2=fopen($tmp_file,'wb');
-			fwrite($myfile2,$data);
-			fclose($myfile2);
-			$myfile_zip=@zip_open($tmp_file);
-			if (!is_integer($myfile_zip))
-			{
-				while (($entry=(@zip_read($myfile_zip)))!==false) // Temporary file may be cleaned up before this can complete, hence @
-				{
-					$entry_name=@zip_entry_name($entry);
-					$mash.=' '.$entry_name;
-					if (substr($entry_name,-1)!='/')
-					{
-						$_entry=@zip_entry_open($myfile_zip,$entry);
-						if ($_entry!==false)
-						{
-							$file_data='';
-							while (true)
-							{
-								$it=@zip_entry_read($entry,1024);
-								if (($it===false) || ($it=='')) break;
-								$file_data.=$it;
-								if (strlen($file_data)>=3*1024*1024) break; // 3MB is enough
-							}
-							@zip_entry_close($entry);
-							$mash.=' '.create_data_mash($entry_name,$file_data);
-							if (strlen($mash)>=3*1024*1024) break; // 3MB is enough
-						}
-					}
-				}
-				@zip_close($myfile_zip);
-			}
-			@unlink($tmp_file);
-			break;
-		case 'tar':
-			require_code('tar');
-			$tmp_file=ocp_tempnam('dcdm');
-			$myfile=fopen($tmp_file,'wb');
-			fwrite($myfile,$data);
-			fclose($myfile);
-			$myfile_tar=tar_open($tmp_file,'rb');
-			if ($myfile_tar!==false)
-			{
-				$directory=tar_get_directory($myfile_tar);
-				foreach ($directory as $entry)
-				{
-					$entry_name=$entry['path'];
-					$mash.=' '.$entry_name;
-					if ($entry['size']>=3*1024*1024) continue; // 3MB is enough
-					$_entrya=tar_get_file($myfile_tar,$entry['path']);
-					if (!is_null($_entrya))
-					{
-						$mash.=' '.create_data_mash($entry_name,$_entrya['data']);
-						if (strlen($mash)>=3*1024*1024) break; // 3MB is enough
-					}
-				}
-				tar_close($myfile_tar);
-			}
-			@unlink($tmp_file);
-			break;
-		case 'gz':
-			if (function_exists('gzopen'))
-			{
-				if (function_exists('gzeof'))
-				{
-					if (function_exists('gzread'))
-					{
-						$tmp_file=ocp_tempnam('dcdm');
-						$myfile=fopen($tmp_file,'wb');
-						fwrite($myfile,$data);
-						fclose($myfile);
-						$myfile=gzopen($tmp_file,'rb');
-						if ($myfile!==false)
-						{
-							$file_data='';
-							while (!gzeof($myfile))
-							{
-								$it=gzread($myfile,1024);
-								$file_data.=$it;
-								if (strlen($file_data)>=3*1024*1024) break; // 3MB is enough
-							}
-							$mash=' '.create_data_mash(preg_replace('#\.gz#i','',$url),$file_data);
-						}
-						@unlink($tmp_file);
-					}
-				}
-			}
-			break;
-		case 'txt':
-		case '1st':
-			$mash.=$data;
-			break;
-		case 'rtf':
-			$len=strlen($data);
-			$skipping_section_depth=0;
-			$escape=false;
-			for ($i=0;$i<$len;$i++)
-			{
-				$byte=$data[$i];
-				if ((!$escape) && ($byte=="\\"))
-				{
-					$escape=true;
-				}
-				elseif ((!$escape) && ($byte=='{'))
-				{
-					if ($skipping_section_depth!=0) $skipping_section_depth++;
-				}
-				elseif ((!$escape) && ($byte=='}'))
-				{
-					if ($skipping_section_depth!=0) $skipping_section_depth--;
-				}
-				elseif (($escape) && ($byte!='{') && ($byte!="\\") && ($byte!='}'))
-				{
-					$end_pos_1=strpos($data,"\\",$i+1);
-					if ($end_pos_1===false) $end_pos_1=$len;
-					$end_pos_2=strpos($data,"\n",$i+1);
-					if ($end_pos_2===false) $end_pos_2=$len;
-					$end_pos_3=strpos($data,' ',$i+1);
-					if ($end_pos_3===false) $end_pos_3=$len;
-					$end_pos_4=strpos($data,"\t",$i+1);
-					if ($end_pos_4===false) $end_pos_4=$len;
-					$end_pos_5=strpos($data,'{',$i+1);
-					if ($end_pos_5===false) $end_pos_5=$len;
-					$end_pos_6=strpos($data,'}',$i+1);
-					if ($end_pos_6===false) $end_pos_6=$len;
-					$end_pos=min($end_pos_1,$end_pos_2,$end_pos_3,$end_pos_4,$end_pos_5,$end_pos_6);
-					$tag=substr($data,$i,$end_pos-$i);
-					$tag=preg_replace('#[\-0-9]*#','',$tag);
-					if (($skipping_section_depth==0) && (($tag=='pgdsc') || ($tag=='comment') || ($tag=='object') || ($tag=='pict') || ($tag=='stylesheet') || ($tag=='fonttbl')))
-					{
-						$skipping_section_depth=1;
-					}
-					if ($tag=='par') $mash.="\n";
-					$i=$end_pos-1;
-					$escape=false;
-				}
-				elseif ($skipping_section_depth==0)
-				{
-					if (($byte!="\r") && ($byte!="\n")) $mash.=$byte;
-					$escape=false;
-				} else $escape=false;
-			}
-			break;
-		case 'pdf':
-			if ((ini_get('safe_mode')!='1') && (strpos(@ini_get('disable_functions'),'shell_exec')===false) && (!is_null($tmp_file)))
-			{
-				$enc=(get_charset()=='utf-8')?' -enc UTF-8':'';
-				$path='pdftohtml -i -noframes -stdout -hidden'.$enc.' -q -xml '.escapeshellarg_wrap($tmp_file);
-				if (strpos(strtolower(PHP_OS),'win')!==false)
-					if (file_exists(get_file_base().'/data_custom/pdftohtml.exe')) $path='"'.get_file_base().DIRECTORY_SEPARATOR.'data_custom'.DIRECTORY_SEPARATOR.'"'.$path;
-				$tmp_file_2=ocp_tempnam('pdfxml');
-				@shell_exec($path.' > '.$tmp_file_2);
-				$mash=create_data_mash($tmp_file_2,NULL,'xml',true);
-				@unlink($tmp_file_2);
-			}
-			break;
-		case 'htm':
-		case 'html':
-			$head_patterns=array('#<\s*script.*<\s*/\s*script\s*>#misU','#<\s*link[^<>]*>#misU','#<\s*style.*<\s*/\s*style\s*>#misU');
-			foreach ($head_patterns as $pattern)
-			{
-				$data=preg_replace($pattern,'',$data);
-			}
-		case 'xml':
-			$mash=str_replace('&apos;','\'',str_replace(' false ',' ',str_replace(' true ',' ',@html_entity_decode(preg_replace('#\<[^\<\>]*\>#',' ',$data),ENT_QUOTES,get_charset()))));
-			$mash=preg_replace('#Error : Bad \w+#','',$mash);
-			break;
-		case 'xls':
-		case 'doc':
-		case 'ppt':
-		case 'hlp':
+    switch ($extension) {
+        case 'zip':
+        case 'odt':
+        case 'odp':
+        case 'docx':
+            require_code('m_zip');
+            $tmp_file = ocp_tempnam('dcdm');
+            $myfile2 = fopen($tmp_file,'wb');
+            fwrite($myfile2,$data);
+            fclose($myfile2);
+            $myfile_zip = @zip_open($tmp_file);
+            if (!is_integer($myfile_zip)) {
+                while (($entry = (@zip_read($myfile_zip))) !== false) { // Temporary file may be cleaned up before this can complete, hence @
+                    $entry_name = @zip_entry_name($entry);
+                    $mash .= ' ' . $entry_name;
+                    if (substr($entry_name,-1) != '/') {
+                        $_entry = @zip_entry_open($myfile_zip,$entry);
+                        if ($_entry !== false) {
+                            $file_data = '';
+                            while (true) {
+                                $it = @zip_entry_read($entry,1024);
+                                if (($it === false) || ($it == '')) {
+                                    break;
+                                }
+                                $file_data .= $it;
+                                if (strlen($file_data) >= 3*1024*1024) {
+                                    break;
+                                } // 3MB is enough
+                            }
+                            @zip_entry_close($entry);
+                            $mash .= ' ' . create_data_mash($entry_name,$file_data);
+                            if (strlen($mash) >= 3*1024*1024) {
+                                break;
+                            } // 3MB is enough
+                        }
+                    }
+                }
+                @zip_close($myfile_zip);
+            }
+            @unlink($tmp_file);
+            break;
+        case 'tar':
+            require_code('tar');
+            $tmp_file = ocp_tempnam('dcdm');
+            $myfile = fopen($tmp_file,'wb');
+            fwrite($myfile,$data);
+            fclose($myfile);
+            $myfile_tar = tar_open($tmp_file,'rb');
+            if ($myfile_tar !== false) {
+                $directory = tar_get_directory($myfile_tar);
+                foreach ($directory as $entry) {
+                    $entry_name = $entry['path'];
+                    $mash .= ' ' . $entry_name;
+                    if ($entry['size'] >= 3*1024*1024) {
+                        continue;
+                    } // 3MB is enough
+                    $_entrya = tar_get_file($myfile_tar,$entry['path']);
+                    if (!is_null($_entrya)) {
+                        $mash .= ' ' . create_data_mash($entry_name,$_entrya['data']);
+                        if (strlen($mash) >= 3*1024*1024) {
+                            break;
+                        } // 3MB is enough
+                    }
+                }
+                tar_close($myfile_tar);
+            }
+            @unlink($tmp_file);
+            break;
+        case 'gz':
+            if (function_exists('gzopen')) {
+                if (function_exists('gzeof')) {
+                    if (function_exists('gzread')) {
+                        $tmp_file = ocp_tempnam('dcdm');
+                        $myfile = fopen($tmp_file,'wb');
+                        fwrite($myfile,$data);
+                        fclose($myfile);
+                        $myfile = gzopen($tmp_file,'rb');
+                        if ($myfile !== false) {
+                            $file_data = '';
+                            while (!gzeof($myfile)) {
+                                $it = gzread($myfile,1024);
+                                $file_data .= $it;
+                                if (strlen($file_data) >= 3*1024*1024) {
+                                    break;
+                                } // 3MB is enough
+                            }
+                            $mash = ' ' . create_data_mash(preg_replace('#\.gz#i','',$url),$file_data);
+                        }
+                        @unlink($tmp_file);
+                    }
+                }
+            }
+            break;
+        case 'txt':
+        case '1st':
+            $mash .= $data;
+            break;
+        case 'rtf':
+            $len = strlen($data);
+            $skipping_section_depth = 0;
+            $escape = false;
+            for ($i = 0;$i<$len;$i++) {
+                $byte = $data[$i];
+                if ((!$escape) && ($byte == "\\")) {
+                    $escape = true;
+                } elseif ((!$escape) && ($byte == '{')) {
+                    if ($skipping_section_depth != 0) {
+                        $skipping_section_depth++;
+                    }
+                } elseif ((!$escape) && ($byte == '}')) {
+                    if ($skipping_section_depth != 0) {
+                        $skipping_section_depth--;
+                    }
+                } elseif (($escape) && ($byte != '{') && ($byte != "\\") && ($byte != '}')) {
+                    $end_pos_1 = strpos($data,"\\",$i+1);
+                    if ($end_pos_1 === false) {
+                        $end_pos_1 = $len;
+                    }
+                    $end_pos_2 = strpos($data,"\n",$i+1);
+                    if ($end_pos_2 === false) {
+                        $end_pos_2 = $len;
+                    }
+                    $end_pos_3 = strpos($data,' ',$i+1);
+                    if ($end_pos_3 === false) {
+                        $end_pos_3 = $len;
+                    }
+                    $end_pos_4 = strpos($data,"\t",$i+1);
+                    if ($end_pos_4 === false) {
+                        $end_pos_4 = $len;
+                    }
+                    $end_pos_5 = strpos($data,'{',$i+1);
+                    if ($end_pos_5 === false) {
+                        $end_pos_5 = $len;
+                    }
+                    $end_pos_6 = strpos($data,'}',$i+1);
+                    if ($end_pos_6 === false) {
+                        $end_pos_6 = $len;
+                    }
+                    $end_pos = min($end_pos_1,$end_pos_2,$end_pos_3,$end_pos_4,$end_pos_5,$end_pos_6);
+                    $tag = substr($data,$i,$end_pos-$i);
+                    $tag = preg_replace('#[\-0-9]*#','',$tag);
+                    if (($skipping_section_depth == 0) && (($tag == 'pgdsc') || ($tag == 'comment') || ($tag == 'object') || ($tag == 'pict') || ($tag == 'stylesheet') || ($tag == 'fonttbl'))) {
+                        $skipping_section_depth = 1;
+                    }
+                    if ($tag == 'par') {
+                        $mash .= "\n";
+                    }
+                    $i = $end_pos-1;
+                    $escape = false;
+                } elseif ($skipping_section_depth == 0) {
+                    if (($byte != "\r") && ($byte != "\n")) {
+                        $mash .= $byte;
+                    }
+                    $escape = false;
+                } else {
+                    $escape = false;
+                }
+            }
+            break;
+        case 'pdf':
+            if ((ini_get('safe_mode') != '1') && (strpos(@ini_get('disable_functions'),'shell_exec') === false) && (!is_null($tmp_file))) {
+                $enc = (get_charset() == 'utf-8')?' -enc UTF-8':'';
+                $path = 'pdftohtml -i -noframes -stdout -hidden' . $enc . ' -q -xml ' . escapeshellarg_wrap($tmp_file);
+                if (strpos(strtolower(PHP_OS),'win') !== false) {
+                    if (file_exists(get_file_base() . '/data_custom/pdftohtml.exe')) {
+                        $path = '"' . get_file_base() . DIRECTORY_SEPARATOR . 'data_custom' . DIRECTORY_SEPARATOR . '"' . $path;
+                    }
+                }
+                $tmp_file_2 = ocp_tempnam('pdfxml');
+                @shell_exec($path . ' > ' . $tmp_file_2);
+                $mash = create_data_mash($tmp_file_2,null,'xml',true);
+                @unlink($tmp_file_2);
+            }
+            break;
+        case 'htm':
+        case 'html':
+            $head_patterns = array('#<\s*script.*<\s*/\s*script\s*>#misU','#<\s*link[^<>]*>#misU','#<\s*style.*<\s*/\s*style\s*>#misU');
+            foreach ($head_patterns as $pattern) {
+                $data = preg_replace($pattern,'',$data);
+            }
+        case 'xml':
+            $mash = str_replace('&apos;','\'',str_replace(' false ',' ',str_replace(' true ',' ',@html_entity_decode(preg_replace('#\<[^\<\>]*\>#',' ',$data),ENT_QUOTES,get_charset()))));
+            $mash = preg_replace('#Error : Bad \w+#','',$mash);
+            break;
+        case 'xls':
+        case 'doc':
+        case 'ppt':
+        case 'hlp':
 //		default: // Binary formats are complex to parse, but whatsmore, as textual tagging isn't used, extraction can be done automatically as all identified text is good.
-			// Strip out interleaved nulls because they are used in wide-chars, obscuring the data
-			$sstring_regexp='[a-zA-Z0-9\'\-\x91\x92\x93\x94]';
-			$data=preg_replace('#('.$sstring_regexp.')\x00('.$sstring_regexp.')\x00#','${1}${2}',$data);
+            // Strip out interleaved nulls because they are used in wide-chars, obscuring the data
+            $sstring_regexp = '[a-zA-Z0-9\'\-\x91\x92\x93\x94]';
+            $data = preg_replace('#(' . $sstring_regexp . ')\x00(' . $sstring_regexp . ')\x00#','${1}${2}',$data);
 
-			// Now try and extract strings
-			$matches=array();
-			$count=preg_match_all('#([a-zA-Z0-9\'\-\x91\x92\x93\x94\s]+)#',$data,$matches);
-			$min_length=10;
-			if ($extension=='xls') $min_length=4;
-			for ($i=0;$i<$count;$i++)
-			{
-				$x=$matches[1][$i];
-				if ((strlen($x)>$min_length) && ($x!=strtoupper($x)) && ($x!='Microsoft Word Document') && ($x!='WordDocument') && ($x!='SummaryInformation') && ($x!='DocumentSummaryInformation'))
-					$mash.=' '.$matches[1][$i];
-			}
-			break;
-	}
+            // Now try and extract strings
+            $matches = array();
+            $count = preg_match_all('#([a-zA-Z0-9\'\-\x91\x92\x93\x94\s]+)#',$data,$matches);
+            $min_length = 10;
+            if ($extension == 'xls') {
+                $min_length = 4;
+            }
+            for ($i = 0;$i<$count;$i++) {
+                $x = $matches[1][$i];
+                if ((strlen($x)>$min_length) && ($x != strtoupper($x)) && ($x != 'Microsoft Word Document') && ($x != 'WordDocument') && ($x != 'SummaryInformation') && ($x != 'DocumentSummaryInformation')) {
+                    $mash .= ' ' . $matches[1][$i];
+                }
+            }
+            break;
+    }
 
-	if (strlen($mash)>1024*1024*3) $mash=substr($mash,0,1024*1024*3);
-	$mash=preg_replace('# +#',' ',preg_replace('#[^\w\d-\-\']#',' ',$mash));
-	if (strlen($mash)>intval(1024*1024*1*0.4)) $mash=substr($mash,0,intval(1024*1024*0.4));
+    if (strlen($mash)>1024*1024*3) {
+        $mash = substr($mash,0,1024*1024*3);
+    }
+    $mash = preg_replace('# +#',' ',preg_replace('#[^\w\d-\-\']#',' ',$mash));
+    if (strlen($mash)>intval(1024*1024*1*0.4)) {
+        $mash = substr($mash,0,intval(1024*1024*0.4));
+    }
 
-	return $mash;
+    return $mash;
 }
 
 /**
@@ -721,116 +763,115 @@ function create_data_mash($url,$data=NULL,$extension=NULL,$direct_path=false)
  * @param  integer			The ordered number of the gallery image to use as the download representative image
  * @return AUTO_LINK			The ID of the newly added download
  */
-function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence=NULL,$add_date=NULL,$num_downloads=0,$views=0,$submitter=NULL,$edit_date=NULL,$id=NULL,$meta_keywords='',$meta_description='',$default_pic=1)
+function add_download($category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence = null,$add_date = null,$num_downloads = 0,$views = 0,$submitter = null,$edit_date = null,$id = null,$meta_keywords = '',$meta_description = '',$default_pic = 1)
 {
-	require_code('global4');
-	prevent_double_submit('ADD_DOWNLOAD',NULL,$name);
+    require_code('global4');
+    prevent_double_submit('ADD_DOWNLOAD',null,$name);
 
-	if (is_null($add_date)) $add_date=time();
-	if (is_null($submitter)) $submitter=get_member();
+    if (is_null($add_date)) {
+        $add_date = time();
+    }
+    if (is_null($submitter)) {
+        $submitter = get_member();
+    }
 
-	if (($file_size==0) || (url_is_local($url)))
-	{
-		if (url_is_local($url))
-		{
-			$file_size=@filesize(get_custom_file_base().'/'.rawurldecode($url)) OR $file_size=NULL;
-		} else
-		{
-			$file_size=@filesize($url) OR $file_size=NULL;
-		}
-	}
-	if (!addon_installed('unvalidated')) $validated=1;
-	$map=array(
-		'download_data_mash'=>'',
-		'download_licence'=>$licence,
-		'rep_image'=>'',
-		'edit_date'=>$edit_date,
-		'download_submitter_gets_points'=>$submitter_gets_points,
-		'download_cost'=>$cost,
-		'original_filename'=>$original_filename,
-		'download_views'=>$views,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'submitter'=>$submitter,
-		'default_pic'=>$default_pic,
-		'num_downloads'=>$num_downloads,
-		'out_mode_id'=>$out_mode_id,
-		'category_id'=>$category_id,
-		'url'=>$url,
-		'author'=>$author,
-		'validated'=>$validated,
-		'add_date'=>$add_date,
-		'file_size'=>$file_size,
-	);
-	$map+=insert_lang('name',$name,2);
-	$map+=insert_lang_comcode('description',$description,3);
-	$map+=insert_lang_comcode('additional_details',$additional_details,3);
-	if (!is_null($id)) $map['id']=$id;
-	$id=$GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
+    if (($file_size == 0) || (url_is_local($url))) {
+        if (url_is_local($url)) {
+            $file_size = @filesize(get_custom_file_base() . '/' . rawurldecode($url)) or $file_size = null;
+        } else {
+            $file_size = @filesize($url) or $file_size = null;
+        }
+    }
+    if (!addon_installed('unvalidated')) {
+        $validated = 1;
+    }
+    $map = array(
+        'download_data_mash' => '',
+        'download_licence' => $licence,
+        'rep_image' => '',
+        'edit_date' => $edit_date,
+        'download_submitter_gets_points' => $submitter_gets_points,
+        'download_cost' => $cost,
+        'original_filename' => $original_filename,
+        'download_views' => $views,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'submitter' => $submitter,
+        'default_pic' => $default_pic,
+        'num_downloads' => $num_downloads,
+        'out_mode_id' => $out_mode_id,
+        'category_id' => $category_id,
+        'url' => $url,
+        'author' => $author,
+        'validated' => $validated,
+        'add_date' => $add_date,
+        'file_size' => $file_size,
+    );
+    $map += insert_lang('name',$name,2);
+    $map += insert_lang_comcode('description',$description,3);
+    $map += insert_lang_comcode('additional_details',$additional_details,3);
+    if (!is_null($id)) {
+        $map['id'] = $id;
+    }
+    $id = $GLOBALS['SITE_DB']->query_insert('download_downloads',$map,true);
 
-	require_code('tasks');
-	call_user_func_array__long_task(do_lang('INDEX_DOWNLOAD'),get_screen_title('INDEX_DOWNLOAD'),'index_download',array($id,$url,$original_filename));
+    require_code('tasks');
+    call_user_func_array__long_task(do_lang('INDEX_DOWNLOAD'),get_screen_title('INDEX_DOWNLOAD'),'index_download',array($id,$url,$original_filename));
 
-	require_code('seo2');
-	if (($meta_keywords=='') && ($meta_description==''))
-	{
-		seo_meta_set_for_implicit('downloads_download',strval($id),array($name,$description,$additional_details),$description);
-	} else
-	{
-		seo_meta_set_for_explicit('downloads_download',strval($id),$meta_keywords,$meta_description);
-	}
+    require_code('seo2');
+    if (($meta_keywords == '') && ($meta_description == '')) {
+        seo_meta_set_for_implicit('downloads_download',strval($id),array($name,$description,$additional_details),$description);
+    } else {
+        seo_meta_set_for_explicit('downloads_download',strval($id),$meta_keywords,$meta_description);
+    }
 
-	// Make its gallery
-	if ((addon_installed('galleries')) && (!running_script('stress_test_loader')))
-	{
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name'=>'download_'.strval($id)));
-		if (is_null($test))
-		{
-			require_lang('downloads');
-			require_code('galleries2');
-			$download_gallery_root=get_option('download_gallery_root');
-			add_gallery('download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
-			set_download_gallery_permissions($id,$submitter);
-		}
-	}
+    // Make its gallery
+    if ((addon_installed('galleries')) && (!running_script('stress_test_loader'))) {
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','name',array('name' => 'download_' . strval($id)));
+        if (is_null($test)) {
+            require_lang('downloads');
+            require_code('galleries2');
+            $download_gallery_root = get_option('download_gallery_root');
+            add_gallery('download_' . strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
+            set_download_gallery_permissions($id,$submitter);
+        }
+    }
 
-	// Stat
-	update_stat('num_archive_downloads',1);
-	if ($file_size>0) update_stat('archive_size',$file_size);
+    // Stat
+    update_stat('num_archive_downloads',1);
+    if ($file_size>0) {
+        update_stat('archive_size',$file_size);
+    }
 
-	if ($validated==1)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			$privacy_limits=privacy_limits_for('download',strval($id));
-		} else
-		{
-			$privacy_limits=array();
-		}
+    if ($validated == 1) {
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            $privacy_limits = privacy_limits_for('download',strval($id));
+        } else {
+            $privacy_limits = array();
+        }
 
-		require_lang('downloads');
-		require_code('notifications');
-		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
-		$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
-		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('download',strval($category_id),$subject,$mail,$privacy_limits);
-	}
+        require_lang('downloads');
+        require_code('notifications');
+        $subject = do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
+        $self_url = build_url(array('page' => 'downloads','type' => 'entry','id' => $id),get_module_zone('downloads'),null,false,false,true);
+        $mail = do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
+        dispatch_notification('download',strval($category_id),$subject,$mail,$privacy_limits);
+    }
 
-	log_it('ADD_DOWNLOAD',strval($id),$name);
+    log_it('ADD_DOWNLOAD',strval($id),$name);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('download',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('download',strval($id),null,null,true);
+    }
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('download',strval($id),$submitter);
+    require_code('member_mentions');
+    dispatch_member_mention_notifications('download',strval($id),$submitter);
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -839,33 +880,32 @@ function add_download($category_id,$name,$url,$description,$author,$additional_d
  * @param  ?AUTO_LINK		The ID of the download (NULL: lookup from download)
  * @param  ?MEMBER			The submitter (NULL: work out automatically)
  */
-function set_download_gallery_permissions($id,$submitter=NULL)
+function set_download_gallery_permissions($id,$submitter = null)
 {
-	if (is_null($submitter)) $submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
+    if (is_null($submitter)) {
+        $submitter = $GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id' => $id));
+    }
 
-	$download_gallery_root=get_option('download_gallery_root');
+    $download_gallery_root = get_option('download_gallery_root');
 
-	// Copy through requisite permissions
-	$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
-	$perms=$GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name'=>'galleries','category_name'=>$download_gallery_root));
-	foreach ($perms as $perm)
-	{
-		$perm['category_name']='download_'.strval($id);
-		$GLOBALS['SITE_DB']->query_insert('group_category_access',$perm);
-	}
-	$GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
-	$perms=$GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name'=>'galleries','category_name'=>$download_gallery_root));
-	foreach ($perms as $perm)
-	{
-		$perm['category_name']='download_'.strval($id);
-		$GLOBALS['SITE_DB']->query_insert('group_privileges',$perm);
-	}
-	// If they were able to submit the download, they should be able to submit extra images
-	$GLOBALS['SITE_DB']->query_delete('member_privileges',array('module_the_name'=>'galleries','category_name'=>'download_'.strval($id)));
-	foreach (array('submit_midrange_content') as $privilege)
-	{
-		$GLOBALS['SITE_DB']->query_insert('member_privileges',array('active_until'=>NULL,'member_id'=>$submitter,'privilege'=>$privilege,'the_page'=>'','module_the_name'=>'galleries','category_name'=>'download_'.strval($id),'the_value'=>'1'));
-	}
+    // Copy through requisite permissions
+    $GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name' => 'galleries','category_name' => 'download_' . strval($id)));
+    $perms = $GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name' => 'galleries','category_name' => $download_gallery_root));
+    foreach ($perms as $perm) {
+        $perm['category_name'] = 'download_' . strval($id);
+        $GLOBALS['SITE_DB']->query_insert('group_category_access',$perm);
+    }
+    $GLOBALS['SITE_DB']->query_delete('group_privileges',array('module_the_name' => 'galleries','category_name' => 'download_' . strval($id)));
+    $perms = $GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name' => 'galleries','category_name' => $download_gallery_root));
+    foreach ($perms as $perm) {
+        $perm['category_name'] = 'download_' . strval($id);
+        $GLOBALS['SITE_DB']->query_insert('group_privileges',$perm);
+    }
+    // If they were able to submit the download, they should be able to submit extra images
+    $GLOBALS['SITE_DB']->query_delete('member_privileges',array('module_the_name' => 'galleries','category_name' => 'download_' . strval($id)));
+    foreach (array('submit_midrange_content') as $privilege) {
+        $GLOBALS['SITE_DB']->query_insert('member_privileges',array('active_until' => NULL,'member_id' => $submitter,'privilege' => $privilege,'the_page' => '','module_the_name' => 'galleries','category_name' => 'download_' . strval($id),'the_value' => '1'));
+    }
 }
 
 /**
@@ -899,127 +939,129 @@ function set_download_gallery_permissions($id,$submitter=NULL)
  * @param  ?integer			The number of downloads that this download has had (NULL: do not change)
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$num_downloads=NULL,$null_is_literal=false)
+function edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time = null,$add_time = null,$views = null,$submitter = null,$num_downloads = null,$null_is_literal = false)
 {
-	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+    if (is_null($edit_time)) {
+        $edit_time = $null_is_literal?null:time();
+    }
 
-	require_code('urls2');
-	suggest_new_idmoniker_for('downloads','view',strval($id),'',$name);
+    require_code('urls2');
+    suggest_new_idmoniker_for('downloads','view',strval($id),'',$name);
 
-	if (($file_size==0) || (url_is_local($url)))
-	{
-		if (url_is_local($url))
-		{
-			$file_size=filesize(get_custom_file_base().'/'.rawurldecode($url));
-		} else
-		{
-			$file_size=@filesize($url) OR $file_size=NULL;
-		}
-	}
+    if (($file_size == 0) || (url_is_local($url))) {
+        if (url_is_local($url)) {
+            $file_size = filesize(get_custom_file_base() . '/' . rawurldecode($url));
+        } else {
+            $file_size = @filesize($url) or $file_size = null;
+        }
+    }
 
-	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details','category_id'),array('id'=>$id),'',1);
-	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$myrow=$myrows[0];
+    $myrows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details','category_id'),array('id' => $id),'',1);
+    if (!array_key_exists(0,$myrows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $myrow = $myrows[0];
 
-	require_code('seo2');
-	seo_meta_set_for_explicit('downloads_download',strval($id),$meta_keywords,$meta_description);
+    require_code('seo2');
+    seo_meta_set_for_explicit('downloads_download',strval($id),$meta_keywords,$meta_description);
 
-	require_code('files2');
-	delete_upload('uploads/downloads','download_downloads','url','id',$id,$url);
+    require_code('files2');
+    delete_upload('uploads/downloads','download_downloads','url','id',$id,$url);
 
-	require_code('tasks');
-	call_user_func_array__long_task(do_lang('INDEX_DOWNLOAD'),get_screen_title('INDEX_DOWNLOAD'),'index_download',array($id,$url,$original_filename));
+    require_code('tasks');
+    call_user_func_array__long_task(do_lang('INDEX_DOWNLOAD'),get_screen_title('INDEX_DOWNLOAD'),'index_download',array($id,$url,$original_filename));
 
-	if (!addon_installed('unvalidated')) $validated=1;
+    if (!addon_installed('unvalidated')) {
+        $validated = 1;
+    }
 
-	require_code('submit');
-	$just_validated=(!content_validated('download',strval($id))) && ($validated==1);
-	if ($just_validated)
-	{
-		send_content_validated_notification('download',strval($id));
-	}
+    require_code('submit');
+    $just_validated = (!content_validated('download',strval($id))) && ($validated == 1);
+    if ($just_validated) {
+        send_content_validated_notification('download',strval($id));
+    }
 
-	$update_map=array(
-		'download_licence'=>$licence,
-		'original_filename'=>$original_filename,
-		'download_submitter_gets_points'=>$submitter_gets_points,
-		'download_cost'=>$cost,
-		'edit_date'=>$edit_time,
-		'file_size'=>$file_size,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'validated'=>$validated,
-		'category_id'=>$category_id,
-		'url'=>$url,
-		'author'=>$author,
-		'default_pic'=>$default_pic,
-		'out_mode_id'=>$out_mode_id,
-	);
-	$update_map+=lang_remap('name',$myrow['name'],$name);
-	$update_map+=lang_remap_comcode('description',$myrow['description'],$description);
-	$update_map+=lang_remap_comcode('additional_details',$myrow['additional_details'],$additional_details);
+    $update_map = array(
+        'download_licence' => $licence,
+        'original_filename' => $original_filename,
+        'download_submitter_gets_points' => $submitter_gets_points,
+        'download_cost' => $cost,
+        'edit_date' => $edit_time,
+        'file_size' => $file_size,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'validated' => $validated,
+        'category_id' => $category_id,
+        'url' => $url,
+        'author' => $author,
+        'default_pic' => $default_pic,
+        'out_mode_id' => $out_mode_id,
+    );
+    $update_map += lang_remap('name',$myrow['name'],$name);
+    $update_map += lang_remap_comcode('description',$myrow['description'],$description);
+    $update_map += lang_remap_comcode('additional_details',$myrow['additional_details'],$additional_details);
 
-	$update_map['edit_date']=$edit_time;
-	if (!is_null($add_time))
-		$update_map['add_date']=$add_time;
-	if (!is_null($views))
-		$update_map['download_views']=$views;
-	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
-	if (!is_null($num_downloads))
-		$update_map['num_downloads']=$num_downloads;
+    $update_map['edit_date'] = $edit_time;
+    if (!is_null($add_time)) {
+        $update_map['add_date'] = $add_time;
+    }
+    if (!is_null($views)) {
+        $update_map['download_views'] = $views;
+    }
+    if (!is_null($submitter)) {
+        $update_map['submitter'] = $submitter;
+    }
+    if (!is_null($num_downloads)) {
+        $update_map['num_downloads'] = $num_downloads;
+    }
 
-	$GLOBALS['SITE_DB']->query_update('download_downloads',$update_map,array('id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_update('download_downloads',$update_map,array('id' => $id),'',1);
 
-	$self_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'),NULL,false,false,true);
+    $self_url = build_url(array('page' => 'downloads','type' => 'entry','id' => $id),get_module_zone('downloads'),null,false,false,true);
 
-	if ($just_validated)
-	{
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			$privacy_limits=privacy_limits_for('download',strval($id));
-		} else
-		{
-			$privacy_limits=array();
-		}
+    if ($just_validated) {
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            $privacy_limits = privacy_limits_for('download',strval($id));
+        } else {
+            $privacy_limits = array();
+        }
 
-		require_lang('downloads');
-		require_code('notifications');
-		$subject=do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
-		$mail=do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
-		dispatch_notification('download',strval($category_id),$subject,$mail,$privacy_limits);
-	}
+        require_lang('downloads');
+        require_code('notifications');
+        $subject = do_lang('DOWNLOAD_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
+        $mail = do_lang('DOWNLOAD_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($name),array(comcode_escape($self_url->evaluate())));
+        dispatch_notification('download',strval($category_id),$subject,$mail,$privacy_limits);
+    }
 
-	log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
+    log_it('EDIT_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('download',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('download',strval($id));
+    }
 
-	if (addon_installed('galleries'))
-	{
-		// Change its gallery
-		require_code('galleries2');
-		$download_gallery_root=get_option('download_gallery_root');
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>'download_'.strval($id)));
-		if (!is_null($test))
-			edit_gallery('download_'.strval($id),'download_'.strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
-	}
+    if (addon_installed('galleries')) {
+        // Change its gallery
+        require_code('galleries2');
+        $download_gallery_root = get_option('download_gallery_root');
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name' => 'download_' . strval($id)));
+        if (!is_null($test)) {
+            edit_gallery('download_' . strval($id),'download_' . strval($id),do_lang('GALLERY_FOR_DOWNLOAD',$name),'','',$download_gallery_root);
+        }
+    }
 
-	require_code('feedback');
-	update_spacer_post(
-		$allow_comments!=0,
-		'downloads',
-		strval($id),
-		$self_url,
-		$name,
-		process_overridden_comment_forum('downloads',strval($id),strval($category_id),strval($myrow['category_id']))
-	);
+    require_code('feedback');
+    update_spacer_post(
+        $allow_comments != 0,
+        'downloads',
+        strval($id),
+        $self_url,
+        $name,
+        process_overridden_comment_forum('downloads',strval($id),strval($category_id),strval($myrow['category_id']))
+    );
 }
 
 /**
@@ -1028,57 +1070,56 @@ function edit_download($id,$category_id,$name,$url,$description,$author,$additio
  * @param  AUTO_LINK		The ID of the download to delete
  * @param  boolean		Whether to leave the actual file behind
  */
-function delete_download($id,$leave=false)
+function delete_download($id,$leave = false)
 {
-	$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details'),array('id'=>$id),'',1);
-	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$myrow=$myrows[0];
+    $myrows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('name','description','additional_details'),array('id' => $id),'',1);
+    if (!array_key_exists(0,$myrows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $myrow = $myrows[0];
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('download',strval($id),'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('download',strval($id),'');
+    }
 
-	delete_lang($myrow['name']);
-	delete_lang($myrow['description']);
-	delete_lang($myrow['additional_details']);
+    delete_lang($myrow['name']);
+    delete_lang($myrow['description']);
+    delete_lang($myrow['additional_details']);
 
-	require_code('seo2');
-	seo_meta_erase_storage('downloads_download',strval($id));
+    require_code('seo2');
+    seo_meta_erase_storage('downloads_download',strval($id));
 
-	if (!$leave)
-	{
-		require_code('files2');
-		delete_upload('uploads/downloads','download_downloads','url','id',$id);
-	}
+    if (!$leave) {
+        require_code('files2');
+        delete_upload('uploads/downloads','download_downloads','url','id',$id);
+    }
 
-	// Delete from database
-	$GLOBALS['SITE_DB']->query_delete('download_downloads',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('download_logging',array('id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'downloads','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'downloads','trackback_for_id'=>$id));
-	require_code('notifications');
-	delete_all_notifications_on('comment_posted','downloads_'.strval($id));
+    // Delete from database
+    $GLOBALS['SITE_DB']->query_delete('download_downloads',array('id' => $id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('download_logging',array('id' => $id));
+    $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => 'downloads','rating_for_id' => $id));
+    $GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type' => 'downloads','trackback_for_id' => $id));
+    require_code('notifications');
+    delete_all_notifications_on('comment_posted','downloads_' . strval($id));
 
-	$GLOBALS['SITE_DB']->query_update('download_downloads',array('out_mode_id'=>NULL),array('out_mode_id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_update('download_downloads',array('out_mode_id' => NULL),array('out_mode_id' => $id),'',1);
 
-	if (addon_installed('galleries'))
-	{
-		// Delete gallery
-		$name='download_'.strval($id);
-		require_code('galleries2');
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name'=>'download_'.strval($id)));
-		if (!is_null($test))
-			delete_gallery($name);
-	}
+    if (addon_installed('galleries')) {
+        // Delete gallery
+        $name = 'download_' . strval($id);
+        require_code('galleries2');
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name' => 'download_' . strval($id)));
+        if (!is_null($test)) {
+            delete_gallery($name);
+        }
+    }
 
-	log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
+    log_it('DELETE_DOWNLOAD',strval($id),get_translated_text($myrow['name']));
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('download',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('download',strval($id));
+    }
 }
 
 /**
@@ -1090,20 +1131,19 @@ function delete_download($id,$leave=false)
  */
 function add_download_licence($title,$text)
 {
-	require_code('global4');
-	prevent_double_submit('ADD_DOWNLOAD_LICENCE',NULL,$title);
+    require_code('global4');
+    prevent_double_submit('ADD_DOWNLOAD_LICENCE',null,$title);
 
-	$id=$GLOBALS['SITE_DB']->query_insert('download_licences',array('l_title'=>$title,'l_text'=>$text),true);
+    $id = $GLOBALS['SITE_DB']->query_insert('download_licences',array('l_title' => $title,'l_text' => $text),true);
 
-	log_it('ADD_DOWNLOAD_LICENCE',strval($id),$title);
+    log_it('ADD_DOWNLOAD_LICENCE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('download_licence',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('download_licence',strval($id),null,null,true);
+    }
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -1115,15 +1155,14 @@ function add_download_licence($title,$text)
  */
 function edit_download_licence($id,$title,$text)
 {
-	$GLOBALS['SITE_DB']->query_update('download_licences',array('l_title'=>$title,'l_text'=>$text),array('id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_update('download_licences',array('l_title' => $title,'l_text' => $text),array('id' => $id),'',1);
 
-	log_it('EDIT_DOWNLOAD_LICENCE',strval($id),$title);
+    log_it('EDIT_DOWNLOAD_LICENCE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('download_licence',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('download_licence',strval($id));
+    }
 }
 
 /**
@@ -1133,21 +1172,22 @@ function edit_download_licence($id,$title,$text)
  */
 function delete_download_licence($id)
 {
-	$myrows=$GLOBALS['SITE_DB']->query_select('download_licences',array('l_title'),array('id'=>$id),'',1);
-	if (!array_key_exists(0,$myrows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$myrow=$myrows[0];
+    $myrows = $GLOBALS['SITE_DB']->query_select('download_licences',array('l_title'),array('id' => $id),'',1);
+    if (!array_key_exists(0,$myrows)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $myrow = $myrows[0];
 
-	$GLOBALS['SITE_DB']->query_delete('download_licences',array('id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('download_licences',array('id' => $id),'',1);
 
-	$GLOBALS['SITE_DB']->query_update('download_downloads',array('download_licence'=>NULL),array('download_licence'=>$id));
+    $GLOBALS['SITE_DB']->query_update('download_downloads',array('download_licence' => NULL),array('download_licence' => $id));
 
-	log_it('DELETE_DOWNLOAD_LICENCE',strval($id),$myrow['l_title']);
+    log_it('DELETE_DOWNLOAD_LICENCE',strval($id),$myrow['l_title']);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('download_licence',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('download_licence',strval($id));
+    }
 }
 
 /**
@@ -1159,16 +1199,17 @@ function delete_download_licence($id)
  */
 function log_download($id,$size,$got_before)
 {
-	// Log
-	if (!$got_before)
-		$GLOBALS['SITE_DB']->query_insert('download_logging',array('id'=>$id,'member_id'=>get_member(),'ip'=>get_ip_address(),'date_and_time'=>time()),false,true); // Suppress errors in case of race condition
+    // Log
+    if (!$got_before) {
+        $GLOBALS['SITE_DB']->query_insert('download_logging',array('id' => $id,'member_id' => get_member(),'ip' => get_ip_address(),'date_and_time' => time()),false,true);
+    } // Suppress errors in case of race condition
 
-	// Update download count
-	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'download_downloads SET num_downloads=(num_downloads+1) WHERE id='.strval($id),1,NULL,true);
+    // Update download count
+    $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'download_downloads SET num_downloads=(num_downloads+1) WHERE id=' . strval($id),1,null,true);
 
-	// Update stats
-	$GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'values SET the_value=(the_value+1) WHERE the_name=\'num_downloads_downloaded\'',1,NULL,true);
-	if ($size!=0) $GLOBALS['SITE_DB']->query('UPDATE '.get_table_prefix().'values SET the_value=(the_value+'.strval($size).') WHERE the_name=\'download_bandwidth\'',1,NULL,true);
+    // Update stats
+    $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'values SET the_value=(the_value+1) WHERE the_name=\'num_downloads_downloaded\'',1,null,true);
+    if ($size != 0) {
+        $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'values SET the_value=(the_value+' . strval($size) . ') WHERE the_name=\'download_bandwidth\'',1,null,true);
+    }
 }
-
-

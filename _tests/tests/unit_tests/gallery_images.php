@@ -18,30 +18,30 @@
  */
 class gallery_images_test_set extends ocp_test_case
 {
-	var $image_id;
+    public $image_id;
 
-	function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		require_code('galleries');
-		require_code('galleries2');
+        require_code('galleries');
+        require_code('galleries2');
 
-		$this->image_id=add_image('','','','http://www.msn.com','images/test.jpg',0,0,0,0,'',NULL,NULL,NULL,0,NULL);
+        $this->image_id = add_image('','','','http://www.msn.com','images/test.jpg',0,0,0,0,'',null,null,null,0,null);
 
-		$this->assertTrue('http://www.msn.com'==$GLOBALS['SITE_DB']->query_select_value('images','url',array('id'=>$this->image_id)));
-	}
+        $this->assertTrue('http://www.msn.com' == $GLOBALS['SITE_DB']->query_select_value('images','url',array('id' => $this->image_id)));
+    }
 
-	function testEditGalleryImage()
-	{
-		edit_image($this->image_id,'','','','http://www.google.com','images/sample.jpg',0,0,0,0,'','','');
+    public function testEditGalleryImage()
+    {
+        edit_image($this->image_id,'','','','http://www.google.com','images/sample.jpg',0,0,0,0,'','','');
 
-		$this->assertTrue('http://www.google.com'==$GLOBALS['SITE_DB']->query_select_value('images','url',array('id'=>$this->image_id)));
-	}
+        $this->assertTrue('http://www.google.com' == $GLOBALS['SITE_DB']->query_select_value('images','url',array('id' => $this->image_id)));
+    }
 
-	function tearDown()
-	{
-		delete_image($this->image_id,false);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        delete_image($this->image_id,false);
+        parent::tearDown();
+    }
 }

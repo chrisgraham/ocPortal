@@ -20,35 +20,33 @@
 
 class Hook_config_download_entries_per_page
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'DOWNLOAD_ENTRIES_PER_PAGE',
-			'type'=>'integer',
-			'category'=>'FEATURE',
-			'group'=>'SECTION_DOWNLOADS',
-			'explanation'=>'CONFIG_OPTION_download_entries_per_page',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'DOWNLOAD_ENTRIES_PER_PAGE',
+            'type' => 'integer',
+            'category' => 'FEATURE',
+            'group' => 'SECTION_DOWNLOADS',
+            'explanation' => 'CONFIG_OPTION_download_entries_per_page',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'downloads',
-		);
-	}
+            'addon' => 'downloads',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '30';
-	}
+    public function get_default()
+    {
+        return '30';
+    }
 }
-
-

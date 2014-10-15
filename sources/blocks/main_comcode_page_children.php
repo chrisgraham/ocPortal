@@ -20,93 +20,95 @@
 
 class Block_main_comcode_page_children
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('param','zone');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','zone');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='array(has_privilege(get_member(),\'see_unvalidated\'),((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),array_key_exists(\'zone\',$map)?$map[\'zone\']:post_param(\'zone\',get_comcode_zone(((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),false)))';
-		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'array(has_privilege(get_member(),\'see_unvalidated\'),((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),array_key_exists(\'zone\',$map)?$map[\'zone\']:post_param(\'zone\',get_comcode_zone(((array_key_exists(\'param\',$map)) && ($map[\'param\']!=\'\'))?$map[\'param\']:get_page_name(),false)))';
+        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{	
-		$page=((array_key_exists('param',$map)) && ($map['param']!=''))?$map['param']:get_page_name();
-		$zone=array_key_exists('zone',$map)?$map['zone']:post_param('zone',get_comcode_zone($page,false));
-		if ($zone=='_SEARCH') $zone=NULL;
-		$qmap=array('p_parent_page'=>$page);
-		if (!is_null($zone)) $qmap['the_zone']=$zone;
-		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $qmap['p_validated']=1;
-		$children=$GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','the_zone'),$qmap);
-		foreach ($children as $i=>$child)
-		{
-			if (($child['the_page']==$page) && ($child['the_zone']==$zone))
-			{
-				unset($children[$i]);
-				continue; // Be safe
-			}
+    public function run($map)
+    {
+        $page = ((array_key_exists('param',$map)) && ($map['param'] != ''))?$map['param']:get_page_name();
+        $zone = array_key_exists('zone',$map)?$map['zone']:post_param('zone',get_comcode_zone($page,false));
+        if ($zone == '_SEARCH') {
+            $zone = null;
+        }
+        $qmap = array('p_parent_page' => $page);
+        if (!is_null($zone)) {
+            $qmap['the_zone'] = $zone;
+        }
+        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+            $qmap['p_validated'] = 1;
+        }
+        $children = $GLOBALS['SITE_DB']->query_select('comcode_pages',array('the_page','the_zone'),$qmap);
+        foreach ($children as $i => $child) {
+            if (($child['the_page'] == $page) && ($child['the_zone'] == $zone)) {
+                unset($children[$i]);
+                continue; // Be safe
+            }
 
-			$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
-			if (!is_null($_title))
-			{
-				$title=get_translated_text($_title,NULL,NULL,true);
-				if (is_null($title)) $title='';
-			} else
-			{
-				$title='';
+            $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page' => $child['the_page'],'the_zone' => $child['the_zone']));
+            if (!is_null($_title)) {
+                $title = get_translated_text($_title,null,null,true);
+                if (is_null($title)) {
+                    $title = '';
+                }
+            } else {
+                $title = '';
 
-				if (get_option('is_on_comcode_page_cache')=='1') // Try and force a parse of the page
-				{
-					request_page($child['the_page'],false,$child['the_zone'],NULL,true);
-					$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page'=>$child['the_page'],'the_zone'=>$child['the_zone']));
-					if (!is_null($_title))
-					{
-						$title=get_translated_text($_title);
-					}
-				}
-			}
+                if (get_option('is_on_comcode_page_cache') == '1') { // Try and force a parse of the page
+                    request_page($child['the_page'],false,$child['the_zone'],null,true);
+                    $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages','cc_page_title',array('the_page' => $child['the_page'],'the_zone' => $child['the_zone']));
+                    if (!is_null($_title)) {
+                        $title = get_translated_text($_title);
+                    }
+                }
+            }
 
-			if ($title=='')
-				$title=escape_html(titleify($child['the_page']));
+            if ($title == '') {
+                $title = escape_html(titleify($child['the_page']));
+            }
 
-			$child['TITLE']=$title;
-			$child['PAGE']=$child['the_page'];
-			$child['ZONE']=get_comcode_zone($child['the_page']);
+            $child['TITLE'] = $title;
+            $child['PAGE'] = $child['the_page'];
+            $child['ZONE'] = get_comcode_zone($child['the_page']);
 
-			$children[$i]=$child;
-		}
+            $children[$i] = $child;
+        }
 
-		sort_maps_by($children,'TITLE');
+        sort_maps_by($children,'TITLE');
 
-		return do_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN',array('_GUID'=>'375aa1907fc6b2ca6b23ab5b5139aaef','CHILDREN'=>$children,'THE_PAGE'=>$page,'THE_ZONE'=>$zone));
-	}
+        return do_template('BLOCK_MAIN_COMCODE_PAGE_CHILDREN',array('_GUID' => '375aa1907fc6b2ca6b23ab5b5139aaef','CHILDREN' => $children,'THE_PAGE' => $page,'THE_ZONE' => $zone));
+    }
 }
-

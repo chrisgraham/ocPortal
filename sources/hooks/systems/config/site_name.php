@@ -20,37 +20,35 @@
 
 class Hook_config_site_name
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'SITE_NAME',
-			'type'=>'line',
-			'category'=>'SITE',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_site_name',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'SITE_NAME',
+            'type' => 'line',
+            'category' => 'SITE',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_site_name',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 1,
+            'required' => true,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return do_lang('UNNAMED');
-	}
+    public function get_default()
+    {
+        return do_lang('UNNAMED');
+    }
 }
-
-

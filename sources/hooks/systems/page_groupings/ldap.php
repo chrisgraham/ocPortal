@@ -20,21 +20,21 @@
 
 class Hook_page_groupings_ldap
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('ldap')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('ldap')) {
+            return array();
+        }
 
-		return array(
-			(get_forum_type()!='ocf')?NULL:array('security','menu/adminzone/security/ldap',array('admin_ocf_ldap',array('type'=>'misc'),get_module_zone('admin_ocf_ldap')),do_lang_tempcode('ldap:LDAP'),'ldap:DOC_LDAP'),
-		);
-	}
+        return array(
+            (get_forum_type() != 'ocf')?null:array('security','menu/adminzone/security/ldap',array('admin_ocf_ldap',array('type' => 'misc'),get_module_zone('admin_ocf_ldap')),do_lang_tempcode('ldap:LDAP'),'ldap:DOC_LDAP'),
+        );
+    }
 }
-
-

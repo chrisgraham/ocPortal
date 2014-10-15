@@ -20,16 +20,16 @@
 
 class Hook_Notification_ocf_password_changed extends Hook_Notification
 {
-	/**
+    /**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *
 	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
 	 */
-	function list_handled_codes()
-	{
-		$list=array();
-		$list['ocf_password_changed']=array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_password_changed'));
-		return $list;
-	}
+    public function list_handled_codes()
+    {
+        $list = array();
+        $list['ocf_password_changed'] = array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_password_changed'));
+        return $list;
+    }
 }

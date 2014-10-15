@@ -30,10 +30,12 @@
  */
 function ecv2_LANG($lang,$escaped,$param)
 {
-	$value=user_lang();
+    $value = user_lang();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -46,16 +48,16 @@ function ecv2_LANG($lang,$escaped,$param)
  */
 function ecv2_THEME($lang,$escaped,$param)
 {
-	if (isset($GLOBALS['FORUM_DRIVER']))
-	{
-		$value=$GLOBALS['FORUM_DRIVER']->get_theme();
-	} else
-	{
-		$value='default';
-	}
+    if (isset($GLOBALS['FORUM_DRIVER'])) {
+        $value = $GLOBALS['FORUM_DRIVER']->get_theme();
+    } else {
+        $value = 'default';
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -68,10 +70,12 @@ function ecv2_THEME($lang,$escaped,$param)
  */
 function ecv2_VERSION_NUMBER($lang,$escaped,$param)
 {
-	$value=ocp_version_pretty();
+    $value = ocp_version_pretty();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -84,10 +88,12 @@ function ecv2_VERSION_NUMBER($lang,$escaped,$param)
  */
 function ecv2_SITE_NAME($lang,$escaped,$param)
 {
-	$value=get_site_name();
+    $value = get_site_name();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -100,10 +106,12 @@ function ecv2_SITE_NAME($lang,$escaped,$param)
  */
 function ecv2_CHARSET($lang,$escaped,$param)
 {
-	$value=get_charset();
+    $value = get_charset();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -116,15 +124,16 @@ function ecv2_CHARSET($lang,$escaped,$param)
  */
 function ecv2_ADDON_INSTALLED($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if ((isset($param[0])) && (!running_script('install')))
-	{
-		$value=(addon_installed($param[0],(isset($param[1])) && ($param[1]=='1')))?'1':'0';
-	}
+    if ((isset($param[0])) && (!running_script('install'))) {
+        $value = (addon_installed($param[0],(isset($param[1])) && ($param[1] == '1')))?'1':'0';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -137,23 +146,26 @@ function ecv2_ADDON_INSTALLED($lang,$escaped,$param)
  */
 function ecv2_CONFIG_OPTION($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		if ($GLOBALS['IN_MINIKERNEL_VERSION']) // Installer, likely executing JAVASCRIPT.tpl. We need a saner default for JavaScript
-		{
-			$value='0';
-		} else
-		{
-			$value=get_option($param[0],array_key_exists(1,$param) && $param[1]=='1');
-			if ($value===NULL) $value='';
-		}
-	}
+    if (isset($param[0])) {
+        if ($GLOBALS['IN_MINIKERNEL_VERSION']) { // Installer, likely executing JAVASCRIPT.tpl. We need a saner default for JavaScript
+            $value = '0';
+        } else {
+            $value = get_option($param[0],array_key_exists(1,$param) && $param[1] == '1');
+            if ($value === NULL) {
+                $value = '';
+            }
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -166,25 +178,28 @@ function ecv2_CONFIG_OPTION($lang,$escaped,$param)
  */
 function ecv2_VALUE_OPTION($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=function_exists('get_value')?get_value($param[0]):'';
-		if (is_null($value))
-		{
-			$value=function_exists('get_long_value')?get_long_value($param[0]):'';
-			if (is_null($value))
-			{
-				$value=isset($param[1])?$param[1]:'';
-				if (($param[0]=='textmate') && ((running_locally()) && (strpos(ocp_srv('HTTP_USER_AGENT'),'Macintosh')!==false))) $value='1';
-			}
-		}
-	}
+    if (isset($param[0])) {
+        $value = function_exists('get_value')?get_value($param[0]):'';
+        if (is_null($value)) {
+            $value = function_exists('get_long_value')?get_long_value($param[0]):'';
+            if (is_null($value)) {
+                $value = isset($param[1])?$param[1]:'';
+                if (($param[0] == 'textmate') && ((running_locally()) && (strpos(ocp_srv('HTTP_USER_AGENT'),'Macintosh') !== false))) {
+                    $value = '1';
+                }
+            }
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -197,10 +212,12 @@ function ecv2_VALUE_OPTION($lang,$escaped,$param)
  */
 function ecv2_MOBILE($lang,$escaped,$param)
 {
-	$value=is_mobile(NULL,array_key_exists(0,$param)?($param[0]=='1'):false)?'1':'0';
+    $value = is_mobile(null,array_key_exists(0,$param)?($param[0] == '1'):false)?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -213,10 +230,12 @@ function ecv2_MOBILE($lang,$escaped,$param)
  */
 function ecv2_COPYRIGHT($lang,$escaped,$param)
 {
-	$value=str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright'));
+    $value = str_replace('$CURRENT_YEAR',date('Y'),get_option('copyright'));
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -229,10 +248,12 @@ function ecv2_COPYRIGHT($lang,$escaped,$param)
  */
 function ecv2_BRAND_NAME($lang,$escaped,$param)
 {
-	$value=brand_name();
+    $value = brand_name();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -245,10 +266,12 @@ function ecv2_BRAND_NAME($lang,$escaped,$param)
  */
 function ecv2_BRAND_BASE_URL($lang,$escaped,$param)
 {
-	$value=get_brand_base_url();
+    $value = get_brand_base_url();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -261,15 +284,16 @@ function ecv2_BRAND_BASE_URL($lang,$escaped,$param)
  */
 function ecv2_CUSTOM_BASE_URL($lang,$escaped,$param)
 {
-	$value=get_custom_base_url((isset($param[0]) && ($param[0]!=''))?($param[0]=='1'):NULL);
+    $value = get_custom_base_url((isset($param[0]) && ($param[0] != ''))?($param[0] == '1'):null);
 
-	if ((isset($param[1])) && ($param[1]=='1'))
-	{
-		$value=cdn_filter($value);
-	}
+    if ((isset($param[1])) && ($param[1] == '1')) {
+        $value = cdn_filter($value);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -282,14 +306,19 @@ function ecv2_CUSTOM_BASE_URL($lang,$escaped,$param)
  */
 function ecv2_BASE_URL_NOHTTP($lang,$escaped,$param)
 {
-	if ($GLOBALS['DEV_MODE']) // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode).
-		return ecv2_BASE_URL($lang,$escaped,$param);
+    if ($GLOBALS['DEV_MODE']) {// Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode).
+        return ecv2_BASE_URL($lang,$escaped,$param);
+    }
 
-	$value=preg_replace('#^https?://[^/]+#','',get_base_url());
-	if (substr($value,0,2)=='//') $value=substr($value,1);
+    $value = preg_replace('#^https?://[^/]+#','',get_base_url());
+    if (substr($value,0,2) == '//') {
+        $value = substr($value,1);
+    }
 
-		if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -302,14 +331,19 @@ function ecv2_BASE_URL_NOHTTP($lang,$escaped,$param)
  */
 function ecv2_CUSTOM_BASE_URL_NOHTTP($lang,$escaped,$param)
 {
-	if ($GLOBALS['DEV_MODE']) // Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode).
-		return ecv2_BASE_URL($lang,$escaped,$param);
+    if ($GLOBALS['DEV_MODE']) {// Debug mode changes base domain so we need to actually use it in full (fine, we don't have HTTPS in debug mode).
+        return ecv2_BASE_URL($lang,$escaped,$param);
+    }
 
-	$value=preg_replace('#^https?://[^/]+/#','/',get_custom_base_url());
-	if (substr($value,0,2)=='//') $value=substr($value,1);
+    $value = preg_replace('#^https?://[^/]+/#','/',get_custom_base_url());
+    if (substr($value,0,2) == '//') {
+        $value = substr($value,1);
+    }
 
-		if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -322,10 +356,12 @@ function ecv2_CUSTOM_BASE_URL_NOHTTP($lang,$escaped,$param)
  */
 function ecv2_BASE_URL($lang,$escaped,$param)
 {
-	$value=get_base_url(isset($param[0])?($param[0]=='1'):NULL);
+    $value = get_base_url(isset($param[0])?($param[0] == '1'):null);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -338,10 +374,12 @@ function ecv2_BASE_URL($lang,$escaped,$param)
  */
 function ecv2_OCF($lang,$escaped,$param)
 {
-	$value=(get_forum_type()=='ocf')?'1':'0';
+    $value = (get_forum_type() == 'ocf')?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -354,18 +392,23 @@ function ecv2_OCF($lang,$escaped,$param)
  */
 function ecv2_VALID_FILE_TYPES($lang,$escaped,$param)
 {
-	$value=get_option('valid_types');
-	$types=array_flip(explode(',',$value));
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = get_option('valid_types');
+    $types = array_flip(explode(',',$value));
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	ksort($types);
-	foreach (array_flip($types) as $val)
-		$value.=$val.',';
-	$value=substr($value,0,strlen($value)-1);
+    ksort($types);
+    foreach (array_flip($types) as $val) {
+        $value .= $val . ',';
+    }
+    $value = substr($value,0,strlen($value)-1);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -378,10 +421,12 @@ function ecv2_VALID_FILE_TYPES($lang,$escaped,$param)
  */
 function ecv2_COOKIE_PATH($lang,$escaped,$param)
 {
-	$value=function_exists('get_cookie_path')?get_cookie_path():'/';
+    $value = function_exists('get_cookie_path')?get_cookie_path():'/';
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -394,11 +439,13 @@ function ecv2_COOKIE_PATH($lang,$escaped,$param)
  */
 function ecv2_COOKIE_DOMAIN($lang,$escaped,$param)
 {
-	$s_value=function_exists('get_cookie_domain')?get_cookie_domain():'';
-	$value=is_null($s_value)?'':$s_value;
+    $s_value = function_exists('get_cookie_domain')?get_cookie_domain():'';
+    $value = is_null($s_value)?'':$s_value;
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -411,10 +458,12 @@ function ecv2_COOKIE_DOMAIN($lang,$escaped,$param)
  */
 function ecv2_SESSION_COOKIE_NAME($lang,$escaped,$param)
 {
-	$value=function_exists('get_session_cookie')?get_session_cookie():'';
+    $value = function_exists('get_session_cookie')?get_session_cookie():'';
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -427,12 +476,14 @@ function ecv2_SESSION_COOKIE_NAME($lang,$escaped,$param)
  */
 function ecv2_MAILTO($lang,$escaped,$param)
 {
-	require_code('obfuscate');
+    require_code('obfuscate');
 
-	$value=mailto_obfuscated();
+    $value = mailto_obfuscated();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -445,10 +496,12 @@ function ecv2_MAILTO($lang,$escaped,$param)
  */
 function ecv2_INLINE_STATS($lang,$escaped,$param)
 {
-	$value=(get_option('show_inline_stats')=='1')?'1':'0';
+    $value = (get_option('show_inline_stats') == '1')?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -461,32 +514,35 @@ function ecv2_INLINE_STATS($lang,$escaped,$param)
  */
 function ecv2_IMG_INLINE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		if ((isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && (!$GLOBALS['IN_MINIKERNEL_VERSION']) && ($GLOBALS['FORUM_DRIVER']!==NULL))
-		{
-			$value=find_theme_image($param[0],true,true,(isset($param[2]) && $param[2]!='')?$param[2]:NULL,NULL,((isset($param[1])) && ($param[1]=='1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
-		} else
-		{
-			$value='themes/default/images/'.$param[0].'.png';
-		}
-		if ($value!='')
-		{
-			$file_path=((substr($value,0,22)=='themes/default/images/')?get_file_base():get_custom_file_base()).'/'.$value;
-			$file_size=@filesize($file_path);
-			if (($file_size!==false) && (floatval($file_size)*1.4<32768.0-100.0)) /* 1.4 represents inflation ratio for base64 encoding */
-			{
-				require_code('mime_types');
-				$value='data:'.get_mime_type(get_file_extension($file_path),false).';base64,'.base64_encode(file_get_contents($file_path));
-			} else return ecv_IMG($lang,$escaped,$param); // LEGACY: IE8
-		} else return ecv_IMG($lang,$escaped,$param);
-	}
+    if (isset($param[0])) {
+        if ((isset($GLOBALS['SITE_DB'])) && (function_exists('find_theme_image')) && (!$GLOBALS['IN_MINIKERNEL_VERSION']) && ($GLOBALS['FORUM_DRIVER'] !== NULL)) {
+            $value = find_theme_image($param[0],true,true,(isset($param[2]) && $param[2] != '')?$param[2]:null,null,((isset($param[1])) && ($param[1] == '1'))?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
+        } else {
+            $value = 'themes/default/images/' . $param[0] . '.png';
+        }
+        if ($value != '') {
+            $file_path = ((substr($value,0,22) == 'themes/default/images/')?get_file_base():get_custom_file_base()) . '/' . $value;
+            $file_size = @filesize($file_path);
+            if (($file_size !== false) && (floatval($file_size)*1.4<32768.0-100.0)) { /* 1.4 represents inflation ratio for base64 encoding */
+                require_code('mime_types');
+                $value = 'data:' . get_mime_type(get_file_extension($file_path),false) . ';base64,' . base64_encode(file_get_contents($file_path));
+            } else {
+                return ecv_IMG($lang,$escaped,$param);
+            } // LEGACY: IE8
+        } else {
+            return ecv_IMG($lang,$escaped,$param);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 // Uncommon symbols
@@ -501,15 +557,16 @@ function ecv2_IMG_INLINE($lang,$escaped,$param)
  */
 function ecv2_ADD($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))+floatval(str_replace(',','',$param[1])),20,true);
-	}
+    if (isset($param[1])) {
+        $value = float_to_raw_string(floatval(str_replace(',','',$param[0]))+floatval(str_replace(',','',$param[1])),20,true);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -522,16 +579,17 @@ function ecv2_ADD($lang,$escaped,$param)
  */
 function ecv2_ALREADY_RATED($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		require_code('feedback');
-		$value=(already_rated(array($param[0]),$param[1])?'1':'0');
-	}
+    if (isset($param[1])) {
+        require_code('feedback');
+        $value = (already_rated(array($param[0]),$param[1])?'1':'0');
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -544,17 +602,20 @@ function ecv2_ALREADY_RATED($lang,$escaped,$param)
  */
 function ecv2_ANCHOR($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$_value=do_template('ANCHOR',array('_GUID'=>'8795c70c9dd7c6217bb765264ac24092','NAME'=>$param[0]));
-		$value=$_value->evaluate();
-	}
+    if (isset($param[0])) {
+        $_value = do_template('ANCHOR',array('_GUID' => '8795c70c9dd7c6217bb765264ac24092','NAME' => $param[0]));
+        $value = $_value->evaluate();
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -567,16 +628,19 @@ function ecv2_ANCHOR($lang,$escaped,$param)
  */
 function ecv2_AT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$value=ocp_mb_substr($param[0],intval($param[1]),1);
-	}
+    if (isset($param[1])) {
+        $value = ocp_mb_substr($param[0],intval($param[1]),1);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -589,18 +653,21 @@ function ecv2_AT($lang,$escaped,$param)
  */
 function ecv2_ATTACHMENT_DOWNLOADS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		$db=$GLOBALS['SITE_DB'];
-		if ((isset($param[1])) && ($param[1]=='1')) $db=$GLOBALS['FORUM_DB'];
-		$_value=$db->query_select_value_if_there('attachments','a_num_downloads',array('id'=>intval($param[0])));
-		$value=is_null($_value)?'?':strval($_value);
-	}
+    if (isset($param[0])) {
+        $db = $GLOBALS['SITE_DB'];
+        if ((isset($param[1])) && ($param[1] == '1')) {
+            $db = $GLOBALS['FORUM_DB'];
+        }
+        $_value = $db->query_select_value_if_there('attachments','a_num_downloads',array('id' => intval($param[0])));
+        $value = is_null($_value)?'?':strval($_value);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -613,16 +680,17 @@ function ecv2_ATTACHMENT_DOWNLOADS($lang,$escaped,$param)
  */
 function ecv2_AVAILABLE_POINTS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (addon_installed('points'))
-	{
-		require_code('points');
-		$value=strval(available_points(isset($param[0])?intval($param[0]):get_member()));
-	}
+    if (addon_installed('points')) {
+        require_code('points');
+        $value = strval(available_points(isset($param[0])?intval($param[0]):get_member()));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -635,23 +703,22 @@ function ecv2_AVAILABLE_POINTS($lang,$escaped,$param)
  */
 function ecv2_AWARD_ID($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		if ($param[0]!='')
-		{
-			static $awarded_content_ids=array();
-			if (!isset($awarded_content_ids[intval($param[0])]))
-			{
-				$awarded_content_ids[intval($param[0])]=$GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id'=>intval($param[0])),'ORDER BY date_and_time DESC');
-			}
-			$value=isset($awarded_content_ids[intval($param[0])])?$awarded_content_ids[intval($param[0])]:'';
-		}
-	}
+    if (isset($param[0])) {
+        if ($param[0] != '') {
+            static $awarded_content_ids = array();
+            if (!isset($awarded_content_ids[intval($param[0])])) {
+                $awarded_content_ids[intval($param[0])] = $GLOBALS['SITE_DB']->query_select_value_if_there('award_archive','content_id',array('a_type_id' => intval($param[0])),'ORDER BY date_and_time DESC');
+            }
+            $value = isset($awarded_content_ids[intval($param[0])])?$awarded_content_ids[intval($param[0])]:'';
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -664,11 +731,13 @@ function ecv2_AWARD_ID($lang,$escaped,$param)
  */
 function ecv2_BROWSER_UA($lang,$escaped,$param)
 {
-	$browser=get_browser_string();
-	$value=$browser;
+    $browser = get_browser_string();
+    $value = $browser;
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -681,10 +750,12 @@ function ecv2_BROWSER_UA($lang,$escaped,$param)
  */
 function ecv2_CAN_SPELLCHECK($lang,$escaped,$param)
 {
-	$value=(function_exists('pspell_check'))?'1':'0';
+    $value = (function_exists('pspell_check'))?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -697,18 +768,21 @@ function ecv2_CAN_SPELLCHECK($lang,$escaped,$param)
  */
 function ecv2_CLEAN_FILE_SIZE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$bytes=is_numeric($param[0])?intval($param[0]):NULL;
-		require_code('files');
-		$value=clean_file_size($bytes);
-	}
+    if (isset($param[0])) {
+        $bytes = is_numeric($param[0])?intval($param[0]):null;
+        require_code('files');
+        $value = clean_file_size($bytes);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -721,21 +795,24 @@ function ecv2_CLEAN_FILE_SIZE($lang,$escaped,$param)
  */
 function ecv2_COMCODE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		global $LAX_COMCODE;
-		$tmp=$LAX_COMCODE;
-		$LAX_COMCODE=true;
-		$_value=comcode_to_tempcode($param[0],NULL,!isset($param[1]) || $param[1]=='1');
-		$LAX_COMCODE=$tmp;
-		$value=$_value->evaluate();
-	}
+    if (isset($param[0])) {
+        global $LAX_COMCODE;
+        $tmp = $LAX_COMCODE;
+        $LAX_COMCODE = true;
+        $_value = comcode_to_tempcode($param[0],null,!isset($param[1]) || $param[1] == '1');
+        $LAX_COMCODE = $tmp;
+        $value = $_value->evaluate();
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -748,21 +825,29 @@ function ecv2_COMCODE($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_FROM_BREADCRUMBS($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$separator=do_template('BREADCRUMB_SEPARATOR',array('_GUID'=>'y28e21cdbc38a3037d083f619bb311ae',));
-		$value='='.str_replace($separator->evaluate(),',=',str_replace(',','&#44;',$param[0]));
-		if ((!array_key_exists(1,$param)) || ($param[1]=='0')) $value=strip_tags($value);
-		else $value=strip_tags($value,'<a>');
-		$value=trim($value);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
+    if (isset($param[0])) {
+        $separator = do_template('BREADCRUMB_SEPARATOR',array('_GUID' => 'y28e21cdbc38a3037d083f619bb311ae',));
+        $value = '=' . str_replace($separator->evaluate(),',=',str_replace(',','&#44;',$param[0]));
+        if ((!array_key_exists(1,$param)) || ($param[1] == '0')) {
+            $value = strip_tags($value);
+        } else {
+            $value = strip_tags($value,'<a>');
+        }
+        $value = trim($value);
+        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) {
+            ocp_mark_as_escaped($value);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -775,16 +860,19 @@ function ecv2_COMMA_LIST_FROM_BREADCRUMBS($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_NICIFY($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=html_entity_decode(str_replace(',',', ',preg_replace('#[^,=]*=#','',$param[0])),ENT_QUOTES,get_charset());
-	}
+    if (isset($param[0])) {
+        $value = html_entity_decode(str_replace(',',', ',preg_replace('#[^,=]*=#','',$param[0])),ENT_QUOTES,get_charset());
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -797,17 +885,22 @@ function ecv2_COMMA_LIST_NICIFY($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_POP($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=preg_replace('#(^|,)[^,]+$#','',$param[0]);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
+    if (isset($param[0])) {
+        $value = preg_replace('#(^|,)[^,]+$#','',$param[0]);
+        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) {
+            ocp_mark_as_escaped($value);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -820,17 +913,22 @@ function ecv2_COMMA_LIST_POP($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_PUSH($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$value=$param[0].','.str_replace(',','&#44;',$param[1]);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
+    if (isset($param[1])) {
+        $value = $param[0] . ',' . str_replace(',','&#44;',$param[1]);
+        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) {
+            ocp_mark_as_escaped($value);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -843,16 +941,19 @@ function ecv2_COMMA_LIST_PUSH($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_REVERSE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=implode(',',array_reverse(explode(',',$param[0])));
-	}
+    if (isset($param[0])) {
+        $value = implode(',',array_reverse(explode(',',$param[0])));
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -865,19 +966,22 @@ function ecv2_COMMA_LIST_REVERSE($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_SET($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[2]))
-	{
-		require_code('blocks');
-		$values=block_params_str_to_arr($param[0]);
-		$values[$param[1]]=$param[2];
-		$value=block_params_arr_to_str($values);
-	}
+    if (isset($param[2])) {
+        require_code('blocks');
+        $values = block_params_str_to_arr($param[0]);
+        $values[$param[1]] = $param[2];
+        $value = block_params_arr_to_str($values);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -890,17 +994,22 @@ function ecv2_COMMA_LIST_SET($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_SHIFT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=preg_replace('#^[^,]+(,|$)#','',$param[0]);
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
+    if (isset($param[0])) {
+        $value = preg_replace('#^[^,]+(,|$)#','',$param[0]);
+        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) {
+            ocp_mark_as_escaped($value);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -913,17 +1022,22 @@ function ecv2_COMMA_LIST_SHIFT($lang,$escaped,$param)
  */
 function ecv2_COMMA_LIST_UNSHIFT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$value=str_replace(',','&#44;',$param[1]).','.$param[0];
-		if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) ocp_mark_as_escaped($value);
-	}
+    if (isset($param[1])) {
+        $value = str_replace(',','&#44;',$param[1]) . ',' . $param[0];
+        if (($GLOBALS['XSS_DETECT']) && (ocp_is_escaped($param[0]))) {
+            ocp_mark_as_escaped($value);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -936,10 +1050,12 @@ function ecv2_COMMA_LIST_UNSHIFT($lang,$escaped,$param)
  */
 function ecv2_COPPA_ON($lang,$escaped,$param)
 {
-	$value=(get_option('is_on_coppa')=='1')?'1':'0';
+    $value = (get_option('is_on_coppa') == '1')?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -952,21 +1068,23 @@ function ecv2_COPPA_ON($lang,$escaped,$param)
  */
 function ecv2_CSS_DIMENSION_REDUCE($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$value=$param[0];
-		if (substr($value,-2)=='px')
-		{
-			$b=$param[1];
-			$value=strval(intval(substr($value,0,-2))-intval($b)).'px';
-		}
-		if ($value=='') $value='0px';
-	}
+    if (isset($param[1])) {
+        $value = $param[0];
+        if (substr($value,-2) == 'px') {
+            $b = $param[1];
+            $value = strval(intval(substr($value,0,-2))-intval($b)) . 'px';
+        }
+        if ($value == '') {
+            $value = '0px';
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -979,21 +1097,27 @@ function ecv2_CSS_DIMENSION_REDUCE($lang,$escaped,$param)
  */
 function ecv2_CURRENCY($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (addon_installed('ecommerce'))
-	{
-		if (isset($param[0]))
-		{
-			require_code('currency');
-			$value=currency_convert(floatval(str_replace(',','',$param[0])),((isset($param[1])) && ($param[1]!=''))?$param[1]:get_option('currency'),((isset($param[2])) && ($param[2]!=''))?$param[2]:NULL,((isset($param[3])) && ($param[3]=='1')));
-			if (is_null($value)) $value=do_lang('INTERNAL_ERROR');
-		} else $value=get_option('currency');
-	}
+    if (addon_installed('ecommerce')) {
+        if (isset($param[0])) {
+            require_code('currency');
+            $value = currency_convert(floatval(str_replace(',','',$param[0])),((isset($param[1])) && ($param[1] != ''))?$param[1]:get_option('currency'),((isset($param[2])) && ($param[2] != ''))?$param[2]:null,((isset($param[3])) && ($param[3] == '1')));
+            if (is_null($value)) {
+                $value = do_lang('INTERNAL_ERROR');
+            }
+        } else {
+            $value = get_option('currency');
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1006,17 +1130,20 @@ function ecv2_CURRENCY($lang,$escaped,$param)
  */
 function ecv2_CURRENCY_SYMBOL($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (addon_installed('ecommerce'))
-	{
-		require_code('ecommerce');
-		$value=ecommerce_get_currency_symbol();
-	}
+    if (addon_installed('ecommerce')) {
+        require_code('ecommerce');
+        $value = ecommerce_get_currency_symbol();
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1029,10 +1156,12 @@ function ecv2_CURRENCY_SYMBOL($lang,$escaped,$param)
  */
 function ecv2_CURRENTLY_INVISIBLE($lang,$escaped,$param)
 {
-	$value=is_invisible()?'1':'0';
+    $value = is_invisible()?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1045,15 +1174,17 @@ function ecv2_CURRENTLY_INVISIBLE($lang,$escaped,$param)
  */
 function ecv2_DATE_AND_TIME($lang,$escaped,$param)
 {
-	$use_contextual_dates=(isset($param[0]) && ($param[0]=='1'));
-	$verbose=(isset($param[1]) && ($param[1]=='1'));
-	$server_time=(isset($param[2]) && ($param[2]=='1'));
-	$time=((isset($param[3])) && ($param[3]!=''))?intval($param[3]):time();
-	$member=isset($param[4])?intval($param[2]):NULL;
-	$value=get_timezoned_date($time,true,$verbose,$server_time,!$use_contextual_dates,$member);
+    $use_contextual_dates = (isset($param[0]) && ($param[0] == '1'));
+    $verbose = (isset($param[1]) && ($param[1] == '1'));
+    $server_time = (isset($param[2]) && ($param[2] == '1'));
+    $time = ((isset($param[3])) && ($param[3] != ''))?intval($param[3]):time();
+    $member = isset($param[4])?intval($param[2]):null;
+    $value = get_timezoned_date($time,true,$verbose,$server_time,!$use_contextual_dates,$member);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1066,18 +1197,23 @@ function ecv2_DATE_AND_TIME($lang,$escaped,$param)
  */
 function ecv2_DEC($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		global $TEMPCODE_SETGET;
-		if (!isset($TEMPCODE_SETGET[$param[0]])) $TEMPCODE_SETGET[$param[0]]='0';
-		$TEMPCODE_SETGET[$param[0]]=strval(intval($TEMPCODE_SETGET[$param[0]])-1);
-	}
+    if (isset($param[0])) {
+        global $TEMPCODE_SETGET;
+        if (!isset($TEMPCODE_SETGET[$param[0]])) {
+            $TEMPCODE_SETGET[$param[0]] = '0';
+        }
+        $TEMPCODE_SETGET[$param[0]] = strval(intval($TEMPCODE_SETGET[$param[0]])-1);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1090,21 +1226,20 @@ function ecv2_DEC($lang,$escaped,$param)
  */
 function ecv2_DIV_CEIL($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		if (floatval($param[1])==0.0)
-		{
-			$value='divide-by-zero';
-		} else
-		{
-			$value=strval(intval(ceil(floatval($param[0])/floatval($param[1]))));
-		}
-	}
+    if (isset($param[1])) {
+        if (floatval($param[1]) == 0.0) {
+            $value = 'divide-by-zero';
+        } else {
+            $value = strval(intval(ceil(floatval($param[0])/floatval($param[1]))));
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1117,10 +1252,12 @@ function ecv2_DIV_CEIL($lang,$escaped,$param)
  */
 function ecv2_DOMAIN($lang,$escaped,$param)
 {
-	$value=get_domain();
+    $value = get_domain();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1133,18 +1270,23 @@ function ecv2_DOMAIN($lang,$escaped,$param)
  */
 function ecv2_ENTITY_DECODE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		static $charset=NULL;
-		if ($charset===NULL) $charset=get_charset();
-		$value=@html_entity_decode($param[0],ENT_QUOTES,$charset);
-	}
+    if (isset($param[0])) {
+        static $charset = null;
+        if ($charset === NULL) {
+            $charset = get_charset();
+        }
+        $value = @html_entity_decode($param[0],ENT_QUOTES,$charset);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1157,21 +1299,25 @@ function ecv2_ENTITY_DECODE($lang,$escaped,$param)
  */
 function ecv2_ESCAPE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$d_escaping=array(isset($param[1])?constant($param[1]):ENTITY_ESCAPED);
-		for ($i=0;$i<max(1,array_key_exists(2,$param)?intval($param[2]):1);$i++)
-		{
-			if (is_string($param[0])) apply_tempcode_escaping($d_escaping,$param[0]);
-		}
-		$value=$param[0];
-	}
+    if (isset($param[0])) {
+        $d_escaping = array(isset($param[1])?constant($param[1]):ENTITY_ESCAPED);
+        for ($i = 0;$i<max(1,array_key_exists(2,$param)?intval($param[2]):1);$i++) {
+            if (is_string($param[0])) {
+                apply_tempcode_escaping($d_escaping,$param[0]);
+            }
+        }
+        $value = $param[0];
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1184,18 +1330,23 @@ function ecv2_ESCAPE($lang,$escaped,$param)
  */
 function ecv2_FIND_GUID_VIA_ID($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_guid_via_id($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[1])) {
+        require_code('resource_fs');
+        $value = find_guid_via_id($param[0],$param[1]);
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1208,18 +1359,23 @@ function ecv2_FIND_GUID_VIA_ID($lang,$escaped,$param)
  */
 function ecv2_FIND_ID_VIA_GUID($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		require_code('resource_fs');
-		$value=find_id_via_guid($param[0]);
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[0])) {
+        require_code('resource_fs');
+        $value = find_id_via_guid($param[0]);
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1232,18 +1388,23 @@ function ecv2_FIND_ID_VIA_GUID($lang,$escaped,$param)
  */
 function ecv2_FIND_ID_VIA_LABEL($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_id_via_label($param[0],$param[1],array_key_exists(2,$param)?$param[2]:NULL);
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[1])) {
+        require_code('resource_fs');
+        $value = find_id_via_label($param[0],$param[1],array_key_exists(2,$param)?$param[2]:null);
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1256,18 +1417,23 @@ function ecv2_FIND_ID_VIA_LABEL($lang,$escaped,$param)
  */
 function ecv2_FIND_ID_VIA_OCCLEFS_FILENAME($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_id_via_occlefs_filename($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[1])) {
+        require_code('resource_fs');
+        $value = find_id_via_occlefs_filename($param[0],$param[1]);
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1280,17 +1446,20 @@ function ecv2_FIND_ID_VIA_OCCLEFS_FILENAME($lang,$escaped,$param)
  */
 function ecv2_FIND_ID_VIA_URL_MONIKER($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		require_code('urls2');
-		$value=find_id_via_url_moniker($param[0],$param[1]);
-	}
+    if (isset($param[1])) {
+        require_code('urls2');
+        $value = find_id_via_url_moniker($param[0],$param[1]);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1303,18 +1472,23 @@ function ecv2_FIND_ID_VIA_URL_MONIKER($lang,$escaped,$param)
  */
 function ecv2_FIND_LABEL_VIA_ID($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_label_via_id($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[1])) {
+        require_code('resource_fs');
+        $value = find_label_via_id($param[0],$param[1]);
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1327,18 +1501,23 @@ function ecv2_FIND_LABEL_VIA_ID($lang,$escaped,$param)
  */
 function ecv2_FIND_OCCLEFS_FILENAME_VIA_ID($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		require_code('resource_fs');
-		$value=find_occlefs_filename_via_id($param[0],$param[1]);
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[1])) {
+        require_code('resource_fs');
+        $value = find_occlefs_filename_via_id($param[0],$param[1]);
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1351,17 +1530,22 @@ function ecv2_FIND_OCCLEFS_FILENAME_VIA_ID($lang,$escaped,$param)
  */
 function ecv2_FIND_URL_MONIKER_VIA_ID($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$value=find_id_moniker(array('page'=>$param[0],'type'=>$param[1],'id'=>$param[1]),array_key_exists(2,$param)?$param[2]:'');
-		if ($value===NULL) $value='';
-	}
+    if (isset($param[1])) {
+        $value = find_id_moniker(array('page' => $param[0],'type' => $param[1],'id' => $param[1]),array_key_exists(2,$param)?$param[2]:'');
+        if ($value === NULL) {
+            $value = '';
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1374,16 +1558,19 @@ function ecv2_FIND_URL_MONIKER_VIA_ID($lang,$escaped,$param)
  */
 function ecv2_FLOAT_FORMAT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=float_format(floatval($param[0]),isset($param[1])?intval($param[1]):2,array_key_exists(2,$param) && $param[2]=='1');
-	}
+    if (isset($param[0])) {
+        $value = float_format(floatval($param[0]),isset($param[1])?intval($param[1]):2,array_key_exists(2,$param) && $param[2] == '1');
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1396,10 +1583,12 @@ function ecv2_FLOAT_FORMAT($lang,$escaped,$param)
  */
 function ecv2_FORUM_BASE_URL($lang,$escaped,$param)
 {
-	$value=get_forum_base_url();
+    $value = get_forum_base_url();
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1412,11 +1601,13 @@ function ecv2_FORUM_BASE_URL($lang,$escaped,$param)
  */
 function ecv2_FORUM_CONTEXT($lang,$escaped,$param)
 {
-	global $SET_CONTEXT_FORUM;
-	$value=is_null($SET_CONTEXT_FORUM)?'':strval($SET_CONTEXT_FORUM);
+    global $SET_CONTEXT_FORUM;
+    $value = is_null($SET_CONTEXT_FORUM)?'':strval($SET_CONTEXT_FORUM);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1429,11 +1620,13 @@ function ecv2_FORUM_CONTEXT($lang,$escaped,$param)
  */
 function ecv2_GEOLOCATE($lang,$escaped,$param)
 {
-	require_code('global4');
-	$value=geolocate_ip(isset($param[0])?$param[0]:NULL);
+    require_code('global4');
+    $value = geolocate_ip(isset($param[0])?$param[0]:null);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1446,16 +1639,17 @@ function ecv2_GEOLOCATE($lang,$escaped,$param)
  */
 function ecv2_GROUP_ID($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(isset($param[1])?intval($param[1]):get_member());
-		$value=array_key_exists(intval($param[0]),$groups)?strval($groups[intval($param[0])]):'';
-	}
+    if (isset($param[0])) {
+        $groups = $GLOBALS['FORUM_DRIVER']->get_members_groups(isset($param[1])?intval($param[1]):get_member());
+        $value = array_key_exists(intval($param[0]),$groups)?strval($groups[intval($param[0])]):'';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1468,21 +1662,23 @@ function ecv2_GROUP_ID($lang,$escaped,$param)
  */
 function ecv2_GROUP_NAME($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$groups=$GLOBALS['FORUM_DRIVER']->get_members_groups(isset($param[1])?intval($param[1]):get_member());
-		if (array_key_exists(intval($param[0]),$groups))
-		{
-			$all_usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			$value=$all_usergroups[$groups[intval($param[0])]];
-		}
-	}
+    if (isset($param[0])) {
+        $groups = $GLOBALS['FORUM_DRIVER']->get_members_groups(isset($param[1])?intval($param[1]):get_member());
+        if (array_key_exists(intval($param[0]),$groups)) {
+            $all_usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+            $value = $all_usergroups[$groups[intval($param[0])]];
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1495,15 +1691,16 @@ function ecv2_GROUP_NAME($lang,$escaped,$param)
  */
 function ecv2_HAS_CATEGORY_ACCESS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if ((isset($param[0])) && (function_exists('has_category_access')))
-	{
-		$value=has_category_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1])?'1':'0';
-	}
+    if ((isset($param[0])) && (function_exists('has_category_access'))) {
+        $value = has_category_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1])?'1':'0';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1516,25 +1713,24 @@ function ecv2_HAS_CATEGORY_ACCESS($lang,$escaped,$param)
  */
 function ecv2_HAS_EDIT_PERMISSION($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$range=strtolower($param[0]);
-		$owner=intval($param[1]);
-		$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
-		$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
-		if (array_key_exists(5,$param))
-		{
-			$value=has_edit_permission($range,$member,$owner,$cms_page,array($param[4],$param[5]))?'1':'0';
-		} else
-		{
-			$value=has_edit_permission($range,$member,$owner,$cms_page)?'1':'0';
-		}
-	}
+    if (isset($param[1])) {
+        $range = strtolower($param[0]);
+        $owner = intval($param[1]);
+        $member = ((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+        $cms_page = ((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+        if (array_key_exists(5,$param)) {
+            $value = has_edit_permission($range,$member,$owner,$cms_page,array($param[4],$param[5]))?'1':'0';
+        } else {
+            $value = has_edit_permission($range,$member,$owner,$cms_page)?'1':'0';
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1547,22 +1743,24 @@ function ecv2_HAS_EDIT_PERMISSION($lang,$escaped,$param)
  */
 function ecv2_SUPPORTS_FRACTIONAL_EDITABLE($lang,$escaped,$param)
 {
-	$value='0';
-	if (isset($param[1]))
-	{
-		$edit_pagelink=$param[0];
-		$has_permission=(isset($param[1])?$param[1]:NULL)==='1';
+    $value = '0';
+    if (isset($param[1])) {
+        $edit_pagelink = $param[0];
+        $has_permission = (isset($param[1])?$param[1]:null) === '1';
 
-		list($zone,$attributes,)=page_link_decode($edit_pagelink);
-		if ($zone=='_SEARCH') $zone=get_module_zone($attributes['page']);
-		if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (($has_permission===true) || (($has_permission===NULL) && (has_zone_access(get_member(),'adminzone')))))
-		{
-			$value='1';
-		}
-	}
+        list($zone,$attributes,) = page_link_decode($edit_pagelink);
+        if ($zone == '_SEARCH') {
+            $zone = get_module_zone($attributes['page']);
+        }
+        if ((has_actual_page_access(get_member(),$attributes['page'],$zone)) && (($has_permission === true) || (($has_permission === NULL) && (has_zone_access(get_member(),'adminzone'))))) {
+            $value = '1';
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1575,10 +1773,12 @@ function ecv2_SUPPORTS_FRACTIONAL_EDITABLE($lang,$escaped,$param)
  */
 function ecv2_HAS_FORUM($lang,$escaped,$param)
 {
-	$value=has_no_forum()?'0':'1';
+    $value = has_no_forum()?'0':'1';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1591,15 +1791,16 @@ function ecv2_HAS_FORUM($lang,$escaped,$param)
  */
 function ecv2_HAS_PAGE_ACCESS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if ((isset($param[0])) && (isset($param[1])) && (function_exists('has_page_access')))
-	{
-		$value=has_page_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1],((!is_null($param)) && (isset($param[3])))?($param[3]=='1'):false)?'1':'0';
-	}
+    if ((isset($param[0])) && (isset($param[1])) && (function_exists('has_page_access'))) {
+        $value = has_page_access(((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member(),$param[0],$param[1],((!is_null($param)) && (isset($param[3])))?($param[3] == '1'):false)?'1':'0';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1612,25 +1813,24 @@ function ecv2_HAS_PAGE_ACCESS($lang,$escaped,$param)
  */
 function ecv2_HAS_SUBMIT_PERMISSION($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		$range=strtolower($param[0]);
-		$ip_address=$param[1];
-		$member=((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
-		$cms_page=((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
-		if (array_key_exists(5,$param))
-		{
-			$value=has_submit_permission($range,$member,$ip_address,$cms_page,array($param[5],$param[6]))?'1':'0';
-		} else
-		{
-			$value=has_submit_permission($range,$member,$ip_address,$cms_page)?'1':'0';
-		}
-	}
+    if (isset($param[0])) {
+        $range = strtolower($param[0]);
+        $ip_address = $param[1];
+        $member = ((!is_null($param)) && (isset($param[2])))?intval($param[2]):get_member();
+        $cms_page = ((!is_null($param)) && (isset($param[3])))?$param[3]:get_page_name();
+        if (array_key_exists(5,$param)) {
+            $value = has_submit_permission($range,$member,$ip_address,$cms_page,array($param[5],$param[6]))?'1':'0';
+        } else {
+            $value = has_submit_permission($range,$member,$ip_address,$cms_page)?'1':'0';
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1643,11 +1843,13 @@ function ecv2_HAS_SUBMIT_PERMISSION($lang,$escaped,$param)
  */
 function ecv2_HTTP_STATUS_CODE($lang,$escaped,$param)
 {
-	global $HTTP_STATUS_CODE;
-	$value=$HTTP_STATUS_CODE;
+    global $HTTP_STATUS_CODE;
+    $value = $HTTP_STATUS_CODE;
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1660,16 +1862,17 @@ function ecv2_HTTP_STATUS_CODE($lang,$escaped,$param)
  */
 function ecv2_ISSET($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		global $TEMPCODE_SETGET;
-		$value=(isset($TEMPCODE_SETGET[$param[0]]))?'1':'0';
-	}
+    if (isset($param[0])) {
+        global $TEMPCODE_SETGET;
+        $value = (isset($TEMPCODE_SETGET[$param[0]]))?'1':'0';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1682,11 +1885,13 @@ function ecv2_ISSET($lang,$escaped,$param)
  */
 function ecv2_IS_A_COOKIE_LOGIN($lang,$escaped,$param)
 {
-	global $IS_A_COOKIE_LOGIN;
-	$value=($IS_A_COOKIE_LOGIN && (ini_get('suhosin.cookie.max_name_length')!=='64'))?'1':'0';
+    global $IS_A_COOKIE_LOGIN;
+    $value = ($IS_A_COOKIE_LOGIN && (ini_get('suhosin.cookie.max_name_length') !== '64'))?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1699,22 +1904,21 @@ function ecv2_IS_A_COOKIE_LOGIN($lang,$escaped,$param)
  */
 function ecv2_IS_FRIEND($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		if (addon_installed('chat'))
-		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_likes',array('member_likes'=>isset($param[1])?intval($param[1]):get_member(),'member_liked'=>intval($param[0])));
-			$value=is_null($test)?'0':'1';
-		} else
-		{
-			$value='0';
-		}
-	}
+    if (isset($param[0])) {
+        if (addon_installed('chat')) {
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_likes',array('member_likes' => isset($param[1])?intval($param[1]):get_member(),'member_liked' => intval($param[0])));
+            $value = is_null($test)?'0':'1';
+        } else {
+            $value = '0';
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1727,10 +1931,12 @@ function ecv2_IS_FRIEND($lang,$escaped,$param)
  */
 function ecv2_IS_VIRTUALISED_REQUEST($lang,$escaped,$param)
 {
-	$value=$GLOBALS['IS_VIRTUALISED_REQUEST']?'1':'0';
+    $value = $GLOBALS['IS_VIRTUALISED_REQUEST']?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1743,16 +1949,17 @@ function ecv2_IS_VIRTUALISED_REQUEST($lang,$escaped,$param)
  */
 function ecv2_LAST_VISIT_TIME($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (get_forum_type()=='ocf')
-	{
-		$member_info=ocf_read_in_member_profile(get_member(),true);
-		$value=strval($member_info['last_visit_time']);
-	}
+    if (get_forum_type() == 'ocf') {
+        $member_info = ocf_read_in_member_profile(get_member(),true);
+        $value = strval($member_info['last_visit_time']);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1765,16 +1972,19 @@ function ecv2_LAST_VISIT_TIME($lang,$escaped,$param)
  */
 function ecv2_LENGTH($lang,$escaped,$param)
 {
-	$value='0';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '0';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=strval(ocp_mb_strlen($param[0]));
-	}
+    if (isset($param[0])) {
+        $value = strval(ocp_mb_strlen($param[0]));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1787,15 +1997,16 @@ function ecv2_LENGTH($lang,$escaped,$param)
  */
 function ecv2_LT($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$value=(intval($param[0])<intval($param[1]))?'1':'0';
-	}
+    if (isset($param[1])) {
+        $value = (intval($param[0])<intval($param[1]))?'1':'0';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1808,11 +2019,15 @@ function ecv2_LT($lang,$escaped,$param)
  */
 function ecv2_MEMBER_OVERRIDE($lang,$escaped,$param)
 {
-	$value=get_param('id','');
-	if ((!is_numeric($value)) || ($value=='')) $value=strval(get_member());
+    $value = get_param('id','');
+    if ((!is_numeric($value)) || ($value == '')) {
+        $value = strval(get_member());
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1825,15 +2040,16 @@ function ecv2_MEMBER_OVERRIDE($lang,$escaped,$param)
  */
 function ecv2_MOD($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		$value=strval(max(intval($param[0]),-intval($param[0])));
-	}
+    if (isset($param[0])) {
+        $value = strval(max(intval($param[0]),-intval($param[0])));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1846,14 +2062,15 @@ function ecv2_MOD($lang,$escaped,$param)
  */
 function ecv2_MULT($lang,$escaped,$param)
 {
-	$value='1';
-	foreach ($param as $p)
-	{
-		$value=float_to_raw_string(floatval($value)*floatval($p),20,true);
-	}
+    $value = '1';
+    foreach ($param as $p) {
+        $value = float_to_raw_string(floatval($value)*floatval($p),20,true);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1866,15 +2083,16 @@ function ecv2_MULT($lang,$escaped,$param)
  */
 function ecv2_NEGATE($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		$value=strval(-intval($param[0]));
-	}
+    if (isset($param[0])) {
+        $value = strval(-intval($param[0]));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1887,10 +2105,12 @@ function ecv2_NEGATE($lang,$escaped,$param)
  */
 function ecv2_NO_SAFE_MODE($lang,$escaped,$param)
 {
-	$value=(str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode')))=='1')?'0':'1';
+    $value = (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1')?'0':'1';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1903,10 +2123,12 @@ function ecv2_NO_SAFE_MODE($lang,$escaped,$param)
  */
 function ecv2_STRIP_HTML($lang,$escaped,$param)
 {
-	$value=strip_html($param[0]);
+    $value = strip_html($param[0]);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1919,16 +2141,19 @@ function ecv2_STRIP_HTML($lang,$escaped,$param)
  */
 function ecv2_NUMBER_FORMAT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=integer_format(intval($param[0]));
-	}
+    if (isset($param[0])) {
+        $value = integer_format(intval($param[0]));
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -1941,18 +2166,19 @@ function ecv2_NUMBER_FORMAT($lang,$escaped,$param)
  */
 function ecv2_NUM_NEW_POSTS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (get_forum_type()=='ocf')
-	{
-		$member_info=ocf_read_in_member_profile(get_member(),true);
-		$_new_posts=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_posts WHERE NOT p_cache_forum_id IS NULL AND p_time>'.strval($member_info['last_visit_time']));
-		$new_posts=$_new_posts[0]['mycnt'];
-		$value=strval($new_posts);
-	}
+    if (get_forum_type() == 'ocf') {
+        $member_info = ocf_read_in_member_profile(get_member(),true);
+        $_new_posts = $GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE NOT p_cache_forum_id IS NULL AND p_time>' . strval($member_info['last_visit_time']));
+        $new_posts = $_new_posts[0]['mycnt'];
+        $value = strval($new_posts);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1965,18 +2191,19 @@ function ecv2_NUM_NEW_POSTS($lang,$escaped,$param)
  */
 function ecv2_NUM_NEW_TOPICS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (get_forum_type()=='ocf')
-	{
-		$member_info=ocf_read_in_member_profile(get_member(),true);
-		$_new_topics=$GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_topics WHERE NOT t_forum_id IS NULL AND t_cache_first_time>'.strval($member_info['last_visit_time']));
-		$new_topics=$_new_topics[0]['mycnt'];
-		$value=strval($new_topics);
-	}
+    if (get_forum_type() == 'ocf') {
+        $member_info = ocf_read_in_member_profile(get_member(),true);
+        $_new_topics = $GLOBALS['FORUM_DB']->query('SELECT COUNT(*) AS mycnt FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics WHERE NOT t_forum_id IS NULL AND t_cache_first_time>' . strval($member_info['last_visit_time']));
+        $new_topics = $_new_topics[0]['mycnt'];
+        $value = strval($new_topics);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -1989,50 +2216,47 @@ function ecv2_NUM_NEW_TOPICS($lang,$escaped,$param)
  */
 function ecv2_RATING($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		static $cache_rating=array();
-		$cache_key=serialize($param);
-		if (isset($cache_rating[$cache_key]))
-		{
-			$value=$cache_rating[$cache_key];
-		} else
-		{
-			global $DISPLAYED_TITLE;
+    if (isset($param[1])) {
+        static $cache_rating = array();
+        $cache_key = serialize($param);
+        if (isset($cache_rating[$cache_key])) {
+            $value = $cache_rating[$cache_key];
+        } else {
+            global $DISPLAYED_TITLE;
 
-			require_code('feedback');
-			$display_tpl=array_key_exists(5,$param)?$param[5]:'RATING_FORM';
-			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-			if ($rating!==NULL)
-			{
-				if (array_key_exists(5,$param))
-				{
-					$value=static_evaluate_tempcode(do_template($display_tpl,$rating));
-				} else
-				{
-					$value=isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
-				}
-			} else
-			{
-				if ((!array_key_exists(2,$param)) || ($param[2]=='0'))
-				{
-					$value=isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
-				} else
-				{
-					$value=do_template('RATING_INLINE_STATIC',$rating);
-				}
-				if (is_object($value)) $value=$value->evaluate();
-			}
+            require_code('feedback');
+            $display_tpl = array_key_exists(5,$param)?$param[5]:'RATING_FORM';
+            $rating = get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],'RATING_FORM',array_key_exists(2,$param)?$param[2]:null);
+            if ($rating !== NULL) {
+                if (array_key_exists(5,$param)) {
+                    $value = static_evaluate_tempcode(do_template($display_tpl,$rating));
+                } else {
+                    $value = isset($rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING'])?$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['RATING']:'';
+                }
+            } else {
+                if ((!array_key_exists(2,$param)) || ($param[2] == '0')) {
+                    $value = isset($rating['ALL_RATING_CRITERIA'][0]['RATING'])?$rating['ALL_RATING_CRITERIA'][0]['RATING']:'';
+                } else {
+                    $value = do_template('RATING_INLINE_STATIC',$rating);
+                }
+                if (is_object($value)) {
+                    $value = $value->evaluate();
+                }
+            }
 
-			$cache_rating[$cache_key]=$value;
-		}
-	}
+            $cache_rating[$cache_key] = $value;
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2045,30 +2269,31 @@ function ecv2_RATING($lang,$escaped,$param)
  */
 function ecv2_NUM_RATINGS($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		global $DISPLAYED_TITLE;
+    if (isset($param[1])) {
+        global $DISPLAYED_TITLE;
 
-		static $cache_num_ratings=array();
-		$cache_key=serialize($param);
-		if (isset($cache_num_ratings[$cache_key]))
-		{
-			$value=$cache_num_ratings[$cache_key];
-		} else
-		{
-			require_code('feedback');
-			$rating=get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:NULL);
-			$value=$rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['NUM_RATINGS'];
+        static $cache_num_ratings = array();
+        $cache_key = serialize($param);
+        if (isset($cache_num_ratings[$cache_key])) {
+            $value = $cache_num_ratings[$cache_key];
+        } else {
+            require_code('feedback');
+            $rating = get_rating_simple_array(array_key_exists(3,$param)?$param[3]:get_self_url(true),array_key_exists(4,$param)?$param[4]:(is_null($DISPLAYED_TITLE)?'':$DISPLAYED_TITLE->evaluate()),$param[0],$param[1],array_key_exists(5,$param)?$param[5]:'RATING_FORM',array_key_exists(2,$param)?$param[2]:null);
+            $value = $rating['ALL_RATING_CRITERIA'][key($rating['ALL_RATING_CRITERIA'])]['NUM_RATINGS'];
 
-			$cache_num_ratings[$cache_key]=$value;
-		}
-	}
+            $cache_num_ratings[$cache_key] = $value;
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2081,17 +2306,20 @@ function ecv2_NUM_RATINGS($lang,$escaped,$param)
  */
 function ecv2_OBFUSCATE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		require_code('obfuscate');
-		$value=obfuscate_entities($param[0]);
-	}
+    if (isset($param[0])) {
+        require_code('obfuscate');
+        $value = obfuscate_entities($param[0]);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2104,19 +2332,22 @@ function ecv2_OBFUSCATE($lang,$escaped,$param)
  */
 function ecv2_OCF_MEMBER_HTML($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (get_forum_type()=='ocf')
-	{
-		require_code('ocf_members');
-		require_code('ocf_members2');
-		$_value=render_member_box(isset($param[0])?intval($param[0]):get_member(),false,NULL,NULL,true,NULL,false);
-		$value=$_value->evaluate();
-	}
+    if (get_forum_type() == 'ocf') {
+        require_code('ocf_members');
+        require_code('ocf_members2');
+        $_value = render_member_box(isset($param[0])?intval($param[0]):get_member(),false,null,null,true,null,false);
+        $value = $_value->evaluate();
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2129,12 +2360,16 @@ function ecv2_OCF_MEMBER_HTML($lang,$escaped,$param)
  */
 function ecv2_OS($lang,$escaped,$param)
 {
-	$os=get_os_string();
-	if (is_null($os)) $os='';
-	$value=$os;
+    $os = get_os_string();
+    if (is_null($os)) {
+        $os = '';
+    }
+    $value = $os;
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2147,16 +2382,19 @@ function ecv2_OS($lang,$escaped,$param)
  */
 function ecv2_PAD_LEFT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$value=str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_LEFT);
-	}
+    if (isset($param[1])) {
+        $value = str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_LEFT);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2169,16 +2407,19 @@ function ecv2_PAD_LEFT($lang,$escaped,$param)
  */
 function ecv2_PAD_RIGHT($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$value=str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_RIGHT);
-	}
+    if (isset($param[1])) {
+        $value = str_pad($param[0],intval($param[1]),array_key_exists(2,$param)?$param[2]:'',STR_PAD_RIGHT);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2191,16 +2432,17 @@ function ecv2_PAD_RIGHT($lang,$escaped,$param)
  */
 function ecv2_POINTS_USED($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (addon_installed('points'))
-	{
-		require_code('points');
-		$value=strval(points_used(isset($param[0])?intval($param[0]):get_member()));
-	}
+    if (addon_installed('points')) {
+        require_code('points');
+        $value = strval(points_used(isset($param[0])?intval($param[0]):get_member()));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2213,15 +2455,16 @@ function ecv2_POINTS_USED($lang,$escaped,$param)
  */
 function ecv2_PREG_MATCH($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$value=(preg_match('#'.str_replace('#','\#',$param[0]).'#'.(isset($param[2])?str_replace('e','',$param[2]):''),$param[1])!=0)?'1':'0';
-	}
+    if (isset($param[1])) {
+        $value = (preg_match('#' . str_replace('#','\#',$param[0]) . '#' . (isset($param[2])?str_replace('e','',$param[2]):''),$param[1]) != 0)?'1':'0';
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2234,10 +2477,12 @@ function ecv2_PREG_MATCH($lang,$escaped,$param)
  */
 function ecv2_QUERY_STRING($lang,$escaped,$param)
 {
-	$value=ocp_srv('QUERY_STRING');
+    $value = ocp_srv('QUERY_STRING');
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2250,15 +2495,16 @@ function ecv2_QUERY_STRING($lang,$escaped,$param)
  */
 function ecv2_REM($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$value=strval(intval($param[0])%intval($param[1]));
-	}
+    if (isset($param[1])) {
+        $value = strval(intval($param[0])%intval($param[1]));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2271,16 +2517,17 @@ function ecv2_REM($lang,$escaped,$param)
  */
 function ecv2_RESET_CYCLE($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[0]))
-	{
-		global $CYCLES;
-		$CYCLES[$param[0]]=0;
-	}
+    if (isset($param[0])) {
+        global $CYCLES;
+        $CYCLES[$param[0]] = 0;
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2293,23 +2540,24 @@ function ecv2_RESET_CYCLE($lang,$escaped,$param)
  */
 function ecv2_ROUND($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$amount=isset($param[1])?intval($param[1]):0;
-		if ($amount>0)
-		{
-			$value=float_format(floatval($param[0]),$amount);
-		} else
-		{
-			$value=strval(intval(round(floatval($param[0]),$amount)));
-		}
-	}
+    if (isset($param[0])) {
+        $amount = isset($param[1])?intval($param[1]):0;
+        if ($amount>0) {
+            $value = float_format(floatval($param[0]),$amount);
+        } else {
+            $value = strval(intval(round(floatval($param[0]),$amount)));
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2322,16 +2570,19 @@ function ecv2_ROUND($lang,$escaped,$param)
  */
 function ecv2_SECONDS_PERIOD($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=display_seconds_period(intval($param[0]));
-	}
+    if (isset($param[0])) {
+        $value = display_seconds_period(intval($param[0]));
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2344,10 +2595,12 @@ function ecv2_SECONDS_PERIOD($lang,$escaped,$param)
  */
 function ecv2_SESSION($lang,$escaped,$param)
 {
-	$value=get_session_id();
+    $value = get_session_id();
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2360,10 +2613,12 @@ function ecv2_SESSION($lang,$escaped,$param)
  */
 function ecv2_SESSION_HASHED($lang,$escaped,$param)
 {
-	$value=md5(get_session_id());
+    $value = md5(get_session_id());
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2376,14 +2631,15 @@ function ecv2_SESSION_HASHED($lang,$escaped,$param)
  */
 function ecv2_SET_TITLE($lang,$escaped,$param)
 {
-	if (isset($param[0]))
-	{
-		get_screen_title($param[0],false);
-	}
+    if (isset($param[0])) {
+        get_screen_title($param[0],false);
+    }
 
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2396,10 +2652,12 @@ function ecv2_SET_TITLE($lang,$escaped,$param)
  */
 function ecv2_SHOW_DOCS($lang,$escaped,$param)
 {
-	$value=(get_option('show_docs')==='0')?'0':'1';
+    $value = (get_option('show_docs') === '0')?'0':'1';
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2412,10 +2670,12 @@ function ecv2_SHOW_DOCS($lang,$escaped,$param)
  */
 function ecv2_SITE_SCOPE($lang,$escaped,$param)
 {
-	$value=get_option('site_scope');
+    $value = get_option('site_scope');
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2428,10 +2688,12 @@ function ecv2_SITE_SCOPE($lang,$escaped,$param)
  */
 function ecv2_SSW($lang,$escaped,$param)
 {
-	$value=(get_option('ssw')=='1')?'1':'0';
+    $value = (get_option('ssw') == '1')?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2444,11 +2706,13 @@ function ecv2_SSW($lang,$escaped,$param)
  */
 function ecv2_STAFF_ADDRESS($lang,$escaped,$param)
 {
-	require_code('obfuscate');
-	$value=obfuscate_email_address(get_option('staff_address'));
+    require_code('obfuscate');
+    $value = obfuscate_email_address(get_option('staff_address'));
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2461,10 +2725,12 @@ function ecv2_STAFF_ADDRESS($lang,$escaped,$param)
  */
 function ecv2_STAFF_ADDRESS_PURE($lang,$escaped,$param)
 {
-	$value=get_option('staff_address');
+    $value = get_option('staff_address');
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2477,16 +2743,17 @@ function ecv2_STAFF_ADDRESS_PURE($lang,$escaped,$param)
  */
 function ecv2_STRPOS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$t_value=strpos($param[0],$param[1]);
-		$value=($t_value===false)?'0':strval($t_value);
-	}
+    if (isset($param[1])) {
+        $t_value = strpos($param[0],$param[1]);
+        $value = ($t_value === false)?'0':strval($t_value);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2499,15 +2766,16 @@ function ecv2_STRPOS($lang,$escaped,$param)
  */
 function ecv2_SUBTRACT($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[1]))
-	{
-		$value=float_to_raw_string(floatval(str_replace(',','',$param[0]))-floatval(str_replace(',','',$param[1])),20,true);
-	}
+    if (isset($param[1])) {
+        $value = float_to_raw_string(floatval(str_replace(',','',$param[0]))-floatval(str_replace(',','',$param[1])),20,true);
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2520,18 +2788,21 @@ function ecv2_SUBTRACT($lang,$escaped,$param)
  */
 function ecv2_TEMPCODE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		require_code('tempcode_compiler');
-		$_value=template_to_tempcode($param[0]);
-		$value=$_value->evaluate();
-	}
+    if (isset($param[0])) {
+        require_code('tempcode_compiler');
+        $_value = template_to_tempcode($param[0]);
+        $value = $_value->evaluate();
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2544,10 +2815,12 @@ function ecv2_TEMPCODE($lang,$escaped,$param)
  */
 function ecv2_TIMEZONE($lang,$escaped,$param)
 {
-	$value=make_nice_timezone_name(get_site_timezone());
+    $value = make_nice_timezone_name(get_site_timezone());
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2560,26 +2833,21 @@ function ecv2_TIMEZONE($lang,$escaped,$param)
  */
 function ecv2_MATURITY_FILTER_REQUESTED($lang,$escaped,$param)
 {
-	$safe='';
-	if (function_exists('apache_request_headers'))
-	{
-		$headers=apache_request_headers();
-		if (array_key_exists('prefer',$headers))
-		{
-			$safe=$headers['prefer'];
-		}
-	} elseif (isset($_SERVER['HTTP_PREFER']))
-	{
-		$safe=$_SERVER['HTTP_PREFER'];
-	} elseif (isset($_ENV['HTTP_PREFER']))
-	{
-		$safe=$_ENV['HTTP_PREFER'];
-	}
-	if (strtolower($safe)=='safe')
-	{
-		return '1';
-	}
-	return '0';
+    $safe = '';
+    if (function_exists('apache_request_headers')) {
+        $headers = apache_request_headers();
+        if (array_key_exists('prefer',$headers)) {
+            $safe = $headers['prefer'];
+        }
+    } elseif (isset($_SERVER['HTTP_PREFER'])) {
+        $safe = $_SERVER['HTTP_PREFER'];
+    } elseif (isset($_ENV['HTTP_PREFER'])) {
+        $safe = $_ENV['HTTP_PREFER'];
+    }
+    if (strtolower($safe) == 'safe') {
+        return '1';
+    }
+    return '0';
 }
 
 /**
@@ -2592,16 +2860,19 @@ function ecv2_MATURITY_FILTER_REQUESTED($lang,$escaped,$param)
  */
 function ecv2_TIME_PERIOD($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=display_time_period(intval($param[0]));
-	}
+    if (isset($param[0])) {
+        $value = display_time_period(intval($param[0]));
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2614,16 +2885,17 @@ function ecv2_TIME_PERIOD($lang,$escaped,$param)
  */
 function ecv2_TOTAL_POINTS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (addon_installed('points'))
-	{
-		require_code('points');
-		$value=strval(total_points(isset($param[0])?intval($param[0]):get_member()));
-	}
+    if (addon_installed('points')) {
+        require_code('points');
+        $value = strval(total_points(isset($param[0])?intval($param[0]):get_member()));
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2636,14 +2908,19 @@ function ecv2_TOTAL_POINTS($lang,$escaped,$param)
  */
 function ecv2_TO_TIMESTAMP($lang,$escaped,$param)
 {
-	if (isset($param[0]))
-	{
-		$value=strval(strtotime($param[0]));
-		if ((array_key_exists(1,$param)) && ($param[1]=='1')) $value=strval(usertime_to_utctime(intval($value))); // '1' means date was in user-time so needs converting to a UTC timestamp
-	} else $value=strval(time());
+    if (isset($param[0])) {
+        $value = strval(strtotime($param[0]));
+        if ((array_key_exists(1,$param)) && ($param[1] == '1')) {
+            $value = strval(usertime_to_utctime(intval($value)));
+        } // '1' means date was in user-time so needs converting to a UTC timestamp
+    } else {
+        $value = strval(time());
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2656,10 +2933,12 @@ function ecv2_TO_TIMESTAMP($lang,$escaped,$param)
  */
 function ecv2_TRUNCATE_EXPAND($lang,$escaped,$param)
 {
-	$value=symbol_truncator($param,'expand');
+    $value = symbol_truncator($param,'expand');
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2672,10 +2951,12 @@ function ecv2_TRUNCATE_EXPAND($lang,$escaped,$param)
  */
 function ecv2_TRUNCATE_RIGHT($lang,$escaped,$param)
 {
-	$value=symbol_truncator($param,'right');
+    $value = symbol_truncator($param,'right');
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2688,16 +2969,19 @@ function ecv2_TRUNCATE_RIGHT($lang,$escaped,$param)
  */
 function ecv2_TUTORIAL_URL($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=get_tutorial_url($param[0]);
-	}
+    if (isset($param[0])) {
+        $value = get_tutorial_url($param[0]);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2710,22 +2994,23 @@ function ecv2_TUTORIAL_URL($lang,$escaped,$param)
  */
 function ecv2_UCASE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		if ((isset($param[1])) && ($param[1]=='1'))
-		{
-			$value=ocp_mb_strtoupper(ocp_mb_substr($param[0],0,1)).ocp_mb_substr($param[0],1); // ucfirst
-		} else
-		{
-			$value=ocp_mb_strtoupper($param[0]);
-		}
-	}
+    if (isset($param[0])) {
+        if ((isset($param[1])) && ($param[1] == '1')) {
+            $value = ocp_mb_strtoupper(ocp_mb_substr($param[0],0,1)) . ocp_mb_substr($param[0],1); // ucfirst
+        } else {
+            $value = ocp_mb_strtoupper($param[0]);
+        }
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2738,17 +3023,20 @@ function ecv2_UCASE($lang,$escaped,$param)
  */
 function ecv2_URLISE_LANG($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$_value=urlise_lang($param[0],$param[1],isset($param[2])?$param[2]:'',isset($param[3])?($param[3]=='1'):false);
-		$value=$_value->evaluate();
-	}
+    if (isset($param[1])) {
+        $_value = urlise_lang($param[0],$param[1],isset($param[2])?$param[2]:'',isset($param[3])?($param[3] == '1'):false);
+        $value = $_value->evaluate();
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2761,10 +3049,12 @@ function ecv2_URLISE_LANG($lang,$escaped,$param)
  */
 function ecv2_USER_AGENT($lang,$escaped,$param)
 {
-	$value=ocp_srv('HTTP_USER_AGENT');
+    $value = ocp_srv('HTTP_USER_AGENT');
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2777,10 +3067,12 @@ function ecv2_USER_AGENT($lang,$escaped,$param)
  */
 function ecv2_VERSION($lang,$escaped,$param)
 {
-	$value=strval(ocp_version());
+    $value = strval(ocp_version());
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2793,20 +3085,22 @@ function ecv2_VERSION($lang,$escaped,$param)
  */
 function ecv2_VIEWS($lang,$escaped,$param)
 {
-	$value='';
+    $value = '';
 
-	if (isset($param[2]))
-	{
-		$id_field=/*isset($param[4])?$param[4]:*/'id'; // Not allowed on fields other than 'id', for security reasons
-		if (preg_match('#^\w*views\w*$#',$param[1])!=0)
-		{
-			$test=$GLOBALS['SITE_DB']->query_select_value_if_there($param[0],$param[1],array($id_field=>$param[2]));
-			if ($test!==NULL) $value=integer_format($test);
-		}
-	}
+    if (isset($param[2])) {
+        $id_field = /*isset($param[4])?$param[4]:*/'id'; // Not allowed on fields other than 'id', for security reasons
+        if (preg_match('#^\w*views\w*$#',$param[1]) != 0) {
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there($param[0],$param[1],array($id_field => $param[2]));
+            if ($test !== NULL) {
+                $value = integer_format($test);
+            }
+        }
+    }
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2819,16 +3113,19 @@ function ecv2_VIEWS($lang,$escaped,$param)
  */
 function ecv2_WCASE($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[0]))
-	{
-		$value=ocp_mb_ucwords($param[0]);
-	}
+    if (isset($param[0])) {
+        $value = ocp_mb_ucwords($param[0]);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2841,17 +3138,20 @@ function ecv2_WCASE($lang,$escaped,$param)
  */
 function ecv2_WORDWRAP($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[1]))
-	{
-		$cut=isset($param[3]) && ($param[3]=='1');
-		$value=wordwrap($param[0],intval($param[1]),isset($param[2])?$param[2]:'<br />',$cut);
-	}
+    if (isset($param[1])) {
+        $cut = isset($param[3]) && ($param[3] == '1');
+        $value = wordwrap($param[0],intval($param[1]),isset($param[2])?$param[2]:'<br />',$cut);
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2864,15 +3164,18 @@ function ecv2_WORDWRAP($lang,$escaped,$param)
  */
 function ecv2_XOR($lang,$escaped,$param)
 {
-	$count=0;
-	foreach ($param as $test)
-	{
-		if (($test=='1') || ($test=='1')) $count++;
-	}
-	$value=($count==1)?'1':'0';
+    $count = 0;
+    foreach ($param as $test) {
+        if (($test == '1') || ($test == '1')) {
+            $count++;
+        }
+    }
+    $value = ($count == 1)?'1':'0';
 
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
-	return $value;
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+    return $value;
 }
 
 /**
@@ -2885,10 +3188,12 @@ function ecv2_XOR($lang,$escaped,$param)
  */
 function ecv2_ZONE_HEADER_TEXT($lang,$escaped,$param)
 {
-	$value=get_translated_text($GLOBALS['ZONE']['zone_header_text']);
+    $value = get_translated_text($GLOBALS['ZONE']['zone_header_text']);
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 /**
@@ -2901,17 +3206,20 @@ function ecv2_ZONE_HEADER_TEXT($lang,$escaped,$param)
  */
 function ecv2_THEME_WIZARD_COLOR($lang,$escaped,$param)
 {
-	$value='';
-	if ($GLOBALS['XSS_DETECT']) ocp_mark_as_escaped($value);
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
 
-	if (isset($param[2]))
-	{
-		global $TEMPCODE_SETGET;
-		$TEMPCODE_SETGET[$param[1]]=$param[0];
-	}
+    if (isset($param[2])) {
+        global $TEMPCODE_SETGET;
+        $TEMPCODE_SETGET[$param[1]] = $param[0];
+    }
 
-	if ($escaped!=array()) apply_tempcode_escaping($escaped,$value);
-	return $value;
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped,$value);
+    }
+    return $value;
 }
 
 // These directives are all static evaluated during compilation, so don't need loading on each request.
@@ -2926,19 +3234,20 @@ function ecv2_THEME_WIZARD_COLOR($lang,$escaped,$param)
  */
 function ecv2_CSS_INHERIT(&$value,$lang,$escaped,$param) // e.g. {+START,CSS_INHERIT,global,default,0,#886aa9}{+END}
 {
-	if (isset($param[0]))
-	{
-		require_code('css_and_js');
+    if (isset($param[0])) {
+        require_code('css_and_js');
 
-		$css_file=$param[0]->evaluate();
-		$theme=isset($param[1])?$param[1]->evaluate():'default';
-		$seed=isset($param[2])?$param[2]->evaluate():NULL;
-		if ($seed=='') $seed=NULL;
-		$dark=isset($param[3])?($param[3]->evaluate()=='1'):false;
-		$algorithm=isset($param[4])?($param[4]->evaluate()):'equations';
+        $css_file = $param[0]->evaluate();
+        $theme = isset($param[1])?$param[1]->evaluate():'default';
+        $seed = isset($param[2])?$param[2]->evaluate():null;
+        if ($seed == '') {
+            $seed = null;
+        }
+        $dark = isset($param[3])?($param[3]->evaluate() == '1'):false;
+        $algorithm = isset($param[4])?($param[4]->evaluate()):'equations';
 
-		$value=css_inherit($css_file,$theme,$GLOBALS['FORUM_DRIVER']->get_theme(),$seed,$dark,$algorithm);
-	}
+        $value = css_inherit($css_file,$theme,$GLOBALS['FORUM_DRIVER']->get_theme(),$seed,$dark,$algorithm);
+    }
 }
 
 /**
@@ -2951,21 +3260,19 @@ function ecv2_CSS_INHERIT(&$value,$lang,$escaped,$param) // e.g. {+START,CSS_INH
  */
 function ecv2_RECONTEXTUALISE_IDS(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$prefix=$param[0]->evaluate();
-		$str=$param[1]->evaluate();
-		$matches=array();
-		$num_matches=preg_match_all('# id="([^"]*)"#',$str,$matches);
-		for ($i=0;$i<$num_matches;$i++)
-		{
-			$str=str_replace(' id="'.$matches[$i][1].'"',' id="'.$prefix.'_'.$matches[$i][1].'"',$str);
-			$str=str_replace(' for="'.$matches[$i][1].'"',' for="'.$prefix.'_'.$matches[$i][1].'"',$str);
-			$str=str_replace(' ById(\''.$matches[$i][1].'\')',' ById(\''.$prefix.'_'.$matches[$i][1].'\')',$str);
-			$str=str_replace(' ById("'.$matches[$i][1].'\')',' ById(\''.$prefix.'_'.$matches[$i][1].'")',$str);
-		}
-		$value=$str;
-	}
+    if (isset($param[1])) {
+        $prefix = $param[0]->evaluate();
+        $str = $param[1]->evaluate();
+        $matches = array();
+        $num_matches = preg_match_all('# id="([^"]*)"#',$str,$matches);
+        for ($i = 0;$i<$num_matches;$i++) {
+            $str = str_replace(' id="' . $matches[$i][1] . '"',' id="' . $prefix . '_' . $matches[$i][1] . '"',$str);
+            $str = str_replace(' for="' . $matches[$i][1] . '"',' for="' . $prefix . '_' . $matches[$i][1] . '"',$str);
+            $str = str_replace(' ById(\'' . $matches[$i][1] . '\')',' ById(\'' . $prefix . '_' . $matches[$i][1] . '\')',$str);
+            $str = str_replace(' ById("' . $matches[$i][1] . '\')',' ById(\'' . $prefix . '_' . $matches[$i][1] . '")',$str);
+        }
+        $value = $str;
+    }
 }
 
 // Uncommon directives
@@ -2980,14 +3287,12 @@ function ecv2_RECONTEXTUALISE_IDS(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$_p=$param[0]->evaluate();
-		if (($_p=='1') || ($_p=='1'))
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        $_p = $param[0]->evaluate();
+        if (($_p == '1') || ($_p == '1')) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3000,13 +3305,11 @@ function ecv2_IF(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF_EMPTY(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		if ($param[0]->is_empty())
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        if ($param[0]->is_empty()) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3019,13 +3322,11 @@ function ecv2_IF_EMPTY(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF_NON_EMPTY(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		if (!$param[0]->is_empty())
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        if (!$param[0]->is_empty()) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3038,14 +3339,12 @@ function ecv2_IF_NON_EMPTY(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF_PASSED(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$t=$param[0]->evaluate();
-		if (isset($param['vars'][$t]))
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        $t = $param[0]->evaluate();
+        if (isset($param['vars'][$t])) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3058,14 +3357,12 @@ function ecv2_IF_PASSED(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF_NON_PASSED(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$t=$param[0]->evaluate();
-		if (!isset($param['vars'][$t]))
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        $t = $param[0]->evaluate();
+        if (!isset($param['vars'][$t])) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3078,14 +3375,12 @@ function ecv2_IF_NON_PASSED(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF_PASSED_AND_TRUE(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$t=$param[0]->evaluate();
-		if ((isset($param['vars'][$t])) && ($param['vars'][$t]!==false) && ($param['vars'][$t]!=='0') && ($param['vars'][$t]!==''))
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        $t = $param[0]->evaluate();
+        if ((isset($param['vars'][$t])) && ($param['vars'][$t] !== false) && ($param['vars'][$t] !== '0') && ($param['vars'][$t] !== '')) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3098,14 +3393,12 @@ function ecv2_IF_PASSED_AND_TRUE(&$value,$lang,$escaped,$param)
  */
 function ecv2_IF_NON_PASSED_OR_FALSE(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$t=$param[0]->evaluate();
-		if ((!isset($param['vars'][$t])) || ($param['vars'][$t]===false) || ($param['vars'][$t]==='0') || ($param['vars'][$t]===''))
-		{
-			$value=$param[1]->evaluate();
-		}
-	}
+    if (isset($param[1])) {
+        $t = $param[0]->evaluate();
+        if ((!isset($param['vars'][$t])) || ($param['vars'][$t] === false) || ($param['vars'][$t] === '0') || ($param['vars'][$t] === '')) {
+            $value = $param[1]->evaluate();
+        }
+    }
 }
 
 /**
@@ -3118,18 +3411,16 @@ function ecv2_IF_NON_PASSED_OR_FALSE(&$value,$lang,$escaped,$param)
  */
 function ecv2_WHILE(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[1]))
-	{
-		$_p=$param[0]->evaluate();
-		if (($_p=='1') || ($_p=='1'))
-		{
-			$value='';
-			$value.=$param[1]->evaluate();
-			$put='';
-			ecv2_WHILE($put,$lang,$escaped,$param);
-			$value.=$put;
-		}
-	}
+    if (isset($param[1])) {
+        $_p = $param[0]->evaluate();
+        if (($_p == '1') || ($_p == '1')) {
+            $value = '';
+            $value .= $param[1]->evaluate();
+            $put = '';
+            ecv2_WHILE($put,$lang,$escaped,$param);
+            $value .= $put;
+        }
+    }
 }
 
 /**
@@ -3142,81 +3433,73 @@ function ecv2_WHILE(&$value,$lang,$escaped,$param)
  */
 function ecv2_LOOP(&$value,$lang,$escaped,$param)
 {
-	if (isset($param[0]))
-	{
-		if (!array_key_exists($param[0]->evaluate(),$param['vars']))
-		{
-			require_code('site');
-			attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$param[0]->evaluate(),'???'),'warn');
-			return;
-		}
+    if (isset($param[0])) {
+        if (!array_key_exists($param[0]->evaluate(),$param['vars'])) {
+            require_code('site');
+            attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$param[0]->evaluate(),'???'),'warn');
+            return;
+        }
 
-		$array_key=$param[0]->evaluate();
-		if ((is_numeric($array_key)) || (strpos($array_key,',')!==false))
-		{
-			$array=array();
-			foreach (explode(',',$array_key) as $x)
-			{
-				if (strpos($x,'=')!==false)
-				{
-					list($key,$val)=explode('=',$x,2);
-					$array[$key]=$val;
-				} else
-				{
-					$array[]=$x;
-				}
-			}
-		} else
-		{
-			$array=array_key_exists($array_key,$param['vars'])?$param['vars'][$array_key]:array();
-			if (!is_array($array)) $array=array();
-		}
+        $array_key = $param[0]->evaluate();
+        if ((is_numeric($array_key)) || (strpos($array_key,',') !== false)) {
+            $array = array();
+            foreach (explode(',',$array_key) as $x) {
+                if (strpos($x,'=') !== false) {
+                    list($key,$val) = explode('=',$x,2);
+                    $array[$key] = $val;
+                } else {
+                    $array[] = $x;
+                }
+            }
+        } else {
+            $array = array_key_exists($array_key,$param['vars'])?$param['vars'][$array_key]:array();
+            if (!is_array($array)) {
+                $array = array();
+            }
+        }
 
-		$value='';
-		if (array_key_exists(1+1,$param))
-		{
-			$columns=$param[1]->evaluate();
-			$row_starter=array_key_exists(2+1,$param)?$param[2]->evaluate():'<tr>';
-			$row_terminator=array_key_exists(3+1,$param)?$param[3]->evaluate():'</tr>';
-			$value.=$row_starter;
+        $value = '';
+        if (array_key_exists(1+1,$param)) {
+            $columns = $param[1]->evaluate();
+            $row_starter = array_key_exists(2+1,$param)?$param[2]->evaluate():'<tr>';
+            $row_terminator = array_key_exists(3+1,$param)?$param[3]->evaluate():'</tr>';
+            $value .= $row_starter;
 
-			// Sorting
-			if (array_key_exists(4+1,$param))
-			{
-				$sort_key=$param[4]->evaluate();
+            // Sorting
+            if (array_key_exists(4+1,$param)) {
+                $sort_key = $param[4]->evaluate();
 
-				$rev=((array_key_exists(5+1,$param)) && ($param[5]->evaluate()=='DESC'));
-				if ($sort_key!='')
-				{
-					sort_maps_by($array,$sort_key);
-				}
-				if ($rev) $array=array_reverse($array);
-			}
-		}
-		$last=count($param)-2;
-		$col=0;
-		$first=true;
-		foreach ($array as $go_key=>$go)
-		{
-			if (!is_array($go)) $go=array('_loop_key'=>make_string_tempcode(is_integer($go_key)?strval($go_key):$go_key),'_loop_var'=>make_string_tempcode($go)); // In case it's not a list of maps, but just a list
+                $rev = ((array_key_exists(5+1,$param)) && ($param[5]->evaluate() == 'DESC'));
+                if ($sort_key != '') {
+                    sort_maps_by($array,$sort_key);
+                }
+                if ($rev) {
+                    $array = array_reverse($array);
+                }
+            }
+        }
+        $last = count($param)-2;
+        $col = 0;
+        $first = true;
+        foreach ($array as $go_key => $go) {
+            if (!is_array($go)) {
+                $go = array('_loop_key' => make_string_tempcode(is_integer($go_key)?strval($go_key):$go_key),'_loop_var' => make_string_tempcode($go));
+            } // In case it's not a list of maps, but just a list
 
-			if ((isset($param[2])) && ($col%$columns==0) && ($col!=0))
-			{
-				$value.=$row_starter;
-			}
-			$ps=$go+$param['vars']+array('_loop_key'=>make_string_tempcode(is_integer($go_key)?strval($go_key):$go_key),'_i'=>strval($col),'_first'=>$first,'_last'=>$col==count($array)-1);
-			$bound=$param[$last]->bind($ps,'');
-			$value.=$bound->evaluate();
-			++$col;
-			if ((isset($param[3])) && ($col%$columns==0))
-			{
-				$value.=$row_terminator;
-			}
-			$first=false;
-		}
-		if ((isset($param[2])) && ($col%$columns!=0))
-		{
-			$value.=$row_terminator;
-		}
-	}
+            if ((isset($param[2])) && ($col%$columns == 0) && ($col != 0)) {
+                $value .= $row_starter;
+            }
+            $ps = $go+$param['vars']+array('_loop_key' => make_string_tempcode(is_integer($go_key)?strval($go_key):$go_key),'_i' => strval($col),'_first' => $first,'_last' => $col == count($array)-1);
+            $bound = $param[$last]->bind($ps,'');
+            $value .= $bound->evaluate();
+            ++$col;
+            if ((isset($param[3])) && ($col%$columns == 0)) {
+                $value .= $row_terminator;
+            }
+            $first = false;
+        }
+        if ((isset($param[2])) && ($col%$columns != 0)) {
+            $value .= $row_terminator;
+        }
+    }
 }

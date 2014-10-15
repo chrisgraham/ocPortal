@@ -20,38 +20,36 @@
 
 class Hook_comcode
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (multi_lang_content())
-		{
-			if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>100000)
-				return NULL; // Too much work. Can be done from upgrader, but people won't go in there so much. People don't really need to go emptying this cache on real sites.
-		}
+    public function info()
+    {
+        if (multi_lang_content()) {
+            if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>100000) {
+                return NULL;
+            } // Too much work. Can be done from upgrader, but people won't go in there so much. People don't really need to go emptying this cache on real sites.
+        }
 
-		$info=array();
-		$info['title']=do_lang_tempcode('COMCODE_CACHE');
-		$info['description']=do_lang_tempcode('DESCRIPTION_COMCODE_CACHE');
-		$info['type']='cache';
+        $info = array();
+        $info['title'] = do_lang_tempcode('COMCODE_CACHE');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_COMCODE_CACHE');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		erase_comcode_cache();
+    public function run()
+    {
+        erase_comcode_cache();
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }
-
-

@@ -23,25 +23,25 @@
  */
 class Module_admin_occle
 {
-	/**
+    /**
 	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Philip Withnall';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['update_require_upgrade']=1;
-		$info['locked']=false;
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Philip Withnall';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['update_require_upgrade'] = 1;
+        $info['locked'] = false;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -50,114 +50,114 @@ class Module_admin_occle
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		return array(
-			'!'=>array('OCCLE','menu/adminzone/tools/occle'),
-		);
-	}
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        return array(
+            '!' => array('OCCLE','menu/adminzone/tools/occle'),
+        );
+    }
 
-	/**
+    /**
 	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
 	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		if (is_null($upgrade_from))
-		{
-			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-			foreach (array_keys($usergroups) as $id)
-			{
-				$GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name'=>'admin_occle','zone_name'=>'adminzone','group_id'=>$id)); // OcCLE very dangerous
-			}
+    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    {
+        if (is_null($upgrade_from)) {
+            $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+            foreach (array_keys($usergroups) as $id) {
+                $GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name' => 'admin_occle','zone_name' => 'adminzone','group_id' => $id)); // OcCLE very dangerous
+            }
 
-			$GLOBALS['SITE_DB']->create_table('occlechat',array(
-				'id'=>'*AUTO',
-				'c_message'=>'LONG_TEXT',
-				'c_url'=>'URLPATH',
-				'c_incoming'=>'BINARY',
-				'c_timestamp'=>'TIME'
-			));
-		}
-	}
+            $GLOBALS['SITE_DB']->create_table('occlechat',array(
+                'id' => '*AUTO',
+                'c_message' => 'LONG_TEXT',
+                'c_url' => 'URLPATH',
+                'c_incoming' => 'BINARY',
+                'c_timestamp' => 'TIME'
+            ));
+        }
+    }
 
-	/**
+    /**
 	 * Uninstall the module.
 	 */
-	function uninstall()
-	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('occlechat');
+    public function uninstall()
+    {
+        $GLOBALS['SITE_DB']->drop_table_if_exists('occlechat');
 
-		delete_value('last_occle_command');
-	}
+        delete_value('last_occle_command');
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		$type=get_param('type','misc');
+    public function pre_run()
+    {
+        $type = get_param('type','misc');
 
-		require_lang('occle');
+        require_lang('occle');
 
-		set_helper_panel_tutorial('tut_occle');
-		set_helper_panel_text(comcode_lang_string('DOC_OCCLE'));
+        set_helper_panel_tutorial('tut_occle');
+        set_helper_panel_text(comcode_lang_string('DOC_OCCLE'));
 
-		$this->title=get_screen_title('OCCLE');
+        $this->title = get_screen_title('OCCLE');
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		require_code('occle');
-		require_javascript('javascript_ajax');
-		require_javascript('javascript_occle');
-		require_css('occle');
+    public function run()
+    {
+        require_code('occle');
+        require_javascript('javascript_ajax');
+        require_javascript('javascript_occle');
+        require_css('occle');
 
-		return $this->main_gui();
-	}
+        return $this->main_gui();
+    }
 
-	/**
+    /**
 	 * The main OcCLE GUI.
 	 *
 	 * @return tempcode	The UI
 	 */
-	function main_gui()
-	{
-		if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+    public function main_gui()
+    {
+        if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
+            warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
+        }
 
-		$command=post_param('occle_command','');
-		if ($command!='')
-		{
-			//We've had a normal form submission
-			$temp=new virtual_bash($command);
-			$commands=$temp->output_html();
-		} else $commands=new ocp_tempcode();
+        $command = post_param('occle_command','');
+        if ($command != '') {
+            //We've had a normal form submission
+            $temp = new virtual_bash($command);
+            $commands = $temp->output_html();
+        } else {
+            $commands = new ocp_tempcode();
+        }
 
-		$content=do_template('OCCLE_MAIN',array(
-			'_GUID'=>'05c1e7efacc3839babfe58fe624caa61',
-			'SUBMIT_URL'=>build_url(array('page'=>'_SELF'),'_SELF'),
-			'PROMPT'=>do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
-			'COMMANDS'=>$commands,
-		));
+        $content = do_template('OCCLE_MAIN',array(
+            '_GUID' => '05c1e7efacc3839babfe58fe624caa61',
+            'SUBMIT_URL' => build_url(array('page' => '_SELF'),'_SELF'),
+            'PROMPT' => do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
+            'COMMANDS' => $commands,
+        ));
 
-		return do_template('OCCLE_MAIN_SCREEN',array(
-			'_GUID'=>'d71ef9fa2cdaf419fee64cf3d7555225',
-			'TITLE'=>$this->title,
-			'CONTENT'=>$content,
-		));
-	}
+        return do_template('OCCLE_MAIN_SCREEN',array(
+            '_GUID' => 'd71ef9fa2cdaf419fee64cf3d7555225',
+            'TITLE' => $this->title,
+            'CONTENT' => $content,
+        ));
+    }
 }
-

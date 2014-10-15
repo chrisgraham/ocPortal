@@ -20,27 +20,27 @@
 
 class Hook_Notification_task_completed extends Hook_Notification
 {
-	/**
+    /**
 	 * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.
 	 *
 	 * @param  ID_TEXT		Notification code
 	 * @return integer		Allowed settings
 	 */
-	function allowed_settings($notification_code)
-	{
-		return A_INSTANT_EMAIL;
-	}
+    public function allowed_settings($notification_code)
+    {
+        return A_INSTANT_EMAIL;
+    }
 
-	/**
+    /**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *
 	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
 	 */
-	function list_handled_codes()
-	{
-		$list=array();
-		$list['task_completed']=array(do_lang('tasks:TASK_COMPLETED'),do_lang('tasks:NOTIFICATION_TYPE_task_completed'));
-		return $list;
-	}
+    public function list_handled_codes()
+    {
+        $list = array();
+        $list['task_completed'] = array(do_lang('tasks:TASK_COMPLETED'),do_lang('tasks:NOTIFICATION_TYPE_task_completed'));
+        return $list;
+    }
 }

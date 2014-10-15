@@ -20,7 +20,7 @@
 
 class Hook_block_ui_renderers_newsletters
 {
-	/**
+    /**
 	 * See if a particular block parameter's UI input can be rendered by this.
 	 *
 	 * @param  ID_TEXT		The block
@@ -30,16 +30,16 @@ class Hook_block_ui_renderers_newsletters
 	 * @param  tempcode		Field description
 	 * @return ?tempcode		Rendered field (NULL: not handled).
 	 */
-	function render_block_ui($block,$parameter,$has_default,$default,$description)
-	{
-		if (($parameter=='param') && (in_array($block,array('main_newsletter_signup')))) // newsletter list
-		{
-			$list=new ocp_tempcode();
-			$rows=$GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
-			foreach ($rows as $newsletter)
-				$list->attach(form_input_list_entry(strval($newsletter['id']),$has_default && strval($newsletter['id'])==$default,get_translated_text($newsletter['title'])));
-			return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false);
-		}
-		return NULL;
-	}
+    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    {
+        if (($parameter == 'param') && (in_array($block,array('main_newsletter_signup')))) { // newsletter list
+            $list = new ocp_tempcode();
+            $rows = $GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+            foreach ($rows as $newsletter) {
+                $list->attach(form_input_list_entry(strval($newsletter['id']),$has_default && strval($newsletter['id']) == $default,get_translated_text($newsletter['title'])));
+            }
+            return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false);
+        }
+        return NULL;
+    }
 }

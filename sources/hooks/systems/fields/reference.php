@@ -20,62 +20,66 @@
 
 class Hook_fields_reference
 {
-	/**
+    /**
 	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
 	 *
 	 * @param  ?ID_TEXT		Only find if we can potential match this field type (NULL: no filter)
 	 * @return array			Map of field type to field type title
 	 */
-	function get_field_types($filter=NULL)
-	{
-		if (!addon_installed('catalogues')) return array();
+    public function get_field_types($filter = null)
+    {
+        if (!addon_installed('catalogues')) {
+            return array();
+        }
 
-		if (($filter!==NULL) && (substr($filter,0,3)!='ck_')) return array(); // To avoid a wasteful query
+        if (($filter !== NULL) && (substr($filter,0,3) != 'ck_')) {
+            return array();
+        } // To avoid a wasteful query
 
-		require_lang('fields');
-		static $cats=NULL;
-		if (is_null($cats))
-			$cats=$GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
-		$ret=array();
-		foreach ($cats as $cat)
-		{
-			$ret['ck_'.$cat['c_name']]=do_lang_tempcode('FIELD_TYPE_reference_x',get_translated_text($cat['c_title']));
-		}
-		return $ret;
-	}
+        require_lang('fields');
+        static $cats = null;
+        if (is_null($cats)) {
+            $cats = $GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
+        }
+        $ret = array();
+        foreach ($cats as $cat) {
+            $ret['ck_' . $cat['c_name']] = do_lang_tempcode('FIELD_TYPE_reference_x',get_translated_text($cat['c_title']));
+        }
+        return $ret;
+    }
 
-	// ==============
-	// Module: search
-	// ==============
+    // ==============
+    // Module: search
+    // ==============
 
-	/**
+    /**
 	 * Get special Tempcode for inputting this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @return ?array			List of specially encoded input detail rows (NULL: nothing special)
 	 */
-	function get_search_inputter($row)
-	{
-		return NULL;
-	}
+    public function get_search_inputter($row)
+    {
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Get special SQL from POSTed parameters for this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @param  integer		We're processing for the ith row
 	 * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
 	 */
-	function inputted_to_sql_for_search($row,$i)
-	{
-		return exact_match_sql($row,$i);
-	}
+    public function inputted_to_sql_for_search($row,$i)
+    {
+        return exact_match_sql($row,$i);
+    }
 
-	// ===================
-	// Backend: fields API
-	// ===================
+    // ===================
+    // Backend: fields API
+    // ===================
 
-	/**
+    /**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
 	 * @param  ?array			The field details (NULL: new field)
@@ -83,36 +87,40 @@ class Hook_fields_reference
 	 * @param  ?string		The given default value as a string (NULL: don't "lock in" a new default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
-	{
-		return array('short_unescaped',$default,'short');
-	}
+    public function get_field_value_row_bits($field,$required = null,$default = null)
+    {
+        return array('short_unescaped',$default,'short');
+    }
 
-	/**
+    /**
 	 * Convert a field value to something renderable.
 	 *
 	 * @param  array			The field details
 	 * @param  mixed			The raw value
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev)
-	{
-		if (is_object($ev)) return $ev;
+    public function render_field_value($field,$ev)
+    {
+        if (is_object($ev)) {
+            return $ev;
+        }
 
-		if ($ev=='') return new ocp_tempcode();
+        if ($ev == '') {
+            return new ocp_tempcode();
+        }
 
-		require_code('content');
+        require_code('content');
 
-		list($title)=content_get_details('catalogue_entry',$ev);
+        list($title) = content_get_details('catalogue_entry',$ev);
 
-		return hyperlink(build_url(array('page'=>'catalogues','type'=>'entry','id'=>$ev),get_module_zone('catalogues')),$title,false,true);
-	}
+        return hyperlink(build_url(array('page' => 'catalogues','type' => 'entry','id' => $ev),get_module_zone('catalogues')),$title,false,true);
+    }
 
-	// ======================
-	// Frontend: fields input
-	// ======================
+    // ======================
+    // Frontend: fields input
+    // ======================
 
-	/**
+    /**
 	 * Get form inputter.
 	 *
 	 * @param  string			The field name
@@ -122,19 +130,18 @@ class Hook_fields_reference
 	 * @param  boolean		Whether this is for a new entry
 	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
 	 */
-	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
-	{
-		$options=array();
-		if (($field['cf_type']!='reference') && (substr($field['cf_type'],0,3)=='ck_'))
-		{
-			$options['catalogue_name']=substr($field['cf_type'],3);
-		}
-		require_code('content');
-		list($nice_label)=content_get_details('catalogue_entry',$actual_value);
-		return form_input_tree_list($_cf_name,$_cf_description,'field_'.strval($field['id']),NULL,'choose_catalogue_entry',$options,$field['cf_required']==1,$actual_value,false,NULL,false,$nice_label);
-	}
+    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    {
+        $options = array();
+        if (($field['cf_type'] != 'reference') && (substr($field['cf_type'],0,3) == 'ck_')) {
+            $options['catalogue_name'] = substr($field['cf_type'],3);
+        }
+        require_code('content');
+        list($nice_label) = content_get_details('catalogue_entry',$actual_value);
+        return form_input_tree_list($_cf_name,$_cf_description,'field_' . strval($field['id']),null,'choose_catalogue_entry',$options,$field['cf_required'] == 1,$actual_value,false,null,false,$nice_label);
+    }
 
-	/**
+    /**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
@@ -143,11 +150,10 @@ class Hook_fields_reference
 	 * @param  ?array			Former value of field (NULL: none)
 	 * @return ?string		The value (NULL: could not process)
 	 */
-	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
-	{
-		$id=$field['id'];
-		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
-	}
+    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    {
+        $id = $field['id'];
+        $tmp_name = 'field_' . strval($id);
+        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+    }
 }
-

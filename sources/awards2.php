@@ -31,28 +31,27 @@
  */
 function add_award_type($title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
-	require_code('global4');
-	prevent_double_submit('ADD_AWARD_TYPE',NULL,$title);
+    require_code('global4');
+    prevent_double_submit('ADD_AWARD_TYPE',null,$title);
 
-	$map=array(
-		'a_points'=>$points,
-		'a_content_type'=>filter_naughty_harsh($content_type),
-		'a_hide_awardee'=>$hide_awardee,
-		'a_update_time_hours'=>$update_time_hours,
-	);
-	$map+=insert_lang('a_title',$title,2);
-	$map+=insert_lang_comcode('a_description',$description,2);
-	$id=$GLOBALS['SITE_DB']->query_insert('award_types',$map,true);
+    $map = array(
+        'a_points' => $points,
+        'a_content_type' => filter_naughty_harsh($content_type),
+        'a_hide_awardee' => $hide_awardee,
+        'a_update_time_hours' => $update_time_hours,
+    );
+    $map += insert_lang('a_title',$title,2);
+    $map += insert_lang_comcode('a_description',$description,2);
+    $id = $GLOBALS['SITE_DB']->query_insert('award_types',$map,true);
 
-	log_it('ADD_AWARD_TYPE',strval($id),$title);
+    log_it('ADD_AWARD_TYPE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('award_type',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('award_type',strval($id),null,null,true);
+    }
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -68,26 +67,27 @@ function add_award_type($title,$description,$points,$content_type,$hide_awardee,
  */
 function edit_award_type($id,$title,$description,$points,$content_type,$hide_awardee,$update_time_hours)
 {
-	$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('award_types','a_title',array('id'=>$id));
-	if (is_null($_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_description=$GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id'=>$id));
-	$map=array(
-		'a_points'=>$points,
-		'a_content_type'=>filter_naughty_harsh($content_type),
-		'a_hide_awardee'=>$hide_awardee,
-		'a_update_time_hours'=>$update_time_hours,
-	);
-	$map+=lang_remap('a_title',$_title,$title);
-	$map+=lang_remap_comcode('a_description',$_description,$description);
-	$GLOBALS['SITE_DB']->query_update('award_types',$map,array('id'=>$id));
+    $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('award_types','a_title',array('id' => $id));
+    if (is_null($_title)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $_description = $GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id' => $id));
+    $map = array(
+        'a_points' => $points,
+        'a_content_type' => filter_naughty_harsh($content_type),
+        'a_hide_awardee' => $hide_awardee,
+        'a_update_time_hours' => $update_time_hours,
+    );
+    $map += lang_remap('a_title',$_title,$title);
+    $map += lang_remap_comcode('a_description',$_description,$description);
+    $GLOBALS['SITE_DB']->query_update('award_types',$map,array('id' => $id));
 
-	log_it('EDIT_AWARD_TYPE',strval($id),$title);
+    log_it('EDIT_AWARD_TYPE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('award_type',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('award_type',strval($id));
+    }
 }
 
 /**
@@ -97,19 +97,19 @@ function edit_award_type($id,$title,$description,$points,$content_type,$hide_awa
  */
 function delete_award_type($id)
 {
-	$_title=$GLOBALS['SITE_DB']->query_select_value_if_there('award_types','a_title',array('id'=>$id));
-	if (is_null($_title)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-	$_description=$GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id'=>$id));
-	log_it('DELETE_AWARD_TYPE',strval($id),get_translated_text($_title));
-	$GLOBALS['SITE_DB']->query_delete('award_types',array('id'=>$id),'',1);
-	$GLOBALS['SITE_DB']->query_delete('award_archive',array('a_type_id'=>$id),'',1);
-	delete_lang($_title);
-	delete_lang($_description);
+    $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('award_types','a_title',array('id' => $id));
+    if (is_null($_title)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
+    $_description = $GLOBALS['SITE_DB']->query_select_value('award_types','a_description',array('id' => $id));
+    log_it('DELETE_AWARD_TYPE',strval($id),get_translated_text($_title));
+    $GLOBALS['SITE_DB']->query_delete('award_types',array('id' => $id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('award_archive',array('a_type_id' => $id),'',1);
+    delete_lang($_title);
+    delete_lang($_description);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('award_type',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('award_type',strval($id));
+    }
 }
-

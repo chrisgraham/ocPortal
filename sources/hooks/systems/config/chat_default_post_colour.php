@@ -20,36 +20,34 @@
 
 class Hook_config_chat_default_post_colour
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CHAT_OPTIONS_COLOUR_NAME',
-			'type'=>'colour',
-			'category'=>'FEATURE',
-			'group'=>'SECTION_CHAT',
-			'explanation'=>'CONFIG_OPTION_chat_default_post_colour',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CHAT_OPTIONS_COLOUR_NAME',
+            'type' => 'colour',
+            'category' => 'FEATURE',
+            'group' => 'SECTION_CHAT',
+            'explanation' => 'CONFIG_OPTION_chat_default_post_colour',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'chat',
-		);
-	}
+            'addon' => 'chat',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'inherit';
-	}
+    public function get_default()
+    {
+        return 'inherit';
+    }
 }
-
-

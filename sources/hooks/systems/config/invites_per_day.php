@@ -20,36 +20,34 @@
 
 class Hook_config_invites_per_day
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'INVITES_PER_DAY',
-			'type'=>'float',
-			'category'=>'USERS',
-			'group'=>'JOINING',
-			'explanation'=>'CONFIG_OPTION_invites_per_day',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>201,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'INVITES_PER_DAY',
+            'type' => 'float',
+            'category' => 'USERS',
+            'group' => 'JOINING',
+            'explanation' => 'CONFIG_OPTION_invites_per_day',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 201,
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

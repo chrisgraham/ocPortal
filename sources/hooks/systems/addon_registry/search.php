@@ -20,396 +20,394 @@
 
 class Hook_addon_registry_search
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Multi-content search engine.';
-	}
+    public function get_description()
+    {
+        return 'Multi-content search engine.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_search',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_search',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array(
-				'search'
-			)
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+            'previously_in_addon' => array(
+                'search'
+            )
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/search.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/search.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/search.png',
-			'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/search.png',
-			'sources/hooks/systems/realtime_rain/search.php',
-			'themes/default/templates/TAGS.tpl',
-			'sources/blocks/side_tag_cloud.php',
-			'sources/hooks/systems/sitemap/search.php',
-			'themes/default/templates/BLOCK_SIDE_TAG_CLOUD.tpl',
-			'themes/default/templates/SEARCH_RESULT.tpl',
-			'themes/default/templates/SEARCH_RESULT_TABLE.tpl',
-			'sources/hooks/systems/addon_registry/search.php',
-			'sources/hooks/modules/admin_stats/search.php',
-			'sources/hooks/modules/admin_setupwizard/search.php',
-			'themes/default/templates/SEARCH_ADVANCED.tpl',
-			'themes/default/templates/BLOCK_MAIN_SEARCH.tpl',
-			'themes/default/templates/BLOCK_TOP_SEARCH.tpl',
-			'themes/default/templates/SEARCH_DOMAINS.tpl',
-			'themes/default/templates/SEARCH_FORM_SCREEN.tpl',
-			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN.tpl',
-			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl',
-			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl',
-			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl',
-			'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl',
-			'themes/default/css/search.css',
-			'lang/EN/search.ini',
-			'site/pages/modules/search.php',
-			'sources/search.php',
-			'sources/blocks/main_search.php',
-			'sources/blocks/top_search.php',
-			'sources/hooks/modules/search/.htaccess',
-			'sources/hooks/modules/search/index.html',
-			'themes/default/templates/OPENSEARCH.tpl',
-			'data/opensearch.php',
-			'sources/hooks/systems/config/search_results_per_page.php',
-			'sources/hooks/systems/config/enable_boolean_search.php',
-			'sources/hooks/systems/page_groupings/search.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/audit/statistics/search.png',
+            'themes/default/images/icons/48x48/menu/adminzone/audit/statistics/search.png',
+            'sources/hooks/systems/realtime_rain/search.php',
+            'themes/default/templates/TAGS.tpl',
+            'sources/blocks/side_tag_cloud.php',
+            'sources/hooks/systems/sitemap/search.php',
+            'themes/default/templates/BLOCK_SIDE_TAG_CLOUD.tpl',
+            'themes/default/templates/SEARCH_RESULT.tpl',
+            'themes/default/templates/SEARCH_RESULT_TABLE.tpl',
+            'sources/hooks/systems/addon_registry/search.php',
+            'sources/hooks/modules/admin_stats/search.php',
+            'sources/hooks/modules/admin_setupwizard/search.php',
+            'themes/default/templates/SEARCH_ADVANCED.tpl',
+            'themes/default/templates/BLOCK_MAIN_SEARCH.tpl',
+            'themes/default/templates/BLOCK_TOP_SEARCH.tpl',
+            'themes/default/templates/SEARCH_DOMAINS.tpl',
+            'themes/default/templates/SEARCH_FORM_SCREEN.tpl',
+            'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN.tpl',
+            'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl',
+            'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl',
+            'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl',
+            'themes/default/templates/SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl',
+            'themes/default/css/search.css',
+            'lang/EN/search.ini',
+            'site/pages/modules/search.php',
+            'sources/search.php',
+            'sources/blocks/main_search.php',
+            'sources/blocks/top_search.php',
+            'sources/hooks/modules/search/.htaccess',
+            'sources/hooks/modules/search/index.html',
+            'themes/default/templates/OPENSEARCH.tpl',
+            'data/opensearch.php',
+            'sources/hooks/systems/config/search_results_per_page.php',
+            'sources/hooks/systems/config/enable_boolean_search.php',
+            'sources/hooks/systems/page_groupings/search.php',
+        );
+    }
 
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'BLOCK_MAIN_SEARCH.tpl'=>'block_main_search',
-			'BLOCK_TOP_SEARCH.tpl'=>'block_top_search',
-			'BLOCK_SIDE_TAG_CLOUD.tpl'=>'block_side_tag_cloud',
-			'TAGS.tpl'=>'tags',
-			'OPENSEARCH.tpl'=>'opensearch',
-			'SEARCH_RESULT.tpl'=>'search_form_screen',
-			'SEARCH_RESULT_TABLE.tpl'=>'search_form_screen',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl'=>'search_form_screen',
-			'SEARCH_ADVANCED.tpl'=>'search_form_screen',
-			'SEARCH_FOR_SEARCH_DOMAIN.tpl'=>'search_form_screen',
-			'SEARCH_DOMAINS.tpl'=>'search_form_screen',
-			'SEARCH_FORM_SCREEN.tpl'=>'search_form_screen',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl'=>'search_form_screen',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl'=>'search_form_screen',
-			'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl'=>'search_form_screen'
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'BLOCK_MAIN_SEARCH.tpl' => 'block_main_search',
+            'BLOCK_TOP_SEARCH.tpl' => 'block_top_search',
+            'BLOCK_SIDE_TAG_CLOUD.tpl' => 'block_side_tag_cloud',
+            'TAGS.tpl' => 'tags',
+            'OPENSEARCH.tpl' => 'opensearch',
+            'SEARCH_RESULT.tpl' => 'search_form_screen',
+            'SEARCH_RESULT_TABLE.tpl' => 'search_form_screen',
+            'SEARCH_FOR_SEARCH_DOMAIN_OPTION.tpl' => 'search_form_screen',
+            'SEARCH_ADVANCED.tpl' => 'search_form_screen',
+            'SEARCH_FOR_SEARCH_DOMAIN.tpl' => 'search_form_screen',
+            'SEARCH_DOMAINS.tpl' => 'search_form_screen',
+            'SEARCH_FORM_SCREEN.tpl' => 'search_form_screen',
+            'SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST.tpl' => 'search_form_screen',
+            'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT.tpl' => 'search_form_screen',
+            'SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK.tpl' => 'search_form_screen'
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_main_search()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH',array(
-				'TITLE'=>lorem_phrase(),
-				'INPUT_FIELDS'=>placeholder_array(),
-				'EXTRA'=>placeholder_array(),
-				'SORT'=>lorem_phrase(),
-				'AUTHOR'=>lorem_phrase(),
-				'DAYS'=>lorem_phrase(),
-				'DIRECTION'=>lorem_phrase(),
-				'ONLY_TITLES'=>'1',
-				'ONLY_SEARCH_META'=>'1',
-				'BOOLEAN_SEARCH'=>'1',
-				'CONJUNCTIVE_OPERATOR'=>'AND',
-				'LIMIT_TO'=>placeholder_array(),
-				'URL'=>placeholder_url(),
-				'FULL_SEARCH_URL'=>placeholder_url(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__block_main_search()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH',array(
+                'TITLE' => lorem_phrase(),
+                'INPUT_FIELDS' => placeholder_array(),
+                'EXTRA' => placeholder_array(),
+                'SORT' => lorem_phrase(),
+                'AUTHOR' => lorem_phrase(),
+                'DAYS' => lorem_phrase(),
+                'DIRECTION' => lorem_phrase(),
+                'ONLY_TITLES' => '1',
+                'ONLY_SEARCH_META' => '1',
+                'BOOLEAN_SEARCH' => '1',
+                'CONJUNCTIVE_OPERATOR' => 'AND',
+                'LIMIT_TO' => placeholder_array(),
+                'URL' => placeholder_url(),
+                'FULL_SEARCH_URL' => placeholder_url(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_top_search()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH',array(
-				'TITLE'=>lorem_phrase(),
-				'EXTRA'=>placeholder_array(),
-				'SORT'=>lorem_phrase(),
-				'AUTHOR'=>lorem_phrase(),
-				'DAYS'=>lorem_phrase(),
-				'DIRECTION'=>lorem_phrase(),
-				'ONLY_TITLES'=>'1',
-				'ONLY_SEARCH_META'=>'1',
-				'BOOLEAN_SEARCH'=>'1',
-				'CONJUNCTIVE_OPERATOR'=>'AND',
-				'LIMIT_TO'=>placeholder_array(),
-				'URL'=>placeholder_url(),
-				'FULL_SEARCH_URL'=>placeholder_url(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__block_top_search()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH',array(
+                'TITLE' => lorem_phrase(),
+                'EXTRA' => placeholder_array(),
+                'SORT' => lorem_phrase(),
+                'AUTHOR' => lorem_phrase(),
+                'DAYS' => lorem_phrase(),
+                'DIRECTION' => lorem_phrase(),
+                'ONLY_TITLES' => '1',
+                'ONLY_SEARCH_META' => '1',
+                'BOOLEAN_SEARCH' => '1',
+                'CONJUNCTIVE_OPERATOR' => 'AND',
+                'LIMIT_TO' => placeholder_array(),
+                'URL' => placeholder_url(),
+                'FULL_SEARCH_URL' => placeholder_url(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__block_side_tag_cloud()
-	{
-		$tpl_tags=array();
-		$tags=array(
-			lorem_word()=>3,
-			lorem_word_2()=>5
-		);
-		foreach ($tags as $tag=>$count)
-		{
-			$em=1.0;
-			$tpl_tags[]=array(
-				'TAG'=>$tag,
-				'COUNT'=>strval($count),
-				'EM'=>float_to_raw_string($em),
-				'LINK'=>placeholder_url(),
-			);
-		}
+    public function tpl_preview__block_side_tag_cloud()
+    {
+        $tpl_tags = array();
+        $tags = array(
+            lorem_word() => 3,
+            lorem_word_2() => 5
+        );
+        foreach ($tags as $tag => $count) {
+            $em = 1.0;
+            $tpl_tags[] = array(
+                'TAG' => $tag,
+                'COUNT' => strval($count),
+                'EM' => float_to_raw_string($em),
+                'LINK' => placeholder_url(),
+            );
+        }
 
-		return array(
-			lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
-				'TITLE'=>lorem_phrase(),
-				'TAGS'=>$tpl_tags,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
+                'TITLE' => lorem_phrase(),
+                'TAGS' => $tpl_tags,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__tags()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('TAGS',array(
-				'TAGS'=>array(
-					array(
-						'LINK_FULLSCOPE'=>placeholder_url(),
-						'TAG'=>lorem_word(),
-					),
-					array(
-						'LINK_FULLSCOPE'=>placeholder_url(),
-						'TAG'=>lorem_word(),
-					)
-				),
-				'TYPE'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__tags()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('TAGS',array(
+                'TAGS' => array(
+                    array(
+                        'LINK_FULLSCOPE' => placeholder_url(),
+                        'TAG' => lorem_word(),
+                    ),
+                    array(
+                        'LINK_FULLSCOPE' => placeholder_url(),
+                        'TAG' => lorem_word(),
+                    )
+                ),
+                'TYPE' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__opensearch()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OPENSEARCH',array(
-				'DESCRIPTION'=>lorem_paragraph(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__opensearch()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OPENSEARCH',array(
+                'DESCRIPTION' => lorem_paragraph(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__search_form_screen()
-	{
-		require_css('forms');
+    public function tpl_preview__search_form_screen()
+    {
+        require_css('forms');
 
-		$options=new ocp_tempcode();
-		foreach (placeholder_array() as $value)
-		{
-			$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array(
-				'NAME'=>placeholder_random(),
-				'DISPLAY'=>lorem_phrase(),
-				'SPECIAL'=>lorem_phrase(),
-				'CHECKED'=>lorem_phrase(),
-			)));
-		}
+        $options = new ocp_tempcode();
+        foreach (placeholder_array() as $value) {
+            $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array(
+                'NAME' => placeholder_random(),
+                'DISPLAY' => lorem_phrase(),
+                'SPECIAL' => lorem_phrase(),
+                'CHECKED' => lorem_phrase(),
+            )));
+        }
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST',array(
-			'NAME'=>placeholder_random(),
-			'DISPLAY'=>lorem_word(),
-			'SPECIAL'=>placeholder_options(),
-			'CHECKED'=>false,
-		)));
+        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST',array(
+            'NAME' => placeholder_random(),
+            'DISPLAY' => lorem_word(),
+            'SPECIAL' => placeholder_options(),
+            'CHECKED' => false,
+        )));
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT',array(
-			'NAME'=>placeholder_random(),
-			'DISPLAY'=>lorem_word(),
-			'SPECIAL'=>lorem_word(),
-			'CHECKED'=>false,
-		)));
+        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT',array(
+            'NAME' => placeholder_random(),
+            'DISPLAY' => lorem_word(),
+            'SPECIAL' => lorem_word(),
+            'CHECKED' => false,
+        )));
 
-		$options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK',array(
-			'NAME'=>placeholder_random(),
-			'DISPLAY'=>lorem_word(),
-			'SPECIAL'=>lorem_word(),
-			'CHECKED'=>false,
-		)));
+        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK',array(
+            'NAME' => placeholder_random(),
+            'DISPLAY' => lorem_word(),
+            'SPECIAL' => lorem_word(),
+            'CHECKED' => false,
+        )));
 
-		$specialisation=do_lorem_template('SEARCH_ADVANCED',array(
-			'AJAX'=>lorem_phrase(),
-			'OPTIONS'=>$options,
-			'TREE'=>'',
-			'UNDERNEATH'=>lorem_phrase(),
-		));
+        $specialisation = do_lorem_template('SEARCH_ADVANCED',array(
+            'AJAX' => lorem_phrase(),
+            'OPTIONS' => $options,
+            'TREE' => '',
+            'UNDERNEATH' => lorem_phrase(),
+        ));
 
-		$search_domains=new ocp_tempcode();
-		foreach (placeholder_array() as $value)
-		{
-			$search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN',array(
-				'ADVANCED_ONLY'=>lorem_phrase(),
-				'CHECKED'=>lorem_phrase(),
-				'OPTIONS_URL'=>placeholder_url(),
-				'LANG'=>lorem_phrase(),
-				'NAME'=>placeholder_random(),
-			)));
-		}
+        $search_domains = new ocp_tempcode();
+        foreach (placeholder_array() as $value) {
+            $search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN',array(
+                'ADVANCED_ONLY' => lorem_phrase(),
+                'CHECKED' => lorem_phrase(),
+                'OPTIONS_URL' => placeholder_url(),
+                'LANG' => lorem_phrase(),
+                'NAME' => placeholder_random(),
+            )));
+        }
 
-		$specialisation->attach(do_lorem_template('SEARCH_DOMAINS',array(
-			'SEARCH_DOMAINS'=>$search_domains,
-		)));
+        $specialisation->attach(do_lorem_template('SEARCH_DOMAINS',array(
+            'SEARCH_DOMAINS' => $search_domains,
+        )));
 
-		$result=new ocp_tempcode();
-		$result->attach(do_lorem_template('SEARCH_RESULT',array(
-			'CONTENT'=>lorem_paragraph_html(),
-			'TYPE'=>placeholder_id(),
-			'ID'=>placeholder_id(),
-		)));
+        $result = new ocp_tempcode();
+        $result->attach(do_lorem_template('SEARCH_RESULT',array(
+            'CONTENT' => lorem_paragraph_html(),
+            'TYPE' => placeholder_id(),
+            'ID' => placeholder_id(),
+        )));
 
-		$types_results=array();
-		foreach (placeholder_array() as $i=>$r)
-			$types_results[$i]=array(
-				'R'=>placeholder_array(),
-			);
+        $types_results = array();
+        foreach (placeholder_array() as $i => $r) {
+            $types_results[$i] = array(
+                'R' => placeholder_array(),
+            );
+        }
 
-		$result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array(
-			'HEADERS'=>placeholder_array(),
-			'ROWS'=>$types_results,
-		)));
+        $result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array(
+            'HEADERS' => placeholder_array(),
+            'ROWS' => $types_results,
+        )));
 
-		require_lang('catalogues');
-		$result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array(
-			'BUILDUP'=>lorem_phrase(),
-			'NAME'=>lorem_word(),
-			'TITLE'=>lorem_word_2(),
-		)));
+        require_lang('catalogues');
+        $result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array(
+            'BUILDUP' => lorem_phrase(),
+            'NAME' => lorem_word(),
+            'TITLE' => lorem_word_2(),
+        )));
 
 
-		return array(
-			lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN',array(
-				'SEARCH_TERM'=>lorem_word_2(),
-				'NUM_RESULTS'=>placeholder_number(),
-				'CAN_ORDER_BY_RATING'=>false,
-				'EXTRA_SORT_FIELDS'=>placeholder_array(0),
-				'USER_LABEL'=>lorem_word(),
-				'DAYS_LABEL'=>lorem_word(),
-				'BOOLEAN_SEARCH'=>false,
-				'AND'=>false,
-				'ONLY_TITLES'=>true,
-				'DAYS'=>placeholder_id(),
-				'SORT'=>'relevance',
-				'DIRECTION'=>'DESC',
-				'CONTENT'=>lorem_phrase(),
-				'RESULTS'=>NULL,
-				'PAGINATION'=>'',
-				'HAS_FULLTEXT_SEARCH'=>true,
-				'TITLE'=>lorem_title(),
-				'AUTHOR'=>lorem_phrase(),
-				'SPECIALISATION'=>$specialisation,
-				'URL'=>placeholder_url(),
-				'HAS_TEMPLATE_SEARCH'=>true,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN',array(
+                'SEARCH_TERM' => lorem_word_2(),
+                'NUM_RESULTS' => placeholder_number(),
+                'CAN_ORDER_BY_RATING' => false,
+                'EXTRA_SORT_FIELDS' => placeholder_array(0),
+                'USER_LABEL' => lorem_word(),
+                'DAYS_LABEL' => lorem_word(),
+                'BOOLEAN_SEARCH' => false,
+                'AND' => false,
+                'ONLY_TITLES' => true,
+                'DAYS' => placeholder_id(),
+                'SORT' => 'relevance',
+                'DIRECTION' => 'DESC',
+                'CONTENT' => lorem_phrase(),
+                'RESULTS' => NULL,
+                'PAGINATION' => '',
+                'HAS_FULLTEXT_SEARCH' => true,
+                'TITLE' => lorem_title(),
+                'AUTHOR' => lorem_phrase(),
+                'SPECIALISATION' => $specialisation,
+                'URL' => placeholder_url(),
+                'HAS_TEMPLATE_SEARCH' => true,
+            )),null,'',true)
+        );
+    }
 }

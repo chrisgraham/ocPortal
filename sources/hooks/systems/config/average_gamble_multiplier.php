@@ -20,35 +20,33 @@
 
 class Hook_config_average_gamble_multiplier
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'AVERAGE_GAMBLE_MULTIPLIER',
-			'type'=>'integer',
-			'category'=>'POINTSTORE',
-			'group'=>'GAMBLING',
-			'explanation'=>'CONFIG_OPTION_average_gamble_multiplier',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'AVERAGE_GAMBLE_MULTIPLIER',
+            'type' => 'integer',
+            'category' => 'POINTSTORE',
+            'group' => 'GAMBLING',
+            'explanation' => 'CONFIG_OPTION_average_gamble_multiplier',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'pointstore',
-		);
-	}
+            'addon' => 'pointstore',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '85';
-	}
+    public function get_default()
+    {
+        return '85';
+    }
 }
-
-

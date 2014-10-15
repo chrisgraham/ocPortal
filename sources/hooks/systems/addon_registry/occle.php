@@ -20,601 +20,596 @@
 
 class Hook_addon_registry_occle
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'A command-line environment for managing your website, designed for Linux/Unix lovers.';
-	}
+    public function get_description()
+    {
+        return 'A command-line environment for managing your website, designed for Linux/Unix lovers.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_occle',
-			'tut_repository',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_occle',
+            'tut_repository',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array('import'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array('import'),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/tools/occle.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/tools/occle.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/tools/occle.png',
-			'themes/default/images/icons/48x48/menu/adminzone/tools/occle.png',
-			'themes/default/images/icons/24x24/tool_buttons/occle_off.png',
-			'themes/default/images/icons/24x24/tool_buttons/occle_on.png',
-			'themes/default/images/icons/48x48/tool_buttons/occle_off.png',
-			'themes/default/images/icons/48x48/tool_buttons/occle_on.png',
-			'sources/hooks/systems/occle_commands/find_guid_via_id.php',
-			'sources/hooks/systems/occle_commands/find_id_via_guid.php',
-			'sources/hooks/systems/occle_commands/find_id_via_label.php',
-			'sources/hooks/systems/occle_commands/find_id_via_occlefs_filename.php',
-			'sources/hooks/systems/occle_commands/find_label_via_id.php',
-			'sources/hooks/systems/occle_commands/find_occlefs_filename_via_id.php',
-			'sources/hooks/systems/occle_fs_extended_config/index.html',
-			'sources/hooks/systems/config/bottom_show_occle_button.php',
-			'sources/hooks/systems/config/occle_chat_announce.php',
-			'sources/hooks/systems/occle_fs/.htaccess',
-			'sources/hooks/systems/occle_notifications/.htaccess',
-			'sources/hooks/systems/addon_registry/occle.php',
-			'sources/hooks/systems/occle_commands/antispam_check.php',
-			'sources/hooks/systems/occle_commands/set_comment_forum.php',
-			'sources/resource_fs.php',
-			'data/modules/admin_occle/.htaccess',
-			'themes/default/templates/OCCLE_HELP.tpl',
-			'themes/default/templates/OCCLE_LS.tpl',
-			'themes/default/templates/OCCLE_MAIN.tpl',
-			'themes/default/templates/JAVASCRIPT_OCCLE.tpl',
-			'themes/default/templates/OCCLE_ARRAY.tpl',
-			'themes/default/templates/OCCLE_ARRAY_ELEMENT.tpl',
-			'themes/default/templates/OCCLE_BOX.tpl',
-			'themes/default/templates/OCCLE_CHAT_NOTIFICATION.tpl',
-			'themes/default/templates/OCCLE_COMMAND.tpl',
-			'themes/default/templates/OCCLE_COMMANDS.tpl',
-			'themes/default/templates/OCCLE_EDIT.tpl',
-			'themes/default/templates/OCCLE_ENTRY_POINTS.tpl',
-			'themes/default/templates/OCCLE_FIND_CODES.tpl',
-			'themes/default/templates/OCCLE_MAIN_SCREEN.tpl',
-			'themes/default/templates/OCCLE_NOTIFICATION.tpl',
-			'themes/default/templates/OCCLE_OCCLECHAT_NOTIFICATION.tpl',
-			'themes/default/templates/OCCLE_OCF_NOTIFICATION.tpl',
-			'themes/default/templates/OCCLE_PT_NOTIFICATION.tpl',
-			'themes/default/templates/OCCLE_RSS.tpl',
-			'themes/default/templates/OCCLE_RSS_ITEM.tpl',
-			'themes/default/templates/OCCLE_USERS_ONLINE.tpl',
-			'themes/default/templates/OCCLE_WHOIS.tpl',
-			'themes/default/templates/JAVASCRIPT_BUTTON_OCCLE.tpl',
-			'adminzone/pages/modules/admin_occle.php',
-			'themes/default/css/occle.css',
-			'data/modules/admin_occle/admin_occlesample_script',
-			'data/modules/admin_occle/index.html',
-			'data/modules/admin_occle/sample_script',
-			'data/modules/admin_occle/test_script',
-			'data/occle.php',
-			'lang/EN/occle.ini',
-			'sources/hooks/systems/occle_commands/.htaccess',
-			'sources/hooks/systems/occle_commands/alien_check.php',
-			'sources/hooks/systems/occle_commands/directory_sizes.php',
-			'sources/hooks/systems/occle_commands/mysql_table_sizes.php',
-			'sources/hooks/systems/occle_commands/db_search.php',
-			'sources/hooks/systems/occle_commands/append.php',
-			'sources/hooks/systems/occle_commands/ban_ip.php',
-			'sources/hooks/systems/occle_commands/ban_member.php',
-			'sources/hooks/systems/occle_commands/bsod.php',
-			'sources/hooks/systems/occle_commands/phpinfo.php',
-			'sources/hooks/systems/occle_commands/call.php',
-			'sources/hooks/systems/occle_commands/cat.php',
-			'sources/hooks/systems/occle_commands/cd.php',
-			'sources/hooks/systems/occle_commands/clear.php',
-			'sources/hooks/systems/occle_commands/clear_caches.php',
-			'sources/hooks/systems/occle_commands/closed.php',
-			'sources/hooks/systems/occle_commands/commands.php',
-			'sources/hooks/systems/occle_commands/cp.php',
-			'sources/hooks/systems/occle_commands/cpdir.php',
-			'sources/hooks/systems/occle_commands/date.php',
-			'sources/hooks/systems/occle_commands/echo.php',
-			'sources/hooks/systems/occle_commands/edit.php',
-			'sources/hooks/systems/occle_commands/exit.php',
-			'sources/hooks/systems/occle_commands/feedback.php',
-			'sources/hooks/systems/occle_commands/find.php',
-			'sources/hooks/systems/occle_commands/find_codes.php',
-			'sources/hooks/systems/occle_commands/find_entry_points.php',
-			'sources/hooks/systems/occle_commands/find_function.php',
-			'sources/hooks/systems/occle_commands/fix_perms.php',
-			'sources/hooks/systems/occle_commands/grep.php',
-			'sources/hooks/systems/occle_commands/help.php',
-			'sources/hooks/systems/occle_commands/index.html',
-			'sources/hooks/systems/occle_commands/ls.php',
-			'sources/hooks/systems/occle_commands/mkdir.php',
-			'sources/hooks/systems/occle_commands/mv.php',
-			'sources/hooks/systems/occle_commands/mvdir.php',
-			'sources/hooks/systems/occle_commands/occlechat.php',
-			'sources/hooks/systems/occle_commands/passwd.php',
-			'sources/hooks/systems/occle_commands/pwd.php',
-			'sources/hooks/systems/occle_commands/read.php',
-			'sources/hooks/systems/occle_commands/reset.php',
-			'sources/hooks/systems/occle_commands/rm.php',
-			'sources/hooks/systems/occle_commands/rmdir.php',
-			'sources/hooks/systems/occle_commands/time.php',
-			'sources/hooks/systems/occle_commands/untar.php',
-			'sources/hooks/systems/occle_commands/users_online.php',
-			'sources/hooks/systems/occle_commands/version.php',
-			'sources/hooks/systems/occle_commands/whoami.php',
-			'sources/hooks/systems/occle_commands/whois.php',
-			'sources/hooks/systems/occle_commands/write.php',
-			'sources/hooks/systems/occle_commands/database_upgrade.php',
-			'sources/hooks/systems/occle_commands/check_perms.php',
-			'sources/hooks/systems/occle_commands/integrity_check.php',
-			'sources/hooks/systems/occle_fs/bin.php',
-			'sources/hooks/systems/occle_fs/database.php',
-			'sources/hooks/systems/occle_fs/etc.php',
-			'sources/hooks/systems/occle_fs/index.html',
-			'sources/hooks/systems/occle_fs/raw.php',
-			'sources/hooks/systems/occle_fs/root.php',
-			'sources/hooks/systems/occle_notifications/index.html',
-			'sources/hooks/systems/occle_notifications/occlechat.php',
-			'sources/hooks/systems/page_groupings/occle.php',
-			'sources/hooks/systems/snippets/occle.php',
-			'sources/occle.php',
-			'sources/occle_fs.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/tools/occle.png',
+            'themes/default/images/icons/48x48/menu/adminzone/tools/occle.png',
+            'themes/default/images/icons/24x24/tool_buttons/occle_off.png',
+            'themes/default/images/icons/24x24/tool_buttons/occle_on.png',
+            'themes/default/images/icons/48x48/tool_buttons/occle_off.png',
+            'themes/default/images/icons/48x48/tool_buttons/occle_on.png',
+            'sources/hooks/systems/occle_commands/find_guid_via_id.php',
+            'sources/hooks/systems/occle_commands/find_id_via_guid.php',
+            'sources/hooks/systems/occle_commands/find_id_via_label.php',
+            'sources/hooks/systems/occle_commands/find_id_via_occlefs_filename.php',
+            'sources/hooks/systems/occle_commands/find_label_via_id.php',
+            'sources/hooks/systems/occle_commands/find_occlefs_filename_via_id.php',
+            'sources/hooks/systems/occle_fs_extended_config/index.html',
+            'sources/hooks/systems/config/bottom_show_occle_button.php',
+            'sources/hooks/systems/config/occle_chat_announce.php',
+            'sources/hooks/systems/occle_fs/.htaccess',
+            'sources/hooks/systems/occle_notifications/.htaccess',
+            'sources/hooks/systems/addon_registry/occle.php',
+            'sources/hooks/systems/occle_commands/antispam_check.php',
+            'sources/hooks/systems/occle_commands/set_comment_forum.php',
+            'sources/resource_fs.php',
+            'data/modules/admin_occle/.htaccess',
+            'themes/default/templates/OCCLE_HELP.tpl',
+            'themes/default/templates/OCCLE_LS.tpl',
+            'themes/default/templates/OCCLE_MAIN.tpl',
+            'themes/default/templates/JAVASCRIPT_OCCLE.tpl',
+            'themes/default/templates/OCCLE_ARRAY.tpl',
+            'themes/default/templates/OCCLE_ARRAY_ELEMENT.tpl',
+            'themes/default/templates/OCCLE_BOX.tpl',
+            'themes/default/templates/OCCLE_CHAT_NOTIFICATION.tpl',
+            'themes/default/templates/OCCLE_COMMAND.tpl',
+            'themes/default/templates/OCCLE_COMMANDS.tpl',
+            'themes/default/templates/OCCLE_EDIT.tpl',
+            'themes/default/templates/OCCLE_ENTRY_POINTS.tpl',
+            'themes/default/templates/OCCLE_FIND_CODES.tpl',
+            'themes/default/templates/OCCLE_MAIN_SCREEN.tpl',
+            'themes/default/templates/OCCLE_NOTIFICATION.tpl',
+            'themes/default/templates/OCCLE_OCCLECHAT_NOTIFICATION.tpl',
+            'themes/default/templates/OCCLE_OCF_NOTIFICATION.tpl',
+            'themes/default/templates/OCCLE_PT_NOTIFICATION.tpl',
+            'themes/default/templates/OCCLE_RSS.tpl',
+            'themes/default/templates/OCCLE_RSS_ITEM.tpl',
+            'themes/default/templates/OCCLE_USERS_ONLINE.tpl',
+            'themes/default/templates/OCCLE_WHOIS.tpl',
+            'themes/default/templates/JAVASCRIPT_BUTTON_OCCLE.tpl',
+            'adminzone/pages/modules/admin_occle.php',
+            'themes/default/css/occle.css',
+            'data/modules/admin_occle/admin_occlesample_script',
+            'data/modules/admin_occle/index.html',
+            'data/modules/admin_occle/sample_script',
+            'data/modules/admin_occle/test_script',
+            'data/occle.php',
+            'lang/EN/occle.ini',
+            'sources/hooks/systems/occle_commands/.htaccess',
+            'sources/hooks/systems/occle_commands/alien_check.php',
+            'sources/hooks/systems/occle_commands/directory_sizes.php',
+            'sources/hooks/systems/occle_commands/mysql_table_sizes.php',
+            'sources/hooks/systems/occle_commands/db_search.php',
+            'sources/hooks/systems/occle_commands/append.php',
+            'sources/hooks/systems/occle_commands/ban_ip.php',
+            'sources/hooks/systems/occle_commands/ban_member.php',
+            'sources/hooks/systems/occle_commands/bsod.php',
+            'sources/hooks/systems/occle_commands/phpinfo.php',
+            'sources/hooks/systems/occle_commands/call.php',
+            'sources/hooks/systems/occle_commands/cat.php',
+            'sources/hooks/systems/occle_commands/cd.php',
+            'sources/hooks/systems/occle_commands/clear.php',
+            'sources/hooks/systems/occle_commands/clear_caches.php',
+            'sources/hooks/systems/occle_commands/closed.php',
+            'sources/hooks/systems/occle_commands/commands.php',
+            'sources/hooks/systems/occle_commands/cp.php',
+            'sources/hooks/systems/occle_commands/cpdir.php',
+            'sources/hooks/systems/occle_commands/date.php',
+            'sources/hooks/systems/occle_commands/echo.php',
+            'sources/hooks/systems/occle_commands/edit.php',
+            'sources/hooks/systems/occle_commands/exit.php',
+            'sources/hooks/systems/occle_commands/feedback.php',
+            'sources/hooks/systems/occle_commands/find.php',
+            'sources/hooks/systems/occle_commands/find_codes.php',
+            'sources/hooks/systems/occle_commands/find_entry_points.php',
+            'sources/hooks/systems/occle_commands/find_function.php',
+            'sources/hooks/systems/occle_commands/fix_perms.php',
+            'sources/hooks/systems/occle_commands/grep.php',
+            'sources/hooks/systems/occle_commands/help.php',
+            'sources/hooks/systems/occle_commands/index.html',
+            'sources/hooks/systems/occle_commands/ls.php',
+            'sources/hooks/systems/occle_commands/mkdir.php',
+            'sources/hooks/systems/occle_commands/mv.php',
+            'sources/hooks/systems/occle_commands/mvdir.php',
+            'sources/hooks/systems/occle_commands/occlechat.php',
+            'sources/hooks/systems/occle_commands/passwd.php',
+            'sources/hooks/systems/occle_commands/pwd.php',
+            'sources/hooks/systems/occle_commands/read.php',
+            'sources/hooks/systems/occle_commands/reset.php',
+            'sources/hooks/systems/occle_commands/rm.php',
+            'sources/hooks/systems/occle_commands/rmdir.php',
+            'sources/hooks/systems/occle_commands/time.php',
+            'sources/hooks/systems/occle_commands/untar.php',
+            'sources/hooks/systems/occle_commands/users_online.php',
+            'sources/hooks/systems/occle_commands/version.php',
+            'sources/hooks/systems/occle_commands/whoami.php',
+            'sources/hooks/systems/occle_commands/whois.php',
+            'sources/hooks/systems/occle_commands/write.php',
+            'sources/hooks/systems/occle_commands/database_upgrade.php',
+            'sources/hooks/systems/occle_commands/check_perms.php',
+            'sources/hooks/systems/occle_commands/integrity_check.php',
+            'sources/hooks/systems/occle_fs/bin.php',
+            'sources/hooks/systems/occle_fs/database.php',
+            'sources/hooks/systems/occle_fs/etc.php',
+            'sources/hooks/systems/occle_fs/index.html',
+            'sources/hooks/systems/occle_fs/raw.php',
+            'sources/hooks/systems/occle_fs/root.php',
+            'sources/hooks/systems/occle_notifications/index.html',
+            'sources/hooks/systems/occle_notifications/occlechat.php',
+            'sources/hooks/systems/page_groupings/occle.php',
+            'sources/hooks/systems/snippets/occle.php',
+            'sources/occle.php',
+            'sources/occle_fs.php',
+        );
+    }
 
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'OCCLE_MAIN.tpl'=>'administrative__occle_main',
-			'OCCLE_MAIN_SCREEN.tpl'=>'administrative__occle_main_screen',
-			'OCCLE_COMMAND.tpl'=>'administrative__occle_command',
-			'OCCLE_ARRAY_ELEMENT.tpl'=>'administrative__occle_array',
-			'OCCLE_ARRAY.tpl'=>'administrative__occle_array',
-			'OCCLE_NOTIFICATION.tpl'=>'administrative__occle_command',
-			'OCCLE_HELP.tpl'=>'administrative__occle_help',
-			'OCCLE_BOX.tpl'=>'administrative__occle_box',
-			'OCCLE_COMMANDS.tpl'=>'administrative__occle_commands',
-			'OCCLE_RSS_ITEM.tpl'=>'administrative__occle_rss',
-			'OCCLE_RSS.tpl'=>'administrative__occle_rss',
-			'OCCLE_EDIT.tpl'=>'administrative__occle_edit',
-			'OCCLE_USERS_ONLINE.tpl'=>'administrative__occle_users_online',
-			'OCCLE_FIND_CODES.tpl'=>'administrative__occle_find_codes',
-			'OCCLE_WHOIS.tpl'=>'administrative__occle_whois',
-			'OCCLE_ENTRY_POINTS.tpl'=>'administrative__occle_entry_points',
-			'OCCLE_LS.tpl'=>'administrative__occle_ls',
-			'OCCLE_CHAT_NOTIFICATION.tpl'=>'administrative__occle_chat_notification',
-			'OCCLE_OCCLECHAT_NOTIFICATION.tpl'=>'administrative__occle_occlechat_notification',
-			'OCCLE_OCF_NOTIFICATION.tpl'=>'administrative__occle_ocf_notification',
-			'OCCLE_PT_NOTIFICATION.tpl'=>'administrative__occle_pt_notification'
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'OCCLE_MAIN.tpl' => 'administrative__occle_main',
+            'OCCLE_MAIN_SCREEN.tpl' => 'administrative__occle_main_screen',
+            'OCCLE_COMMAND.tpl' => 'administrative__occle_command',
+            'OCCLE_ARRAY_ELEMENT.tpl' => 'administrative__occle_array',
+            'OCCLE_ARRAY.tpl' => 'administrative__occle_array',
+            'OCCLE_NOTIFICATION.tpl' => 'administrative__occle_command',
+            'OCCLE_HELP.tpl' => 'administrative__occle_help',
+            'OCCLE_BOX.tpl' => 'administrative__occle_box',
+            'OCCLE_COMMANDS.tpl' => 'administrative__occle_commands',
+            'OCCLE_RSS_ITEM.tpl' => 'administrative__occle_rss',
+            'OCCLE_RSS.tpl' => 'administrative__occle_rss',
+            'OCCLE_EDIT.tpl' => 'administrative__occle_edit',
+            'OCCLE_USERS_ONLINE.tpl' => 'administrative__occle_users_online',
+            'OCCLE_FIND_CODES.tpl' => 'administrative__occle_find_codes',
+            'OCCLE_WHOIS.tpl' => 'administrative__occle_whois',
+            'OCCLE_ENTRY_POINTS.tpl' => 'administrative__occle_entry_points',
+            'OCCLE_LS.tpl' => 'administrative__occle_ls',
+            'OCCLE_CHAT_NOTIFICATION.tpl' => 'administrative__occle_chat_notification',
+            'OCCLE_OCCLECHAT_NOTIFICATION.tpl' => 'administrative__occle_occlechat_notification',
+            'OCCLE_OCF_NOTIFICATION.tpl' => 'administrative__occle_ocf_notification',
+            'OCCLE_PT_NOTIFICATION.tpl' => 'administrative__occle_pt_notification'
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_main()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_MAIN',array(
-				'COMMANDS'=>lorem_phrase(),
-				'SUBMIT_URL'=>placeholder_url(),
-				'page'=>lorem_phrase(),
-				'PROMPT'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_main()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_MAIN',array(
+                'COMMANDS' => lorem_phrase(),
+                'SUBMIT_URL' => placeholder_url(),
+                'page' => lorem_phrase(),
+                'PROMPT' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_main_screen()
-	{
-		$content=do_lorem_template('OCCLE_MAIN',array(
-			'SUBMIT_URL'=>placeholder_url(),
-			'PROMPT'=>lorem_phrase(),
-			'COMMANDS'=>lorem_phrase(),
-		));
+    public function tpl_preview__administrative__occle_main_screen()
+    {
+        $content = do_lorem_template('OCCLE_MAIN',array(
+            'SUBMIT_URL' => placeholder_url(),
+            'PROMPT' => lorem_phrase(),
+            'COMMANDS' => lorem_phrase(),
+        ));
 
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_MAIN_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'CONTENT'=>$content,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_MAIN_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'CONTENT' => $content,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_command()
-	{
-		$notifications=do_lorem_template('OCCLE_NOTIFICATION',array(
-			'SECTION'=>lorem_phrase(),
-			'TYPE'=>lorem_phrase(),
-			'NOTIFICATION_CONTENT'=>lorem_phrase(),
-		));
+    public function tpl_preview__administrative__occle_command()
+    {
+        $notifications = do_lorem_template('OCCLE_NOTIFICATION',array(
+            'SECTION' => lorem_phrase(),
+            'TYPE' => lorem_phrase(),
+            'NOTIFICATION_CONTENT' => lorem_phrase(),
+        ));
 
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_COMMAND',array(
-				'NOTIFICATIONS'=>$notifications,
-				'METHOD'=>lorem_phrase(),
-				'STDOUT'=>lorem_phrase(),
-				'STDHTML'=>lorem_phrase(),
-				'STDCOMMAND'=>lorem_word_2(),
-				'STDERR'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_COMMAND',array(
+                'NOTIFICATIONS' => $notifications,
+                'METHOD' => lorem_phrase(),
+                'STDOUT' => lorem_phrase(),
+                'STDHTML' => lorem_phrase(),
+                'STDCOMMAND' => lorem_word_2(),
+                'STDERR' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_array()
-	{
-		$elements=do_lorem_template('OCCLE_ARRAY_ELEMENT',array(
-			'KEY'=>lorem_phrase(),
-			'VALUE'=>lorem_phrase(),
-		));
+    public function tpl_preview__administrative__occle_array()
+    {
+        $elements = do_lorem_template('OCCLE_ARRAY_ELEMENT',array(
+            'KEY' => lorem_phrase(),
+            'VALUE' => lorem_phrase(),
+        ));
 
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_ARRAY',array(
-				'ELEMENTS'=>$elements,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_ARRAY',array(
+                'ELEMENTS' => $elements,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_help()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_HELP',array(
-				'INTRODUCTION'=>lorem_phrase(),
-				'OPTIONS'=>placeholder_array(),
-				'PARAMETERS'=>placeholder_array(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_help()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_HELP',array(
+                'INTRODUCTION' => lorem_phrase(),
+                'OPTIONS' => placeholder_array(),
+                'PARAMETERS' => placeholder_array(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_box()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_BOX',array(
-				'HTML'=>lorem_sentence_html(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_box()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_BOX',array(
+                'HTML' => lorem_sentence_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_commands()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_COMMANDS',array(
-				'COMMANDS'=>placeholder_array(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_commands()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_COMMANDS',array(
+                'COMMANDS' => placeholder_array(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_rss()
-	{
-		$content=do_lorem_template('OCCLE_RSS_ITEM',array(
-			'FULL_URL'=>placeholder_url(),
-			'NEWS_TITLE'=>lorem_phrase(),
-			'DATE'=>placeholder_time(),
-			'SUMMARY'=>lorem_paragraph(),
-		));
+    public function tpl_preview__administrative__occle_rss()
+    {
+        $content = do_lorem_template('OCCLE_RSS_ITEM',array(
+            'FULL_URL' => placeholder_url(),
+            'NEWS_TITLE' => lorem_phrase(),
+            'DATE' => placeholder_time(),
+            'SUMMARY' => lorem_paragraph(),
+        ));
 
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_RSS',array(
-				'TITLE'=>lorem_phrase(),
-				'CONTENT'=>$content,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_RSS',array(
+                'TITLE' => lorem_phrase(),
+                'CONTENT' => $content,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_edit()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_EDIT',array(
-				'UNIQ_ID'=>placeholder_random(),
-				'FILE'=>lorem_phrase(),
-				'SUBMIT_URL'=>placeholder_url(),
-				'FILE_CONTENTS'=>lorem_sentence(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_edit()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_EDIT',array(
+                'UNIQ_ID' => placeholder_random(),
+                'FILE' => lorem_phrase(),
+                'SUBMIT_URL' => placeholder_url(),
+                'FILE_CONTENTS' => lorem_sentence(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_users_online()
-	{
-		$memb=array();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$memb[$v]=$k;
-		}
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_USERS_ONLINE',array(
-				'MEMBERS'=>$memb,
-				'GUESTS'=>placeholder_number(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_users_online()
+    {
+        $memb = array();
+        foreach (placeholder_array() as $k => $v) {
+            $memb[$v] = $k;
+        }
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_USERS_ONLINE',array(
+                'MEMBERS' => $memb,
+                'GUESTS' => placeholder_number(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_find_codes()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_FIND_CODES',array(
-				'FILES'=>placeholder_array(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_find_codes()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_FIND_CODES',array(
+                'FILES' => placeholder_array(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_whois()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_WHOIS',array(
-				'STATS'=>lorem_phrase(),
-				'IP_LIST'=>placeholder_list_item(),
-				'ID'=>placeholder_id(),
-				'IP'=>placeholder_ip(),
-				'NAME'=>lorem_word(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_whois()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_WHOIS',array(
+                'STATS' => lorem_phrase(),
+                'IP_LIST' => placeholder_list_item(),
+                'ID' => placeholder_id(),
+                'IP' => placeholder_ip(),
+                'NAME' => lorem_word(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_entry_points()
-	{
-		$points=array();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$points[$v]=$k;
-		}
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_ENTRY_POINTS',array(
-				'ENTRY_POINTS'=>$points,
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_entry_points()
+    {
+        $points = array();
+        foreach (placeholder_array() as $k => $v) {
+            $points[$v] = $k;
+        }
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_ENTRY_POINTS',array(
+                'ENTRY_POINTS' => $points,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_ls()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_LS',array(
-				'DIRECTORY'=>lorem_phrase(),
-				'DIRECTORIES'=>placeholder_array(),
-				'FILES'=>placeholder_array(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_ls()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_LS',array(
+                'DIRECTORY' => lorem_phrase(),
+                'DIRECTORIES' => placeholder_array(),
+                'FILES' => placeholder_array(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_chat_notification()
-	{
-		require_lang('chat');
+    public function tpl_preview__administrative__occle_chat_notification()
+    {
+        require_lang('chat');
 
-		$rooms=array();
-		foreach (placeholder_array() as $k=>$v)
-		{
-			$rooms[$v]=$k;
-		}
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_CHAT_NOTIFICATION',array(
-				'MESSAGE_COUNT'=>placeholder_number(),
-				'ROOMS'=>$rooms,
-			)),NULL,'',true)
-		);
-	}
+        $rooms = array();
+        foreach (placeholder_array() as $k => $v) {
+            $rooms[$v] = $k;
+        }
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_CHAT_NOTIFICATION',array(
+                'MESSAGE_COUNT' => placeholder_number(),
+                'ROOMS' => $rooms,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_occlechat_notification()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_OCCLECHAT_NOTIFICATION',array(
-				'MESSAGE_COUNT'=>placeholder_number(),
-				'MESSAGES'=>placeholder_array(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_occlechat_notification()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_OCCLECHAT_NOTIFICATION',array(
+                'MESSAGE_COUNT' => placeholder_number(),
+                'MESSAGES' => placeholder_array(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_ocf_notification()
-	{
-		$topics=array();
-		foreach (placeholder_array() as $val)
-		{
-			$topics[]=array(
-				'_loop_var'=>placeholder_url(),
-				'_loop_key'=>lorem_word(),
-			);
-		}
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_OCF_NOTIFICATION',array(
-				'TOPICS'=>$topics,
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_ocf_notification()
+    {
+        $topics = array();
+        foreach (placeholder_array() as $val) {
+            $topics[] = array(
+                '_loop_var' => placeholder_url(),
+                '_loop_key' => lorem_word(),
+            );
+        }
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_OCF_NOTIFICATION',array(
+                'TOPICS' => $topics,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__occle_pt_notification()
-	{
-		$topics=array();
-		foreach (placeholder_array() as $val)
-		{
-			$topics[]=array(
-				'_loop_var'=>placeholder_url(),
-				'_loop_key'=>lorem_word(),
-			);
-		}
-		return array(
-			lorem_globalise(do_lorem_template('OCCLE_PT_NOTIFICATION',array(
-				'TOPICS'=>$topics,
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__occle_pt_notification()
+    {
+        $topics = array();
+        foreach (placeholder_array() as $val) {
+            $topics[] = array(
+                '_loop_var' => placeholder_url(),
+                '_loop_key' => lorem_word(),
+            );
+        }
+        return array(
+            lorem_globalise(do_lorem_template('OCCLE_PT_NOTIFICATION',array(
+                'TOPICS' => $topics,
+            )),null,'',true)
+        );
+    }
 }

@@ -18,30 +18,30 @@
  */
 class downloads_category_test_set extends ocp_test_case
 {
-	var $dwn_cat_id;
+    public $dwn_cat_id;
 
-	function setUp()
-	{
-		parent::setUp();
+    public function setUp()
+    {
+        parent::setUp();
 
-		require_code('downloads');
-		require_code('downloads2');
+        require_code('downloads');
+        require_code('downloads2');
 
-		$this->dwn_cat_id=add_download_category('test',1,'test','test','',NULL);
+        $this->dwn_cat_id = add_download_category('test',1,'test','test','',null);
 
-		$this->assertTrue('test'==$GLOBALS['SITE_DB']->query_select_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
-	}
+        $this->assertTrue('test' == $GLOBALS['SITE_DB']->query_select_value('download_categories','notes',array('id' => $this->dwn_cat_id)));
+    }
 
-	function testEditDownloads_category()
-	{
-		edit_download_category($this->dwn_cat_id,'test',1,'test','edit_test','','','');
+    public function testEditDownloads_category()
+    {
+        edit_download_category($this->dwn_cat_id,'test',1,'test','edit_test','','','');
 
-		$this->assertTrue('edit_test'==$GLOBALS['SITE_DB']->query_select_value('download_categories','notes',array('id'=>$this->dwn_cat_id)));
-	}
+        $this->assertTrue('edit_test' == $GLOBALS['SITE_DB']->query_select_value('download_categories','notes',array('id' => $this->dwn_cat_id)));
+    }
 
-	function tearDown()
-	{
-		delete_download_category($this->dwn_cat_id);
-		parent::tearDown();
-	}
+    public function tearDown()
+    {
+        delete_download_category($this->dwn_cat_id);
+        parent::tearDown();
+    }
 }

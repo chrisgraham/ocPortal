@@ -20,88 +20,83 @@
 
 class Block_main_poll
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('param','zone');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','zone');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		$zone=array_key_exists('zone',$map)?$map['zone']:get_module_zone('polls');
+    public function run($map)
+    {
+        $zone = array_key_exists('zone',$map)?$map['zone']:get_module_zone('polls');
 
-		require_code('polls');
-		require_css('polls');
-		require_lang('polls');
+        require_code('polls');
+        require_css('polls');
+        require_lang('polls');
 
-		// Action links
-		if ((has_actual_page_access(NULL,'cms_polls',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls')))
-		{
-			$submit_url=build_url(array('page'=>'cms_polls','type'=>'ad','redirect'=>get_self_url(true,false)),get_module_zone('cms_polls'));
-		} else $submit_url=new ocp_tempcode();
+        // Action links
+        if ((has_actual_page_access(null,'cms_polls',null,null)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls'))) {
+            $submit_url = build_url(array('page' => 'cms_polls','type' => 'ad','redirect' => get_self_url(true,false)),get_module_zone('cms_polls'));
+        } else {
+            $submit_url = new ocp_tempcode();
+        }
 
-		// Lookup poll row
-		$poll_id=mixed();
-		if (array_key_exists('param',$map)) $poll_id=intval($map['param']);
-		if ($poll_id===NULL)
-		{
-			$rows=persistent_cache_get('POLL');
-			if (is_null($rows))
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('is_current'=>1),'ORDER BY id DESC',1);
-				persistent_cache_set('POLL',$rows);
-			}
-		} else
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$poll_id),'',1);
-		}
-		if (!array_key_exists(0,$rows))
-		{
-			return do_template('BLOCK_NO_ENTRIES',array('_GUID'=>'fdc85bb2e14bdf00830347e52f25cdac','HIGH'=>true,'TITLE'=>do_lang_tempcode('POLL'),'MESSAGE'=>do_lang_tempcode('NO_ENTRIES'),'ADD_NAME'=>do_lang_tempcode('ADD_POLL'),'SUBMIT_URL'=>$submit_url));
-		}
-		$myrow=$rows[0];
-		$poll_id=$myrow['id'];
+        // Lookup poll row
+        $poll_id = mixed();
+        if (array_key_exists('param',$map)) {
+            $poll_id = intval($map['param']);
+        }
+        if ($poll_id === NULL) {
+            $rows = persistent_cache_get('POLL');
+            if (is_null($rows)) {
+                $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('is_current' => 1),'ORDER BY id DESC',1);
+                persistent_cache_set('POLL',$rows);
+            }
+        } else {
+            $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => $poll_id),'',1);
+        }
+        if (!array_key_exists(0,$rows)) {
+            return do_template('BLOCK_NO_ENTRIES',array('_GUID' => 'fdc85bb2e14bdf00830347e52f25cdac','HIGH' => true,'TITLE' => do_lang_tempcode('POLL'),'MESSAGE' => do_lang_tempcode('NO_ENTRIES'),'ADD_NAME' => do_lang_tempcode('ADD_POLL'),'SUBMIT_URL' => $submit_url));
+        }
+        $myrow = $rows[0];
+        $poll_id = $myrow['id'];
 
-		// Show the poll
-		$show_poll_results=get_param_integer('show_poll_results_'.strval($poll_id),0);
-		if ($show_poll_results==0)
-		{
-			$content=render_poll_box(false,$myrow,$zone,true,false);
-		} else
-		{
-			// Vote
-			$cast=post_param_integer('cast_'.strval($poll_id),NULL);
-			$myrow=vote_in_poll($poll_id,$cast,$myrow); // Either an active vote, or a forfeited vote (viewing results)
+        // Show the poll
+        $show_poll_results = get_param_integer('show_poll_results_' . strval($poll_id),0);
+        if ($show_poll_results == 0) {
+            $content = render_poll_box(false,$myrow,$zone,true,false);
+        } else {
+            // Vote
+            $cast = post_param_integer('cast_' . strval($poll_id),null);
+            $myrow = vote_in_poll($poll_id,$cast,$myrow); // Either an active vote, or a forfeited vote (viewing results)
 
-			// Show poll, with results
-			$content=render_poll_box(true,$myrow,$zone,true,false);
-		}
+            // Show poll, with results
+            $content = render_poll_box(true,$myrow,$zone,true,false);
+        }
 
-		// Render block wrapper template around poll
-		return do_template('BLOCK_MAIN_POLL',array(
-			'_GUID'=>'06a5b384015504a6a57fc4ddedbe91a7',
-			'BLOCK_PARAMS'=>block_params_arr_to_str($map),
-			'CONTENT'=>$content,
-		));
-	}
+        // Render block wrapper template around poll
+        return do_template('BLOCK_MAIN_POLL',array(
+            '_GUID' => '06a5b384015504a6a57fc4ddedbe91a7',
+            'BLOCK_PARAMS' => block_params_arr_to_str($map),
+            'CONTENT' => $content,
+        ));
+    }
 }
-
-

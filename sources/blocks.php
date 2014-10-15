@@ -34,11 +34,10 @@ Post-AJAX the functions are used to confirm these permissions (the permission ID
  */
 function block_params_to_block_signature($map)
 {
-	foreach ($map as $key=>$val)
-	{
-		$map[$key]=preg_quote($val,'#');
-	}
-	return $map;
+    foreach ($map as $key => $val) {
+        $map[$key] = preg_quote($val,'#');
+    }
+    return $map;
 }
 
 /**
@@ -50,13 +49,11 @@ function block_params_to_block_signature($map)
  */
 function block_signature_check($allowed,$used)
 {
-	foreach ($used as $key=>$val)
-	{
-		if ((!isset($allowed[$key])) || (preg_match('#^'.$allowed[$key].'$#',$val)==0))
-		{
-			return false;
-		}
-	}
+    foreach ($used as $key => $val) {
+        if ((!isset($allowed[$key])) || (preg_match('#^' . $allowed[$key] . '$#',$val) == 0)) {
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }

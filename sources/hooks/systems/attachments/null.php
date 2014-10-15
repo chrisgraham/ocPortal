@@ -20,16 +20,15 @@
 
 class Hook_attachments_null
 {
-	/**
+    /**
 	 * Run function for attachment hooks. They see if permission to an attachment of an ID relating to this content is present for the current member.
 	 *
 	 * @param  ID_TEXT		The ID
 	 * @param  object			The database connection to check on
 	 * @return boolean		Whether there is permission
 	 */
-	function run($id,$connection)
-	{
-		return true;
-	}
+    public function run($id,$connection)
+    {
+        return true;
+    }
 }
-

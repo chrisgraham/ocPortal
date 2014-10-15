@@ -20,35 +20,33 @@
 
 class Hook_config_spam_check_level
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'SPAM_CHECK_LEVEL',
-			'type'=>'list',
-			'category'=>'SECURITY',
-			'group'=>'SPAMMER_DETECTION',
-			'explanation'=>'CONFIG_OPTION_spam_check_level',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'EVERYTHING|ACTIONS|GUESTACTIONS|JOINING|NEVER',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'SPAM_CHECK_LEVEL',
+            'type' => 'list',
+            'category' => 'SECURITY',
+            'group' => 'SPAMMER_DETECTION',
+            'explanation' => 'CONFIG_OPTION_spam_check_level',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'EVERYTHING|ACTIONS|GUESTACTIONS|JOINING|NEVER',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'NEVER';
-	}
+    public function get_default()
+    {
+        return 'NEVER';
+    }
 }
-
-

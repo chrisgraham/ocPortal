@@ -15,134 +15,134 @@
 
 class Hook_addon_registry_transcoder
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the addon category
 	 *
 	 * @return string			The category
 	 */
-	function get_category()
-	{
-		return 'Development';
-	}
+    public function get_category()
+    {
+        return 'Development';
+    }
 
-	/**
+    /**
 	 * Get the addon author
 	 *
 	 * @return string			The author
 	 */
-	function get_author()
-	{
-		return 'Chris Graham';
-	}
+    public function get_author()
+    {
+        return 'Chris Graham';
+    }
 
-	/**
+    /**
 	 * Find other authors
 	 *
 	 * @return array			A list of co-authors that should be attributed
 	 */
-	function get_copyright_attribution()
-	{
-		return array();
-	}
+    public function get_copyright_attribution()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the addon licence (one-line summary only)
 	 *
 	 * @return string			The licence
 	 */
-	function get_licence()
-	{
-		return 'Licensed on the same terms as ocPortal';
-	}
+    public function get_licence()
+    {
+        return 'Licensed on the same terms as ocPortal';
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Simple ocProducts transcoding server. Needs a programmer to install and configure it.';
-	}
+    public function get_description()
+    {
+        return 'Simple ocProducts transcoding server. Needs a programmer to install and configure it.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(
-			),
-			'recommends'=>array(
-			),
-			'conflicts_with'=>array(
-			)
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(
+            ),
+            'recommends' => array(
+            ),
+            'conflicts_with' => array(
+            )
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/tool.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/tool.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources_custom/hooks/systems/addon_registry/transcoder.php',
-			'data_custom/receive_transcoded_file.php',
-			'transcoder/go.bat',
-			'transcoder/go.sh',
-			'transcoder/move_to_sent.php',
-			'transcoder/queue.php',
-			'transcoder/receive_script.php',
-			'transcoder/done/index.html',
-			'transcoder/fail/index.html',
-			'transcoder/queue/index.html',
-			'transcoder/sent/index.html',
-			'transcoder/index.html',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources_custom/hooks/systems/addon_registry/transcoder.php',
+            'data_custom/receive_transcoded_file.php',
+            'transcoder/go.bat',
+            'transcoder/go.sh',
+            'transcoder/move_to_sent.php',
+            'transcoder/queue.php',
+            'transcoder/receive_script.php',
+            'transcoder/done/index.html',
+            'transcoder/fail/index.html',
+            'transcoder/queue/index.html',
+            'transcoder/sent/index.html',
+            'transcoder/index.html',
+        );
+    }
 }

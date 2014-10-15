@@ -20,35 +20,33 @@
 
 class Hook_config_shipping_cost_factor
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'SHIPPING_COST_FACTOR',
-			'type'=>'line',
-			'category'=>'ECOMMERCE',
-			'group'=>'SHOPPING',
-			'explanation'=>'CONFIG_OPTION_shipping_cost_factor',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'SHIPPING_COST_FACTOR',
+            'type' => 'line',
+            'category' => 'ECOMMERCE',
+            'group' => 'SHOPPING',
+            'explanation' => 'CONFIG_OPTION_shipping_cost_factor',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'shopping',
-		);
-	}
+            'addon' => 'shopping',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

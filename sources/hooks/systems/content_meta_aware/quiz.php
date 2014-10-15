@@ -20,77 +20,77 @@
 
 class Hook_content_meta_aware_quiz
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'quiz:QUIZ',
+            'content_type_label' => 'quiz:QUIZ',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'quizzes',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
-			'parent_category_meta_aware_type'=>NULL,
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>'q_type', // For category permissions
-			'category_type'=>'quiz', // For category permissions
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_is_string'=>true,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'quizzes',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => NULL,
+            'parent_category_meta_aware_type' => NULL,
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => 'q_type', // For category permissions
+            'category_type' => 'quiz', // For category permissions
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_is_string' => true,
 
-			'title_field'=>'q_name',
-			'title_field_dereference'=>true,
-			'description_field'=>'q_start_text',
-			'thumb_field'=>NULL,
+            'title_field' => 'q_name',
+            'title_field_dereference' => true,
+            'description_field' => 'q_start_text',
+            'thumb_field' => NULL,
 
-			'view_page_link_pattern'=>'_SEARCH:quiz:do:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_quiz:_ed:_WILD',
-			'view_category_page_link_pattern'=>NULL,
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_quiz'))?(get_module_zone('cms_quiz').':cms_quiz:ad'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('quiz')).':quiz',
+            'view_page_link_pattern' => '_SEARCH:quiz:do:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_quiz:_ed:_WILD',
+            'view_category_page_link_pattern' => NULL,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_quiz'))?(get_module_zone('cms_quiz') . ':cms_quiz:ad'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('quiz')) . ':quiz',
 
-			'support_url_monikers'=>true,
+            'support_url_monikers' => true,
 
-			'views_field'=>NULL,
-			'submitter_field'=>'q_submitter',
-			'add_time_field'=>'q_add_date',
-			'edit_time_field'=>NULL,
-			'date_field'=>'q_add_date',
-			'validated_field'=>'q_validated',
+            'views_field' => NULL,
+            'submitter_field' => 'q_submitter',
+            'add_time_field' => 'q_add_date',
+            'edit_time_field' => NULL,
+            'date_field' => 'q_add_date',
+            'validated_field' => 'q_validated',
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>'quiz',
+            'search_hook' => 'quiz',
 
-			'addon_name'=>'quizzes',
+            'addon_name' => 'quizzes',
 
-			'cms_page'=>'cms_quiz',
-			'module'=>'quiz',
+            'cms_page' => 'cms_quiz',
+            'module' => 'quiz',
 
-			'occle_filesystem_hook'=>'quizzes',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'quizzes',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_QUIZ',
-		);
-	}
+            'actionlog_regexp' => '\w+_QUIZ',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -102,10 +102,10 @@ class Hook_content_meta_aware_quiz
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('quiz');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('quiz');
 
-		return render_quiz_box($row,$zone,$give_context,$guid);
-	}
+        return render_quiz_box($row,$zone,$give_context,$guid);
+    }
 }

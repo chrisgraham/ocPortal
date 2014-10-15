@@ -20,22 +20,22 @@
 
 class Hook_page_groupings_tickets
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('tickets')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('tickets')) {
+            return array();
+        }
 
-		return array(
-			array('setup','menu/site_meta/tickets',array('admin_tickets',array('type'=>'misc'),get_module_zone('admin_tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS'),'tickets:DOC_TICKETS'),
-			array('site_meta','menu/site_meta/tickets',array('tickets',array(),get_module_zone('tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS')),
-		);
-	}
+        return array(
+            array('setup','menu/site_meta/tickets',array('admin_tickets',array('type' => 'misc'),get_module_zone('admin_tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS'),'tickets:DOC_TICKETS'),
+            array('site_meta','menu/site_meta/tickets',array('tickets',array(),get_module_zone('tickets')),do_lang_tempcode('tickets:SUPPORT_TICKETS')),
+        );
+    }
 }
-
-

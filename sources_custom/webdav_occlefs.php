@@ -15,7 +15,7 @@
 
 namespace webdav_occlefs
 {
-	/**
+    /**
 	 * Base node-class
 	 *
 	 * The node class implements the method used by both the File and the Directory classes
@@ -24,185 +24,183 @@ namespace webdav_occlefs
 	 * @author Evert Pot (http://www.rooftopsolutions.nl/)
 	 * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
 	 */
-	abstract class Node implements \Sabre\DAV\INode
-	{
-		/**
+    abstract class Node implements \Sabre\DAV\INode
+    {
+        /**
 		 * The path to the current node
 		 *
 		 * @var string
 		 */
-		protected $path;
+        protected $path;
 
-		/**
+        /**
 		 * The OcCLE-fs object we are chaining to
 		 *
 		 * @var object
 		 */
-		protected $occlefs;
+        protected $occlefs;
 
-		/**
+        /**
 		 * Sets up the node, expects a full path name
 		 *
 		 * @param string $path
 		 */
-		public function __construct($path)
-		{
-			$this->path=$path;
+        public function __construct($path)
+        {
+            $this->path = $path;
 
-			require_code('occle_fs');
-			$this->occlefs=new \occle_fs();
-		}
+            require_code('occle_fs');
+            $this->occlefs = new \occle_fs();
+        }
 
-		/**
+        /**
 		 * Returns the name of the node
 		 *
 		 * @return string
 		 */
-		public function getName()
-		{
-			list(,$name)=\Sabre\DAV\URLUtil::splitPath($this->path);
-			return $name;
-		}
+        public function getName()
+        {
+            list(,$name) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            return $name;
+        }
 
-		/**
+        /**
 		 * Renames the node
 		 *
 		 * @param string $name The new name
 		 * @return void
 		 */
-		public function setName($name)
-		{
-			list($parentPath,)=\Sabre\DAV\URLUtil::splitPath($this->path);
-			list(,$newName)=\Sabre\DAV\URLUtil::splitPath($name);
+        public function setName($name)
+        {
+            list($parentPath,) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            list(,$newName) = \Sabre\DAV\URLUtil::splitPath($name);
 
-			$parsedOldPath=$this->occlefs->_pwd_to_array($this->path);
+            $parsedOldPath = $this->occlefs->_pwd_to_array($this->path);
 
-			$newPath=$parentPath.'/'.$newName;
-			$parsedNewPath=$this->occlefs->_pwd_to_array($newPath);
+            $newPath = $parentPath . '/' . $newName;
+            $parsedNewPath = $this->occlefs->_pwd_to_array($newPath);
 
-			if ($this->occlefs->_is_file($parsedOldPath))
-			{
-				// File
-				$test=$this->occlefs->move_file($parsedOldPath,$parsedNewPath);
-			} elseif ($this->occlefs->_is_dir($parsedOldPath))
-			{
-				// Directory
-				$test=$this->occlefs->move_directory($parsedOldPath,$parsedNewPath);
-			} else
-			{
-				throw new \Sabre\DAV\Exception\NotFound('Error renaming/moving '.$name);
-			}
+            if ($this->occlefs->_is_file($parsedOldPath)) {
+                // File
+                $test = $this->occlefs->move_file($parsedOldPath,$parsedNewPath);
+            } elseif ($this->occlefs->_is_dir($parsedOldPath)) {
+                // Directory
+                $test = $this->occlefs->move_directory($parsedOldPath,$parsedNewPath);
+            } else {
+                throw new \Sabre\DAV\Exception\NotFound('Error renaming/moving ' . $name);
+            }
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\Forbidden('Error renaming/moving '.$name);
-			}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\Forbidden('Error renaming/moving ' . $name);
+            }
 
-			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
+            $GLOBALS['OCCLEFS_LISTING_CACHE'] = array();
 
-			$this->path=$newPath;
-		}
+            $this->path = $newPath;
+        }
 
-		/**
+        /**
 		 * Returns the last modification time, as a unix timestamp
 		 *
 		 * @return int
 		 */
-		public function getLastModified()
-		{
-			if ($this->path=='') return NULL;
+        public function getLastModified()
+        {
+            if ($this->path == '') {
+                return NULL;
+            }
 
-			list($currentPath,$currentName)=\Sabre\DAV\URLUtil::splitPath($this->path);
-			$parsedCurrentPath=$this->occlefs->_pwd_to_array($currentPath);
+            list($currentPath,$currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            $parsedCurrentPath = $this->occlefs->_pwd_to_array($currentPath);
 
-			$listing=$this->_listingWrap($parsedCurrentPath);
-			foreach ($listing[0]+$listing[1] as $l)
-			{
-				list($filename,$filetype,$filesize,$filetime)=$l;
-				if ($filename==$currentName) return $filetime;
-			}
+            $listing = $this->_listingWrap($parsedCurrentPath);
+            foreach ($listing[0]+$listing[1] as $l) {
+                list($filename,$filetype,$filesize,$filetime) = $l;
+                if ($filename == $currentName) {
+                    return $filetime;
+                }
+            }
 
-			throw new \Sabre\DAV\Exception\NotFound('Could not find '.$this->path);
+            throw new \Sabre\DAV\Exception\NotFound('Could not find ' . $this->path);
 
-			return NULL;
-		}
+            return NULL;
+        }
 
-		/**
+        /**
 		 * Returns the last modification time, as a unix timestamp
 		 *
 		 * @param array $parsedPath Directory listing
 		 * @return array
 		 */
-		function _listingWrap($parsedPath)
-		{
-			$sz=serialize($parsedPath);
-			if (isset($GLOBALS['OCCLEFS_LISTING_CACHE'][$sz])) return $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz];
-			$GLOBALS['OCCLEFS_LISTING_CACHE'][$sz]=$this->occlefs->listing($parsedPath);
-			return $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz];
-		}
-	}
+        public function _listingWrap($parsedPath)
+        {
+            $sz = serialize($parsedPath);
+            if (isset($GLOBALS['OCCLEFS_LISTING_CACHE'][$sz])) {
+                return $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz];
+            }
+            $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz] = $this->occlefs->listing($parsedPath);
+            return $GLOBALS['OCCLEFS_LISTING_CACHE'][$sz];
+        }
+    }
 
-	/**
+    /**
 	 * Directory class
 	 *
 	 * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
 	 * @author Evert Pot (http://www.rooftopsolutions.nl/)
 	 * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
 	 */
-	class Directory extends Node implements \Sabre\DAV\ICollection
-	{
-		/**
+    class Directory extends Node implements \Sabre\DAV\ICollection
+    {
+        /**
 		 * Creates a new file in the directory
 		 *
 		 * @param string $name Name of the file
 		 * @param resource|string $data Initial payload
 		 * @return null|string
 		 */
-		public function createFile($name,$data=null)
-		{
-			$newPath=$this->path.'/'.$name;
+        public function createFile($name,$data = null)
+        {
+            $newPath = $this->path . '/' . $name;
 
-			$parsedNewPath=$this->occlefs->_pwd_to_array($newPath);
+            $parsedNewPath = $this->occlefs->_pwd_to_array($newPath);
 
-			if (is_resource($data))
-			{
-				ob_start();
-				fpassthru($data);
-				$data=ob_get_clean();
-			}
-			$test=$this->occlefs->write_file($parsedNewPath,is_null($data)?'':$data);
+            if (is_resource($data)) {
+                ob_start();
+                fpassthru($data);
+                $data = ob_get_clean();
+            }
+            $test = $this->occlefs->write_file($parsedNewPath,is_null($data)?'':$data);
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\Forbidden('Could not create '.$name);
-			}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\Forbidden('Could not create ' . $name);
+            }
 
-			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
-		}
+            $GLOBALS['OCCLEFS_LISTING_CACHE'] = array();
+        }
 
-		/**
+        /**
 		 * Creates a new subdirectory
 		 *
 		 * @param string $name
 		 * @return void
 		 */
-		public function createDirectory($name)
-		{
-			$newPath=$this->path.'/'.$name;
+        public function createDirectory($name)
+        {
+            $newPath = $this->path . '/' . $name;
 
-			$parsedNewPath=$this->occlefs->_pwd_to_array($newPath);
+            $parsedNewPath = $this->occlefs->_pwd_to_array($newPath);
 
-			$test=$this->occlefs->make_directory($parsedNewPath);
+            $test = $this->occlefs->make_directory($parsedNewPath);
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\Forbidden('Could not create '.$name);
-			}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\Forbidden('Could not create ' . $name);
+            }
 
-			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
-		}
+            $GLOBALS['OCCLEFS_LISTING_CACHE'] = array();
+        }
 
-		/**
+        /**
 		 * Returns a specific child node, referenced by its name
 		 *
 		 * This method must throw \Sabre\DAV\Exception\NotFound if the node does not
@@ -211,198 +209,189 @@ namespace webdav_occlefs
 		 * @param string $name
 		 * @return \Sabre\DAV\INode
 		 */
-		public function getChild($name)
-		{
-			$path=$this->path.'/'.$name;
+        public function getChild($name)
+        {
+            $path = $this->path . '/' . $name;
 
-			$parsedPath=$this->occlefs->_pwd_to_array($path);
+            $parsedPath = $this->occlefs->_pwd_to_array($path);
 
-			if ($name=='')
-			{
-				return new Directory('');
-			}
+            if ($name == '') {
+                return new Directory('');
+            }
 
-			if ($this->occlefs->_is_dir($parsedPath))
-			{
-				return new Directory($path);
-			} elseif ($this->occlefs->_is_file($parsedPath))
-			{
-				return new File($path);
-			}
+            if ($this->occlefs->_is_dir($parsedPath)) {
+                return new Directory($path);
+            } elseif ($this->occlefs->_is_file($parsedPath)) {
+                return new File($path);
+            }
 
-			throw new \Sabre\DAV\Exception\NotFound('Could not find '.$name);
-		}
+            throw new \Sabre\DAV\Exception\NotFound('Could not find ' . $name);
+        }
 
-		/**
+        /**
 		 * Returns an array with all the child nodes
 		 *
 		 * @return \Sabre\DAV\INode[]
 		 */
-		public function getChildren()
-		{
-			$listing=$this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
+        public function getChildren()
+        {
+            $listing = $this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
 
-			$nodes=array();
-			foreach ($listing[0] as $l)
-			{
-				list($filename,$filetype,$filesize,$filetime)=$l;
+            $nodes = array();
+            foreach ($listing[0] as $l) {
+                list($filename,$filetype,$filesize,$filetime) = $l;
 
-				$_path=$this->path.'/'.$filename;
+                $_path = $this->path . '/' . $filename;
 
-				$nodes[]=new Directory($_path);
-			}
-			foreach ($listing[1] as $l)
-			{
-				list($filename,$filetype,$filesize,$filetime)=$l;
+                $nodes[] = new Directory($_path);
+            }
+            foreach ($listing[1] as $l) {
+                list($filename,$filetype,$filesize,$filetime) = $l;
 
-				$_path=$this->path.'/'.$filename;
+                $_path = $this->path . '/' . $filename;
 
-				$nodes[]=new File($_path);
-			}
+                $nodes[] = new File($_path);
+            }
 
-			return $nodes;
-		}
+            return $nodes;
+        }
 
-		/**
+        /**
 		 * Checks if a child exists.
 		 *
 		 * @param string $name
 		 * @return bool
 		 */
-		public function childExists($name)
-		{
-			$listing=$this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
+        public function childExists($name)
+        {
+            $listing = $this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
 
-			$nodes=array();
-			foreach ($listing[0]+$listing[1] as $l)
-			{
-				list($filename,$filetype,$filesize,$filetime)=$l;
+            $nodes = array();
+            foreach ($listing[0]+$listing[1] as $l) {
+                list($filename,$filetype,$filesize,$filetime) = $l;
 
-				if ($filename==$name) return true;
-			}
+                if ($filename == $name) {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		/**
+        /**
 		 * Deletes all files in this directory, and then itself
 		 *
 		 * @return void
 		 */
-		public function delete()
-		{
-			$parsedPath=$this->occlefs->_pwd_to_array($this->path);
+        public function delete()
+        {
+            $parsedPath = $this->occlefs->_pwd_to_array($this->path);
 
-			$test=$this->occlefs->remove_directory($parsedPath);
+            $test = $this->occlefs->remove_directory($parsedPath);
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\Forbidden('Could not delete '.$this->path);
-			}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\Forbidden('Could not delete ' . $this->path);
+            }
 
-			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
-		}
-	}
+            $GLOBALS['OCCLEFS_LISTING_CACHE'] = array();
+        }
+    }
 
-	/**
+    /**
 	 * File class
 	 *
 	 * @copyright Copyright (C) 2007-2013 Rooftop Solutions. All rights reserved.
 	 * @author Evert Pot (http://www.rooftopsolutions.nl/)
 	 * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
 	 */
-	class File extends Node implements \Sabre\DAV\IFile
-	{
-		/**
+    class File extends Node implements \Sabre\DAV\IFile
+    {
+        /**
 		 * Updates the data
 		 *
 		 * @param resource $data
 		 * @return void
 		 */
-		public function put($data)
-		{
-			$parsedPath=$this->occlefs->_pwd_to_array($this->path);
+        public function put($data)
+        {
+            $parsedPath = $this->occlefs->_pwd_to_array($this->path);
 
-			if (is_resource($data))
-			{
-				ob_start();
-				fpassthru($data);
-				$data=ob_get_clean();
-			}
+            if (is_resource($data)) {
+                ob_start();
+                fpassthru($data);
+                $data = ob_get_clean();
+            }
 
-			$test=$this->occlefs->write_file($parsedPath,is_null($data)?'':$data);
+            $test = $this->occlefs->write_file($parsedPath,is_null($data)?'':$data);
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\Forbidden('Could not save '.$this->path);
-			}
-		}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\Forbidden('Could not save ' . $this->path);
+            }
+        }
 
-		/**
+        /**
 		 * Returns the data
 		 *
 		 * @return string
 		 */
-		public function get()
-		{
-			$parsedPath=$this->occlefs->_pwd_to_array($this->path);
+        public function get()
+        {
+            $parsedPath = $this->occlefs->_pwd_to_array($this->path);
 
-			$test=$this->occlefs->read_file($parsedPath);
+            $test = $this->occlefs->read_file($parsedPath);
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\NotFound('Could not find '.$this->path);
-			}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\NotFound('Could not find ' . $this->path);
+            }
 
-			return $test;
-		}
+            return $test;
+        }
 
-		/**
+        /**
 		 * Delete the current file
 		 *
 		 * @return void
 		 */
-		public function delete()
-		{
-			$parsedPath=$this->occlefs->_pwd_to_array($this->path);
+        public function delete()
+        {
+            $parsedPath = $this->occlefs->_pwd_to_array($this->path);
 
-			$test=$this->occlefs->remove_file($parsedPath);
+            $test = $this->occlefs->remove_file($parsedPath);
 
-			if ($test===false)
-			{
-				throw new \Sabre\DAV\Exception\Forbidden('Could not delete '.$this->path);
-			}
+            if ($test === false) {
+                throw new \Sabre\DAV\Exception\Forbidden('Could not delete ' . $this->path);
+            }
 
-			$GLOBALS['OCCLEFS_LISTING_CACHE']=array();
-		}
+            $GLOBALS['OCCLEFS_LISTING_CACHE'] = array();
+        }
 
-		/**
+        /**
 		 * Returns the size of the node, in bytes
 		 *
 		 * @return int
 		 */
-		public function getSize()
-		{
-			list($currentPath,$currentName)=\Sabre\DAV\URLUtil::splitPath($this->path);
-			$parsedCurrentPath=$this->occlefs->_pwd_to_array($currentPath);
+        public function getSize()
+        {
+            list($currentPath,$currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            $parsedCurrentPath = $this->occlefs->_pwd_to_array($currentPath);
 
-			$listing=$this->_listingWrap($parsedCurrentPath);
-			foreach ($listing[1] as $l)
-			{
-				list($filename,$filetype,$filesize,$filetime)=$l;
-				if ($filename==$currentName)
-				{
-					if (is_null($filesize)) $filesize=strlen($this->get()); // Needed at least for Cyberduck
-					return $filesize;
-				}
-			}
+            $listing = $this->_listingWrap($parsedCurrentPath);
+            foreach ($listing[1] as $l) {
+                list($filename,$filetype,$filesize,$filetime) = $l;
+                if ($filename == $currentName) {
+                    if (is_null($filesize)) {
+                        $filesize = strlen($this->get());
+                    } // Needed at least for Cyberduck
+                    return $filesize;
+                }
+            }
 
-			throw new \Sabre\DAV\Exception\NotFound('Could not find '.$this->path);
+            throw new \Sabre\DAV\Exception\NotFound('Could not find ' . $this->path);
 
-			return NULL;
-		}
+            return NULL;
+        }
 
-		/**
+        /**
 		 * Returns the ETag for a file
 		 *
 		 * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
@@ -412,27 +401,27 @@ namespace webdav_occlefs
 		 *
 		 * @return mixed
 		 */
-		public function getETag()
-		{
-			return null;
-		}
+        public function getETag()
+        {
+            return null;
+        }
 
-		/**
+        /**
 		 * Returns the mime-type for a file
 		 *
 		 * If null is returned, we'll assume application/octet-stream
 		 *
 		 * @return mixed
 		 */
-		public function getContentType()
-		{
-			return null;
-		}
-	}
+        public function getContentType()
+        {
+            return null;
+        }
+    }
 
-	class Auth extends \Sabre\DAV\Auth\Backend\AbstractBasic
-	{
-		/**
+    class Auth extends \Sabre\DAV\Auth\Backend\AbstractBasic
+    {
+        /**
 		 * Validates a username and password
 		 *
 		 * This method should return true or false depending on if login
@@ -442,22 +431,19 @@ namespace webdav_occlefs
 		 * @param string $password
 		 * @return bool
 		 */
-		function validateUserPass($username,$password)
-		{
-			$password_hashed=$GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);
-			$result=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,$password_hashed,$password);
-			if (is_null($result['id'])) // Failure, try blank password (as some clients don't let us input a blank password, so the real password could be blank)
-			{
-				$password='';
-				$password_hashed=$GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);
-				$result=$GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,NULL,$password_hashed,$password);
-			}
-			if (!is_null($result['id']))
-			{
-				return $GLOBALS['FORUM_DRIVER']->is_super_admin($result['id']);
-			}
-			return false;
-		}
-	}
+        public function validateUserPass($username,$password)
+        {
+            $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);
+            $result = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,null,$password_hashed,$password);
+            if (is_null($result['id'])) { // Failure, try blank password (as some clients don't let us input a blank password, so the real password could be blank)
+                $password = '';
+                $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);
+                $result = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,null,$password_hashed,$password);
+            }
+            if (!is_null($result['id'])) {
+                return $GLOBALS['FORUM_DRIVER']->is_super_admin($result['id']);
+            }
+            return false;
+        }
+    }
 }
-

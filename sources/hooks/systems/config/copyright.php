@@ -20,35 +20,33 @@
 
 class Hook_config_copyright
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'COPYRIGHT',
-			'type'=>'transline',
-			'category'=>'SITE',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_copyright',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'COPYRIGHT',
+            'type' => 'transline',
+            'category' => 'SITE',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_copyright',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'Copyright &copy; '.get_site_name().' '.date('Y').'';
-	}
+    public function get_default()
+    {
+        return 'Copyright &copy; ' . get_site_name() . ' ' . date('Y') . '';
+    }
 }
-
-

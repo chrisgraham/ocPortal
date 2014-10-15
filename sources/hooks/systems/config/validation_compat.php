@@ -20,35 +20,33 @@
 
 class Hook_config_validation_compat
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'VALIDATION_COMPAT',
-			'type'=>'tick',
-			'category'=>'ACCESSIBILITY',
-			'group'=>'VALIDATION',
-			'explanation'=>'CONFIG_OPTION_validation_compat',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'VALIDATION_COMPAT',
+            'type' => 'tick',
+            'category' => 'ACCESSIBILITY',
+            'group' => 'VALIDATION',
+            'explanation' => 'CONFIG_OPTION_validation_compat',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'core_validation',
-		);
-	}
+            'addon' => 'core_validation',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return NULL; // Disabled by default, as option stands against ideas of progressive enhancement
-	}
+    public function get_default()
+    {
+        return NULL; // Disabled by default, as option stands against ideas of progressive enhancement
+    }
 }
-
-

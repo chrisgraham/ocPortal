@@ -20,84 +20,84 @@
 
 class Hook_addon_registry_match_key_permissions
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Match-key-permissions allow advanced setting of permissions on a screen-by-screen basis.';
-	}
+    public function get_description()
+    {
+        return 'Match-key-permissions allow advanced setting of permissions on a screen-by-screen basis.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_permissions',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_permissions',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/security/permissions/match_keys.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/security/permissions/match_keys.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/security/permissions/match_keys.png',
-			'themes/default/images/icons/48x48/menu/adminzone/security/permissions/match_keys.png',
-			'sources/hooks/systems/occle_fs_extended_config/match_key_message.php',
-			'sources/hooks/systems/addon_registry/match_key_permissions.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/security/permissions/match_keys.png',
+            'themes/default/images/icons/48x48/menu/adminzone/security/permissions/match_keys.png',
+            'sources/hooks/systems/occle_fs_extended_config/match_key_message.php',
+            'sources/hooks/systems/addon_registry/match_key_permissions.php',
+        );
+    }
 }

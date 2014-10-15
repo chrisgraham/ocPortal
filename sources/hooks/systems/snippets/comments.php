@@ -20,32 +20,35 @@
 
 class Hook_comments
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		if (get_option('is_on_comments')=='0') warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+    public function run()
+    {
+        if (get_option('is_on_comments') == '0') {
+            warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        }
 
-		$serialized_options=get_param('serialized_options',false,true);
-		$hash=get_param('hash');
+        $serialized_options = get_param('serialized_options',false,true);
+        $hash = get_param('hash');
 
-		require_code('crypt');
-		if (ratchet_hash($serialized_options,get_site_salt())!=$hash) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        require_code('crypt');
+        if (ratchet_hash($serialized_options,get_site_salt()) != $hash) {
+            warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        }
 
-		secure_serialized_data($serialized_options);
-		list($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews)=unserialize($serialized_options);
+        secure_serialized_data($serialized_options);
+        list($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews) = unserialize($serialized_options);
 
-		$posts=array_map('intval',explode(',',get_param('ids',false,true)));
+        $posts = array_map('intval',explode(',',get_param('ids',false,true)));
 
-		$_parent_id=get_param('id','');
-		$parent_id=($_parent_id=='')?mixed():intval($_parent_id);
+        $_parent_id = get_param('id','');
+        $parent_id = ($_parent_id == '')?mixed():intval($_parent_id);
 
-		require_code('topics');
-		$renderer=new OCP_Topic();
-		return $renderer->render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,NULL,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id);
-	}
+        require_code('topics');
+        $renderer = new OCP_Topic();
+        return $renderer->render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,null,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id);
+    }
 }
-

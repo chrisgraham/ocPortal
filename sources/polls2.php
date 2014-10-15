@@ -68,81 +68,98 @@
  * @param  ?TIME				The edit date (NULL: never)
  * @return AUTO_LINK			The poll ID of our new poll
  */
-function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$num_options=NULL,$current=0,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='',$time=NULL,$submitter=NULL,$use_time=NULL,$v1=0,$v2=0,$v3=0,$v4=0,$v5=0,$v6=0,$v7=0,$v8=0,$v9=0,$v10=0,$views=0,$edit_date=NULL)
+function add_poll($question,$a1,$a2,$a3 = '',$a4 = '',$a5 = '',$a6 = '',$a7 = '',$a8 = '',$a9 = '',$a10 = '',$num_options = null,$current = 0,$allow_rating = 1,$allow_comments = 1,$allow_trackbacks = 1,$notes = '',$time = null,$submitter = null,$use_time = null,$v1 = 0,$v2 = 0,$v3 = 0,$v4 = 0,$v5 = 0,$v6 = 0,$v7 = 0,$v8 = 0,$v9 = 0,$v10 = 0,$views = 0,$edit_date = null)
 {
-	require_code('global4');
-	prevent_double_submit('ADD_POLL',NULL,$question);
+    require_code('global4');
+    prevent_double_submit('ADD_POLL',null,$question);
 
-	if (is_null($num_options))
-	{
-		$num_options=2;
-		if ($a3!='') $num_options++;
-		if ($a4!='') $num_options++;
-		if ($a5!='') $num_options++;
-		if ($a6!='') $num_options++;
-		if ($a7!='') $num_options++;
-		if ($a8!='') $num_options++;
-		if ($a9!='') $num_options++;
-		if ($a10!='') $num_options++;
-	}
+    if (is_null($num_options)) {
+        $num_options = 2;
+        if ($a3 != '') {
+            $num_options++;
+        }
+        if ($a4 != '') {
+            $num_options++;
+        }
+        if ($a5 != '') {
+            $num_options++;
+        }
+        if ($a6 != '') {
+            $num_options++;
+        }
+        if ($a7 != '') {
+            $num_options++;
+        }
+        if ($a8 != '') {
+            $num_options++;
+        }
+        if ($a9 != '') {
+            $num_options++;
+        }
+        if ($a10 != '') {
+            $num_options++;
+        }
+    }
 
-	if ($current==1)
-	{
-		persistent_cache_delete('POLL');
-		$GLOBALS['SITE_DB']->query_update('poll',array('is_current'=>0),array('is_current'=>1),'',1);
-	}
+    if ($current == 1) {
+        persistent_cache_delete('POLL');
+        $GLOBALS['SITE_DB']->query_update('poll',array('is_current' => 0),array('is_current' => 1),'',1);
+    }
 
-	if (is_null($time)) $time=time();
-	if (is_null($submitter)) $submitter=get_member();
+    if (is_null($time)) {
+        $time = time();
+    }
+    if (is_null($submitter)) {
+        $submitter = get_member();
+    }
 
-	$map=array(
-		'edit_date'=>$edit_date,
-		'poll_views'=>$views,
-		'add_time'=>$time,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'notes'=>$notes,
-		'submitter'=>$submitter,
-		'date_and_time'=>$use_time,
-		'votes1'=>$v1,
-		'votes2'=>$v2,
-		'votes3'=>$v3,
-		'votes4'=>$v4,
-		'votes5'=>$v5,
-		'votes6'=>$v6,
-		'votes7'=>$v7,
-		'votes8'=>$v8,
-		'votes9'=>$v9,
-		'votes10'=>$v10,
-		'num_options'=>$num_options,
-		'is_current'=>$current,
-	);
-	$map+=insert_lang_comcode('question',$question,1);
-	$map+=insert_lang_comcode('option1',$a1,1);
-	$map+=insert_lang_comcode('option2',$a2,1);
-	$map+=insert_lang_comcode('option3',$a3,1);
-	$map+=insert_lang_comcode('option4',$a4,1);
-	$map+=insert_lang_comcode('option5',$a5,1);
-	$map+=insert_lang_comcode('option6',$a6,1);
-	$map+=insert_lang_comcode('option7',$a7,1);
-	$map+=insert_lang_comcode('option8',$a8,1);
-	$map+=insert_lang_comcode('option9',$a9,1);
-	$map+=insert_lang_comcode('option10',$a10,1);
-	$id=$GLOBALS['SITE_DB']->query_insert('poll',$map,true);
+    $map = array(
+        'edit_date' => $edit_date,
+        'poll_views' => $views,
+        'add_time' => $time,
+        'allow_trackbacks' => $allow_trackbacks,
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'notes' => $notes,
+        'submitter' => $submitter,
+        'date_and_time' => $use_time,
+        'votes1' => $v1,
+        'votes2' => $v2,
+        'votes3' => $v3,
+        'votes4' => $v4,
+        'votes5' => $v5,
+        'votes6' => $v6,
+        'votes7' => $v7,
+        'votes8' => $v8,
+        'votes9' => $v9,
+        'votes10' => $v10,
+        'num_options' => $num_options,
+        'is_current' => $current,
+    );
+    $map += insert_lang_comcode('question',$question,1);
+    $map += insert_lang_comcode('option1',$a1,1);
+    $map += insert_lang_comcode('option2',$a2,1);
+    $map += insert_lang_comcode('option3',$a3,1);
+    $map += insert_lang_comcode('option4',$a4,1);
+    $map += insert_lang_comcode('option5',$a5,1);
+    $map += insert_lang_comcode('option6',$a6,1);
+    $map += insert_lang_comcode('option7',$a7,1);
+    $map += insert_lang_comcode('option8',$a8,1);
+    $map += insert_lang_comcode('option9',$a9,1);
+    $map += insert_lang_comcode('option10',$a10,1);
+    $id = $GLOBALS['SITE_DB']->query_insert('poll',$map,true);
 
-	log_it('ADD_POLL',strval($id),$question);
+    log_it('ADD_POLL',strval($id),$question);
 
-	require_code('member_mentions');
-	dispatch_member_mention_notifications('poll',strval($id),$submitter);
+    require_code('member_mentions');
+    dispatch_member_mention_notifications('poll',strval($id),$submitter);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('poll',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('poll',strval($id),null,null,true);
+    }
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -173,75 +190,79 @@ function add_poll($question,$a1,$a2,$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a
  * @param  ?MEMBER			Submitter (NULL: do not change)
  * @param  boolean			Determines whether some NULLs passed mean 'use a default' or literally mean 'set to NULL'
  */
-function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time=NULL,$add_time=NULL,$views=NULL,$submitter=NULL,$null_is_literal=false)
+function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time = null,$add_time = null,$views = null,$submitter = null,$null_is_literal = false)
 {
-	if (is_null($edit_time)) $edit_time=$null_is_literal?NULL:time();
+    if (is_null($edit_time)) {
+        $edit_time = $null_is_literal?null:time();
+    }
 
-	log_it('EDIT_POLL',strval($id),$question);
+    log_it('EDIT_POLL',strval($id),$question);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('poll',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('poll',strval($id));
+    }
 
-	persistent_cache_delete('POLL');
+    persistent_cache_delete('POLL');
 
-	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
-	$_question=$rows[0]['question'];
-	$_a1=$rows[0]['option1'];
-	$_a2=$rows[0]['option2'];
-	$_a3=$rows[0]['option3'];
-	$_a4=$rows[0]['option4'];
-	$_a5=$rows[0]['option5'];
-	$_a6=$rows[0]['option6'];
-	$_a7=$rows[0]['option7'];
-	$_a8=$rows[0]['option8'];
-	$_a9=$rows[0]['option9'];
-	$_a10=$rows[0]['option10'];
+    $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => $id),'',1);
+    $_question = $rows[0]['question'];
+    $_a1 = $rows[0]['option1'];
+    $_a2 = $rows[0]['option2'];
+    $_a3 = $rows[0]['option3'];
+    $_a4 = $rows[0]['option4'];
+    $_a5 = $rows[0]['option5'];
+    $_a6 = $rows[0]['option6'];
+    $_a7 = $rows[0]['option7'];
+    $_a8 = $rows[0]['option8'];
+    $_a9 = $rows[0]['option9'];
+    $_a10 = $rows[0]['option10'];
 
-	$update_map=array(
-		'allow_rating'=>$allow_rating,
-		'allow_comments'=>$allow_comments,
-		'allow_trackbacks'=>$allow_trackbacks,
-		'notes'=>$notes,
-		'num_options'=>$num_options,
-	);
-	$update_map+=lang_remap_comcode('question',$_question,$question);
-	$update_map+=lang_remap_comcode('option1',$_a1,$a1);
-	$update_map+=lang_remap_comcode('option2',$_a2,$a2);
-	$update_map+=lang_remap_comcode('option3',$_a3,$a3);
-	$update_map+=lang_remap_comcode('option4',$_a4,$a4);
-	$update_map+=lang_remap_comcode('option5',$_a5,$a5);
-	$update_map+=lang_remap_comcode('option6',$_a6,$a6);
-	$update_map+=lang_remap_comcode('option7',$_a7,$a7);
-	$update_map+=lang_remap_comcode('option8',$_a8,$a8);
-	$update_map+=lang_remap_comcode('option9',$_a9,$a9);
-	$update_map+=lang_remap_comcode('option10',$_a10,$a10);
+    $update_map = array(
+        'allow_rating' => $allow_rating,
+        'allow_comments' => $allow_comments,
+        'allow_trackbacks' => $allow_trackbacks,
+        'notes' => $notes,
+        'num_options' => $num_options,
+    );
+    $update_map += lang_remap_comcode('question',$_question,$question);
+    $update_map += lang_remap_comcode('option1',$_a1,$a1);
+    $update_map += lang_remap_comcode('option2',$_a2,$a2);
+    $update_map += lang_remap_comcode('option3',$_a3,$a3);
+    $update_map += lang_remap_comcode('option4',$_a4,$a4);
+    $update_map += lang_remap_comcode('option5',$_a5,$a5);
+    $update_map += lang_remap_comcode('option6',$_a6,$a6);
+    $update_map += lang_remap_comcode('option7',$_a7,$a7);
+    $update_map += lang_remap_comcode('option8',$_a8,$a8);
+    $update_map += lang_remap_comcode('option9',$_a9,$a9);
+    $update_map += lang_remap_comcode('option10',$_a10,$a10);
 
-	$update_map['edit_date']=$edit_time;
-	if (!is_null($add_time))
-		$update_map['add_time']=$add_time;
-	if (!is_null($views))
-		$update_map['poll_views']=$views;
-	if (!is_null($submitter))
-		$update_map['submitter']=$submitter;
+    $update_map['edit_date'] = $edit_time;
+    if (!is_null($add_time)) {
+        $update_map['add_time'] = $add_time;
+    }
+    if (!is_null($views)) {
+        $update_map['poll_views'] = $views;
+    }
+    if (!is_null($submitter)) {
+        $update_map['submitter'] = $submitter;
+    }
 
-	$GLOBALS['SITE_DB']->query_update('poll',$update_map,array('id'=>$id),'',1);
-	decache('main_poll');
+    $GLOBALS['SITE_DB']->query_update('poll',$update_map,array('id' => $id),'',1);
+    decache('main_poll');
 
-	require_code('urls2');
-	suggest_new_idmoniker_for('polls','view',strval($id),'',$question);
+    require_code('urls2');
+    suggest_new_idmoniker_for('polls','view',strval($id),'',$question);
 
-	require_code('feedback');
-	update_spacer_post(
-		$allow_comments!=0,
-		'polls',
-		strval($id),
-		build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls'),NULL,false,false,true),
-		$question,
-		find_overridden_comment_forum('polls')
-	);
+    require_code('feedback');
+    update_spacer_post(
+        $allow_comments != 0,
+        'polls',
+        strval($id),
+        build_url(array('page' => 'polls','type' => 'view','id' => $id),get_module_zone('polls'),null,false,false,true),
+        $question,
+        find_overridden_comment_forum('polls')
+    );
 }
 
 /**
@@ -251,37 +272,34 @@ function edit_poll($id,$question,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_o
  */
 function delete_poll($id)
 {
-	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>$id),'',1);
+    $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => $id),'',1);
 
-	persistent_cache_delete('POLL');
+    persistent_cache_delete('POLL');
 
-	if (addon_installed('catalogues'))
-	{
-		update_catalogue_content_ref('poll',strval($id),'');
-	}
+    if (addon_installed('catalogues')) {
+        update_catalogue_content_ref('poll',strval($id),'');
+    }
 
-	$question=get_translated_text($rows[0]['question']);
+    $question = get_translated_text($rows[0]['question']);
 
-	delete_lang($rows[0]['question']);
-	for ($i=1;$i<=10;$i++)
-	{
-		delete_lang($rows[0]['option'.strval($i)]);
-	}
+    delete_lang($rows[0]['question']);
+    for ($i = 1;$i <= 10;$i++) {
+        delete_lang($rows[0]['option' . strval($i)]);
+    }
 
-	$GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type'=>'polls','rating_for_id'=>$id));
-	$GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type'=>'polls','trackback_for_id'=>$id));
-	require_code('notifications');
-	delete_all_notifications_on('comment_posted','polls_'.strval($id));
+    $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => 'polls','rating_for_id' => $id));
+    $GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type' => 'polls','trackback_for_id' => $id));
+    require_code('notifications');
+    delete_all_notifications_on('comment_posted','polls_' . strval($id));
 
-	$GLOBALS['SITE_DB']->query_delete('poll',array('id'=>$id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('poll',array('id' => $id),'',1);
 
-	log_it('DELETE_POLL',strval($id),$question);
+    log_it('DELETE_POLL',strval($id),$question);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		expunge_resourcefs_moniker('poll',strval($id));
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        expunge_resourcefs_moniker('poll',strval($id));
+    }
 }
 
 /**
@@ -291,38 +309,36 @@ function delete_poll($id)
  */
 function set_poll($id)
 {
-	persistent_cache_delete('POLL');
+    persistent_cache_delete('POLL');
 
-	$rows=$GLOBALS['SITE_DB']->query_select('poll',array('question','submitter'),array('id'=>$id));
-	$question=$rows[0]['question'];
-	$submitter=$rows[0]['submitter'];
+    $rows = $GLOBALS['SITE_DB']->query_select('poll',array('question','submitter'),array('id' => $id));
+    $question = $rows[0]['question'];
+    $submitter = $rows[0]['submitter'];
 
-	log_it('CHOOSE_POLL',strval($id),get_translated_text($question));
+    log_it('CHOOSE_POLL',strval($id),get_translated_text($question));
 
-	require_code('users2');
-	if (has_actual_page_access(get_modal_user(),'polls'))
-	{
-		require_code('activities');
-		syndicate_described_activity('polls:ACTIVITY_CHOOSE_POLL',get_translated_text($question),'','','_SEARCH:polls:view:'.strval($id),'','','polls');
-	}
+    require_code('users2');
+    if (has_actual_page_access(get_modal_user(),'polls')) {
+        require_code('activities');
+        syndicate_described_activity('polls:ACTIVITY_CHOOSE_POLL',get_translated_text($question),'','','_SEARCH:polls:view:' . strval($id),'','','polls');
+    }
 
-	if ((!is_guest($submitter)) && (addon_installed('points')))
-	{
-		require_code('points2');
-		$points_chosen=intval(get_option('points_CHOOSE_POLL'));
-		if ($points_chosen!=0)
-			system_gift_transfer(do_lang('POLL'),$points_chosen,$submitter);
-	}
+    if ((!is_guest($submitter)) && (addon_installed('points'))) {
+        require_code('points2');
+        $points_chosen = intval(get_option('points_CHOOSE_POLL'));
+        if ($points_chosen != 0) {
+            system_gift_transfer(do_lang('POLL'),$points_chosen,$submitter);
+        }
+    }
 
-	$GLOBALS['SITE_DB']->query_update('poll',array('is_current'=>0),array('is_current'=>1));
-	$GLOBALS['SITE_DB']->query_update('poll',array('is_current'=>1,'date_and_time'=>time()),array('id'=>$id),'',1);
-	decache('main_poll');
+    $GLOBALS['SITE_DB']->query_update('poll',array('is_current' => 0),array('is_current' => 1));
+    $GLOBALS['SITE_DB']->query_update('poll',array('is_current' => 1,'date_and_time' => time()),array('id' => $id),'',1);
+    decache('main_poll');
 
-	require_lang('polls');
-	require_code('notifications');
-	$subject=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$question);
-	$poll_url=build_url(array('page'=>'polls','type'=>'view','id'=>$id),get_module_zone('polls'),NULL,false,false,true);
-	$mail=do_lang('POLL_CHOSEN_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(get_translated_text($question)),$poll_url->evaluate());
-	dispatch_notification('poll_chosen',NULL,$subject,$mail);
+    require_lang('polls');
+    require_code('notifications');
+    $subject = do_lang('POLL_CHOSEN_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$question);
+    $poll_url = build_url(array('page' => 'polls','type' => 'view','id' => $id),get_module_zone('polls'),null,false,false,true);
+    $mail = do_lang('POLL_CHOSEN_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(get_translated_text($question)),$poll_url->evaluate());
+    dispatch_notification('poll_chosen',null,$subject,$mail);
 }
-

@@ -20,16 +20,14 @@
 
 class Hook_Preview_wiki_page
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=(get_param('page','')=='cms_wiki');
-		return array($applies,'wiki_page',false);
-	}
+    public function applies()
+    {
+        $applies = (get_param('page','') == 'cms_wiki');
+        return array($applies,'wiki_page',false);
+    }
 }
-
-

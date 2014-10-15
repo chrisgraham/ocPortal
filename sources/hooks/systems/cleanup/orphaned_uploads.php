@@ -20,42 +20,41 @@
 
 class Hook_orphaned_uploads
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		$dbs_bak=$GLOBALS['NO_DB_SCOPE_CHECK'];
-		$GLOBALS['NO_DB_SCOPE_CHECK']=true;
-		$urlpaths=$GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type'=>'URLPATH'));
-		$count=0;
-		foreach ($urlpaths as $urlpath)
-		{
-			$count+=$GLOBALS['SITE_DB']->query_select_value($urlpath['m_table'],'COUNT(*)');
-			if ($count>10000) return NULL; // Too much!
-		}
-		$GLOBALS['NO_DB_SCOPE_CHECK']=$dbs_bak;
+    public function info()
+    {
+        $dbs_bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
+        $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
+        $urlpaths = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type' => 'URLPATH'));
+        $count = 0;
+        foreach ($urlpaths as $urlpath) {
+            $count += $GLOBALS['SITE_DB']->query_select_value($urlpath['m_table'],'COUNT(*)');
+            if ($count>10000) {
+                return NULL;
+            } // Too much!
+        }
+        $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_bak;
 
-		$info=array();
-		$info['title']=do_lang_tempcode('ORPHANED_UPLOADS');
-		$info['description']=do_lang_tempcode('DESCRIPTION_ORPHANED_UPLOADS');
-		$info['type']='optimise';
+        $info = array();
+        $info['title'] = do_lang_tempcode('ORPHANED_UPLOADS');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_ORPHANED_UPLOADS');
+        $info['type'] = 'optimise';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'),NULL,'find_orphaned_uploads');
-	}
+    public function run()
+    {
+        require_code('tasks');
+        return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'),null,'find_orphaned_uploads');
+    }
 }
-
-

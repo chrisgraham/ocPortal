@@ -20,35 +20,33 @@
 
 class Hook_config_blog_update_time
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'BLOG_REGULARITY',
-			'type'=>'integer',
-			'category'=>'ADMIN',
-			'group'=>'CHECK_LIST',
-			'explanation'=>'CONFIG_OPTION_blog_update_time',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'BLOG_REGULARITY',
+            'type' => 'integer',
+            'category' => 'ADMIN',
+            'group' => 'CHECK_LIST',
+            'explanation' => 'CONFIG_OPTION_blog_update_time',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'news',
-		);
-	}
+            'addon' => 'news',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '168';
-	}
+    public function get_default()
+    {
+        return '168';
+    }
 }
-
-

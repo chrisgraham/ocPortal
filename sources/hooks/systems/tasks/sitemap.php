@@ -20,20 +20,20 @@
 
 class Hook_task_sitemap
 {
-	/**
+    /**
 	 * Run the task hook.
 	 *
 	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
 	 */
-	function run()
-	{
-		set_value('sitemap_building_in_progress','1');
+    public function run()
+    {
+        set_value('sitemap_building_in_progress','1');
 
-		require_code('sitemap_xml');
-		sitemap_xml_build();
+        require_code('sitemap_xml');
+        sitemap_xml_build();
 
-		set_value('sitemap_building_in_progress','0');
+        set_value('sitemap_building_in_progress','0');
 
-		return NULL;
-	}
+        return NULL;
+    }
 }

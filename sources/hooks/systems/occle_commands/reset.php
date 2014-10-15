@@ -20,7 +20,7 @@
 
 class Hook_occle_command_reset
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,15 +28,14 @@ class Hook_occle_command_reset
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('reset',array('h'),array()),'','');
-		else
-		{
-			ocp_eatcookie('occle_dir');
-			ocp_eatcookie('occle_state');
-			return array('','',do_lang('SUCCESS'),'');
-		}
-	}
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('reset',array('h'),array()),'','');
+        } else {
+            ocp_eatcookie('occle_dir');
+            ocp_eatcookie('occle_state');
+            return array('','',do_lang('SUCCESS'),'');
+        }
+    }
 }
-

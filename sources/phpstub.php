@@ -34,7 +34,7 @@ The code quality checker automatically parses and uses this file, to build up th
  */
 function abs($number)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -45,7 +45,7 @@ function abs($number)
  */
 function array_count_values($input)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -56,9 +56,9 @@ function array_count_values($input)
  * @param  ?array	Third array (NULL: only 2).
  * @return array	The difference.
  */
-function array_diff($array1,$array2,$array3=NULL)
+function array_diff($array1,$array2,$array3 = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -69,9 +69,9 @@ function array_diff($array1,$array2,$array3=NULL)
  * @param  ?array	Third array (NULL: only 2).
  * @return array	The difference.
  */
-function array_diff_assoc($array1,$array2,$array3=NULL)
+function array_diff_assoc($array1,$array2,$array3 = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -82,7 +82,7 @@ function array_diff_assoc($array1,$array2,$array3=NULL)
  */
 function array_flip($trans)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -94,7 +94,7 @@ function array_flip($trans)
  */
 function array_key_exists($key,$search)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -104,9 +104,9 @@ function array_key_exists($key,$search)
  * @param  ?mixed	Only find keys with this value (NULL: no such filter).
  * @return array	The keys of the array.
  */
-function array_keys($input,$search_value=NULL)
+function array_keys($input,$search_value = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -117,9 +117,9 @@ function array_keys($input,$search_value=NULL)
  * @param  ?array	Third array (NULL: only 2).
  * @return array	The intersection.
  */
-function array_intersect($array1,$array2,$array3=NULL)
+function array_intersect($array1,$array2,$array3 = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -130,9 +130,9 @@ function array_intersect($array1,$array2,$array3=NULL)
  * @param  ?array	Third array (NULL: only 2).
  * @return array	The intersection.
  */
-function array_intersect_assoc($array1,$array2,$array3=NULL)
+function array_intersect_assoc($array1,$array2,$array3 = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -145,9 +145,9 @@ function array_intersect_assoc($array1,$array2,$array3=NULL)
  * @param  ?array	Fifth array to merge (NULL: not this one).
  * @return array	Merged array.
  */
-function array_merge($array1,$array2,$array3=NULL,$array4=NULL,$array5=NULL)
+function array_merge($array1,$array2,$array3 = null,$array4 = null,$array5 = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -158,7 +158,7 @@ function array_merge($array1,$array2,$array3=NULL,$array4=NULL,$array5=NULL)
  */
 function array_pop(&$array)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -170,7 +170,7 @@ function array_pop(&$array)
  */
 function array_push(&$array,$var)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -180,9 +180,9 @@ function array_push(&$array,$var)
  * @param  boolean	Whether to preserve keys.
  * @return array		The reversed array.
  */
-function array_reverse($array,$preserve_keys=false)
+function array_reverse($array,$preserve_keys = false)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -194,7 +194,7 @@ function array_reverse($array,$preserve_keys=false)
  */
 function array_search($needle,$haystack)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -205,7 +205,7 @@ function array_search($needle,$haystack)
  */
 function array_shift(&$array)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -216,9 +216,9 @@ function array_shift(&$array)
  * @param  ?integer  The length (NULL: up to the end of the array).
  * @return array		The slice.
  */
-function array_slice($array,$offset,$length=NULL)
+function array_slice($array,$offset,$length = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -230,9 +230,9 @@ function array_slice($array,$offset,$length=NULL)
  * @param  ?array		The replacement (NULL: nothing put in, just bit taken out).
  * @return array		The spliced result.
  */
-function array_splice($input,$offset,$length=NULL,$replacement=NULL)
+function array_splice($input,$offset,$length = null,$replacement = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -243,7 +243,7 @@ function array_splice($input,$offset,$length=NULL,$replacement=NULL)
  */
 function array_unique($array)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -254,7 +254,7 @@ function array_unique($array)
  */
 function array_values($array)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -263,7 +263,7 @@ function array_values($array)
  * @param  array		Array.
  * @param  integer	Sort flags.
  */
-function arsort(&$array,$sort_flags=0)
+function arsort(&$array,$sort_flags = 0)
 {
 }
 
@@ -273,7 +273,7 @@ function arsort(&$array,$sort_flags=0)
  * @param  array		Array.
  * @param  integer	Sort flags.
  */
-function asort(&$array,$sort_flags=0)
+function asort(&$array,$sort_flags = 0)
 {
 }
 
@@ -285,7 +285,7 @@ function asort(&$array,$sort_flags=0)
  */
 function base64_decode($encoded_data)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -296,7 +296,7 @@ function base64_decode($encoded_data)
  */
 function base64_encode($data)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -309,9 +309,9 @@ function base64_encode($data)
  * @param  ?mixed	Optional parameter (NULL: none).
  * @return mixed	Whatever the function returns.
  */
-function call_user_func($function,$param_a=NULL,$param_b=NULL,$param_c=NULL,$param_d=NULL)
+function call_user_func($function,$param_a = null,$param_b = null,$param_c = null,$param_d = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -322,7 +322,7 @@ function call_user_func($function,$param_a=NULL,$param_b=NULL,$param_c=NULL,$par
  */
 function ceil($function)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -333,7 +333,7 @@ function ceil($function)
  */
 function chdir($directory)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -346,7 +346,7 @@ function chdir($directory)
  */
 function checkdate($month,$day,$year)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -358,7 +358,7 @@ function checkdate($month,$day,$year)
  */
 function chmod($filename,$mode)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -369,7 +369,7 @@ function chmod($filename,$mode)
  */
 function chr($ascii)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -380,9 +380,9 @@ function chr($ascii)
  * @param  string		Split character.
  * @return string		The chunked version of the input string.
  */
-function chunk_split($body,$chunklen=76,$splitter="\r\n")
+function chunk_split($body,$chunklen = 76,$splitter = "\r\n")
 {
-	return '';
+    return '';
 }
 
 /**
@@ -393,7 +393,7 @@ function chunk_split($body,$chunklen=76,$splitter="\r\n")
  */
 function class_exists($class_name)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -420,7 +420,7 @@ function closedir($handle)
  */
 function constant($name)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -431,9 +431,9 @@ function constant($name)
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return boolean		Success status.
  */
-function copy($source,$dest,$context=NULL)
+function copy($source,$dest,$context = null)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -444,7 +444,7 @@ function copy($source,$dest,$context=NULL)
  */
 function cos($angle)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -455,7 +455,7 @@ function cos($angle)
  */
 function count($var)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -465,9 +465,9 @@ function count($var)
  * @param  ?string	The salt (NULL: generate a random salt).
  * @return string		The hash. The start of the hash determines parameters (encoding, salt).
  */
-function crypt($string,$salt=NULL)
+function crypt($string,$salt = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -478,7 +478,7 @@ function crypt($string,$salt=NULL)
  */
 function current($array)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -488,9 +488,9 @@ function current($array)
  * @param  ?TIME	The timestamp (NULL: current time).
  * @return string	The string representation of the local time/date.
  */
-function date($format,$timestamp=NULL)
+function date($format,$timestamp = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -501,7 +501,7 @@ function date($format,$timestamp=NULL)
  */
 function dechex($number)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -512,7 +512,7 @@ function dechex($number)
  */
 function decoct($number)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -524,7 +524,7 @@ function decoct($number)
  */
 function define($name,$value)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -535,7 +535,7 @@ function define($name,$value)
  */
 function defined($name)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -546,7 +546,7 @@ function defined($name)
  */
 function dirname($name)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -557,7 +557,7 @@ function dirname($name)
  */
 function deg2rad($number)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -569,9 +569,9 @@ function deg2rad($number)
  * @param  string		The parameter that defines details of the message type (for type 0, meaningless).
  * @return boolean	Success status.
  */
-function error_log($message,$message_type=0,$destination='')
+function error_log($message,$message_type = 0,$destination = '')
 {
-	return true;
+    return true;
 }
 
 /**
@@ -580,9 +580,9 @@ function error_log($message,$message_type=0,$destination='')
  * @param  ?integer  OR'd combination of error type constants. (E_ERROR, E_WARNING,  E_PARSE, E_NOTICE, E_CORE_ERROR, E_CORE_WARNING, E_COMPILE_ERROR, E_COMPILE_WARNING, E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE, E_ALL) (NULL: find current level).
  * @return integer	Current error reporting level.
  */
-function error_reporting($level=NULL)
+function error_reporting($level = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -590,7 +590,7 @@ function error_reporting($level=NULL)
  *
  * @param  string	The message.
  */
-function exit($message='')
+function exit($message = '')
 {
 }
 
@@ -602,9 +602,9 @@ function exit($message='')
  * @param  ?integer  The maximum number of splits (the last element containing the remainder) (NULL: no limit).
  * @return array		The split list.
  */
-function explode($separator,$string,$limit=NULL)
+function explode($separator,$string,$limit = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -615,7 +615,7 @@ function explode($separator,$string,$limit=NULL)
  */
 function fclose($handle)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -626,7 +626,7 @@ function fclose($handle)
  */
 function feof($handle)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -636,9 +636,9 @@ function feof($handle)
  * @param  ?integer	The maximum length of the line (NULL: no limit).
  * @return string		The string read.
  */
-function fgets($handle,$length=NULL)
+function fgets($handle,$length = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -648,9 +648,9 @@ function fgets($handle,$length=NULL)
  * @param  integer	Flags.
  * @return ~array		The array (each line being an entry in the array, and newlines still attached) (false: error).
  */
-function file($filename,$flags=0)
+function file($filename,$flags = 0)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -661,7 +661,7 @@ function file($filename,$flags=0)
  */
 function file_exists($filename)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -672,7 +672,7 @@ function file_exists($filename)
  */
 function filectime($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -683,7 +683,7 @@ function filectime($filename)
  */
 function filegroup($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -694,7 +694,7 @@ function filegroup($filename)
  */
 function filemtime($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -705,7 +705,7 @@ function filemtime($filename)
  */
 function fileowner($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -716,7 +716,7 @@ function fileowner($filename)
  */
 function fileperms($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -727,7 +727,7 @@ function fileperms($filename)
  */
 function filesize($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -738,7 +738,7 @@ function filesize($filename)
  */
 function floatval($var)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -749,7 +749,7 @@ function floatval($var)
  */
 function floor($value)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -759,7 +759,7 @@ function floor($value)
  */
 function get_defined_vars()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -769,7 +769,7 @@ function get_defined_vars()
  */
 function get_declared_classes()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -779,7 +779,7 @@ function get_declared_classes()
  */
 function get_defined_functions()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -791,9 +791,9 @@ function get_defined_functions()
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return ~resource 	The file handle (false: could not be opened).
  */
-function fopen($filename,$mode,$use_include_path=false,$context=NULL)
+function fopen($filename,$mode,$use_include_path = false,$context = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -804,7 +804,7 @@ function fopen($filename,$mode,$use_include_path=false,$context=NULL)
  */
 function fpassthru($handle)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -816,7 +816,7 @@ function fpassthru($handle)
  */
 function fread($handle,$length)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -827,9 +827,9 @@ function fread($handle,$length)
  * @param  integer	SEEK_SET, SEEK_CUR or SEEK_END.
  * @return integer	Success status (-1 means error).
  */
-function fseek($handle,$offset,$whence=SEEK_SET)
+function fseek($handle,$offset,$whence = SEEK_SET)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -840,7 +840,7 @@ function fseek($handle,$offset,$whence=SEEK_SET)
  */
 function ftell($handle)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -852,7 +852,7 @@ function ftell($handle)
  */
 function ftp_chdir($ftp_stream,$dir)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -863,7 +863,7 @@ function ftp_chdir($ftp_stream,$dir)
  */
 function ftp_close($ftp_stream)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -874,9 +874,9 @@ function ftp_close($ftp_stream)
  * @param  integer	The timeout after which we give up with an error.
  * @return ~resource The FTP connection (false: error).
  */
-function ftp_connect($host,$port=21,$timeout=90)
+function ftp_connect($host,$port = 21,$timeout = 90)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -888,7 +888,7 @@ function ftp_connect($host,$port=21,$timeout=90)
  */
 function ftp_delete($ftp_stream,$filename)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -902,7 +902,7 @@ function ftp_delete($ftp_stream,$filename)
  */
 function ftp_fput($ftp_stream,$remote_file,$handle,$mode)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -915,7 +915,7 @@ function ftp_fput($ftp_stream,$remote_file,$handle,$mode)
  */
 function ftp_login($ftp_stream,$username,$password)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -927,7 +927,7 @@ function ftp_login($ftp_stream,$username,$password)
  */
 function ftp_mkdir($ftp_stream,$directory)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -939,7 +939,7 @@ function ftp_mkdir($ftp_stream,$directory)
  */
 function ftp_nlist($ftp_stream,$directory)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -953,7 +953,7 @@ function ftp_nlist($ftp_stream,$directory)
  */
 function ftp_put($ftp_stream,$remote_file,$local_file,$mode)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -966,7 +966,7 @@ function ftp_put($ftp_stream,$remote_file,$local_file,$mode)
  */
 function ftp_rename($ftp_stream,$from,$to)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -978,7 +978,7 @@ function ftp_rename($ftp_stream,$from,$to)
  */
 function ftp_rmdir($ftp_stream,$directory)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -990,7 +990,7 @@ function ftp_rmdir($ftp_stream,$directory)
  */
 function ftp_site($ftp_stream,$cmd)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -1002,7 +1002,7 @@ function ftp_site($ftp_stream,$cmd)
  */
 function ftp_size($ftp_stream,$cmd)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1013,7 +1013,7 @@ function ftp_size($ftp_stream,$cmd)
  */
 function function_exists($function_name)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -1024,9 +1024,9 @@ function function_exists($function_name)
  * @param  ?integer  The length of data to write (NULL: all of $string).
  * @return ~integer  The number of bytes written (false: error).
  */
-function fwrite($handle,$string,$length=NULL)
+function fwrite($handle,$string,$length = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1036,7 +1036,7 @@ function fwrite($handle,$string,$length=NULL)
  */
 function gd_info()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1047,7 +1047,7 @@ function gd_info()
  */
 function get_class($obj)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -1058,7 +1058,7 @@ function get_class($obj)
  */
 function get_class_methods($class_name)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1069,7 +1069,7 @@ function get_class_methods($class_name)
  */
 function get_class_vars($class_name)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1080,7 +1080,7 @@ function get_class_vars($class_name)
  */
 function get_object_vars($object)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1091,9 +1091,9 @@ function get_object_vars($object)
  * @param  string		The character set to use
  * @return array		The translation table.
  */
-function get_html_translation_table($table,$quote_style=ENT_COMPAT,$charset='UTF-8')
+function get_html_translation_table($table,$quote_style = ENT_COMPAT,$charset = 'UTF-8')
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1103,7 +1103,7 @@ function get_html_translation_table($table,$quote_style=ENT_COMPAT,$charset='UTF
  */
 function get_magic_quotes_gpc()
 {
-	return false;
+    return false;
 }
 
 /**
@@ -1113,7 +1113,7 @@ function get_magic_quotes_gpc()
  */
 function getcwd()
 {
-	return '';
+    return '';
 }
 
 /**
@@ -1122,9 +1122,9 @@ function getcwd()
  * @param  ?TIME	Timestamp to get information for (NULL: now).
  * @return array	The information.
  */
-function getdate($timestamp=NULL)
+function getdate($timestamp = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1135,7 +1135,7 @@ function getdate($timestamp=NULL)
  */
 function getenv($string)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -1145,9 +1145,9 @@ function getenv($string)
  * @param  ?TIME	Timestamp to use (NULL: now).
  * @return string	The formatted string.
  */
-function gmdate($format,$timestamp=NULL)
+function gmdate($format,$timestamp = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -1158,7 +1158,7 @@ function gmdate($format,$timestamp=NULL)
  */
 function gzclose($handle)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -1170,7 +1170,7 @@ function gzclose($handle)
  */
 function gzopen($filename,$mode)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1181,9 +1181,9 @@ function gzopen($filename,$mode)
  * @param  ?integer  The length of data to write (NULL: full length of input string).
  * @return ~integer  The number of bytes written (false: error).
  */
-function gzwrite($handle,$string,$length=NULL)
+function gzwrite($handle,$string,$length = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1194,7 +1194,7 @@ function gzwrite($handle,$string,$length=NULL)
  * @param  string		The header to send.
  * @param  boolean	Whether to replace a previous call to set the same header (if you choose to not replace, it will send two different values for the same header).
  */
-function header($string,$replace_last=true)
+function header($string,$replace_last = true)
 {
 }
 
@@ -1205,7 +1205,7 @@ function header($string,$replace_last=true)
  */
 function headers_sent()
 {
-	return false;
+    return false;
 }
 
 /**
@@ -1216,7 +1216,7 @@ function headers_sent()
  */
 function hexdec($hex_string)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1236,9 +1236,9 @@ function highlight_string($str)
  * @param  string		The character set to use.
  * @return string		The encoded string.
  */
-function htmlentities($string,$quote_style=ENT_COMPAT,$charset='')
+function htmlentities($string,$quote_style = ENT_COMPAT,$charset = '')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -1250,7 +1250,7 @@ function htmlentities($string,$quote_style=ENT_COMPAT,$charset='')
  */
 function imagealphablending($image,$blendmode)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1264,7 +1264,7 @@ function imagealphablending($image,$blendmode)
  */
 function imagecolorallocate($image,$red,$green,$blue)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1279,7 +1279,7 @@ function imagecolorallocate($image,$red,$green,$blue)
  */
 function imagecolorallocatealpha($image,$red,$green,$blue,$alpha)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1289,9 +1289,9 @@ function imagecolorallocatealpha($image,$red,$green,$blue,$alpha)
  * @param  ?integer  Transparency colour identifier (NULL: get it, don't set it).
  * @return integer	Transparency colour identifier.
  */
-function imagecolortransparent($image,$color=NULL)
+function imagecolortransparent($image,$color = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1327,7 +1327,7 @@ function imagecopy($dst_im,$src_im,$dst_x,$dst_y,$src_x,$src_y,$src_w,$src_h)
  */
 function imagecopyresampled($dst_im,$src_im,$dst_x,$dst_y,$src_x,$src_y,$dst_w,$dst_h,$src_w,$src_h)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1357,7 +1357,7 @@ function imagecopyresized($dst_im,$src_im,$dst_x,$dst_y,$src_x,$src_y,$dst_w,$ds
  */
 function imagecreate($width,$height)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1368,7 +1368,7 @@ function imagecreate($width,$height)
  */
 function imagecreatefromstring($image)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1379,7 +1379,7 @@ function imagecreatefromstring($image)
  */
 function imagecreatefrompng($path)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1390,7 +1390,7 @@ function imagecreatefrompng($path)
  */
 function imagecreatefromjpeg($path)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1401,7 +1401,7 @@ function imagecreatefromjpeg($path)
  */
 function imageistruecolor($image)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1413,7 +1413,7 @@ function imageistruecolor($image)
  */
 function imagecreatetruecolor($x,$y)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1426,7 +1426,7 @@ function imagecreatetruecolor($x,$y)
  */
 function imagecolorat($image,$x,$y)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1438,7 +1438,7 @@ function imagecolorat($image,$x,$y)
  */
 function imagecolorsforindex($image,$color)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1470,7 +1470,7 @@ function imagefill($image,$x,$y,$colour)
  */
 function imagefontheight($font)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1481,7 +1481,7 @@ function imagefontheight($font)
  */
 function imagefontwidth($font)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1492,9 +1492,9 @@ function imagefontwidth($font)
  * @param  ?integer  Quality level (NULL: default).
  * @return boolean	Success status.
  */
-function imagejpeg($image,$filename=NULL,$quality=NULL)
+function imagejpeg($image,$filename = null,$quality = null)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1505,9 +1505,9 @@ function imagejpeg($image,$filename=NULL,$quality=NULL)
  * @param  integer	Compression level (0-9, 9 being highest compression).
  * @return boolean	Success status.
  */
-function imagepng($image,$filename=NULL,$quality=0)
+function imagepng($image,$filename = null,$quality = 0)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1554,7 +1554,7 @@ function imagestring($image,$font,$x,$y,$s,$col)
  */
 function imagesx($image)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1565,7 +1565,7 @@ function imagesx($image)
  */
 function imagesy($image)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1593,7 +1593,7 @@ function imagestringup($image,$font,$x,$y,$s,$col)
  */
 function imagettfbbox($size,$angle,$fontfile,$text)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1611,7 +1611,7 @@ function imagettfbbox($size,$angle,$fontfile,$text)
  */
 function imagettftext($handle,$size,$angle,$x,$y,$colour,$fontfile,$text)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -1621,7 +1621,7 @@ function imagettftext($handle,$size,$angle,$x,$y,$colour,$fontfile,$text)
  */
 function imagetypes()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1639,7 +1639,7 @@ function imagetypes()
  */
 function imagearc($image,$cx,$cy,$w,$h,$s,$e,$color)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1658,7 +1658,7 @@ function imagearc($image,$cx,$cy,$w,$h,$s,$e,$color)
  */
 function imagefilledarc($image,$cx,$cy,$w,$h,$s,$e,$color,$style)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1705,7 +1705,7 @@ function imageline($image,$x1,$y1,$x2,$y2,$color)
  */
 function imageellipse($image,$cx,$cy,$w,$h,$color)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1721,7 +1721,7 @@ function imageellipse($image,$cx,$cy,$w,$h,$color)
  */
 function imagefilledellipse($image,$cx,$cy,$w,$h,$color)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1823,7 +1823,7 @@ function imagegammacorrect($image,$in,$out)
  */
 function imageinterlace($image,$interlace)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1834,7 +1834,7 @@ function imageinterlace($image,$interlace)
  */
 function imageloadfont($file)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1856,7 +1856,7 @@ function imagepalettecopy($destination,$source)
  */
 function imagesetbrush($image,$brush)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1878,7 +1878,7 @@ function imagesetstyle($image,$style)
  */
 function imagesetthickness($image,$thickness)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1890,7 +1890,7 @@ function imagesetthickness($image,$thickness)
  */
 function imagesettile($image,$tile)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1929,7 +1929,7 @@ function imagecharup($image,$font,$x,$y,$c,$color)
  */
 function imagecolorclosest($image,$red,$green,$blue)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1944,7 +1944,7 @@ function imagecolorclosest($image,$red,$green,$blue)
  */
 function imagecolorclosestalpha($image,$red,$green,$blue,$alpha)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1958,7 +1958,7 @@ function imagecolorclosestalpha($image,$red,$green,$blue,$alpha)
  */
 function imagecolorclosesthwb($image,$red,$green,$blue)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1970,7 +1970,7 @@ function imagecolorclosesthwb($image,$red,$green,$blue)
  */
 function imagecolordeallocate($image,$colour)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -1984,7 +1984,7 @@ function imagecolordeallocate($image,$colour)
  */
 function imagecolorexact($image,$red,$green,$blue)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -1999,7 +1999,7 @@ function imagecolorexact($image,$red,$green,$blue)
  */
 function imagecolorexactalpha($image,$red,$green,$blue,$alpha)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2013,7 +2013,7 @@ function imagecolorexactalpha($image,$red,$green,$blue,$alpha)
  */
 function imagecolorresolve($image,$red,$green,$blue)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2028,7 +2028,7 @@ function imagecolorresolve($image,$red,$green,$blue)
  */
 function imagecolorresolvealpha($image,$red,$green,$blue,$alpha)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2051,7 +2051,7 @@ function imagecolorset($image,$red,$green,$blue)
  */
 function imagecolorstotal($image)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2080,7 +2080,7 @@ function imagecopymerge($dst_im,$src_im,$dst_x,$dst_y,$src_x,$src_y,$src_w,$src_
  */
 function implode($glue,$pieces)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2091,9 +2091,9 @@ function implode($glue,$pieces)
  * @param  boolean	Use strict type checking.
  * @return boolean	Whether the value exists in the array.
  */
-function in_array($needle,$haystack,$strict=false)
+function in_array($needle,$haystack,$strict = false)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2104,7 +2104,7 @@ function in_array($needle,$haystack,$strict=false)
  */
 function include($filename)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2115,7 +2115,7 @@ function include($filename)
  */
 function include_once($filename)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2126,7 +2126,7 @@ function include_once($filename)
  */
 function ini_get($varname)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2147,7 +2147,7 @@ function ini_restore($varname)
  */
 function ini_set($var,$value)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2157,9 +2157,9 @@ function ini_set($var,$value)
  * @param  integer	The base.
  * @return integer	The integer, extracted.
  */
-function intval($var,$base=10)
+function intval($var,$base = 10)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2171,7 +2171,7 @@ function intval($var,$base=10)
  */
 function is_a($object,$class_name)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2182,7 +2182,7 @@ function is_a($object,$class_name)
  */
 function is_array($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2193,7 +2193,7 @@ function is_array($var)
  */
 function is_bool($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2204,7 +2204,7 @@ function is_bool($var)
  */
 function is_dir($path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2215,7 +2215,7 @@ function is_dir($path)
  */
 function is_file($path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2226,7 +2226,7 @@ function is_file($path)
  */
 function is_link($path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2237,7 +2237,7 @@ function is_link($path)
  */
 function is_float($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2248,7 +2248,7 @@ function is_float($var)
  */
 function is_integer($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2259,7 +2259,7 @@ function is_integer($var)
  */
 function is_callable($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2270,7 +2270,7 @@ function is_callable($var)
  */
 function is_null($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2281,7 +2281,7 @@ function is_null($var)
  */
 function is_numeric($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2292,7 +2292,7 @@ function is_numeric($var)
  */
 function is_object($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2303,7 +2303,7 @@ function is_object($var)
  */
 function is_readable($path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2314,7 +2314,7 @@ function is_readable($path)
  */
 function is_resource($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2325,7 +2325,7 @@ function is_resource($var)
  */
 function is_string($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2336,7 +2336,7 @@ function is_string($var)
  */
 function is_uploaded_file($path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2347,7 +2347,7 @@ function is_uploaded_file($path)
  */
 function is_writable($path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2358,7 +2358,7 @@ function is_writable($path)
  */
 function isset(&$path)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2386,7 +2386,7 @@ function ksort(&$array)
  */
 function localeconv()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2396,9 +2396,9 @@ function localeconv()
  * @param  string	Characters to trim.
  * @return string	The trimmed string.
  */
-function ltrim($string,$characters=" \t\n\r\0\x0B")
+function ltrim($string,$characters = " \t\n\r\0\x0B")
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2411,9 +2411,9 @@ function ltrim($string,$characters=" \t\n\r\0\x0B")
  * @param  string		Additional stuff to send to sendmail executable (if appropriate, only works when safe mode is off).
  * @return boolean	Success status.
  */
-function mail($to,$subject,$message,$additional_headers='',$additional_flags='')
+function mail($to,$subject,$message,$additional_headers = '',$additional_flags = '')
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2431,9 +2431,9 @@ function mail($to,$subject,$message,$additional_headers='',$additional_flags='')
  * @param  ?mixed	Tenth argument (NULL: no tenth argument) (if array, then each treated as a separate parameter).
  * @return mixed	The highest valued argument.
  */
-function max($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL,$arg9=NULL,$arg10=NULL)
+function max($arg1,$arg2 = null,$arg3 = null,$arg4 = null,$arg5 = null,$arg6 = null,$arg7 = null,$arg8 = null,$arg9 = null,$arg10 = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2444,7 +2444,7 @@ function max($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=
  */
 function md5($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2456,7 +2456,7 @@ function md5($str)
  */
 function method_exists($object,$method_name)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2467,7 +2467,7 @@ function method_exists($object,$method_name)
  */
 function microtime($as_float)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2485,9 +2485,9 @@ function microtime($as_float)
  * @param  ?mixed	Tenth argument (NULL: no tenth argument) (if array, then each treated as a separate parameter).
  * @return mixed	The lowest valued argument.
  */
-function min($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL,$arg9=NULL,$arg10=NULL)
+function min($arg1,$arg2 = null,$arg3 = null,$arg4 = null,$arg5 = null,$arg6 = null,$arg7 = null,$arg8 = null,$arg9 = null,$arg10 = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2499,9 +2499,9 @@ function min($arg1,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return boolean		Success status.
  */
-function mkdir($path,$mode,$recursive=false,$context=NULL)
+function mkdir($path,$mode,$recursive = false,$context = null)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2516,9 +2516,9 @@ function mkdir($path,$mode,$recursive=false,$context=NULL)
  * @param  integer	Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
  * @return TIME		The timestamp.
  */
-function mktime($hour,$minute=NULL,$second=NULL,$month=NULL,$day=NULL,$year=NULL,$is_dst=-1)
+function mktime($hour,$minute = null,$second = null,$month = null,$day = null,$year = null,$is_dst = -1)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2530,7 +2530,7 @@ function mktime($hour,$minute=NULL,$second=NULL,$month=NULL,$day=NULL,$year=NULL
  */
 function move_uploaded_file($filename,$destination)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2540,7 +2540,7 @@ function move_uploaded_file($filename,$destination)
  */
 function mt_getrandmax()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2552,7 +2552,7 @@ function mt_getrandmax()
  */
 function mt_rand($min,$max)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2573,9 +2573,9 @@ function mt_srand($seed)
  * @param  string		The string to separate groups of 1000's with.
  * @return string		The string formatted number.
  */
-function number_format($number,$decimals=0,$dec_point='.',$thousands_sep=',')
+function number_format($number,$decimals = 0,$dec_point = '.',$thousands_sep = ',')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2585,7 +2585,7 @@ function number_format($number,$decimals=0,$dec_point='.',$thousands_sep=',')
  */
 function ob_start()
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2595,7 +2595,7 @@ function ob_start()
  */
 function ob_end_clean()
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2605,7 +2605,7 @@ function ob_end_clean()
  */
 function ob_end_flush()
 {
-	return false;
+    return false;
 }
 
 /**
@@ -2615,7 +2615,7 @@ function ob_end_flush()
  */
 function ob_get_contents()
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2632,7 +2632,7 @@ function ob_flush()
  */
 function ob_get_clean()
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2651,7 +2651,7 @@ function ob_clean()
  */
 function ob_gzhandler($buffer,$mode)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2661,7 +2661,7 @@ function ob_gzhandler($buffer,$mode)
  */
 function ob_get_length()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2673,7 +2673,7 @@ function ob_get_length()
  */
 function ob_iconv_handler($buffer,$mode)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2693,7 +2693,7 @@ function ob_implicit_flush($flag)
  */
 function print($octal_string)
 {
-	return 1;
+    return 1;
 }
 
 /**
@@ -2704,7 +2704,7 @@ function print($octal_string)
  */
 function octdec($octal_string)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2715,7 +2715,7 @@ function octdec($octal_string)
  */
 function opendir($path)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2726,7 +2726,7 @@ function opendir($path)
  */
 function ord($string)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2765,9 +2765,9 @@ function ord($string)
  * @param  ?mixed	Argument that binds to the formatting string (NULL: none).
  * @return string	The binary string.
  */
-function pack($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL,$arg9=NULL,$arg10=NULL,$arg11=NULL,$arg12=NULL,$arg13=NULL,$arg14=NULL,$arg15=NULL,$arg16=NULL,$arg17=NULL,$arg18=NULL,$arg19=NULL,$arg20=NULL,$arg21=NULL,$arg22=NULL,$arg23=NULL,$arg24=NULL,$arg25=NULL,$arg26=NULL,$arg27=NULL,$arg28=NULL,$arg29=NULL,$arg30=NULL)
+function pack($format,$arg1 = null,$arg2 = null,$arg3 = null,$arg4 = null,$arg5 = null,$arg6 = null,$arg7 = null,$arg8 = null,$arg9 = null,$arg10 = null,$arg11 = null,$arg12 = null,$arg13 = null,$arg14 = null,$arg15 = null,$arg16 = null,$arg17 = null,$arg18 = null,$arg19 = null,$arg20 = null,$arg21 = null,$arg22 = null,$arg23 = null,$arg24 = null,$arg25 = null,$arg26 = null,$arg27 = null,$arg28 = null,$arg29 = null,$arg30 = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2778,7 +2778,7 @@ function pack($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$ar
  */
 function parse_url($url)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2789,7 +2789,7 @@ function parse_url($url)
  */
 function pathinfo($path)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2800,7 +2800,7 @@ function pathinfo($path)
  */
 function posix_getpwuid($uid)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2810,7 +2810,7 @@ function posix_getpwuid($uid)
  */
 function posix_getuid()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2822,9 +2822,9 @@ function posix_getuid()
  * @param  integer	Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer  The number of matches (false: error).
  */
-function preg_match($pattern,$subject,$matches=NULL,$flags=0)
+function preg_match($pattern,$subject,$matches = null,$flags = 0)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2835,9 +2835,9 @@ function preg_match($pattern,$subject,$matches=NULL,$flags=0)
  * @param  integer	Either 0, or PREG_GREP_INVERT.
  * @return array		Matches.
  */
-function preg_grep($pattern,$subject,$flags=0)
+function preg_grep($pattern,$subject,$flags = 0)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2849,9 +2849,9 @@ function preg_grep($pattern,$subject,$flags=0)
  * @param  integer	Either 0, or PREG_OFFSET_CAPTURE.
  * @return ~integer  The number of matches (false: error).
  */
-function preg_match_all($pattern,$subject,&$matches,$flags=0)
+function preg_match_all($pattern,$subject,&$matches,$flags = 0)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -2863,9 +2863,9 @@ function preg_match_all($pattern,$subject,&$matches,$flags=0)
  * @param  ?integer  The limit of replacements (NULL: no limit).
  * @return ~string	The string with replacements made (false: error).
  */
-function preg_replace($pattern,$replacement,$subject,$limit=NULL)
+function preg_replace($pattern,$replacement,$subject,$limit = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2877,9 +2877,9 @@ function preg_replace($pattern,$replacement,$subject,$limit=NULL)
  * @param  ?integer  The limit of replacements (NULL: no limit).
  * @return ~string	The string with replacements made (false: error).
  */
-function preg_replace_callback($pattern,$callback,$subject,$limit=NULL)
+function preg_replace_callback($pattern,$callback,$subject,$limit = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2891,9 +2891,9 @@ function preg_replace_callback($pattern,$callback,$subject,$limit=NULL)
  * @param  ?integer  The special mode (NULL: none).
  * @return array		The array due to splitting.
  */
-function preg_split($pattern,$subject,$max_splits=NULL,$mode=NULL)
+function preg_split($pattern,$subject,$max_splits = null,$mode = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -2913,7 +2913,7 @@ function print_r($data)
  */
 function putenv($string)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -2924,7 +2924,7 @@ function putenv($string)
  */
 function rawurldecode($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2935,7 +2935,7 @@ function rawurldecode($str)
  */
 function rawurlencode($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2946,7 +2946,7 @@ function rawurlencode($str)
  */
 function readdir($dir_handle)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2957,7 +2957,7 @@ function readdir($dir_handle)
  */
 function realpath($path)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -2982,7 +2982,7 @@ function realpath($path)
  * @param  ?mixed	Parameter (NULL: not used).
  * @param  ?mixed	Parameter (NULL: not used).
  */
-function register_shutdown_function($callback,$parama=NULL,$paramb=NULL,$paramc=NULL,$paramd=NULL,$parame=NULL,$paramf=NULL,$paramg=NULL,$paramh=NULL,$parami=NULL,$paramj=NULL,$paramk=NULL,$paraml=NULL,$paramm=NULL,$paramn=NULL,$paramo=NULL,$paramp=NULL,$paramq=NULL)
+function register_shutdown_function($callback,$parama = null,$paramb = null,$paramc = null,$paramd = null,$parame = null,$paramf = null,$paramg = null,$paramh = null,$parami = null,$paramj = null,$paramk = null,$paraml = null,$paramm = null,$paramn = null,$paramo = null,$paramp = null,$paramq = null)
 {
 }
 
@@ -2994,9 +2994,9 @@ function register_shutdown_function($callback,$parama=NULL,$paramb=NULL,$paramc=
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return boolean		Success status.
  */
-function rename($oldname,$newname,$context=NULL)
+function rename($oldname,$newname,$context = null)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3007,7 +3007,7 @@ function rename($oldname,$newname,$context=NULL)
  */
 function require($filename)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3018,7 +3018,7 @@ function require($filename)
  */
 function require_once($filename)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3029,7 +3029,7 @@ function require_once($filename)
  */
 function reset($array)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3039,9 +3039,9 @@ function reset($array)
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return boolean		Success status.
  */
-function rmdir($dirname,$context=NULL)
+function rmdir($dirname,$context = null)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3051,9 +3051,9 @@ function rmdir($dirname,$context=NULL)
  * @param  integer	Number of decimal points of precision required (-ve allowed).
  * @return float		Rounded value.
  */
-function round($val,$precision=0)
+function round($val,$precision = 0)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -3072,9 +3072,9 @@ function rsort(&$array)
  * @param  string	Characters to trim.
  * @return string	Trimmed string.
  */
-function rtrim($str,$characters=" \t\n\r\0\x0B")
+function rtrim($str,$characters = " \t\n\r\0\x0B")
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3085,7 +3085,7 @@ function rtrim($str,$characters=" \t\n\r\0\x0B")
  */
 function serialize($value)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3096,7 +3096,7 @@ function serialize($value)
  */
 function set_error_handler($error_handler)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3112,9 +3112,9 @@ function set_error_handler($error_handler)
  * @param  BINARY		Whether the cookie is only for HTTPS.
  * @return boolean	Success status (fails if output already started).
  */
-function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secure=0)
+function setcookie($name,$value = null,$expire = null,$path = null,$domain = null,$secure = 0)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3126,7 +3126,7 @@ function setcookie($name,$value=NULL,$expire=NULL,$path=NULL,$domain=NULL,$secur
  */
 function setlocale($category,$locale)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3137,7 +3137,7 @@ function setlocale($category,$locale)
  */
 function sha1($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3148,7 +3148,7 @@ function sha1($str)
  */
 function sin($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -3174,9 +3174,9 @@ function sort(&$array)
  * @param  ?mixed		Argument for the formatting string (NULL: none required).
  * @return string		Formatted string.
  */
-function sprintf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL)
+function sprintf($format,$arg1 = null,$arg2 = null,$arg3 = null,$arg4 = null,$arg5 = null,$arg6 = null,$arg7 = null,$arg8 = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3194,9 +3194,9 @@ function sprintf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,
  * @param  ?mixed		Argument for the formatting string (NULL: none required).
  * @return string		Formatted string.
  */
-function fprintf($handle,$format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL,$arg6=NULL,$arg7=NULL,$arg8=NULL)
+function fprintf($handle,$format,$arg1 = null,$arg2 = null,$arg3 = null,$arg4 = null,$arg5 = null,$arg6 = null,$arg7 = null,$arg8 = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3217,9 +3217,9 @@ function srand($seed)
  * @param  integer	The padding type (STR_PAD_RIGHT, STR_PAD_LEFT, STR_PAD_BOTH).
  * @return string		The result.
  */
-function str_pad($input,$pad_length,$pad_string=' ',$pad_type=STR_PAD_RIGHT)
+function str_pad($input,$pad_length,$pad_string = ' ',$pad_type = STR_PAD_RIGHT)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3231,7 +3231,7 @@ function str_pad($input,$pad_length,$pad_string=' ',$pad_type=STR_PAD_RIGHT)
  */
 function str_repeat($input,$multiplier)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3244,7 +3244,7 @@ function str_repeat($input,$multiplier)
  */
 function str_replace($search,$replace,$subject)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3256,7 +3256,7 @@ function str_replace($search,$replace,$subject)
  */
 function strcmp($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3266,9 +3266,9 @@ function strcmp($str1,$str2)
  * @param  ?TIME	The timestamp (NULL: now).
  * @return string	The formatted string.
  */
-function strftime($format,$timestamp=NULL)
+function strftime($format,$timestamp = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3278,9 +3278,9 @@ function strftime($format,$timestamp=NULL)
  * @param  string	Comma-separated list of allowable tags.
  * @return string	Result.
  */
-function strip_tags($str,$allowable_tags='')
+function strip_tags($str,$allowable_tags = '')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3291,7 +3291,7 @@ function strip_tags($str,$allowable_tags='')
  */
 function addslashes($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3302,7 +3302,7 @@ function addslashes($str)
  */
 function stripslashes($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3313,7 +3313,7 @@ function stripslashes($str)
  */
 function strlen($str)
 {
-	return 0;
+    return 0;
 }
 
 // FUDGEFUDGE: strpos can give "Offset not contained in string" error. We'd ideally have it in our catch errors list (code_quality.php) but it's unrealistic to catch all strpos errors.
@@ -3326,9 +3326,9 @@ function strlen($str)
  * @param  integer	Offset to search from.
  * @return ~integer  The offset it is found at (false: not found).
  */
-function strpos($haystack,$needle,$offset=0)
+function strpos($haystack,$needle,$offset = 0)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3340,7 +3340,7 @@ function strpos($haystack,$needle,$offset=0)
  */
 function strrpos($haystack,$needle)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3352,7 +3352,7 @@ function strrpos($haystack,$needle)
  */
 function strstr($haystack,$needle)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3362,9 +3362,9 @@ function strstr($haystack,$needle)
  * @param  ?string	Deliminators (NULL: continue with previous tokenisation).
  * @return ~string	Next token (false: could not return a token, no more tokens to return).
  */
-function strtok($subject,$deliminators=NULL)
+function strtok($subject,$deliminators = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3375,7 +3375,7 @@ function strtok($subject,$deliminators=NULL)
  */
 function strtolower($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3385,9 +3385,9 @@ function strtolower($str)
  * @param  ?TIME		The timestamp to find times relative to (NULL: now).
  * @return TIME		The timetamp (-1: failed).
  */
-function strtotime($time,$now=NULL)
+function strtotime($time,$now = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3398,7 +3398,7 @@ function strtotime($time,$now=NULL)
  */
 function strtoupper($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3409,9 +3409,9 @@ function strtoupper($str)
  * @param  ?mixed	To string (NULL: previous parameter was a map).
  * @return string	Result.
  */
-function strtr($string,$replace_pairs,$to=NULL)
+function strtr($string,$replace_pairs,$to = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3422,7 +3422,7 @@ function strtr($string,$replace_pairs,$to=NULL)
  */
 function strval($var)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3433,9 +3433,9 @@ function strval($var)
  * @param  ?integer  The length to extract (NULL: all remaining).
  * @return ~string	String part (false: $start was over the end of the string).
  */
-function substr($string,$start,$length=NULL)
+function substr($string,$start,$length = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3447,7 +3447,7 @@ function substr($string,$start,$length=NULL)
  */
 function substr_count($haystack,$needle)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3457,7 +3457,7 @@ function substr_count($haystack,$needle)
  */
 function time()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3467,9 +3467,9 @@ function time()
  * @param  string	Characters to trim.
  * @return string	Trimmed string.
  */
-function trim($str,$characters=" \t\n\r\0\x0B")
+function trim($str,$characters = " \t\n\r\0\x0B")
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3500,7 +3500,7 @@ function uasort(&$array,$cmp_function)
  */
 function ucfirst($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3511,7 +3511,7 @@ function ucfirst($str)
  */
 function ucwords($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3533,7 +3533,7 @@ function uksort(&$array,$cmp_function)
  */
 function uniqid($prefix,$lcg)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3543,9 +3543,9 @@ function uniqid($prefix,$lcg)
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return boolean		Success status.
  */
-function unlink($filename,$context=NULL)
+function unlink($filename,$context = null)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3556,7 +3556,7 @@ function unlink($filename,$context=NULL)
  */
 function unserialize($str)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3576,7 +3576,7 @@ function unset(&$var)
  */
 function urldecode($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3587,7 +3587,7 @@ function urldecode($str)
  */
 function urlencode($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3608,7 +3608,7 @@ function usort(&$array,$cmp_function)
  */
 function utf8_decode($data)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3619,7 +3619,7 @@ function utf8_decode($data)
  */
 function utf8_encode($data)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3631,9 +3631,9 @@ function utf8_encode($data)
  * @param  boolean	Whether to cut up words.
  * @return string		Word-wrapped string.
  */
-function wordwrap($string,$width=75,$break="\n",$cut=false)
+function wordwrap($string,$width = 75,$break = "\n",$cut = false)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3644,7 +3644,7 @@ function wordwrap($string,$width=75,$break="\n",$cut=false)
  */
 function xml_error_string($code)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3655,7 +3655,7 @@ function xml_error_string($code)
  */
 function xml_get_current_byte_index($parser)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3666,7 +3666,7 @@ function xml_get_current_byte_index($parser)
  */
 function xml_get_current_line_number($parser)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3677,7 +3677,7 @@ function xml_get_current_line_number($parser)
  */
 function xml_get_error_code($parser)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3688,9 +3688,9 @@ function xml_get_error_code($parser)
  * @param  boolean	Finish parsing process with this piece of data (otherwise parsing is open to re-enter with more data).
  * @return BINARY		Success status.
  */
-function xml_parse($parser,$data,$is_final=false)
+function xml_parse($parser,$data,$is_final = false)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3699,9 +3699,9 @@ function xml_parse($parser,$data,$is_final=false)
  * @param  ?string	Encoding (NULL: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource XML parser (false: could not create, happens on default PHP5 on Windows).
  */
-function xml_parser_create_ns($encoding=NULL)
+function xml_parser_create_ns($encoding = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -3712,7 +3712,7 @@ function xml_parser_create_ns($encoding=NULL)
  */
 function xml_parser_free($parser)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3725,7 +3725,7 @@ function xml_parser_free($parser)
  */
 function xml_parser_set_option($parser,$option,$value)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3737,7 +3737,7 @@ function xml_parser_set_option($parser,$option,$value)
  */
 function xml_set_character_data_handler($parser,$handler)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3750,7 +3750,7 @@ function xml_set_character_data_handler($parser,$handler)
  */
 function xml_set_element_handler($parser,$start_handler,$end_handler)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3762,7 +3762,7 @@ function xml_set_element_handler($parser,$start_handler,$end_handler)
  */
 function xml_set_end_namespace_decl_handler($parser,$handler)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3784,7 +3784,7 @@ function xml_set_object($parser,$object)
  */
 function xml_set_start_namespace_decl_handler($parser,$handler)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3796,7 +3796,7 @@ function xml_set_start_namespace_decl_handler($parser,$handler)
  */
 function xmlrpc_encode_request($method,$params)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3807,7 +3807,7 @@ function xmlrpc_encode_request($method,$params)
  */
 function acos($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -3817,9 +3817,9 @@ function acos($arg)
  * @param  integer	Number of entries required.
  * @return mixed		Random entry, or array of random entries if $num_req!=1.
  */
-function array_rand($input,$num_req=1)
+function array_rand($input,$num_req = 1)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3840,7 +3840,7 @@ function array_unshift(&$array,$var)
  */
 function asin($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -3859,9 +3859,9 @@ function assert($assertion)
  * @param  ?mixed		The value for flag (NULL: N/A).
  * @return ~mixed	 	Old value (false: error).
  */
-function assert_options($option,$value=NULL)
+function assert_options($option,$value = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3872,7 +3872,7 @@ function assert_options($option,$value=NULL)
  */
 function atan($num)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -3885,7 +3885,7 @@ function atan($num)
  */
 function base_convert($number,$frombase,$tobase)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3895,9 +3895,9 @@ function base_convert($number,$frombase,$tobase)
  * @param  string		File extension to cut off (blank: none).
  * @return string		File name component.
  */
-function basename($path,$ext='')
+function basename($path,$ext = '')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3908,7 +3908,7 @@ function basename($path,$ext='')
  */
 function bin2hex($str)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3919,7 +3919,7 @@ function bin2hex($str)
  */
 function bindec($binary_string)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3931,7 +3931,7 @@ function bindec($binary_string)
  */
 function call_user_func_array($callback,$parameters)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3941,7 +3941,7 @@ function call_user_func_array($callback,$parameters)
  */
 function connection_aborted()
 {
-	return false;
+    return false;
 }
 
 /**
@@ -3951,7 +3951,7 @@ function connection_aborted()
  */
 function connection_status()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3962,7 +3962,7 @@ function connection_status()
  */
 function crc32($str)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -3973,7 +3973,7 @@ function crc32($str)
  */
 function decbin($number)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -3984,7 +3984,7 @@ function decbin($number)
  */
 function each($array)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -3995,7 +3995,7 @@ function each($array)
  */
 function empty($var)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -4006,7 +4006,7 @@ function empty($var)
  */
 function end($array)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4017,7 +4017,7 @@ function end($array)
  */
 function fflush($handle)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -4028,7 +4028,7 @@ function fflush($handle)
  */
 function fileatime($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4040,7 +4040,7 @@ function fileatime($filename)
  */
 function flock($handle,$operation)
 {
-	return false;
+    return false;
 }
 
 /**
@@ -4058,7 +4058,7 @@ function flush()
  */
 function gethostbyaddr($ip_address)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4069,7 +4069,7 @@ function gethostbyaddr($ip_address)
  */
 function gethostbyname($hostname)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4079,7 +4079,7 @@ function gethostbyname($hostname)
  */
 function getrandmax()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4094,9 +4094,9 @@ function getrandmax()
  * @param  integer	Whether date is in DST (-1 meaning unknown/guess, 0 meaning no, 1 meaning yes).
  * @return integer	The timestamp.
  */
-function gmmktime($hour,$minute,$second,$month,$day,$year,$is_dst=-1)
+function gmmktime($hour,$minute,$second,$month,$day,$year,$is_dst = -1)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4106,9 +4106,9 @@ function gmmktime($hour,$minute,$second,$month,$day,$year,$is_dst=-1)
  * @param  ?TIME	The timestamp (NULL: now).
  * @return string	The formatted string.
  */
-function gmstrftime($format,$timestamp=NULL)
+function gmstrftime($format,$timestamp = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4119,7 +4119,7 @@ function gmstrftime($format,$timestamp=NULL)
  */
 function ip2long($ip_address)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4130,7 +4130,7 @@ function ip2long($ip_address)
  */
 function key($array)
 {
-	return 0;
+    return 0;
 }
 
 /**  --> Use similar_text
@@ -4142,7 +4142,7 @@ function key($array)
  */
 function levenshtein($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4153,7 +4153,7 @@ function levenshtein($str1,$str2)
  */
 function log($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4164,7 +4164,7 @@ function log($arg)
  */
 function log10($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4175,7 +4175,7 @@ function log10($arg)
  */
 function long2ip($proper_address)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4186,7 +4186,7 @@ function long2ip($proper_address)
  */
 function md5_file($filename)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4198,7 +4198,7 @@ function md5_file($filename)
  */
 function money_format($format,$number)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4209,7 +4209,7 @@ function money_format($format,$number)
  */
 function next($array)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4219,7 +4219,7 @@ function next($array)
  */
 function pi()
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4231,7 +4231,7 @@ function pi()
  */
 function pow($base,$exp)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4241,9 +4241,9 @@ function pow($base,$exp)
  * @param  string	Extra character to escape, was used in regular expression to surround it.
  * @return string	The escape string.
  */
-function preg_quote($str,$surround_char='/')
+function preg_quote($str,$surround_char = '/')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4254,7 +4254,7 @@ function preg_quote($str,$surround_char='/')
  */
 function prev($array)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4265,7 +4265,7 @@ function prev($array)
  */
 function rad2deg($number)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4276,9 +4276,9 @@ function rad2deg($number)
  * @param  integer	Step.
  * @return array		The sequence.
  */
-function range($from,$to,$step=1)
+function range($from,$to,$step = 1)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4289,9 +4289,9 @@ function range($from,$to,$step=1)
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return ~integer  	The number of bytes read (false: error).
  */
-function readfile($filename,$use_include_path=false,$context=NULL)
+function readfile($filename,$use_include_path = false,$context = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4311,9 +4311,9 @@ function shuffle($array)
  * @param  ?float		Returns the percentage of similarity (NULL: do not get).
  * @return integer	The number of matching characters.
  */
-function similar_text($first,$second,/*&*/$percent=NULL)
+function similar_text($first,$second,/*&*/$percent = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4324,7 +4324,7 @@ function similar_text($first,$second,/*&*/$percent=NULL)
  */
 function sqrt($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4336,7 +4336,7 @@ function sqrt($arg)
  */
 function strcasecmp($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4348,7 +4348,7 @@ function strcasecmp($str1,$str2)
  */
 function strcoll($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4360,7 +4360,7 @@ function strcoll($str1,$str2)
  */
 function strcspn($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4372,7 +4372,7 @@ function strcspn($str1,$str2)
  */
 function stristr($haystack,$needle)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4384,7 +4384,7 @@ function stristr($haystack,$needle)
  */
 function strnatcasecmp($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4396,7 +4396,7 @@ function strnatcasecmp($str1,$str2)
  */
 function strnatcmp($str1,$str2)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4409,7 +4409,7 @@ function strnatcmp($str1,$str2)
  */
 function strncasecmp($str1,$str2,$len)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4422,7 +4422,7 @@ function strncasecmp($str1,$str2,$len)
  */
 function strncmp($str1,$str2,$len)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4435,7 +4435,7 @@ function strncmp($str1,$str2,$len)
  */
 function strrchr($haystack,$needle)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4446,7 +4446,7 @@ function strrchr($haystack,$needle)
  */
 function strrev($string)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4458,7 +4458,7 @@ function strrev($string)
  */
 function strspn($string,$mask)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4470,9 +4470,9 @@ function strspn($string,$mask)
  * @param  ?integer  The run-length of what is being replaced (NULL: go to end of string).
  * @return string		A copy of string delimited by the start and (optionally) length parameters with the string given in replacement.
  */
-function substr_replace($string,$replacement,$start,$length=NULL)
+function substr_replace($string,$replacement,$start,$length = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4483,7 +4483,7 @@ function substr_replace($string,$replacement,$start,$length=NULL)
  */
 function tan($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4495,7 +4495,7 @@ function tan($arg)
  */
 function unpack($format,$data)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4506,9 +4506,9 @@ function unpack($format,$data)
  * @param  ?string	The operator to compare with (NULL: unified).
  * @return mixed		For unified: -1 if v1<v2, 0 if v1=v2, 1 if v1>v2. Else BINARY or boolean.
  */
-function version_compare($version1,$version2,$compare_symbol=NULL)
+function version_compare($version1,$version2,$compare_symbol = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4519,7 +4519,7 @@ function version_compare($version1,$version2,$compare_symbol=NULL)
  */
 function gettype($var)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4529,7 +4529,7 @@ function gettype($var)
  */
 function zend_version()
 {
-	return '';
+    return '';
 }
 
 /*!WEIRD*
@@ -4549,7 +4549,7 @@ function zend_version()
  */
 function xml_get_current_column_number($parser)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4558,9 +4558,9 @@ function xml_get_current_column_number($parser)
  * @param  ?string	Encoding (NULL: PHP4: as-for-input/PHP5: autodetect).
  * @return ~resource XML parser (false: could not create, happens on default PHP5 on Windows) (false: error).
  */
-function xml_parser_create($encoding=NULL)
+function xml_parser_create($encoding = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4572,7 +4572,7 @@ function xml_parser_create($encoding=NULL)
  */
 function xml_parser_get_option($parser,$option)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4584,9 +4584,9 @@ function xml_parser_get_option($parser,$option)
  * @param  ?array		Where to put the indices into the XML for where the values are at (NULL: don't collect). Note that this is actually passed by reference, but is also optional.
  * @return BINARY		0 is failure, 1=pass.
  */
-function xml_parse_into_struct($parser,$data,&$values,$index=NULL)
+function xml_parse_into_struct($parser,$data,&$values,$index = null)
 {
-	return 1;
+    return 1;
 }
 
 /**
@@ -4598,7 +4598,7 @@ function xml_parse_into_struct($parser,$data,&$values,$index=NULL)
  */
 function xml_set_default_handler($parser,$callback)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4610,7 +4610,7 @@ function xml_set_default_handler($parser,$callback)
  */
 function xml_set_external_entity_ref_handler($parser,$callback)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4622,7 +4622,7 @@ function xml_set_external_entity_ref_handler($parser,$callback)
  */
 function xml_set_notation_decl_handler($parser,$callback)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4634,7 +4634,7 @@ function xml_set_notation_decl_handler($parser,$callback)
  */
 function xml_set_processing_instruction_handler($parser,$callback)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4646,7 +4646,7 @@ function xml_set_processing_instruction_handler($parser,$callback)
  */
 function xml_set_unparsed_entity_decl_handler($parser,$callback)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4667,7 +4667,7 @@ function var_dump($expression)
  */
 function vprintf($format,$args)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4679,7 +4679,7 @@ function vprintf($format,$args)
  */
 function vsprintf($format,$args)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4690,9 +4690,9 @@ function vsprintf($format,$args)
  * @param  ?TIME		New access time (NULL: do not change).
  * @return boolean	Success status.
  */
-function touch($filename,$time=NULL,$atime=NULL)
+function touch($filename,$time = null,$atime = null)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4703,7 +4703,7 @@ function touch($filename,$time=NULL,$atime=NULL)
  */
 function tanh($in)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4714,7 +4714,7 @@ function tanh($in)
  */
 function sinh($in)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4743,7 +4743,7 @@ function usleep($sec)
  */
 function soundex($input)
 {
-	return '';
+    return '';
 }
 
 /*!WEIRD*
@@ -4766,7 +4766,7 @@ function soundex($input)
  */
 function stripcslashes($in)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4777,7 +4777,7 @@ function stripcslashes($in)
  */
 function readgzfile($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4795,7 +4795,7 @@ function restore_error_handler()
  */
 function rewind($handle)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4815,7 +4815,7 @@ function rewinddir($handle)
  */
 function quoted_printable_decode($in)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4826,7 +4826,7 @@ function quoted_printable_decode($in)
  */
 function quotemeta($in)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4837,7 +4837,7 @@ function quotemeta($in)
  */
 function exp($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4848,7 +4848,7 @@ function exp($arg)
  */
 function ezmlm_hash($addr)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4858,7 +4858,7 @@ function ezmlm_hash($addr)
  */
 function lcg_value()
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -4868,9 +4868,9 @@ function lcg_value()
  * @param  boolean	If set to FALSE or not supplied than the array is returned as a regular, numerically indexed array. If the argument is set to TRUE then localtime() is an associative array containing all the different elements of the structure returned by the C function call to localtime.
  * @return array		Components.
  */
-function localtime($timestamp,$associative=false)
+function localtime($timestamp,$associative = false)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4882,7 +4882,7 @@ function localtime($timestamp,$associative=false)
  */
 function addcslashes($str,$charlist)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -4892,9 +4892,9 @@ function addcslashes($str,$charlist)
  * @param  ?mixed	The filter function callback (NULL: filter out false's).
  * @return array	Out.
  */
-function array_filter($input,$callback=NULL)
+function array_filter($input,$callback = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4906,7 +4906,7 @@ function array_filter($input,$callback=NULL)
  */
 function array_map($callback,$array)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4917,7 +4917,7 @@ function array_map($callback,$array)
  */
 function array_sum($array)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4931,9 +4931,9 @@ function array_sum($array)
  * @param  ?array	Fifth array to merge (NULL: not this one).
  * @return array	Result.
  */
-function array_merge_recursive($array1,$array2,$array3=NULL,$array4=NULL,$array5=NULL)
+function array_merge_recursive($array1,$array2,$array3 = null,$array4 = null,$array5 = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4943,9 +4943,9 @@ function array_merge_recursive($array1,$array2,$array3=NULL,$array4=NULL,$array5
  * @param  ?integer  Argument code (NULL: none given).
  * @return array		Result.
  */
-function array_multisort($array,$args=NULL)
+function array_multisort($array,$args = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4958,7 +4958,7 @@ function array_multisort($array,$args=NULL)
  */
 function array_pad($input,$pad_size,$pad_value)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -4969,9 +4969,9 @@ function array_pad($input,$pad_size,$pad_value)
  * @param  ?integer  Initial value (NULL: no initial).
  * @return ?integer  Result (NULL: no initial given, and empty array given).
  */
-function array_reduce($input,$callback,$initial=NULL)
+function array_reduce($input,$callback,$initial = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -4982,7 +4982,7 @@ function array_reduce($input,$callback,$initial=NULL)
  */
 function array_walk(&$array)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -4994,7 +4994,7 @@ function array_walk(&$array)
  */
 function atan2($x,$y)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -5005,7 +5005,7 @@ function atan2($x,$y)
  */
 function fgetc($handle)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5016,9 +5016,9 @@ function fgetc($handle)
  * @param  string		Delimiter.
  * @return ~array		Line (false: error).
  */
-function fgetcsv($handle,$length=NULL,$delimiter=',')
+function fgetcsv($handle,$length = null,$delimiter = ',')
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5029,9 +5029,9 @@ function fgetcsv($handle,$length=NULL,$delimiter=',')
  * @param  string		Allowable HTML tags separated by spaces.
  * @return ~string	Line (false: error).
  */
-function fgetss($handle,$length=NULL,$allowable_tags='')
+function fgetss($handle,$length = null,$allowable_tags = '')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5042,7 +5042,7 @@ function fgetss($handle,$length=NULL,$allowable_tags='')
  */
 function filetype($file)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5054,7 +5054,7 @@ function filetype($file)
  */
 function fscanf($handle,$format)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5065,7 +5065,7 @@ function fscanf($handle,$format)
  */
 function fstat($handle)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5078,7 +5078,7 @@ function fstat($handle)
  */
 function ftp_chmod($ftp_stream,$mode,$filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5089,7 +5089,7 @@ function ftp_chmod($ftp_stream,$mode,$filename)
  */
 function ftp_cdup($ftp_stream)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5103,7 +5103,7 @@ function ftp_cdup($ftp_stream)
  */
 function ftp_fget($ftp_stream,$file_handle,$remote_file,$mode)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5117,7 +5117,7 @@ function ftp_fget($ftp_stream,$file_handle,$remote_file,$mode)
  */
 function ftp_get($ftp_stream,$local_file,$remote_file,$mode)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5129,7 +5129,7 @@ function ftp_get($ftp_stream,$local_file,$remote_file,$mode)
  */
 function ftp_pasv($ftp_stream,$pasv)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5140,7 +5140,7 @@ function ftp_pasv($ftp_stream,$pasv)
  */
 function ftp_pwd($ftp_stream)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5152,7 +5152,7 @@ function ftp_pwd($ftp_stream)
  */
 function ftp_rawlist($ftp_stream,$directory)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5163,7 +5163,7 @@ function ftp_rawlist($ftp_stream,$directory)
  */
 function ftp_systype($ftp_stream)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5175,7 +5175,7 @@ function ftp_systype($ftp_stream)
  */
 function ftruncate($file,$size)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5186,7 +5186,7 @@ function ftruncate($file,$size)
  */
 function func_get_arg($arg_num)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5196,7 +5196,7 @@ function func_get_arg($arg_num)
  */
 function func_get_args()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5206,7 +5206,7 @@ function func_get_args()
  */
 function func_num_args()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5216,9 +5216,9 @@ function func_num_args()
  * @param  boolean	Whether to process sections.
  * @return ~array	 	Map of Ini file data (2d if processed sections) (false: error).
  */
-function parse_ini_file($filename,$process_sections=false)
+function parse_ini_file($filename,$process_sections = false)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5239,7 +5239,7 @@ function parse_str($str,&$arr)
  */
 function is_executable($filename)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5250,7 +5250,7 @@ function is_executable($filename)
  */
 function is_scalar($var)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5262,7 +5262,7 @@ function is_scalar($var)
  */
 function is_subclass_of($object,$class_name)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5274,7 +5274,7 @@ function is_subclass_of($object,$class_name)
  */
 function metaphone($string,$value)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5285,7 +5285,7 @@ function metaphone($string,$value)
  */
 function natcasesort(&$array)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5296,7 +5296,7 @@ function natcasesort(&$array)
  */
 function natsort(&$array)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5307,7 +5307,7 @@ function natsort(&$array)
  */
 function nl2br($in)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5317,9 +5317,9 @@ function nl2br($in)
  * @set    a s n r v m
  * @return string	The info.
  */
-function php_uname($mode='a')
+function php_uname($mode = 'a')
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5332,7 +5332,7 @@ function php_uname($mode='a')
  */
 function popen($command,$mode)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5346,9 +5346,9 @@ function popen($command,$mode)
  * @param  ?mixed	Argument (NULL: not given).
  * @return string	Assembled string.
  */
-function printf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL)
+function printf($format,$arg1 = null,$arg2 = null,$arg3 = null,$arg4 = null,$arg5 = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5361,7 +5361,7 @@ function printf($format,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL,$arg5=NULL)
  */
 function convert_cyr_string($in,$from,$to)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5372,7 +5372,7 @@ function convert_cyr_string($in,$from,$to)
  */
 function cosh($arg)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -5383,9 +5383,9 @@ function cosh($arg)
  * @set    0 1 2 3 4
  * @return mixed		Result, depending on mode used.
  */
-function count_chars($string,$mode=0)
+function count_chars($string,$mode = 0)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5397,7 +5397,7 @@ function count_chars($string,$mode=0)
  */
 function create_function($args,$code)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5408,7 +5408,7 @@ function create_function($args,$code)
  */
 function eval($code)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5419,7 +5419,7 @@ function eval($code)
  */
 function gethostbynamel($hostname)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5429,9 +5429,9 @@ function gethostbynamel($hostname)
  * @param  ?array		Extra details will be put here (NULL: return-only). Note that this is actually passed by reference, but is also optional.
  * @return ~array	 	List of details: $width, $height, $type, $attr (false: error).
  */
-function getimagesize($filename,$image_info=NULL)
+function getimagesize($filename,$image_info = null)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5441,7 +5441,7 @@ function getimagesize($filename,$image_info=NULL)
  */
 function getlastmod()
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5451,7 +5451,7 @@ function getlastmod()
  */
 function gettimeofday()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5462,7 +5462,7 @@ function gettimeofday()
  */
 function get_cfg_var($varname)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5472,7 +5472,7 @@ function get_cfg_var($varname)
  */
 function get_magic_quotes_runtime()
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5483,7 +5483,7 @@ function get_magic_quotes_runtime()
  */
 function get_meta_tags($filename)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5494,7 +5494,7 @@ function get_meta_tags($filename)
  */
 function get_parent_class($object)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5504,7 +5504,7 @@ function get_parent_class($object)
  */
 function get_included_files()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5515,7 +5515,7 @@ function get_included_files()
  */
 function get_resource_type($handle)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5527,7 +5527,7 @@ function get_resource_type($handle)
  */
 function gzcompress($data,$level)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5539,7 +5539,7 @@ function gzcompress($data,$level)
  */
 function gzdeflate($data,$level)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5552,7 +5552,7 @@ function gzdeflate($data,$level)
  */
 function gzencode($data,$level)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5563,7 +5563,7 @@ function gzencode($data,$level)
  */
 function gzfile($filename)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5575,7 +5575,7 @@ function gzfile($filename)
  */
 function gzinflate($data,$length)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5587,7 +5587,7 @@ function gzinflate($data,$length)
  */
 function gzuncompress($data,$length)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5597,9 +5597,9 @@ function gzuncompress($data,$length)
  * @param  ?integer  Maximum number of characters per line (NULL: no limit).
  * @return string		Out.
  */
-function hebrev($hebrew_text,$max_chars_per_line=NULL)
+function hebrev($hebrew_text,$max_chars_per_line = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5609,9 +5609,9 @@ function hebrev($hebrew_text,$max_chars_per_line=NULL)
  * @param  ?integer  Maximum number of characters per line (NULL: no limit).
  * @return string		Out.
  */
-function hebrevc($hebrew_text,$max_chars_per_line=NULL)
+function hebrevc($hebrew_text,$max_chars_per_line = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5623,7 +5623,7 @@ function hebrevc($hebrew_text,$max_chars_per_line=NULL)
  */
 function hypot($x,$y)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -5634,7 +5634,7 @@ function hypot($x,$y)
  */
 function ignore_user_abort($setting)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5654,7 +5654,7 @@ function ocp_mark_as_escaped(&$var)
  */
 function ocp_is_escaped($var)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5665,9 +5665,9 @@ function ocp_is_escaped($var)
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return ~LONG_TEXT	The file contents (false: error).
  */
-function file_get_contents($filename,$use_include_path=false,$context=NULL)
+function file_get_contents($filename,$use_include_path = false,$context = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5678,9 +5678,9 @@ function file_get_contents($filename,$use_include_path=false,$context=NULL)
  * @set    0 1 2
  * @return mixed			Typically a list - the words of the input string.
  */
-function str_word_count($input,$format=0)
+function str_word_count($input,$format = 0)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5691,9 +5691,9 @@ function str_word_count($input,$format=0)
  * @param  ?string		Character set to decode to (NULL: default).
  * @return string			The decoded text.
  */
-function html_entity_decode($input,$quote_style,$charset=NULL)
+function html_entity_decode($input,$quote_style,$charset = null)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5705,7 +5705,7 @@ function html_entity_decode($input,$quote_style,$charset=NULL)
  */
 function array_combine($keys,$values)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5717,7 +5717,7 @@ function array_combine($keys,$values)
  */
 function array_diff_uassoc($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5729,7 +5729,7 @@ function array_diff_uassoc($a,$b)
  */
 function array_udiff($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5741,7 +5741,7 @@ function array_udiff($a,$b)
  */
 function array_udiff_assoc($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5753,7 +5753,7 @@ function array_udiff_assoc($a,$b)
  */
 function array_udiff_uassoc($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5764,9 +5764,9 @@ function array_udiff_uassoc($a,$b)
  * @param  ?mixed 	 	If the optional userdata parameter is supplied, it will be passed as the third parameter to the callback funcname (NULL: no user data).
  * @return boolean		Result.
  */
-function array_walk_recursive($input,$funcname,$userdata=NULL)
+function array_walk_recursive($input,$funcname,$userdata = null)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5778,7 +5778,7 @@ function array_walk_recursive($input,$funcname,$userdata=NULL)
  */
 function array_uintersect_assoc($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5790,7 +5790,7 @@ function array_uintersect_assoc($a,$b)
  */
 function array_uintersect_uassoc($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5802,7 +5802,7 @@ function array_uintersect_uassoc($a,$b)
  */
 function array_uintersect($a,$b)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5812,9 +5812,9 @@ function array_uintersect($a,$b)
  * @param  integer 		Maximum length of the chunk.
  * @return array			Result.
  */
-function str_split($str,$split_length=1)
+function str_split($str,$split_length = 1)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5826,7 +5826,7 @@ function str_split($str,$split_length=1)
  */
 function strpbrk($haystack,$char_list)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5839,9 +5839,9 @@ function strpbrk($haystack,$char_list)
  * @param  boolean  		Whether to compare as case insensitive.
  * @return ~integer		Returns < 0 if main_str from position offset is less than str, > 0 if it is greater than str, and 0 if they are equal (false: out of bounds).
  */
-function substr_compare($main_str,$str,$offset,$length=NULL,$case_insensitivity=false)
+function substr_compare($main_str,$str,$offset,$length = null,$case_insensitivity = false)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5853,9 +5853,9 @@ function substr_compare($main_str,$str,$offset,$length=NULL,$case_insensitivity=
  * @param  ?resource		A stream context to attach to (NULL: no special context).
  * @return ~integer		Bytes written (false: error).
  */
-function file_put_contents($filename,$data,$flags=0,$context=NULL)
+function file_put_contents($filename,$data,$flags = 0,$context = null)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5865,9 +5865,9 @@ function file_put_contents($filename,$data,$flags=0,$context=NULL)
  * @param  BINARY			Whether to parse into a map.
  * @return array			Result.
  */
-function get_headers($url,$parse=0)
+function get_headers($url,$parse = 0)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5877,7 +5877,7 @@ function get_headers($url,$parse=0)
  */
 function headers_list()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5888,7 +5888,7 @@ function headers_list()
  */
 function http_build_query($query_data)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5898,9 +5898,9 @@ function http_build_query($query_data)
  * @param  boolean 		Whether to prepend a dot to the extension or not.
  * @return string			A string with the extension corresponding to the given image type.
  */
-function image_type_to_extension($imagetype,$include_dot=true)
+function image_type_to_extension($imagetype,$include_dot = true)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5914,9 +5914,9 @@ function image_type_to_extension($imagetype,$include_dot=true)
  * @param  ?mixed	 	 	Parameter (NULL: don't read).
  * @return boolean		Success status.
  */
-function imagefilter($image,$filtertype,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=NULL)
+function imagefilter($image,$filtertype,$arg1 = null,$arg2 = null,$arg3 = null,$arg4 = null)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -5927,7 +5927,7 @@ function imagefilter($image,$filtertype,$arg1=NULL,$arg2=NULL,$arg3=NULL,$arg4=N
  */
 function scandir($directory)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5938,7 +5938,7 @@ function scandir($directory)
  */
 function str_shuffle($in)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5949,7 +5949,7 @@ function str_shuffle($in)
  */
 function image_type_to_mime_type($image_type)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -5960,7 +5960,7 @@ function image_type_to_mime_type($image_type)
  */
 function exif_imagetype($filename)
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -5970,9 +5970,9 @@ function exif_imagetype($filename)
  * @param  integer 	 	Flags.
  * @return ~array			Files found (false: error).
  */
-function glob($pattern,$flags=0)
+function glob($pattern,$flags = 0)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -5982,7 +5982,7 @@ function glob($pattern,$flags=0)
  */
 function debug_backtrace()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6000,7 +6000,7 @@ function debug_print_backtrace()
  */
 function date_default_timezone_set($timezone_identifier)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -6010,7 +6010,7 @@ function date_default_timezone_set($timezone_identifier)
  */
 function date_default_timezone_get()
 {
-	return '';
+    return '';
 }
 
 /**
@@ -6022,7 +6022,7 @@ function date_default_timezone_get()
  */
 function array_diff_key($array1,$array2)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6033,7 +6033,7 @@ function array_diff_key($array1,$array2)
  */
 function inet_pton($address)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -6044,7 +6044,7 @@ function inet_pton($address)
  */
 function array_product($array)
 {
-	return 0.0;
+    return 0.0;
 }
 
 /**
@@ -6057,7 +6057,7 @@ function array_product($array)
  */
 function array_diff_ukey($array1,$array2,$callback)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6070,7 +6070,7 @@ function array_diff_ukey($array1,$array2,$callback)
  */
 function array_intersect_ukey($array1,$array2,$callback)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6080,7 +6080,7 @@ function array_intersect_ukey($array1,$array2,$callback)
  */
 function libxml_get_errors()
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6091,7 +6091,7 @@ function libxml_get_errors()
  */
 function inet_ntop($in_addr)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -6103,9 +6103,9 @@ function inet_ntop($in_addr)
  * @param  string	 		The optional enclosure parameter sets the field enclosure (one character only).
  * @return ~integer		The length of the written string (false: error).
  */
-function fputcsv($handle,$fields,$delimiter=',',$enclosure='"')
+function fputcsv($handle,$fields,$delimiter = ',',$enclosure = '"')
 {
-	return 0;
+    return 0;
 }
 
 /**
@@ -6116,7 +6116,7 @@ function fputcsv($handle,$fields,$delimiter=',',$enclosure='"')
  */
 function is_nan($val)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -6127,7 +6127,7 @@ function is_nan($val)
  */
 function is_finite($val)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -6138,7 +6138,7 @@ function is_finite($val)
  */
 function is_infinite($val)
 {
-	return true;
+    return true;
 }
 
 /**
@@ -6149,9 +6149,9 @@ function is_infinite($val)
  * @param  boolean 		When set to TRUE keys will be preserved. Default is FALSE which will reindex the chunk numerically.
  * @return array			A multidimensional numerically indexed array, starting with zero, with each dimension containing size elements.
  */
-function array_chunk($input,$size,$preserve_keys=false)
+function array_chunk($input,$size,$preserve_keys = false)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6164,7 +6164,7 @@ function array_chunk($input,$size,$preserve_keys=false)
  */
 function array_fill($start_index,$num,$value)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6176,7 +6176,7 @@ function array_fill($start_index,$num,$value)
  */
 function array_change_key_case($input,$case)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6188,9 +6188,9 @@ function array_change_key_case($input,$case)
  * @param  boolean 		When set to TRUE the thumbnail itself is read. Otherwise, only the tagged data is read.
  * @return ~array			An associative array where the array indexes are the header names and the array values are the values associated with those headers (false: error).
  */
-function exif_read_data($filename,$sections=NULL,$arrays=false,$thumbnail=false)
+function exif_read_data($filename,$sections = null,$arrays = false,$thumbnail = false)
 {
-	return array();
+    return array();
 }
 
 /**
@@ -6200,9 +6200,9 @@ function exif_read_data($filename,$sections=NULL,$arrays=false,$thumbnail=false)
  * @param  boolean 		If used and set to TRUE, var_export() will return the variable representation instead of outputting it.
  * @return ?string		Variable representation (NULL: asked to not return a value).
  */
-function var_export($expression,$return=false)
+function var_export($expression,$return = false)
 {
-	return '';
+    return '';
 }
 
 /**
@@ -6212,9 +6212,9 @@ function var_export($expression,$return=false)
  * @param  ?array 		Parameters (NULL: none). Usually options is used, parameters not needed and refers to standard parameters for all context types.
  * @return resource		Stream context.
  */
-function stream_context_create($options=NULL,$params=NULL)
+function stream_context_create($options = null,$params = null)
 {
-	return array();
+    return array();
 }
 
 /*

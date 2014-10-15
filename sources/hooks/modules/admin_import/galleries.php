@@ -20,20 +20,18 @@
 
 class Hook_galleries
 {
-	/**
+    /**
 	 * Standard importer hook info function.
 	 *
 	 * @return ?array	Importer handling details (NULL: importer is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['product']='Gallery media';
-		$info['hook_type']='redirect';
-		$info['import_module']='cms_galleries';
-		$info['import_method_name']='gimp';
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['product'] = 'Gallery media';
+        $info['hook_type'] = 'redirect';
+        $info['import_module'] = 'cms_galleries';
+        $info['import_method_name'] = 'gimp';
+        return $info;
+    }
 }
-
-

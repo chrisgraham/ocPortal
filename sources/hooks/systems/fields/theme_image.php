@@ -20,55 +20,54 @@
 
 class Hook_fields_theme_image
 {
-	/**
+    /**
 	 * Find what field types this hook can serve. This method only needs to be defined if it is not serving a single field type with a name corresponding to the hook itself.
 	 *
 	 * @return array			Map of field type to field type title
 	 */
-	function get_field_types()
-	{
-		require_code('themes2');
-		$images=get_all_image_ids_type('',true,NULL,NULL,true);
-		$ret=array();
-		foreach ($images as $image)
-		{
-			$ret['th_'.$image]=do_lang_tempcode('FIELD_TYPE_theme_image_x',escape_html($image));
-		}
-		return $ret;
-	}
+    public function get_field_types()
+    {
+        require_code('themes2');
+        $images = get_all_image_ids_type('',true,null,null,true);
+        $ret = array();
+        foreach ($images as $image) {
+            $ret['th_' . $image] = do_lang_tempcode('FIELD_TYPE_theme_image_x',escape_html($image));
+        }
+        return $ret;
+    }
 
-	// ==============
-	// Module: search
-	// ==============
+    // ==============
+    // Module: search
+    // ==============
 
-	/**
+    /**
 	 * Get special Tempcode for inputting this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @return ?array			List of specially encoded input detail rows (NULL: nothing special)
 	 */
-	function get_search_inputter($row)
-	{
-		return NULL;
-	}
+    public function get_search_inputter($row)
+    {
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Get special SQL from POSTed parameters for this field.
 	 *
 	 * @param  array			The row for the field to input
 	 * @param  integer		We're processing for the ith row
 	 * @return ?array			Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
 	 */
-	function inputted_to_sql_for_search($row,$i)
-	{
-		return NULL;
-	}
+    public function inputted_to_sql_for_search($row,$i)
+    {
+        return NULL;
+    }
 
-	// ===================
-	// Backend: fields API
-	// ===================
+    // ===================
+    // Backend: fields API
+    // ===================
 
-	/**
+    /**
 	 * Get some info bits relating to our field type, that helps us look it up / set defaults.
 	 *
 	 * @param  ?array			The field details (NULL: new field)
@@ -76,16 +75,17 @@ class Hook_fields_theme_image
 	 * @param  ?string		The given default value as a string (NULL: don't "lock in" a new default value)
 	 * @return array			Tuple of details (row-type,default-value-to-use,db row-type)
 	 */
-	function get_field_value_row_bits($field,$required=NULL,$default=NULL)
-	{
-		if ($required!==NULL)
-		{
-			if (($required) && ($default=='')) $default='default';
-		}
-		return array('short_text',$default,'short');
-	}
+    public function get_field_value_row_bits($field,$required = null,$default = null)
+    {
+        if ($required !== NULL) {
+            if (($required) && ($default == '')) {
+                $default = 'default';
+            }
+        }
+        return array('short_text',$default,'short');
+    }
 
-	/**
+    /**
 	 * Convert a field value to something renderable.
 	 *
 	 * @param  array			The field details
@@ -94,28 +94,34 @@ class Hook_fields_theme_image
 	 * @param  ?array			List of fields the output is being limited to (NULL: N/A)
 	 * @return mixed			Rendered field (tempcode or string)
 	 */
-	function render_field_value($field,$ev,$i,$only_fields)
-	{
-		if (is_object($ev)) return $ev;
+    public function render_field_value($field,$ev,$i,$only_fields)
+    {
+        if (is_object($ev)) {
+            return $ev;
+        }
 
-		if ($ev=='') return '';
+        if ($ev == '') {
+            return '';
+        }
 
-		$img_url=find_theme_image($ev);
-		if (!array_key_exists('c_name',$field)) $field['c_name']='other';
-		$tpl_set=$field['c_name'];
+        $img_url = find_theme_image($ev);
+        if (!array_key_exists('c_name',$field)) {
+            $field['c_name'] = 'other';
+        }
+        $tpl_set = $field['c_name'];
 
-		set_extra_request_metadata(array(
-			'image'=>$img_url,
-		));
+        set_extra_request_metadata(array(
+            'image' => $img_url,
+        ));
 
-		return do_template('CATALOGUE_'.$tpl_set.'_FIELD_PICTURE',array('I'=>is_null($only_fields)?'-1':strval($i),'CATALOGUE'=>$field['c_name'],'URL'=>$img_url,'THUMB_URL'=>$img_url),NULL,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
-	}
+        return do_template('CATALOGUE_' . $tpl_set . '_FIELD_PICTURE',array('I' => is_null($only_fields)?'-1':strval($i),'CATALOGUE' => $field['c_name'],'URL' => $img_url,'THUMB_URL' => $img_url),null,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
+    }
 
-	// ======================
-	// Frontend: fields input
-	// ======================
+    // ======================
+    // Frontend: fields input
+    // ======================
 
-	/**
+    /**
 	 * Get form inputter.
 	 *
 	 * @param  string			The field name
@@ -125,13 +131,13 @@ class Hook_fields_theme_image
 	 * @param  boolean		Whether this is for a new entry
 	 * @return ?tempcode		The Tempcode for the input field (NULL: skip the field - it's not input)
 	 */
-	function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
-	{
-		$ids=get_all_image_ids_type(substr($field['cf_type'],3),true);
-		return form_input_theme_image($_cf_name,$_cf_description,'field_'.strval($field['id']),$ids,NULL,$actual_value,NULL,$field['cf_required']==0);
-	}
+    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    {
+        $ids = get_all_image_ids_type(substr($field['cf_type'],3),true);
+        return form_input_theme_image($_cf_name,$_cf_description,'field_' . strval($field['id']),$ids,null,$actual_value,null,$field['cf_required'] == 0);
+    }
 
-	/**
+    /**
 	 * Find the posted value from the get_field_inputter field
 	 *
 	 * @param  boolean		Whether we were editing (because on edit, it could be a fractional edit)
@@ -140,12 +146,10 @@ class Hook_fields_theme_image
 	 * @param  ?array			Former value of field (NULL: none)
 	 * @return ?string		The value (NULL: could not process)
 	 */
-	function inputted_to_field_value($editing,$field,$upload_dir='uploads/catalogues',$old_value=NULL)
-	{
-		$id=$field['id'];
-		$tmp_name='field_'.strval($id);
-		return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
-	}
+    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    {
+        $id = $field['id'];
+        $tmp_name = 'field_' . strval($id);
+        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+    }
 }
-
-

@@ -23,60 +23,40 @@
  */
 function init__caches()
 {
-	global $BLOCK_CACHE_ON_CACHE;
-	$BLOCK_CACHE_ON_CACHE=NULL;
+    global $BLOCK_CACHE_ON_CACHE;
+    $BLOCK_CACHE_ON_CACHE = null;
 
-	global $PERSISTENT_CACHE,$SITE_INFO;
-	/** The persistent cache access object (NULL if there is no persistent cache).
+    global $PERSISTENT_CACHE,$SITE_INFO;
+    /** The persistent cache access object (NULL if there is no persistent cache).
 	 * @global ?object $PERSISTENT_CACHE
 	 */
-	$PERSISTENT_CACHE=NULL;
+    $PERSISTENT_CACHE = null;
 
-	$use_memcache=((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache']!='') && ($SITE_INFO['use_mem_cache']!='0'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
-	if (($use_memcache) && (!$GLOBALS['IN_MINIKERNEL_VERSION']))
-	{
-		if ((class_exists('Memcached')) && (($SITE_INFO['use_mem_cache']=='memcached') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_memcached');
-			$PERSISTENT_CACHE=new ocp_memcached();
-		}
-
-		elseif ((class_exists('Memcache')) && (($SITE_INFO['use_mem_cache']=='memcache') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_memcache');
-			$PERSISTENT_CACHE=new ocp_memcache();
-		}
-
-		elseif ((function_exists('apc_fetch')) && (($SITE_INFO['use_mem_cache']=='apc') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_apc');
-			$PERSISTENT_CACHE=new ocp_apccache();
-		}
-
-		elseif (((function_exists('eaccelerator_put')) || (function_exists('mmcache_put'))) && (($SITE_INFO['use_mem_cache']=='eaccelerator') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_eaccelerator');
-			$PERSISTENT_CACHE=new ocp_eacceleratorcache();
-		}
-
-		elseif ((function_exists('xcache_get')) && (($SITE_INFO['use_mem_cache']=='xcache') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_xcache');
-			$PERSISTENT_CACHE=new ocp_xcache();
-		}
-
-		elseif ((function_exists('wincache_ucache_get')) && (($SITE_INFO['use_mem_cache']=='wincache') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_wincache');
-			$PERSISTENT_CACHE=new ocp_wincache();
-		}
-
-		elseif ((file_exists(get_custom_file_base().'/caches/persistent/')) && (($SITE_INFO['use_mem_cache']=='filesystem') || ($SITE_INFO['use_mem_cache']=='1')))
-		{
-			require_code('caches_filesystem');
-			$PERSISTENT_CACHE=new ocp_filecache();
-		}
-	}
+    $use_memcache = ((array_key_exists('use_mem_cache',$SITE_INFO)) && ($SITE_INFO['use_mem_cache'] != '') && ($SITE_INFO['use_mem_cache'] != '0'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
+    if (($use_memcache) && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) {
+        if ((class_exists('Memcached')) && (($SITE_INFO['use_mem_cache'] == 'memcached') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_memcached');
+            $PERSISTENT_CACHE = new ocp_memcached();
+        } elseif ((class_exists('Memcache')) && (($SITE_INFO['use_mem_cache'] == 'memcache') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_memcache');
+            $PERSISTENT_CACHE = new ocp_memcache();
+        } elseif ((function_exists('apc_fetch')) && (($SITE_INFO['use_mem_cache'] == 'apc') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_apc');
+            $PERSISTENT_CACHE = new ocp_apccache();
+        } elseif (((function_exists('eaccelerator_put')) || (function_exists('mmcache_put'))) && (($SITE_INFO['use_mem_cache'] == 'eaccelerator') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_eaccelerator');
+            $PERSISTENT_CACHE = new ocp_eacceleratorcache();
+        } elseif ((function_exists('xcache_get')) && (($SITE_INFO['use_mem_cache'] == 'xcache') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_xcache');
+            $PERSISTENT_CACHE = new ocp_xcache();
+        } elseif ((function_exists('wincache_ucache_get')) && (($SITE_INFO['use_mem_cache'] == 'wincache') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_wincache');
+            $PERSISTENT_CACHE = new ocp_wincache();
+        } elseif ((file_exists(get_custom_file_base() . '/caches/persistent/')) && (($SITE_INFO['use_mem_cache'] == 'filesystem') || ($SITE_INFO['use_mem_cache'] == '1'))) {
+            require_code('caches_filesystem');
+            $PERSISTENT_CACHE = new ocp_filecache();
+        }
+    }
 }
 
 /**
@@ -86,15 +66,19 @@ function init__caches()
  * @param  ?TIME			Minimum timestamp that entries from the cache may hold (NULL: don't care)
  * @return ?mixed			The data (NULL: not found / NULL entry)
  */
-function persistent_cache_get($key,$min_cache_date=NULL)
+function persistent_cache_get($key,$min_cache_date = null)
 {
-	global $PERSISTENT_CACHE;
-	//if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3)==1)) return NULL;	Annoying when doing performance tests, but you can enable to test persistent cache more
-	if ($PERSISTENT_CACHE===NULL) return NULL;
-	$test=$PERSISTENT_CACHE->get(get_file_base().serialize($key),$min_cache_date); // First we'll try specifically for site
-	if ($test!==NULL) return $test;
-	$test=$PERSISTENT_CACHE->get(('ocp'.float_to_raw_string(ocp_version_number())).serialize($key),$min_cache_date); // And last we'll try server-wide
-	return $test;
+    global $PERSISTENT_CACHE;
+    //if (($GLOBALS['DEV_MODE']) && (mt_rand(0,3)==1)) return NULL;	Annoying when doing performance tests, but you can enable to test persistent cache more
+    if ($PERSISTENT_CACHE === NULL) {
+        return NULL;
+    }
+    $test = $PERSISTENT_CACHE->get(get_file_base() . serialize($key),$min_cache_date); // First we'll try specifically for site
+    if ($test !== NULL) {
+        return $test;
+    }
+    $test = $PERSISTENT_CACHE->get(('ocp' . float_to_raw_string(ocp_version_number())) . serialize($key),$min_cache_date); // And last we'll try server-wide
+    return $test;
 }
 
 /**
@@ -105,12 +89,16 @@ function persistent_cache_get($key,$min_cache_date=NULL)
  * @param  boolean		Whether it is server-wide data
  * @param  ?integer		The expiration time in seconds. (NULL: Default expiry in 60 minutes, or never if it is server-wide).
  */
-function persistent_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
+function persistent_cache_set($key,$data,$server_wide = false,$expire_secs = null)
 {
-	global $PERSISTENT_CACHE;
-	if ($PERSISTENT_CACHE===NULL) return NULL;
-	if ($expire_secs===NULL) $expire_secs=$server_wide?0:(60*60);
-	$PERSISTENT_CACHE->set(($server_wide?('ocp'.float_to_raw_string(ocp_version_number())):get_file_base()).serialize($key),$data,0,$expire_secs);
+    global $PERSISTENT_CACHE;
+    if ($PERSISTENT_CACHE === NULL) {
+        return NULL;
+    }
+    if ($expire_secs === NULL) {
+        $expire_secs = $server_wide?0:(60*60);
+    }
+    $PERSISTENT_CACHE->set(($server_wide?('ocp' . float_to_raw_string(ocp_version_number())):get_file_base()) . serialize($key),$data,0,$expire_secs);
 }
 
 /**
@@ -119,34 +107,30 @@ function persistent_cache_set($key,$data,$server_wide=false,$expire_secs=NULL)
  * @param  mixed			Key name
  * @param  boolean		Whether we are deleting via substring
  */
-function persistent_cache_delete($key,$substring=false)
+function persistent_cache_delete($key,$substring = false)
 {
-	global $PERSISTENT_CACHE;
-	if ($PERSISTENT_CACHE===NULL) return NULL;
-	if ($substring)
-	{
-		$list=$PERSISTENT_CACHE->load_objects_list();
-		foreach (array_keys($list) as $l)
-		{
-			$delete=true;
-			foreach (is_array($key)?$key:array($key) as $key_part)
-			{
-				if (strpos($l,$key_part)===false) // Should work even though key was serialized, in reasonable cases
-				{
-					$delete=false;
-					break;
-				}
-			}
-			if ($delete)
-			{
-				$PERSISTENT_CACHE->delete($l);
-			}
-		}
-	} else
-	{
-		$PERSISTENT_CACHE->delete(get_file_base().serialize($key));
-		$PERSISTENT_CACHE->delete('ocp'.float_to_raw_string(ocp_version_number()).serialize($key));
-	}
+    global $PERSISTENT_CACHE;
+    if ($PERSISTENT_CACHE === NULL) {
+        return NULL;
+    }
+    if ($substring) {
+        $list = $PERSISTENT_CACHE->load_objects_list();
+        foreach (array_keys($list) as $l) {
+            $delete = true;
+            foreach (is_array($key)?$key:array($key) as $key_part) {
+                if (strpos($l,$key_part) === false) { // Should work even though key was serialized, in reasonable cases
+                    $delete = false;
+                    break;
+                }
+            }
+            if ($delete) {
+                $PERSISTENT_CACHE->delete($l);
+            }
+        }
+    } else {
+        $PERSISTENT_CACHE->delete(get_file_base() . serialize($key));
+        $PERSISTENT_CACHE->delete('ocp' . float_to_raw_string(ocp_version_number()) . serialize($key));
+    }
 }
 
 /**
@@ -154,22 +138,24 @@ function persistent_cache_delete($key,$substring=false)
  */
 function erase_persistent_cache()
 {
-	$path=get_custom_file_base().'/caches/persistent';
-	if (!file_exists($path)) return;
-	$d=opendir($path);
-	while (($e=readdir($d))!==false)
-	{
-		if (substr($e,-4)=='.gcd')
-		{
-			// Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
-			@unlink(get_custom_file_base().'/persistent_cache/'.$e);
-		}
-	}
-	closedir($d);
+    $path = get_custom_file_base() . '/caches/persistent';
+    if (!file_exists($path)) {
+        return;
+    }
+    $d = opendir($path);
+    while (($e = readdir($d)) !== false) {
+        if (substr($e,-4) == '.gcd') {
+            // Ideally we'd lock whilst we delete, but it's not stable (and the workaround would be too slow for our efficiency context). So some people reading may get errors whilst we're clearing the cache. Fortunately this is a rare op to perform.
+            @unlink(get_custom_file_base() . '/persistent_cache/' . $e);
+        }
+    }
+    closedir($d);
 
-	global $PERSISTENT_CACHE;
-	if ($PERSISTENT_CACHE===NULL) return NULL;
-	$PERSISTENT_CACHE->flush();
+    global $PERSISTENT_CACHE;
+    if ($PERSISTENT_CACHE === NULL) {
+        return NULL;
+    }
+    $PERSISTENT_CACHE->flush();
 }
 
 /**
@@ -178,12 +164,14 @@ function erase_persistent_cache()
  * @param  mixed			The type of what we are cacheing (e.g. block name) (ID_TEXT or an array of ID_TEXT, the array may be pairs re-specifying $identifier)
  * @param  ?array			A map of identifiying characteristics (NULL: no identifying characteristics, decache all)
  */
-function decache($cached_for,$identifier=NULL)
+function decache($cached_for,$identifier = null)
 {
-	if (get_mass_import_mode()) return;
+    if (get_mass_import_mode()) {
+        return;
+    }
 
-	require_code('caches2');
-	_decache($cached_for,$identifier);
+    require_code('caches2');
+    _decache($cached_for,$identifier);
 }
 
 /**
@@ -194,19 +182,19 @@ function decache($cached_for,$identifier=NULL)
  */
 function find_cache_on($codename)
 {
-	// See if we have it cached
-	global $BLOCK_CACHE_ON_CACHE;
-	if ($BLOCK_CACHE_ON_CACHE===NULL)
-	{
-		$BLOCK_CACHE_ON_CACHE=function_exists('persistent_cache_get')?persistent_cache_get('BLOCK_CACHE_ON_CACHE'):NULL;
-		if ($BLOCK_CACHE_ON_CACHE===NULL)
-		{
-			$BLOCK_CACHE_ON_CACHE=list_to_map('cached_for',$GLOBALS['SITE_DB']->query_select('cache_on',array('*')));
-			persistent_cache_set('BLOCK_CACHE_ON_CACHE',$BLOCK_CACHE_ON_CACHE);
-		}
-	}
-	if (isset($BLOCK_CACHE_ON_CACHE[$codename])) return $BLOCK_CACHE_ON_CACHE[$codename];
-	return NULL;
+    // See if we have it cached
+    global $BLOCK_CACHE_ON_CACHE;
+    if ($BLOCK_CACHE_ON_CACHE === NULL) {
+        $BLOCK_CACHE_ON_CACHE = function_exists('persistent_cache_get')?persistent_cache_get('BLOCK_CACHE_ON_CACHE'):null;
+        if ($BLOCK_CACHE_ON_CACHE === NULL) {
+            $BLOCK_CACHE_ON_CACHE = list_to_map('cached_for',$GLOBALS['SITE_DB']->query_select('cache_on',array('*')));
+            persistent_cache_set('BLOCK_CACHE_ON_CACHE',$BLOCK_CACHE_ON_CACHE);
+        }
+    }
+    if (isset($BLOCK_CACHE_ON_CACHE[$codename])) {
+        return $BLOCK_CACHE_ON_CACHE[$codename];
+    }
+    return NULL;
 }
 
 /**
@@ -220,82 +208,79 @@ function find_cache_on($codename)
  * @param  ?array			Parameters to call up block with if we have to defer caching (NULL: none)
  * @return ?mixed			The cached result (NULL: no cached result)
  */
-function get_cache_entry($codename,$cache_identifier,$ttl=10000,$tempcode=false,$caching_via_cron=false,$map=NULL) // Default to a very big ttl
+function get_cache_entry($codename,$cache_identifier,$ttl = 10000,$tempcode = false,$caching_via_cron = false,$map = null) // Default to a very big ttl
 {
-	if ($GLOBALS['PERSISTENT_CACHE']!==NULL)
-	{
-		$theme=$GLOBALS['FORUM_DRIVER']->get_theme();
-		$lang=user_lang();
-		$pcache=persistent_cache_get(array('CACHE',$codename,md5($cache_identifier),$lang,$theme));
-		if ($pcache===NULL)
-		{
-			if ($caching_via_cron)
-			{
-				require_code('caches2');
-				request_via_cron($codename,$map,$tempcode);
-				return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'),'','nothing_here');
-			}
-			return NULL;
-		}
-		$cache_rows=array($pcache);
-	} else
-	{
-		$cache_rows=$GLOBALS['SITE_DB']->query_select('cache',array('the_value','date_and_time','dependencies'),array('lang'=>user_lang(),'cached_for'=>$codename,'the_theme'=>$GLOBALS['FORUM_DRIVER']->get_theme(),'identifier'=>md5($cache_identifier)),'',1);
-		if (!isset($cache_rows[0])) // No
-		{
-			if ($caching_via_cron)
-			{
-				require_code('caches2');
-				request_via_cron($codename,$map,$tempcode);
-				return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'),'','nothing_here');
-			}
-			return NULL;
-		}
+    if ($GLOBALS['PERSISTENT_CACHE'] !== NULL) {
+        $theme = $GLOBALS['FORUM_DRIVER']->get_theme();
+        $lang = user_lang();
+        $pcache = persistent_cache_get(array('CACHE',$codename,md5($cache_identifier),$lang,$theme));
+        if ($pcache === NULL) {
+            if ($caching_via_cron) {
+                require_code('caches2');
+                request_via_cron($codename,$map,$tempcode);
+                return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'),'','nothing_here');
+            }
+            return NULL;
+        }
+        $cache_rows = array($pcache);
+    } else {
+        $cache_rows = $GLOBALS['SITE_DB']->query_select('cache',array('the_value','date_and_time','dependencies'),array('lang' => user_lang(),'cached_for' => $codename,'the_theme' => $GLOBALS['FORUM_DRIVER']->get_theme(),'identifier' => md5($cache_identifier)),'',1);
+        if (!isset($cache_rows[0])) { // No
+            if ($caching_via_cron) {
+                require_code('caches2');
+                request_via_cron($codename,$map,$tempcode);
+                return paragraph(do_lang_tempcode('CACHE_NOT_READY_YET'),'','nothing_here');
+            }
+            return NULL;
+        }
 
-		if ($tempcode)
-		{
-			$ob=new ocp_tempcode();
-			if (!$ob->from_assembly($cache_rows[0]['the_value'],true)) return NULL;
-			$cache_rows[0]['the_value']=$ob;
-		} else
-		{
-			$cache_rows[0]['the_value']=unserialize($cache_rows[0]['the_value']);
-		}
-	}
+        if ($tempcode) {
+            $ob = new ocp_tempcode();
+            if (!$ob->from_assembly($cache_rows[0]['the_value'],true)) {
+                return NULL;
+            }
+            $cache_rows[0]['the_value'] = $ob;
+        } else {
+            $cache_rows[0]['the_value'] = unserialize($cache_rows[0]['the_value']);
+        }
+    }
 
-	$stale=(($ttl!=-1) && (time()>($cache_rows[0]['date_and_time']+$ttl*60)));
+    $stale = (($ttl != -1) && (time()>($cache_rows[0]['date_and_time']+$ttl*60)));
 
-	if ((!$caching_via_cron) && ($stale)) // Out of date
-	{
-		return NULL;
-	} else // We can use directly
-	{
-		if ($stale)
-		{
-			require_code('caches2');
-			request_via_cron($codename,$map,$tempcode);
-		}
+    if ((!$caching_via_cron) && ($stale)) { // Out of date
+        return NULL;
+    } else { // We can use directly
+        if ($stale) {
+            require_code('caches2');
+            request_via_cron($codename,$map,$tempcode);
+        }
 
-		$cache=$cache_rows[0]['the_value'];
-		if ($cache_rows[0]['dependencies']!='')
-		{
-			$bits=explode('!',$cache_rows[0]['dependencies']);
-			$langs_required=explode(':',$bits[0]); // Sometimes lang has got intertwinded with non cacheable stuff (and thus was itself not cached), so we need the lang files
-			foreach ($langs_required as $lang)
-				if ($lang!='') require_lang($lang,NULL,NULL,true);
-			if (isset($bits[1]))
-			{
-				$javascripts_required=explode(':',$bits[1]);
-				foreach ($javascripts_required as $javascript)
-					if ($javascript!='') require_javascript($javascript);
-			}
-			if (isset($bits[2]))
-			{
-				$csss_required=explode(':',$bits[2]);
-				foreach ($csss_required as $css)
-					if ($css!='') require_css($css);
-			}
-		}
-		return $cache;
-	}
+        $cache = $cache_rows[0]['the_value'];
+        if ($cache_rows[0]['dependencies'] != '') {
+            $bits = explode('!',$cache_rows[0]['dependencies']);
+            $langs_required = explode(':',$bits[0]); // Sometimes lang has got intertwinded with non cacheable stuff (and thus was itself not cached), so we need the lang files
+            foreach ($langs_required as $lang) {
+                if ($lang != '') {
+                    require_lang($lang,null,null,true);
+                }
+            }
+            if (isset($bits[1])) {
+                $javascripts_required = explode(':',$bits[1]);
+                foreach ($javascripts_required as $javascript) {
+                    if ($javascript != '') {
+                        require_javascript($javascript);
+                    }
+                }
+            }
+            if (isset($bits[2])) {
+                $csss_required = explode(':',$bits[2]);
+                foreach ($csss_required as $css) {
+                    if ($css != '') {
+                        require_css($css);
+                    }
+                }
+            }
+        }
+        return $cache;
+    }
 }

@@ -23,13 +23,13 @@
  */
 function init__upload_syndication()
 {
-	require_code('uploads');
+    require_code('uploads');
 
-	define('UPLOAD_PRECEDENCE_NO',0);
-	define('UPLOAD_PRECEDENCE_LOW',1);
-	define('UPLOAD_PRECEDENCE_MEDIUM',5);
-	define('UPLOAD_PRECEDENCE_HIGH',10);
-	define('UPLOAD_PRECEDENCE_REGARDLESS',1000);
+    define('UPLOAD_PRECEDENCE_NO',0);
+    define('UPLOAD_PRECEDENCE_LOW',1);
+    define('UPLOAD_PRECEDENCE_MEDIUM',5);
+    define('UPLOAD_PRECEDENCE_HIGH',10);
+    define('UPLOAD_PRECEDENCE_REGARDLESS',1000);
 }
 
 /**
@@ -40,61 +40,59 @@ function init__upload_syndication()
  */
 function get_upload_syndication_json($file_handling_types)
 {
-	$struct=array();
+    $struct = array();
 
-	$all_hook_file_handling_types=0;
+    $all_hook_file_handling_types = 0;
 
-	$hooks=find_all_hooks('systems','upload_syndication');
-	foreach (array_keys($hooks) as $hook)
-	{
-		require_code('hooks/systems/upload_syndication/'.filter_naughty($hook));
-		$ob=object_factory('Hook_upload_syndication_'.$hook);
-		if ($ob->is_enabled())
-		{
-			$hook_file_handling_types=$ob->get_file_handling_types();
-			if (($hook_file_handling_types & $file_handling_types)!=0)
-			{
-				$all_hook_file_handling_types|=$hook_file_handling_types;
-				if (!$ob->happens_always())
-				{
-					$struct[$hook]=array('label'=>$ob->get_label(),'authorised'=>$ob->is_authorised());
-				}
-			}
-		}
-	}
+    $hooks = find_all_hooks('systems','upload_syndication');
+    foreach (array_keys($hooks) as $hook) {
+        require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
+        $ob = object_factory('Hook_upload_syndication_' . $hook);
+        if ($ob->is_enabled()) {
+            $hook_file_handling_types = $ob->get_file_handling_types();
+            if (($hook_file_handling_types & $file_handling_types) != 0) {
+                $all_hook_file_handling_types |= $hook_file_handling_types;
+                if (!$ob->happens_always()) {
+                    $struct[$hook] = array('label' => $ob->get_label(),'authorised' => $ob->is_authorised());
+                }
+            }
+        }
+    }
 
-	$all_hook_file_handling_types=$all_hook_file_handling_types & $file_handling_types;
-	$syndicatable_filetypes='';
-	if (($all_hook_file_handling_types & OCP_UPLOAD_ANYTHING)==0)
-	{
-		require_code('images');
-		if (($all_hook_file_handling_types & OCP_UPLOAD_IMAGE)!=0)
-		{
-			if ($syndicatable_filetypes!='') $syndicatable_filetypes.=',';
-			$syndicatable_filetypes.=get_allowed_image_file_types();
-		}
-		if (($all_hook_file_handling_types & OCP_UPLOAD_VIDEO)!=0)
-		{
-			if ($syndicatable_filetypes!='') $syndicatable_filetypes.=',';
-			$syndicatable_filetypes.=get_allowed_video_file_types();
-		}
-		if (($all_hook_file_handling_types & OCP_UPLOAD_AUDIO)!=0)
-		{
-			if ($syndicatable_filetypes!='') $syndicatable_filetypes.=',';
-			$syndicatable_filetypes.=get_allowed_audio_file_types();
-		}
-		if (($all_hook_file_handling_types & OCP_UPLOAD_SWF)!=0)
-		{
-			if ($syndicatable_filetypes!='') $syndicatable_filetypes.=',';
-			$syndicatable_filetypes.='swf';
-		}
-	}
+    $all_hook_file_handling_types = $all_hook_file_handling_types & $file_handling_types;
+    $syndicatable_filetypes = '';
+    if (($all_hook_file_handling_types & OCP_UPLOAD_ANYTHING) == 0) {
+        require_code('images');
+        if (($all_hook_file_handling_types & OCP_UPLOAD_IMAGE) != 0) {
+            if ($syndicatable_filetypes != '') {
+                $syndicatable_filetypes .= ',';
+            }
+            $syndicatable_filetypes .= get_allowed_image_file_types();
+        }
+        if (($all_hook_file_handling_types & OCP_UPLOAD_VIDEO) != 0) {
+            if ($syndicatable_filetypes != '') {
+                $syndicatable_filetypes .= ',';
+            }
+            $syndicatable_filetypes .= get_allowed_video_file_types();
+        }
+        if (($all_hook_file_handling_types & OCP_UPLOAD_AUDIO) != 0) {
+            if ($syndicatable_filetypes != '') {
+                $syndicatable_filetypes .= ',';
+            }
+            $syndicatable_filetypes .= get_allowed_audio_file_types();
+        }
+        if (($all_hook_file_handling_types & OCP_UPLOAD_SWF) != 0) {
+            if ($syndicatable_filetypes != '') {
+                $syndicatable_filetypes .= ',';
+            }
+            $syndicatable_filetypes .= 'swf';
+        }
+    }
 
-	if ((function_exists('json_encode')) && (count($struct)>0))
-	{
-		return array(json_encode($struct),$syndicatable_filetypes);
-	}
-	return array(NULL,$syndicatable_filetypes);
+    if ((function_exists('json_encode')) && (count($struct)>0)) {
+        return array(json_encode($struct),$syndicatable_filetypes);
+    }
+    return array(null,$syndicatable_filetypes);
 }
 
 /**
@@ -102,29 +100,28 @@ function get_upload_syndication_json($file_handling_types)
  */
 function upload_syndication_auth_script()
 {
-	$hook=get_param('hook');
-	$name=get_param('name');
+    $hook = get_param('hook');
+    $name = get_param('name');
 
-	require_code('hooks/systems/upload_syndication/'.filter_naughty($hook));
-	$ob=object_factory('Hook_upload_syndication_'.$hook);
-	$success=$ob->receive_authorisation();
+    require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
+    $ob = object_factory('Hook_upload_syndication_' . $hook);
+    $success = $ob->receive_authorisation();
 
-	require_lang('upload_syndication');
+    require_lang('upload_syndication');
 
-	$label=$ob->get_label();
+    $label = $ob->get_label();
 
-	if (!$success)
-	{
-		warn_exit(do_lang_tempcode('FAILURE_UPLOAD_SYNDICATION_AUTH',escape_html($label)));
-	}
+    if (!$success) {
+        warn_exit(do_lang_tempcode('FAILURE_UPLOAD_SYNDICATION_AUTH',escape_html($label)));
+    }
 
-	$tpl=do_template('UPLOAD_SYNDICATION_SETUP_SCREEN',array('_GUID'=>'336ee1c1a5503a79ef426bbcdc4258fd','LABEL'=>$label,
-		'HOOK'=>$hook,
-		'NAME'=>$name,
-	));
-	$echo=do_template('STANDALONE_HTML_WRAP',array('_GUID'=>'abde85be22df7fcfd51c5067f1b82e7a','TITLE'=>do_lang_tempcode('UPLOAD_SYNDICATION_AUTH'),'CONTENT'=>$tpl,'POPUP'=>true));
-	$echo->handle_symbol_preprocessing();
-	$echo->evaluate_echo();
+    $tpl = do_template('UPLOAD_SYNDICATION_SETUP_SCREEN',array('_GUID' => '336ee1c1a5503a79ef426bbcdc4258fd','LABEL' => $label,
+        'HOOK' => $hook,
+        'NAME' => $name,
+    ));
+    $echo = do_template('STANDALONE_HTML_WRAP',array('_GUID' => 'abde85be22df7fcfd51c5067f1b82e7a','TITLE' => do_lang_tempcode('UPLOAD_SYNDICATION_AUTH'),'CONTENT' => $tpl,'POPUP' => true));
+    $echo->handle_symbol_preprocessing();
+    $echo->evaluate_echo();
 }
 
 /**
@@ -135,28 +132,24 @@ function upload_syndication_auth_script()
  */
 function upload_will_syndicate($name)
 {
-	$hooks=find_all_hooks('systems','upload_syndication');
-	foreach (array_keys($hooks) as $hook)
-	{
-		require_code('hooks/systems/upload_syndication/'.filter_naughty($hook));
-		$ob=object_factory('Hook_upload_syndication_'.$hook);
-		if ((post_param_integer('upload_syndicate__'.$hook.'__'.$name,0)==1) || ($ob->happens_always()))
-		{
-			if (($ob->is_enabled()) && ($ob->is_authorised()))
-			{
-				require_code('uploads');
-				is_plupload(true);
+    $hooks = find_all_hooks('systems','upload_syndication');
+    foreach (array_keys($hooks) as $hook) {
+        require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
+        $ob = object_factory('Hook_upload_syndication_' . $hook);
+        if ((post_param_integer('upload_syndicate__' . $hook . '__' . $name,0) == 1) || ($ob->happens_always())) {
+            if (($ob->is_enabled()) && ($ob->is_authorised())) {
+                require_code('uploads');
+                is_plupload(true);
 
-				$hook_file_handling_types=$ob->get_file_handling_types();
-				$filename=isset($_FILES[$name]['name'])?$_FILES[$name]['name']:'';
-				if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) // Check the upload API agrees this file matches the filetype bitmask
-				{
-					return true;
-				}
-			}
-		}
-	}
-	return false;
+                $hook_file_handling_types = $ob->get_file_handling_types();
+                $filename = isset($_FILES[$name]['name'])?$_FILES[$name]['name']:'';
+                if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) { // Check the upload API agrees this file matches the filetype bitmask
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 /**
@@ -172,66 +165,60 @@ function upload_will_syndicate($name)
  */
 function handle_upload_syndication($name,$title,$description,$url,$filename,$remove_locally_if_no_quota)
 {
-	if (!url_is_local($url)) return $url; // Not an upload
+    if (!url_is_local($url)) {
+        return $url;
+    } // Not an upload
 
-	$new_url=$url;
+    $new_url = $url;
 
-	$filepath=get_custom_file_base().'/'.rawurldecode($url);
-	$url=get_custom_base_url().'/'.$url;
+    $filepath = get_custom_file_base() . '/' . rawurldecode($url);
+    $url = get_custom_base_url() . '/' . $url;
 
-	$remote_urls=array();
-	$hooks=find_all_hooks('systems','upload_syndication');
-	foreach (array_keys($hooks) as $hook)
-	{
-		require_code('hooks/systems/upload_syndication/'.filter_naughty($hook));
-		$ob=object_factory('Hook_upload_syndication_'.$hook);
-		if ((post_param_integer('upload_syndicate__'.$hook.'__'.$name,0)==1) || ($ob->happens_always()))
-		{
-			if (($ob->is_enabled()) && ($ob->is_authorised()))
-			{
-				$hook_file_handling_types=$ob->get_file_handling_types();
-				if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) // Check the upload API agrees this file matches the filetype bitmask
-				{
-					$remote_url=$ob->syndicate($url,$filepath,$filename,$title,$description);
-					if (!is_null($remote_url))
-					{
-						$remote_urls[$hook]=array($remote_url,$ob->get_reference_precedence());
-						if ($ob->get_reference_precedence()==UPLOAD_PRECEDENCE_REGARDLESS) // Cloud-filesystem use-case
-							$remove_locally_if_no_quota=true;
-					}
-				}
-			}
-		}
-	}
+    $remote_urls = array();
+    $hooks = find_all_hooks('systems','upload_syndication');
+    foreach (array_keys($hooks) as $hook) {
+        require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
+        $ob = object_factory('Hook_upload_syndication_' . $hook);
+        if ((post_param_integer('upload_syndicate__' . $hook . '__' . $name,0) == 1) || ($ob->happens_always())) {
+            if (($ob->is_enabled()) && ($ob->is_authorised())) {
+                $hook_file_handling_types = $ob->get_file_handling_types();
+                if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) { // Check the upload API agrees this file matches the filetype bitmask
+                    $remote_url = $ob->syndicate($url,$filepath,$filename,$title,$description);
+                    if (!is_null($remote_url)) {
+                        $remote_urls[$hook] = array($remote_url,$ob->get_reference_precedence());
+                        if ($ob->get_reference_precedence() == UPLOAD_PRECEDENCE_REGARDLESS) {// Cloud-filesystem use-case
+                            $remove_locally_if_no_quota = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	$force_remove_locally=(post_param_integer('force_remove_locally',0)==1);
+    $force_remove_locally = (post_param_integer('force_remove_locally',0) == 1);
 
-	if ($remove_locally_if_no_quota || $force_remove_locally)
-	{
-		require_code('files2');
-		$max_attach_size=get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
-		$no_quota=(($max_attach_size==0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb')==0));
-		if ($no_quota || $force_remove_locally)
-		{
-			if (url_is_local($new_url))
-			{
-				@unlink(get_custom_file_base().'/'.rawurldecode($new_url));
-				sync_file(rawurldecode($new_url));
-			}
+    if ($remove_locally_if_no_quota || $force_remove_locally) {
+        require_code('files2');
+        $max_attach_size = get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
+        $no_quota = (($max_attach_size == 0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb') == 0));
+        if ($no_quota || $force_remove_locally) {
+            if (url_is_local($new_url)) {
+                @unlink(get_custom_file_base() . '/' . rawurldecode($new_url));
+                sync_file(rawurldecode($new_url));
+            }
 
-			if (count($remote_urls)==0)
-			{
-				require_lang('upload_syndication');
-				warn_exit(do_lang_tempcode('UPLOAD_MUST_SYNDICATE',escape_html(get_site_name())));
-			}
+            if (count($remote_urls) == 0) {
+                require_lang('upload_syndication');
+                warn_exit(do_lang_tempcode('UPLOAD_MUST_SYNDICATE',escape_html(get_site_name())));
+            }
 
-			sort_maps_by($remote_urls,1);
+            sort_maps_by($remote_urls,1);
 
-			// The first element (URL in URL pair) of the last URL pair element
-			$last_url=end($remote_urls);
-			$new_url=reset($last_url);
-		}
-	}
+            // The first element (URL in URL pair) of the last URL pair element
+            $last_url = end($remote_urls);
+            $new_url = reset($last_url);
+        }
+    }
 
-	return $new_url;
+    return $new_url;
 }

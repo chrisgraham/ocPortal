@@ -14,14 +14,14 @@
 
 class Hook_members_facebook
 {
-	/**
+    /**
 	 * Get sections to inject to about tab of the member profile.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting sections for
 	 * @return array		List of sections. Each tuple is Tempcode.
 	 */
-	function get_sections($member_id)
-	{
-		return array(do_template('MEMBER_FACEBOOK',array('_GUID'=>'233c4cf6852e67fd2687dadb2ddff4c1','MEMBER_ID'=>strval($member_id))));
-	}
+    public function get_sections($member_id)
+    {
+        return array(do_template('MEMBER_FACEBOOK',array('_GUID' => '233c4cf6852e67fd2687dadb2ddff4c1','MEMBER_ID' => strval($member_id))));
+    }
 }

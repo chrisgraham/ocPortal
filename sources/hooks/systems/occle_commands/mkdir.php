@@ -20,7 +20,7 @@
 
 class Hook_occle_command_mkdir
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,22 +28,29 @@ class Hook_occle_command_mkdir
 	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('mkdir',array('h'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','mkdir'));
-			else $parameters[0]=$occle_fs->_pwd_to_array($parameters[0]);
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('mkdir',array('h'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','mkdir'));
+            } else {
+                $parameters[0] = $occle_fs->_pwd_to_array($parameters[0]);
+            }
 
-			$path=$parameters[0];
-			array_pop($path);
-			if (!$occle_fs->_is_dir($path)) return array('','','',do_lang('NOT_A_DIR','1'));
+            $path = $parameters[0];
+            array_pop($path);
+            if (!$occle_fs->_is_dir($path)) {
+                return array('','','',do_lang('NOT_A_DIR','1'));
+            }
 
-			$success=$occle_fs->make_directory($parameters[0]);
-			if ($success) return array('','',do_lang('SUCCESS'),'');
-			else return array('','','',do_lang('INCOMPLETE_ERROR'));
-		}
-	}
+            $success = $occle_fs->make_directory($parameters[0]);
+            if ($success) {
+                return array('','',do_lang('SUCCESS'),'');
+            } else {
+                return array('','','',do_lang('INCOMPLETE_ERROR'));
+            }
+        }
+    }
 }
-

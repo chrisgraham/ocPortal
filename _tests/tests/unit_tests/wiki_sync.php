@@ -18,13 +18,13 @@
  */
 class wiki_sync_test_set extends ocp_test_case
 {
-	function testOrphanedMedia()
-	{
-		// TODO
-	}
+    public function testOrphanedMedia()
+    {
+        // TODO
+    }
 
-	function testNoWikiPageDupes()
-	{
-		// TODO
-	}
+    public function testNoWikiPageDupes()
+    {
+        // TODO
+    }
 }

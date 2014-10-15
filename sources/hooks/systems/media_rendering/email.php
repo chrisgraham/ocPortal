@@ -20,50 +20,50 @@
 
 class Hook_media_rendering_email
 {
-	/**
+    /**
 	 * Get the label for this media rendering type.
 	 *
 	 * @return string		The label
 	 */
-	function get_type_label()
-	{
-		require_lang('comcode');
-		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
-	}
+    public function get_type_label()
+    {
+        require_lang('comcode');
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+    }
 
-	/**
+    /**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask
 	 */
-	function get_media_type()
-	{
-		return MEDIA_TYPE_ALL;
-	}
+    public function get_media_type()
+    {
+        return MEDIA_TYPE_ALL;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this mime type.
 	 *
 	 * @param  ID_TEXT	The mime type
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_mime_type($mime_type)
-	{
-		return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
-	}
+    public function recognises_mime_type($mime_type)
+    {
+        return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this URL pattern.
 	 *
 	 * @param  URLPATH	URL to pattern match
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_url($url)
-	{
-		return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
-	}
+    public function recognises_url($url)
+    {
+        return MEDIA_RECOG_PRECEDENCE_TRIVIAL;
+    }
 
-	/**
+    /**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
 	 * @param  mixed		URL to render
@@ -73,17 +73,22 @@ class Hook_media_rendering_email
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
-	{
-		if (is_object($url)) $url=$url->evaluate();
+    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    {
+        if (is_object($url)) {
+            $url = $url->evaluate();
+        }
 
-		require_code('mail');
-		global $EMAIL_ATTACHMENTS;
-		if (url_is_local($url)) $url=get_custom_base_url().'/'.$url;
-		if ((!array_key_exists('filename',$attributes)) || ($attributes['filename']==''))
-			$attributes['filename']=urldecode(basename($url));
-		$EMAIL_ATTACHMENTS[$url]=$attributes['filename'];
+        require_code('mail');
+        global $EMAIL_ATTACHMENTS;
+        if (url_is_local($url)) {
+            $url = get_custom_base_url() . '/' . $url;
+        }
+        if ((!array_key_exists('filename',$attributes)) || ($attributes['filename'] == '')) {
+            $attributes['filename'] = urldecode(basename($url));
+        }
+        $EMAIL_ATTACHMENTS[$url] = $attributes['filename'];
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }

@@ -20,22 +20,26 @@
 
 class Hook_page_groupings_collaboration_zone
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('collaboration_zone')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('collaboration_zone')) {
+            return array();
+        }
 
-		if (is_null($member_id)) $member_id=get_member();
+        if (is_null($member_id)) {
+            $member_id = get_member();
+        }
 
-		return array(
-			has_zone_access($member_id,'collaboration')?array('','menu/collaboration',array('admin',array('type'=>'collaboration'),'adminzone'),do_lang_tempcode('_COLLABORATION')):NULL,
-			array('collaboration','menu/collaboration/start',array('about',array(),'collaboration'),do_lang_tempcode('ABOUT')),
-		);
-	}
+        return array(
+            has_zone_access($member_id,'collaboration')?array('','menu/collaboration',array('admin',array('type' => 'collaboration'),'adminzone'),do_lang_tempcode('_COLLABORATION')):null,
+            array('collaboration','menu/collaboration/start',array('about',array(),'collaboration'),do_lang_tempcode('ABOUT')),
+        );
+    }
 }

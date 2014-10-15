@@ -23,14 +23,14 @@
  */
 function init__ocf_members()
 {
-	global $CUSTOM_FIELD_CACHE;
-	$CUSTOM_FIELD_CACHE=array();
-	global $MEMBER_CACHE_FIELD_MAPPINGS;
-	$MEMBER_CACHE_FIELD_MAPPINGS=array();
-	global $PRIMARY_GROUP_MEMBERS_CACHE;
-	$PRIMARY_GROUP_MEMBERS_CACHE=array();
-	global $MAY_WHISPER_CACHE;
-	$MAY_WHISPER_CACHE=array();
+    global $CUSTOM_FIELD_CACHE;
+    $CUSTOM_FIELD_CACHE = array();
+    global $MEMBER_CACHE_FIELD_MAPPINGS;
+    $MEMBER_CACHE_FIELD_MAPPINGS = array();
+    global $PRIMARY_GROUP_MEMBERS_CACHE;
+    $PRIMARY_GROUP_MEMBERS_CACHE = array();
+    global $MAY_WHISPER_CACHE;
+    $MAY_WHISPER_CACHE = array();
 }
 
 /**
@@ -39,21 +39,25 @@ function init__ocf_members()
  * @param  boolean	Whether to only show ones that already have things in (i.e. not default ones)
  * @return array		List of filter categories
  */
-function ocf_get_filter_cats($only_exists_now=false)
+function ocf_get_filter_cats($only_exists_now = false)
 {
-	$filter_rows_a=$GLOBALS['FORUM_DB']->query_select('f_topics',array('DISTINCT t_pt_from_category'),array('t_pt_from'=>get_member()));
-	$filter_rows_b=$GLOBALS['FORUM_DB']->query_select('f_topics',array('DISTINCT t_pt_to_category'),array('t_pt_to'=>get_member()));
-	$filter_cats=array(''=>1);
-	if (!$only_exists_now)
-		$filter_cats[do_lang('TRASH')]=1;
-	if ($GLOBALS['FORUM_DB']->query_select_value('f_special_pt_access','COUNT(*)',array('s_member_id'=>get_member()))>0)
-	$filter_cats[do_lang('INVITED_TO_PTS')]=1;
-	foreach ($filter_rows_a as $filter_row)
-		$filter_cats[$filter_row['t_pt_from_category']]=1;
-	foreach ($filter_rows_b as $filter_row)
-		$filter_cats[$filter_row['t_pt_to_category']]=1;
+    $filter_rows_a = $GLOBALS['FORUM_DB']->query_select('f_topics',array('DISTINCT t_pt_from_category'),array('t_pt_from' => get_member()));
+    $filter_rows_b = $GLOBALS['FORUM_DB']->query_select('f_topics',array('DISTINCT t_pt_to_category'),array('t_pt_to' => get_member()));
+    $filter_cats = array('' => 1);
+    if (!$only_exists_now) {
+        $filter_cats[do_lang('TRASH')] = 1;
+    }
+    if ($GLOBALS['FORUM_DB']->query_select_value('f_special_pt_access','COUNT(*)',array('s_member_id' => get_member()))>0) {
+        $filter_cats[do_lang('INVITED_TO_PTS')] = 1;
+    }
+    foreach ($filter_rows_a as $filter_row) {
+        $filter_cats[$filter_row['t_pt_from_category']] = 1;
+    }
+    foreach ($filter_rows_b as $filter_row) {
+        $filter_cats[$filter_row['t_pt_to_category']] = 1;
+    }
 
-	return array_keys($filter_cats);
+    return array_keys($filter_cats);
 }
 
 /**
@@ -64,10 +68,11 @@ function ocf_get_filter_cats($only_exists_now=false)
  */
 function ocf_authusername_is_bound_via_httpauth($authusername)
 {
-	$ret=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_password_compat_scheme'=>'httpauth','m_pass_hash_salted'=>$authusername));
-	if (is_null($ret))
-		$ret=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members WHERE '.db_string_not_equal_to('m_password_compat_scheme','').' AND '.db_string_equal_to('m_username',$authusername));
-	return $ret;
+    $ret = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_password_compat_scheme' => 'httpauth','m_pass_hash_salted' => $authusername));
+    if (is_null($ret)) {
+        $ret = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE ' . db_string_not_equal_to('m_password_compat_scheme','') . ' AND ' . db_string_equal_to('m_username',$authusername));
+    }
+    return $ret;
 }
 
 /**
@@ -78,11 +83,13 @@ function ocf_authusername_is_bound_via_httpauth($authusername)
  */
 function ocf_is_ldap_member($member_id)
 {
-	global $LDAP_CONNECTION;
-	if (is_null($LDAP_CONNECTION)) return false;
+    global $LDAP_CONNECTION;
+    if (is_null($LDAP_CONNECTION)) {
+        return false;
+    }
 
-	$scheme=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
-	return $scheme=='ldap';
+    $scheme = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
+    return $scheme == 'ldap';
 }
 
 /**
@@ -93,8 +100,8 @@ function ocf_is_ldap_member($member_id)
  */
 function ocf_is_httpauth_member($member_id)
 {
-	$scheme=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
-	return $scheme=='httpauth';
+    $scheme = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_password_compat_scheme');
+    return $scheme == 'httpauth';
 }
 
 /**
@@ -111,65 +118,83 @@ function ocf_is_httpauth_member($member_id)
  * @param  ?boolean	That are to go on the join form (NULL: don't care).
  * @return array		A list of rows of such fields.
  */
-function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
+function ocf_get_all_custom_fields_match($groups = null,$public_view = null,$owner_view = null,$owner_set = null,$required = null,$show_in_posts = null,$show_in_post_previews = null,$special_start = 0,$show_on_join_form = null)
 {
-	global $CUSTOM_FIELD_CACHE;
-	$x=serialize(array($public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start));
-	if (array_key_exists($x,$CUSTOM_FIELD_CACHE)) // ocPortal offers a wide array of features. It's multi dimensional. ocPortal.. entering the 6th dimension. hyper-hyper-time.
-	{
-		$result=$CUSTOM_FIELD_CACHE[$x];
-	} else
-	{
-		// Load up filters
-		$hooks=find_all_hooks('systems','ocf_cpf_filter');
-		$to_keep=array();
-		foreach (array_keys($hooks) as $hook)
-		{
-			require_code('hooks/systems/ocf_cpf_filter/'.$hook);
-			$_hook=object_factory('Hook_ocf_cpf_filter_'.$hook,true);
-			if ($_hook===NULL) continue;
-			$to_keep+=$_hook->to_enable();
-		}
+    global $CUSTOM_FIELD_CACHE;
+    $x = serialize(array($public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start));
+    if (array_key_exists($x,$CUSTOM_FIELD_CACHE)) { // ocPortal offers a wide array of features. It's multi dimensional. ocPortal.. entering the 6th dimension. hyper-hyper-time.
+        $result = $CUSTOM_FIELD_CACHE[$x];
+    } else {
+        // Load up filters
+        $hooks = find_all_hooks('systems','ocf_cpf_filter');
+        $to_keep = array();
+        foreach (array_keys($hooks) as $hook) {
+            require_code('hooks/systems/ocf_cpf_filter/' . $hook);
+            $_hook = object_factory('Hook_ocf_cpf_filter_' . $hook,true);
+            if ($_hook === NULL) {
+                continue;
+            }
+            $to_keep += $_hook->to_enable();
+        }
 
-		$where='WHERE 1=1 ';
-		if ($public_view!==NULL) $where.=' AND cf_public_view='.strval($public_view);
-		if ($owner_view!==NULL) $where.=' AND cf_owner_view='.strval($owner_view);
-		if ($owner_set!==NULL) $where.=' AND cf_owner_set='.strval($owner_set);
-		if ($required!==NULL) $where.=' AND cf_required='.strval($required);
-		if ($show_in_posts!==NULL) $where.=' AND cf_show_in_posts='.strval($show_in_posts);
-		if ($show_in_post_previews!==NULL) $where.=' AND cf_show_in_post_previews='.strval($show_in_post_previews);
-		if ($special_start==1) $where.=' AND '.$GLOBALS['SITE_DB']->translate_field_ref('cf_name').' LIKE \''.db_encode_like('ocp_%').'\'';
-		if ($show_on_join_form!==NULL) $where.=' AND cf_show_on_join_form='.strval($show_on_join_form);
+        $where = 'WHERE 1=1 ';
+        if ($public_view !== NULL) {
+            $where .= ' AND cf_public_view=' . strval($public_view);
+        }
+        if ($owner_view !== NULL) {
+            $where .= ' AND cf_owner_view=' . strval($owner_view);
+        }
+        if ($owner_set !== NULL) {
+            $where .= ' AND cf_owner_set=' . strval($owner_set);
+        }
+        if ($required !== NULL) {
+            $where .= ' AND cf_required=' . strval($required);
+        }
+        if ($show_in_posts !== NULL) {
+            $where .= ' AND cf_show_in_posts=' . strval($show_in_posts);
+        }
+        if ($show_in_post_previews !== NULL) {
+            $where .= ' AND cf_show_in_post_previews=' . strval($show_in_post_previews);
+        }
+        if ($special_start == 1) {
+            $where .= ' AND ' . $GLOBALS['SITE_DB']->translate_field_ref('cf_name') . ' LIKE \'' . db_encode_like('ocp_%') . '\'';
+        }
+        if ($show_on_join_form !== NULL) {
+            $where .= ' AND cf_show_on_join_form=' . strval($show_on_join_form);
+        }
 
-		global $TABLE_LANG_FIELDS_CACHE;
-		$_result=$GLOBALS['FORUM_DB']->query('SELECT f.* FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_custom_fields f '.$where.' ORDER BY cf_order',NULL,NULL,false,true,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
-		$result=array();
-		foreach ($_result as $row)
-		{
-			$row['trans_name']=get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB']);
+        global $TABLE_LANG_FIELDS_CACHE;
+        $_result = $GLOBALS['FORUM_DB']->query('SELECT f.* FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_custom_fields f ' . $where . ' ORDER BY cf_order',null,null,false,true,array_key_exists('f_custom_fields',$TABLE_LANG_FIELDS_CACHE)?$TABLE_LANG_FIELDS_CACHE['f_custom_fields']:array());
+        $result = array();
+        foreach ($_result as $row) {
+            $row['trans_name'] = get_translated_text($row['cf_name'],$GLOBALS['FORUM_DB']);
 
-			if ((substr($row['trans_name'],0,4)=='ocp_') && ($special_start==0))
-			{
-				// See if it gets filtered
-				if (!array_key_exists(substr($row['trans_name'],4),$to_keep)) continue;
+            if ((substr($row['trans_name'],0,4) == 'ocp_') && ($special_start == 0)) {
+                // See if it gets filtered
+                if (!array_key_exists(substr($row['trans_name'],4),$to_keep)) {
+                    continue;
+                }
 
-				require_lang('ocf');
-				$test=do_lang('SPECIAL_CPF__'.$row['trans_name'],NULL,NULL,NULL,NULL,false);
-				if ($test!==NULL) $row['trans_name']=$test;
-			}
-			$result[]=$row;
-		}
+                require_lang('ocf');
+                $test = do_lang('SPECIAL_CPF__' . $row['trans_name'],null,null,null,null,false);
+                if ($test !== NULL) {
+                    $row['trans_name'] = $test;
+                }
+            }
+            $result[] = $row;
+        }
 
-		$CUSTOM_FIELD_CACHE[$x]=$result;
-	}
+        $CUSTOM_FIELD_CACHE[$x] = $result;
+    }
 
-	$result2=array();
-	foreach ($result as $row)
-	{
-		if (($row['cf_only_group']=='') || ($groups===NULL) || (count(array_intersect(explode(',',$row['cf_only_group']),$groups))!=0)) $result2[]=$row;
-	}
+    $result2 = array();
+    foreach ($result as $row) {
+        if (($row['cf_only_group'] == '') || ($groups === NULL) || (count(array_intersect(explode(',',$row['cf_only_group']),$groups)) != 0)) {
+            $result2[] = $row;
+        }
+    }
 
-	return $result2;
+    return $result2;
 }
 
 /**
@@ -187,141 +212,139 @@ function ocf_get_all_custom_fields_match($groups=NULL,$public_view=NULL,$owner_v
  * @param  ?boolean	That are to go on the join form (NULL: don't care).
  * @return array		A mapping of field title to a map of details: 'RAW' as the raw field value, 'RENDERED' as the rendered field value, 'FIELD_ID' to the field ID, 'EDITABILITY' defining if fractional editing can work on this
  */
-function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$owner_view=NULL,$owner_set=NULL,$encrypted=NULL,$required=NULL,$show_in_posts=NULL,$show_in_post_previews=NULL,$special_start=0,$show_on_join_form=NULL)
+function ocf_get_all_custom_fields_match_member($member_id,$public_view = null,$owner_view = null,$owner_set = null,$encrypted = null,$required = null,$show_in_posts = null,$show_in_post_previews = null,$special_start = 0,$show_on_join_form = null)
 {
-	$fields_to_show=ocf_get_all_custom_fields_match($GLOBALS['FORUM_DRIVER']->get_members_groups($member_id),$public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start,$show_on_join_form);
-	$custom_fields=array();
-	$member_mappings=ocf_get_custom_field_mappings($member_id);
-	$member_value=mixed(); // Initialise type to mixed
-	$all_cpf_permissions=((get_member()==$member_id)||$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))?/*no restricts if you are the member or a super-admin*/array():list_to_map('field_id',$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id'=>$member_id)));
+    $fields_to_show = ocf_get_all_custom_fields_match($GLOBALS['FORUM_DRIVER']->get_members_groups($member_id),$public_view,$owner_view,$owner_set,$required,$show_in_posts,$show_in_post_previews,$special_start,$show_on_join_form);
+    $custom_fields = array();
+    $member_mappings = ocf_get_custom_field_mappings($member_id);
+    $member_value = mixed(); // Initialise type to mixed
+    $all_cpf_permissions = ((get_member() == $member_id) || $GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))?/*no restricts if you are the member or a super-admin*/array():list_to_map('field_id',$GLOBALS['FORUM_DB']->query_select('f_member_cpf_perms',array('*'),array('member_id' => $member_id)));
 
-	require_code('fields');
+    require_code('fields');
 
-	$editable_with_comcode=array('long_text'=>1,'long_trans'=>1,'short_trans'=>1);
-	$editable_without_comcode=array('list'=>1,'radiolist'=>1,'short_text'=>1,'codename'=>1,'url'=>1,'integer'=>1,'float'=>1,'email'=>1);
+    $editable_with_comcode = array('long_text' => 1,'long_trans' => 1,'short_trans' => 1);
+    $editable_without_comcode = array('list' => 1,'radiolist' => 1,'short_text' => 1,'codename' => 1,'url' => 1,'integer' => 1,'float' => 1,'email' => 1);
 
-	foreach ($fields_to_show as $i=>$field_to_show)
-	{
-		$member_value=$member_mappings['field_'.strval($field_to_show['id'])];
-		if (!is_string($member_value))
-		{
-			if (is_null($member_value)) $member_value='';
-			elseif (is_float($member_value)) $member_value=float_to_raw_string($member_value);
-			else $member_value=strval($member_value);
-		}
+    foreach ($fields_to_show as $i => $field_to_show) {
+        $member_value = $member_mappings['field_' . strval($field_to_show['id'])];
+        if (!is_string($member_value)) {
+            if (is_null($member_value)) {
+                $member_value = '';
+            } elseif (is_float($member_value)) {
+                $member_value = float_to_raw_string($member_value);
+            } else {
+                $member_value = strval($member_value);
+            }
+        }
 
-		// Decrypt the value if appropriate
-		if ((array_key_exists('cf_encrypted',$field_to_show)) && ($field_to_show['cf_encrypted']==1))
-		{
-			require_code('encryption');
-			if ((is_encryption_enabled()) && (!is_null(post_param('decrypt',NULL))))
-			{
-				$member_value=decrypt_data($member_value,post_param('decrypt'));
-			}
-		}
+        // Decrypt the value if appropriate
+        if ((array_key_exists('cf_encrypted',$field_to_show)) && ($field_to_show['cf_encrypted'] == 1)) {
+            require_code('encryption');
+            if ((is_encryption_enabled()) && (!is_null(post_param('decrypt',null)))) {
+                $member_value = decrypt_data($member_value,post_param('decrypt'));
+            }
+        }
 
-		$ob=get_fields_hook($field_to_show['cf_type']);
-		list(,,$storage_type)=$ob->get_field_value_row_bits($field_to_show);
+        $ob = get_fields_hook($field_to_show['cf_type']);
+        list(,,$storage_type) = $ob->get_field_value_row_bits($field_to_show);
 
-		if (strpos($storage_type,'_trans')!==false)
-		{
-			if ((is_null($member_value)) || ($member_value=='0'))
-			{
-				$member_value_raw='';
-				$member_value=''; // This is meant to be '' for blank, not new ocp_tempcode()
-			} else
-			{
-				$member_value_raw=get_translated_text($member_mappings['field_'.strval($field_to_show['id'])],$GLOBALS['FORUM_DB']);
-				$member_value=get_translated_tempcode('f_member_custom_fields',$member_mappings,'field_'.strval($field_to_show['id']),$GLOBALS['FORUM_DB']);
-				if ((is_object($member_value)) && ($member_value->is_empty())) $member_value='';
-			}
-		} else
-		{
-			$member_value_raw=$member_value;
-		}
+        if (strpos($storage_type,'_trans') !== false) {
+            if ((is_null($member_value)) || ($member_value == '0')) {
+                $member_value_raw = '';
+                $member_value = ''; // This is meant to be '' for blank, not new ocp_tempcode()
+            } else {
+                $member_value_raw = get_translated_text($member_mappings['field_' . strval($field_to_show['id'])],$GLOBALS['FORUM_DB']);
+                $member_value = get_translated_tempcode('f_member_custom_fields',$member_mappings,'field_' . strval($field_to_show['id']),$GLOBALS['FORUM_DB']);
+                if ((is_object($member_value)) && ($member_value->is_empty())) {
+                    $member_value = '';
+                }
+            }
+        } else {
+            $member_value_raw = $member_value;
+        }
 
-		// Get custom permissions for the current CPF
-		$cpf_permissions=array_key_exists($field_to_show['id'],$all_cpf_permissions)?$all_cpf_permissions[$field_to_show['id']]:array();
+        // Get custom permissions for the current CPF
+        $cpf_permissions = array_key_exists($field_to_show['id'],$all_cpf_permissions)?$all_cpf_permissions[$field_to_show['id']]:array();
 
-		$display_cpf=true;
+        $display_cpf = true;
 
-		// If there are custom permissions set and we are not showing to all
-		if ((array_key_exists(0,$cpf_permissions)) && (!is_null($public_view)))
-		{
-			$display_cpf=false;
+        // If there are custom permissions set and we are not showing to all
+        if ((array_key_exists(0,$cpf_permissions)) && (!is_null($public_view))) {
+            $display_cpf = false;
 
-			// Negative ones
-			if ($cpf_permissions[0]['guest_view']==1) $display_cpf=true;
-			if (!is_guest())
-			{
-				if ($cpf_permissions[0]['member_view']==1) $display_cpf=true;
-			}
+            // Negative ones
+            if ($cpf_permissions[0]['guest_view'] == 1) {
+                $display_cpf = true;
+            }
+            if (!is_guest()) {
+                if ($cpf_permissions[0]['member_view'] == 1) {
+                    $display_cpf = true;
+                }
+            }
 
-			if (!$display_cpf) // Guard this, as the code will take some time to run
-			{
-				if ($cpf_permissions[0]['friend_view']==1)
-				{
-					if (addon_installed('chat'))
-					{
-						if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_liked',array('member_likes'=>$member_id,'member_liked'=>get_member()))))
-							$display_cpf=true;
-					}
-				}
+            if (!$display_cpf) { // Guard this, as the code will take some time to run
+                if ($cpf_permissions[0]['friend_view'] == 1) {
+                    if (addon_installed('chat')) {
+                        if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends','member_liked',array('member_likes' => $member_id,'member_liked' => get_member())))) {
+                            $display_cpf = true;
+                        }
+                    }
+                }
 
-				if (!is_guest())
-				{
-					if ($cpf_permissions[0]['group_view']=='all')
-					{
-						$display_cpf=true;
-					} else
-					{
-						if (strlen($cpf_permissions[0]['group_view'])>0)
-						{
-							require_code('ocfiltering');
+                if (!is_guest()) {
+                    if ($cpf_permissions[0]['group_view'] == 'all') {
+                        $display_cpf = true;
+                    } else {
+                        if (strlen($cpf_permissions[0]['group_view'])>0) {
+                            require_code('ocfiltering');
 
-							$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,false,NULL,$member_id);
+                            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,false,null,$member_id);
 
-							$groups_to_search=array();
-							foreach (array_keys($groups) as $group_id)
-							{
-								$groups_to_search[$group_id]=NULL;
-							}
-							$matched_groups=ocfilter_to_idlist_using_memory($cpf_permissions[0]['group_view'],$groups_to_search);
+                            $groups_to_search = array();
+                            foreach (array_keys($groups) as $group_id) {
+                                $groups_to_search[$group_id] = null;
+                            }
+                            $matched_groups = ocfilter_to_idlist_using_memory($cpf_permissions[0]['group_view'],$groups_to_search);
 
-							if (count($matched_groups)>0)
-							{
-								$display_cpf=true;
-							}
-						}
-					}
-				}
-			}
-		}
+                            if (count($matched_groups)>0) {
+                                $display_cpf = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-		if ($display_cpf)
-		{
-			$rendered_value=$ob->render_field_value($field_to_show,$member_value,$i,NULL,'f_members',$member_id,'id','field_'.strval($field_to_show['id']),$member_id);
+        if ($display_cpf) {
+            $rendered_value = $ob->render_field_value($field_to_show,$member_value,$i,null,'f_members',$member_id,'id','field_' . strval($field_to_show['id']),$member_id);
 
-			$editability=mixed(); // If stays as NULL, not editable
-			if (array_key_exists($field_to_show['cf_type'],$editable_with_comcode)) $editability=true; // Editable: Supports Comcode
-			elseif (array_key_exists($field_to_show['cf_type'],$editable_without_comcode)) $editability=false; // Editable: Does not support Comcode
+            $editability = mixed(); // If stays as NULL, not editable
+            if (array_key_exists($field_to_show['cf_type'],$editable_with_comcode)) {
+                $editability = true;
+            } // Editable: Supports Comcode
+            elseif (array_key_exists($field_to_show['cf_type'],$editable_without_comcode)) {
+                $editability = false;
+            } // Editable: Does not support Comcode
 
-			$edit_type='line';
-			if (in_array($field_to_show['cf_type'],array('list','radiolist'))) $edit_type=$field_to_show['cf_default'];
-			elseif (in_array($field_to_show['cf_type'],array('long_text','long_trans'))) $edit_type='textarea';
+            $edit_type = 'line';
+            if (in_array($field_to_show['cf_type'],array('list','radiolist'))) {
+                $edit_type = $field_to_show['cf_default'];
+            } elseif (in_array($field_to_show['cf_type'],array('long_text','long_trans'))) {
+                $edit_type = 'textarea';
+            }
 
-			$custom_fields[$field_to_show['trans_name']]=array(
-				'RAW'=>$member_value_raw,
-				'RENDERED'=>$rendered_value,
-				'FIELD_ID'=>strval($field_to_show['id']),
-				'EDITABILITY'=>$editability,
-				'TYPE'=>$field_to_show['cf_type'],
-				'EDIT_TYPE'=>$edit_type,
-			);
-		}
-	}
+            $custom_fields[$field_to_show['trans_name']] = array(
+                'RAW' => $member_value_raw,
+                'RENDERED' => $rendered_value,
+                'FIELD_ID' => strval($field_to_show['id']),
+                'EDITABILITY' => $editability,
+                'TYPE' => $field_to_show['cf_type'],
+                'EDIT_TYPE' => $edit_type,
+            );
+        }
+    }
 
-	return $custom_fields;
+    return $custom_fields;
 }
 
 /**
@@ -332,15 +355,13 @@ function ocf_get_all_custom_fields_match_member($member_id,$public_view=NULL,$ow
  */
 function find_cpf_field_id($title)
 {
-	$fields_to_show=ocf_get_all_custom_fields_match(NULL);
-	foreach ($fields_to_show as $field_to_show)
-	{
-		if ($field_to_show['trans_name']==$title)
-		{
-			return $field_to_show['id'];
-		}
-	}
-	return NULL;
+    $fields_to_show = ocf_get_all_custom_fields_match(null);
+    foreach ($fields_to_show as $field_to_show) {
+        if ($field_to_show['trans_name'] == $title) {
+            return $field_to_show['id'];
+        }
+    }
+    return NULL;
 }
 
 /**
@@ -351,54 +372,47 @@ function find_cpf_field_id($title)
  */
 function ocf_get_custom_field_mappings($member_id)
 {
-	require_code('fields');
+    require_code('fields');
 
-	global $MEMBER_CACHE_FIELD_MAPPINGS;
-	if (!array_key_exists($member_id,$MEMBER_CACHE_FIELD_MAPPINGS))
-	{
-		$query=$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id'=>$member_id),'',1);
-		if (!array_key_exists(0,$query)) // Repair
-		{
-			$value=mixed();
+    global $MEMBER_CACHE_FIELD_MAPPINGS;
+    if (!array_key_exists($member_id,$MEMBER_CACHE_FIELD_MAPPINGS)) {
+        $query = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id' => $member_id),'',1);
+        if (!array_key_exists(0,$query)) { // Repair
+            $value = mixed();
 
-			$row=array('mf_member_id'=>$member_id);
+            $row = array('mf_member_id' => $member_id);
 
-			$all_fields_regardless=$GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
-			foreach ($all_fields_regardless as $field)
-			{
-				$ob=get_fields_hook($field['cf_type']);
-				list(,$value,$storage_type)=$ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
+            $all_fields_regardless = $GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type'));
+            foreach ($all_fields_regardless as $field) {
+                $ob = get_fields_hook($field['cf_type']);
+                list(,$value,$storage_type) = $ob->get_field_value_row_bits($field,false,'',$GLOBALS['FORUM_DB']);
 
-				$row['field_'.strval($field['id'])]=$value;
-				if (is_string($value)) // Should not normally be needed, but the grabbing from cf_default further up is not converted yet
-				{
-					switch ($storage_type)
-					{
-						case 'short_trans':
-						case 'long_trans':
-							if (!is_null($value))
-							{
-								$row+=insert_lang_comcode('field_'.strval($field['id']),$value,3,$GLOBALS['FORUM_DB']);
-							} else
-							{
-								$row['field_'.strval($field['id'])]=NULL;
-							}
-							break;
-						case 'integer':
-							$row['field_'.strval($field['id'])]=intval($value);
-							break;
-						case 'float':
-							$row['field_'.strval($field['id'])]=floatval($value);
-							break;
-					}
-				}
-			}
-			$GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
-			$query=array($row);
-		}
-		$MEMBER_CACHE_FIELD_MAPPINGS[$member_id]=$query[0];
-	}
-	return $MEMBER_CACHE_FIELD_MAPPINGS[$member_id];
+                $row['field_' . strval($field['id'])] = $value;
+                if (is_string($value)) { // Should not normally be needed, but the grabbing from cf_default further up is not converted yet
+                    switch ($storage_type) {
+                        case 'short_trans':
+                        case 'long_trans':
+                            if (!is_null($value)) {
+                                $row += insert_lang_comcode('field_' . strval($field['id']),$value,3,$GLOBALS['FORUM_DB']);
+                            } else {
+                                $row['field_' . strval($field['id'])] = null;
+                            }
+                            break;
+                        case 'integer':
+                            $row['field_' . strval($field['id'])] = intval($value);
+                            break;
+                        case 'float':
+                            $row['field_' . strval($field['id'])] = floatval($value);
+                            break;
+                    }
+                }
+            }
+            $GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
+            $query = array($row);
+        }
+        $MEMBER_CACHE_FIELD_MAPPINGS[$member_id] = $query[0];
+    }
+    return $MEMBER_CACHE_FIELD_MAPPINGS[$member_id];
 }
 
 /**
@@ -409,16 +423,14 @@ function ocf_get_custom_field_mappings($member_id)
  */
 function ocf_get_custom_fields_member($member_id)
 {
-	$row=ocf_get_custom_field_mappings($member_id);
-	$result=array();
-	foreach ($row as $column=>$val)
-	{
-		if (preg_match('#^field\_\d+$#',$column)!=0)
-		{
-			$result[intval(substr($column,6))]=$val;
-		}
-	}
-	return $result;
+    $row = ocf_get_custom_field_mappings($member_id);
+    $result = array();
+    foreach ($row as $column => $val) {
+        if (preg_match('#^field\_\d+$#',$column) != 0) {
+            $result[intval(substr($column,6))] = $val;
+        }
+    }
+    return $result;
 }
 
 /**
@@ -429,16 +441,16 @@ function ocf_get_custom_fields_member($member_id)
  */
 function ocf_get_member_primary_group($member_id)
 {
-	global $PRIMARY_GROUP_MEMBERS_CACHE;
-	if (array_key_exists($member_id,$PRIMARY_GROUP_MEMBERS_CACHE)) return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
+    global $PRIMARY_GROUP_MEMBERS_CACHE;
+    if (array_key_exists($member_id,$PRIMARY_GROUP_MEMBERS_CACHE)) {
+        return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
+    }
 
-	if (ocf_is_ldap_member($member_id))
-	{
-		ocf_ldap_get_member_primary_group($member_id);
-	} else
-	{
-		$PRIMARY_GROUP_MEMBERS_CACHE[$member_id]=$GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_primary_group');
-	}
+    if (ocf_is_ldap_member($member_id)) {
+        ocf_ldap_get_member_primary_group($member_id);
+    } else {
+        $PRIMARY_GROUP_MEMBERS_CACHE[$member_id] = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_primary_group');
+    }
 
-	return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
+    return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
 }

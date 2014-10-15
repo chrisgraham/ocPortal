@@ -20,7 +20,7 @@
 
 class Hook_occle_command_commands
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,18 +28,17 @@ class Hook_occle_command_commands
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('commands',array('h'),array()),'','');
-		else
-		{
-			$hooks=find_all_hooks('systems','occle_commands');
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('commands',array('h'),array()),'','');
+        } else {
+            $hooks = find_all_hooks('systems','occle_commands');
 
-			$commands=array_keys($hooks);
-			sort($commands);
+            $commands = array_keys($hooks);
+            sort($commands);
 
-			return array('',do_template('OCCLE_COMMANDS',array('_GUID'=>'bd0354a12a05a6116be62f4d77b47657','COMMANDS'=>$commands)),'','');
-		}
-	}
+            return array('',do_template('OCCLE_COMMANDS',array('_GUID' => 'bd0354a12a05a6116be62f4d77b47657','COMMANDS' => $commands)),'','');
+        }
+    }
 }
-

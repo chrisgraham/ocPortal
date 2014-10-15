@@ -25,23 +25,23 @@ require_code('crud_module');
  */
 class Module_cms_downloads extends standard_crud_module
 {
-	var $lang_type='DOWNLOAD';
-	var $select_name='NAME';
-	var $permissions_require='mid';
-	var $permissions_cat_require='downloads';
-	var $permissions_cat_name='category_id';
-	var $user_facing=true;
-	var $seo_type='downloads_download';
-	var $upload='file';
-	var $javascript='var url=document.getElementById(\'url\'); var form=url.form; var crf=function() { var s=url.value!=\'\'; if (form.elements[\'copy_to_server\']) form.elements[\'copy_to_server\'].disabled=!s; if (form.elements[\'file_size\']) form.elements[\'file_size\'].disabled=!s; }; crf(); url.onchange=crf; url.onkeyup=crf; var cost=document.getElementById(\'cost\'); if (cost) { var form=cost.form; var crf2=function() { var s=(cost.value!=\'\') && (cost.value!=\'0\'); if (form.elements[\'submitter_gets_points\']) form.elements[\'submitter_gets_points\'].disabled=!s; }; crf2(); cost.onchange=crf2; cost.onkeyup=crf2; }';
-	var $content_type='download';
-	var $menu_label='SECTION_DOWNLOADS';
-	var $table='download_downloads';
-	var $supports_mass_delete=true;
+    public $lang_type = 'DOWNLOAD';
+    public $select_name = 'NAME';
+    public $permissions_require = 'mid';
+    public $permissions_cat_require = 'downloads';
+    public $permissions_cat_name = 'category_id';
+    public $user_facing = true;
+    public $seo_type = 'downloads_download';
+    public $upload = 'file';
+    public $javascript = 'var url=document.getElementById(\'url\'); var form=url.form; var crf=function() { var s=url.value!=\'\'; if (form.elements[\'copy_to_server\']) form.elements[\'copy_to_server\'].disabled=!s; if (form.elements[\'file_size\']) form.elements[\'file_size\'].disabled=!s; }; crf(); url.onchange=crf; url.onkeyup=crf; var cost=document.getElementById(\'cost\'); if (cost) { var form=cost.form; var crf2=function() { var s=(cost.value!=\'\') && (cost.value!=\'0\'); if (form.elements[\'submitter_gets_points\']) form.elements[\'submitter_gets_points\'].disabled=!s; }; crf2(); cost.onchange=crf2; cost.onkeyup=crf2; }';
+    public $content_type = 'download';
+    public $menu_label = 'SECTION_DOWNLOADS';
+    public $table = 'download_downloads';
+    public $supports_mass_delete = true;
 
-	var $donext_type=NULL;
+    public $donext_type = null;
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -50,256 +50,263 @@ class Module_cms_downloads extends standard_crud_module
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		$ret=array(
-			'misc'=>array('MANAGE_DOWNLOADS','menu/rich_content/downloads'),
-		);
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        $ret = array(
+            'misc' => array('MANAGE_DOWNLOADS','menu/rich_content/downloads'),
+        );
 
-		$this->cat_crud_module=class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
-		$this->alt_crud_module=class_exists('Mx_cms_downloads_alt')?new Mx_cms_downloads_alt():new Module_cms_downloads_alt();
+        $this->cat_crud_module = class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
+        $this->alt_crud_module = class_exists('Mx_cms_downloads_alt')?new Mx_cms_downloads_alt():new Module_cms_downloads_alt();
 
-		$ret+=parent::get_entry_points();
+        $ret += parent::get_entry_points();
 
-		$ret+=array(
-			'av'=>array('ADD_DOWNLOAD_LICENCE','menu/cms/downloads/add_one_licence'),
-			'ev'=>array('EDIT_DOWNLOAD_LICENCE','menu/cms/downloads/edit_one_licence'),
-		);
+        $ret += array(
+            'av' => array('ADD_DOWNLOAD_LICENCE','menu/cms/downloads/add_one_licence'),
+            'ev' => array('EDIT_DOWNLOAD_LICENCE','menu/cms/downloads/edit_one_licence'),
+        );
 
-		if (has_privilege(get_member(),'mass_import','cms_downloads'))
-		{
-			if (function_exists('ftp_connect'))
-				$ret['import']=array('FTP_DOWNLOADS','menu/_generic_admin/import');
+        if (has_privilege(get_member(),'mass_import','cms_downloads')) {
+            if (function_exists('ftp_connect')) {
+                $ret['import'] = array('FTP_DOWNLOADS','menu/_generic_admin/import');
+            }
 
-			$ret['import2']=array('FILESYSTEM_DOWNLOADS','menu/_generic_admin/import');
-		}
+            $ret['import2'] = array('FILESYSTEM_DOWNLOADS','menu/_generic_admin/import');
+        }
 
-		if ($support_crosslinks)
-		{
-			require_code('fields');
-			$ret+=manage_custom_fields_entry_points('download')+manage_custom_fields_entry_points('download_category');
-		}
-		return $ret;
-	}
+        if ($support_crosslinks) {
+            require_code('fields');
+            $ret += manage_custom_fields_entry_points('download')+manage_custom_fields_entry_points('download_category');
+        }
+        return $ret;
+    }
 
-	/**
+    /**
 	 * Find privileges defined as overridable by this module.
 	 *
 	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_privilege_overrides()
-	{
-		require_lang('downloads');
-		return array('view_private_content'=>0,'download'=>1,'mass_import'=>0,'submit_cat_midrange_content'=>array(0,'ADD_DOWNLOAD_CATEGORY'),'edit_cat_midrange_content'=>array(0,'EDIT_DOWNLOAD_CATEGORY'),'delete_cat_midrange_content'=>array(0,'DELETE_DOWNLOAD_CATEGORY'),'submit_midrange_content'=>array(1,'ADD_DOWNLOAD'),'bypass_validation_midrange_content'=>array(1,'BYPASS_DOWNLOAD_VALIDATION'),'edit_own_midrange_content'=>array(1,'EDIT_OWN_DOWNLOAD'),'edit_midrange_content'=>array(1,'EDIT_DOWNLOAD'),'delete_own_midrange_content'=>array(1,'DELETE_OWN_DOWNLOAD'),'delete_midrange_content'=>array(1,'DELETE_DOWNLOAD'));
-	}
+    public function get_privilege_overrides()
+    {
+        require_lang('downloads');
+        return array('view_private_content' => 0,'download' => 1,'mass_import' => 0,'submit_cat_midrange_content' => array(0,'ADD_DOWNLOAD_CATEGORY'),'edit_cat_midrange_content' => array(0,'EDIT_DOWNLOAD_CATEGORY'),'delete_cat_midrange_content' => array(0,'DELETE_DOWNLOAD_CATEGORY'),'submit_midrange_content' => array(1,'ADD_DOWNLOAD'),'bypass_validation_midrange_content' => array(1,'BYPASS_DOWNLOAD_VALIDATION'),'edit_own_midrange_content' => array(1,'EDIT_OWN_DOWNLOAD'),'edit_midrange_content' => array(1,'EDIT_DOWNLOAD'),'delete_own_midrange_content' => array(1,'DELETE_OWN_DOWNLOAD'),'delete_midrange_content' => array(1,'DELETE_DOWNLOAD'));
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true,$type=NULL)
-	{
-		$this->cat_crud_module=class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
-		$this->alt_crud_module=class_exists('Mx_cms_downloads_alt')?new Mx_cms_downloads_alt():new Module_cms_downloads_alt();
-		$GLOBALS['MODULE_CMS_DOWNLOADS']=$this;
+    public function pre_run($top_level = true,$type = null)
+    {
+        $this->cat_crud_module = class_exists('Mx_cms_downloads_cat')?new Mx_cms_downloads_cat():new Module_cms_downloads_cat();
+        $this->alt_crud_module = class_exists('Mx_cms_downloads_alt')?new Mx_cms_downloads_alt():new Module_cms_downloads_alt();
+        $GLOBALS['MODULE_CMS_DOWNLOADS'] = $this;
 
-		$type=get_param('type','misc');
+        $type = get_param('type','misc');
 
-		require_lang('downloads');
+        require_lang('downloads');
 
-		inform_non_canonical_parameter('parent_id');
-		inform_non_canonical_parameter('validated');
-		inform_non_canonical_parameter('cat');
+        inform_non_canonical_parameter('parent_id');
+        inform_non_canonical_parameter('validated');
+        inform_non_canonical_parameter('cat');
 
-		set_helper_panel_tutorial('tut_downloads');
+        set_helper_panel_tutorial('tut_downloads');
 
-		if ($type=='import' || $type=='_import')
-		{
-			$this->title=get_screen_title('FTP_DOWNLOADS');
-		}
+        if ($type == 'import' || $type == '_import') {
+            $this->title = get_screen_title('FTP_DOWNLOADS');
+        }
 
-		if ($type=='import2' || $type=='_import2')
-		{
-			$this->title=get_screen_title('FILESYSTEM_DOWNLOADS');
-		}
+        if ($type == 'import2' || $type == '_import2') {
+            $this->title = get_screen_title('FILESYSTEM_DOWNLOADS');
+        }
 
-		if ($type=='import')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS'))));
-		}
+        if ($type == 'import') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS'))));
+        }
 
-		if ($type=='_import')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FTP_DOWNLOADS'))));
-			breadcrumb_set_self(do_lang_tempcode('DONE'));
-		}
+        if ($type == '_import') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FTP_DOWNLOADS'))));
+            breadcrumb_set_self(do_lang_tempcode('DONE'));
+        }
 
-		if ($type=='import2')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS'))));
-		}
+        if ($type == 'import2') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS'))));
+        }
 
-		if ($type=='_import2')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FILESYSTEM_DOWNLOADS'))));
-			breadcrumb_set_self(do_lang_tempcode('DONE'));
-		}
+        if ($type == '_import2') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_DOWNLOADS')),array('_SELF:_SELF:import',do_lang_tempcode('FILESYSTEM_DOWNLOADS'))));
+            breadcrumb_set_self(do_lang_tempcode('DONE'));
+        }
 
-		return parent::pre_run($top_level);
-	}
+        return parent::pre_run($top_level);
+    }
 
-	/**
+    /**
 	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
-	function run_start($type)
-	{
-		require_code('downloads');
-		require_code('downloads2');
-		require_css('downloads');
+    public function run_start($type)
+    {
+        require_code('downloads');
+        require_code('downloads2');
+        require_css('downloads');
 
-		// Decide what to do
-		if ($type=='misc') return $this->misc();
-		if ($type=='import') return $this->import_interface();
-		if ($type=='_import') return $this->_import();
-		if ($type=='import2') return $this->import_interface2();
-		if ($type=='_import2') return $this->_import2();
+        // Decide what to do
+        if ($type == 'misc') {
+            return $this->misc();
+        }
+        if ($type == 'import') {
+            return $this->import_interface();
+        }
+        if ($type == '_import') {
+            return $this->_import();
+        }
+        if ($type == 'import2') {
+            return $this->import_interface2();
+        }
+        if ($type == '_import2') {
+            return $this->_import2();
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * The do-next manager for before download content management.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function misc()
-	{
-		require_code('templates_donext');
-		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_DOWNLOADS'),comcode_lang_string('DOC_DOWNLOADS'),
-			array_merge(array(
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type'=>'ac'),'_SELF'),do_lang('ADD_DOWNLOAD_CATEGORY')):NULL,
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('menu/_generic_admin/edit_one_category',array('_SELF',array('type'=>'ec'),'_SELF'),do_lang('EDIT_DOWNLOAD_CATEGORY')):NULL,
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL,
-				has_privilege(get_member(),'mass_import')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
-				has_privilege(get_member(),'mass_import')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import2'),'_SELF'),do_lang('LOAD_FILESYSTEM_FILES')):NULL,
-				has_privilege(get_member(),'submit_midrange_content','cms_downloads')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_DOWNLOAD')):NULL,
-				has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_DOWNLOAD')):NULL,
-			),manage_custom_fields_donext_link('download'),manage_custom_fields_donext_link('download_category')),
-			do_lang('MANAGE_DOWNLOADS')
-		);
-	}
+    public function misc()
+    {
+        require_code('templates_donext');
+        require_code('fields');
+        return do_next_manager(get_screen_title('MANAGE_DOWNLOADS'),comcode_lang_string('DOC_DOWNLOADS'),
+            array_merge(array(
+                has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type' => 'ac'),'_SELF'),do_lang('ADD_DOWNLOAD_CATEGORY')):null,
+                has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('menu/_generic_admin/edit_one_category',array('_SELF',array('type' => 'ec'),'_SELF'),do_lang('EDIT_DOWNLOAD_CATEGORY')):null,
+                has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type' => 'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):null,
+                has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type' => 'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):null,
+                has_privilege(get_member(),'mass_import')?array('menu/_generic_admin/import',array('_SELF',array('type' => 'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):null,
+                has_privilege(get_member(),'mass_import')?array('menu/_generic_admin/import',array('_SELF',array('type' => 'import2'),'_SELF'),do_lang('LOAD_FILESYSTEM_FILES')):null,
+                has_privilege(get_member(),'submit_midrange_content','cms_downloads')?array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_DOWNLOAD')):null,
+                has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_DOWNLOAD')):null,
+            ),manage_custom_fields_donext_link('download'),manage_custom_fields_donext_link('download_category')),
+            do_lang('MANAGE_DOWNLOADS')
+        );
+    }
 
-	/**
+    /**
 	 * The UI for importing FTP downloads.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function import_interface()
-	{
-		if (!function_exists('ftp_connect')) warn_exit(do_lang_tempcode('FTP_NEEDED'));
+    public function import_interface()
+    {
+        if (!function_exists('ftp_connect')) {
+            warn_exit(do_lang_tempcode('FTP_NEEDED'));
+        }
 
-		check_privilege('mass_import');
+        check_privilege('mass_import');
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_import'),'_SELF');
-		$submit_name=do_lang_tempcode('LOAD_FTP_FILES');
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-		$fields->attach(form_input_line(do_lang_tempcode('FTP_SERVER_URL'),do_lang_tempcode('DESCRIPTION_FTP_SERVER_URL'),'server_url','ftp://ftp.example.com/files/',true));
-		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_PATH'),do_lang_tempcode('DESCRIPTION_DESTINATION_PATH'),'destination',NULL,'choose_download_category',array('addable_filter'=>true),true));
-		$fields->attach(form_input_tick(do_lang_tempcode('KEEP_SUBFOLDERS'),do_lang_tempcode('DESCRIPTION_KEEP_SUBFOLDERS'),'subfolders',true));
+        $post_url = build_url(array('page' => '_SELF','type' => '_import'),'_SELF');
+        $submit_name = do_lang_tempcode('LOAD_FTP_FILES');
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
+        $fields->attach(form_input_line(do_lang_tempcode('FTP_SERVER_URL'),do_lang_tempcode('DESCRIPTION_FTP_SERVER_URL'),'server_url','ftp://ftp.example.com/files/',true));
+        $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_PATH'),do_lang_tempcode('DESCRIPTION_DESTINATION_PATH'),'destination',null,'choose_download_category',array('addable_filter' => true),true));
+        $fields->attach(form_input_tick(do_lang_tempcode('KEEP_SUBFOLDERS'),do_lang_tempcode('DESCRIPTION_KEEP_SUBFOLDERS'),'subfolders',true));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'3b0fadb204770861ab34a91fc062cf03','TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_LOAD_FTP_FILES')),'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	}
+        return do_template('FORM_SCREEN',array('_GUID' => '3b0fadb204770861ab34a91fc062cf03','TITLE' => $this->title,'HIDDEN' => '','TEXT' => paragraph(do_lang_tempcode('DESCRIPTION_LOAD_FTP_FILES')),'FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__import','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The actualiser for importing FTP downloads.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function _import()
-	{
-		$destination=post_param_integer('destination');
+    public function _import()
+    {
+        $destination = post_param_integer('destination');
 
-		check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
+        check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
 
-		set_mass_import_mode();
+        set_mass_import_mode();
 
-		$server_url=post_param('server_url');
-		$subfolders=post_param_integer('subfolders',0);
+        $server_url = post_param('server_url');
+        $subfolders = post_param_integer('subfolders',0);
 
-		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('FTP_DOWNLOADS'),$this->title,'import_ftp_downloads',array($destination,$server_url,$subfolders));
-	}
+        require_code('tasks');
+        return call_user_func_array__long_task(do_lang('FTP_DOWNLOADS'),$this->title,'import_ftp_downloads',array($destination,$server_url,$subfolders));
+    }
 
-	/**
+    /**
 	 * The UI for importing filesystem downloads.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function import_interface2()
-	{
-		check_privilege('mass_import');
+    public function import_interface2()
+    {
+        check_privilege('mass_import');
 
-		$post_url=build_url(array('page'=>'_SELF','type'=>'_import2'),'_SELF');
-		$submit_name=do_lang_tempcode('LOAD_FILESYSTEM_FILES');
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-		$fields->attach(form_input_line(do_lang_tempcode('DIRECTORY'),do_lang_tempcode('DIRECTORY_RELATIVE_INSTALL'),'server_path','uploads/website_specific/my_downloads/',true));
-		$fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_PATH'),do_lang_tempcode('DESCRIPTION_DESTINATION_PATH'),'destination',NULL,'choose_download_category',array('addable_filter'=>true),true));
-		$fields->attach(form_input_tick(do_lang_tempcode('KEEP_SUBFOLDERS'),do_lang_tempcode('DESCRIPTION_KEEP_SUBFOLDERS'),'subfolders',true));
+        $post_url = build_url(array('page' => '_SELF','type' => '_import2'),'_SELF');
+        $submit_name = do_lang_tempcode('LOAD_FILESYSTEM_FILES');
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
+        $fields->attach(form_input_line(do_lang_tempcode('DIRECTORY'),do_lang_tempcode('DIRECTORY_RELATIVE_INSTALL'),'server_path','uploads/website_specific/my_downloads/',true));
+        $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_PATH'),do_lang_tempcode('DESCRIPTION_DESTINATION_PATH'),'destination',null,'choose_download_category',array('addable_filter' => true),true));
+        $fields->attach(form_input_tick(do_lang_tempcode('KEEP_SUBFOLDERS'),do_lang_tempcode('DESCRIPTION_KEEP_SUBFOLDERS'),'subfolders',true));
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'b2a15e705e907f0b20373a80ca8839c6','TITLE'=>$this->title,'HIDDEN'=>'','TEXT'=>paragraph(do_lang_tempcode('DESCRIPTION_LOAD_FILESYSTEM_FILES')),'FIELDS'=>$fields,'SUBMIT_ICON'=>'menu___generic_admin__import','SUBMIT_NAME'=>$submit_name,'URL'=>$post_url));
-	}
+        return do_template('FORM_SCREEN',array('_GUID' => 'b2a15e705e907f0b20373a80ca8839c6','TITLE' => $this->title,'HIDDEN' => '','TEXT' => paragraph(do_lang_tempcode('DESCRIPTION_LOAD_FILESYSTEM_FILES')),'FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__import','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+    }
 
-	/**
+    /**
 	 * The actualiser for importing filesystem downloads.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function _import2()
-	{
-		$destination=post_param_integer('destination');
+    public function _import2()
+    {
+        $destination = post_param_integer('destination');
 
-		check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
+        check_privilege('mass_import'/*Not currently scoped to categories,array('downloads',$destination)*/);
 
-		set_mass_import_mode();
+        set_mass_import_mode();
 
-		$server_path=post_param('server_path');
+        $server_path = post_param('server_path');
 
-		$subfolders=post_param_integer('subfolders',0);
+        $subfolders = post_param_integer('subfolders',0);
 
-		require_code('tasks');
-		return call_user_func_array__long_task(do_lang('FILESYSTEM_DOWNLOADS'),$this->title,'import_filesystem_downloads',array($destination,$server_path,$subfolders));
-	}
+        require_code('tasks');
+        return call_user_func_array__long_task(do_lang('FILESYSTEM_DOWNLOADS'),$this->title,'import_filesystem_downloads',array($destination,$server_path,$subfolders));
+    }
 
-	/**
+    /**
 	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function create_selection_list_ajax_tree()
-	{
-		if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)')==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
+    public function create_selection_list_ajax_tree()
+    {
+        if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)') == 0) {
+            inform_exit(do_lang_tempcode('NO_ENTRIES'));
+        }
 
-		$search_url=build_url(array('page'=>'search','id'=>'downloads'),get_module_zone('search'));
-		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
+        $search_url = build_url(array('page' => 'search','id' => 'downloads'),get_module_zone('search'));
+        $archive_url = build_url(array('page' => 'downloads'),get_module_zone('downloads'));
 
-		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_downloads')?NULL:get_member();
-		$tree=form_input_tree_list(do_lang_tempcode('NAME'),'','id',NULL,'choose_download',array('only_owned'=>$only_owned,'editable_filter'=>true),true,NULL,false,NULL,has_js() && $this->supports_mass_delete);
-		return array($tree,$search_url,$archive_url);
-	}
+        $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_downloads')?null:get_member();
+        $tree = form_input_tree_list(do_lang_tempcode('NAME'),'','id',null,'choose_download',array('only_owned' => $only_owned,'editable_filter' => true),true,null,false,null,has_js() && $this->supports_mass_delete);
+        return array($tree,$search_url,$archive_url);
+    }
 
-	/**
+    /**
 	 * Get tempcode for a download adding/editing form.
 	 *
 	 * @param  ?AUTO_LINK		The ID of the download (NULL: new)
@@ -323,394 +330,399 @@ class Module_cms_downloads extends standard_crud_module
 	 * @param  integer			Which image to use for the downloads representative image (counts from 1)
 	 * @return array				A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id=NULL,$name='',$category_id=NULL,$url='',$author='',$description='',$additional_details='',$out_mode_id=NULL,$validated=1,$allow_rating=NULL,$allow_comments=NULL,$allow_trackbacks=NULL,$notes='',$file_size=NULL,$cost=0,$submitter_gets_points=1,$original_filename=NULL,$licence=NULL,$default_pic=1)
-	{
-		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+    public function get_form_fields($id = null,$name = '',$category_id = null,$url = '',$author = '',$description = '',$additional_details = '',$out_mode_id = null,$validated = 1,$allow_rating = null,$allow_comments = null,$allow_trackbacks = null,$notes = '',$file_size = null,$cost = 0,$submitter_gets_points = 1,$original_filename = null,$licence = null,$default_pic = 1)
+    {
+        list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		if ((is_null($id)) && (is_null($category_id)))
-		{
-			$category_id=get_param_integer('cat',-1);
-			if ($category_id==-1) $category_id=NULL;
-		}
+        if ((is_null($id)) && (is_null($category_id))) {
+            $category_id = get_param_integer('cat',-1);
+            if ($category_id == -1) {
+                $category_id = null;
+            }
+        }
 
-		if (is_null($category_id))
-		{
-			$num_categories=$GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)');
-			if ($num_categories==1) $cat=db_get_first_id(); // Only option!
-		}
+        if (is_null($category_id)) {
+            $num_categories = $GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)');
+            if ($num_categories == 1) {
+                $cat = db_get_first_id();
+            } // Only option!
+        }
 
-		$fields=new ocp_tempcode();
-		$hidden=new ocp_tempcode();
-		require_code('form_templates');
-		handle_max_file_size($hidden);
-		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
-		if (!is_null($original_filename)) $fields->attach(form_input_line(do_lang_tempcode('ORIGINAL_FILENAME'),do_lang_tempcode('DESCRIPTION_ORIGINAL_FILENAME'),'original_filename',$original_filename,false));
-		if ((get_value('no_confirm_url_spec_cats')!=='1') || (is_null($category_id)))
-		{
-			$fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',NULL,'choose_download_category',array(),true,strval(is_null($category_id)?db_get_first_id():$category_id)));
-		} else
-		{
-			$hidden->attach(form_input_hidden('category_id',strval($category_id)));
-		}
+        $fields = new ocp_tempcode();
+        $hidden = new ocp_tempcode();
+        require_code('form_templates');
+        handle_max_file_size($hidden);
+        $fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'name',$name,true));
+        if (!is_null($original_filename)) {
+            $fields->attach(form_input_line(do_lang_tempcode('ORIGINAL_FILENAME'),do_lang_tempcode('DESCRIPTION_ORIGINAL_FILENAME'),'original_filename',$original_filename,false));
+        }
+        if ((get_value('no_confirm_url_spec_cats') !== '1') || (is_null($category_id))) {
+            $fields->attach(form_input_tree_list(do_lang_tempcode('CATEGORY'),do_lang_tempcode('DESCRIPTION_CATEGORY_TREE'),'category_id',null,'choose_download_category',array(),true,strval(is_null($category_id)?db_get_first_id():$category_id)));
+        } else {
+            $hidden->attach(form_input_hidden('category_id',strval($category_id)));
+        }
 
-		$set_name='file';
-		$required=true;
-		$set_title=do_lang_tempcode('FILE');
-		$field_set=alternate_fields_set__start($set_name);
+        $set_name = 'file';
+        $required = true;
+        $set_title = do_lang_tempcode('FILE');
+        $field_set = alternate_fields_set__start($set_name);
 
-		$field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false));
+        $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false));
 
-		$field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$url,false));
+        $field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$url,false));
 
-		$fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+        $fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
 
-		if (has_privilege(get_member(),'draw_to_server'))
-			$fields->attach(form_input_tick(do_lang_tempcode('COPY_TO_SERVER'),do_lang_tempcode('DESCRIPTION_COPY_TO_SERVER'),'copy_to_server',false));
-		$fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'),do_lang_tempcode('DESCRIPTION_FILE_SIZE'),'file_size',$file_size,false));
-		if (addon_installed('authors'))
-		{
-			if ($author=='')
-			{
-				$author=$GLOBALS['SITE_DB']->query_select_value_if_there('authors','author',array('member_id'=>get_member()));
-				if (is_null($author)) $author=$GLOBALS['FORUM_DRIVER']->get_username(get_member());
-			}
-		}
-		if (addon_installed('authors'))
-		{
-			$fields->attach(form_input_author(do_lang_tempcode('AUTHOR'),do_lang_tempcode('DESCRIPTION_AUTHOR'),'author',$author,true));
-		}
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		if ((is_null($id)) && (addon_installed('galleries')))
-		{
-			$fields->attach(form_input_upload(do_lang_tempcode('IMAGE'),'','img_file',false,NULL,NULL,true,str_replace(' ','',get_option('valid_images'))));
-		}
-		if ($validated==0)
-		{
-			$validated=get_param_integer('validated',0);
-			if (($validated==1) && (addon_installed('unvalidated'))) attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
-		}
-		if (has_some_cat_privilege(get_member(),'bypass_validation_'.$this->permissions_require.'range_content',NULL,$this->permissions_cat_require))
-			if (addon_installed('unvalidated'))
-				$fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
+        if (has_privilege(get_member(),'draw_to_server')) {
+            $fields->attach(form_input_tick(do_lang_tempcode('COPY_TO_SERVER'),do_lang_tempcode('DESCRIPTION_COPY_TO_SERVER'),'copy_to_server',false));
+        }
+        $fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'),do_lang_tempcode('DESCRIPTION_FILE_SIZE'),'file_size',$file_size,false));
+        if (addon_installed('authors')) {
+            if ($author == '') {
+                $author = $GLOBALS['SITE_DB']->query_select_value_if_there('authors','author',array('member_id' => get_member()));
+                if (is_null($author)) {
+                    $author = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
+                }
+            }
+        }
+        if (addon_installed('authors')) {
+            $fields->attach(form_input_author(do_lang_tempcode('AUTHOR'),do_lang_tempcode('DESCRIPTION_AUTHOR'),'author',$author,true));
+        }
+        $fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
+        if ((is_null($id)) && (addon_installed('galleries'))) {
+            $fields->attach(form_input_upload(do_lang_tempcode('IMAGE'),'','img_file',false,null,null,true,str_replace(' ','',get_option('valid_images'))));
+        }
+        if ($validated == 0) {
+            $validated = get_param_integer('validated',0);
+            if (($validated == 1) && (addon_installed('unvalidated'))) {
+                attach_message(do_lang_tempcode('WILL_BE_VALIDATED_WHEN_SAVING'));
+            }
+        }
+        if (has_some_cat_privilege(get_member(),'bypass_validation_' . $this->permissions_require . 'range_content',null,$this->permissions_cat_require)) {
+            if (addon_installed('unvalidated')) {
+                $fields->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated == 1));
+            }
+        }
 
-		$fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'3014367d92010c4ff78684f7c792efa0','SECTION_HIDDEN'=>$additional_details=='' && is_null($out_mode_id) && ($cost==0) && is_null($licence),'TITLE'=>do_lang_tempcode('ADVANCED'))));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('ADDITIONAL_INFO'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_INFO'),'additional_details',$additional_details,false));
-		if (!is_null($id))
-			$fields->attach(form_input_integer(do_lang_tempcode('DEFAULT_PICTURE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PICTURE'),'default_pic',$default_pic,false));
-		if (!is_null($id)) $fields->attach(form_input_tree_list(do_lang_tempcode('OUTMODE'),do_lang_tempcode('DESCRIPTION_OUTMODE'),'out_mode_id',NULL,'choose_download',array('shun'=>$id),false,is_null($out_mode_id)?'':strval($out_mode_id)));
-		if (addon_installed('points'))
-		{
-			require_lang('points');
-			$fields->attach(form_input_integer(do_lang_tempcode('COST'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_COST'),'cost',$cost,true));
-			$fields->attach(form_input_tick(do_lang_tempcode('SUBMITTER_GETS_POINTS'),do_lang_tempcode('DESCRIPTION_SUBMITTER_GETS_POINTS'),'submitter_gets_points',$submitter_gets_points==1));
-		} else
-		{
-			$hidden->attach(form_input_hidden('cost',''));
-		}
-		$licences=create_selection_list_download_licences($licence);
-		if (!$licences->is_empty())
-		{
-			$licences=create_selection_list_download_licences($licence,true);
-			$fields->attach(form_input_list(do_lang_tempcode('LICENCE'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_LICENCE'),'licence',$licences));
-		}
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '3014367d92010c4ff78684f7c792efa0','SECTION_HIDDEN' => $additional_details == '' && is_null($out_mode_id) && ($cost == 0) && is_null($licence),'TITLE' => do_lang_tempcode('ADVANCED'))));
+        $fields->attach(form_input_text_comcode(do_lang_tempcode('ADDITIONAL_INFO'),do_lang_tempcode('DESCRIPTION_ADDITIONAL_INFO'),'additional_details',$additional_details,false));
+        if (!is_null($id)) {
+            $fields->attach(form_input_integer(do_lang_tempcode('DEFAULT_PICTURE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PICTURE'),'default_pic',$default_pic,false));
+        }
+        if (!is_null($id)) {
+            $fields->attach(form_input_tree_list(do_lang_tempcode('OUTMODE'),do_lang_tempcode('DESCRIPTION_OUTMODE'),'out_mode_id',null,'choose_download',array('shun' => $id),false,is_null($out_mode_id)?'':strval($out_mode_id)));
+        }
+        if (addon_installed('points')) {
+            require_lang('points');
+            $fields->attach(form_input_integer(do_lang_tempcode('COST'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_COST'),'cost',$cost,true));
+            $fields->attach(form_input_tick(do_lang_tempcode('SUBMITTER_GETS_POINTS'),do_lang_tempcode('DESCRIPTION_SUBMITTER_GETS_POINTS'),'submitter_gets_points',$submitter_gets_points == 1));
+        } else {
+            $hidden->attach(form_input_hidden('cost',''));
+        }
+        $licences = create_selection_list_download_licences($licence);
+        if (!$licences->is_empty()) {
+            $licences = create_selection_list_download_licences($licence,true);
+            $fields->attach(form_input_list(do_lang_tempcode('LICENCE'),do_lang_tempcode('DESCRIPTION_DOWNLOAD_LICENCE'),'licence',$licences));
+        }
 
-		// Meta data
-		require_code('seo2');
-		$seo_fields=seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false);
-		require_code('feedback2');
-		$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
-		$fields->attach(meta_data_get_fields('download',is_null($id)?NULL:strval($id),false,NULL,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
-		if (has_privilege(get_member(),'edit_meta_fields'))
-		{
-			$fields->attach(form_input_integer(do_lang_tempcode('NUM_DOWNLOADS'),do_lang_tempcode('DESCRIPTION_META_NUM_DOWNLOADS'),'meta_num_downloads',NULL,false));
-		}
-		$fields->attach($seo_fields);
-		$fields->attach($feedback_fields);
+        // Meta data
+        require_code('seo2');
+        $seo_fields = seo_get_fields($this->seo_type,is_null($id)?null:strval($id),false);
+        require_code('feedback2');
+        $feedback_fields = feedback_fields($allow_rating == 1,$allow_comments == 1,$allow_trackbacks == 1,false,$notes,$allow_comments == 2,false,true,false);
+        $fields->attach(meta_data_get_fields('download',is_null($id)?null:strval($id),false,null,($seo_fields->is_empty() && $feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+        if (has_privilege(get_member(),'edit_meta_fields')) {
+            $fields->attach(form_input_integer(do_lang_tempcode('NUM_DOWNLOADS'),do_lang_tempcode('DESCRIPTION_META_NUM_DOWNLOADS'),'meta_num_downloads',null,false));
+        }
+        $fields->attach($seo_fields);
+        $fields->attach($feedback_fields);
 
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			if (is_null($id))
-			{
-				$fields->attach(get_privacy_form_fields('download'));
-			} else
-			{
-				$fields->attach(get_privacy_form_fields('download',strval($id)));
-			}
-		}
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy2');
+            if (is_null($id)) {
+                $fields->attach(get_privacy_form_fields('download'));
+            } else {
+                $fields->attach(get_privacy_form_fields('download',strval($id)));
+            }
+        }
 
-		if (addon_installed('content_reviews'))
-			$fields->attach(content_review_get_fields('download',is_null($id)?NULL:strval($id)));
+        if (addon_installed('content_reviews')) {
+            $fields->attach(content_review_get_fields('download',is_null($id)?null:strval($id)));
+        }
 
-		return array($fields,$hidden);
-	}
+        return array($fields,$hidden);
+    }
 
-	/**
+    /**
 	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
 	 */
-	function get_submitter($id)
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('submitter','add_date'),array('id'=>intval($id)),'',1);
-		if (!array_key_exists(0,$rows)) return array(NULL,NULL);
-		return array($rows[0]['submitter'],$rows[0]['add_date']);
-	}
+    public function get_submitter($id)
+    {
+        $rows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('submitter','add_date'),array('id' => intval($id)),'',1);
+        if (!array_key_exists(0,$rows)) {
+            return array(null,null);
+        }
+        return array($rows[0]['submitter'],$rows[0]['add_date']);
+    }
 
-	/**
+    /**
 	 * Standard crud_module cat getter.
 	 *
 	 * @param  AUTO_LINK		The entry for which the cat is sought
 	 * @return mixed			The cat
 	 */
-	function get_cat($id)
-	{
-		$temp=$GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','category_id',array('id'=>$id));
-		if (is_null($temp)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		return $temp;
-	}
+    public function get_cat($id)
+    {
+        $temp = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','category_id',array('id' => $id));
+        if (is_null($temp)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        return $temp;
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A tuple of lots of info
 	 */
-	function fill_in_edit_form($_id)
-	{
-		$id=intval($_id);
+    public function fill_in_edit_form($_id)
+    {
+        $id = intval($_id);
 
-		$myrows=$GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$myrows))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$myrows[0];
+        $myrows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id' => $id),'',1);
+        if (!array_key_exists(0,$myrows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $myrow = $myrows[0];
 
-		$cat=$myrow['category_id'];
+        $cat = $myrow['category_id'];
 
-		$ret=$this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['additional_details']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
+        $ret = $this->get_form_fields($id,get_translated_text($myrow['name']),$cat,$myrow['url'],$myrow['author'],get_translated_text($myrow['description']),get_translated_text($myrow['additional_details']),$myrow['out_mode_id'],$myrow['validated'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes'],$myrow['file_size'],$myrow['download_cost'],$myrow['download_submitter_gets_points'],$myrow['original_filename'],$myrow['download_licence'],$myrow['default_pic']);
 
-		if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_downloads',array('downloads',$cat)))
-		{
-			$radios=form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
-			$radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
-			$radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
-			$delete_fields=form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
-		} else $delete_fields=new ocp_tempcode();
+        if (has_delete_permission('mid',get_member(),$myrow['submitter'],'cms_downloads',array('downloads',$cat))) {
+            $radios = form_input_radio_entry('delete','0',true,do_lang_tempcode('LEAVE'));
+            $radios->attach(form_input_radio_entry('delete','1',false,do_lang_tempcode('DELETE_PARTIAL')));
+            $radios->attach(form_input_radio_entry('delete','2',false,do_lang_tempcode('DELETE_FULL')));
+            $delete_fields = form_input_radio(do_lang_tempcode('DELETE_STATUS'),do_lang_tempcode('DESCRIPTION_DELETE_STATUS'),'delete',$radios);
+        } else {
+            $delete_fields = new ocp_tempcode();
+        }
 
-		$ret[2]=$delete_fields;
-		$ret[3]='';
-		$ret[4]=true;
-		return $ret;
-	}
+        $ret[2] = $delete_fields;
+        $ret[3] = '';
+        $ret[4] = true;
+        return $ret;
+    }
 
-	/**
+    /**
 	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT			The ID of the new entry
 	 */
-	function add_actualisation()
-	{
-		$category_id=post_param_integer('category_id');
-		$name=post_param('name');
-		$description=post_param('description');
-		$author=post_param('author',get_site_name());
-		$_out_mode_id=post_param('out_mode_id','');
-		$out_mode_id=($_out_mode_id=='')?-1:intval($_out_mode_id);
-		if ($out_mode_id==-1) $out_mode_id=NULL;
-		$_licence=post_param('licence','');
-		$licence=($_licence=='')?-1:intval($_licence);
-		if ($licence==-1) $licence=NULL;
-		$validated=post_param_integer('validated',0);
-		$additional_details=post_param('additional_details');
-		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
-		$allow_rating=post_param_integer('allow_rating',0);
-		$allow_comments=post_param_integer('allow_comments',0);
-		$notes=post_param('notes','');
-		$file_size=post_param_integer('file_size',0);
-		$cost=post_param_integer('cost',0);
-		$submitter_gets_points=post_param_integer('submitter_gets_points',0);
-		$copy_to_server=post_param_integer('copy_to_server',0);
-		if (!has_privilege(get_member(),'draw_to_server')) $copy_to_server=0;
+    public function add_actualisation()
+    {
+        $category_id = post_param_integer('category_id');
+        $name = post_param('name');
+        $description = post_param('description');
+        $author = post_param('author',get_site_name());
+        $_out_mode_id = post_param('out_mode_id','');
+        $out_mode_id = ($_out_mode_id == '')?-1:intval($_out_mode_id);
+        if ($out_mode_id == -1) {
+            $out_mode_id = null;
+        }
+        $_licence = post_param('licence','');
+        $licence = ($_licence == '')?-1:intval($_licence);
+        if ($licence == -1) {
+            $licence = null;
+        }
+        $validated = post_param_integer('validated',0);
+        $additional_details = post_param('additional_details');
+        $allow_trackbacks = post_param_integer('allow_trackbacks',0);
+        $allow_rating = post_param_integer('allow_rating',0);
+        $allow_comments = post_param_integer('allow_comments',0);
+        $notes = post_param('notes','');
+        $file_size = post_param_integer('file_size',0);
+        $cost = post_param_integer('cost',0);
+        $submitter_gets_points = post_param_integer('submitter_gets_points',0);
+        $copy_to_server = post_param_integer('copy_to_server',0);
+        if (!has_privilege(get_member(),'draw_to_server')) {
+            $copy_to_server = 0;
+        }
 
-		$urls=get_url('url','file','uploads/downloads',2,OCP_UPLOAD_ANYTHING,false,'','',$copy_to_server==1);
-		if ($urls[0]=='')
-		{
-			warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
-		}
-		$original_filename=$urls[2];
+        $urls = get_url('url','file','uploads/downloads',2,OCP_UPLOAD_ANYTHING,false,'','',$copy_to_server == 1);
+        if ($urls[0] == '') {
+            warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+        }
+        $original_filename = $urls[2];
 
-		if ((substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
-			attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
+        if ((substr($urls[0],0,8) != 'uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B']))) {
+            attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
+        }
 
-		$meta_data=actual_meta_data_get_fields('download',NULL);
-		actual_meta_data_get_fields__special($meta_data,'num_downloads',0);
+        $meta_data = actual_meta_data_get_fields('download',null);
+        actual_meta_data_get_fields__special($meta_data,'num_downloads',0);
 
-		$id=add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_data['add_time'],/*$meta_data['num_downloads']*/0,$meta_data['views'],$meta_data['submitter']);
-		if (addon_installed('galleries'))
-		{
-			require_code('permissions2');
-			set_category_permissions_from_environment('galleries','download_'.strval($id));
+        $id = add_download($category_id,$name,fixup_protocolless_urls($urls[0]),$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_data['add_time'],/*$meta_data['num_downloads']*/0,$meta_data['views'],$meta_data['submitter']);
+        if (addon_installed('galleries')) {
+            require_code('permissions2');
+            set_category_permissions_from_environment('galleries','download_' . strval($id));
 
-			$img_urls=get_url('','img_file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true);
-			if ($img_urls[0]!='')
-			{
-				add_image('','download_'.strval($id),'',$img_urls[0],$img_urls[1],1,0,0,0,'');
-			}
-		}
+            $img_urls = get_url('','img_file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true);
+            if ($img_urls[0] != '') {
+                add_image('','download_' . strval($id),'',$img_urls[0],$img_urls[1],1,0,0,0,'');
+            }
+        }
 
-		$this->donext_type=$category_id;
+        $this->donext_type = $category_id;
 
-		if ((!is_null(get_param('redirect',NULL))) && (addon_installed('galleries')))
-		{
-			$redirect_url=build_url(array('page'=>'downloads','type'=>'entry','id'=>$id),get_module_zone('downloads'));
-			$add_image_url=build_url(array('page'=>'cms_galleries','type'=>'ad','cat'=>'download_'.strval($id),'redirect'=>$redirect_url->evaluate()),get_module_zone('cms_galleries'));
-			$this->do_next_description=do_lang_tempcode('DOWNLOAD_ADDED',escape_html($add_image_url->evaluate()));
-		}
+        if ((!is_null(get_param('redirect',null))) && (addon_installed('galleries'))) {
+            $redirect_url = build_url(array('page' => 'downloads','type' => 'entry','id' => $id),get_module_zone('downloads'));
+            $add_image_url = build_url(array('page' => 'cms_galleries','type' => 'ad','cat' => 'download_' . strval($id),'redirect' => $redirect_url->evaluate()),get_module_zone('cms_galleries'));
+            $this->do_next_description = do_lang_tempcode('DOWNLOAD_ADDED',escape_html($add_image_url->evaluate()));
+        }
 
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
-		}
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy2');
+            list($privacy_level,$additional_access) = read_privacy_fields();
+            save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
+        }
 
-		if (($validated==1) || (!addon_installed('unvalidated')))
-		{
-			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
-			{
-				$privacy_ok=true;
-				if (addon_installed('content_privacy'))
-				{
-					require_code('content_privacy');
-					$privacy_ok=has_privacy_access('download',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
-				}
-				if ($privacy_ok)
-				{
-					require_code('activities');
-					syndicate_described_activity('downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads');
-				}
-			}
-		}
+        if (($validated == 1) || (!addon_installed('unvalidated'))) {
+            if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id)))) {
+                $privacy_ok = true;
+                if (addon_installed('content_privacy')) {
+                    require_code('content_privacy');
+                    $privacy_ok = has_privacy_access('download',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+                }
+                if ($privacy_ok) {
+                    require_code('activities');
+                    syndicate_described_activity('downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:' . strval($id),'','','downloads');
+                }
+            }
+        }
 
-		if (addon_installed('content_reviews'))
-			content_review_set('download',strval($id));
+        if (addon_installed('content_reviews')) {
+            content_review_set('download',strval($id));
+        }
 
-		return strval($id);
-	}
+        return strval($id);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
-	function edit_actualisation($_id)
-	{
-		$id=intval($_id);
+    public function edit_actualisation($_id)
+    {
+        $id = intval($_id);
 
-		$validated=post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $validated = post_param_integer('validated',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
-		$category_id=post_param_integer('category_id',INTEGER_MAGIC_NULL);
-		$name=post_param('name');
-		$out_mode_id=post_param_integer('out_mode_id',fractional_edit()?INTEGER_MAGIC_NULL:-1);
-		if ($out_mode_id==-1) $out_mode_id=NULL;
-		$licence=post_param_integer('licence',fractional_edit()?INTEGER_MAGIC_NULL:-1);
-		if ($licence==-1) $licence=NULL;
+        $category_id = post_param_integer('category_id',INTEGER_MAGIC_NULL);
+        $name = post_param('name');
+        $out_mode_id = post_param_integer('out_mode_id',fractional_edit()?INTEGER_MAGIC_NULL:-1);
+        if ($out_mode_id == -1) {
+            $out_mode_id = null;
+        }
+        $licence = post_param_integer('licence',fractional_edit()?INTEGER_MAGIC_NULL:-1);
+        if ($licence == -1) {
+            $licence = null;
+        }
 
-		if (!fractional_edit())
-		{
-			$copy_to_server=post_param_integer('copy_to_server',0);
-			if (!has_privilege(get_member(),'draw_to_server')) $copy_to_server=0;
-			$urls=get_url('url','file','uploads/downloads',2,OCP_UPLOAD_ANYTHING,false,'','',$copy_to_server==1);
-			$url=fixup_protocolless_urls($urls[0]);
+        if (!fractional_edit()) {
+            $copy_to_server = post_param_integer('copy_to_server',0);
+            if (!has_privilege(get_member(),'draw_to_server')) {
+                $copy_to_server = 0;
+            }
+            $urls = get_url('url','file','uploads/downloads',2,OCP_UPLOAD_ANYTHING,false,'','',$copy_to_server == 1);
+            $url = fixup_protocolless_urls($urls[0]);
 
-			if (($url!='') && (substr($urls[0],0,8)!='uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B'])))
-				attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
-		} else $url=STRING_MAGIC_NULL;
+            if (($url != '') && (substr($urls[0],0,8) != 'uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B']))) {
+                attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
+            }
+        } else {
+            $url = STRING_MAGIC_NULL;
+        }
 
-		$description=post_param('description',STRING_MAGIC_NULL);
-		$author=post_param('author',STRING_MAGIC_NULL);
-		$additional_details=post_param('additional_details',STRING_MAGIC_NULL);
-		$default_pic=post_param_integer('default_pic',INTEGER_MAGIC_NULL);
-		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$notes=post_param('notes',STRING_MAGIC_NULL);
-		$file_size=post_param_integer('file_size',INTEGER_MAGIC_NULL);
-		$cost=post_param_integer('cost',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$submitter_gets_points=post_param_integer('submitter_gets_points',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$original_filename=post_param('original_filename',STRING_MAGIC_NULL);
-		if ((!fractional_edit()) && ($original_filename==''))
-		{
-			$original_filename=$urls[2];
-		}
-		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $description = post_param('description',STRING_MAGIC_NULL);
+        $author = post_param('author',STRING_MAGIC_NULL);
+        $additional_details = post_param('additional_details',STRING_MAGIC_NULL);
+        $default_pic = post_param_integer('default_pic',INTEGER_MAGIC_NULL);
+        $allow_rating = post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $allow_comments = post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $notes = post_param('notes',STRING_MAGIC_NULL);
+        $file_size = post_param_integer('file_size',INTEGER_MAGIC_NULL);
+        $cost = post_param_integer('cost',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $submitter_gets_points = post_param_integer('submitter_gets_points',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $original_filename = post_param('original_filename',STRING_MAGIC_NULL);
+        if ((!fractional_edit()) && ($original_filename == '')) {
+            $original_filename = $urls[2];
+        }
+        $allow_trackbacks = post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
 
-		$this->donext_type=$category_id;
+        $this->donext_type = $category_id;
 
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			list($privacy_level,$additional_access)=read_privacy_fields();
-			save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
-		}
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy2');
+            list($privacy_level,$additional_access) = read_privacy_fields();
+            save_privacy_form_fields('download',strval($id),$privacy_level,$additional_access);
+        }
 
-		if (($validated==1) && ($GLOBALS['SITE_DB']->query_select_value('download_downloads','validated',array('id'=>$id))==0)) // Just became validated, syndicate as just added
-		{
-			$submitter=$GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id'=>$id));
+        if (($validated == 1) && ($GLOBALS['SITE_DB']->query_select_value('download_downloads','validated',array('id' => $id)) == 0)) { // Just became validated, syndicate as just added
+            $submitter = $GLOBALS['SITE_DB']->query_select_value('download_downloads','submitter',array('id' => $id));
 
-			if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id))))
-			{
-				$privacy_ok=true;
-				if (addon_installed('content_privacy'))
-				{
-					require_code('content_privacy');
-					$privacy_ok=has_privacy_access('download',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
-				}
-				if ($privacy_ok)
-				{
-					require_code('activities');
-					syndicate_described_activity(($submitter!=get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:'.strval($id),'','','downloads',1,NULL/*$submitter*/);
-				}
-			}
-		}
+            if ((has_actual_page_access(get_modal_user(),'downloads')) && (has_category_access(get_modal_user(),'downloads',strval($category_id)))) {
+                $privacy_ok = true;
+                if (addon_installed('content_privacy')) {
+                    require_code('content_privacy');
+                    $privacy_ok = has_privacy_access('download',strval($id),$GLOBALS['FORUM_DRIVER']->get_guest_id());
+                }
+                if ($privacy_ok) {
+                    require_code('activities');
+                    syndicate_described_activity(($submitter != get_member())?'downloads:ACTIVITY_VALIDATE_DOWNLOAD':'downloads:ACTIVITY_ADD_DOWNLOAD',$name,'','','_SEARCH:downloads:entry:' . strval($id),'','','downloads',1,NULL/*$submitter*/);
+                }
+            }
+        }
 
-		$meta_data=actual_meta_data_get_fields('download',strval($id));
-		actual_meta_data_get_fields__special($meta_data,'num_downloads',INTEGER_MAGIC_NULL);
+        $meta_data = actual_meta_data_get_fields('download',strval($id));
+        actual_meta_data_get_fields__special($meta_data,'num_downloads',INTEGER_MAGIC_NULL);
 
-		edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],$meta_data['num_downloads'],true);
+        edit_download($id,$category_id,$name,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],$meta_data['num_downloads'],true);
 
-		if ((addon_installed('galleries')) && (!fractional_edit()))
-		{
-			require_code('permissions2');
-			set_category_permissions_from_environment('galleries','download_'.strval($id));
-		}
+        if ((addon_installed('galleries')) && (!fractional_edit())) {
+            require_code('permissions2');
+            set_category_permissions_from_environment('galleries','download_' . strval($id));
+        }
 
-		if (addon_installed('content_reviews'))
-			content_review_set('download',strval($id));
-	}
+        if (addon_installed('content_reviews')) {
+            content_review_set('download',strval($id));
+        }
+    }
 
-	/**
+    /**
 	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
-	function delete_actualisation($_id)
-	{
-		$id=intval($_id);
+    public function delete_actualisation($_id)
+    {
+        $id = intval($_id);
 
-		$delete_status=post_param('delete','leave');
-		delete_download($id,!($delete_status=='2'));
+        $delete_status = post_param('delete','leave');
+        delete_download($id,!($delete_status == '2'));
 
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy2');
-			delete_privacy_form_fields('download',strval($id));
-		}
-	}
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy2');
+            delete_privacy_form_fields('download',strval($id));
+        }
+    }
 
-	/**
+    /**
 	 * The do-next manager for after download content management (events only).
 	 *
 	 * @param  tempcode		The title (output of get_screen_title)
@@ -718,10 +730,10 @@ class Module_cms_downloads extends standard_crud_module
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
 	 */
-	function do_next_manager($title,$description,$id)
-	{
-		return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?NULL:intval($id),$this->donext_type);
-	}
+    public function do_next_manager($title,$description,$id)
+    {
+        return $this->cat_crud_module->_do_next_manager($title,$description,is_null($id)?null:intval($id),$this->donext_type);
+    }
 }
 
 /**
@@ -729,98 +741,97 @@ class Module_cms_downloads extends standard_crud_module
  */
 class Module_cms_downloads_alt extends standard_crud_module
 {
-	var $lang_type='DOWNLOAD_LICENCE';
-	var $select_name='TITLE';
-	var $permissions_require='cat_high';
-	var $user_facing=false;
-	var $menu_label='SECTION_DOWNLOADS';
+    public $lang_type = 'DOWNLOAD_LICENCE';
+    public $select_name = 'TITLE';
+    public $permissions_require = 'cat_high';
+    public $user_facing = false;
+    public $menu_label = 'SECTION_DOWNLOADS';
 
-	var $donext_type=NULL;
+    public $donext_type = null;
 
-	/**
+    /**
 	 * Standard CRUD-module entry list fetcher.
 	 *
 	 * @return tempcode	The list
 	 */
-	function create_selection_list_entries()
-	{
-		return create_selection_list_download_licences();
-	}
+    public function create_selection_list_entries()
+    {
+        return create_selection_list_download_licences();
+    }
 
-	/**
+    /**
 	 * Get tempcode for a download adding/editing form.
 	 *
 	 * @param  ID_TEXT		The title of the licence
 	 * @param  LONG_TEXT		The text of the licence
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($title='',$text='')
-	{
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-		$fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_LICENCE_TEXT'),'text',$text,true));
+    public function get_form_fields($title = '',$text = '')
+    {
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
+        $fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
+        $fields->attach(form_input_text_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_LICENCE_TEXT'),'text',$text,true));
 
-		return array($fields,new ocp_tempcode());
-	}
+        return array($fields,new ocp_tempcode());
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function fill_in_edit_form($_id)
-	{
-		$id=intval($_id);
+    public function fill_in_edit_form($_id)
+    {
+        $id = intval($_id);
 
-		$myrows=$GLOBALS['SITE_DB']->query_select('download_licences',array('*'),array('id'=>$id));
-		if (!array_key_exists(0,$myrows))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$myrows[0];
+        $myrows = $GLOBALS['SITE_DB']->query_select('download_licences',array('*'),array('id' => $id));
+        if (!array_key_exists(0,$myrows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $myrow = $myrows[0];
 
-		return $this->get_form_fields($myrow['l_title'],$myrow['l_text']);
-	}
+        return $this->get_form_fields($myrow['l_title'],$myrow['l_text']);
+    }
 
-	/**
+    /**
 	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT			The ID of the new entry
 	 */
-	function add_actualisation()
-	{
-		$id=add_download_licence(post_param('title'),post_param('text'));
+    public function add_actualisation()
+    {
+        $id = add_download_licence(post_param('title'),post_param('text'));
 
-		return strval($id);
-	}
+        return strval($id);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
-	function edit_actualisation($_id)
-	{
-		$id=intval($_id);
+    public function edit_actualisation($_id)
+    {
+        $id = intval($_id);
 
-		edit_download_licence($id,post_param('title'),post_param('text'));
-	}
+        edit_download_licence($id,post_param('title'),post_param('text'));
+    }
 
-	/**
+    /**
 	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
-	function delete_actualisation($_id)
-	{
-		$id=intval($_id);
+    public function delete_actualisation($_id)
+    {
+        $id = intval($_id);
 
-		delete_download_licence($id);
-	}
+        delete_download_licence($id);
+    }
 
-	/**
+    /**
 	 * The do-next manager for after download content management (events only).
 	 *
 	 * @param  tempcode		The title (output of get_screen_title)
@@ -828,10 +839,10 @@ class Module_cms_downloads_alt extends standard_crud_module
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
 	 */
-	function do_next_manager($title,$description,$id)
-	{
-		return $GLOBALS['MODULE_CMS_DOWNLOADS']->cat_crud_module->_do_next_manager($title,$description,NULL,NULL,$id);
-	}
+    public function do_next_manager($title,$description,$id)
+    {
+        return $GLOBALS['MODULE_CMS_DOWNLOADS']->cat_crud_module->_do_next_manager($title,$description,null,null,$id);
+    }
 }
 
 /**
@@ -839,31 +850,31 @@ class Module_cms_downloads_alt extends standard_crud_module
  */
 class Module_cms_downloads_cat extends standard_crud_module
 {
-	var $lang_type='DOWNLOAD_CATEGORY';
-	var $select_name='NAME';
-	var $permissions_require='cat_mid';
-	var $permission_module='downloads';
-	var $seo_type='downloads_category';
-	var $upload='image';
-	var $content_type='download_category';
-	var $protect_first=1;
-	var $menu_label='SECTION_DOWNLOADS';
+    public $lang_type = 'DOWNLOAD_CATEGORY';
+    public $select_name = 'NAME';
+    public $permissions_require = 'cat_mid';
+    public $permission_module = 'downloads';
+    public $seo_type = 'downloads_category';
+    public $upload = 'image';
+    public $content_type = 'download_category';
+    public $protect_first = 1;
+    public $menu_label = 'SECTION_DOWNLOADS';
 
-	/**
+    /**
 	 * Standard crud_module list function.
 	 *
 	 * @return array				A triple: The tree field (tempcode), Search URL, Archive URL
 	 */
-	function create_selection_list_ajax_tree()
-	{
-		$search_url=build_url(array('page'=>'search','id'=>'download_categories'),get_module_zone('search'));
-		$archive_url=build_url(array('page'=>'downloads'),get_module_zone('downloads'));
+    public function create_selection_list_ajax_tree()
+    {
+        $search_url = build_url(array('page' => 'search','id' => 'download_categories'),get_module_zone('search'));
+        $archive_url = build_url(array('page' => 'downloads'),get_module_zone('downloads'));
 
-		$tree=form_input_tree_list(do_lang_tempcode('NAME'),'','id',NULL,'choose_download_category',array(),true);
-		return array($tree,$search_url,$archive_url);
-	}
+        $tree = form_input_tree_list(do_lang_tempcode('NAME'),'','id',null,'choose_download_category',array(),true);
+        return array($tree,$search_url,$archive_url);
+    }
 
-	/**
+    /**
 	 * Get tempcode for a download category adding/editing form.
 	 *
 	 * @param  ?AUTO_LINK	The download ID (NULL: new)
@@ -875,134 +886,141 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 * @param  URLPATH		The rep-image for the download category
 	 * @return array			A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
 	 */
-	function get_form_fields($id=NULL,$category='',$parent_id=NULL,$description='',$notes='',$category_id=-1,$rep_image='')
-	{
-		if ((is_null($parent_id)) && ($category_id==-1))
-		{
-			$parent_id=get_param_integer('parent_id',-1);
-			if ($parent_id==-1) $parent_id=db_get_first_id();
-		}
+    public function get_form_fields($id = null,$category = '',$parent_id = null,$description = '',$notes = '',$category_id = -1,$rep_image = '')
+    {
+        if ((is_null($parent_id)) && ($category_id == -1)) {
+            $parent_id = get_param_integer('parent_id',-1);
+            if ($parent_id == -1) {
+                $parent_id = db_get_first_id();
+            }
+        }
 
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-		$fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'category',$category,true));
-		if (!is_null($parent_id))
-		{
-			$fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',NULL,'choose_download_category',array(),true,strval($parent_id)));
-		}
-		$fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-		if (get_option('enable_staff_notes')=='1')
-			$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
-		$hidden=new ocp_tempcode();
-		handle_max_file_size($hidden,'image');
-		$fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,NULL,true,str_replace(' ','',get_option('valid_images'))));
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
+        $fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME'),'category',$category,true));
+        if (!is_null($parent_id)) {
+            $fields->attach(form_input_tree_list(do_lang_tempcode('PARENT'),do_lang_tempcode('DESCRIPTION_PARENT'),'parent_id',null,'choose_download_category',array(),true,strval($parent_id)));
+        }
+        $fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
+        if (get_option('enable_staff_notes') == '1') {
+            $fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),'notes',$notes,false));
+        }
+        $hidden = new ocp_tempcode();
+        handle_max_file_size($hidden,'image');
+        $fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'),do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'),'rep_image',false,$rep_image,null,true,str_replace(' ','',get_option('valid_images'))));
 
-		$fields->attach(meta_data_get_fields('download_category',is_null($id)?NULL:strval($id)));
-		require_code('seo2');
-		$fields->attach(seo_get_fields($this->seo_type,is_null($id)?NULL:strval($id),false));
+        $fields->attach(meta_data_get_fields('download_category',is_null($id)?null:strval($id)));
+        require_code('seo2');
+        $fields->attach(seo_get_fields($this->seo_type,is_null($id)?null:strval($id),false));
 
-		if (addon_installed('content_reviews'))
-			$fields->attach(content_review_get_fields('download_category',is_null($id)?NULL:strval($id)));
+        if (addon_installed('content_reviews')) {
+            $fields->attach(content_review_get_fields('download_category',is_null($id)?null:strval($id)));
+        }
 
-		// Permissions
-		$fields->attach($this->get_permission_fields(($category_id==-1)?NULL:strval($category_id),NULL,($category=='')));
+        // Permissions
+        $fields->attach($this->get_permission_fields(($category_id == -1)?null:strval($category_id),null,($category == '')));
 
-		return array($fields,$hidden);
-	}
+        return array($fields,$hidden);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A pair: The input fields, Hidden fields
 	 */
-	function fill_in_edit_form($id)
-	{
-		$category_id=intval($id);
+    public function fill_in_edit_form($id)
+    {
+        $category_id = intval($id);
 
-		$rows=$GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('id'=>$category_id),'',1);
-		if (!array_key_exists(0,$rows))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
+        $rows = $GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('id' => $category_id),'',1);
+        if (!array_key_exists(0,$rows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $myrow = $rows[0];
 
-		return $this->get_form_fields($category_id,get_translated_text($myrow['category']),$myrow['parent_id'],get_translated_text($myrow['description']),$myrow['notes'],$category_id,$myrow['rep_image']);
-	}
+        return $this->get_form_fields($category_id,get_translated_text($myrow['category']),$myrow['parent_id'],get_translated_text($myrow['description']),$myrow['notes'],$category_id,$myrow['rep_image']);
+    }
 
-	/**
+    /**
 	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
-	function add_actualisation()
-	{
-		$category=post_param('category');
-		$parent_id=post_param_integer('parent_id');
-		$description=post_param('description');
-		$notes=post_param('notes','');
-		$urls=get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
-		$rep_image=$urls[0];
+    public function add_actualisation()
+    {
+        $category = post_param('category');
+        $parent_id = post_param_integer('parent_id');
+        $description = post_param('description');
+        $notes = post_param('notes','');
+        $urls = get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
+        $rep_image = $urls[0];
 
-		$meta_data=actual_meta_data_get_fields('download_category',NULL);
+        $meta_data = actual_meta_data_get_fields('download_category',null);
 
-		$category_id=add_download_category($category,$parent_id,$description,$notes,$rep_image,$meta_data['add_time']);
-		$this->set_permissions(strval($category_id));
+        $category_id = add_download_category($category,$parent_id,$description,$notes,$rep_image,$meta_data['add_time']);
+        $this->set_permissions(strval($category_id));
 
-		if (addon_installed('content_reviews'))
-			content_review_set('download_category',strval($category_id));
+        if (addon_installed('content_reviews')) {
+            content_review_set('download_category',strval($category_id));
+        }
 
-		return strval($category_id);
-	}
+        return strval($category_id);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
-	function edit_actualisation($id)
-	{
-		$category_id=intval($id);
+    public function edit_actualisation($id)
+    {
+        $category_id = intval($id);
 
-		$category=post_param('category');
-		$parent_id=post_param_integer('parent_id',INTEGER_MAGIC_NULL);
-		if ($parent_id==-1) $parent_id=NULL;
-		$description=post_param('description',STRING_MAGIC_NULL);
-		$notes=post_param('notes',STRING_MAGIC_NULL);
-		if (!fractional_edit())
-		{
-			$urls=get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
-			$rep_image=$urls[0];
-			if (($rep_image=='') && (post_param_integer('rep_image_unlink',0)!=1)) $rep_image=NULL;
-		} else $rep_image=STRING_MAGIC_NULL;
+        $category = post_param('category');
+        $parent_id = post_param_integer('parent_id',INTEGER_MAGIC_NULL);
+        if ($parent_id == -1) {
+            $parent_id = null;
+        }
+        $description = post_param('description',STRING_MAGIC_NULL);
+        $notes = post_param('notes',STRING_MAGIC_NULL);
+        if (!fractional_edit()) {
+            $urls = get_url('image_url','rep_image','uploads/repimages',0,OCP_UPLOAD_IMAGE);
+            $rep_image = $urls[0];
+            if (($rep_image == '') && (post_param_integer('rep_image_unlink',0) != 1)) {
+                $rep_image = null;
+            }
+        } else {
+            $rep_image = STRING_MAGIC_NULL;
+        }
 
-		$meta_data=actual_meta_data_get_fields('download_category',strval($category_id));
+        $meta_data = actual_meta_data_get_fields('download_category',strval($category_id));
 
-		edit_download_category($category_id,$category,$parent_id,$description,$notes,$rep_image,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['add_time']);
-		if (!fractional_edit())
-		{
-			$this->set_permissions(strval($category_id));
-		}
+        edit_download_category($category_id,$category,$parent_id,$description,$notes,$rep_image,post_param('meta_keywords',STRING_MAGIC_NULL),post_param('meta_description',STRING_MAGIC_NULL),$meta_data['add_time']);
+        if (!fractional_edit()) {
+            $this->set_permissions(strval($category_id));
+        }
 
-		if (addon_installed('content_reviews'))
-			content_review_set('download_category',strval($category_id));
-	}
+        if (addon_installed('content_reviews')) {
+            content_review_set('download_category',strval($category_id));
+        }
+    }
 
-	/**
+    /**
 	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
-	function delete_actualisation($id)
-	{
-		$category_id=intval($id);
+    public function delete_actualisation($id)
+    {
+        $category_id = intval($id);
 
-		check_delete_permission('cat_high',NULL);
+        check_delete_permission('cat_high',null);
 
-		delete_download_category($category_id);
-	}
+        delete_download_category($category_id);
+    }
 
-	/**
+    /**
 	 * The do-next manager for after download content management (event types only).
 	 *
 	 * @param  tempcode		The title (output of get_screen_title)
@@ -1010,12 +1028,12 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 * @param  ?AUTO_LINK	The ID of whatever was just handled (NULL: N/A)
 	 * @return tempcode		The UI
 	 */
-	function do_next_manager($title,$description,$id)
-	{
-		return $this->_do_next_manager($title,$description,NULL,is_null($id)?NULL:intval($id));
-	}
+    public function do_next_manager($title,$description,$id)
+    {
+        return $this->_do_next_manager($title,$description,null,is_null($id)?null:intval($id));
+    }
 
-	/**
+    /**
 	 * The do-next manager for after download content management.
 	 *
 	 * @param  tempcode		The title (output of get_screen_title)
@@ -1025,72 +1043,67 @@ class Module_cms_downloads_cat extends standard_crud_module
 	 * @param  ?AUTO_LINK	The download licence ID we were working in (NULL: deleted/NA)
 	 * @return tempcode		The UI
 	 */
-	function _do_next_manager($title,$description,$id=NULL,$category_id=NULL,$download_licence_id=NULL)
-	{
-		require_code('templates_donext');
+    public function _do_next_manager($title,$description,$id = null,$category_id = null,$download_licence_id = null)
+    {
+        require_code('templates_donext');
 
-		if ((is_null($id)) && (is_null($category_id)))
-		{
-			return do_next_manager($title,$description,
-				NULL,
-				NULL,
-				/* TYPED-ORDERED LIST OF 'LINKS'	 */
-				array('_SELF',array('type'=>'ad'),'_SELF'), // Add one
-				NULL, // Edit this
-				has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL, // Edit one
-				NULL, // View this
-				array('downloads',array('type'=>'misc'),get_module_zone('downloads')), // View archive
-				NULL, // Add to category
-				has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL, // Add one category
-				has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL, // Edit one category
-				NULL, // Edit this category
-				NULL, // View this category
-				/* SPECIALLY TYPED 'LINKS' */
-				array(
-					has_privilege(get_member(),'mass_import','cms_downloads')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL,
-				),
-				array(),
-				array(
-					has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
-					has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
-				),
-				do_lang('LICENCES')
-			);
-		}
+        if ((is_null($id)) && (is_null($category_id))) {
+            return do_next_manager($title,$description,
+                null,
+                null,
+                /* TYPED-ORDERED LIST OF 'LINKS'	 */
+                array('_SELF',array('type' => 'ad'),'_SELF'), // Add one
+                NULL, // Edit this
+                has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ed'),'_SELF'):null, // Edit one
+                NULL, // View this
+                array('downloads',array('type' => 'misc'),get_module_zone('downloads')), // View archive
+                NULL, // Add to category
+                has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ac'),'_SELF'):null, // Add one category
+                has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ec'),'_SELF'):null, // Edit one category
+                NULL, // Edit this category
+                NULL, // View this category
+                /* SPECIALLY TYPED 'LINKS' */
+                array(
+                    has_privilege(get_member(),'mass_import','cms_downloads')?array('menu/_generic_admin/import',array('_SELF',array('type' => 'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):null,
+                ),
+                array(),
+                array(
+                    has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type' => 'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):null,
+                    has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type' => 'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):null
+                ),
+                do_lang('LICENCES')
+            );
+        }
 
-		$special_links=array(has_privilege(get_member(),'mass_import','cms_downloads')?array('menu/_generic_admin/import',array('_SELF',array('type'=>'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):NULL);
+        $special_links = array(has_privilege(get_member(),'mass_import','cms_downloads')?array('menu/_generic_admin/import',array('_SELF',array('type' => 'import'),'_SELF'),do_lang('LOAD_FTP_FILES')):null);
 
-		if ((addon_installed('galleries')) && (!is_null($id)))
-		{
-			require_lang('galleries');
-			$special_links[]=(has_privilege(get_member(),'submit_midrange_content','cms_galleries',array('galleries','download_'.strval($id))) && (!is_null($id)))?array('menu/cms/downloads/add_image_to_this',array('cms_galleries',array('type'=>'ad','cat'=>'download_'.strval($id)),get_module_zone('cms_galleries'))):NULL;
-		}
+        if ((addon_installed('galleries')) && (!is_null($id))) {
+            require_lang('galleries');
+            $special_links[] = (has_privilege(get_member(),'submit_midrange_content','cms_galleries',array('galleries','download_' . strval($id))) && (!is_null($id)))?array('menu/cms/downloads/add_image_to_this',array('cms_galleries',array('type' => 'ad','cat' => 'download_' . strval($id)),get_module_zone('cms_galleries'))):null;
+        }
 
-		return do_next_manager($title,$description,
-			NULL,
-			NULL,
-			/* TYPED-ORDERED LIST OF 'LINKS'	 */
-			is_null($id)?NULL:array('_SELF',array('type'=>'ad','cat'=>$category_id),'_SELF'), // Add one
-			(is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_downloads',array('downloads',$category_id))))?NULL:array('_SELF',array('type'=>'_ed','id'=>$id),'_SELF'), // Edit this
-			has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ed'),'_SELF'):NULL, // Edit one
-			is_null($id)?NULL:array('downloads',array('type'=>'entry','id'=>$id),get_module_zone('downloads')), // View this
-			array('downloads',array('type'=>'misc'),get_module_zone('downloads')), // View archive
-			(!is_null($id))?NULL:array('_SELF',array('type'=>'ad','cat'=>$category_id),'_SELF'), // Add to category
-			has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ac'),'_SELF'):NULL, // Add one category
-			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'ec'),'_SELF'):NULL, // Edit one category
-			has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type'=>'_ec','id'=>$category_id),'_SELF'):NULL, // Edit this category
-			array('downloads',array('type'=>'misc','id'=>($category_id==db_get_first_id())?NULL:$category_id),get_module_zone('downloads')), // View this category
-			/* SPECIALLY TYPED 'LINKS' */
-			$special_links,
-			array(),
-			array(
-				has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type'=>'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):NULL,
-				has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type'=>'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):NULL
-			),
-			do_lang('LICENCES')
-		);
-
-	}
+        return do_next_manager($title,$description,
+            null,
+            null,
+            /* TYPED-ORDERED LIST OF 'LINKS'	 */
+            is_null($id)?null:array('_SELF',array('type' => 'ad','cat' => $category_id),'_SELF'), // Add one
+            (is_null($id) || (!has_privilege(get_member(),'edit_own_midrange_content','cms_downloads',array('downloads',$category_id))))?null:array('_SELF',array('type' => '_ed','id' => $id),'_SELF'), // Edit this
+            has_privilege(get_member(),'edit_own_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ed'),'_SELF'):null, // Edit one
+            is_null($id)?null:array('downloads',array('type' => 'entry','id' => $id),get_module_zone('downloads')), // View this
+            array('downloads',array('type' => 'misc'),get_module_zone('downloads')), // View archive
+            (!is_null($id))?null:array('_SELF',array('type' => 'ad','cat' => $category_id),'_SELF'), // Add to category
+            has_privilege(get_member(),'submit_cat_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ac'),'_SELF'):null, // Add one category
+            has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type' => 'ec'),'_SELF'):null, // Edit one category
+            has_privilege(get_member(),'edit_own_cat_midrange_content','cms_downloads')?array('_SELF',array('type' => '_ec','id' => $category_id),'_SELF'):null, // Edit this category
+            array('downloads',array('type' => 'misc','id' => ($category_id == db_get_first_id())?null:$category_id),get_module_zone('downloads')), // View this category
+            /* SPECIALLY TYPED 'LINKS' */
+            $special_links,
+            array(),
+            array(
+                has_privilege(get_member(),'submit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/add_one_licence',array('_SELF',array('type' => 'av'),'_SELF'),do_lang('ADD_DOWNLOAD_LICENCE')):null,
+                has_privilege(get_member(),'edit_cat_highrange_content','cms_downloads')?array('menu/cms/downloads/edit_one_licence',array('_SELF',array('type' => 'ev'),'_SELF'),do_lang('EDIT_DOWNLOAD_LICENCE')):null
+            ),
+            do_lang('LICENCES')
+        );
+    }
 }
-
-

@@ -15,36 +15,34 @@
 
 class Hook_config_channel_update_time
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'UPDATE_TIME',
-			'type'=>'integer',
-			'category'=>'BLOCKS',
-			'group'=>'YOUTUBE_CHANNEL_INTEGRATION',
-			'explanation'=>'CONFIG_OPTION_channel_update_time',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'UPDATE_TIME',
+            'type' => 'integer',
+            'category' => 'BLOCKS',
+            'group' => 'YOUTUBE_CHANNEL_INTEGRATION',
+            'explanation' => 'CONFIG_OPTION_channel_update_time',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'twitter_feed_integration_block',
-		);
-	}
+            'addon' => 'twitter_feed_integration_block',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '60';
-	}
+    public function get_default()
+    {
+        return '60';
+    }
 }
-
-

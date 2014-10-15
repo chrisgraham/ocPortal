@@ -20,45 +20,46 @@
 
 class Block_main_trackback
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Philip Withnall';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=1;
-		$info['locked']=false;
-		$info['parameters']=array('param','page','id');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Philip Withnall';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 1;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','page','id');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (!array_key_exists('page',$map)) $map['page']=get_page_name();
+    public function run($map)
+    {
+        if (!array_key_exists('page',$map)) {
+            $map['page'] = get_page_name();
+        }
 
-		if (array_key_exists('id',$map))
-		{
-			$id=$map['id'];
-		} else $id=get_param('id','0');
+        if (array_key_exists('id',$map)) {
+            $id = $map['id'];
+        } else {
+            $id = get_param('id','0');
+        }
 
-		require_code('feedback');
+        require_code('feedback');
 
-		actualise_post_trackback(get_option('is_on_trackbacks')=='1',$map['page'],$id);
+        actualise_post_trackback(get_option('is_on_trackbacks') == '1',$map['page'],$id);
 
-		return get_trackbacks($map['page'],$id,get_option('is_on_trackbacks')=='1');
-	}
+        return get_trackbacks($map['page'],$id,get_option('is_on_trackbacks') == '1');
+    }
 }
-
-

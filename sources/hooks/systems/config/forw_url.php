@@ -20,35 +20,33 @@
 
 class Hook_config_forw_url
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'FORW_MAINTAIN_URL',
-			'type'=>'line',
-			'category'=>'POINTSTORE',
-			'group'=>'FORWARDING',
-			'explanation'=>'CONFIG_OPTION_forw_url',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'FORW_MAINTAIN_URL',
+            'type' => 'line',
+            'category' => 'POINTSTORE',
+            'group' => 'FORWARDING',
+            'explanation' => 'CONFIG_OPTION_forw_url',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'pointstore',
-		);
-	}
+            'addon' => 'pointstore',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'http://'.get_domain().':2082/frontend/x/mail/addfwd.html';
-	}
+    public function get_default()
+    {
+        return 'http://' . get_domain() . ':2082/frontend/x/mail/addfwd.html';
+    }
 }
-
-

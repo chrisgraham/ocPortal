@@ -20,32 +20,32 @@
 
 class Hook_unvalidated_downloads
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!module_installed('downloads')) return NULL;
+    public function info()
+    {
+        if (!module_installed('downloads')) {
+            return NULL;
+        }
 
-		require_lang('downloads');
+        require_lang('downloads');
 
-		$info=array();
-		$info['db_table']='download_downloads';
-		$info['db_identifier']='id';
-		$info['db_validated']='validated';
-		$info['db_title']='name';
-		$info['db_title_dereference']=true;
-		$info['db_add_date']='add_date';
-		$info['db_edit_date']='edit_date';
-		$info['edit_module']='cms_downloads';
-		$info['edit_type']='_ed';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('SECTION_DOWNLOADS');
+        $info = array();
+        $info['db_table'] = 'download_downloads';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'validated';
+        $info['db_title'] = 'name';
+        $info['db_title_dereference'] = true;
+        $info['db_add_date'] = 'add_date';
+        $info['db_edit_date'] = 'edit_date';
+        $info['edit_module'] = 'cms_downloads';
+        $info['edit_type'] = '_ed';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('SECTION_DOWNLOADS');
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

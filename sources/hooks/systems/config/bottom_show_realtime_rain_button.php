@@ -20,35 +20,33 @@
 
 class Hook_config_bottom_show_realtime_rain_button
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'REALTIME_RAIN_BUTTON',
-			'type'=>'tick',
-			'category'=>'THEME',
-			'group'=>'FOOTER_LINKS',
-			'explanation'=>'CONFIG_OPTION_bottom_show_realtime_rain_button',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'REALTIME_RAIN_BUTTON',
+            'type' => 'tick',
+            'category' => 'THEME',
+            'group' => 'FOOTER_LINKS',
+            'explanation' => 'CONFIG_OPTION_bottom_show_realtime_rain_button',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'realtime_rain',
-		);
-	}
+            'addon' => 'realtime_rain',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

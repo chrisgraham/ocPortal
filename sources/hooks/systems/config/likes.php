@@ -20,35 +20,33 @@
 
 class Hook_config_likes
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_LIKES',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'USER_INTERACTION_RATING',
-			'explanation'=>'CONFIG_OPTION_likes',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_LIKES',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => 'USER_INTERACTION_RATING',
+            'explanation' => 'CONFIG_OPTION_likes',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

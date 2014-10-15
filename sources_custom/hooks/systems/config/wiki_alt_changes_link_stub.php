@@ -20,35 +20,33 @@
 
 class Hook_config_wiki_alt_changes_link_stub
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'WIKI_ALT_CHANGES_LINK_STUB',
-			'type'=>'line',
-			'category'=>'FEATURE',
-			'group'=>'WIKI',
-			'explanation'=>'CONFIG_OPTION_wiki_alt_changes_link_stub',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'WIKI_ALT_CHANGES_LINK_STUB',
+            'type' => 'line',
+            'category' => 'FEATURE',
+            'group' => 'WIKI',
+            'explanation' => 'CONFIG_OPTION_wiki_alt_changes_link_stub',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'wiki_sync',
-		);
-	}
+            'addon' => 'wiki_sync',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return ''; // E.g. https://github.com/?/?/commits/v10/docs/pages/comcode_custom/EN
-	}
+    public function get_default()
+    {
+        return ''; // E.g. https://github.com/?/?/commits/v10/docs/pages/comcode_custom/EN
+    }
 }
-
-

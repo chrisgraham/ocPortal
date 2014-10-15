@@ -20,19 +20,19 @@
 
 class Hook_Profiles_Tabs_Edit_delete
 {
-	/**
+    /**
 	 * Find whether this hook is active.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
 	 * @param  MEMBER			The ID of the member who is doing the viewing
 	 * @return boolean		Whether this hook is active
 	 */
-	function is_active($member_id_of,$member_id_viewing)
-	{
-		return has_privilege($member_id_viewing,'delete_account') && (($member_id_of==$member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')));
-	}
+    public function is_active($member_id_of,$member_id_viewing)
+    {
+        return has_privilege($member_id_viewing,'delete_account') && (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')));
+    }
 
-	/**
+    /**
 	 * Render function for profile tabs edit hooks.
 	 *
 	 * @param  MEMBER			The ID of the member who is being viewed
@@ -40,54 +40,53 @@ class Hook_Profiles_Tabs_Edit_delete
 	 * @param  boolean		Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
 	 * @return ?array			A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
 	 */
-	function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible=false)
-	{
-		$title=do_lang_tempcode('DELETE');
+    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    {
+        $title = do_lang_tempcode('DELETE');
 
-		$order=200;
+        $order = 200;
 
-		// Actualiser
-		$delete_account=post_param_integer('delete',0);
-		if ($delete_account==1)
-		{
-			if (is_guest($member_id_of))
-				warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+        // Actualiser
+        $delete_account = post_param_integer('delete',0);
+        if ($delete_account == 1) {
+            if (is_guest($member_id_of)) {
+                warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+            }
 
-			ocf_delete_member($member_id_of);
+            ocf_delete_member($member_id_of);
 
-			inform_exit(do_lang_tempcode('SUCCESS'));
-		}
+            inform_exit(do_lang_tempcode('SUCCESS'));
+        }
 
-		if ($leave_to_ajax_if_possible) return NULL;
+        if ($leave_to_ajax_if_possible) {
+            return NULL;
+        }
 
-		// UI fields
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+        // UI fields
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
 
-		$text=paragraph(do_lang_tempcode('_DELETE_MEMBER'.(($member_id_of==$member_id_viewing)?'_SUICIDAL':''),$username));
+        $text = paragraph(do_lang_tempcode('_DELETE_MEMBER' . (($member_id_of == $member_id_viewing)?'_SUICIDAL':''),$username));
 
-		if ($member_id_of!=$member_id_viewing)
-		{
-			$merge_url=build_url(array('page'=>'admin_ocf_merge_members','from'=>$username,'to'=>$GLOBALS['FORUM_DRIVER']->get_username(get_member())),get_module_zone('admin_ocf_merge_members'));
-			$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_MERGE',escape_html($merge_url->evaluate()))));
+        if ($member_id_of != $member_id_viewing) {
+            $merge_url = build_url(array('page' => 'admin_ocf_merge_members','from' => $username,'to' => $GLOBALS['FORUM_DRIVER']->get_username(get_member())),get_module_zone('admin_ocf_merge_members'));
+            $text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_MERGE',escape_html($merge_url->evaluate()))));
 
-			if (has_privilege($member_id_of,'comcode_dangerous'))
-				$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_ADMIN',escape_html($merge_url->evaluate()))));
+            if (has_privilege($member_id_of,'comcode_dangerous')) {
+                $text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_ADMIN',escape_html($merge_url->evaluate()))));
+            }
 
-			if (addon_installed('search'))
-			{
-				$search_url=build_url(array('page'=>'search','type'=>'results','author'=>$username),get_module_zone('search'));
-				$text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_SEARCH',escape_html($search_url->evaluate()))));
-			}
-		}
+            if (addon_installed('search')) {
+                $search_url = build_url(array('page' => 'search','type' => 'results','author' => $username),get_module_zone('search'));
+                $text->attach(paragraph(do_lang_tempcode('_DELETE_MEMBER_SEARCH',escape_html($search_url->evaluate()))));
+            }
+        }
 
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-		$fields->attach(form_input_tick(do_lang_tempcode(($member_id_of!=$member_id_viewing)?'DELETE_WITHOUT_MERGING':'DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
+        $fields->attach(form_input_tick(do_lang_tempcode(($member_id_of != $member_id_viewing)?'DELETE_WITHOUT_MERGING':'DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
 
-		$javascript='';
+        $javascript = '';
 
-		return array($title,$fields,$text,$javascript,$order,NULL,'tabs/member_account/edit/delete');
-	}
+        return array($title,$fields,$text,$javascript,$order,null,'tabs/member_account/edit/delete');
+    }
 }
-
-

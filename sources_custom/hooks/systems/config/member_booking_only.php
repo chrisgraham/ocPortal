@@ -15,35 +15,33 @@
 
 class Hook_config_member_booking_only
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MEMBER_BOOKING_ONLY',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'BOOKINGS',
-			'explanation'=>'CONFIG_OPTION_member_booking_only',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MEMBER_BOOKING_ONLY',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => 'BOOKINGS',
+            'explanation' => 'CONFIG_OPTION_member_booking_only',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'booking',
-		);
-	}
+            'addon' => 'booking',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

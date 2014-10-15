@@ -23,8 +23,8 @@
  */
 function init__ocf_posts()
 {
-	global $SIGNATURES_CACHE;
-	$SIGNATURES_CACHE=array();
+    global $SIGNATURES_CACHE;
+    $SIGNATURES_CACHE = array();
 }
 
 /**
@@ -36,21 +36,30 @@ function init__ocf_posts()
  * @param  ?MEMBER		The member (NULL: current member).
  * @return boolean		The answer.
  */
-function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_id=NULL)
+function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id = null,$member_id = null)
 {
-	if (is_null($member_id)) $member_id=get_member();
+    if (is_null($member_id)) {
+        $member_id = get_member();
+    }
 
-	if (!has_privilege($member_id,'submit_lowrange_content','topics',array('forums',$forum_id,'topics',$topic_id))) return false;
-	if (is_null($last_member_id)) return true;
-	if (($last_member_id==$member_id) && (!is_null($forum_id)))
-	{
-		if (!has_privilege($member_id,'double_post')) return false;
-	}
+    if (!has_privilege($member_id,'submit_lowrange_content','topics',array('forums',$forum_id,'topics',$topic_id))) {
+        return false;
+    }
+    if (is_null($last_member_id)) {
+        return true;
+    }
+    if (($last_member_id == $member_id) && (!is_null($forum_id))) {
+        if (!has_privilege($member_id,'double_post')) {
+            return false;
+        }
+    }
 
-	$test=$GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_warnings WHERE (p_silence_from_topic='.strval($topic_id).' OR p_silence_from_forum='.strval($forum_id).') AND w_member_id='.strval($member_id));
-	if (!is_null($test)) return false;
+    $test = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_warnings WHERE (p_silence_from_topic=' . strval($topic_id) . ' OR p_silence_from_forum=' . strval($forum_id) . ') AND w_member_id=' . strval($member_id));
+    if (!is_null($test)) {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 /**
@@ -62,30 +71,36 @@ function ocf_may_post_in_topic($forum_id,$topic_id,$last_member_id=NULL,$member_
  * @param  ?boolean		Whether the topic the post is in is closed (NULL: don't consider this, maybe we're not considering any one specific case).
  * @return boolean		The answer.
  */
-function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL,$topic_is_closed=NULL)
+function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id = null,$topic_is_closed = null)
 {
-	if (is_null($member_id)) $member_id=get_member();
+    if (is_null($member_id)) {
+        $member_id = get_member();
+    }
 
-	if (is_null($forum_id))
-	{
-		if (has_privilege($member_id,'moderate_personal_topic')) return true;
-		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
-	} else
-	{
-		$ticket_forum=get_option('ticket_forum_name',true);
-		$comments_forum=get_option('comments_forum_name',true);
-		if ((is_null($ticket_forum)) || (($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)) && ($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum))))
-		{
-			if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
-		}
-	}
+    if (is_null($forum_id)) {
+        if (has_privilege($member_id,'moderate_personal_topic')) {
+            return true;
+        }
+        if (($resource_owner != $member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) {
+            return false;
+        }
+    } else {
+        $ticket_forum = get_option('ticket_forum_name',true);
+        $comments_forum = get_option('comments_forum_name',true);
+        if ((is_null($ticket_forum)) || (($forum_id != $GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)) && ($forum_id != $GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum)))) {
+            if (!has_category_access($member_id,'forums',strval($forum_id))) {
+                return false;
+            }
+        }
+    }
 
-	if ($topic_is_closed===true)
-	{
-		if (!ocf_may_moderate_forum($forum_id,$member_id)) return false;
-	}
+    if ($topic_is_closed === true) {
+        if (!ocf_may_moderate_forum($forum_id,$member_id)) {
+            return false;
+        }
+    }
 
-	return has_edit_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
+    return has_edit_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }
 
 /**
@@ -96,25 +111,30 @@ function ocf_may_edit_post_by($resource_owner,$forum_id,$member_id=NULL,$topic_i
  * @param  ?MEMBER		The member (NULL: current member).
  * @return boolean		The answer.
  */
-function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
+function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id = null)
 {
-	if (is_null($member_id)) $member_id=get_member();
+    if (is_null($member_id)) {
+        $member_id = get_member();
+    }
 
-	if (is_null($forum_id))
-	{
-		if (has_privilege($member_id,'moderate_personal_topic')) return true;
-		if (($resource_owner!=$member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) return false;
-	} else
-	{
-		$ticket_forum=get_option('ticket_forum_name',true);
-		$comments_forum=get_option('comments_forum_name',true);
-		if ((is_null($ticket_forum)) || (($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)) && ($forum_id!=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum))))
-		{
-			if (!has_category_access($member_id,'forums',strval($forum_id))) return false;
-		}
-	}
+    if (is_null($forum_id)) {
+        if (has_privilege($member_id,'moderate_personal_topic')) {
+            return true;
+        }
+        if (($resource_owner != $member_id) || (!has_privilege($member_id,'delete_personal_topic_posts'))) {
+            return false;
+        }
+    } else {
+        $ticket_forum = get_option('ticket_forum_name',true);
+        $comments_forum = get_option('comments_forum_name',true);
+        if ((is_null($ticket_forum)) || (($forum_id != $GLOBALS['FORUM_DRIVER']->forum_id_from_name($ticket_forum)) && ($forum_id != $GLOBALS['FORUM_DRIVER']->forum_id_from_name($comments_forum)))) {
+            if (!has_category_access($member_id,'forums',strval($forum_id))) {
+                return false;
+            }
+        }
+    }
 
-	return has_delete_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
+    return has_delete_permission('low',$member_id,$resource_owner,'topics',array('forums',$forum_id));
 }
 
 /**
@@ -126,22 +146,21 @@ function ocf_may_delete_post_by($resource_owner,$forum_id,$member_id=NULL)
  */
 function ocf_display_spacer_post($linked_type,$linked_id)
 {
-	$new_description=mixed();
-	$new_post=mixed();
+    $new_description = mixed();
+    $new_post = mixed();
 
-	require_code('content');
-	$linked_type=convert_ocportal_type_codes('feedback_type_code',$linked_type,'content_type');
-	if ($linked_type!='')
-	{
-		require_code('content');
-		$cma_ob=get_content_object($linked_type);
-		$cma_info=$cma_ob->info();
-		$linked_rows=$GLOBALS['SITE_DB']->query_select($cma_info['table'],array('*'),get_content_where_for_str_id($linked_id,$cma_info),'',1);
-		if (array_key_exists(0,$linked_rows))
-			$new_post=$cma_ob->run($linked_rows[0],'_SEARCH',true,true);
-		$new_description=do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
-	}
+    require_code('content');
+    $linked_type = convert_ocportal_type_codes('feedback_type_code',$linked_type,'content_type');
+    if ($linked_type != '') {
+        require_code('content');
+        $cma_ob = get_content_object($linked_type);
+        $cma_info = $cma_ob->info();
+        $linked_rows = $GLOBALS['SITE_DB']->query_select($cma_info['table'],array('*'),get_content_where_for_str_id($linked_id,$cma_info),'',1);
+        if (array_key_exists(0,$linked_rows)) {
+            $new_post = $cma_ob->run($linked_rows[0],'_SEARCH',true,true);
+        }
+        $new_description = do_lang('THIS_IS_COMMENT_TOPIC',get_site_name());
+    }
 
-	return array($new_description,$new_post);
+    return array($new_description,$new_post);
 }
-

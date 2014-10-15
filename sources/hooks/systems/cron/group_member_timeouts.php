@@ -20,13 +20,13 @@
 
 class Hook_cron_group_member_timeouts
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		require_code('group_member_timeouts');
+    public function run()
+    {
+        require_code('group_member_timeouts');
 
-		cleanup_member_timeouts();
-	}
+        cleanup_member_timeouts();
+    }
 }

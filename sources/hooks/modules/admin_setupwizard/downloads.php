@@ -20,17 +20,17 @@
 
 class Hook_sw_downloads
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('downloads')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('downloads')) {
+            return array();
+        }
 
-		return array(array('main_awards'=>array('YES_CELL','NO')),array());
-	}
+        return array(array('main_awards' => array('YES_CELL','NO')),array());
+    }
 }
-
-

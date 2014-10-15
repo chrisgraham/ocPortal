@@ -24,67 +24,66 @@
  */
 function ocf_field_editable($field_name,$special_type)
 {
-	switch ($field_name)
-	{
-		case 'username':
-			switch ($special_type)
-			{
-				case 'facebook':
-					if (get_option('facebook_sync_username')=='1') return false;
-					break;
+    switch ($field_name) {
+        case 'username':
+            switch ($special_type) {
+                case 'facebook':
+                    if (get_option('facebook_sync_username') == '1') {
+                        return false;
+                    }
+                    break;
 
-				case 'ldap':
-					return false;
-			}
-			break;
+                case 'ldap':
+                    return false;
+            }
+            break;
 
-		case 'password':
-			switch ($special_type)
-			{
-				case 'facebook':
-					return false;
+        case 'password':
+            switch ($special_type) {
+                case 'facebook':
+                    return false;
 
-				case 'ldap':
-				case 'httpauth':
-					return false;
-			}
-			break;
+                case 'ldap':
+                case 'httpauth':
+                    return false;
+            }
+            break;
 
-		case 'primary_group':
-			switch ($special_type)
-			{
-				case 'ldap':
-					return false;
-			}
-			break;
+        case 'primary_group':
+            switch ($special_type) {
+                case 'ldap':
+                    return false;
+            }
+            break;
 
-		case 'secondary_groups':
-			switch ($special_type)
-			{
-				case 'ldap':
-					return false;
-			}
-			break;
+        case 'secondary_groups':
+            switch ($special_type) {
+                case 'ldap':
+                    return false;
+            }
+            break;
 
-		case 'dob':
-			switch ($special_type)
-			{
-				case 'facebook':
-					if (get_option('facebook_sync_dob')=='1') return false;
-					break;
-			}
-			break;
+        case 'dob':
+            switch ($special_type) {
+                case 'facebook':
+                    if (get_option('facebook_sync_dob') == '1') {
+                        return false;
+                    }
+                    break;
+            }
+            break;
 
-		case 'email':
-			switch ($special_type)
-			{
-				case 'facebook':
-					if (get_option('facebook_sync_email')=='1') return false;
-					break;
-			}
-			break;
+        case 'email':
+            switch ($special_type) {
+                case 'facebook':
+                    if (get_option('facebook_sync_email') == '1') {
+                        return false;
+                    }
+                    break;
+            }
+            break;
 
-	}
+    }
 
-	return true;
+    return true;
 }

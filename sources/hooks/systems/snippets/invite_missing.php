@@ -20,25 +20,29 @@
 
 class Hook_invite_missing
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$val=get_param('name');
+    public function run()
+    {
+        $val = get_param('name');
 
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_email_address',array('i_email_address'=>$val,'i_taken'=>0));
-		if (!is_null($test)) return new ocp_tempcode(); // All ok
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_email_address',array('i_email_address' => $val,'i_taken' => 0));
+        if (!is_null($test)) {
+            return new ocp_tempcode();
+        } // All ok
 
-		// Some kind of issue...
+        // Some kind of issue...
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_email_address',array('i_email_address'=>$val));
-		if (!is_null($test)) return make_string_tempcode(strip_html(do_lang('INVITE_ALREADY_JOINED')));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_email_address',array('i_email_address' => $val));
+        if (!is_null($test)) {
+            return make_string_tempcode(strip_html(do_lang('INVITE_ALREADY_JOINED')));
+        }
 
-		return make_string_tempcode(strip_html(do_lang('NO_INVITE')));
-	}
+        return make_string_tempcode(strip_html(do_lang('NO_INVITE')));
+    }
 }

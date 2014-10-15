@@ -20,19 +20,19 @@
  */
 function init__site__pages__modules_custom__galleries($code)
 {
-	i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+    i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-	// Add a redirection for the workflow handling
-	$code=str_replace('if ($type==\'list\') return $this->list_galleries();',
-		'if ($type==\'list\') return $this->list_galleries();
+    // Add a redirection for the workflow handling
+    $code = str_replace('if ($type==\'list\') return $this->list_galleries();',
+        'if ($type==\'list\') return $this->list_galleries();
 		if ($type=="workflow") return $this->workflow_handler();',
-		$code);
+        $code);
 
-	// Add workflow warnings to flow mode galleries. This has to be done for
-	// images...
-	$code=str_replace(
-		'$current_entry=do_template(\'GALLERY_FLOW_MODE_IMAGE\'',
-		'// Add the workflow form if this entry is unvalidated
+    // Add workflow warnings to flow mode galleries. This has to be done for
+    // images...
+    $code = str_replace(
+        '$current_entry=do_template(\'GALLERY_FLOW_MODE_IMAGE\'',
+        '// Add the workflow form if this entry is unvalidated
 		if (array_key_exists("validated", $row) && $row["validated"]!=1)
 		{
 			require_code("workflows");
@@ -46,12 +46,12 @@ function init__site__pages__modules_custom__galleries($code)
 			}
 		}
 		$current_entry=do_template(\'GALLERY_FLOW_MODE_IMAGE\'',
-		$code
-	);
+        $code
+    );
 
-	// ...and videos separately.
-	$code=str_replace('$current_entry=do_template(\'GALLERY_FLOW_MODE_VIDEO',
-		'// Add the workflow form if this entry is unvalidated
+    // ...and videos separately.
+    $code = str_replace('$current_entry=do_template(\'GALLERY_FLOW_MODE_VIDEO',
+        '// Add the workflow form if this entry is unvalidated
 		if (array_key_exists("validated", $row) && $row["validated"]!=1)
 		{
 			require_code("workflows");
@@ -65,16 +65,16 @@ function init__site__pages__modules_custom__galleries($code)
 			}
 		}
 		$current_entry=do_template(\'GALLERY_FLOW_MODE_VIDEO',
-		$code
-	);
+        $code
+    );
 
 
-	// Add workflow warnings to images
-	$code=str_replace(
-		'} else $warning_details=new ocp_tempcode();
+    // Add workflow warnings to images
+    $code = str_replace(
+        '} else $warning_details=new ocp_tempcode();
 
 		if ((has_actual_page_access',
-		'// Add the workflow form here for now, to save duplicating the condition
+        '// Add the workflow form here for now, to save duplicating the condition
 		require_code(\'workflows\');
 		require_lang(\'workflows\');
 		// We need to find our ID first
@@ -86,15 +86,15 @@ function init__site__pages__modules_custom__galleries($code)
 		} else $warning_details=new ocp_tempcode();
 
 		if ((has_actual_page_access',
-		$code
-	);
+        $code
+    );
 
-	// Add workflow warnings to videos
-	$code=str_replace(
-		'} else $warning_details=new ocp_tempcode();
+    // Add workflow warnings to videos
+    $code = str_replace(
+        '} else $warning_details=new ocp_tempcode();
 
 		// Comments',
-		'require_code("workflows");
+        'require_code("workflows");
 		require_lang("workflows");
 		// We need to find our ID first
 		$workflow_content_id=get_workflow_content_id(\'video\',strval($id));
@@ -102,13 +102,13 @@ function init__site__pages__modules_custom__galleries($code)
 		} else $warning_details=new ocp_tempcode();
 
 		// Comments',
-		$code
-	);
+        $code
+    );
 
-	// Add workflow handling to the end of the class definition
-	$code=str_replace('\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
+    // Add workflow handling to the end of the class definition
+    $code = str_replace('\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
 	}',
-		'\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
+        '\'MORE_URL\'=>$more_url,\'CATEGORY_NAME\'=>$category_name));
 	}
 		/**
 		 * Handler for workflow requests
@@ -119,7 +119,7 @@ function init__site__pages__modules_custom__galleries($code)
 			require_code("workflows");		// Load workflow-related code
 			return workflow_update_handler();
 		}',
-		$code
-	);
-	return $code;
+        $code
+    );
+    return $code;
 }

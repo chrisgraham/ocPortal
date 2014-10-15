@@ -27,35 +27,37 @@
  */
 function _find_text_file_path($codename,$lang)
 {
-	if ($lang===NULL)
-	{
-		$langs=array('');
-	}
-	elseif ($lang!='')
-	{
-		$langs=array($lang);
-	} else
-	{
-		$langs=array(user_lang());
-		if (get_site_default_lang()!=user_lang()) $langs[]=get_site_default_lang();
-		if (fallback_lang()!=get_site_default_lang()) $langs[]=fallback_lang();
-	}
-	$i=0;
-	$path='';
-	do
-	{
-		$lang=$langs[$i];
-		$path=get_custom_file_base().'/text_custom/'.$lang.'/'.$codename.'.txt';
-		if (!file_exists($path))
-			$path=get_file_base().'/text_custom/'.$lang.'/'.$codename.'.txt';
-		if (!file_exists($path))
-			$path=get_file_base().'/text/'.$lang.'/'.$codename.'.txt';
-		$i++;
-	}
-	while ((!file_exists($path)) && (array_key_exists($i,$langs)));
-	if (!file_exists($path)) $path='';
+    if ($lang === NULL) {
+        $langs = array('');
+    } elseif ($lang != '') {
+        $langs = array($lang);
+    } else {
+        $langs = array(user_lang());
+        if (get_site_default_lang() != user_lang()) {
+            $langs[] = get_site_default_lang();
+        }
+        if (fallback_lang() != get_site_default_lang()) {
+            $langs[] = fallback_lang();
+        }
+    }
+    $i = 0;
+    $path = '';
+    do {
+        $lang = $langs[$i];
+        $path = get_custom_file_base() . '/text_custom/' . $lang . '/' . $codename . '.txt';
+        if (!file_exists($path)) {
+            $path = get_file_base() . '/text_custom/' . $lang . '/' . $codename . '.txt';
+        }
+        if (!file_exists($path)) {
+            $path = get_file_base() . '/text/' . $lang . '/' . $codename . '.txt';
+        }
+        $i++;
+    } while ((!file_exists($path)) && (array_key_exists($i,$langs)));
+    if (!file_exists($path)) {
+        $path = '';
+    }
 
-	return $path;
+    return $path;
 }
 
 /**
@@ -66,22 +68,23 @@ function _find_text_file_path($codename,$lang)
  * @param  boolean			Whether to tolerate missing files
  * @return string				The file contents
  */
-function read_text_file($codename,$lang=NULL,$missing_blank=false)
+function read_text_file($codename,$lang = null,$missing_blank = false)
 {
-	$path=_find_text_file_path($codename,$lang);
+    $path = _find_text_file_path($codename,$lang);
 
-	$tmp=@fopen($path,'rb');
-	if ($tmp===false)
-	{
-		if ($missing_blank) return '';
-		warn_exit(do_lang_tempcode('MISSING_TEXT_FILE',escape_html($codename)));
-	}
-	@flock($tmp,LOCK_SH);
-	$in=@file_get_contents($path);
-	@flock($tmp,LOCK_UN);
-	fclose($tmp);
-	$in=unixify_line_format($in);
-	return $in;
+    $tmp = @fopen($path,'rb');
+    if ($tmp === false) {
+        if ($missing_blank) {
+            return '';
+        }
+        warn_exit(do_lang_tempcode('MISSING_TEXT_FILE',escape_html($codename)));
+    }
+    @flock($tmp,LOCK_SH);
+    $in = @file_get_contents($path);
+    @flock($tmp,LOCK_UN);
+    fclose($tmp);
+    $in = unixify_line_format($in);
+    return $in;
 }
 
 /**
@@ -93,36 +96,43 @@ function read_text_file($codename,$lang=NULL,$missing_blank=false)
  */
 function write_text_file($codename,$lang,$out)
 {
-	$xpath=_find_text_file_path($codename,$lang);
-	if ($xpath=='')
-	{
-		$xpath=get_file_base().'/text/'.user_lang().'/'.$codename.'.txt';
-	}
-	$path=str_replace(get_file_base().'/text/',get_custom_file_base().'/text_custom/',$xpath);
+    $xpath = _find_text_file_path($codename,$lang);
+    if ($xpath == '') {
+        $xpath = get_file_base() . '/text/' . user_lang() . '/' . $codename . '.txt';
+    }
+    $path = str_replace(get_file_base() . '/text/',get_custom_file_base() . '/text_custom/',$xpath);
 
-	if (!file_exists(dirname($path)))
-	{
-		require_code('files2');
-		make_missing_directory(dirname($path));
-	}
+    if (!file_exists(dirname($path))) {
+        require_code('files2');
+        make_missing_directory(dirname($path));
+    }
 
-	$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
-	if ($myfile===false) intelligent_write_error($path);
-	@flock($myfile,LOCK_EX);
-	if (!GOOGLE_APPENGINE) ftruncate($myfile,0);
-	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	@flock($myfile,LOCK_UN);
-	fclose($myfile);
-	fix_permissions($path);
-	sync_file($path);
+    $myfile = @fopen($path,GOOGLE_APPENGINE?'wb':'at');
+    if ($myfile === false) {
+        intelligent_write_error($path);
+    }
+    @flock($myfile,LOCK_EX);
+    if (!GOOGLE_APPENGINE) {
+        ftruncate($myfile,0);
+    }
+    if (fwrite($myfile,$out)<strlen($out)) {
+        warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+    }
+    @flock($myfile,LOCK_UN);
+    fclose($myfile);
+    fix_permissions($path);
+    sync_file($path);
 
-	// Backup with a timestamp (useful if for example an addon update replaces changes)
-	$path.='.'.strval(time());
-	$myfile=@fopen($path,GOOGLE_APPENGINE?'wb':'at');
-	if ($myfile===false) intelligent_write_error($path);
-	if (fwrite($myfile,$out)<strlen($out)) warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-	fclose($myfile);
-	fix_permissions($path);
-	sync_file($path);
+    // Backup with a timestamp (useful if for example an addon update replaces changes)
+    $path .= '.' . strval(time());
+    $myfile = @fopen($path,GOOGLE_APPENGINE?'wb':'at');
+    if ($myfile === false) {
+        intelligent_write_error($path);
+    }
+    if (fwrite($myfile,$out)<strlen($out)) {
+        warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+    }
+    fclose($myfile);
+    fix_permissions($path);
+    sync_file($path);
 }
-

@@ -14,55 +14,55 @@
 
 class Block_side_justgiving_donate
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('eggid');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('eggid');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='array(array_key_exists(\'eggid\',$map)?$map[\'eggid\']:0)';
-		$info['ttl']=60*5;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'array(array_key_exists(\'eggid\',$map)?$map[\'eggid\']:0)';
+        $info['ttl'] = 60*5;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+    public function run($map)
+    {
+        i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-		require_lang('justgiving_donate');
+        require_lang('justgiving_donate');
 
-		if (!array_key_exists('eggid',$map)) return do_lang_tempcode('NO_PARAMETER_SENT','eggid');
+        if (!array_key_exists('eggid',$map)) {
+            return do_lang_tempcode('NO_PARAMETER_SENT','eggid');
+        }
 
-		$eggid=$map['eggid'];
+        $eggid = $map['eggid'];
 
-		return do_template('BLOCK_SIDE_JUSTGIVING_DONATE',array('_GUID'=>'f2fcc049804d8305eb0d8fe2cee81626','TITLE'=>do_lang_tempcode('BLOCK_JUSTGIVING_DONATE_TITLE'),'EGGID'=>$eggid));
-	}
+        return do_template('BLOCK_SIDE_JUSTGIVING_DONATE',array('_GUID' => 'f2fcc049804d8305eb0d8fe2cee81626','TITLE' => do_lang_tempcode('BLOCK_JUSTGIVING_DONATE_TITLE'),'EGGID' => $eggid));
+    }
 }
-
-

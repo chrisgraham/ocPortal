@@ -20,35 +20,33 @@
 
 class Hook_config_pt_notifications_as_web
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'PT_NOTIFICATIONS_AS_WEB',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'NOTIFICATIONS',
-			'explanation'=>'CONFIG_OPTION_pt_notifications_as_web',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'PT_NOTIFICATIONS_AS_WEB',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => 'NOTIFICATIONS',
+            'explanation' => 'CONFIG_OPTION_pt_notifications_as_web',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_notifications',
-		);
-	}
+            'addon' => 'core_notifications',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

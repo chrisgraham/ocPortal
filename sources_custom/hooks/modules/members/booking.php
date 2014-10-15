@@ -15,43 +15,48 @@
 
 class Hook_members_booking
 {
-	/**
+    /**
 	 * Find member-related links to inject.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting link hooks for
 	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
 	 */
-	function run($member_id)
-	{
-		if (!has_actual_page_access(get_member(),'cms_booking')) return array();
-		if (!$GLOBALS['SITE_DB']->table_exists('bookable')) return array();
+    public function run($member_id)
+    {
+        if (!has_actual_page_access(get_member(),'cms_booking')) {
+            return array();
+        }
+        if (!$GLOBALS['SITE_DB']->table_exists('bookable')) {
+            return array();
+        }
 
-		require_lang('booking');
-		require_code('booking');
-		require_code('booking2');
+        require_lang('booking');
+        require_code('booking');
+        require_code('booking2');
 
-		$zone=get_module_zone('cms_booking');
+        $zone = get_module_zone('cms_booking');
 
-		$request=get_member_booking_request($member_id);
+        $request = get_member_booking_request($member_id);
 
-		$links=array();
+        $links = array();
 
-		foreach ($request as $i=>$r)
-		{
-			$from=get_timezoned_date(mktime(0,0,0,$r['start_month'],$r['start_day'],$r['start_year']),false);
-			$to=get_timezoned_date(mktime(0,0,0,$r['end_month'],$r['end_day'],$r['end_year']),false);
+        foreach ($request as $i => $r) {
+            $from = get_timezoned_date(mktime(0,0,0,$r['start_month'],$r['start_day'],$r['start_year']),false);
+            $to = get_timezoned_date(mktime(0,0,0,$r['end_month'],$r['end_day'],$r['end_year']),false);
 
-			$bookable=$GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id'=>$r['bookable_id']),'',1);
-			if (!array_key_exists(0,$bookable)) continue;
+            $bookable = $GLOBALS['SITE_DB']->query_select('bookable',array('*'),array('id' => $r['bookable_id']),'',1);
+            if (!array_key_exists(0,$bookable)) {
+                continue;
+            }
 
-			$links[]=array(
-				'content',
-				do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode('bookable',$bookable[0],'title')),
-				build_url(array('page'=>'cms_booking','type'=>'_eb','id'=>strval($member_id).'_'.strval($i)),$zone),
-				'menu/booking',
-			);
-		}
+            $links[] = array(
+                'content',
+                do_lang_tempcode('BOOKING_EDIT',$from,$to,get_translated_tempcode('bookable',$bookable[0],'title')),
+                build_url(array('page' => 'cms_booking','type' => '_eb','id' => strval($member_id) . '_' . strval($i)),$zone),
+                'menu/booking',
+            );
+        }
 
-		return $links;
-	}
+        return $links;
+    }
 }

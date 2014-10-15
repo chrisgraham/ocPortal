@@ -20,37 +20,39 @@
 
 class Hook_config_smtp_from_address
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'EMAIL_ADDRESS',
-			'type'=>'line',
-			'category'=>'SERVER',
-			'group'=>'SMTP',
-			'explanation'=>'CONFIG_OPTION_smtp_from_address',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'EMAIL_ADDRESS',
+            'type' => 'line',
+            'category' => 'SERVER',
+            'group' => 'SMTP',
+            'explanation' => 'CONFIG_OPTION_smtp_from_address',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (!function_exists('fsockopen')) return NULL;
-		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) return NULL;
-		return '';
-	}
+    public function get_default()
+    {
+        if (!function_exists('fsockopen')) {
+            return NULL;
+        }
+        if (strpos(@ini_get('disable_functions'),'shell_exec') !== false) {
+            return NULL;
+        }
+        return '';
+    }
 }
-
-

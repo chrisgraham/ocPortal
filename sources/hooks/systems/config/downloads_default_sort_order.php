@@ -20,35 +20,33 @@
 
 class Hook_config_downloads_default_sort_order
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'DOWNLOADS_DEFAULT_SORT_ORDER',
-			'type'=>'list',
-			'category'=>'FEATURE',
-			'group'=>'SECTION_DOWNLOADS',
-			'explanation'=>'CONFIG_OPTION_downloads_default_sort_order',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'t.text_original ASC|file_size ASC|file_size DESC|num_downloads DESC|average_rating DESC|compound_rating DESC|add_date ASC|add_date DESC|fixed_random ASC',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'DOWNLOADS_DEFAULT_SORT_ORDER',
+            'type' => 'list',
+            'category' => 'FEATURE',
+            'group' => 'SECTION_DOWNLOADS',
+            'explanation' => 'CONFIG_OPTION_downloads_default_sort_order',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 't.text_original ASC|file_size ASC|file_size DESC|num_downloads DESC|average_rating DESC|compound_rating DESC|add_date ASC|add_date DESC|fixed_random ASC',
 
-			'addon'=>'downloads',
-		);
-	}
+            'addon' => 'downloads',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'name ASC';
-	}
+    public function get_default()
+    {
+        return 'name ASC';
+    }
 }
-
-

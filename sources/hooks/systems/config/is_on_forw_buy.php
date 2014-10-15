@@ -20,36 +20,34 @@
 
 class Hook_config_is_on_forw_buy
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_PURCHASE',
-			'type'=>'tick',
-			'category'=>'POINTSTORE',
-			'group'=>'FORWARDING',
-			'explanation'=>'CONFIG_OPTION_is_on_forw_buy',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_PURCHASE',
+            'type' => 'tick',
+            'category' => 'POINTSTORE',
+            'group' => 'FORWARDING',
+            'explanation' => 'CONFIG_OPTION_is_on_forw_buy',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'pointstore',
-		);
-	}
+            'addon' => 'pointstore',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

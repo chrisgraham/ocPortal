@@ -23,198 +23,192 @@
  */
 class Module_wiki
 {
-	/**
+    /**
 	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=10;
-		$info['locked']=false;
-		$info['update_require_upgrade']=1;
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 10;
+        $info['locked'] = false;
+        $info['update_require_upgrade'] = 1;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Uninstall the module.
 	 */
-	function uninstall()
-	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('wiki_children');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('wiki_pages');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('wiki_changes');
-		$GLOBALS['SITE_DB']->drop_table_if_exists('wiki_posts');
+    public function uninstall()
+    {
+        $GLOBALS['SITE_DB']->drop_table_if_exists('wiki_children');
+        $GLOBALS['SITE_DB']->drop_table_if_exists('wiki_pages');
+        $GLOBALS['SITE_DB']->drop_table_if_exists('wiki_changes');
+        $GLOBALS['SITE_DB']->drop_table_if_exists('wiki_posts');
 
-		delete_value('num_wiki_pages');
-		delete_value('num_wiki_posts');
-		delete_value('num_wiki_files');
+        delete_value('num_wiki_pages');
+        delete_value('num_wiki_posts');
+        delete_value('num_wiki_files');
 
-		delete_attachments('wiki_page');
-		delete_attachments('wiki_post');
+        delete_attachments('wiki_page');
+        delete_attachments('wiki_post');
 
-		delete_privilege('wiki_manage_tree');
-		delete_privilege('wiki_edit_pages');
-		delete_privilege('wiki_edit');
+        delete_privilege('wiki_manage_tree');
+        delete_privilege('wiki_edit_pages');
+        delete_privilege('wiki_edit');
 
-		$GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name'=>'wiki_page'));
+        $GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name' => 'wiki_page'));
 
-		$GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_wiki');
-	}
+        $GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_wiki');
+    }
 
-	/**
+    /**
 	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
 	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		require_lang('wiki');
+    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    {
+        require_lang('wiki');
 
-		if (is_null($upgrade_from))
-		{
-			$GLOBALS['SITE_DB']->create_table('wiki_changes',array(
-				'id'=>'*AUTO',
-				'the_action'=>'ID_TEXT',
-				'the_page'=>'AUTO_LINK',
-				'date_and_time'=>'TIME',
-				'ip'=>'IP',
-				'member_id'=>'MEMBER'
-			));
+        if (is_null($upgrade_from)) {
+            $GLOBALS['SITE_DB']->create_table('wiki_changes',array(
+                'id' => '*AUTO',
+                'the_action' => 'ID_TEXT',
+                'the_page' => 'AUTO_LINK',
+                'date_and_time' => 'TIME',
+                'ip' => 'IP',
+                'member_id' => 'MEMBER'
+            ));
 
-			$GLOBALS['SITE_DB']->create_table('wiki_children',array(
-				'parent_id'=>'*AUTO_LINK',
-				'child_id'=>'*AUTO_LINK',
-				'the_order'=>'INTEGER',
-				'title'=>'SHORT_TEXT'
-			));
+            $GLOBALS['SITE_DB']->create_table('wiki_children',array(
+                'parent_id' => '*AUTO_LINK',
+                'child_id' => '*AUTO_LINK',
+                'the_order' => 'INTEGER',
+                'title' => 'SHORT_TEXT'
+            ));
 
-			$GLOBALS['SITE_DB']->create_table('wiki_pages',array(
-				'id'=>'*AUTO',
-				'title'=>'SHORT_TRANS',
-				'notes'=>'LONG_TEXT',
-				'description'=>'LONG_TRANS__COMCODE',
-				'add_date'=>'TIME',
-				'edit_date'=>'?TIME',
-				'wiki_views'=>'INTEGER',
-				'hide_posts'=>'BINARY',
-				'submitter'=>'MEMBER'
-			));
+            $GLOBALS['SITE_DB']->create_table('wiki_pages',array(
+                'id' => '*AUTO',
+                'title' => 'SHORT_TRANS',
+                'notes' => 'LONG_TEXT',
+                'description' => 'LONG_TRANS__COMCODE',
+                'add_date' => 'TIME',
+                'edit_date' => '?TIME',
+                'wiki_views' => 'INTEGER',
+                'hide_posts' => 'BINARY',
+                'submitter' => 'MEMBER'
+            ));
 
-			$GLOBALS['SITE_DB']->create_index('wiki_pages','wiki_views',array('wiki_views'));
-			$GLOBALS['SITE_DB']->create_index('wiki_pages','sps',array('submitter'));
-			$GLOBALS['SITE_DB']->create_index('wiki_pages','sadd_date',array('add_date'));
+            $GLOBALS['SITE_DB']->create_index('wiki_pages','wiki_views',array('wiki_views'));
+            $GLOBALS['SITE_DB']->create_index('wiki_pages','sps',array('submitter'));
+            $GLOBALS['SITE_DB']->create_index('wiki_pages','sadd_date',array('add_date'));
 
-			$map=array(
-				'submitter'=>$GLOBALS['FORUM_DRIVER']->get_guest_id()+1,
-				'edit_date'=>NULL,
-				'hide_posts'=>0,
-				'wiki_views'=>0,
-				'add_date'=>time(),
-				'notes'=>'',
-			);
-			$map+=insert_lang_comcode('description','',2);
-			$map+=lang_code_to_default_content('title','WIKI_HOME',false,1);
-			$GLOBALS['SITE_DB']->query_insert('wiki_pages',$map);
-			$groups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-			foreach (array_keys($groups) as $group_id)
-			{
-				$GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name'=>'wiki_page','category_name'=>strval(db_get_first_id()),'group_id'=>$group_id));
-			}
+            $map = array(
+                'submitter' => $GLOBALS['FORUM_DRIVER']->get_guest_id()+1,
+                'edit_date' => NULL,
+                'hide_posts' => 0,
+                'wiki_views' => 0,
+                'add_date' => time(),
+                'notes' => '',
+            );
+            $map += insert_lang_comcode('description','',2);
+            $map += lang_code_to_default_content('title','WIKI_HOME',false,1);
+            $GLOBALS['SITE_DB']->query_insert('wiki_pages',$map);
+            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+            foreach (array_keys($groups) as $group_id) {
+                $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'wiki_page','category_name' => strval(db_get_first_id()),'group_id' => $group_id));
+            }
 
-			add_privilege('WIKI','wiki_manage_tree',false);
+            add_privilege('WIKI','wiki_manage_tree',false);
 
-			$GLOBALS['SITE_DB']->create_table('wiki_posts',array(
-				'id'=>'*AUTO',
-				'page_id'=>'AUTO_LINK',
-				'the_message'=>'LONG_TRANS__COMCODE',
-				'date_and_time'=>'TIME',
-				'validated'=>'BINARY',
-				'wiki_views'=>'INTEGER',
-				'member_id'=>'MEMBER',
-				'edit_date'=>'?TIME'
-			));
+            $GLOBALS['SITE_DB']->create_table('wiki_posts',array(
+                'id' => '*AUTO',
+                'page_id' => 'AUTO_LINK',
+                'the_message' => 'LONG_TRANS__COMCODE',
+                'date_and_time' => 'TIME',
+                'validated' => 'BINARY',
+                'wiki_views' => 'INTEGER',
+                'member_id' => 'MEMBER',
+                'edit_date' => '?TIME'
+            ));
 
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','wiki_views',array('wiki_views'));
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','spos',array('member_id'));
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','posts_on_page',array('page_id'));
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','cdate_and_time',array('date_and_time'));
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','svalidated',array('validated'));
+            $GLOBALS['SITE_DB']->create_index('wiki_posts','wiki_views',array('wiki_views'));
+            $GLOBALS['SITE_DB']->create_index('wiki_posts','spos',array('member_id'));
+            $GLOBALS['SITE_DB']->create_index('wiki_posts','posts_on_page',array('page_id'));
+            $GLOBALS['SITE_DB']->create_index('wiki_posts','cdate_and_time',array('date_and_time'));
+            $GLOBALS['SITE_DB']->create_index('wiki_posts','svalidated',array('validated'));
 
-			$GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_wiki',20,1,0,0,0,'','integer');
+            $GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_wiki',20,1,0,0,0,'','integer');
 
-			$GLOBALS['SITE_DB']->create_index('wiki_posts','ftjoin_spm',array('the_message'));
-			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spt',array('title'));
-			$GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spd',array('description'));
-		}
+            $GLOBALS['SITE_DB']->create_index('wiki_posts','ftjoin_spm',array('the_message'));
+            $GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spt',array('title'));
+            $GLOBALS['SITE_DB']->create_index('wiki_pages','ftjoin_spd',array('description'));
+        }
 
-		if ((!is_null($upgrade_from)) && ($upgrade_from<10))
-		{
-			$GLOBALS['SITE_DB']->rename_table('seedy_children','wiki_children');
-			$GLOBALS['SITE_DB']->rename_table('seedy_pages','wiki_pages');
-			$GLOBALS['SITE_DB']->rename_table('seedy_changes','wiki_changes');
-			$GLOBALS['SITE_DB']->rename_table('seedy_posts','wiki_posts');
+        if ((!is_null($upgrade_from)) && ($upgrade_from<10)) {
+            $GLOBALS['SITE_DB']->rename_table('seedy_children','wiki_children');
+            $GLOBALS['SITE_DB']->rename_table('seedy_pages','wiki_pages');
+            $GLOBALS['SITE_DB']->rename_table('seedy_changes','wiki_changes');
+            $GLOBALS['SITE_DB']->rename_table('seedy_posts','wiki_posts');
 
-			$GLOBALS['SITE_DB']->alter_table_field('wiki_posts','seedy_views','INTEGER','wiki_views');
+            $GLOBALS['SITE_DB']->alter_table_field('wiki_posts','seedy_views','INTEGER','wiki_views');
 
-			$GLOBALS['SITE_DB']->add_table_field('wiki_pages','edit_date','?TIME');
+            $GLOBALS['SITE_DB']->add_table_field('wiki_pages','edit_date','?TIME');
 
-			rename_config_option('is_on_wiki','is_on_seedy');
-			rename_config_option('points_wiki','points_cedi');
-			rename_config_option('wiki_show_stats_count_pages','cedi_show_stats_count_pages');
-			rename_config_option('wiki_show_stats_count_posts','cedi_show_stats_count_posts');
+            rename_config_option('is_on_wiki','is_on_seedy');
+            rename_config_option('points_wiki','points_cedi');
+            rename_config_option('wiki_show_stats_count_pages','cedi_show_stats_count_pages');
+            rename_config_option('wiki_show_stats_count_posts','cedi_show_stats_count_posts');
 
-			rename_privilege('seedy_manage_tree','wiki_manage_tree');
-			rename_privilege('seedy_edit_pages','wiki_edit_pages');
-			rename_privilege('seedy_edit','wiki_edit');
+            rename_privilege('seedy_manage_tree','wiki_manage_tree');
+            rename_privilege('seedy_edit_pages','wiki_edit_pages');
+            rename_privilege('seedy_edit','wiki_edit');
 
-			$GLOBALS['SITE_DB']->query_update('group_category_access',array('module_the_name'=>'wiki_page'),array('module_the_name'=>'seedy_page'));
-			$GLOBALS['SITE_DB']->query_update('group_privileges',array('module_the_name'=>'wiki_page'),array('module_the_name'=>'seedy_page'));
-			$GLOBALS['SITE_DB']->query_update('group_privileges',array('the_page'=>'wiki'),array('the_page'=>'cedi'));
-			$GLOBALS['SITE_DB']->query_update('group_page_access',array('page_name'=>'wiki'),array('page_name'=>'cedi'));
-			$GLOBALS['SITE_DB']->query_update('group_page_access',array('page_name'=>'cms_wiki'),array('page_name'=>'cms_cedi'));
+            $GLOBALS['SITE_DB']->query_update('group_category_access',array('module_the_name' => 'wiki_page'),array('module_the_name' => 'seedy_page'));
+            $GLOBALS['SITE_DB']->query_update('group_privileges',array('module_the_name' => 'wiki_page'),array('module_the_name' => 'seedy_page'));
+            $GLOBALS['SITE_DB']->query_update('group_privileges',array('the_page' => 'wiki'),array('the_page' => 'cedi'));
+            $GLOBALS['SITE_DB']->query_update('group_page_access',array('page_name' => 'wiki'),array('page_name' => 'cedi'));
+            $GLOBALS['SITE_DB']->query_update('group_page_access',array('page_name' => 'cms_wiki'),array('page_name' => 'cms_cedi'));
 
-			$GLOBALS['SITE_DB']->query_update('notifications',array('l_notification_code'=>'wiki'),array('l_notification_code'=>'cedi'));
+            $GLOBALS['SITE_DB']->query_update('notifications',array('l_notification_code' => 'wiki'),array('l_notification_code' => 'cedi'));
 
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_MAKE_POST'),array('the_action'=>'CEDI_MAKE_POST'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_DELETE_POST'),array('the_action'=>'CEDI_DELETE_POST'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_EDIT_TREE'),array('the_action'=>'CEDI_EDIT_TREE'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_MOVE_POST'),array('the_action'=>'CEDI_MOVE_POST'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_EDIT_POST'),array('the_action'=>'CEDI_EDIT_POST'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_MAKE_POST'),array('the_action'=>'CEDI_MAKE_POST'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'WIKI_EDIT_PAGE'),array('the_action'=>'CEDI_SEEDY_POSTS'));
-			$GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action'=>'MERGE_WIKI_POSTS'),array('the_action'=>'MERGE_CEDI_POSTS'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_MAKE_POST'),array('the_action' => 'CEDI_MAKE_POST'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_DELETE_POST'),array('the_action' => 'CEDI_DELETE_POST'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_EDIT_TREE'),array('the_action' => 'CEDI_EDIT_TREE'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_MOVE_POST'),array('the_action' => 'CEDI_MOVE_POST'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_EDIT_POST'),array('the_action' => 'CEDI_EDIT_POST'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_MAKE_POST'),array('the_action' => 'CEDI_MAKE_POST'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'WIKI_EDIT_PAGE'),array('the_action' => 'CEDI_SEEDY_POSTS'));
+            $GLOBALS['SITE_DB']->query_update('seedy_changes',array('the_action' => 'MERGE_WIKI_POSTS'),array('the_action' => 'MERGE_CEDI_POSTS'));
 
-			$GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_type'=>'wiki_post'),array('r_referer_type'=>'cedi_post'));
-			$GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_type'=>'wiki_page'),array('r_referer_type'=>'cedi_page'));
+            $GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_type' => 'wiki_post'),array('r_referer_type' => 'cedi_post'));
+            $GLOBALS['SITE_DB']->query_update('attachment_refs',array('r_referer_type' => 'wiki_page'),array('r_referer_type' => 'cedi_page'));
 
-			$GLOBALS['SITE_DB']->query_update('translate',array('text_original'=>'ocp_points_gained_wiki'),array('text_original'=>'ocp_points_gained_seedy'));
+            $GLOBALS['SITE_DB']->query_update('translate',array('text_original' => 'ocp_points_gained_wiki'),array('text_original' => 'ocp_points_gained_seedy'));
 
-			if (addon_installed('catalogues'))
-			{
-				foreach (array('catalogues','catalogue_categories','catalogue_fields','catalogue_entries') as $table)
-				{
-					$GLOBALS['SITE_DB']->query_update($table,array('c_name'=>'_wiki_post'),array('c_name'=>'_seedy_post'));
-				}
-			}
+            if (addon_installed('catalogues')) {
+                foreach (array('catalogues','catalogue_categories','catalogue_fields','catalogue_entries') as $table) {
+                    $GLOBALS['SITE_DB']->query_update($table,array('c_name' => '_wiki_post'),array('c_name' => '_seedy_post'));
+                }
+            }
 
-			$GLOBALS['SITE_DB']->alter_table_field('wiki_changes','the_user','MEMBER','member_id');
-			$GLOBALS['SITE_DB']->alter_table_field('wiki_posts','the_user','MEMBER','member_id');
-		}
+            $GLOBALS['SITE_DB']->alter_table_field('wiki_changes','the_user','MEMBER','member_id');
+            $GLOBALS['SITE_DB']->alter_table_field('wiki_posts','the_user','MEMBER','member_id');
+        }
 
-		if ((is_null($upgrade_from)) || ($upgrade_from<10))
-		{
-			$GLOBALS['SITE_DB']->create_index('wiki_pages','#wiki_search__combined',array('title','description'));
-		}
-	}
+        if ((is_null($upgrade_from)) || ($upgrade_from<10)) {
+            $GLOBALS['SITE_DB']->create_index('wiki_pages','#wiki_search__combined',array('title','description'));
+        }
+    }
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -223,384 +217,398 @@ class Module_wiki
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		return array(
-			'misc'=>array('WIKI_HOME','menu/rich_content/wiki'),
-			'random'=>array('RANDOM_PAGE','menu/rich_content/wiki/random_page'),
-			'changes'=>array('WIKI_CHANGELOG','menu/rich_content/wiki/change_log'),
-		);
-	}
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        return array(
+            'misc' => array('WIKI_HOME','menu/rich_content/wiki'),
+            'random' => array('RANDOM_PAGE','menu/rich_content/wiki/random_page'),
+            'changes' => array('WIKI_CHANGELOG','menu/rich_content/wiki/change_log'),
+        );
+    }
 
-	var $title;
-	var $id;
-	var $chain;
-	var $page;
-	var $current_title;
-	var $title_to_use;
-	var $title_to_use_2;
-	var $dbposts;
-	var $num_posts;
+    public $title;
+    public $id;
+    public $chain;
+    public $page;
+    public $current_title;
+    public $title_to_use;
+    public $title_to_use_2;
+    public $dbposts;
+    public $num_posts;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		$type=get_param('type','misc');
+    public function pre_run()
+    {
+        $type = get_param('type','misc');
 
-		require_lang('wiki');
-		require_code('wiki');
+        require_lang('wiki');
+        require_code('wiki');
 
-		set_feed_url('?mode=wiki&filter=');
+        set_feed_url('?mode=wiki&filter=');
 
-		if ($type=='misc')
-		{
-			// Find our page by whatever means
-			$find=get_param('find','');
-			if ($find!='')	// Allow quick 'find' remapping to a real ID
-			{
-				$id=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','id',array($GLOBALS['SITE_DB']->translate_field_ref('title')=>$find));
-				if (is_null($id))
-				{
-					$this->title=get_screen_title('ERROR_OCCURRED');
-					$add_access=(has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki'));
-					require_lang('zones');
-					$add_url=$add_access?build_url(array('page'=>'cms_wiki','type'=>'add_page','id'=>$find,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki')):new ocp_tempcode();
-					return do_template('MISSING_SCREEN',array('_GUID'=>'ba778c816860a9594983ed9ef03d0c42','TITLE'=>$this->title,'ADD_URL'=>$add_url,'PAGE'=>$find));
-				}
-				$chain=wiki_derive_chain($id);
-			} else
-			{
-				list($id,$chain)=get_param_wiki_chain('id',strval(db_get_first_id()));
-			}
-			$pages=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>$id),'',1);
+        if ($type == 'misc') {
+            // Find our page by whatever means
+            $find = get_param('find','');
+            if ($find != '') { // Allow quick 'find' remapping to a real ID
+                $id = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','id',array($GLOBALS['SITE_DB']->translate_field_ref('title') => $find));
+                if (is_null($id)) {
+                    $this->title = get_screen_title('ERROR_OCCURRED');
+                    $add_access = (has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki'));
+                    require_lang('zones');
+                    $add_url = $add_access?build_url(array('page' => 'cms_wiki','type' => 'add_page','id' => $find,'redirect' => get_self_url(true,true)),get_module_zone('cms_wiki')):new ocp_tempcode();
+                    return do_template('MISSING_SCREEN',array('_GUID' => 'ba778c816860a9594983ed9ef03d0c42','TITLE' => $this->title,'ADD_URL' => $add_url,'PAGE' => $find));
+                }
+                $chain = wiki_derive_chain($id);
+            } else {
+                list($id,$chain) = get_param_wiki_chain('id',strval(db_get_first_id()));
+            }
+            $pages = $GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id' => $id),'',1);
 
-			// Display title
-			if (!array_key_exists(0,$pages))
-			{
-				return warn_screen(get_screen_title('WIKI'),do_lang_tempcode('MISSING_RESOURCE'));
-			}
-			$page=$pages[0];
-			$current_title=get_translated_text($page['title']);
-			$title_to_use=do_lang_tempcode('WIKI_PAGE',escape_html($current_title));
-			$title_to_use_2=do_lang('WIKI_PAGE',$current_title);
-			if ((get_value('no_awards_in_titles')!=='1') && (addon_installed('awards')))
-			{
-				require_code('awards');
-				$awards=find_awards_for('wiki_page',strval($page['id']));
-			} else $awards=array();
-			$this->title=get_screen_title($title_to_use,false,NULL,NULL,$awards);
+            // Display title
+            if (!array_key_exists(0,$pages)) {
+                return warn_screen(get_screen_title('WIKI'),do_lang_tempcode('MISSING_RESOURCE'));
+            }
+            $page = $pages[0];
+            $current_title = get_translated_text($page['title']);
+            $title_to_use = do_lang_tempcode('WIKI_PAGE',escape_html($current_title));
+            $title_to_use_2 = do_lang('WIKI_PAGE',$current_title);
+            if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
+                require_code('awards');
+                $awards = find_awards_for('wiki_page',strval($page['id']));
+            } else {
+                $awards = array();
+            }
+            $this->title = get_screen_title($title_to_use,false,null,null,$awards);
 
-			if (!has_category_access(get_member(),'wiki_page',strval($page['id']))) access_denied('CATEGORY_ACCESS');
+            if (!has_category_access(get_member(),'wiki_page',strval($page['id']))) {
+                access_denied('CATEGORY_ACCESS');
+            }
 
-			seo_meta_load_for('wiki_page',strval($id),$title_to_use_2);
+            seo_meta_load_for('wiki_page',strval($id),$title_to_use_2);
 
-			// Build up navigation tree
-			$breadcrumbs=wiki_breadcrumbs($chain,$current_title,has_privilege(get_member(),'open_virtual_roots'),true,true);
+            // Build up navigation tree
+            $breadcrumbs = wiki_breadcrumbs($chain,$current_title,has_privilege(get_member(),'open_virtual_roots'),true,true);
 
-			$where_map=array('page_id'=>$id);
-			if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) $where_map['validated']=1;
-			$dbposts=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),$where_map,'ORDER BY date_and_time',300);
-			$num_posts=count($dbposts);
+            $where_map = array('page_id' => $id);
+            if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+                $where_map['validated'] = 1;
+            }
+            $dbposts = $GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),$where_map,'ORDER BY date_and_time',300);
+            $num_posts = count($dbposts);
 
-			set_extra_request_metadata(array(
-				'created'=>date('Y-m-d',$page['add_date']),
-				'creator'=>$GLOBALS['FORUM_DRIVER']->get_username($page['submitter']),
-				'publisher'=>'', // blank means same as creator
-				'modified'=>'',
-				'type'=>'Wiki+ Page',
-				'title'=>get_translated_text($page['title']),
-				'identifier'=>'_SEARCH:wiki:misc:'.strval($page['id']),
-				'description'=>get_translated_text($page['description']),
-				'numposts'=>strval($num_posts),
-				'image'=>find_theme_image('icons/48x48/menu/rich_content/wiki'),
-				//'category'=>???,
-			));
+            set_extra_request_metadata(array(
+                'created' => date('Y-m-d',$page['add_date']),
+                'creator' => $GLOBALS['FORUM_DRIVER']->get_username($page['submitter']),
+                'publisher' => '', // blank means same as creator
+                'modified' => '',
+                'type' => 'Wiki+ Page',
+                'title' => get_translated_text($page['title']),
+                'identifier' => '_SEARCH:wiki:misc:' . strval($page['id']),
+                'description' => get_translated_text($page['description']),
+                'numposts' => strval($num_posts),
+                'image' => find_theme_image('icons/48x48/menu/rich_content/wiki'),
+                //'category'=>???,
+            ));
 
-			breadcrumb_add_segment($breadcrumbs);
+            breadcrumb_add_segment($breadcrumbs);
 
-			// Re-defined canonical URL
-			global $CANONICAL_URL,$NON_CANONICAL_PARAMS;
-			$non_canonical=array();
-			if (is_array($NON_CANONICAL_PARAMS)) foreach ($NON_CANONICAL_PARAMS as $n) $non_canonical[$n]=NULL;
-			$CANONICAL_URL=get_self_url(true,false,$non_canonical+array('id'=>$id,'type'=>'misc','find'=>NULL));
+            // Re-defined canonical URL
+            global $CANONICAL_URL,$NON_CANONICAL_PARAMS;
+            $non_canonical = array();
+            if (is_array($NON_CANONICAL_PARAMS)) {
+                foreach ($NON_CANONICAL_PARAMS as $n) {
+                    $non_canonical[$n] = null;
+                }
+            }
+            $CANONICAL_URL = get_self_url(true,false,$non_canonical+array('id' => $id,'type' => 'misc','find' => NULL));
 
-			$this->id=$id;
-			$this->chain=$chain;
-			$this->page=$page;
-			$this->current_title=$current_title;
-			$this->title_to_use=$title_to_use;
-			$this->title_to_use_2=$title_to_use_2;
-			$this->dbposts=$dbposts;
-			$this->num_posts=$num_posts;
-		}
+            $this->id = $id;
+            $this->chain = $chain;
+            $this->page = $page;
+            $this->current_title = $current_title;
+            $this->title_to_use = $title_to_use;
+            $this->title_to_use_2 = $title_to_use_2;
+            $this->dbposts = $dbposts;
+            $this->num_posts = $num_posts;
+        }
 
-		if ($type=='changes')
-		{
-			breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('WIKI'))));
+        if ($type == 'changes') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('WIKI'))));
 
-			$this->title=get_screen_title('WIKI_CHANGELOG');
-		}
+            $this->title = get_screen_title('WIKI_CHANGELOG');
+        }
 
-		if ($type=='post')
-		{
-			$_chain=get_param_wiki_chain('id',strval(db_get_first_id()));
-			$chain=$_chain[1];
+        if ($type == 'post') {
+            $_chain = get_param_wiki_chain('id',strval(db_get_first_id()));
+            $chain = $_chain[1];
 
-			$posting=is_null(get_param_integer('post_id',NULL));
+            $posting = is_null(get_param_integer('post_id',null));
 
-			$breadcrumbs=wiki_breadcrumbs($chain,NULL,true,true);
-			breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>'.do_lang($posting?'MAKE_POST':'SAVE').'</span>'));
+            $breadcrumbs = wiki_breadcrumbs($chain,null,true,true);
+            breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>' . do_lang($posting?'MAKE_POST':'SAVE') . '</span>'));
 
-			if ($posting)
-			{
-				$this->title=get_screen_title('WIKI_MAKE_POST');
-			} else
-			{
-				$this->title=get_screen_title('WIKI_EDIT_POST');
-			}
+            if ($posting) {
+                $this->title = get_screen_title('WIKI_MAKE_POST');
+            } else {
+                $this->title = get_screen_title('WIKI_EDIT_POST');
+            }
 
-			$this->chain=$chain;
-		}
+            $this->chain = $chain;
+        }
 
-		if ($type=='_post')
-		{
-			$posting=is_null(post_param_integer('post_id',NULL));
+        if ($type == '_post') {
+            $posting = is_null(post_param_integer('post_id',null));
 
-			if ($posting)
-			{
-				$this->title=get_screen_title('WIKI_MAKE_POST');
-			} else
-			{
-				$this->title=get_screen_title('WIKI_EDIT_POST');
-			}
-		}
+            if ($posting) {
+                $this->title = get_screen_title('WIKI_MAKE_POST');
+            } else {
+                $this->title = get_screen_title('WIKI_EDIT_POST');
+            }
+        }
 
-		if ($type=='mg' || $type=='do')
-		{
-			$this->title=get_screen_title('MERGE_WIKI_POSTS');
-		}
+        if ($type == 'mg' || $type == 'do') {
+            $this->title = get_screen_title('MERGE_WIKI_POSTS');
+        }
 
-		if ($type=='move' || $type=='_move')
-		{
-			$this->title=get_screen_title('WIKI_MOVE_POST');
-		}
+        if ($type == 'move' || $type == '_move') {
+            $this->title = get_screen_title('WIKI_MOVE_POST');
+        }
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		$type=get_param('type','misc');
+    public function run()
+    {
+        $type = get_param('type','misc');
 
-		require_css('wiki');
+        require_css('wiki');
 
-		// Decide what to do
-		if ($type=='findpost')
-		{
-			$post_id=get_param_integer('id');
-			$page_id=$GLOBALS['SITE_DB']->query_select('wiki_posts','page_id',array('id'=>$post_id));
-			$redirect=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$page_id),'_SELF',NULL,false,false,false,'post_'.strval($post_id));
-			require_code('site2');
-			assign_refresh($redirect,0.0);
-			return redirect_screen(get_screen_title('WIKI'),$redirect);
-		}
-		if ($type=='misc') return $this->page();
-		if ($type=='random') return $this->random();
-		if ($type=='changes') return $this->changes();
-		if ($type=='mg') return $this->do_wiki_merge_interface();
-		if ($type=='do') return $this->do_wiki_merge();
-		if ($type=='move') return $this->move();
-		if ($type=='_move') return $this->_move();
-		if ($type=='post') return $this->post();
-		if ($type=='_post') return $this->_post();
+        // Decide what to do
+        if ($type == 'findpost') {
+            $post_id = get_param_integer('id');
+            $page_id = $GLOBALS['SITE_DB']->query_select('wiki_posts','page_id',array('id' => $post_id));
+            $redirect = build_url(array('page' => '_SELF','type' => 'misc','id' => $page_id),'_SELF',null,false,false,false,'post_' . strval($post_id));
+            require_code('site2');
+            assign_refresh($redirect,0.0);
+            return redirect_screen(get_screen_title('WIKI'),$redirect);
+        }
+        if ($type == 'misc') {
+            return $this->page();
+        }
+        if ($type == 'random') {
+            return $this->random();
+        }
+        if ($type == 'changes') {
+            return $this->changes();
+        }
+        if ($type == 'mg') {
+            return $this->do_wiki_merge_interface();
+        }
+        if ($type == 'do') {
+            return $this->do_wiki_merge();
+        }
+        if ($type == 'move') {
+            return $this->move();
+        }
+        if ($type == '_move') {
+            return $this->_move();
+        }
+        if ($type == 'post') {
+            return $this->post();
+        }
+        if ($type == '_post') {
+            return $this->_post();
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * Redirect to a random page.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function random()
-	{
-		attach_message(do_lang_tempcode('TAKEN_RANDOM_WIKI_PAGE'),'inform');
+    public function random()
+    {
+        attach_message(do_lang_tempcode('TAKEN_RANDOM_WIKI_PAGE'),'inform');
 
-		$num_pages=$GLOBALS['SITE_DB']->query_select_value('wiki_pages','MAX(id)');
-		$pages=array();
-		do // Loop. picking random pages between 0 and max-id till we find one that exists
-		{
-			$id=mt_rand(db_get_first_id(),$num_pages);
-			$pages=$GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id'=>$id),'',1);
-		}
-		while (!array_key_exists(0,$pages));
-		$redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$id),'_SELF');
-		return redirect_screen(get_screen_title('RANDOM_PAGE'),$redir_url,'');
-	}
+        $num_pages = $GLOBALS['SITE_DB']->query_select_value('wiki_pages','MAX(id)');
+        $pages = array();
+        do { // Loop. picking random pages between 0 and max-id till we find one that exists
+            $id = mt_rand(db_get_first_id(),$num_pages);
+            $pages = $GLOBALS['SITE_DB']->query_select('wiki_pages',array('*'),array('id' => $id),'',1);
+        } while (!array_key_exists(0,$pages));
+        $redir_url = build_url(array('page' => '_SELF','type' => 'misc','id' => $id),'_SELF');
+        return redirect_screen(get_screen_title('RANDOM_PAGE'),$redir_url,'');
+    }
 
-	/**
+    /**
 	 * The UI to show a page.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function page()
-	{
-		$id=$this->id;
-		$chain=$this->chain;
-		$page=$this->page;
-		$current_title=$this->current_title;
-		$title_to_use=$this->title_to_use;
-		$title_to_use_2=$this->title_to_use_2;
-		$dbposts=$this->dbposts;
-		$num_posts=$this->num_posts;
+    public function page()
+    {
+        $id = $this->id;
+        $chain = $this->chain;
+        $page = $this->page;
+        $current_title = $this->current_title;
+        $title_to_use = $this->title_to_use;
+        $title_to_use_2 = $this->title_to_use_2;
+        $dbposts = $this->dbposts;
+        $num_posts = $this->num_posts;
 
-		require_code('feedback');
+        require_code('feedback');
 
-		// We will use OCF styling
-		require_lang('ocf');
+        // We will use OCF styling
+        require_lang('ocf');
 
-		if (get_option('wiki_enable_content_posts')=='0') $page['hide_posts']=1;
+        if (get_option('wiki_enable_content_posts') == '0') {
+            $page['hide_posts'] = 1;
+        }
 
-		// Views
-		if ((get_db_type()!='xml') && (get_value('no_view_counts')!=='1') && (is_null(get_bot_type())))
-		{
-			$page['wiki_views']++;
-			if (!$GLOBALS['SITE_DB']->table_is_locked('wiki_pages'))
-				$GLOBALS['SITE_DB']->query_update('wiki_pages',array('wiki_views'=>$page['wiki_views']),array('id'=>$id),'',1,NULL,false,true);
-		}
+        // Views
+        if ((get_db_type() != 'xml') && (get_value('no_view_counts') !== '1') && (is_null(get_bot_type()))) {
+            $page['wiki_views']++;
+            if (!$GLOBALS['SITE_DB']->table_is_locked('wiki_pages')) {
+                $GLOBALS['SITE_DB']->query_update('wiki_pages',array('wiki_views' => $page['wiki_views']),array('id' => $id),'',1,null,false,true);
+            }
+        }
 
-		// Description
-		$description=get_translated_tempcode('wiki_pages',$page,'description');
-		$description_comcode=get_translated_text($page['description']);
+        // Description
+        $description = get_translated_tempcode('wiki_pages',$page,'description');
+        $description_comcode = get_translated_text($page['description']);
 
-		// Children Links
-		$num_children=0;
-		$children=new ocp_tempcode();
-		if (get_option('wiki_enable_children')=='1')
-		{
-			$children_rows=$GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN '.get_table_prefix().'wiki_pages p ON c.child_id=p.id',array('child_id','c.title','hide_posts','description'),array('c.parent_id'=>$id),'ORDER BY c.the_order');
-			foreach ($children_rows as $myrow)
-			{
-				$child_id=$myrow['child_id'];
-				if (get_option('wiki_enable_content_posts')=='0') $myrow['hide_posts']=1;
-				$_child_title=$myrow['title'];
-				$child_title=get_translated_text($_child_title);
-				$child_description=get_translated_text($myrow['description']);
+        // Children Links
+        $num_children = 0;
+        $children = new ocp_tempcode();
+        if (get_option('wiki_enable_children') == '1') {
+            $children_rows = $GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN ' . get_table_prefix() . 'wiki_pages p ON c.child_id=p.id',array('child_id','c.title','hide_posts','description'),array('c.parent_id' => $id),'ORDER BY c.the_order');
+            foreach ($children_rows as $myrow) {
+                $child_id = $myrow['child_id'];
+                if (get_option('wiki_enable_content_posts') == '0') {
+                    $myrow['hide_posts'] = 1;
+                }
+                $_child_title = $myrow['title'];
+                $child_title = get_translated_text($_child_title);
+                $child_description = get_translated_text($myrow['description']);
 
-				$my_child_posts=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$child_id));
-				$my_child_children=$GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id'=>$child_id));
+                $my_child_posts = $GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id' => $child_id));
+                $my_child_children = $GLOBALS['SITE_DB']->query_select_value('wiki_children','COUNT(*)',array('parent_id' => $child_id));
 
-				if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description)!=''))
-				{
-					$sup=do_template('WIKI_SUBCATEGORY_CHILDREN',array(
-						'_GUID'=>'90e9f1647fdad0cacccecca3cbf12888',
-						'MY_CHILD_POSTS'=>integer_format($my_child_posts),
-						'MY_CHILD_CHILDREN'=>integer_format($my_child_children),
-						'BODY_CONTENT'=>(trim($child_description)!='')?strval(strlen($child_description)):NULL,
-					));
-				} else
-				{
-					$sup=($myrow['hide_posts']==1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
-				}
+                if (($my_child_posts>0) || ($my_child_children>0) || (trim($child_description) != '')) {
+                    $sup = do_template('WIKI_SUBCATEGORY_CHILDREN',array(
+                        '_GUID' => '90e9f1647fdad0cacccecca3cbf12888',
+                        'MY_CHILD_POSTS' => integer_format($my_child_posts),
+                        'MY_CHILD_CHILDREN' => integer_format($my_child_children),
+                        'BODY_CONTENT' => (trim($child_description) != '')?strval(strlen($child_description)):null,
+                    ));
+                } else {
+                    $sup = ($myrow['hide_posts'] == 1)?new ocp_tempcode():do_lang_tempcode('EMPTY');
+                }
 
-				$url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>wiki_derive_chain($child_id)),'_SELF');
-				$children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID'=>'e9f9b504093220dc23a1ab59b3e8e5df','URL'=>$url,'CHILD'=>$child_title,'SUP'=>$sup)));
+                $url = build_url(array('page' => '_SELF','type' => 'misc','id' => wiki_derive_chain($child_id)),'_SELF');
+                $children->attach(do_template('WIKI_SUBCATEGORY_LINK',array('_GUID' => 'e9f9b504093220dc23a1ab59b3e8e5df','URL' => $url,'CHILD' => $child_title,'SUP' => $sup)));
 
-				$num_children++;
-			}
-		}
+                $num_children++;
+            }
+        }
 
-		$staff_access=has_privilege(get_member(),'edit_lowrange_content','cms_wiki',array('wiki_page',$id));
+        $staff_access = has_privilege(get_member(),'edit_lowrange_content','cms_wiki',array('wiki_page',$id));
 
-		// Main text (posts)
-		$posts=new ocp_tempcode();
-		$include_expansion=(strpos($description_comcode,'[attachment')!==false);
-		foreach ($dbposts as $myrow)
-		{
-			// Work out posters details
-			$poster=$myrow['member_id'];
-			$username=$GLOBALS['FORUM_DRIVER']->get_username($poster);
-			if (is_null($username)) $username=do_lang('UNKNOWN');
+        // Main text (posts)
+        $posts = new ocp_tempcode();
+        $include_expansion = (strpos($description_comcode,'[attachment') !== false);
+        foreach ($dbposts as $myrow) {
+            // Work out posters details
+            $poster = $myrow['member_id'];
+            $username = $GLOBALS['FORUM_DRIVER']->get_username($poster);
+            if (is_null($username)) {
+                $username = do_lang('UNKNOWN');
+            }
 
-			$post_id=$myrow['id'];
+            $post_id = $myrow['id'];
 
-			// Date post was made
-			$post_date_raw=$myrow['date_and_time'];
-			$post_date=get_timezoned_date($myrow['date_and_time']);
+            // Date post was made
+            $post_date_raw = $myrow['date_and_time'];
+            $post_date = get_timezoned_date($myrow['date_and_time']);
 
-			// Rating
-			actualise_rating(true,'wiki_post',strval($post_id),build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title);
-			$rating_array=get_rating_simple_array(build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF'),$current_title,'wiki_post',strval($post_id),'WIKI_RATING_FORM',$poster);
-			if (!is_null($rating_array))
-			{
-				$rating=do_template('WIKI_RATING',$rating_array);
-			} else $rating=new ocp_tempcode();
+            // Rating
+            actualise_rating(true,'wiki_post',strval($post_id),build_url(array('page' => '_SELF','type' => 'misc','id' => $chain),'_SELF'),$current_title);
+            $rating_array = get_rating_simple_array(build_url(array('page' => '_SELF','type' => 'misc','id' => $chain),'_SELF'),$current_title,'wiki_post',strval($post_id),'WIKI_RATING_FORM',$poster);
+            if (!is_null($rating_array)) {
+                $rating = do_template('WIKI_RATING',$rating_array);
+            } else {
+                $rating = new ocp_tempcode();
+            }
 
-			// Display the post then ;)
-			$post_comcode=get_translated_text($myrow['the_message']);
-			$include_expansion_here=(strpos($post_comcode,'[attachment')!==false);
-			if ($include_expansion_here) $include_expansion=true;
-			$post=get_translated_tempcode('wiki_posts',$myrow,'the_message');
-			if ((has_edit_permission('low',get_member(),$poster,'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
-			{
-				$edit_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain,'post_id'=>$post_id),'_SELF');
-				$extra=do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'37404e2e5cf7e4cb806f796e9df90898','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'FULL_TITLE'=>do_lang_tempcode('EDIT'),'TITLE'=>do_lang_tempcode('EDIT'),'IMG'=>'buttons__edit'));
-				$move_url=build_url(array('page'=>'_SELF','type'=>'move','id'=>$chain,'post_id'=>$post_id),'_SELF');
-				$extra->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID'=>'b4325cd1bac924cc83771d4c3c41be8b','REL'=>'move','IMMEDIATE'=>false,'URL'=>$move_url,'FULL_TITLE'=>do_lang_tempcode('MOVE'),'TITLE'=>do_lang_tempcode('MOVE'),'IMG'=>'buttons__move')));
-			} else $extra=new ocp_tempcode();
-			$poster_url=is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
-			$rate_url=get_self_url(true);
-			$posts->attach(do_template('WIKI_POST',array(
-				'_GUID'=>'a29b107abfaf7689c8392676c63093f5',
-				'INCLUDE_EXPANSION'=>$include_expansion_here,
-				'UNVALIDATED'=>($myrow['validated']==0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),
-				'STAFF_ACCESS'=>$staff_access,
-				'RATE_URL'=>$rate_url.'#post_'.strval($post_id),
-				'RATING'=>$rating,
-				'ID'=>strval($myrow['id']),
-				'POSTER_URL'=>$poster_url,
-				'POSTER'=>$username,
-				'POST_DATE_RAW'=>strval($post_date_raw),
-				'POST_DATE'=>$post_date,
-				'POST'=>$post,
-				'BUTTONS'=>$extra,
-			)));
-		}
+            // Display the post then ;)
+            $post_comcode = get_translated_text($myrow['the_message']);
+            $include_expansion_here = (strpos($post_comcode,'[attachment') !== false);
+            if ($include_expansion_here) {
+                $include_expansion = true;
+            }
+            $post = get_translated_tempcode('wiki_posts',$myrow,'the_message');
+            if ((has_edit_permission('low',get_member(),$poster,'cms_wiki',array('wiki_page',$id))) && (($id != db_get_first_id()) || (has_privilege(get_member(),'feature')))) {
+                $edit_url = build_url(array('page' => '_SELF','type' => 'post','id' => $chain,'post_id' => $post_id),'_SELF');
+                $extra = do_template('BUTTON_SCREEN_ITEM',array('_GUID' => '37404e2e5cf7e4cb806f796e9df90898','REL' => 'edit','IMMEDIATE' => false,'URL' => $edit_url,'FULL_TITLE' => do_lang_tempcode('EDIT'),'TITLE' => do_lang_tempcode('EDIT'),'IMG' => 'buttons__edit'));
+                $move_url = build_url(array('page' => '_SELF','type' => 'move','id' => $chain,'post_id' => $post_id),'_SELF');
+                $extra->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID' => 'b4325cd1bac924cc83771d4c3c41be8b','REL' => 'move','IMMEDIATE' => false,'URL' => $move_url,'FULL_TITLE' => do_lang_tempcode('MOVE'),'TITLE' => do_lang_tempcode('MOVE'),'IMG' => 'buttons__move')));
+            } else {
+                $extra = new ocp_tempcode();
+            }
+            $poster_url = is_guest($poster)?'':$GLOBALS['FORUM_DRIVER']->member_profile_url($poster,false,true);
+            $rate_url = get_self_url(true);
+            $posts->attach(do_template('WIKI_POST',array(
+                '_GUID' => 'a29b107abfaf7689c8392676c63093f5',
+                'INCLUDE_EXPANSION' => $include_expansion_here,
+                'UNVALIDATED' => ($myrow['validated'] == 0)?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode(),
+                'STAFF_ACCESS' => $staff_access,
+                'RATE_URL' => $rate_url . '#post_' . strval($post_id),
+                'RATING' => $rating,
+                'ID' => strval($myrow['id']),
+                'POSTER_URL' => $poster_url,
+                'POSTER' => $username,
+                'POST_DATE_RAW' => strval($post_date_raw),
+                'POST_DATE' => $post_date,
+                'POST' => $post,
+                'BUTTONS' => $extra,
+            )));
+        }
 
-		if ($num_posts>=300)
-		{
-			attach_message(do_lang_tempcode('TOO_MANY_WIKI_POSTS'),'warn');
-		}
+        if ($num_posts >= 300) {
+            attach_message(do_lang_tempcode('TOO_MANY_WIKI_POSTS'),'warn');
+        }
 
-		$buttons=$this->_render_buttons($chain,$id,$include_expansion,$num_posts<300);
+        $buttons = $this->_render_buttons($chain,$id,$include_expansion,$num_posts<300);
 
-		return do_template('WIKI_PAGE_SCREEN',array(
-			'_GUID'=>'1840d6934be3344c4f93a159fc737a45',
-			'TAGS'=>get_loaded_tags('wiki_pages'),
-			'HIDE_POSTS'=>$page['hide_posts']==1,
-			'ID'=>strval($id),
-			'CHAIN'=>$chain,
-			'VIEWS'=>integer_format($page['wiki_views']),
-			'STAFF_ACCESS'=>$staff_access,
-			'DESCRIPTION'=>$description,
-			'TITLE'=>$this->title,
-			'CHILDREN'=>$children,
-			'POSTS'=>$posts,
-			'NUM_POSTS'=>integer_format($num_posts),
-			'BUTTONS'=>$buttons,
-		));
-	}
+        return do_template('WIKI_PAGE_SCREEN',array(
+            '_GUID' => '1840d6934be3344c4f93a159fc737a45',
+            'TAGS' => get_loaded_tags('wiki_pages'),
+            'HIDE_POSTS' => $page['hide_posts'] == 1,
+            'ID' => strval($id),
+            'CHAIN' => $chain,
+            'VIEWS' => integer_format($page['wiki_views']),
+            'STAFF_ACCESS' => $staff_access,
+            'DESCRIPTION' => $description,
+            'TITLE' => $this->title,
+            'CHILDREN' => $children,
+            'POSTS' => $posts,
+            'NUM_POSTS' => integer_format($num_posts),
+            'BUTTONS' => $buttons,
+        ));
+    }
 
-	/**
+    /**
 	 * Show the buttons on the Wiki+ page viewing page.
 	 *
 	 * @param  SHORT_TEXT	The ID chain being used to get to this page
@@ -609,543 +617,557 @@ class Module_wiki
 	 * @param  boolean		Whether posting is generally allowed (may be passed false if too many posts)
 	 * @return tempcode		The button tempcode
 	 */
-	function _render_buttons($chain,$id,$include_expansion,$may_post=true)
-	{
-		$page_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>$chain),'_SELF');
-		$pos=strpos($chain,'/');
-		$id=intval(substr($chain,($pos===false)?0:($pos+1)));
-		/*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search'))) // Not enough space
+    public function _render_buttons($chain,$id,$include_expansion,$may_post = true)
+    {
+        $page_url = build_url(array('page' => '_SELF','type' => 'misc','id' => $chain),'_SELF');
+        $pos = strpos($chain,'/');
+        $id = intval(substr($chain,($pos === false)?0:($pos+1)));
+        /*if ((addon_installed('search')) && (has_actual_page_access(get_member(),'search'))) // Not enough space
 		{
 			$search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
 			$search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
-		} else */$search_button=new ocp_tempcode();
-		$changes_url=build_url(array('page'=>'_SELF','type'=>'changes','id'=>$chain),'_SELF');
-		$changes_button=do_template('BUTTON_SCREEN',array('_GUID'=>'99ad7faac817326510583a69ac719d58','IMMEDIATE'=>false,'REL'=>'history','URL'=>$changes_url,'TITLE'=>do_lang_tempcode('WIKI_CHANGELOG'),'IMG'=>'buttons__changes'));
-		if ((get_option('wiki_enable_children')=='1') && (has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
-		{
-			$tree_url=build_url(array('page'=>'cms_wiki','type'=>'edit_tree','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$tree_button=do_template('BUTTON_SCREEN',array('_GUID'=>'e6edc9f39b6b0aff86cffbaa98c51827','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$tree_url,'TITLE'=>do_lang_tempcode('__WIKI_EDIT_TREE'),'IMG'=>'buttons__edit_tree'));
-		} else $tree_button=new ocp_tempcode();
-		if ((has_edit_permission('cat_low',get_member(),NULL,'cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki')))
-		{
-			$edit_url=build_url(array('page'=>'cms_wiki','type'=>'edit_page','id'=>$chain,'redirect'=>get_self_url(true,true)),get_module_zone('cms_wiki'));
-			$edit_button=do_template('BUTTON_SCREEN',array('_GUID'=>'5d8783a0af3a35f21022b30397f1b03e','REL'=>'edit','IMMEDIATE'=>false,'URL'=>$edit_url,'TITLE'=>do_lang_tempcode('_WIKI_EDIT_PAGE'),'IMG'=>'buttons__edit'));
-		} else $edit_button=new ocp_tempcode();
-		if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki',array('wiki_page',$id))) && (($id!=db_get_first_id()) || (has_privilege(get_member(),'feature'))))
-		{
-			$post_url=build_url(array('page'=>'_SELF','type'=>'post','id'=>$chain),'_SELF');
-			$post_button=do_template('BUTTON_SCREEN',array('_GUID'=>'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE'=>false,'URL'=>$post_url,'TITLE'=>do_lang_tempcode('MAKE_POST'),'IMG'=>'buttons__new_reply'));
-		} else $post_button=new ocp_tempcode();
+		} else */$search_button = new ocp_tempcode();
+        $changes_url = build_url(array('page' => '_SELF','type' => 'changes','id' => $chain),'_SELF');
+        $changes_button = do_template('BUTTON_SCREEN',array('_GUID' => '99ad7faac817326510583a69ac719d58','IMMEDIATE' => false,'REL' => 'history','URL' => $changes_url,'TITLE' => do_lang_tempcode('WIKI_CHANGELOG'),'IMG' => 'buttons__changes'));
+        if ((get_option('wiki_enable_children') == '1') && (has_privilege(get_member(),'wiki_manage_tree','cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki'))) {
+            $tree_url = build_url(array('page' => 'cms_wiki','type' => 'edit_tree','id' => $chain,'redirect' => get_self_url(true,true)),get_module_zone('cms_wiki'));
+            $tree_button = do_template('BUTTON_SCREEN',array('_GUID' => 'e6edc9f39b6b0aff86cffbaa98c51827','REL' => 'edit','IMMEDIATE' => false,'URL' => $tree_url,'TITLE' => do_lang_tempcode('__WIKI_EDIT_TREE'),'IMG' => 'buttons__edit_tree'));
+        } else {
+            $tree_button = new ocp_tempcode();
+        }
+        if ((has_edit_permission('cat_low',get_member(),null,'cms_wiki',array('wiki_page',$id))) && (has_actual_page_access(get_member(),'cms_wiki'))) {
+            $edit_url = build_url(array('page' => 'cms_wiki','type' => 'edit_page','id' => $chain,'redirect' => get_self_url(true,true)),get_module_zone('cms_wiki'));
+            $edit_button = do_template('BUTTON_SCREEN',array('_GUID' => '5d8783a0af3a35f21022b30397f1b03e','REL' => 'edit','IMMEDIATE' => false,'URL' => $edit_url,'TITLE' => do_lang_tempcode('_WIKI_EDIT_PAGE'),'IMG' => 'buttons__edit'));
+        } else {
+            $edit_button = new ocp_tempcode();
+        }
+        if (($may_post) && (has_submit_permission('low',get_member(),get_ip_address(),'cms_wiki',array('wiki_page',$id))) && (($id != db_get_first_id()) || (has_privilege(get_member(),'feature')))) {
+            $post_url = build_url(array('page' => '_SELF','type' => 'post','id' => $chain),'_SELF');
+            $post_button = do_template('BUTTON_SCREEN',array('_GUID' => 'c26462f34a64c4bf80c1fb7c40102eb0','IMMEDIATE' => false,'URL' => $post_url,'TITLE' => do_lang_tempcode('MAKE_POST'),'IMG' => 'buttons__new_reply'));
+        } else {
+            $post_button = new ocp_tempcode();
+        }
 
-		$tpl=new ocp_tempcode();
-		$tpl->attach($search_button);
-		$tpl->attach($changes_button);
-		$tpl->attach($post_button);
-		$tpl->attach($tree_button);
-		$tpl->attach($edit_button);
-		return $tpl;
-	}
+        $tpl = new ocp_tempcode();
+        $tpl->attach($search_button);
+        $tpl->attach($changes_button);
+        $tpl->attach($post_button);
+        $tpl->attach($tree_button);
+        $tpl->attach($edit_button);
+        return $tpl;
+    }
 
-	/**
+    /**
 	 * The UI to show changes.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function changes()
-	{
-		$start=get_param_integer('changes_start',0);
-		$max=get_param_integer('changes_max',25);
-		$sortables=array('date_and_time'=>do_lang_tempcode('DATE'));
-		$test=explode(' ',get_param('sort','date_and_time DESC'),2);
-		if (count($test)==1) $test[1]='DESC';
-		list($sortable,$sort_order)=$test;
-		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
-			log_hack_attack_and_exit('ORDERBY_HACK');
+    public function changes()
+    {
+        $start = get_param_integer('changes_start',0);
+        $max = get_param_integer('changes_max',25);
+        $sortables = array('date_and_time' => do_lang_tempcode('DATE'));
+        $test = explode(' ',get_param('sort','date_and_time DESC'),2);
+        if (count($test) == 1) {
+            $test[1] = 'DESC';
+        }
+        list($sortable,$sort_order) = $test;
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+            log_hack_attack_and_exit('ORDERBY_HACK');
+        }
 
-		$max_rows=$GLOBALS['SITE_DB']->query_select_value('wiki_changes','COUNT(*)',array('the_action'=>'WIKI_MAKE_POST'));
-		$_id=get_param('id',NULL);
-		$id=NULL;
-		if (!is_null($_id))
-		{
-			list($id,)=get_param_wiki_chain('id');
-		}
-		$where=(!is_null($id))?('the_page='.strval($id)):(db_string_equal_to('the_action','WIKI_MAKE_POST').' OR '.db_string_equal_to('the_action','WIKI_EDIT_PAGE'));
-		$rows=$GLOBALS['SITE_DB']->query('SELECT * FROM '.get_table_prefix().'wiki_changes WHERE '.$where.' ORDER BY '.$sortable.' '.$sort_order,$max,$start);
-		$fields=new ocp_tempcode();
-		require_code('templates_results_table');
-		foreach ($rows as $myrow)
-		{
-			if (!has_category_access(get_member(),'wiki_page',strval($myrow['the_page']))) continue;
+        $max_rows = $GLOBALS['SITE_DB']->query_select_value('wiki_changes','COUNT(*)',array('the_action' => 'WIKI_MAKE_POST'));
+        $_id = get_param('id',null);
+        $id = null;
+        if (!is_null($_id)) {
+            list($id,) = get_param_wiki_chain('id');
+        }
+        $where = (!is_null($id))?('the_page=' . strval($id)):(db_string_equal_to('the_action','WIKI_MAKE_POST') . ' OR ' . db_string_equal_to('the_action','WIKI_EDIT_PAGE'));
+        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'wiki_changes WHERE ' . $where . ' ORDER BY ' . $sortable . ' ' . $sort_order,$max,$start);
+        $fields = new ocp_tempcode();
+        require_code('templates_results_table');
+        foreach ($rows as $myrow) {
+            if (!has_category_access(get_member(),'wiki_page',strval($myrow['the_page']))) {
+                continue;
+            }
 
-			$l=$GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id'=>$myrow['the_page']));
-			if (!is_null($l))
-			{
-				$chain=is_null($id)?wiki_derive_chain($myrow['the_page']):$_id;
-				$l=wiki_breadcrumbs($chain,get_translated_text($l),true);
+            $l = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','title',array('id' => $myrow['the_page']));
+            if (!is_null($l)) {
+                $chain = is_null($id)?wiki_derive_chain($myrow['the_page']):$_id;
+                $l = wiki_breadcrumbs($chain,get_translated_text($l),true);
 
-				$_date_and_time=get_timezoned_date($myrow['date_and_time']);
-				$ml=$GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
-				$action=do_lang($myrow['the_action'],NULL,NULL,NULL,NULL,false);
-				if (is_null($action)) $action='?';
+                $_date_and_time = get_timezoned_date($myrow['date_and_time']);
+                $ml = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($myrow['member_id']);
+                $action = do_lang($myrow['the_action'],null,null,null,null,false);
+                if (is_null($action)) {
+                    $action = '?';
+                }
 
-				$fields->attach(results_entry(array($l,$ml,escape_html($_date_and_time),$action)));
-			}
-		}
-		if ($fields->is_empty()) return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
+                $fields->attach(results_entry(array($l,$ml,escape_html($_date_and_time),$action)));
+            }
+        }
+        if ($fields->is_empty()) {
+            return inform_screen($this->title,do_lang_tempcode('NO_ENTRIES'));
+        }
 
-		$fields_title=results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('MEMBER'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable.' '.$sort_order);
-		$out=results_table(do_lang_tempcode('WIKI_CHANGELOG'),$start,'changes_start',$max,'changes_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
+        $fields_title = results_field_title(array(do_lang_tempcode('PAGE'),do_lang_tempcode('MEMBER'),do_lang_tempcode('DATE'),do_lang_tempcode('ACTION')),$sortables,'sort',$sortable . ' ' . $sort_order);
+        $out = results_table(do_lang_tempcode('WIKI_CHANGELOG'),$start,'changes_start',$max,'changes_max',$max_rows,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort');
 
-		$tpl=do_template('WIKI_CHANGES_SCREEN',array('_GUID'=>'0dea1ed9d31a818cba60f56fc1c8f68f','TITLE'=>$this->title,'RESULTS'=>$out));
+        $tpl = do_template('WIKI_CHANGES_SCREEN',array('_GUID' => '0dea1ed9d31a818cba60f56fc1c8f68f','TITLE' => $this->title,'RESULTS' => $out));
 
-		require_code('templates_internalise_screen');
-		return internalise_own_screen($tpl);
-	}
+        require_code('templates_internalise_screen');
+        return internalise_own_screen($tpl);
+    }
 
-	/**
+    /**
 	 * Get markers of posts from the POST/GET.
 	 *
 	 * @return array	A list of markers.
 	 */
-	function get_markers()
-	{
-		$markers=array();
-		foreach (array_keys($_REQUEST) as $key)
-		{
-			if (substr($key,0,5)=='mark_') $markers[]=intval(substr($key,5));
-		}
-		return $markers;
-	}
+    public function get_markers()
+    {
+        $markers = array();
+        foreach (array_keys($_REQUEST) as $key) {
+            if (substr($key,0,5) == 'mark_') {
+                $markers[] = intval(substr($key,5));
+            }
+        }
+        return $markers;
+    }
 
-	/**
+    /**
 	 * The UI for merging Wiki+ posts.
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function do_wiki_merge_interface()
-	{
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>get_param('id',false,true)),'_SELF');
-		$redir_url=$_redir_url->evaluate();
-		$merge_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'type'=>'do','id'=>get_param('id',false,true)),'_SELF',NULL,true);
+    public function do_wiki_merge_interface()
+    {
+        $_redir_url = build_url(array('page' => '_SELF','type' => 'misc','id' => get_param('id',false,true)),'_SELF');
+        $redir_url = $_redir_url->evaluate();
+        $merge_url = build_url(array('page' => '_SELF','redirect' => $redir_url,'type' => 'do','id' => get_param('id',false,true)),'_SELF',null,true);
 
-		$merged='';
-		$markers=$this->get_markers();
-		if (count($markers)==0) warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
-		foreach ($markers as $id)
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>$id),'',1);
-			if (!array_key_exists(0,$rows)) continue;
-			$myrow=$rows[0];
+        $merged = '';
+        $markers = $this->get_markers();
+        if (count($markers) == 0) {
+            warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
+        }
+        foreach ($markers as $id) {
+            $rows = $GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id' => $id),'',1);
+            if (!array_key_exists(0,$rows)) {
+                continue;
+            }
+            $myrow = $rows[0];
 
-			if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) access_denied('CATEGORY_ACCESS');
-			check_edit_permission('low',NULL,array('wiki_page',$myrow['page_id']),'cms_wiki');
+            if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) {
+                access_denied('CATEGORY_ACCESS');
+            }
+            check_edit_permission('low',null,array('wiki_page',$myrow['page_id']),'cms_wiki');
 
-			if ($merged!='') $merged.="\n\n";
-			$merged.=get_translated_text($myrow['the_message']);
-		}
+            if ($merged != '') {
+                $merged .= "\n\n";
+            }
+            $merged .= get_translated_text($myrow['the_message']);
+        }
 
-		require_code('form_templates');
+        require_code('form_templates');
 
-		$posting_form=get_posting_form(do_lang('MERGE_WIKI_POSTS'),'menu___generic_admin__merge',$merged,$merge_url,new ocp_tempcode(),new ocp_tempcode());
+        $posting_form = get_posting_form(do_lang('MERGE_WIKI_POSTS'),'menu___generic_admin__merge',$merged,$merge_url,new ocp_tempcode(),new ocp_tempcode());
 
-		return do_template('POSTING_SCREEN',array('_GUID'=>'4372327fb689ef70a9ac5d275dd454f1','POSTING_FORM'=>$posting_form,'HIDDEN'=>'','TITLE'=>$this->title,'TEXT'=>do_lang_tempcode('WIKI_MERGE_TEXT')));
-	}
+        return do_template('POSTING_SCREEN',array('_GUID' => '4372327fb689ef70a9ac5d275dd454f1','POSTING_FORM' => $posting_form,'HIDDEN' => '','TITLE' => $this->title,'TEXT' => do_lang_tempcode('WIKI_MERGE_TEXT')));
+    }
 
-	/**
+    /**
 	 * The actualiser for merging Wiki+ posts.
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function do_wiki_merge()
-	{
-		check_edit_permission('low',NULL,array('wiki_page',get_param('id',false,true)),'cms_wiki');
+    public function do_wiki_merge()
+    {
+        check_edit_permission('low',null,array('wiki_page',get_param('id',false,true)),'cms_wiki');
 
-		require_code('comcode_check');
+        require_code('comcode_check');
 
-		@ignore_user_abort(true);
+        @ignore_user_abort(true);
 
-		$message=post_param('post');
-		check_comcode($message,NULL,false,NULL,true);
-		$map=array(
-			'edit_date'=>NULL,
-			'member_id'=>get_member(),
-			'date_and_time'=>time(),
-			'page_id'=>get_param_integer('id'),
-			'validated'=>1,
-			'wiki_views'=>0,
-		);
-		if (multi_lang_content())
-		{
-			$map['the_message']=0;
-		} else
-		{
-			$map['the_message']='';
-			$map['the_message__text_parsed']='';
-			$map['the_message__source_user']=get_member();
-		}
-		$post_id=$GLOBALS['SITE_DB']->query_insert('wiki_posts',$map,true);
-		require_code('attachments2');
-		$map=array();
-		$map+=insert_lang_comcode_attachments('the_message',2,$message,'wiki_post',strval($post_id));
-		$GLOBALS['SITE_DB']->query_update('wiki_posts',$map,array('id'=>$post_id),'',1);
+        $message = post_param('post');
+        check_comcode($message,null,false,null,true);
+        $map = array(
+            'edit_date' => NULL,
+            'member_id' => get_member(),
+            'date_and_time' => time(),
+            'page_id' => get_param_integer('id'),
+            'validated' => 1,
+            'wiki_views' => 0,
+        );
+        if (multi_lang_content()) {
+            $map['the_message'] = 0;
+        } else {
+            $map['the_message'] = '';
+            $map['the_message__text_parsed'] = '';
+            $map['the_message__source_user'] = get_member();
+        }
+        $post_id = $GLOBALS['SITE_DB']->query_insert('wiki_posts',$map,true);
+        require_code('attachments2');
+        $map = array();
+        $map += insert_lang_comcode_attachments('the_message',2,$message,'wiki_post',strval($post_id));
+        $GLOBALS['SITE_DB']->query_update('wiki_posts',$map,array('id' => $post_id),'',1);
 
-		@ignore_user_abort(false);
+        @ignore_user_abort(false);
 
-		$markers=$this->get_markers();
-		foreach ($markers as $id)
-		{
-			$GLOBALS['SITE_DB']->query_delete('wiki_posts',array('id'=>$id),'',1);
-		}
+        $markers = $this->get_markers();
+        foreach ($markers as $id) {
+            $GLOBALS['SITE_DB']->query_delete('wiki_posts',array('id' => $id),'',1);
+        }
 
-		$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page'=>get_param_integer('id'),'the_action'=>'MERGE_WIKI_POSTS','date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>get_member()));
+        $GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page' => get_param_integer('id'),'the_action' => 'MERGE_WIKI_POSTS','date_and_time' => time(),'ip' => get_ip_address(),'member_id' => get_member()));
 
-		require_code('autosave');
-		clear_ocp_autosave();
+        require_code('autosave');
+        clear_ocp_autosave();
 
-		// Show it worked / Refresh
-		$url=get_param('redirect');
-		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $url = get_param('redirect');
+        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * The UI for moving a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function move()
-	{
-		$_id=get_param_wiki_chain('id');
-		$id=$_id[0];
-		$post_id=get_param_integer('post_id');
+    public function move()
+    {
+        $_id = get_param_wiki_chain('id');
+        $id = $_id[0];
+        $post_id = get_param_integer('post_id');
 
-		$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id'=>$post_id));
+        $original_poster = $GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id' => $post_id));
 
-		$true_page_id=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id'=>$post_id));
-		if (!has_category_access(get_member(),'wiki_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
-		check_edit_permission('low',$original_poster,array('wiki_page',$true_page_id),'cms_wiki');
+        $true_page_id = $GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id' => $post_id));
+        if (!has_category_access(get_member(),'wiki_page',strval($true_page_id))) {
+            access_denied('CATEGORY_ACCESS');
+        }
+        check_edit_permission('low',$original_poster,array('wiki_page',$true_page_id),'cms_wiki');
 
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>get_param('id',false,true)),'_SELF');
-		$redir_url=$_redir_url->evaluate();
-		$move_url=build_url(array('page'=>'_SELF','redirect'=>$redir_url,'type'=>'_move','id'=>get_param('id',false,true)),'_SELF');
+        $_redir_url = build_url(array('page' => '_SELF','type' => 'misc','id' => get_param('id',false,true)),'_SELF');
+        $redir_url = $_redir_url->evaluate();
+        $move_url = build_url(array('page' => '_SELF','redirect' => $redir_url,'type' => '_move','id' => get_param('id',false,true)),'_SELF');
 
-		require_code('form_templates');
+        require_code('form_templates');
 
-		$fields=form_input_tree_list(do_lang_tempcode('DESTINATION'),'','target',NULL,'choose_wiki_page',array(),true,strval($id));
+        $fields = form_input_tree_list(do_lang_tempcode('DESTINATION'),'','target',null,'choose_wiki_page',array(),true,strval($id));
 
-		$hidden=form_input_hidden('source',strval($post_id));
+        $hidden = form_input_hidden('source',strval($post_id));
 
-		return do_template('FORM_SCREEN',array(
-			'_GUID'=>'f231626424aa83d75df571a818665152',
-			'SKIP_VALIDATION'=>true,
-			'TITLE'=>$this->title,
-			'URL'=>$move_url,
-			'TEXT'=>do_lang_tempcode('SELECT_TARGET_POST_DESTINATION'),
-			'FIELDS'=>$fields,
-			'HIDDEN'=>$hidden,
-			'SUBMIT_ICON'=>'buttons__move',
-			'SUBMIT_NAME'=>do_lang_tempcode('MOVE'),
-		));
-	}
+        return do_template('FORM_SCREEN',array(
+            '_GUID' => 'f231626424aa83d75df571a818665152',
+            'SKIP_VALIDATION' => true,
+            'TITLE' => $this->title,
+            'URL' => $move_url,
+            'TEXT' => do_lang_tempcode('SELECT_TARGET_POST_DESTINATION'),
+            'FIELDS' => $fields,
+            'HIDDEN' => $hidden,
+            'SUBMIT_ICON' => 'buttons__move',
+            'SUBMIT_NAME' => do_lang_tempcode('MOVE'),
+        ));
+    }
 
-	/**
+    /**
 	 * The actualiser for moving a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function _move()
-	{
-		$post_id=post_param_integer('source');
-		$target=post_param_integer('target');
-		$_id=get_param_wiki_chain('id');
-		$id=$_id[0];
+    public function _move()
+    {
+        $post_id = post_param_integer('source');
+        $target = post_param_integer('target');
+        $_id = get_param_wiki_chain('id');
+        $id = $_id[0];
 
-		$true_page_id=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id'=>$post_id));
-		if (!has_category_access(get_member(),'wiki_page',strval($true_page_id))) access_denied('CATEGORY_ACCESS');
+        $true_page_id = $GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id' => $post_id));
+        if (!has_category_access(get_member(),'wiki_page',strval($true_page_id))) {
+            access_denied('CATEGORY_ACCESS');
+        }
 
-		$original_poster=$GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id'=>$post_id));
-		check_edit_permission('low',$original_poster,array('wiki_page',$true_page_id),'cms_wiki');
+        $original_poster = $GLOBALS['SITE_DB']->query_select_value('wiki_posts','member_id',array('id' => $post_id));
+        check_edit_permission('low',$original_poster,array('wiki_page',$true_page_id),'cms_wiki');
 
-		// Check user info
-		$member=get_member();
-		if ($target==db_get_first_id())
-		{
-			check_privilege('feature');
-		}
+        // Check user info
+        $member = get_member();
+        if ($target == db_get_first_id()) {
+            check_privilege('feature');
+        }
 
-		if ($id==$target)
-		{
-			return warn_screen($this->title,do_lang_tempcode('INVALID_OPERATION'));
-		} else
-		{
-			$GLOBALS['SITE_DB']->query_update('wiki_posts',array('page_id'=>$target),array('id'=>$post_id),'',1);
-			$GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page'=>$target,'the_action'=>'WIKI_MOVE_POST','date_and_time'=>time(),'ip'=>get_ip_address(),'member_id'=>$member));
+        if ($id == $target) {
+            return warn_screen($this->title,do_lang_tempcode('INVALID_OPERATION'));
+        } else {
+            $GLOBALS['SITE_DB']->query_update('wiki_posts',array('page_id' => $target),array('id' => $post_id),'',1);
+            $GLOBALS['SITE_DB']->query_insert('wiki_changes',array('the_page' => $target,'the_action' => 'WIKI_MOVE_POST','date_and_time' => time(),'ip' => get_ip_address(),'member_id' => $member));
 
-			// Show it worked / Refresh
-			$url=get_param('redirect');
-			return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-		}
-	}
+            // Show it worked / Refresh
+            $url = get_param('redirect');
+            return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        }
+    }
 
-	/**
+    /**
 	 * The UI for making a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function post()
-	{
-		$post_id=get_param_integer('post_id',NULL);
-		$mode=($post_id===NULL)?'post':'edit';
+    public function post()
+    {
+        $post_id = get_param_integer('post_id',null);
+        $mode = ($post_id === NULL)?'post':'edit';
 
-		require_code('form_templates');
+        require_code('form_templates');
 
-		$specialisation=new ocp_tempcode();
+        $specialisation = new ocp_tempcode();
 
-		$parsed=NULL;
+        $parsed = null;
 
-		if ($mode=='post') url_default_parameters__enable();
+        if ($mode == 'post') {
+            url_default_parameters__enable();
+        }
 
-		if ($mode=='edit')
-		{
-			$_id=get_param_wiki_chain('id',strval($GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id'=>$post_id))));
-			$id=$_id[0];
+        if ($mode == 'edit') {
+            $_id = get_param_wiki_chain('id',strval($GLOBALS['SITE_DB']->query_select_value('wiki_posts','page_id',array('id' => $post_id))));
+            $id = $_id[0];
 
-			$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>$post_id),'',1);
-			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-			$myrow=$rows[0];
+            $rows = $GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id' => $post_id),'',1);
+            if (!array_key_exists(0,$rows)) {
+                warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+            }
+            $myrow = $rows[0];
 
-			if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) access_denied('CATEGORY_ACCESS');
+            if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) {
+                access_denied('CATEGORY_ACCESS');
+            }
 
-			$original_poster=$myrow['member_id'];
-			check_edit_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
+            $original_poster = $myrow['member_id'];
+            check_edit_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
 
-			// If we are editing, we need to retrieve the message
-			$message=get_translated_text($myrow['the_message']);
-			$parsed=get_translated_tempcode('wiki_posts',$myrow,'the_message');
+            // If we are editing, we need to retrieve the message
+            $message = get_translated_text($myrow['the_message']);
+            $parsed = get_translated_tempcode('wiki_posts',$myrow,'the_message');
 
-			require_code('content2');
-			$specialisation->attach(meta_data_get_fields('wiki_post',strval($post_id)));
+            require_code('content2');
+            $specialisation->attach(meta_data_get_fields('wiki_post',strval($post_id)));
 
-			if (has_delete_permission('low',get_member(),$original_poster,'cms_wiki',array('wiki_page',$myrow['page_id'])))
-			{
-				$specialisation->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'569be0b840914473a0928606a045f838','TITLE'=>do_lang_tempcode('ACTIONS'))));
-				$specialisation->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
-			}
+            if (has_delete_permission('low',get_member(),$original_poster,'cms_wiki',array('wiki_page',$myrow['page_id']))) {
+                $specialisation->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '569be0b840914473a0928606a045f838','TITLE' => do_lang_tempcode('ACTIONS'))));
+                $specialisation->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+            }
 
-			$submit_name=do_lang_tempcode('SAVE');
+            $submit_name = do_lang_tempcode('SAVE');
 
-			$validated=$myrow['validated'];
+            $validated = $myrow['validated'];
 
-			list($warning_details,$ping_url)=handle_conflict_resolution();
+            list($warning_details,$ping_url) = handle_conflict_resolution();
 
-			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$myrow['page_id'])))
-				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
-		} else
-		{
-			$_id=get_param_wiki_chain('id');
-			$id=$_id[0];
+            if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$myrow['page_id']))) {
+                $specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated == 1));
+            }
+        } else {
+            $_id = get_param_wiki_chain('id');
+            $id = $_id[0];
 
-			if ($GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id'=>$id))>=300)
-			{
-				warn_exit(do_lang_tempcode('TOO_MANY_WIKI_POSTS'));
-			}
+            if ($GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('page_id' => $id)) >= 300) {
+                warn_exit(do_lang_tempcode('TOO_MANY_WIKI_POSTS'));
+            }
 
-			check_submit_permission('low',array('wiki_page',$id),'cms_wiki');
+            check_submit_permission('low',array('wiki_page',$id),'cms_wiki');
 
-			$message='';
+            $message = '';
 
-			$submit_name=do_lang_tempcode('MAKE_POST');
+            $submit_name = do_lang_tempcode('MAKE_POST');
 
-			$validated=1;
+            $validated = 1;
 
-			list($warning_details,$ping_url)=array(NULL,NULL);
+            list($warning_details,$ping_url) = array(null,null);
 
-			require_code('content2');
-			$specialisation->attach(meta_data_get_fields('wiki_post',NULL));
+            require_code('content2');
+            $specialisation->attach(meta_data_get_fields('wiki_post',null));
 
-			if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki'))
-				$specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated==1));
-		}
+            if (has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki')) {
+                $specialisation->attach(form_input_tick(do_lang_tempcode('VALIDATED'),do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())?'DESCRIPTION_VALIDATED_SIMPLE':'DESCRIPTION_VALIDATED'),'validated',$validated == 1));
+            }
+        }
 
-		$hidden_fields=new ocp_tempcode();
+        $hidden_fields = new ocp_tempcode();
 
-		require_code('fields');
-		if (has_tied_catalogue('wiki_post'))
-		{
-			append_form_custom_fields('wiki_post',($mode=='edit')?strval($post_id):NULL,$specialisation,$hidden_fields);
-		}
+        require_code('fields');
+        if (has_tied_catalogue('wiki_post')) {
+            append_form_custom_fields('wiki_post',($mode == 'edit')?strval($post_id):null,$specialisation,$hidden_fields);
+        }
 
-		$text=new ocp_tempcode();
+        $text = new ocp_tempcode();
 
-		list($page_id,)=get_param_wiki_chain('id',strval(db_get_first_id()));
-		require_lang('notifications');
-		$notify=($GLOBALS['SITE_DB']->query_select_value_if_there('wiki_changes','MAX(date_and_time)',array('the_page'=>$page_id))<time()-60*10);
-		$radios=form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
-		$radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
-		$specialisation->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
+        list($page_id,) = get_param_wiki_chain('id',strval(db_get_first_id()));
+        require_lang('notifications');
+        $notify = ($GLOBALS['SITE_DB']->query_select_value_if_there('wiki_changes','MAX(date_and_time)',array('the_page' => $page_id))<time()-60*10);
+        $radios = form_input_radio_entry('send_notification','0',!$notify,do_lang_tempcode('NO'));
+        $radios->attach(form_input_radio_entry('send_notification','1',$notify,do_lang_tempcode('YES')));
+        $specialisation->attach(form_input_radio(do_lang_tempcode('SEND_NOTIFICATION'),do_lang_tempcode('DESCRIPTION_SEND_NOTIFICATION'),'send_notification',$radios));
 
-		if (addon_installed('captcha'))
-		{
-			require_code('captcha');
-			if (use_captcha())
-			{
-				$specialisation->attach(form_input_captcha());
-				$text->attach(paragraph(do_lang_tempcode('FORM_TIME_SECURITY')));
-			}
-		}
+        if (addon_installed('captcha')) {
+            require_code('captcha');
+            if (use_captcha()) {
+                $specialisation->attach(form_input_captcha());
+                $text->attach(paragraph(do_lang_tempcode('FORM_TIME_SECURITY')));
+            }
+        }
 
-		if (addon_installed('points'))
-		{
-			$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>get_self_url(true,true)),get_module_zone('login'));
-			$_login_url=escape_html($login_url->evaluate());
-			if ((is_guest()) && ((get_forum_type()!='ocf') || (has_actual_page_access(get_member(),'join')))) $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT',$_login_url)));
-		}
+        if (addon_installed('points')) {
+            $login_url = build_url(array('page' => 'login','type' => 'misc','redirect' => get_self_url(true,true)),get_module_zone('login'));
+            $_login_url = escape_html($login_url->evaluate());
+            if ((is_guest()) && ((get_forum_type() != 'ocf') || (has_actual_page_access(get_member(),'join')))) {
+                $text->attach(paragraph(do_lang_tempcode('NOT_LOGGED_IN_NO_CREDIT',$_login_url)));
+            }
+        }
 
-		// Awards?
-		if (addon_installed('awards'))
-		{
-			require_code('awards');
-			$specialisation->attach(get_award_fields('wiki_post',($post_id===NULL)?NULL:strval($post_id)));
-		} else $awards=array();
+        // Awards?
+        if (addon_installed('awards')) {
+            require_code('awards');
+            $specialisation->attach(get_award_fields('wiki_post',($post_id === NULL)?null:strval($post_id)));
+        } else {
+            $awards = array();
+        }
 
-		$message=post_param('message',$message);
+        $message = post_param('message',$message);
 
-		$chain=$this->chain;
+        $chain = $this->chain;
 
-		$breadcrumbs=wiki_breadcrumbs($chain,NULL,true,true);
+        $breadcrumbs = wiki_breadcrumbs($chain,null,true,true);
 
-		$_redir_url=build_url(array('page'=>'_SELF','type'=>'misc','id'=>get_param('id',strval($id),true)),'_SELF');
-		$redir_url=$_redir_url->evaluate();
-		$post_url=build_url(array('page'=>'_SELF','id'=>get_param('id',strval(db_get_first_id()),false),'redirect'=>$redir_url,'type'=>'_post'),'_SELF');
+        $_redir_url = build_url(array('page' => '_SELF','type' => 'misc','id' => get_param('id',strval($id),true)),'_SELF');
+        $redir_url = $_redir_url->evaluate();
+        $post_url = build_url(array('page' => '_SELF','id' => get_param('id',strval(db_get_first_id()),false),'redirect' => $redir_url,'type' => '_post'),'_SELF');
 
-		$hidden_fields->attach(form_input_hidden('post_id',($post_id===NULL)?'':strval($post_id)));
+        $hidden_fields->attach(form_input_hidden('post_id',($post_id === NULL)?'':strval($post_id)));
 
-		$javascript=(function_exists('captcha_ajax_check')?captcha_ajax_check():'');
+        $javascript = (function_exists('captcha_ajax_check')?captcha_ajax_check():'');
 
-		$posting_form=get_posting_form($submit_name,($mode=='edit')?'menu___generic_admin__edit_this':'menu___generic_admin__add_one',$message,$post_url,$hidden_fields,new ocp_tempcode(),NULL,'',$specialisation,$parsed,$javascript);
+        $posting_form = get_posting_form($submit_name,($mode == 'edit')?'menu___generic_admin__edit_this':'menu___generic_admin__add_one',$message,$post_url,$hidden_fields,new ocp_tempcode(),null,'',$specialisation,$parsed,$javascript);
 
-		if ($mode=='post') url_default_parameters__disable();
+        if ($mode == 'post') {
+            url_default_parameters__disable();
+        }
 
-		return do_template('WIKI_POSTING_SCREEN',array('_GUID'=>'efdea6198cba136eb6809937c2322458','PING_URL'=>$ping_url,'WARNING_DETAILS'=>$warning_details,'TEXT'=>$text,'TITLE'=>$this->title,'POSTING_FORM'=>$posting_form));
-	}
+        return do_template('WIKI_POSTING_SCREEN',array('_GUID' => 'efdea6198cba136eb6809937c2322458','PING_URL' => $ping_url,'WARNING_DETAILS' => $warning_details,'TEXT' => $text,'TITLE' => $this->title,'POSTING_FORM' => $posting_form));
+    }
 
-	/**
+    /**
 	 * The actualiser for making a Wiki+ post.
 	 *
 	 * @return tempcode	The UI.
 	 */
-	function _post()
-	{
-		if (addon_installed('captcha'))
-		{
-			require_code('captcha');
-			enforce_captcha();
-		}
+    public function _post()
+    {
+        if (addon_installed('captcha')) {
+            require_code('captcha');
+            enforce_captcha();
+        }
 
-		$post_id=post_param_integer('post_id',NULL);
-		$mode=($post_id===NULL)?'post':'edit';
+        $post_id = post_param_integer('post_id',null);
+        $mode = ($post_id === NULL)?'post':'edit';
 
-		require_code('uploads');
+        require_code('uploads');
 
-		$_id=get_param_wiki_chain('id');
-		$id=$_id[0];
-		if ($mode=='edit')
-		{
-			$delete=post_param_integer('delete',0);
-		} else
-		{
-			if ($GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('id'=>$id))>=300)
-			{
-				warn_exit(do_lang_tempcode('TOO_MANY_WIKI_POSTS'));
-			}
-		}
+        $_id = get_param_wiki_chain('id');
+        $id = $_id[0];
+        if ($mode == 'edit') {
+            $delete = post_param_integer('delete',0);
+        } else {
+            if ($GLOBALS['SITE_DB']->query_select_value('wiki_posts','COUNT(*)',array('id' => $id)) >= 300) {
+                warn_exit(do_lang_tempcode('TOO_MANY_WIKI_POSTS'));
+            }
+        }
 
-		// Post Text
-		$message=post_param('post');
+        // Post Text
+        $message = post_param('post');
 
-		$validated=post_param_integer('validated',0);
+        $validated = post_param_integer('validated',0);
 
-		if ($id==db_get_first_id())
-		{
-			check_privilege('feature');
-		}
+        if ($id == db_get_first_id()) {
+            check_privilege('feature');
+        }
 
-		// Do it
-		if ($mode=='post')
-		{
-			require_code('antispam');
-			inject_action_spamcheck();
-			if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$id)))
-				$validated=0;
-			if (!has_category_access(get_member(),'wiki_page',strval($id))) access_denied('CATEGORY_ACCESS');
+        // Do it
+        if ($mode == 'post') {
+            require_code('antispam');
+            inject_action_spamcheck();
+            if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$id))) {
+                $validated = 0;
+            }
+            if (!has_category_access(get_member(),'wiki_page',strval($id))) {
+                access_denied('CATEGORY_ACCESS');
+            }
 
-			check_submit_permission('low',NULL,'cms_wiki');
+            check_submit_permission('low',null,'cms_wiki');
 
-			require_code('content2');
-			$meta_data=actual_meta_data_get_fields('wiki_post',NULL);
+            require_code('content2');
+            $meta_data = actual_meta_data_get_fields('wiki_post',null);
 
-			require_code('content2');
-			$post_id=wiki_add_post($id,$message,$validated,$meta_data['submitter'],true,$meta_data['add_time'],$meta_data['views']);
+            require_code('content2');
+            $post_id = wiki_add_post($id,$message,$validated,$meta_data['submitter'],true,$meta_data['add_time'],$meta_data['views']);
 
-			if ($validated==0)
-			{
-				require_code('submit');
-				$edit_url=build_url(array('page'=>'wiki','type'=>'post','post_id'=>$post_id,'validated'=>1),'_SELF',NULL,false,false,true);
-				if (addon_installed('unvalidated'))
-					send_validation_request('WIKI_MAKE_POST','wiki_posts',false,strval($post_id),$edit_url);
-			}
-		} else
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id'=>$post_id),'',1);
-			if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-			$myrow=$rows[0];
-			if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) access_denied('CATEGORY_ACCESS');
+            if ($validated == 0) {
+                require_code('submit');
+                $edit_url = build_url(array('page' => 'wiki','type' => 'post','post_id' => $post_id,'validated' => 1),'_SELF',null,false,false,true);
+                if (addon_installed('unvalidated')) {
+                    send_validation_request('WIKI_MAKE_POST','wiki_posts',false,strval($post_id),$edit_url);
+                }
+            }
+        } else {
+            $rows = $GLOBALS['SITE_DB']->query_select('wiki_posts',array('*'),array('id' => $post_id),'',1);
+            if (!array_key_exists(0,$rows)) {
+                warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+            }
+            $myrow = $rows[0];
+            if (!has_category_access(get_member(),'wiki_page',strval($myrow['page_id']))) {
+                access_denied('CATEGORY_ACCESS');
+            }
 
-			$original_poster=$myrow['member_id'];
+            $original_poster = $myrow['member_id'];
 
-			if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$myrow['page_id'])))
-				$validated=0;
+            if (!has_privilege(get_member(),'bypass_validation_lowrange_content','cms_wiki',array('wiki_page',$myrow['page_id']))) {
+                $validated = 0;
+            }
 
-			if ($delete==1)
-			{
-				check_delete_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
+            if ($delete == 1) {
+                check_delete_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
 
-				wiki_delete_post($post_id);
+                wiki_delete_post($post_id);
 
-				require_code('fields');
-				if (has_tied_catalogue('wiki_post'))
-				{
-					delete_form_custom_fields('wiki_post',strval($post_id));
-				}
-			} else
-			{
-				check_edit_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
+                require_code('fields');
+                if (has_tied_catalogue('wiki_post')) {
+                    delete_form_custom_fields('wiki_post',strval($post_id));
+                }
+            } else {
+                check_edit_permission('low',$original_poster,array('wiki_page',$myrow['page_id']),'cms_wiki');
 
-				require_code('content2');
-				$meta_data=actual_meta_data_get_fields('wiki_post',strval($post_id));
+                require_code('content2');
+                $meta_data = actual_meta_data_get_fields('wiki_post',strval($post_id));
 
-				wiki_edit_post($post_id,$message,$validated,$meta_data['submitter'],NULL,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],true);
-			}
-		}
+                wiki_edit_post($post_id,$message,$validated,$meta_data['submitter'],null,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],true);
+            }
+        }
 
-		require_code('fields');
-		if (has_tied_catalogue('wiki_post'))
-		{
-			save_form_custom_fields('wiki_post',strval($post_id));
-		}
+        require_code('fields');
+        if (has_tied_catalogue('wiki_post')) {
+            save_form_custom_fields('wiki_post',strval($post_id));
+        }
 
-		if (addon_installed('awards'))
-		{
-			require_code('awards');
-			handle_award_setting('wiki_post',strval($post_id));
-		}
+        if (addon_installed('awards')) {
+            require_code('awards');
+            handle_award_setting('wiki_post',strval($post_id));
+        }
 
-		require_code('autosave');
-		clear_ocp_autosave();
+        require_code('autosave');
+        clear_ocp_autosave();
 
-		// Show it worked / Refresh
-		$url=get_param('redirect');
-		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-	}
+        // Show it worked / Refresh
+        $url = get_param('redirect');
+        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+    }
 }
-
-

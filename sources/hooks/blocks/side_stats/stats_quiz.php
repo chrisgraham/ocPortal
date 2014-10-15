@@ -20,24 +20,28 @@
 
 class Hook_stats_quiz
 {
-	/**
+    /**
 	 * Show a stats section.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		if (!addon_installed('quizzes')) return new ocp_tempcode();
+    public function run()
+    {
+        if (!addon_installed('quizzes')) {
+            return new ocp_tempcode();
+        }
 
-		require_lang('quiz');
+        require_lang('quiz');
 
-		$bits=new ocp_tempcode();
-		if (get_option('quiz_show_stats_count_total_open')=='1') $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID'=>'736e5008b15c984768234dde7586adf7','KEY'=>do_lang_tempcode('QUIZZES'),'VALUE'=>integer_format($GLOBALS['SITE_DB']->query_select_value('quizzes','COUNT(*)')))));
-		if ($bits->is_empty_shell()) return new ocp_tempcode();
-		$section=do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID'=>'88c7eb369ee73af200f71d029b84baf5','SECTION'=>do_lang_tempcode('QUIZZES'),'CONTENT'=>$bits));
+        $bits = new ocp_tempcode();
+        if (get_option('quiz_show_stats_count_total_open') == '1') {
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => '736e5008b15c984768234dde7586adf7','KEY' => do_lang_tempcode('QUIZZES'),'VALUE' => integer_format($GLOBALS['SITE_DB']->query_select_value('quizzes','COUNT(*)')))));
+        }
+        if ($bits->is_empty_shell()) {
+            return new ocp_tempcode();
+        }
+        $section = do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID' => '88c7eb369ee73af200f71d029b84baf5','SECTION' => do_lang_tempcode('QUIZZES'),'CONTENT' => $bits));
 
-		return $section;
-	}
+        return $section;
+    }
 }
-
-

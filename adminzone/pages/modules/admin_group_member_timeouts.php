@@ -23,24 +23,24 @@
  */
 class Module_admin_group_member_timeouts
 {
-	/**
+    /**
 	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -49,176 +49,174 @@ class Module_admin_group_member_timeouts
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		return array(
-			'misc'=>array('GROUP_MEMBER_TIMEOUTS','menu/adminzone/security/usergroups_temp'),
-		);
-	}
+        return array(
+            'misc' => array('GROUP_MEMBER_TIMEOUTS','menu/adminzone/security/usergroups_temp'),
+        );
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		if (!cron_installed()) attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(get_tutorial_url('tut_configuration'))),'warn');
+    public function pre_run()
+    {
+        if (!cron_installed()) {
+            attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(get_tutorial_url('tut_configuration'))),'warn');
+        }
 
-		$type=get_param('type','misc');
+        $type = get_param('type','misc');
 
-		require_lang('group_member_timeouts');
+        require_lang('group_member_timeouts');
 
-		$this->title=get_screen_title('GROUP_MEMBER_TIMEOUTS');
+        $this->title = get_screen_title('GROUP_MEMBER_TIMEOUTS');
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		$type=get_param('type','misc');
+    public function run()
+    {
+        $type = get_param('type','misc');
 
-		if ($type=='misc') return $this->manage();
-		if ($type=='save') return $this->save();
+        if ($type == 'misc') {
+            return $this->manage();
+        }
+        if ($type == 'save') {
+            return $this->save();
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * The UI to manage group member timeouts.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function manage()
-	{
-		require_code('form_templates');
-		require_code('templates_pagination');
+    public function manage()
+    {
+        require_code('form_templates');
+        require_code('templates_pagination');
 
-		$start=get_param_integer('start',0);
-		$max=get_param_integer('max',100);
-		$max_rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
+        $start = get_param_integer('start',0);
+        $max = get_param_integer('max',100);
+        $max_rows = $GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
 
-		if (get_forum_type()=='ocf')
-		{
-			$num_usergroups=$GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
-			if ($num_usergroups>50)
-			{
-				$_usergroups=$GLOBALS['FORUM_DB']->query_select('f_usergroup_subs s JOIN '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_groups g ON g.id=s.s_group_id',array('g.id','g.g_name'),NULL,'ORDER BY g_order',1);
-				$usergroups=array();
-				foreach ($_usergroups as $g)
-				{
-					$usergroups[$g['id']]=get_translated_text($g['g_name'],$GLOBALS['FORUM_DB']);
-				}
-			} else
-			{
-				$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-			}
-		} else
-		{
-			$usergroups=$GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-		}
-		unset($usergroups[db_get_first_id()]);
+        if (get_forum_type() == 'ocf') {
+            $num_usergroups = $GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
+            if ($num_usergroups>50) {
+                $_usergroups = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs s JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=s.s_group_id',array('g.id','g.g_name'),null,'ORDER BY g_order',1);
+                $usergroups = array();
+                foreach ($_usergroups as $g) {
+                    $usergroups[$g['id']] = get_translated_text($g['g_name'],$GLOBALS['FORUM_DB']);
+                }
+            } else {
+                $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+            }
+        } else {
+            $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
+        }
+        unset($usergroups[db_get_first_id()]);
 
-		single_field__start();
+        single_field__start();
 
-		$rows=$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_select('f_group_member_timeouts',array('member_id','group_id','timeout'),NULL,'',$max,$start);
-		$timeouts=array();
-		foreach ($rows as $i=>$row)
-		{
-			// Cleanup disassociated data
-			if (!isset($usergroups[$row['group_id']]))
-			{
-				$GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts',array('group_id'=>$row['group_id']));
-				continue;
-			}
+        $rows = $GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']->query_select('f_group_member_timeouts',array('member_id','group_id','timeout'),null,'',$max,$start);
+        $timeouts = array();
+        foreach ($rows as $i => $row) {
+            // Cleanup disassociated data
+            if (!isset($usergroups[$row['group_id']])) {
+                $GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts',array('group_id' => $row['group_id']));
+                continue;
+            }
 
-			$timeouts[]=array(
-				'USERNAME'=>$GLOBALS['FORUM_DRIVER']->get_username($row['member_id']),
-				'MEMBER_ID'=>strval($row['member_id']),
-				'GROUP_ID'=>strval($row['group_id']),
-				'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_'.strval($i),true,false,true,$row['timeout'],10,NULL,NULL),
-			);
-		}
+            $timeouts[] = array(
+                'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username($row['member_id']),
+                'MEMBER_ID' => strval($row['member_id']),
+                'GROUP_ID' => strval($row['group_id']),
+                'DATE_INPUT' => form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_' . strval($i),true,false,true,$row['timeout'],10,null,null),
+            );
+        }
 
-		$url=build_url(array('page'=>'_SELF','type'=>'save'),'_SELF');
+        $url = build_url(array('page' => '_SELF','type' => 'save'),'_SELF');
 
-		$pagination=pagination(do_lang('GROUP_MEMBER_TIMEOUTS'),$start,'start',$max,'max',$max_rows);
+        $pagination = pagination(do_lang('GROUP_MEMBER_TIMEOUTS'),$start,'start',$max,'max',$max_rows);
 
-		require_code('form_templates');
-		list($warning_details,$ping_url)=handle_conflict_resolution();
+        require_code('form_templates');
+        list($warning_details,$ping_url) = handle_conflict_resolution();
 
-		$ret=do_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN',array(
-			'TITLE'=>$this->title,
-			'TIMEOUTS'=>$timeouts,
-			'GROUPS'=>$usergroups,
-			'DATE_INPUT'=>form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_new',true,false,true,NULL,10,NULL,NULL),
-			'URL'=>$url,
-			'PAGINATION'=>$pagination,
-			'PING_URL'=>$ping_url,
-			'WARNING_DETAILS'=>$warning_details,
-		));
+        $ret = do_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN',array(
+            'TITLE' => $this->title,
+            'TIMEOUTS' => $timeouts,
+            'GROUPS' => $usergroups,
+            'DATE_INPUT' => form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_new',true,false,true,null,10,null,null),
+            'URL' => $url,
+            'PAGINATION' => $pagination,
+            'PING_URL' => $ping_url,
+            'WARNING_DETAILS' => $warning_details,
+        ));
 
-		single_field__end();
+        single_field__end();
 
-		return $ret;
-	}
+        return $ret;
+    }
 
-	/**
+    /**
 	 * Save group member timeouts.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function save()
-	{
-		require_code('group_member_timeouts');
+    public function save()
+    {
+        require_code('group_member_timeouts');
 
-		// Main edits
-		foreach (array_keys($_POST) as $key)
-		{
-			$matches=array();
-			if (preg_match('#^gmt_username_(\d+)$#',$key,$matches)!=0)
-			{
-				$old_group_id=post_param_integer('gmt_old_group_id_'.$matches[1],NULL);
-				$group_id=post_param_integer('gmt_group_id_'.$matches[1],NULL);
-				$username=post_param('gmt_username_'.$matches[1],'');
-				$time=get_input_date('gmt_time_'.$matches[1]);
+        // Main edits
+        foreach (array_keys($_POST) as $key) {
+            $matches = array();
+            if (preg_match('#^gmt_username_(\d+)$#',$key,$matches) != 0) {
+                $old_group_id = post_param_integer('gmt_old_group_id_' . $matches[1],null);
+                $group_id = post_param_integer('gmt_group_id_' . $matches[1],null);
+                $username = post_param('gmt_username_' . $matches[1],'');
+                $time = get_input_date('gmt_time_' . $matches[1]);
 
-				$this->_save_group_member_timeout($old_group_id,$group_id,$username,$time);
-			}
-		}
+                $this->_save_group_member_timeout($old_group_id,$group_id,$username,$time);
+            }
+        }
 
-		// Add new
+        // Add new
 
-		$group_id=post_param_integer('gmt_group_id_new',NULL);
-		$username=post_param('gmt_username_new','');
-		$time=get_input_date('gmt_time_new');
+        $group_id = post_param_integer('gmt_group_id_new',null);
+        $username = post_param('gmt_username_new','');
+        $time = get_input_date('gmt_time_new');
 
-		if ((!is_null($group_id)) && ($username!='') && (!is_null($time)))
-		{
-			$this->_save_group_member_timeout(NULL,$group_id,$username,$time);
-		}
+        if ((!is_null($group_id)) && ($username != '') && (!is_null($time))) {
+            $this->_save_group_member_timeout(null,$group_id,$username,$time);
+        }
 
-		// Clean up
+        // Clean up
 
-		cleanup_member_timeouts();
+        cleanup_member_timeouts();
 
-		// Redirect
+        // Redirect
 
-		$url=build_url(array('page'=>'_SELF','type'=>'misc'),'_SELF');
+        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
 
-		return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
-	}
+        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+    }
 
-	/**
+    /**
 	 * Save group member timeouts.
 	 *
 	 * @param  ?GROUP			The usergroup ID before edit (NULL: N/A)
@@ -226,30 +224,28 @@ class Module_admin_group_member_timeouts
 	 * @param  ID_TEXT		The username
 	 * @param  TIME			The expiry time
 	 */
-	function _save_group_member_timeout($old_group_id,$group_id,$username,$time)
-	{
-		$prefer_for_primary_group=false;//(post_param_integer('prefer_for_primary_group',0)==1); Don't promote this bad choice
+    public function _save_group_member_timeout($old_group_id,$group_id,$username,$time)
+    {
+        $prefer_for_primary_group = false;//(post_param_integer('prefer_for_primary_group',0)==1); Don't promote this bad choice
 
-		if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) // Security issue, don't allow privilege elevation
-		{
-			$admin_groups=$GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
-			if (in_array($group_id,$admin_groups)) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-		}
+        if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) { // Security issue, don't allow privilege elevation
+            $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
+            if (in_array($group_id,$admin_groups)) {
+                warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+            }
+        }
 
-		$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
-		if (is_null($member_id))
-		{
-			attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)),'warn');
-		} else
-		{
-			if (!is_null($old_group_id))
-			{
-				$GLOBALS[(get_forum_type()=='ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_member_timeouts',array(
-					'member_id'=>$member_id,
-					'group_id'=>$old_group_id,
-				),'',1);
-			}
-			set_member_group_timeout($member_id,$group_id,$time,$prefer_for_primary_group);
-		}
-	}
+        $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+        if (is_null($member_id)) {
+            attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)),'warn');
+        } else {
+            if (!is_null($old_group_id)) {
+                $GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_member_timeouts',array(
+                    'member_id' => $member_id,
+                    'group_id' => $old_group_id,
+                ),'',1);
+            }
+            set_member_group_timeout($member_id,$group_id,$time,$prefer_for_primary_group);
+        }
+    }
 }

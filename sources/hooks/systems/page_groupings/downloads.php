@@ -20,22 +20,22 @@
 
 class Hook_page_groupings_downloads
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('downloads')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('downloads')) {
+            return array();
+        }
 
-		return array(
-			array('cms','menu/rich_content/downloads',array('cms_downloads',array('type'=>'misc'),get_module_zone('cms_downloads')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('downloads:SECTION_DOWNLOADS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',NULL,'',true))))),'downloads:DOC_DOWNLOADS'),
-			array('rich_content','menu/rich_content/downloads',array('downloads',array(),get_module_zone('downloads')),do_lang_tempcode('downloads:SECTION_DOWNLOADS')),
-		);
-	}
+        return array(
+            array('cms','menu/rich_content/downloads',array('cms_downloads',array('type' => 'misc'),get_module_zone('cms_downloads')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('downloads:SECTION_DOWNLOADS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',null,'',true))))),'downloads:DOC_DOWNLOADS'),
+            array('rich_content','menu/rich_content/downloads',array('downloads',array(),get_module_zone('downloads')),do_lang_tempcode('downloads:SECTION_DOWNLOADS')),
+        );
+    }
 }
-
-

@@ -20,7 +20,7 @@
 
 class Hook_block_ui_renderers_banners
 {
-	/**
+    /**
 	 * See if a particular block parameter's UI input can be rendered by this.
 	 *
 	 * @param  ID_TEXT		The block
@@ -30,14 +30,13 @@ class Hook_block_ui_renderers_banners
 	 * @param  tempcode		Field description
 	 * @return ?tempcode		Rendered field (NULL: not handled).
 	 */
-	function render_block_ui($block,$parameter,$has_default,$default,$description)
-	{
-		if (($parameter=='param') && (in_array($block,array('main_banner_wave','main_topsites')))) // banner type list
-		{
-			require_code('banners');
-			$list=create_selection_list_banner_types($default);
-			return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false);
-		}
-		return NULL;
-	}
+    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    {
+        if (($parameter == 'param') && (in_array($block,array('main_banner_wave','main_topsites')))) { // banner type list
+            require_code('banners');
+            $list = create_selection_list_banner_types($default);
+            return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false);
+        }
+        return NULL;
+    }
 }

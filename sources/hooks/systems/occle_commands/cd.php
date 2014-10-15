@@ -20,7 +20,7 @@
 
 class Hook_occle_command_cd
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,27 +28,28 @@ class Hook_occle_command_cd
 	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('cd',array('h'),array(true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters))
-			{
-				$pwd=$occle_fs->print_working_directory(true);
-				array_pop($pwd);
-				$parameters[0]=$pwd;
-			} else
-			{
-				if ($parameters[0]=='~') $parameters[0]='/home'; // Not really a part of the architecture, but handy
-				$parameters[0]=$occle_fs->_pwd_to_array($parameters[0]);
-			}
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('cd',array('h'),array(true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                $pwd = $occle_fs->print_working_directory(true);
+                array_pop($pwd);
+                $parameters[0] = $pwd;
+            } else {
+                if ($parameters[0] == '~') {
+                    $parameters[0] = '/home';
+                } // Not really a part of the architecture, but handy
+                $parameters[0] = $occle_fs->_pwd_to_array($parameters[0]);
+            }
 
-			if (!$occle_fs->_is_dir($parameters[0])) return array('','','',do_lang('NOT_A_DIR','1'));
+            if (!$occle_fs->_is_dir($parameters[0])) {
+                return array('','','',do_lang('NOT_A_DIR','1'));
+            }
 
-			$occle_fs->change_directory($parameters[0]);
-			return array('','',$occle_fs->print_working_directory(),'');
-		}
-	}
+            $occle_fs->change_directory($parameters[0]);
+            return array('','',$occle_fs->print_working_directory(),'');
+        }
+    }
 }
-

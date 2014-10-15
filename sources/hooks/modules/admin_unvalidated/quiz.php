@@ -20,32 +20,32 @@
 
 class Hook_unvalidated_quiz
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!module_installed('quiz')) return NULL;
+    public function info()
+    {
+        if (!module_installed('quiz')) {
+            return NULL;
+        }
 
-		require_lang('quiz');
+        require_lang('quiz');
 
-		$info=array();
-		$info['db_table']='quizzes';
-		$info['db_identifier']='id';
-		$info['db_validated']='q_validated';
-		$info['db_title']='q_name';
-		$info['db_title_dereference']=true;
-		$info['db_add_date']='q_add_date';
-		$info['db_edit_date']='q_add_date';
-		$info['edit_module']='cms_quiz';
-		$info['edit_type']='_ed';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('QUIZZES');
+        $info = array();
+        $info['db_table'] = 'quizzes';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'q_validated';
+        $info['db_title'] = 'q_name';
+        $info['db_title_dereference'] = true;
+        $info['db_add_date'] = 'q_add_date';
+        $info['db_edit_date'] = 'q_add_date';
+        $info['edit_module'] = 'cms_quiz';
+        $info['edit_type'] = '_ed';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('QUIZZES');
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

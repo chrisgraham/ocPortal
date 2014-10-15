@@ -20,242 +20,239 @@
 
 class Hook_addon_registry_core_language_editing
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Translate the software, or just change what it says for stylistic reasons.';
-	}
+    public function get_description()
+    {
+        return 'Translate the software, or just change what it says for stylistic reasons.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_intl',
-			'tut_intl_users',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_intl',
+            'tut_intl_users',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/style/language/language.png',
-			'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png',
-			'themes/default/images/icons/24x24/menu/adminzone/style/language/language_content.png',
-			'themes/default/images/icons/48x48/menu/adminzone/style/language/language_content.png',
-			'themes/default/images/icons/24x24/menu/adminzone/style/language/criticise_language.png',
-			'themes/default/images/icons/48x48/menu/adminzone/style/language/criticise_language.png',
-			'themes/default/images/icons/24x24/menu/adminzone/style/language/index.html',
-			'themes/default/images/icons/48x48/menu/adminzone/style/language/index.html',
-			'themes/default/css/translations_editor.css',
-			'sources/hooks/systems/addon_registry/core_language_editing.php',
-			'sources/hooks/blocks/main_staff_checklist/translations.php',
-			'themes/default/templates/JAVASCRIPT_TRANSLATE.tpl',
-			'themes/default/templates/TRANSLATE_ACTION.tpl',
-			'themes/default/templates/TRANSLATE_LINE.tpl',
-			'themes/default/templates/TRANSLATE_LINE_CONTENT.tpl',
-			'themes/default/templates/TRANSLATE_SCREEN.tpl',
-			'themes/default/templates/TRANSLATE_SCREEN_CONTENT_SCREEN.tpl',
-			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl',
-			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl',
-			'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISM.tpl',
-			'adminzone/pages/modules/admin_lang.php',
-			'sources/hooks/systems/page_groupings/language.php',
-			'themes/default/images/icons/14x14/translate.png',
-			'themes/default/images/icons/28x28/translate.png',
-			'sources/hooks/systems/config/google_translate_api_key.php',
-			'sources/database_multi_lang_conv.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/style/language/language.png',
+            'themes/default/images/icons/48x48/menu/adminzone/style/language/language.png',
+            'themes/default/images/icons/24x24/menu/adminzone/style/language/language_content.png',
+            'themes/default/images/icons/48x48/menu/adminzone/style/language/language_content.png',
+            'themes/default/images/icons/24x24/menu/adminzone/style/language/criticise_language.png',
+            'themes/default/images/icons/48x48/menu/adminzone/style/language/criticise_language.png',
+            'themes/default/images/icons/24x24/menu/adminzone/style/language/index.html',
+            'themes/default/images/icons/48x48/menu/adminzone/style/language/index.html',
+            'themes/default/css/translations_editor.css',
+            'sources/hooks/systems/addon_registry/core_language_editing.php',
+            'sources/hooks/blocks/main_staff_checklist/translations.php',
+            'themes/default/templates/JAVASCRIPT_TRANSLATE.tpl',
+            'themes/default/templates/TRANSLATE_ACTION.tpl',
+            'themes/default/templates/TRANSLATE_LINE.tpl',
+            'themes/default/templates/TRANSLATE_LINE_CONTENT.tpl',
+            'themes/default/templates/TRANSLATE_SCREEN.tpl',
+            'themes/default/templates/TRANSLATE_SCREEN_CONTENT_SCREEN.tpl',
+            'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl',
+            'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl',
+            'themes/default/templates/TRANSLATE_LANGUAGE_CRITICISM.tpl',
+            'adminzone/pages/modules/admin_lang.php',
+            'sources/hooks/systems/page_groupings/language.php',
+            'themes/default/images/icons/14x14/translate.png',
+            'themes/default/images/icons/28x28/translate.png',
+            'sources/hooks/systems/config/google_translate_api_key.php',
+            'sources/database_multi_lang_conv.php',
+        );
+    }
 
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'TRANSLATE_LANGUAGE_CRITICISM.tpl'=>'administrative__translate_language_criticise_screen',
-			'TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl'=>'administrative__translate_language_criticise_screen',
-			'TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl'=>'administrative__translate_language_criticise_screen',
-			'TRANSLATE_ACTION.tpl'=>'administrative__translate_screen_content_screen',
-			'TRANSLATE_LINE_CONTENT.tpl'=>'administrative__translate_screen_content_screen',
-			'TRANSLATE_SCREEN_CONTENT_SCREEN.tpl'=>'administrative__translate_screen_content_screen',
-			'TRANSLATE_LINE.tpl'=>'administrative__translate_screen',
-			'TRANSLATE_SCREEN.tpl'=>'administrative__translate_screen'
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'TRANSLATE_LANGUAGE_CRITICISM.tpl' => 'administrative__translate_language_criticise_screen',
+            'TRANSLATE_LANGUAGE_CRITICISE_FILE.tpl' => 'administrative__translate_language_criticise_screen',
+            'TRANSLATE_LANGUAGE_CRITICISE_SCREEN.tpl' => 'administrative__translate_language_criticise_screen',
+            'TRANSLATE_ACTION.tpl' => 'administrative__translate_screen_content_screen',
+            'TRANSLATE_LINE_CONTENT.tpl' => 'administrative__translate_screen_content_screen',
+            'TRANSLATE_SCREEN_CONTENT_SCREEN.tpl' => 'administrative__translate_screen_content_screen',
+            'TRANSLATE_LINE.tpl' => 'administrative__translate_screen',
+            'TRANSLATE_SCREEN.tpl' => 'administrative__translate_screen'
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__translate_language_criticise_screen()
-	{
-		$file=new ocp_tempcode();
-		$files='';
-		foreach (placeholder_array() as $value)
-		{
-			$crit=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM',array(
-				'CRITICISM'=>lorem_sentence(),
-			));
-			$file->attach($crit);
-		}
-		$file_result=do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array(
-			'COMPLAINTS'=>$file,
-			'FILENAME'=>do_lang_tempcode('NA_EM'),
-		));
+    public function tpl_preview__administrative__translate_language_criticise_screen()
+    {
+        $file = new ocp_tempcode();
+        $files = '';
+        foreach (placeholder_array() as $value) {
+            $crit = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM',array(
+                'CRITICISM' => lorem_sentence(),
+            ));
+            $file->attach($crit);
+        }
+        $file_result = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array(
+            'COMPLAINTS' => $file,
+            'FILENAME' => do_lang_tempcode('NA_EM'),
+        ));
 
-		$files.=$file_result->evaluate();
+        $files .= $file_result->evaluate();
 
-		return array(
-			lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'FILES'=>$files,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'FILES' => $files,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__translate_screen_content_screen()
-	{
-		require_lang('lang');
-		$lines=new ocp_tempcode();
-		foreach (placeholder_array() as $key=>$value)
-		{
-			$actions=do_lorem_template('TRANSLATE_ACTION',array(
-				'LANG_FROM'=>fallback_lang(),
-				'LANG_TO'=>fallback_lang(),
-				'NAME'=>'trans_'.strval($key),
-				'OLD'=>$value,
-			));
-			$lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array(
-				'ID'=>strval($key),
-				'NAME'=>'trans_'.strval($key),
-				'OLD'=>$value,
-				'CURRENT'=>$value,
-				'ACTIONS'=>$actions,
-				'PRIORITY'=>lorem_word(),
-			)));
-		}
+    public function tpl_preview__administrative__translate_screen_content_screen()
+    {
+        require_lang('lang');
+        $lines = new ocp_tempcode();
+        foreach (placeholder_array() as $key => $value) {
+            $actions = do_lorem_template('TRANSLATE_ACTION',array(
+                'LANG_FROM' => fallback_lang(),
+                'LANG_TO' => fallback_lang(),
+                'NAME' => 'trans_' . strval($key),
+                'OLD' => $value,
+            ));
+            $lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array(
+                'ID' => strval($key),
+                'NAME' => 'trans_' . strval($key),
+                'OLD' => $value,
+                'CURRENT' => $value,
+                'ACTIONS' => $actions,
+                'PRIORITY' => lorem_word(),
+            )));
+        }
 
-		return array(
-			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
-				'LANG_NICE_NAME'=>lorem_word(),
-				'LANG_NICE_ORIGINAL_NAME'=>lorem_word(),
-				'TOO_MANY'=>lorem_phrase(),
-				'GOOGLE'=>lorem_phrase(),
-				'TOTAL'=>placeholder_number(),
-				'LANG'=>fallback_lang(),
-				'LANG_ORIGINAL_NAME'=>fallback_lang(),
-				'LINES'=>$lines,
-				'TITLE'=>lorem_title(),
-				'URL'=>placeholder_url(),
-				'MAX'=>placeholder_number(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
+                'LANG_NICE_NAME' => lorem_word(),
+                'LANG_NICE_ORIGINAL_NAME' => lorem_word(),
+                'TOO_MANY' => lorem_phrase(),
+                'GOOGLE' => lorem_phrase(),
+                'TOTAL' => placeholder_number(),
+                'LANG' => fallback_lang(),
+                'LANG_ORIGINAL_NAME' => fallback_lang(),
+                'LINES' => $lines,
+                'TITLE' => lorem_title(),
+                'URL' => placeholder_url(),
+                'MAX' => placeholder_number(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__translate_screen()
-	{
-		require_lang('lang');
-		$lines='';
-		foreach (placeholder_array() as $i=>$value)
-		{
-			$temp=do_lorem_template('TRANSLATE_LINE',array(
-				'TRANSLATE_AUTO'=>$value,
-				'DESCRIPTION'=>lorem_sentence(),
-				'NAME'=>lorem_word().strval($i),
-				'OLD'=>str_replace('\n', "\n", $value),
-				'CURRENT'=>$value,
-				'ACTIONS'=>lorem_phrase(),
-			));
-			$lines.=$temp->evaluate();
-		}
+    public function tpl_preview__administrative__translate_screen()
+    {
+        require_lang('lang');
+        $lines = '';
+        foreach (placeholder_array() as $i => $value) {
+            $temp = do_lorem_template('TRANSLATE_LINE',array(
+                'TRANSLATE_AUTO' => $value,
+                'DESCRIPTION' => lorem_sentence(),
+                'NAME' => lorem_word() . strval($i),
+                'OLD' => str_replace('\n', "\n", $value),
+                'CURRENT' => $value,
+                'ACTIONS' => lorem_phrase(),
+            ));
+            $lines .= $temp->evaluate();
+        }
 
-		return array(
-			lorem_globalise(do_lorem_template('TRANSLATE_SCREEN',array(
-				'PAGE'=>lorem_phrase(),
-				'GOOGLE'=>lorem_phrase(),
-				'LANG'=>fallback_lang(),
-				'LINES'=>$lines,
-				'TITLE'=>lorem_title(),
-				'URL'=>placeholder_url(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('TRANSLATE_SCREEN',array(
+                'PAGE' => lorem_phrase(),
+                'GOOGLE' => lorem_phrase(),
+                'LANG' => fallback_lang(),
+                'LINES' => $lines,
+                'TITLE' => lorem_title(),
+                'URL' => placeholder_url(),
+            )),null,'',true)
+        );
+    }
 }

@@ -17,155 +17,138 @@
 This file is currently broken. It would need to be rewritten to load as part of ocPortal, but currently is not required.
 */
 
-if (!function_exists('error_capture'))
-{
-	function error_capture($errno,$errmsg)
-	{
-		$GLOBALS['ERROR']=$errmsg;
-	}
+if (!function_exists('error_capture')) {
+    function error_capture($errno,$errmsg)
+    {
+        $GLOBALS['ERROR'] = $errmsg;
+    }
 }
 
 global $WITHIN_PHP;
-if (!isset($WITHIN_PHP)) $WITHIN_PHP=false;
-
-if (!$WITHIN_PHP)
-{
-	error_reporting(E_ALL);
-
-	$extra=array();
-	if (isset($_SERVER['argv']))
-	{
-		foreach ($_SERVER['argv'] as $index=>$argv)
-		{
-			$explode=explode('=',$argv,2);
-			if (count($explode)==2)
-				$extra[$explode[0]]=$explode[1];
-		}
-		$_SERVER['argv']=array_merge($_SERVER['argv'],$extra);
-
-		if (array_key_exists('path',$_SERVER['argv'])) $GLOBALS['OCPORTAL_PATH']=$_SERVER['argv']['path'];
-	}
-
-	require_once('lib.php');
-	global $OCPORTAL_PATH,$START_TIME;
-	$START_TIME=time();
-
-	$to_use=isset($_SERVER['argv'][1])?$_SERVER['argv'][1]:$_GET['to_use'];
+if (!isset($WITHIN_PHP)) {
+    $WITHIN_PHP = false;
 }
 
-if (!isset($_SERVER['argv']))
-	$_SERVER['argv']=array();
+if (!$WITHIN_PHP) {
+    error_reporting(E_ALL);
 
-if (!function_exists('init__validation'))
-{
-	require_once('../../sources/validation.php');
-	init__validation();
-	if (file_exists('../../sources/validation2.php'))
-	{
-		require_once('../../sources/validation2.php');
-		init__validation2();
-	}
-}
-if (!function_exists('init__js_lex'))
-{
-	require_once('../../sources/js_lex.php');
-	init__js_lex();
-}
-if (!function_exists('init__js_parse'))
-{
-	require_once('../../sources/js_parse.php');
-	init__js_parse();
-}
-if (!function_exists('init__js_validator'))
-{
-	require_once('../../sources/js_validator.php');
-	init__js_validator();
+    $extra = array();
+    if (isset($_SERVER['argv'])) {
+        foreach ($_SERVER['argv'] as $index => $argv) {
+            $explode = explode('=',$argv,2);
+            if (count($explode) == 2) {
+                $extra[$explode[0]] = $explode[1];
+            }
+        }
+        $_SERVER['argv'] = array_merge($_SERVER['argv'],$extra);
+
+        if (array_key_exists('path',$_SERVER['argv'])) {
+            $GLOBALS['OCPORTAL_PATH'] = $_SERVER['argv']['path'];
+        }
+    }
+
+    require_once('lib.php');
+    global $OCPORTAL_PATH,$START_TIME;
+    $START_TIME = time();
+
+    $to_use = isset($_SERVER['argv'][1])?$_SERVER['argv'][1]:$_GET['to_use'];
 }
 
-if (!$WITHIN_PHP)
-{
-	$full_path=(strpos($to_use,':')===false)?($OCPORTAL_PATH.'/'.$to_use):$to_use;
-	$contents=file_get_contents($full_path);
-	$contents=str_replace("\r",'',$contents);
-	if (substr($to_use,-4)=='.tpl')
-	{
-		$contents=str_replace('{!LINK_NEW_WINDOW}',do_lang('LINK_NEW_WINDOW'),$contents);
-		$contents=str_replace('{!SPREAD_TABLE}',do_lang('SPREAD_TABLE'),$contents);
-		$contents=str_replace('{!MAP_TABLE}',do_lang('MAP_TABLE'),$contents);
-	}
+if (!isset($_SERVER['argv'])) {
+    $_SERVER['argv'] = array();
+}
 
-	$javascript=(((strpos($to_use,'/JAVASCRIPT')!==false) || (strpos($to_use,'\\JAVASCRIPT')!==false)) && (strpos($contents,'function ')!==false));
+if (!function_exists('init__validation')) {
+    require_once('../../sources/validation.php');
+    init__validation();
+    if (file_exists('../../sources/validation2.php')) {
+        require_once('../../sources/validation2.php');
+        init__validation2();
+    }
+}
+if (!function_exists('init__js_lex')) {
+    require_once('../../sources/js_lex.php');
+    init__js_lex();
+}
+if (!function_exists('init__js_parse')) {
+    require_once('../../sources/js_parse.php');
+    init__js_parse();
+}
+if (!function_exists('init__js_validator')) {
+    require_once('../../sources/js_validator.php');
+    init__js_validator();
+}
 
-	if ((substr($to_use,-4)!='.css') && (!$javascript))
-	{
-		do
-		{
-			$old_contents=$contents;
-			$contents=preg_replace('#\{[^\n\{\}]*\}#U','',$contents);
-		}
-		while ($contents!=$old_contents);
-	}
-	elseif ($javascript)
-	{
-		do
-		{
-			$old_contents=$contents;
-			$contents=preg_replace('#\{[\$\!][^\n\{\}]*\}#U','',$contents);
-		}
-		while ($contents!=$old_contents);
-	}
-} else
-{
-	global $BETWEEN_ALL;
-	$contents=$BETWEEN_ALL;
-	$javascript=false;
-	$to_use=$GLOBALS['FILENAME'];
+if (!$WITHIN_PHP) {
+    $full_path = (strpos($to_use,':') === false)?($OCPORTAL_PATH . '/' . $to_use):$to_use;
+    $contents = file_get_contents($full_path);
+    $contents = str_replace("\r",'',$contents);
+    if (substr($to_use,-4) == '.tpl') {
+        $contents = str_replace('{!LINK_NEW_WINDOW}',do_lang('LINK_NEW_WINDOW'),$contents);
+        $contents = str_replace('{!SPREAD_TABLE}',do_lang('SPREAD_TABLE'),$contents);
+        $contents = str_replace('{!MAP_TABLE}',do_lang('MAP_TABLE'),$contents);
+    }
+
+    $javascript = (((strpos($to_use,'/JAVASCRIPT') !== false) || (strpos($to_use,'\\JAVASCRIPT') !== false)) && (strpos($contents,'function ') !== false));
+
+    if ((substr($to_use,-4) != '.css') && (!$javascript)) {
+        do {
+            $old_contents = $contents;
+            $contents = preg_replace('#\{[^\n\{\}]*\}#U','',$contents);
+        } while ($contents != $old_contents);
+    } elseif ($javascript) {
+        do {
+            $old_contents = $contents;
+            $contents = preg_replace('#\{[\$\!][^\n\{\}]*\}#U','',$contents);
+        } while ($contents != $old_contents);
+    }
+} else {
+    global $BETWEEN_ALL;
+    $contents = $BETWEEN_ALL;
+    $javascript = false;
+    $to_use = $GLOBALS['FILENAME'];
 }
-$line=1;
-$pos=1;
-for ($i=0;$i<strlen($contents);$i++)
-{
-	$next=$contents[$i];
-	if (ord($next)>128) echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('XHTML_UNSAFE_CHAR',$next,strval(ord($next)))."\n";
-	if ($next=="\n")
-	{
-		$line++;
-		$pos=1;
-	} else $pos++;
+$line = 1;
+$pos = 1;
+for ($i = 0;$i<strlen($contents);$i++) {
+    $next = $contents[$i];
+    if (ord($next)>128) {
+        echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . do_lang('XHTML_UNSAFE_CHAR',$next,strval(ord($next))) . "\n";
+    }
+    if ($next == "\n") {
+        $line++;
+        $pos = 1;
+    } else {
+        $pos++;
+    }
 }
-if ($javascript)
-{
-	$results=check_js($contents,false);
-}
-elseif (substr($to_use,-4)=='.css')
-{
-	$results=check_css($contents);
-} else
-{
-	$is_fragment=(substr($to_use,-5)!='.html') && (substr($to_use,-4)!='.htm')/* && (substr($to_use,-4)!='.php')*/;
-	$manual=(in_array('checks',$_SERVER['argv'])) || ((array_key_exists('checks',$_SERVER['argv']) && ($_SERVER['argv']['checks']=='1')));
-	$ext=false;
-	if ((strpos($to_use,'/_mail.html')!==false) || (strpos($to_use,'_mail.htm')!==false) || ($to_use=='_mail.html') || ($to_use=='_mail.htm'))
-	{
-		$GLOBALS['MAIL_MODE']=true;
-		$matches=array();
-		$num_matches=preg_match_all('#^.*$#m',$contents,$matches);
-		$pos=1;
-		$line=1;
-		for ($i=0;$i<$num_matches;$i++)
-		{
-			if (strlen($matches[0][$i])>512) echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('MAIL_LONG_LINE')."\n";
-			$line++;
-		}
-		if (strpos(strtolower($contents),'unsubscribe')===false)
-		{
-			echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('MAIL_UNSUBSCRIBE')."\n";
-		}
-		if ((strpos(strtolower($contents),'web version')===false) && (strpos(strtolower($contents),'if you are')===false))
-		{
-			echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('MAIL_WEB_VERSION')."\n";
-		}
-		$nasty_keywords=explode("\n","
+if ($javascript) {
+    $results = check_js($contents,false);
+} elseif (substr($to_use,-4) == '.css') {
+    $results = check_css($contents);
+} else {
+    $is_fragment = (substr($to_use,-5) != '.html') && (substr($to_use,-4) != '.htm')/* && (substr($to_use,-4)!='.php')*/;
+    $manual = (in_array('checks',$_SERVER['argv'])) || ((array_key_exists('checks',$_SERVER['argv']) && ($_SERVER['argv']['checks'] == '1')));
+    $ext = false;
+    if ((strpos($to_use,'/_mail.html') !== false) || (strpos($to_use,'_mail.htm') !== false) || ($to_use == '_mail.html') || ($to_use == '_mail.htm')) {
+        $GLOBALS['MAIL_MODE'] = true;
+        $matches = array();
+        $num_matches = preg_match_all('#^.*$#m',$contents,$matches);
+        $pos = 1;
+        $line = 1;
+        for ($i = 0;$i<$num_matches;$i++) {
+            if (strlen($matches[0][$i])>512) {
+                echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . do_lang('MAIL_LONG_LINE') . "\n";
+            }
+            $line++;
+        }
+        if (strpos(strtolower($contents),'unsubscribe') === false) {
+            echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . do_lang('MAIL_UNSUBSCRIBE') . "\n";
+        }
+        if ((strpos(strtolower($contents),'web version') === false) && (strpos(strtolower($contents),'if you are') === false)) {
+            echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . do_lang('MAIL_WEB_VERSION') . "\n";
+        }
+        $nasty_keywords = explode("\n","
 4U
 Accept credit cards
 Act now! Don't hesitate!
@@ -251,7 +234,7 @@ Free access
 Free cell phone
 Free consultation
 Free DVD
-Free grant money 	
+Free grant money
 Free hosting
 Free installation
 Free investment
@@ -336,7 +319,7 @@ Once in lifetime
 One hundred percent free
 One hundred percent guaranteed
 One time mailing
-Online biz opportunity 	
+Online biz opportunity
 Online pharmacy
 Only $
 Opportunity
@@ -423,87 +406,79 @@ Winning
 Work at home
 You have been selected
 Your income");
-		foreach ($nasty_keywords as $keyword)
-		{
-			$keyword=trim($keyword);
-			if ($keyword=='') continue;
-			if (strpos($contents,$keyword)!==false)
-			{
-				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.do_lang('MAIL_FLASHWORD')."\n";
-			}
-		}
-	} else
-	{
-		$GLOBALS['MAIL_MODE']=false;
-	}
-	$results=check_xhtml($contents,false,$is_fragment,true,true,true,true,$ext,$manual); // full check, but no external file checking
+        foreach ($nasty_keywords as $keyword) {
+            $keyword = trim($keyword);
+            if ($keyword == '') {
+                continue;
+            }
+            if (strpos($contents,$keyword) !== false) {
+                echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . do_lang('MAIL_FLASHWORD') . "\n";
+            }
+        }
+    } else {
+        $GLOBALS['MAIL_MODE'] = false;
+    }
+    $results = check_xhtml($contents,false,$is_fragment,true,true,true,true,$ext,$manual); // full check, but no external file checking
 }
-if (!is_null($results))
-{
-	$pedantic=(in_array('checks',$_SERVER['argv'])) || ((array_key_exists('pedantic',$_SERVER['argv']) && ($_SERVER['argv']['pedantic']=='1')));
-	$skip_over=$pedantic?array():array('XHTML_EMPTY_TAG','CSS_INLINE_STYLES','WCAG_ADJACENT_LINKS','XHTML_SPELLING');
-	foreach ($results['errors'] as $result)
-	{
-		//echo ' '.implode(' ',$result['error'])."\n";
-		$error_exp=trim(is_array($result['error'])?implode(' ',$result['error']):$result['error']);
-		$sp=strpos($error_exp,' ');
-		if (in_array($sp===false?$error_exp:substr($error_exp,0,$sp),$skip_over)) continue;
-		$error_exp_2=trim(is_array($result['error'])?do_lang($result['error'][0],@$result['error'][1],@$result['error'][2],@$result['error'][3]):$result['error']);
-		echo 'ISSUE "'.$to_use.'" '.$result['line'].' '.$result['pos'].' '.html_entity_decode($error_exp_2,ENT_QUOTES)."\n";
-	}
+if (!is_null($results)) {
+    $pedantic = (in_array('checks',$_SERVER['argv'])) || ((array_key_exists('pedantic',$_SERVER['argv']) && ($_SERVER['argv']['pedantic'] == '1')));
+    $skip_over = $pedantic?array():array('XHTML_EMPTY_TAG','CSS_INLINE_STYLES','WCAG_ADJACENT_LINKS','XHTML_SPELLING');
+    foreach ($results['errors'] as $result) {
+        //echo ' '.implode(' ',$result['error'])."\n";
+        $error_exp = trim(is_array($result['error'])?implode(' ',$result['error']):$result['error']);
+        $sp = strpos($error_exp,' ');
+        if (in_array($sp === false?$error_exp:substr($error_exp,0,$sp),$skip_over)) {
+            continue;
+        }
+        $error_exp_2 = trim(is_array($result['error'])?do_lang($result['error'][0],@$result['error'][1],@$result['error'][2],@$result['error'][3]):$result['error']);
+        echo 'ISSUE "' . $to_use . '" ' . $result['line'] . ' ' . $result['pos'] . ' ' . html_entity_decode($error_exp_2,ENT_QUOTES) . "\n";
+    }
 }
 // Check URLs
 global $CRAWLED_URLS,$URL_BASE;
-$filesize=0;
-if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS)))
-{
-	foreach ($CRAWLED_URLS as $url)
-	{
-		if ($url=='TODO') continue;
+$filesize = 0;
+if ((!isset($URL_BASE)) && (isset($CRAWLED_URLS))) {
+    foreach ($CRAWLED_URLS as $url) {
+        if ($url == 'TODO') {
+            continue;
+        }
 
-		if (strpos($url,'://')===false)
-		{
-			if ($GLOBALS['MAIL_MODE'])
-				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('MAIL_LOCAL_REF'),ENT_QUOTES)."\n";
-		} else
-		{
-			set_error_handler('error_capture');
-			$GLOBALS['ERROR']='';
-			file_get_contents($url);
-			restore_error_handler();
-			if (strpos($GLOBALS['ERROR'],'no such host is known')!==false)
-			{
-				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'bad host'),ENT_QUOTES)."\n";
-			}
-			if (strpos($GLOBALS['ERROR'],'404 not found')!==false)
-			{
-				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'404'),ENT_QUOTES)."\n";
-			}
-			if (strpos($GLOBALS['ERROR'],'500 internal server error')!==false)
-			{
-				echo 'ISSUE "'.$to_use.'" 1 1 '.html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'500'),ENT_QUOTES)."\n";
-			}
-		}
-		if (preg_match('#^[A-Za-z0-9\-\_\.][A-Za-z0-9\-\_\./]*$#',$url)!=0)
-		{
-			if (!file_exists(dirname($to_use).'/'.$url))
-			{
-				$global_pos=strpos($contents,$url);
-				$line=substr_count(substr($contents,0,$global_pos),"\n")+1;
-				$pos=$global_pos-strrpos(substr($contents,0,$global_pos),"\n");
-				echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_LOCAL_BROKEN_URL',$url),ENT_QUOTES)."\n";
-			} else
-			{
-				$filesize+=filesize(dirname($to_use).'/'.$url);
-			}
-		}
-	}
+        if (strpos($url,'://') === false) {
+            if ($GLOBALS['MAIL_MODE']) {
+                echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . html_entity_decode(do_lang('MAIL_LOCAL_REF'),ENT_QUOTES) . "\n";
+            }
+        } else {
+            set_error_handler('error_capture');
+            $GLOBALS['ERROR'] = '';
+            file_get_contents($url);
+            restore_error_handler();
+            if (strpos($GLOBALS['ERROR'],'no such host is known') !== false) {
+                echo 'ISSUE "' . $to_use . '" 1 1 ' . html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'bad host'),ENT_QUOTES) . "\n";
+            }
+            if (strpos($GLOBALS['ERROR'],'404 not found') !== false) {
+                echo 'ISSUE "' . $to_use . '" 1 1 ' . html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'404'),ENT_QUOTES) . "\n";
+            }
+            if (strpos($GLOBALS['ERROR'],'500 internal server error') !== false) {
+                echo 'ISSUE "' . $to_use . '" 1 1 ' . html_entity_decode(do_lang('XHTML_BROKEN_URL',$url,'500'),ENT_QUOTES) . "\n";
+            }
+        }
+        if (preg_match('#^[A-Za-z0-9\-\_\.][A-Za-z0-9\-\_\./]*$#',$url) != 0) {
+            if (!file_exists(dirname($to_use) . '/' . $url)) {
+                $global_pos = strpos($contents,$url);
+                $line = substr_count(substr($contents,0,$global_pos),"\n")+1;
+                $pos = $global_pos-strrpos(substr($contents,0,$global_pos),"\n");
+                echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . html_entity_decode(do_lang('XHTML_LOCAL_BROKEN_URL',$url),ENT_QUOTES) . "\n";
+            } else {
+                $filesize += filesize(dirname($to_use) . '/' . $url);
+            }
+        }
+    }
 }
-if ($filesize>100*1024)
-{
-	echo 'ISSUE "'.$to_use.'" '.strval($line).' '.strval($pos).' '.html_entity_decode(do_lang('XHTML_BLOAT'),ENT_QUOTES)."\n";
+if ($filesize>100*1024) {
+    echo 'ISSUE "' . $to_use . '" ' . strval($line) . ' ' . strval($pos) . ' ' . html_entity_decode(do_lang('XHTML_BLOAT'),ENT_QUOTES) . "\n";
 }
 
 global $WITHIN_PHP;
-if (!isset($WITHIN_PHP)) echo 'DONE "'.$to_use."\"\n";
-
+if (!isset($WITHIN_PHP)) {
+    echo 'DONE "' . $to_use . "\"\n";
+}

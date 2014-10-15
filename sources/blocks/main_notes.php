@@ -20,66 +20,66 @@
 
 class Block_main_notes
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('param','title','lang_none','scrolls');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','title','lang_none','scrolls');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		require_code('textfiles');
+    public function run($map)
+    {
+        require_code('textfiles');
 
-		$file=array_key_exists('param',$map)?$map['param']:'admin_notes';
-		$title=array_key_exists('title',$map)?$map['title']:do_lang('NOTES');
-		$lang_none=array_key_exists('lang_none',$map)?$map['lang_none']:'0';
-		$scrolls=array_key_exists('scrolls',$map)?$map['scrolls']:'0';
-		$lang=($lang_none=='1')?NULL:'';
+        $file = array_key_exists('param',$map)?$map['param']:'admin_notes';
+        $title = array_key_exists('title',$map)?$map['title']:do_lang('NOTES');
+        $lang_none = array_key_exists('lang_none',$map)?$map['lang_none']:'0';
+        $scrolls = array_key_exists('scrolls',$map)?$map['scrolls']:'0';
+        $lang = ($lang_none == '1')?null:'';
 
-		$file=filter_naughty($file,true);
+        $file = filter_naughty($file,true);
 
-		$new=post_param('new',NULL);
-		if (!is_null($new))
-		{
-			$hooks=find_all_hooks('blocks','main_notes');
-			foreach (array_keys($hooks) as $hook)
-			{
-				require_code('hooks/blocks/main_notes/'.filter_naughty_harsh($hook));
-				$ob=object_factory('Hook_notes_'.filter_naughty_harsh($hook),true);
-				if (is_null($ob)) continue;
-				$ob->run($file);
-			}
-			write_text_file($file,$lang,$new);
-			log_it('NOTES',$file);
+        $new = post_param('new',null);
+        if (!is_null($new)) {
+            $hooks = find_all_hooks('blocks','main_notes');
+            foreach (array_keys($hooks) as $hook) {
+                require_code('hooks/blocks/main_notes/' . filter_naughty_harsh($hook));
+                $ob = object_factory('Hook_notes_' . filter_naughty_harsh($hook),true);
+                if (is_null($ob)) {
+                    continue;
+                }
+                $ob->run($file);
+            }
+            write_text_file($file,$lang,$new);
+            log_it('NOTES',$file);
 
-			attach_message(do_lang_tempcode('SUCCESS'),'inform');
-		}
+            attach_message(do_lang_tempcode('SUCCESS'),'inform');
+        }
 
-		$contents=read_text_file($file,$lang,true);
-		$post_url=get_self_url();
+        $contents = read_text_file($file,$lang,true);
+        $post_url = get_self_url();
 
-		$map_comcode='';
-		foreach ($map as $key=>$val) $map_comcode.=' '.$key.'="'.addslashes($val).'"';
-		return do_template('BLOCK_MAIN_NOTES',array('_GUID'=>'f737053505de3bd8ccfe806ec014b8fb','TITLE'=>$title,'BLOCK_NAME'=>'main_notes','MAP'=>$map_comcode,'CONTENTS'=>$contents,'SCROLLS'=>array_key_exists('scrolls',$map) && ($map['scrolls']=='1'),'URL'=>$post_url));
-	}
+        $map_comcode = '';
+        foreach ($map as $key => $val) {
+            $map_comcode .= ' ' . $key . '="' . addslashes($val) . '"';
+        }
+        return do_template('BLOCK_MAIN_NOTES',array('_GUID' => 'f737053505de3bd8ccfe806ec014b8fb','TITLE' => $title,'BLOCK_NAME' => 'main_notes','MAP' => $map_comcode,'CONTENTS' => $contents,'SCROLLS' => array_key_exists('scrolls',$map) && ($map['scrolls'] == '1'),'URL' => $post_url));
+    }
 }
-
-

@@ -25,170 +25,149 @@
  */
 function init__google_appengine()
 {
-	$uri=preg_replace('#\?.*#','',$_SERVER['REQUEST_URI']);
-	if (substr($uri,0,1)=='/') $uri=substr($uri,1);
-	$matches=array();
+    $uri = preg_replace('#\?.*#','',$_SERVER['REQUEST_URI']);
+    if (substr($uri,0,1) == '/') {
+        $uri = substr($uri,1);
+    }
+    $matches = array();
 
-	// RULES START	
-	if (preg_match('#^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$3');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/s/([^\&\?]*)/index\.php$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=wiki&id=$2');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3&id=$4$5');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3$4');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)/index\.php(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2$3');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/index\.php(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$3');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/s/([^\&\?]*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=wiki&id=$2');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3&id=$4');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3&id=$4');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?]*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?page=$2');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/s/([^\&\?\.]*)&(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?$3&page=wiki&id=$2');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?$5&page=$2&type=$3&id=$4');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?$4&page=$2&type=$3');
-		return NULL;
-	}
-	if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)&(.*)$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1index.php\?$3&page=$2');
-		return NULL;
-	}
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
-		return NULL;
-	}
-	if (preg_match('#^s/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
-		return NULL;
-	}
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
-		return NULL;
-	}
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
-		return NULL;
-	}
-	if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'$1/index.php\?page=$2');
-		return NULL;
-	}
-	if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
-		return NULL;
-	}
-	if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
-		return NULL;
-	}
-	if (preg_match('#^([^/\&\?]+)\.htm$#',$uri,$matches)!=0)
-	{
-		_roll_gae_redirect($matches,'index.php\?page=$1');
-		return NULL;
-	}
+    // RULES START
+    if (preg_match('#^([^=]*)pages/(modules|modules\_custom)/([^/]*)\.php$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$3');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/s/([^\&\?]*)/index\.php$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=wiki&id=$2');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/index\.php(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3&id=$4$5');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/index\.php(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3$4');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)/index\.php(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2$3');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/index\.php(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$3');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/s/([^\&\?]*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=wiki&id=$2');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)/$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3&id=$4');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3&id=$4');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)/([^/\&\?]*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2&type=$3');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?]*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?page=$2');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/s/([^\&\?\.]*)&(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?$3&page=wiki&id=$2');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?$5&page=$2&type=$3&id=$4');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)/([^/\&\?\.]*)&(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?$4&page=$2&type=$3');
+        return NULL;
+    }
+    if (preg_match('#^([^=]*)pg/([^/\&\?\.]*)&(.*)$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1index.php\?$3&page=$2');
+        return NULL;
+    }
+    if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
+        return NULL;
+    }
+    if (preg_match('#^s/([^\&\?]*)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
+        return NULL;
+    }
+    if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
+        return NULL;
+    }
+    if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
+        return NULL;
+    }
+    if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'$1/index.php\?page=$2');
+        return NULL;
+    }
+    if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
+        return NULL;
+    }
+    if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
+        return NULL;
+    }
+    if (preg_match('#^([^/\&\?]+)\.htm$#',$uri,$matches) != 0) {
+        _roll_gae_redirect($matches,'index.php\?page=$1');
+        return NULL;
+    }
 
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
-	//	return NULL;
-	//}
-	//if (preg_match('#^s/([^\&\?]*)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
-	//	return NULL;
-	//}
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
-	//	return NULL;
-	//}
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
-	//	return NULL;
-	//}
-	//if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'$1/index.php\?page=$2');
-	//	return NULL;
-	//}
-	//if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
-	//	return NULL;
-	//}
-	//if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
-	//	return NULL;
-	//}
-	//if (preg_match('#^([^/\&\?]+)$#',$uri,$matches)!=0)
-	//{
-	//	_roll_gae_redirect($matches,'index.php\?page=$1');
-	//	return NULL;
-	//}
-	// RULES END
+    //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/s/([^\&\?]*)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'$1/index.php\?page=wiki&id=$2');
+    //	return NULL;
+    //}
+    //if (preg_match('#^s/([^\&\?]*)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'index\.php\?page=wiki&id=$1');
+    //	return NULL;
+    //}
+    //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3&id=$4');
+    //	return NULL;
+    //}
+    //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'$1/index.php\?page=$2&type=$3');
+    //	return NULL;
+    //}
+    //if (preg_match('#^(site|forum|adminzone|cms|collaboration|docs)/([^/\&\?]+)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'$1/index.php\?page=$2');
+    //	return NULL;
+    //}
+    //if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)/([^\&\?]*)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'index.php\?page=$1&type=$2&id=$3');
+    //	return NULL;
+    //}
+    //if (preg_match('#^([^/\&\?]+)/([^/\&\?]*)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'index.php\?page=$1&type=$2');
+    //	return NULL;
+    //}
+    //if (preg_match('#^([^/\&\?]+)$#',$uri,$matches)!=0)
+    //{
+    //	_roll_gae_redirect($matches,'index.php\?page=$1');
+    //	return NULL;
+    //}
+    // RULES END
 
-	/*if (isset($_GET['gae_stop']))	Useful for debugging crashes on live Google App Engine
+    /*if (isset($_GET['gae_stop']))	Useful for debugging crashes on live Google App Engine
 	{
 		declare(ticks=1);
 		register_tick_function('gae_debugger');
@@ -203,27 +182,23 @@ function init__google_appengine()
  */
 function _roll_gae_redirect($matches,$to)
 {
-	$to=str_replace('\\?','?',$to);
-	foreach ($matches as $i=>$match)
-	{
-		$to=str_replace('$'.strval($i),urlencode($match),$to);
-	}
+    $to = str_replace('\\?','?',$to);
+    foreach ($matches as $i => $match) {
+        $to = str_replace('$' . strval($i),urlencode($match),$to);
+    }
 
-	$qs=preg_replace('#^[^\?]*(\?|$)#','',$to);
-	$_SERVER['QUERY_STRING']=$qs;
-	if ($qs!='')
-	{
-		if (strpos($_SERVER['REQUEST_URI'],'?')===false)
-		{
-			$_SERVER['REQUEST_URI'].='?'.$qs;
-		} else
-		{
-			$_SERVER['REQUEST_URI'].='&'.$qs;
-		}
-	}
-	$arr=array();
-	parse_str($qs,$arr);
-	$_GET+=$arr;
+    $qs = preg_replace('#^[^\?]*(\?|$)#','',$to);
+    $_SERVER['QUERY_STRING'] = $qs;
+    if ($qs != '') {
+        if (strpos($_SERVER['REQUEST_URI'],'?') === false) {
+            $_SERVER['REQUEST_URI'] .= '?' . $qs;
+        } else {
+            $_SERVER['REQUEST_URI'] .= '&' . $qs;
+        }
+    }
+    $arr = array();
+    parse_str($qs,$arr);
+    $_GET += $arr;
 }
 
 /**
@@ -233,19 +208,18 @@ function _roll_gae_redirect($matches,$to)
  */
 function gae_is_admin()
 {
-	require_once('google/appengine/api/users/User.php');
-	require_once('google/appengine/api/users/UserService.php');
+    require_once('google/appengine/api/users/User.php');
+    require_once('google/appengine/api/users/UserService.php');
 
-	$_userservice='google\appengine\api\users\UserService';
-	$userservice=new $_userservice();
+    $_userservice = 'google\appengine\api\users\UserService';
+    $userservice = new $_userservice();
 
-	$user=$userservice->getCurrentUser();
+    $user = $userservice->getCurrentUser();
 
-	if ($user!==NULL)
-	{
-		return $userservice->isCurrentUserAdmin();
-	}
-	return false;
+    if ($user !== NULL) {
+        return $userservice->isCurrentUserAdmin();
+    }
+    return false;
 }
 
 /**
@@ -253,24 +227,21 @@ function gae_is_admin()
  */
 function gae_debugger()
 {
-	static $i=0;
-	$i++;
-	static $stop=-1;
-	if ($stop===-1)
-	{
-		if ((!isset($_GET['gae_stop'])) || (!gae_is_admin()))
-		{
-			$_GET['gae_stop']=NULL;
-			return;
-		}
-		$stop=intval($_GET['gae_stop']);
-	}
+    static $i = 0;
+    $i++;
+    static $stop = -1;
+    if ($stop === -1) {
+        if ((!isset($_GET['gae_stop'])) || (!gae_is_admin())) {
+            $_GET['gae_stop'] = null;
+            return;
+        }
+        $stop = intval($_GET['gae_stop']);
+    }
 
-	if ($i===$stop)
-	{
-		debug_print_backtrace();
-		exit();
-	}
+    if ($i === $stop) {
+        debug_print_backtrace();
+        exit();
+    }
 }
 
 /**
@@ -281,13 +252,13 @@ function gae_debugger()
  */
 function gae_optimistic_cache($enabled)
 {
-	static $gs_options_enabled=array('gs'=>array(
-		'enable_optimistic_cache'=>true,
-		'read_cache_expiry_seconds'=>180,
-	));
-	static $gs_options_disabled=array('gs'=>array(
-		'enable_optimistic_cache'=>false,
-		'read_cache_expiry_seconds'=>3600,
-	));
-	stream_context_set_default($enabled?$gs_options_enabled:$gs_options_disabled);
+    static $gs_options_enabled = array('gs' => array(
+        'enable_optimistic_cache' => true,
+        'read_cache_expiry_seconds' => 180,
+    ));
+    static $gs_options_disabled = array('gs' => array(
+        'enable_optimistic_cache' => false,
+        'read_cache_expiry_seconds' => 3600,
+    ));
+    stream_context_set_default($enabled?$gs_options_enabled:$gs_options_disabled);
 }

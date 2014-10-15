@@ -20,32 +20,32 @@
 
 class Hook_sitemap_privilege_category extends Hook_sitemap_base
 {
-	/**
+    /**
 	 * Find if a page-link will be covered by this node.
 	 *
 	 * @param  ID_TEXT		The page-link.
 	 * @return integer		A SITEMAP_NODE_* constant.
 	 */
-	function handles_page_link($page_link)
-	{
-		$matches=array();
-		if (preg_match('#^([^:]*):admin_permissions:privileges#',$page_link,$matches)!=0)
-		{
-			$zone=$matches[1];
-			$page='admin_permissions';
+    public function handles_page_link($page_link)
+    {
+        $matches = array();
+        if (preg_match('#^([^:]*):admin_permissions:privileges#',$page_link,$matches) != 0) {
+            $zone = $matches[1];
+            $page = 'admin_permissions';
 
-			require_code('site');
-			$test=_request_page($page,$zone);
-			if (($test!==false) && (($test[0]=='MODULES_CUSTOM') || ($test[0]=='MODULES'))) // Ensure the relevant module really does exist in the given zone
-			{
-				if ($matches[0]!=$page_link) return SITEMAP_NODE_HANDLED;
-				return SITEMAP_NODE_HANDLED_VIRTUALLY;
-			}
-		}
-		return SITEMAP_NODE_NOT_HANDLED;
-	}
+            require_code('site');
+            $test = _request_page($page,$zone);
+            if (($test !== false) && (($test[0] == 'MODULES_CUSTOM') || ($test[0] == 'MODULES'))) { // Ensure the relevant module really does exist in the given zone
+                if ($matches[0] != $page_link) {
+                    return SITEMAP_NODE_HANDLED;
+                }
+                return SITEMAP_NODE_HANDLED_VIRTUALLY;
+            }
+        }
+        return SITEMAP_NODE_NOT_HANDLED;
+    }
 
-	/**
+    /**
 	 * Find details of a virtual position in the sitemap. Virtual positions have no structure of their own, but can find child structures to be absorbed down the tree. We do this for modularity reasons.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -63,47 +63,46 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			List of node structures (NULL: working via callback).
 	 */
-	function get_virtual_nodes($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$return_anyway=false)
-	{
-		$nodes=($callback===NULL || $return_anyway)?array():mixed();
+    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    {
+        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
 
-		if (($valid_node_types!==NULL) && (!in_array('_privilege_category',$valid_node_types)))
-		{
-			return $nodes;
-		}
+        if (($valid_node_types !== NULL) && (!in_array('_privilege_category',$valid_node_types))) {
+            return $nodes;
+        }
 
-		if ($require_permission_support)
-		{
-			return $nodes;
-		}
+        if ($require_permission_support) {
+            return $nodes;
+        }
 
-		$page=$this->_make_zone_concrete($zone,$page_link);
+        $page = $this->_make_zone_concrete($zone,$page_link);
 
-		require_all_lang();
+        require_all_lang();
 
-		$_sections=list_to_map('p_section',$GLOBALS['SITE_DB']->query_select('privilege_list',array('DISTINCT p_section')));
-		foreach ($_sections as $i=>$s)
-		{	
-			$_sections[$s['p_section']]=do_lang($s['p_section']);
-		}
-		uasort($_sections,'strnatcasecmp');
+        $_sections = list_to_map('p_section',$GLOBALS['SITE_DB']->query_select('privilege_list',array('DISTINCT p_section')));
+        foreach ($_sections as $i => $s) {
+            $_sections[$s['p_section']] = do_lang($s['p_section']);
+        }
+        uasort($_sections,'strnatcasecmp');
 
-		if ($child_cutoff!==NULL)
-		{
-			if (count($_sections)>$child_cutoff) return $nodes;
-		}
+        if ($child_cutoff !== NULL) {
+            if (count($_sections)>$child_cutoff) {
+                return $nodes;
+            }
+        }
 
-		foreach (array_keys($_sections) as $category)
-		{
-			$child_page_link=$zone.':'.$page.':privileges:'.$category;
-			$node=$this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-			if (($callback===NULL || $return_anyway) && ($node!==NULL)) $nodes[]=$node;
-		}
+        foreach (array_keys($_sections) as $category) {
+            $child_page_link = $zone . ':' . $page . ':privileges:' . $category;
+            $node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+            if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+                $nodes[] = $node;
+            }
+        }
 
-		return $nodes;
-	}
+        return $nodes;
+    }
 
-	/**
+    /**
 	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -122,60 +121,61 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
-	{
-		$matches=array();
-		preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$page_link,$matches);
-		$page=$matches[2];
-		$privilege_category=$matches[4];
+    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    {
+        $matches = array();
+        preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$page_link,$matches);
+        $page = $matches[2];
+        $privilege_category = $matches[4];
 
-		require_all_lang();
-		if ($privilege_category=='SECTION_FORUMS')
-		{
-			$title=do_lang('FORUMS_AND_MEMBERS');
-		} else
-		{
-			$title=do_lang($privilege_category);
-		}
+        require_all_lang();
+        if ($privilege_category == 'SECTION_FORUMS') {
+            $title = do_lang('FORUMS_AND_MEMBERS');
+        } else {
+            $title = do_lang($privilege_category);
+        }
 
-		$struct=array(
-			'title'=>make_string_tempcode($title),
-			'content_type'=>'_privilege_category',
-			'content_id'=>NULL,
-			'modifiers'=>array(),
-			'only_on_page'=>'',
-			'page_link'=>$page_link,
-			'url'=>NULL,
-			'extra_meta'=>array(
-				'description'=>NULL,
-				'image'=>NULL,
-				'image_2x'=>NULL,
-				'add_date'=>NULL,
-				'edit_date'=>NULL,
-				'submitter'=>NULL,
-				'views'=>NULL,
-				'rating'=>NULL,
-				'meta_keywords'=>NULL,
-				'meta_description'=>NULL,
-				'categories'=>NULL,
-				'validated'=>NULL,
-				'db_row'=>NULL,
-			),
-			'permissions'=>array(),
-			'has_possible_children'=>false,
+        $struct = array(
+            'title' => make_string_tempcode($title),
+            'content_type' => '_privilege_category',
+            'content_id' => NULL,
+            'modifiers' => array(),
+            'only_on_page' => '',
+            'page_link' => $page_link,
+            'url' => NULL,
+            'extra_meta' => array(
+                'description' => NULL,
+                'image' => NULL,
+                'image_2x' => NULL,
+                'add_date' => NULL,
+                'edit_date' => NULL,
+                'submitter' => NULL,
+                'views' => NULL,
+                'rating' => NULL,
+                'meta_keywords' => NULL,
+                'meta_description' => NULL,
+                'categories' => NULL,
+                'validated' => NULL,
+                'db_row' => NULL,
+            ),
+            'permissions' => array(),
+            'has_possible_children' => false,
 
-			// These are likely to be changed in individual hooks
-			'sitemap_priority'=>SITEMAP_IMPORTANCE_LOW,
-			'sitemap_refreshfreq'=>'yearly',
+            // These are likely to be changed in individual hooks
+            'sitemap_priority' => SITEMAP_IMPORTANCE_LOW,
+            'sitemap_refreshfreq' => 'yearly',
 
-			'privilege_page'=>NULL,
-		);
+            'privilege_page' => NULL,
+        );
 
-		if (!$this->_check_node_permissions($struct)) return NULL;
+        if (!$this->_check_node_permissions($struct)) {
+            return NULL;
+        }
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
+        if ($callback !== NULL) {
+            call_user_func($callback,$struct);
+        }
 
-		return ($callback===NULL || $return_anyway)?$struct:NULL;
-	}
+        return ($callback === NULL || $return_anyway)?$struct:null;
+    }
 }

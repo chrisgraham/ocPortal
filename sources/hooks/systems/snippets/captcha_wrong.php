@@ -20,18 +20,20 @@
 
 class Hook_captcha_wrong
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$val=get_param('name');
+    public function run()
+    {
+        $val = get_param('name');
 
-		require_code('captcha');
-		if (check_captcha($val)) return new ocp_tempcode();
+        require_code('captcha');
+        if (check_captcha($val)) {
+            return new ocp_tempcode();
+        }
 
-		return make_string_tempcode(strip_html(do_lang('INVALID_SECURITY_CODE_ENTERED')));
-	}
+        return make_string_tempcode(strip_html(do_lang('INVALID_SECURITY_CODE_ENTERED')));
+    }
 }

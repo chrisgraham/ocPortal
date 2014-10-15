@@ -20,56 +20,60 @@
 
 class Hook_realtime_rain_chat
 {
-	/**
+    /**
 	 * Run function for realtime-rain hooks.
 	 *
 	 * @param  TIME			Start of time range.
 	 * @param  TIME			End of time range.
 	 * @return array			A list of template parameter sets for rendering a 'drop'.
 	 */
-	function run($from,$to)
-	{
-		$drops=array();
+    public function run($from,$to)
+    {
+        $drops = array();
 
-		if (has_actual_page_access(get_member(),'chat'))
-		{
-			require_code('chat');
+        if (has_actual_page_access(get_member(),'chat')) {
+            require_code('chat');
 
-			$rows=$GLOBALS['SITE_DB']->query('SELECT ip_address,the_message,date_and_time AS timestamp,room_id,member_id FROM '.$GLOBALS['SITE_DB']->get_table_prefix().'chat_messages WHERE system_message=0 AND date_and_time BETWEEN '.strval($from).' AND '.strval($to));
+            $rows = $GLOBALS['SITE_DB']->query('SELECT ip_address,the_message,date_and_time AS timestamp,room_id,member_id FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'chat_messages WHERE system_message=0 AND date_and_time BETWEEN ' . strval($from) . ' AND ' . strval($to));
 
-			foreach ($rows as $row)
-			{
-				if (!check_chatroom_access($row['room_id'],true)) continue;
+            foreach ($rows as $row) {
+                if (!check_chatroom_access($row['room_id'],true)) {
+                    continue;
+                }
 
-				$timestamp=$row['timestamp'];
-				$member_id=$row['member_id'];
+                $timestamp = $row['timestamp'];
+                $member_id = $row['member_id'];
 
-				$message=get_translated_text($row['the_message']);
-				if (strpos($message,'[private')!==false) continue;
-				$message=strip_comcode($message);
-				if ($message=='') continue;
+                $message = get_translated_text($row['the_message']);
+                if (strpos($message,'[private') !== false) {
+                    continue;
+                }
+                $message = strip_comcode($message);
+                if ($message == '') {
+                    continue;
+                }
 
-				$drops[]=rain_get_special_icons($row['ip_address'],$timestamp,NULL,$message)+array(
-					'TYPE'=>'chat',
-					'FROM_MEMBER_ID'=>strval($member_id),
-					'TO_MEMBER_ID'=>NULL,
-					'TITLE'=>rain_truncate_for_title($message),
-					'IMAGE'=>is_guest($member_id)?rain_get_country_image($row['ip_address']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
-					'TIMESTAMP'=>strval($timestamp),
-					'RELATIVE_TIMESTAMP'=>strval($timestamp-$from),
-					'TICKER_TEXT'=>$message,
-					'URL'=>build_url(array('page'=>'points','type'=>'member','id'=>$member_id),'_SEARCH'),
-					'IS_POSITIVE'=>false,
-					'IS_NEGATIVE'=>false,
+                $drops[] = rain_get_special_icons($row['ip_address'],$timestamp,null,$message)+array(
+                    'TYPE' => 'chat',
+                    'FROM_MEMBER_ID' => strval($member_id),
+                    'TO_MEMBER_ID' => NULL,
+                    'TITLE' => rain_truncate_for_title($message),
+                    'IMAGE' => is_guest($member_id)?rain_get_country_image($row['ip_address']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
+                    'TIMESTAMP' => strval($timestamp),
+                    'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
+                    'TICKER_TEXT' => $message,
+                    'URL' => build_url(array('page' => 'points','type' => 'member','id' => $member_id),'_SEARCH'),
+                    'IS_POSITIVE' => false,
+                    'IS_NEGATIVE' => false,
 
-					// These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-					'FROM_ID'=>'member_'.strval($member_id),
-					'TO_ID'=>NULL,
-					'GROUP_ID'=>'room_'.strval($row['room_id']),
-				);
-			}
-		}
+                    // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                    'FROM_ID' => 'member_' . strval($member_id),
+                    'TO_ID' => NULL,
+                    'GROUP_ID' => 'room_' . strval($row['room_id']),
+                );
+            }
+        }
 
-		return $drops;
-	}
+        return $drops;
+    }
 }

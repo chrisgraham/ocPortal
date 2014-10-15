@@ -20,30 +20,30 @@
 
 class Hook_unvalidated_calendar
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!module_installed('calendar')) return NULL;
+    public function info()
+    {
+        if (!module_installed('calendar')) {
+            return NULL;
+        }
 
-		require_lang('calendar');
+        require_lang('calendar');
 
-		$info=array();
-		$info['db_table']='calendar_events';
-		$info['db_identifier']='id';
-		$info['db_validated']='validated';
-		$info['db_add_date']='e_add_date';
-		$info['db_edit_date']='e_edit_date';
-		$info['edit_module']='cms_calendar';
-		$info['edit_type']='ed';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('EVENT');
+        $info = array();
+        $info['db_table'] = 'calendar_events';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'validated';
+        $info['db_add_date'] = 'e_add_date';
+        $info['db_edit_date'] = 'e_edit_date';
+        $info['edit_module'] = 'cms_calendar';
+        $info['edit_type'] = 'ed';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('EVENT');
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

@@ -27,13 +27,12 @@
  */
 function get_function_hash($code,$function)
 {
-	$matches=array();
-	if (preg_match('#^(function '.$function.'\(.*\n\{.*\n\})#msU',$code,$matches)!=0)
-	{
-		return md5(preg_replace('#\s#','',$matches[1]));
-	}
+    $matches = array();
+    if (preg_match('#^(function ' . $function . '\(.*\n\{.*\n\})#msU',$code,$matches) != 0) {
+        return md5(preg_replace('#\s#','',$matches[1]));
+    }
 
-	return '';
+    return '';
 }
 
 /**
@@ -47,19 +46,22 @@ function get_function_hash($code,$function)
  */
 function insert_code_before__by_linenum(&$code,$function,$linenum,$newcode)
 {
-	$pos=strpos($code,'function '.$function.'(');
-	if ($pos===false) return false;
+    $pos = strpos($code,'function ' . $function . '(');
+    if ($pos === false) {
+        return false;
+    }
 
-	$pos=strpos($code,"\n",$pos)+1;
-	for ($i=0;$i<$linenum;$i++)
-	{
-		$next=strpos($code,"\n",$pos);
-		if ($next===false) return false;
-		$pos=$next+1;
-	}
-	$code=substr($code,0,$pos)."\t".$newcode."\n".substr($code,$pos);
+    $pos = strpos($code,"\n",$pos)+1;
+    for ($i = 0;$i<$linenum;$i++) {
+        $next = strpos($code,"\n",$pos);
+        if ($next === false) {
+            return false;
+        }
+        $pos = $next+1;
+    }
+    $code = substr($code,0,$pos) . "\t" . $newcode . "\n" . substr($code,$pos);
 
-	return true;
+    return true;
 }
 
 /**
@@ -73,7 +75,7 @@ function insert_code_before__by_linenum(&$code,$function,$linenum,$newcode)
  */
 function insert_code_after__by_linenum(&$code,$function,$linenum,$newcode)
 {
-	return insert_code_before__by_linenum($code,$function,$linenum+1,$newcode);
+    return insert_code_before__by_linenum($code,$function,$linenum+1,$newcode);
 }
 
 /**
@@ -86,21 +88,24 @@ function insert_code_after__by_linenum(&$code,$function,$linenum,$newcode)
  * @param  integer		We are inserting at this instance of the line (i.e. takes into account a literal line of code may exist in other places in a function).
  * @return boolean		Success status.
  */
-function insert_code_before__by_command(&$code,$function,$command,$newcode,$instance_of_command=1)
+function insert_code_before__by_command(&$code,$function,$command,$newcode,$instance_of_command = 1)
 {
-	$pos=strpos($code,'function '.$function.'(');
-	if ($pos===false) return false;
+    $pos = strpos($code,'function ' . $function . '(');
+    if ($pos === false) {
+        return false;
+    }
 
-	for ($i=0;$i<$instance_of_command;$i++)
-	{
-		$next=strpos($code,$command,$pos);
-		if ($next===false) return false;
-		$pos=$next+1;
-	}
-	$pos=strrpos(substr($code,0,$pos),"\n");
-	$code=substr($code,0,$pos)."\n\t".$newcode.substr($code,$pos);
+    for ($i = 0;$i<$instance_of_command;$i++) {
+        $next = strpos($code,$command,$pos);
+        if ($next === false) {
+            return false;
+        }
+        $pos = $next+1;
+    }
+    $pos = strrpos(substr($code,0,$pos),"\n");
+    $code = substr($code,0,$pos) . "\n\t" . $newcode . substr($code,$pos);
 
-	return true;
+    return true;
 }
 
 /**
@@ -113,21 +118,24 @@ function insert_code_before__by_command(&$code,$function,$command,$newcode,$inst
  * @param  integer		We are inserting at this instance of the line (i.e. takes into account a literal line of code may exist in other places in a function).
  * @return boolean		Success status.
  */
-function insert_code_after__by_command(&$code,$function,$command,$newcode,$instance_of_command=1)
+function insert_code_after__by_command(&$code,$function,$command,$newcode,$instance_of_command = 1)
 {
-	$pos=strpos($code,'function '.$function.'(');
-	if ($pos===false) return false;
+    $pos = strpos($code,'function ' . $function . '(');
+    if ($pos === false) {
+        return false;
+    }
 
-	for ($i=0;$i<$instance_of_command;$i++)
-	{
-		$next=strpos($code,$command,$pos);
-		if ($next===false) return false;
-		$pos=$next+1;
-	}
-	$pos=strpos($code,"\n",$pos);
-	$code=substr($code,0,$pos)."\n\t".$newcode.substr($code,$pos);
+    for ($i = 0;$i<$instance_of_command;$i++) {
+        $next = strpos($code,$command,$pos);
+        if ($next === false) {
+            return false;
+        }
+        $pos = $next+1;
+    }
+    $pos = strpos($code,"\n",$pos);
+    $code = substr($code,0,$pos) . "\n\t" . $newcode . substr($code,$pos);
 
-	return true;
+    return true;
 }
 
 /**
@@ -139,21 +147,23 @@ function insert_code_after__by_command(&$code,$function,$command,$newcode,$insta
  * @param  integer		We remove the nth instance of this command.
  * @return boolean		Success status.
  */
-function remove_code(&$code,$function,$command,$instance_of_command=1)
+function remove_code(&$code,$function,$command,$instance_of_command = 1)
 {
-	$pos=strpos($code,'function '.$function.'(');
-	if ($pos===false) return false;
+    $pos = strpos($code,'function ' . $function . '(');
+    if ($pos === false) {
+        return false;
+    }
 
-	for ($i=0;$i<$instance_of_command;$i++)
-	{
-		$next=strpos($code,$command,$pos);
-		if ($next===false) return false;
-		$pos=$next+1;
-	}
-	$old_pos=$pos;
-	$pos=strpos($code,"\n",$pos);
-	$code=substr($code,0,$pos)."\n".substr($code,$old_pos+1);
+    for ($i = 0;$i<$instance_of_command;$i++) {
+        $next = strpos($code,$command,$pos);
+        if ($next === false) {
+            return false;
+        }
+        $pos = $next+1;
+    }
+    $old_pos = $pos;
+    $pos = strpos($code,"\n",$pos);
+    $code = substr($code,0,$pos) . "\n" . substr($code,$old_pos+1);
 
-	return true;
+    return true;
 }
-

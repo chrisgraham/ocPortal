@@ -15,76 +15,76 @@
 
 class Hook_addon_registry_unslider
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the addon category
 	 *
 	 * @return string			The category
 	 */
-	function get_category()
-	{
-		return 'Graphical';
-	}
+    public function get_category()
+    {
+        return 'Graphical';
+    }
 
-	/**
+    /**
 	 * Get the addon author
 	 *
 	 * @return string			The author
 	 */
-	function get_author()
-	{
-		return 'Chris Graham';
-	}
+    public function get_author()
+    {
+        return 'Chris Graham';
+    }
 
-	/**
+    /**
 	 * Find other authors
 	 *
 	 * @return array			A list of co-authors that should be attributed
 	 */
-	function get_copyright_attribution()
-	{
-		return array(
-			'"@idiot"',
-		);
-	}
+    public function get_copyright_attribution()
+    {
+        return array(
+            '"@idiot"',
+        );
+    }
 
-	/**
+    /**
 	 * Get the addon licence (one-line summary only)
 	 *
 	 * @return string			The licence
 	 */
-	function get_licence()
-	{
-		return 'WTFPL License';
-	}
+    public function get_licence()
+    {
+        return 'WTFPL License';
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'A customisable slider for displaying custom HTML or media.
+    public function get_description()
+    {
+        return 'A customisable slider for displaying custom HTML or media.
 
 The addon contains a new block, main_unslider. The block is based on the Unslider jQuery plugin. It includes a number of slides and lets you move between them, either on a timer or manually. The contents of each slide is sourced from a specially-named ocPortal page.
 
@@ -96,71 +96,71 @@ The [tt]pages[/tt] parameter refers to suffixes on a standard naming scheme. [tt
 These six example slides/pages are bundled with the addon. 1-4 use background images and simple Comcode, 5 uses a Youtube video (but any video code should work), 6 uses an image. You will see that the image and video are auto-sized to fit the slider perfectly (taking precedence over the normal size of the video).
 
 If the [tt]delay[/tt] is set to blank or 0, it will disable automatic (timed) transition between slides. You may wish to do this if you include a video slide, although if the user hovers the mouse over the slider it will block automatic transitions also.';
-	}
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(
-			),
-			'recommends'=>array(
-			),
-			'conflicts_with'=>array(
-			)
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(
+            ),
+            'recommends' => array(
+            ),
+            'conflicts_with' => array(
+            )
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources_custom/hooks/systems/addon_registry/unslider.php',
-			'sources_custom/blocks/main_unslider.php',
-			'themes/default/css_custom/unslider.css',
-			'themes/default/templates_custom/BLOCK_MAIN_UNSLIDER.tpl',
-			'themes/default/templates_custom/JAVASCRIPT_UNSLIDER.tpl',
-			'pages/comcode_custom/EN/_unslider_slide1.txt',
-			'pages/comcode_custom/EN/_unslider_slide2.txt',
-			'pages/comcode_custom/EN/_unslider_slide3.txt',
-			'pages/comcode_custom/EN/_unslider_slide4.txt',
-			'pages/comcode_custom/EN/_unslider_slide5.txt',
-			'pages/comcode_custom/EN/_unslider_slide6.txt',
-			'lang_custom/EN/unslider.ini',
-			'themes/default/images_custom/unslider_backgrounds/index.html',
-			'themes/default/images_custom/unslider_backgrounds/shop.jpg',
-			'themes/default/images_custom/unslider_backgrounds/subway.jpg',
-			'themes/default/images_custom/unslider_backgrounds/sunset.jpg',
-			'themes/default/images_custom/unslider_backgrounds/wood.jpg',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources_custom/hooks/systems/addon_registry/unslider.php',
+            'sources_custom/blocks/main_unslider.php',
+            'themes/default/css_custom/unslider.css',
+            'themes/default/templates_custom/BLOCK_MAIN_UNSLIDER.tpl',
+            'themes/default/templates_custom/JAVASCRIPT_UNSLIDER.tpl',
+            'pages/comcode_custom/EN/_unslider_slide1.txt',
+            'pages/comcode_custom/EN/_unslider_slide2.txt',
+            'pages/comcode_custom/EN/_unslider_slide3.txt',
+            'pages/comcode_custom/EN/_unslider_slide4.txt',
+            'pages/comcode_custom/EN/_unslider_slide5.txt',
+            'pages/comcode_custom/EN/_unslider_slide6.txt',
+            'lang_custom/EN/unslider.ini',
+            'themes/default/images_custom/unslider_backgrounds/index.html',
+            'themes/default/images_custom/unslider_backgrounds/shop.jpg',
+            'themes/default/images_custom/unslider_backgrounds/subway.jpg',
+            'themes/default/images_custom/unslider_backgrounds/sunset.jpg',
+            'themes/default/images_custom/unslider_backgrounds/wood.jpg',
+        );
+    }
 }

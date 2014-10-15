@@ -20,79 +20,81 @@
 
 class Hook_content_meta_aware_post
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function info($zone = null)
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		return array(
-			'supports_custom_fields'=>true,
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'ocf:FORUM_POST',
+            'content_type_label' => 'ocf:FORUM_POST',
 
-			'connection'=>$GLOBALS['FORUM_DB'],
-			'table'=>'f_posts',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>'p_topic_id',
-			'parent_category_meta_aware_type'=>'topic',
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>'p_cache_forum_id', // For category permissions
-			'category_type'=>'forums', // For category permissions
-			'parent_spec__table_name'=>'f_forums',
-			'parent_spec__parent_name'=>'f_parent_forum',
-			'parent_spec__field_name'=>'id',
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['FORUM_DB'],
+            'table' => 'f_posts',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => 'p_topic_id',
+            'parent_category_meta_aware_type' => 'topic',
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => 'p_cache_forum_id', // For category permissions
+            'category_type' => 'forums', // For category permissions
+            'parent_spec__table_name' => 'f_forums',
+            'parent_spec__parent_name' => 'f_parent_forum',
+            'parent_spec__field_name' => 'id',
+            'category_is_string' => false,
 
-			'title_field'=>'p_title',
-			'title_field_dereference'=>false,
-			'description_field'=>'p_post',
-			'thumb_field'=>NULL,
+            'title_field' => 'p_title',
+            'title_field_dereference' => false,
+            'description_field' => 'p_post',
+            'thumb_field' => NULL,
 
-			'view_page_link_pattern'=>'_SEARCH:topicview:findpost:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:topics:edit_post:_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:topicview:misc:_WILD',
-			'add_url'=>'',
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('forumview')).':forumview',
+            'view_page_link_pattern' => '_SEARCH:topicview:findpost:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:topics:edit_post:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:topicview:misc:_WILD',
+            'add_url' => '',
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('forumview')) . ':forumview',
 
-			'support_url_monikers'=>false,
+            'support_url_monikers' => false,
 
-			'views_field'=>NULL,
-			'submitter_field'=>'p_poster',
-			'add_time_field'=>'p_time',
-			'edit_time_field'=>'p_last_edit_time',
-			'date_field'=>'p_time',
-			'validated_field'=>'p_validated',
+            'views_field' => NULL,
+            'submitter_field' => 'p_poster',
+            'add_time_field' => 'p_time',
+            'edit_time_field' => 'p_last_edit_time',
+            'date_field' => 'p_time',
+            'validated_field' => 'p_validated',
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>'post',
+            'feedback_type_code' => 'post',
 
-			'permissions_type_code'=>'forums',
+            'permissions_type_code' => 'forums',
 
-			'search_hook'=>'ocf_posts',
+            'search_hook' => 'ocf_posts',
 
-			'addon_name'=>'ocf_forum',
+            'addon_name' => 'ocf_forum',
 
-			'cms_page'=>'topics',
-			'module'=>'forumview',
+            'cms_page' => 'topics',
+            'module' => 'forumview',
 
-			'occle_filesystem_hook'=>'forums',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'forums',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_POST',
-		);
-	}
+            'actionlog_regexp' => '\w+_POST',
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -104,10 +106,10 @@ class Hook_content_meta_aware_post
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('ocf_posts2');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('ocf_posts2');
 
-		return render_post_box($row,false,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$guid);
-	}
+        return render_post_box($row,false,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+    }
 }

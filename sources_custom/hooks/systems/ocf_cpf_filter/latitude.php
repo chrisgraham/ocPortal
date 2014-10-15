@@ -15,19 +15,17 @@
 
 class Hook_ocf_cpf_filter_latitude
 {
-	/**
+    /**
 	 * Find which special CPFs to enable.
 	 *
 	 * @return array			A list of CPFs to enable
 	 */
-	function to_enable()
-	{
-		require_lang('google_map_users');
-		$cpf=array();
-		$cpf['latitude']=1;
-		$cpf['longitude']=1;
-		return $cpf;
-	}
+    public function to_enable()
+    {
+        require_lang('google_map_users');
+        $cpf = array();
+        $cpf['latitude'] = 1;
+        $cpf['longitude'] = 1;
+        return $cpf;
+    }
 }
-
-

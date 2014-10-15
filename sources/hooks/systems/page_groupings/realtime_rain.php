@@ -20,21 +20,21 @@
 
 class Hook_page_groupings_realtime_rain
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('realtime_rain')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('realtime_rain')) {
+            return array();
+        }
 
-		return array(
-			array('audit','menu/adminzone/audit/realtime_rain',array('admin_realtime_rain',array('type'=>'misc'),get_module_zone('admin_realtime_rain')),do_lang_tempcode('realtime_rain:_REALTIME_RAIN'),'realtime_rain:DOC_REALTIME_RAIN'),
-		);
-	}
+        return array(
+            array('audit','menu/adminzone/audit/realtime_rain',array('admin_realtime_rain',array('type' => 'misc'),get_module_zone('admin_realtime_rain')),do_lang_tempcode('realtime_rain:_REALTIME_RAIN'),'realtime_rain:DOC_REALTIME_RAIN'),
+        );
+    }
 }
-
-

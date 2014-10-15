@@ -20,446 +20,438 @@
 
 class Hook_addon_registry_core_addon_management
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Install or uninstall addons.';
-	}
+    public function get_description()
+    {
+        return 'Install or uninstall addons.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_framework',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_framework',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/structure/addons.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/structure/addons.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/structure/addons.png',
-			'themes/default/images/icons/48x48/menu/adminzone/structure/addons.png',
-			'themes/default/images/icons/24x24/menu/_generic_admin/component.png',
-			'themes/default/images/icons/48x48/menu/_generic_admin/component.png',
-			'themes/default/css/addons_editor.css',
-			'sources/hooks/systems/addon_registry/core_addon_management.php',
-			'sources/addons.php',
-			'sources/addons2.php',
-			'themes/default/templates/ADDON_SCREEN_ADDON.tpl',
-			'themes/default/templates/ADDON_MULTI_CONFIRM_SCREEN.tpl',
-			'themes/default/templates/ADDON_SCREEN.tpl',
-			'themes/default/templates/ADDON_EXPORT_FILE_CHOICE.tpl',
-			'themes/default/templates/ADDON_EXPORT_LINE.tpl',
-			'themes/default/templates/ADDON_EXPORT_LINE_CHOICE.tpl',
-			'themes/default/templates/ADDON_EXPORT_SCREEN.tpl',
-			'themes/default/templates/ADDON_INSTALL_CONFIRM_SCREEN.tpl',
-			'themes/default/templates/ADDON_INSTALL_FILES.tpl',
-			'themes/default/templates/ADDON_INSTALL_FILES_WARNING.tpl',
-			'themes/default/templates/ADDON_INSTALL_WARNING.tpl',
-			'themes/default/templates/ADDON_UNINSTALL_CONFIRM_SCREEN.tpl',
-			'themes/default/templates/MODULE_SCREEN.tpl',
-			'themes/default/templates/MODULE_SCREEN_MODULE.tpl',
-			'themes/default/templates/ADDON_NAME.tpl',
-			'adminzone/pages/modules/admin_addons.php',
-			'exports/index.html',
-			'exports/addons/index.html',
-			'imports/index.html',
-			'imports/.htaccess',
-			'imports/addons/.htaccess',
-			'imports/addons/index.html',
-			'lang/EN/addons.ini',
-			'sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php',
-			'themes/default/images/icons/14x14/install.png',
-			'themes/default/images/icons/14x14/reinstall.png',
-			'themes/default/images/icons/14x14/upgrade.png',
-			'themes/default/images/icons/28x28/install.png',
-			'themes/default/images/icons/28x28/reinstall.png',
-			'themes/default/images/icons/28x28/upgrade.png',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/structure/addons.png',
+            'themes/default/images/icons/48x48/menu/adminzone/structure/addons.png',
+            'themes/default/images/icons/24x24/menu/_generic_admin/component.png',
+            'themes/default/images/icons/48x48/menu/_generic_admin/component.png',
+            'themes/default/css/addons_editor.css',
+            'sources/hooks/systems/addon_registry/core_addon_management.php',
+            'sources/addons.php',
+            'sources/addons2.php',
+            'themes/default/templates/ADDON_SCREEN_ADDON.tpl',
+            'themes/default/templates/ADDON_MULTI_CONFIRM_SCREEN.tpl',
+            'themes/default/templates/ADDON_SCREEN.tpl',
+            'themes/default/templates/ADDON_EXPORT_FILE_CHOICE.tpl',
+            'themes/default/templates/ADDON_EXPORT_LINE.tpl',
+            'themes/default/templates/ADDON_EXPORT_LINE_CHOICE.tpl',
+            'themes/default/templates/ADDON_EXPORT_SCREEN.tpl',
+            'themes/default/templates/ADDON_INSTALL_CONFIRM_SCREEN.tpl',
+            'themes/default/templates/ADDON_INSTALL_FILES.tpl',
+            'themes/default/templates/ADDON_INSTALL_FILES_WARNING.tpl',
+            'themes/default/templates/ADDON_INSTALL_WARNING.tpl',
+            'themes/default/templates/ADDON_UNINSTALL_CONFIRM_SCREEN.tpl',
+            'themes/default/templates/MODULE_SCREEN.tpl',
+            'themes/default/templates/MODULE_SCREEN_MODULE.tpl',
+            'themes/default/templates/ADDON_NAME.tpl',
+            'adminzone/pages/modules/admin_addons.php',
+            'exports/index.html',
+            'exports/addons/index.html',
+            'imports/index.html',
+            'imports/.htaccess',
+            'imports/addons/.htaccess',
+            'imports/addons/index.html',
+            'lang/EN/addons.ini',
+            'sources/hooks/systems/ajax_tree/choose_ocportalcom_addon.php',
+            'themes/default/images/icons/14x14/install.png',
+            'themes/default/images/icons/14x14/reinstall.png',
+            'themes/default/images/icons/14x14/upgrade.png',
+            'themes/default/images/icons/28x28/install.png',
+            'themes/default/images/icons/28x28/reinstall.png',
+            'themes/default/images/icons/28x28/upgrade.png',
+        );
+    }
 
 
-	/**
+    /**
 	 * Get mapping between template names and the method of this class that can render a preview of them
 	 *
 	 * @return array			The mapping
 	 */
-	function tpl_previews()
-	{
-		return array(
-			'ADDON_SCREEN.tpl'=>'administrative__addon_screen',
-			'ADDON_SCREEN_ADDON.tpl'=>'administrative__addon_screen',
-			'ADDON_NAME.tpl'=>'administrative__addon_screen',
-			'ADDON_MULTI_CONFIRM_SCREEN.tpl'=>'administrative__addon_multi_confirm_screen',
-			'ADDON_INSTALL_CONFIRM_SCREEN.tpl'=>'administrative__addon_install_confirm_screen',
-			'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl'=>'administrative__addon_uninstall_confirm_screen',
-			'ADDON_EXPORT_LINE.tpl'=>'administrative__addon_export_screen',
-			'ADDON_EXPORT_FILE_CHOICE.tpl'=>'administrative__addon_export_screen',
-			'ADDON_EXPORT_LINE_CHOICE.tpl'=>'administrative__addon_export_screen',
-			'ADDON_EXPORT_SCREEN.tpl'=>'administrative__addon_export_screen',
-			'MODULE_SCREEN_MODULE.tpl'=>'administrative__module_screen',
-			'MODULE_SCREEN.tpl'=>'administrative__module_screen',
-			'ADDON_INSTALL_FILES_WARNING.tpl'=>'administrative__addon_install_confirm_screen',
-			'ADDON_INSTALL_FILES.tpl'=>'administrative__addon_install_confirm_screen',
-			'ADDON_INSTALL_WARNING.tpl'=>'administrative__addon_install_confirm_screen'
-		);
-	}
+    public function tpl_previews()
+    {
+        return array(
+            'ADDON_SCREEN.tpl' => 'administrative__addon_screen',
+            'ADDON_SCREEN_ADDON.tpl' => 'administrative__addon_screen',
+            'ADDON_NAME.tpl' => 'administrative__addon_screen',
+            'ADDON_MULTI_CONFIRM_SCREEN.tpl' => 'administrative__addon_multi_confirm_screen',
+            'ADDON_INSTALL_CONFIRM_SCREEN.tpl' => 'administrative__addon_install_confirm_screen',
+            'ADDON_UNINSTALL_CONFIRM_SCREEN.tpl' => 'administrative__addon_uninstall_confirm_screen',
+            'ADDON_EXPORT_LINE.tpl' => 'administrative__addon_export_screen',
+            'ADDON_EXPORT_FILE_CHOICE.tpl' => 'administrative__addon_export_screen',
+            'ADDON_EXPORT_LINE_CHOICE.tpl' => 'administrative__addon_export_screen',
+            'ADDON_EXPORT_SCREEN.tpl' => 'administrative__addon_export_screen',
+            'MODULE_SCREEN_MODULE.tpl' => 'administrative__module_screen',
+            'MODULE_SCREEN.tpl' => 'administrative__module_screen',
+            'ADDON_INSTALL_FILES_WARNING.tpl' => 'administrative__addon_install_confirm_screen',
+            'ADDON_INSTALL_FILES.tpl' => 'administrative__addon_install_confirm_screen',
+            'ADDON_INSTALL_WARNING.tpl' => 'administrative__addon_install_confirm_screen'
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__addon_screen()
-	{
-		$add_ons=new ocp_tempcode();
+    public function tpl_preview__administrative__addon_screen()
+    {
+        $add_ons = new ocp_tempcode();
 
-		foreach (placeholder_array() as $value)
-		{
-			$actions=do_lorem_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY',array(
-				'GET'=>true,
-				'NAME'=>lorem_phrase(),
-				'HIDDEN'=>'',
-				'URL'=>placeholder_url(),
-			));
-			$status=do_lang_tempcode('STATUS_NOT_INSTALLED');
+        foreach (placeholder_array() as $value) {
+            $actions = do_lorem_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY',array(
+                'GET' => true,
+                'NAME' => lorem_phrase(),
+                'HIDDEN' => '',
+                'URL' => placeholder_url(),
+            ));
+            $status = do_lang_tempcode('STATUS_NOT_INSTALLED');
 
-			$pretty_name=do_lorem_template('ADDON_NAME',array('IMAGE_URL'=>placeholder_image_url(),'NAME'=>lorem_word()));
+            $pretty_name = do_lorem_template('ADDON_NAME',array('IMAGE_URL' => placeholder_image_url(),'NAME' => lorem_word()));
 
-			$add_ons->attach(do_lorem_template('ADDON_SCREEN_ADDON',array(
-				'DESCRIPTION'=>lorem_paragraph_html(),
-				'FILE_LIST'=>lorem_paragraph_html(),
-				'COLOUR'=>'orange',
-				'STATUS'=>$status,
-				'NAME'=>$value,
-				'PRETTY_NAME'=>$pretty_name,
-				'FILENAME'=>lorem_word(),
-				'AUTHOR'=>lorem_phrase(),
-				'ORGANISATION'=>lorem_word(),
-				'VERSION'=>placeholder_number(),
-				'CATEGORY'=>lorem_phrase(),
-				'COPYRIGHT_ATTRIBUTION'=>lorem_phrase(),
-				'LICENCE'=>lorem_phrase(),
-				'ACTIONS'=>$actions,
-				'TYPE'=>lorem_phrase(),
-				'PASSTHROUGH'=>lorem_phrase(),
-				'UPDATED'=>false,
-			)));
-		}
+            $add_ons->attach(do_lorem_template('ADDON_SCREEN_ADDON',array(
+                'DESCRIPTION' => lorem_paragraph_html(),
+                'FILE_LIST' => lorem_paragraph_html(),
+                'COLOUR' => 'orange',
+                'STATUS' => $status,
+                'NAME' => $value,
+                'PRETTY_NAME' => $pretty_name,
+                'FILENAME' => lorem_word(),
+                'AUTHOR' => lorem_phrase(),
+                'ORGANISATION' => lorem_word(),
+                'VERSION' => placeholder_number(),
+                'CATEGORY' => lorem_phrase(),
+                'COPYRIGHT_ATTRIBUTION' => lorem_phrase(),
+                'LICENCE' => lorem_phrase(),
+                'ACTIONS' => $actions,
+                'TYPE' => lorem_phrase(),
+                'PASSTHROUGH' => lorem_phrase(),
+                'UPDATED' => false,
+            )));
+        }
 
-		return array(
-			lorem_globalise(do_lorem_template('ADDON_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'ADDONS'=>$add_ons,
-				'MULTI_ACTION'=>placeholder_url(),
-				'UPDATED_ADDONS'=>'',
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('ADDON_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'ADDONS' => $add_ons,
+                'MULTI_ACTION' => placeholder_url(),
+                'UPDATED_ADDONS' => '',
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__addon_multi_confirm_screen()
-	{
-		$install_files=new ocp_tempcode();
-		$uninstall_files=new ocp_tempcode();
+    public function tpl_preview__administrative__addon_multi_confirm_screen()
+    {
+        $install_files = new ocp_tempcode();
+        $uninstall_files = new ocp_tempcode();
 
-		$install=array(
-			'news',
-			'gallery'
-		);
-		$uninstall=array(
-			'catalogues'
-		);
+        $install = array(
+            'news',
+            'gallery'
+        );
+        $uninstall = array(
+            'catalogues'
+        );
 
-		foreach ($install as $name)
-			$uninstall_files->attach('<li>'.$name.'</li>');
+        foreach ($install as $name) {
+            $uninstall_files->attach('<li>' . $name . '</li>');
+        }
 
-		foreach ($uninstall as $file)
-			$install_files->attach('<li>'.$file.'</li>');
+        foreach ($uninstall as $file) {
+            $install_files->attach('<li>' . $file . '</li>');
+        }
 
-		return array(
-			lorem_globalise(do_lorem_template('ADDON_MULTI_CONFIRM_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'HIDDEN'=>'',
-				'URL'=>placeholder_url(),
-				'INSTALL_FILES'=>$install_files,
-				'UNINSTALL_FILES'=>$uninstall_files,
-				'WARNINGS'=>lorem_phrase(),
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('ADDON_MULTI_CONFIRM_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'HIDDEN' => '',
+                'URL' => placeholder_url(),
+                'INSTALL_FILES' => $install_files,
+                'UNINSTALL_FILES' => $uninstall_files,
+                'WARNINGS' => lorem_phrase(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__addon_install_confirm_screen()
-	{
-		$_dependencies=new ocp_tempcode();
-		foreach (placeholder_array() as $in)
-		{
-			if (!$_dependencies->is_empty())
-				$_dependencies->attach(do_lang_tempcode('LIST_SEP'));
-			$_dependencies->attach(escape_html($in));
-		}
+    public function tpl_preview__administrative__addon_install_confirm_screen()
+    {
+        $_dependencies = new ocp_tempcode();
+        foreach (placeholder_array() as $in) {
+            if (!$_dependencies->is_empty()) {
+                $_dependencies->attach(do_lang_tempcode('LIST_SEP'));
+            }
+            $_dependencies->attach(escape_html($in));
+        }
 
-		$warning=do_lorem_template('ADDON_INSTALL_WARNING',array(
-			'WARNING'=>do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES', $_dependencies, lorem_phrase()),
-			'ADDON_WARNING_OVERWRITE'=>lorem_phrase(),
-		));
-		$files=new ocp_tempcode();
-		foreach (placeholder_array() as $val)
-		{
-			$files->attach(do_lorem_template('ADDON_INSTALL_FILES_WARNING',array(
-				'PATH'=>lorem_phrase(),
-				'ABOUT'=>do_lang_tempcode('ADDON_FILE_WILL_OVERWRITE'),
-				'I'=>placeholder_random(),
-			)));
-		}
-		foreach (placeholder_array() as $val)
-		{
-			$files->attach(do_lorem_template('ADDON_INSTALL_FILES',array(
-				'PATH'=>lorem_phrase(),
-				'ABOUT'=>do_lang_tempcode('ADDON_FILE_NORMAL'),
-				'I'=>placeholder_random(),
-			)));
-		}
-		return array(
-			lorem_globalise(do_lorem_template('ADDON_INSTALL_CONFIRM_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'FILE'=>lorem_phrase(),
-				'URL'=>placeholder_url(),
-				'FILES'=>$files,
-				'WARNINGS'=>$warning,
-				'NAME'=>lorem_word(),
-				'AUTHOR'=>lorem_word_2(),
-				'ORGANISATION'=>lorem_phrase(),
-				'VERSION'=>placeholder_number(),
-				'CATEGORY'=>lorem_phrase(),
-				'COPYRIGHT_ATTRIBUTION'=>lorem_phrase(),
-				'LICENCE'=>lorem_phrase(),
-				'DESCRIPTION'=>lorem_paragraph_html(),
-			)),NULL,'',true)
-		);
-	}
+        $warning = do_lorem_template('ADDON_INSTALL_WARNING',array(
+            'WARNING' => do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES', $_dependencies, lorem_phrase()),
+            'ADDON_WARNING_OVERWRITE' => lorem_phrase(),
+        ));
+        $files = new ocp_tempcode();
+        foreach (placeholder_array() as $val) {
+            $files->attach(do_lorem_template('ADDON_INSTALL_FILES_WARNING',array(
+                'PATH' => lorem_phrase(),
+                'ABOUT' => do_lang_tempcode('ADDON_FILE_WILL_OVERWRITE'),
+                'I' => placeholder_random(),
+            )));
+        }
+        foreach (placeholder_array() as $val) {
+            $files->attach(do_lorem_template('ADDON_INSTALL_FILES',array(
+                'PATH' => lorem_phrase(),
+                'ABOUT' => do_lang_tempcode('ADDON_FILE_NORMAL'),
+                'I' => placeholder_random(),
+            )));
+        }
+        return array(
+            lorem_globalise(do_lorem_template('ADDON_INSTALL_CONFIRM_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'FILE' => lorem_phrase(),
+                'URL' => placeholder_url(),
+                'FILES' => $files,
+                'WARNINGS' => $warning,
+                'NAME' => lorem_word(),
+                'AUTHOR' => lorem_word_2(),
+                'ORGANISATION' => lorem_phrase(),
+                'VERSION' => placeholder_number(),
+                'CATEGORY' => lorem_phrase(),
+                'COPYRIGHT_ATTRIBUTION' => lorem_phrase(),
+                'LICENCE' => lorem_phrase(),
+                'DESCRIPTION' => lorem_paragraph_html(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__addon_uninstall_confirm_screen()
-	{
-		return array(
-			lorem_globalise(do_lorem_template('ADDON_UNINSTALL_CONFIRM_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'URL'=>placeholder_url(),
-				'NAME'=>lorem_word(),
-				'WARNINGS'=>lorem_phrase(),
-				'FILES'=>placeholder_list_item(),
-			)),NULL,'',true)
-		);
-	}
+    public function tpl_preview__administrative__addon_uninstall_confirm_screen()
+    {
+        return array(
+            lorem_globalise(do_lorem_template('ADDON_UNINSTALL_CONFIRM_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'URL' => placeholder_url(),
+                'NAME' => lorem_word(),
+                'WARNINGS' => lorem_phrase(),
+                'FILES' => placeholder_list_item(),
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__addon_export_screen()
-	{
-		$tpl_languages=new ocp_tempcode();
-		$tpl_themes=new ocp_tempcode();
+    public function tpl_preview__administrative__addon_export_screen()
+    {
+        $tpl_languages = new ocp_tempcode();
+        $tpl_themes = new ocp_tempcode();
 
-		foreach (array(
-			'en',
-			'mal'
-		) as $value)
-		{
-			$frm_langs=new ocp_tempcode();
-			$i=0;
-			foreach (placeholder_array() as $file)
-			{
-				$frm_langs->attach(form_input_hidden('file_'.strval($i),$file));
-				$i++;
-			}
-			$tpl_languages->attach(do_lorem_template('ADDON_EXPORT_LINE',array(
-				'NAME'=>$value,
-				'URL'=>placeholder_url(),
-				'FILES'=>$frm_langs,
-			)));
-		}
+        foreach (array(
+            'en',
+            'mal'
+        ) as $value) {
+            $frm_langs = new ocp_tempcode();
+            $i = 0;
+            foreach (placeholder_array() as $file) {
+                $frm_langs->attach(form_input_hidden('file_' . strval($i),$file));
+                $i++;
+            }
+            $tpl_languages->attach(do_lorem_template('ADDON_EXPORT_LINE',array(
+                'NAME' => $value,
+                'URL' => placeholder_url(),
+                'FILES' => $frm_langs,
+            )));
+        }
 
-		foreach (array(
-			'default',
-			'ocp'
-		) as $value)
-		{
-			$frm_themes=new ocp_tempcode();
-			foreach (placeholder_array() as $file)
-			{
-				$frm_themes->attach(form_input_hidden('file_'.strval($i),$file));
-				$i++;
-			}
-			$tpl_themes->attach(do_lorem_template('ADDON_EXPORT_LINE',array(
-				'NAME'=>$value,
-				'URL'=>placeholder_url(),
-				'FILES'=>$frm_themes,
-			)));
-		}
+        foreach (array(
+            'default',
+            'ocp'
+        ) as $value) {
+            $frm_themes = new ocp_tempcode();
+            foreach (placeholder_array() as $file) {
+                $frm_themes->attach(form_input_hidden('file_' . strval($i),$file));
+                $i++;
+            }
+            $tpl_themes->attach(do_lorem_template('ADDON_EXPORT_LINE',array(
+                'NAME' => $value,
+                'URL' => placeholder_url(),
+                'FILES' => $frm_themes,
+            )));
+        }
 
 
-		$frm_files=new ocp_tempcode();
-		$i=0;
-		foreach (placeholder_array() as $file)
-		{
-			$frm_files->attach(do_lorem_template('ADDON_EXPORT_FILE_CHOICE',array(
-				'ID'=>strval($i),
-				'PATH'=>$file,
-			)));
-			$i++;
-		}
+        $frm_files = new ocp_tempcode();
+        $i = 0;
+        foreach (placeholder_array() as $file) {
+            $frm_files->attach(do_lorem_template('ADDON_EXPORT_FILE_CHOICE',array(
+                'ID' => strval($i),
+                'PATH' => $file,
+            )));
+            $i++;
+        }
 
-		$tpl_files=do_lorem_template('ADDON_EXPORT_LINE_CHOICE',array(
-			'URL'=>placeholder_url(),
-			'FILES'=>$frm_files,
-		));
+        $tpl_files = do_lorem_template('ADDON_EXPORT_LINE_CHOICE',array(
+            'URL' => placeholder_url(),
+            'FILES' => $frm_files,
+        ));
 
-		return array(
-			lorem_globalise(do_lorem_template('ADDON_EXPORT_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'LANGUAGES'=>$tpl_languages,
-				'FILES'=>$tpl_files,
-				'THEMES'=>$tpl_themes,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('ADDON_EXPORT_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'LANGUAGES' => $tpl_languages,
+                'FILES' => $tpl_files,
+                'THEMES' => $tpl_themes,
+            )),null,'',true)
+        );
+    }
 
-	/**
+    /**
 	 * Get a preview(s) of a (group of) template(s), as a full standalone piece of HTML in Tempcode format.
 	 * Uses sources/lorem.php functions to place appropriate stock-text. Should not hard-code things, as the code is intended to be declaritive.
 	 * Assumptions: You can assume all Lang/CSS/JavaScript files in this addon have been pre-required.
 	 *
 	 * @return array			Array of previews, each is Tempcode. Normally we have just one preview, but occasionally it is good to test templates are flexible (e.g. if they use IF_EMPTY, we can test with and without blank data).
 	 */
-	function tpl_preview__administrative__module_screen()
-	{
-		$modules=array(
-			'gallery',
-			'downloads',
-			'catalogues'
-		);
-		$tpl_modules=new ocp_tempcode();
-		foreach ($modules as $module)
-		{
-			$actions=new ocp_tempcode();
-			$status=do_lang_tempcode('STATUS_TO_UPGRADE');
+    public function tpl_preview__administrative__module_screen()
+    {
+        $modules = array(
+            'gallery',
+            'downloads',
+            'catalogues'
+        );
+        $tpl_modules = new ocp_tempcode();
+        foreach ($modules as $module) {
+            $actions = new ocp_tempcode();
+            $status = do_lang_tempcode('STATUS_TO_UPGRADE');
 
-			if ($module=='downloads')
-			{
-				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY',array(
-					'HIDDEN'=>'',
-					'NAME'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-				)));
-				$status=do_lang_tempcode('STATUS_CURRENT');
-			}
-			else
-				$actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array(
-					'HIDDEN'=>'',
-					'NAME'=>lorem_phrase(),
-					'URL'=>placeholder_url(),
-				)));
+            if ($module == 'downloads') {
+                $actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY',array(
+                    'HIDDEN' => '',
+                    'NAME' => lorem_phrase(),
+                    'URL' => placeholder_url(),
+                )));
+                $status = do_lang_tempcode('STATUS_CURRENT');
+            } else {
+                $actions->attach(do_lorem_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY',array(
+                    'HIDDEN' => '',
+                    'NAME' => lorem_phrase(),
+                    'URL' => placeholder_url(),
+                )));
+            }
 
-			$tpl_modules->attach(do_lorem_template('MODULE_SCREEN_MODULE',array(
-				'STATUS'=>$status,
-				'NAME'=>$module,
-				'AUTHOR'=>lorem_word(),
-				'ORGANISATION'=>lorem_phrase(),
-				'VERSION'=>placeholder_number(),
-				'HACKED_BY'=>lorem_word_2(),
-				'HACK_VERSION'=>placeholder_number(),
-				'ACTIONS'=>$actions,
-			)));
-		}
+            $tpl_modules->attach(do_lorem_template('MODULE_SCREEN_MODULE',array(
+                'STATUS' => $status,
+                'NAME' => $module,
+                'AUTHOR' => lorem_word(),
+                'ORGANISATION' => lorem_phrase(),
+                'VERSION' => placeholder_number(),
+                'HACKED_BY' => lorem_word_2(),
+                'HACK_VERSION' => placeholder_number(),
+                'ACTIONS' => $actions,
+            )));
+        }
 
-		return array(
-			lorem_globalise(do_lorem_template('MODULE_SCREEN',array(
-				'TITLE'=>lorem_title(),
-				'MODULES'=>$tpl_modules,
-			)),NULL,'',true)
-		);
-	}
+        return array(
+            lorem_globalise(do_lorem_template('MODULE_SCREEN',array(
+                'TITLE' => lorem_title(),
+                'MODULES' => $tpl_modules,
+            )),null,'',true)
+        );
+    }
 }

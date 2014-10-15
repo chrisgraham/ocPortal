@@ -23,52 +23,52 @@
  */
 class Module_invoices
 {
-	/**
+    /**
 	 * Find details of the module.
 	 *
 	 * @return ?array	Map of module info (NULL: module is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Uninstall the module.
 	 */
-	function uninstall()
-	{
-		$GLOBALS['SITE_DB']->drop_table_if_exists('invoices');
-	}
+    public function uninstall()
+    {
+        $GLOBALS['SITE_DB']->drop_table_if_exists('invoices');
+    }
 
-	/**
+    /**
 	 * Install the module.
 	 *
 	 * @param  ?integer	What version we're upgrading from (NULL: new install)
 	 * @param  ?integer	What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
 	 */
-	function install($upgrade_from=NULL,$upgrade_from_hack=NULL)
-	{
-		$GLOBALS['SITE_DB']->create_table('invoices',array(
-			'id'=>'*AUTO', // linked to IPN with this
-			'i_type_code'=>'ID_TEXT',
-			'i_member_id'=>'MEMBER',
-			'i_state'=>'ID_TEXT', // new|pending|paid|delivered (pending means payment has been requested)
-			'i_amount'=>'SHORT_TEXT', // can't always find this from i_type_code
-			'i_special'=>'SHORT_TEXT', // depending on i_type_code, would trigger something special such as a key upgrade
-			'i_time'=>'TIME',
-			'i_note'=>'LONG_TEXT'
-		));
-	}
+    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    {
+        $GLOBALS['SITE_DB']->create_table('invoices',array(
+            'id' => '*AUTO', // linked to IPN with this
+            'i_type_code' => 'ID_TEXT',
+            'i_member_id' => 'MEMBER',
+            'i_state' => 'ID_TEXT', // new|pending|paid|delivered (pending means payment has been requested)
+            'i_amount' => 'SHORT_TEXT', // can't always find this from i_type_code
+            'i_special' => 'SHORT_TEXT', // depending on i_type_code, would trigger something special such as a key upgrade
+            'i_time' => 'TIME',
+            'i_note' => 'LONG_TEXT'
+        ));
+    }
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -77,144 +77,151 @@ class Module_invoices
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		if ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id'=>get_member()))>0))
-		{
-			return array(
-				'misc'=>array('MY_INVOICES','menu/adminzone/audit/ecommerce/invoices'),
-			);
-		}
-		return array();
-	}
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        if ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id' => get_member()))>0)) {
+            return array(
+                'misc' => array('MY_INVOICES','menu/adminzone/audit/ecommerce/invoices'),
+            );
+        }
+        return array();
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run()
-	{
-		$type=get_param('type','misc');
+    public function pre_run()
+    {
+        $type = get_param('type','misc');
 
-		require_lang('ecommerce');
+        require_lang('ecommerce');
 
-		if ($type=='misc')
-		{
-			$this->title=get_screen_title('MY_INVOICES');
-		}
+        if ($type == 'misc') {
+            $this->title = get_screen_title('MY_INVOICES');
+        }
 
-		if ($type=='pay')
-		{
-			$this->title=get_screen_title('MAKE_PAYMENT');
-		}
+        if ($type == 'pay') {
+            $this->title = get_screen_title('MAKE_PAYMENT');
+        }
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Execute the module.
 	 *
 	 * @return tempcode	The result of execution.
 	 */
-	function run()
-	{
-		require_code('ecommerce');
-		require_css('ecommerce');
+    public function run()
+    {
+        require_code('ecommerce');
+        require_css('ecommerce');
 
-		// Kill switch
-		if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(),'access_ecommerce_in_test_mode'))) warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
+        // Kill switch
+        if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(),'access_ecommerce_in_test_mode'))) {
+            warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
+        }
 
-		if (is_guest()) access_denied('NOT_AS_GUEST');
+        if (is_guest()) {
+            access_denied('NOT_AS_GUEST');
+        }
 
-		$type=get_param('type','misc');
+        $type = get_param('type','misc');
 
-		if ($type=='misc') return $this->my();
-		if ($type=='pay') return $this->pay();
-		return new ocp_tempcode();
-	}
+        if ($type == 'misc') {
+            return $this->my();
+        }
+        if ($type == 'pay') {
+            return $this->pay();
+        }
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * Show my invoices.
 	 *
 	 * @return tempcode	The interface.
 	 */
-	function my()
-	{
-		$member_id=get_member();
-		if (has_privilege(get_member(),'assume_any_member')) $member_id=get_param_integer('id',$member_id);
+    public function my()
+    {
+        $member_id = get_member();
+        if (has_privilege(get_member(),'assume_any_member')) {
+            $member_id = get_param_integer('id',$member_id);
+        }
 
-		$invoices=array();
-		$rows=$GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('i_member_id'=>$member_id));
-		foreach ($rows as $row)
-		{
-			$type_code=$row['i_type_code'];
-			$object=find_product($type_code);
-			if (is_null($object)) continue;
-			$products=$object->get_products(false,$type_code);
+        $invoices = array();
+        $rows = $GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('i_member_id' => $member_id));
+        foreach ($rows as $row) {
+            $type_code = $row['i_type_code'];
+            $object = find_product($type_code);
+            if (is_null($object)) {
+                continue;
+            }
+            $products = $object->get_products(false,$type_code);
 
-			$invoice_title=$products[$type_code][4];
-			$time=get_timezoned_date($row['i_time'],true,false,false,true);
-			$payable=($row['i_state']=='new');
-			$deliverable=($row['i_state']=='paid');
-			$state=do_lang('PAYMENT_STATE_'.$row['i_state']);
-			if (perform_local_payment())
-			{
-				$transaction_button=hyperlink(build_url(array('page'=>'_SELF','type'=>'pay','id'=>$row['id']),'_SELF'),do_lang_tempcode('MAKE_PAYMENT'));
-			} else
-			{
-				$transaction_button=make_transaction_button(substr(get_class($object),5),$invoice_title,strval($row['id']),floatval($row['i_amount']),get_option('currency'));
-			}
-			$invoices[]=array(
-				'TRANSACTION_BUTTON'=>$transaction_button,
-				'INVOICE_TITLE'=>$invoice_title,
-				'INVOICE_ID'=>strval($row['id']),
-				'AMOUNT'=>$row['i_amount'],
-				'TIME'=>$time,
-				'STATE'=>$state,
-				'DELIVERABLE'=>$deliverable,
-				'PAYABLE'=>$payable,
-				'NOTE'=>$row['i_note'],
-				'TYPE_CODE'=>$row['i_type_code'],
-			);
-		}
-		if (count($invoices)==0) inform_exit(do_lang_tempcode('NO_ENTRIES'));
+            $invoice_title = $products[$type_code][4];
+            $time = get_timezoned_date($row['i_time'],true,false,false,true);
+            $payable = ($row['i_state'] == 'new');
+            $deliverable = ($row['i_state'] == 'paid');
+            $state = do_lang('PAYMENT_STATE_' . $row['i_state']);
+            if (perform_local_payment()) {
+                $transaction_button = hyperlink(build_url(array('page' => '_SELF','type' => 'pay','id' => $row['id']),'_SELF'),do_lang_tempcode('MAKE_PAYMENT'));
+            } else {
+                $transaction_button = make_transaction_button(substr(get_class($object),5),$invoice_title,strval($row['id']),floatval($row['i_amount']),get_option('currency'));
+            }
+            $invoices[] = array(
+                'TRANSACTION_BUTTON' => $transaction_button,
+                'INVOICE_TITLE' => $invoice_title,
+                'INVOICE_ID' => strval($row['id']),
+                'AMOUNT' => $row['i_amount'],
+                'TIME' => $time,
+                'STATE' => $state,
+                'DELIVERABLE' => $deliverable,
+                'PAYABLE' => $payable,
+                'NOTE' => $row['i_note'],
+                'TYPE_CODE' => $row['i_type_code'],
+            );
+        }
+        if (count($invoices) == 0) {
+            inform_exit(do_lang_tempcode('NO_ENTRIES'));
+        }
 
-		return do_template('ECOM_INVOICES_SCREEN',array('_GUID'=>'144a893d93090c105eecc48fa58921a7','TITLE'=>$this->title,'CURRENCY'=>get_option('currency'),'INVOICES'=>$invoices));
-	}
+        return do_template('ECOM_INVOICES_SCREEN',array('_GUID' => '144a893d93090c105eecc48fa58921a7','TITLE' => $this->title,'CURRENCY' => get_option('currency'),'INVOICES' => $invoices));
+    }
 
-	/**
+    /**
 	 * Show my invoices.
 	 *
 	 * @return tempcode	The interface.
 	 */
-	function pay()
-	{
-		$id=get_param_integer('id');
+    public function pay()
+    {
+        $id = get_param_integer('id');
 
-		if (((ocp_srv('HTTPS')=='') || (ocp_srv('HTTPS')=='off')) && (!ecommerce_test_mode()))
-		{
-			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
-		}
+        if (((ocp_srv('HTTPS') == '') || (ocp_srv('HTTPS') == 'off')) && (!ecommerce_test_mode())) {
+            warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
+        }
 
-		$post_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
+        $post_url = build_url(array('page' => 'purchase','type' => 'finish'),get_module_zone('purchase'));
 
-		$rows=$GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('id'=>$id),'',1);
-		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$row=$rows[0];
-		$type_code=$row['i_type_code'];
-		$object=find_product($type_code);
-		$products=$object->get_products(false,$type_code);
-		$invoice_title=$products[$type_code][4];
+        $rows = $GLOBALS['SITE_DB']->query_select('invoices',array('*'),array('id' => $id),'',1);
+        if (!array_key_exists(0,$rows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $row = $rows[0];
+        $type_code = $row['i_type_code'];
+        $object = find_product($type_code);
+        $products = $object->get_products(false,$type_code);
+        $invoice_title = $products[$type_code][4];
 
-		list($fields,$hidden)=get_transaction_form_fields(NULL,strval($id),$invoice_title,float_to_raw_string($row['i_amount']),NULL,'');
+        list($fields,$hidden) = get_transaction_form_fields(null,strval($id),$invoice_title,float_to_raw_string($row['i_amount']),null,'');
 
-		$text=do_lang_tempcode('TRANSACT_INFO');
+        $text = do_lang_tempcode('TRANSACT_INFO');
 
-		return do_template('FORM_SCREEN',array('_GUID'=>'e90a4019b37c8bf5bcb64086416bcfb3','TITLE'=>$this->title,'SKIP_VALIDATION'=>'1','FIELDS'=>$fields,'URL'=>$post_url,'TEXT'=>$text,'HIDDEN'=>$hidden,'SUBMIT_ICON'=>'menu__rich_content__ecommerce__purchase','SUBMIT_NAME'=>do_lang_tempcode('MAKE_PAYMENT')));
-	}
+        return do_template('FORM_SCREEN',array('_GUID' => 'e90a4019b37c8bf5bcb64086416bcfb3','TITLE' => $this->title,'SKIP_VALIDATION' => '1','FIELDS' => $fields,'URL' => $post_url,'TEXT' => $text,'HIDDEN' => $hidden,'SUBMIT_ICON' => 'menu__rich_content__ecommerce__purchase','SUBMIT_NAME' => do_lang_tempcode('MAKE_PAYMENT')));
+    }
 }
-
-

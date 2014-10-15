@@ -20,36 +20,34 @@
 
 class Hook_config_ldap_bind_password
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'PASSWORD',
-			'type'=>'line',
-			'category'=>'USERS',
-			'group'=>'LDAP',
-			'explanation'=>'CONFIG_OPTION_ldap_bind_password',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
-			'order_in_category_group'=>3,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'PASSWORD',
+            'type' => 'line',
+            'category' => 'USERS',
+            'group' => 'LDAP',
+            'explanation' => 'CONFIG_OPTION_ldap_bind_password',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
+            'order_in_category_group' => 3,
 
-			'addon'=>'ldap',
-		);
-	}
+            'addon' => 'ldap',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

@@ -27,74 +27,68 @@
  * @param  ?ID_TEXT		The username of the member who is being viewed (NULL: work out from member_id_of)
  * @return tempcode		The rendered profile
  */
-function render_profile_tabset($title,$member_id_of,$member_id_viewing=NULL,$username=NULL)
+function render_profile_tabset($title,$member_id_of,$member_id_viewing = null,$username = null)
 {
-	if (is_null($member_id_viewing)) $member_id_viewing=get_member();
+    if (is_null($member_id_viewing)) {
+        $member_id_viewing = get_member();
+    }
 
-	if (is_null($username))
-	{
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-		if ((is_null($username)) || (is_guest($member_id_of))) warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
-	}
+    if (is_null($username)) {
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
+        if ((is_null($username)) || (is_guest($member_id_of))) {
+            warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
+        }
+    }
 
-	$tabs=array();
+    $tabs = array();
 
-	$only_tab=get_param('only_tab',NULL);
+    $only_tab = get_param('only_tab',null);
 
-	$hooks=find_all_hooks('systems','profiles_tabs');
-	if (isset($hooks['edit'])) // Editing must go first, so changes reflect in the renders of the tabs
-	{
-		$hooks=array('edit'=>$hooks['edit'])+$hooks;
-	}
-	foreach (array_keys($hooks) as $hook)
-	{
-		if (($only_tab===NULL) || (preg_match('#(^|,)'.preg_quote($hook,'#').'(,|$)#',$only_tab)!=0))
-		{
-			require_code('hooks/systems/profiles_tabs/'.$hook);
-			$ob=object_factory('Hook_Profiles_Tabs_'.$hook);
-			if ($ob->is_active($member_id_of,$member_id_viewing))
-			{
-				$tabs[$hook]=$ob->render_tab($member_id_of,$member_id_viewing,(preg_match('#(^|,)'.preg_quote($hook,'#').'(,|$)#',$only_tab)==0) && !browser_matches('ie6') && !browser_matches('ie7') && has_js());
-			}
-		}
-	}
+    $hooks = find_all_hooks('systems','profiles_tabs');
+    if (isset($hooks['edit'])) { // Editing must go first, so changes reflect in the renders of the tabs
+        $hooks = array('edit' => $hooks['edit'])+$hooks;
+    }
+    foreach (array_keys($hooks) as $hook) {
+        if (($only_tab === NULL) || (preg_match('#(^|,)' . preg_quote($hook,'#') . '(,|$)#',$only_tab) != 0)) {
+            require_code('hooks/systems/profiles_tabs/' . $hook);
+            $ob = object_factory('Hook_Profiles_Tabs_' . $hook);
+            if ($ob->is_active($member_id_of,$member_id_viewing)) {
+                $tabs[$hook] = $ob->render_tab($member_id_of,$member_id_viewing,(preg_match('#(^|,)' . preg_quote($hook,'#') . '(,|$)#',$only_tab) == 0) && !browser_matches('ie6') && !browser_matches('ie7') && has_js());
+            }
+        }
+    }
 
-	if (!is_null($only_tab))
-	{
-		$_unsorted=$tabs;
-		$tabs=array();
-		foreach (explode(',',$only_tab) as $tab)
-		{
-			if (isset($_unsorted[$tab]))
-				$tabs[$tab]=$_unsorted[$tab];
-		}
-	} else
-	{
-		sort_maps_by($tabs,2);
-	}
+    if (!is_null($only_tab)) {
+        $_unsorted = $tabs;
+        $tabs = array();
+        foreach (explode(',',$only_tab) as $tab) {
+            if (isset($_unsorted[$tab])) {
+                $tabs[$tab] = $_unsorted[$tab];
+            }
+        }
+    } else {
+        sort_maps_by($tabs,2);
+    }
 
-	require_javascript('javascript_profile');
-	require_javascript('javascript_ajax');
+    require_javascript('javascript_profile');
+    require_javascript('javascript_ajax');
 
-	load_up_all_self_page_permissions($member_id_viewing);
+    load_up_all_self_page_permissions($member_id_viewing);
 
-	$_tabs=array();
-	$i=0;
-	foreach ($tabs as $hook=>$tab)
-	{
-		if ($only_tab===$hook)
-		{
-			$title=get_screen_title($tab[0],false);
-		}
+    $_tabs = array();
+    $i = 0;
+    foreach ($tabs as $hook => $tab) {
+        if ($only_tab === $hook) {
+            $title = get_screen_title($tab[0],false);
+        }
 
-		if ($tab[1]!==NULL)
-		{
-			//$tab[1]->handle_symbol_preprocessing();
-			$tab[1]=$tab[1]->evaluate(); // So that SETs run early, thus things can be moved outside tabs
-		}
-		$_tabs[]=array('TAB_TITLE'=>$tab[0],'TAB_CODE'=>$hook,'TAB_ICON'=>$tab[3],'TAB_CONTENT'=>$tab[1],'TAB_FIRST'=>$i==0,'TAB_LAST'=>!array_key_exists($i+1,$tabs));
-		$i++;
-	}
+        if ($tab[1] !== NULL) {
+            //$tab[1]->handle_symbol_preprocessing();
+            $tab[1] = $tab[1]->evaluate(); // So that SETs run early, thus things can be moved outside tabs
+        }
+        $_tabs[] = array('TAB_TITLE' => $tab[0],'TAB_CODE' => $hook,'TAB_ICON' => $tab[3],'TAB_CONTENT' => $tab[1],'TAB_FIRST' => $i == 0,'TAB_LAST' => !array_key_exists($i+1,$tabs));
+        $i++;
+    }
 
-	return do_template('OCF_MEMBER_PROFILE_SCREEN',array('_GUID'=>'2f33348714723492105c4717974c8f4c','TITLE'=>$title,'TABS'=>$_tabs,'MEMBER_ID'=>strval($member_id_of)));
+    return do_template('OCF_MEMBER_PROFILE_SCREEN',array('_GUID' => '2f33348714723492105c4717974c8f4c','TITLE' => $title,'TABS' => $_tabs,'MEMBER_ID' => strval($member_id_of)));
 }

@@ -20,35 +20,33 @@
 
 class Hook_config_points_COMCODE_PAGE_ADD
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'COMCODE_PAGE_ADD',
-			'type'=>'integer',
-			'category'=>'POINTS',
-			'group'=>'COUNT_POINTS_GIVEN',
-			'explanation'=>'CONFIG_OPTION_points_COMCODE_PAGE_ADD',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'COMCODE_PAGE_ADD',
+            'type' => 'integer',
+            'category' => 'POINTS',
+            'group' => 'COUNT_POINTS_GIVEN',
+            'explanation' => 'CONFIG_OPTION_points_COMCODE_PAGE_ADD',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_comcode_pages',
-		);
-	}
+            'addon' => 'core_comcode_pages',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return addon_installed('points')?'10':NULL;
-	}
+    public function get_default()
+    {
+        return addon_installed('points')?'10':null;
+    }
 }
-
-

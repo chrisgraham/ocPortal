@@ -20,7 +20,7 @@
 
 class Hook_rss_tickets
 {
-	/**
+    /**
 	 * Run function for RSS hooks.
 	 *
 	 * @param  string			A list of categories we accept from
@@ -31,71 +31,79 @@ class Hook_rss_tickets
 	 * @param  integer		The maximum number of entries to return, ordering by date
 	 * @return ?array			A pair: The main syndication section, and a title (NULL: error)
 	 */
-	function run($_filters,$cutoff,$prefix,$date_string,$max)
-	{
-		if (!addon_installed('tickets')) return NULL;
+    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    {
+        if (!addon_installed('tickets')) {
+            return NULL;
+        }
 
-		if (!has_actual_page_access(get_member(),'tickets')) return NULL;
+        if (!has_actual_page_access(get_member(),'tickets')) {
+            return NULL;
+        }
 
-		if (is_guest()) return NULL;
+        if (is_guest()) {
+            return NULL;
+        }
 
-		require_code('tickets');
-		require_code('tickets2');
+        require_code('tickets');
+        require_code('tickets2');
 
-		$ticket_types=ocfilter_to_idlist_using_callback($_filters,'',NULL,NULL,NULL,NULL,false);
-		if (count($ticket_types)!=0)
-		{
-			$rows=array();
-			foreach ($ticket_types as $ticket_type_id)
-			{
-				if (!has_category_access(get_member(),'tickets',strval($ticket_type_id))) continue;
-				$rows=array_merge($rows,get_tickets(get_member(),$ticket_type_id));
-			}
-		}
-		else $rows=get_tickets(get_member());
+        $ticket_types = ocfilter_to_idlist_using_callback($_filters,'',null,null,null,null,false);
+        if (count($ticket_types) != 0) {
+            $rows = array();
+            foreach ($ticket_types as $ticket_type_id) {
+                if (!has_category_access(get_member(),'tickets',strval($ticket_type_id))) {
+                    continue;
+                }
+                $rows = array_merge($rows,get_tickets(get_member(),$ticket_type_id));
+            }
+        } else {
+            $rows = get_tickets(get_member());
+        }
 
-		require_code('feedback');
+        require_code('feedback');
 
-		$ticket_type_rows=collapse_2d_complexity('id','ticket_type_name',$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name')));
+        $ticket_type_rows = collapse_2d_complexity('id','ticket_type_name',$GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name')));
 
-		$content=new ocp_tempcode();
-		foreach ($rows as $i=>$row)
-		{
-			if ($i==$max) break;
+        $content = new ocp_tempcode();
+        foreach ($rows as $i => $row) {
+            if ($i == $max) {
+                break;
+            }
 
-			if ($row['lasttime']<$cutoff) continue;
+            if ($row['lasttime']<$cutoff) {
+                continue;
+            }
 
-			$ticket_id=extract_topic_identifier($row['description']);
-			$ticket_type_id=$GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id'=>$ticket_id));
+            $ticket_id = extract_topic_identifier($row['description']);
+            $ticket_type_id = $GLOBALS['SITE_DB']->query_select_value_if_there('tickets','ticket_type',array('ticket_id' => $ticket_id));
 
-			$author=$row['firstusername'];
-			$date=date($date_string,$row['firsttime']);
-			$edit_date=date($date_string,$row['lasttime']);
+            $author = $row['firstusername'];
+            $date = date($date_string,$row['firsttime']);
+            $edit_date = date($date_string,$row['lasttime']);
 
-			$title=xmlentities($row['firsttitle']);
-			$summary=xmlentities($row['firstpost']->evaluate());
+            $title = xmlentities($row['firsttitle']);
+            $summary = xmlentities($row['firstpost']->evaluate());
 
-			$category='';
-			$category_raw='';
-			if ((!is_null($ticket_type_id)) && (isset($ticket_type_rows[$ticket_type_id])))
-			{
-				$category=get_translated_text($ticket_type_rows[$ticket_type_id]);
-				$category_raw=strval($ticket_type_id);
-			}
+            $category = '';
+            $category_raw = '';
+            if ((!is_null($ticket_type_id)) && (isset($ticket_type_rows[$ticket_type_id]))) {
+                $category = get_translated_text($ticket_type_rows[$ticket_type_id]);
+                $category_raw = strval($ticket_type_id);
+            }
 
-			$view_url=build_url(array('page'=>'tickets','type'=>'ticket','id'=>$ticket_id),get_module_zone('tickets'),NULL,false,false,true);
+            $view_url = build_url(array('page' => 'tickets','type' => 'ticket','id' => $ticket_id),get_module_zone('tickets'),null,false,false,true);
 
-			if (($prefix=='RSS_') && (get_option('is_on_comments')=='1'))
-			{
-				$if_comments=do_template('RSS_ENTRY_COMMENTS',array('_GUID'=>'32c536b95de70994d0a13cfed18aa6ec','COMMENT_URL'=>$view_url,'ID'=>strval($ticket_id)));
-			} else $if_comments=new ocp_tempcode();
+            if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1')) {
+                $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => '32c536b95de70994d0a13cfed18aa6ec','COMMENT_URL' => $view_url,'ID' => strval($ticket_id)));
+            } else {
+                $if_comments = new ocp_tempcode();
+            }
 
-			$content->attach(do_template($prefix.'ENTRY',array('VIEW_URL'=>$view_url,'SUMMARY'=>$summary,'EDIT_DATE'=>$edit_date,'IF_COMMENTS'=>$if_comments,'TITLE'=>$title,'CATEGORY_RAW'=>$category_raw,'CATEGORY'=>$category,'AUTHOR'=>$author,'ID'=>$ticket_id,'NEWS'=>'','DATE'=>$date)));
-		}
+            $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $ticket_id,'NEWS' => '','DATE' => $date)));
+        }
 
-		require_lang('tickets');
-		return array($content,do_lang('SUPPORT_TICKETS'));
-	}
+        require_lang('tickets');
+        return array($content,do_lang('SUPPORT_TICKETS'));
+    }
 }
-
-

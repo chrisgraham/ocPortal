@@ -15,17 +15,15 @@
 
 class Hook_admin_import_types_community_billboard
 {
-	/**
+    /**
 	 * Get a map of valid import types.
 	 *
 	 * @return array		A map from codename to the language string that names them to the user.
 	 */
-	function run()
-	{
-		return array(
-			'community_billboard'=>'COMMUNITY_BILLBOARD_ARCHIVE',
-		);
-	}
+    public function run()
+    {
+        return array(
+            'community_billboard' => 'COMMUNITY_BILLBOARD_ARCHIVE',
+        );
+    }
 }
-
-

@@ -20,36 +20,34 @@
 
 class Hook_config_minimum_password_strength
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MINIMUM_PASSWORD_STRENGTH',
-			'type'=>'list',
-			'category'=>'SECURITY',
-			'group'=>'USERNAMES_AND_PASSWORDS',
-			'explanation'=>'CONFIG_OPTION_minimum_password_strength',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'1|2|3|4|5|6|7|8|9|10',
-			'order_in_category_group'=>3,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MINIMUM_PASSWORD_STRENGTH',
+            'type' => 'list',
+            'category' => 'SECURITY',
+            'group' => 'USERNAMES_AND_PASSWORDS',
+            'explanation' => 'CONFIG_OPTION_minimum_password_strength',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '1|2|3|4|5|6|7|8|9|10',
+            'order_in_category_group' => 3,
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return (get_forum_type()!='ocf')?NULL:'1';
-	}
+    public function get_default()
+    {
+        return (get_forum_type() != 'ocf')?null:'1';
+    }
 }
-
-

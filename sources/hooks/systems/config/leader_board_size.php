@@ -20,36 +20,34 @@
 
 class Hook_config_leader_board_size
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'LEADER_BOARD_SIZE',
-			'type'=>'integer',
-			'category'=>'POINTS',
-			'group'=>'POINT_LEADER_BOARD',
-			'explanation'=>'CONFIG_OPTION_leader_board_size',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'LEADER_BOARD_SIZE',
+            'type' => 'integer',
+            'category' => 'POINTS',
+            'group' => 'POINT_LEADER_BOARD',
+            'explanation' => 'CONFIG_OPTION_leader_board_size',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'points',
-		);
-	}
+            'addon' => 'points',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '5';
-	}
+    public function get_default()
+    {
+        return '5';
+    }
 }
-
-

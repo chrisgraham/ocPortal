@@ -5,30 +5,30 @@
 i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
 require_code('nested_csv');
-$csv_structure=get_nested_csv_structure();
+$csv_structure = get_nested_csv_structure();
 
 // Sanitisation to protect any data not destined to be available in the form
-$csv_headings_used=array();
-foreach ($csv_structure['cpf_fields'] as $csv_field)
-{
-	$csv_headings_used[$csv_field['csv_heading']]=1;
-	$csv_headings_used[$csv_field['csv_parent_heading']]=1;
+$csv_headings_used = array();
+foreach ($csv_structure['cpf_fields'] as $csv_field) {
+    $csv_headings_used[$csv_field['csv_heading']] = 1;
+    $csv_headings_used[$csv_field['csv_parent_heading']] = 1;
 }
-foreach ($csv_structure['csv_files'] as $csv_filename=>$csv_file)
-{
-	foreach ($csv_file['data'] as $i=>$row)
-	{
-		foreach (array_keys($row) as $csv_heading)
-		{
-			if ($csv_heading=='deprecated') continue;
-			if (!isset($csv_headings_used[$csv_heading])) unset($csv_structure['csv_files'][$csv_filename]['data'][$i][$csv_heading]);
-		}
-	}
+foreach ($csv_structure['csv_files'] as $csv_filename => $csv_file) {
+    foreach ($csv_file['data'] as $i => $row) {
+        foreach (array_keys($row) as $csv_heading) {
+            if ($csv_heading == 'deprecated') {
+                continue;
+            }
+            if (!isset($csv_headings_used[$csv_heading])) {
+                unset($csv_structure['csv_files'][$csv_filename]['data'][$i][$csv_heading]);
+            }
+        }
+    }
 }
 
 // Output JavaScript
 echo "
-	window.nested_csv_structure=".json_encode($csv_structure).";
+	window.nested_csv_structure=" . json_encode($csv_structure) . ";
 
 	add_event_listener_abstract(window,'load',function() {
 		var forms=document.getElementsByTagName('form');
@@ -99,7 +99,7 @@ echo "
 			{
 				option=document.createElement('option');
 				element.add(option,null);
-				set_inner_html(option,'".addslashes(do_lang('SELECT_OTHER_FIRST','xxx'))."'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label));
+				set_inner_html(option,'" . addslashes(do_lang('SELECT_OTHER_FIRST','xxx')) . "'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label));
 				option.value='';
 			} else // Parent is set, so we need to filter possibilities
 			{
@@ -147,7 +147,7 @@ echo "
 				{
 					option=document.createElement('option');
 					element.add(option,null);
-					set_inner_html(option,'".addslashes(do_lang('PLEASE_SELECT'))."');
+					set_inner_html(option,'" . addslashes(do_lang('PLEASE_SELECT')) . "');
 					option.value='';
 				}
 				var previous_one=null;

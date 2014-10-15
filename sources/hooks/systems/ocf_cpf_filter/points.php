@@ -20,15 +20,13 @@
 
 class Hook_ocf_cpf_filter_points
 {
-	/**
+    /**
 	 * Find which special CPFs to enable.
 	 *
 	 * @return array			A list of CPFs to enable
 	 */
-	function to_enable()
-	{
-		return array('points_used'=>1,'gift_points_used'=>1,'points_gained_given'=>1,'points_gained_rating'=>1,'points_gained_voting'=>1);
-	}
+    public function to_enable()
+    {
+        return array('points_used' => 1,'gift_points_used' => 1,'points_gained_given' => 1,'points_gained_rating' => 1,'points_gained_voting' => 1);
+    }
 }
-
-

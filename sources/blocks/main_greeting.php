@@ -20,77 +20,73 @@
 
 class Block_main_greeting
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array();
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array();
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='is_guest()?NULL:array(get_member())';
-		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'is_guest()?NULL:array(get_member())';
+        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		$forum=get_forum_type();
+    public function run($map)
+    {
+        $forum = get_forum_type();
 
-		$out=new ocp_tempcode();
+        $out = new ocp_tempcode();
 
-		if ($forum!='none')
-		{
-			// Standard welcome back vs into greeting
-			$member=get_member();
-			if (is_guest($member))
-			{
-				$redirect=get_self_url(true,true);
-				$login_url=build_url(array('page'=>'login','type'=>'misc','redirect'=>$redirect),get_module_zone('login'));
-				$join_url=$GLOBALS['FORUM_DRIVER']->join_url();
-				$join_bits=do_template('JOIN_OR_LOGIN',array('_GUID'=>'8ced2271aa280a03ba9e03a84bc1dabf','LOGIN_URL'=>$login_url,'JOIN_URL'=>$join_url));
+        if ($forum != 'none') {
+            // Standard welcome back vs into greeting
+            $member = get_member();
+            if (is_guest($member)) {
+                $redirect = get_self_url(true,true);
+                $login_url = build_url(array('page' => 'login','type' => 'misc','redirect' => $redirect),get_module_zone('login'));
+                $join_url = $GLOBALS['FORUM_DRIVER']->join_url();
+                $join_bits = do_template('JOIN_OR_LOGIN',array('_GUID' => '8ced2271aa280a03ba9e03a84bc1dabf','LOGIN_URL' => $login_url,'JOIN_URL' => $join_url));
 
-				$p=do_lang_tempcode('WELCOME',$join_bits);
-				$out->attach(paragraph($p,'hhrt4dsgdsgd'));
-			} else
-			{
-				$out->attach(paragraph(do_lang_tempcode('WELCOME_BACK',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member,true)),escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),'gfgdf9gjd'));
-			}
-		}
+                $p = do_lang_tempcode('WELCOME',$join_bits);
+                $out->attach(paragraph($p,'hhrt4dsgdsgd'));
+            } else {
+                $out->attach(paragraph(do_lang_tempcode('WELCOME_BACK',escape_html($GLOBALS['FORUM_DRIVER']->get_username($member,true)),escape_html($GLOBALS['FORUM_DRIVER']->get_username($member))),'gfgdf9gjd'));
+            }
+        }
 
-		$message=get_option('welcome_message');
-		if (has_actual_page_access(get_member(),'admin_config'))
-		{
-			if ($message!='') $message.=' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SITE#group_GENERAL}">'.do_lang('EDIT').'</a></span>[/semihtml]';
-		}
-		$out->attach(comcode_to_tempcode($message,NULL,true));
+        $message = get_option('welcome_message');
+        if (has_actual_page_access(get_member(),'admin_config')) {
+            if ($message != '') {
+                $message .= ' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SITE#group_GENERAL}">' . do_lang('EDIT') . '</a></span>[/semihtml]';
+            }
+        }
+        $out->attach(comcode_to_tempcode($message,null,true));
 
-		return $out;
-	}
+        return $out;
+    }
 }
-
-

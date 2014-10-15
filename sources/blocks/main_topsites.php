@@ -20,84 +20,84 @@
 
 class Block_main_topsites
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('param');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('param');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
-		$info['ttl']=(get_value('no_block_timeout')==='1')?60*60*24*365*5/*5 year timeout*/:60*24;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\')';
+        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*24;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (!array_key_exists('param',$map)) $map['param']='';
+    public function run($map)
+    {
+        if (!array_key_exists('param',$map)) {
+            $map['param'] = '';
+        }
 
-		require_code('banners');
-		require_lang('banners');
+        require_code('banners');
+        require_lang('banners');
 
-		$b_type=$map['param'];
-		$myquery='SELECT * FROM '.get_table_prefix().'banners WHERE validated=1 AND '.db_string_equal_to('b_type',$b_type).' AND (expiry_date IS NULL OR expiry_date>'.strval(time()).') ORDER BY hits_from+hits_to DESC';
-		$_banners=$GLOBALS['SITE_DB']->query($myquery,200);
-		$assemble=new ocp_tempcode();
+        $b_type = $map['param'];
+        $myquery = 'SELECT * FROM ' . get_table_prefix() . 'banners WHERE validated=1 AND ' . db_string_equal_to('b_type',$b_type) . ' AND (expiry_date IS NULL OR expiry_date>' . strval(time()) . ') ORDER BY hits_from+hits_to DESC';
+        $_banners = $GLOBALS['SITE_DB']->query($myquery,200);
+        $assemble = new ocp_tempcode();
 
-		$banners=array();
+        $banners = array();
 
-		foreach ($_banners as $banner)
-		{
-			$description=get_translated_tempcode('banners',$banner,'caption');
+        foreach ($_banners as $banner) {
+            $description = get_translated_tempcode('banners',$banner,'caption');
 
-			$bd=show_banner($banner['name'],$banner['b_title_text'],$description,$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
+            $bd = show_banner($banner['name'],$banner['b_title_text'],$description,$banner['b_direct_code'],$banner['img_url'],'',$banner['site_url'],$banner['b_type'],$banner['submitter']);
 
-			$banners[]=array(
-				'BANNER'=>$bd,
-				'NAME'=>$banner['name'],
-				'URL'=>$banner['site_url'],
-				'DESCRIPTION'=>$description,
-				'HITSFROM'=>strval($banner['hits_from']),
-				'HITSTO'=>strval($banner['hits_to']),
-				'VIEWSFROM'=>strval($banner['views_from']),
-				'VIEWSTO'=>strval($banner['views_to']),
-				'ADDDATE'=>strval($banner['add_date']),
-				'SUBMITTER'=>strval($banner['submitter']),
-			);
-		}
+            $banners[] = array(
+                'BANNER' => $bd,
+                'NAME' => $banner['name'],
+                'URL' => $banner['site_url'],
+                'DESCRIPTION' => $description,
+                'HITSFROM' => strval($banner['hits_from']),
+                'HITSTO' => strval($banner['hits_to']),
+                'VIEWSFROM' => strval($banner['views_from']),
+                'VIEWSTO' => strval($banner['views_to']),
+                'ADDDATE' => strval($banner['add_date']),
+                'SUBMITTER' => strval($banner['submitter']),
+            );
+        }
 
-		if ((has_actual_page_access(NULL,'cms_banners',NULL,NULL)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_banners')))
-		{
-			$submit_url=build_url(array('page'=>'cms_banners','type'=>'ad','redirect'=>SELF_REDIRECT),get_module_zone('cms_banners'));
-		} else $submit_url=new ocp_tempcode();
+        if ((has_actual_page_access(null,'cms_banners',null,null)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_banners'))) {
+            $submit_url = build_url(array('page' => 'cms_banners','type' => 'ad','redirect' => SELF_REDIRECT),get_module_zone('cms_banners'));
+        } else {
+            $submit_url = new ocp_tempcode();
+        }
 
-		return do_template('BLOCK_MAIN_TOPSITES',array('_GUID'=>'776cecc3769b4f4e082be327da5b7248','TYPE'=>$map['param'],'BANNERS'=>$banners,'SUBMIT_URL'=>$submit_url));
-	}
+        return do_template('BLOCK_MAIN_TOPSITES',array('_GUID' => '776cecc3769b4f4e082be327da5b7248','TYPE' => $map['param'],'BANNERS' => $banners,'SUBMIT_URL' => $submit_url));
+    }
 }
-
-

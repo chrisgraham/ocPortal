@@ -20,107 +20,107 @@
 
 class Hook_addon_registry_linux_helper_scripts
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Bash shell scripts to help configure permissions on Linux/Unix servers.';
-	}
+    public function get_description()
+    {
+        return 'Bash shell scripts to help configure permissions on Linux/Unix servers.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_adv_installation',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_adv_installation',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources/hooks/systems/addon_registry/linux_helper_scripts.php',
+    public function get_file_list()
+    {
+        return array(
+            'sources/hooks/systems/addon_registry/linux_helper_scripts.php',
 
-			// The following are sh shell scripts
-			'decache.sh',
-			'fixperms.sh',
-			'themechanges.sh',
-			'recentchanges.sh',
-			'db_init.sh',
-			'db_export.sh',
-			'db_import.sh',
+            // The following are sh shell scripts
+            'decache.sh',
+            'fixperms.sh',
+            'themechanges.sh',
+            'recentchanges.sh',
+            'db_init.sh',
+            'db_export.sh',
+            'db_import.sh',
 
-			// The following are PHP scripts designed to be callable directly (not all bundled with the main ocPortal)
-			// sources/critical_errors.php (works to monitor for logged critical errors, and email them)
-			// data/occle.php (command line tunnel into OcCLE, VERY useful)
-			// _tests/codechecker/code_quality.php (Code Quality Checker)
-			// _tests/codechecker/phpdoc_parser.php (Code Quality Checker function signature parsing)
-			// data_custom/compile_in_includes.php (Compile ocPortal overrides against originals, for slight performance improvement)
+            // The following are PHP scripts designed to be callable directly (not all bundled with the main ocPortal)
+            // sources/critical_errors.php (works to monitor for logged critical errors, and email them)
+            // data/occle.php (command line tunnel into OcCLE, VERY useful)
+            // _tests/codechecker/code_quality.php (Code Quality Checker)
+            // _tests/codechecker/phpdoc_parser.php (Code Quality Checker function signature parsing)
+            // data_custom/compile_in_includes.php (Compile ocPortal overrides against originals, for slight performance improvement)
 
-			// Various tools are also built into the Admin Zone menus
+            // Various tools are also built into the Admin Zone menus
 
-			// Various tools are built into the upgrader
-			//  E.g. detecting alien files
-			//  E.g. detecting missing files
-			//  E.g. detecting corrupt files
-			//  E.g. clearing the caches (without having to run the full ocPortal)
-			//  E.g. detecting missing permissions
-			//  E.g. deleting files accidentally uploaded from non-installed addons
-		);
-	}
+            // Various tools are built into the upgrader
+            //  E.g. detecting alien files
+            //  E.g. detecting missing files
+            //  E.g. detecting corrupt files
+            //  E.g. clearing the caches (without having to run the full ocPortal)
+            //  E.g. detecting missing permissions
+            //  E.g. deleting files accidentally uploaded from non-installed addons
+        );
+    }
 }

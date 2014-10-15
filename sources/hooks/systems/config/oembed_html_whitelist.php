@@ -20,35 +20,33 @@
 
 class Hook_config_oembed_html_whitelist
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'OEMBED_HTML_WHITELIST',
-			'type'=>'text',
-			'category'=>'FEATURE',
-			'group'=>'MEDIA',
-			'explanation'=>'CONFIG_OPTION_oembed_html_whitelist',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'OEMBED_HTML_WHITELIST',
+            'type' => 'text',
+            'category' => 'FEATURE',
+            'group' => 'MEDIA',
+            'explanation' => 'CONFIG_OPTION_oembed_html_whitelist',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_rich_media',
-		);
-	}
+            'addon' => 'core_rich_media',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return "youtube.com\nyoutu.be\nvimeo.com\ndailymotion.com\nslideshare.net\nscribd.com\nsoundcloud.com\ntwitter.com\nembed.ly\nmaps.google.com\nmaps.google.co.uk\nimgur.com\nustream.tv\njustin.tv\napi.embed.ly\nnoembed.com";
-	}
+    public function get_default()
+    {
+        return "youtube.com\nyoutu.be\nvimeo.com\ndailymotion.com\nslideshare.net\nscribd.com\nsoundcloud.com\ntwitter.com\nembed.ly\nmaps.google.com\nmaps.google.co.uk\nimgur.com\nustream.tv\njustin.tv\napi.embed.ly\nnoembed.com";
+    }
 }
-
-

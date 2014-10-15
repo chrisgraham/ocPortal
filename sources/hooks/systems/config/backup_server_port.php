@@ -20,36 +20,34 @@
 
 class Hook_config_backup_server_port
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'BACKUP_SERVER_PORT',
-			'type'=>'integer',
-			'category'=>'FEATURE',
-			'group'=>'BACKUPS',
-			'explanation'=>'CONFIG_OPTION_backup_server_port',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>4,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'BACKUP_SERVER_PORT',
+            'type' => 'integer',
+            'category' => 'FEATURE',
+            'group' => 'BACKUPS',
+            'explanation' => 'CONFIG_OPTION_backup_server_port',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 4,
 
-			'addon'=>'backup',
-		);
-	}
+            'addon' => 'backup',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '21';
-	}
+    public function get_default()
+    {
+        return '21';
+    }
 }
-
-

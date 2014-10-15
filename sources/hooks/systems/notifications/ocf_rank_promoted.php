@@ -20,16 +20,16 @@
 
 class Hook_Notification_ocf_rank_promoted extends Hook_Notification
 {
-	/**
+    /**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *
 	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
 	 */
-	function list_handled_codes()
-	{
-		$list=array();
-		$list['ocf_promotion']=array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_rank_promoted'));
-		return $list;
-	}
+    public function list_handled_codes()
+    {
+        $list = array();
+        $list['ocf_promotion'] = array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_rank_promoted'));
+        return $list;
+    }
 }

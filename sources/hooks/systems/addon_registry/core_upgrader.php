@@ -20,88 +20,88 @@
 
 class Hook_addon_registry_core_upgrader
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'The upgrader code.';
-	}
+    public function get_description()
+    {
+        return 'The upgrader code.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_upgrade',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_upgrade',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array('core_installation_uninstallation'),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+            'previously_in_addon' => array('core_installation_uninstallation'),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/tools/upgrade.png',
-			'themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png',
-			'sources/hooks/systems/addon_registry/core_upgrader.php',
-			'upgrader.php',
-			'sources/upgrade.php',
-			'lang/EN/upgrade.ini',
-			'data/upgrader2.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/tools/upgrade.png',
+            'themes/default/images/icons/48x48/menu/adminzone/tools/upgrade.png',
+            'sources/hooks/systems/addon_registry/core_upgrader.php',
+            'upgrader.php',
+            'sources/upgrade.php',
+            'lang/EN/upgrade.ini',
+            'data/upgrader2.php',
+        );
+    }
 }

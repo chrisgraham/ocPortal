@@ -20,38 +20,38 @@
 
 class Hook_config_ticket_mail_on
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TICKET_MAIL_ON',
-			'type'=>'tick',
-			'category'=>'FEATURE',
-			'group'=>'SUPPORT_TICKETS_MAIL',
-			'explanation'=>'CONFIG_OPTION_ticket_mail_on',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TICKET_MAIL_ON',
+            'type' => 'tick',
+            'category' => 'FEATURE',
+            'group' => 'SUPPORT_TICKETS_MAIL',
+            'explanation' => 'CONFIG_OPTION_ticket_mail_on',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'tickets',
-		);
-	}
+            'addon' => 'tickets',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (GOOGLE_APPENGINE) return NULL;
+    public function get_default()
+    {
+        if (GOOGLE_APPENGINE) {
+            return NULL;
+        }
 
-		return '0';
-	}
+        return '0';
+    }
 }
-
-

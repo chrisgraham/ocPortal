@@ -20,54 +20,48 @@
 
 class Hook_Preview_image
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=(get_param('page','')=='cms_galleries') && ((get_param('type')=='_ed') || (get_param('type')=='ad'));
-		return array($applies,NULL,false);
-	}
+    public function applies()
+    {
+        $applies = (get_param('page','') == 'cms_galleries') && ((get_param('type') == '_ed') || (get_param('type') == 'ad'));
+        return array($applies,null,false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		require_code('uploads');
+    public function run()
+    {
+        require_code('uploads');
 
-		$cat=post_param('cat');
+        $cat = post_param('cat');
 
-		$urls=get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'','file2');
-		if ($urls[0]=='')
-		{
-			if (!is_null(post_param_integer('id',NULL)))
-			{
-				$rows=$GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id'=>post_param_integer('id')),'',1);
-				$urls=$rows[0];
+        $urls = get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'','file2');
+        if ($urls[0] == '') {
+            if (!is_null(post_param_integer('id',null))) {
+                $rows = $GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id' => post_param_integer('id')),'',1);
+                $urls = $rows[0];
 
-				$url=$urls['url'];
-				$thumb_url=$urls['thumb_url'];
-			} else
-			{
-				warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
-			}
-		} else
-		{
-			$url=$urls[0];
-			$thumb_url=$urls[1];
-		}
+                $url = $urls['url'];
+                $thumb_url = $urls['thumb_url'];
+            } else {
+                warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+            }
+        } else {
+            $url = $urls[0];
+            $thumb_url = $urls[1];
+        }
 
-		require_code('images');
-		$thumb=do_image_thumb(url_is_local($thumb_url)?(get_custom_base_url().'/'.$thumb_url):$thumb_url,post_param('description'),true);
-		$preview=hyperlink(url_is_local($url)?(get_custom_base_url().'/'.$url):$url,$thumb);
+        require_code('images');
+        $thumb = do_image_thumb(url_is_local($thumb_url)?(get_custom_base_url() . '/' . $thumb_url):$thumb_url,post_param('description'),true);
+        $preview = hyperlink(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url,$thumb);
 
-		return array($preview,NULL);
-	}
+        return array($preview,null);
+    }
 }
-
-

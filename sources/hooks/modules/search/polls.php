@@ -20,45 +20,50 @@
 
 class Hook_search_polls
 {
-	/**
+    /**
 	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
-	function info($check_permissions=true)
-	{
-		if (!module_installed('polls')) return NULL;
+    public function info($check_permissions = true)
+    {
+        if (!module_installed('polls')) {
+            return NULL;
+        }
 
-		if ($check_permissions)
-		{
-			if (!has_actual_page_access(get_member(),'polls')) return NULL;
-		}
+        if ($check_permissions) {
+            if (!has_actual_page_access(get_member(),'polls')) {
+                return NULL;
+            }
+        }
 
-		if ($GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)')==0) return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)') == 0) {
+            return NULL;
+        }
 
-		require_lang('polls');
+        require_lang('polls');
 
-		$info=array();
-		$info['lang']=do_lang_tempcode('POLL_ARCHIVE');
-		$info['default']=true;
+        $info = array();
+        $info['lang'] = do_lang_tempcode('POLL_ARCHIVE');
+        $info['default'] = true;
 
-		$info['permissions']=array(
-			array(
-				'type'=>'zone',
-				'zone_name'=>get_module_zone('polls'),
-			),
-			array(
-				'type'=>'page',
-				'zone_name'=>get_module_zone('polls'),
-				'page_name'=>'polls',
-			),
-		);
+        $info['permissions'] = array(
+            array(
+                'type' => 'zone',
+                'zone_name' => get_module_zone('polls'),
+            ),
+            array(
+                'type' => 'page',
+                'zone_name' => get_module_zone('polls'),
+                'page_name' => 'polls',
+            ),
+        );
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run function for search results.
 	 *
 	 * @param  string			Search string
@@ -81,63 +86,66 @@ class Hook_search_polls
 	 * @param  boolean		Whether it is a boolean search
 	 * @return array			List of maps (template, orderer)
 	 */
-	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
-	{
-		$remapped_orderer='';
-		switch ($sort)
-		{
-			case 'average_rating':
-			case 'compound_rating':
-				$remapped_orderer=$sort.':polls:id';
-				break;
+    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    {
+        $remapped_orderer = '';
+        switch ($sort) {
+            case 'average_rating':
+            case 'compound_rating':
+                $remapped_orderer = $sort . ':polls:id';
+                break;
 
-			case 'title':
-				$remapped_orderer='question';
-				break;
+            case 'title':
+                $remapped_orderer = 'question';
+                break;
 
-			case 'add_date':
-				$remapped_orderer='add_time';
-				break;
-		}
+            case 'add_date':
+                $remapped_orderer = 'add_time';
+                break;
+        }
 
-		require_code('polls');
-		require_lang('polls');
-		require_css('polls');
+        require_code('polls');
+        require_lang('polls');
+        require_css('polls');
 
-		// Calculate our where clause (search)
-		$sq=build_search_submitter_clauses('submitter',$author_id,$author);
-		if (is_null($sq)) return array(); else $where_clause.=$sq;
-		if (!is_null($cutoff))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='add_time>'.strval($cutoff);
-		}
+        // Calculate our where clause (search)
+        $sq = build_search_submitter_clauses('submitter',$author_id,$author);
+        if (is_null($sq)) {
+            return array();
+        } else {
+            $where_clause .= $sq;
+        }
+        if (!is_null($cutoff)) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'add_time>' . strval($cutoff);
+        }
 
-		// Calculate and perform query
-		$rows=get_search_rows(NULL,NULL,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'poll r',array('r.question'=>'SHORT_TRANS__COMCODE','r.option1'=>'SHORT_TRANS__COMCODE','r.option2'=>'SHORT_TRANS__COMCODE','r.option3'=>'SHORT_TRANS__COMCODE','r.option4'=>'SHORT_TRANS__COMCODE','r.option5'=>'SHORT_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
+        // Calculate and perform query
+        $rows = get_search_rows(null,null,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'poll r',array('r.question' => 'SHORT_TRANS__COMCODE','r.option1' => 'SHORT_TRANS__COMCODE','r.option2' => 'SHORT_TRANS__COMCODE','r.option3' => 'SHORT_TRANS__COMCODE','r.option4' => 'SHORT_TRANS__COMCODE','r.option5' => 'SHORT_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
 
-		$out=array();
-		foreach ($rows as $i=>$row)
-		{
-			$out[$i]['data']=$row;
-			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
-		}
+        $out = array();
+        foreach ($rows as $i => $row) {
+            $out[$i]['data'] = $row;
+            unset($rows[$i]);
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	/**
+    /**
 	 * Run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
 	 * @return tempcode	The output
 	 */
-	function render($row)
-	{
-		require_code('polls');
-		return render_poll_box(true,$row);
-	}
+    public function render($row)
+    {
+        require_code('polls');
+        return render_poll_box(true,$row);
+    }
 }
-
-

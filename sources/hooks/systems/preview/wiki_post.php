@@ -20,36 +20,34 @@
 
 class Hook_Preview_wiki_post
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=(get_param('page','')=='wiki');
-		return array($applies,'wiki_post',false);
-	}
+    public function applies()
+    {
+        $applies = (get_param('page','') == 'wiki');
+        return array($applies,'wiki_post',false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		require_lang('ocf');
-		require_css('ocf');
+    public function run()
+    {
+        require_lang('ocf');
+        require_css('ocf');
 
-		$original_comcode=post_param('post');
+        $original_comcode = post_param('post');
 
-		$posting_ref_id=post_param_integer('posting_ref_id',mt_rand(0,100000));
-		$post_bits=do_comcode_attachments($original_comcode,'wiki_post',strval(-$posting_ref_id),true,$GLOBALS['SITE_DB']);
-		$post_comcode=$post_bits['comcode'];
-		$post_html=$post_bits['tempcode'];
+        $posting_ref_id = post_param_integer('posting_ref_id',mt_rand(0,100000));
+        $post_bits = do_comcode_attachments($original_comcode,'wiki_post',strval(-$posting_ref_id),true,$GLOBALS['SITE_DB']);
+        $post_comcode = $post_bits['comcode'];
+        $post_html = $post_bits['tempcode'];
 
-		return array($post_html,$post_comcode);
-	}
+        return array($post_html,$post_comcode);
+    }
 }
-
-

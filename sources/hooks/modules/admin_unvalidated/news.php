@@ -20,32 +20,32 @@
 
 class Hook_unvalidated_news
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!module_installed('news')) return NULL;
+    public function info()
+    {
+        if (!module_installed('news')) {
+            return NULL;
+        }
 
-		require_lang('news');
+        require_lang('news');
 
-		$info=array();
-		$info['db_table']='news';
-		$info['db_identifier']='id';
-		$info['db_validated']='validated';
-		$info['db_title']='title';
-		$info['db_title_dereference']=true;
-		$info['db_add_date']='date_and_time';
-		$info['db_edit_date']='edit_date';
-		$info['edit_module']='cms_news';
-		$info['edit_type']='_ed';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('NEWS');
+        $info = array();
+        $info['db_table'] = 'news';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'validated';
+        $info['db_title'] = 'title';
+        $info['db_title_dereference'] = true;
+        $info['db_add_date'] = 'date_and_time';
+        $info['db_edit_date'] = 'edit_date';
+        $info['edit_module'] = 'cms_news';
+        $info['edit_type'] = '_ed';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('NEWS');
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

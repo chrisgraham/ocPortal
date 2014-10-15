@@ -27,54 +27,51 @@
  */
 function _enforce_sessioned_url($url)
 {
-	// Take hash off
-	$hash='';
-	$hash_pos=strpos($url,'#');
-	if ($hash_pos!==false)
-	{
-		$hash=substr($url,$hash_pos);
-		$url=substr($url,0,$hash_pos);
-	}
+    // Take hash off
+    $hash = '';
+    $hash_pos = strpos($url,'#');
+    if ($hash_pos !== false) {
+        $hash = substr($url,$hash_pos);
+        $url = substr($url,0,$hash_pos);
+    }
 
-	// Take hash off
-	$hash='';
-	$hash_pos=strpos($url,'#');
-	if ($hash_pos!==false)
-	{
-		$hash=substr($url,$hash_pos);
-		$url=substr($url,0,$hash_pos);
-	}
+    // Take hash off
+    $hash = '';
+    $hash_pos = strpos($url,'#');
+    if ($hash_pos !== false) {
+        $hash = substr($url,$hash_pos);
+        $url = substr($url,0,$hash_pos);
+    }
 
-	if (strpos($url,'?')===false)
-	{
-		$url_scheme=get_option('url_scheme');
-		if (($url_scheme=='HTM') || ($url_scheme=='SIMPLE'))
-		{
-			$url.='?';
-		} else
-		{
-			$url.='/index.php?';
-		}
-	} else $url.='&';
-	$url=preg_replace('#keep\_session=\w+&#','',$url);
-	$url=preg_replace('#&keep\_session=\w+#','',$url);
+    if (strpos($url,'?') === false) {
+        $url_scheme = get_option('url_scheme');
+        if (($url_scheme == 'HTM') || ($url_scheme == 'SIMPLE')) {
+            $url .= '?';
+        } else {
+            $url .= '/index.php?';
+        }
+    } else {
+        $url .= '&';
+    }
+    $url = preg_replace('#keep\_session=\w+&#','',$url);
+    $url = preg_replace('#&keep\_session=\w+#','',$url);
 
-	// Get hash back
-	$url.=$hash;
-	$url=preg_replace('#\?keep\_session=\w+#','',$url);
+    // Get hash back
+    $url .= $hash;
+    $url = preg_replace('#\?keep\_session=\w+#','',$url);
 
-	// Possibly a nested URL too
-	$url=preg_replace('#keep\_session=\w+'.preg_quote(urlencode('&')).'#','',$url);
-	$url=preg_replace('#'.preg_quote(urlencode('&')).'keep\_session=\w+#','',$url);
-	$url=preg_replace('#'.preg_quote(urlencode('?')).'keep\_session=\w+#','',$url);
+    // Possibly a nested URL too
+    $url = preg_replace('#keep\_session=\w+' . preg_quote(urlencode('&')) . '#','',$url);
+    $url = preg_replace('#' . preg_quote(urlencode('&')) . 'keep\_session=\w+#','',$url);
+    $url = preg_replace('#' . preg_quote(urlencode('?')) . 'keep\_session=\w+#','',$url);
 
-	// Put keep_session back
-	$url.='keep_session='.urlencode(get_session_id());
+    // Put keep_session back
+    $url .= 'keep_session=' . urlencode(get_session_id());
 
-	// Get hash back
-	$url.=$hash;
+    // Get hash back
+    $url .= $hash;
 
-	return $url;
+    return $url;
 }
 
 /**
@@ -87,100 +84,98 @@ function _enforce_sessioned_url($url)
  * @param  boolean		Whether the session should be invisible
  * @return ID_TEXT		New session ID
  */
-function create_session($member,$session_confirmed=0,$invisible=false)
+function create_session($member,$session_confirmed = 0,$invisible = false)
 {
-	global $SESSION_CACHE,$MEMBER_CACHED;
-	$MEMBER_CACHED=$member;
+    global $SESSION_CACHE,$MEMBER_CACHED;
+    $MEMBER_CACHED = $member;
 
-	if (($invisible) && (get_option('is_on_invisibility')=='0')) $invisible=false;
+    if (($invisible) && (get_option('is_on_invisibility') == '0')) {
+        $invisible = false;
+    }
 
-	$new_session=mixed();
-	$restored_session=delete_expired_sessions_or_recover($member);
-	if (is_null($restored_session)) // We're force to make a new one
-	{
-		// Generate random session
-		require_code('crypt');
-		$new_session=get_rand_password();
+    $new_session = mixed();
+    $restored_session = delete_expired_sessions_or_recover($member);
+    if (is_null($restored_session)) { // We're force to make a new one
+        // Generate random session
+        require_code('crypt');
+        $new_session = get_rand_password();
 
-		// Store session
-		$username=$GLOBALS['FORUM_DRIVER']->get_username($member);
-		$new_session_row=array(
-			'the_session'=>$new_session,
-			'last_activity'=>time(),
-			'member_id'=>$member,
-			'ip'=>get_ip_address(3),
-			'session_confirmed'=>$session_confirmed,
-			'session_invisible'=>$invisible?1:0,
-			'cache_username'=>$username,
-			'the_title'=>'',
-			'the_zone'=>get_zone_name(),
-			'the_page'=>substr(get_page_name(),0,80),
-			'the_type'=>substr(get_param('type','',true),0,80),
-			'the_id'=>substr(either_param('id',''),0,80),
-		);
-		if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) // Better to have no session than a 5+ second loading page
-		{
-			$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
-			if ((get_forum_type()=='ocf') && (!$GLOBALS['FORUM_DB']->table_is_locked('f_members')))
-				$GLOBALS['FORUM_DB']->query('UPDATE '.$GLOBALS['FORUM_DB']->get_table_prefix().'f_members SET m_total_sessions=m_total_sessions+1 WHERE id='.strval($member),1,NULL,true);
-		}
+        // Store session
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($member);
+        $new_session_row = array(
+            'the_session' => $new_session,
+            'last_activity' => time(),
+            'member_id' => $member,
+            'ip' => get_ip_address(3),
+            'session_confirmed' => $session_confirmed,
+            'session_invisible' => $invisible?1:0,
+            'cache_username' => $username,
+            'the_title' => '',
+            'the_zone' => get_zone_name(),
+            'the_page' => substr(get_page_name(),0,80),
+            'the_type' => substr(get_param('type','',true),0,80),
+            'the_id' => substr(either_param('id',''),0,80),
+        );
+        if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) { // Better to have no session than a 5+ second loading page
+            $GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row,false,true);
+            if ((get_forum_type() == 'ocf') && (!$GLOBALS['FORUM_DB']->table_is_locked('f_members'))) {
+                $GLOBALS['FORUM_DB']->query('UPDATE ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members SET m_total_sessions=m_total_sessions+1 WHERE id=' . strval($member),1,null,true);
+            }
+        }
 
-		$SESSION_CACHE[$new_session]=$new_session_row;
+        $SESSION_CACHE[$new_session] = $new_session_row;
 
-		$big_change=true;
-	} else
-	{
-		$new_session=$restored_session;
-		$prior_session_row=$SESSION_CACHE[$new_session];
-		$new_session_row=array(
-			'the_title'=>'',
-			'the_zone'=>get_zone_name(),
-			'the_page'=>get_page_name(),
-			'the_type'=>substr(either_param('type',''),0,80),
-			'the_id'=>substr(either_param('id',''),0,80),
-			'last_activity'=>time(),
-			'ip'=>get_ip_address(3),
-			'session_confirmed'=>$session_confirmed,
-		);
-		$big_change=($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed']!=$session_confirmed) || ($prior_session_row['ip']!=$new_session_row['ip']);
-		if ($big_change)
-		{
-			if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) // Better to have wrong session than a 5+ second loading page
-				$GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session'=>$new_session),'',1,NULL,false,true);
-		}
+        $big_change = true;
+    } else {
+        $new_session = $restored_session;
+        $prior_session_row = $SESSION_CACHE[$new_session];
+        $new_session_row = array(
+            'the_title' => '',
+            'the_zone' => get_zone_name(),
+            'the_page' => get_page_name(),
+            'the_type' => substr(either_param('type',''),0,80),
+            'the_id' => substr(either_param('id',''),0,80),
+            'last_activity' => time(),
+            'ip' => get_ip_address(3),
+            'session_confirmed' => $session_confirmed,
+        );
+        $big_change = ($prior_session_row['last_activity']<time()-10) || ($prior_session_row['session_confirmed'] != $session_confirmed) || ($prior_session_row['ip'] != $new_session_row['ip']);
+        if ($big_change) {
+            if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) {// Better to have wrong session than a 5+ second loading page
+                $GLOBALS['SITE_DB']->query_update('sessions',$new_session_row,array('the_session' => $new_session),'',1,null,false,true);
+            }
+        }
 
-		$SESSION_CACHE[$new_session]=array_merge($SESSION_CACHE[$new_session],$new_session_row);
-	}
+        $SESSION_CACHE[$new_session] = array_merge($SESSION_CACHE[$new_session],$new_session_row);
+    }
 
-	if ($big_change) // Only update the persistent cache for non-trivial changes.
-	{
-		if (get_option('session_prudence')=='0') // With session prudence we don't store all these in persistent cache due to the size of it all. So only re-save if that's not on.
-			persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
-	}
+    if ($big_change) { // Only update the persistent cache for non-trivial changes.
+        if (get_option('session_prudence') == '0') {// With session prudence we don't store all these in persistent cache due to the size of it all. So only re-save if that's not on.
+            persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+        }
+    }
 
-	set_session_id($new_session,is_guest($member));
+    set_session_id($new_session,is_guest($member));
 
-	// New sessions=Login points
-	if ((!is_null($member)) && (!is_guest($member)) && (addon_installed('points')) && (addon_installed('stats')))
-	{
-		$points_per_daily_visit=intval(get_option('points_per_daily_visit'));
-		if ($points_per_daily_visit!=0)
-		{
-			// See if this is the first visit today
-			$test=$GLOBALS['SITE_DB']->query_select_value('stats','MAX(date_and_time)',array('member_id'=>$member));
-			if ($test<time()-60*60*24)
-			{
-				require_code('points');
-				$_before=point_info($member);
-				if (array_key_exists('points_gained_given',$_before))
-					$GLOBALS['FORUM_DRIVER']->set_custom_field($member,'points_gained_given',strval(intval($_before['points_gained_given'])+$points_per_daily_visit));
-			}
-		}
-	}
+    // New sessions=Login points
+    if ((!is_null($member)) && (!is_guest($member)) && (addon_installed('points')) && (addon_installed('stats'))) {
+        $points_per_daily_visit = intval(get_option('points_per_daily_visit'));
+        if ($points_per_daily_visit != 0) {
+            // See if this is the first visit today
+            $test = $GLOBALS['SITE_DB']->query_select_value('stats','MAX(date_and_time)',array('member_id' => $member));
+            if ($test<time()-60*60*24) {
+                require_code('points');
+                $_before = point_info($member);
+                if (array_key_exists('points_gained_given',$_before)) {
+                    $GLOBALS['FORUM_DRIVER']->set_custom_field($member,'points_gained_given',strval(intval($_before['points_gained_given'])+$points_per_daily_visit));
+                }
+            }
+        }
+    }
 
-	$GLOBALS['SESSION_CONFIRMED_CACHE']=$session_confirmed;
+    $GLOBALS['SESSION_CONFIRMED_CACHE'] = $session_confirmed;
 
-	return $new_session;
+    return $new_session;
 }
 
 /**
@@ -191,30 +186,33 @@ function create_session($member,$session_confirmed=0,$invisible=false)
  * @param  ID_TEXT		The session ID
  * @param  boolean		Whether this is a guest session (guest sessions will use persistent cookies)
  */
-function set_session_id($id,$guest_session=false)  // NB: Guests sessions can persist because they are more benign
+function set_session_id($id,$guest_session = false)  // NB: Guests sessions can persist because they are more benign
 {
-	// If checking safe mode, can really get in a spin. Don't let it set a session cookie till we've completed startup properly.
-	global $CHECKING_SAFEMODE;
-	if (($CHECKING_SAFEMODE) && ($id=='')) return;
+    // If checking safe mode, can really get in a spin. Don't let it set a session cookie till we've completed startup properly.
+    global $CHECKING_SAFEMODE;
+    if (($CHECKING_SAFEMODE) && ($id == '')) {
+        return;
+    }
 
-	// Save cookie
-	$timeout=$guest_session?(time()+intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))):NULL;
-	/*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))		Useful for testing non-cookie support, but annoying if left on
+    // Save cookie
+    $timeout = $guest_session?(time()+intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))):null;
+    /*if (($GLOBALS['DEV_MODE']) && (get_param_integer('keep_debug_has_cookies',0)==0))		Useful for testing non-cookie support, but annoying if left on
 	{
 		$test=false;
 	} else*/
-	{
-		$test=@setcookie(get_session_cookie(),$id,$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
-	}
-	$_COOKIE[get_session_cookie()]=$id; // So we remember for this page view
+    {
+        $test = @setcookie(get_session_cookie(),$id,$timeout,get_cookie_path()); // Set a session cookie with our session ID. We only use sessions for secure browser-session login... the database and url's do the rest
+    }
+    $_COOKIE[get_session_cookie()] = $id; // So we remember for this page view
 
-	// If we really have to, store in URL
-	if (((!has_cookies()) || (!$test)) && (!$guest_session/*restorable with no special auth*/) && (is_null(get_bot_type())))
-	{
-		$_GET['keep_session']=$id;
-	}
+    // If we really have to, store in URL
+    if (((!has_cookies()) || (!$test)) && (!$guest_session/*restorable with no special auth*/) && (is_null(get_bot_type()))) {
+        $_GET['keep_session'] = $id;
+    }
 
-	if ($id!=get_session_id()) decache('side_users_online');
+    if ($id != get_session_id()) {
+        decache('side_users_online');
+    }
 }
 
 /**
@@ -222,17 +220,15 @@ function set_session_id($id,$guest_session=false)  // NB: Guests sessions can pe
  */
 function force_httpauth()
 {
-	if (empty($_SERVER['PHP_AUTH_USER']))
-	{
-		header('WWW-Authenticate: Basic realm="'.urlencode(get_site_name()).'"');
-		set_http_status_code('401');
-		exit();
-	}
-	if (isset($_SERVER['PHP_AUTH_PW'])) // Ah, route as a normal login if we can then
-	{
-		$_POST['login_username']=$_SERVER['PHP_AUTH_USER'];
-		$_POST['password']=$_SERVER['PHP_AUTH_PW'];
-	}
+    if (empty($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="' . urlencode(get_site_name()) . '"');
+        set_http_status_code('401');
+        exit();
+    }
+    if (isset($_SERVER['PHP_AUTH_PW'])) { // Ah, route as a normal login if we can then
+        $_POST['login_username'] = $_SERVER['PHP_AUTH_USER'];
+        $_POST['password'] = $_SERVER['PHP_AUTH_PW'];
+    }
 }
 
 /**
@@ -243,61 +239,64 @@ function force_httpauth()
  */
 function try_su_login($member)
 {
-	$ks=get_param('keep_su','');
+    $ks = get_param('keep_su','');
 
-	require_code('permissions');
-	if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
-	if (has_privilege($member,'assume_any_member'))
-	{
-		$su=$GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
+    require_code('permissions');
+    if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) {
+        $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
+    }
+    if (has_privilege($member,'assume_any_member')) {
+        $su = $GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
 
-		if (!is_null($su)) $member=$su; elseif (is_numeric($ks)) $member=intval($ks); else $member=NULL;
+        if (!is_null($su)) {
+            $member = $su;
+        } elseif (is_numeric($ks)) {
+            $member = intval($ks);
+        } else {
+            $member = null;
+        }
 
-		if (is_null($member))
-		{
-			require_code('site');
-			attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($ks)),'warn');
-			return get_member();
-		}
+        if (is_null($member)) {
+            require_code('site');
+            attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($ks)),'warn');
+            return get_member();
+        }
 
-		if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin($su)) || ($GLOBALS['FORUM_DRIVER']->is_super_admin($member)))
-		{
-			if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) // All hands to the guns
-			{
-				global $USER_THEME_CACHE;
-				$USER_THEME_CACHE='default';
-				critical_error('MEMBER_BANNED');
-			}
-		}
-		$GLOBALS['IS_ACTUALLY_ADMIN']=true;
-		$GLOBALS['IS_ACTUALLY']=$member;
+        if ((!$GLOBALS['FORUM_DRIVER']->is_super_admin($su)) || ($GLOBALS['FORUM_DRIVER']->is_super_admin($member))) {
+            if ((!is_guest($member)) && ($GLOBALS['FORUM_DRIVER']->is_banned($member))) { // All hands to the guns
+                global $USER_THEME_CACHE;
+                $USER_THEME_CACHE = 'default';
+                critical_error('MEMBER_BANNED');
+            }
+        }
+        $GLOBALS['IS_ACTUALLY_ADMIN'] = true;
+        $GLOBALS['IS_ACTUALLY'] = $member;
 
-		if ((get_forum_type()=='ocf') && (get_param_integer('keep_su_online',0)==1))
-		{
-			require_code('crypt');
-			$new_session_row=array(
-				'the_session'=>get_rand_password(),
-				'last_activity'=>time(),
-				'member_id'=>$member,
-				'ip'=>get_ip_address(3),
-				'session_confirmed'=>0,
-				'session_invisible'=>0,
-				'cache_username'=>$GLOBALS['FORUM_DRIVER']->get_username($member),
-				'the_title'=>'',
-				'the_zone'=>get_zone_name(),
-				'the_page'=>substr(get_page_name(),0,80),
-				'the_type'=>substr(get_param('type','',true),0,80),
-				'the_id'=>substr(either_param('id',''),0,80),
-			);
-			$GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row);
-			global $FLOOD_CONTROL_ONCE;
-			$FLOOD_CONTROL_ONCE=false;
-			$GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
-			$GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible'=>1),array('the_session'=>get_session_id()),'',1);
-		}
-	}
+        if ((get_forum_type() == 'ocf') && (get_param_integer('keep_su_online',0) == 1)) {
+            require_code('crypt');
+            $new_session_row = array(
+                'the_session' => get_rand_password(),
+                'last_activity' => time(),
+                'member_id' => $member,
+                'ip' => get_ip_address(3),
+                'session_confirmed' => 0,
+                'session_invisible' => 0,
+                'cache_username' => $GLOBALS['FORUM_DRIVER']->get_username($member),
+                'the_title' => '',
+                'the_zone' => get_zone_name(),
+                'the_page' => substr(get_page_name(),0,80),
+                'the_type' => substr(get_param('type','',true),0,80),
+                'the_id' => substr(either_param('id',''),0,80),
+            );
+            $GLOBALS['SITE_DB']->query_insert('sessions',$new_session_row);
+            global $FLOOD_CONTROL_ONCE;
+            $FLOOD_CONTROL_ONCE = false;
+            $GLOBALS['FORUM_DRIVER']->ocf_flood_control($member);
+            $GLOBALS['SITE_DB']->query_update('sessions',array('session_invisible' => 1),array('the_session' => get_session_id()),'',1);
+        }
+    }
 
-	return $member;
+    return $member;
 }
 
 /**
@@ -307,34 +306,32 @@ function try_su_login($member)
  */
 function try_httpauth_login()
 {
-	global $LDAP_CONNECTION;
+    global $LDAP_CONNECTION;
 
-	require_code('ocf_members');
-	require_code('ocf_groups');
-	require_lang('ocf');
+    require_code('ocf_members');
+    require_code('ocf_groups');
+    require_lang('ocf');
 
-	$member=ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']);
-	if ((is_null($member)) && ((running_script('index')) || (running_script('execute_temp'))))
-	{
-		require_code('ocf_members_action');
-		require_code('ocf_members_action2');
-		if ((trim(post_param('email_address',''))=='') && (get_option('finish_profile')=='1'))
-		{
-			@ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
-			$middle=ocf_member_external_linker_ask($_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled')!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
-			$tpl=globalise($middle,NULL,'',true);
-			$tpl->evaluate_echo();
-			exit();
-		} else
-		{
-			$member=ocf_member_external_linker($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled')!='1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
-		}
-	}
+    $member = ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']);
+    if ((is_null($member)) && ((running_script('index')) || (running_script('execute_temp')))) {
+        require_code('ocf_members_action');
+        require_code('ocf_members_action2');
+        if ((trim(post_param('email_address','')) == '') && (get_option('finish_profile') == '1')) {
+            @ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
+            $middle = ocf_member_external_linker_ask($_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled') != '1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
+            $tpl = globalise($middle,null,'',true);
+            $tpl->evaluate_echo();
+            exit();
+        } else {
+            $member = ocf_member_external_linker($_SERVER['PHP_AUTH_USER'],$_SERVER['PHP_AUTH_USER'],((get_option('windows_auth_is_enabled') != '1') || is_null($LDAP_CONNECTION))?'httpauth':'ldap');
+        }
+    }
 
-	if (!is_null($member))
-		create_session($member,1,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1')); // This will mark it as confirmed
+    if (!is_null($member)) {
+        create_session($member,1,(isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1'));
+    } // This will mark it as confirmed
 
-	return $member;
+    return $member;
 }
 
 /**
@@ -344,111 +341,104 @@ function try_httpauth_login()
  */
 function try_cookie_login()
 {
-	$member=NULL;
+    $member = null;
 
-	// Preprocess if this is a serialized cookie
-	$member_cookie_name=get_member_cookie();
-	$bar_pos=strpos($member_cookie_name,'|');
-	$colon_pos=strpos($member_cookie_name,':');
-	if ($colon_pos!==false)
-	{
-		$base=substr($member_cookie_name,0,$colon_pos);
-		if ((array_key_exists($base,$_COOKIE)) && ($_COOKIE[$base]!=''))
-		{
-			$real_member_cookie=substr($member_cookie_name,$colon_pos+1);
-			$real_pass_cookie=substr(get_pass_cookie(),$colon_pos+1);
+    // Preprocess if this is a serialized cookie
+    $member_cookie_name = get_member_cookie();
+    $bar_pos = strpos($member_cookie_name,'|');
+    $colon_pos = strpos($member_cookie_name,':');
+    if ($colon_pos !== false) {
+        $base = substr($member_cookie_name,0,$colon_pos);
+        if ((array_key_exists($base,$_COOKIE)) && ($_COOKIE[$base] != '')) {
+            $real_member_cookie = substr($member_cookie_name,$colon_pos+1);
+            $real_pass_cookie = substr(get_pass_cookie(),$colon_pos+1);
 
-			$the_cookie=$_COOKIE[$base];
-			if (get_magic_quotes_gpc())
-			{
-				$the_cookie=stripslashes($_COOKIE[$base]);
-			}
+            $the_cookie = $_COOKIE[$base];
+            if (get_magic_quotes_gpc()) {
+                $the_cookie = stripslashes($_COOKIE[$base]);
+            }
 
-			secure_serialized_data($the_cookie,array());
+            secure_serialized_data($the_cookie,array());
 
-			$unserialize=@unserialize($the_cookie);
+            $unserialize = @unserialize($the_cookie);
 
-			if (is_array($unserialize))
-			{
-				if (array_key_exists($real_member_cookie,$unserialize))
-				{
-					$the_member=$unserialize[$real_member_cookie];
-					if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
-					$_COOKIE[get_member_cookie()]=$the_member;
-				}
-				if (array_key_exists($real_pass_cookie,$unserialize))
-				{
-					$the_pass=$unserialize[$real_pass_cookie];
-					if (get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
-					$_COOKIE[get_pass_cookie()]=$the_pass;
-				}
-			}
-		}
-	}
-	elseif ($bar_pos!==false)
-	{
-		$base=substr($member_cookie_name,0,$bar_pos);
-		if ((array_key_exists($base,$_COOKIE)) && ($_COOKIE[$base]!=''))
-		{
-			$real_member_cookie=substr($member_cookie_name,$bar_pos+1);
-			$real_pass_cookie=substr(get_pass_cookie(),$bar_pos+1);
+            if (is_array($unserialize)) {
+                if (array_key_exists($real_member_cookie,$unserialize)) {
+                    $the_member = $unserialize[$real_member_cookie];
+                    if (get_magic_quotes_gpc()) {
+                        $the_member = addslashes($the_member);
+                    }
+                    $_COOKIE[get_member_cookie()] = $the_member;
+                }
+                if (array_key_exists($real_pass_cookie,$unserialize)) {
+                    $the_pass = $unserialize[$real_pass_cookie];
+                    if (get_magic_quotes_gpc()) {
+                        $the_pass = addslashes($the_pass);
+                    }
+                    $_COOKIE[get_pass_cookie()] = $the_pass;
+                }
+            }
+        }
+    } elseif ($bar_pos !== false) {
+        $base = substr($member_cookie_name,0,$bar_pos);
+        if ((array_key_exists($base,$_COOKIE)) && ($_COOKIE[$base] != '')) {
+            $real_member_cookie = substr($member_cookie_name,$bar_pos+1);
+            $real_pass_cookie = substr(get_pass_cookie(),$bar_pos+1);
 
-			$the_cookie=$_COOKIE[$base];
-			if (get_magic_quotes_gpc())
-			{
-				$the_cookie=stripslashes($_COOKIE[$base]);
-			}
+            $the_cookie = $_COOKIE[$base];
+            if (get_magic_quotes_gpc()) {
+                $the_cookie = stripslashes($_COOKIE[$base]);
+            }
 
-			$cookie_contents=explode('||',$the_cookie);
+            $cookie_contents = explode('||',$the_cookie);
 
-			$the_member=$cookie_contents[intval($real_member_cookie)];
-			if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
-			$_COOKIE[get_member_cookie()]=$the_member;
+            $the_member = $cookie_contents[intval($real_member_cookie)];
+            if (get_magic_quotes_gpc()) {
+                $the_member = addslashes($the_member);
+            }
+            $_COOKIE[get_member_cookie()] = $the_member;
 
-			$the_pass=$cookie_contents[intval($real_pass_cookie)];
-			if (get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
-			$_COOKIE[get_pass_cookie()]=$the_pass;
-		}
-	}
+            $the_pass = $cookie_contents[intval($real_pass_cookie)];
+            if (get_magic_quotes_gpc()) {
+                $the_pass = addslashes($the_pass);
+            }
+            $_COOKIE[get_pass_cookie()] = $the_pass;
+        }
+    }
 
-	if ((array_key_exists(get_member_cookie(),$_COOKIE)) && (array_key_exists(get_pass_cookie(),$_COOKIE)))
-	{
-		$store=$_COOKIE[get_member_cookie()];
-		$pass=$_COOKIE[get_pass_cookie()];
-		if (get_magic_quotes_gpc())
-		{
-			$store=stripslashes($store);
-			$pass=stripslashes($pass);
-		}
-		if ($GLOBALS['FORUM_DRIVER']->is_cookie_login_name())
-		{
-			$username=$store;
-			$store=strval($GLOBALS['FORUM_DRIVER']->get_member_from_username($store));
-		} else $username=$GLOBALS['FORUM_DRIVER']->get_username(intval($store));
-		$member=intval($store);
-		if (!is_guest($member))
-		{
-			if ($GLOBALS['FORUM_DRIVER']->is_hashed())
-			{
-				// Test password hash
-				$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login(NULL,$member,$pass,$pass,true);
-				$member=$login_array['id'];
-			} else
-			{
-				// Test password plain
-				$login_array=$GLOBALS['FORUM_DRIVER']->forum_authorise_login(NULL,$member,apply_forum_driver_md5_variant($pass,$username),$pass,true);
-				$member=$login_array['id'];
-			}
+    if ((array_key_exists(get_member_cookie(),$_COOKIE)) && (array_key_exists(get_pass_cookie(),$_COOKIE))) {
+        $store = $_COOKIE[get_member_cookie()];
+        $pass = $_COOKIE[get_pass_cookie()];
+        if (get_magic_quotes_gpc()) {
+            $store = stripslashes($store);
+            $pass = stripslashes($pass);
+        }
+        if ($GLOBALS['FORUM_DRIVER']->is_cookie_login_name()) {
+            $username = $store;
+            $store = strval($GLOBALS['FORUM_DRIVER']->get_member_from_username($store));
+        } else {
+            $username = $GLOBALS['FORUM_DRIVER']->get_username(intval($store));
+        }
+        $member = intval($store);
+        if (!is_guest($member)) {
+            if ($GLOBALS['FORUM_DRIVER']->is_hashed()) {
+                // Test password hash
+                $login_array = $GLOBALS['FORUM_DRIVER']->forum_authorise_login(null,$member,$pass,$pass,true);
+                $member = $login_array['id'];
+            } else {
+                // Test password plain
+                $login_array = $GLOBALS['FORUM_DRIVER']->forum_authorise_login(null,$member,apply_forum_driver_md5_variant($pass,$username),$pass,true);
+                $member = $login_array['id'];
+            }
 
-			if (!is_null($member))
-			{
-				global $IS_A_COOKIE_LOGIN;
-				$IS_A_COOKIE_LOGIN=true;
+            if (!is_null($member)) {
+                global $IS_A_COOKIE_LOGIN;
+                $IS_A_COOKIE_LOGIN = true;
 
-				create_session($member,0,(isset($_COOKIE[get_member_cookie().'_invisible'])) && ($_COOKIE[get_member_cookie().'_invisible']=='1'));
-			}
-		}
-	}
+                create_session($member,0,(isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1'));
+            }
+        }
+    }
 
-	return $member;
+    return $member;
 }

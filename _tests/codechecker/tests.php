@@ -15,10 +15,10 @@
 
 function get_tests()
 {
-	$tests=array();
+    $tests = array();
 
-	// This is a good lexer test
-	$tests[0]=<<<EOF
+    // This is a good lexer test
+    $tests[0] = <<<EOF
 		function blah()  // test
 		{
 			\$testing="my \"lexer\"\t".'forever '.0.'!'.0.3.'!'.010.'!'.0xa3;	/* woo */
@@ -28,8 +28,8 @@ END;
 		}
 EOF;
 
-	// This is a good parser test for functions
-	$tests[1]=<<<END
+    // This is a good parser test for functions
+    $tests[1] = <<<END
 function test(\$a,\$b)
 {
 	return 4;
@@ -41,8 +41,8 @@ test(1,2);
 \$a(1,2);
 END;
 
-	// This is a good test for loops
-	$tests[2]=<<<END
+    // This is a good test for loops
+    $tests[2] = <<<END
 foreach (array(1,2) as \$a=>\$b)
 {
 	while (true)
@@ -64,8 +64,8 @@ foreach (array(1,2) as \$a=>\$b)
 
 END;
 
-	// This is a good test for objects
-	$tests[3]=<<<END
+    // This is a good test for objects
+    $tests[3] = <<<END
 class foobar
 {
 	var \$i;
@@ -90,8 +90,8 @@ abstract class baz
 \$b=clone \$a;
 END;
 
-	// This is a good test for conditionality
-	$tests[4]=<<<END
+    // This is a good test for conditionality
+    $tests[4] = <<<END
 if (true) \$a=1; elseif (true) \$a=1; else \$a=2;
 
 switch (1)
@@ -103,8 +103,8 @@ switch (1)
 }
 END;
 
-	// This is a good test for various things
-	$tests[5]=<<<END
+    // This is a good test for various things
+    $tests[5] = <<<END
 global \$A;
 \$b=array(1=>3,2=>3);
 echo \$A[\$b[1]];
@@ -116,7 +116,7 @@ list(\$a1,\$b1,\$c1)=\$A;
 \$d=\$c?1:0;
 END;
 
-	$tests[6]=<<<END
+    $tests[6] = <<<END
 class foo
 {
 	function bar(\$meh,\$foo23bar,&\$var) { /*woo!*/
@@ -134,11 +134,11 @@ class foo
 }
 END;
 
-	$tests[7]=<<<END
+    $tests[7] = <<<END
 if (\$pos===false) \$pos=strlen(\$_SERVER['SCRIPT_NAME']); else \$pos--;
 END;
 
-	$tests[8]=<<<END
+    $tests[8] = <<<END
 // <global type conflict>
 
 function foo()
@@ -154,7 +154,7 @@ function bar()
 }
 END;
 
-	$tests[9]=<<<END
+    $tests[9] = <<<END
 // <parameter type conflict>
 
 function foo()
@@ -164,7 +164,7 @@ function foo()
 }
 END;
 
-	$tests[10]=<<<END
+    $tests[10] = <<<END
 // <bad return>
 
 function intval(\$a)
@@ -173,7 +173,7 @@ function intval(\$a)
 }
 END;
 
-	$tests[11]=<<<END
+    $tests[11] = <<<END
 // <missing return>
 
 function intval(\$a)
@@ -181,7 +181,7 @@ function intval(\$a)
 }
 END;
 
-	$tests[12]=<<<END
+    $tests[12] = <<<END
 // <bad arity (low)>
 
 function foo()
@@ -190,7 +190,7 @@ function foo()
 }
 END;
 
-	$tests[13]=<<<END
+    $tests[13] = <<<END
 // <bad arity (high)>
 
 function foo()
@@ -199,7 +199,7 @@ function foo()
 }
 END;
 
-	$tests[14]=<<<END
+    $tests[14] = <<<END
 // <bad parameters>
 
 function foo()
@@ -208,20 +208,20 @@ function foo()
 }
 END;
 
-	$tests[15]=<<<END
+    $tests[15] = <<<END
 // <local type conflict>
 
 \$a=1;
 \$a='1';
 END;
 
-	$tests[16]=<<<END
+    $tests[16] = <<<END
 // <echo typing error>
 
 echo 3;
 END;
 
-	$tests[17]=<<<END
+    $tests[17] = <<<END
 // <switch inconsistency>
 
 switch(3)
@@ -231,7 +231,7 @@ switch(3)
 }
 END;
 
-	$tests[18]=<<<END
+    $tests[18] = <<<END
 // <conditional typing error>
 
 if ('a')
@@ -240,7 +240,7 @@ if ('a')
 }
 END;
 
-	$tests[19]=<<<END
+    $tests[19] = <<<END
 // <foreach typing error>
 
 foreach (3 as \$a)
@@ -249,7 +249,7 @@ foreach (3 as \$a)
 }
 END;
 
-	$tests[20]=<<<END
+    $tests[20] = <<<END
 // <test of type checker feed through>
 
 if (true)
@@ -273,66 +273,66 @@ if (true)
 }
 END;
 
-	$tests[21]=<<<END
+    $tests[21] = <<<END
 // <continue typing error>
 
 continue 'a';
 END;
 
-	$tests[22]=<<<END
+    $tests[22] = <<<END
 // <increment typing error>
 
 \$a='';
 \$a++;
 END;
 
-	$tests[23]=<<<END
+    $tests[23] = <<<END
 // <illegal reference passing>
 
 \$a='';
 intval(&\$a);
 END;
 
-	$tests[24]=<<<END
+    $tests[24] = <<<END
 // <illegal special assignment>
 
 \$a='';
 \$a+=1;
 END;
 
-	$tests[25]=<<<END
+    $tests[25] = <<<END
 // <illegal special assignment #2>
 
 \$a=1;
 \$a+='';
 END;
 
-	$tests[26]=<<<END
+    $tests[26] = <<<END
 // <unary if error #1>
 
 \$a=''?1:2;
 END;
 
-	$tests[27]=<<<END
+    $tests[27] = <<<END
 // <unary if error #2>
 
 \$a=true?'':2;
 END;
 
-	$tests[28]=<<<END
+    $tests[28] = <<<END
 // <boolean logic error>
 
 \$a=1 && 2;
 END;
 
-	$tests[29]=<<<END
+    $tests[29] = <<<END
 // <conc error>
 
 \$a='a'.2;
 END;
 
-	// This one will fail to parse
-	$tests[30]=<<<END
+    // This one will fail to parse
+    $tests[30] = <<<END
 // <illegal embedded assignment>
 
 if (\$a='x' && true)
@@ -341,13 +341,13 @@ if (\$a='x' && true)
 }
 END;
 
-	$tests[31]=<<<END
+    $tests[31] = <<<END
 // <illegal negation>
 
 \$a=-'a';
 END;
 
-	$tests[32]=<<<END
+    $tests[32] = <<<END
 // <unreachable code>
 
 function foo()
@@ -357,74 +357,74 @@ function foo()
 }
 END;
 
-	$tests[33]=<<<END
+    $tests[33] = <<<END
 // <bad continue depth>
 
 continue;
 END;
 
-	$tests[34]=<<<END
+    $tests[34] = <<<END
 // <usage of globals before globalisation>
 
 \$A=1;
 global \$A;
 END;
 
-	$tests[35]=<<<END
+    $tests[35] = <<<END
 // <unused variable>
 
 \$a=1;
 END;
 
-	$tests[36]=<<<END
+    $tests[36] = <<<END
 // <bad construction>
 
 \$a=new ocp_tempcode(1);
 unset(\$a);
 END;
 
-	$tests[37]=<<<END
+    $tests[37] = <<<END
 // <array append mistake>
 
 \$a=1;
 \$a[]=1;
 END;
 
-	// This one will fail to parse
-	$tests[39]=<<<END
+    // This one will fail to parse
+    $tests[39] = <<<END
 // <$$>
 
 \$\$foo=1;
 END;
 
-	// This one will fail to parse
-	$tests[40]=<<<END
+    // This one will fail to parse
+    $tests[40] = <<<END
 // <$$>
 
 \$object->\$foo=1;
 END;
 
-	$tests[41]=<<<END
+    $tests[41] = <<<END
 // <Unused variables>
 
 \$foo=1;
 \$foo=2;
 END;
 
-	$tests[42]=<<<END
+    $tests[42] = <<<END
 // <Bad layout>
 
 {
  }
 END;
 
-	$tests[43]=<<<END
+    $tests[43] = <<<END
 // <Double dereferencing>
 
 \$foo->bar->foo();
 END;
 
-	$tests[44]=<<<END
+    $tests[44] = <<<END
 // <Complex variable referencing>
 
 function x(\$a)
@@ -433,39 +433,39 @@ function x(\$a)
 }
 END;
 
-	$tests[45]=<<<END
+    $tests[45] = <<<END
 // <! would bind to 0>
 
 if (!fopen('foo','w')) exit();
 END;
 
-	$tests[46]=<<<END
+    $tests[46] = <<<END
 // <string variable referencing>
 \$a='';
 echo "\$a";
 END;
 
-	$tests[47]=<<<END
+    $tests[47] = <<<END
 // <deep variable referencing>
 \$a='';
 \$b=array();
 echo \$b[''][''][''][''][\$a];
 END;
 
-	$tests[48]=<<<END
+    $tests[48] = <<<END
 // <correct boolean interpretation>
 \$a=false;
 if (!\$a) exit();
 END;
 
-	$tests[49]=<<<END
+    $tests[49] = <<<END
 // <deep variable referencing 2>
 \$a='';
 \$b=new foo();
 echo \$b[\$a]->bar();
 END;
 
-	$tests[50]=<<<END
+    $tests[50] = <<<END
 // <nice error offsets>
 function fpassthru(\$a)
 {
@@ -476,43 +476,43 @@ function fpassthru(\$a)
 }
 END;
 
-	$tests[51]=<<<END
+    $tests[51] = <<<END
 \$a=array();
 \$a[]='bar';
 END;
 
-	$tests[52]=<<<END
+    $tests[52] = <<<END
 if (preg_match('a','a')) exit();
 END;
 
-	$tests[53]=<<<END
+    $tests[53] = <<<END
 \$bool=\$whatever==NULL;
 END;
 
-	$tests[54]=<<<END
+    $tests[54] = <<<END
 \$whatever_1=strpos('a',\$whatever_2);
 END;
 
-	$tests[55]=<<<END
+    $tests[55] = <<<END
 \$whatever=array('a'=>1,'a'=>1);
 END;
 
-	$tests[56]=<<<END
+    $tests[56] = <<<END
 preg_match_all('','',array());
 END;
 
-	$tests[57]=<<<END
+    $tests[57] = <<<END
 set_time_limit(0);
 END;
 
-	$tests[58]=<<<END
+    $tests[58] = <<<END
 \$test='';
 \$a='';
 \$test.=&\$a;
 END;
 
-	// Tests chaining method calls and associated jiggery-pokery
-	$tests[59]=<<<END
+    // Tests chaining method calls and associated jiggery-pokery
+    $tests[59] = <<<END
 class A
 {
 	public \$a;
@@ -527,8 +527,8 @@ class A
 \$irrelevant_variable_name->b()->b()->b()->b()->a=5;
 END;
 
-	// Tests interfaces
-	$tests[60]=<<<END
+    // Tests interfaces
+    $tests[60] = <<<END
 interface A
 {
 	public \$a=10;
@@ -557,8 +557,8 @@ class Foo implements A
 }
 END;
 
-	// Tests type hinting
-	$tests[61]=<<<END
+    // Tests type hinting
+    $tests[61] = <<<END
 class A
 {
 	public function foo(A \$a, A \$b=NULL, A &\$c, array \$d, array \$e=NULL, array &\$f, array &\$g, \$h, \$i=5)
@@ -567,7 +567,7 @@ class A
 }
 END;
 
-	$tests[62]=<<<END
+    $tests[62] = <<<END
 try
 {
 	\$ocportal->controller('site_pageload')->do_page_script();
@@ -578,12 +578,12 @@ catch (OCP_Exception \$e)
 }
 END;
 
-	$tests[63]=<<<END
+    $tests[63] = <<<END
 \$ocportal->controller('site_pageload')->do_page_script();
 END;
 
-	// Tests type redefining
-	$tests[64]=<<<END
+    // Tests type redefining
+    $tests[64] = <<<END
 if (false)
 {
 	class A
@@ -603,15 +603,15 @@ if (false)
 }
 END;
 
-	$tests[65]=<<<END
+    $tests[65] = <<<END
 if (\$a->b) exit();
 END;
 
-	$tests[66]=<<<END
+    $tests[66] = <<<END
 \$a=@\$b;
 END;
 
-	$tests[67]=<<<END
+    $tests[67] = <<<END
 foreach (array() as \$a)
 {
 	foreach (array() as \$a)
@@ -620,5 +620,5 @@ foreach (array() as \$a)
 }
 END;
 
-	return $tests;
+    return $tests;
 }

@@ -20,36 +20,36 @@
 
 class Hook_sitemap_topic extends Hook_sitemap_content
 {
-	protected $content_type='topic';
-	protected $screen_type='misc';
+    protected $content_type = 'topic';
+    protected $screen_type = 'misc';
 
-	// If we have a different content type of entries, under this content type
-	protected $entry_content_type=NULL;
-	protected $entry_sitetree_hook=NULL;
+    // If we have a different content type of entries, under this content type
+    protected $entry_content_type = null;
+    protected $entry_sitetree_hook = null;
 
-	/**
+    /**
 	 * Get the permission page that nodes matching $page_link in this hook are tied to.
 	 * The permission page is where privileges may be overridden against.
 	 *
 	 * @param  string			The page-link
 	 * @return ?ID_TEXT		The permission page (NULL: none)
 	 */
-	function get_privilege_page($page_link)
-	{
-		return 'topics';
-	}
+    public function get_privilege_page($page_link)
+    {
+        return 'topics';
+    }
 
-	/**
+    /**
 	 * Find whether the hook is active.
 	 *
 	 * @return boolean		Whether the hook is active.
 	 */
-	function is_active()
-	{
-		return (get_forum_type()=='ocf');
-	}
+    public function is_active()
+    {
+        return (get_forum_type() == 'ocf');
+    }
 
-	/**
+    /**
 	 * Find details of a position in the Sitemap.
 	 *
 	 * @param  ID_TEXT  		The page-link we are finding.
@@ -68,31 +68,42 @@ class Hook_sitemap_topic extends Hook_sitemap_content
 	 * @param  boolean		Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
 	 * @return ?array			Node structure (NULL: working via callback / error).
 	 */
-	function get_node($page_link,$callback=NULL,$valid_node_types=NULL,$child_cutoff=NULL,$max_recurse_depth=NULL,$recurse_level=0,$require_permission_support=false,$zone='_SEARCH',$use_page_groupings=false,$consider_secondary_categories=false,$consider_validation=false,$meta_gather=0,$row=NULL,$return_anyway=false)
-	{
-		$_=$this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-		if ($_===NULL) return NULL;
-		list($content_id,$row,$partial_struct)=$_;
+    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    {
+        $_ = $this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+        if ($_ === NULL) {
+            return NULL;
+        }
+        list($content_id,$row,$partial_struct) = $_;
 
-		$sitemap_refreshfreq='yearly';
-		if ($row['t_cache_last_time']>time()-60*60*24*90) $sitemap_refreshfreq='monthly';
-		if ($row['t_cache_last_time']>time()-60*60*24*31) $sitemap_refreshfreq='weekly';
-		if ($row['t_cache_last_time']>time()-60*60*24*7) $sitemap_refreshfreq='daily';
+        $sitemap_refreshfreq = 'yearly';
+        if ($row['t_cache_last_time']>time()-60*60*24*90) {
+            $sitemap_refreshfreq = 'monthly';
+        }
+        if ($row['t_cache_last_time']>time()-60*60*24*31) {
+            $sitemap_refreshfreq = 'weekly';
+        }
+        if ($row['t_cache_last_time']>time()-60*60*24*7) {
+            $sitemap_refreshfreq = 'daily';
+        }
 
-		$struct=array(
-			'sitemap_priority'=>SITEMAP_IMPORTANCE_LOW,
-			'sitemap_refreshfreq'=>$sitemap_refreshfreq,
+        $struct = array(
+            'sitemap_priority' => SITEMAP_IMPORTANCE_LOW,
+            'sitemap_refreshfreq' => $sitemap_refreshfreq,
 
-			'has_possible_children'=>false,
+            'has_possible_children' => false,
 
-			'privilege_page'=>$this->get_privilege_page($page_link),
-		)+$partial_struct;
+            'privilege_page' => $this->get_privilege_page($page_link),
+        )+$partial_struct;
 
-		if (!$this->_check_node_permissions($struct)) return NULL;
+        if (!$this->_check_node_permissions($struct)) {
+            return NULL;
+        }
 
-		if ($callback!==NULL)
-			call_user_func($callback,$struct);
+        if ($callback !== NULL) {
+            call_user_func($callback,$struct);
+        }
 
-		return ($callback===NULL || $return_anyway)?$struct:NULL;
-	}
+        return ($callback === NULL || $return_anyway)?$struct:null;
+    }
 }

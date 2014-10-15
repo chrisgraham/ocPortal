@@ -20,35 +20,33 @@
 
 class Hook_config_enable_forum_dupe_buttons
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLE_FORUM_DUPE_BUTTONS',
-			'type'=>'tick',
-			'category'=>'FORUMS',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_enable_forum_dupe_buttons',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLE_FORUM_DUPE_BUTTONS',
+            'type' => 'tick',
+            'category' => 'FORUMS',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_enable_forum_dupe_buttons',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'ocf_forum',
-		);
-	}
+            'addon' => 'ocf_forum',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

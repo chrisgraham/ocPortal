@@ -20,21 +20,21 @@
 
 class Hook_page_groupings_unvalidated
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('unvalidated')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('unvalidated')) {
+            return array();
+        }
 
-		return array(
-			array('audit','menu/adminzone/audit/unvalidated',array('admin_unvalidated',array(),get_module_zone('admin_unvalidated')),do_lang_tempcode('unvalidated:UNVALIDATED_RESOURCES'),'DOC_UNVALIDATED'),
-		);
-	}
+        return array(
+            array('audit','menu/adminzone/audit/unvalidated',array('admin_unvalidated',array(),get_module_zone('admin_unvalidated')),do_lang_tempcode('unvalidated:UNVALIDATED_RESOURCES'),'DOC_UNVALIDATED'),
+        );
+    }
 }
-
-

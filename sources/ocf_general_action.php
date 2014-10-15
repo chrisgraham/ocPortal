@@ -29,25 +29,24 @@
  */
 function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_forums)
 {
-	require_code('global4');
-	prevent_double_submit('ADD_POST_TEMPLATE',NULL,$title);
+    require_code('global4');
+    prevent_double_submit('ADD_POST_TEMPLATE',null,$title);
 
-	$id=$GLOBALS['FORUM_DB']->query_insert('f_post_templates',array(
-		't_title'=>$title,
-		't_text'=>$text,
-		't_forum_multi_code'=>$forum_multi_code,
-		't_use_default_forums'=>$use_default_forums
-	),true);
+    $id = $GLOBALS['FORUM_DB']->query_insert('f_post_templates',array(
+        't_title' => $title,
+        't_text' => $text,
+        't_forum_multi_code' => $forum_multi_code,
+        't_use_default_forums' => $use_default_forums
+    ),true);
 
-	log_it('ADD_POST_TEMPLATE',strval($id),$title);
+    log_it('ADD_POST_TEMPLATE',strval($id),$title);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('post_template',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('post_template',strval($id),null,null,true);
+    }
 
-	return $id;
+    return $id;
 }
 
 /**
@@ -60,20 +59,22 @@ function ocf_make_post_template($title,$text,$forum_multi_code,$use_default_foru
  * @param  BINARY			Whether this may be used as a topic emoticon.
  * @param  BINARY			Whether this may only be used by privileged members
  */
-function ocf_make_emoticon($code,$theme_img_code,$relevance_level=1,$use_topics=1,$is_special=0)
+function ocf_make_emoticon($code,$theme_img_code,$relevance_level = 1,$use_topics = 1,$is_special = 0)
 {
-	$test=$GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','e_code',array('e_code'=>$code));
-	if (!is_null($test)) warn_exit(do_lang_tempcode('CONFLICTING_EMOTICON_CODE',escape_html($test)));
+    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','e_code',array('e_code' => $code));
+    if (!is_null($test)) {
+        warn_exit(do_lang_tempcode('CONFLICTING_EMOTICON_CODE',escape_html($test)));
+    }
 
-	$GLOBALS['FORUM_DB']->query_insert('f_emoticons',array(
-		'e_code'=>$code,
-		'e_theme_img_code'=>$theme_img_code,
-		'e_relevance_level'=>$relevance_level,
-		'e_use_topics'=>$use_topics,
-		'e_is_special'=>$is_special
-	));
+    $GLOBALS['FORUM_DB']->query_insert('f_emoticons',array(
+        'e_code' => $code,
+        'e_theme_img_code' => $theme_img_code,
+        'e_relevance_level' => $relevance_level,
+        'e_use_topics' => $use_topics,
+        'e_is_special' => $is_special
+    ));
 
-	log_it('ADD_EMOTICON',$code,$theme_img_code);
+    log_it('ADD_EMOTICON',$code,$theme_img_code);
 }
 
 /**
@@ -89,22 +90,21 @@ function ocf_make_emoticon($code,$theme_img_code,$relevance_level=1,$use_topics=
  * @set primary secondary ""
  * @return AUTO_LINK		The ID
  */
-function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter=NULL,$usergroup=NULL,$usergroup_type='')
+function ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter = null,$usergroup = null,$usergroup_type = '')
 {
-	require_code('global4');
-	prevent_double_submit('ADD_WELCOME_EMAIL',NULL,$subject);
+    require_code('global4');
+    prevent_double_submit('ADD_WELCOME_EMAIL',null,$subject);
 
-	$map=array(
-		'w_name'=>$name,
-		'w_newsletter'=>$newsletter,
-		'w_send_time'=>$send_time,
-		'w_usergroup'=>$usergroup,
-		'w_usergroup_type'=>$usergroup_type,
-	);
-	$map+=insert_lang('w_subject',$subject,2);
-	$map+=insert_lang('w_text',$text,2);
-	$id=$GLOBALS['SITE_DB']->query_insert('f_welcome_emails',$map,true);
-	log_it('ADD_WELCOME_EMAIL',strval($id),$subject);
-	return $id;
+    $map = array(
+        'w_name' => $name,
+        'w_newsletter' => $newsletter,
+        'w_send_time' => $send_time,
+        'w_usergroup' => $usergroup,
+        'w_usergroup_type' => $usergroup_type,
+    );
+    $map += insert_lang('w_subject',$subject,2);
+    $map += insert_lang('w_text',$text,2);
+    $id = $GLOBALS['SITE_DB']->query_insert('f_welcome_emails',$map,true);
+    log_it('ADD_WELCOME_EMAIL',strval($id),$subject);
+    return $id;
 }
-

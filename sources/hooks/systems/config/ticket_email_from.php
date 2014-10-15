@@ -20,37 +20,37 @@
 
 class Hook_config_ticket_email_from
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TICKET_EMAIL_FROM',
-			'type'=>'line',
-			'category'=>'FEATURE',
-			'group'=>'SUPPORT_TICKETS_MAIL',
-			'explanation'=>'CONFIG_OPTION_ticket_email_from',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TICKET_EMAIL_FROM',
+            'type' => 'line',
+            'category' => 'FEATURE',
+            'group' => 'SUPPORT_TICKETS_MAIL',
+            'explanation' => 'CONFIG_OPTION_ticket_email_from',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'tickets',
-		);
-	}
+            'addon' => 'tickets',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (GOOGLE_APPENGINE) return 'tickets@appid.appspotmail.com';
+    public function get_default()
+    {
+        if (GOOGLE_APPENGINE) {
+            return 'tickets@appid.appspotmail.com';
+        }
 
-		return 'support@'.get_domain();
-	}
+        return 'support@' . get_domain();
+    }
 }
-
-

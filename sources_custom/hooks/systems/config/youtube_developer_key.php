@@ -15,35 +15,33 @@
 
 class Hook_config_youtube_developer_key
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'YOUTUBE_DEVELOPER_KEY',
-			'type'=>'line',
-			'category'=>'GALLERY',
-			'group'=>'GALLERY_SYNDICATION',
-			'explanation'=>'CONFIG_OPTION_youtube_developer_key',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'YOUTUBE_DEVELOPER_KEY',
+            'type' => 'line',
+            'category' => 'GALLERY',
+            'group' => 'GALLERY_SYNDICATION',
+            'explanation' => 'CONFIG_OPTION_youtube_developer_key',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'gallery_syndication',
-		);
-	}
+            'addon' => 'gallery_syndication',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

@@ -20,17 +20,17 @@
 
 class Hook_sw_random_quotes
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('random_quotes')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('random_quotes')) {
+            return array();
+        }
 
-		return array(array('main_quotes'=>array('YES','NO')),array());
-	}
+        return array(array('main_quotes' => array('YES','NO')),array());
+    }
 }
-
-

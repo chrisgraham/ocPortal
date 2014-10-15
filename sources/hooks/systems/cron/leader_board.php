@@ -20,14 +20,12 @@
 
 class Hook_cron_leader_board
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		require_code('leader_board');
-		calculate_latest_leader_board(false);
-	}
+    public function run()
+    {
+        require_code('leader_board');
+        calculate_latest_leader_board(false);
+    }
 }
-
-

@@ -20,7 +20,7 @@
 
 class Hook_occle_command_ban_member
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,27 +28,35 @@ class Hook_occle_command_ban_member
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return ~array  Array of stdcommand, stdhtml, stdout, and stderr responses (false: error)
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('ban_member',array('h','u'),array(true,true)),'','');
-		else
-		{
-			if (get_forum_type()!='ocf') return array('','','',do_lang('NO_OCF'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('ban_member',array('h','u'),array(true,true)),'','');
+        } else {
+            if (get_forum_type() != 'ocf') {
+                return array('','','',do_lang('NO_OCF'));
+            }
 
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','ban_member'));
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','ban_member'));
+            }
 
-			require_code('ocf_members_action');
-			require_code('ocf_members_action2');
-			require_lang('ocf');
+            require_code('ocf_members_action');
+            require_code('ocf_members_action2');
+            require_lang('ocf');
 
-			$member_id=$GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
+            $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($parameters[0]);
 
-			if (is_null($member_id)) return array('','','',do_lang('MEMBER_NO_EXIST'));
+            if (is_null($member_id)) {
+                return array('','','',do_lang('MEMBER_NO_EXIST'));
+            }
 
-			if ((array_key_exists('u',$options)) || (array_key_exists('unban',$options))) ocf_unban_member($member_id);
-			else ocf_ban_member($member_id);
-			return array('','',do_lang('SUCCESS'),'');
-		}
-	}
+            if ((array_key_exists('u',$options)) || (array_key_exists('unban',$options))) {
+                ocf_unban_member($member_id);
+            } else {
+                ocf_ban_member($member_id);
+            }
+            return array('','',do_lang('SUCCESS'),'');
+        }
+    }
 }
-

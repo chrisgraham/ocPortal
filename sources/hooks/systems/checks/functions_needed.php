@@ -20,16 +20,16 @@
 
 class Hook_check_functions_needed
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
+    public function run()
+    {
+        $warning = array();
 
-		$needed_functions=<<<END
+        $needed_functions = <<<END
 			abs addslashes array_count_values array_diff array_flip array_key_exists array_keys
 			array_intersect array_merge array_pop array_push array_reverse array_search array_shift
 			array_slice array_splice array_unique array_values arsort asort base64_decode base64_encode
@@ -105,13 +105,15 @@ class Hook_check_functions_needed
 			is_nan is_finite is_infinite ob_flush array_chunk array_fill array_change_key_case
 			exif_read_data var_export
 END;
-		foreach (preg_split('#\s+#',$needed_functions) as $function)
-		{
-			if (trim($function)=='') continue;
-			if (@preg_match('#(\s|,|^)'.preg_quote($function,'#').'(\s|$|,)#',strtolower(@ini_get('disable_functions').','.ini_get('suhosin.executor.func.blacklist').','.ini_get('suhosin.executor.include.blacklist').','.ini_get('suhosin.executor.eval.blacklist')))!=0)
-				$warning[]=do_lang_tempcode('DISABLED_FUNCTION',escape_html($function));
-		}
+        foreach (preg_split('#\s+#',$needed_functions) as $function) {
+            if (trim($function) == '') {
+                continue;
+            }
+            if (@preg_match('#(\s|,|^)' . preg_quote($function,'#') . '(\s|$|,)#',strtolower(@ini_get('disable_functions') . ',' . ini_get('suhosin.executor.func.blacklist') . ',' . ini_get('suhosin.executor.include.blacklist') . ',' . ini_get('suhosin.executor.eval.blacklist'))) != 0) {
+                $warning[] = do_lang_tempcode('DISABLED_FUNCTION',escape_html($function));
+            }
+        }
 
-		return $warning;
-	}
+        return $warning;
+    }
 }

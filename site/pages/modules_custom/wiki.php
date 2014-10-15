@@ -35,32 +35,35 @@
 
 class Mx_wiki extends Module_wiki
 {
-	function run_start()
-	{
-		i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
+    public function run_start()
+    {
+        i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-		return parent::run_start();
-	}
+        return parent::run_start();
+    }
 
-	function changes()
-	{
-		$url=get_option('wiki_alt_changes_link_stub');
-		if ($url=='') return parent::changes();
+    public function changes()
+    {
+        $url = get_option('wiki_alt_changes_link_stub');
+        if ($url == '') {
+            return parent::changes();
+        }
 
-		$_id=get_param('id',NULL);
-		$id=NULL;
-		if (!is_null($_id))
-		{
-			list($id,)=get_param_wiki_chain('id');
+        $_id = get_param('id',null);
+        $id = null;
+        if (!is_null($_id)) {
+            list($id,) = get_param_wiki_chain('id');
 
-			require_code('wiki_sync');
+            require_code('wiki_sync');
 
-			$page_name=find_filename_for_wiki_page($id);
+            $page_name = find_filename_for_wiki_page($id);
 
-			if (substr($url,-1)!='/') $url.='/';
-			$url.=$page_name.'.txt';
-		}
+            if (substr($url,-1) != '/') {
+                $url .= '/';
+            }
+            $url .= $page_name . '.txt';
+        }
 
-		return redirect_screen($this->title,$url);
-	}
+        return redirect_screen($this->title,$url);
+    }
 }

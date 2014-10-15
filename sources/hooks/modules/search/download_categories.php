@@ -20,45 +20,50 @@
 
 class Hook_search_download_categories
 {
-	/**
+    /**
 	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
-	function info($check_permissions=true)
-	{
-		if (!module_installed('downloads')) return NULL;
+    public function info($check_permissions = true)
+    {
+        if (!module_installed('downloads')) {
+            return NULL;
+        }
 
-		if ($check_permissions)
-		{
-			if (!has_actual_page_access(get_member(),'downloads')) return NULL;
-		}
+        if ($check_permissions) {
+            if (!has_actual_page_access(get_member(),'downloads')) {
+                return NULL;
+            }
+        }
 
-		if ($GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)')<=1) return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)') <= 1) {
+            return NULL;
+        }
 
-		require_lang('downloads');
+        require_lang('downloads');
 
-		$info=array();
-		$info['lang']=do_lang_tempcode('DOWNLOAD_CATEGORIES');
-		$info['default']=true;
+        $info = array();
+        $info['lang'] = do_lang_tempcode('DOWNLOAD_CATEGORIES');
+        $info['default'] = true;
 
-		$info['permissions']=array(
-			array(
-				'type'=>'zone',
-				'zone_name'=>get_module_zone('downloads'),
-			),
-			array(
-				'type'=>'page',
-				'zone_name'=>get_module_zone('downloads'),
-				'page_name'=>'downloads',
-			),
-		);
+        $info['permissions'] = array(
+            array(
+                'type' => 'zone',
+                'zone_name' => get_module_zone('downloads'),
+            ),
+            array(
+                'type' => 'page',
+                'zone_name' => get_module_zone('downloads'),
+                'page_name' => 'downloads',
+            ),
+        );
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run function for search results.
 	 *
 	 * @param  string			Search string
@@ -81,58 +86,56 @@ class Hook_search_download_categories
 	 * @param  boolean		Whether it is a boolean search
 	 * @return array			List of maps (template, orderer)
 	 */
-	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
-	{
-		$remapped_orderer='';
-		switch ($sort)
-		{
-			case 'title':
-				$remapped_orderer='category';
-				break;
+    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    {
+        $remapped_orderer = '';
+        switch ($sort) {
+            case 'title':
+                $remapped_orderer = 'category';
+                break;
 
-			case 'add_date':
-				$remapped_orderer='add_date';
-				break;
-		}
+            case 'add_date':
+                $remapped_orderer = 'add_date';
+                break;
+        }
 
-		require_lang('downloads');
+        require_lang('downloads');
 
-		// Calculate our where clause (search)
-		if ($author!='')
-		{
-			return array();
-		}
-		if (!is_null($cutoff))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='add_date>'.strval($cutoff);
-		}
+        // Calculate our where clause (search)
+        if ($author != '') {
+            return array();
+        }
+        if (!is_null($cutoff)) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'add_date>' . strval($cutoff);
+        }
 
-		// Calculate and perform query
-		$rows=get_search_rows('downloads_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_categories r',array('r.category'=>'SHORT_TRANS','r.description'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'downloads','id');
+        // Calculate and perform query
+        $rows = get_search_rows('downloads_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_categories r',array('r.category' => 'SHORT_TRANS','r.description' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'downloads','id');
 
-		$out=array();
-		foreach ($rows as $i=>$row)
-		{
-			$out[$i]['data']=$row;
-			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
-		}
+        $out = array();
+        foreach ($rows as $i => $row) {
+            $out[$i]['data'] = $row;
+            unset($rows[$i]);
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	/**
+    /**
 	 * Run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
 	 * @return tempcode	The output
 	 */
-	function render($row)
-	{
-		require_code('downloads');
-		return render_download_category_box($row);
-	}
+    public function render($row)
+    {
+        require_code('downloads');
+        return render_download_category_box($row);
+    }
 }
-
-

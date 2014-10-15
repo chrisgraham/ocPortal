@@ -20,7 +20,7 @@
 
 class Hook_occle_command_find
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,40 +28,54 @@ class Hook_occle_command_find
 	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('find',array('h','p','r','f','d'),array(true,true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','find'));
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('find',array('h','p','r','f','d'),array(true,true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','find'));
+            }
 
-			if (!((array_key_exists('d',$options)) || (array_key_exists('directories',$options)))) $directories=false;
-			elseif (array_key_exists('d',$options)) $directories=$options['d']=='1';
-			else $directories=$options['directories']=='1';
+            if (!((array_key_exists('d',$options)) || (array_key_exists('directories',$options)))) {
+                $directories = false;
+            } elseif (array_key_exists('d',$options)) {
+                $directories = $options['d'] == '1';
+            } else {
+                $directories = $options['directories'] == '1';
+            }
 
-			if (!((array_key_exists('f',$options)) || (array_key_exists('files',$options)))) $files=true;
-			elseif (array_key_exists('f',$options)) $files=$options['f']=='1';
-			else $files=$options['files']=='1';
+            if (!((array_key_exists('f',$options)) || (array_key_exists('files',$options)))) {
+                $files = true;
+            } elseif (array_key_exists('f',$options)) {
+                $files = $options['f'] == '1';
+            } else {
+                $files = $options['files'] == '1';
+            }
 
-			if (!array_key_exists(1,$parameters)) $parameters[1]=$occle_fs->print_working_directory(true);
-			else $parameters[1]=$occle_fs->_pwd_to_array($parameters[1]);
+            if (!array_key_exists(1,$parameters)) {
+                $parameters[1] = $occle_fs->print_working_directory(true);
+            } else {
+                $parameters[1] = $occle_fs->_pwd_to_array($parameters[1]);
+            }
 
-			if (!$occle_fs->_is_dir($parameters[1])) return array('','','',do_lang('NOT_A_DIR','2'));
+            if (!$occle_fs->_is_dir($parameters[1])) {
+                return array('','','',do_lang('NOT_A_DIR','2'));
+            }
 
-			$listing=$occle_fs->search($parameters[0],((array_key_exists('p',$options)) || (array_key_exists('preg',$options))),((array_key_exists('r',$options)) || (array_key_exists('recursive',$options))),$files,$directories,$parameters[1]);
+            $listing = $occle_fs->search($parameters[0],((array_key_exists('p',$options)) || (array_key_exists('preg',$options))),((array_key_exists('r',$options)) || (array_key_exists('recursive',$options))),$files,$directories,$parameters[1]);
 
-			return array(
-				'',
-				do_template('OCCLE_LS',array(
-					'_GUID'=>'50336439839279d3d8620d6f2124512a',
-					'DIRECTORY'=>$occle_fs->_pwd_to_string($parameters[1]),
-					'DIRECTORIES'=>$occle_fs->prepare_dir_contents_for_listing($listing[0]),
-					'FILES'=>$occle_fs->prepare_dir_contents_for_listing($listing[1]),
-				)),
-				'',
-				''
-			);
-		}
-	}
+            return array(
+                '',
+                do_template('OCCLE_LS',array(
+                    '_GUID' => '50336439839279d3d8620d6f2124512a',
+                    'DIRECTORY' => $occle_fs->_pwd_to_string($parameters[1]),
+                    'DIRECTORIES' => $occle_fs->prepare_dir_contents_for_listing($listing[0]),
+                    'FILES' => $occle_fs->prepare_dir_contents_for_listing($listing[1]),
+                )),
+                '',
+                ''
+            );
+        }
+    }
 }
-

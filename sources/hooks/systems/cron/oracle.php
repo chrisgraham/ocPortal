@@ -20,28 +20,24 @@
 
 class Hook_cron_oracle
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		if (get_db_type()=='oracle')
-		{
-			$oracle_index_cleanup_last_time=intval(get_long_value('oracle_index_cleanup_last_time'));
+    public function run()
+    {
+        if (get_db_type() == 'oracle') {
+            $oracle_index_cleanup_last_time = intval(get_long_value('oracle_index_cleanup_last_time'));
 
-			if ($oracle_index_cleanup_last_time<(time()-60*60*5)) // every 5 hours
-			{
-				set_long_value('oracle_index_cleanup_last_time',strval(time()));
+            if ($oracle_index_cleanup_last_time<(time()-60*60*5)) { // every 5 hours
+                set_long_value('oracle_index_cleanup_last_time',strval(time()));
 
-				$indices=$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('i_name'));
-				foreach ($indices as $index)
-				{
-					if ($index['i_name'][0]=='#')
-						$GLOBALS['SITE_DB']->query('EXEC CTX_DDL.SYNC_INDEX(\''.substr($index['i_name'],1).'\')');
-				}
-			}
-		}
-	}
+                $indices = $GLOBALS['SITE_DB']->query_select('db_meta_indices',array('i_name'));
+                foreach ($indices as $index) {
+                    if ($index['i_name'][0] == '#') {
+                        $GLOBALS['SITE_DB']->query('EXEC CTX_DDL.SYNC_INDEX(\'' . substr($index['i_name'],1) . '\')');
+                    }
+                }
+            }
+        }
+    }
 }
-
-

@@ -20,16 +20,16 @@
 
 class Hook_Notification_staff_checklist extends Hook_Notification__Staff
 {
-	/**
+    /**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *
 	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
 	 */
-	function list_handled_codes()
-	{
-		$list=array();
-		$list['staff_checklist_notify']=array(do_lang('STAFF'),do_lang('staff_checklist:NOTIFICATION_TYPE_staff_checklist_notify'));
-		return $list;
-	}
+    public function list_handled_codes()
+    {
+        $list = array();
+        $list['staff_checklist_notify'] = array(do_lang('STAFF'),do_lang('staff_checklist:NOTIFICATION_TYPE_staff_checklist_notify'));
+        return $list;
+    }
 }

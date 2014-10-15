@@ -20,17 +20,17 @@
 
 class Hook_sw_printer_friendly_block
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('printer_friendly_block')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('printer_friendly_block')) {
+            return array();
+        }
 
-		return array(array(),array('side_printer_friendly'=>array('PANEL_NONE','PANEL_NONE')));
-	}
+        return array(array(),array('side_printer_friendly' => array('PANEL_NONE','PANEL_NONE')));
+    }
 }
-
-

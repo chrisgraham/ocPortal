@@ -20,36 +20,34 @@
 
 class Hook_config_cc_address
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CC_ADDRESS',
-			'type'=>'line',
-			'category'=>'SITE',
-			'group'=>'EMAIL',
-			'explanation'=>'CONFIG_OPTION_cc_address',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>3,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CC_ADDRESS',
+            'type' => 'line',
+            'category' => 'SITE',
+            'group' => 'EMAIL',
+            'explanation' => 'CONFIG_OPTION_cc_address',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 3,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

@@ -20,17 +20,15 @@
 
 class Hook_admin_import_types_tickets
 {
-	/**
+    /**
 	 * Get a map of valid import types.
 	 *
 	 * @return array		A map from codename to the language string that names them to the user.
 	 */
-	function run()
-	{
-		return array(
-			'support_tickets'=>'SUPPORT_TICKETS',
-		);
-	}
+    public function run()
+    {
+        return array(
+            'support_tickets' => 'SUPPORT_TICKETS',
+        );
+    }
 }
-
-

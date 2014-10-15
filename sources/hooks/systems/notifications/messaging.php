@@ -20,28 +20,28 @@
 
 class Hook_Notification_messaging extends Hook_Notification__Staff
 {
-	/**
+    /**
 	 * Find whether a handled notification code supports categories.
 	 * (Content types, for example, will define notifications on specific categories, not just in general. The categories are interpreted by the hook and may be complex. E.g. it might be like a regexp match, or like FORUM:3 or TOPIC:100)
 	 *
 	 * @param  ID_TEXT		Notification code
 	 * @return boolean		Whether it does
 	 */
-	function supports_categories($notification_code)
-	{
-		return true;
-	}
+    public function supports_categories($notification_code)
+    {
+        return true;
+    }
 
-	/**
+    /**
 	 * Get a list of all the notification codes this hook can handle.
 	 * (Addons can define hooks that handle whole sets of codes, so hooks are written so they can take wide authority)
 	 *
 	 * @return array			List of codes (mapping between code names, and a pair: section and labelling for those codes)
 	 */
-	function list_handled_codes()
-	{
-		$list=array();
-		$list['messaging']=array(do_lang('notifications:MESSAGES'),do_lang('messaging:NOTIFICATION_TYPE_messaging'));
-		return $list;
-	}
+    public function list_handled_codes()
+    {
+        $list = array();
+        $list['messaging'] = array(do_lang('notifications:MESSAGES'),do_lang('messaging:NOTIFICATION_TYPE_messaging'));
+        return $list;
+    }
 }

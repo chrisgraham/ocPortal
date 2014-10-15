@@ -20,17 +20,15 @@
 
 class Hook_admin_import_types_downloads
 {
-	/**
+    /**
 	 * Get a map of valid import types.
 	 *
 	 * @return array		A map from codename to the language string that names them to the user.
 	 */
-	function run()
-	{
-		return array(
-			'downloads_and_categories'=>'SECTION_DOWNLOADS',
-		);
-	}
+    public function run()
+    {
+        return array(
+            'downloads_and_categories' => 'SECTION_DOWNLOADS',
+        );
+    }
 }
-
-

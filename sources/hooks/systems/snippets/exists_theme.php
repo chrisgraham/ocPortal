@@ -20,18 +20,20 @@
 
 class Hook_exists_theme
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$val=get_param('name');
+    public function run()
+    {
+        $val = get_param('name');
 
-		$test=file_exists(get_file_base().'/themes/'.$val) || file_exists(get_custom_file_base().'/themes/'.$val);
-		if (!$test) return new ocp_tempcode();
+        $test = file_exists(get_file_base() . '/themes/' . $val) || file_exists(get_custom_file_base() . '/themes/' . $val);
+        if (!$test) {
+            return new ocp_tempcode();
+        }
 
-		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
-	}
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
+    }
 }

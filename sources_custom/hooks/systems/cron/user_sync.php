@@ -15,28 +15,26 @@
 
 class Hook_cron_user_sync
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		if (get_value('user_sync_enabled')==='1')
-		{
-			$_last_time=get_long_value('last_cron_user_sync');
-			$last_time=is_null($_last_time)?mixed():intval($_last_time);
-			if (!is_null($last_time))
-			{
-				if ((time()-$last_time)<60*60*24) return;
-			}
+    public function run()
+    {
+        if (get_value('user_sync_enabled') === '1') {
+            $_last_time = get_long_value('last_cron_user_sync');
+            $last_time = is_null($_last_time)?mixed():intval($_last_time);
+            if (!is_null($last_time)) {
+                if ((time()-$last_time)<60*60*24) {
+                    return;
+                }
+            }
 
-			$time=time();
-			set_long_value('last_cron_user_sync',strval($time));
+            $time = time();
+            set_long_value('last_cron_user_sync',strval($time));
 
-			require_code('user_sync');
+            require_code('user_sync');
 
-			user_sync__inbound($last_time);
-		}
-	}
+            user_sync__inbound($last_time);
+        }
+    }
 }
-
-

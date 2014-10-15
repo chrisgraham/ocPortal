@@ -20,16 +20,16 @@
 
 class Hook_count
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$name=get_param('name');
-		update_stat($name,1);
+    public function run()
+    {
+        $name = get_param('name');
+        update_stat($name,1);
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }

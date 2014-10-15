@@ -20,63 +20,68 @@
 
 class Hook_search_news
 {
-	/**
+    /**
 	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
-	function info($check_permissions=true)
-	{
-		if (!module_installed('news')) return NULL;
+    public function info($check_permissions = true)
+    {
+        if (!module_installed('news')) {
+            return NULL;
+        }
 
-		if ($check_permissions)
-		{
-			if (!has_actual_page_access(get_member(),'news')) return NULL;
-		}
+        if ($check_permissions) {
+            if (!has_actual_page_access(get_member(),'news')) {
+                return NULL;
+            }
+        }
 
-		if ($GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)')==0) return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)') == 0) {
+            return NULL;
+        }
 
-		require_lang('news');
+        require_lang('news');
 
-		$info=array();
-		$info['lang']=do_lang_tempcode('NEWS');
-		$info['default']=true;
-		$info['category']='news_category';
-		$info['integer_category']=true;
+        $info = array();
+        $info['lang'] = do_lang_tempcode('NEWS');
+        $info['default'] = true;
+        $info['category'] = 'news_category';
+        $info['integer_category'] = true;
 
-		$info['permissions']=array(
-			array(
-				'type'=>'zone',
-				'zone_name'=>get_module_zone('news'),
-			),
-			array(
-				'type'=>'page',
-				'zone_name'=>get_module_zone('news'),
-				'page_name'=>'news',
-			),
-		);
+        $info['permissions'] = array(
+            array(
+                'type' => 'zone',
+                'zone_name' => get_module_zone('news'),
+            ),
+            array(
+                'type' => 'page',
+                'zone_name' => get_module_zone('news'),
+                'page_name' => 'news',
+            ),
+        );
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Get a list of entries for the content covered by this search hook. In hierarchical list selection format.
 	 *
 	 * @param  string			The default selected item
 	 * @return tempcode		Tree structure
 	 */
-	function get_tree($_selected)
-	{
-		$selected=intval($_selected);
+    public function get_tree($_selected)
+    {
+        $selected = intval($_selected);
 
-		require_code('news');
+        require_code('news');
 
-		$tree=create_selection_list_news_categories($selected);
-		return $tree;
-	}
+        $tree = create_selection_list_news_categories($selected);
+        return $tree;
+    }
 
-	/**
+    /**
 	 * Run function for search results.
 	 *
 	 * @param  string			Search string
@@ -99,84 +104,84 @@ class Hook_search_news
 	 * @param  boolean		Whether it is a boolean search
 	 * @return array			List of maps (template, orderer)
 	 */
-	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
-	{
-		$remapped_orderer='';
-		switch ($sort)
-		{
-			case 'average_rating':
-			case 'compound_rating':
-				$remapped_orderer=$sort.':news:id';
-				break;
+    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    {
+        $remapped_orderer = '';
+        switch ($sort) {
+            case 'average_rating':
+            case 'compound_rating':
+                $remapped_orderer = $sort . ':news:id';
+                break;
 
-			case 'title':
-				$remapped_orderer='title';
-				break;
+            case 'title':
+                $remapped_orderer = 'title';
+                break;
 
-			case 'add_date':
-				$remapped_orderer='date_and_time';
-				break;
-		}
+            case 'add_date':
+                $remapped_orderer = 'date_and_time';
+                break;
+        }
 
-		require_code('news');
-		require_lang('news');
-		require_css('news');
+        require_code('news');
+        require_lang('news');
+        require_css('news');
 
-		// Calculate our where clause (search)
-		$sq=build_search_submitter_clauses('submitter',$author_id,$author,'author');
-		if (is_null($sq)) return array(); else $where_clause.=$sq;
-		if (!is_null($cutoff))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='date_and_time>'.strval($cutoff);
-		}
+        // Calculate our where clause (search)
+        $sq = build_search_submitter_clauses('submitter',$author_id,$author,'author');
+        if (is_null($sq)) {
+            return array();
+        } else {
+            $where_clause .= $sq;
+        }
+        if (!is_null($cutoff)) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'date_and_time>' . strval($cutoff);
+        }
 
-		if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='validated=1';
-		}
+        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'validated=1';
+        }
 
-		$privacy_join='';
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','r');
-			$where_clause.=$privacy_where;
-		}
+        $privacy_join = '';
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            list($privacy_join,$privacy_where) = get_privacy_where_clause('news','r');
+            $where_clause .= $privacy_where;
+        }
 
-		// Calculate and perform query
-		$rows=get_search_rows('news','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'news r'.$privacy_join,array('r.title'=>'SHORT_TRANS__COMCODE','r.news'=>'LONG_TRANS__COMCODE','r.news_article'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'news','news_category');
+        // Calculate and perform query
+        $rows = get_search_rows('news','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'news r' . $privacy_join,array('r.title' => 'SHORT_TRANS__COMCODE','r.news' => 'LONG_TRANS__COMCODE','r.news_article' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'news','news_category');
 
-		$out=array();
-		foreach ($rows as $i=>$row)
-		{
-			$out[$i]['data']=$row;
-			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
-		}
+        $out = array();
+        foreach ($rows as $i => $row) {
+            $out[$i]['data'] = $row;
+            unset($rows[$i]);
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	/**
+    /**
 	 * Run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
 	 * @return tempcode	The output
 	 */
-	function render($myrow)
-	{
-		global $NEWS_CATS_CACHE;
-		if (!isset($NEWS_CATS_CACHE))
-		{
-			$NEWS_CATS_CACHE=$GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner'=>NULL));
-			$NEWS_CATS_CACHE=list_to_map('id',$NEWS_CATS_CACHE);
-		}
+    public function render($myrow)
+    {
+        global $NEWS_CATS_CACHE;
+        if (!isset($NEWS_CATS_CACHE)) {
+            $NEWS_CATS_CACHE = $GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('nc_owner' => NULL));
+            $NEWS_CATS_CACHE = list_to_map('id',$NEWS_CATS_CACHE);
+        }
 
-		require_code('news');
-		return render_news_box($myrow);
-	}
+        require_code('news');
+        return render_news_box($myrow);
+    }
 }
-
-

@@ -20,16 +20,17 @@
 
 class Hook_check_gd
 {
-	/**
+    /**
 	 * Check various input var restrictions.
 	 *
 	 * @return	array		List of warnings
 	 */
-	function run()
-	{
-		$warning=array();
-		if (!function_exists('imagecreatefromstring'))
-			$warning[]=do_lang_tempcode('NO_GD_ON_SERVER');
-		return $warning;
-	}
+    public function run()
+    {
+        $warning = array();
+        if (!function_exists('imagecreatefromstring')) {
+            $warning[] = do_lang_tempcode('NO_GD_ON_SERVER');
+        }
+        return $warning;
+    }
 }

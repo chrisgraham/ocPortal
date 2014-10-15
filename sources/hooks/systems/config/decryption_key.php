@@ -20,35 +20,37 @@
 
 class Hook_config_decryption_key
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'DECRYPTION_KEY',
-			'type'=>'line',
-			'category'=>'PRIVACY',
-			'group'=>'ADVANCED',
-			'explanation'=>'CONFIG_OPTION_decryption_key',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'DECRYPTION_KEY',
+            'type' => 'line',
+            'category' => 'PRIVACY',
+            'group' => 'ADVANCED',
+            'explanation' => 'CONFIG_OPTION_decryption_key',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		require_code('encryption'); if (get_forum_type()!='ocf') return NULL; return is_encryption_available()?'':NULL;
-	}
+    public function get_default()
+    {
+        require_code('encryption');
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
+        return is_encryption_available()?'':null;
+    }
 }
-
-

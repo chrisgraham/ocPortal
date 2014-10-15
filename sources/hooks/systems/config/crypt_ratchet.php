@@ -20,62 +20,56 @@
 
 class Hook_config_crypt_ratchet
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CRYPT_RATCHET',
-			'type'=>'integer',
-			'category'=>'SECURITY',
-			'group'=>'ADVANCED',
-			'explanation'=>'CONFIG_OPTION_crypt_ratchet',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CRYPT_RATCHET',
+            'type' => 'integer',
+            'category' => 'SECURITY',
+            'group' => 'ADVANCED',
+            'explanation' => 'CONFIG_OPTION_crypt_ratchet',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (function_exists('password_hash'))
-		{
-			/**
+    public function get_default()
+    {
+        if (function_exists('password_hash')) {
+            /**
 			 * This code will benchmark your server to determine how high of a cost you can
 			 * afford. You want to set the highest cost that you can without slowing down
 			 * you server too much. 10 is a good baseline, and more is good if your servers
 			 * are fast enough. The code below aims for <= 50 milliseconds stretching time,
 			 * which is a good baseline for systems handling interactive logins.
 			 */
-			$time_target=0.05; // 50 milliseconds
+            $time_target = 0.05; // 50 milliseconds
 
-			$cost=10;
-			do
-			{
-				$start=microtime(true);
-				password_hash('test',PASSWORD_BCRYPT,array('cost'=>$cost));
-				$end=microtime(true);
-				$time_dif=($end-$start);
-				$cost++;
-			}
-			while (($time_dif<$time_target) && ($cost<=31));
-			$cost--;
-		} else
-		{
-			$cost=10;
-		}
+            $cost = 10;
+            do {
+                $start = microtime(true);
+                password_hash('test',PASSWORD_BCRYPT,array('cost' => $cost));
+                $end = microtime(true);
+                $time_dif = ($end-$start);
+                $cost++;
+            } while (($time_dif<$time_target) && ($cost <= 31));
+            $cost--;
+        } else {
+            $cost = 10;
+        }
 
-		return strval($cost);
-	}
+        return strval($cost);
+    }
 }
-
-

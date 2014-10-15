@@ -20,17 +20,15 @@
 
 class Hook_admin_import_types_filedump
 {
-	/**
+    /**
 	 * Get a map of valid import types.
 	 *
 	 * @return array		A map from codename to the language string that names them to the user.
 	 */
-	function run()
-	{
-		return array(
-			'filedump'=>'FILEDUMP',
-		);
-	}
+    public function run()
+    {
+        return array(
+            'filedump' => 'FILEDUMP',
+        );
+    }
 }
-
-

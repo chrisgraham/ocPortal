@@ -20,78 +20,77 @@
 
 class Hook_content_meta_aware_wiki_post
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'wiki:WIKI_POST',
+            'content_type_label' => 'wiki:WIKI_POST',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'wiki_posts',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>'page_id',
-			'parent_category_meta_aware_type'=>'wiki_page',
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>'page_id', // For category permissions
-			'category_type'=>'wiki_page', // For category permissions
-			'parent_spec__table_name'=>'wiki_children',
-			'parent_spec__parent_name'=>'parent_id',
-			'parent_spec__field_name'=>'child_id',
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'wiki_posts',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => 'page_id',
+            'parent_category_meta_aware_type' => 'wiki_page',
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => 'page_id', // For category permissions
+            'category_type' => 'wiki_page', // For category permissions
+            'parent_spec__table_name' => 'wiki_children',
+            'parent_spec__parent_name' => 'parent_id',
+            'parent_spec__field_name' => 'child_id',
+            'category_is_string' => false,
 
-			'title_field'=>'the_message',
-			'title_field_dereference'=>true,
-			'description_field'=>'the_message',
-			'thumb_field'=>NULL,
+            'title_field' => 'the_message',
+            'title_field_dereference' => true,
+            'description_field' => 'the_message',
+            'thumb_field' => NULL,
 
-			'view_page_link_pattern'=>'_SEARCH:wiki:find_post:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:wiki:post:post_id=_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:wiki:misc:_WILD',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('low',get_member(),get_ip_address(),'wiki'))?(get_module_zone('wiki').':wiki:add_post'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('wiki')).':wiki',
+            'view_page_link_pattern' => '_SEARCH:wiki:find_post:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:wiki:post:post_id=_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:wiki:misc:_WILD',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('low',get_member(),get_ip_address(),'wiki'))?(get_module_zone('wiki') . ':wiki:add_post'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('wiki')) . ':wiki',
 
-			'support_url_monikers'=>false,
+            'support_url_monikers' => false,
 
-			'views_field'=>'wiki_views',
-			'submitter_field'=>'member_id',
-			'add_time_field'=>'date_and_time',
-			'edit_time_field'=>'edit_date',
-			'date_field'=>'date_and_time',
-			'validated_field'=>'validated',
+            'views_field' => 'wiki_views',
+            'submitter_field' => 'member_id',
+            'add_time_field' => 'date_and_time',
+            'edit_time_field' => 'edit_date',
+            'date_field' => 'date_and_time',
+            'validated_field' => 'validated',
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>'wiki_posts',
+            'search_hook' => 'wiki_posts',
 
-			'addon_name'=>'wiki',
+            'addon_name' => 'wiki',
 
-			'cms_page'=>'wiki',
-			'module'=>'wiki',
+            'cms_page' => 'wiki',
+            'module' => 'wiki',
 
-			'occle_filesystem_hook'=>'wiki',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'wiki',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>NULL,
+            'rss_hook' => NULL,
 
-			'actionlog_regexp'=>'\w+_WIKI_POST',
-		);
+            'actionlog_regexp' => '\w+_WIKI_POST',
+        );
+    }
 
-	}
-
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -103,10 +102,10 @@ class Hook_content_meta_aware_wiki_post
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('wiki');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('wiki');
 
-		return render_wiki_post_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?NULL:intval($root),$guid);
-	}
+        return render_wiki_post_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+    }
 }

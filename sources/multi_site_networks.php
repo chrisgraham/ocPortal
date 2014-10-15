@@ -24,41 +24,42 @@
  * @param  URLPATH		The URL we grab our netlink from. If this is not blank, instead of getting a netlink block, we direct to a netlink site.
  * @return tempcode		The netlink block
  */
-function do_netlink($redir_url='')
+function do_netlink($redir_url = '')
 {
-	header('Content-type: text/plain; charset='.get_charset());
+    header('Content-type: text/plain; charset=' . get_charset());
 
-	// If we are redirecting
-	if ($redir_url!='')
-	{
-		if ((strpos($redir_url,"\n")!==false) || (strpos($redir_url,"\r")!==false))
-			log_hack_attack_and_exit('HEADER_SPLIT_HACK');
-		header('Location: '.$redir_url);
-		exit();
-	}
+    // If we are redirecting
+    if ($redir_url != '') {
+        if ((strpos($redir_url,"\n") !== false) || (strpos($redir_url,"\r") !== false)) {
+            log_hack_attack_and_exit('HEADER_SPLIT_HACK');
+        }
+        header('Location: ' . $redir_url);
+        exit();
+    }
 
-	// Ok we're displaying a netlink, which will be dumped right into the body of the reading site
-	//  - this isn't actually a weburl that is actually displayed, its loaded by ocPortal and embedded-inline
+    // Ok we're displaying a netlink, which will be dumped right into the body of the reading site
+    //  - this isn't actually a weburl that is actually displayed, its loaded by ocPortal and embedded-inline
 
-	// For all the names in our network
-	require_code('textfiles');
-	$lines=explode("\n",read_text_file('netlink',NULL,true));
-	if (count($lines)==0) return new ocp_tempcode();
-	$content=new ocp_tempcode();
-	foreach ($lines as $line)
-	{
-		$parts=explode('=',$line,2);
-		if (count($parts)!=2) continue;
-		$name=rtrim($parts[0]);
-		$url=trim($parts[1]);
+    // For all the names in our network
+    require_code('textfiles');
+    $lines = explode("\n",read_text_file('netlink',null,true));
+    if (count($lines) == 0) {
+        return new ocp_tempcode();
+    }
+    $content = new ocp_tempcode();
+    foreach ($lines as $line) {
+        $parts = explode('=',$line,2);
+        if (count($parts) != 2) {
+            continue;
+        }
+        $name = rtrim($parts[0]);
+        $url = trim($parts[1]);
 
-		// Are we looking at the source site in the network?
-		$selected=(strtolower($url)==strtolower(get_param('source','')));
+        // Are we looking at the source site in the network?
+        $selected = (strtolower($url) == strtolower(get_param('source','')));
 
-		$content->attach(form_input_list_entry(base64_encode($url),$selected,$name));
-	}
+        $content->attach(form_input_list_entry(base64_encode($url),$selected,$name));
+    }
 
-	return do_template('NETLINK',array('_GUID'=>'180321222dc5dc99a231597c803f0726','CONTENT'=>$content));
+    return do_template('NETLINK',array('_GUID' => '180321222dc5dc99a231597c803f0726','CONTENT' => $content));
 }
-
-

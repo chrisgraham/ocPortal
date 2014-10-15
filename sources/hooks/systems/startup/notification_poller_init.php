@@ -20,17 +20,16 @@
 
 class Hook_startup_notification_poller_init
 {
-	/**
+    /**
 	 * Run startup code.
 	 */
-	function run()
-	{
-		if ((running_script('index')) && (!is_guest()) && (get_option('notification_poll_frequency')!='0'))
-		{
-			require_javascript('javascript_notification_poller');
-			require_javascript('javascript_ajax');
+    public function run()
+    {
+        if ((running_script('index')) && (!is_guest()) && (get_option('notification_poll_frequency') != '0')) {
+            require_javascript('javascript_notification_poller');
+            require_javascript('javascript_ajax');
 
-			attach_to_screen_footer(do_template('NOTIFICATION_POLLER'));
-		}
-	}
+            attach_to_screen_footer(do_template('NOTIFICATION_POLLER'));
+        }
+    }
 }

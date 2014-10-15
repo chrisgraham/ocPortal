@@ -20,36 +20,34 @@
 
 class Hook_comcode_pages
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		require_lang('zones');
+    public function info()
+    {
+        require_lang('zones');
 
-		$info=array();
-		$info['title']=do_lang_tempcode('COMCODE_PAGES');
-		$info['description']=do_lang_tempcode('DESCRIPTION_COMCODE_PAGE_CACHE');
-		$info['type']='cache';
+        $info = array();
+        $info['title'] = do_lang_tempcode('COMCODE_PAGES');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_COMCODE_PAGE_CACHE');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		require_code('caches3');
+    public function run()
+    {
+        require_code('caches3');
 
-		erase_comcode_page_cache();
+        erase_comcode_page_cache();
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }
-
-

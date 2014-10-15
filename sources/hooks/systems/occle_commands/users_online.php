@@ -20,7 +20,7 @@
 
 class Hook_occle_command_users_online
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,27 +28,30 @@ class Hook_occle_command_users_online
 	 * @param  object	A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('users_online',array('h'),array()),'','');
-		else
-		{
-			$count=0;
-			require_code('users2');
-			$members=get_users_online(true,NULL,$count);
-			if (is_null($members)) return array('','',do_lang('TOO_MANY_USERS_ONLINE'),'');
-			$out=new ocp_tempcode();
-			$guests=0;
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('users_online',array('h'),array()),'','');
+        } else {
+            $count = 0;
+            require_code('users2');
+            $members = get_users_online(true,null,$count);
+            if (is_null($members)) {
+                return array('','',do_lang('TOO_MANY_USERS_ONLINE'),'');
+            }
+            $out = new ocp_tempcode();
+            $guests = 0;
 
-			$valid_members=array();
-			foreach ($members as $member)
-			{
-				if ((is_guest($member['member_id'])) || (is_null($member['cache_username']))) $guests++;
-				else $valid_members[$member['cache_username']]=$member['member_id'];
-			}
+            $valid_members = array();
+            foreach ($members as $member) {
+                if ((is_guest($member['member_id'])) || (is_null($member['cache_username']))) {
+                    $guests++;
+                } else {
+                    $valid_members[$member['cache_username']] = $member['member_id'];
+                }
+            }
 
-			return array('',do_template('OCCLE_USERS_ONLINE',array('_GUID'=>'fcf779ef175895d425b706e40fb3252a','MEMBERS'=>$valid_members,'GUESTS'=>integer_format($guests))),'','');
-		}
-	}
+            return array('',do_template('OCCLE_USERS_ONLINE',array('_GUID' => 'fcf779ef175895d425b706e40fb3252a','MEMBERS' => $valid_members,'GUESTS' => integer_format($guests))),'','');
+        }
+    }
 }
-

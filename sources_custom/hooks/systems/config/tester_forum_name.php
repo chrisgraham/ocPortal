@@ -15,37 +15,35 @@
 
 class Hook_config_tester_forum_name
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TESTER_FORUM_NAME',
-			'type'=>'forum',
-			'category'=>'FEATURE',
-			'group'=>'TESTER',
-			'explanation'=>'CONFIG_OPTION_tester_forum_name',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>2,
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TESTER_FORUM_NAME',
+            'type' => 'forum',
+            'category' => 'FEATURE',
+            'group' => 'TESTER',
+            'explanation' => 'CONFIG_OPTION_tester_forum_name',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 2,
+            'required' => true,
 
-			'addon'=>'tester',
-		);
-	}
+            'addon' => 'tester',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return do_lang('tester:DEFAULT_TESTER_FORUM','','','',get_site_default_lang());
-	}
+    public function get_default()
+    {
+        return do_lang('tester:DEFAULT_TESTER_FORUM','','','',get_site_default_lang());
+    }
 }
-
-

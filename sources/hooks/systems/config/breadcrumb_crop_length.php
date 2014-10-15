@@ -20,35 +20,33 @@
 
 class Hook_config_breadcrumb_crop_length
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'BREADCRUMB_CROP_LENGTH',
-			'type'=>'integer',
-			'category'=>'SITE',
-			'group'=>'BREADCRUMBS',
-			'explanation'=>'CONFIG_OPTION_breadcrumb_crop_length',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'BREADCRUMB_CROP_LENGTH',
+            'type' => 'integer',
+            'category' => 'SITE',
+            'group' => 'BREADCRUMBS',
+            'explanation' => 'CONFIG_OPTION_breadcrumb_crop_length',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '26';
-	}
+    public function get_default()
+    {
+        return '26';
+    }
 }
-
-

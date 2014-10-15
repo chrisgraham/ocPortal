@@ -20,34 +20,34 @@
 
 class Hook_unvalidated_ocf_posts
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function info()
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		require_lang('ocf');
+        require_lang('ocf');
 
-		$info=array();
-		$info['db_table']='f_posts';
-		$info['db_identifier']='id';
-		$info['db_validated']='p_validated';
-		$info['db_title']='p_title';
-		$info['db_title_dereference']=false;
-		$info['db_add_date']='p_time';
-		$info['db_edit_date']='p_last_edit_time';
-		$info['edit_module']='topics';
-		$info['edit_type']='edit_post';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('FORUM_POSTS');
-		$info['is_minor']=true;
-		$info['db']=$GLOBALS['FORUM_DB'];
+        $info = array();
+        $info['db_table'] = 'f_posts';
+        $info['db_identifier'] = 'id';
+        $info['db_validated'] = 'p_validated';
+        $info['db_title'] = 'p_title';
+        $info['db_title_dereference'] = false;
+        $info['db_add_date'] = 'p_time';
+        $info['db_edit_date'] = 'p_last_edit_time';
+        $info['edit_module'] = 'topics';
+        $info['edit_type'] = 'edit_post';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('FORUM_POSTS');
+        $info['is_minor'] = true;
+        $info['db'] = $GLOBALS['FORUM_DB'];
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

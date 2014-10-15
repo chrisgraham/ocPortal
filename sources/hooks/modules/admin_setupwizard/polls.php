@@ -20,17 +20,17 @@
 
 class Hook_sw_polls
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('polls')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('polls')) {
+            return array();
+        }
 
-		return array(array('main_poll'=>array('NO','YES_CELL')),array());
-	}
+        return array(array('main_poll' => array('NO','YES_CELL')),array());
+    }
 }
-
-

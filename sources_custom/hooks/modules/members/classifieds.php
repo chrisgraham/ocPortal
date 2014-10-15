@@ -15,24 +15,26 @@
 
 class Hook_members_classifieds
 {
-	/**
+    /**
 	 * Find member-related links to inject.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting link hooks for
 	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
 	 */
-	function run($member_id)
-	{
-		if (!has_actual_page_access(get_member(),'classifieds',get_module_zone('classifieds'))) return array();
+    public function run($member_id)
+    {
+        if (!has_actual_page_access(get_member(),'classifieds',get_module_zone('classifieds'))) {
+            return array();
+        }
 
-		require_lang('classifieds');
+        require_lang('classifieds');
 
-		$result=array();
+        $result = array();
 
-		if (($member_id==get_member()) || (has_privilege(get_member(),'assume_any_member')))
-			$result[]=array('content',do_lang('CLASSIFIED_ADVERTS'),build_url(array('page'=>'classifieds','type'=>'adverts','member_id'=>$member_id),get_module_zone('classifieds')),'menu/rich_content/catalogues/classifieds');
+        if (($member_id == get_member()) || (has_privilege(get_member(),'assume_any_member'))) {
+            $result[] = array('content',do_lang('CLASSIFIED_ADVERTS'),build_url(array('page' => 'classifieds','type' => 'adverts','member_id' => $member_id),get_module_zone('classifieds')),'menu/rich_content/catalogues/classifieds');
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 }
-

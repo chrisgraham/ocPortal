@@ -20,36 +20,34 @@
 
 class Hook_config_attachment_default_height
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ATTACHMENT_DEFAULT_HEIGHT',
-			'type'=>'integer',
-			'category'=>'FEATURE',
-			'group'=>'_COMCODE',
-			'explanation'=>'CONFIG_OPTION_attachment_default_height',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>2,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ATTACHMENT_DEFAULT_HEIGHT',
+            'type' => 'integer',
+            'category' => 'FEATURE',
+            'group' => '_COMCODE',
+            'explanation' => 'CONFIG_OPTION_attachment_default_height',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 2,
 
-			'addon'=>'core_rich_media',
-		);
-	}
+            'addon' => 'core_rich_media',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '315'; // NB: This is for videos (etc), not images
-	}
+    public function get_default()
+    {
+        return '315'; // NB: This is for videos (etc), not images
+    }
 }
-
-

@@ -15,35 +15,33 @@
 
 class Hook_config_community_billboard
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'COST_community_billboard',
-			'type'=>'integer',
-			'category'=>'POINTSTORE',
-			'group'=>'COMMUNITY_BILLBOARD_MESSAGE',
-			'explanation'=>'CONFIG_OPTION_community_billboard',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'COST_community_billboard',
+            'type' => 'integer',
+            'category' => 'POINTSTORE',
+            'group' => 'COMMUNITY_BILLBOARD_MESSAGE',
+            'explanation' => 'CONFIG_OPTION_community_billboard',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'community_billboard',
-		);
-	}
+            'addon' => 'community_billboard',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '200';
-	}
+    public function get_default()
+    {
+        return '200';
+    }
 }
-
-

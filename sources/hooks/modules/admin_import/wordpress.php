@@ -20,20 +20,18 @@
 
 class Hook_wordpress
 {
-	/**
+    /**
 	 * Standard importer hook info function.
 	 *
 	 * @return ?array	Importer handling details (NULL: importer is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['product']='Wordpress blog';
-		$info['hook_type']='redirect';
-		$info['import_module']='cms_blogs';
-		$info['import_method_name']='import_wordpress';
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['product'] = 'Wordpress blog';
+        $info['hook_type'] = 'redirect';
+        $info['import_module'] = 'cms_blogs';
+        $info['import_method_name'] = 'import_wordpress';
+        return $info;
+    }
 }
-
-

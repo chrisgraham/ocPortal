@@ -26,29 +26,29 @@
  */
 class Database_Static_postgresql
 {
-	var $cache_db=array();
+    public $cache_db = array();
 
-	/**
+    /**
 	 * Get the default user for making db connections (used by the installer as a default).
 	 *
 	 * @return string			The default user for db connections
 	 */
-	function db_default_user()
-	{
-		return 'postgres';
-	}
+    public function db_default_user()
+    {
+        return 'postgres';
+    }
 
-	/**
+    /**
 	 * Get the default password for making db connections (used by the installer as a default).
 	 *
 	 * @return string			The default password for db connections
 	 */
-	function db_default_password()
-	{
-		return '';
-	}
+    public function db_default_password()
+    {
+        return '';
+    }
 
-	/**
+    /**
 	 * Create a table index.
 	 *
 	 * @param  ID_TEXT		The name of the table to create the index on
@@ -56,192 +56,193 @@ class Database_Static_postgresql
 	 * @param  string			Part of the SQL query: a comma-separated list of fields to use on the index
 	 * @param  array			The DB connection to make on
 	 */
-	function db_create_index($table_name,$index_name,$_fields,$db)
-	{
-		if ($index_name[0]=='#') return;
-		$this->db_query('CREATE INDEX index'.$index_name.'_'.strval(mt_rand(0,10000)).' ON '.$table_name.'('.$_fields.')',$db);
-	}
+    public function db_create_index($table_name,$index_name,$_fields,$db)
+    {
+        if ($index_name[0] == '#') {
+            return;
+        }
+        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0,10000)) . ' ON ' . $table_name . '(' . $_fields . ')',$db);
+    }
 
-	/**
+    /**
 	 * Change the primary key of a table.
 	 *
 	 * @param  ID_TEXT		The name of the table to create the index on
 	 * @param  array			A list of fields to put in the new key
 	 * @param  array			The DB connection to make on
 	 */
-	function db_change_primary_key($table_name,$new_key,$db)
-	{
-		$this->db_query('ALTER TABLE '.$table_name.' DROP PRIMARY KEY',$db);
-		$this->db_query('ALTER TABLE '.$table_name.' ADD PRIMARY KEY ('.implode(',',$new_key).')',$db);
-	}
+    public function db_change_primary_key($table_name,$new_key,$db)
+    {
+        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',',$new_key) . ')',$db);
+    }
 
-	/**
+    /**
 	 * Get the ID of the first row in an auto-increment table (used whenever we need to reference the first).
 	 *
 	 * @return integer			First ID used
 	 */
-	function db_get_first_id()
-	{
-		return 1;
-	}
+    public function db_get_first_id()
+    {
+        return 1;
+    }
 
-	/**
+    /**
 	 * Get a map of ocPortal field types, to actual mySQL types.
 	 *
 	 * @return array			The map
 	 */
-	function db_get_type_remap()
-	{
-		$type_remap=array(
-			'AUTO'=>'serial',
-			'AUTO_LINK'=>'integer',
-			'INTEGER'=>'integer',
-			'UINTEGER'=>'bigint',
-			'SHORT_INTEGER'=>'smallint',
-			'REAL'=>'real',
-			'BINARY'=>'smallint',
-			'MEMBER'=>'integer',
-			'GROUP'=>'integer',
-			'TIME'=>'integer',
-			'LONG_TRANS'=>'integer',
-			'SHORT_TRANS'=>'integer',
-			'LONG_TRANS__COMCODE'=>'integer',
-			'SHORT_TRANS__COMCODE'=>'integer',
-			'SHORT_TEXT'=>'text',
-			'LONG_TEXT'=>'text',
-			'ID_TEXT'=>'varchar(80)',
-			'MINIID_TEXT'=>'varchar(40)',
-			'IP'=>'varchar(40)',
-			'LANGUAGE_NAME'=>'varchar(5)',
-			'URLPATH'=>'varchar(255)',
-			'MD5'=>'varchar(33)'
-		);
-		return $type_remap;
-	}
+    public function db_get_type_remap()
+    {
+        $type_remap = array(
+            'AUTO' => 'serial',
+            'AUTO_LINK' => 'integer',
+            'INTEGER' => 'integer',
+            'UINTEGER' => 'bigint',
+            'SHORT_INTEGER' => 'smallint',
+            'REAL' => 'real',
+            'BINARY' => 'smallint',
+            'MEMBER' => 'integer',
+            'GROUP' => 'integer',
+            'TIME' => 'integer',
+            'LONG_TRANS' => 'integer',
+            'SHORT_TRANS' => 'integer',
+            'LONG_TRANS__COMCODE' => 'integer',
+            'SHORT_TRANS__COMCODE' => 'integer',
+            'SHORT_TEXT' => 'text',
+            'LONG_TEXT' => 'text',
+            'ID_TEXT' => 'varchar(80)',
+            'MINIID_TEXT' => 'varchar(40)',
+            'IP' => 'varchar(40)',
+            'LANGUAGE_NAME' => 'varchar(5)',
+            'URLPATH' => 'varchar(255)',
+            'MD5' => 'varchar(33)'
+        );
+        return $type_remap;
+    }
 
-	/**
+    /**
 	 * Close the database connections. We don't really need to close them (will close at exit), just disassociate so we can refresh them.
 	 */
-	function db_close_connections()
-	{
-		$this->cache_db=array();
-	}
+    public function db_close_connections()
+    {
+        $this->cache_db = array();
+    }
 
-	/**
+    /**
 	 * Create a new table.
 	 *
 	 * @param  ID_TEXT		The table name
 	 * @param  array			A map of field names to ocPortal field types (with *#? encodings)
 	 * @param  array			The DB connection to make on
 	 */
-	function db_create_table($table_name,$fields,$db)
-	{
-		$type_remap=$this->db_get_type_remap();
+    public function db_create_table($table_name,$fields,$db)
+    {
+        $type_remap = $this->db_get_type_remap();
 
-		$_fields='';
-		$keys='';
-		foreach ($fields as $name=>$type)
-		{
-			if ($type[0]=='*') // Is a key
-			{
-				$type=substr($type,1);
-				if ($keys!='') $keys.=', ';
-				$keys.=$name;
-			}
+        $_fields = '';
+        $keys = '';
+        foreach ($fields as $name => $type) {
+            if ($type[0] == '*') { // Is a key
+                $type = substr($type,1);
+                if ($keys != '') {
+                    $keys .= ', ';
+                }
+                $keys .= $name;
+            }
 
-			if ($type[0]=='?') // Is perhaps null
-			{
-				$type=substr($type,1);
-				$perhaps_null='NULL';
-			} else $perhaps_null='NOT NULL';
+            if ($type[0] == '?') { // Is perhaps null
+                $type = substr($type,1);
+                $perhaps_null = 'NULL';
+            } else {
+                $perhaps_null = 'NOT NULL';
+            }
 
-			$type=isset($type_remap[$type])?$type_remap[$type]:$type;
+            $type = isset($type_remap[$type])?$type_remap[$type]:$type;
 
-			$_fields.='	  '.$name.' '.$type;
-			if (substr($name,-13)=='__text_parsed')
-			{
-				$_fields.=' DEFAULT \'\'';
-			} elseif (substr($name,-13)=='__source_user')
-			{
-				$_fields.=' DEFAULT '.strval(db_get_first_id());
-			}
-			$_fields.=' '.$perhaps_null.','."\n";
-		}
+            $_fields .= '	  ' . $name . ' ' . $type;
+            if (substr($name,-13) == '__text_parsed') {
+                $_fields .= ' DEFAULT \'\'';
+            } elseif (substr($name,-13) == '__source_user') {
+                $_fields .= ' DEFAULT ' . strval(db_get_first_id());
+            }
+            $_fields .= ' ' . $perhaps_null . ',' . "\n";
+        }
 
-		$query='CREATE TABLE '.$table_name.' (
-		  '.$_fields.'
-		  PRIMARY KEY ('.$keys.')
+        $query = 'CREATE TABLE ' . $table_name . ' (
+		  ' . $_fields . '
+		  PRIMARY KEY (' . $keys . ')
 		)';
-		$this->db_query($query,$db,NULL,NULL);
-	}
+        $this->db_query($query,$db,null,null);
+    }
 
-	/**
+    /**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are equal.
 	 *
 	 * @param  ID_TEXT		The attribute
 	 * @param  string			The comparison
 	 * @return string			The SQL
 	 */
-	function db_string_equal_to($attribute,$compare)
-	{
-		return $attribute." LIKE '".$this->db_escape_string($compare)."'";
-	}
+    public function db_string_equal_to($attribute,$compare)
+    {
+        return $attribute . " LIKE '" . $this->db_escape_string($compare) . "'";
+    }
 
-	/**
+    /**
 	 * Encode an SQL statement fragment for a conditional to see if two strings are not equal.
 	 *
 	 * @param  ID_TEXT		The attribute
 	 * @param  string			The comparison
 	 * @return string			The SQL
 	 */
-	function db_string_not_equal_to($attribute,$compare)
-	{
-		return $attribute."<>'".$this->db_escape_string($compare)."'";
-	}
+    public function db_string_not_equal_to($attribute,$compare)
+    {
+        return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
+    }
 
-	/**
+    /**
 	 * This function is internal to the database system, allowing SQL statements to be build up appropriately. Some databases require IS NULL to be used to check for blank strings.
 	 *
 	 * @return boolean			Whether a blank string IS NULL
 	 */
-	function db_empty_is_null()
-	{
-		return false;
-	}
+    public function db_empty_is_null()
+    {
+        return false;
+    }
 
-	/**
+    /**
 	 * Delete a table.
 	 *
 	 * @param  ID_TEXT		The table name
 	 * @param  array			The DB connection to delete on
 	 */
-	function db_drop_table_if_exists($table,$db)
-	{
-		$this->db_query('DROP TABLE '.$table,$db,NULL,NULL,true);
-	}
+    public function db_drop_table_if_exists($table,$db)
+    {
+        $this->db_query('DROP TABLE ' . $table,$db,null,null,true);
+    }
 
-	/**
+    /**
 	 * Determine whether the database is a flat file database, and thus not have a meaningful connect username and password.
 	 *
 	 * @return boolean			Whether the database is a flat file database
 	 */
-	function db_is_flat_file_simple()
-	{
-		return false;
-	}
+    public function db_is_flat_file_simple()
+    {
+        return false;
+    }
 
-	/**
+    /**
 	 * Encode a LIKE string comparision fragement for the database system. The pattern is a mixture of characters and ? and % wilcard symbols.
 	 *
 	 * @param  string			The pattern
 	 * @return string			The encoded pattern
 	 */
-	function db_encode_like($pattern)
-	{
-		return $this->db_escape_string($pattern);
-	}
+    public function db_encode_like($pattern)
+    {
+        return $this->db_escape_string($pattern);
+    }
 
-	/**
+    /**
 	 * Get a database connection. This function shouldn't be used by you, as a connection to the database is established automatically.
 	 *
 	 * @param  boolean		Whether to create a persistent connection
@@ -252,65 +253,62 @@ class Database_Static_postgresql
 	 * @param  boolean		Whether to on error echo an error and return with a NULL, rather than giving a critical error
 	 * @return ?array			A database connection (NULL: failed)
 	 */
-	function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok=false)
-	{
-		// Potential cacheing
-		if (isset($this->cache_db[$db_name][$db_host]))
-		{
-			return $this->cache_db[$db_name][$db_host];
-		}
+    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    {
+        // Potential cacheing
+        if (isset($this->cache_db[$db_name][$db_host])) {
+            return $this->cache_db[$db_name][$db_host];
+        }
 
-		if (!function_exists('pg_pconnect'))
-		{
-			$error='The postgreSQL PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
-			if ($fail_ok)
-			{
-				echo $error;
-				return NULL;
-			}
-			critical_error('PASSON',$error);
-		}
+        if (!function_exists('pg_pconnect')) {
+            $error = 'The postgreSQL PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
+            if ($fail_ok) {
+                echo $error;
+                return NULL;
+            }
+            critical_error('PASSON',$error);
+        }
 
-		$db=$persistent?@pg_pconnect('host='.$db_host.' dbname='.$db_name.' user='.$db_user.' password='.$db_password):@pg_connect('host='.$db_host.' dbname='.$db_name.' user='.$db_user.' password='.$db_password);
-		if ($db===false)
-		{
-			$error='Could not connect to database-server ('.@pg_last_error().')';
-			if ($fail_ok)
-			{
-				echo $error;
-				return NULL;
-			}
-			critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
-		}
+        $db = $persistent?@pg_pconnect('host=' . $db_host . ' dbname=' . $db_name . ' user=' . $db_user . ' password=' . $db_password):@pg_connect('host=' . $db_host . ' dbname=' . $db_name . ' user=' . $db_user . ' password=' . $db_password);
+        if ($db === false) {
+            $error = 'Could not connect to database-server (' . @pg_last_error() . ')';
+            if ($fail_ok) {
+                echo $error;
+                return NULL;
+            }
+            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
+        }
 
-		if (!$db) fatal_exit(do_lang('CONNECT_DB_ERROR'));
-		$this->cache_db[$db_name][$db_host]=$db;
-		return $db;
-	}
+        if (!$db) {
+            fatal_exit(do_lang('CONNECT_DB_ERROR'));
+        }
+        $this->cache_db[$db_name][$db_host] = $db;
+        return $db;
+    }
 
-	/**
+    /**
 	 * Find whether full-text-search is present
 	 *
 	 * @param  array			A DB connection
 	 * @return boolean		Whether it is
 	 */
-	function db_has_full_text($db)
-	{
-		return false;
-	}
+    public function db_has_full_text($db)
+    {
+        return false;
+    }
 
-	/**
+    /**
 	 * Escape a string so it may be inserted into a query. If SQL statements are being built up and passed using db_query then it is essential that this is used for security reasons. Otherwise, the abstraction layer deals with the situation.
 	 *
 	 * @param  string			The string
 	 * @return string			The escaped string
 	 */
-	function db_escape_string($string)
-	{
-		return pg_escape_string($string);
-	}
+    public function db_escape_string($string)
+    {
+        return pg_escape_string($string);
+    }
 
-	/**
+    /**
 	 * This function is a very basic query executor. It shouldn't usually be used by you, as there are abstracted versions available.
 	 *
 	 * @param  string			The complete SQL query
@@ -321,100 +319,103 @@ class Database_Static_postgresql
 	 * @param  boolean		Whether to get the autoincrement ID created for an insert query
 	 * @return ?mixed			The results (NULL: no results), or the insert ID
 	 */
-	function db_query($query,$db,$max=NULL,$start=NULL,$fail_ok=false,$get_insert_id=false)
-	{
-		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT '))
-		{
-			if ((!is_null($max)) && (!is_null($start))) $query.=' LIMIT '.strval(intval($max)).' OFFSET '.strval(intval($start));
-			elseif (!is_null($max)) $query.=' LIMIT '.strval(intval($max));
-			elseif (!is_null($start)) $query.=' OFFSET '.strval(intval($start));
-		}
+    public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    {
+        if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) {
+            if ((!is_null($max)) && (!is_null($start))) {
+                $query .= ' LIMIT ' . strval(intval($max)) . ' OFFSET ' . strval(intval($start));
+            } elseif (!is_null($max)) {
+                $query .= ' LIMIT ' . strval(intval($max));
+            } elseif (!is_null($start)) {
+                $query .= ' OFFSET ' . strval(intval($start));
+            }
+        }
 
-		$results=@pg_query($db,$query);
-		if ((($results===false) || ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results===true))) && (!$fail_ok))
-		{
-			$err=pg_last_error($db);
-			if (function_exists('ocp_mark_as_escaped')) ocp_mark_as_escaped($err);
-			if ((!running_script('upgrader')) && (!get_mass_import_mode()))
-			{
-				if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',NULL,NULL,NULL,NULL,false))) fatal_exit(htmlentities('Query failed: '.$query.' : '.$err));
+        $results = @pg_query($db,$query);
+        if ((($results === false) || ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results === true))) && (!$fail_ok)) {
+            $err = pg_last_error($db);
+            if (function_exists('ocp_mark_as_escaped')) {
+                ocp_mark_as_escaped($err);
+            }
+            if ((!running_script('upgrader')) && (!get_mass_import_mode())) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                    fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
+                }
 
-				fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
-			} else
-			{
-				echo htmlentities('Database query failed: '.$query.' [').($err).htmlentities(']'.'<br />'."\n");
-				return NULL;
-			}
-		}
+                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+            } else {
+                echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
+                return NULL;
+            }
+        }
 
-		if ((strtoupper(substr($query,0,7))=='SELECT ') || (strtoupper(substr($query,0,8))=='(SELECT ') && ($results!==false) && ($results!==true))
-		{
-			return $this->db_get_query_rows($results);
-		}
+        if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results !== false) && ($results !== true)) {
+            return $this->db_get_query_rows($results);
+        }
 
-		if ($get_insert_id)
-		{
-			if (strtoupper(substr($query,0,7))=='UPDATE ') return NULL;
+        if ($get_insert_id) {
+            if (strtoupper(substr($query,0,7)) == 'UPDATE ') {
+                return NULL;
+            }
 
-			// Inefficient :(
-			$pos=strpos($query,'(');
-			$table_name=substr($query,12,$pos-13);
+            // Inefficient :(
+            $pos = strpos($query,'(');
+            $table_name = substr($query,12,$pos-13);
 
-			$r3=@pg_query($db,'SELECT last_value FROM '.$table_name.'_id_seq');
-			if ($r3)
-			{
-				$seq_array=pg_fetch_row($r3,0);
-				return intval($seq_array[0]);
-			}
-		}
+            $r3 = @pg_query($db,'SELECT last_value FROM ' . $table_name . '_id_seq');
+            if ($r3) {
+                $seq_array = pg_fetch_row($r3,0);
+                return intval($seq_array[0]);
+            }
+        }
 
-		return NULL;
-	}
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Get the rows returned from a SELECT query.
 	 *
 	 * @param  resource		The query result pointer
 	 * @param  ?integer		Whether to start reading from (NULL: irrelevant for this forum driver)
 	 * @return array			A list of row maps
 	 */
-	function db_get_query_rows($results,$start=NULL)
-	{
-		$num_fields=pg_num_fields($results);
-		$types=array();
-		$names=array();
-		for ($x=1;$x<=$num_fields;$x++)
-		{
-			$types[$x-1]=pg_field_type($results,$x-1);
-			$names[$x-1]=strtolower(pg_field_name($results,$x-1));
-		}
+    public function db_get_query_rows($results,$start = null)
+    {
+        $num_fields = pg_num_fields($results);
+        $types = array();
+        $names = array();
+        for ($x = 1;$x <= $num_fields;$x++) {
+            $types[$x-1] = pg_field_type($results,$x-1);
+            $names[$x-1] = strtolower(pg_field_name($results,$x-1));
+        }
 
-		$out=array();
-		$i=0;
-		while (($row=pg_fetch_row($results))!==false)
-		{
-			$j=0;
-			$newrow=array();
-			foreach ($row as $v)
-			{
-				$name=$names[$j];
-				$type=$types[$j];
+        $out = array();
+        $i = 0;
+        while (($row = pg_fetch_row($results)) !== false) {
+            $j = 0;
+            $newrow = array();
+            foreach ($row as $v) {
+                $name = $names[$j];
+                $type = $types[$j];
 
-				if (($type=='INTEGER') || ($type=='SMALLINT') || ($type=='SERIAL') || ($type=='UINTEGER'))
-				{
-					if (!is_null($v)) $newrow[$name]=intval($v); else $newrow[$name]=NULL;
-				} else $newrow[$name]=$v;
+                if (($type == 'INTEGER') || ($type == 'SMALLINT') || ($type == 'SERIAL') || ($type == 'UINTEGER')) {
+                    if (!is_null($v)) {
+                        $newrow[$name] = intval($v);
+                    } else {
+                        $newrow[$name] = null;
+                    }
+                } else {
+                    $newrow[$name] = $v;
+                }
 
-				$j++;
-			}
+                $j++;
+            }
 
-			$out[]=$newrow;
+            $out[] = $newrow;
 
-			$i++;
-		}
-		pg_free_result($results);
-		return $out;
-	}
+            $i++;
+        }
+        pg_free_result($results);
+        return $out;
+    }
 }
-
-

@@ -18,19 +18,19 @@
  */
 class git_conflicts_test_set extends ocp_test_case
 {
-	function testValidCode()
-	{
-		if (function_exists('set_time_limit')) @set_time_limit(0);
+    public function testValidCode()
+    {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
 
-		require_code('files2');
-		$php_path=find_php_path();
-		$contents=get_directory_contents(get_file_base());
-		foreach ($contents as $c)
-		{
-			if ((substr($c,-4)=='.php') && (basename($c)!='errorlog.php') && (basename($c)!='phpstub.php') && (basename($c)!='permissioncheckslog.php'))
-			{
-				$this->assertTrue(strpos(file_get_contents($c),'<<<'.'<')===false,$c);
-			}
-		}
-	}
+        require_code('files2');
+        $php_path = find_php_path();
+        $contents = get_directory_contents(get_file_base());
+        foreach ($contents as $c) {
+            if ((substr($c,-4) == '.php') && (basename($c) != 'errorlog.php') && (basename($c) != 'phpstub.php') && (basename($c) != 'permissioncheckslog.php')) {
+                $this->assertTrue(strpos(file_get_contents($c),'<<<' . '<') === false,$c);
+            }
+        }
+    }
 }

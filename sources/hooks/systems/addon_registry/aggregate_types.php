@@ -20,92 +20,92 @@
 
 class Hook_addon_registry_aggregate_types
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Define complex aggregate types in XML, and spawn them.';
-	}
+    public function get_description()
+    {
+        return 'Define complex aggregate types in XML, and spawn them.';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_aggregate_types',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_aggregate_types',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array('occle','import'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-			'previously_in_addon'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array('occle','import'),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+            'previously_in_addon' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/adminzone/structure/aggregate_types.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/adminzone/structure/aggregate_types.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'themes/default/images/icons/24x24/menu/adminzone/structure/aggregate_types.png',
-			'themes/default/images/icons/48x48/menu/adminzone/structure/aggregate_types.png',
-			'sources/hooks/systems/addon_registry/aggregate_types.php',
-			'sources/hooks/systems/resource_meta_aware/aggregate_type_instance.php',
-			'lang/EN/aggregate_types.ini',
-			'adminzone/pages/modules/admin_aggregate_types.php',
-			'data_custom/aggregate_types.xml',
-			'sources/hooks/systems/occle_fs/aggregate_type_instances.php',
-			'sources/aggregate_types.php',
-			'sources/hooks/modules/admin_import_types/aggregate_types.php',
-			'sources/hooks/systems/page_groupings/aggregate_types.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'themes/default/images/icons/24x24/menu/adminzone/structure/aggregate_types.png',
+            'themes/default/images/icons/48x48/menu/adminzone/structure/aggregate_types.png',
+            'sources/hooks/systems/addon_registry/aggregate_types.php',
+            'sources/hooks/systems/resource_meta_aware/aggregate_type_instance.php',
+            'lang/EN/aggregate_types.ini',
+            'adminzone/pages/modules/admin_aggregate_types.php',
+            'data_custom/aggregate_types.xml',
+            'sources/hooks/systems/occle_fs/aggregate_type_instances.php',
+            'sources/aggregate_types.php',
+            'sources/hooks/modules/admin_import_types/aggregate_types.php',
+            'sources/hooks/systems/page_groupings/aggregate_types.php',
+        );
+    }
 }

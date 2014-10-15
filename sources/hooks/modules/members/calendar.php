@@ -20,22 +20,24 @@
 
 class Hook_members_calendar
 {
-	/**
+    /**
 	 * Find member-related links to inject.
 	 *
 	 * @param  MEMBER		The ID of the member we are getting link hooks for
 	 * @return array		List of lists of tuples for results (by link section). Each tuple is: type,title,url
 	 */
-	function run($member_id)
-	{
-		if (!addon_installed('calendar')) return array();
+    public function run($member_id)
+    {
+        if (!addon_installed('calendar')) {
+            return array();
+        }
 
-		//if (!has_privilege(get_member(),'assume_any_member')) return array();	Now will have separate permission filtering
-		if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar'))) return array();
+        //if (!has_privilege(get_member(),'assume_any_member')) return array();	Now will have separate permission filtering
+        if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar'))) {
+            return array();
+        }
 
-		require_lang('calendar');
-		return array(array('content',do_lang_tempcode('CALENDAR'),build_url(array('page'=>'calendar','type'=>'misc','member_id'=>$member_id,'private'=>1),get_module_zone('calendar')),'menu/rich_content/calendar'));
-	}
+        require_lang('calendar');
+        return array(array('content',do_lang_tempcode('CALENDAR'),build_url(array('page' => 'calendar','type' => 'misc','member_id' => $member_id,'private' => 1),get_module_zone('calendar')),'menu/rich_content/calendar'));
+    }
 }
-
-

@@ -20,18 +20,18 @@
 
 class Hook_whats_news_comcode_pages
 {
-	/**
+    /**
 	 * Run function for newsletter hooks.
 	 *
 	 * @return array				Tuple of result details: HTML list of all types that can be choosed, title for selection list
 	 */
-	function choose_categories()
-	{
-		require_code('zones3');
-		return array(create_selection_list_zones(),do_lang('PAGES'));
-	}
+    public function choose_categories()
+    {
+        require_code('zones3');
+        return array(create_selection_list_zones(),do_lang('PAGES'));
+    }
 
-	/**
+    /**
 	 * Run function for newsletter hooks.
 	 *
 	 * @param  TIME				The time that the entries found must be newer than
@@ -39,59 +39,69 @@ class Hook_whats_news_comcode_pages
 	 * @param  string				Category filter to apply
 	 * @return array				Tuple of result details
 	 */
-	function run($cutoff_time,$lang,$filter)
-	{
-		$max=intval(get_option('max_newsletter_whatsnew'));
+    public function run($cutoff_time,$lang,$filter)
+    {
+        $max = intval(get_option('max_newsletter_whatsnew'));
 
-		$new=new ocp_tempcode();
+        $new = new ocp_tempcode();
 
-		require_code('ocfiltering');
-		if ($filter=='') $filter=','; // Just welcome zone
-		$or_list=ocfilter_to_sqlfragment($filter,'b.the_zone',NULL,NULL,NULL,NULL,false);
+        require_code('ocfiltering');
+        if ($filter == '') {
+            $filter = ',';
+        } // Just welcome zone
+        $or_list = ocfilter_to_sqlfragment($filter,'b.the_zone',null,null,null,null,false);
 
-		$_rows=$GLOBALS['SITE_DB']->query('SELECT a.* FROM '.get_table_prefix().'cached_comcode_pages a JOIN '.get_table_prefix().'comcode_pages b ON a.the_page=b.the_page AND a.the_zone=b.the_zone WHERE p_add_date>'.strval($cutoff_time).' AND ('.$or_list.')',$max);
-		if (count($_rows)==$max) return array();
-		$rows=array();
-		foreach ($_rows as $row)
-			$rows[$row['the_zone'].':'.$row['the_page']]=$row;
-		$_rows2=$GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type'=>'comcode_page'));
-		$rows2=array();
-		foreach ($_rows2 as $row)
-			$rows2[$row['meta_for_id']]=$row;
-		$zones=explode(',',$filter);//find_all_zones();
-		foreach ($zones as $zone)
-		{
-			if ($zone=='cms') continue;
-			if ($zone=='adminzone') continue;
+        $_rows = $GLOBALS['SITE_DB']->query('SELECT a.* FROM ' . get_table_prefix() . 'cached_comcode_pages a JOIN ' . get_table_prefix() . 'comcode_pages b ON a.the_page=b.the_page AND a.the_zone=b.the_zone WHERE p_add_date>' . strval($cutoff_time) . ' AND (' . $or_list . ')',$max);
+        if (count($_rows) == $max) {
+            return array();
+        }
+        $rows = array();
+        foreach ($_rows as $row) {
+            $rows[$row['the_zone'] . ':' . $row['the_page']] = $row;
+        }
+        $_rows2 = $GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type' => 'comcode_page'));
+        $rows2 = array();
+        foreach ($_rows2 as $row) {
+            $rows2[$row['meta_for_id']] = $row;
+        }
+        $zones = explode(',',$filter);//find_all_zones();
+        foreach ($zones as $zone) {
+            if ($zone == 'cms') {
+                continue;
+            }
+            if ($zone == 'adminzone') {
+                continue;
+            }
 
-			$pages=find_all_pages($zone,'comcode_custom/'.get_site_default_lang(),'txt',false,$cutoff_time);
-			foreach (array_keys($pages) as $page)
-			{
-				if (!is_string($page)) $page=strval($page); // PHP can be weird when things like '404' are put in arrays
+            $pages = find_all_pages($zone,'comcode_custom/' . get_site_default_lang(),'txt',false,$cutoff_time);
+            foreach (array_keys($pages) as $page) {
+                if (!is_string($page)) {
+                    $page = strval($page);
+                } // PHP can be weird when things like '404' are put in arrays
 
-				if (substr($page,0,6)=='panel_') continue;
+                if (substr($page,0,6) == 'panel_') {
+                    continue;
+                }
 
-				$id=$zone.':'.$page;
-				$_url=build_url(array('page'=>$page),$zone,NULL,false,false,true);
-				$url=$_url->evaluate();
-				$name=titleify($page);
-				if (array_key_exists($id,$rows))
-				{
-					$_name=get_translated_text($rows[$id]['cc_page_title'],NULL,NULL,true);
-					if (!is_null($_name)) $name=$_name;
-				}
-				$description='';
-				$member_id=NULL;
-				if (array_key_exists($id,$rows2))
-				{
-					$description=get_translated_text($rows2[$id]['meta_description']);
-				}
-				$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'67f165847dacd54d2965686d561b57ee','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'CONTENT_TYPE'=>'comcode_page','CONTENT_ID'=>$zone.':'.$page)));
-			}
-		}
+                $id = $zone . ':' . $page;
+                $_url = build_url(array('page' => $page),$zone,null,false,false,true);
+                $url = $_url->evaluate();
+                $name = titleify($page);
+                if (array_key_exists($id,$rows)) {
+                    $_name = get_translated_text($rows[$id]['cc_page_title'],null,null,true);
+                    if (!is_null($_name)) {
+                        $name = $_name;
+                    }
+                }
+                $description = '';
+                $member_id = null;
+                if (array_key_exists($id,$rows2)) {
+                    $description = get_translated_text($rows2[$id]['meta_description']);
+                }
+                $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => '67f165847dacd54d2965686d561b57ee','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'DESCRIPTION' => $description,'CONTENT_TYPE' => 'comcode_page','CONTENT_ID' => $zone . ':' . $page)));
+            }
+        }
 
-		return array($new,do_lang('PAGES','','','',$lang));
-	}
+        return array($new,do_lang('PAGES','','','',$lang));
+    }
 }
-
-

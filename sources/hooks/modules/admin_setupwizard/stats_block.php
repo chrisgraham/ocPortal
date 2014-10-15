@@ -20,17 +20,17 @@
 
 class Hook_sw_stats_block
 {
-	/**
+    /**
 	 * Run function for blocks in the setup wizard.
 	 *
 	 * @return array		Map of block names, to display types.
 	 */
-	function get_blocks()
-	{
-		if (!addon_installed('stats')) return array();
+    public function get_blocks()
+    {
+        if (!addon_installed('stats')) {
+            return array();
+        }
 
-		return array(array(),array('side_stats'=>array('PANEL_LEFT','PANEL_RIGHT')));
-	}
+        return array(array(),array('side_stats' => array('PANEL_LEFT','PANEL_RIGHT')));
+    }
 }
-
-

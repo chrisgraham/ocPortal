@@ -20,36 +20,36 @@
 
 class Hook_config_unzip_cmd
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'UNZIP_CMD',
-			'type'=>'line',
-			'category'=>'SERVER',
-			'group'=>'ARCHIVES',
-			'explanation'=>'CONFIG_OPTION_unzip_cmd',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'UNZIP_CMD',
+            'type' => 'line',
+            'category' => 'SERVER',
+            'group' => 'ARCHIVES',
+            'explanation' => 'CONFIG_OPTION_unzip_cmd',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (function_exists('zip_open')) return NULL;
-		return '/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@';
-	}
+    public function get_default()
+    {
+        if (function_exists('zip_open')) {
+            return NULL;
+        }
+        return '/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@';
+    }
 }
-
-

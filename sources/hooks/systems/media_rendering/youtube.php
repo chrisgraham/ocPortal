@@ -20,68 +20,68 @@
 
 class Hook_media_rendering_youtube
 {
-	/**
+    /**
 	 * Get the label for this media rendering type.
 	 *
 	 * @return string		The label
 	 */
-	function get_type_label()
-	{
-		require_lang('comcode');
-		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
-	}
+    public function get_type_label()
+    {
+        require_lang('comcode');
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+    }
 
-	/**
+    /**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask
 	 */
-	function get_media_type()
-	{
-		return MEDIA_TYPE_VIDEO;
-	}
+    public function get_media_type()
+    {
+        return MEDIA_TYPE_VIDEO;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this mime type.
 	 *
 	 * @param  ID_TEXT	The mime type
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_mime_type($mime_type)
-	{
-		return MEDIA_RECOG_PRECEDENCE_NONE;
-	}
+    public function recognises_mime_type($mime_type)
+    {
+        return MEDIA_RECOG_PRECEDENCE_NONE;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this URL pattern.
 	 *
 	 * @param  URLPATH	URL to pattern match
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_url($url)
-	{
-		if ((preg_match('#^https?://(www|m)\.youtube\.com/watch\?v=([\w\-]+)#',$url)!=0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$url)!=0))
-			return MEDIA_RECOG_PRECEDENCE_HIGH;
-		return MEDIA_RECOG_PRECEDENCE_NONE;
-	}
+    public function recognises_url($url)
+    {
+        if ((preg_match('#^https?://(www|m)\.youtube\.com/watch\?v=([\w\-]+)#',$url) != 0) || (preg_match('#^https?://youtu\.be/([\w\-]+)#',$url) != 0)) {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
+        return MEDIA_RECOG_PRECEDENCE_NONE;
+    }
 
-	/**
+    /**
 	 * If we can handle this URL, get the thumbnail URL.
 	 *
 	 * @param  URLPATH		Video URL
 	 * @return ?string		The thumbnail URL (NULL: no match).
 	 */
-	function get_video_thumbnail($src_url)
-	{
-		$matches=array();
-		if ((preg_match('#^https?://(www|m)\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches)!=0) || (preg_match('#^http://(youtu\.be)/([\w\-]+)#',$src_url,$matches)!=0))
-		{
-			return 'http://img.youtube.com/vi/'.rawurldecode($matches[2]).'/0.jpg';
-		}
-		return NULL;
-	}
+    public function get_video_thumbnail($src_url)
+    {
+        $matches = array();
+        if ((preg_match('#^https?://(www|m)\.youtube\.com/watch\?v=([\w\-]+)#',$src_url,$matches) != 0) || (preg_match('#^http://(youtu\.be)/([\w\-]+)#',$src_url,$matches) != 0)) {
+            return 'http://img.youtube.com/vi/' . rawurldecode($matches[2]) . '/0.jpg';
+        }
+        return NULL;
+    }
 
-	/**
+    /**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
 	 * @param  mixed		URL to render
@@ -91,10 +91,12 @@ class Hook_media_rendering_youtube
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
-	{
-		if (is_object($url)) $url=$url->evaluate();
-		$attributes['remote_id']=preg_replace('#^(https?://(www|m)\.youtube\.com/watch\?v=|https?://youtu\.be/)([\w\-]+)#','${3}',$url);
-		return do_template('MEDIA_YOUTUBE',array('_GUID'=>'f7c4c015b208e13bf0cd9326d9133175','HOOK'=>'youtube')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
-	}
+    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    {
+        if (is_object($url)) {
+            $url = $url->evaluate();
+        }
+        $attributes['remote_id'] = preg_replace('#^(https?://(www|m)\.youtube\.com/watch\?v=|https?://youtu\.be/)([\w\-]+)#','${3}',$url);
+        return do_template('MEDIA_YOUTUBE',array('_GUID' => 'f7c4c015b208e13bf0cd9326d9133175','HOOK' => 'youtube')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+    }
 }

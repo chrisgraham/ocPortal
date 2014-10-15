@@ -20,35 +20,33 @@
 
 class Hook_config_max_quota
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MAX_QUOTA',
-			'type'=>'integer',
-			'category'=>'POINTSTORE',
-			'group'=>'POP3',
-			'explanation'=>'CONFIG_OPTION_max_quota',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MAX_QUOTA',
+            'type' => 'integer',
+            'category' => 'POINTSTORE',
+            'group' => 'POP3',
+            'explanation' => 'CONFIG_OPTION_max_quota',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'pointstore',
-		);
-	}
+            'addon' => 'pointstore',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '10000';
-	}
+    public function get_default()
+    {
+        return '10000';
+    }
 }
-
-

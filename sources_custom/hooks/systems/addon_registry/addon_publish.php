@@ -15,127 +15,127 @@
 
 class Hook_addon_registry_addon_publish
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the addon category
 	 *
 	 * @return string			The category
 	 */
-	function get_category()
-	{
-		return 'Development';
-	}
+    public function get_category()
+    {
+        return 'Development';
+    }
 
-	/**
+    /**
 	 * Get the addon author
 	 *
 	 * @return string			The author
 	 */
-	function get_author()
-	{
-		return 'Chris Graham';
-	}
+    public function get_author()
+    {
+        return 'Chris Graham';
+    }
 
-	/**
+    /**
 	 * Find other authors
 	 *
 	 * @return array			A list of co-authors that should be attributed
 	 */
-	function get_copyright_attribution()
-	{
-		return array();
-	}
+    public function get_copyright_attribution()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the addon licence (one-line summary only)
 	 *
 	 * @return string			The licence
 	 */
-	function get_licence()
-	{
-		return 'Licensed on the same terms as ocPortal';
-	}
+    public function get_licence()
+    {
+        return 'Licensed on the same terms as ocPortal';
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'Scripts to help us in mass-publishing addons to ocportal.com (not useful in their direct form to anyone else).';
-	}
+    public function get_description()
+    {
+        return 'Scripts to help us in mass-publishing addons to ocportal.com (not useful in their direct form to anyone else).';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array(
-			),
-			'recommends'=>array(
-			),
-			'conflicts_with'=>array(
-			)
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array(
+            ),
+            'recommends' => array(
+            ),
+            'conflicts_with' => array(
+            )
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/tool.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/tool.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources_custom/hooks/systems/addon_registry/addon_publish.php',
-			'adminzone/pages/minimodules_custom/publish_addons_as_downloads.php',
-			'adminzone/pages/minimodules_custom/build_addons.php',
-			'adminzone/pages/minimodules_custom/admin_generate_adhoc_upgrade.php',
-			'sources_custom/hooks/systems/page_groupings/addon_publish.php',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources_custom/hooks/systems/addon_registry/addon_publish.php',
+            'adminzone/pages/minimodules_custom/publish_addons_as_downloads.php',
+            'adminzone/pages/minimodules_custom/build_addons.php',
+            'adminzone/pages/minimodules_custom/admin_generate_adhoc_upgrade.php',
+            'sources_custom/hooks/systems/page_groupings/addon_publish.php',
+        );
+    }
 }

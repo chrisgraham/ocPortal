@@ -20,7 +20,7 @@
 
 class Hook_occle_command_grep
 {
-	/**
+    /**
 	 * Run function for OcCLE hooks.
 	 *
 	 * @param  array	The options with which the command was called
@@ -28,53 +28,52 @@ class Hook_occle_command_grep
 	 * @param  object A reference to the OcCLE filesystem object
 	 * @return array	Array of stdcommand, stdhtml, stdout, and stderr responses
 	 */
-	function run($options,$parameters,&$occle_fs)
-	{
-		if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) return array('',do_command_help('grep',array('h'),array(true,true)),'','');
-		else
-		{
-			if (!array_key_exists(0,$parameters)) return array('','','',do_lang('MISSING_PARAM','1','grep'));
-			if (!array_key_exists(1,$parameters)) return array('','','',do_lang('MISSING_PARAM','2','grep'));
-			$_parameters=$occle_fs->_pwd_to_array($parameters[1]);
+    public function run($options,$parameters,&$occle_fs)
+    {
+        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
+            return array('',do_command_help('grep',array('h'),array(true,true)),'','');
+        } else {
+            if (!array_key_exists(0,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','1','grep'));
+            }
+            if (!array_key_exists(1,$parameters)) {
+                return array('','','',do_lang('MISSING_PARAM','2','grep'));
+            }
+            $_parameters = $occle_fs->_pwd_to_array($parameters[1]);
 
-			if (!$occle_fs->_is_file($_parameters))
-			{
-				if ($parameters[1]=='<comcode_pages>')
-				{
-					$output='';
+            if (!$occle_fs->_is_file($_parameters)) {
+                if ($parameters[1] == '<comcode_pages>') {
+                    $output = '';
 
-					$zones=find_all_zones(false,false,true);
-					foreach ($zones as $zone)
-					{
-						$pages=find_all_pages_wrap($zone,true,false,FIND_ALL_PAGES__ALL,'comcode');
-						foreach ($pages as $page=>$type)
-						{
-							$contents=file_get_contents(get_custom_file_base().'/'.$zone.'/pages/'.$type.'/'.$page);
-							if (preg_match('#'.$parameters[0].'#',$contents)!=0)
-							{
-								$output.=$zone.':'.basename($page,'.txt')."\n";
-							}
-						}
-					}
+                    $zones = find_all_zones(false,false,true);
+                    foreach ($zones as $zone) {
+                        $pages = find_all_pages_wrap($zone,true,false,FIND_ALL_PAGES__ALL,'comcode');
+                        foreach ($pages as $page => $type) {
+                            $contents = file_get_contents(get_custom_file_base() . '/' . $zone . '/pages/' . $type . '/' . $page);
+                            if (preg_match('#' . $parameters[0] . '#',$contents) != 0) {
+                                $output .= $zone . ':' . basename($page,'.txt') . "\n";
+                            }
+                        }
+                    }
 
-					return array('','',$output,'');
-				}
+                    return array('','',$output,'');
+                }
 
-				return array('','','',do_lang('NOT_A_FILE','2'));
-			}
+                return array('','','',do_lang('NOT_A_FILE','2'));
+            }
 
-			$_lines=unixify_line_format($occle_fs->read_file($_parameters));
-			$lines=explode("\n",$_lines);
-			if (($parameters[0]=='') || (($parameters[0][0]!='#') && ($parameters[0][0]!='/')))
-			{
-				$parameters[0]='#'.$parameters[0].'#';
-			}
-			$matches=preg_grep($parameters[0],$lines);
-			$output='';
-			foreach ($matches as $value) $output.=$value."\n";
+            $_lines = unixify_line_format($occle_fs->read_file($_parameters));
+            $lines = explode("\n",$_lines);
+            if (($parameters[0] == '') || (($parameters[0][0] != '#') && ($parameters[0][0] != '/'))) {
+                $parameters[0] = '#' . $parameters[0] . '#';
+            }
+            $matches = preg_grep($parameters[0],$lines);
+            $output = '';
+            foreach ($matches as $value) {
+                $output .= $value . "\n";
+            }
 
-			return array('','',$output,'');
-		}
-	}
+            return array('','',$output,'');
+        }
+    }
 }
-

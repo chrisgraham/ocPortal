@@ -20,23 +20,23 @@
 
 class Hook_page_groupings_pointstore
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('pointstore')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('pointstore')) {
+            return array();
+        }
 
-		return array(
-			array('audit','menu/adminzone/audit/pointstore_log',array('admin_pointstore',array('type'=>'misc'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_SALES'),'pointstore:DOC_POINTSTORE'),
-			array('setup','menu/social/pointstore',array('admin_pointstore',array('type'=>'p'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_INVENTORY'),'pointstore:DOC_POINTSTORE'),
-			array('social','menu/social/pointstore',array('pointstore',array(),get_module_zone('pointstore')),do_lang_tempcode('pointstore:POINTSTORE')),
-		);
-	}
+        return array(
+            array('audit','menu/adminzone/audit/pointstore_log',array('admin_pointstore',array('type' => 'misc'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_SALES'),'pointstore:DOC_POINTSTORE'),
+            array('setup','menu/social/pointstore',array('admin_pointstore',array('type' => 'p'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_INVENTORY'),'pointstore:DOC_POINTSTORE'),
+            array('social','menu/social/pointstore',array('pointstore',array(),get_module_zone('pointstore')),do_lang_tempcode('pointstore:POINTSTORE')),
+        );
+    }
 }
-
-

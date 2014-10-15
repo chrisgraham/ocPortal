@@ -20,17 +20,17 @@
 
 class Hook_ocf_cpf_filter_sms
 {
-	/**
+    /**
 	 * Find which special CPFs to enable.
 	 *
 	 * @return array			A list of CPFs to enable
 	 */
-	function to_enable()
-	{
-		$cpf=array();
-		if (get_option('sms_username')!='') $cpf['mobile_phone_number']=1;
-		return $cpf;
-	}
+    public function to_enable()
+    {
+        $cpf = array();
+        if (get_option('sms_username') != '') {
+            $cpf['mobile_phone_number'] = 1;
+        }
+        return $cpf;
+    }
 }
-
-

@@ -20,57 +20,65 @@
 
 class Hook_media_rendering_video_websafe
 {
-	/**
+    /**
 	 * Get the label for this media rendering type.
 	 *
 	 * @return string		The label
 	 */
-	function get_type_label()
-	{
-		require_lang('comcode');
-		return do_lang('MEDIA_TYPE_'.preg_replace('#^Hook_media_rendering_#','',__CLASS__));
-	}
+    public function get_type_label()
+    {
+        require_lang('comcode');
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+    }
 
-	/**
+    /**
 	 * Find the media types this hook serves.
 	 *
 	 * @return integer	The media type(s), as a bitmask
 	 */
-	function get_media_type()
-	{
-		return MEDIA_TYPE_VIDEO;
-	}
+    public function get_media_type()
+    {
+        return MEDIA_TYPE_VIDEO;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this mime type.
 	 *
 	 * @param  ID_TEXT	The mime type
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_mime_type($mime_type)
-	{
-		if ($mime_type=='video/mp4') return MEDIA_RECOG_PRECEDENCE_HIGH;
-		if ($mime_type=='video/webm') return MEDIA_RECOG_PRECEDENCE_HIGH;
-		if ($mime_type=='video/ogg') return MEDIA_RECOG_PRECEDENCE_HIGH;
+    public function recognises_mime_type($mime_type)
+    {
+        if ($mime_type == 'video/mp4') {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
+        if ($mime_type == 'video/webm') {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
+        if ($mime_type == 'video/ogg') {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
 
-		// We support Flash fallback in here too, for legacy reasons (there is overlap of supported media in Flash and browsers, and we use a hybrid player that supports both)
-		if ($mime_type=='video/flv') return MEDIA_RECOG_PRECEDENCE_HIGH;
+        // We support Flash fallback in here too, for legacy reasons (there is overlap of supported media in Flash and browsers, and we use a hybrid player that supports both)
+        if ($mime_type == 'video/flv') {
+            return MEDIA_RECOG_PRECEDENCE_HIGH;
+        }
 
-		return MEDIA_RECOG_PRECEDENCE_NONE;
-	}
+        return MEDIA_RECOG_PRECEDENCE_NONE;
+    }
 
-	/**
+    /**
 	 * See if we can recognise this URL pattern.
 	 *
 	 * @param  URLPATH	URL to pattern match
 	 * @return integer	Recognition precedence
 	 */
-	function recognises_url($url)
-	{
-		return MEDIA_RECOG_PRECEDENCE_NONE;
-	}
+    public function recognises_url($url)
+    {
+        return MEDIA_RECOG_PRECEDENCE_NONE;
+    }
 
-	/**
+    /**
 	 * Provide code to display what is at the URL, in the most appropriate way.
 	 *
 	 * @param  mixed		URL to render
@@ -80,8 +88,8 @@ class Hook_media_rendering_video_websafe
 	 * @param  ?MEMBER	Member to run as (NULL: current member)
 	 * @return tempcode	Rendered version
 	 */
-	function render($url,$url_safe,$attributes,$as_admin=false,$source_member=NULL)
-	{
-		return do_template('MEDIA_VIDEO_WEBSAFE',array('_GUID'=>'26387b2cee516e1ab54acb552aee2dcb','HOOK'=>'video_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
-	}
+    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    {
+        return do_template('MEDIA_VIDEO_WEBSAFE',array('_GUID' => '26387b2cee516e1ab54acb552aee2dcb','HOOK' => 'video_websafe')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+    }
 }

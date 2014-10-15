@@ -20,32 +20,30 @@
 
 class Hook_templates
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['title']=do_lang_tempcode('TEMPLATE_CACHE');
-		$info['description']=do_lang_tempcode('DESCRIPTION_TEMPLATES');
-		$info['type']='cache';
+    public function info()
+    {
+        $info = array();
+        $info['title'] = do_lang_tempcode('TEMPLATE_CACHE');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_TEMPLATES');
+        $info['type'] = 'cache';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		erase_cached_templates();
+    public function run()
+    {
+        erase_cached_templates();
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 }
-
-

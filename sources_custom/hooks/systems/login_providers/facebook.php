@@ -15,51 +15,41 @@
 
 class Hook_login_provider_facebook
 {
-	/**
+    /**
 	 * Standard login provider hook.
 	 *
 	 * @param  ?MEMBER		Member ID already detected as logged in (NULL: none). May be a guest ID.
 	 * @return ?MEMBER		Member ID now detected as logged in (NULL: none). May be a guest ID.
 	 */
-	function try_login($member) // NB: if $member is set (but not Guest), then it will bind to that account
-	{
-		require_code('facebook_connect');
+    public function try_login($member) // NB: if $member is set (but not Guest), then it will bind to that account
+    {
+        require_code('facebook_connect');
 
-		// Facebook connect
-		if ((get_forum_type()=='ocf') && (get_option('facebook_allow_signups')=='1'))
-		{
-			@ini_set('ocproducts.type_strictness','0');
-			global $FACEBOOK_CONNECT;
-			if (!is_null($FACEBOOK_CONNECT))
-			{
-				try
-				{
-					if ($FACEBOOK_CONNECT->getUser()!=0)
-					{
-						$member=handle_facebook_connection_login($member);
+        // Facebook connect
+        if ((get_forum_type() == 'ocf') && (get_option('facebook_allow_signups') == '1')) {
+            @ini_set('ocproducts.type_strictness','0');
+            global $FACEBOOK_CONNECT;
+            if (!is_null($FACEBOOK_CONNECT)) {
+                try {
+                    if ($FACEBOOK_CONNECT->getUser() != 0) {
+                        $member = handle_facebook_connection_login($member);
 
-						if (!is_guest($member))
-						{
-							if (is_file(get_file_base().'/sources_custom/hooks/systems/syndication/facebook.php'))
-							{
-								if (post_param_integer('auto_syndicate',0)==1)
-								{
-									set_long_value('facebook_oauth_token'.'__'.strval($member),$FACEBOOK_CONNECT->getAccessToken());
-								} else
-								{
-									set_long_value('facebook_oauth_token'.'__'.strval($member),'');
-								}
-							}
-						}
-					}
-				}
-				catch (Exception $e)
-				{
-					// User will know what is wrong already (Facebook wil have said), so don't show on our end
-				}
-			}
-			@ini_set('ocproducts.type_strictness','1');
-		}
-		return $member;
-	}
+                        if (!is_guest($member)) {
+                            if (is_file(get_file_base() . '/sources_custom/hooks/systems/syndication/facebook.php')) {
+                                if (post_param_integer('auto_syndicate',0) == 1) {
+                                    set_long_value('facebook_oauth_token' . '__' . strval($member),$FACEBOOK_CONNECT->getAccessToken());
+                                } else {
+                                    set_long_value('facebook_oauth_token' . '__' . strval($member),'');
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception $e) {
+                    // User will know what is wrong already (Facebook wil have said), so don't show on our end
+                }
+            }
+            @ini_set('ocproducts.type_strictness','1');
+        }
+        return $member;
+    }
 }

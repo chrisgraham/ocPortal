@@ -20,35 +20,33 @@
 
 class Hook_config_is_on_staff_filter
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MEMBER_FILTER',
-			'type'=>'tick',
-			'category'=>'SECURITY',
-			'group'=>'STAFF',
-			'explanation'=>'CONFIG_OPTION_is_on_staff_filter',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MEMBER_FILTER',
+            'type' => 'tick',
+            'category' => 'SECURITY',
+            'group' => 'STAFF',
+            'explanation' => 'CONFIG_OPTION_is_on_staff_filter',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'staff',
-		);
-	}
+            'addon' => 'staff',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

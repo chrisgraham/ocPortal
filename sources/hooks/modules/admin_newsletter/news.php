@@ -20,22 +20,24 @@
 
 class Hook_whats_news_news
 {
-	/**
+    /**
 	 * Find selectable (filterable) categories.
 	 *
 	 * @return ?array				Tuple of result details: HTML list of all types that can be choosed, title for selection list (NULL: disabled)
 	 */
-	function choose_categories()
-	{
-		if (!addon_installed('news')) return NULL;
+    public function choose_categories()
+    {
+        if (!addon_installed('news')) {
+            return NULL;
+        }
 
-		require_lang('news');
+        require_lang('news');
 
-		require_code('news');
-		return array(create_selection_list_news_categories(NULL,false,false,true),do_lang('NEWS'));
-	}
+        require_code('news');
+        return array(create_selection_list_news_categories(null,false,false,true),do_lang('NEWS'));
+    }
 
-	/**
+    /**
 	 * Run function for newsletter hooks.
 	 *
 	 * @param  TIME				The time that the entries found must be newer than
@@ -44,55 +46,57 @@ class Hook_whats_news_news
 	 * @param  BINARY				Whether to use full article instead of summary
 	 * @return array				Tuple of result details
 	 */
-	function run($cutoff_time,$lang,$filter,$in_full=1)
-	{
-		if (!addon_installed('news')) return array();
+    public function run($cutoff_time,$lang,$filter,$in_full = 1)
+    {
+        if (!addon_installed('news')) {
+            return array();
+        }
 
-		require_lang('news');
+        require_lang('news');
 
-		$max=intval(get_option('max_newsletter_whatsnew'));
+        $max = intval(get_option('max_newsletter_whatsnew'));
 
-		$new=new ocp_tempcode();
+        $new = new ocp_tempcode();
 
-		require_code('ocfiltering');
-		$or_list=ocfilter_to_sqlfragment($filter,'news_category');
-		$or_list_2=ocfilter_to_sqlfragment($filter,'news_entry_category');
+        require_code('ocfiltering');
+        $or_list = ocfilter_to_sqlfragment($filter,'news_category');
+        $or_list_2 = ocfilter_to_sqlfragment($filter,'news_entry_category');
 
-		$privacy_join='';
-		$privacy_where='';
-		if (addon_installed('content_privacy'))
-		{
-			require_code('content_privacy');
-			list($privacy_join,$privacy_where)=get_privacy_where_clause('news','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
-		}
+        $privacy_join = '';
+        $privacy_where = '';
+        if (addon_installed('content_privacy')) {
+            require_code('content_privacy');
+            list($privacy_join,$privacy_where) = get_privacy_where_clause('news','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
+        }
 
-		$rows=$GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM '.get_table_prefix().'news r LEFT JOIN '.get_table_prefix().'news_category_entries ON news_entry=id'.$privacy_join.' WHERE validated=1 AND date_and_time>'.strval($cutoff_time).' AND (('.$or_list.') OR ('.$or_list_2.'))'.$privacy_where.' ORDER BY date_and_time DESC',$max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM ' . get_table_prefix() . 'news r LEFT JOIN ' . get_table_prefix() . 'news_category_entries ON news_entry=id' . $privacy_join . ' WHERE validated=1 AND date_and_time>' . strval($cutoff_time) . ' AND ((' . $or_list . ') OR (' . $or_list_2 . '))' . $privacy_where . ' ORDER BY date_and_time DESC',$max);
 
-		if (count($rows)==$max) return array();
+        if (count($rows) == $max) {
+            return array();
+        }
 
-		$rows=remove_duplicate_rows($rows,'id');
-		foreach ($rows as $row)
-		{
-			$id=$row['id'];
-			$_url=build_url(array('page'=>'news','type'=>'view','id'=>$row['id']),get_module_zone('news'),NULL,false,false,true);
-			$url=$_url->evaluate();
-			$name=get_translated_text($row['title'],NULL,$lang);
-			$description=get_translated_text($row[($in_full==1)?'news_article':'news'],NULL,$lang);
-			if ($description=='')
-			{
-				$description=get_translated_text($row[($in_full==1)?'news':'news_article'],NULL,$lang);
-			}
-			$member_id=(is_guest($row['submitter']))?NULL:strval($row['submitter']);
-			$thumbnail=$row['news_image'];
-			if ($thumbnail!='')
-			{
-				if (url_is_local($thumbnail)) $thumbnail=get_custom_base_url().'/'.$thumbnail;
-			} else $thumbnail=mixed();
-			$new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID'=>'4eaf5ec00db1f0b89cef5120c2486521','MEMBER_ID'=>$member_id,'URL'=>$url,'NAME'=>$name,'DESCRIPTION'=>$description,'THUMBNAIL'=>$thumbnail,'CONTENT_TYPE'=>'news','CONTENT_ID'=>strval($id))));
-		}
+        $rows = remove_duplicate_rows($rows,'id');
+        foreach ($rows as $row) {
+            $id = $row['id'];
+            $_url = build_url(array('page' => 'news','type' => 'view','id' => $row['id']),get_module_zone('news'),null,false,false,true);
+            $url = $_url->evaluate();
+            $name = get_translated_text($row['title'],null,$lang);
+            $description = get_translated_text($row[($in_full == 1)?'news_article':'news'],null,$lang);
+            if ($description == '') {
+                $description = get_translated_text($row[($in_full == 1)?'news':'news_article'],null,$lang);
+            }
+            $member_id = (is_guest($row['submitter']))?null:strval($row['submitter']);
+            $thumbnail = $row['news_image'];
+            if ($thumbnail != '') {
+                if (url_is_local($thumbnail)) {
+                    $thumbnail = get_custom_base_url() . '/' . $thumbnail;
+                }
+            } else {
+                $thumbnail = mixed();
+            }
+            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'DESCRIPTION' => $description,'THUMBNAIL' => $thumbnail,'CONTENT_TYPE' => 'news','CONTENT_ID' => strval($id))));
+        }
 
-		return array($new,do_lang('NEWS','','','',$lang));
-	}
+        return array($new,do_lang('NEWS','','','',$lang));
+    }
 }
-
-

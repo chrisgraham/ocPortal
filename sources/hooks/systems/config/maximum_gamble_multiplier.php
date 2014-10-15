@@ -20,36 +20,34 @@
 
 class Hook_config_maximum_gamble_multiplier
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MAXIMUM_GAMBLE_MULTIPLIER',
-			'type'=>'integer',
-			'category'=>'POINTSTORE',
-			'group'=>'GAMBLING',
-			'explanation'=>'CONFIG_OPTION_maximum_gamble_multiplier',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>4,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MAXIMUM_GAMBLE_MULTIPLIER',
+            'type' => 'integer',
+            'category' => 'POINTSTORE',
+            'group' => 'GAMBLING',
+            'explanation' => 'CONFIG_OPTION_maximum_gamble_multiplier',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 4,
 
-			'addon'=>'pointstore',
-		);
-	}
+            'addon' => 'pointstore',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '200';
-	}
+    public function get_default()
+    {
+        return '200';
+    }
 }
-
-

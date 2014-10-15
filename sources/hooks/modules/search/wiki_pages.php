@@ -20,45 +20,50 @@
 
 class Hook_search_wiki_pages
 {
-	/**
+    /**
 	 * Find details for this search hook.
 	 *
 	 * @param  boolean	Whether to check permissions.
 	 * @return ?array		Map of search hook details (NULL: hook is disabled).
 	 */
-	function info($check_permissions=true)
-	{
-		if (!module_installed('wiki')) return NULL;
+    public function info($check_permissions = true)
+    {
+        if (!module_installed('wiki')) {
+            return NULL;
+        }
 
-		if ($check_permissions)
-		{
-			if (!has_actual_page_access(get_member(),'wiki')) return NULL;
-		}
+        if ($check_permissions) {
+            if (!has_actual_page_access(get_member(),'wiki')) {
+                return NULL;
+            }
+        }
 
-		if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)')<=1) return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)') <= 1) {
+            return NULL;
+        }
 
-		require_lang('wiki');
+        require_lang('wiki');
 
-		$info=array();
-		$info['lang']=do_lang_tempcode('WIKI_PAGES');
-		$info['default']=true;
+        $info = array();
+        $info['lang'] = do_lang_tempcode('WIKI_PAGES');
+        $info['default'] = true;
 
-		$info['permissions']=array(
-			array(
-				'type'=>'zone',
-				'zone_name'=>get_module_zone('wiki'),
-			),
-			array(
-				'type'=>'page',
-				'zone_name'=>get_module_zone('wiki'),
-				'page_name'=>'wiki',
-			),
-		);
+        $info['permissions'] = array(
+            array(
+                'type' => 'zone',
+                'zone_name' => get_module_zone('wiki'),
+            ),
+            array(
+                'type' => 'page',
+                'zone_name' => get_module_zone('wiki'),
+                'page_name' => 'wiki',
+            ),
+        );
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run function for search results.
 	 *
 	 * @param  string			Search string
@@ -81,58 +86,56 @@ class Hook_search_wiki_pages
 	 * @param  boolean		Whether it is a boolean search
 	 * @return array			List of maps (template, orderer)
 	 */
-	function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
-	{
-		$remapped_orderer='';
-		switch ($sort)
-		{
-			case 'title':
-				$remapped_orderer='title';
-				break;
+    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    {
+        $remapped_orderer = '';
+        switch ($sort) {
+            case 'title':
+                $remapped_orderer = 'title';
+                break;
 
-			case 'add_date':
-				$remapped_orderer='add_date';
-				break;
-		}
+            case 'add_date':
+                $remapped_orderer = 'add_date';
+                break;
+        }
 
-		require_code('wiki');
-		require_lang('wiki');
+        require_code('wiki');
+        require_lang('wiki');
 
-		// Calculate our where clause (search)
-		if ($author!='')
-		{
-			return array();
-		}
-		if (!is_null($cutoff))
-		{
-			$where_clause.=' AND ';
-			$where_clause.='add_date>'.strval($cutoff);
-		}
+        // Calculate our where clause (search)
+        if ($author != '') {
+            return array();
+        }
+        if (!is_null($cutoff)) {
+            $where_clause .= ' AND ';
+            $where_clause .= 'add_date>' . strval($cutoff);
+        }
 
-		// Calculate and perform query
-		$rows=get_search_rows('wiki_page','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'wiki_pages r',array('r.title'=>'SHORT_TRANS','r.description'=>'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',NULL,'wiki_page','id');
+        // Calculate and perform query
+        $rows = get_search_rows('wiki_page','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'wiki_pages r',array('r.title' => 'SHORT_TRANS','r.description' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'wiki_page','id');
 
-		$out=array();
-		foreach ($rows as $i=>$row)
-		{
-			$out[$i]['data']=$row;
-			unset($rows[$i]);
-			if (($remapped_orderer!='') && (array_key_exists($remapped_orderer,$row))) $out[$i]['orderer']=$row[$remapped_orderer]; elseif (strpos($remapped_orderer,'_rating:')!==false) $out[$i]['orderer']=$row[$remapped_orderer];
-		}
+        $out = array();
+        foreach ($rows as $i => $row) {
+            $out[$i]['data'] = $row;
+            unset($rows[$i]);
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                $out[$i]['orderer'] = $row[$remapped_orderer];
+            }
+        }
 
-		return $out;
-	}
+        return $out;
+    }
 
-	/**
+    /**
 	 * Run function for rendering a search result.
 	 *
 	 * @param  array		The data row stored when we retrieved the result
 	 * @return tempcode	The output
 	 */
-	function render($row)
-	{
-		return render_wiki_page_box($row);
-	}
+    public function render($row)
+    {
+        return render_wiki_page_box($row);
+    }
 }
-
-

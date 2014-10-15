@@ -15,35 +15,33 @@
 
 class Hook_config_bookings_max_ahead_months
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'BOOKINGS_MAX_AHEAD_MONTHS',
-			'type'=>'integer',
-			'category'=>'FEATURE',
-			'group'=>'BOOKINGS',
-			'explanation'=>'CONFIG_OPTION_bookings_max_ahead_months',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'BOOKINGS_MAX_AHEAD_MONTHS',
+            'type' => 'integer',
+            'category' => 'FEATURE',
+            'group' => 'BOOKINGS',
+            'explanation' => 'CONFIG_OPTION_bookings_max_ahead_months',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'booking',
-		);
-	}
+            'addon' => 'booking',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '36';
-	}
+    public function get_default()
+    {
+        return '36';
+    }
 }
-
-

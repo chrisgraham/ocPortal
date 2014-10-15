@@ -20,16 +20,16 @@
 
 class Hook_cron_tickets_email_integration
 {
-	/**
+    /**
 	 * Run function for CRON hooks. Searches for tasks to perform.
 	 */
-	function run()
-	{
-		if (!addon_installed('tickets')) return;
+    public function run()
+    {
+        if (!addon_installed('tickets')) {
+            return;
+        }
 
-		require_code('tickets_email_integration');
-		ticket_incoming_scan();
-	}
+        require_code('tickets_email_integration');
+        ticket_incoming_scan();
+    }
 }
-
-

@@ -20,7 +20,7 @@
 
 class Hook_ocf_auth_smf
 {
-	/**
+    /**
 	 * Try and authenticate for our password compatibility scheme.
 	 *
 	 * @param  ?SHORT_TEXT	The member username (NULL: don't use this in the authentication - but look it up using the ID if needed)
@@ -31,27 +31,21 @@ class Hook_ocf_auth_smf
 	 * @param  array			Row of OCF account
 	 * @return ?tempcode		Error message (NULL: none)
 	 */
-	function auth($username,$userid,$password_hashed,$password_raw,$cookie_login,$row)
-	{
-		if ($cookie_login)
-		{
-			if ($row['m_pass_hash_salted']!=$password_hashed)
-			{
-				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
-			}
-		} else
-		{
-			$username=strtolower(post_param('login_username',NULL)); //prepare inputted username
-			$password_given=strtr(post_param('password',''),array_flip(get_html_translation_table(HTML_SPECIALCHARS,ENT_QUOTES))+array('&#039;'=>'\'','&nbsp;'=>' ')); //prepare inputted password
+    public function auth($username,$userid,$password_hashed,$password_raw,$cookie_login,$row)
+    {
+        if ($cookie_login) {
+            if ($row['m_pass_hash_salted'] != $password_hashed) {
+                return do_lang_tempcode('MEMBER_BAD_PASSWORD');
+            }
+        } else {
+            $username = strtolower(post_param('login_username',null)); //prepare inputted username
+            $password_given = strtr(post_param('password',''),array_flip(get_html_translation_table(HTML_SPECIALCHARS,ENT_QUOTES))+array('&#039;' => '\'','&nbsp;' => ' ')); //prepare inputted password
 
-			if (sha1($username.$password_given)!=$row['m_pass_hash_salted'])
-			{
-				return do_lang_tempcode('MEMBER_BAD_PASSWORD');
-			}
-		}
+            if (sha1($username . $password_given) != $row['m_pass_hash_salted']) {
+                return do_lang_tempcode('MEMBER_BAD_PASSWORD');
+            }
+        }
 
-		return NULL;
-	}
+        return NULL;
+    }
 }
-
-

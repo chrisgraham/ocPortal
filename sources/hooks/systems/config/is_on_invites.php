@@ -20,36 +20,34 @@
 
 class Hook_config_is_on_invites
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'INVITES_ENABLED',
-			'type'=>'tick',
-			'category'=>'USERS',
-			'group'=>'JOINING',
-			'explanation'=>'CONFIG_OPTION_is_on_invites',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>200,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'INVITES_ENABLED',
+            'type' => 'tick',
+            'category' => 'USERS',
+            'group' => 'JOINING',
+            'explanation' => 'CONFIG_OPTION_is_on_invites',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 200,
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '0';
-	}
+    public function get_default()
+    {
+        return '0';
+    }
 }
-
-

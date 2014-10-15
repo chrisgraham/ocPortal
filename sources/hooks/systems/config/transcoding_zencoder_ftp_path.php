@@ -20,36 +20,34 @@
 
 class Hook_config_transcoding_zencoder_ftp_path
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'TRANSCODING_ZENCODER_FTP_PATH',
-			'type'=>'line',
-			'category'=>'GALLERY',
-			'group'=>'TRANSCODING',
-			'explanation'=>'CONFIG_OPTION_transcoding_zencoder_ftp_path',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>7,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'TRANSCODING_ZENCODER_FTP_PATH',
+            'type' => 'line',
+            'category' => 'GALLERY',
+            'group' => 'TRANSCODING',
+            'explanation' => 'CONFIG_OPTION_transcoding_zencoder_ftp_path',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 7,
 
-			'addon'=>'galleries',
-		);
-	}
+            'addon' => 'galleries',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '';
-	}
+    public function get_default()
+    {
+        return '';
+    }
 }
-
-

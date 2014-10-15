@@ -27,68 +27,58 @@
  */
 function set_comment_forum_for($feedback_code,$category_id,$forum_id)
 {
-	require_code('feedback');
+    require_code('feedback');
 
-	$old_forum_id=find_overridden_comment_forum($feedback_code,$category_id);
-	$_old_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($old_forum_id);
-	$_forum_id=$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_id);
-	if (is_null($_forum_id)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    $old_forum_id = find_overridden_comment_forum($feedback_code,$category_id);
+    $_old_forum_id = $GLOBALS['FORUM_DRIVER']->forum_id_from_name($old_forum_id);
+    $_forum_id = $GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_id);
+    if (is_null($_forum_id)) {
+        warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+    }
 
-	$default_comment_topic_forum=$GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
-	if (!is_null($category_id))
-	{
-		if ($default_comment_topic_forum==$_forum_id)
-		{
-			delete_value('comment_forum__'.$feedback_code.'__'.$category_id);
-		} else
-		{
-			set_value('comment_forum__'.$feedback_code.'__'.$category_id,strval($_forum_id));
-		}
-	} else
-	{
-		if ($default_comment_topic_forum==$_forum_id)
-		{
-			delete_value('comment_forum__'.$feedback_code);
-		} else
-		{
-			set_value('comment_forum__'.$feedback_code,strval($_forum_id));
-		}
-	}
+    $default_comment_topic_forum = $GLOBALS['FORUM_DRIVER']->forum_id_from_name(get_option('comments_forum_name'));
+    if (!is_null($category_id)) {
+        if ($default_comment_topic_forum == $_forum_id) {
+            delete_value('comment_forum__' . $feedback_code . '__' . $category_id);
+        } else {
+            set_value('comment_forum__' . $feedback_code . '__' . $category_id,strval($_forum_id));
+        }
+    } else {
+        if ($default_comment_topic_forum == $_forum_id) {
+            delete_value('comment_forum__' . $feedback_code);
+        } else {
+            set_value('comment_forum__' . $feedback_code,strval($_forum_id));
+        }
+    }
 
-	// Move stuff
-	if (get_forum_type()=='ocf')
-	{
-		require_code('content');
-		$cma_hook=convert_ocportal_type_codes('feedback_type_code',$feedback_code,'cma_hook');
-		require_code('hooks/systems/content_meta_aware/'.$cma_hook);
-		$cma_ob=object_factory('Hook_content_meta_aware_'.$cma_hook);
-		$info=$cma_ob->info();
-		$category_is_string=(isset($info['category_is_string']) && $info['category_is_string']);
-		$topics=array();
-		$start=0;
-		do
-		{
-			$rows=$GLOBALS['SITE_DB']->query_select($info['table'],array($info['id_field']),array($info['parent_category_field']=>$category_is_string?$category_id:intval($category_id)),'',100,$start);
-			foreach ($rows as $row)
-			{
-				$id=$row[$info['id_field']];
-				$feedback_id=$feedback_code.'_'.(is_string($id)?$id:strval($id));
-				$topic_id=$GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id,$feedback_id);
-				if (!is_null($topic_id))
-				{
-					$topics[]=$topic_id;
-				}
-			}
-			$start+=100;
-		}
-		while (count($rows)>0);
+    // Move stuff
+    if (get_forum_type() == 'ocf') {
+        require_code('content');
+        $cma_hook = convert_ocportal_type_codes('feedback_type_code',$feedback_code,'cma_hook');
+        require_code('hooks/systems/content_meta_aware/' . $cma_hook);
+        $cma_ob = object_factory('Hook_content_meta_aware_' . $cma_hook);
+        $info = $cma_ob->info();
+        $category_is_string = (isset($info['category_is_string']) && $info['category_is_string']);
+        $topics = array();
+        $start = 0;
+        do {
+            $rows = $GLOBALS['SITE_DB']->query_select($info['table'],array($info['id_field']),array($info['parent_category_field'] => $category_is_string?$category_id:intval($category_id)),'',100,$start);
+            foreach ($rows as $row) {
+                $id = $row[$info['id_field']];
+                $feedback_id = $feedback_code . '_' . (is_string($id)?$id:strval($id));
+                $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id,$feedback_id);
+                if (!is_null($topic_id)) {
+                    $topics[] = $topic_id;
+                }
+            }
+            $start += 100;
+        } while (count($rows)>0);
 
-		if (count($topics)>0)
-		{
-			require_code('ocf_topics_action2');
-			ocf_move_topics($_old_forum_id,$_forum_id,$topics,false);
-		}
-	}
+        if (count($topics)>0) {
+            require_code('ocf_topics_action2');
+            ocf_move_topics($_old_forum_id,$_forum_id,$topics,false);
+        }
+    }
 }
 
 /**
@@ -96,51 +86,55 @@ function set_comment_forum_for($feedback_code,$category_id,$forum_id)
  */
 function trackback_script()
 {
-	if (get_option('is_on_trackbacks')=='0') return;
+    if (get_option('is_on_trackbacks') == '0') {
+        return;
+    }
 
-	require_lang('trackbacks');
+    require_lang('trackbacks');
 
-	header('Content-type: text/xml');
+    header('Content-type: text/xml');
 
-	$page=get_param('page');
-	$id=get_param_integer('id');
-	$mode=either_param('__mode','none');
+    $page = get_param('page');
+    $id = get_param_integer('id');
+    $mode = either_param('__mode','none');
 
-	$allow_trackbacks=true;
+    $allow_trackbacks = true;
 
-	$hooks=find_all_hooks('systems','trackback');
-	foreach (array_keys($hooks) as $hook)
-	{
-		if ($hook==$page)
-		{
-			require_code('hooks/systems/trackback/'.filter_naughty_harsh($hook));
-			$object=object_factory('Hook_trackback_'.filter_naughty_harsh($hook),true);
-			if (is_null($object)) continue;
-			$allow_trackbacks=$object->run($id);
-			break;
-		}
-	}
+    $hooks = find_all_hooks('systems','trackback');
+    foreach (array_keys($hooks) as $hook) {
+        if ($hook == $page) {
+            require_code('hooks/systems/trackback/' . filter_naughty_harsh($hook));
+            $object = object_factory('Hook_trackback_' . filter_naughty_harsh($hook),true);
+            if (is_null($object)) {
+                continue;
+            }
+            $allow_trackbacks = $object->run($id);
+            break;
+        }
+    }
 
-	if ($mode=='rss')
-	{
-		//List all the trackbacks to the specified page
-		$xml=get_trackbacks($page,strval($id),$allow_trackbacks,'xml');
-	}
-	else
-	{
-		$time=get_param_integer('time');
-		if ($time>time()-60*5) exit(); // Trackback link intentionally goes stale after 5 minutes, so it can't be statically stored and spam hammered
+    if ($mode == 'rss') {
+        //List all the trackbacks to the specified page
+        $xml = get_trackbacks($page,strval($id),$allow_trackbacks,'xml');
+    } else {
+        $time = get_param_integer('time');
+        if ($time>time()-60*5) {
+            exit();
+        } // Trackback link intentionally goes stale after 5 minutes, so it can't be statically stored and spam hammered
 
-		//Add a trackback for the specified page
-		$output=actualise_post_trackback($allow_trackbacks,$page,strval($id));
+        //Add a trackback for the specified page
+        $output = actualise_post_trackback($allow_trackbacks,$page,strval($id));
 
-		if ($output) $xml=do_template('TRACKBACK_XML_NO_ERROR',array());
-		else $xml=do_template('TRACKBACK_XML_ERROR',array('_GUID'=>'ac5e34aeabf92712607e62e062407861','TRACKBACK_ERROR'=>do_lang_tempcode('TRACKBACK_ERROR')));
-	}
+        if ($output) {
+            $xml = do_template('TRACKBACK_XML_NO_ERROR',array());
+        } else {
+            $xml = do_template('TRACKBACK_XML_ERROR',array('_GUID' => 'ac5e34aeabf92712607e62e062407861','TRACKBACK_ERROR' => do_lang_tempcode('TRACKBACK_ERROR')));
+        }
+    }
 
 
-	$echo=do_template('TRACKBACK_XML_WRAPPER',array('_GUID'=>'cd8d057328569803a6cca9f8d37a0ac8','XML'=>$xml));
-	$echo->evaluate_echo();
+    $echo = do_template('TRACKBACK_XML_WRAPPER',array('_GUID' => 'cd8d057328569803a6cca9f8d37a0ac8','XML' => $xml));
+    $echo->evaluate_echo();
 }
 
 /**
@@ -158,62 +152,55 @@ function trackback_script()
  * @param  string			Field name prefix
  * @return tempcode		The feedback editing fields
  */
-function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews=NULL,$default_off=false,$has_notes=true,$show_header=true,$field_name_prefix='')
+function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_trackbacks,$notes,$allow_reviews = null,$default_off = false,$has_notes = true,$show_header = true,$field_name_prefix = '')
 {
-	if (get_option('enable_feedback')=='0') return new ocp_tempcode();
+    if (get_option('enable_feedback') == '0') {
+        return new ocp_tempcode();
+    }
 
-	require_code('feedback');
-	require_code('form_templates');
-	$fields=new ocp_tempcode();
-	if (($send_trackbacks) && (get_option('is_on_trackbacks')=='1'))
-	{
-		require_lang('trackbacks');
-		$fields->attach(form_input_line(do_lang_tempcode('SEND_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_SEND_TRACKBACKS'),$field_name_prefix.'send_trackbacks',get_param('trackback',''),false));
-	}
-	if (get_option('is_on_rating')=='1')
-	{
-		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_RATING'),do_lang_tempcode('DESCRIPTION_ALLOW_RATING'),$field_name_prefix.'allow_rating',$allow_rating));
-	}
-	if (get_option('is_on_comments')=='1')
-	{
-		if (!is_null($allow_reviews))
-		{
-			$choices=new ocp_tempcode();
-			$choices->attach(form_input_list_entry('0',!$allow_comments && !$allow_reviews,do_lang('NO')));
-			$choices->attach(form_input_list_entry('1',$allow_comments && !$allow_reviews,do_lang('ALLOW_COMMENTS_ONLY')));
-			$choices->attach(form_input_list_entry('2',$allow_reviews,do_lang('ALLOW_REVIEWS')));
-			$fields->attach(form_input_list(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),$field_name_prefix.'allow_comments',$choices,NULL,false,false));
-		} else
-		{
-			$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),$field_name_prefix.'allow_comments',$allow_comments));
-		}
-	}
-	if ((get_option('is_on_trackbacks')=='1') && (!is_null($allow_trackbacks)))
-	{
-		require_lang('trackbacks');
-		$fields->attach(form_input_tick(do_lang_tempcode('ALLOW_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_ALLOW_TRACKBACKS'),$field_name_prefix.'allow_trackbacks',$allow_trackbacks));
-	}
-	if ((get_option('enable_staff_notes')=='1') && ($has_notes))
-		$fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),$field_name_prefix.'notes',$notes,false));
+    require_code('feedback');
+    require_code('form_templates');
+    $fields = new ocp_tempcode();
+    if (($send_trackbacks) && (get_option('is_on_trackbacks') == '1')) {
+        require_lang('trackbacks');
+        $fields->attach(form_input_line(do_lang_tempcode('SEND_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_SEND_TRACKBACKS'),$field_name_prefix . 'send_trackbacks',get_param('trackback',''),false));
+    }
+    if (get_option('is_on_rating') == '1') {
+        $fields->attach(form_input_tick(do_lang_tempcode('ALLOW_RATING'),do_lang_tempcode('DESCRIPTION_ALLOW_RATING'),$field_name_prefix . 'allow_rating',$allow_rating));
+    }
+    if (get_option('is_on_comments') == '1') {
+        if (!is_null($allow_reviews)) {
+            $choices = new ocp_tempcode();
+            $choices->attach(form_input_list_entry('0',!$allow_comments && !$allow_reviews,do_lang('NO')));
+            $choices->attach(form_input_list_entry('1',$allow_comments && !$allow_reviews,do_lang('ALLOW_COMMENTS_ONLY')));
+            $choices->attach(form_input_list_entry('2',$allow_reviews,do_lang('ALLOW_REVIEWS')));
+            $fields->attach(form_input_list(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),$field_name_prefix . 'allow_comments',$choices,null,false,false));
+        } else {
+            $fields->attach(form_input_tick(do_lang_tempcode('ALLOW_COMMENTS'),do_lang_tempcode('DESCRIPTION_ALLOW_COMMENTS'),$field_name_prefix . 'allow_comments',$allow_comments));
+        }
+    }
+    if ((get_option('is_on_trackbacks') == '1') && (!is_null($allow_trackbacks))) {
+        require_lang('trackbacks');
+        $fields->attach(form_input_tick(do_lang_tempcode('ALLOW_TRACKBACKS'),do_lang_tempcode('DESCRIPTION_ALLOW_TRACKBACKS'),$field_name_prefix . 'allow_trackbacks',$allow_trackbacks));
+    }
+    if ((get_option('enable_staff_notes') == '1') && ($has_notes)) {
+        $fields->attach(form_input_text(do_lang_tempcode('NOTES'),do_lang_tempcode('DESCRIPTION_NOTES'),$field_name_prefix . 'notes',$notes,false));
+    }
 
-	if ($show_header)
-	{
-		if (!$fields->is_empty())
-		{
-			if ($default_off)
-			{
-				$section_hidden=$notes=='' && !$allow_comments && (is_null($allow_trackbacks) || !$allow_trackbacks) && !$allow_rating;
-			} else
-			{
-				$section_hidden=$notes=='' && $allow_comments && (is_null($allow_trackbacks) || $allow_trackbacks || (get_option('is_on_trackbacks')=='0')) && $allow_rating;
-			}
-			$_fields=do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID'=>'95864784029fd6d46a8b2ebbca9d81eb','SECTION_HIDDEN'=>$section_hidden,'TITLE'=>do_lang_tempcode((get_option('enable_staff_notes')=='1')?'FEEDBACK_AND_NOTES':'_FEEDBACK')));
-			$_fields->attach($fields);
-			$fields=$_fields;
-		}
-	}
+    if ($show_header) {
+        if (!$fields->is_empty()) {
+            if ($default_off) {
+                $section_hidden = $notes == '' && !$allow_comments && (is_null($allow_trackbacks) || !$allow_trackbacks) && !$allow_rating;
+            } else {
+                $section_hidden = $notes == '' && $allow_comments && (is_null($allow_trackbacks) || $allow_trackbacks || (get_option('is_on_trackbacks') == '0')) && $allow_rating;
+            }
+            $_fields = do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '95864784029fd6d46a8b2ebbca9d81eb','SECTION_HIDDEN' => $section_hidden,'TITLE' => do_lang_tempcode((get_option('enable_staff_notes') == '1')?'FEEDBACK_AND_NOTES':'_FEEDBACK')));
+            $_fields->attach($fields);
+            $fields = $_fields;
+        }
+    }
 
-	return $fields;
+    return $fields;
 }
 
 /**
@@ -226,14 +213,12 @@ function feedback_fields($allow_rating,$allow_comments,$allow_trackbacks,$send_t
 */
 function send_trackbacks($_urls,$title,$excerpt)
 {
-	$urls=explode(',',$_urls);
+    $urls = explode(',',$_urls);
 
-	foreach ($urls as $url)
-	{
-		$url=trim($url);
-		http_download_file($url,NULL,false,false,'ocPortal',array('url'=>get_custom_base_url(),'title'=>$title,'blog_name'=>get_site_name(),'excerpt'=>$excerpt));
-	}
+    foreach ($urls as $url) {
+        $url = trim($url);
+        http_download_file($url,null,false,false,'ocPortal',array('url' => get_custom_base_url(),'title' => $title,'blog_name' => get_site_name(),'excerpt' => $excerpt));
+    }
 
-	return true; // To be honest, I can't be bothered to code a proper status return, and it wouldn't do anything, so I won't ;-).
+    return true; // To be honest, I can't be bothered to code a proper status return, and it wouldn't do anything, so I won't ;-).
 }
-

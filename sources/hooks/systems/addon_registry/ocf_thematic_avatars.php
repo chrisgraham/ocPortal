@@ -20,95 +20,95 @@
 
 class Hook_addon_registry_ocf_thematic_avatars
 {
-	/**
+    /**
 	 * Get a list of file permissions to set
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_chmod_array()
-	{
-		return array();
-	}
+    public function get_chmod_array()
+    {
+        return array();
+    }
 
-	/**
+    /**
 	 * Get the version of ocPortal this addon is for
 	 *
 	 * @return float			Version number
 	 */
-	function get_version()
-	{
-		return ocp_version_number();
-	}
+    public function get_version()
+    {
+        return ocp_version_number();
+    }
 
-	/**
+    /**
 	 * Get the description of the addon
 	 *
 	 * @return string			Description of the addon
 	 */
-	function get_description()
-	{
-		return 'A selection of avatars for OCF';
-	}
+    public function get_description()
+    {
+        return 'A selection of avatars for OCF';
+    }
 
-	/**
+    /**
 	 * Get a list of tutorials that apply to this addon
 	 *
 	 * @return array			List of tutorials
 	 */
-	function get_applicable_tutorials()
-	{
-		return array(
-			'tut_members',
-		);
-	}
+    public function get_applicable_tutorials()
+    {
+        return array(
+            'tut_members',
+        );
+    }
 
-	/**
+    /**
 	 * Get a mapping of dependency types
 	 *
 	 * @return array			File permissions to set
 	 */
-	function get_dependencies()
-	{
-		return array(
-			'requires'=>array('ocf_member_avatars'),
-			'recommends'=>array(),
-			'conflicts_with'=>array(),
-		);
-	}
+    public function get_dependencies()
+    {
+        return array(
+            'requires' => array('ocf_member_avatars'),
+            'recommends' => array(),
+            'conflicts_with' => array(),
+        );
+    }
 
-	/**
+    /**
 	 * Explicitly say which icon should be used
 	 *
 	 * @return URLPATH		Icon
 	 */
-	function get_default_icon()
-	{
-		return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
-	}
+    public function get_default_icon()
+    {
+        return 'themes/default/images/icons/48x48/menu/_generic_admin/component.png';
+    }
 
-	/**
+    /**
 	 * Get a list of files that belong to this addon
 	 *
 	 * @return array			List of files
 	 */
-	function get_file_list()
-	{
-		return array(
-			'sources/hooks/systems/addon_registry/ocf_thematic_avatars.php',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/animals.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/books.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/business.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/chess.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/food.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/games.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/index.html',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/money.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/music.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/nature.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/outdoors.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/space.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/sports.png',
-			'themes/default/images/ocf_default_avatars/default_set/thematic/tech.png',
-		);
-	}
+    public function get_file_list()
+    {
+        return array(
+            'sources/hooks/systems/addon_registry/ocf_thematic_avatars.php',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/animals.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/books.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/business.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/chess.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/food.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/games.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/index.html',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/money.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/music.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/nature.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/outdoors.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/space.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/sports.png',
+            'themes/default/images/ocf_default_avatars/default_set/thematic/tech.png',
+        );
+    }
 }

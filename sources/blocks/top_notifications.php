@@ -20,53 +20,55 @@
 
 class Block_top_notifications
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=1;
-		$info['locked']=false;
-		$info['parameters']=array('max');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 1;
+        $info['locked'] = false;
+        $info['parameters'] = array('max');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		if (is_guest()) return new ocp_tempcode();
+    public function run($map)
+    {
+        if (is_guest()) {
+            return new ocp_tempcode();
+        }
 
-		if (!has_js()) return new ocp_tempcode();
+        if (!has_js()) {
+            return new ocp_tempcode();
+        }
 
-		$max=isset($map['max'])?intval($map['max']):5;
+        $max = isset($map['max'])?intval($map['max']):5;
 
-		require_code('notification_poller');
+        require_code('notification_poller');
 
-		list($notifications,$num_unread_web_notifications)=get_web_notifications($max);
+        list($notifications,$num_unread_web_notifications) = get_web_notifications($max);
 
-		list($pts,$num_unread_pts)=get_pts($max);
+        list($pts,$num_unread_pts) = get_pts($max);
 
-		return do_template('BLOCK_TOP_NOTIFICATIONS',array('_GUID'=>'3fa04eb827741561440dbf1a65988b33','NUM_UNREAD_WEB_NOTIFICATIONS'=>strval($num_unread_web_notifications),
-			'NOTIFICATIONS'=>$notifications,
+        return do_template('BLOCK_TOP_NOTIFICATIONS',array('_GUID' => '3fa04eb827741561440dbf1a65988b33','NUM_UNREAD_WEB_NOTIFICATIONS' => strval($num_unread_web_notifications),
+            'NOTIFICATIONS' => $notifications,
 
-			'NUM_UNREAD_PTS'=>strval($num_unread_pts),
-			'PTS'=>$pts,
+            'NUM_UNREAD_PTS' => strval($num_unread_pts),
+            'PTS' => $pts,
 
-			'MAX'=>strval($max),
-		));
-	}
+            'MAX' => strval($max),
+        ));
+    }
 }
-
-

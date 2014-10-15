@@ -20,35 +20,33 @@
 
 class Hook_config_is_on_folder_create
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'FOLDER_CREATE',
-			'type'=>'tick',
-			'category'=>'SERVER',
-			'group'=>'GENERAL',
-			'explanation'=>'CONFIG_OPTION_is_on_folder_create',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'FOLDER_CREATE',
+            'type' => 'tick',
+            'category' => 'SERVER',
+            'group' => 'GENERAL',
+            'explanation' => 'CONFIG_OPTION_is_on_folder_create',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
 
-			'addon'=>'filedump',
-		);
-	}
+            'addon' => 'filedump',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '1';
-	}
+    public function get_default()
+    {
+        return '1';
+    }
 }
-
-

@@ -20,52 +20,53 @@
 
 class Block_main_screen_actions
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('title','url');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('title','url');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		require_css('screen_actions');
+    public function run($map)
+    {
+        require_css('screen_actions');
 
-		require_lang('recommend');
+        require_lang('recommend');
 
-		$from=isset($map['url'])?$map['url']:'';
-		if ($from=='')
-			$from=get_self_url(true);
+        $from = isset($map['url'])?$map['url']:'';
+        if ($from == '') {
+            $from = get_self_url(true);
+        }
 
-		$_map=array('page'=>'recommend','from'=>$from);
-		if (array_key_exists('title',$map)) $_map['title']=$map['title'];
-		$recommend_url=build_url($_map,'_SEARCH');
+        $_map = array('page' => 'recommend','from' => $from);
+        if (array_key_exists('title',$map)) {
+            $_map['title'] = $map['title'];
+        }
+        $recommend_url = build_url($_map,'_SEARCH');
 
-		return do_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
-			'_GUID'=>'2f5ceee4e1cc3d31c184c62e0710b1c3',
-			'PRINT_URL'=>get_self_url(true,false,array('wide_print'=>1)),
-			'RECOMMEND_URL'=>$recommend_url,
-			'EASY_SELF_URL'=>str_replace("'",'',urlencode(get_self_url(true))),
-			'TITLE'=>array_key_exists('title',$map)?$map['title']:'',
-		));
-	}
+        return do_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
+            '_GUID' => '2f5ceee4e1cc3d31c184c62e0710b1c3',
+            'PRINT_URL' => get_self_url(true,false,array('wide_print' => 1)),
+            'RECOMMEND_URL' => $recommend_url,
+            'EASY_SELF_URL' => str_replace("'",'',urlencode(get_self_url(true))),
+            'TITLE' => array_key_exists('title',$map)?$map['title']:'',
+        ));
+    }
 }
-
-

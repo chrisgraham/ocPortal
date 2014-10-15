@@ -20,14 +20,14 @@
 
 class Hook_password_strength
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		require_code('password_strength');
-		return make_string_tempcode(strval(test_password(either_param('password'),either_param('username',''))));
-	}
+    public function run()
+    {
+        require_code('password_strength');
+        return make_string_tempcode(strval(test_password(either_param('password'),either_param('username',''))));
+    }
 }

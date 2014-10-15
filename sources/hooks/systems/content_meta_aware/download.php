@@ -20,80 +20,80 @@
 
 class Hook_content_meta_aware_download
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		return array(
-			'supports_custom_fields'=>true,
+    public function info($zone = null)
+    {
+        return array(
+            'supports_custom_fields' => true,
 
-			'content_type_label'=>'DOWNLOAD',
+            'content_type_label' => 'DOWNLOAD',
 
-			'connection'=>$GLOBALS['SITE_DB'],
-			'table'=>'download_downloads',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>'category_id',
-			'parent_category_meta_aware_type'=>'download_category',
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_field'=>'category_id', // For category permissions
-			'category_type'=>'downloads', // For category permissions
-			'parent_spec__table_name'=>'download_categories',
-			'parent_spec__parent_name'=>'parent_id',
-			'parent_spec__field_name'=>'id',
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['SITE_DB'],
+            'table' => 'download_downloads',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => 'category_id',
+            'parent_category_meta_aware_type' => 'download_category',
+            'is_category' => false,
+            'is_entry' => true,
+            'category_field' => 'category_id', // For category permissions
+            'category_type' => 'downloads', // For category permissions
+            'parent_spec__table_name' => 'download_categories',
+            'parent_spec__parent_name' => 'parent_id',
+            'parent_spec__field_name' => 'id',
+            'category_is_string' => false,
 
-			'title_field'=>'name',
-			'title_field_dereference'=>true,
-			'description_field'=>'description',
-			'thumb_field'=>'rep_image',
+            'title_field' => 'name',
+            'title_field_dereference' => true,
+            'description_field' => 'description',
+            'thumb_field' => 'rep_image',
 
-			'view_page_link_pattern'=>'_SEARCH:downloads:entry:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:cms_downloads:_ed:_WILD',
-			'view_category_page_link_pattern'=>'_SEARCH:downloads:misc:_WILD',
-			'add_url'=>(function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?(get_module_zone('cms_downloads').':cms_downloads:ad'):NULL,
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('downloads')).':downloads',
+            'view_page_link_pattern' => '_SEARCH:downloads:entry:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:cms_downloads:_ed:_WILD',
+            'view_category_page_link_pattern' => '_SEARCH:downloads:misc:_WILD',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?(get_module_zone('cms_downloads') . ':cms_downloads:ad'):null,
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('downloads')) . ':downloads',
 
-			'support_url_monikers'=>true,
+            'support_url_monikers' => true,
 
-			'views_field'=>'download_views',
-			'submitter_field'=>'submitter',
-			'author_field'=>'author',
-			'add_time_field'=>'add_date',
-			'edit_time_field'=>'edit_date',
-			'date_field'=>'add_date',
-			'validated_field'=>'validated',
+            'views_field' => 'download_views',
+            'submitter_field' => 'submitter',
+            'author_field' => 'author',
+            'add_time_field' => 'add_date',
+            'edit_time_field' => 'edit_date',
+            'date_field' => 'add_date',
+            'validated_field' => 'validated',
 
-			'seo_type_code'=>'downloads_download',
+            'seo_type_code' => 'downloads_download',
 
-			'feedback_type_code'=>'downloads',
+            'feedback_type_code' => 'downloads',
 
-			'permissions_type_code'=>'downloads', // NULL if has no permissions
+            'permissions_type_code' => 'downloads', // NULL if has no permissions
 
-			'search_hook'=>'downloads',
+            'search_hook' => 'downloads',
 
-			'addon_name'=>'downloads',
+            'addon_name' => 'downloads',
 
-			'cms_page'=>'cms_downloads',
-			'module'=>'downloads',
+            'cms_page' => 'cms_downloads',
+            'module' => 'downloads',
 
-			'occle_filesystem_hook'=>'downloads',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'downloads',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>'downloads',
+            'rss_hook' => 'downloads',
 
-			'actionlog_regexp'=>'\w+_DOWNLOAD',
+            'actionlog_regexp' => '\w+_DOWNLOAD',
 
-			'supports_privacy'=>true,
-		);
-	}
+            'supports_privacy' => true,
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -105,10 +105,10 @@ class Hook_content_meta_aware_download
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('downloads');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('downloads');
 
-		return render_download_box($row,true,$include_breadcrumbs,$zone,NULL,$give_context,is_null($root)?NULL:intval($root),$guid);
-	}
+        return render_download_box($row,true,$include_breadcrumbs,$zone,null,$give_context,is_null($root)?null:intval($root),$guid);
+    }
 }

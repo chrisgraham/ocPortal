@@ -15,36 +15,34 @@
 
 class Hook_config_support_credit_value
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'SUPPORT_CREDIT_VALUE',
-			'type'=>'float',
-			'category'=>'FEATURE',
-			'group'=>'SECTION_CUSTOMERS',
-			'explanation'=>'CONFIG_OPTION_support_credit_value',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'SUPPORT_CREDIT_VALUE',
+            'type' => 'float',
+            'category' => 'FEATURE',
+            'group' => 'SECTION_CUSTOMERS',
+            'explanation' => 'CONFIG_OPTION_support_credit_value',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'ocportalcom_support_credits',
-		);
-	}
+            'addon' => 'ocportalcom_support_credits',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '5.5';
-	}
+    public function get_default()
+    {
+        return '5.5';
+    }
 }
-
-

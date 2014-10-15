@@ -20,29 +20,26 @@
 
 class Hook_task_ocf_recache
 {
-	/**
+    /**
 	 * Run the task hook.
 	 *
 	 * @return ?array			A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
 	 */
-	function run()
-	{
-		ocf_require_all_forum_stuff();
+    public function run()
+    {
+        ocf_require_all_forum_stuff();
 
-		// Forums
-		require_code('ocf_posts_action2');
-		$start=0;
-		do
-		{
-			$forums=$GLOBALS['FORUM_DB']->query_select('f_forums',array('id'),NULL,'',100,$start);
-			foreach ($forums as $forum)
-			{
-				ocf_force_update_forum_cacheing($forum['id']);
-			}
-			$start+=100;
-		}
-		while ($forums!=array());
+        // Forums
+        require_code('ocf_posts_action2');
+        $start = 0;
+        do {
+            $forums = $GLOBALS['FORUM_DB']->query_select('f_forums',array('id'),null,'',100,$start);
+            foreach ($forums as $forum) {
+                ocf_force_update_forum_cacheing($forum['id']);
+            }
+            $start += 100;
+        } while ($forums != array());
 
-		return NULL;
-	}
+        return NULL;
+    }
 }

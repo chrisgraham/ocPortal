@@ -20,85 +20,87 @@
 
 class Hook_content_meta_aware_member
 {
-	/**
+    /**
 	 * Get content type details. Provides information to allow task reporting, randomisation, and add-screen linking, to function.
 	 *
 	 * @param  ?ID_TEXT	The zone to link through to (NULL: autodetect).
 	 * @return ?array		Map of award content-type info (NULL: disabled).
 	 */
-	function info($zone=NULL)
-	{
-		if (get_forum_type()!='ocf') return NULL;
+    public function info($zone = null)
+    {
+        if (get_forum_type() != 'ocf') {
+            return NULL;
+        }
 
-		return array(
-			'supports_custom_fields'=>false,
+        return array(
+            'supports_custom_fields' => false,
 
-			'content_type_label'=>'MEMBER',
+            'content_type_label' => 'MEMBER',
 
-			'connection'=>$GLOBALS['FORUM_DB'],
-			'table'=>'f_members',
-			'id_field'=>'id',
-			'id_field_numeric'=>true,
-			'parent_category_field'=>NULL,
-			'parent_category_field__resource_fs'=>'m_primary_group',
-			'parent_category_meta_aware_type'=>'group',
-			'is_category'=>false,
-			'is_entry'=>true,
-			'category_type'=>NULL, // For category permissions
-			'parent_spec__table_name'=>NULL,
-			'parent_spec__parent_name'=>NULL,
-			'parent_spec__field_name'=>NULL,
-			'category_field'=>'m_primary_group', // For category permissions
-			'category_is_string'=>false,
+            'connection' => $GLOBALS['FORUM_DB'],
+            'table' => 'f_members',
+            'id_field' => 'id',
+            'id_field_numeric' => true,
+            'parent_category_field' => NULL,
+            'parent_category_field__resource_fs' => 'm_primary_group',
+            'parent_category_meta_aware_type' => 'group',
+            'is_category' => false,
+            'is_entry' => true,
+            'category_type' => NULL, // For category permissions
+            'parent_spec__table_name' => NULL,
+            'parent_spec__parent_name' => NULL,
+            'parent_spec__field_name' => NULL,
+            'category_field' => 'm_primary_group', // For category permissions
+            'category_is_string' => false,
 
-			'title_field'=>'m_username',
-			'title_field_dereference'=>false,
-			'description_field'=>'m_title',
-			'thumb_field'=>'m_avatar_url',
+            'title_field' => 'm_username',
+            'title_field_dereference' => false,
+            'description_field' => 'm_title',
+            'thumb_field' => 'm_avatar_url',
 
-			'view_page_link_pattern'=>'_SEARCH:members:view:_WILD',
-			'edit_page_link_pattern'=>'_SEARCH:members:view:_WILD',
-			'edit_page_link_pattern_post'=>'_SEARCH:members:view:_WILD:only_tab=edit:only_subtab=settings',
-			'edit_page_link_field'=>'edit_username',
-			'view_category_page_link_pattern'=>NULL,
-			'add_url'=>'',
-			'archive_url'=>((!is_null($zone))?$zone:get_module_zone('members')).':members',
+            'view_page_link_pattern' => '_SEARCH:members:view:_WILD',
+            'edit_page_link_pattern' => '_SEARCH:members:view:_WILD',
+            'edit_page_link_pattern_post' => '_SEARCH:members:view:_WILD:only_tab=edit:only_subtab=settings',
+            'edit_page_link_field' => 'edit_username',
+            'view_category_page_link_pattern' => NULL,
+            'add_url' => '',
+            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('members')) . ':members',
 
-			'support_url_monikers'=>(get_option('username_profile_links')=='0'),
+            'support_url_monikers' => (get_option('username_profile_links') == '0'),
 
-			'views_field'=>NULL,
-			'submitter_field'=>'id',
-			'add_time_field'=>'m_join_time',
-			'edit_time_field'=>NULL,
-			'date_field'=>'m_join_time',
-			'validated_field'=>'m_validated',
+            'views_field' => NULL,
+            'submitter_field' => 'id',
+            'add_time_field' => 'm_join_time',
+            'edit_time_field' => NULL,
+            'date_field' => 'm_join_time',
+            'validated_field' => 'm_validated',
 
-			'seo_type_code'=>NULL,
+            'seo_type_code' => NULL,
 
-			'feedback_type_code'=>NULL,
+            'feedback_type_code' => NULL,
 
-			'permissions_type_code'=>NULL, // NULL if has no permissions
+            'permissions_type_code' => NULL, // NULL if has no permissions
 
-			'search_hook'=>'ocf_members',
+            'search_hook' => 'ocf_members',
 
-			'addon_name'=>'core_ocf',
+            'addon_name' => 'core_ocf',
 
-			'cms_page'=>'admin_ocf_members',
-			'module'=>'members',
+            'cms_page' => 'admin_ocf_members',
+            'module' => 'members',
 
-			'occle_filesystem_hook'=>'groups',
-			'occle_filesystem__is_folder'=>false,
+            'occle_filesystem_hook' => 'groups',
+            'occle_filesystem__is_folder' => false,
 
-			'rss_hook'=>'ocf_members',
+            'rss_hook' => 'ocf_members',
 
-			'actionlog_regexp'=>'\w+_MEMBER',
+            'actionlog_regexp' => '\w+_MEMBER',
 
-			'ocselect'=>'ocf_members2::_members_ocselect',
-			'ocselect_protected_fields'=>array('m_pass_hash_salted','m_pass_salt','m_password_change_code'), // These are ones even some staff should never know
-		);
-	}
+            'ocselect' => 'ocf_members2::_members_ocselect',
+            'ocselect_protected_fields' => array('m_pass_hash_salted','m_pass_salt','m_password_change_code'), // These are ones even some staff should never know
+        );
+    }
 
-	/**
+    /**
 	 * Run function for content hooks. Renders a content box for an award/randomisation.
 	 *
 	 * @param  array		The database row for the content
@@ -110,13 +112,13 @@ class Hook_content_meta_aware_member
 	 * @param  ID_TEXT	Overridden GUID to send to templates (blank: none)
 	 * @return tempcode	Results
 	 */
-	function run($row,$zone,$give_context=true,$include_breadcrumbs=true,$root=NULL,$attach_to_url_filter=false,$guid='')
-	{
-		require_code('ocf_members');
-		require_code('ocf_members2');
+    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    {
+        require_code('ocf_members');
+        require_code('ocf_members2');
 
-		$GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']]=$row;
+        $GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']] = $row;
 
-		return render_member_box($row['id'],false,NULL,NULL,true,NULL,$give_context,$guid);
-	}
+        return render_member_box($row['id'],false,null,null,true,null,$give_context,$guid);
+    }
 }

@@ -20,36 +20,34 @@
 
 class Hook_config_messaging_forum_name
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'_MESSAGING_FORUM_NAME',
-			'type'=>'forum',
-			'category'=>'ADMIN',
-			'group'=>'CONTACT_US_MESSAGING',
-			'explanation'=>'CONFIG_OPTION_messaging_forum_name',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'required'=>true,
+    public function get_details()
+    {
+        return array(
+            'human_name' => '_MESSAGING_FORUM_NAME',
+            'type' => 'forum',
+            'category' => 'ADMIN',
+            'group' => 'CONTACT_US_MESSAGING',
+            'explanation' => 'CONFIG_OPTION_messaging_forum_name',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'required' => true,
 
-			'addon'=>'staff_messaging',
-		);
-	}
+            'addon' => 'staff_messaging',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return do_lang('messaging:MESSAGING_FORUM_NAME','','','',get_site_default_lang());
-	}
+    public function get_default()
+    {
+        return do_lang('messaging:MESSAGING_FORUM_NAME','','','',get_site_default_lang());
+    }
 }
-
-

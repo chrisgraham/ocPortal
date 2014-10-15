@@ -20,29 +20,29 @@
 
 class Hook_Preview_comcode_tag
 {
-	/**
+    /**
 	 * Find whether this preview hook applies.
 	 *
 	 * @return array			Triplet: Whether it applies, the attachment ID type, whether the forum DB is used [optional]
 	 */
-	function applies()
-	{
-		$applies=!is_null(post_param('tag_contents',NULL)) || !is_null(post_param('tag_contents__a',NULL)) || !is_null(post_param('tag_contents__b',NULL)) || !is_null(post_param('tag_contents_0',NULL));
-		return array($applies,NULL,false);
-	}
+    public function applies()
+    {
+        $applies = !is_null(post_param('tag_contents',null)) || !is_null(post_param('tag_contents__a',null)) || !is_null(post_param('tag_contents__b',null)) || !is_null(post_param('tag_contents_0',null));
+        return array($applies,null,false);
+    }
 
-	/**
+    /**
 	 * Run function for preview hooks.
 	 *
 	 * @return array			A pair: The preview, the updated post Comcode
 	 */
-	function run()
-	{
-		require_code('comcode_add');
+    public function run()
+    {
+        require_code('comcode_add');
 
-		$comcode=_get_preview_environment_comcode(post_param('tag'));
-		$temp_tpl=comcode_to_tempcode($comcode);
+        $comcode = _get_preview_environment_comcode(post_param('tag'));
+        $temp_tpl = comcode_to_tempcode($comcode);
 
-		return array($temp_tpl,NULL);
-	}
+        return array($temp_tpl,null);
+    }
 }

@@ -20,89 +20,80 @@
 
 class Hook_page_backups
 {
-	/**
+    /**
 	 * Find details about this cleanup hook.
 	 *
 	 * @return ?array	Map of cleanup hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!is_suexec_like()) return NULL;
+    public function info()
+    {
+        if (!is_suexec_like()) {
+            return NULL;
+        }
 
-		$info=array();
-		$info['title']=do_lang_tempcode('ARCHIVE_PAGE_BACKUPS');
-		$info['description']=do_lang_tempcode('DESCRIPTION_ARCHIVE_PAGE_BACKUPS');
-		$info['type']='optimise';
+        $info = array();
+        $info['title'] = do_lang_tempcode('ARCHIVE_PAGE_BACKUPS');
+        $info['description'] = do_lang_tempcode('DESCRIPTION_ARCHIVE_PAGE_BACKUPS');
+        $info['type'] = 'optimise';
 
-		return $info;
-	}
+        return $info;
+    }
 
-	/**
+    /**
 	 * Run the cleanup hook action.
 	 *
 	 * @return tempcode	Results
 	 */
-	function run()
-	{
-		$langs=array_keys(find_all_langs());
+    public function run()
+    {
+        $langs = array_keys(find_all_langs());
 
-		// Zones: Comcode pages
-		$start=0;
-		do
-		{
-			$zones=find_all_zones(false,false,false,$start,50);
-			foreach ($zones as $zone)
-			{
-				foreach ($langs as $lang)
-				{
-					$path=get_custom_file_base().'/'.filter_naughty($zone).'/pages/comcode_custom/'.filter_naughty($lang);
-					$this->process($path);
-				}
-			}
-			$start+=50;
-		}
-		while (count($zones)!=0);
+        // Zones: Comcode pages
+        $start = 0;
+        do {
+            $zones = find_all_zones(false,false,false,$start,50);
+            foreach ($zones as $zone) {
+                foreach ($langs as $lang) {
+                    $path = get_custom_file_base() . '/' . filter_naughty($zone) . '/pages/comcode_custom/' . filter_naughty($lang);
+                    $this->process($path);
+                }
+            }
+            $start += 50;
+        } while (count($zones) != 0);
 
-		// Themes: Templates and CSS files
-		$themes=find_all_themes();
-		foreach ($themes as $theme)
-		{
-			$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/templates_custom';
-			$this->process($path);
+        // Themes: Templates and CSS files
+        $themes = find_all_themes();
+        foreach ($themes as $theme) {
+            $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/templates_custom';
+            $this->process($path);
 
-			$path=get_custom_file_base().'/themes/'.filter_naughty($theme).'/css_custom';
-			$this->process($path);
-		}
+            $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/css_custom';
+            $this->process($path);
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * Move revision files from the given path, to a subdirectory.
 	 *
 	 * @param  PATH		Path
 	 */
-	function process($path)
-	{
-		$dh=@opendir($path);
-		if ($dh!==false)
-		{
-			if (!file_exists($path.'/_old_backups'))
-			{
-				mkdir($path.'/_old_backups',0777);
-				fix_permissions($path.'/_old_backups',0777);
-			}
+    public function process($path)
+    {
+        $dh = @opendir($path);
+        if ($dh !== false) {
+            if (!file_exists($path . '/_old_backups')) {
+                mkdir($path . '/_old_backups',0777);
+                fix_permissions($path . '/_old_backups',0777);
+            }
 
-			while (($f=readdir($dh))!==false)
-			{
-				if (is_numeric(get_file_extension($f)))
-				{
-					rename($path.'/'.$f,$path.'/_old_backups/'.$f);
-				}
-			}
-			closedir($dh);
-		}
-	}
+            while (($f = readdir($dh)) !== false) {
+                if (is_numeric(get_file_extension($f))) {
+                    rename($path . '/' . $f,$path . '/_old_backups/' . $f);
+                }
+            }
+            closedir($dh);
+        }
+    }
 }
-
-

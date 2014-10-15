@@ -20,22 +20,22 @@
 
 class Hook_page_groupings_galleries
 {
-	/**
+    /**
 	 * Run function for do_next_menu hooks. They find links to put on standard navigation menus of the system.
 	 *
 	 * @param  ?MEMBER		Member ID to run as (NULL: current member)
 	 * @param  boolean		Whether to use extensive documentation tooltips, rather than short summaries
 	 * @return array			List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
 	 */
-	function run($member_id=NULL,$extensive_docs=false)
-	{
-		if (!addon_installed('galleries')) return array();
+    public function run($member_id = null,$extensive_docs = false)
+    {
+        if (!addon_installed('galleries')) {
+            return array();
+        }
 
-		return array(
-			array('cms','menu/rich_content/galleries',array('cms_galleries',array('type'=>'misc'),get_module_zone('cms_galleries')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('galleries:GALLERIES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('images','COUNT(*)',NULL,'',true)+$GLOBALS['SITE_DB']->query_select_value_if_there('videos','COUNT(*)',NULL,'',true))))),'galleries:DOC_GALLERIES'),
-			array('rich_content','menu/rich_content/galleries',array('galleries',array(),get_module_zone('galleries')),do_lang_tempcode('galleries:GALLERIES')),
-		);
-	}
+        return array(
+            array('cms','menu/rich_content/galleries',array('cms_galleries',array('type' => 'misc'),get_module_zone('cms_galleries')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('galleries:GALLERIES'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('images','COUNT(*)',null,'',true)+$GLOBALS['SITE_DB']->query_select_value_if_there('videos','COUNT(*)',null,'',true))))),'galleries:DOC_GALLERIES'),
+            array('rich_content','menu/rich_content/galleries',array('galleries',array(),get_module_zone('galleries')),do_lang_tempcode('galleries:GALLERIES')),
+        );
+    }
 }
-
-

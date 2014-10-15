@@ -15,26 +15,26 @@ First run this, then run SQLEditor on the files created in uploads/website_speci
 
 require_code('relations');
 
-$all_tables=get_all_tables();
+$all_tables = get_all_tables();
 
-$tables_by=get_tables_by_addon();
+$tables_by = get_tables_by_addon();
 
-foreach ($tables_by as $t=>$ts)
-{
-	$path=get_custom_file_base().'/uploads/website_specific/ocportal_erd__'.$t.'.sql';
-	$myfile=fopen($path,GOOGLE_APPENGINE?'wb':'wt');
-	$tables=array();
-	foreach ($ts as $table)
-	{
-		if (!array_key_exists($table,$all_tables)) continue; // Not installed
+foreach ($tables_by as $t => $ts) {
+    $path = get_custom_file_base() . '/uploads/website_specific/ocportal_erd__' . $t . '.sql';
+    $myfile = fopen($path,GOOGLE_APPENGINE?'wb':'wt');
+    $tables = array();
+    foreach ($ts as $table) {
+        if (!array_key_exists($table,$all_tables)) {
+            continue;
+        } // Not installed
 
-		$tables[$table]=$all_tables[$table];
-	}
-	fwrite($myfile,get_innodb_table_sql($tables,$all_tables));
-	fclose($myfile);
-	fix_permissions($path);
-	sync_file($path);
+        $tables[$table] = $all_tables[$table];
+    }
+    fwrite($myfile,get_innodb_table_sql($tables,$all_tables));
+    fclose($myfile);
+    fix_permissions($path);
+    sync_file($path);
 }
 
-$GLOBALS['SCREEN_TEMPLATE_CALLED']='';
+$GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
 echo 'Done, files generated in <kbd>uploads/website_specific</kbd>.';

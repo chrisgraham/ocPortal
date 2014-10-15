@@ -27,34 +27,33 @@
  * @param  boolean	Whether to accept failure.
  * @return ?string	The result (NULL: failed).
  */
-function xml_rpc($url,$method,$params,$accept_failure=false)
+function xml_rpc($url,$method,$params,$accept_failure = false)
 {
-	require_code('xml');
+    require_code('xml');
 
-$rpc="
-<"."?xml version=\"1.0\"?".">
+    $rpc = "
+<" . "?xml version=\"1.0\"?" . ">
 <methodCall>
  <methodName>{$method}</methodName>
  <params>
 ";
-	foreach ($params as $_value)
-	{
-		$value=_xml_rpc_type_convert($_value);
-$rpc.=<<<END
+    foreach ($params as $_value) {
+        $value = _xml_rpc_type_convert($_value);
+        $rpc .= <<<END
 
 	  <param>
 			<value>{$value}</value>
 	  </param>
 END;
-	}
-$rpc.=<<<END
+    }
+    $rpc .= <<<END
 
  </params>
 </methodCall>
 END;
 
-	$result=http_download_file($url,NULL,true,false,'ocPortal',array('_'=>$rpc));
-	return $result;
+    $result = http_download_file($url,null,true,false,'ocPortal',array('_' => $rpc));
+    return $result;
 }
 
 /**
@@ -65,47 +64,41 @@ END;
  */
 function _xml_rpc_type_convert($_value)
 {
-	switch (gettype($_value))
-	{
-		case 'boolean':
-			$value='<boolean>'.($_value?'1':'0').'</boolean>';
-			break;
-		case 'array':
-			$keys=array_keys($_value);
-			if ((count($_value)>0) && (!is_integer(array_pop($keys))))
-			{
-				$value='<struct>';
-				foreach ($_value as $k=>$v)
-				{
-					$value.='<name>'.$k.'</name><value>'._xml_rpc_type_convert($v).'</value>';
-				}
-				$value.='</struct>';
-			} else
-			{
-				$value='<array><data>';
-				foreach ($_value as $v)
-				{
-					$value.='<value>'._xml_rpc_type_convert($v).'</value>';
-				}
-				$value.='</data></array>';
-			}
-			break;
-		case 'object':
-			$value='<string>'.xmlentities($_value->evaluate()).'</string>';
-			break;
-		case 'integer':
-			$value='<i4>'.strval($_value).'</i4>';
-			break;
-		case 'float':
-			$value='<double>'.float_to_raw_string($_value).'</double>';
-			break;
-		case 'NULL':
-			$value='<nil/>';
-			break;
-		default:
-			$value='<string>'.xmlentities(strval($_value)).'</string>';
-			break;
-	}
-	return $value;
+    switch (gettype($_value)) {
+        case 'boolean':
+            $value = '<boolean>' . ($_value?'1':'0') . '</boolean>';
+            break;
+        case 'array':
+            $keys = array_keys($_value);
+            if ((count($_value)>0) && (!is_integer(array_pop($keys)))) {
+                $value = '<struct>';
+                foreach ($_value as $k => $v) {
+                    $value .= '<name>' . $k . '</name><value>' . _xml_rpc_type_convert($v) . '</value>';
+                }
+                $value .= '</struct>';
+            } else {
+                $value = '<array><data>';
+                foreach ($_value as $v) {
+                    $value .= '<value>' . _xml_rpc_type_convert($v) . '</value>';
+                }
+                $value .= '</data></array>';
+            }
+            break;
+        case 'object':
+            $value = '<string>' . xmlentities($_value->evaluate()) . '</string>';
+            break;
+        case 'integer':
+            $value = '<i4>' . strval($_value) . '</i4>';
+            break;
+        case 'float':
+            $value = '<double>' . float_to_raw_string($_value) . '</double>';
+            break;
+        case 'NULL':
+            $value = '<nil/>';
+            break;
+        default:
+            $value = '<string>' . xmlentities(strval($_value)) . '</string>';
+            break;
+    }
+    return $value;
 }
-

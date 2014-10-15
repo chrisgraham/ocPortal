@@ -20,35 +20,33 @@
 
 class Hook_config_md_default_sort_order
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MD_DEFAULT_SORT_ORDER',
-			'type'=>'list',
-			'category'=>'USERS',
-			'group'=>'MEMBER_DIRECTORY',
-			'explanation'=>'CONFIG_OPTION_md_default_sort_order',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'m_username ASC|m_cache_num_posts DESC|m_join_time ASC|m_join_time DESC|m_last_visit_time DESC',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MD_DEFAULT_SORT_ORDER',
+            'type' => 'list',
+            'category' => 'USERS',
+            'group' => 'MEMBER_DIRECTORY',
+            'explanation' => 'CONFIG_OPTION_md_default_sort_order',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'm_username ASC|m_cache_num_posts DESC|m_join_time ASC|m_join_time DESC|m_last_visit_time DESC',
 
-			'addon'=>'core_ocf',
-		);
-	}
+            'addon' => 'core_ocf',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'm_join_time DESC';
-	}
+    public function get_default()
+    {
+        return 'm_join_time DESC';
+    }
 }
-
-

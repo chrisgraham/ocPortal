@@ -20,35 +20,33 @@
 
 class Hook_config_gallery_mode_is
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'GALLERY_MODE_IS',
-			'type'=>'list',
-			'category'=>'GALLERY',
-			'group'=>'GALLERY_FEATURES',
-			'explanation'=>'CONFIG_OPTION_gallery_mode_is',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'choice|flow|regular',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'GALLERY_MODE_IS',
+            'type' => 'list',
+            'category' => 'GALLERY',
+            'group' => 'GALLERY_FEATURES',
+            'explanation' => 'CONFIG_OPTION_gallery_mode_is',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'choice|flow|regular',
 
-			'addon'=>'galleries',
-		);
-	}
+            'addon' => 'galleries',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return 'choice';
-	}
+    public function get_default()
+    {
+        return 'choice';
+    }
 }
-
-

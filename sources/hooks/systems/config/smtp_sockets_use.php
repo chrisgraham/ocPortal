@@ -20,38 +20,40 @@
 
 class Hook_config_smtp_sockets_use
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'ENABLED',
-			'type'=>'tick',
-			'category'=>'SERVER',
-			'group'=>'SMTP',
-			'explanation'=>'CONFIG_OPTION_smtp_sockets_use',
-			'shared_hosting_restricted'=>'1',
-			'list_options'=>'',
-			'order_in_category_group'=>1,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'ENABLED',
+            'type' => 'tick',
+            'category' => 'SERVER',
+            'group' => 'SMTP',
+            'explanation' => 'CONFIG_OPTION_smtp_sockets_use',
+            'shared_hosting_restricted' => '1',
+            'list_options' => '',
+            'order_in_category_group' => 1,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (!function_exists('fsockopen')) return NULL;
-		if (strpos(@ini_get('disable_functions'),'shell_exec')!==false) return NULL;
-		return '0';
-	}
+    public function get_default()
+    {
+        if (!function_exists('fsockopen')) {
+            return NULL;
+        }
+        if (strpos(@ini_get('disable_functions'),'shell_exec') !== false) {
+            return NULL;
+        }
+        return '0';
+    }
 }
-
-

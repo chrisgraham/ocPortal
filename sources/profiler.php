@@ -37,22 +37,22 @@ data_custom/profiling--<memberID>.<timestamp>.<uniqid>--<requestTimeInSeconds>.l
  */
 function init__profiler()
 {
-	global $PROFILING_ALLOWED;
-	$PROFILING_ALLOWED=NULL; // Will be detected later
+    global $PROFILING_ALLOWED;
+    $PROFILING_ALLOWED = null; // Will be detected later
 
-	global $PROFILING_LINUX_FULL;
-	$PROFILING_LINUX_FULL=NULL; // Will be detected later
+    global $PROFILING_LINUX_FULL;
+    $PROFILING_LINUX_FULL = null; // Will be detected later
 
-	global $PROFILER_PATH;
-	$PROFILER_PATH=NULL; // Will be decided later
+    global $PROFILER_PATH;
+    $PROFILER_PATH = null; // Will be decided later
 
-	global $PROFILER_FILEHANDLE;
-	$PROFILER_FILEHANDLE=NULL; // Will be opened if we have profiling enabled
+    global $PROFILER_FILEHANDLE;
+    $PROFILER_FILEHANDLE = null; // Will be opened if we have profiling enabled
 
-	global $PROFILER_DATA;
-	$PROFILER_DATA=array();
+    global $PROFILER_DATA;
+    $PROFILER_DATA = array();
 
-	register_shutdown_function('_ocp_profiler_script_end');
+    register_shutdown_function('_ocp_profiler_script_end');
 }
 
 /**
@@ -62,19 +62,26 @@ function init__profiler()
  */
 function ocp_profile_is_enabled()
 {
-	if (!function_exists('get_value')) return false;
-	if (!function_exists('get_member')) return false;
-	if (!function_exists('get_self_url_easy')) return false;
-	if (!function_exists('clean_file_size')) return false;
+    if (!function_exists('get_value')) {
+        return false;
+    }
+    if (!function_exists('get_member')) {
+        return false;
+    }
+    if (!function_exists('get_self_url_easy')) {
+        return false;
+    }
+    if (!function_exists('clean_file_size')) {
+        return false;
+    }
 
-	global $PROFILING_ALLOWED,$PROFILING_LINUX_FULL;
-	if (!isset($PROFILING_ALLOWED))
-	{
-		$val=get_value('enable_profiler');
-		$PROFILING_ALLOWED=($val=='1' || $val=='2') && (is_writable_wrap(get_custom_file_base().'/data_custom'));
-		$PROFILING_LINUX_FULL=($val=='2');
-	}
-	return $PROFILING_ALLOWED;
+    global $PROFILING_ALLOWED,$PROFILING_LINUX_FULL;
+    if (!isset($PROFILING_ALLOWED)) {
+        $val = get_value('enable_profiler');
+        $PROFILING_ALLOWED = ($val == '1' || $val == '2') && (is_writable_wrap(get_custom_file_base() . '/data_custom'));
+        $PROFILING_LINUX_FULL = ($val == '2');
+    }
+    return $PROFILING_ALLOWED;
 }
 
 /**
@@ -84,17 +91,21 @@ function ocp_profile_is_enabled()
  */
 function _ocp_profile_start_for($identifier)
 {
-	if (!ocp_profile_is_enabled()) return;
+    if (!ocp_profile_is_enabled()) {
+        return;
+    }
 
-	global $PROFILER_DATA;
+    global $PROFILER_DATA;
 
-	if (!isset($PROFILER_DATA[$identifier])) $PROFILER_DATA[$identifier]=array();
+    if (!isset($PROFILER_DATA[$identifier])) {
+        $PROFILER_DATA[$identifier] = array();
+    }
 
-	$at=array(
-		'time_start'=>microtime(true),
-		'specifics'=>NULL,
-	);
-	$PROFILER_DATA[$identifier][]=$at;
+    $at = array(
+        'time_start' => microtime(true),
+        'specifics' => NULL,
+    );
+    $PROFILER_DATA[$identifier][] = $at;
 }
 
 /**
@@ -103,26 +114,30 @@ function _ocp_profile_start_for($identifier)
  * @param  ID_TEXT		Identifier
  * @param  ?string		Longer details of what happened (e.g. a specific SQL query that ran) (NULL: none provided)
  */
-function _ocp_profile_end_for($identifier,$specifics=NULL)
+function _ocp_profile_end_for($identifier,$specifics = null)
 {
-	if (!ocp_profile_is_enabled()) return;
+    if (!ocp_profile_is_enabled()) {
+        return;
+    }
 
-	global $PROFILER_DATA;
+    global $PROFILER_DATA;
 
-	if (!isset($PROFILER_DATA[$identifier])) return; // Error, should never happen
+    if (!isset($PROFILER_DATA[$identifier])) {
+        return;
+    } // Error, should never happen
 
-	end($PROFILER_DATA[$identifier]);
-	$key=key($PROFILER_DATA[$identifier]);
-	$at=&$PROFILER_DATA[$identifier][$key];
-	$time_start=$at['time_start'];
-	$time_end=microtime(true);
-	$at=array(
-		'time_end'=>$time_end,
-		'time_length'=>intval(($time_start-$time_end)*1000),
-		'specifics'=>$specifics,
-	)+$at;
+    end($PROFILER_DATA[$identifier]);
+    $key = key($PROFILER_DATA[$identifier]);
+    $at = &$PROFILER_DATA[$identifier][$key];
+    $time_start = $at['time_start'];
+    $time_end = microtime(true);
+    $at = array(
+        'time_end' => $time_end,
+        'time_length' => intval(($time_start-$time_end)*1000),
+        'specifics' => $specifics,
+    )+$at;
 
-	_ocp_profile_log_line(_ocp_profile_generate_line($identifier,$at,$key+1));
+    _ocp_profile_log_line(_ocp_profile_generate_line($identifier,$at,$key+1));
 }
 
 /**
@@ -135,11 +150,13 @@ function _ocp_profile_end_for($identifier,$specifics=NULL)
  */
 function _ocp_profile_generate_line($identifier,$at,$cnt)
 {
-	$line=$identifier;
-	$line.='(x'.strval($cnt).')';
-	$line.=str_repeat(' ',max(1,55-strlen($line))).float_to_raw_string($at['time_length'],4).'s';
-	if (!is_null($at['specifics'])) $line.='  '.$at['specifics'];
-	return $line;
+    $line = $identifier;
+    $line .= '(x' . strval($cnt) . ')';
+    $line .= str_repeat(' ',max(1,55-strlen($line))) . float_to_raw_string($at['time_length'],4) . 's';
+    if (!is_null($at['specifics'])) {
+        $line .= '  ' . $at['specifics'];
+    }
+    return $line;
 }
 
 /**
@@ -149,35 +166,31 @@ function _ocp_profile_generate_line($identifier,$at,$cnt)
  */
 function _ocp_profile_log_line($line)
 {
-	// Open up unique log file (per-request) if not yet done so
-	global $PROFILER_FILEHANDLE,$PROFILER_PATH;
-	if (!isset($PROFILER_FILEHANDLE))
-	{
-		if (!isset($PROFILER_PATH))
-		{
-			$PROFILER_PATH=get_custom_file_base().'/data_custom/profiling';
-			if (is_guest())
-			{
-				$PROFILER_PATH.='--guest';
-			} else
-			{
-				$PROFILER_PATH.='--member'.strval(get_member());
-			}
-			$PROFILER_PATH.='.timestamp'.strval(time());
-			$PROFILER_PATH.='.rand'.uniqid('',true);
-			$PROFILER_PATH.='--in-progress.log';
-		}
+    // Open up unique log file (per-request) if not yet done so
+    global $PROFILER_FILEHANDLE,$PROFILER_PATH;
+    if (!isset($PROFILER_FILEHANDLE)) {
+        if (!isset($PROFILER_PATH)) {
+            $PROFILER_PATH = get_custom_file_base() . '/data_custom/profiling';
+            if (is_guest()) {
+                $PROFILER_PATH .= '--guest';
+            } else {
+                $PROFILER_PATH .= '--member' . strval(get_member());
+            }
+            $PROFILER_PATH .= '.timestamp' . strval(time());
+            $PROFILER_PATH .= '.rand' . uniqid('',true);
+            $PROFILER_PATH .= '--in-progress.log';
+        }
 
-		$PROFILER_FILEHANDLE=fopen($PROFILER_PATH,'at');
+        $PROFILER_FILEHANDLE = fopen($PROFILER_PATH,'at');
 
-		// Pre-logging
-		_ocp_profile_log_line('URL: '.get_self_url_easy());
-		_ocp_profiler_generic_logging();
-		_ocp_profile_log_line(''); // Spacer line
-	}
+        // Pre-logging
+        _ocp_profile_log_line('URL: ' . get_self_url_easy());
+        _ocp_profiler_generic_logging();
+        _ocp_profile_log_line(''); // Spacer line
+    }
 
-	// Write line
-	fwrite($PROFILER_FILEHANDLE,$line."\n");
+    // Write line
+    fwrite($PROFILER_FILEHANDLE,$line . "\n");
 }
 
 /**
@@ -185,39 +198,40 @@ function _ocp_profile_log_line($line)
  */
 function _ocp_profiler_script_end()
 {
-	if (!ocp_profile_is_enabled()) return;
+    if (!ocp_profile_is_enabled()) {
+        return;
+    }
 
-	global $PAGE_START_TIME,$PROFILER_PATH,$PROFILER_FILEHANDLE;
+    global $PAGE_START_TIME,$PROFILER_PATH,$PROFILER_FILEHANDLE;
 
-	if (!isset($PROFILER_FILEHANDLE)) return; // Never started, so don't tail off
+    if (!isset($PROFILER_FILEHANDLE)) {
+        return;
+    } // Never started, so don't tail off
 
-	// Lock out further profiling
-	global $PROFILING_ALLOWED;
-	$PROFILING_ALLOWED=false;
+    // Lock out further profiling
+    global $PROFILING_ALLOWED;
+    $PROFILING_ALLOWED = false;
 
-	// Post-logging
-	_ocp_profile_log_line(''); // Spacer line
-	_ocp_profiler_generic_logging();
-	if (function_exists('memory_get_usage'))
-	{
-		_ocp_profile_log_line('PHP memory usage: '.clean_file_size(memory_get_usage()));
-	}
-	if (function_exists('memory_get_peak_usage'))
-	{
-		_ocp_profile_log_line('PHP peak memory usage: '.clean_file_size(memory_get_peak_usage()));
-	}
+    // Post-logging
+    _ocp_profile_log_line(''); // Spacer line
+    _ocp_profiler_generic_logging();
+    if (function_exists('memory_get_usage')) {
+        _ocp_profile_log_line('PHP memory usage: ' . clean_file_size(memory_get_usage()));
+    }
+    if (function_exists('memory_get_peak_usage')) {
+        _ocp_profile_log_line('PHP peak memory usage: ' . clean_file_size(memory_get_peak_usage()));
+    }
 
-	// Close down file
-	if (isset($PROFILER_FILEHANDLE))
-	{
-		fclose($PROFILER_FILEHANDLE);
+    // Close down file
+    if (isset($PROFILER_FILEHANDLE)) {
+        fclose($PROFILER_FILEHANDLE);
 
-		// Rename file to make total time clearer, for easier identification of slow requests
-		$scope_time=intval(($PAGE_START_TIME-microtime(true))*1000);
-		$new_path=preg_replace('#--in-progress\.log$#','--'.strval($scope_time).'s.log',$PROFILER_PATH);
-		fix_permissions($PROFILER_PATH);
-		rename($PROFILER_PATH,$new_path);
-	}
+        // Rename file to make total time clearer, for easier identification of slow requests
+        $scope_time = intval(($PAGE_START_TIME-microtime(true))*1000);
+        $new_path = preg_replace('#--in-progress\.log$#','--' . strval($scope_time) . 's.log',$PROFILER_PATH);
+        fix_permissions($PROFILER_PATH);
+        rename($PROFILER_PATH,$new_path);
+    }
 }
 
 /**
@@ -225,16 +239,17 @@ function _ocp_profiler_script_end()
  */
 function _ocp_profiler_generic_logging()
 {
-	global $PROFILING_LINUX_FULL;
+    global $PROFILING_LINUX_FULL;
 
-	if ($PROFILING_LINUX_FULL)
-	{
-		$c=trim(@strval(shell_exec('uptime')));
-		if ($c!='')
-			_ocp_profile_log_line('uptime: '.$c);
+    if ($PROFILING_LINUX_FULL) {
+        $c = trim(@strval(shell_exec('uptime')));
+        if ($c != '') {
+            _ocp_profile_log_line('uptime: ' . $c);
+        }
 
-		$c=trim(@strval(shell_exec('vmstat')));
-		if ($c!='')
-			_ocp_profile_log_line('vmstat: '.$c);
-	}
+        $c = trim(@strval(shell_exec('vmstat')));
+        if ($c != '') {
+            _ocp_profile_log_line('vmstat: ' . $c);
+        }
+    }
 }

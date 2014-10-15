@@ -20,36 +20,34 @@
 
 class Hook_config_ldap_member_property
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'LDAP_MEMBER_PROPERTY',
-			'type'=>'line',
-			'category'=>'USERS',
-			'group'=>'LDAP',
-			'explanation'=>'CONFIG_OPTION_ldap_member_property',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
-			'order_in_category_group'=>8,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'LDAP_MEMBER_PROPERTY',
+            'type' => 'line',
+            'category' => 'USERS',
+            'group' => 'LDAP',
+            'explanation' => 'CONFIG_OPTION_ldap_member_property',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
+            'order_in_category_group' => 8,
 
-			'addon'=>'ldap',
-		);
-	}
+            'addon' => 'ldap',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return (get_option('ldap_is_windows')=='1')?'sAMAccountName':'cn';
-	}
+    public function get_default()
+    {
+        return (get_option('ldap_is_windows') == '1')?'sAMAccountName':'cn';
+    }
 }
-
-

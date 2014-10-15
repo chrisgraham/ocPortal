@@ -20,37 +20,37 @@
 
 class Hook_config_url_scheme
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'URL_SCHEME',
-			'type'=>'list',
-			'category'=>'SITE',
-			'group'=>'SEO',
-			'explanation'=>'CONFIG_OPTION_url_scheme',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'RAW|PG|HTM|SIMPLE',
-			'order_in_category_group'=>3,
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'URL_SCHEME',
+            'type' => 'list',
+            'category' => 'SITE',
+            'group' => 'SEO',
+            'explanation' => 'CONFIG_OPTION_url_scheme',
+            'shared_hosting_restricted' => '0',
+            'list_options' => 'RAW|PG|HTM|SIMPLE',
+            'order_in_category_group' => 3,
 
-			'addon'=>'core_configuration',
-		);
-	}
+            'addon' => 'core_configuration',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		if (GOOGLE_APPENGINE) return 'HTM';
-		return 'RAW';
-	}
+    public function get_default()
+    {
+        if (GOOGLE_APPENGINE) {
+            return 'HTM';
+        }
+        return 'RAW';
+    }
 }
-
-

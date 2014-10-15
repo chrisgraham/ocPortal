@@ -20,35 +20,33 @@
 
 class Hook_config_max_forum_inspect
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'MAX_FORUM_INSPECT',
-			'type'=>'integer',
-			'category'=>'PERFORMANCE',
-			'group'=>'SECTION_FORUMS',
-			'explanation'=>'CONFIG_OPTION_max_forum_inspect',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'MAX_FORUM_INSPECT',
+            'type' => 'integer',
+            'category' => 'PERFORMANCE',
+            'group' => 'SECTION_FORUMS',
+            'explanation' => 'CONFIG_OPTION_max_forum_inspect',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'ocf_forum',
-		);
-	}
+            'addon' => 'ocf_forum',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return (get_forum_type()!='ocf')?NULL:'300';
-	}
+    public function get_default()
+    {
+        return (get_forum_type() != 'ocf')?null:'300';
+    }
 }
-
-

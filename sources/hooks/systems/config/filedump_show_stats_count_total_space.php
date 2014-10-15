@@ -20,35 +20,33 @@
 
 class Hook_config_filedump_show_stats_count_total_space
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'FILEDUMP_DISK_USAGE',
-			'type'=>'tick',
-			'category'=>'BLOCKS',
-			'group'=>'STATISTICS',
-			'explanation'=>'CONFIG_OPTION_filedump_show_stats_count_total_space',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'FILEDUMP_DISK_USAGE',
+            'type' => 'tick',
+            'category' => 'BLOCKS',
+            'group' => 'STATISTICS',
+            'explanation' => 'CONFIG_OPTION_filedump_show_stats_count_total_space',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'filedump',
-		);
-	}
+            'addon' => 'filedump',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return addon_installed('stats_block')?'0':NULL;
-	}
+    public function get_default()
+    {
+        return addon_installed('stats_block')?'0':null;
+    }
 }
-
-

@@ -20,30 +20,30 @@
 
 class Hook_unvalidated_banners
 {
-	/**
+    /**
 	 * Find details on the unvalidated hook.
 	 *
 	 * @return ?array	Map of hook info (NULL: hook is disabled).
 	 */
-	function info()
-	{
-		if (!module_installed('banners')) return NULL;
+    public function info()
+    {
+        if (!module_installed('banners')) {
+            return NULL;
+        }
 
-		require_lang('banners');
+        require_lang('banners');
 
-		$info=array();
-		$info['db_table']='banners';
-		$info['db_identifier']='name';
-		$info['db_validated']='validated';
-		$info['db_add_date']='add_date';
-		$info['db_edit_date']='edit_date';
-		$info['edit_module']='cms_banners';
-		$info['edit_type']='_ed';
-		$info['edit_identifier']='id';
-		$info['title']=do_lang_tempcode('BANNERS');
+        $info = array();
+        $info['db_table'] = 'banners';
+        $info['db_identifier'] = 'name';
+        $info['db_validated'] = 'validated';
+        $info['db_add_date'] = 'add_date';
+        $info['db_edit_date'] = 'edit_date';
+        $info['edit_module'] = 'cms_banners';
+        $info['edit_type'] = '_ed';
+        $info['edit_identifier'] = 'id';
+        $info['title'] = do_lang_tempcode('BANNERS');
 
-		return $info;
-	}
+        return $info;
+    }
 }
-
-

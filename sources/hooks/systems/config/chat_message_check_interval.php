@@ -20,35 +20,33 @@
 
 class Hook_config_chat_message_check_interval
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'CHAT_MESSAGE_CHECK_INTERVAL',
-			'type'=>'integer',
-			'category'=>'FEATURE',
-			'group'=>'CHAT',
-			'explanation'=>'CONFIG_OPTION_chat_message_check_interval',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'CHAT_MESSAGE_CHECK_INTERVAL',
+            'type' => 'integer',
+            'category' => 'FEATURE',
+            'group' => 'CHAT',
+            'explanation' => 'CONFIG_OPTION_chat_message_check_interval',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'chat',
-		);
-	}
+            'addon' => 'chat',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return '5000';
-	}
+    public function get_default()
+    {
+        return '5000';
+    }
 }
-
-

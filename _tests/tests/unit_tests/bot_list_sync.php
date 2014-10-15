@@ -23,21 +23,21 @@
  */
 class bot_list_sync_test_set extends ocp_test_case
 {
-	function testBotListInSync()
-	{
-		$_SERVER['HTTP_USER_AGENT']='aaaa';
-		$GLOBALS['BOT_TYPE_CACHE']=false;
-		get_bot_type();
+    public function testBotListInSync()
+    {
+        $_SERVER['HTTP_USER_AGENT'] = 'aaaa';
+        $GLOBALS['BOT_TYPE_CACHE'] = false;
+        get_bot_type();
 
-		require_code('files');
-		$file_bots=better_parse_ini_file(get_file_base().'/text/bots.txt');
-		ksort($file_bots);
+        require_code('files');
+        $file_bots = better_parse_ini_file(get_file_base() . '/text/bots.txt');
+        ksort($file_bots);
 
-		$_SERVER['HTTP_USER_AGENT']='';	// Force away optimisation
-		get_bot_type();
-		global $BOT_MAP_CACHE;
-		ksort($BOT_MAP_CACHE);
+        $_SERVER['HTTP_USER_AGENT'] = '';    // Force away optimisation
+        get_bot_type();
+        global $BOT_MAP_CACHE;
+        ksort($BOT_MAP_CACHE);
 
-		$this->assertTrue($BOT_MAP_CACHE==$file_bots);
-	}
+        $this->assertTrue($BOT_MAP_CACHE == $file_bots);
+    }
 }

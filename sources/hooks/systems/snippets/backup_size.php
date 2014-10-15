@@ -20,29 +20,30 @@
 
 class Hook_backup_size
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		if (function_exists('set_time_limit')) @set_time_limit(0);
+    public function run()
+    {
+        if (function_exists('set_time_limit')) {
+            @set_time_limit(0);
+        }
 
-		require_code('files');
-		require_code('files2');
+        require_code('files');
+        require_code('files2');
 
-		$size=0;
-		$max_size=get_param_integer('max_size')*1024*1024;
-		$files=get_directory_contents(get_custom_file_base());
-		foreach ($files as $file)
-		{
-			$filesize=filesize(get_custom_file_base().'/'.$file);
-			if ($filesize<$max_size) $size+=$filesize;
-		}
+        $size = 0;
+        $max_size = get_param_integer('max_size')*1024*1024;
+        $files = get_directory_contents(get_custom_file_base());
+        foreach ($files as $file) {
+            $filesize = filesize(get_custom_file_base() . '/' . $file);
+            if ($filesize<$max_size) {
+                $size += $filesize;
+            }
+        }
 
-		return make_string_tempcode(clean_file_size($size));
-	}
+        return make_string_tempcode(clean_file_size($size));
+    }
 }
-
-

@@ -20,92 +20,98 @@
 
 class Block_main_quotes
 {
-	/**
+    /**
 	 * Find details of the block.
 	 *
 	 * @return ?array	Map of block info (NULL: block is disabled).
 	 */
-	function info()
-	{
-		$info=array();
-		$info['author']='Chris Graham';
-		$info['organisation']='ocProducts';
-		$info['hacked_by']=NULL;
-		$info['hack_version']=NULL;
-		$info['version']=2;
-		$info['locked']=false;
-		$info['parameters']=array('param','title');
-		return $info;
-	}
+    public function info()
+    {
+        $info = array();
+        $info['author'] = 'Chris Graham';
+        $info['organisation'] = 'ocProducts';
+        $info['hacked_by'] = null;
+        $info['hack_version'] = null;
+        $info['version'] = 2;
+        $info['locked'] = false;
+        $info['parameters'] = array('param','title');
+        return $info;
+    }
 
-	/**
+    /**
 	 * Find cacheing details for the block.
 	 *
 	 * @return ?array	Map of cache details (cache_on and ttl) (NULL: block is disabled).
 	 */
-	function cacheing_environment()
-	{
-		$info=array();
-		$info['cache_on']='array(array_key_exists(\'title\',$map)?$map[\'title\']:\'-\',has_actual_page_access(get_member(),\'quotes\',\'adminzone\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'quotes\')';
-		$info['ttl']=5;
-		return $info;
-	}
+    public function cacheing_environment()
+    {
+        $info = array();
+        $info['cache_on'] = 'array(array_key_exists(\'title\',$map)?$map[\'title\']:\'-\',has_actual_page_access(get_member(),\'quotes\',\'adminzone\'),array_key_exists(\'param\',$map)?$map[\'param\']:\'quotes\')';
+        $info['ttl'] = 5;
+        return $info;
+    }
 
-	/**
+    /**
 	 * Execute the block.
 	 *
 	 * @param  array		A map of parameters.
 	 * @return tempcode	The result of execution.
 	 */
-	function run($map)
-	{
-		require_lang('quotes');
+    public function run($map)
+    {
+        require_lang('quotes');
 
-		$file=array_key_exists('param',$map)?$map['param']:'quotes';
-		$title=array_key_exists('title',$map)?$map['title']:do_lang('QUOTES');
+        $file = array_key_exists('param',$map)?$map['param']:'quotes';
+        $title = array_key_exists('title',$map)?$map['title']:do_lang('QUOTES');
 
-		require_css('random_quotes');
+        require_css('random_quotes');
 
-		require_code('textfiles');
+        require_code('textfiles');
 
-		$place=_find_text_file_path($file,'');
+        $place = _find_text_file_path($file,'');
 
-		if (!file_exists($place)) warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',escape_html($place)));
-		$edit_url=new ocp_tempcode();
-		if (($file=='quotes') && (has_actual_page_access(get_member(),'quotes','adminzone')))
-		{
-			$edit_url=build_url(array('page'=>'quotes'),'adminzone');
-		}
-		return do_template('BLOCK_MAIN_QUOTES',array('_GUID'=>'7cab7422f603f7b1197c940de48b99aa','TITLE'=>$title,'EDIT_URL'=>$edit_url,'FILE'=>$file,'CONTENT'=>comcode_to_tempcode($this->get_random_line($place),NULL,true)));
-	}
+        if (!file_exists($place)) {
+            warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND',escape_html($place)));
+        }
+        $edit_url = new ocp_tempcode();
+        if (($file == 'quotes') && (has_actual_page_access(get_member(),'quotes','adminzone'))) {
+            $edit_url = build_url(array('page' => 'quotes'),'adminzone');
+        }
+        return do_template('BLOCK_MAIN_QUOTES',array('_GUID' => '7cab7422f603f7b1197c940de48b99aa','TITLE' => $title,'EDIT_URL' => $edit_url,'FILE' => $file,'CONTENT' => comcode_to_tempcode($this->get_random_line($place),null,true)));
+    }
 
-	/**
+    /**
 	 * Get a random line from a file.
 	 *
 	 * @param  PATH			The filename
 	 * @return string			The random line
 	 */
-	function get_random_line($filename)
-	{
-		$myfile=@fopen(filter_naughty($filename,true),GOOGLE_APPENGINE?'rb':'rt');
-		if ($myfile===false) return '';
-		@flock($myfile,LOCK_SH);
-		$i=0;
-		$line=array();
-		while (true)
-		{
-			$line[$i]=fgets($myfile,1024);
+    public function get_random_line($filename)
+    {
+        $myfile = @fopen(filter_naughty($filename,true),GOOGLE_APPENGINE?'rb':'rt');
+        if ($myfile === false) {
+            return '';
+        }
+        @flock($myfile,LOCK_SH);
+        $i = 0;
+        $line = array();
+        while (true) {
+            $line[$i] = fgets($myfile,1024);
 
-			if (($line[$i]===false) || ($line[$i]===NULL)) break;
+            if (($line[$i] === false) || ($line[$i] === NULL)) {
+                break;
+            }
 
-			if (trim($line[$i])!='') $i++;
-		}
-		if ($i==0) return '';
-		$r=mt_rand(0,$i-1);
-		@flock($myfile,LOCK_UN);
-		fclose($myfile);
-		return trim($line[$r]);
-	}
+            if (trim($line[$i]) != '') {
+                $i++;
+            }
+        }
+        if ($i == 0) {
+            return '';
+        }
+        $r = mt_rand(0,$i-1);
+        @flock($myfile,LOCK_UN);
+        fclose($myfile);
+        return trim($line[$r]);
+    }
 }
-
-

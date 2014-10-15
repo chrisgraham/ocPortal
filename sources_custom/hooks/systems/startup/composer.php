@@ -2,9 +2,10 @@
 
 class Hook_startup_composer
 {
-	function run()
-	{
-		if (is_file(get_file_base().'/vendor/autoload.php'))
-			require(get_file_base().'/vendor/autoload.php');
-	}
+    public function run()
+    {
+        if (is_file(get_file_base() . '/vendor/autoload.php')) {
+            require(get_file_base() . '/vendor/autoload.php');
+        }
+    }
 }

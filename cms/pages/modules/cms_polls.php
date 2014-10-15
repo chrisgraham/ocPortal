@@ -25,20 +25,20 @@ require_code('crud_module');
  */
 class Module_cms_polls extends standard_crud_module
 {
-	var $lang_type='POLL';
-	var $archive_entry_point='_SEARCH:polls:misc';
-	var $view_entry_point='_SEARCH:polls:view:_ID';
-	var $user_facing=true;
-	var $send_validation_request=false;
-	var $permissions_require='mid';
-	var $select_name='QUESTION';
-	var $select_name_description='DESCRIPTION_QUESTION';
-	var $menu_label='POLLS';
-	var $table='poll';
-	var $title_is_multi_lang=true;
-	var $content_type='poll';
+    public $lang_type = 'POLL';
+    public $archive_entry_point = '_SEARCH:polls:misc';
+    public $view_entry_point = '_SEARCH:polls:view:_ID';
+    public $user_facing = true;
+    public $send_validation_request = false;
+    public $permissions_require = 'mid';
+    public $select_name = 'QUESTION';
+    public $select_name_description = 'DESCRIPTION_QUESTION';
+    public $menu_label = 'POLLS';
+    public $table = 'poll';
+    public $title_is_multi_lang = true;
+    public $content_type = 'poll';
 
-	/**
+    /**
 	 * Find entry-points available within this module.
 	 *
 	 * @param  boolean	Whether to check permissions.
@@ -47,173 +47,172 @@ class Module_cms_polls extends standard_crud_module
 	 * @param  boolean	Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
 	 * @return ?array		A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
 	 */
-	function get_entry_points($check_perms=true,$member_id=NULL,$support_crosslinks=true,$be_deferential=false)
-	{
-		$ret=array(
-			'misc'=>array('MANAGE_POLLS','menu/social/polls'),
-		)+parent::get_entry_points();
+    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    {
+        $ret = array(
+            'misc' => array('MANAGE_POLLS','menu/social/polls'),
+        )+parent::get_entry_points();
 
-		if ($support_crosslinks)
-		{
-			require_code('fields');
-			$ret+=manage_custom_fields_entry_points('poll');
-		}
-		return $ret;
-	}
+        if ($support_crosslinks) {
+            require_code('fields');
+            $ret += manage_custom_fields_entry_points('poll');
+        }
+        return $ret;
+    }
 
-	var $title;
+    public $title;
 
-	/**
+    /**
 	 * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.
 	 *
 	 * @param  boolean		Whether this is running at the top level, prior to having sub-objects called.
 	 * @param  ?ID_TEXT		The screen type to consider for meta-data purposes (NULL: read from environment).
 	 * @return ?tempcode		Tempcode indicating some kind of exceptional output (NULL: none).
 	 */
-	function pre_run($top_level=true,$type=NULL)
-	{
-		$type=get_param('type','misc');
+    public function pre_run($top_level = true,$type = null)
+    {
+        $type = get_param('type','misc');
 
-		require_lang('polls');
+        require_lang('polls');
 
-		set_helper_panel_tutorial('tut_feedback');
+        set_helper_panel_tutorial('tut_feedback');
 
-		return parent::pre_run($top_level);
-	}
+        return parent::pre_run($top_level);
+    }
 
-	/**
+    /**
 	 * Standard crud_module run_start.
 	 *
 	 * @param  ID_TEXT		The type of module execution
 	 * @return tempcode		The output of the run
 	 */
-	function run_start($type)
-	{
-		require_code('polls');
-		require_code('polls2');
-		require_css('polls');
+    public function run_start($type)
+    {
+        require_code('polls');
+        require_code('polls2');
+        require_css('polls');
 
-		$this->add_one_label=do_lang_tempcode('ADD_POLL');
-		$this->edit_this_label=do_lang_tempcode('EDIT_THIS_POLL');
-		$this->edit_one_label=do_lang_tempcode('EDIT_POLL');
+        $this->add_one_label = do_lang_tempcode('ADD_POLL');
+        $this->edit_this_label = do_lang_tempcode('EDIT_THIS_POLL');
+        $this->edit_one_label = do_lang_tempcode('EDIT_POLL');
 
-		if ($type=='misc') return $this->misc();
+        if ($type == 'misc') {
+            return $this->misc();
+        }
 
-		return new ocp_tempcode();
-	}
+        return new ocp_tempcode();
+    }
 
-	/**
+    /**
 	 * Find privileges defined as overridable by this module.
 	 *
 	 * @return array	A map of privileges that are overridable; privilege to 0 or 1. 0 means "not category overridable". 1 means "category overridable".
 	 */
-	function get_privilege_overrides()
-	{
-		require_lang('polls');
-		return array('submit_midrange_content'=>array(0,'ADD_POLL'),'bypass_validation_midrange_content'=>array(0,'BYPASS_VALIDATION_POLL'),'edit_own_midrange_content'=>array(0,'EDIT_OWN_POLL'),'edit_midrange_content'=>array(0,'EDIT_POLL'),'delete_own_midrange_content'=>array(0,'DELETE_OWN_POLL'),'delete_midrange_content'=>array(0,'DELETE_POLL'),'edit_own_highrange_content'=>array(0,'EDIT_OWN_LIVE_POLL'),'edit_highrange_content'=>array(0,'EDIT_LIVE_POLL'),'delete_own_highrange_content'=>array(0,'DELETE_OWN_LIVE_POLL'),'delete_highrange_content'=>array(0,'DELETE_LIVE_POLL'),'vote_in_polls'=>0);
-	}
+    public function get_privilege_overrides()
+    {
+        require_lang('polls');
+        return array('submit_midrange_content' => array(0,'ADD_POLL'),'bypass_validation_midrange_content' => array(0,'BYPASS_VALIDATION_POLL'),'edit_own_midrange_content' => array(0,'EDIT_OWN_POLL'),'edit_midrange_content' => array(0,'EDIT_POLL'),'delete_own_midrange_content' => array(0,'DELETE_OWN_POLL'),'delete_midrange_content' => array(0,'DELETE_POLL'),'edit_own_highrange_content' => array(0,'EDIT_OWN_LIVE_POLL'),'edit_highrange_content' => array(0,'EDIT_LIVE_POLL'),'delete_own_highrange_content' => array(0,'DELETE_OWN_LIVE_POLL'),'delete_highrange_content' => array(0,'DELETE_LIVE_POLL'),'vote_in_polls' => 0);
+    }
 
-	/**
+    /**
 	 * The do-next manager for before content management.
 	 *
 	 * @return tempcode		The UI
 	 */
-	function misc()
-	{
-		require_code('templates_donext');
-		require_code('fields');
-		return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
-			array_merge(array(
-				has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('menu/_generic_admin/add_one',array('_SELF',array('type'=>'ad'),'_SELF'),do_lang('ADD_POLL')):NULL,
-				has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('menu/_generic_admin/edit_one',array('_SELF',array('type'=>'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):NULL,
-			),manage_custom_fields_donext_link('poll')),
-			do_lang('MANAGE_POLLS')
-		);
-	}
+    public function misc()
+    {
+        require_code('templates_donext');
+        require_code('fields');
+        return do_next_manager(get_screen_title('MANAGE_POLLS'),comcode_lang_string('DOC_POLLS'),
+            array_merge(array(
+                has_privilege(get_member(),'submit_midrange_content','cms_polls')?array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_POLL')):null,
+                has_privilege(get_member(),'edit_own_midrange_content','cms_polls')?array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_OR_CHOOSE_POLL')):null,
+            ),manage_custom_fields_donext_link('poll')),
+            do_lang('MANAGE_POLLS')
+        );
+    }
 
-	/**
+    /**
 	 * Standard crud_module table function.
 	 *
 	 * @param  array			Details to go to build_url for link to the next screen.
 	 * @return array			A quartet: The choose table, Whether re-ordering is supported from this screen, Search URL, Archive URL.
 	 */
-	function create_selection_list_choose_table($url_map)
-	{
-		require_code('templates_results_table');
+    public function create_selection_list_choose_table($url_map)
+    {
+        require_code('templates_results_table');
 
-		$default_order='is_current DESC,add_time DESC';
-		$current_ordering=get_param('sort',$default_order);
-		if ($current_ordering=='is_current DESC,add_time DESC')
-		{
-			list($sortable,$sort_order)=array('is_current DESC,add_time','DESC');
-		}
-		elseif (($current_ordering=='is_current ASC,add_time ASC') || ($current_ordering=='is_current DESC,add_time ASC'))
-		{
-			list($sortable,$sort_order)=array('is_current ASC,add_time','ASC');
-		} else
-		{
-			if (strpos($current_ordering,' ')===false) warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-			list($sortable,$sort_order)=explode(' ',$current_ordering,2);
-		}
-		$sortables=array(
-			'question'=>do_lang_tempcode('QUESTION'),
-			'add_time'=>do_lang_tempcode('ADDED'),
-			'is_current DESC,add_time'=>do_lang_tempcode('CURRENT'),
-			'submitter'=>do_lang_tempcode('OWNER'),
-			'poll_views'=>do_lang_tempcode('COUNT_VIEWS'),
-			'votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10'=>do_lang_tempcode('COUNT_TOTAL'),
-		);
-		if (((strtoupper($sort_order)!='ASC') && (strtoupper($sort_order)!='DESC')) || (!array_key_exists($sortable,$sortables)))
-			log_hack_attack_and_exit('ORDERBY_HACK');
+        $default_order = 'is_current DESC,add_time DESC';
+        $current_ordering = get_param('sort',$default_order);
+        if ($current_ordering == 'is_current DESC,add_time DESC') {
+            list($sortable,$sort_order) = array('is_current DESC,add_time','DESC');
+        } elseif (($current_ordering == 'is_current ASC,add_time ASC') || ($current_ordering == 'is_current DESC,add_time ASC')) {
+            list($sortable,$sort_order) = array('is_current ASC,add_time','ASC');
+        } else {
+            if (strpos($current_ordering,' ') === false) {
+                warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
+            }
+            list($sortable,$sort_order) = explode(' ',$current_ordering,2);
+        }
+        $sortables = array(
+            'question' => do_lang_tempcode('QUESTION'),
+            'add_time' => do_lang_tempcode('ADDED'),
+            'is_current DESC,add_time' => do_lang_tempcode('CURRENT'),
+            'submitter' => do_lang_tempcode('OWNER'),
+            'poll_views' => do_lang_tempcode('COUNT_VIEWS'),
+            'votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10' => do_lang_tempcode('COUNT_TOTAL'),
+        );
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+            log_hack_attack_and_exit('ORDERBY_HACK');
+        }
 
-		$header_row=results_field_title(array(
-			do_lang_tempcode('QUESTION'),
-			do_lang_tempcode('ADDED'),
-			do_lang_tempcode('CURRENT'),
-			do_lang_tempcode('USED_PREVIOUSLY'),
-			do_lang_tempcode('OWNER'),
-			do_lang_tempcode('COUNT_VIEWS'),
-			do_lang_tempcode('COUNT_TOTAL'),
-			do_lang_tempcode('ACTIONS'),
-		),$sortables,'sort',$sortable.' '.$sort_order);
+        $header_row = results_field_title(array(
+            do_lang_tempcode('QUESTION'),
+            do_lang_tempcode('ADDED'),
+            do_lang_tempcode('CURRENT'),
+            do_lang_tempcode('USED_PREVIOUSLY'),
+            do_lang_tempcode('OWNER'),
+            do_lang_tempcode('COUNT_VIEWS'),
+            do_lang_tempcode('COUNT_TOTAL'),
+            do_lang_tempcode('ACTIONS'),
+        ),$sortables,'sort',$sortable . ' ' . $sort_order);
 
-		$fields=new ocp_tempcode();
+        $fields = new ocp_tempcode();
 
-		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
-		list($rows,$max_rows)=$this->get_entry_rows(false,$current_ordering,(is_null($only_owned)?array():array('submitter'=>$only_owned)));
-		require_code('form_templates');
-		foreach ($rows as $row)
-		{
-			$edit_link=build_url($url_map+array('id'=>$row['id']),'_SELF');
+        $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_polls')?null:get_member();
+        list($rows,$max_rows) = $this->get_entry_rows(false,$current_ordering,(is_null($only_owned)?array():array('submitter' => $only_owned)));
+        require_code('form_templates');
+        foreach ($rows as $row) {
+            $edit_link = build_url($url_map+array('id' => $row['id']),'_SELF');
 
-			$username=protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['submitter']));
+            $username = protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['submitter']));
 
-			$total_votes=$row['votes1']+$row['votes2']+$row['votes3']+$row['votes4']+$row['votes5']+$row['votes6']+$row['votes7']+$row['votes8']+$row['votes9']+$row['votes10'];
-			$used=($total_votes!=0);
-			$current=($row['is_current']==1);
+            $total_votes = $row['votes1']+$row['votes2']+$row['votes3']+$row['votes4']+$row['votes5']+$row['votes6']+$row['votes7']+$row['votes8']+$row['votes9']+$row['votes10'];
+            $used = ($total_votes != 0);
+            $current = ($row['is_current'] == 1);
 
-			$fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page'=>'polls','type'=>'view','id'=>$row['id']),get_module_zone('polls')),get_translated_text($row['question']))),get_timezoned_date($row['add_time']),$current?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($used || $current)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$username,integer_format($row['poll_views']),do_lang_tempcode('VOTES',escape_html(integer_format($total_votes))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT').' #'.strval($row['id']))))),true);
-		}
+            $fields->attach(results_entry(array(protect_from_escaping(hyperlink(build_url(array('page' => 'polls','type' => 'view','id' => $row['id']),get_module_zone('polls')),get_translated_text($row['question']))),get_timezoned_date($row['add_time']),$current?do_lang_tempcode('YES'):do_lang_tempcode('NO'),($used || $current)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$username,integer_format($row['poll_views']),do_lang_tempcode('VOTES',escape_html(integer_format($total_votes))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT') . ' #' . strval($row['id']))))),true);
+        }
 
-		$search_url=build_url(array('page'=>'search','id'=>'polls'),get_module_zone('search'));
-		$archive_url=build_url(array('page'=>'polls'),get_module_zone('polls'));
+        $search_url = build_url(array('page' => 'search','id' => 'polls'),get_module_zone('search'));
+        $archive_url = build_url(array('page' => 'polls'),get_module_zone('polls'));
 
-		return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
-	}
+        return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+    }
 
-	/**
+    /**
 	 * Standard crud_module list function.
 	 *
 	 * @return tempcode		The selection list
 	 */
-	function create_selection_list_entries()
-	{
-		$only_owned=has_privilege(get_member(),'edit_midrange_content','cms_polls')?NULL:get_member();
-		$poll_list=create_selection_list_polls(NULL,$only_owned);
-		return $poll_list;
-	}
+    public function create_selection_list_entries()
+    {
+        $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_polls')?null:get_member();
+        $poll_list = create_selection_list_polls(null,$only_owned);
+        return $poll_list;
+    }
 
-	/**
+    /**
 	 * Get tempcode for a poll adding/editing form.
 	 *
 	 * @param  ?AUTO_LINK		The poll ID (NULL: new)
@@ -235,232 +234,266 @@ class Module_cms_polls extends standard_crud_module
 	 * @param  LONG_TEXT			Notes for the poll
 	 * @return array				A pair: The input fields, Hidden fields
 	 */
-	function get_form_fields($id=NULL,$question='',$a1='',$a2='',$a3='',$a4='',$a5='',$a6='',$a7='',$a8='',$a9='',$a10='',$current=false,$allow_rating=1,$allow_comments=1,$allow_trackbacks=1,$notes='')
-	{
-		list($allow_rating,$allow_comments,$allow_trackbacks)=$this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
+    public function get_form_fields($id = null,$question = '',$a1 = '',$a2 = '',$a3 = '',$a4 = '',$a5 = '',$a6 = '',$a7 = '',$a8 = '',$a9 = '',$a10 = '',$current = false,$allow_rating = 1,$allow_comments = 1,$allow_trackbacks = 1,$notes = '')
+    {
+        list($allow_rating,$allow_comments,$allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating,$allow_comments,$allow_trackbacks);
 
-		$fields=new ocp_tempcode();
-		require_code('form_templates');
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('QUESTION'),do_lang_tempcode('DESCRIPTION_QUESTION'),'question',$question,true));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(1)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option1',$a1,true));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(2)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option2',$a2,true));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(3)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option3',$a3,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(4)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option4',$a4,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(5)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option5',$a5,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(6)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option6',$a6,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(7)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option7',$a7,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(8)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option8',$a8,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(9)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option9',$a9,false));
-		$fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(10)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option10',$a10,false));
-		if (has_privilege(get_member(),'choose_poll'))
-		{
-			if ($question=='')
-			{
-				$test=$GLOBALS['SITE_DB']->query_select_value_if_there('poll','is_current',array('is_current'=>1));
-				if (is_null($test)) $current=true;
-			}
-			$fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
-		}
+        $fields = new ocp_tempcode();
+        require_code('form_templates');
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('QUESTION'),do_lang_tempcode('DESCRIPTION_QUESTION'),'question',$question,true));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(1)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option1',$a1,true));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(2)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option2',$a2,true));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(3)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option3',$a3,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(4)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option4',$a4,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(5)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option5',$a5,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(6)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option6',$a6,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(7)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option7',$a7,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(8)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option8',$a8,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(9)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option9',$a9,false));
+        $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X',integer_format(10)),do_lang_tempcode('DESCRIPTION_ANSWER'),'option10',$a10,false));
+        if (has_privilege(get_member(),'choose_poll')) {
+            if ($question == '') {
+                $test = $GLOBALS['SITE_DB']->query_select_value_if_there('poll','is_current',array('is_current' => 1));
+                if (is_null($test)) {
+                    $current = true;
+                }
+            }
+            $fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'),do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'),'validated',$current));
+        }
 
-		// Meta data
-		require_code('feedback2');
-		$feedback_fields=feedback_fields($allow_rating==1,$allow_comments==1,$allow_trackbacks==1,false,$notes,$allow_comments==2,false,true,false);
-		$fields->attach(meta_data_get_fields('poll',is_null($id)?NULL:strval($id),false,NULL,($feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
-		$fields->attach($feedback_fields);
+        // Meta data
+        require_code('feedback2');
+        $feedback_fields = feedback_fields($allow_rating == 1,$allow_comments == 1,$allow_trackbacks == 1,false,$notes,$allow_comments == 2,false,true,false);
+        $fields->attach(meta_data_get_fields('poll',is_null($id)?null:strval($id),false,null,($feedback_fields->is_empty())?META_DATA_HEADER_YES:META_DATA_HEADER_FORCE));
+        $fields->attach($feedback_fields);
 
-		if (addon_installed('content_reviews'))
-			$fields->attach(content_review_get_fields('poll',is_null($id)?NULL:strval($id)));
+        if (addon_installed('content_reviews')) {
+            $fields->attach(content_review_get_fields('poll',is_null($id)?null:strval($id)));
+        }
 
-		return array($fields,new ocp_tempcode());
-	}
+        return array($fields,new ocp_tempcode());
+    }
 
-	/**
+    /**
 	 * Standard crud_module submitter getter.
 	 *
 	 * @param  ID_TEXT		The entry for which the submitter is sought
 	 * @return array			The submitter, and the time of submission (null submission time implies no known submission time)
 	 */
-	function get_submitter($id)
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('submitter','date_and_time'),array('id'=>intval($id)),'',1);
-		if (!array_key_exists(0,$rows)) return array(NULL,NULL);
-		return array(intval($id),$rows[0]['submitter'],$rows[0]['date_and_time']);
-	}
+    public function get_submitter($id)
+    {
+        $rows = $GLOBALS['SITE_DB']->query_select('poll',array('submitter','date_and_time'),array('id' => intval($id)),'',1);
+        if (!array_key_exists(0,$rows)) {
+            return array(null,null);
+        }
+        return array(intval($id),$rows[0]['submitter'],$rows[0]['date_and_time']);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit form filler.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 * @return array			A quartet: fields, hidden, delete-fields, text
 	 */
-	function fill_in_edit_form($id)
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id'=>intval($id)));
-		if (!array_key_exists(0,$rows))
-		{
-			warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		}
-		$myrow=$rows[0];
+    public function fill_in_edit_form($id)
+    {
+        $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => intval($id)));
+        if (!array_key_exists(0,$rows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $myrow = $rows[0];
 
-		return $this->get_form_fields(get_translated_text($myrow['question']),get_translated_text($myrow['option1']),get_translated_text($myrow['option2']),get_translated_text($myrow['option3']),get_translated_text($myrow['option4']),get_translated_text($myrow['option5']),get_translated_text($myrow['option6']),get_translated_text($myrow['option7']),get_translated_text($myrow['option8']),get_translated_text($myrow['option9']),get_translated_text($myrow['option10']),$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
-	}
+        return $this->get_form_fields(get_translated_text($myrow['question']),get_translated_text($myrow['option1']),get_translated_text($myrow['option2']),get_translated_text($myrow['option3']),get_translated_text($myrow['option4']),get_translated_text($myrow['option5']),get_translated_text($myrow['option6']),get_translated_text($myrow['option7']),get_translated_text($myrow['option8']),get_translated_text($myrow['option9']),get_translated_text($myrow['option10']),$myrow['is_current'],$myrow['allow_rating'],$myrow['allow_comments'],$myrow['allow_trackbacks'],$myrow['notes']);
+    }
 
-	/**
+    /**
 	 * Standard crud_module add actualiser.
 	 *
 	 * @return ID_TEXT		The entry added
 	 */
-	function add_actualisation()
-	{
-		$question=post_param('question');
-		$option1=post_param('option1');
-		$option2=post_param('option2');
-		$option3=post_param('option3');
-		$option4=post_param('option4');
-		$option5=post_param('option5');
-		$option6=post_param('option6');
-		$option7=post_param('option7');
-		$option8=post_param('option8');
-		$option9=post_param('option9');
-		$option10=post_param('option10');
-		$allow_rating=post_param_integer('allow_rating',0);
-		$allow_comments=post_param_integer('allow_comments',0);
-		$allow_trackbacks=post_param_integer('allow_trackbacks',0);
-		$notes=post_param('notes','');
-		$num_options=10;
-		if ($option10=='') $num_options=9;
-		if ($option9=='') $num_options=8;
-		if ($option8=='') $num_options=7;
-		if ($option7=='') $num_options=6;
-		if ($option6=='') $num_options=5;
-		if ($option5=='') $num_options=4;
-		if ($option4=='') $num_options=3;
-		if ($option3=='') $num_options=2;
-		if ($option2=='') $num_options=1;
+    public function add_actualisation()
+    {
+        $question = post_param('question');
+        $option1 = post_param('option1');
+        $option2 = post_param('option2');
+        $option3 = post_param('option3');
+        $option4 = post_param('option4');
+        $option5 = post_param('option5');
+        $option6 = post_param('option6');
+        $option7 = post_param('option7');
+        $option8 = post_param('option8');
+        $option9 = post_param('option9');
+        $option10 = post_param('option10');
+        $allow_rating = post_param_integer('allow_rating',0);
+        $allow_comments = post_param_integer('allow_comments',0);
+        $allow_trackbacks = post_param_integer('allow_trackbacks',0);
+        $notes = post_param('notes','');
+        $num_options = 10;
+        if ($option10 == '') {
+            $num_options = 9;
+        }
+        if ($option9 == '') {
+            $num_options = 8;
+        }
+        if ($option8 == '') {
+            $num_options = 7;
+        }
+        if ($option7 == '') {
+            $num_options = 6;
+        }
+        if ($option6 == '') {
+            $num_options = 5;
+        }
+        if ($option5 == '') {
+            $num_options = 4;
+        }
+        if ($option4 == '') {
+            $num_options = 3;
+        }
+        if ($option3 == '') {
+            $num_options = 2;
+        }
+        if ($option2 == '') {
+            $num_options = 1;
+        }
 
-		$meta_data=actual_meta_data_get_fields('poll',NULL);
+        $meta_data = actual_meta_data_get_fields('poll',null);
 
-		$id=add_poll($question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['add_time'],$meta_data['submitter'],NULL,0,0,0,0,0,0,0,0,0,0,$meta_data['views'],$meta_data['edit_time']);
-		$current=post_param_integer('validated',0);
-		if ($current==1)
-		{
-			if (!has_privilege(get_member(),'choose_poll'))
-				log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
-			set_poll($id);
-		}
+        $id = add_poll($question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,post_param_integer('validated',0),$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['add_time'],$meta_data['submitter'],null,0,0,0,0,0,0,0,0,0,0,$meta_data['views'],$meta_data['edit_time']);
+        $current = post_param_integer('validated',0);
+        if ($current == 1) {
+            if (!has_privilege(get_member(),'choose_poll')) {
+                log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
+            }
+            set_poll($id);
+        }
 
-		if ($current==1)
-		{
-			if (has_actual_page_access(get_modal_user(),'polls'))
-			{
-				require_code('activities');
-				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls');
-			}
-		}
+        if ($current == 1) {
+            if (has_actual_page_access(get_modal_user(),'polls')) {
+                require_code('activities');
+                syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:' . strval($id),'','','polls');
+            }
+        }
 
-		if (addon_installed('content_reviews'))
-			content_review_set('poll',strval($id));
+        if (addon_installed('content_reviews')) {
+            content_review_set('poll',strval($id));
+        }
 
-		return strval($id);
-	}
+        return strval($id);
+    }
 
-	/**
+    /**
 	 * Standard crud_module edit actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being edited
 	 */
-	function edit_actualisation($id)
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('is_current','submitter','num_options'),array('id'=>intval($id)),'',1);
-		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$is_current=$rows[0]['is_current'];
-		$submitter=$rows[0]['submitter'];
+    public function edit_actualisation($id)
+    {
+        $rows = $GLOBALS['SITE_DB']->query_select('poll',array('is_current','submitter','num_options'),array('id' => intval($id)),'',1);
+        if (!array_key_exists(0,$rows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $is_current = $rows[0]['is_current'];
+        $submitter = $rows[0]['submitter'];
 
-		check_edit_permission(($is_current==1)?'high':'mid',$submitter);
+        check_edit_permission(($is_current == 1)?'high':'mid',$submitter);
 
-		$question=post_param('question',STRING_MAGIC_NULL);
-		$option1=post_param('option1',STRING_MAGIC_NULL);
-		$option2=post_param('option2',STRING_MAGIC_NULL);
-		$option3=post_param('option3',STRING_MAGIC_NULL);
-		$option4=post_param('option4',STRING_MAGIC_NULL);
-		$option5=post_param('option5',STRING_MAGIC_NULL);
-		$option6=post_param('option6',STRING_MAGIC_NULL);
-		$option7=post_param('option7',STRING_MAGIC_NULL);
-		$option8=post_param('option8',STRING_MAGIC_NULL);
-		$option9=post_param('option9',STRING_MAGIC_NULL);
-		$option10=post_param('option10',STRING_MAGIC_NULL);
-		$allow_rating=post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$allow_comments=post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$allow_trackbacks=post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
-		$notes=post_param('notes',STRING_MAGIC_NULL);
-		if (fractional_edit())
-		{
-			$num_options=$rows[0]['num_options'];
-		} else
-		{
-			$num_options=10;
-			if ($option10=='') $num_options=9;
-			if ($option9=='') $num_options=8;
-			if ($option8=='') $num_options=7;
-			if ($option7=='') $num_options=6;
-			if ($option6=='') $num_options=5;
-			if ($option5=='') $num_options=4;
-			if ($option4=='') $num_options=3;
-			if ($option3=='') $num_options=2;
-			if ($option2=='') $num_options=1;
-		}
+        $question = post_param('question',STRING_MAGIC_NULL);
+        $option1 = post_param('option1',STRING_MAGIC_NULL);
+        $option2 = post_param('option2',STRING_MAGIC_NULL);
+        $option3 = post_param('option3',STRING_MAGIC_NULL);
+        $option4 = post_param('option4',STRING_MAGIC_NULL);
+        $option5 = post_param('option5',STRING_MAGIC_NULL);
+        $option6 = post_param('option6',STRING_MAGIC_NULL);
+        $option7 = post_param('option7',STRING_MAGIC_NULL);
+        $option8 = post_param('option8',STRING_MAGIC_NULL);
+        $option9 = post_param('option9',STRING_MAGIC_NULL);
+        $option10 = post_param('option10',STRING_MAGIC_NULL);
+        $allow_rating = post_param_integer('allow_rating',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $allow_comments = post_param_integer('allow_comments',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $allow_trackbacks = post_param_integer('allow_trackbacks',fractional_edit()?INTEGER_MAGIC_NULL:0);
+        $notes = post_param('notes',STRING_MAGIC_NULL);
+        if (fractional_edit()) {
+            $num_options = $rows[0]['num_options'];
+        } else {
+            $num_options = 10;
+            if ($option10 == '') {
+                $num_options = 9;
+            }
+            if ($option9 == '') {
+                $num_options = 8;
+            }
+            if ($option8 == '') {
+                $num_options = 7;
+            }
+            if ($option7 == '') {
+                $num_options = 6;
+            }
+            if ($option6 == '') {
+                $num_options = 5;
+            }
+            if ($option5 == '') {
+                $num_options = 4;
+            }
+            if ($option4 == '') {
+                $num_options = 3;
+            }
+            if ($option3 == '') {
+                $num_options = 2;
+            }
+            if ($option2 == '') {
+                $num_options = 1;
+            }
+        }
 
-		$current=post_param_integer('validated',0);
+        $current = post_param_integer('validated',0);
 
-		if (($current==1) && ($GLOBALS['SITE_DB']->query_select_value('poll','is_current',array('id'=>$id))==0)) // Just became validated, syndicate as just added
-		{
-			$submitter=$GLOBALS['SITE_DB']->query_select_value('poll','submitter',array('id'=>$id));
+        if (($current == 1) && ($GLOBALS['SITE_DB']->query_select_value('poll','is_current',array('id' => $id)) == 0)) { // Just became validated, syndicate as just added
+            $submitter = $GLOBALS['SITE_DB']->query_select_value('poll','submitter',array('id' => $id));
 
-			if (has_actual_page_access(get_modal_user(),'polls'))
-			{
-				require_code('activities');
-				syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:'.strval($id),'','','polls',1,NULL/*$submitter*/);
-			}
-		}
+            if (has_actual_page_access(get_modal_user(),'polls')) {
+                require_code('activities');
+                syndicate_described_activity('polls:ACTIVITY_ADD_POLL',$question,'','','_SEARCH:polls:view:' . strval($id),'','','polls',1,NULL/*$submitter*/);
+            }
+        }
 
-		$meta_data=actual_meta_data_get_fields('poll',$id);
+        $meta_data = actual_meta_data_get_fields('poll',$id);
 
-		edit_poll(intval($id),$question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
+        edit_poll(intval($id),$question,$option1,$option2,$option3,$option4,$option5,$option6,$option7,$option8,$option9,$option10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_data['edit_time'],$meta_data['add_time'],$meta_data['views'],$meta_data['submitter'],true);
 
-		if (!fractional_edit())
-		{
-			if ($current==1)
-			{
-				if ($is_current==0)
-				{
-					if (!has_privilege(get_member(),'choose_poll'))
-						log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
+        if (!fractional_edit()) {
+            if ($current == 1) {
+                if ($is_current == 0) {
+                    if (!has_privilege(get_member(),'choose_poll')) {
+                        log_hack_attack_and_exit('BYPASS_VALIDATION_HACK');
+                    }
 
-					set_poll(intval($id));
-				}
-			}
-		}
+                    set_poll(intval($id));
+                }
+            }
+        }
 
-		if (addon_installed('content_reviews'))
-			content_review_set('poll',strval($id));
-	}
+        if (addon_installed('content_reviews')) {
+            content_review_set('poll',strval($id));
+        }
+    }
 
-	/**
+    /**
 	 * Standard crud_module delete actualiser.
 	 *
 	 * @param  ID_TEXT		The entry being deleted
 	 */
-	function delete_actualisation($id)
-	{
-		$rows=$GLOBALS['SITE_DB']->query_select('poll',array('is_current','submitter'),array('id'=>intval($id)),'',1);
-		if (!array_key_exists(0,$rows)) warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-		$is_current=$rows[0]['is_current'];
-		$submitter=$rows[0]['submitter'];
+    public function delete_actualisation($id)
+    {
+        $rows = $GLOBALS['SITE_DB']->query_select('poll',array('is_current','submitter'),array('id' => intval($id)),'',1);
+        if (!array_key_exists(0,$rows)) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        $is_current = $rows[0]['is_current'];
+        $submitter = $rows[0]['submitter'];
 
-		check_delete_permission(($is_current==1)?'high':'mid',$submitter);
+        check_delete_permission(($is_current == 1)?'high':'mid',$submitter);
 
-		delete_poll(intval($id));
-	}
+        delete_poll(intval($id));
+    }
 }
-
-

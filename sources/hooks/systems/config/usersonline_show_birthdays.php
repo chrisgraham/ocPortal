@@ -20,35 +20,33 @@
 
 class Hook_config_usersonline_show_birthdays
 {
-	/**
+    /**
 	 * Gets the details relating to the config option.
 	 *
 	 * @return ?array		The details (NULL: disabled)
 	 */
-	function get_details()
-	{
-		return array(
-			'human_name'=>'BIRTHDAYS',
-			'type'=>'tick',
-			'category'=>'BLOCKS',
-			'group'=>'USERS_ONLINE_BLOCK',
-			'explanation'=>'CONFIG_OPTION_usersonline_show_birthdays',
-			'shared_hosting_restricted'=>'0',
-			'list_options'=>'',
+    public function get_details()
+    {
+        return array(
+            'human_name' => 'BIRTHDAYS',
+            'type' => 'tick',
+            'category' => 'BLOCKS',
+            'group' => 'USERS_ONLINE_BLOCK',
+            'explanation' => 'CONFIG_OPTION_usersonline_show_birthdays',
+            'shared_hosting_restricted' => '0',
+            'list_options' => '',
 
-			'addon'=>'users_online_block',
-		);
-	}
+            'addon' => 'users_online_block',
+        );
+    }
 
-	/**
+    /**
 	 * Gets the default value for the config option.
 	 *
 	 * @return ?string		The default value (NULL: option is disabled)
 	 */
-	function get_default()
-	{
-		return ((has_no_forum()) || (get_forum_type()!='ocf'))?NULL:'0';
-	}
+    public function get_default()
+    {
+        return ((has_no_forum()) || (get_forum_type() != 'ocf'))?null:'0';
+    }
 }
-
-

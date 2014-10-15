@@ -20,18 +20,20 @@
 
 class Hook_exists_banner
 {
-	/**
+    /**
 	 * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.
 	 *
 	 * @return tempcode  The snippet
 	 */
-	function run()
-	{
-		$val=get_param('name');
+    public function run()
+    {
+        $val = get_param('name');
 
-		$test=$GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name'=>$val));
-		if (is_null($test)) return new ocp_tempcode();
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name' => $val));
+        if (is_null($test)) {
+            return new ocp_tempcode();
+        }
 
-		return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
-	}
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
+    }
 }

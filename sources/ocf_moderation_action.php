@@ -31,31 +31,29 @@
  * @param  SHORT_TEXT	The title suffix.
  * @return AUTO_LINK		The ID of the multi moderation just added.
  */
-function ocf_make_multi_moderation($name,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code='*',$title_suffix='')
+function ocf_make_multi_moderation($name,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code = '*',$title_suffix = '')
 {
-	require_code('global4');
-	prevent_double_submit('ADD_MULTI_MODERATION',NULL,$name);
+    require_code('global4');
+    prevent_double_submit('ADD_MULTI_MODERATION',null,$name);
 
-	$map=array(
-		'mm_post_text'=>$post_text,
-		'mm_move_to'=>$move_to,
-		'mm_pin_state'=>$pin_state,
-		'mm_sink_state'=>$sink_state,
-		'mm_open_state'=>$open_state,
-		'mm_forum_multi_code'=>$forum_multi_code,
-		'mm_title_suffix'=>$title_suffix,
-	);
-	$map+=insert_lang('mm_name',$name,3,$GLOBALS['FORUM_DB']);
-	$id=$GLOBALS['FORUM_DB']->query_insert('f_multi_moderations',$map,true);
+    $map = array(
+        'mm_post_text' => $post_text,
+        'mm_move_to' => $move_to,
+        'mm_pin_state' => $pin_state,
+        'mm_sink_state' => $sink_state,
+        'mm_open_state' => $open_state,
+        'mm_forum_multi_code' => $forum_multi_code,
+        'mm_title_suffix' => $title_suffix,
+    );
+    $map += insert_lang('mm_name',$name,3,$GLOBALS['FORUM_DB']);
+    $id = $GLOBALS['FORUM_DB']->query_insert('f_multi_moderations',$map,true);
 
-	log_it('ADD_MULTI_MODERATION',strval($id),$name);
+    log_it('ADD_MULTI_MODERATION',strval($id),$name);
 
-	if ((addon_installed('occle')) && (!running_script('install')))
-	{
-		require_code('resource_fs');
-		generate_resourcefs_moniker('multi_moderation',strval($id),NULL,NULL,true);
-	}
+    if ((addon_installed('occle')) && (!running_script('install'))) {
+        require_code('resource_fs');
+        generate_resourcefs_moniker('multi_moderation',strval($id),null,null,true);
+    }
 
-	return $id;
+    return $id;
 }
-
