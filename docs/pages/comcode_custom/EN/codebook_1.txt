@@ -97,22 +97,22 @@ For example,
 [code="PHP"]
 function run()
 {
-	// Load-up/records dependencies that all screens in the module use
-	require_code('downloads');
-	require_code('feedback');
-	require_lang('downloads');
-	require_css('downloads');
+    // Load-up/records dependencies that all screens in the module use
+    require_code('downloads');
+    require_code('feedback');
+    require_lang('downloads');
+    require_css('downloads');
 
-	// Get the URL parameter named 'type' into the variable $type
-	$type=get_param('type','misc');
+    // Get the URL parameter named 'type' into the variable $type
+    $type = get_param('type','misc');
 
-	// Decide what to do (delegate)
-	if ($type=='tree_view') return $this->tree_view_screen();
-	if ($type=='entry') return $this->dloadinfo_screen();
-	if ($type=='misc') return $this->category_screen();
-	
-	// If we get to this point no delegate was found
-	return new ocp_tempcode();
+    // Decide what to do (delegate)
+    if ($type == 'tree_view') return $this->tree_view_screen();
+    if ($type == 'entry') return $this->dloadinfo_screen();
+    if ($type == 'misc') return $this->category_screen();
+
+    // If we get to this point no delegate was found
+    return new ocp_tempcode();
 }
 [/code]
 
@@ -265,42 +265,42 @@ A typical scenario for a module screen is as follows:
 [code="PHP"]
 function category_screen()
 {
-	// Get the ID number of the category being viewed
-	$id=get_param_integer('id');
+    // Get the ID number of the category being viewed
+    $id = get_param_integer('id');
 
-	// Find all subcategories to the category being viewed, in id order
-	$rows=$GLOBALS['SITE_DB']->query_select('categories', // Use this table
-		array('id','name'), // Get these fields
-		array('parent'=>$id), // WHERE this
-		'ORDER BY id'); // Order By
+    // Find all subcategories to the category being viewed, in id order
+    $rows = $GLOBALS['SITE_DB']->query_select('categories', // Use this table
+        array('id','name'), // Get these fields
+        array('parent' => $id), // WHERE this
+        'ORDER BY id'); // Order By
 
-	// If there are no subcategories, exit with an error saying this
-	// NO_SUBCATEGORIES is a lang string which must be defined
-	if (count($rows)==0)
-		user_clean_exit(do_lang_tempcode('NO_SUBCATEGORIES'));
+    // If there are no subcategories, exit with an error saying this
+    // NO_SUBCATEGORIES is a lang string which must be defined
+    if (count($rows) == 0) {
+        user_clean_exit(do_lang_tempcode('NO_SUBCATEGORIES'));
+    }
 
-	// Create a new Tempcode object to hold our subcategory composition
-	$subcategories=new ocp_tempcode();
+    // Create a new Tempcode object to hold our subcategory composition
+    $subcategories = new ocp_tempcode();
 
-	// Loop through all our subcategories
-	foreach ($rows as $row)
-	{
-		// Compose the next subcategory onto the previous
-		// Note how $row['id'] is passed through 'strval'...
-		// ocPortal is coded to be type-strict,
-		// and we have to decide for any integer whether to convert it
-		// to a string using
-		// 'strval' (code-ready) or 'number_format' (pretty)
-		$subcategories->attach(do_template(
-			'SUBCATEGORY', // Template name
-			array( // Parameters to the template
-				'NAME'=>$row['name'],
-				'ID'=>strval($row['id']))));
-	}
+    // Loop through all our subcategories
+    foreach ($rows as $row) {
+        // Compose the next subcategory onto the previous
+        // Note how $row['id'] is passed through 'strval'...
+        // ocPortal is coded to be type-strict,
+        // and we have to decide for any integer whether to convert it
+        // to a string using
+        // 'strval' (code-ready) or 'number_format' (pretty)
+        $subcategories->attach(do_template(
+            'SUBCATEGORY', // Template name
+            array( // Parameters to the template
+                'NAME' => $row['name'],
+                'ID' => strval($row['id']))));
+    }
 
-	// Wrap up our subcategory composition in a template
-	// that represents the whole screen
-	return do_template('CATEGORY_SCREEN',array('SUBCATEGORIES'=>$subcategories));
+    // Wrap up our subcategory composition in a template
+    // that represents the whole screen
+    return do_template('CATEGORY_SCREEN',array('SUBCATEGORIES' => $subcategories));
 }
 [/code]
 
@@ -336,65 +336,64 @@ To keep this code short I have intentionally missed out some functions and PHP-d
 
 class Module_example
 {
-	function info()
-	{
-		// Bare essentials of this function only here because I'm keeping this
-		// example as short as possible. We would normally expect this function
-		// to be properly defined.
-		return array('version'=>1,'hack_version'=>1,'hacked_by'=>1);
-	}
+    public function info()
+    {
+        // Bare essentials of this function only here because I'm keeping this
+        // example as short as possible. We would normally expect this function
+        // to be properly defined.
+        return array('version' => 1,'hack_version' => 1,'hacked_by' => 1);
+    }
 
-	// This is the function called when the module is loaded up to produce
-	// output.
-	function run()
-	{
-		// Decide which screen to show
-		$type=get_param('type','screen_a');
-		switch ($type)
-		{
-			case 'screen_a':
-				return $this->screen_a();
-			case 'screen_b':
-				return $this->screen_b();
-		}
+    // This is the function called when the module is loaded up to produce
+    // output.
+    public function run()
+    {
+        // Decide which screen to show
+        $type = get_param('type','screen_a');
+        switch ($type) {
+            case 'screen_a':
+                return $this->screen_a();
+            case 'screen_b':
+                return $this->screen_b();
+        }
 
-		return new ocp_tempcode(); // An invalid screen was requested from this module
-	}
+        return new ocp_tempcode(); // An invalid screen was requested from this module
+    }
 
-	function screen_a()
-	{
-		// We normally would use a lang string but this is a short and simple example.
-		$title=get_page_title('Example Title',false); // false='not a lang string'
+    public function screen_a()
+    {
+        // We normally would use a lang string but this is a short and simple example.
+        $title = get_page_title('Example Title',false); // false='not a lang string'
 
-		// Produce a URL to screen_b of this module ("this module"=same page, same zone)
-		$screen_b_url=build_url(array('page'=>'_SELF','type'=>'screen_b'),'_SELF');
+        // Produce a URL to screen_b of this module ("this module"=same page, same zone)
+        $screen_b_url = build_url(array('page' => '_SELF','type' => 'screen_b'),'_SELF');
 
-		// Return out screen's output, which comes from a template
-		return do_template('EXAMPLE_SCREEN_A',array(
-			'TITLE'=>$title,
-			'SCREEN_B_URL'=>$screen_b_url
-		));
-	}
+        // Return out screen's output, which comes from a template
+        return do_template('EXAMPLE_SCREEN_A',array(
+            'TITLE' => $title,
+            'SCREEN_B_URL' => $screen_b_url
+        ));
+    }
 
-	function screen_b()
-	{
-		// We normally would use a lang string but this is a short and simple example.
-		$title=get_page_title('Example Title 2',false); // false='not a lang string'
+    public function screen_b()
+    {
+        // We normally would use a lang string but this is a short and simple example.
+        $title = get_page_title('Example Title 2',false); // false='not a lang string'
 
-		// Read in our 'my_checkbox' POST value. Because it's a checkbox, it will only
-		// be present if it was actually ticked (checked). So we need to supply a default of 0
-		// in case it was not. The checkbox value was defined as "1" in the HTML so
-		// we expect it as an integer.
-		$_ticked=post_param_integer('my_checkbox',0);
+        // Read in our 'my_checkbox' POST value. Because it's a checkbox, it will only
+        // be present if it was actually ticked (checked). So we need to supply a default of 0
+        // in case it was not. The checkbox value was defined as "1" in the HTML so
+        // we expect it as an integer.
+        $_ticked = post_param_integer('my_checkbox',0);
 
-		$ticked=$_ticked==1; // Convert our 0/1 into a proper boolean
+        $ticked = $_ticked == 1; // Convert our 0/1 into a proper boolean
 
-		// Return out screen's output, which comes from a template
-		return do_template('EXAMPLE_SCREEN_B',array(
-			'TITLE'=>$title,
-			'TICKED'=>$ticked
-		));
-	}
+        // Return out screen's output, which comes from a template
+        return do_template('EXAMPLE_SCREEN_B',array(
+            'TITLE' => $title,
+            'TICKED' => $ticked
+        ));
+    }
 }
 [/code]
 
@@ -512,15 +511,18 @@ All hooks that go together (e.g. all search hooks) have the same class interface
 
 An example of some code that uses hooks is:
 [code="PHP"]
-$_hooks=find_all_hooks('modules','search');
-foreach (array_keys($_hooks) as $hook)
-{
-	require_code('hooks/modules/search/'.filter_naughty_harsh($hook));
+<?php
 
-	$object=object_factory('Hook_search_'.filter_naughty_harsh($hook),true);
-	if (is_null($object)) continue;
-	$info=$object->info();
-	...
+$_hooks = find_all_hooks('modules','search');
+foreach (array_keys($_hooks) as $hook) {
+    require_code('hooks/modules/search/' . filter_naughty_harsh($hook));
+
+    $object = object_factory('Hook_search_' . filter_naughty_harsh($hook),true);
+    if (is_null($object)) {
+        continue;
+    }
+    $info = $object->info();
+    ...
 }
 [/code]
 
@@ -542,13 +544,12 @@ ocPortal needs to be able to provide a spot for addons to put links on somebody'
 
 The code that uses these hooks is as follows:
 [code="PHP"]
-$hooks=find_all_hooks('modules','members');
-foreach (array_keys($hooks) as $hook)
-{
-	require_code('hooks/modules/members/'.filter_naughty_harsh($hook));
-	$object=object_factory('Hook_members_'.filter_naughty_harsh($hook));
-	$hook_result=$object->run($member_id);
-	$modules=array_merge($modules,$hook_result);
+$hooks = find_all_hooks('modules','members');
+foreach (array_keys($hooks) as $hook) {
+    require_code('hooks/modules/members/' . filter_naughty_harsh($hook));
+    $object = object_factory('Hook_members_' . filter_naughty_harsh($hook));
+    $hook_result = $object->run($member_id);
+    $modules = array_merge($modules,$hook_result);
 }
 [/code]
 
@@ -559,35 +560,38 @@ Let's look at one of our hook implementations to see what code it has in it. We 
 [code="PHP"]
 class Hook_members_calendar
 {
-/**
- * Execute the module.
- *
- * @param  MEMBER		The ID of the member we are getting link hooks for
- * @return array		List of tuples for results. Each tuple is: type,title,url
- */
-function run($member_id)
-{
-	if (!addon_installed('calendar')) return array();
-		
-	if (!has_privilege(get_member(),'assume_any_member')) return array();
-	if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar')))
-		return array();
+    /**
+     * Execute the module.
+     *
+     * @param  MEMBER		The ID of the member we are getting link hooks for
+     * @return array		List of tuples for results. Each tuple is: type,title,url
+     */
+    public function run($member_id)
+    {
+        if (!addon_installed('calendar')) {
+            return array();
+        }
 
-	require_lang('calendar');
-	return array(
-		array('views',
-			do_lang_tempcode('CALENDAR'),
-			build_url(
-				array('page'=>'calendar','type'=>'misc','member_id'=>$member_id),
-				get_module_zone('calendar')
-			)
-		)
-	);
-}
+        if (!has_privilege(get_member(),'assume_any_member')) {
+            return array();
+        }
+        if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar'))) {
+            return array();
+        }
 
+        require_lang('calendar');
+        return array(
+            array('views',
+                do_lang_tempcode('CALENDAR'),
+                build_url(
+                    array('page' => 'calendar','type' => 'misc','member_id' => $member_id),
+                    get_module_zone('calendar')
+                )
+            )
+        );
+    }
 }
 [/code]
-(Note that we've reformatted this code slightly to make it fit neatly above)
 
 Notice how this class is named '[tt]Hook_members_calendar[/tt]'. The '[tt]calendar[/tt]' bit comes from the filename, the '[tt]Hook_[/tt]' bit is a standard contention for any hook, and the '[tt]members_[/tt]' bit is something all the members hooks are using as a convention and really is just there to stop namespace conflicts (e.g. if we also have a calendar hook for search we wouldn't want these two classes in ocPortal to have the name, so we try to make our sets of hooks use their own unique naming convention to keep them apart).
 
@@ -892,13 +896,11 @@ So, how does strict-typing work? In PHP each variable does have a type, it's jus
 
 Consider the following:
 [code="PHP"]
-$values=array(NULL,0,'',false);
-foreach ($values as $x)
-{
-	if (!$x)
-	{
-		echo "Value is false\n";
-	}
+$values = array(NULL,0,'',false);
+foreach ($values as $x) {
+    if (!$x) {
+        echo "Value is false\n";
+    }
 }
 [/code]
 
@@ -917,36 +919,30 @@ If you have a list (an array with numeric keys, such as one returned from the [t
 
 Avoid this kind of thing, where one variable might be of more than one type...
 [code="PHP"]
-if ($foo)
-{
-	$number=1;
-} else
-{
-	$number='';
+if ($foo) {
+    $number = 1;
+} else {
+    $number = '';
 }
 [/code]
 
 If a numeric variable has no value, set it to NULL, like...
 [code="PHP"]
-if ($foo)
-{
-	$number=1;
-} else
-{
-	$number=NULL;
+if ($foo) {
+    $number = 1;
+} else {
+    $number = NULL;
 }
 [/code]
 and then use the [tt]is_null[/tt]/[tt]is_integer[/tt] functions as required. We do not consider 'null' a type like the others, due to how databases interpret it. We consider it more like a special marker meaning 'no value'.
 
 If a variable really must have multiple types, do...
 [code="PHP"]
-$variable=mixed();
-if ($foo)
-{
-	$variable=1;
-} else
-{
-	$variable='';
+$variable = mixed();
+if ($foo) {
+    $variable = 1;
+} else {
+    $variable = '';
 }
 [/code]
 as this will flag the situation to our tools.
@@ -960,11 +956,12 @@ List arrays have numeric indices, so it is wrong to reference them as strings li
 
 Another example:
 [code="PHP"]
-$secondary_groups=explode(',',$row['additionalGroups']);
-foreach ($secondary_groups as $group)
-{
-	$GLOBAL['FORUM_DB']->query_insert('f_groups',array(
-				'm_group_id'=>$group,'m_member'=>get_member()));
+$secondary_groups = explode(',',$row['additionalGroups']);
+foreach ($secondary_groups as $group) {
+    $GLOBAL['FORUM_DB']->query_insert('f_groups',array(
+        'm_group_id' => $group,
+        'm_member' => get_member()
+    ));
 }
 [/code]
 This is a good example of why type strictness is important to us. This will create an array of strings, and the DB will be modified using strings -- however the database uses integers. So this code won't work on mySQL strict mode, or other database software. This is better...

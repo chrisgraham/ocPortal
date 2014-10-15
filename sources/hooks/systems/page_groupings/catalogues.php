@@ -77,10 +77,10 @@ class Hook_page_groupings_catalogues
 								continue;
 							}
 							else*/if ($num_categories == 1) {
-    $only_category = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name' => $row['c_name']));
-    $ret2[] = array($page_grouping,$menu_icon,array('catalogues',array('type' => 'misc','id' => strval($only_category)),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode('catalogues',$row,'c_description'));
-    continue;
-}
+                                $only_category = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','id',array('c_name' => $row['c_name']));
+                                $ret2[] = array($page_grouping,$menu_icon,array('catalogues',array('type' => 'misc','id' => strval($only_category)),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode('catalogues',$row,'c_description'));
+                                continue;
+                            }
                         }
 
                         $ret2[] = array($page_grouping,$menu_icon,array('catalogues',array('type' => 'index','id' => $row['c_name']),get_module_zone('catalogues')),make_string_tempcode(escape_html(get_translated_text($row['c_title']))),get_translated_tempcode('catalogues',$row,'c_description'));

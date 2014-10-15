@@ -130,31 +130,30 @@ function make_installers($skip_file_grab = false)
 			/* QUICK INSTALLER CODE starts */
 
 			global \$FILE_ARRAY,\$SIZE_ARRAY,\$OFFSET_ARRAY,\$DIR_ARRAY,\$DATADOTOCP_FILE;
-			\$OFFSET_ARRAY=array({$offset_list});
-			\$SIZE_ARRAY=array({$size_list});
-			\$FILE_ARRAY=array({$file_list});
-			\$DATADOTOCP_FILE=fopen('data.ocp','rb');
-			if (\$DATADOTOCP_FILE===false) warn_exit('data.ocp missing / inaccessible');
-			if (filesize('data.ocp')!={$archive_size}) warn_exit('data.ocp not fully uploaded, or wrong version for this installer');
-			if (md5(file_array_get('{$md5_test_path}'))!='{$md5}') warn_exit('data.ocp corrupt. Must not be uploaded in text mode');
+			\$OFFSET_ARRAY = array({$offset_list});
+			\$SIZE_ARRAY = array({$size_list});
+			\$FILE_ARRAY = array({$file_list});
+			\$DATADOTOCP_FILE = fopen('data.ocp','rb');
+			if (\$DATADOTOCP_FILE === false) warn_exit('data.ocp missing / inaccessible');
+			if (filesize('data.ocp') != {$archive_size}) warn_exit('data.ocp not fully uploaded, or wrong version for this installer');
+			if (md5(file_array_get('{$md5_test_path}')) != '{$md5}') warn_exit('data.ocp corrupt. Must not be uploaded in text mode');
 
 			function file_array_get(\$path)
 			{
 				global \$OFFSET_ARRAY,\$SIZE_ARRAY,\$DATADOTOCP_FILE,\$FILE_BASE;
 
-				if (substr(\$path,0,strlen(\$FILE_BASE.'/'))==\$FILE_BASE.'/')
-					\$path=substr(\$path,strlen(\$FILE_BASE.'/'));
+				if (substr(\$path,0,strlen(\$FILE_BASE.'/')) == \$FILE_BASE.'/')
+					\$path = substr(\$path,strlen(\$FILE_BASE.'/'));
 
 				if (!isset(\$OFFSET_ARRAY[\$path])) return;
-				\$offset=\$OFFSET_ARRAY[\$path];
-				\$size=\$SIZE_ARRAY[\$path];
-				if (\$size==0) return '';
+				\$offset = \$OFFSET_ARRAY[\$path];
+				\$size = \$SIZE_ARRAY[\$path];
+				if (\$size == 0) return '';
 				fseek(\$DATADOTOCP_FILE,\$offset,SEEK_SET);
-				if (\$size>1024*1024)
-				{
+				if (\$size>1024*1024) {
 					return array(\$size,\$DATADOTOCP_FILE,\$offset);
 				}
-				\$data=fread(\$DATADOTOCP_FILE,\$size);
+				\$data = fread(\$DATADOTOCP_FILE,\$size);
 				return \$data;
 			}
 
@@ -167,7 +166,7 @@ function make_installers($skip_file_grab = false)
 			function file_array_get_at(\$i)
 			{
 				global \$FILE_ARRAY;
-				\$name=\$FILE_ARRAY[\$i];
+				\$name = \$FILE_ARRAY[\$i];
 				return array(\$name,file_array_get(\$name));
 			}
 

@@ -12,13 +12,11 @@ if (!function_exists('init__comcode_compiler')) {
     {
         $new_code = '
 			require_code(\'textfiles\');
-			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));
-			foreach ($whitelists as $w)
-			{
-				if (trim($w)!=\'\')
-				{
-					if ($w[0]!=\'/\') $w=preg_quote($w,\'#\'); else $w=substr($w,1,strlen($w)-2);
-					$allowed_html_seqs[]=$w;
+			$whitelists = explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));
+			foreach ($whitelists as $w) {
+				if (trim($w) != \'\') {
+					if ($w[0] != \'/\') $w = preg_quote($w,\'#\'); else $w = substr($w,1,strlen($w)-2);
+					$allowed_html_seqs[] = $w;
 				}
 			}
 		';
@@ -26,24 +24,21 @@ if (!function_exists('init__comcode_compiler')) {
 
         $new_code = '
 			global $OBSCURE_REPLACEMENTS;
-			$OBSCURE_REPLACEMENTS=array();
+			$OBSCURE_REPLACEMENTS = array();
 			require_code(\'textfiles\');
-			$whitelists=explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));
-			foreach ($whitelists as $i=>$w)
-			{
-				if (trim($w)!=\'\')
-				{
-					if ($w[0]!=\'/\') $w=preg_quote($w,\'#\'); else $w=substr($w,1,strlen($w)-2);
-					$ahead=preg_replace_callback(\'#\'.$w.\'#\',\'obscure_html_callback\',$ahead);
+			$whitelists = explode("\n",read_text_file(\'comcode_whitelist\',NULL,true));
+			foreach ($whitelists as $i => $w) {
+				if (trim($w) != \'\') {
+					if ($w[0] != \'/\') $w = preg_quote($w,\'#\'); else $w = substr($w,1,strlen($w)-2);
+					$ahead = preg_replace_callback(\'#\'.$w.\'#\',\'obscure_html_callback\',$ahead);
 				}
 			}
 		';
         $in = str_replace('// Null vector',$new_code,$in);
 
         $new_code = '
-			foreach ($OBSCURE_REPLACEMENTS as $rep=>$from)
-			{
-				$ahead=str_replace($rep,$from,$ahead);
+			foreach ($OBSCURE_REPLACEMENTS as $rep => $from) {
+				$ahead = str_replace($rep,$from,$ahead);
 			}
 		';
         $in = str_replace('// Tidy up',$new_code,$in);

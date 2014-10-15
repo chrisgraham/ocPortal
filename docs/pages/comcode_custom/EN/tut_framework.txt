@@ -106,9 +106,9 @@ You can redefine any existing function or class, and you can define new function
 [code="PHP"]
 function example_function($a,$b)
 {
-	some_logging_function('call to example_function with '.$a.' and '.$b);
-	$ret=non_overridden__example_function($a,$b);
-	some_logging_function('leaving example_function returning '.$ret);
+	some_logging_function('call to example_function with ' . $a.' and ' . $b);
+	$ret = non_overridden__example_function($a,$b);
+	some_logging_function('leaving example_function returning ' . $ret);
 	return $ret;
 }
 [/code]
@@ -118,9 +118,9 @@ class example extends non_overridden__example
 {
 	function mymethod($a,$b)
 	{
-		some_logging_function('call to example::mymethod with '.$a.' and '.$b);
-		$ret=parent::mymethod($a,$b);
-		some_logging_function('leaving example::mymethod returning '.$ret);
+		some_logging_function('call to example::mymethod with ' . $a.' and ' . $b);
+		$ret = parent::mymethod($a,$b);
+		some_logging_function('leaving example::mymethod returning ' . $ret);
 		return $ret;
 	}
 }

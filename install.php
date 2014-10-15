@@ -1618,40 +1618,40 @@ function step_5_write_config()
             $val = $base_url;
         }
         $_val = addslashes(trim($val));
-        fwrite($config_file_handle,'$SITE_INFO[\'' . $key . '\']=\'' . $_val . "';\n");
+        fwrite($config_file_handle,'$SITE_INFO[\'' . $key . '\'] = \'' . $_val . "';\n");
     }
 
     // Derive a random session cookie name, to stop conflicts between sites
-    fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\']=\'ocp_session__' . preg_replace('#[^\w]#','',uniqid('',true)) . "';\n");
+    fwrite($config_file_handle,'$SITE_INFO[\'session_cookie\'] = \'ocp_session__' . preg_replace('#[^\w]#','',uniqid('',true)) . "';\n");
 
     // On the live GAE, we need to switch in different settings to the local dev server
     if (GOOGLE_APPENGINE) {
         $gae_live_code = "
-			if (appengine_is_live()) {
-				\$SITE_INFO['db_site']='" . addslashes(post_param('gae_live_db_site')) . "';
-				\$SITE_INFO['db_site_host']='" . addslashes(post_param('gae_live_db_site_host')) . "';
-				\$SITE_INFO['db_site_user']='" . addslashes(post_param('gae_live_db_site_user')) . "';
-				\$SITE_INFO['db_site_password']='" . addslashes(post_param('gae_live_db_site_password')) . "';
-				\$SITE_INFO['custom_file_base']='" . addslashes('gs://' . post_param('gae_bucket_name')) . "';
-				if ((strpos(\$_SERVER['HTTP_HOST'],'.appspot.com')!==false) || (!tacit_https())) {
-					\$SITE_INFO['custom_base_url']='" . addslashes((tacit_https()?'https://':'http://') . post_param('gae_bucket_name') . '.storage.googleapis.com') . "';
-				} else { // Assumes a storage.<domain> CNAME has been created
-					\$SITE_INFO['custom_base_url']='" . addslashes((tacit_https()?'https://':'http://') . 'storage.') . "'.\$_SERVER['HTTP_HOST'];
-				}
-				\$SITE_INFO['no_extra_logs']='1';
-				\$SITE_INFO['no_disk_sanity_checks']='1';
-				\$SITE_INFO['no_installer_checks']='1';
-				\$SITE_INFO['disable_smart_decaching']='1';
-			} else {
-				\$SITE_INFO['custom_file_base']='" . addslashes(get_file_base() . '/data_custom/modules/google_appengine') . "';
-				\$SITE_INFO['custom_base_url']='" . addslashes(get_base_url() . '/data_custom/modules/google_appengine') . "';
+if (appengine_is_live()) {
+    \$SITE_INFO['db_site'] = '" . addslashes(post_param('gae_live_db_site')) . "';
+    \$SITE_INFO['db_site_host'] = '" . addslashes(post_param('gae_live_db_site_host')) . "';
+    \$SITE_INFO['db_site_user'] = '" . addslashes(post_param('gae_live_db_site_user')) . "';
+    \$SITE_INFO['db_site_password'] = '" . addslashes(post_param('gae_live_db_site_password')) . "';
+    \$SITE_INFO['custom_file_base'] = '" . addslashes('gs://' . post_param('gae_bucket_name')) . "';
+    if ((strpos(\$_SERVER['HTTP_HOST'],'.appspot.com') !== false) || (!tacit_https())) {
+        \$SITE_INFO['custom_base_url'] = '" . addslashes((tacit_https()?'https://':'http://') . post_param('gae_bucket_name') . '.storage.googleapis.com') . "';
+    } else { // Assumes a storage.<domain> CNAME has been created
+        \$SITE_INFO['custom_base_url'] = '" . addslashes((tacit_https()?'https://':'http://') . 'storage.') . "'.\$_SERVER['HTTP_HOST'];
+    }
+    \$SITE_INFO['no_extra_logs'] = '1';
+    \$SITE_INFO['no_disk_sanity_checks'] = '1';
+    \$SITE_INFO['no_installer_checks'] = '1';
+    \$SITE_INFO['disable_smart_decaching'] = '1';
+} else {
+    \$SITE_INFO['custom_file_base'] = '" . addslashes(get_file_base() . '/data_custom/modules/google_appengine') . "';
+    \$SITE_INFO['custom_base_url'] = '" . addslashes(get_base_url() . '/data_custom/modules/google_appengine') . "';
 
-				// Or this for more accurate (but slower) testing (assumes app name matches bucket name)...
-				//\$SITE_INFO['custom_file_base']='gs://" . addslashes(post_param('gae_application')) . "';
-				//\$SITE_INFO['custom_base_url']='http://localhost:8080/data/modules/google_appengine/cloud_storage_proxy.php?';
-			}
-			\$SITE_INFO['use_mem_cache']='1';
-			\$SITE_INFO['charset']='utf-8';
+    // Or this for more accurate (but slower) testing (assumes app name matches bucket name)...
+    //\$SITE_INFO['custom_file_base'] = 'gs://" . addslashes(post_param('gae_application')) . "';
+    //\$SITE_INFO['custom_base_url'] = 'http://localhost:8080/data/modules/google_appengine/cloud_storage_proxy.php?';
+}
+\$SITE_INFO['use_mem_cache'] = '1';
+\$SITE_INFO['charset'] = 'utf-8';
 ";
         fwrite($config_file_handle,preg_replace('#^\t\t\t#m','',$gae_live_code));
     }
@@ -1659,19 +1659,19 @@ function step_5_write_config()
     fwrite($config_file_handle,'
 
 if (!function_exists(\'git_repos\')) {
-	/**
-	 * Find the git branch name. This is useful for making this config file context-adaptive (i.e. dev settings vs production settings).
-	 *
-	 * @return ?ID_TEXT	Branch name (NULL: not in git)
-	 */
-	function git_repos()
-	{
-		$path=dirname(__FILE__).\'/.git/HEAD\';
-		if (!is_file($path)) return \'\';
-		$lines=file($path);
-		$parts=explode(\'/\',$lines[0]);
-		return trim(end($parts));
-	}
+    /**
+     * Find the git branch name. This is useful for making this config file context-adaptive (i.e. dev settings vs production settings).
+     *
+     * @return ?ID_TEXT	Branch name (NULL: not in git)
+     */
+    function git_repos()
+    {
+        $path = dirname(__FILE__).\'/.git/HEAD\';
+        if (!is_file($path)) return \'\';
+        $lines = file($path);
+        $parts = explode(\'/\',$lines[0]);
+        return trim(end($parts));
+    }
 }
 ');
 

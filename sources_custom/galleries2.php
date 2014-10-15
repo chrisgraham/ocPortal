@@ -19,36 +19,30 @@ function init__galleries2($code)
     $code = str_replace(
         'log_it(\'ADD_IMAGE\',strval($id),$title);',
         '
-		if ($validated==0)
+		if ($validated == 0)
 		{
 			require_code("workflows");
 			require_lang("workflows");
 			// See if we have a specific workflow to use
-			$workflow_id=intval(str_replace("wf_","",either_param("workflow","wf_-1")));
+			$workflow_id = intval(str_replace("wf_","",either_param("workflow","wf_-1")));
 			// If we have been given a specific workflow, but we do not have access to
 			// choose workflows, fall back to the default
 			if ($workflow_id != -1 && !can_choose_workflow())
-				$workflow_id=-1;
+				$workflow_id =- 1;
 
-			if ($workflow_id==-1)
-			{
+			if ($workflow_id == -1) {
 				// Look for the workflow of the containing gallery
-				$workflow_id=get_workflow_of_content("gallery",$title);
-				if (is_null($workflow_id))
-				{
+				$workflow_id = get_workflow_of_content("gallery",$title);
+				if (is_null($workflow_id)) {
 					// Use the default if it has none
 					add_content_to_workflow("image",strval($id));
 					attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text(get_default_workflow())),"inform");
-				}
-				else
-				{
+				} else {
 					// The parent has a workflow. Copy it for this.
 					add_content_to_workflow("image",strval($id),$workflow_id);
 					attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
 				}
-			}
-			else
-			{
+			} else {
 				// Use the specific ID provided
 				add_content_to_workflow("image",strval($id),$workflow_id);
 				attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
@@ -63,36 +57,29 @@ function init__galleries2($code)
     $code = str_replace(
         'log_it(\'ADD_VIDEO\',strval($id),$title);',
         '
-		if ($validated==0)
-		{
+		if ($validated == 0) {
 			require_code("workflows");
 			require_lang("workflows");
 			// See if we have a specific workflow to use
-			$workflow_id=intval(str_replace("wf_","",either_param("workflow","wf_-1")));
+			$workflow_id = intval(str_replace("wf_","",either_param("workflow","wf_-1")));
 			// If we have been given a specific workflow, but we do not have access to
 			// choose workflows, fall back to the default
 			if ($workflow_id != -1 && !can_choose_workflow())
-				$workflow_id=-1;
+				$workflow_id =- 1;
 
-			if ($workflow_id==-1)
-			{
+			if ($workflow_id == -1) {
 				// Look for the workflow of the containing gallery
-				$workflow_id=get_workflow_of_content("gallery",$title);
-				if (is_null($workflow_id))
-				{
+				$workflow_id = get_workflow_of_content("gallery",$title);
+				if (is_null($workflow_id)) {
 					// Use the default if it has none
 					add_content_to_workflow("video",strval($id));
 					attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text(get_default_workflow())),"inform");
-				}
-				else
-				{
+				} else {
 					// The parent has a workflow. Copy it for this.
 					add_content_to_workflow("video",strval($id),$workflow_id);
 					attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
 				}
-			}
-			else
-			{
+			} else {
 				// Use the specific ID provided
 				add_content_to_workflow("video",strval($id),$workflow_id);
 				attach_message(do_lang("CONTENT_NOW_IN_WORKFLOW",get_translated_text($workflow_id)),"inform");
@@ -108,29 +95,23 @@ function init__galleries2($code)
         'require_code("workflows");
 		require_lang("workflows");
 		// See if we have a specific workflow to use
-		$workflow_id=intval(str_replace("wf_","",either_param("workflow","wf_-1")));
+		$workflow_id = intval(str_replace("wf_","",either_param("workflow","wf_-1")));
 		// If we have been given a specific workflow, but we do not have access to
 		// choose workflows, fall back to the default
 		if ($workflow_id != -1 && !can_choose_workflow())
-			$workflow_id=-1;
+			$workflow_id = -1;
 
-		if ($workflow_id==-1)
-		{
+		if ($workflow_id == -1) {
 			// Look for the workflow of the containing gallery
-			$workflow_id=get_workflow_of_content("gallery",$parent_id);
-			if (is_null($workflow_id))
-			{
+			$workflow_id = get_workflow_of_content("gallery",$parent_id);
+			if (is_null($workflow_id)) {
 				// Use the default if it has none
 				add_content_to_workflow("gallery",$name);
-			}
-			else
-			{
+			} else {
 				// The parent has a workflow. Copy it for this.
 				add_content_to_workflow("gallery",$name,$workflow_id);
 			}
-		}
-		else
-		{
+		} else {
 			// Use the specific ID provided
 			add_content_to_workflow("gallery",$name,$workflow_id);
 		}

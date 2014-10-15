@@ -21,22 +21,22 @@ Customise this code for your particular import scenario.
 
 function get_user_sync_env()
 {
-	$db_type=get_db_type();
-	$db_host=get_db_site_host();
-	$db_name='somedb';
-	$db_user=get_db_site_user();
-	$db_password=get_db_site_password();
-	$db_table='users';
-	$db_field_delim='`';
+    $db_type = get_db_type();
+    $db_host = get_db_site_host();
+    $db_name = 'somedb';
+    $db_user = get_db_site_user();
+    $db_password = get_db_site_password();
+    $db_table = 'users';
+    $db_field_delim = '`';
 
-	//$username_fields=array('Forename','Surname'); // Fields that forms the username
-	$username_fields=array('user_idn'); // Probably better: will be unique
-	$username_fields_types=array('VARCHAR');
+    //$username_fields=array('Forename','Surname'); // Fields that forms the username
+    $username_fields = array('user_idn'); // Probably better: will be unique
+    $username_fields_types = array('VARCHAR');
 
-	$time_field=NULL; // Set to a field name, to reduce the complexity of re-syncs
+    $time_field = null; // Set to a field name, to reduce the complexity of re-syncs
 
-	$field_remap=array(
-		/*'
+    $field_remap = array(
+        /*'
 		e.g.
 
 		OCP FIELD NAME (without prefix)'=>array(
@@ -48,94 +48,94 @@ function get_user_sync_env()
 		),
 		*/
 
-		'pass_hash_salted'=>array(
-		),
-		'email_address'=>array(
-		),
-		'groups'=>array(
-		),
-		'dob_day'=>array(
-		),
-		'dob_month'=>array(
-		),
-		'dob_year'=>array(
-		),
-		'timezone_offset'=>array(
-		),
-		'primary_group'=>array(
-		),
-		'validated'=>array(
-		),
-		'is_perm_banned'=>array(
-		),
-		'reveal_age'=>array(
-		),
-		'photo_url'=>array(
-		),
-		'language'=>array(
-		),
-		'allow_emails'=>array(
-		),
-		'allow_emails_from_staff'=>array(
-		),
+        'pass_hash_salted' => array(
+        ),
+        'email_address' => array(
+        ),
+        'groups' => array(
+        ),
+        'dob_day' => array(
+        ),
+        'dob_month' => array(
+        ),
+        'dob_year' => array(
+        ),
+        'timezone_offset' => array(
+        ),
+        'primary_group' => array(
+        ),
+        'validated' => array(
+        ),
+        'is_perm_banned' => array(
+        ),
+        'reveal_age' => array(
+        ),
+        'photo_url' => array(
+        ),
+        'language' => array(
+        ),
+        'allow_emails' => array(
+        ),
+        'allow_emails_from_staff' => array(
+        ),
 
-		// CPFs...
-		'fullname'=>array(
-		),
-		'firstname'=>array(
-		),
-		'lastname'=>array(
-		),
-		'country'=>array(
-		),
-		'state'=>array(
-		),
-		'city'=>array(
-		),
-		'building_name_or_number'=>array(
-		),
-		'post_code'=>array(
-		),
-		'mobile_phone_number'=>array(
-		),
-		'payment_type'=>array(
-		),
-		'payment_cardholder_name'=>array(
-		),
-		'payment_card_number'=>array(
-		),
-		'payment_card_start_date'=>array(
-		),
-		'payment_card_expiry_date'=>array(
-		),
-		'payment_card_issue_number'=>array(
-		),
-		'payment_card_cv2'=>array(
-		),
-	);
+        // CPFs...
+        'fullname' => array(
+        ),
+        'firstname' => array(
+        ),
+        'lastname' => array(
+        ),
+        'country' => array(
+        ),
+        'state' => array(
+        ),
+        'city' => array(
+        ),
+        'building_name_or_number' => array(
+        ),
+        'post_code' => array(
+        ),
+        'mobile_phone_number' => array(
+        ),
+        'payment_type' => array(
+        ),
+        'payment_cardholder_name' => array(
+        ),
+        'payment_card_number' => array(
+        ),
+        'payment_card_start_date' => array(
+        ),
+        'payment_card_expiry_date' => array(
+        ),
+        'payment_card_issue_number' => array(
+        ),
+        'payment_card_cv2' => array(
+        ),
+    );
 
-	$default_password=NULL; // NULL means random password
-	$temporary_password=true;
+    $default_password = null; // NULL means random password
+    $temporary_password = true;
 
-	return array(
-		$db_type,
-		$db_host,
-		$db_name,
-		$db_user,
-		$db_password,
-		$db_table,
+    return array(
+        $db_type,
+        $db_host,
+        $db_name,
+        $db_user,
+        $db_password,
+        $db_table,
 
-		$db_field_delim,
+        $db_field_delim,
 
-		$username_fields,
-		$username_fields_types,
-		$time_field,
+        $username_fields,
+        $username_fields_types,
+        $time_field,
 
-		$field_remap,
+        $field_remap,
 
-		$default_password,
-		$temporary_password,
-	);
+        $default_password,
+        $temporary_password,
+    );
 }
 
 function get_user_sync__begin($dbh,$since)
@@ -145,4 +145,3 @@ function get_user_sync__begin($dbh,$since)
 function get_user_sync__finish($dbh,$since)
 {
 }
-

@@ -681,11 +681,11 @@ In the model add/edit actualisation function [tt]query_insert[/tt]/[tt]query_upd
 In the model delete actualisation function...
 [code="PHP"]
 $GLOBALS['SITE_DB']->query_delete('rating',array(
-	'rating_for_type'=>'<your_chosen_feedback_module_name>',
-	'rating_for_id'=>$id));
+	'rating_for_type' => '<your_chosen_feedback_module_name>',
+	'rating_for_id' => $id));
 $GLOBALS['SITE_DB']->query_delete('trackbacks',array(
-	'trackback_for_type'=>'<your_chosen_feedback_module_name>',
-	'trackback_for_id'=>$id));
+	'trackback_for_type' => '<your_chosen_feedback_module_name>',
+	'trackback_for_id' => $id));
 [/code]
 
 In the view function for your content...

@@ -249,9 +249,9 @@ class Module_admin_ocf_forums extends standard_crud_module
     /**
 	 * Get a UI to choose a forum to edit.
 	 *
-	 * @param  AUTO_LINK		The ID of the forum we are generating the tree below (start recursion with db_get_first_id())
+	 * @param  AUTO_LINK	The ID of the forum we are generating the tree below (start recursion with db_get_first_id())
 	 * @param  SHORT_TEXT	The name of the forum $id
-	 * @param  array			A list of rows of all forums, or array() if the function is to get the list itself
+	 * @param  array		A list of rows of all forums, or array() if the function is to get the list itself
 	 * @param  integer		The relative position of this forum wrt the others on the same level/branch in the UI
 	 * @param  integer		The number of forums in the parent forum grouping
 	 * @param  ?BINARY		Whether to order own subcategories alphabetically (NULL: ask the DB)

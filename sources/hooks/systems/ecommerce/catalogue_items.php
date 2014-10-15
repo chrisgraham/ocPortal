@@ -29,7 +29,7 @@ class Hook_catalogue_items
 	 * @param  boolean	Whether to make sure the language for item_name is the site default language (crucial for when we read/go to third-party sales systems and use the item_name as a key).
 	 * @param  ?ID_TEXT	Product being searched for (NULL: none).
 	 * @param  boolean 	Whether $search refers to the item name rather than the product codename.
-	 * @return array		A map of product name to list of product details.
+	 * @return array	A map of product name to list of product details.
 	 */
     public function get_products($site_lang = false,$search = null,$search_item_names = false)
     {
