@@ -338,7 +338,7 @@ function comcode_helper_script()
 				foreach ($params as $param)
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),1));
+					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),1));
 				}
 			}
 			elseif ($tag=='jumping')
@@ -346,7 +346,7 @@ function comcode_helper_script()
 				foreach ($params as $param)
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),2));
 				}
 			}
 			elseif ($tag=='shocker')
@@ -355,9 +355,13 @@ function comcode_helper_script()
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
 					if ($param=='left' || $param=='right')
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
-					else
-						$fields->attach(form_input_line(titleify($param),protect_from_escaping($description),$param,'',false));
+					{
+						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),2));
+					} else
+					{
+						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'');
+						$fields->attach(form_input_line(titleify($param),protect_from_escaping($description),$param,$default,false));
+					}
 				}
 			}
 			elseif ($tag=='random')
@@ -365,7 +369,7 @@ function comcode_helper_script()
 				foreach ($params as $param)
 				{
 					$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),($param!='X')?2:0));
+					$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),($param!='X')?2:0));
 				}
 			}
 			elseif ($tag=='sections')
@@ -375,12 +379,13 @@ function comcode_helper_script()
 					if($param=='default')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,1,false));
+						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'1');
+						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,intval($default),false));
 					}
 					elseif($param=='name')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),2));
 					}
 				}
 			}
@@ -391,17 +396,19 @@ function comcode_helper_script()
 					if($param=='default')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,1,false));
+						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'1');
+						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,intval($default),false));
 					}
 					elseif($param=='name')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),2));
 					}
 					elseif($param=='switch_time')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,6000,false));
+						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'6000');
+						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,intval($default),false));
 					}
 				}
 			}
@@ -412,12 +419,13 @@ function comcode_helper_script()
 					if($param=='default')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,1,false));
+						$default=array_key_exists($param,$defaults)?$defaults[$param]:get_param('default_'.$param,'1');
+						$fields->attach(form_input_integer(titleify($param),protect_from_escaping($description),$param,intval($default),false));
 					}
 					elseif($param=='name')
 					{
 						$description=do_lang('COMCODE_TAG_'.$tag.'_PARAM_'.$param);
-						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,array(),2));
+						$fields->attach(form_input_line_multi(titleify($param),protect_from_escaping($description),$param,get_defaults_multi($defaults,$param),2));
 					}
 				}
 			}
@@ -700,8 +708,9 @@ function _get_preview_environment_comcode($tag)
 		$i=0;
 		while (post_param('x_key_'.strval($i),'')!='')
 		{
-			$value=str_replace('"','\"',post_param('x_key_'.strval($i)));
-			$bparameters.=' '.strval($i+1).'_key="'.$value.'"';
+			$key=str_replace('"','\"',post_param('x_key_'.strval($i)));
+			$value=str_replace('"','\"',post_param('x_value_'.strval($i)));
+			$bparameters.=' '.strval($i+1).'_key="'.$key.'"';
 			$bparameters.=' '.strval($i+1).'_value="'.$value.'"';
 
 			$i++;
@@ -863,4 +872,33 @@ function _get_preview_environment_comcode($tag)
 		$comcode='['.$actual_tag.$bparameters.']'.$tag_contents.'[/'.$actual_tag.']';
 
 	return array($comcode,$bparameters);
+}
+
+/**
+ * Locate a set of consistently named parameters and generate an array of them for a multi-line input.
+ *
+ * @param  array			All default values for the tag.
+ * @param  ID_TEXT		Match name for the parameter set.
+ * @return array			List of values.
+ */
+function get_defaults_multi($defaults,$param)
+{
+	$values=array();
+	foreach ($defaults as $key=>$val)
+	{
+		if (substr($param,0,2)=='x_')
+		{
+			if (preg_match('#^'.str_replace('x','\d',preg_quote($param,'#')).'$#',$key)!=0)
+			{
+				$values[]=$val;
+			}
+		} else
+		{
+			if (substr($key,0,strlen($param)+1)==$param.'_')
+			{
+				$values[]=$val;
+			}
+		}
+	}
+	return $values;
 }

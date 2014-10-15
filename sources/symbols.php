@@ -2217,6 +2217,37 @@ function ecv($lang,$escaped,$type,$name,$param)
 				}
 				break;
 
+			case 'SELF_PAGE_LINK':
+				$value=url_to_pagelink(static_evaluate_tempcode(build_url(array(),'_SELF',NULL,true,false,true)));
+				break;
+
+			case 'SET_TUTORIAL_LINK':
+				$value='';
+				if (array_key_exists(1,$param))
+				{
+					set_tutorial_link($param[0],$param[1]);
+				}
+				break;
+
+			case 'DISPLAY_CONCEPT':
+				$value='';
+				if (array_key_exists(0,$param))
+				{
+					$key=$param[0];
+					$page_link=get_tutorial_link('concept___'.preg_replace('#[^\w_]#','_',$key));
+					if (is_null($page_link))
+					{
+						$temp_tpl=make_string_tempcode($key);
+					} else
+					{
+						list($zone,$attributes,$hash)=page_link_decode($page_link);
+						$_url=build_url($attributes,$zone,NULL,false,false,false,$hash);
+						$temp_tpl=do_template('COMCODE_CONCEPT',array('_GUID'=>'ee0cd05f87329923f05145180004d8a8','TEXT'=>$key,'URL'=>$_url));
+					}
+					$value=$temp_tpl->evaluate();
+				}
+				break;
+
 			case 'SELF_URL':
 				$extra_params=NULL;
 				if (isset($param[3]))

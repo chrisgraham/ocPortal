@@ -1558,22 +1558,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 		case 'concept':
 			if ((!array_key_exists('param',$attributes)) || ($attributes['param']==''))
 			{
-				$text=$embed->evaluate();
+				$key=$embed->evaluate();
 
-				$page=get_tutorial_link('concept__'.preg_replace('#[^\w_]#','_',$text));
-				if (!is_null($page))
-				{
-					$zone=get_comcode_zone($page,false);
-				}
-				if ((is_null($page)) || (is_null($zone)))
-				{
-					$temp_tpl=make_string_tempcode($text);
-				} else
-				{
-					$_url=build_url(array('page'=>$page),$zone);
-					$_url->attach('#concept__'.preg_replace('#[^\w_]#','_',$text));
-					$temp_tpl=do_template('COMCODE_CONCEPT',array('_GUID'=>'ee0cd05f87329923f05145180004d8a8','TEXT'=>$text,'URL'=>$_url));
-				}
+				$temp_tpl=symbol_tempcode('DISPLAY_CONCEPT',array($key));
 			} else
 			{
 				$temp_tpl=do_template('COMCODE_CONCEPT_INLINE',array('_GUID'=>'381a59de4d6f8967446c12bf4641a9ce','TEXT'=>$embed,'FULL'=>$attributes['param']));
@@ -1591,10 +1578,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$cid=substr($_key,0,strlen($_key)-4);
 					$to_parse=array_key_exists($cid.'_value',$attributes)?$attributes[$cid.'_value']:new ocp_tempcode();
 					$value=is_object($to_parse)?$to_parse:comcode_to_tempcode($to_parse,$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
-					$concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT',array('_GUID'=>'4baf6dabc32146c594c7fd922791b6b2','A'=>'concept__'.preg_replace('#[^\w]#','_',$_value),'KEY'=>$key,'VALUE'=>$value)));
-
-					if ((get_param('type','')=='') && (get_param('id','',true)==''))
-						set_tutorial_link('concept__'.preg_replace('#[^\w]#','_',$key),get_page_name());
+					$concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT',array('_GUID'=>'4baf6dabc32146c594c7fd922791b6b2','A'=>'concept___'.preg_replace('#[^\w]#','_',$key),'KEY'=>$key,'VALUE'=>$value)));
 				}
 			}
 
