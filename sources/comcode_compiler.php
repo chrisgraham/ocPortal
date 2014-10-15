@@ -1216,7 +1216,7 @@ function __comcode_to_tempcode($comcode,$source_member,$as_admin,$wrap_pos,$pass
                                 $b = strrpos($until_now,'>');
                                 $in_html_tag = ($a !== false) && (($b === false) || ($a>$b));
                             }
-                            if (($textual_area) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && (trim($next) != '') && (!$differented) && ($next == 'h') && ((substr($comcode,$pos-1,strlen('http://')) == 'http://') || (substr($comcode,$pos-1,strlen('https://')) == 'https://') || (substr($comcode,$pos-1,strlen('ftp://')) == 'ftp://'))) {
+                            if ((($textual_area) || ($tag_stack[count($tag_stack)-1][6]) && ($in_semihtml)) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && (trim($next) != '') && (!$differented) && ($next == 'h') && ((substr($comcode,$pos-1,strlen('http://')) == 'http://') || (substr($comcode,$pos-1,strlen('https://')) == 'https://') || (substr($comcode,$pos-1,strlen('ftp://')) == 'ftp://'))) {
                                 // Find the full link portion in the upcoming Comcode
                                 $link_end_pos = strlen($comcode);
                                 foreach (array(' ',"\n",'[',')','"','>','<',".\n",', ','. ',"'",) as $link_terminator_str) {

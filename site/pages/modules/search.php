@@ -357,7 +357,16 @@ class Module_search
 
         $author = get_param('author','');
         $author_id = ($author != '')?$GLOBALS['FORUM_DRIVER']->get_member_from_username($author):null;
-        $days = get_param_integer('days',($id == 'ocf_members')?null:60);
+        $days = get_param_integer('days',null);
+        if ($days === null) {
+            $_days = get_value('search_days__' . $id);
+            if ($_days === null) {
+                $days = ($id == 'ocf_members')?-1:60;
+            } else {
+                $days = intval($_days);
+                if ($days == 0) $days = -1;
+            }
+        }
         $sort = get_param('sort','relevance');
         $direction = get_param('direction','DESC');
         if (!in_array(strtoupper($direction),array('ASC','DESC'))) {
