@@ -49,11 +49,6 @@ class Compressor{
 	var $sub_script_list;
 	var $use_gzip;
 
-	function compressor($param)
-	{
-		$this->__construct($param);
-	}
-
 	function __construct($param)
 	{
 		$this->start_time= $this->get_microtime();

@@ -1451,6 +1451,7 @@ function extract_module_functions($path,$functions,$params = null,$prefer_direct
             while ($file[$start-$spaces-1] != "\n") {
                 $spaces++;
             }
+            $spaces -= strlen(ltrim(substr($file, $start-$spaces, $spaces))); // Remove length of stuff like 'public ' in front of 'function'
 
             $end1 = strpos($file,"\n" . str_repeat(' ',$spaces) . '}' . "\n",$start);
             $end2 = strpos($file,"\n" . str_repeat("\t",$spaces) . '}' . "\n",$start);

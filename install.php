@@ -1469,7 +1469,7 @@ function step_5_ftp()
         $done_all = true;
         break; // That's them all
     }
-}
+
     if (!is_suexec_like()) {
         if (!file_exists(get_file_base() . '/ocp_inst_tmp/tmp')) {
             warn_exit(do_lang_tempcode('DOUBLE_INSTALL_DO'));
