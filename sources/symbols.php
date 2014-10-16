@@ -2218,12 +2218,23 @@ function ecv($lang,$escaped,$type,$name,$param)
 				break;
 
 			case 'SELF_PAGE_LINK':
-				$value=url_to_pagelink(static_evaluate_tempcode(build_url(array(),'_SELF',NULL,true,false,true)));
+			    $value='';
+                if (running_script('index') || running_script('iframe'))
+                {
+    				$value=get_zone_name().':'.get_page_name();
+    				foreach ($_GET as $key=>$val)
+    				{
+    					if ($key=='page') continue;
+    					if (is_array($val)) continue;
+    					if (substr($key,0,5)=='keep_') continue;
+    					$value.=':'.$key.'='.$val;
+    				}
+				}
 				break;
 
 			case 'SET_TUTORIAL_LINK':
 				$value='';
-				if (array_key_exists(1,$param))
+				if ((array_key_exists(1,$param)) && ($param[1]!='') && ($param[1][0]!='#'))
 				{
 					set_tutorial_link($param[0],$param[1]);
 				}
