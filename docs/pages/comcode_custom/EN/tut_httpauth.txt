@@ -30,10 +30,7 @@ When defining access rules on Apache you will need to define most of the HTTP-au
 One further note about the Welcome Zone: If you use the shoutbox or poll blocks, these make calls to the 'data' directory (which you will have secured via HTTP-auth), which will prompt for logins. Also the preview function on the Guestbook will do this too. To resolve this problem, [i]copy[/i] the [tt]data/preview.php[/tt] and [tt]data/iframe.php[/tt] files to the base directory; ocPortal will then be smart enough to find the right ones to use based on the zone the user is in.
 
 You may find that the Flash uploader ocPortal has does not work with HTTP-authentication, as Flash might not be able to provide credentials properly.
-To disable it, run this command through OcCLE:
-[code]
-:set_value('no_swfupload','1');
-[/code]
+You may disable it in the accessibility configuration options (Admin Zone > Setup > Configuration > Accessibility options).
 
 As previously mentioned, but worth re-iterating: ocPortal is only accessible in HTTP-auth enabled areas if the user is actually able to HTTP-authenticate there. ocPortal will then assume that user is logged in. If ocPortal cannot see any HTTP-auth user, it can only be because that ocPortal zone is not secured with HTTP-auth.
 This takes some time to get-your-head-around, but makes sense when you do. If it helps, consider the situation like this: with HTTP-authentication, security and authentication is being taken away from ocPortal and moved to another layer- it puts ocPortal in a position to be able to make assumptions by placing a virtual shield in front of it.
