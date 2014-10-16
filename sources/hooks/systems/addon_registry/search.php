@@ -304,6 +304,8 @@ class Hook_addon_registry_search
     {
         require_css('forms');
 
+        require_code('database_search');
+
         $options = new ocp_tempcode();
         foreach (placeholder_array() as $value) {
             $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array(

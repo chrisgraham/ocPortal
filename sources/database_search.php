@@ -24,6 +24,13 @@
 function init__database_search()
 {
     $GLOBALS['TOTAL_SEARCH_RESULTS'] = 0;
+
+    $maximum_result_count_point = get_value('maximum_result_count_point');
+    if ($maximum_result_count_point === null) {
+        define('MAXIMUM_RESULT_COUNT_POINT',1000);
+    } else {
+        define('MAXIMUM_RESULT_COUNT_POINT',intval($maximum_result_count_point));
+    }
 }
 
 /**
@@ -498,7 +505,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
             } else {
                 $_count_query_keywords_search = '(SELECT COUNT(*) FROM (';
                 $_count_query_keywords_search .= 'SELECT 1 FROM ' . $_keywords_query;
-                $_count_query_keywords_search .= ' LIMIT 1000) counter)';
+                $_count_query_keywords_search .= ' LIMIT ' . strval(MAXIMUM_RESULT_COUNT_POINT) . ') counter)';
             }
 
             $group_by_ok = (can_arbitrary_groupby() && $meta_id_field === 'id');
@@ -515,7 +522,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
                 }
             }
 
-            /*if ($group_by_ok)  This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
+            /*if ($group_by_ok)  This accuracy is not needed, and does not work with the "LIMIT MAXIMUM_RESULT_COUNT_POINT" subquery optimisation
             {
                     $_count_query_keywords_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_keywords_search);
             }*/
@@ -526,7 +533,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
             $t_keyword_search_rows_count = $db->query_value_if_there($_count_query_keywords_search,true);
             ocp_profile_end_for('SEARCH:t_keyword_search_rows_count',$_count_query_keywords_search);
             if (is_null($t_keyword_search_rows_count)) {
-                warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
+                $t_keyword_search_rows_count = MAXIMUM_RESULT_COUNT_POINT; // Too slow, so just put in a maximum
             }
             $t_count += $t_keyword_search_rows_count;
 
@@ -689,7 +696,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
                     } else { // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
                         $_query .= '(SELECT COUNT(*) FROM (';
                         $_query .= 'SELECT 1 FROM ' . $_table_clause . (($where_clause_3 == '')?'':(' WHERE ' . $where_clause_3));
-                        $_query .= ' LIMIT 1000) counter)';
+                        $_query .= ' LIMIT ' . strval(MAXIMUM_RESULT_COUNT_POINT) . ') counter)';
                     }
                 }
                 $_count_query_main_search = 'SELECT (' . $_query . ')';
@@ -713,7 +720,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
                 }
             }
 
-            /*if ($group_by_ok)  This accuracy is not needed, and does not work with the "LIMIT 1000" subquery optimisation
+            /*if ($group_by_ok)  This accuracy is not needed, and does not work with the "LIMIT MAXIMUM_RESULT_COUNT_POINT" subquery optimisation
             {
                     $_count_query_main_search=str_replace('COUNT(*)','COUNT(DISTINCT r.id)',$_count_query_main_search);
             }*/
@@ -723,7 +730,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
             ocp_profile_start_for('SEARCH:t_main_search_rows_count');
             $t_main_search_rows_count = $db->query_value_if_there($_count_query_main_search);
             if (is_null($t_main_search_rows_count)) {
-                warn_exit(do_lang_tempcode('SEARCH_QUERY_TOO_SLOW'));
+                $t_main_search_rows_count = MAXIMUM_RESULT_COUNT_POINT; // Too slow, so just put in a maximum
             }
             ocp_profile_end_for('SEARCH:t_main_search_rows_count',$_count_query_main_search);
             $t_count += $t_main_search_rows_count;
@@ -856,7 +863,7 @@ function get_search_rows($meta_type,$meta_id_field,$content,$boolean_search,$boo
                 } else { // Has to do a nested subquery to reduce scope of COUNT(*), because the unbounded full-text's binary tree descendence can be extremely slow on physical disks if common words exist that aren't defined as MySQL stop words
                     $_count_query_main_search = 'SELECT COUNT(*) FROM (';
                     $_count_query_main_search .= 'SELECT 1 ' . $query;
-                    $_count_query_main_search .= ' LIMIT 1000) counter';
+                    $_count_query_main_search .= ' LIMIT ' . strval(MAXIMUM_RESULT_COUNT_POINT) . ') counter';
                 }
             }
             $query = 'SELECT ' . $select . $query . ($group_by_ok?' GROUP BY r.id':'');

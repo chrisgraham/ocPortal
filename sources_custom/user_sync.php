@@ -603,6 +603,15 @@ function user_sync__outbound($member_id)
     }
 }
 
+function user_sync__outbound_edit($member_id)
+{
+    // Not currently implemented
+}
+
+function user_sync__outbound_delete($member_id)
+{
+    // Not currently implemented
+}
 
 /*
 UTILITY FUNCTIONS

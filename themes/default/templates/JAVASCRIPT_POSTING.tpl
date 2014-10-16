@@ -72,7 +72,8 @@ function set_attachment(field_name,number,filename,multi)
 		var is_archive=(ext=='tar') || (ext=='zip');
 
 		var show_overlay,defaults={};
-		defaults.description=filepath; // Default caption to local file path
+		if (filepath.indexOf('fakepath')==-1) // iPhone gives c:\fakepath\image.jpg, so don't use that
+			defaults.description=filepath; // Default caption to local file path
 		{+START,INCLUDE,ATTACHMENT_UI_DEFAULTS}{+END}
 
 		if (!show_overlay)

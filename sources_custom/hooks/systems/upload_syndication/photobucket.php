@@ -60,7 +60,7 @@ class Hook_upload_syndication_photobucket
 
         $api = $this->_get_api();
 
-        // Request the 'access' token, that may have been authorised for us already against a stored 'request' token
+        // Request the 'access' token, that may have been authorised for us already against a stored 'request' token [stored from receive_authorisation() at the start of the oAuth chain, before the user was sent to go approve it]
         if (($req_key !== NULL) && (substr($req_key,0,4) == 'req_')) {
             return $this->_get_access_token_then_login($api,$req_key);
         }
@@ -85,6 +85,7 @@ class Hook_upload_syndication_photobucket
         return true;
     }
 
+    // Get access token from request token.
     public function _get_access_token_then_login($api,$req_key)
     {
         $api->reset(true,true,true,true);
@@ -120,6 +121,7 @@ class Hook_upload_syndication_photobucket
         return $this->_login();
     }
 
+    // This is called from data/upload_syndication_auth.php, which is called to start the oAuth chain
     public function receive_authorisation()
     {
         if ($this->is_authorised()) {
