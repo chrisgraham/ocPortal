@@ -212,7 +212,6 @@ class galleries_test_set extends ocp_test_case
             'require__award_3' => 0,
             'description__is_wysiwyg' => 1,
         );
-
         //$this->cms_gal_category->_ed();
     }
 
@@ -316,7 +315,6 @@ class galleries_test_set extends ocp_test_case
             'require__meta_description' => 0,
             'description__is_wysiwyg' => 1,
         );
-
         //$this->cms_gal_alt->_ad();
     }
 

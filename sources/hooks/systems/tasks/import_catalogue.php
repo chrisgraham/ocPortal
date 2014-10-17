@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_task_import_catalogue
 {
     /**
@@ -37,48 +36,48 @@ class Hook_task_import_catalogue
      * @param  PATH                     The CSV file being imported
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
      */
-    public function run($catalogue_name,$key_field,$new_handling,$delete_handling,$update_handling,$meta_keywords_field,$meta_description_field,$notes_field,$allow_rating,$allow_comments,$allow_trackbacks,$csv_name)
+    public function run($catalogue_name, $key_field, $new_handling, $delete_handling, $update_handling, $meta_keywords_field, $meta_description_field, $notes_field, $allow_rating, $allow_comments, $allow_trackbacks, $csv_name)
     {
         require_code('catalogues2');
 
         log_it('IMPORT_CATALOGUE_ENTRIES');
 
-        $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name' => $catalogue_name));
+        $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => $catalogue_name));
 
         // Find out what categories we have in the catalogue
         $categories = array();
-        $cat_rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories',array('cc_title','cc_parent_id'),array('c_name' => $catalogue_name));
+        $cat_rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('cc_title', 'cc_parent_id'), array('c_name' => $catalogue_name));
         foreach ($cat_rows as $cat_row) {
             $categories[get_translated_text($cat_row['cc_title'])] = $cat_row['id'];
 
             // Root category is 'default' category for catalogue importing (category with same name as catalogue)
-            if ((!array_key_exists($catalogue_name,$categories)) && (is_null($cat_row['cc_parent_id']))) {
+            if ((!array_key_exists($catalogue_name, $categories)) && (is_null($cat_row['cc_parent_id']))) {
                 $categories[$catalogue_name] = $cat_row['id'];
             }
         }
-        $root_cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','id',array('cc_parent_id' => NULL));
+        $root_cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'id', array('cc_parent_id' => null));
 
         // Open CSV file
-        @ini_set('auto_detect_line_endings','1');
-        $handle = fopen($csv_name,'rt');
+        @ini_set('auto_detect_line_endings', '1');
+        $handle = fopen($csv_name, 'rt');
 
         // Read column names
         $del = ',';
-        $csv_field_titles = fgetcsv($handle,1000,$del);
-        if ((count($csv_field_titles) == 1) && (strpos($csv_field_titles[0],';') !== false)) {
+        $csv_field_titles = fgetcsv($handle, 1000, $del);
+        if ((count($csv_field_titles) == 1) && (strpos($csv_field_titles[0], ';') !== false)) {
             $del = ';';
             rewind($handle);
-            $csv_field_titles = fgetcsv($handle,1000,$del);
+            $csv_field_titles = fgetcsv($handle, 1000, $del);
         }
         $csv_field_titles = array_flip($csv_field_titles);
 
         // Check key exists, if we have one
         if (($key_field != '') && ($key_field != 'ID')) {
-            if (!array_key_exists($key_field,$csv_field_titles)) {
+            if (!array_key_exists($key_field, $csv_field_titles)) {
                 fclose($handle);
                 @unlink($csv_name);
                 sync_file($csv_name);
-                return array(null,do_lang_tempcode('CATALOGUES_IMPORT_MISSING_KEY_FIELD'));
+                return array(null, do_lang_tempcode('CATALOGUES_IMPORT_MISSING_KEY_FIELD'));
             }
             $found_key = false;
             foreach ($fields as $field) {
@@ -91,7 +90,7 @@ class Hook_task_import_catalogue
                 fclose($handle);
                 @unlink($csv_name);
                 sync_file($csv_name);
-                return array(null,do_lang_tempcode('CATALOGUES_IMPORT_MISSING_KEY_FIELD'));
+                return array(null, do_lang_tempcode('CATALOGUES_IMPORT_MISSING_KEY_FIELD'));
             }
         }
 
@@ -99,32 +98,32 @@ class Hook_task_import_catalogue
         $temp2 = $LAX_COMCODE;
         $LAX_COMCODE = true;
 
-        if (($meta_keywords_field != '') && (!array_key_exists($meta_keywords_field,$csv_field_titles))) {
+        if (($meta_keywords_field != '') && (!array_key_exists($meta_keywords_field, $csv_field_titles))) {
             fclose($handle);
             @unlink($csv_name);
             sync_file($csv_name);
-            return array(null,do_lang_tempcode('CATALOGUES_IMPORT_MISSING_META_KEYWORDS_FIELD'));
+            return array(null, do_lang_tempcode('CATALOGUES_IMPORT_MISSING_META_KEYWORDS_FIELD'));
         }
-        if (($meta_description_field != '') && (!array_key_exists($meta_description_field,$csv_field_titles))) {
+        if (($meta_description_field != '') && (!array_key_exists($meta_description_field, $csv_field_titles))) {
             fclose($handle);
             @unlink($csv_name);
             sync_file($csv_name);
-            return array(null,do_lang_tempcode('CATALOGUES_IMPORT_MISSING_META_DESCRIPTION_FIELD'));
+            return array(null, do_lang_tempcode('CATALOGUES_IMPORT_MISSING_META_DESCRIPTION_FIELD'));
         }
-        if (($notes_field != '') && (!array_key_exists($notes_field,$csv_field_titles))) {
+        if (($notes_field != '') && (!array_key_exists($notes_field, $csv_field_titles))) {
             fclose($handle);
             @unlink($csv_name);
             sync_file($csv_name);
-            return array(null,do_lang_tempcode('CATALOGUES_IMPORT_MISSING_NOTES_FIELD'));
+            return array(null, do_lang_tempcode('CATALOGUES_IMPORT_MISSING_NOTES_FIELD'));
         }
 
         // Import, line by line
         $matched_ids = array();
-        while (($data = fgetcsv($handle,100000,$del)) !== false) {
+        while (($data = fgetcsv($handle, 100000, $del)) !== false) {
             if ($data === array(null)) {
                 continue;
             } // blank line
-            $test = $this->import_csv_lines($catalogue_name,$data,$root_cat,$fields,$categories,$csv_field_titles,$key_field,$new_handling,$delete_handling,$update_handling,$matched_ids,$notes_field,$meta_keywords_field,$meta_description_field,$allow_rating,$allow_comments,$allow_trackbacks);
+            $test = $this->import_csv_lines($catalogue_name, $data, $root_cat, $fields, $categories, $csv_field_titles, $key_field, $new_handling, $delete_handling, $update_handling, $matched_ids, $notes_field, $meta_keywords_field, $meta_description_field, $allow_rating, $allow_comments, $allow_trackbacks);
             if (!is_null($test)) {
                 fclose($handle);
                 @unlink($csv_name);
@@ -135,9 +134,9 @@ class Hook_task_import_catalogue
 
         // Handle non-matched existing ones
         if ($delete_handling == 'delete') {
-            $all_entry_ids = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id'),array('c_name' => $catalogue_name));
+            $all_entry_ids = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('id'), array('c_name' => $catalogue_name));
             foreach ($all_entry_ids as $id) {
-                if (!array_key_exists($id['id'],$matched_ids)) {
+                if (!array_key_exists($id['id'], $matched_ids)) {
                     // Delete entry
                     actual_delete_catalogue_entry($id['id']);
                 }
@@ -149,7 +148,7 @@ class Hook_task_import_catalogue
         fclose($handle);
         @unlink($csv_name);
         sync_file($csv_name);
-        return NULL;
+        return null;
     }
 
     /**
@@ -174,15 +173,15 @@ class Hook_task_import_catalogue
      * @param  boolean                  Whether trackbacks are allowed for this resource
      * @return ?array                   Return to propagate [immediate exit] (NULL: nothing to propagate)
      */
-    public function import_csv_lines($catalogue_name,$csv_data,$catalog_root,$fields,&$categories,$csv_field_titles,$key_field,$new_handling,$delete_handling,$update_handling,&$matched_ids,$notes_field,$meta_keywords_field,$meta_description_field,$allow_rating,$allow_comments,$allow_trackbacks)
+    public function import_csv_lines($catalogue_name, $csv_data, $catalog_root, $fields, &$categories, $csv_field_titles, $key_field, $new_handling, $delete_handling, $update_handling, &$matched_ids, $notes_field, $meta_keywords_field, $meta_description_field, $allow_rating, $allow_comments, $allow_trackbacks)
     {
         $notes = '';
         $meta_keywords = '';
         $meta_description = '';
         $key = '';
 
-        if (array_key_exists($notes_field,$csv_field_titles)) {
-            if (!array_key_exists($csv_field_titles[$notes_field],$csv_data)) {
+        if (array_key_exists($notes_field, $csv_field_titles)) {
+            if (!array_key_exists($csv_field_titles[$notes_field], $csv_data)) {
                 $csv_data[$csv_field_titles[$notes_field]] = '';
             } // Not set for this particular row, even though column exists in the CSV
 
@@ -190,8 +189,8 @@ class Hook_task_import_catalogue
             unset($csv_field_titles[$notes_field]);
         }
 
-        if (array_key_exists($meta_keywords_field,$csv_field_titles)) {
-            if (!array_key_exists($csv_field_titles[$meta_keywords_field],$csv_data)) {
+        if (array_key_exists($meta_keywords_field, $csv_field_titles)) {
+            if (!array_key_exists($csv_field_titles[$meta_keywords_field], $csv_data)) {
                 $csv_data[$csv_field_titles[$meta_keywords_field]] = '';
             } // Not set for this particular row, even though column exists in the CSV
 
@@ -199,8 +198,8 @@ class Hook_task_import_catalogue
             unset($csv_field_titles[$meta_keywords_field]);
         }
 
-        if (array_key_exists($meta_description_field,$csv_field_titles)) {
-            if (!array_key_exists($csv_field_titles[$meta_description_field],$csv_data)) {
+        if (array_key_exists($meta_description_field, $csv_field_titles)) {
+            if (!array_key_exists($csv_field_titles[$meta_description_field], $csv_data)) {
                 $csv_data[$csv_field_titles[$meta_description_field]] = '';
             } // Not set for this particular row, even though column exists in the CSV
 
@@ -208,8 +207,8 @@ class Hook_task_import_catalogue
             unset($csv_field_titles[$meta_description_field]);
         }
 
-        if (array_key_exists($key_field,$csv_field_titles)) {
-            if (!array_key_exists($csv_field_titles[$key_field],$csv_data)) {
+        if (array_key_exists($key_field, $csv_field_titles)) {
+            if (!array_key_exists($csv_field_titles[$key_field], $csv_data)) {
                 $csv_data[$csv_field_titles[$key_field]] = '';
             } // Not set for this particular row, even though column exists in the CSV
 
@@ -222,25 +221,25 @@ class Hook_task_import_catalogue
         foreach ($fields as $field) {
             $field_name = get_translated_text($field['cf_name']);
 
-            if (array_key_exists($field_name,$csv_field_titles)) {
-                if (!array_key_exists($csv_field_titles[$field_name],$csv_data)) {
+            if (array_key_exists($field_name, $csv_field_titles)) {
+                if (!array_key_exists($csv_field_titles[$field_name], $csv_data)) {
                     $csv_data[$csv_field_titles[$field_name]] = '';
                 } // Not set for this particular row, even though column exists in the CSV
 
                 $value = trim($csv_data[$csv_field_titles[$field_name]]);
 
                 if (($field['cf_type'] == 'picture') || ($field['cf_type'] == 'video')) {
-                    if (preg_replace('#\..*$#','',$value) == 'Noimage') {
+                    if (preg_replace('#\..*$#', '', $value) == 'Noimage') {
                         $value = '';
                     }
 
                     if ($value != '') {
-                        if ((strpos($value,'\\') === false) && (strpos($value,'/') === false)) {
+                        if ((strpos($value, '\\') === false) && (strpos($value, '/') === false)) {
                             $value = 'uploads/catalogues/' . rawurlencode($value);
                         }
                     }
                 } else {
-                    if ((strip_tags($value) != $value) && (strpos($value,'[html') === false) && (strpos($value,'[semihtml') === false)) {
+                    if ((strip_tags($value) != $value) && (strpos($value, '[html') === false) && (strpos($value, '[semihtml') === false)) {
                         $value = '[html]' . $value . '[/html]';
                     }
                 }
@@ -253,7 +252,7 @@ class Hook_task_import_catalogue
         }
 
         if (!$matched_at_least_one_field) {
-            return array(null,do_lang_tempcode('FIELDS_UNMATCH'));
+            return array(null, do_lang_tempcode('FIELDS_UNMATCH'));
         }
 
         // See if we can match to existing record, via $key_field
@@ -262,27 +261,27 @@ class Hook_task_import_catalogue
         if ($key_field != '') {
             if ($key_field == 'ID') {
                 if ($key != '') {
-                    $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries','id',array('id' => intval($key)));
+                    $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entries', 'id', array('id' => intval($key)));
                 }
             } else {
                 require_code('fields');
                 foreach ($fields as $field) {
                     if (get_translated_text($field['cf_name']) == $key_field) {
                         $hook_ob = get_fields_hook($field['cf_type']);
-                        list(,,$db_type) = $hook_ob->get_field_value_row_bits($field);
+                        list(, , $db_type) = $hook_ob->get_field_value_row_bits($field);
                         switch ($db_type) {
                             case 'integer':
-                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type,'id',array('cv_value' => intval($key)));
+                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type, 'id', array('cv_value' => intval($key)));
                                 break;
                             case 'float':
-                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type,'id',array('cv_value' => floatval($key)));
+                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type, 'id', array('cv_value' => floatval($key)));
                                 break;
                             case 'short_trans':
                             case 'long_trans':
-                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type,'id',array($GLOBALS['SITE_DB']->translate_field_ref('cv_value') => $key));
+                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type, 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cv_value') => $key));
                                 break;
                             default:
-                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type,'id',array('cv_value' => $key));
+                                $has_match = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $db_type, 'id', array('cv_value' => $key));
                                 break;
                         }
                         break;
@@ -308,25 +307,25 @@ class Hook_task_import_catalogue
 
         if (($method == 'overwrite') || ($method == 'freshen') || ($method == 'add')) {
             // Handle category addition
-            $category_title = array_key_exists('CATEGORY',$csv_field_titles)?$csv_data[$csv_field_titles['CATEGORY']]:'';
+            $category_title = array_key_exists('CATEGORY', $csv_field_titles) ? $csv_data[$csv_field_titles['CATEGORY']] : '';
             if ($category_title == '') { // Have to do a general category for the catalogue
                 // Checks the general category exists or not
-                if (array_key_exists($catalogue_name,$categories)) {
+                if (array_key_exists($catalogue_name, $categories)) {
                     $category_id = $categories[$catalogue_name];
                 } else { // If category field is null, record adds to a general category named catalogue name.
-                    $catalog_title = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_title',array('c_name' => $catalogue_name));
+                    $catalog_title = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogues', 'c_title', array('c_name' => $catalogue_name));
 
-                    $category_id = actual_add_catalogue_category($catalogue_name,$catalog_title,$catalog_title,$catalog_title,$catalog_root,'');
+                    $category_id = actual_add_catalogue_category($catalogue_name, $catalog_title, $catalog_title, $catalog_title, $catalog_root, '');
                     if (get_value('disable_cat_cat_perms') !== '1') {
                         $this->set_permissions(strval($category_id));
                     }
 
                     $categories[$catalogue_name] = $category_id;
                 }
-            } elseif (array_key_exists($category_title,$categories)) {
+            } elseif (array_key_exists($category_title, $categories)) {
                 $category_id = $categories[$category_title];
             } else {
-                $category_id = actual_add_catalogue_category($catalogue_name,$category_title,$category_title,$category_title,$catalog_root,'');
+                $category_id = actual_add_catalogue_category($catalogue_name, $category_title, $category_title, $category_title, $catalog_root, '');
                 if (get_value('disable_cat_cat_perms') !== '1') {
                     $this->set_permissions(strval($category_id));
                 }
@@ -355,18 +354,18 @@ class Hook_task_import_catalogue
             }
 
             if (($method == 'overwrite') || ($method == 'freshen')) {
-                actual_edit_catalogue_entry($has_match,$category_id,1,$notes,$allow_rating?1:0,$allow_comments?1:0,$allow_trackbacks?1:0,$map,$meta_keywords,$meta_description);
+                actual_edit_catalogue_entry($has_match, $category_id, 1, $notes, $allow_rating ? 1 : 0, $allow_comments ? 1 : 0, $allow_trackbacks ? 1 : 0, $map, $meta_keywords, $meta_description);
                 $id = $has_match;
             } else { // Add
-                $id = actual_add_catalogue_entry($category_id,1,$notes,$allow_rating?1:0,$allow_comments?1:0,$allow_trackbacks?1:0,$map);
+                $id = actual_add_catalogue_entry($category_id, 1, $notes, $allow_rating ? 1 : 0, $allow_comments ? 1 : 0, $allow_trackbacks ? 1 : 0, $map);
 
                 require_code('seo2');
-                seo_meta_set_for_explicit('catalogue_entry',strval($id),$meta_keywords,$meta_description);
+                seo_meta_set_for_explicit('catalogue_entry', strval($id), $meta_keywords, $meta_description);
             }
 
             $matched_ids[$id] = true;
 
-            return NULL;
+            return null;
         }
     }
 }

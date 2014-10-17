@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Hook_checklist_open_site
 {
     /**
@@ -27,13 +26,13 @@ class Hook_checklist_open_site
      */
     public function run()
     {
-        $url = build_url(array('page' => 'admin_config','type' => 'category','id' => 'SITE'),'adminzone',null,false,false,false,'group_CLOSED_SITE');
-        $task = urlise_lang(do_lang('NAG_OPEN_WEBSITE'),$url);
+        $url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => 'SITE'), 'adminzone', null, false, false, false, 'group_CLOSED_SITE');
+        $task = urlise_lang(do_lang('NAG_OPEN_WEBSITE'), $url);
 
-        $status = (get_option('site_closed') == '1')?0:1;
+        $status = (get_option('site_closed') == '1') ? 0 : 1;
 
-        $_status = ($status == 0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => '83cfd2a7553a4820f2930484bfa85e47','URL' => '','STATUS' => $_status,'TASK' => $task));
-        return array(array($tpl,($status == 0)?-1:0,1,null));
+        $_status = ($status == 0) ? do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0') : do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '83cfd2a7553a4820f2930484bfa85e47', 'URL' => '', 'STATUS' => $_status, 'TASK' => $task));
+        return array(array($tpl, ($status == 0) ? -1 : 0, 1, null));
     }
 }

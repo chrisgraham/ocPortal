@@ -39,22 +39,22 @@ function init__database_security_filter()
  */
 function is_simple_query($query)
 {
-    $complex_keywords = array('ORDER' => 1,'GROUP' => 1,'AS' => 1,'OR' => 1,'NOT' => 1,'LIKE' => 1,'IN' => 1,'BETWEEN' => 1,'UNION' => 1,'HAVING' => 1);
-    $complex_operators = array('<','>','!','+','-','/','*');
+    $complex_keywords = array('ORDER' => 1, 'GROUP' => 1, 'AS' => 1, 'OR' => 1, 'NOT' => 1, 'LIKE' => 1, 'IN' => 1, 'BETWEEN' => 1, 'UNION' => 1, 'HAVING' => 1);
+    $complex_operators = array('<', '>', '!', '+', '-', '/', '*');
     $query = _trim_quoted_substrings($query);
-    $query_parts = explode(' ',$query);
-    if (in_array(strtolower(trim($query_parts[0])),array('select','update','delete'))) {
+    $query_parts = explode(' ', $query);
+    if (in_array(strtolower(trim($query_parts[0])), array('select', 'update', 'delete'))) {
         foreach ($query_parts as $part) {
-            if (array_key_exists(strtoupper(trim($part)),$complex_keywords)) {
+            if (array_key_exists(strtoupper(trim($part)), $complex_keywords)) {
                 return false;
             }
         }
         foreach ($complex_operators as $operator) {
-            if (strpos($query,$operator) !== false) {
+            if (strpos($query, $operator) !== false) {
                 return false;
             }
         }
-        if (preg_match('/[a-z]\(/',strtolower($query))) {
+        if (preg_match('/[a-z]\(/', strtolower($query))) {
             return false;
         } // SQL functions
         return true;
@@ -70,34 +70,34 @@ function is_simple_query($query)
  */
 function has_escaped_dynamic_sql($query)
 {
-    $query_call_strings = array('query(','query_value_if_there(');
+    $query_call_strings = array('query(', 'query_value_if_there(');
 
     $strings = _get_quoted_substrings($query);
     foreach ($strings as $str) {
-        if (!array_key_exists($str,$GLOBALS['DB_ESCAPE_STRING_LIST'])) { // Not explicitly escaped, so we scan the code to see if it was hard-coded in there
+        if (!array_key_exists($str, $GLOBALS['DB_ESCAPE_STRING_LIST'])) { // Not explicitly escaped, so we scan the code to see if it was hard-coded in there
             foreach (debug_backtrace() as $backtrace_depth => $backtrace) {
                 if ((isset($backtrace['file'])) && (file_exists($backtrace['file']))) {
                     $file = file($backtrace['file']);
                     $ok = false;
                     $found_query_line = false;
                     foreach ($query_call_strings as $query_call_string) {
-                        $loc = $file[$backtrace['line']-1];
-                        $offset = strpos($loc,$query_call_string);
+                        $loc = $file[$backtrace['line'] - 1];
+                        $offset = strpos($loc, $query_call_string);
 
                         if ($offset !== false) { // First do a fast check on the line itself
                             $found_query_line = true;
 
-                            $_strings = _get_quoted_substrings(substr($loc,$offset),true);
+                            $_strings = _get_quoted_substrings(substr($loc, $offset), true);
 
-                            if (in_array($str,$_strings)) {
+                            if (in_array($str, $_strings)) {
                                 $ok = true;
                             } else {
                                 // Oh, maybe the string was somewhere escaped in the same file at least
                                 $_strings = array();
                                 foreach ($file as $line) {
-                                    $_strings = array_merge($_strings,_get_quoted_substrings($line,true));
+                                    $_strings = array_merge($_strings, _get_quoted_substrings($line, true));
                                 }
-                                if (in_array($str,$_strings)) {
+                                if (in_array($str, $_strings)) {
                                     $ok = true;
                                 }
                             }
@@ -126,27 +126,27 @@ function has_escaped_dynamic_sql($query)
  * @param  boolean                      Whether to recurse (for double escaping)
  * @return array                        List of substrings
  */
-function _get_quoted_substrings($string,$recurse = false)
+function _get_quoted_substrings($string, $recurse = false)
 {
     $buffer = '';
     $output = array();
     $found_start = false;
     $ignore = false;
     $len = strlen($string);
-    for ($i = 0;$i<$len;$i++) {
+    for ($i = 0; $i < $len; $i++) {
         if (!$found_start && ($string[$i] == '\'')) {
             $found_start = true;
             continue;
         }
         if ($found_start) {
             if (($ignore !== $i/*If not escaped*/) && ($string[$i] == '\'')) { // We've found a string
-                $output[] = trim($buffer,' %');
+                $output[] = trim($buffer, ' %');
                 $buffer = '';
                 $found_start = false; // We've closed our string, ready ourselves for next
                 continue;
             }
             if (($ignore !== $i) && ($string[$i] == '\\')) {
-                $ignore = $i+1;
+                $ignore = $i + 1;
             }
             $buffer .= $string[$i];
         }
@@ -156,7 +156,7 @@ function _get_quoted_substrings($string,$recurse = false)
         $output = array();
         foreach ($_output as $str) {
             $output[] = $str;
-            $output = array_merge($output,_get_quoted_substrings(stripcslashes($str)));
+            $output = array_merge($output, _get_quoted_substrings(stripcslashes($str)));
         }
     }
     return $output;
@@ -173,7 +173,7 @@ function _trim_quoted_substrings($string)
     $found_start = false;
     $ignore = mixed();
     $len = strlen($string);
-    for ($i = 0;$i<$len;$i++) {
+    for ($i = 0; $i < $len; $i++) {
         if (!$found_start && ($string[$i] == '\'')) { // We've found a string
             $found_start = true;
             continue;
@@ -184,7 +184,7 @@ function _trim_quoted_substrings($string)
                 continue;
             }
             if (($ignore !== $i) && ($string[$i] == '\\')) {
-                $ignore = $i+1;
+                $ignore = $i + 1;
             }
             $string[$i] = ' ';
         }

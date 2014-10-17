@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    staff
  */
-
 class Hook_config_staff_text
 {
     /**

@@ -35,10 +35,10 @@ class Hook_occle_fs_groups extends resource_fs_base
     {
         switch ($resource_type) {
             case 'member':
-                return $GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');
+                return $GLOBALS['FORUM_DB']->query_select_value('f_members', 'COUNT(*)');
 
             case 'group':
-                return $GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
+                return $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
         }
         return 0;
     }
@@ -50,15 +50,15 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
         switch ($resource_type) {
             case 'member':
-                $ret = $GLOBALS['FORUM_DB']->query_select('f_members',array('m_username'),array('m_username' => $label));
-                return collapse_1d_complexity('m_username',$ret);
+                $ret = $GLOBALS['FORUM_DB']->query_select('f_members', array('m_username'), array('m_username' => $label));
+                return collapse_1d_complexity('m_username', $ret);
 
             case 'group':
-                $_ret = $GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $label));
+                $_ret = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id'), array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $label));
                 $ret = array();
                 foreach ($_ret as $r) {
                     $ret[] = strval($r['id']);
@@ -111,7 +111,7 @@ class Hook_occle_fs_groups extends resource_fs_base
             'rank_image_pri_only' => 'BINARY',
             'open_membership' => 'BINARY',
             'is_private_club' => 'BINARY',
-        )+$this->_custom_fields_enumerate_properties('group');
+        ) + $this->_custom_fields_enumerate_properties('group');
     }
 
     /**
@@ -122,7 +122,7 @@ class Hook_occle_fs_groups extends resource_fs_base
      */
     public function _get_folder_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_GROUP') . ' OR ' . db_string_equal_to('the_type','EDIT_GROUP') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_GROUP') . ' OR ' . db_string_equal_to('the_type', 'EDIT_GROUP') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -133,38 +133,38 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
-    public function __folder_read_in_properties($path,$properties)
+    public function __folder_read_in_properties($path, $properties)
     {
-        $is_default = $this->_default_property_int($properties,'is_default');
-        $is_super_admin = $this->_default_property_int($properties,'is_super_admin');
-        $is_super_moderator = $this->_default_property_int($properties,'is_super_moderator');
-        $rank_title = $this->_default_property_str($properties,'rank_title');
-        $rank_image = $this->_default_property_str($properties,'rank_image');
-        $promotion_target = $this->_default_property_int_null($properties,'promotion_target');
-        $promotion_threshold = $this->_default_property_int_null($properties,'promotion_threshold');
-        $group_leader = $this->_default_property_int_null($properties,'group_leader');
-        $flood_control_submit_secs = $this->_default_property_int_modeavg($properties,'flood_control_submit_secs','f_groups',0,'g_flood_control_submit_secs');
-        $flood_control_access_secs = $this->_default_property_int_modeavg($properties,'flood_control_access_secs','f_groups',0,'g_flood_control_access_secs');
-        $max_daily_upload_mb = $this->_default_property_int_modeavg($properties,'max_daily_upload_mb','f_groups',70,'g_max_daily_upload_mb');
-        $max_attachments_per_post = $this->_default_property_int_modeavg($properties,'max_attachments_per_post','f_groups',50,'g_max_attachments_per_post');
-        $max_avatar_width = $this->_default_property_int_modeavg($properties,'max_avatar_width','f_groups',100,'g_max_avatar_width');
-        $max_avatar_height = $this->_default_property_int_modeavg($properties,'max_avatar_height','f_groups',100,'g_max_avatar_height');
-        $max_post_length_comcode = $this->_default_property_int_modeavg($properties,'max_post_length_comcode','f_groups',30000,'g_max_post_length_comcode');
-        $max_sig_length_comcode = $this->_default_property_int_modeavg($properties,'max_sig_length_comcode','f_groups',700,'g_max_sig_length_comcode');
-        $gift_points_base = $this->_default_property_int_modeavg($properties,'gift_points_base','f_groups',25,'g_gift_points_base');
-        $gift_points_per_day = $this->_default_property_int_modeavg($properties,'gift_points_per_day','f_groups',1,'g_gift_points_per_day');
-        $enquire_on_new_ips = $this->_default_property_int($properties,'enquire_on_new_ips');
-        $is_presented_at_install = $this->_default_property_int($properties,'is_presented_at_install');
-        $hidden = $this->_default_property_int($properties,'hidden');
-        $order = $this->_default_property_int_null($properties,'order');
+        $is_default = $this->_default_property_int($properties, 'is_default');
+        $is_super_admin = $this->_default_property_int($properties, 'is_super_admin');
+        $is_super_moderator = $this->_default_property_int($properties, 'is_super_moderator');
+        $rank_title = $this->_default_property_str($properties, 'rank_title');
+        $rank_image = $this->_default_property_str($properties, 'rank_image');
+        $promotion_target = $this->_default_property_int_null($properties, 'promotion_target');
+        $promotion_threshold = $this->_default_property_int_null($properties, 'promotion_threshold');
+        $group_leader = $this->_default_property_int_null($properties, 'group_leader');
+        $flood_control_submit_secs = $this->_default_property_int_modeavg($properties, 'flood_control_submit_secs', 'f_groups', 0, 'g_flood_control_submit_secs');
+        $flood_control_access_secs = $this->_default_property_int_modeavg($properties, 'flood_control_access_secs', 'f_groups', 0, 'g_flood_control_access_secs');
+        $max_daily_upload_mb = $this->_default_property_int_modeavg($properties, 'max_daily_upload_mb', 'f_groups', 70, 'g_max_daily_upload_mb');
+        $max_attachments_per_post = $this->_default_property_int_modeavg($properties, 'max_attachments_per_post', 'f_groups', 50, 'g_max_attachments_per_post');
+        $max_avatar_width = $this->_default_property_int_modeavg($properties, 'max_avatar_width', 'f_groups', 100, 'g_max_avatar_width');
+        $max_avatar_height = $this->_default_property_int_modeavg($properties, 'max_avatar_height', 'f_groups', 100, 'g_max_avatar_height');
+        $max_post_length_comcode = $this->_default_property_int_modeavg($properties, 'max_post_length_comcode', 'f_groups', 30000, 'g_max_post_length_comcode');
+        $max_sig_length_comcode = $this->_default_property_int_modeavg($properties, 'max_sig_length_comcode', 'f_groups', 700, 'g_max_sig_length_comcode');
+        $gift_points_base = $this->_default_property_int_modeavg($properties, 'gift_points_base', 'f_groups', 25, 'g_gift_points_base');
+        $gift_points_per_day = $this->_default_property_int_modeavg($properties, 'gift_points_per_day', 'f_groups', 1, 'g_gift_points_per_day');
+        $enquire_on_new_ips = $this->_default_property_int($properties, 'enquire_on_new_ips');
+        $is_presented_at_install = $this->_default_property_int($properties, 'is_presented_at_install');
+        $hidden = $this->_default_property_int($properties, 'hidden');
+        $order = $this->_default_property_int_null($properties, 'order');
         if (is_null($order)) {
-            $order = $GLOBALS['FORUM_DB']->query_select_value('f_groups','MAX(g_order)')+1;
+            $order = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'MAX(g_order)') + 1;
         }
-        $rank_image_pri_only = $this->_default_property_int($properties,'rank_image_pri_only');
-        $open_membership = $this->_default_property_int($properties,'open_membership');
-        $is_private_club = $this->_default_property_int($properties,'is_private_club');
+        $rank_image_pri_only = $this->_default_property_int($properties, 'rank_image_pri_only');
+        $open_membership = $this->_default_property_int($properties, 'open_membership');
+        $is_private_club = $this->_default_property_int($properties, 'is_private_club');
 
-        return array($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club);
+        return array($is_default, $is_super_admin, $is_super_moderator, $rank_title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club);
     }
 
     /**
@@ -175,21 +175,21 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error)
      */
-    public function folder_add($filename,$path,$properties)
+    public function folder_add($filename, $path, $properties)
     {
         if ($path != '') {
             return false;
         } // Only one depth allowed for this resource type
 
-        list($properties,$label) = $this->_folder_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
         require_code('ocf_groups_action');
 
-        list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club) = $this->__folder_read_in_properties($path,$properties);
+        list($is_default, $is_super_admin, $is_super_moderator, $rank_title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club) = $this->__folder_read_in_properties($path, $properties);
 
-        $id = ocf_make_group($label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,true,false);
+        $id = ocf_make_group($label, $is_default, $is_super_admin, $is_super_moderator, $rank_title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club, true, false);
 
-        $this->_custom_fields_save('group',strval($id),$properties);
+        $this->_custom_fields_save('group', strval($id), $properties);
 
         return strval($id);
     }
@@ -201,12 +201,12 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function folder_load($filename,$path)
+    public function folder_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -238,7 +238,7 @@ class Hook_occle_fs_groups extends resource_fs_base
             'rank_image_pri_only' => $row['g_rank_image_pri_only'],
             'open_membership' => $row['g_open_membership'],
             'is_private_club' => $row['g_is_private_club'],
-        )+$this->_custom_fields_load('group',strval($row['id']));
+        ) + $this->_custom_fields_load('group', strval($row['id']));
     }
 
     /**
@@ -249,18 +249,18 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function folder_edit($filename,$path,$properties)
+    public function folder_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('ocf_groups_action2');
 
-        $label = $this->_default_property_str($properties,'label');
-        list($is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club) = $this->__folder_read_in_properties($path,$properties);
+        $label = $this->_default_property_str($properties, 'label');
+        list($is_default, $is_super_admin, $is_super_moderator, $rank_title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club) = $this->__folder_read_in_properties($path, $properties);
 
-        ocf_edit_group(intval($resource_id),$label,$is_default,$is_super_admin,$is_super_moderator,$rank_title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,true);
+        ocf_edit_group(intval($resource_id), $label, $is_default, $is_super_admin, $is_super_moderator, $rank_title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club, true);
 
-        $this->_custom_fields_save('group',$resource_id,$properties);
+        $this->_custom_fields_save('group', $resource_id, $properties);
 
         return $resource_id;
     }
@@ -272,9 +272,9 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function folder_delete($filename,$path)
+    public function folder_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('ocf_groups_action2');
         ocf_delete_group(intval($resource_id));
@@ -325,11 +325,11 @@ class Hook_occle_fs_groups extends resource_fs_base
             'on_probation_until' => '?TIME',
         );
         require_code('ocf_members');
-        $custom_fields = ocf_get_all_custom_fields_match(null,null,null,null,null,null,null,0,null);
+        $custom_fields = ocf_get_all_custom_fields_match(null, null, null, null, null, null, null, 0, null);
         foreach ($custom_fields as $i => $custom_field) {
-            $cf_name = get_translated_text($custom_field['cf_name'],$GLOBALS['FORUM_DB']);
+            $cf_name = get_translated_text($custom_field['cf_name'], $GLOBALS['FORUM_DB']);
             $fixed_id = fix_id($cf_name);
-            if (!array_key_exists($fixed_id,$props)) {
+            if (!array_key_exists($fixed_id, $props)) {
                 $key = $fixed_id;
             } else {
                 $key = 'field_' . strval($custom_field['id']);
@@ -337,7 +337,7 @@ class Hook_occle_fs_groups extends resource_fs_base
 
             require_code('fields');
             $ob = get_fields_hook($custom_field['cf_type']);
-            list(,,$storage_type) = $ob->get_field_value_row_bits(array('id' => NULL,'cf_type' => $custom_field['cf_type'],'cf_default' => ''));
+            list(, , $storage_type) = $ob->get_field_value_row_bits(array('id' => null, 'cf_type' => $custom_field['cf_type'], 'cf_default' => ''));
             $_type = 'SHORT_TEXT';
             switch ($storage_type) {
                 case 'short_trans':
@@ -369,7 +369,7 @@ class Hook_occle_fs_groups extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','EDIT_EDIT_MEMBER_PROFILE') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'EDIT_EDIT_MEMBER_PROFILE') . ')';
         $time = $GLOBALS['SITE_DB']->query_value_if_there($query);
         //if (is_null($time)) $time=$row['m_join_time']; This will be picked up naturally
         return $time;
@@ -382,11 +382,11 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
-    public function __file_read_in_properties($path,$properties)
+    public function __file_read_in_properties($path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        $password_hashed = $this->_default_property_str($properties,'password_hashed');
-        $email_address = $this->_default_property_str($properties,'email_address');
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        $password_hashed = $this->_default_property_str($properties, 'password_hashed');
+        $email_address = $this->_default_property_str($properties, 'email_address');
         $groups = array();
         $primary_group_id = $this->_integer_category($category);
         $groups[] = $primary_group_id;
@@ -394,68 +394,68 @@ class Hook_occle_fs_groups extends resource_fs_base
             $_groups = @unserialize($properties['groups']);
             if ($_groups !== false) {
                 foreach ($_groups as $group) {
-                    $groups[] = intval(remap_portable_as_resource_id('group',$group));
+                    $groups[] = intval(remap_portable_as_resource_id('group', $group));
                 }
             }
         }
-        $dob_day = $this->_default_property_int_null($properties,'dob_day');
-        $dob_month = $this->_default_property_int_null($properties,'dob_month');
-        $dob_year = $this->_default_property_int_null($properties,'dob_year');
-        $timezone = $this->_default_property_str_null($properties,'timezone');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $dob_day = $this->_default_property_int_null($properties, 'dob_day');
+        $dob_month = $this->_default_property_int_null($properties, 'dob_month');
+        $dob_year = $this->_default_property_int_null($properties, 'dob_year');
+        $timezone = $this->_default_property_str_null($properties, 'timezone');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $join_time = $this->_default_property_int_null($properties,'join_time');
-        $last_visit_time = $this->_default_property_int_null($properties,'last_visit_time');
-        $theme = $this->_default_property_str($properties,'theme');
-        $avatar_url = $this->_default_property_str($properties,'avatar_url');
-        $signature = $this->_default_property_str($properties,'signature');
-        $is_perm_banned = $this->_default_property_int($properties,'is_perm_banned');
-        $preview_posts = $this->_default_property_int_modeavg($properties,'preview_posts','f_members',0,'m_preview_posts');
-        $reveal_age = $this->_default_property_int_modeavg($properties,'reveal_age','f_members',0,'m_reveal_age');
-        $user_title = $this->_default_property_str($properties,'user_title');
-        $photo_url = $this->_default_property_str($properties,'photo_url');
-        $photo_thumb_url = $this->_default_property_str($properties,'photo_thumb_url');
-        $views_signatures = $this->_default_property_int($properties,'views_signatures');
-        $auto_monitor_contrib_content = $this->_default_property_int_null($properties,'auto_monitor_contrib_content');
+        $join_time = $this->_default_property_int_null($properties, 'join_time');
+        $last_visit_time = $this->_default_property_int_null($properties, 'last_visit_time');
+        $theme = $this->_default_property_str($properties, 'theme');
+        $avatar_url = $this->_default_property_str($properties, 'avatar_url');
+        $signature = $this->_default_property_str($properties, 'signature');
+        $is_perm_banned = $this->_default_property_int($properties, 'is_perm_banned');
+        $preview_posts = $this->_default_property_int_modeavg($properties, 'preview_posts', 'f_members', 0, 'm_preview_posts');
+        $reveal_age = $this->_default_property_int_modeavg($properties, 'reveal_age', 'f_members', 0, 'm_reveal_age');
+        $user_title = $this->_default_property_str($properties, 'user_title');
+        $photo_url = $this->_default_property_str($properties, 'photo_url');
+        $photo_thumb_url = $this->_default_property_str($properties, 'photo_thumb_url');
+        $views_signatures = $this->_default_property_int($properties, 'views_signatures');
+        $auto_monitor_contrib_content = $this->_default_property_int_null($properties, 'auto_monitor_contrib_content');
         if (is_null($auto_monitor_contrib_content)) {
             $auto_monitor_contrib_content = intval(get_option('allow_auto_notifications'));
         }
-        $language = $this->_default_property_str_null($properties,'language');
-        $allow_emails = $this->_default_property_int_modeavg($properties,'allow_emails','f_members',1,'m_allow_emails');
-        $allow_emails_from_staff = $this->_default_property_int_modeavg($properties,'allow_emails_from_staff','f_members',1,'m_allow_emails_from_staff');
-        $ip_address = $this->_default_property_str_null($properties,'ip_address');
-        $validated_email_confirm_code = $this->_default_property_str($properties,'validated_email_confirm_code');
-        $password_compatibility_scheme = $this->_default_property_str_null($properties,'password_compatibility_scheme');
-        $salt = $this->_default_property_str($properties,'salt');
-        $last_submit_time = $this->_default_property_int_null($properties,'last_submit_time');
-        $highlighted_name = $this->_default_property_int($properties,'highlighted_name');
-        $pt_allow = $this->_default_property_str($properties,'pt_allow');
-        $pt_rules_text = $this->_default_property_str($properties,'pt_rules_text');
-        $on_probation_until = $this->_default_property_int_null($properties,'on_probation_until');
+        $language = $this->_default_property_str_null($properties, 'language');
+        $allow_emails = $this->_default_property_int_modeavg($properties, 'allow_emails', 'f_members', 1, 'm_allow_emails');
+        $allow_emails_from_staff = $this->_default_property_int_modeavg($properties, 'allow_emails_from_staff', 'f_members', 1, 'm_allow_emails_from_staff');
+        $ip_address = $this->_default_property_str_null($properties, 'ip_address');
+        $validated_email_confirm_code = $this->_default_property_str($properties, 'validated_email_confirm_code');
+        $password_compatibility_scheme = $this->_default_property_str_null($properties, 'password_compatibility_scheme');
+        $salt = $this->_default_property_str($properties, 'salt');
+        $last_submit_time = $this->_default_property_int_null($properties, 'last_submit_time');
+        $highlighted_name = $this->_default_property_int($properties, 'highlighted_name');
+        $pt_allow = $this->_default_property_str($properties, 'pt_allow');
+        $pt_rules_text = $this->_default_property_str($properties, 'pt_rules_text');
+        $on_probation_until = $this->_default_property_int_null($properties, 'on_probation_until');
 
         require_code('ocf_members');
-        $custom_fields = ocf_get_all_custom_fields_match(null,null,null,null,null,null,null,0,null);
+        $custom_fields = ocf_get_all_custom_fields_match(null, null, null, null, null, null, null, 0, null);
         $actual_custom_fields = array();
         $props_already = array();
         foreach ($custom_fields as $i => $custom_field) {
-            $cf_name = get_translated_text($custom_field['cf_name'],$GLOBALS['FORUM_DB']);
+            $cf_name = get_translated_text($custom_field['cf_name'], $GLOBALS['FORUM_DB']);
             $fixed_id = fix_id($cf_name);
-            if (!array_key_exists($fixed_id,$props_already)) {
+            if (!array_key_exists($fixed_id, $props_already)) {
                 $key = $fixed_id;
             } else {
                 $key = 'field_' . strval($custom_field['id']);
             }
             $props_already[$key] = true;
-            $value = $this->_default_property_str_null($properties,$key);
+            $value = $this->_default_property_str_null($properties, $key);
             if (is_null($value)) {
                 $value = $custom_field['cf_default'];
             }
             $actual_custom_fields[$custom_field['id']] = $value;
         }
 
-        return array($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+        return array($password_hashed, $email_address, $groups, $dob_day, $dob_month, $dob_year, $actual_custom_fields, $timezone, $validated, $join_time, $last_visit_time, $theme, $avatar_url, $signature, $is_perm_banned, $preview_posts, $reveal_age, $user_title, $photo_url, $photo_thumb_url, $views_signatures, $auto_monitor_contrib_content, $language, $allow_emails, $allow_emails_from_staff, $ip_address, $validated_email_confirm_code, $password_compatibility_scheme, $salt, $last_submit_time, $highlighted_name, $pt_allow, $pt_rules_text, $on_probation_until);
     }
 
     /**
@@ -466,10 +466,10 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -477,9 +477,9 @@ class Hook_occle_fs_groups extends resource_fs_base
 
         require_code('ocf_members_action');
 
-        list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until) = $this->__file_read_in_properties($path,$properties);
+        list($password_hashed, $email_address, $groups, $dob_day, $dob_month, $dob_year, $actual_custom_fields, $timezone, $validated, $join_time, $last_visit_time, $theme, $avatar_url, $signature, $is_perm_banned, $preview_posts, $reveal_age, $user_title, $photo_url, $photo_thumb_url, $views_signatures, $auto_monitor_contrib_content, $language, $allow_emails, $allow_emails_from_staff, $ip_address, $validated_email_confirm_code, $password_compatibility_scheme, $salt, $last_submit_time, $highlighted_name, $pt_allow, $pt_rules_text, $on_probation_until) = $this->__file_read_in_properties($path, $properties);
 
-        $id = ocf_make_member($label,$password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$category,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,false,$password_compatibility_scheme,$salt,$last_submit_time,null,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until);
+        $id = ocf_make_member($label, $password_hashed, $email_address, $groups, $dob_day, $dob_month, $dob_year, $actual_custom_fields, $timezone, $category, $validated, $join_time, $last_visit_time, $theme, $avatar_url, $signature, $is_perm_banned, $preview_posts, $reveal_age, $user_title, $photo_url, $photo_thumb_url, $views_signatures, $auto_monitor_contrib_content, $language, $allow_emails, $allow_emails_from_staff, $ip_address, $validated_email_confirm_code, false, $password_compatibility_scheme, $salt, $last_submit_time, null, $highlighted_name, $pt_allow, $pt_rules_text, $on_probation_until);
 
         return strval($id);
     }
@@ -491,20 +491,20 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_members', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
         $groups = array();
-        $_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_group_id'),array('gm_member_id' => intval($resource_id)));
+        $_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members', array('gm_group_id'), array('gm_member_id' => intval($resource_id)));
         foreach ($_groups as $_group) {
-            $groups[] = remap_resource_id_as_portable('group',strval($_group['gm_group_id']));
+            $groups[] = remap_resource_id_as_portable('group', strval($_group['gm_group_id']));
         }
 
         $ret = array(
@@ -547,7 +547,7 @@ class Hook_occle_fs_groups extends resource_fs_base
         $cpfs = ocf_get_all_custom_fields_match_member(intval($resource_id));
         foreach ($cpfs as $cf_name => $cpf) {
             $fixed_id = fix_id($cf_name);
-            if (!array_key_exists($fixed_id,$ret)) {
+            if (!array_key_exists($fixed_id, $ret)) {
                 $key = $fixed_id;
             } else {
                 $key = 'field_' . strval($cpf['FIELD_ID']);
@@ -566,11 +566,11 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -578,10 +578,10 @@ class Hook_occle_fs_groups extends resource_fs_base
 
         require_code('ocf_members_action2');
 
-        $label = $this->_default_property_str($properties,'label');
-        list($password_hashed,$email_address,$groups,$dob_day,$dob_month,$dob_year,$actual_custom_fields,$timezone,$validated,$join_time,$last_visit_time,$theme,$avatar_url,$signature,$is_perm_banned,$preview_posts,$reveal_age,$user_title,$photo_url,$photo_thumb_url,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$ip_address,$validated_email_confirm_code,$password_compatibility_scheme,$salt,$last_submit_time,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until) = $this->__file_read_in_properties($path,$properties);
+        $label = $this->_default_property_str($properties, 'label');
+        list($password_hashed, $email_address, $groups, $dob_day, $dob_month, $dob_year, $actual_custom_fields, $timezone, $validated, $join_time, $last_visit_time, $theme, $avatar_url, $signature, $is_perm_banned, $preview_posts, $reveal_age, $user_title, $photo_url, $photo_thumb_url, $views_signatures, $auto_monitor_contrib_content, $language, $allow_emails, $allow_emails_from_staff, $ip_address, $validated_email_confirm_code, $password_compatibility_scheme, $salt, $last_submit_time, $highlighted_name, $pt_allow, $pt_rules_text, $on_probation_until) = $this->__file_read_in_properties($path, $properties);
 
-        ocf_edit_member(intval($resource_id),$email_address,$preview_posts,$dob_day,$dob_month,$dob_year,$timezone,$category,$actual_custom_fields,$theme,$reveal_age,$views_signatures,$auto_monitor_contrib_content,$language,$allow_emails,$allow_emails_from_staff,$validated,$label,$password_hashed,$highlighted_name,$pt_allow,$pt_rules_text,$on_probation_until,$join_time,$avatar_url,$signature,$is_perm_banned,$photo_url,$photo_thumb_url,$salt,$password_compatibility_scheme,true);
+        ocf_edit_member(intval($resource_id), $email_address, $preview_posts, $dob_day, $dob_month, $dob_year, $timezone, $category, $actual_custom_fields, $theme, $reveal_age, $views_signatures, $auto_monitor_contrib_content, $language, $allow_emails, $allow_emails_from_staff, $validated, $label, $password_hashed, $highlighted_name, $pt_allow, $pt_rules_text, $on_probation_until, $join_time, $avatar_url, $signature, $is_perm_banned, $photo_url, $photo_thumb_url, $salt, $password_compatibility_scheme, true);
 
         return $resource_id;
     }
@@ -593,9 +593,9 @@ class Hook_occle_fs_groups extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('ocf_members_action2');
         ocf_delete_member(intval($resource_id));

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_config_average_gamble_multiplier
 {
     /**

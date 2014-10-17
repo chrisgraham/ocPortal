@@ -164,20 +164,20 @@ function init__js_lex()
     $TOKENS['SINGLE_QUOTE'] = '\''; // Ending it with non-escaped ' is implicit in LEXER_SINGLE_QUOTE_STRING_LITERAL state
 
     // Lexer states
-    define('LEXER_FREE',1); // (grabs implicitly)
-    define('LEXER_REGEXP',2); // grabs and converts to token equiv of new RegExp("...")
-    define('LEXER_ML_COMMENT',4); // grab comment
-    define('LEXER_COMMENT',5); // grab comment
-    define('LEXER_DOUBLE_QUOTE_STRING_LITERAL',6); // grab string_literal
-    define('LEXER_SINGLE_QUOTE_STRING_LITERAL',7); // grab string_literal
-    define('LEXER_NUMERIC_LITERAL',8); // grab float_literal/integer_literal (supports decimal, octal, hexadecimal)
+    define('LEXER_FREE', 1); // (grabs implicitly)
+    define('LEXER_REGEXP', 2); // grabs and converts to token equiv of new RegExp("...")
+    define('LEXER_ML_COMMENT', 4); // grab comment
+    define('LEXER_COMMENT', 5); // grab comment
+    define('LEXER_DOUBLE_QUOTE_STRING_LITERAL', 6); // grab string_literal
+    define('LEXER_SINGLE_QUOTE_STRING_LITERAL', 7); // grab string_literal
+    define('LEXER_NUMERIC_LITERAL', 8); // grab float_literal/integer_literal (supports decimal, octal, hexadecimal)
 
     // These are characters that can be used to continue an identifier lexer token (any other character starts a new token).
     global $CONTINUATIONS;
     $CONTINUATIONS = array(
-                                'a' => '1','b' => '1','c' => '1','d' => '1','e' => '1','f' => '1','g' => '1','h' => '1','i' => '1','j' => '1','k' => '1','l' => '1','m' => '1','n' => '1','o' => '1','p' => '1','q' => '1','r' => '1','s' => '1','t' => '1','u' => '1','v' => '1','w' => '1','x' => '1','y' => '1','z' => '1',
-                                'A' => '1','B' => '1','C' => '1','D' => '1','E' => '1','F' => '1','G' => '1','H' => '1','I' => '1','J' => '1','K' => '1','L' => '1','M' => '1','N' => '1','O' => '1','P' => '1','Q' => '1','R' => '1','S' => '1','T' => '1','U' => '1','V' => '1','W' => '1','X' => '1','Y' => '1','Z' => '1',
-                                '1' => '1','2' => '1','3' => '1','4' => '1','5' => '1','6' => '1','7' => '1','8' => '1','9' => '1','0' => '1','_' => '1','$' => '1');
+        'a' => '1', 'b' => '1', 'c' => '1', 'd' => '1', 'e' => '1', 'f' => '1', 'g' => '1', 'h' => '1', 'i' => '1', 'j' => '1', 'k' => '1', 'l' => '1', 'm' => '1', 'n' => '1', 'o' => '1', 'p' => '1', 'q' => '1', 'r' => '1', 's' => '1', 't' => '1', 'u' => '1', 'v' => '1', 'w' => '1', 'x' => '1', 'y' => '1', 'z' => '1',
+        'A' => '1', 'B' => '1', 'C' => '1', 'D' => '1', 'E' => '1', 'F' => '1', 'G' => '1', 'H' => '1', 'I' => '1', 'J' => '1', 'K' => '1', 'L' => '1', 'M' => '1', 'N' => '1', 'O' => '1', 'P' => '1', 'Q' => '1', 'R' => '1', 'S' => '1', 'T' => '1', 'U' => '1', 'V' => '1', 'W' => '1', 'X' => '1', 'Y' => '1', 'Z' => '1',
+        '1' => '1', '2' => '1', '3' => '1', '4' => '1', '5' => '1', '6' => '1', '7' => '1', '8' => '1', '9' => '1', '0' => '1', '_' => '1', '$' => '1');
     // For non-identifier tokens, tokenisation is driven purely upon "best match".
 }
 
@@ -189,7 +189,7 @@ function init__js_lex()
  */
 function js_lex($text)
 {
-    global $CONTINUATIONS,$TOKENS,$JS_TAG_RANGES,$JS_VALUE_RANGES,$JS_TEXT,$JS_LEX_TOKENS;
+    global $CONTINUATIONS, $TOKENS, $JS_TAG_RANGES, $JS_VALUE_RANGES, $JS_TEXT, $JS_LEX_TOKENS;
 
     // So that we don't have to consider end-of-file states as much.
     $JS_TEXT = $text . "\n";
@@ -206,17 +206,18 @@ function js_lex($text)
     $char = '';
     $i = 0;
     $empty_array = array();
-    $numberic_chars = array('0' => 1,'1' => 1,'2' => 1,'3' => 1,'4' => 1,'5' => 1,'6' => 1,'7' => 1,'8' => 1,'9' => 1);
+    $numberic_chars = array('0' => 1, '1' => 1, '2' => 1, '3' => 1, '4' => 1, '5' => 1, '6' => 1, '7' => 1, '8' => 1, '9' => 1);
     while (true) {
         switch ($lex_state) {
             case LEXER_FREE:
                 // Jump over any white space in our way
                 do {
-                    list($reached_end,$i,$char) = lex__get_next_char($i);
+                    list($reached_end, $i, $char) = lex__get_next_char($i);
                     if ($reached_end) {
                         break 3;
                     }
-                } while (trim($char) == '');
+                }
+                while (trim($char) == '');
 
                 // We need to know where our token is starting
                 $i--;
@@ -228,7 +229,7 @@ function js_lex($text)
                 $token_so_far = '';
                 $token_length = 0;
                 while ($maybe_applicable_tokens !== $empty_array) {
-                    list($reached_end,$i,$char) = lex__get_next_char($i);
+                    list($reached_end, $i, $char) = lex__get_next_char($i);
                     if ($reached_end) {
                         break 3;
                     }
@@ -239,12 +240,12 @@ function js_lex($text)
                     // Filter out any tokens that no longer match
                     foreach ($maybe_applicable_tokens as $token_name => $token_value) {
                         // Hasn't matched (or otherwise, may still match)
-                        if ((!isset($token_value[$token_length-1])) || ($token_value[$token_length-1] != $char)) {
+                        if ((!isset($token_value[$token_length - 1])) || ($token_value[$token_length - 1] != $char)) {
                             unset($maybe_applicable_tokens[$token_name]);
                         } else {
                             // Is it a perfect match?
                             if ((!isset($token_value[$token_length])) && ((!isset($CONTINUATIONS[$token_so_far[0]])) || (!isset($CONTINUATIONS[$JS_TEXT[$i]])))) {
-                                if (($token_name != 'FUNCTION') || (!isset($JS_LEX_TOKENS[$num_tokens_so_far-1])) || ($JS_LEX_TOKENS[$num_tokens_so_far-1][0] != 'NEW')) {
+                                if (($token_name != 'FUNCTION') || (!isset($JS_LEX_TOKENS[$num_tokens_so_far - 1])) || ($JS_LEX_TOKENS[$num_tokens_so_far - 1][0] != 'NEW')) {
                                     $applicable_tokens[$token_name] = $token_name;
                                 }
                                 unset($maybe_applicable_tokens[$token_name]);
@@ -254,7 +255,7 @@ function js_lex($text)
                 }
 
                 if (isset($applicable_tokens['DIV_EQUAL'])) {
-                    $previous = isset($JS_LEX_TOKENS[$num_tokens_so_far-1])?($JS_LEX_TOKENS[$num_tokens_so_far-1][0]):'BRACKET_OPEN';
+                    $previous = isset($JS_LEX_TOKENS[$num_tokens_so_far - 1]) ? ($JS_LEX_TOKENS[$num_tokens_so_far - 1][0]) : 'BRACKET_OPEN';
                     if (($previous == 'BRACKET_OPEN') || ($previous == 'COMMA')) {
                         $applicable_tokens = array('DIVIDE'); // Actually, a regular expression
                     }
@@ -263,8 +264,8 @@ function js_lex($text)
                 // If we have any applicable tokens, find the longest and move $i so it's as we just read it
                 $i = $i_current;
                 if (count($applicable_tokens) != 0) {
-                    usort($applicable_tokens,'jlex__strlen_sort');
-                    $token_found = $applicable_tokens[count($applicable_tokens)-1];
+                    usort($applicable_tokens, 'jlex__strlen_sort');
+                    $token_found = $applicable_tokens[count($applicable_tokens) - 1];
 
                     $i += strlen($TOKENS[$token_found]);
 
@@ -275,7 +276,7 @@ function js_lex($text)
                     } elseif ($token_found == 'COMMENT') {
                         $lex_state = LEXER_COMMENT;
                         break;
-                    } elseif (($token_found == 'DIVIDE') && (!in_array(@$JS_LEX_TOKENS[$num_tokens_so_far-1][0],array('number_literal','IDENTIFIER','EXTRACT_CLOSE','BRACKET_CLOSE')))) {
+                    } elseif (($token_found == 'DIVIDE') && (!in_array(@$JS_LEX_TOKENS[$num_tokens_so_far - 1][0], array('number_literal', 'IDENTIFIER', 'EXTRACT_CLOSE', 'BRACKET_CLOSE')))) {
                         $lex_state = LEXER_REGEXP;
                         break;
                     } elseif ($token_found == 'DOUBLE_QUOTE') {
@@ -286,19 +287,19 @@ function js_lex($text)
                         break;
                     }
 
-                    $JS_LEX_TOKENS[] = array($token_found,$i);
+                    $JS_LEX_TOKENS[] = array($token_found, $i);
                     $num_tokens_so_far++;
                 } else {
                     // Otherwise, we've found an identifier or numerical literal token, so extract it
                     $token_found = '';
                     $numeric = null;
                     do {
-                        list($reached_end,$i,$char) = lex__get_next_char($i);
+                        list($reached_end, $i, $char) = lex__get_next_char($i);
                         if ($reached_end) {
                             break 3;
                         }
                         if (!isset($numeric)) {
-                            $numeric_chars = array('0' => 0,'1' => 1,'2' => 2,'3' => 3,'4' => 4,'5' => 5,'6' => 6,'7' => 7,'8' => 8,'9' => 9);
+                            $numeric_chars = array('0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4, '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9);
                             $numeric = isset($numeric_chars[$char]);
                         }
                         if ((!isset($CONTINUATIONS[$char])) && (($numeric === false) || ($char != '.') || (!is_numeric($JS_TEXT[$i])))) {
@@ -306,29 +307,30 @@ function js_lex($text)
                         }
 
                         $token_found .= $char;
-                    } while (true);
+                    }
+                    while (true);
                     $i--;
 
                     if ($numeric) {
-                        if (strpos($token_found,'.') !== false) {
-                            $JS_LEX_TOKENS[] = array('number_literal',floatval($token_found),$i);
-                        } elseif (strpos($token_found,'x') !== false) {
-                            $JS_LEX_TOKENS[] = array('number_literal',intval(base_convert($token_found,16,10)),$i);
+                        if (strpos($token_found, '.') !== false) {
+                            $JS_LEX_TOKENS[] = array('number_literal', floatval($token_found), $i);
+                        } elseif (strpos($token_found, 'x') !== false) {
+                            $JS_LEX_TOKENS[] = array('number_literal', intval(base_convert($token_found, 16, 10)), $i);
                         } elseif ($token_found[0] == '0') {
-                            $JS_LEX_TOKENS[] = array('number_literal',intval(base_convert($token_found,8,10)),$i);
+                            $JS_LEX_TOKENS[] = array('number_literal', intval(base_convert($token_found, 8, 10)), $i);
                         } else {
-                            $JS_LEX_TOKENS[] = array('number_literal',intval($token_found),$i);
+                            $JS_LEX_TOKENS[] = array('number_literal', intval($token_found), $i);
                         }
                         $num_tokens_so_far++;
 
-                        $JS_VALUE_RANGES[] = array($i-strlen($token_found),$i);
+                        $JS_VALUE_RANGES[] = array($i - strlen($token_found), $i);
                     } else {
                         if ($token_found == '') {
-                            js_log_warning('LEXER','Bad token found',$i,true);
+                            js_log_warning('LEXER', 'Bad token found', $i, true);
                             return array();
                         }
-                        $JS_LEX_TOKENS[] = array('IDENTIFIER',$token_found,$i);
-                        $JS_TAG_RANGES[] = array($i-strlen($token_found),$i);
+                        $JS_LEX_TOKENS[] = array('IDENTIFIER', $token_found, $i);
+                        $JS_TAG_RANGES[] = array($i - strlen($token_found), $i);
                         $num_tokens_so_far++;
                     }
                 }
@@ -336,7 +338,7 @@ function js_lex($text)
                 break;
 
             case LEXER_COMMENT:
-                list($reached_end,$i,$char) = lex__get_next_char($i);
+                list($reached_end, $i, $char) = lex__get_next_char($i);
                 if ($reached_end) {
                     break 2;
                 }
@@ -344,7 +346,7 @@ function js_lex($text)
                 // Exit case
                 if ($char == "\n") {
                     $lex_state = LEXER_FREE;
-                    $JS_LEX_TOKENS[] = array('comment',$special_token_value,$i);
+                    $JS_LEX_TOKENS[] = array('comment', $special_token_value, $i);
                     $special_token_value = '';
                     $i--;
                     $num_tokens_so_far++;
@@ -357,7 +359,7 @@ function js_lex($text)
                 break;
 
             case LEXER_ML_COMMENT:
-                list($reached_end,$i,$char) = lex__get_next_chars($i,2);
+                list($reached_end, $i, $char) = lex__get_next_chars($i, 2);
                 if ($reached_end) {
                     break 2;
                 }
@@ -365,7 +367,7 @@ function js_lex($text)
                 // Exit case
                 if ($char == '*/') {
                     $lex_state = LEXER_FREE;
-                    $JS_LEX_TOKENS[] = array('comment',$special_token_value,$i);
+                    $JS_LEX_TOKENS[] = array('comment', $special_token_value, $i);
                     $special_token_value = '';
                     $num_tokens_so_far++;
                     break;
@@ -383,25 +385,26 @@ function js_lex($text)
                 break;
 
             case LEXER_REGEXP:
-                list($reached_end,$i,$char) = lex__get_next_chars($i,1);
+                list($reached_end, $i, $char) = lex__get_next_chars($i, 1);
                 if ($reached_end) {
                     break 2;
                 }
 
                 // Exit case
-                if (($char == '/') && (($i<2) || ($JS_TEXT[$i-2] != '\\') || ($JS_TEXT[$i-3] == '\\'))) {
+                if (($char == '/') && (($i < 2) || ($JS_TEXT[$i - 2] != '\\') || ($JS_TEXT[$i - 3] == '\\'))) {
                     do {
-                        list($reached_end,$i,$char) = lex__get_next_chars($i,1);
-                    } while (($char == 'g') || ($char == 'i') || ($char == 'm'));
+                        list($reached_end, $i, $char) = lex__get_next_chars($i, 1);
+                    }
+                    while (($char == 'g') || ($char == 'i') || ($char == 'm'));
                     $i--;
 
                     $lex_state = LEXER_FREE;
-                    $JS_LEX_TOKENS[] = array('NEW',$i);
-                    $JS_LEX_TOKENS[] = array('IDENTIFIER','RegExp',$i);
-                    $JS_LEX_TOKENS[] = array('BRACKET_OPEN',$i);
-                    $JS_LEX_TOKENS[] = array('string_literal',$special_token_value,$i);
-                    $JS_LEX_TOKENS[] = array('BRACKET_CLOSE',$i);
-                    $JS_VALUE_RANGES[] = array($i-strlen($special_token_value),$i);
+                    $JS_LEX_TOKENS[] = array('NEW', $i);
+                    $JS_LEX_TOKENS[] = array('IDENTIFIER', 'RegExp', $i);
+                    $JS_LEX_TOKENS[] = array('BRACKET_OPEN', $i);
+                    $JS_LEX_TOKENS[] = array('string_literal', $special_token_value, $i);
+                    $JS_LEX_TOKENS[] = array('BRACKET_CLOSE', $i);
+                    $JS_VALUE_RANGES[] = array($i - strlen($special_token_value), $i);
                     $special_token_value = '';
                     $num_tokens_so_far += 5;
                     break;
@@ -413,20 +416,20 @@ function js_lex($text)
                 break;
 
             case LEXER_DOUBLE_QUOTE_STRING_LITERAL:
-                list($reached_end,$i,$char) = lex__get_next_char($i);
+                list($reached_end, $i, $char) = lex__get_next_char($i);
                 if ($reached_end) {
                     break 2;
                 }
 
-                if (($char == "\n") && ((strlen($special_token_value) == 0) || ($special_token_value[strlen($special_token_value)-1] == '\\'))) {
-                    js_log_warning('LEXER','String literals may not contain explicit new lines without special escaping',$i,true);
+                if (($char == "\n") && ((strlen($special_token_value) == 0) || ($special_token_value[strlen($special_token_value) - 1] == '\\'))) {
+                    js_log_warning('LEXER', 'String literals may not contain explicit new lines without special escaping', $i, true);
                 }
 
                 // Exit case
                 if (($char == '"') && (!$escape_flag)) {
                     $lex_state = LEXER_FREE;
-                    $JS_LEX_TOKENS[] = array('string_literal',$special_token_value,$i);
-                    $JS_VALUE_RANGES[] = array($i-strlen($special_token_value)-1,$i-1);
+                    $JS_LEX_TOKENS[] = array('string_literal', $special_token_value, $i);
+                    $JS_VALUE_RANGES[] = array($i - strlen($special_token_value) - 1, $i - 1);
                     $special_token_value = '';
                     $num_tokens_so_far++;
                     break;
@@ -456,20 +459,20 @@ function js_lex($text)
                 break;
 
             case LEXER_SINGLE_QUOTE_STRING_LITERAL:
-                list($reached_end,$i,$char) = lex__get_next_char($i);
+                list($reached_end, $i, $char) = lex__get_next_char($i);
                 if ($reached_end) {
                     break 2;
                 }
 
-                if (($char == "\n") && ((strlen($special_token_value) == 0) || ($special_token_value[strlen($special_token_value)-1] == '\\'))) {
-                    js_log_warning('LEXER','String literals may not contain explicit new lines',$i,true);
+                if (($char == "\n") && ((strlen($special_token_value) == 0) || ($special_token_value[strlen($special_token_value) - 1] == '\\'))) {
+                    js_log_warning('LEXER', 'String literals may not contain explicit new lines', $i, true);
                 }
 
                 // Exit case
                 if (($char == "'") && (!$escape_flag)) {
                     $lex_state = LEXER_FREE;
-                    $JS_LEX_TOKENS[] = array('string_literal',$special_token_value,$i);
-                    $JS_VALUE_RANGES[] = array($i-strlen($special_token_value)-1,$i-1);
+                    $JS_LEX_TOKENS[] = array('string_literal', $special_token_value, $i);
+                    $JS_VALUE_RANGES[] = array($i - strlen($special_token_value) - 1, $i - 1);
                     $special_token_value = '';
                     $num_tokens_so_far++;
                     break;
@@ -511,10 +514,10 @@ function lex__get_next_char($i)
 {
     global $JS_TEXT;
     if (!isset($JS_TEXT[$i])) {
-        return array(true,$i+1,'');
+        return array(true, $i + 1, '');
     }
     $char = $JS_TEXT[$i];
-    return array(false,$i+1,$char);
+    return array(false, $i + 1, $char);
 }
 
 /**
@@ -524,11 +527,11 @@ function lex__get_next_char($i)
  * @param  integer                      How many to get
  * @return list                         Get triplet about the next character (whether end reached, new position, characters)
  */
-function lex__get_next_chars($i,$num)
+function lex__get_next_chars($i, $num)
 {
     global $JS_TEXT;
-    $str = substr($JS_TEXT,$i,$num);
-    return array(strlen($str)<$num,$i+$num,$str);
+    $str = substr($JS_TEXT, $i, $num);
+    return array(strlen($str) < $num, $i + $num, $str);
 }
 
 /**
@@ -538,26 +541,26 @@ function lex__get_next_chars($i,$num)
  * @param  boolean                      Whether the position is a string offset (as opposed to a token position)
  * @return list                         The quartet of details (line offset, line number, the line, the absolute position)
  */
-function js_pos_to_line_details($i,$absolute = false)
+function js_pos_to_line_details($i, $absolute = false)
 {
-    global $JS_TEXT,$JS_LEX_TOKENS;
+    global $JS_TEXT, $JS_LEX_TOKENS;
     if ((!$absolute) && (!isset($JS_LEX_TOKENS[$i]))) {
         $i = -1;
     }
     if ($i == -1) {
-        return array(0,0,'',0);
+        return array(0, 0, '', 0);
     }
-    $j = $absolute?$i:$JS_LEX_TOKENS[$i][count($JS_LEX_TOKENS[$i])-1];
-    $line = substr_count(substr($JS_TEXT,0,$j),"\n")+1;
-    $pos = $j-strrpos(substr($JS_TEXT,0,$j),"\n");
-    $l_s = strrpos(substr($JS_TEXT,0,$j+1),"\n")+1;
+    $j = $absolute ? $i : $JS_LEX_TOKENS[$i][count($JS_LEX_TOKENS[$i]) - 1];
+    $line = substr_count(substr($JS_TEXT, 0, $j), "\n") + 1;
+    $pos = $j - strrpos(substr($JS_TEXT, 0, $j), "\n");
+    $l_s = strrpos(substr($JS_TEXT, 0, $j + 1), "\n") + 1;
     if ($l_s == 1) {
         $l_s = 0;
     }
 
-    $full_line = substr($JS_TEXT,$l_s,strpos($JS_TEXT,"\n",$j)-1-$l_s);
+    $full_line = substr($JS_TEXT, $l_s, strpos($JS_TEXT, "\n", $j) - 1 - $l_s);
 
-    return array($pos,$line,$full_line,$j);
+    return array($pos, $line, $full_line, $j);
 }
 
 /**
@@ -570,12 +573,12 @@ function js_pos_to_line_details($i,$absolute = false)
  * @param  integer                      The global position
  * @return ?boolean                     Always NULL (NULL: exit)
  */
-function js_die_error($system,$pos,$line,$message,$i)
+function js_die_error($system, $pos, $line, $message, $i)
 {
-    $error = array('JS ERROR (' . $system . '): ' . $message,$pos,$line,$i);
+    $error = array('JS ERROR (' . $system . '): ' . $message, $pos, $line, $i);
     global $JS_ERRORS;
     $JS_ERRORS[] = $error;
-    return NULL;
+    return null;
 }
 
 /**
@@ -586,20 +589,20 @@ function js_die_error($system,$pos,$line,$message,$i)
  * @param  integer                      The global position
  * @param  boolean                      Whether the position is a string offset (as opposed to a token position)
  */
-function js_log_warning($system,$warning,$i = -1,$absolute = false)
+function js_log_warning($system, $warning, $i = -1, $absolute = false)
 {
     global $JS_TEXT;
 
     if (($i == -1) && (isset($GLOBALS['i']))) {
         $i = $GLOBALS['i'];
     }
-    list($pos,$line,,$i) = js_pos_to_line_details($i,$absolute);
+    list($pos, $line, , $i) = js_pos_to_line_details($i, $absolute);
 
-    if (strpos(substr($JS_TEXT,$i,200),'JSLINT: Ignore errors') !== false) {
+    if (strpos(substr($JS_TEXT, $i, 200), 'JSLINT: Ignore errors') !== false) {
         return;
     }
 
-    $error = array('JS ERROR (' . $system . '): ' . $warning,$pos,$line,$i);
+    $error = array('JS ERROR (' . $system . '): ' . $warning, $pos, $line, $i);
     global $JS_ERRORS;
     $JS_ERRORS[] = $error;
 }
@@ -611,7 +614,7 @@ function js_log_warning($system,$warning,$i = -1,$absolute = false)
  * @param  string                       The second string to compare
  * @return integer                      The comparison result
  */
-function jlex__strlen_sort($a,$b)
+function jlex__strlen_sort($a, $b)
 {
     global $TOKENS;
     $a = $TOKENS[$a];
@@ -619,5 +622,5 @@ function jlex__strlen_sort($a,$b)
     if ($a == $b) {
         return 0;
     }
-    return (strlen($a)<strlen($b))?-1:1;
+    return (strlen($a) < strlen($b)) ? -1 : 1;
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_password_reset_process
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_password_reset_process
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'temporary';
+        return (get_forum_type() != 'ocf') ? null : 'temporary';
     }
 }

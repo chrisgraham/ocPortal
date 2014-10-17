@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_config_galleries_show_stats_count_images
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_galleries_show_stats_count_images
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

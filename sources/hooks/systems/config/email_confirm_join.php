@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_email_confirm_join
 {
     /**

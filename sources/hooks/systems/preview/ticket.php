@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-
 class Hook_Preview_ticket
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Preview_ticket
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'tickets');
-        return array($applies,'ocf_post',false,array('post'));
+        $applies = (get_param('page', '') == 'tickets');
+        return array($applies, 'ocf_post', false, array('post'));
     }
 }

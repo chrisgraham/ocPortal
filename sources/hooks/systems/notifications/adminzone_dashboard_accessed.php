@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_Notification_adminzone_dashboard_accessed extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_adminzone_dashboard_accessed extends Hook_Notification__
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_adminzone_dashboard_accessed extends Hook_Notification__
     public function list_handled_codes()
     {
         $list = array();
-        $list['adminzone_dashboard_accessed'] = array(do_lang('security:SECURITY'),do_lang('NOTIFICATION_TYPE_adminzone_dashboard_accessed'));
+        $list['adminzone_dashboard_accessed'] = array(do_lang('security:SECURITY'), do_lang('NOTIFICATION_TYPE_adminzone_dashboard_accessed'));
         return $list;
     }
 }

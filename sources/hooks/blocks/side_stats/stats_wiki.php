@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_stats_wiki
 {
     /**
@@ -36,15 +35,15 @@ class Hook_stats_wiki
 
         $bits = new ocp_tempcode();
         if (get_option('wiki_show_stats_count_pages') == '1') {
-            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => '8bbd18d5169c4e5449b252880ecda716','KEY' => do_lang_tempcode('COUNT_PAGES'),'VALUE' => integer_format(get_num_wiki_pages()))));
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '8bbd18d5169c4e5449b252880ecda716', 'KEY' => do_lang_tempcode('COUNT_PAGES'), 'VALUE' => integer_format(get_num_wiki_pages()))));
         }
         if (get_option('wiki_show_stats_count_posts') == '1') {
-            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => 'd8cf3d5aabc18777f609760010303ace','KEY' => do_lang_tempcode('COUNT_POSTS'),'VALUE' => integer_format(get_num_wiki_posts()))));
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'd8cf3d5aabc18777f609760010303ace', 'KEY' => do_lang_tempcode('COUNT_POSTS'), 'VALUE' => integer_format(get_num_wiki_posts()))));
         }
         if ($bits->is_empty_shell()) {
             return new ocp_tempcode();
         }
-        $wiki = do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID' => 'ea19e51db4e62958843ace808016af1e','SECTION' => do_lang_tempcode('WIKI'),'CONTENT' => $bits));
+        $wiki = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => 'ea19e51db4e62958843ace808016af1e', 'SECTION' => do_lang_tempcode('WIKI'), 'CONTENT' => $bits));
 
         return $wiki;
     }

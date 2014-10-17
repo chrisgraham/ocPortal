@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_config_points_COMCODE_PAGE_ADD
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_COMCODE_PAGE_ADD
      */
     public function get_default()
     {
-        return addon_installed('points')?'10':null;
+        return addon_installed('points') ? '10' : null;
     }
 }

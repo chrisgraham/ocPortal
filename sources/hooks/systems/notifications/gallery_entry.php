@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_Notification_gallery_entry extends Hook_Notification
 {
     /**
@@ -39,16 +38,16 @@ class Hook_Notification_gallery_entry extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         require_code('galleries');
 
-        $total = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','COUNT(*)');
-        if ($total>300) {
-            return parent::create_category_tree($notification_code,$id);
+        $total = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'COUNT(*)');
+        if ($total > 300) {
+            return parent::create_category_tree($notification_code, $id);
         } // Too many, so just allow removing UI
 
-        $page_links = get_gallery_tree($id,'',null,false,null,false,false,true,false,5);
+        $page_links = get_gallery_tree($id, '', null, false, null, false, false, true, false, 5);
         $filtered = array();
         foreach ($page_links as $p) {
             $filtered[] = $p;
@@ -64,7 +63,7 @@ class Hook_Notification_gallery_entry extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -78,7 +77,7 @@ class Hook_Notification_gallery_entry extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['gallery_entry'] = array(do_lang('menus:CONTENT'),do_lang('galleries:NOTIFICATION_TYPE_gallery_entry'));
+        $list['gallery_entry'] = array(do_lang('menus:CONTENT'), do_lang('galleries:NOTIFICATION_TYPE_gallery_entry'));
         return $list;
     }
 
@@ -92,11 +91,11 @@ class Hook_Notification_gallery_entry extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'galleries',$notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_category_access($members,'galleries',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'galleries', $notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_category_access($members, 'galleries', $notification_code, $category, $to_member_ids, $start, $max);
 
         return $members;
     }

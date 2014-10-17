@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    external_db_login
  */
-
 class Mx_login extends Module_login
 {
     /**

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_Preview_poll
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_poll
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'cms_polls');
-        return array($applies,null,false);
+        $applies = (get_param('page', '') == 'cms_polls');
+        return array($applies, null, false);
     }
 
     /**
@@ -47,20 +46,21 @@ class Hook_Preview_poll
                 $answer = comcode_to_tempcode($answer_plain);
                 $votes = 0;
                 $width = 0;
-                $tpl->attach(do_template('POLL_ANSWER_RESULT',array('_GUID' => '0412b038bb359ce84e5732dec8a09b12','PID' => '','I' => strval($i),'VOTE_URL' => '','ANSWER' => $answer,'ANSWER_PLAIN' => $answer_plain,'WIDTH' => strval($width),'VOTES' => integer_format($votes))));
+                $tpl->attach(do_template('POLL_ANSWER_RESULT', array('_GUID' => '0412b038bb359ce84e5732dec8a09b12', 'PID' => '', 'I' => strval($i), 'VOTE_URL' => '', 'ANSWER' => $answer, 'ANSWER_PLAIN' => $answer_plain, 'WIDTH' => strval($width), 'VOTES' => integer_format($votes))));
                 $i++;
             }
-        } while ($answer_plain != '');
+        }
+        while ($answer_plain != '');
 
         $submit_url = new ocp_tempcode();
 
         // Do our final template
         $question_plain = post_param('question');
         $question = comcode_to_tempcode($question_plain);
-        $archive_url = build_url(array('page' => 'polls','type' => 'misc'),get_module_zone('polls'));
-        $map2 = array('VOTE_URL' => '','SUBMITTER' => strval(get_member()),'PID' => '','FULL_URL' => '','CONTENT' => $tpl,'QUESTION' => $question,'QUESTION_PLAIN' => $question_plain,'SUBMIT_URL' => $submit_url,'ARCHIVE_URL' => $archive_url,'RESULT_URL' => '','ZONE' => '');
-        $output = do_template('POLL_BOX',$map2);
+        $archive_url = build_url(array('page' => 'polls', 'type' => 'misc'), get_module_zone('polls'));
+        $map2 = array('VOTE_URL' => '', 'SUBMITTER' => strval(get_member()), 'PID' => '', 'FULL_URL' => '', 'CONTENT' => $tpl, 'QUESTION' => $question, 'QUESTION_PLAIN' => $question_plain, 'SUBMIT_URL' => $submit_url, 'ARCHIVE_URL' => $archive_url, 'RESULT_URL' => '', 'ZONE' => '');
+        $output = do_template('POLL_BOX', $map2);
 
-        return array($output,null);
+        return array($output, null);
     }
 }

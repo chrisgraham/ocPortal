@@ -50,41 +50,41 @@ class Hook_mybb
         $info['product'] = 'MyBB 1.4.x';
         $info['prefix'] = 'mybb_';
         $info['import'] = array(
-                                'config',
-                                'ocf_groups',
-                                'ocf_custom_profile_fields',
-                                'ocf_members',
-                                'ocf_member_files',
-                                'ip_bans',
-                                'custom_comcode',
-                                'ocf_forum_groupings',
-                                'ocf_forums',
-                                'ocf_topics',
-                                'ocf_private_topics',
-                                'ocf_posts',
-                                'ocf_post_files',
-                                'ocf_polls_and_votes',
-                                'notifications',
-                                'wordfilter',
-                                'calendar',
-                                'ocf_multi_moderations'
-                            );
+            'config',
+            'ocf_groups',
+            'ocf_custom_profile_fields',
+            'ocf_members',
+            'ocf_member_files',
+            'ip_bans',
+            'custom_comcode',
+            'ocf_forum_groupings',
+            'ocf_forums',
+            'ocf_topics',
+            'ocf_private_topics',
+            'ocf_posts',
+            'ocf_post_files',
+            'ocf_polls_and_votes',
+            'notifications',
+            'wordfilter',
+            'calendar',
+            'ocf_multi_moderations'
+        );
 
         $info['dependencies'] = array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
-                                'ocf_members' => array('ocf_groups'),
-                                'ocf_member_files' => array('ocf_members'),
-                                'ocf_forums' => array('ocf_forum_groupings','ocf_members','ocf_groups'),
-                                'ocf_topics' => array('ocf_forums','ocf_members'),
-                                'ocf_polls_and_votes' => array('ocf_topics','ocf_members'),
-                                'ocf_posts' => array('ocf_topics','ocf_members'),
-                                'ocf_post_files' => array('ocf_posts','ocf_private_topics'),
-                                'notifications' => array('ocf_topics','ocf_members','ocf_polls_and_votes'),
-                                'ocf_private_topics' => array('ocf_members'),
-                                'ocf_multi_moderations' => array('ocf_forums','ocf_members','ocf_topics','ocf_posts','ocf_private_topics','ocf_forum_groupings'),
-                            );
-        $_cleanup_url = build_url(array('page' => 'admin_cleanup'),get_module_zone('admin_cleanup'));
+            'ocf_members' => array('ocf_groups'),
+            'ocf_member_files' => array('ocf_members'),
+            'ocf_forums' => array('ocf_forum_groupings', 'ocf_members', 'ocf_groups'),
+            'ocf_topics' => array('ocf_forums', 'ocf_members'),
+            'ocf_polls_and_votes' => array('ocf_topics', 'ocf_members'),
+            'ocf_posts' => array('ocf_topics', 'ocf_members'),
+            'ocf_post_files' => array('ocf_posts', 'ocf_private_topics'),
+            'notifications' => array('ocf_topics', 'ocf_members', 'ocf_polls_and_votes'),
+            'ocf_private_topics' => array('ocf_members'),
+            'ocf_multi_moderations' => array('ocf_forums', 'ocf_members', 'ocf_topics', 'ocf_posts', 'ocf_private_topics', 'ocf_forum_groupings'),
+        );
+        $_cleanup_url = build_url(array('page' => 'admin_cleanup'), get_module_zone('admin_cleanup'));
         $cleanup_url = $_cleanup_url->evaluate();
-        $info['message'] = (get_param('type','misc') != 'import' && get_param('type','misc') != 'hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
+        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new ocp_tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
 
         return $info;
     }
@@ -99,11 +99,11 @@ class Hook_mybb
     {
         $config = array();
         if (!file_exists($file_base . '/inc/config.php')) {
-            warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('inc/config.php')));
+            warn_exit(do_lang_tempcode('BAD_IMPORT_PATH', escape_html('inc/config.php')));
         }
         require($file_base . '/inc/config.php');
 
-        return array($config['database']['database'],$config['database']['username'],$config['database']['password'],$config['database']['table_prefix'],$config['database']['hostname']);
+        return array($config['database']['database'], $config['database']['username'], $config['database']['password'], $config['database']['table_prefix'], $config['database']['hostname']);
     }
 
     /**
@@ -113,7 +113,7 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_config($db,$table_prefix,$file_base)
+    public function import_config($db, $table_prefix, $file_base)
     {
         require($file_base . '/inc/config.php');
 
@@ -182,7 +182,7 @@ class Hook_mybb
             }
 
             if (isset($row['name']) && $row['name'] == 'postmaxavatarsize') {
-                $avatar_dimensions = explode('x',$row['value']);
+                $avatar_dimensions = explode('x', $row['value']);
                 if (isset($avatar_dimensions[0]) && isset($avatar_dimensions[1]) && (!is_null($avatar_dimensions[0])) && (!is_null($avatar_dimensions[1]))) {
                     $additional_data['avatar_max_width'] = intval($avatar_dimensions[0]);
                     $additional_data['avatar_max_height'] = intval($avatar_dimensions[1]);
@@ -191,7 +191,7 @@ class Hook_mybb
             }
 
             if (isset($row['name']) && $row['name'] == 'disableregs') {
-                $page_remap_data['enableregs'] = 1-intval($row['value']);
+                $page_remap_data['enableregs'] = 1 - intval($row['value']);
                 continue;
             }
 
@@ -215,31 +215,31 @@ class Hook_mybb
 
         foreach ($config_remapping as $key => $value) {
             if ($key != 'timezone') {
-                set_option($key,$value);
+                set_option($key, $value);
             } else {
-                set_value('timezone',$value);
+                set_value('timezone', $value);
             }
 
             $PROBED_FORUM_CONFIG[$key] = $value;
         }
 
         foreach ($page_remap as $to) {
-            $GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name' => $to,'zone_name' => get_module_zone($to)));
+            $GLOBALS['SITE_DB']->query_delete('group_page_access', array('page_name' => $to, 'zone_name' => get_module_zone($to)));
         }
         foreach ($groups as $id => $groupname) {
-            if (preg_match('/Administrator/i',$groupname) != 0) {
+            if (preg_match('/Administrator/i', $groupname) != 0) {
                 continue;
             }
 
             foreach ($page_remap as $from => $to) {
                 if ($page_remap_data[$from] == 1) {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name' => $to,'zone_name' => get_module_zone($to),'group_id' => $id));
+                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => $to, 'zone_name' => get_module_zone($to), 'group_id' => $id));
                 }
             }
 
-            $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_max_attachments_per_post' => $additional_data['maxattachments'],'g_max_avatar_width' => $additional_data['avatar_max_width'],'g_max_avatar_height' => $additional_data['avatar_max_height']),array('id' => $id),'',1);
+            $GLOBALS['FORUM_DB']->query_update('f_groups', array('g_max_attachments_per_post' => $additional_data['maxattachments'], 'g_max_avatar_width' => $additional_data['avatar_max_width'], 'g_max_avatar_height' => $additional_data['avatar_max_height']), array('id' => $id), '', 1);
 
-            set_privilege($id,'use_quick_reply',$additional_data['quickreply']);
+            set_privilege($id, 'use_quick_reply', $additional_data['quickreply']);
         }
 
         $PROBED_FORUM_CONFIG['board_prefix'] = $board_url;
@@ -253,7 +253,7 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_groups($db,$table_prefix,$file_base)
+    public function import_ocf_groups($db, $table_prefix, $file_base)
     {
         require($file_base . '/inc/config.php');
 
@@ -265,7 +265,7 @@ class Hook_mybb
             $PROBED_FORUM_CONFIG[$key] = $val;
         }
 
-        $avatar_dimensions = explode('x',$PROBED_FORUM_CONFIG['postmaxavatarsize']);
+        $avatar_dimensions = explode('x', $PROBED_FORUM_CONFIG['postmaxavatarsize']);
         if (isset($avatar_dimensions[0]) && isset($avatar_dimensions[1]) && (!is_null($avatar_dimensions[0])) && (!is_null($avatar_dimensions[1]))) {
             $avatar_max_width = intval($avatar_dimensions[0]);
             $avatar_max_height = intval($avatar_dimensions[1]);
@@ -276,23 +276,23 @@ class Hook_mybb
 
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'usergroups ORDER BY gid');
         foreach ($rows as $row) {
-            if (import_check_if_imported('group',strval($row['gid']))) {
+            if (import_check_if_imported('group', strval($row['gid']))) {
                 continue;
             }
 
-            $is_super_admin = ($row['title'] == 'Administrator')?1:0;
-            $is_super_moderator = ($row['title'] == 'Universal Moderator')?1:0;
+            $is_super_admin = ($row['title'] == 'Administrator') ? 1 : 0;
+            $is_super_moderator = ($row['title'] == 'Universal Moderator') ? 1 : 0;
 
-            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $row['title']));
+            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $row['title']));
             if (is_null($id_new)) {
-                $id_new = ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,'','',null,null,null,null,null,null,null,$avatar_max_width,$avatar_max_height,null);
+                $id_new = ocf_make_group($row['title'], 0, $is_super_admin, $is_super_moderator, '', '', null, null, null, null, null, null, null, $avatar_max_width, $avatar_max_height, null);
             }
 
             // privileges
-            set_privilege($id_new,'allow_html',true);
+            set_privilege($id_new, 'allow_html', true);
 
-            if (!import_check_if_imported('group',strval($row['gid']))) {
-                import_id_remap_put('group',strval($row['gid']),$id_new);
+            if (!import_check_if_imported('group', strval($row['gid']))) {
+                import_id_remap_put('group', strval($row['gid']), $id_new);
             }
         }
     }
@@ -304,22 +304,22 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_members($db,$table_prefix,$file_base)
+    public function import_ocf_members($db, $table_prefix, $file_base)
     {
         $row_start = 0;
         $rows = array();
 
         do {
-            $rows = $db->query('SELECT u.uid AS \'muid\',u.*,b.* FROM ' . $table_prefix . 'users u LEFT JOIN ' . $table_prefix . 'banned b ON u.uid=b.uid WHERE u.uid<>-1 ORDER BY u.uid',200,$row_start);
+            $rows = $db->query('SELECT u.uid AS \'muid\',u.*,b.* FROM ' . $table_prefix . 'users u LEFT JOIN ' . $table_prefix . 'banned b ON u.uid=b.uid WHERE u.uid<>-1 ORDER BY u.uid', 200, $row_start);
 
             foreach ($rows as $row) {
-                if (import_check_if_imported('member',strval($row['muid']))) {
+                if (import_check_if_imported('member', strval($row['muid']))) {
                     continue;
                 }
 
                 $test = $GLOBALS['OCF_DRIVER']->get_member_from_username($row['username']);
                 if (!is_null($test)) {
-                    import_id_remap_put('member',strval($row['muid']),$test);
+                    import_id_remap_put('member', strval($row['muid']), $test);
                     continue;
                 }
 
@@ -334,47 +334,46 @@ class Hook_mybb
                 }
 
                 $primary_group = $row['usergroup'];
-                $_secondary_groups = explode(',',$row['additionalgroups']);
+                $_secondary_groups = explode(',', $row['additionalgroups']);
                 $secondary_groups = array();
                 foreach ($_secondary_groups as $_sec_group) {
-                    $sec_group = import_id_remap_get('group',$_sec_group,true);
+                    $sec_group = import_id_remap_get('group', $_sec_group, true);
                     if (!is_null($sec_group)) {
                         $secondary_groups[] = $sec_group;
                     }
                 }
                 //array_map('intval',);
 
-                $primary_group = import_id_remap_get('group',strval($row['usergroup']));
+                $primary_group = import_id_remap_get('group', strval($row['usergroup']));
 
                 if ($row['usergroup'] == 4) {
-                    $secondary_groups[] = db_get_first_id()+1;
+                    $secondary_groups[] = db_get_first_id() + 1;
                 }
 
-                $custom_fields = array(
-                );
+                $custom_fields = array();
                 if ($row['website'] != '') {
-                    $custom_fields[ocf_make_boiler_custom_field('website')] = (strlen($row['website'])>0)?('[url]' . $row['website'] . '[/url]'):'';
+                    $custom_fields[ocf_make_boiler_custom_field('website')] = (strlen($row['website']) > 0) ? ('[url]' . $row['website'] . '[/url]') : '';
                 }
 
-                $signature = $this->fix_links($row['signature'],$db,$table_prefix);
+                $signature = $this->fix_links($row['signature'], $db, $table_prefix);
                 $validated = 1;
                 $reveal_age = 0;
 
                 if ($row['birthday'] != '') {
                     $birthdate = date('Y-m-d', strtotime($row['birthday']));
-                    $birthdata = array_map('intval',explode('-',$birthdate));
-                    $bday_day = (isset($birthdata[0]) && ($birthdata[0] != 0))?$birthdata[0]:null;
-                    $bday_month = (isset($birthdata[1]) && ($birthdata[1] != 0))?$birthdata[1]:null;
-                    $bday_year = (isset($birthdata[2]) && ($birthdata[2] != 0))?$birthdata[2]:null;
+                    $birthdata = array_map('intval', explode('-', $birthdate));
+                    $bday_day = (isset($birthdata[0]) && ($birthdata[0] != 0)) ? $birthdata[0] : null;
+                    $bday_month = (isset($birthdata[1]) && ($birthdata[1] != 0)) ? $birthdata[1] : null;
+                    $bday_year = (isset($birthdata[2]) && ($birthdata[2] != 0)) ? $birthdata[2] : null;
                 } else {
-                    list($bday_day,$bday_month,$bday_year) = array(null,null,null);
+                    list($bday_day, $bday_month, $bday_year) = array(null, null, null);
                 }
 
                 $views_signatures = 1;
                 $preview_posts = 1;
                 $track_posts = $row['allownotices'];
                 $title = $row['usertitle'];
-                $title = @html_entity_decode($title,ENT_QUOTES,get_charset());
+                $title = @html_entity_decode($title, ENT_QUOTES, get_charset());
 
                 // These are done in the members-files stage
                 $avatar_url = '';
@@ -385,21 +384,22 @@ class Hook_mybb
                 $type = 'md5';
                 $salt = $row['salt'];
 
-                $id_new = ocf_make_member($row['username'],$password,$row['email'],null,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timezone']),$primary_group,$validated,$row['regdate'],$row['lastvisit'],'',$avatar_url,$signature,($row['lifted']>time())?1:0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$track_posts,$language,$row['receivepms'],$row['receivepms'],'','',false,$type,$salt,1);
+                $id_new = ocf_make_member($row['username'], $password, $row['email'], null, $bday_day, $bday_month, $bday_year, $custom_fields, strval($row['timezone']), $primary_group, $validated, $row['regdate'], $row['lastvisit'], '', $avatar_url, $signature, ($row['lifted'] > time()) ? 1 : 0, $preview_posts, $reveal_age, $title, $photo_url, $photo_thumb_url, $views_signatures, $track_posts, $language, $row['receivepms'], $row['receivepms'], '', '', false, $type, $salt, 1);
 
                 // Fix usergroup leadership
-                $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader' => $id_new),array('g_group_leader' => -$row['muid']));
+                $GLOBALS['FORUM_DB']->query_update('f_groups', array('g_group_leader' => $id_new), array('g_group_leader' => -$row['muid']));
 
-                import_id_remap_put('member',strval($row['muid']),$id_new);
+                import_id_remap_put('member', strval($row['muid']), $id_new);
 
                 // Set up usergroup membership
                 foreach ($secondary_groups as $s) {
-                    ocf_add_member_to_group($id_new,$s,1);
+                    ocf_add_member_to_group($id_new, $s, 1);
                 }
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -409,11 +409,11 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_member_files($db,$table_prefix,$file_base)
+    public function import_ocf_member_files($db, $table_prefix, $file_base)
     {
         global $STRICT_FILE;
 
-        $options = $db->query('SELECT * FROM ' . $table_prefix . 'settings WHERE name LIKE \'' . db_encode_like('%avatar%') . '\' OR ' . db_string_equal_to('name','homeurl'));
+        $options = $db->query('SELECT * FROM ' . $table_prefix . 'settings WHERE name LIKE \'' . db_encode_like('%avatar%') . '\' OR ' . db_string_equal_to('name', 'homeurl'));
         $options_array = array();
 
         $avatar_path = '';
@@ -436,38 +436,38 @@ class Hook_mybb
         $forum_dir = ocp_srv('DOCUMENT_ROOT') . urldecode($home_dir_parts['path']);
 
         $avatar_gallery_path = $forum_dir . '/' . $avatar_gallery_path;
-        $avatar_path = preg_replace('#\.\/#','/',$avatar_path);
+        $avatar_path = preg_replace('#\.\/#', '/', $avatar_path);
         $avatar_path = $forum_dir . $avatar_path;
 
         $row_start = 0;
         $rows = array();
         do {
             $query = 'SELECT uid,avatar,avatardimensions,avatartype,showavatars FROM ' . $table_prefix . 'users WHERE uid<>-1 ORDER BY uid';
-            $rows = $db->query($query,200,$row_start);
+            $rows = $db->query($query, 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('member_files',strval($row['uid']))) {
+                if (import_check_if_imported('member_files', strval($row['uid']))) {
                     continue;
                 }
 
-                $member_id = import_id_remap_get('member',strval($row['uid']));
+                $member_id = import_id_remap_get('member', strval($row['uid']));
 
                 $avatar_url = '';
                 switch ($row['avatartype']) {
                     case 'gallery': // Gallery
                         $filename = $row['avatar'];
-                        $filename = preg_replace('#images\/avatars\/#','',$filename); //we need just a filename
+                        $filename = preg_replace('#images\/avatars\/#', '', $filename); //we need just a filename
 
-                        if ((file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . $filename)) || (@rename($avatar_gallery_path . '/' . $filename,get_custom_file_base() . '/uploads/ocf_avatars/' . $filename))) {
-                            $avatar_url = 'uploads/ocf_avatars/' . substr($filename,strrpos($filename,'/'));
+                        if ((file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . $filename)) || (@rename($avatar_gallery_path . '/' . $filename, get_custom_file_base() . '/uploads/ocf_avatars/' . $filename))) {
+                            $avatar_url = 'uploads/ocf_avatars/' . substr($filename, strrpos($filename, '/'));
                             sync_file($avatar_url);
                         } else {
                             // Try as a pack avatar then
-                            $striped_filename = str_replace('/','_',$filename);
+                            $striped_filename = str_replace('/', '_', $filename);
                             if (file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . $striped_filename)) {
-                                $avatar_url = 'uploads/ocf_avatars/' . substr($filename,strrpos($filename,'/'));
+                                $avatar_url = 'uploads/ocf_avatars/' . substr($filename, strrpos($filename, '/'));
                             } else {
                                 if ($STRICT_FILE) {
-                                    warn_exit(do_lang_tempcode('MISSING_AVATAR',escape_html($filename)));
+                                    warn_exit(do_lang_tempcode('MISSING_AVATAR', escape_html($filename)));
                                 }
                                 $avatar_url = '';
                             }
@@ -480,28 +480,27 @@ class Hook_mybb
 
                     case 'upload': // Upload
                         $filename = $row['avatar'];
-                        $filename = preg_replace('#\.\/uploads\/avatars\/#','',$filename);
-                        if ((file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . $filename)) || (@rename($avatar_path . '/' . $filename,get_custom_file_base() . '/uploads/ocf_avatars/' . $filename))) {
+                        $filename = preg_replace('#\.\/uploads\/avatars\/#', '', $filename);
+                        if ((file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . $filename)) || (@rename($avatar_path . '/' . $filename, get_custom_file_base() . '/uploads/ocf_avatars/' . $filename))) {
                             $avatar_url = 'uploads/ocf_avatars/' . $filename;
                             sync_file($avatar_url);
                         } else {
                             if ($STRICT_FILE) {
-                                warn_exit(do_lang_tempcode('MISSING_AVATAR',escape_html($filename)));
+                                warn_exit(do_lang_tempcode('MISSING_AVATAR', escape_html($filename)));
                             }
                             $avatar_url = '';
                         }
                         break;
-
-
                 }
 
-                $GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url' => $avatar_url),array('id' => $member_id),'',1);
+                $GLOBALS['FORUM_DB']->query_update('f_members', array('m_avatar_url' => $avatar_url), array('id' => $member_id), '', 1);
 
-                import_id_remap_put('member_files',strval($row['uid']),1);
+                import_id_remap_put('member_files', strval($row['uid']), 1);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -511,7 +510,7 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ip_bans($db,$table_prefix,$file_base)
+    public function import_ip_bans($db, $table_prefix, $file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'users u LEFT JOIN ' . $table_prefix . 'banned b ON u.uid=b.uid WHERE b.gid=7');
 
@@ -527,29 +526,29 @@ class Hook_mybb
                 $perm_banned = true;
             } else {
                 //calculate the ban period
-                $period_array = array_map('intval',explode('-',$ban_period));
-                if (isset($period_array[0]) && ($period_array[0]>0)) {
-                    $ban_till = $ban_time+strtotime("+ " . $period_array[0] . " day",strtotime($ban_time)); //the user is banned till this date/time
-                } elseif (isset($period_array[1]) && ($period_array[1]>0)) {
-                    $ban_till = $ban_time+strtotime("+ " . $period_array[1] . " month",strtotime($ban_time)); //the user is banned till this date/time
-                } elseif (isset($period_array[2]) && ($period_array[2]>0)) {
-                    $ban_till = $ban_time+strtotime("+ " . $period_array[2] . " year",strtotime($ban_time)); //the user is banned till this date/time
+                $period_array = array_map('intval', explode('-', $ban_period));
+                if (isset($period_array[0]) && ($period_array[0] > 0)) {
+                    $ban_till = $ban_time + strtotime("+ " . $period_array[0] . " day", strtotime($ban_time)); //the user is banned till this date/time
+                } elseif (isset($period_array[1]) && ($period_array[1] > 0)) {
+                    $ban_till = $ban_time + strtotime("+ " . $period_array[1] . " month", strtotime($ban_time)); //the user is banned till this date/time
+                } elseif (isset($period_array[2]) && ($period_array[2] > 0)) {
+                    $ban_till = $ban_time + strtotime("+ " . $period_array[2] . " year", strtotime($ban_time)); //the user is banned till this date/time
                 }
             }
 
-            $ban_till = $ban_time+$ban_period; //the user is banned till this date/time
+            $ban_till = $ban_time + $ban_period; //the user is banned till this date/time
 
             if (!$perm_banned) {
                 continue;
             } //add just IPs of permanently banned users
 
-            if (import_check_if_imported('ip_ban',strval($row['uid']))) {
+            if (import_check_if_imported('ip_ban', strval($row['uid']))) {
                 continue;
             }
 
             add_ip_ban($row['lastip']);
 
-            import_id_remap_put('ip_ban',strval($row['lastip']),0);
+            import_id_remap_put('ip_ban', strval($row['lastip']), 0);
         }
     }
 
@@ -561,7 +560,7 @@ class Hook_mybb
      */
     public function _un_phpbb_ip($ip)
     {
-        if (strlen($ip)<8) {
+        if (strlen($ip) < 8) {
             return '127.0.0.1';
         }
 
@@ -576,26 +575,26 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_forum_groupings($db,$table_prefix,$old_base_dir)
+    public function import_ocf_forum_groupings($db, $table_prefix, $old_base_dir)
     {
-        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'forums WHERE ' . db_string_equal_to('type','c'));
+        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'forums WHERE ' . db_string_equal_to('type', 'c'));
         foreach ($rows as $row) {
-            if (import_check_if_imported('category',strval($row['fid']))) {
+            if (import_check_if_imported('category', strval($row['fid']))) {
                 continue;
             }
 
             $title = $row['name'];
-            $title = @html_entity_decode($title,ENT_QUOTES,get_charset());
+            $title = @html_entity_decode($title, ENT_QUOTES, get_charset());
 
-            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title' => $title));
+            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'id', array('c_title' => $title));
             if (!is_null($test)) {
-                import_id_remap_put('category',strval($row['fid']),$test);
+                import_id_remap_put('category', strval($row['fid']), $test);
                 continue;
             }
 
-            $id_new = ocf_make_forum_grouping($title,'',1);
+            $id_new = ocf_make_forum_grouping($title, '', 1);
 
-            import_id_remap_put('category',strval($row['fid']),$id_new);
+            import_id_remap_put('category', strval($row['fid']), $id_new);
         }
     }
 
@@ -606,13 +605,13 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_forums($db,$table_prefix,$old_base_dir)
+    public function import_ocf_forums($db, $table_prefix, $old_base_dir)
     {
         require_code('ocf_forums_action2');
 
-        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'forums WHERE ' . db_string_equal_to('type','f'));
+        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'forums WHERE ' . db_string_equal_to('type', 'f'));
         foreach ($rows as $row) {
-            $remapped = import_id_remap_get('forum',strval($row['fid']),true);
+            $remapped = import_id_remap_get('forum', strval($row['fid']), true);
             if (!is_null($remapped)) {
                 continue;
             }
@@ -624,13 +623,13 @@ class Hook_mybb
             $position = $row['disporder'];
             $post_count_increment = 1;
 
-            $parentlist = explode(',',$row['parentlist']);
+            $parentlist = explode(',', $row['parentlist']);
             $cat_id = $parentlist[0];
 
-            $category_id = import_id_remap_get('category',$cat_id,true);
+            $category_id = import_id_remap_get('category', $cat_id, true);
             end($parentlist);
             $prev = prev($parentlist);
-            $parent_forum = ($prev != $parentlist[0])?intval($prev):db_get_first_id();
+            $parent_forum = ($prev != $parentlist[0]) ? intval($prev) : db_get_first_id();
 
             $access_mapping = array();
             if ($row['status'] == 1) {
@@ -648,14 +647,14 @@ class Hook_mybb
                         $v = 4;
                     }
 
-                    $group_id = import_id_remap_get('group',strval($p['gid']));
+                    $group_id = import_id_remap_get('group', strval($p['gid']));
                     $access_mapping[$group_id] = $v;
                 }
             }
 
-            $id_new = ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position,$post_count_increment,0,'');
+            $id_new = ocf_make_forum($name, $description, $category_id, $access_mapping, $parent_forum, $position, $post_count_increment, 0, '');
 
-            import_id_remap_put('forum',strval($row['fid']),$id_new);
+            import_id_remap_put('forum', strval($row['fid']), $id_new);
         }
     }
 
@@ -666,26 +665,27 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_topics($db,$table_prefix,$file_base)
+    public function import_ocf_topics($db, $table_prefix, $file_base)
     {
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'threads WHERE visible=1 ORDER BY tid',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'threads WHERE visible=1 ORDER BY tid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('topic',strval($row['tid']))) {
+                if (import_check_if_imported('topic', strval($row['tid']))) {
                     continue;
                 }
 
-                $forum_id = import_id_remap_get('forum',strval($row['fid']));
+                $forum_id = import_id_remap_get('forum', strval($row['fid']));
 
-                $id_new = ocf_make_topic($forum_id,$row['subject'],'',1,($row['visible'] == 1)?0:1,0,0,0,null,null,false,$row['views']);
+                $id_new = ocf_make_topic($forum_id, $row['subject'], '', 1, ($row['visible'] == 1) ? 0 : 1, 0, 0, 0, null, null, false, $row['views']);
 
-                import_id_remap_put('topic',strval($row['tid']),$id_new);
+                import_id_remap_put('topic', strval($row['tid']), $id_new);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -695,30 +695,30 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_posts($db,$table_prefix,$file_base)
+    public function import_ocf_posts($db, $table_prefix, $file_base)
     {
         global $STRICT_FILE;
 
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'posts p ORDER BY p.pid',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'posts p ORDER BY p.pid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('post',strval($row['pid']))) {
+                if (import_check_if_imported('post', strval($row['pid']))) {
                     continue;
                 }
 
-                $topic_id = import_id_remap_get('topic',strval($row['tid']),true);
+                $topic_id = import_id_remap_get('topic', strval($row['tid']), true);
                 if (is_null($topic_id)) {
-                    import_id_remap_put('post',strval($row['pid']),-1);
+                    import_id_remap_put('post', strval($row['pid']), -1);
                     continue;
                 }
-                $member_id = import_id_remap_get('member',strval($row['uid']),true);
+                $member_id = import_id_remap_get('member', strval($row['uid']), true);
                 if (is_null($member_id)) {
                     $member_id = db_get_first_id();
                 }
 
-                $forum_id = import_id_remap_get('forum',strval($row['fid']),true);
+                $forum_id = import_id_remap_get('forum', strval($row['fid']), true);
 
                 $title = '';
                 $topics = $db->query('SELECT subject FROM ' . $table_prefix . 'threads WHERE tid=' . strval($row['tid']));
@@ -729,22 +729,23 @@ class Hook_mybb
                     $title = $row['subject'];
                 }
 
-                $title = @html_entity_decode($title,ENT_QUOTES,get_charset());
+                $title = @html_entity_decode($title, ENT_QUOTES, get_charset());
 
-                $post = $this->fix_links($row['message'],$db,$table_prefix);
+                $post = $this->fix_links($row['message'], $db, $table_prefix);
 
                 $last_edit_by = null;
                 $last_edit_time = $row['edittime'];
 
                 $post_username = $GLOBALS['OCF_DRIVER']->get_username($member_id);
 
-                $id_new = ocf_make_post($topic_id,$title,$post,0,$first_post,1,0,$post_username,$row['ipaddress'],$row['dateline'],$member_id,null,$last_edit_time,$last_edit_by,false,false,$forum_id,false);
+                $id_new = ocf_make_post($topic_id, $title, $post, 0, $first_post, 1, 0, $post_username, $row['ipaddress'], $row['dateline'], $member_id, null, $last_edit_time, $last_edit_by, false, false, $forum_id, false);
 
-                import_id_remap_put('post',strval($row['pid']),$id_new);
+                import_id_remap_put('post', strval($row['pid']), $id_new);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -755,7 +756,7 @@ class Hook_mybb
      */
     public function _fix_links_callback_topic($m)
     {
-        return 'index.php?page=topicview&id=' . strval(import_id_remap_get('topic',strval($m[2]),true));
+        return 'index.php?page=topicview&id=' . strval(import_id_remap_get('topic', strval($m[2]), true));
     }
 
     /**
@@ -766,7 +767,7 @@ class Hook_mybb
      */
     public function _fix_links_callback_post($m)
     {
-        return 'index.php?page=topicview&type=findpost&id=' . strval(import_id_remap_get('post',strval($m[2]),true));
+        return 'index.php?page=topicview&type=findpost&id=' . strval(import_id_remap_get('post', strval($m[2]), true));
     }
 
     /**
@@ -777,7 +778,7 @@ class Hook_mybb
      */
     public function _fix_links_callback_forum($m)
     {
-        return 'index.php?page=forumview&id=' . strval(import_id_remap_get('forum',strval($m[2]),true));
+        return 'index.php?page=forumview&id=' . strval(import_id_remap_get('forum', strval($m[2]), true));
     }
 
     /**
@@ -788,7 +789,7 @@ class Hook_mybb
      */
     public function _fix_links_callback_member($m)
     {
-        return 'index.php?page=members&type=view&id=' . strval(import_id_remap_get('member',strval($m[2]),true));
+        return 'index.php?page=members&type=view&id=' . strval(import_id_remap_get('member', strval($m[2]), true));
     }
 
     /**
@@ -799,16 +800,16 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @return string                   The new text field text
      */
-    public function fix_links($post,$db,$table_prefix)
+    public function fix_links($post, $db, $table_prefix)
     {
-        $options = $db->query('SELECT * FROM ' . $table_prefix . 'settings WHERE ' . db_string_equal_to('name','bburl'));
+        $options = $db->query('SELECT * FROM ' . $table_prefix . 'settings WHERE ' . db_string_equal_to('name', 'bburl'));
 
-        $OLD_BASE_URL = (isset($options[0]['value']) && $options[0]['value'] != '')?$options[0]['value']:'';
+        $OLD_BASE_URL = (isset($options[0]['value']) && $options[0]['value'] != '') ? $options[0]['value'] : '';
 
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(showthread\.php\?tid=)(\d*)#',array($this,'_fix_links_callback_topic'),$post);
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(forumdisplay\.php\?fid=)(\d*)#',array($this,'_fix_links_callback_forum'),$post);
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(member\.php\?action=profile\&uid=)(\d*)#',array($this,'_fix_links_callback_member'),$post);
-        $post = preg_replace('#:[0-9a-f]{10}#','',$post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(showthread\.php\?tid=)(\d*)#', array($this, '_fix_links_callback_topic'), $post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(forumdisplay\.php\?fid=)(\d*)#', array($this, '_fix_links_callback_forum'), $post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(member\.php\?action=profile\&uid=)(\d*)#', array($this, '_fix_links_callback_member'), $post);
+        $post = preg_replace('#:[0-9a-f]{10}#', '', $post);
         return $post;
     }
 
@@ -823,11 +824,11 @@ class Hook_mybb
      * @param  string                   The filename to output to
      * @return URLPATH                  The URL
      */
-    public function data_to_disk($data,$filename,$sections,$db,$table_prefix = '',$output_filename = '')
+    public function data_to_disk($data, $filename, $sections, $db, $table_prefix = '', $output_filename = '')
     {
-        $options = $db->query('SELECT * FROM ' . $table_prefix . 'settings WHERE ' . db_string_equal_to('name','bburl'));
+        $options = $db->query('SELECT * FROM ' . $table_prefix . 'settings WHERE ' . db_string_equal_to('name', 'bburl'));
 
-        $homeurl = (isset($options[0]['value']) && ($options[0]['value'] != ''))?$options[0]['value']:'';
+        $homeurl = (isset($options[0]['value']) && ($options[0]['value'] != '')) ? $options[0]['value'] : '';
 
         $home_dir_parts = parse_url($homeurl);
         $forum_dir = ocp_srv('DOCUMENT_ROOT') . urldecode($home_dir_parts['path']);
@@ -840,12 +841,12 @@ class Hook_mybb
             }
         }
 
-        $filename = ($output_filename == '')?preg_replace('#.*\/#','',$filename):$output_filename;
+        $filename = ($output_filename == '') ? preg_replace('#.*\/#', '', $filename) : $output_filename;
 
-        $filename = find_derivative_filename('uploads/' . $sections,$filename);
+        $filename = find_derivative_filename('uploads/' . $sections, $filename);
         $path = get_custom_file_base() . '/uploads/' . $sections . '/' . $filename;
-        $myfile = @fopen($path,'wb') or warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html('uploads/' . $sections . '/' . $filename)));
-        fwrite($myfile,$data);
+        $myfile = @fopen($path, 'wb') or warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html('uploads/' . $sections . '/' . $filename)));
+        fwrite($myfile, $data);
         fclose($myfile);
         fix_permissions($path);
         sync_file($path);
@@ -862,7 +863,7 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_post_files($db,$table_prefix,$file_base)
+    public function import_ocf_post_files($db, $table_prefix, $file_base)
     {
         global $STRICT_FILE;
         require_code('attachments2');
@@ -871,38 +872,39 @@ class Hook_mybb
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'attachments ORDER BY aid',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'attachments ORDER BY aid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('post_files',strval($row['aid']))) {
+                if (import_check_if_imported('post_files', strval($row['aid']))) {
                     continue;
                 }
 
-                $post_id = import_id_remap_get('post',strval($row['pid']));
+                $post_id = import_id_remap_get('post', strval($row['pid']));
 
-                $post_row = $GLOBALS['FORUM_DB']->query_select('f_posts',array('p_time','p_poster','p_post'),array('id' => $post_id),'',1);
-                if (!array_key_exists(0,$post_row)) {
-                    import_id_remap_put('post_files',strval($row['aid']),1);
+                $post_row = $GLOBALS['FORUM_DB']->query_select('f_posts', array('p_time', 'p_poster', 'p_post'), array('id' => $post_id), '', 1);
+                if (!array_key_exists(0, $post_row)) {
+                    import_id_remap_put('post_files', strval($row['aid']), 1);
                     continue; // Orphaned post
                 }
-                $post = get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
+                $post = get_translated_text($post_row[0]['p_post'], $GLOBALS['SITE_DB']);
                 $member_id = $post_row[0]['p_poster'];
 
-                $url = $this->data_to_disk('',$row['attachname'],'attachments',$db,$table_prefix, $row['filename']);
-                $thumb_url = $this->data_to_disk('',$row['thumbnail'],'attachments_thumbs',$db,$table_prefix, $row['filename']);
-                $attachment_map = array('a_member_id' => $member_id,'a_file_size' => $row['filesize'],'a_url' => $url,'a_thumb_url' => $thumb_url,'a_original_filename' => $row['filename'],'a_num_downloads' => $row['downloads'],'a_last_downloaded_time' => NULL,'a_add_time' => $row['dateuploaded'],'a_description' => '');
-                $a_id = $GLOBALS['SITE_DB']->query_insert('attachments',$attachment_map,true);
-                $GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type' => 'ocf_post','r_referer_id' => strval($post_id),'a_id' => $a_id));
+                $url = $this->data_to_disk('', $row['attachname'], 'attachments', $db, $table_prefix, $row['filename']);
+                $thumb_url = $this->data_to_disk('', $row['thumbnail'], 'attachments_thumbs', $db, $table_prefix, $row['filename']);
+                $attachment_map = array('a_member_id' => $member_id, 'a_file_size' => $row['filesize'], 'a_url' => $url, 'a_thumb_url' => $thumb_url, 'a_original_filename' => $row['filename'], 'a_num_downloads' => $row['downloads'], 'a_last_downloaded_time' => null, 'a_add_time' => $row['dateuploaded'], 'a_description' => '');
+                $a_id = $GLOBALS['SITE_DB']->query_insert('attachments', $attachment_map, true);
+                $GLOBALS['SITE_DB']->query_insert('attachment_refs', array('r_referer_type' => 'ocf_post', 'r_referer_id' => strval($post_id), 'a_id' => $a_id));
                 $post .= "\n\n" . '[attachment]' . strval($a_id) . '[/attachment]';
 
                 ocf_over_msn();
-                $GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id' => $post_id),'',1);
+                $GLOBALS['FORUM_DB']->query_update('f_posts', update_lang_comcode_attachments('p_post', $post_row[0]['p_post'], $post, 'ocf_post', strval($post_id)), array('id' => $post_id), '', 1);
                 ocf_over_local();
 
-                import_id_remap_put('post_files',strval($row['aid']),1);
+                import_id_remap_put('post_files', strval($row['aid']), 1);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -912,40 +914,40 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_polls_and_votes($db,$table_prefix,$file_base)
+    public function import_ocf_polls_and_votes($db, $table_prefix, $file_base)
     {
         $rows = $db->query_select('polls');
         foreach ($rows as $row) {
-            if (import_check_if_imported('poll',strval($row['pid']))) {
+            if (import_check_if_imported('poll', strval($row['pid']))) {
                 continue;
             }
 
-            $topic_id = import_id_remap_get('topic',strval($row['tid']),true);
+            $topic_id = import_id_remap_get('topic', strval($row['tid']), true);
             if (is_null($topic_id)) {
-                import_id_remap_put('poll',strval($row['pid']),-1);
+                import_id_remap_put('poll', strval($row['pid']), -1);
                 continue;
             }
 
-            $is_open = 1-$row['closed'];
+            $is_open = 1 - $row['closed'];
 
             $answers = array();
-            $answers_array = explode('||~|~||',$row['options']);
+            $answers_array = explode('||~|~||', $row['options']);
 
             $answer_map = array();
             foreach ($answers_array as $key => $answer) {
-                $answer_map[$key+1] = count($answers);
+                $answer_map[$key + 1] = count($answers);
                 $answers[] = $answer;
             }
             $maximum = count($answers);
 
             $rows2 = $db->query('SELECT * FROM ' . $table_prefix . 'pollvotes WHERE pid=' . strval($row['pid']));
             foreach ($rows2 as $row2) {
-                $row2['uid'] = import_id_remap_get('member',strval($row2['uid']),true);
+                $row2['uid'] = import_id_remap_get('member', strval($row2['uid']), true);
             }
 
-            $id_new = ocf_make_poll($topic_id,$row['question'],0,$is_open,1,$maximum,0,$answers,false);
+            $id_new = ocf_make_poll($topic_id, $row['question'], 0, $is_open, 1, $maximum, 0, $answers, false);
 
-            $answers = collapse_1d_complexity('id',$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('id'),array('pa_poll_id' => $id_new)));
+            $answers = collapse_1d_complexity('id', $GLOBALS['FORUM_DB']->query_select('f_poll_answers', array('id'), array('pa_poll_id' => $id_new)));
 
             foreach ($rows2 as $row2) {
                 $member_id = $row2['uid'];
@@ -955,11 +957,11 @@ class Hook_mybb
                     } else {
                         $answer = $answers[$answer_map[$row2['voteoption']]];
                     }
-                    $GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id' => $id_new,'pv_member_id' => $member_id,'pv_answer_id' => $answer,'pv_ip' => ''));
+                    $GLOBALS['FORUM_DB']->query_insert('f_poll_votes', array('pv_poll_id' => $id_new, 'pv_member_id' => $member_id, 'pv_answer_id' => $answer, 'pv_ip' => ''));
                 }
             }
 
-            import_id_remap_put('poll',strval($row['pid']),$id_new);
+            import_id_remap_put('poll', strval($row['pid']), $id_new);
         }
     }
 
@@ -971,7 +973,7 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
+    public function import_ocf_private_topics($db, $table_prefix, $old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'privatemessages p ORDER BY dateline');
 
@@ -979,14 +981,14 @@ class Hook_mybb
         $groups = array();
         foreach ($rows as $row) {
             // Do some fiddling around for duplication
-            if ($row['fromid']>$row['toid']) {
+            if ($row['fromid'] > $row['toid']) {
                 $a = $row['toid'];
                 $b = $row['fromid'];
             } else {
                 $a = $row['fromid'];
                 $b = $row['toid'];
             }
-            $row['subject'] = str_replace('Re: ','',$row['subject']);
+            $row['subject'] = str_replace('Re: ', '', $row['subject']);
             $groups[strval($a) . ':' . strval($b) . ':' . $row['subject']][] = $row;
         }
 
@@ -994,20 +996,20 @@ class Hook_mybb
         foreach ($groups as $group) {
             $row = $group[0];
 
-            if (import_check_if_imported('pt',strval($row['pmid']))) {
+            if (import_check_if_imported('pt', strval($row['pmid']))) {
                 continue;
             }
 
             // Create topic
-            $from_id = import_id_remap_get('member',strval($row['fromid']),true);
+            $from_id = import_id_remap_get('member', strval($row['fromid']), true);
             if (is_null($from_id)) {
                 $from_id = $GLOBALS['OCF_DRIVER']->get_guest_id();
             }
-            $to_id = import_id_remap_get('member',strval($row['toid']),true);
+            $to_id = import_id_remap_get('member', strval($row['toid']), true);
             if (is_null($to_id)) {
                 $to_id = $GLOBALS['OCF_DRIVER']->get_guest_id();
             }
-            $topic_id = ocf_make_topic(null,'','',1,1,0,0,0,$from_id,$to_id,false);
+            $topic_id = ocf_make_topic(null, '', '', 1, 1, 0, 0, 0, $from_id, $to_id, false);
 
             $first_post = true;
             foreach ($group as $_post) {
@@ -1017,11 +1019,11 @@ class Hook_mybb
                     $title = '';
                 }
 
-                $title = @html_entity_decode($title,ENT_QUOTES,get_charset());
+                $title = @html_entity_decode($title, ENT_QUOTES, get_charset());
 
-                $post = $this->fix_links($_post['message'],$db,$table_prefix);
+                $post = $this->fix_links($_post['message'], $db, $table_prefix);
                 $validated = 1;
-                $from_id = import_id_remap_get('member',strval($_post['fromid']),true);
+                $from_id = import_id_remap_get('member', strval($_post['fromid']), true);
                 if (is_null($from_id)) {
                     $from_id = $GLOBALS['OCF_DRIVER']->get_guest_id();
                 }
@@ -1032,11 +1034,11 @@ class Hook_mybb
                 $last_edit_time = null;
                 $last_edit_by = null;
 
-                ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,null,$last_edit_time,$last_edit_by,false,false,null,false);
+                ocf_make_post($topic_id, $title, $post, 0, $first_post, $validated, 0, $poster_name_if_guest, $ip_address, $time, $poster, null, $last_edit_time, $last_edit_by, false, false, null, false);
                 $first_post = false;
             }
 
-            import_id_remap_put('pt',strval($row['pmid']),$topic_id);
+            import_id_remap_put('pt', strval($row['pmid']), $topic_id);
         }
     }
 
@@ -1084,34 +1086,35 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_notifications($db,$table_prefix,$file_base)
+    public function import_notifications($db, $table_prefix, $file_base)
     {
         require_code('notifications');
 
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'threadsubscriptions',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'threadsubscriptions', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('topic_notification',strval($row['tid']) . '-' . strval($row['uid']))) {
+                if (import_check_if_imported('topic_notification', strval($row['tid']) . '-' . strval($row['uid']))) {
                     continue;
                 }
 
-                $member_id = import_id_remap_get('member',strval($row['uid']),true);
+                $member_id = import_id_remap_get('member', strval($row['uid']), true);
                 if (is_null($member_id)) {
                     continue;
                 }
-                $topic_id = import_id_remap_get('topic',strval($row['tid']),true);
+                $topic_id = import_id_remap_get('topic', strval($row['tid']), true);
                 if (is_null($topic_id)) {
                     continue;
                 }
-                enable_notifications('ocf_topic',strval($topic_id),$member_id);
+                enable_notifications('ocf_topic', strval($topic_id), $member_id);
 
-                import_id_remap_put('topic_notification',strval($row['tid']) . '-' . strval($row['uid']),1);
+                import_id_remap_put('topic_notification', strval($row['tid']) . '-' . strval($row['uid']), 1);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -1121,11 +1124,11 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_wordfilter($db,$table_prefix,$file_base)
+    public function import_wordfilter($db, $table_prefix, $file_base)
     {
         $rows = $db->query_select('badwords');
         foreach ($rows as $row) {
-            add_wordfilter_word($row['badword'],$row['replacement']);
+            add_wordfilter_word($row['badword'], $row['replacement']);
         }
     }
 
@@ -1136,31 +1139,31 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_custom_comcode($db,$table_prefix,$file_base)
+    public function import_custom_comcode($db, $table_prefix, $file_base)
     {
         require_code('custom_comcode');
         require_code('comcode_compiler');
 
         $rows = $db->query_select('mycode');
         foreach ($rows as $row) {
-            if (import_check_if_imported('custom_comcode',strval($row['cid']))) {
+            if (import_check_if_imported('custom_comcode', strval($row['cid']))) {
                 continue;
             }
 
             $matches = array();
-            preg_match('#\[(.*?)\\\]#',$row['regex'], $matches);
-            $custom_tag = (isset($matches[1]) && ($matches[1] != ''))?$matches[1]:''; //'tag_tag'
+            preg_match('#\[(.*?)\\\]#', $row['regex'], $matches);
+            $custom_tag = (isset($matches[1]) && ($matches[1] != '')) ? $matches[1] : ''; //'tag_tag'
             $title = $row['title'];//'tag_title'
             $description = $row['description'];//'tag_description'
 
             $parameter = '';//'tag_parameters'
-            $tag_replace = preg_replace('#\$1#','{content}',$row['replacement']);//'tag_replace'
+            $tag_replace = preg_replace('#\$1#', '{content}', $row['replacement']);//'tag_replace'
             $tag_enabled = $row['active'];//'tag_enabled'
 
             global $VALID_COMCODE_TAGS;
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag' => $custom_tag));
-            if ((array_key_exists($custom_tag,$VALID_COMCODE_TAGS)) || (!is_null($test))) {
-                import_id_remap_put('custom_comcode',strval($row['cid']),1);
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode', 'tag_tag', array('tag_tag' => $custom_tag));
+            if ((array_key_exists($custom_tag, $VALID_COMCODE_TAGS)) || (!is_null($test))) {
+                import_id_remap_put('custom_comcode', strval($row['cid']), 1);
                 continue;
             }
 
@@ -1175,9 +1178,9 @@ class Hook_mybb
             $block_tag = 0;
             $textual_tag = 1;
 
-            add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
+            add_custom_comcode_tag($tag, $title, $description, $replace, $example, $parameters, $enabled, $dangerous_tag, $block_tag, $textual_tag);
 
-            import_id_remap_put('custom_comcode',strval($row['cid']),1);
+            import_id_remap_put('custom_comcode', strval($row['cid']), 1);
         }
     }
 
@@ -1188,12 +1191,12 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_custom_profile_fields($db,$table_prefix,$file_base)
+    public function import_ocf_custom_profile_fields($db, $table_prefix, $file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'profilefields');
         $members = $db->query('SELECT * FROM ' . $table_prefix . 'userfields');
         foreach ($rows as $row) {
-            if (import_check_if_imported('cpf',strval($row['fid']))) {
+            if (import_check_if_imported('cpf', strval($row['fid']))) {
                 continue;
             }
 
@@ -1204,20 +1207,20 @@ class Hook_mybb
                 $type = 'long_text';
             }
 
-            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $row['name']));
+            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $row['name']));
             if (is_null($id_new)) {
-                $id_new = ocf_make_custom_field($row['name'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],0,0,$row['disporder'],'',true);
+                $id_new = ocf_make_custom_field($row['name'], 0, $row['description'], '', 1 - $row['hidden'], 1 - $row['hidden'], $row['editable'], 0, $type, $row['required'], 0, 0, $row['disporder'], '', true);
             }
 
             foreach ($members as $member) {
                 $v = $member['fid' . strval($row['fid'])];
-                $member_id = import_id_remap_get('member',strval($member['ufid']),true);
+                $member_id = import_id_remap_get('member', strval($member['ufid']), true);
                 if (($v != '') && (!is_null($member_id))) {
-                    ocf_set_custom_field($member_id,$id_new,$v);
+                    ocf_set_custom_field($member_id, $id_new, $v);
                 }
             }
 
-            import_id_remap_put('cpf',strval($row['fid']),$id_new);
+            import_id_remap_put('cpf', strval($row['fid']), $id_new);
         }
     }
 
@@ -1228,17 +1231,17 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_calendar($db,$table_prefix,$file_base)
+    public function import_calendar($db, $table_prefix, $file_base)
     {
         require_code('calendar2');
 
         $rows = $db->query_select('events');
         foreach ($rows as $row) {
-            if (import_check_if_imported('event',strval($row['eid']))) {
+            if (import_check_if_imported('event', strval($row['eid']))) {
                 continue;
             }
 
-            $submitter = import_id_remap_get('member',strval($row['uid']),true);
+            $submitter = import_id_remap_get('member', strval($row['uid']), true);
             if (is_null($submitter)) {
                 $submitter = $GLOBALS['OCF_DRIVER']->get_guest_id();
             }
@@ -1247,45 +1250,45 @@ class Hook_mybb
             $recurrences = null;
 
             $event_repeat_data = unserialize($row['repeats']);
-            $event_repeats = (isset($event_repeat_data['repeats']) && ($event_repeat_data['repeats'] != 0))?$event_repeat_data['repeats']:0;
+            $event_repeats = (isset($event_repeat_data['repeats']) && ($event_repeat_data['repeats'] != 0)) ? $event_repeat_data['repeats'] : 0;
 
             switch ($event_repeats) {
                 case 1:
-                    $week_array = array(0,0,0,0,0,0,0);
-                    $start_day_num = intval(date('w',$row['starttime']));
+                    $week_array = array(0, 0, 0, 0, 0, 0, 0);
+                    $start_day_num = intval(date('w', $row['starttime']));
                     $every_days = $event_repeat_data['days'];
 
                     $week_array[$start_day_num] = 1;
                     $next_day = $start_day_num;
-                    for ($i = 1;$i<7;$i++) {
+                    for ($i = 1; $i < 7; $i++) {
                         $next_day += $every_days;
-                        if ($next_day>6) {
+                        if ($next_day > 6) {
                             $next_day -= 6;
                         }
                         $week_array[$next_day] = 1;
                     }
 
-                    $recurrence = 'daily ' . implode('',$week_array);
+                    $recurrence = 'daily ' . implode('', $week_array);
                     break;
                 case 2:
                     $recurrence = 'daily 1111100';
                     break;
                 case 3:
-                    $week_array = array(0,0,0,0,0,0,0);
-                    $week_array[0] = (isset($event_repeat_data['days'][0]) && ($event_repeat_data['days'][0] != ''))?1:0;
-                    $week_array[1] = (isset($event_repeat_data['days'][1]) && ($event_repeat_data['days'][1] != ''))?1:0;
-                    $week_array[2] = (isset($event_repeat_data['days'][2]) && ($event_repeat_data['days'][2] != ''))?1:0;
-                    $week_array[3] = (isset($event_repeat_data['days'][3]) && ($event_repeat_data['days'][3] != ''))?1:0;
-                    $week_array[4] = (isset($event_repeat_data['days'][4]) && ($event_repeat_data['days'][4] != ''))?1:0;
-                    $week_array[5] = (isset($event_repeat_data['days'][5]) && ($event_repeat_data['days'][5] != ''))?1:0;
-                    $week_array[6] = (isset($event_repeat_data['days'][6]) && ($event_repeat_data['days'][6] != ''))?1:0;
+                    $week_array = array(0, 0, 0, 0, 0, 0, 0);
+                    $week_array[0] = (isset($event_repeat_data['days'][0]) && ($event_repeat_data['days'][0] != '')) ? 1 : 0;
+                    $week_array[1] = (isset($event_repeat_data['days'][1]) && ($event_repeat_data['days'][1] != '')) ? 1 : 0;
+                    $week_array[2] = (isset($event_repeat_data['days'][2]) && ($event_repeat_data['days'][2] != '')) ? 1 : 0;
+                    $week_array[3] = (isset($event_repeat_data['days'][3]) && ($event_repeat_data['days'][3] != '')) ? 1 : 0;
+                    $week_array[4] = (isset($event_repeat_data['days'][4]) && ($event_repeat_data['days'][4] != '')) ? 1 : 0;
+                    $week_array[5] = (isset($event_repeat_data['days'][5]) && ($event_repeat_data['days'][5] != '')) ? 1 : 0;
+                    $week_array[6] = (isset($event_repeat_data['days'][6]) && ($event_repeat_data['days'][6] != '')) ? 1 : 0;
 
-                    $recurrence = 'daily ' . implode('',$week_array);
+                    $recurrence = 'daily ' . implode('', $week_array);
                     break;
                 case 4:
                     $pattern = '1';
                     $repeat_every_n_years = $event_repeat_data['months'];
-                    for ($i = 1;$i<$repeat_every_n_years;$i++) {
+                    for ($i = 1; $i < $repeat_every_n_years; $i++) {
                         $pattern .= '0';
                     }
 
@@ -1294,7 +1297,7 @@ class Hook_mybb
                 case 5:
                     $pattern = '1';
                     $repeat_every_n_years = $event_repeat_data['years'];
-                    for ($i = 1;$i<$repeat_every_n_years;$i++) {
+                    for ($i = 1; $i < $repeat_every_n_years; $i++) {
                         $pattern .= '0';
                     }
 
@@ -1302,14 +1305,14 @@ class Hook_mybb
                     break;
             }
 
-            list($start_year,$start_month,$start_day,$start_hour,$start_minute) = explode('-',date('Y-m-d-h-i',strtotime($row['starttime'])));
-            list($end_year,$end_month,$end_day,$end_hour,$end_minute) = explode('-',date('Y-m-d-h-i',strtotime($row['endtime'])));
+            list($start_year, $start_month, $start_day, $start_hour, $start_minute) = explode('-', date('Y-m-d-h-i', strtotime($row['starttime'])));
+            list($end_year, $end_month, $end_day, $end_hour, $end_minute) = explode('-', date('Y-m-d-h-i', strtotime($row['endtime'])));
             ocf_over_msn();
-            $id_new = add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['name'],$row['description'],3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,null,1,null,1,1,1,1,'',$submitter,0,$row['dateline']);
+            $id_new = add_calendar_event(db_get_first_id() + 1, $recurrence, $recurrences, 0, $row['name'], $row['description'], 3, $start_year, $start_month, $start_day, 'day_of_month', $start_hour, $start_minute, $end_year, $end_month, $end_day, 'day_of_month', $end_hour, $end_minute, null, 1, null, 1, 1, 1, 1, '', $submitter, 0, $row['dateline']);
             ocf_over_local();
             if ($row['visible'] == 0) {
                 if (addon_installed('content_privacy')) {
-                    $GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+                    $GLOBALS['SITE_DB']->query_insert('content_privacy', array(
                         'content_type' => 'event',
                         'content_id' => strval($id_new),
                         'guest_view' => 0,
@@ -1319,7 +1322,7 @@ class Hook_mybb
                 }
             }
 
-            import_id_remap_put('event',strval($row['eid']),$id_new);
+            import_id_remap_put('event', strval($row['eid']), $id_new);
         }
     }
 
@@ -1330,23 +1333,23 @@ class Hook_mybb
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_multi_moderations($db,$table_prefix,$file_base)
+    public function import_ocf_multi_moderations($db, $table_prefix, $file_base)
     {
-        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'modtools WHERE ' . db_string_equal_to('type','t'));
+        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'modtools WHERE ' . db_string_equal_to('type', 't'));
         foreach ($rows as $row) {
-            $mm_forum_multi_code = (isset($row['forums']) && strlen($row['forums'])>0)?'+' . $row['forums']:'*'; //'mm_forum_multi_code'
+            $mm_forum_multi_code = (isset($row['forums']) && strlen($row['forums']) > 0) ? '+' . $row['forums'] : '*'; //'mm_forum_multi_code'
             $mm_name = $row['name'];
 
             $topic_options = unserialize($row['threadoptions']);
 
-            $mm_sink_state = ($topic_options['approvethread'] == 'approve')?1:($topic_options['approvethread'] == 'unapprove')?0:null;
-            $mm_open_state = ($topic_options['openthread'] == 'open')?1:($topic_options['openthread'] == 'close')?0:null;
-            $mm_move_to = ($topic_options['movethread'] != 0)?$topic_options['movethread']:null;
+            $mm_sink_state = ($topic_options['approvethread'] == 'approve') ? 1 : ($topic_options['approvethread'] == 'unapprove') ? 0 : null;
+            $mm_open_state = ($topic_options['openthread'] == 'open') ? 1 : ($topic_options['openthread'] == 'close') ? 0 : null;
+            $mm_move_to = ($topic_options['movethread'] != 0) ? $topic_options['movethread'] : null;
 
-            $mm_title_suffix = ($topic_options['newsubject'] != '{subject}')?preg_replace('#\{username\}#','',$topic_options['newsubject']):'';
+            $mm_title_suffix = ($topic_options['newsubject'] != '{subject}') ? preg_replace('#\{username\}#', '', $topic_options['newsubject']) : '';
 
-            $mm_post_text = ($topic_options['replysubject'] != '{subject}')?preg_replace('#\{username\}#','',$topic_options['replysubject']):'';
-            $mm_post_text .= ($topic_options['addreply'] != '')?preg_replace('#\{username\}#','',$topic_options['addreply']):'';
+            $mm_post_text = ($topic_options['replysubject'] != '{subject}') ? preg_replace('#\{username\}#', '', $topic_options['replysubject']) : '';
+            $mm_post_text .= ($topic_options['addreply'] != '') ? preg_replace('#\{username\}#', '', $topic_options['addreply']) : '';
             $map = array(
                 'mm_forum_multi_code' => $mm_forum_multi_code,
                 'mm_sink_state' => $mm_sink_state,
@@ -1355,8 +1358,8 @@ class Hook_mybb
                 'mm_title_suffix' => $mm_title_suffix,
                 'mm_post_text' => $mm_post_text,
             );
-            $map += insert_lang('mm_name',$mm_name,3);
-            $GLOBALS['SITE_DB']->query_insert('f_multi_moderations',$map);
+            $map += insert_lang('mm_name', $mm_name, 3);
+            $GLOBALS['SITE_DB']->query_insert('f_multi_moderations', $map);
         }
     }
 }

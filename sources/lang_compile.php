@@ -38,21 +38,21 @@ function init__lang_compile()
  * @param  boolean                      Whether to just return if there was a loading error
  * @return boolean                      Whether we FAILED to load
  */
-function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors = false)
+function require_lang_compile($codename, $lang, $type, $cache_path, $ignore_errors = false)
 {
-    global $LANGUAGE_STRINGS_CACHE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
+    global $LANGUAGE_STRINGS_CACHE, $REQUIRE_LANG_LOOP, $LANG_LOADED_LANG;
 
-    $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache',0) == 1) || (get_param_integer('cache',0) == 1)) && (get_param_integer('keep_cache',null) !== 0) && (get_param_integer('cache',null) !== 0);
+    $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1)) && (get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache', null) !== 0);
     if ($desire_cache) {
         if (!$GLOBALS['IN_MINIKERNEL_VERSION']) {
             global $DECACHED_COMCODE_LANG_STRINGS;
 
             // Cleanup language strings
             if (!$DECACHED_COMCODE_LANG_STRINGS) {
-                $comcode_lang_strings = $GLOBALS['SITE_DB']->query('SELECT string_index FROM ' . get_table_prefix() . 'cached_comcode_pages WHERE ' . db_string_equal_to('the_zone','') . ' AND the_page LIKE \'' . db_encode_like($codename . ':') . '\'');
+                $comcode_lang_strings = $GLOBALS['SITE_DB']->query('SELECT string_index FROM ' . get_table_prefix() . 'cached_comcode_pages WHERE ' . db_string_equal_to('the_zone', '') . ' AND the_page LIKE \'' . db_encode_like($codename . ':') . '\'');
                 if (!is_null($comcode_lang_strings)) {
                     foreach ($comcode_lang_strings as $comcode_lang_string) {
-                        $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',$comcode_lang_string);
+                        $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages', $comcode_lang_string);
                         delete_lang($comcode_lang_string['string_index']);
                     }
                 }
@@ -69,7 +69,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
     if ((@is_array($FILE_ARRAY)) && (file_array_exists('lang/' . $lang . '/' . $codename . '.ini'))) {
         $lang_file = 'lang/' . $lang . '/' . $codename . '.ini';
         $file = file_array_get($lang_file);
-        _get_lang_file_map($file,$load_target,null,true);
+        _get_lang_file_map($file, $load_target, null, true);
         $bad = true;
     } else {
         $bad = true;
@@ -78,7 +78,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
         // Load originals
         $lang_file = get_file_base() . '/lang/' . $lang . '/' . filter_naughty($codename) . '.ini';
         if (file_exists($lang_file)) { // Non-custom, Proper language
-            _get_lang_file_map($lang_file,$load_target,null,false);
+            _get_lang_file_map($lang_file, $load_target, null, false);
             $bad = false;
         }
 
@@ -96,7 +96,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
             }
         }
         if (($type != 'lang') && (file_exists($lang_file))) {
-            _get_lang_file_map($lang_file,$load_target,null,false);
+            _get_lang_file_map($lang_file, $load_target, null, false);
             $bad = false;
             $dirty = true; // Tainted from the official pack, so can't store server wide
         }
@@ -104,16 +104,16 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
         // NB: Merge op doesn't happen in require_lang. It happens when do_lang fails and then decides it has to force a recursion to do_lang(xx,fallback_lang()) which triggers require_lang(xx,fallback_lang()) when it sees it's not loaded
 
         if (($bad) && ($lang != fallback_lang())) { // Still some hope
-            require_lang($codename,fallback_lang(),$type,$ignore_errors);
+            require_lang($codename, fallback_lang(), $type, $ignore_errors);
             $REQUIRE_LANG_LOOP--;
             $fallback_cache_path = get_custom_file_base() . '/caches/lang/' . fallback_lang() . '/' . $codename . '.lcd';
             if (file_exists($fallback_cache_path)) {
                 require_code('files');
-                @copy($fallback_cache_path,$cache_path);
+                @copy($fallback_cache_path, $cache_path);
                 fix_permissions($cache_path);
             }
 
-            if (!array_key_exists($lang,$LANG_LOADED_LANG)) {
+            if (!array_key_exists($lang, $LANG_LOADED_LANG)) {
                 $LANG_LOADED_LANG[$lang] = array();
             }
             $LANG_LOADED_LANG[$lang][$codename] = 1;
@@ -127,7 +127,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
             }
 
             if (($codename != 'critical_error') || ($lang != get_site_default_lang())) {
-                fatal_exit(do_lang_tempcode('MISSING_LANG_FILE',escape_html($codename),escape_html($lang)));
+                fatal_exit(do_lang_tempcode('MISSING_LANG_FILE', escape_html($codename), escape_html($lang)));
             } else {
                 critical_error('CRIT_LANG');
             }
@@ -142,28 +142,28 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
                 make_missing_directory(dirname($cache_path));
             }
 
-            $file = @fopen($cache_path,GOOGLE_APPENGINE?'wb':'ab'); // Will fail if cache dir missing .. e.g. in quick installer
+            $file = @fopen($cache_path, GOOGLE_APPENGINE ? 'wb' : 'ab'); // Will fail if cache dir missing .. e.g. in quick installer
             if ($file !== false) {
-                @flock($file,LOCK_EX);
+                @flock($file, LOCK_EX);
                 if (!GOOGLE_APPENGINE) {
-                    ftruncate($file,0);
+                    ftruncate($file, 0);
                 }
-                if (fwrite($file,serialize($load_target))>0) {
+                if (fwrite($file, serialize($load_target)) > 0) {
                     // Success
-                    @flock($file,LOCK_UN);
+                    @flock($file, LOCK_UN);
                     fclose($file);
                     require_code('files');
                     fix_permissions($cache_path);
                 } else {
                     // Failure
-                    @flock($file,LOCK_UN);
+                    @flock($file, LOCK_UN);
                     fclose($file);
                     @unlink($cache_path);
                 }
             }
         }
     } else {
-        persistent_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
+        persistent_cache_set(array('LANG', $lang, $codename), $load_target, !$dirty);
     }
 
     if ($desire_cache) {
@@ -181,7 +181,7 @@ function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors =
  * @param  boolean                      Force usage of original file
  * @return array                        The language entries
  */
-function get_lang_file_map($lang,$file,$non_custom = false)
+function get_lang_file_map($lang, $file, $non_custom = false)
 {
     $a = get_custom_file_base() . '/lang_custom/' . $lang . '/' . $file . '.ini';
     if (!file_exists($a)) {
@@ -219,7 +219,7 @@ function get_lang_file_map($lang,$file,$non_custom = false)
     }
 
     $target = array();
-    _get_lang_file_map($a,$target);
+    _get_lang_file_map($a, $target);
     return $target;
 }
 
@@ -231,26 +231,26 @@ function get_lang_file_map($lang,$file,$non_custom = false)
  * @param  ?boolean                     Whether to get descriptions rather than strings (NULL: no, but we might pick up some descriptions accidently)
  * @param  boolean                      Whether $b is infact not a path, but the actual file contents
  */
-function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file = false)
+function _get_lang_file_map($b, &$entries, $descriptions = null, $given_whole_file = false)
 {
     if (!$given_whole_file) {
         if (!file_exists($b)) {
             return;
         }
 
-        $tmp = fopen($b,'rb');
-        @flock($tmp,LOCK_SH);
+        $tmp = fopen($b, 'rb');
+        @flock($tmp, LOCK_SH);
         $lines = file($b);
-        @flock($tmp,LOCK_UN);
+        @flock($tmp, LOCK_UN);
         fclose($tmp);
-        if ($lines === NULL) {
+        if ($lines === null) {
             $lines = array();
         } // Workaround HHVM bug #1162
     } else {
-        $lines = explode("\n",unixify_line_format($b));
+        $lines = explode("\n", unixify_line_format($b));
     }
 
-    if ((!$given_whole_file) && ($b[strlen($b)-1] == 'o')) { // po file.
+    if ((!$given_whole_file) && ($b[strlen($b) - 1] == 'o')) { // po file.
         // No description support btw (but shouldn't really be needed, once you save it will make a .ini and that does have description support)
         if ($descriptions === true) {
             return;
@@ -266,7 +266,7 @@ function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file 
                 continue;
             }
 
-            if (($line[0] == '#') && (preg_match('/#: \[strings\](.*)/',$line,$matches) != 0)) {
+            if (($line[0] == '#') && (preg_match('/#: \[strings\](.*)/', $line, $matches) != 0)) {
                 if ((!is_null($doing)) && ($value != '')) {
                     $entries[$doing] = $value;
                 }
@@ -276,9 +276,9 @@ function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file 
             }
             if ($processing) {
                 if ($line[0] == '"') {
-                    $v = substr(rtrim($line,"\r\n"),1);
-                    if (substr($v,-1) == '"') {
-                        $v = substr($v,0,strlen($v)-1);
+                    $v = substr(rtrim($line, "\r\n"), 1);
+                    if (substr($v, -1) == '"') {
+                        $v = substr($v, 0, strlen($v) - 1);
                     }
                     $value .= stripslashes($v);
                 } else {
@@ -295,11 +295,11 @@ function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file 
                 }
             }
             if (!$processing) {
-                if (substr($line,0,8) == 'msgstr "') {
+                if (substr($line, 0, 8) == 'msgstr "') {
                     $processing = true;
-                    $v = substr(rtrim($line,"\r\n"),8);
-                    if (substr($v,-1) == '"') {
-                        $v = substr($v,0,strlen($v)-1);
+                    $v = substr(rtrim($line, "\r\n"), 8);
+                    if (substr($v, -1) == '"') {
+                        $v = substr($v, 0, strlen($v) - 1);
                     }
                     $value .= stripslashes($v);
                 }
@@ -308,7 +308,7 @@ function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file 
         if ((!is_null($doing)) && ($value != '')) {
             $entries[$doing] = $value;
         }
-        if (substr(basename($b),0,6) == 'global' || $given_whole_file) {
+        if (substr(basename($b), 0, 6) == 'global' || $given_whole_file) {
             $entries['charset'] = 'utf-8'; // Has to be
         }
         return;
@@ -318,7 +318,7 @@ function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file 
     $in_lang = false;
     $nl = "\r\n";
     foreach ($lines as $line) {
-        $line = rtrim($line,$nl);
+        $line = rtrim($line, $nl);
         if ($line == '') {
             continue;
         }
@@ -332,10 +332,10 @@ function _get_lang_file_map($b,&$entries,$descriptions = null,$given_whole_file 
         }
 
         if ($in_lang) {
-            $parts = explode('=',$line,2);
+            $parts = explode('=', $line, 2);
 
             if (isset($parts[1])) {
-                $entries[$parts[0]] = rtrim($parts[1],$nl);/*We do this at lookup-time now for performance reasons str_replace('\n',"\n",$parts[1]);*/
+                $entries[$parts[0]] = rtrim($parts[1], $nl);/*We do this at lookup-time now for performance reasons str_replace('\n',"\n",$parts[1]);*/
             }
         }
     }

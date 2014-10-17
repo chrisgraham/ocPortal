@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_Preview_wiki_post
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_wiki_post
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'wiki');
-        return array($applies,'wiki_post',false);
+        $applies = (get_param('page', '') == 'wiki');
+        return array($applies, 'wiki_post', false);
     }
 
     /**
@@ -43,11 +42,11 @@ class Hook_Preview_wiki_post
 
         $original_comcode = post_param('post');
 
-        $posting_ref_id = post_param_integer('posting_ref_id',mt_rand(0,100000));
-        $post_bits = do_comcode_attachments($original_comcode,'wiki_post',strval(-$posting_ref_id),true,$GLOBALS['SITE_DB']);
+        $posting_ref_id = post_param_integer('posting_ref_id', mt_rand(0, 100000));
+        $post_bits = do_comcode_attachments($original_comcode, 'wiki_post', strval(-$posting_ref_id), true, $GLOBALS['SITE_DB']);
         $post_comcode = $post_bits['comcode'];
         $post_html = $post_bits['tempcode'];
 
-        return array($post_html,$post_comcode);
+        return array($post_html, $post_comcode);
     }
 }

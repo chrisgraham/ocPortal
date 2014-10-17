@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Block_side_personal_stats
 {
     /**
@@ -61,26 +60,26 @@ class Block_side_personal_stats
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
 
             require_code('global4');
-            list($links,$details,$num_unread_pps) = member_personal_links_and_details($member_id);
+            list($links, $details, $num_unread_pps) = member_personal_links_and_details($member_id);
 
-            return do_template('BLOCK_SIDE_PERSONAL_STATS',array('_GUID' => '99f9bc3387102daaeeedf99843b0502e','NUM_UNREAD_PTS' => strval($num_unread_pps),'AVATAR_URL' => $avatar_url,'MEMBER_ID' => strval($member_id),'USERNAME' => $username,'LINKS' => $links,'DETAILS' => $details));
+            return do_template('BLOCK_SIDE_PERSONAL_STATS', array('_GUID' => '99f9bc3387102daaeeedf99843b0502e', 'NUM_UNREAD_PTS' => strval($num_unread_pps), 'AVATAR_URL' => $avatar_url, 'MEMBER_ID' => strval($member_id), 'USERNAME' => $username, 'LINKS' => $links, 'DETAILS' => $details));
         } else {
             $title = do_lang_tempcode('NOT_LOGGED_IN');
 
             if ((get_page_name() != 'join') && (get_page_name() != 'login')) {
-                if (count($_POST)>0) {
-                    $_this_url = build_url(array('page' => ''),'',array('keep_session' => 1,'redirect' => 1));
+                if (count($_POST) > 0) {
+                    $_this_url = build_url(array('page' => ''), '', array('keep_session' => 1, 'redirect' => 1));
                 } else {
-                    $_this_url = build_url(array('page' => '_SELF'),'_SELF',array('keep_session' => 1,'redirect' => 1),true);
+                    $_this_url = build_url(array('page' => '_SELF'), '_SELF', array('keep_session' => 1, 'redirect' => 1), true);
                 }
             } else {
-                $_this_url = build_url(array('page' => ''),'',array('keep_session' => 1,'redirect' => 1));
+                $_this_url = build_url(array('page' => ''), '', array('keep_session' => 1, 'redirect' => 1));
             }
             $this_url = $_this_url->evaluate();
-            $login_url = build_url(array('page' => 'login','type' => 'login','redirect' => $this_url),get_module_zone('login'));
-            $full_link = build_url(array('page' => 'login','type' => 'misc','redirect' => $this_url),get_module_zone('login'));
-            $join_url = (get_forum_type() != 'none')?$GLOBALS['FORUM_DRIVER']->join_url():'';
-            return do_template('BLOCK_SIDE_PERSONAL_STATS_NO',array('_GUID' => '32aade68b98dfd191f0f84c6648f7dde','TITLE' => $title,'FULL_LOGIN_URL' => $full_link,'JOIN_URL' => $join_url,'LOGIN_URL' => $login_url));
+            $login_url = build_url(array('page' => 'login', 'type' => 'login', 'redirect' => $this_url), get_module_zone('login'));
+            $full_link = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => $this_url), get_module_zone('login'));
+            $join_url = (get_forum_type() != 'none') ? $GLOBALS['FORUM_DRIVER']->join_url() : '';
+            return do_template('BLOCK_SIDE_PERSONAL_STATS_NO', array('_GUID' => '32aade68b98dfd191f0f84c6648f7dde', 'TITLE' => $title, 'FULL_LOGIN_URL' => $full_link, 'JOIN_URL' => $join_url, 'LOGIN_URL' => $login_url));
         }
     }
 }

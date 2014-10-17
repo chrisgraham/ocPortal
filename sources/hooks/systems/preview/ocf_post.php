@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_Preview_ocf_post
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_ocf_post
      */
     public function applies()
     {
-        $applies = ((get_param('page','') == 'topics') && (in_array(get_param('type'),array('birthday','edit_post','new_post','edit_topic','new_pt','new_topic','multimod')))) || (get_param('page','') == 'topicview');
-        return array($applies,'ocf_post',true);
+        $applies = ((get_param('page', '') == 'topics') && (in_array(get_param('type'), array('birthday', 'edit_post', 'new_post', 'edit_topic', 'new_pt', 'new_topic', 'multimod')))) || (get_param('page', '') == 'topicview');
+        return array($applies, 'ocf_post', true);
     }
 
     /**
@@ -44,116 +43,116 @@ class Hook_Preview_ocf_post
         $original_comcode = post_param('post');
         require_code('ocf_posts_action');
         require_code('ocf_posts_action2');
-        ocf_check_post($original_comcode,post_param_integer('topic_id',null),get_member());
-        $posting_ref_id = post_param_integer('posting_ref_id',mt_rand(0,100000));
-        if ($posting_ref_id<0) {
+        ocf_check_post($original_comcode, post_param_integer('topic_id', null), get_member());
+        $posting_ref_id = post_param_integer('posting_ref_id', mt_rand(0, 100000));
+        if ($posting_ref_id < 0) {
             fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
-        $post_bits = do_comcode_attachments($original_comcode,'ocf_post',strval(-$posting_ref_id),true,$GLOBALS['FORUM_DB']);
+        $post_bits = do_comcode_attachments($original_comcode, 'ocf_post', strval(-$posting_ref_id), true, $GLOBALS['FORUM_DB']);
         $post_comcode = $post_bits['comcode'];
         $post_html = $post_bits['tempcode'];
 
         // Put quote in
-        $parent_id = post_param_integer('parent_id',null);
-        if ((!is_null($parent_id)) && (strpos($post_comcode,'[quote') === false)) {
-            $_p = $GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id' => $parent_id),'',1);
-            if (array_key_exists(0,$_p)) {
+        $parent_id = post_param_integer('parent_id', null);
+        if ((!is_null($parent_id)) && (strpos($post_comcode, '[quote') === false)) {
+            $_p = $GLOBALS['FORUM_DB']->query_select('f_posts', array('*'), array('id' => $parent_id), '', 1);
+            if (array_key_exists(0, $_p)) {
                 $p = $_p[0];
-                $p['message'] = get_translated_tempcode('f_posts',$p,'p_post',$GLOBALS['FORUM_DB']);
+                $p['message'] = get_translated_tempcode('f_posts', $p, 'p_post', $GLOBALS['FORUM_DB']);
 
                 $temp = $post_html;
                 $post_html = new ocp_tempcode();
-                $post_html = do_template('COMCODE_QUOTE_BY',array('_GUID' => 'ba33b8277a991e48c7174c0469771a44','SAIDLESS' => false,'BY' => $p['p_poster_name_if_guest'],'CONTENT' => $p['message']));
+                $post_html = do_template('COMCODE_QUOTE_BY', array('_GUID' => 'ba33b8277a991e48c7174c0469771a44', 'SAIDLESS' => false, 'BY' => $p['p_poster_name_if_guest'], 'CONTENT' => $p['message']));
                 $post_html->attach($temp);
             }
         }
 
         $post_owner = get_member();
         $_post_date = time();
-        $post_id = post_param_integer('post_id',null);
+        $post_id = post_param_integer('post_id', null);
         if (!is_null($post_id)) {
-            $post_owner = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_poster',array('id' => $post_id));
+            $post_owner = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts', 'p_poster', array('id' => $post_id));
             if (is_null($post_owner)) {
                 $post_owner = get_member();
             }
 
-            $_post_date = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','p_time',array('id' => $post_id));
+            $_post_date = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts', 'p_time', array('id' => $post_id));
             if (is_null($_post_date)) {
                 $_post_date = time();
             }
         }
         $post_date = get_timezoned_date($_post_date);
 
-        $post_title = post_param('title','');
-        if (strlen($post_title)>120) {
+        $post_title = post_param('title', '');
+        if (strlen($post_title) > 120) {
             warn_exit(do_lang_tempcode('TITLE_TOO_LONG'));
         }
-        $unvalidated = ((post_param_integer('validated',0) == 0) && (get_param('page','') == 'topics'))?do_lang_tempcode('UNVALIDATED'):new ocp_tempcode();
+        $unvalidated = ((post_param_integer('validated', 0) == 0) && (get_param('page', '') == 'topics')) ? do_lang_tempcode('UNVALIDATED') : new ocp_tempcode();
         $emphasis = new ocp_tempcode();
-        $intended_solely_for = post_param('intended_solely_for',null);
+        $intended_solely_for = post_param('intended_solely_for', null);
         if ($intended_solely_for == '') {
             $intended_solely_for = null;
         }
-        $is_emphasised = post_param_integer('is_emphasised',0) == 1;
+        $is_emphasised = post_param_integer('is_emphasised', 0) == 1;
         if ($is_emphasised) {
             $emphasis = do_lang_tempcode('IMPORTANT');
         } elseif (!is_null($intended_solely_for)) {
-            $emphasis = do_lang_tempcode('PP_TO',escape_html($intended_solely_for));
+            $emphasis = do_lang_tempcode('PP_TO', escape_html($intended_solely_for));
         }
-        $class = $is_emphasised?'ocf_post_emphasis':(!is_null($intended_solely_for)?'ocf_post_personal':'');
+        $class = $is_emphasised ? 'ocf_post_emphasis' : (!is_null($intended_solely_for) ? 'ocf_post_personal' : '');
 
         // Member details
-        $signature = get_translated_tempcode('f_members',$GLOBALS['FORUM_DRIVER']->get_member_row($post_owner),'m_signature',$GLOBALS['FORUM_DB']);
+        $signature = get_translated_tempcode('f_members', $GLOBALS['FORUM_DRIVER']->get_member_row($post_owner), 'm_signature', $GLOBALS['FORUM_DB']);
         $_postdetails_avatar = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($post_owner);
         if ($_postdetails_avatar != '') {
-            $post_avatar = do_template('OCF_TOPIC_POST_AVATAR',array('_GUID' => '2683c09eabd7a9f1fdc57a20117483ef','AVATAR' => $_postdetails_avatar));
+            $post_avatar = do_template('OCF_TOPIC_POST_AVATAR', array('_GUID' => '2683c09eabd7a9f1fdc57a20117483ef', 'AVATAR' => $_postdetails_avatar));
         } else {
             $post_avatar = new ocp_tempcode();
         }
         require_code('ocf_groups');
         require_code('ocf_members');
-        $poster_title = addon_installed('ocf_member_titles')?$GLOBALS['FORUM_DRIVER']->get_member_row_field($post_owner,'m_title'):'';
-        $primary_group = $GLOBALS['FORUM_DRIVER']->get_member_row_field($post_owner,'m_primary_group');
+        $poster_title = addon_installed('ocf_member_titles') ? $GLOBALS['FORUM_DRIVER']->get_member_row_field($post_owner, 'm_title') : '';
+        $primary_group = $GLOBALS['FORUM_DRIVER']->get_member_row_field($post_owner, 'm_primary_group');
         if ($poster_title == '') {
-            $poster_title = get_translated_text(ocf_get_group_property($primary_group,'title'),$GLOBALS['FORUM_DB']);
+            $poster_title = get_translated_text(ocf_get_group_property($primary_group, 'title'), $GLOBALS['FORUM_DB']);
         }
 
         // Poster box
         if (!is_guest($post_owner)) {
             require_code('ocf_members2');
-            $poster_details = render_member_box($post_owner,false,null,null,false,null,false);
+            $poster_details = render_member_box($post_owner, false, null, null, false, null, false);
             $poster_username = $GLOBALS['FORUM_DRIVER']->get_username($post_owner);
             if (is_null($poster_username)) {
                 $poster_username = do_lang('UNKNOWN');
             }
-            $poster = do_template('OCF_POSTER_MEMBER',array('_GUID' => '976a6ceb631bbdcdd950b723cb5d2487','ONLINE' => true,'ID' => strval($post_owner),'POSTER_DETAILS' => $poster_details,'PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url($post_owner,false,true),'POSTER_USERNAME' => $poster_username));
+            $poster = do_template('OCF_POSTER_MEMBER', array('_GUID' => '976a6ceb631bbdcdd950b723cb5d2487', 'ONLINE' => true, 'ID' => strval($post_owner), 'POSTER_DETAILS' => $poster_details, 'PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url($post_owner, false, true), 'POSTER_USERNAME' => $poster_username));
         } else {
             $poster_details = new ocp_tempcode();
-            $custom_fields = do_template('OCF_MEMBER_BOX_CUSTOM_FIELD',array('_GUID' => '9cbbc5913d8164970f19c38a210fda95','NAME' => do_lang_tempcode('IP_ADDRESS'),'VALUE' => (get_ip_address())));
-            $poster_details = do_template('OCF_GUEST_DETAILS',array('_GUID' => '2db48e17db9f060c04386843f2d0f105','CUSTOM_FIELDS' => $custom_fields));
-            $poster_username = post_param('poster_name_if_guest',do_lang('GUEST'));
-            $ip_link = ((has_actual_page_access(get_member(),'admin_lookup')) && (addon_installed('securitylogging')))?build_url(array('page' => 'admin_lookup','param' => get_ip_address()),get_module_zone('admin_lookup')):new ocp_tempcode();
-            $poster = do_template('OCF_POSTER_GUEST',array('_GUID' => '9c0ba6198663de96facc7399a08e8281','LOOKUP_IP_URL' => $ip_link,'POSTER_DETAILS' => $poster_details,'POSTER_USERNAME' => $poster_username));
+            $custom_fields = do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => '9cbbc5913d8164970f19c38a210fda95', 'NAME' => do_lang_tempcode('IP_ADDRESS'), 'VALUE' => (get_ip_address())));
+            $poster_details = do_template('OCF_GUEST_DETAILS', array('_GUID' => '2db48e17db9f060c04386843f2d0f105', 'CUSTOM_FIELDS' => $custom_fields));
+            $poster_username = post_param('poster_name_if_guest', do_lang('GUEST'));
+            $ip_link = ((has_actual_page_access(get_member(), 'admin_lookup')) && (addon_installed('securitylogging'))) ? build_url(array('page' => 'admin_lookup', 'param' => get_ip_address()), get_module_zone('admin_lookup')) : new ocp_tempcode();
+            $poster = do_template('OCF_POSTER_GUEST', array('_GUID' => '9c0ba6198663de96facc7399a08e8281', 'LOOKUP_IP_URL' => $ip_link, 'POSTER_DETAILS' => $poster_details, 'POSTER_USERNAME' => $poster_username));
         }
 
         // Rank images
         $rank_images = new ocp_tempcode();
-        $posters_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($post_owner,true);
+        $posters_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($post_owner, true);
         foreach ($posters_groups as $group) {
-            $rank_image = ocf_get_group_property($group,'rank_image');
-            $group_leader = ocf_get_group_property($group,'group_leader');
+            $rank_image = ocf_get_group_property($group, 'rank_image');
+            $group_leader = ocf_get_group_property($group, 'group_leader');
             $group_name = ocf_get_group_name($group);
             if ($rank_image != '') {
-                $rank_images->attach(do_template('OCF_RANK_IMAGE',array('_GUID' => 'a6a413fc07e05b28ab995b072718b755','GROUP_NAME' => $group_name,'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()),'IMG' => $rank_image,'IS_LEADER' => $group_leader == get_member())));
+                $rank_images->attach(do_template('OCF_RANK_IMAGE', array('_GUID' => 'a6a413fc07e05b28ab995b072718b755', 'GROUP_NAME' => $group_name, 'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()), 'IMG' => $rank_image, 'IS_LEADER' => $group_leader == get_member())));
             }
         }
 
         if (get_param('type') == 'edit_post') {
-            $last_edited = do_template('OCF_TOPIC_POST_LAST_EDITED',array(
+            $last_edited = do_template('OCF_TOPIC_POST_LAST_EDITED', array(
                 '_GUID' => '3c476cf570fc4ba9780cc6b9c358b7f4',
                 'LAST_EDIT_DATE_RAW' => strval(time()),
-                'LAST_EDIT_DATE' => get_timezoned_date(time(),true),
-                'LAST_EDIT_PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),
+                'LAST_EDIT_DATE' => get_timezoned_date(time(), true),
+                'LAST_EDIT_PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(), false, true),
                 'LAST_EDIT_USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()),
             ));
         } else {
@@ -186,9 +185,9 @@ class Hook_Preview_ocf_post
             'BUTTONS' => '',
             'POSTER_ID' => strval($post_owner),
         );
-        $post = do_template('OCF_TOPIC_POST',$map);
-        $out = do_template('OCF_POST_BOX',array('_GUID' => '62bbfabfa5c16c2aa6724a0b79839626','GIVE_CONTEXT' => false,'POST' => $post)+$map+array('ACTUAL_POST' => $post_html));
+        $post = do_template('OCF_TOPIC_POST', $map);
+        $out = do_template('OCF_POST_BOX', array('_GUID' => '62bbfabfa5c16c2aa6724a0b79839626', 'GIVE_CONTEXT' => false, 'POST' => $post) + $map + array('ACTUAL_POST' => $post_html));
 
-        return array($out,$post_comcode);
+        return array($out, $post_comcode);
     }
 }

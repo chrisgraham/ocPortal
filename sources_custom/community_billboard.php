@@ -22,25 +22,25 @@
  * @param  BINARY                       Whether the message is for immediate use
  * @return AUTO_LINK                    The ID of the newly added message
  */
-function add_community_billboard_message($message,$days,$notes,$validated)
+function add_community_billboard_message($message, $days, $notes, $validated)
 {
     require_code('global4');
-    prevent_double_submit('ADD_COMMUNITY_BILLBOARD',null,$message);
+    prevent_double_submit('ADD_COMMUNITY_BILLBOARD', null, $message);
 
     $order_time = time();
 
     $map = array(
         'notes' => $notes,
-        'activation_time' => NULL,
+        'activation_time' => null,
         'active_now' => 0,
         'days' => $days,
         'order_time' => $order_time,
         'member_id' => get_member(),
     );
-    $map += insert_lang_comcode('the_message',$message,2);
-    $id = $GLOBALS['SITE_DB']->query_insert('community_billboard',$map,true);
+    $map += insert_lang_comcode('the_message', $message, 2);
+    $id = $GLOBALS['SITE_DB']->query_insert('community_billboard', $map, true);
 
-    log_it('ADD_COMMUNITY_BILLBOARD',strval($id),$message);
+    log_it('ADD_COMMUNITY_BILLBOARD', strval($id), $message);
 
     if ($validated == 1) {
         choose_community_billboard_message($id);
@@ -57,16 +57,16 @@ function add_community_billboard_message($message,$days,$notes,$validated)
  * @param  LONG_TEXT                    Notes
  * @param  BINARY                       Whether the message is the active message
  */
-function edit_community_billboard_message($id,$message,$notes,$validated)
+function edit_community_billboard_message($id, $message, $notes, $validated)
 {
-    $_message = $GLOBALS['SITE_DB']->query_select_value('community_billboard','the_message',array('id' => $id));
-    log_it('EDIT_COMMUNITY_BILLBOARD',strval($id),$message);
+    $_message = $GLOBALS['SITE_DB']->query_select_value('community_billboard', 'the_message', array('id' => $id));
+    log_it('EDIT_COMMUNITY_BILLBOARD', strval($id), $message);
     $map = array(
         'notes' => $notes,
         'active_now' => $validated,
     );
-    $map += lang_remap_comcode('the_message',$_message,$message);
-    $GLOBALS['SITE_DB']->query_update('community_billboard',$map,array('id' => $id),'',1);
+    $map += lang_remap_comcode('the_message', $_message, $message);
+    $GLOBALS['SITE_DB']->query_update('community_billboard', $map, array('id' => $id), '', 1);
     if ($validated == 1) {
         choose_community_billboard_message($id);
     } else {
@@ -81,10 +81,10 @@ function edit_community_billboard_message($id,$message,$notes,$validated)
  */
 function delete_community_billboard_message($id)
 {
-    $message = $GLOBALS['SITE_DB']->query_select_value('community_billboard','the_message',array('id' => $id));
+    $message = $GLOBALS['SITE_DB']->query_select_value('community_billboard', 'the_message', array('id' => $id));
     $_message = get_translated_text($message);
-    log_it('DELETE_COMMUNITY_BILLBOARD',strval($id),$_message);
-    $GLOBALS['SITE_DB']->query_delete('community_billboard',array('id' => $id),'',1);
+    log_it('DELETE_COMMUNITY_BILLBOARD', strval($id), $_message);
+    $GLOBALS['SITE_DB']->query_delete('community_billboard', array('id' => $id), '', 1);
     delete_lang($message);
 
     persistent_cache_delete('COMMUNITY_BILLBOARD'); // In case it was active
@@ -97,11 +97,11 @@ function delete_community_billboard_message($id)
  */
 function choose_community_billboard_message($id)
 {
-    $message = $GLOBALS['SITE_DB']->query_select_value('community_billboard','the_message',array('id' => $id));
+    $message = $GLOBALS['SITE_DB']->query_select_value('community_billboard', 'the_message', array('id' => $id));
     $message = get_translated_text($message);
-    log_it('CHOOSE_COMMUNITY_BILLBOARD',strval($id),$message);
-    $GLOBALS['SITE_DB']->query_update('community_billboard',array('active_now' => 0));
-    $GLOBALS['SITE_DB']->query_update('community_billboard',array('activation_time' => time(),'active_now' => 1),array('id' => $id),'',1);
+    log_it('CHOOSE_COMMUNITY_BILLBOARD', strval($id), $message);
+    $GLOBALS['SITE_DB']->query_update('community_billboard', array('active_now' => 0));
+    $GLOBALS['SITE_DB']->query_update('community_billboard', array('activation_time' => time(), 'active_now' => 1), array('id' => $id), '', 1);
 
     persistent_cache_delete('COMMUNITY_BILLBOARD');
 }
@@ -113,12 +113,12 @@ function choose_community_billboard_message($id)
  */
 function create_selection_list_community_billboard_messages()
 {
-    $rows = $GLOBALS['SITE_DB']->query_select('community_billboard',array('*'),null,'ORDER BY order_time ASC');
-    $time = $GLOBALS['SITE_DB']->query_select_value_if_there('community_billboard','activation_time',array('active_now' => 1));
+    $rows = $GLOBALS['SITE_DB']->query_select('community_billboard', array('*'), null, 'ORDER BY order_time ASC');
+    $time = $GLOBALS['SITE_DB']->query_select_value_if_there('community_billboard', 'activation_time', array('active_now' => 1));
     $out = new ocp_tempcode();
     foreach ($rows as $row) {
         $selected = false;
-        if ($row['activation_time']<$time) {
+        if ($row['activation_time'] < $time) {
             $status = do_lang_tempcode('USED_PREVIOUSLY');
         } elseif (is_null($row['activation_time'])) {
             $status = do_lang_tempcode('NOT_USED_PREVIOUSLY');
@@ -127,8 +127,8 @@ function create_selection_list_community_billboard_messages()
             $selected = true;
         }
         $message = get_translated_text($row['the_message']);
-        $text = do_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE',array('_GUID' => 'e4a5d54fa6cdc7848bd95bc017c60469','MESSAGE' => $message,'STATUS' => $status));
-        $out->attach(form_input_list_entry(strval($row['id']),$selected,protect_from_escaping($text->evaluate())));
+        $text = do_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE', array('_GUID' => 'e4a5d54fa6cdc7848bd95bc017c60469', 'MESSAGE' => $message, 'STATUS' => $status));
+        $out->attach(form_input_list_entry(strval($row['id']), $selected, protect_from_escaping($text->evaluate())));
     }
     return $out;
 }

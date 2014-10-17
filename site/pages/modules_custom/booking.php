@@ -57,10 +57,10 @@ class Module_booking
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('bookable',array(
+            $GLOBALS['SITE_DB']->create_table('bookable', array(
                 'id' => '*AUTO',
                 //'num_available'=>'INTEGER',      Implied by number of bookable_codes attached to bookable_id
                 'title' => 'SHORT_TRANS__COMCODE',
@@ -89,7 +89,7 @@ class Module_booking
                 'active_to_year' => '?INTEGER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('bookable_blacked',array(
+            $GLOBALS['SITE_DB']->create_table('bookable_blacked', array(
                 'id' => '*AUTO',
                 'blacked_from_day' => 'SHORT_INTEGER',
                 'blacked_from_month' => 'SHORT_INTEGER',
@@ -100,17 +100,17 @@ class Module_booking
                 'blacked_explanation' => 'LONG_TRANS__COMCODE',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('bookable_blacked_for',array(
+            $GLOBALS['SITE_DB']->create_table('bookable_blacked_for', array(
                 'bookable_id' => '*AUTO_LINK',
                 'blacked_id' => '*AUTO_LINK',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('bookable_codes',array(
+            $GLOBALS['SITE_DB']->create_table('bookable_codes', array(
                 'bookable_id' => '*AUTO_LINK',
                 'code' => '*ID_TEXT', // (room numbers, seats, etc) ; can be auto-generated if requested
             ));
 
-            $GLOBALS['SITE_DB']->create_table('bookable_supplement',array(
+            $GLOBALS['SITE_DB']->create_table('bookable_supplement', array(
                 'id' => '*AUTO',
                 'price' => 'REAL',
                 'price_is_per_period' => 'BINARY', // If this is the case, the supplement will actually be repeated out in separate records, each tied to a booking for that date
@@ -121,12 +121,12 @@ class Module_booking
                 'sort_order' => 'INTEGER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('bookable_supplement_for',array(
+            $GLOBALS['SITE_DB']->create_table('bookable_supplement_for', array(
                 'supplement_id' => '*AUTO_LINK',
                 'bookable_id' => '*AUTO_LINK',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('booking',array(
+            $GLOBALS['SITE_DB']->create_table('booking', array(
                 'id' => '*AUTO',
                 'bookable_id' => 'AUTO_LINK',
                 'member_id' => 'MEMBER',
@@ -144,7 +144,7 @@ class Module_booking
                 'customer_phone' => 'SHORT_TEXT',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('booking_supplement',array(
+            $GLOBALS['SITE_DB']->create_table('booking_supplement', array(
                 'booking_id' => '*AUTO_LINK',
                 'supplement_id' => '*AUTO_LINK',
                 'quantity' => 'INTEGER',
@@ -152,11 +152,11 @@ class Module_booking
             ));
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<2)) {
-            $GLOBALS['SITE_DB']->add_table_field('booking','customer_name','SHORT_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('booking','customer_email','SHORT_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('booking','customer_mobile','SHORT_TEXT');
-            $GLOBALS['SITE_DB']->add_table_field('booking','customer_phone','SHORT_TEXT');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 2)) {
+            $GLOBALS['SITE_DB']->add_table_field('booking', 'customer_name', 'SHORT_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('booking', 'customer_email', 'SHORT_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('booking', 'customer_mobile', 'SHORT_TEXT');
+            $GLOBALS['SITE_DB']->add_table_field('booking', 'customer_phone', 'SHORT_TEXT');
         }
     }
 
@@ -169,10 +169,10 @@ class Module_booking
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('CREATE_BOOKING','menu/book'),
+            'misc' => array('CREATE_BOOKING', 'menu/book'),
         );
     }
 
@@ -187,7 +187,7 @@ class Module_booking
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('booking');
 
@@ -207,7 +207,7 @@ class Module_booking
             $this->title = get_screen_title('CREATE_BOOKING');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -221,7 +221,7 @@ class Module_booking
         require_code('ocf_join');
         require_javascript('javascript_booking');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ((is_guest()) && (get_forum_type() != 'ocf')) {
             access_denied('NOT_AS_GUEST');
@@ -254,10 +254,10 @@ class Module_booking
     public function choose_bookables_and_dates()
     {
         $query = 'SELECT * FROM ' . get_table_prefix() . 'bookable WHERE enabled=1';
-        $filter = get_param('filter','*');
+        $filter = get_param('filter', '*');
         require_code('ocfiltering');
-        $query .= ' AND ' . ocfilter_to_sqlfragment($filter,'id');
-        $bookables = $GLOBALS['SITE_DB']->query($query . ' ORDER BY sort_order',null,null,false,true);
+        $query .= ' AND ' . ocfilter_to_sqlfragment($filter, 'id');
+        $bookables = $GLOBALS['SITE_DB']->query($query . ' ORDER BY sort_order', null, null, false, true);
 
         $has_date_ranges = false;
         $has_single_dates = false;
@@ -271,17 +271,17 @@ class Module_booking
 
         $categories = array();
         foreach ($bookables as $bookable) {
-            $active_from = mktime(0,0,0,$bookable['active_from_month'],$bookable['active_from_day'],$bookable['active_from_year']);
+            $active_from = mktime(0, 0, 0, $bookable['active_from_month'], $bookable['active_from_day'], $bookable['active_from_year']);
             $active_to = mixed();
-            $active_to = is_null($bookable['active_to_year'])?null:mktime(0,0,0,$bookable['active_to_month'],$bookable['active_to_day'],$bookable['active_to_year']);
+            $active_to = is_null($bookable['active_to_year']) ? null : mktime(0, 0, 0, $bookable['active_to_month'], $bookable['active_to_day'], $bookable['active_to_year']);
             $min_date = $active_from;
             $max_date = $active_to;
 
-            if ($min_date<$min_min_date) {
+            if ($min_date < $min_min_date) {
                 $min_min_date = $min_date;
             }
             if ((is_null($max_max_date)) || (!is_null($active_to))) {
-                if ($max_date>$max_max_date) {
+                if ($max_date > $max_max_date) {
                     $max_max_date = $max_date;
                 }
             }
@@ -295,13 +295,13 @@ class Module_booking
             $messages = array();
 
             // Message if not currently active
-            if ($active_from>time()) {
-                $messages[] = do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED',get_timezoned_date($active_from,false,true,false,true));
+            if ($active_from > time()) {
+                $messages[] = do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_NOT_STARTED', get_timezoned_date($active_from, false, true, false, true));
             }
 
             // Message if becomes inactive within next 6 months
-            if ((!is_null($active_to)) && ($active_to<SHOW_WARNINGS_UNTIL)) {
-                $messages[] = do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED',get_timezoned_date($active_to,false,true,false,true));
+            if ((!is_null($active_to)) && ($active_to < SHOW_WARNINGS_UNTIL)) {
+                $messages[] = do_lang_tempcode('NOTE_BOOKING_IMPOSSIBLE_ENDED', get_timezoned_date($active_to, false, true, false, true));
             }
 
             // Message about any black-outs within next 6 months
@@ -314,36 +314,36 @@ class Module_booking
                 'ORDER BY id'
             );
             foreach ($blacked as $black) {
-                $black_from = mktime(0,0,0,$black['blacked_from_month'],$black['blacked_from_day'],$black['blacked_from_year']);
+                $black_from = mktime(0, 0, 0, $black['blacked_from_month'], $black['blacked_from_day'], $black['blacked_from_year']);
                 $black_to = mixed();
-                $black_to = is_null($black['blacked_to_year'])?null:mktime(0,0,0,$black['blacked_to_month'],$black['blacked_to_day'],$black['blacked_to_year']);
-                if (($black_from>time()) && ($black_to<SHOW_WARNINGS_UNTIL)) {
+                $black_to = is_null($black['blacked_to_year']) ? null : mktime(0, 0, 0, $black['blacked_to_month'], $black['blacked_to_day'], $black['blacked_to_year']);
+                if (($black_from > time()) && ($black_to < SHOW_WARNINGS_UNTIL)) {
                     $messages[] = do_lang_tempcode(
-                        ($black_from == $black_to)?'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF':'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
-                        get_timezoned_date($black_from,false,true,false,true),
-                        get_timezoned_date($black_to,false,true,false,true),
-                        get_translated_tempcode('bookable_blacked',$black,'blacked_explanation')
+                        ($black_from == $black_to) ? 'NOTE_BOOKING_IMPOSSIBLE_BLACKED_ONEOFF' : 'NOTE_BOOKING_IMPOSSIBLE_BLACKED_PERIOD',
+                        get_timezoned_date($black_from, false, true, false, true),
+                        get_timezoned_date($black_to, false, true, false, true),
+                        get_translated_tempcode('bookable_blacked', $black, 'blacked_explanation')
                     );
                 }
             }
 
             $category = get_translated_text($bookable['categorisation']);
 
-            if (!array_key_exists($category,$categories)) {
-                $categories[$category] = array('CATEGORY_TITLE' => $category,'BOOKABLES' => array());
+            if (!array_key_exists($category, $categories)) {
+                $categories[$category] = array('CATEGORY_TITLE' => $category, 'BOOKABLES' => array());
             }
 
-            $quantity_available = $GLOBALS['SITE_DB']->query_select_value('bookable_codes','COUNT(*)',array('bookable_id' => $bookable['id']));
+            $quantity_available = $GLOBALS['SITE_DB']->query_select_value('bookable_codes', 'COUNT(*)', array('bookable_id' => $bookable['id']));
 
-            list($quantity,$date_from,$date_to) = $this->_read_chosen_bookable_settings($bookable);
+            list($quantity, $date_from, $date_to) = $this->_read_chosen_bookable_settings($bookable);
 
             if (is_null($max_max_date)) {
                 $max_max_date = MAX_AHEAD_BOOKING_DATE;
             }
 
-            $description = get_translated_tempcode('bookable',$bookable,'description');
+            $description = get_translated_tempcode('bookable', $bookable, 'description');
 
-            if ((!$description->is_empty()) || (count($messages)>0)) {
+            if ((!$description->is_empty()) || (count($messages) > 0)) {
                 $has_details = true;
             }
 
@@ -351,29 +351,28 @@ class Module_booking
                 'BOOKABLE_ID' => strval($bookable['id']),
                 'BOOKABLE_QUANTITY_AVAILABLE' => strval($quantity_available),
                 'BOOKABLE_MESSAGES' => $messages,
-                'BOOKABLE_TITLE' => get_translated_tempcode('bookable',$bookable,'title'),
+                'BOOKABLE_TITLE' => get_translated_tempcode('bookable', $bookable, 'title'),
                 'BOOKABLE_DESCRIPTION' => $description,
                 'BOOKABLE_PRICE' => float_format($bookable['price']),
                 'BOOKABLE_PRICE_RAW' => float_to_raw_string($bookable['price']),
 
                 'BOOKABLE_SELECT_DATE_RANGE' => $bookable['dates_are_ranges'] == 1,
-                'BOOKABLE_MIN_DATE_DAY' => date('d',$min_date),
-                'BOOKABLE_MIN_DATE_MONTH' => date('m',$min_date),
-                'BOOKABLE_MIN_DATE_YEAR' => date('Y',$min_date),
-                'BOOKABLE_MAX_DATE_DAY' => date('d',$max_date),
-                'BOOKABLE_MAX_DATE_MONTH' => date('m',$max_date),
-                'BOOKABLE_MAX_DATE_YEAR' => date('Y',$max_date),
+                'BOOKABLE_MIN_DATE_DAY' => date('d', $min_date),
+                'BOOKABLE_MIN_DATE_MONTH' => date('m', $min_date),
+                'BOOKABLE_MIN_DATE_YEAR' => date('Y', $min_date),
+                'BOOKABLE_MAX_DATE_DAY' => date('d', $max_date),
+                'BOOKABLE_MAX_DATE_MONTH' => date('m', $max_date),
+                'BOOKABLE_MAX_DATE_YEAR' => date('Y', $max_date),
 
                 // For re-entrancy
                 'BOOKABLE_QUANTITY' => strval($quantity),
-                'BOOKABLE_DATE_FROM_DAY' => date('d',$date_from),
-                'BOOKABLE_DATE_FROM_MONTH' => date('m',$date_from),
-                'BOOKABLE_DATE_FROM_YEAR' => date('Y',$date_from),
-                'BOOKABLE_DATE_TO_DAY' => date('d',$date_to),
-                'BOOKABLE_DATE_TO_MONTH' => date('m',$date_to),
-                'BOOKABLE_DATE_TO_YEAR' => date('Y',$date_to),
+                'BOOKABLE_DATE_FROM_DAY' => date('d', $date_from),
+                'BOOKABLE_DATE_FROM_MONTH' => date('m', $date_from),
+                'BOOKABLE_DATE_FROM_YEAR' => date('Y', $date_from),
+                'BOOKABLE_DATE_TO_DAY' => date('d', $date_to),
+                'BOOKABLE_DATE_TO_MONTH' => date('m', $date_to),
+                'BOOKABLE_DATE_TO_YEAR' => date('Y', $date_to),
             );
-
             //Wrong - we're sorting by sort_order  sort_maps_by($categories[$category]['BOOKABLES'],'BOOKABLE_TITLE');
         }
 
@@ -389,7 +388,7 @@ class Module_booking
                         $in_all = true;
                         foreach ($categories as $_category_title => $_bookables) {
                             foreach ($bookables['BOOKABLES'] as $_i => $_bookable) {
-                                if (!in_array($message,$_bookable['BOOKABLE_MESSAGES'])) {
+                                if (!in_array($message, $_bookable['BOOKABLE_MESSAGES'])) {
                                     $in_all = false;
                                     break 2;
                                 }
@@ -400,35 +399,35 @@ class Module_booking
                         }
                         $done_one = true;
                     }
-                    if (in_array($message,$shared_messages)) { // Known to be in all
+                    if (in_array($message, $shared_messages)) { // Known to be in all
                         unset($categories[$category_title]['BOOKABLES'][$i]['BOOKABLE_MESSAGES'][$j]);
                     }
                 }
             }
         }
 
-        return do_template('BOOKING_START_SCREEN',array(
+        return do_template('BOOKING_START_SCREEN', array(
             '_GUID' => '12787a01e3408b56f61f4b41cefa1325',
             'TITLE' => $this->title,
             'CATEGORIES' => $categories,
-            'POST_URL' => build_url(array('page' => '_SELF','type' => 'flesh_out','usergroup' => get_param_integer('usergroup',null)),'_SELF'),
+            'POST_URL' => build_url(array('page' => '_SELF', 'type' => 'flesh_out', 'usergroup' => get_param_integer('usergroup', null)), '_SELF'),
             'SHARED_MESSAGES' => $shared_messages,
             'HAS_DATE_RANGES' => $has_date_ranges,
             'HAS_SINGLE_DATES' => $has_single_dates,
             'HAS_DETAILS' => $has_details,
             'HAS_MIXED_DATE_TYPES' => $has_single_dates && $has_date_ranges,
-            'MIN_DATE_DAY' => date('d',$min_min_date),
-            'MIN_DATE_MONTH' => date('m',$min_min_date),
-            'MIN_DATE_YEAR' => date('Y',$min_min_date),
-            'MAX_DATE_DAY' => date('d',$max_max_date),
-            'MAX_DATE_MONTH' => date('m',$max_max_date),
-            'MAX_DATE_YEAR' => date('Y',$max_max_date),
-            'DATE_FROM_DAY' => date('d',$date_from),
-            'DATE_FROM_MONTH' => date('m',$date_from),
-            'DATE_FROM_YEAR' => date('Y',$date_from),
-            'DATE_TO_DAY' => date('d',$date_to),
-            'DATE_TO_MONTH' => date('m',$date_to),
-            'DATE_TO_YEAR' => date('Y',$date_to),
+            'MIN_DATE_DAY' => date('d', $min_min_date),
+            'MIN_DATE_MONTH' => date('m', $min_min_date),
+            'MIN_DATE_YEAR' => date('Y', $min_min_date),
+            'MAX_DATE_DAY' => date('d', $max_max_date),
+            'MAX_DATE_MONTH' => date('m', $max_max_date),
+            'MAX_DATE_YEAR' => date('Y', $max_max_date),
+            'DATE_FROM_DAY' => date('d', $date_from),
+            'DATE_FROM_MONTH' => date('m', $date_from),
+            'DATE_FROM_YEAR' => date('Y', $date_from),
+            'DATE_TO_DAY' => date('d', $date_to),
+            'DATE_TO_MONTH' => date('m', $date_to),
+            'DATE_TO_YEAR' => date('Y', $date_to),
             'HIDDEN' => build_keep_post_fields(),
         ));
     }
@@ -441,7 +440,7 @@ class Module_booking
      */
     public function _read_chosen_bookable_settings($bookable)
     {
-        $quantity = post_param_integer('bookable_' . strval($bookable['id']) . '_quantity',0);
+        $quantity = post_param_integer('bookable_' . strval($bookable['id']) . '_quantity', 0);
         $date_from = get_input_date('bookable_' . strval($bookable['id']) . '_date_from');
         if (is_null($date_from)) {
             $date_from = get_input_date('bookable_date_from');
@@ -457,7 +456,7 @@ class Module_booking
             $date_to = $date_from;
         }
 
-        return array($quantity,$date_from,$date_to);
+        return array($quantity, $date_from, $date_to);
     }
 
     /**
@@ -469,9 +468,9 @@ class Module_booking
     {
         // Check booking: redirect to last step as re-entrant if not valid
         $request = get_booking_request_from_form();
-        $test = check_booking_dates_available($request,array());
+        $test = check_booking_dates_available($request, array());
         if (!is_null($test)) {
-            attach_message($test,'warn');
+            attach_message($test, 'warn');
             return $this->choose_bookables_and_dates();
         }
 
@@ -479,29 +478,29 @@ class Module_booking
 
         $found = false;
 
-        $bookable_rows = $GLOBALS['SITE_DB']->query_select('bookable',array('*'),null,'ORDER BY sort_order');
+        $bookable_rows = $GLOBALS['SITE_DB']->query_select('bookable', array('*'), null, 'ORDER BY sort_order');
         foreach ($bookable_rows as $bookable_row) {
-            if (post_param_integer('bookable_' . strval($bookable_row['id']) . '_quantity',0)>0) {
+            if (post_param_integer('bookable_' . strval($bookable_row['id']) . '_quantity', 0) > 0) {
                 $found = true;
 
                 $supplements = array();
-                $supplement_rows = $GLOBALS['SITE_DB']->query_select('bookable_supplement a JOIN ' . get_table_prefix() . 'bookable_supplement_for b ON a.id=b.supplement_id',array('a.*'),array('bookable_id' => $bookable_row['id']),'ORDER BY sort_order');
+                $supplement_rows = $GLOBALS['SITE_DB']->query_select('bookable_supplement a JOIN ' . get_table_prefix() . 'bookable_supplement_for b ON a.id=b.supplement_id', array('a.*'), array('bookable_id' => $bookable_row['id']), 'ORDER BY sort_order');
                 foreach ($supplement_rows as $supplement_row) {
                     $supplements[] = array(
                         'SUPPLEMENT_ID' => strval($supplement_row['id']),
-                        'SUPPLEMENT_TITLE' => get_translated_tempcode('bookable_supplement',$supplement_row,'title'),
+                        'SUPPLEMENT_TITLE' => get_translated_tempcode('bookable_supplement', $supplement_row, 'title'),
                         'SUPPLEMENT_SUPPORTS_QUANTITY' => $supplement_row['supports_quantities'] == 1,
-                        'SUPPLEMENT_QUANTITY' => strval(post_param_integer('bookable_' . strval($bookable_row['id']) . '_supplement_' . strval($supplement_row['id']) . '_quantity',0)),
+                        'SUPPLEMENT_QUANTITY' => strval(post_param_integer('bookable_' . strval($bookable_row['id']) . '_supplement_' . strval($supplement_row['id']) . '_quantity', 0)),
                         'SUPPLEMENT_SUPPORTS_NOTES' => $supplement_row['supports_notes'] == 1,
-                        'SUPPLEMENT_NOTES' => post_param('bookable_' . strval($bookable_row['id']) . '_supplement_' . strval($supplement_row['id']) . '_notes',''),
+                        'SUPPLEMENT_NOTES' => post_param('bookable_' . strval($bookable_row['id']) . '_supplement_' . strval($supplement_row['id']) . '_notes', ''),
                     );
                 }
 
                 $bookables[] = array(
                     'BOOKABLE_ID' => strval($bookable_row['id']),
-                    'BOOKABLE_TITLE' => get_translated_tempcode('bookable',$bookable_row,'title'),
+                    'BOOKABLE_TITLE' => get_translated_tempcode('bookable', $bookable_row, 'title'),
                     'BOOKABLE_SUPPORTS_NOTES' => $bookable_row['supports_notes'] == 1,
-                    'BOOKABLE_NOTES' => post_param('bookable_' . strval($bookable_row['id']) . '_notes',''),
+                    'BOOKABLE_NOTES' => post_param('bookable_' . strval($bookable_row['id']) . '_notes', ''),
                     'BOOKABLE_SUPPLEMENTS' => $supplements,
 
                     'BOOKABLE_QUANTITY' => strval(post_param_integer('bookable_' . strval($bookable_row['id']) . '_quantity')), // Can select up to this many supplements
@@ -516,13 +515,13 @@ class Module_booking
         require_javascript('javascript_ajax');
         require_javascript('javascript_validation');
 
-        return do_template('BOOKING_FLESH_OUT_SCREEN',array(
+        return do_template('BOOKING_FLESH_OUT_SCREEN', array(
             '_GUID' => '255280fa4f9bb37e3dae76f5bca46ace',
             'TITLE' => $this->title,
             'BOOKABLES' => $bookables,
             'PRICE' => float_format(find_booking_price($request)),
-            'POST_URL' => build_url(array('page' => '_SELF','type' => 'account','usergroup' => get_param_integer('usergroup',null)),'_SELF'),
-            'BACK_URL' => build_url(array('page' => '_SELF','type' => 'misc','usergroup' => get_param_integer('usergroup',null)),'_SELF'),
+            'POST_URL' => build_url(array('page' => '_SELF', 'type' => 'account', 'usergroup' => get_param_integer('usergroup', null)), '_SELF'),
+            'BACK_URL' => build_url(array('page' => '_SELF', 'type' => 'misc', 'usergroup' => get_param_integer('usergroup', null)), '_SELF'),
             'HIDDEN' => build_keep_post_fields(),
         ));
     }
@@ -541,7 +540,7 @@ class Module_booking
             }
         }
 
-        $url = build_url(array('page' => '_SELF','type' => 'done'),'_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'done'), '_SELF');
 
         $hidden = build_keep_post_fields();
 
@@ -549,20 +548,20 @@ class Module_booking
         if (get_option('member_booking_only') == '0') {
             require_code('form_templates');
             $fields = new ocp_tempcode();
-            $fields->attach(form_input_line(do_lang_tempcode('YOUR_NAME'),'','customer_name',$GLOBALS['FORUM_DRIVER']->get_username(get_member()),true));
-            $fields->attach(form_input_email(do_lang_tempcode('YOUR_EMAIL_ADDRESS'),'','customer_email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
-            $fields->attach(form_input_email(do_lang_tempcode('ALT_FIELD',do_lang_tempcode('CONFIRM_EMAIL_ADDRESS')),'','customer_email_confirm',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),true));
-            $fields->attach(form_input_line(do_lang_tempcode('YOUR_MOBILE_NUMBER'),'','customer_mobile','',false));
-            $fields->attach(form_input_line(do_lang_tempcode('YOUR_PHONE_NUMBER'),'','customer_phone','',true));
+            $fields->attach(form_input_line(do_lang_tempcode('YOUR_NAME'), '', 'customer_name', $GLOBALS['FORUM_DRIVER']->get_username(get_member()), true));
+            $fields->attach(form_input_email(do_lang_tempcode('YOUR_EMAIL_ADDRESS'), '', 'customer_email', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), true));
+            $fields->attach(form_input_email(do_lang_tempcode('ALT_FIELD', do_lang_tempcode('CONFIRM_EMAIL_ADDRESS')), '', 'customer_email_confirm', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), true));
+            $fields->attach(form_input_line(do_lang_tempcode('YOUR_MOBILE_NUMBER'), '', 'customer_mobile', '', false));
+            $fields->attach(form_input_line(do_lang_tempcode('YOUR_PHONE_NUMBER'), '', 'customer_phone', '', true));
             $submit_name = do_lang_tempcode('BOOK');
-            $form = do_template('FORM',array('_GUID' => '18e831a00ac918b06c7f761c7d7d5fb0','TEXT' => do_lang_tempcode('A_FEW_DETAILS'),'HIDDEN' => $hidden,'FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $url));
+            $form = do_template('FORM', array('_GUID' => '18e831a00ac918b06c7f761c7d7d5fb0', 'TEXT' => do_lang_tempcode('A_FEW_DETAILS'), 'HIDDEN' => $hidden, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => $submit_name, 'URL' => $url));
             $javascript = '';
         } else {
             // Integrated signup
-            list($javascript,$form) = ocf_join_form($url,true,false,false,false);
+            list($javascript, $form) = ocf_join_form($url, true, false, false, false);
         }
 
-        return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN',array('_GUID' => 'b6e499588de8e2136122949478bac2e7','TITLE' => $this->title,'JAVASCRIPT' => $javascript,'FORM' => $form,'HIDDEN' => $hidden));
+        return do_template('BOOKING_JOIN_OR_LOGIN_SCREEN', array('_GUID' => 'b6e499588de8e2136122949478bac2e7', 'TITLE' => $this->title, 'JAVASCRIPT' => $javascript, 'FORM' => $form, 'HIDDEN' => $hidden));
     }
 
     /**
@@ -574,20 +573,20 @@ class Module_booking
     {
         // Finish join operation, if applicable
         if ((is_guest()) && (get_option('member_booking_only') == '1')) {
-            list($messages) = ocf_join_actual(true,false,false,true,false,false,false,true);
+            list($messages) = ocf_join_actual(true, false, false, true, false, false, false, true);
             if (!$messages->is_empty()) {
-                return inform_screen($this->title,$messages);
+                return inform_screen($this->title, $messages);
             }
         }
 
         // Read request
         $request = get_booking_request_from_form();
-        if (!array_key_exists(0,$request)) {
+        if (!array_key_exists(0, $request)) {
             warn_exit(do_lang_tempcode('NOTHING_IN_BOOKING'));
         }
 
         // Save
-        $test = save_booking_form_to_db($request,array());
+        $test = save_booking_form_to_db($request, array());
         if (is_null($test)) {
             warn_exit(do_lang_tempcode('BOOKING_ERROR'));
         }
@@ -596,8 +595,8 @@ class Module_booking
         send_booking_emails($request);
 
         // Show success
-        $customer_name = post_param('customer_name',is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
-        return inform_screen($this->title,do_lang_tempcode('BOOKING_SUCCESS',escape_html($customer_name)));
+        $customer_name = post_param('customer_name', is_guest() ? '' : $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true));
+        return inform_screen($this->title, do_lang_tempcode('BOOKING_SUCCESS', escape_html($customer_name)));
     }
 }
 

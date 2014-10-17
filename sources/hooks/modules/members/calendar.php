@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_members_calendar
 {
     /**
@@ -33,11 +32,11 @@ class Hook_members_calendar
         }
 
         //if (!has_privilege(get_member(),'assume_any_member')) return array();  Now will have separate permission filtering
-        if (!has_actual_page_access(get_member(),'calendar',get_module_zone('calendar'))) {
+        if (!has_actual_page_access(get_member(), 'calendar', get_module_zone('calendar'))) {
             return array();
         }
 
         require_lang('calendar');
-        return array(array('content',do_lang_tempcode('CALENDAR'),build_url(array('page' => 'calendar','type' => 'misc','member_id' => $member_id,'private' => 1),get_module_zone('calendar')),'menu/rich_content/calendar'));
+        return array(array('content', do_lang_tempcode('CALENDAR'), build_url(array('page' => 'calendar', 'type' => 'misc', 'member_id' => $member_id, 'private' => 1), get_module_zone('calendar')), 'menu/rich_content/calendar'));
     }
 }

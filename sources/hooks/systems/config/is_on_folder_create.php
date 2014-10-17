@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_config_is_on_folder_create
 {
     /**

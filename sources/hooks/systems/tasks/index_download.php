@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_task_index_download
 {
     /**
@@ -28,19 +27,19 @@ class Hook_task_index_download
      * @param  ID_TEXT                  The download filename
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
      */
-    public function run($id,$url,$original_filename)
+    public function run($id, $url, $original_filename)
     {
         require_code('downloads');
         require_code('downloads2');
 
-        $data_mash = ($url == '')?'':create_data_mash($url,null,get_file_extension($original_filename));
+        $data_mash = ($url == '') ? '' : create_data_mash($url, null, get_file_extension($original_filename));
 
         $update_map = array(
             'download_data_mash' => $data_mash,
         );
 
-        $GLOBALS['SITE_DB']->query_update('download_downloads',$update_map,array('id' => $id),'',1);
+        $GLOBALS['SITE_DB']->query_update('download_downloads', $update_map, array('id' => $id), '', 1);
 
-        return NULL;
+        return null;
     }
 }

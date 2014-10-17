@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_config_group_private_chatrooms
 {
     /**

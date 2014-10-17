@@ -72,18 +72,18 @@ function encrypt_data($data)
     /* See http://uk.php.net/manual/en/function.openssl-pkey-get-public.php */
     $key = openssl_pkey_get_public('file://' . get_option('encryption_key'));
     if ($key === false) {
-        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
+        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'), 'warn');
         return '';
     }
 
     $maxlength = 117;
     $output = '';
-    while (strlen($data)>0) {
-        $input = substr($data,0,$maxlength);
-        $data = substr($data,$maxlength);
+    while (strlen($data) > 0) {
+        $input = substr($data, 0, $maxlength);
+        $data = substr($data, $maxlength);
         $encrypted = '';
-        if (!openssl_public_encrypt($input,$encrypted,$key)) {
-            attach_message(do_lang_tempcode('ENCRYPTION_ERROR'),'warn');
+        if (!openssl_public_encrypt($input, $encrypted, $key)) {
+            attach_message(do_lang_tempcode('ENCRYPTION_ERROR'), 'warn');
             return '';
         }
 
@@ -103,7 +103,7 @@ function is_data_encrypted($data)
     if (!is_string($data)) {
         return false;
     }
-    return (substr($data,0,12) == '(Encrypted!)');
+    return (substr($data, 0, 12) == '(Encrypted!)');
 }
 
 /**
@@ -118,7 +118,7 @@ function remove_magic_encryption_marker($data)
     if (!is_data_encrypted($data)) {
         return $data;
     }
-    return substr($data,12);
+    return substr($data, 12);
 }
 
 /**
@@ -129,7 +129,7 @@ function remove_magic_encryption_marker($data)
  * @param  string                       Passphrase to unlock the site's private key
  * @return string                       Decrypted data
  */
-function decrypt_data($data,$passphrase)
+function decrypt_data($data, $passphrase)
 {
     require_lang('encryption');
 
@@ -146,36 +146,37 @@ function decrypt_data($data,$passphrase)
 
     // Check the passphrase isn't empty (if it is legitimately empty, we're doing the site a favour by bailing out)
     if ($passphrase == '') {
-        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
+        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'), 'warn');
         return '';
     }
 
     // Remove the magic encryption marker and base64-decode it first
-    $data = base64_decode(remove_magic_encryption_marker(str_replace('<br />','',$data)));
+    $data = base64_decode(remove_magic_encryption_marker(str_replace('<br />', '', $data)));
 
-    $key = openssl_pkey_get_private(array('file://' . get_option('decryption_key'),$passphrase));
+    $key = openssl_pkey_get_private(array('file://' . get_option('decryption_key'), $passphrase));
     if ($key === false) {
-        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'),'warn');
+        attach_message(do_lang_tempcode('ENCRYPTION_KEY_ERROR'), 'warn');
         return '';
     }
 
     $maxlength = strlen($data);
     $decryption_keyfile = file_get_contents(get_option('decryption_key'));
-    if (strpos($decryption_keyfile,'AES') === false) {
-        $maxlength = 128/*1024 bit key assumption*/;
-    } elseif (strpos($decryption_keyfile,'AES-256') !== false) {
+    if (strpos($decryption_keyfile, 'AES') === false) {
+        $maxlength = 128/*1024 bit key assumption*/
+        ;
+    } elseif (strpos($decryption_keyfile, 'AES-256') !== false) {
         $maxlength = 256;
-    } elseif (strpos($decryption_keyfile,'AES-512') !== false) {
+    } elseif (strpos($decryption_keyfile, 'AES-512') !== false) {
         $maxlength = 512;
     }
 
     $output = '';
-    while (strlen($data)>0) {
-        $input = substr($data,0,$maxlength);
-        $data = substr($data,$maxlength);
+    while (strlen($data) > 0) {
+        $input = substr($data, 0, $maxlength);
+        $data = substr($data, $maxlength);
         $decrypted = '';
-        if (!openssl_private_decrypt($input,$decrypted,$key)) {
-            attach_message(do_lang_tempcode('DECRYPTION_ERROR'),'warn');
+        if (!openssl_private_decrypt($input, $decrypted, $key)) {
+            attach_message(do_lang_tempcode('DECRYPTION_ERROR'), 'warn');
             return $output;
         }
 

@@ -6,7 +6,7 @@ if (function_exists('set_time_limit')) {
     set_time_limit(300);
 }
 
-$content = (isset($_POST['post'])?$_POST['post']:file_get_contents("php://input")) . "\n";
+$content = (isset($_POST['post']) ? $_POST['post'] : file_get_contents("php://input")) . "\n";
 
 /*
 $debugfile="data/".rand().".xml";
@@ -21,7 +21,7 @@ $options = array(
     )
 );
 $context = stream_context_create($options);
-@$result = file_get_contents($url,false,$context);
+@$result = file_get_contents($url, false, $context);
 header($http_response_header[0]);
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/xml");

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle
 {
     /**
@@ -31,17 +30,17 @@ class Hook_occle
             warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
         }
 
-        if (has_actual_page_access(get_member(),'admin_occle')) {
+        if (has_actual_page_access(get_member(), 'admin_occle')) {
             require_code('occle');
             require_lang('occle');
 
             $title = get_screen_title('OCCLE');
 
-            return do_template('OCCLE_MAIN',array(
+            return do_template('OCCLE_MAIN', array(
                 '_GUID' => '2f29170f4f8320a26fad66e0d0f52b7a',
                 'COMMANDS' => '',
-                'SUBMIT_URL' => build_url(array('page' => 'admin_occle'),'adminzone'),
-                'PROMPT' => do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
+                'SUBMIT_URL' => build_url(array('page' => 'admin_occle'), 'adminzone'),
+                'PROMPT' => do_lang_tempcode('COMMAND_PROMPT', escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
             ));
         }
 

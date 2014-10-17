@@ -44,15 +44,15 @@ class Module_admin_ocf_emoticons extends standard_crud_module
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         return array(
-            'misc' => array('EMOTICONS','menu/adminzone/style/emoticons'),
-        )+parent::get_entry_points();
+            'misc' => array('EMOTICONS', 'menu/adminzone/style/emoticons'),
+        ) + parent::get_entry_points();
     }
 
     public $title;
@@ -64,9 +64,9 @@ class Module_admin_ocf_emoticons extends standard_crud_module
      * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
      */
-    public function pre_run($top_level = true,$type = null)
+    public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf');
         require_css('ocf_admin');
@@ -74,11 +74,11 @@ class Module_admin_ocf_emoticons extends standard_crud_module
         set_helper_panel_tutorial('tut_emoticons');
 
         if ($type == 'import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('EMOTICONS'))));
         }
 
         if ($type == '_import') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('EMOTICONS')),array('_SELF:_SELF:import',do_lang_tempcode('IMPORT_EMOTICONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('EMOTICONS')), array('_SELF:_SELF:import', do_lang_tempcode('IMPORT_EMOTICONS'))));
         }
 
         if ($type == 'import' || $type == '_import') {
@@ -154,11 +154,11 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     public function misc()
     {
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('EMOTICONS'),comcode_lang_string('DOC_EMOTICONS'),
+        return do_next_manager(get_screen_title('EMOTICONS'), comcode_lang_string('DOC_EMOTICONS'),
             array(
-                array('menu/_generic_admin/import',array('_SELF',array('type' => 'import'),'_SELF'),do_lang('IMPORT_EMOTICONS')),
-                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_EMOTICON')),
-                array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_EMOTICON')),
+                array('menu/_generic_admin/import', array('_SELF', array('type' => 'import'), '_SELF'), do_lang('IMPORT_EMOTICONS')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_EMOTICON')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_EMOTICON')),
             ),
             do_lang('EMOTICONS')
         );
@@ -172,22 +172,22 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     public function import()
     {
         if ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['SITE_DB']->connection_write) {
-            attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
+            attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'), 'warn');
         }
 
         require_code('form_templates');
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_import','uploading' => 1),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_import', 'uploading' => 1), '_SELF');
         $fields = new ocp_tempcode();
         $supported = 'tar';
         if ((function_exists('zip_open')) || (get_option('unzip_cmd') != '')) {
             $supported .= ', zip';
         }
-        $fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'),do_lang_tempcode('DESCRIPTION_ARCHIVE_IMAGES',escape_html($supported),escape_html(str_replace(',',', ',get_option('valid_images')))),'file',true,null,null,true,str_replace(' ','',get_option('valid_images') . ',' . $supported)));
+        $fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_ARCHIVE_IMAGES', escape_html($supported), escape_html(str_replace(',', ', ', get_option('valid_images')))), 'file', true, null, null, true, str_replace(' ', '', get_option('valid_images') . ',' . $supported)));
 
         $text = paragraph(do_lang_tempcode('IMPORT_EMOTICONS_WARNING'));
         require_code('images');
-        $max = floatval(get_max_image_size())/floatval(1024*1024);
+        $max = floatval(get_max_image_size()) / floatval(1024 * 1024);
         /*if ($max<1.0) Ok - this is silly! Emoticons are tiny.
         {
             require_code('files2');
@@ -196,10 +196,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
         }*/
 
         $hidden = build_keep_post_fields();
-        $hidden->attach(form_input_hidden('test','1'));
+        $hidden->attach(form_input_hidden('test', '1'));
         handle_max_file_size($hidden);
 
-        return do_template('FORM_SCREEN',array('_GUID' => '1910e01ec183392f6b254671dc7050a3','TITLE' => $this->title,'FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__import','SUBMIT_NAME' => do_lang_tempcode('BATCH_IMPORT_ARCHIVE_CONTENTS'),'URL' => $post_url,'TEXT' => $text,'HIDDEN' => $hidden));
+        return do_template('FORM_SCREEN', array('_GUID' => '1910e01ec183392f6b254671dc7050a3', 'TITLE' => $this->title, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'menu___generic_admin__import', 'SUBMIT_NAME' => do_lang_tempcode('BATCH_IMPORT_ARCHIVE_CONTENTS'), 'URL' => $post_url, 'TEXT' => $text, 'HIDDEN' => $hidden));
     }
 
     /**
@@ -235,7 +235,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
                     if (!is_integer($myfile)) {
                         while (false !== ($entry = zip_read($myfile))) {
                             // Load in file
-                            zip_entry_open($myfile,$entry);
+                            zip_entry_open($myfile, $entry);
 
                             $_file = zip_entry_name($entry);
 
@@ -249,15 +249,16 @@ class Module_admin_ocf_emoticons extends standard_crud_module
                                     require_code('files2');
                                     make_missing_directory(dirname($path));
                                 }
-                                $outfile = @fopen($path,'wb') or intelligent_write_error($path);
+                                $outfile = @fopen($path, 'wb') or intelligent_write_error($path);
 
                                 $more = mixed();
                                 do {
                                     $more = zip_entry_read($entry);
-                                    if (fwrite($outfile,$more)<strlen($more)) {
+                                    if (fwrite($outfile, $more) < strlen($more)) {
                                         warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                                     }
-                                } while (($more !== false) && ($more != ''));
+                                }
+                                while (($more !== false) && ($more != ''));
 
                                 fclose($outfile);
                                 fix_permissions($path);
@@ -272,12 +273,12 @@ class Module_admin_ocf_emoticons extends standard_crud_module
                         zip_close($myfile);
                     } else {
                         require_code('failure');
-                        warn_exit(zip_error($myfile,$mzip));
+                        warn_exit(zip_error($myfile, $mzip));
                     }
                     break;
                 case 'tar':
                     require_code('tar');
-                    $myfile = tar_open($tmp_name,'rb');
+                    $myfile = tar_open($tmp_name, 'rb');
                     if ($myfile !== false) {
                         $directory = tar_get_directory($myfile);
                         foreach ($directory as $entry) {
@@ -291,7 +292,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
                                     $path = get_custom_file_base() . '/themes/default/images_custom/ocf_emoticons__' . basename($_file);
                                 }
 
-                                $_in = tar_get_file($myfile,$entry['path'],false,$path);
+                                $_in = tar_get_file($myfile, $entry['path'], false, $path);
 
                                 $this->_import_emoticon($path);
                             }
@@ -302,18 +303,18 @@ class Module_admin_ocf_emoticons extends standard_crud_module
                     break;
                 default:
                     if (is_image($file)) {
-                        $urls = get_url('',$attach_name,'themes/default/images_custom');
+                        $urls = get_url('', $attach_name, 'themes/default/images_custom');
                         $path = $urls[0];
                         $this->_import_emoticon($path);
                     } else {
-                        attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'),'warn');
+                        attach_message(do_lang_tempcode('BAD_ARCHIVE_FORMAT'), 'warn');
                     }
             }
         }
 
         log_it('IMPORT_EMOTICONS');
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),null);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), null);
     }
 
     /**
@@ -323,7 +324,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
      */
     public function _import_emoticon($path)
     {
-        $emoticon_code = basename($path,'.' . get_file_extension($path));
+        $emoticon_code = basename($path, '.' . get_file_extension($path));
 
         if (file_exists(get_file_base() . '/themes/default/images/emoticons/index.html')) {
             $image_code = 'emoticons/' . $emoticon_code;
@@ -332,10 +333,10 @@ class Module_admin_ocf_emoticons extends standard_crud_module
         }
         $url_path = 'themes/default/images_custom/' . rawurlencode(basename($path));
 
-        $GLOBALS['SITE_DB']->query_delete('theme_images',array('id' => $image_code));
-        $GLOBALS['SITE_DB']->query_insert('theme_images',array('id' => $image_code,'theme' => 'default','path' => $url_path,'lang' => get_site_default_lang()));
-        $GLOBALS['FORUM_DB']->query_delete('f_emoticons',array('e_code' => ':' . $emoticon_code . ':'),'',1);
-        $GLOBALS['FORUM_DB']->query_insert('f_emoticons',array(
+        $GLOBALS['SITE_DB']->query_delete('theme_images', array('id' => $image_code));
+        $GLOBALS['SITE_DB']->query_insert('theme_images', array('id' => $image_code, 'theme' => 'default', 'path' => $url_path, 'lang' => get_site_default_lang()));
+        $GLOBALS['FORUM_DB']->query_delete('f_emoticons', array('e_code' => ':' . $emoticon_code . ':'), '', 1);
+        $GLOBALS['FORUM_DB']->query_insert('f_emoticons', array(
             'e_code' => ':' . $emoticon_code . ':',
             'e_theme_img_code' => $image_code,
             'e_relevance_level' => 2,
@@ -357,53 +358,53 @@ class Module_admin_ocf_emoticons extends standard_crud_module
      * @param  BINARY                   Whether this may only be used by privileged members
      * @return array                    A pair: The input fields, Hidden fields
      */
-    public function get_form_fields($code = ':-]',$theme_img_code = '',$relevance_level = 1,$use_topics = 1,$is_special = 0)
+    public function get_form_fields($code = ':-]', $theme_img_code = '', $relevance_level = 1, $use_topics = 1, $is_special = 0)
     {
         if ($GLOBALS['SITE_DB']->connection_write != $GLOBALS['SITE_DB']->connection_write) {
-            attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'),'warn');
+            attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'), 'warn');
         }
 
         $fields = new ocp_tempcode();
         $hidden = new ocp_tempcode();
 
-        $fields->attach(form_input_line(do_lang_tempcode('CODE'),do_lang_tempcode('DESCRIPTION_EMOTICON_CODE'),'code',$code,true));
+        $fields->attach(form_input_line(do_lang_tempcode('CODE'), do_lang_tempcode('DESCRIPTION_EMOTICON_CODE'), 'code', $code, true));
 
         require_code('themes2');
-        $ids = get_all_image_ids_type('ocf_emoticons',false,$GLOBALS['FORUM_DB']);
+        $ids = get_all_image_ids_type('ocf_emoticons', false, $GLOBALS['FORUM_DB']);
 
         if (get_base_url() == get_forum_base_url()) {
             $set_name = 'image';
             $required = true;
             $set_title = do_lang_tempcode('IMAGE');
-            $field_set = (count($ids) == 0)?new ocp_tempcode():alternate_fields_set__start($set_name);
+            $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
 
-            $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',$required,null,null,true,str_replace(' ','',get_option('valid_images'))));
+            $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'file', $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 
-            $image_chooser_field = form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,null,$theme_img_code,null,false,$GLOBALS['FORUM_DB']);
+            $image_chooser_field = form_input_theme_image(do_lang_tempcode('STOCK'), '', 'theme_img_code', $ids, null, $theme_img_code, null, false, $GLOBALS['FORUM_DB']);
             $field_set->attach($image_chooser_field);
 
-            $fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+            $fields->attach(alternate_fields_set__end($set_name, $set_title, '', $field_set, $required));
 
-            handle_max_file_size($hidden,'image');
+            handle_max_file_size($hidden, 'image');
         } else {
             if (count($ids) == 0) {
-                warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN','ocf_emoticons'));
+                warn_exit(do_lang_tempcode('NO_SELECTABLE_THEME_IMAGES_MSN', 'ocf_emoticons'));
             }
 
-            $image_chooser_field = form_input_theme_image(do_lang_tempcode('STOCK'),'','theme_img_code',$ids,null,$theme_img_code,null,true,$GLOBALS['FORUM_DB']);
+            $image_chooser_field = form_input_theme_image(do_lang_tempcode('STOCK'), '', 'theme_img_code', $ids, null, $theme_img_code, null, true, $GLOBALS['FORUM_DB']);
             $fields->attach($image_chooser_field);
         }
 
         $list = new ocp_tempcode();
-        for ($i = 0;$i <= 4;$i++) {
-            $list->attach(form_input_list_entry(strval($i),$i == $relevance_level,do_lang_tempcode('EMOTICON_RELEVANCE_LEVEL_' . strval($i))));
+        for ($i = 0; $i <= 4; $i++) {
+            $list->attach(form_input_list_entry(strval($i), $i == $relevance_level, do_lang_tempcode('EMOTICON_RELEVANCE_LEVEL_' . strval($i))));
         }
-        $fields->attach(form_input_list(do_lang_tempcode('RELEVANCE_LEVEL'),do_lang_tempcode('DESCRIPTION_RELEVANCE_LEVEL'),'relevance_level',$list));
+        $fields->attach(form_input_list(do_lang_tempcode('RELEVANCE_LEVEL'), do_lang_tempcode('DESCRIPTION_RELEVANCE_LEVEL'), 'relevance_level', $list));
 
-        $fields->attach(form_input_tick(do_lang_tempcode('USE_TOPICS'),do_lang_tempcode('DESCRIPTION_USE_TOPICS'),'use_topics',$use_topics == 1));
-        $fields->attach(form_input_tick(do_lang_tempcode('EMOTICON_IS_SPECIAL'),do_lang_tempcode('DESCRIPTION_EMOTICON_IS_SPECIAL'),'is_special',$is_special == 1));
+        $fields->attach(form_input_tick(do_lang_tempcode('USE_TOPICS'), do_lang_tempcode('DESCRIPTION_USE_TOPICS'), 'use_topics', $use_topics == 1));
+        $fields->attach(form_input_tick(do_lang_tempcode('EMOTICON_IS_SPECIAL'), do_lang_tempcode('DESCRIPTION_EMOTICON_IS_SPECIAL'), 'is_special', $is_special == 1));
 
-        return array($fields,$hidden);
+        return array($fields, $hidden);
     }
 
     /**
@@ -413,12 +414,12 @@ class Module_admin_ocf_emoticons extends standard_crud_module
      */
     public function create_selection_list_radio_entries()
     {
-        $_m = $GLOBALS['FORUM_DB']->query_select('f_emoticons',array('e_code','e_theme_img_code'));
+        $_m = $GLOBALS['FORUM_DB']->query_select('f_emoticons', array('e_code', 'e_theme_img_code'));
         $entries = new ocp_tempcode();
         $first = true;
         foreach ($_m as $m) {
             $url = find_theme_image($m['e_theme_img_code']);
-            $entries->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array('_GUID' => 'f7f64637d1c4984881f7acc68c2fe6c7','PRETTY' => $m['e_code'],'CHECKED' => $first,'NAME' => 'id','CODE' => $m['e_code'],'URL' => $url)));
+            $entries->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array('_GUID' => 'f7f64637d1c4984881f7acc68c2fe6c7', 'PRETTY' => $m['e_code'], 'CHECKED' => $first, 'NAME' => 'id', 'CODE' => $m['e_code'], 'URL' => $url)));
             $first = false;
         }
 
@@ -433,13 +434,13 @@ class Module_admin_ocf_emoticons extends standard_crud_module
      */
     public function fill_in_edit_form($id)
     {
-        $m = $GLOBALS['FORUM_DB']->query_select('f_emoticons',array('*'),array('e_code' => $id),'',1);
-        if (!array_key_exists(0,$m)) {
+        $m = $GLOBALS['FORUM_DB']->query_select('f_emoticons', array('*'), array('e_code' => $id), '', 1);
+        if (!array_key_exists(0, $m)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $r = $m[0];
 
-        $ret = $this->get_form_fields($r['e_code'],$r['e_theme_img_code'],$r['e_relevance_level'],$r['e_use_topics'],$r['e_is_special']);
+        $ret = $this->get_form_fields($r['e_code'], $r['e_theme_img_code'], $r['e_relevance_level'], $r['e_use_topics'], $r['e_is_special']);
 
         return $ret;
     }
@@ -453,9 +454,9 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     {
         require_code('themes2');
 
-        $theme_img_code = get_theme_img_code('ocf_emoticons',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
+        $theme_img_code = get_theme_img_code('ocf_emoticons', true, 'file', 'theme_img_code', $GLOBALS['FORUM_DB']);
 
-        ocf_make_emoticon(post_param('code'),$theme_img_code,post_param_integer('relevance_level'),post_param_integer('use_topics',0),post_param_integer('is_special',0));
+        ocf_make_emoticon(post_param('code'), $theme_img_code, post_param_integer('relevance_level'), post_param_integer('use_topics', 0), post_param_integer('is_special', 0));
         return post_param('code');
     }
 
@@ -468,9 +469,9 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     {
         require_code('themes2');
 
-        $theme_img_code = get_theme_img_code('ocf_emoticons',true,'file','theme_img_code',$GLOBALS['FORUM_DB']);
+        $theme_img_code = get_theme_img_code('ocf_emoticons', true, 'file', 'theme_img_code', $GLOBALS['FORUM_DB']);
 
-        ocf_edit_emoticon($id,post_param('code'),$theme_img_code,post_param_integer('relevance_level'),post_param_integer('use_topics',0),post_param_integer('is_special',0));
+        ocf_edit_emoticon($id, post_param('code'), $theme_img_code, post_param_integer('relevance_level'), post_param_integer('use_topics', 0), post_param_integer('is_special', 0));
 
         $this->new_id = post_param('code');
     }

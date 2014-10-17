@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_rss_galleries
 {
     /**
@@ -31,48 +30,48 @@ class Hook_rss_galleries
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
         if (!addon_installed('galleries')) {
-            return NULL;
+            return null;
         }
 
-        if (!has_actual_page_access(get_member(),'galleries')) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'galleries')) {
+            return null;
         }
 
-        $filters_1 = ocfilter_to_sqlfragment($_filters,'name','galleries','parent_id','name','name',false,false); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
-        $filters = ocfilter_to_sqlfragment($_filters,'cat','galleries','parent_id','cat','name',false,false); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+        $filters_1 = ocfilter_to_sqlfragment($_filters, 'name', 'galleries', 'parent_id', 'name', 'name', false, false); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+        $filters = ocfilter_to_sqlfragment($_filters, 'cat', 'galleries', 'parent_id', 'cat', 'name', false, false); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
         require_lang('galleries');
 
         $content = new ocp_tempcode();
         $_galleries = array();
-        if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'galleries WHERE ' . $filters_1,false,true)<3000) {
-            $_galleries = $GLOBALS['SITE_DB']->query('SELECT fullname,name FROM ' . get_table_prefix() . 'galleries WHERE ' . $filters_1,null,null,false,true);
+        if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'galleries WHERE ' . $filters_1, false, true) < 3000) {
+            $_galleries = $GLOBALS['SITE_DB']->query('SELECT fullname,name FROM ' . get_table_prefix() . 'galleries WHERE ' . $filters_1, null, null, false, true);
             foreach ($_galleries as $i => $_gallery) {
                 $_galleries[$i]['_title'] = get_translated_text($_gallery['fullname']);
             }
         }
-        $galleries = collapse_2d_complexity('name','_title',$_galleries);
+        $galleries = collapse_2d_complexity('name', '_title', $_galleries);
 
         $privacy_join = '';
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('video','r');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('video', 'r');
         }
-        $rows1 = $GLOBALS['SITE_DB']->query('SELECT r.*,\'video\' AS type FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'videos r' . $privacy_join . ' WHERE add_date>' . strval($cutoff) . ' AND ' . $filters . (((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'') . $privacy_where . ' ORDER BY add_date DESC',$max);
+        $rows1 = $GLOBALS['SITE_DB']->query('SELECT r.*,\'video\' AS type FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'videos r' . $privacy_join . ' WHERE add_date>' . strval($cutoff) . ' AND ' . $filters . (((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) ? ' AND validated=1 ' : '') . $privacy_where . ' ORDER BY add_date DESC', $max);
 
         $privacy_join = '';
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('image','r');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('image', 'r');
         }
-        $rows2 = browser_matches('itunes')?array():$GLOBALS['SITE_DB']->query('SELECT r.*,\'image\' AS type FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'images r' . $privacy_join . ' WHERE add_date>' . strval($cutoff) . ' AND ' . $filters . (((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND validated=1 ':'') . $privacy_where . ' ORDER BY add_date DESC',$max);
+        $rows2 = browser_matches('itunes') ? array() : $GLOBALS['SITE_DB']->query('SELECT r.*,\'image\' AS type FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'images r' . $privacy_join . ' WHERE add_date>' . strval($cutoff) . ' AND ' . $filters . (((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) ? ' AND validated=1 ' : '') . $privacy_where . ' ORDER BY add_date DESC', $max);
 
-        $rows = array_merge($rows1,$rows2);
+        $rows = array_merge($rows1, $rows2);
         foreach ($rows as $row) {
             $id = strval($row['id']);
             $author = $GLOBALS['FORUM_DRIVER']->get_username($row['submitter']);
@@ -80,21 +79,21 @@ class Hook_rss_galleries
                 $author = '';
             }
 
-            $news_date = date($date_string,$row['add_date']);
-            $edit_date = is_null($row['edit_date'])?'':date($date_string,$row['edit_date']);
+            $news_date = date($date_string, $row['add_date']);
+            $edit_date = is_null($row['edit_date']) ? '' : date($date_string, $row['edit_date']);
 
             if (get_translated_text($row['title']) != '') {
                 $news_title = xmlentities(get_translated_text($row['title']));
             } else {
-                $news_title = xmlentities(do_lang('THIS_WITH_SIMPLE',(($row['type'] == 'video')?do_lang('VIDEO'):do_lang('IMAGE')),strval($row['id'])));
+                $news_title = xmlentities(do_lang('THIS_WITH_SIMPLE', (($row['type'] == 'video') ? do_lang('VIDEO') : do_lang('IMAGE')), strval($row['id'])));
             }
-            $just_row = db_map_restrict($row,array('id','description'));
-            $_summary = get_translated_tempcode($row['type'] . 's',$just_row,'description');
+            $just_row = db_map_restrict($row, array('id', 'description'));
+            $_summary = get_translated_tempcode($row['type'] . 's', $just_row, 'description');
             $summary = xmlentities($_summary->evaluate());
             $news = '';
 
-            if (!array_key_exists($row['cat'],$galleries)) {
-                $_fullname = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','fullname',array('name' => $row['cat']));
+            if (!array_key_exists($row['cat'], $galleries)) {
+                $_fullname = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'fullname', array('name' => $row['cat']));
                 if (is_null($_fullname)) {
                     continue;
                 }
@@ -103,26 +102,26 @@ class Hook_rss_galleries
             $category = $galleries[$row['cat']];
             $category_raw = $row['cat'];
 
-            $view_url = build_url(array('page' => 'galleries','type' => $row['type'],'id' => $row['id']),get_module_zone('galleries'),null,false,false,true);
+            $view_url = build_url(array('page' => 'galleries', 'type' => $row['type'], 'id' => $row['id']), get_module_zone('galleries'), null, false, false, true);
 
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
-                $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => '65dc0cec8c75f565c58c95fa1667aa1e','COMMENT_URL' => $view_url,'ID' => strval($row['id'])));
+                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '65dc0cec8c75f565c58c95fa1667aa1e', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
                 $if_comments = new ocp_tempcode();
             }
 
             require_code('images');
-            $thumb_url = ensure_thumbnail($row['url'],$row['thumb_url'],'galleries',$row['type'] . 's',$row['id']);
+            $thumb_url = ensure_thumbnail($row['url'], $row['thumb_url'], 'galleries', $row['type'] . 's', $row['id']);
             $enclosure_url = $row['url'];
             if (url_is_local($enclosure_url)) {
                 $enclosure_url = get_custom_base_url() . '/' . $enclosure_url;
             }
-            list($enclosure_length,$enclosure_type) = get_enclosure_details($row['url'],$enclosure_url);
+            list($enclosure_length, $enclosure_type) = get_enclosure_details($row['url'], $enclosure_url);
 
-            $meta = seo_meta_get_for($row['type'],strval($row['id']));
-            $keywords = trim($meta[0],', ');
+            $meta = seo_meta_get_for($row['type'], strval($row['id']));
+            $keywords = trim($meta[0], ', ');
 
-            $content->attach(do_template($prefix . 'ENTRY',array(
+            $content->attach(do_template($prefix . 'ENTRY', array(
                 'ENCLOSURE_URL' => $enclosure_url,
                 'ENCLOSURE_LENGTH' => $enclosure_length,
                 'ENCLOSURE_TYPE' => $enclosure_type,
@@ -137,12 +136,12 @@ class Hook_rss_galleries
                 'ID' => $id,
                 'NEWS' => $news,
                 'DATE' => $news_date,
-                'DURATION' => array_key_exists('video_length',$row)?(strval(intval(floor(floatval($row['video_length']))/60.0)) . ':' . strval($row['video_length']%60)):null,
+                'DURATION' => array_key_exists('video_length', $row) ? (strval(intval(floor(floatval($row['video_length'])) / 60.0)) . ':' . strval($row['video_length'] % 60)) : null,
                 'KEYWORDS' => $keywords,
             )));
         }
 
         require_lang('galleries');
-        return array($content,do_lang('GALLERIES'));
+        return array($content, do_lang('GALLERIES'));
     }
 }

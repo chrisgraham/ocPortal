@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-
 class Hook_Preview_ocf_signature
 {
     /**
@@ -29,16 +28,16 @@ class Hook_Preview_ocf_signature
     {
         require_lang('ocf');
 
-        $member_id = get_param_integer('id',get_member());
+        $member_id = get_param_integer('id', get_member());
 
-        $applies = (get_param('page','') == 'members') && (post_param('signature',null) !== NULL);
+        $applies = (get_param('page', '') == 'members') && (post_param('signature', null) !== null);
         if ($applies) {
             require_code('ocf_groups');
-            $max_sig_length = ocf_get_member_best_group_property($member_id,'max_sig_length_comcode');
-            if (strlen(post_param('post',''))>$max_sig_length) {
+            $max_sig_length = ocf_get_member_best_group_property($member_id, 'max_sig_length_comcode');
+            if (strlen(post_param('post', '')) > $max_sig_length) {
                 warn_exit(do_lang_tempcode('SIGNATURE_TOO_BIG'));
             }
         }
-        return array($applies,'ocf_signature',true,array('post'));
+        return array($applies, 'ocf_signature', true, array('post'));
     }
 }

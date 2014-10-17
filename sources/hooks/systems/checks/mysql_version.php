@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_mysql_version
 {
     /**
@@ -29,12 +28,12 @@ class Hook_check_mysql_version
     {
         $warning = array();
         if (function_exists('mysqli_get_client_version')) {
-            $x = float_to_raw_string(floatval(mysqli_get_client_version())/10000.0);
-            if (version_compare($x,'4.1.0','<')) {
+            $x = float_to_raw_string(floatval(mysqli_get_client_version()) / 10000.0);
+            if (version_compare($x, '4.1.0', '<')) {
                 $warning[] = do_lang_tempcode('MYSQL_TOO_OLD');
             }
         } elseif (function_exists('mysql_get_client_info')) {
-            if (version_compare(mysql_get_client_info(),'4.1.0','<')) {
+            if (version_compare(mysql_get_client_info(), '4.1.0', '<')) {
                 $warning[] = do_lang_tempcode('MYSQL_TOO_OLD');
             }
         }

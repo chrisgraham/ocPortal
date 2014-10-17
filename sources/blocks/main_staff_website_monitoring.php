@@ -19,7 +19,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Block_main_staff_website_monitoring
 {
     /**
@@ -50,7 +49,7 @@ class Block_main_staff_website_monitoring
     {
         $info = array();
         $info['cache_on'] = '(count($_POST)>0)?NULL:array()'; // No cache on POST as this is when we save text data
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*5;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 5;
         return $info;
     }
 
@@ -68,16 +67,16 @@ class Block_main_staff_website_monitoring
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if ((is_null($upgrade_from)) || ($upgrade_from < 2)) {
-            $GLOBALS['SITE_DB']->create_table('sitewatchlist',array(
+            $GLOBALS['SITE_DB']->create_table('sitewatchlist', array(
                 'id' => '*AUTO',
                 'siteurl' => 'URLPATH',
                 'site_name' => 'SHORT_TEXT',
             ));
 
-            $GLOBALS['SITE_DB']->query_insert('sitewatchlist',array(
+            $GLOBALS['SITE_DB']->query_insert('sitewatchlist', array(
                 'siteurl' => get_base_url(),
                 'site_name' => get_site_name(),
             ));
@@ -96,19 +95,19 @@ class Block_main_staff_website_monitoring
 
         require_code('files');
         $p = array();
-        $result = http_download_file('http://data.alexa.com/data?cli=10&dat=s&url=' . $url,null,false,false,'ocPortal',null,null,null,null,null,null,null,null,1.0);
-        if (preg_match('#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si',$result,$p) != 0) {
+        $result = http_download_file('http://data.alexa.com/data?cli=10&dat=s&url=' . $url, null, false, false, 'ocPortal', null, null, null, null, null, null, null, null, 1.0);
+        if (preg_match('#<POPULARITY URL="(.*?)" TEXT="([0-9]+){1,}"/>#si', $result, $p) != 0) {
             $rank = integer_format(intval($p[2]));
         } else {
             $rank = '0';
         }
-        if (preg_match('#<LINKSIN NUM="([0-9]+){1,}"/>#si',$result,$p) != 0) {
+        if (preg_match('#<LINKSIN NUM="([0-9]+){1,}"/>#si', $result, $p) != 0) {
             $links = integer_format(intval($p[1]));
         } else {
             $links = '0';
         }
-        if (preg_match( '#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si',$result,$p) != 0) {
-            $speed = 'Top ' . integer_format(100-intval($p[1])) . '%';
+        if (preg_match('#<SPEED TEXT="[^"]*" PCT="([0-9]+){1,}"/>#si', $result, $p) != 0) {
+            $speed = 'Top ' . integer_format(100 - intval($p[1])) . '%';
         } else {
             $speed = '?';
         }
@@ -121,7 +120,7 @@ class Block_main_staff_website_monitoring
             audience (i.e. what country views the site most)
          */
 
-        return array($rank,$links,$speed);
+        return array($rank, $links, $speed);
     }
 
     //convert a string to a 32-bit integer
@@ -136,7 +135,8 @@ class Block_main_staff_website_monitoring
             //  the result of converting to integer is undefined
             //  refer to http://www.php.net/manual/en/language.types.integer.php
             if ((is_integer($check) && floatval($check) >= $int_32_unit) ||
-                (is_float($check) && $check >= $int_32_unit)) {
+                (is_float($check) && $check >= $int_32_unit)
+            ) {
                 $check = ($check - $int_32_unit * intval($check / $int_32_unit));
                 //if the check less than -2^31
                 $check = ($check < -2147483648.0) ? ($check + $int_32_unit) : $check;
@@ -146,7 +146,7 @@ class Block_main_staff_website_monitoring
             }
             $check += ord($str[$i]);
         }
-        return is_integer($check)? $check : intval($check);
+        return is_integer($check) ? $check : intval($check);
     }
 
     //genearate a hash for a url
@@ -156,12 +156,12 @@ class Block_main_staff_website_monitoring
         $check2 = $this->StrToNum($string, 0, 0x1003F);
 
         $check1 = $check1 >> 2;
-        $check1 = (($check1 >> 4) & 0x3FFFFC0 ) | ($check1 & 0x3F);
-        $check1 = (($check1 >> 4) & 0x3FFC00 ) | ($check1 & 0x3FF);
-        $check1 = (($check1 >> 4) & 0x3C000 ) | ($check1 & 0x3FFF);
+        $check1 = (($check1 >> 4) & 0x3FFFFC0) | ($check1 & 0x3F);
+        $check1 = (($check1 >> 4) & 0x3FFC00) | ($check1 & 0x3FF);
+        $check1 = (($check1 >> 4) & 0x3C000) | ($check1 & 0x3FFF);
 
-        $t1 = (((($check1 & 0x3C0) << 4) | ($check1 & 0x3C)) << 2 ) | ($check2 & 0xF0F );
-        $t2 = @(((($check1 & 0xFFFFC000) << 4) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000 );
+        $t1 = (((($check1 & 0x3C0) << 4) | ($check1 & 0x3C)) << 2) | ($check2 & 0xF0F);
+        $t2 = @(((($check1 & 0xFFFFC000) << 4) | ($check1 & 0x3C00)) << 0xA) | ($check2 & 0xF0F0000);
 
         return ($t1 | $t2);
     }
@@ -172,23 +172,23 @@ class Block_main_staff_website_monitoring
         $check_byte = 0;
         $flag = 0;
 
-        $hashstr = sprintf('%u', $hashnum) ;
+        $hashstr = sprintf('%u', $hashnum);
         $length = strlen($hashstr);
 
-        for ($i = $length - 1;  $i >= 0;  $i --) {
+        for ($i = $length - 1; $i >= 0; $i--) {
             $re = intval($hashstr[$i]);
             if (1 === ($flag % 2)) {
                 $re += $re;
                 $re = intval($re / 10) + ($re % 10);
             }
             $check_byte += $re;
-            $flag ++;
+            $flag++;
         }
 
         $check_byte = $check_byte % 10;
         if (0 !== $check_byte) {
             $check_byte = 10 - $check_byte;
-            if (1 === ($flag % 2) ) {
+            if (1 === ($flag % 2)) {
                 if (1 === ($check_byte % 2)) {
                     $check_byte += 9;
                 }
@@ -212,7 +212,7 @@ class Block_main_staff_website_monitoring
         $ch = $this->getch($url);
         $errno = '0';
         $errstr = '';
-        $data = http_download_file('http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . $ch . '&features=Rank&q=info:' . $url,null,false,false,'ocPortal',null,null,null,null,null,null,null,null,1.0);
+        $data = http_download_file('http://toolbarqueries.google.com/tbr?client=navclient-auto&ch=' . $ch . '&features=Rank&q=info:' . $url, null, false, false, 'ocPortal', null, null, null, null, null, null, null, null, 1.0);
         if (is_null($data)) {
             return '';
         }
@@ -221,10 +221,10 @@ class Block_main_staff_website_monitoring
         } else {
             $pr = substr($data, $pos + 9);
             $pr = trim($pr);
-            $pr = str_replace("\n",'',$pr);
+            $pr = str_replace("\n", '', $pr);
             return $pr;
         }
-        return NULL;
+        return null;
     }
 
     //return the pagerank figure
@@ -245,19 +245,19 @@ class Block_main_staff_website_monitoring
      */
     public function run($map)
     {
-        define('GOOGLE_MAGIC',0xE6359A60);
+        define('GOOGLE_MAGIC', 0xE6359A60);
 
-        $links = post_param('website_monitoring_list_edit',null);
+        $links = post_param('website_monitoring_list_edit', null);
         if (!is_null($links)) {
             $GLOBALS['SITE_DB']->query_delete('sitewatchlist');
             $items = explode("\n", $links);
             foreach ($items as $i) {
                 $q = trim($i);
                 if (!empty($q)) {
-                    $bits = explode('=',$q);
+                    $bits = explode('=', $q);
                     if (count($bits) >= 2) {
                         $last_bit = array_pop($bits);
-                        $bits = array(implode('=',$bits),$last_bit);
+                        $bits = array(implode('=', $bits), $last_bit);
                         $link = $bits[0];
                         $site_name = $bits[1];
                     } else {
@@ -270,7 +270,7 @@ class Block_main_staff_website_monitoring
                             $site_name = $link;
                         }
                     }
-                    $GLOBALS['SITE_DB']->query_insert('sitewatchlist',array('site_name' => $site_name,'siteurl' => fixup_protocolless_urls($link)));
+                    $GLOBALS['SITE_DB']->query_insert('sitewatchlist', array('site_name' => $site_name, 'siteurl' => fixup_protocolless_urls($link)));
                 }
             }
 
@@ -281,7 +281,7 @@ class Block_main_staff_website_monitoring
 
         $sitesbeingwatched = array();
         $sitegriddata = array();
-        if (count($rows)>0) {
+        if (count($rows) > 0) {
             foreach ($rows as $r) {
                 $alex = $this->getAlexaRank(($r['siteurl']));
                 $sitesbeingwatched[$r['siteurl']] = $r['site_name'];
@@ -303,6 +303,6 @@ class Block_main_staff_website_monitoring
         foreach ($map as $key => $val) {
             $map_comcode .= ' ' . $key . '="' . addslashes($val) . '"';
         }
-        return do_template('BLOCK_MAIN_STAFF_WEBSITE_MONITORING',array('_GUID' => '0abf65878c508bf133836589a8cc45da','URL' => get_self_url(),'BLOCK_NAME' => 'main_staff_website_monitoring','MAP' => $map_comcode,'SITEURLS' => $sitesbeingwatched,'GRIDDATA' => $sitegriddata));
+        return do_template('BLOCK_MAIN_STAFF_WEBSITE_MONITORING', array('_GUID' => '0abf65878c508bf133836589a8cc45da', 'URL' => get_self_url(), 'BLOCK_NAME' => 'main_staff_website_monitoring', 'MAP' => $map_comcode, 'SITEURLS' => $sitesbeingwatched, 'GRIDDATA' => $sitegriddata));
     }
 }

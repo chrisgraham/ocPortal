@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_main_google_results
 {
     /**
@@ -41,7 +40,7 @@ class Block_main_google_results
     {
         $info = array();
         $info['cache_on'] = 'array()';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*5;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 5;
         return $info;
     }
 
@@ -57,6 +56,6 @@ class Block_main_google_results
 
         require_lang('google_search');
 
-        return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS',array('_GUID' => 'e2bd264817a6ad7852918583986bd373'));
+        return do_template('BLOCK_MAIN_GOOGLE_SEARCH_RESULTS', array('_GUID' => 'e2bd264817a6ad7852918583986bd373'));
     }
 }

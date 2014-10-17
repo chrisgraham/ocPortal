@@ -21,11 +21,11 @@ class tracker_categories_test_set extends ocp_test_case
     public function testHasAddons()
     {
         $post = array();
-        $categories = unserialize(http_download_file(get_brand_base_url() . '/data_custom/ocportalcom_web_service.php?call=get_tracker_categories',null,true,false,'ocPortal Test Platform',$post));
-        $addons = find_all_hooks('systems','addon_registry');
+        $categories = unserialize(http_download_file(get_brand_base_url() . '/data_custom/ocportalcom_web_service.php?call=get_tracker_categories', null, true, false, 'ocPortal Test Platform', $post));
+        $addons = find_all_hooks('systems', 'addon_registry');
         foreach ($addons as $addon => $place) {
             if ($place == 'sources') {
-                $this->assertTrue(in_array($addon,$categories),$addon);
+                $this->assertTrue(in_array($addon, $categories), $addon);
             }
         }
     }
@@ -33,17 +33,17 @@ class tracker_categories_test_set extends ocp_test_case
     public function testNoUnknownAddons()
     {
         $post = array();
-        $categories = unserialize(http_download_file(get_brand_base_url() . '/data_custom/ocportalcom_web_service.php?call=get_tracker_categories',null,true,false,'ocPortal Test Platform',$post));
-        $addons = find_all_hooks('systems','addon_registry');
+        $categories = unserialize(http_download_file(get_brand_base_url() . '/data_custom/ocportalcom_web_service.php?call=get_tracker_categories', null, true, false, 'ocPortal Test Platform', $post));
+        $addons = find_all_hooks('systems', 'addon_registry');
         foreach ($categories as $category) {
             if (strtolower($category) != $category) {
                 continue;
             } // Only lower case must correspond to addons
-            if (strpos($category,'(old)') !== false) {
+            if (strpos($category, '(old)') !== false) {
                 continue;
             }
 
-            $this->assertTrue(array_key_exists($category,$addons),$category);
+            $this->assertTrue(array_key_exists($category, $addons), $category);
         }
     }
 }

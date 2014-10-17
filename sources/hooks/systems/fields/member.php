@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_member
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_member
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,13 +41,13 @@ class Hook_fields_member
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        $param = get_param('option_' . strval($row['id']),'');
+        $param = get_param('option_' . strval($row['id']), '');
         if ($param != '') {
             $param = strval($GLOBALS['FORUM_DRIVER']->get_member_from_username($param));
         }
-        return exact_match_sql($row,$i,'long',$param);
+        return exact_match_sql($row, $i, 'long', $param);
     }
 
     // ===================
@@ -63,14 +62,14 @@ class Hook_fields_member
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = strval($GLOBALS['FORUM_DRIVER']->get_guest_id());
             }
         }
-        return array('integer_unescaped',$default,'integer');
+        return array('integer_unescaped', $default, 'integer');
     }
 
     /**
@@ -80,7 +79,7 @@ class Hook_fields_member
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -107,7 +106,7 @@ class Hook_fields_member
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if (is_null($actual_value)) {
             $actual_value = '';
@@ -119,7 +118,7 @@ class Hook_fields_member
         } else {
             $actual_value = $GLOBALS['FORUM_DRIVER']->get_username(intval($actual_value));
         }
-        return form_input_username($_cf_name,$_cf_description,'field_' . strval($field['id']),$actual_value,$field['cf_required'] == 1);
+        return form_input_username($_cf_name, $_cf_description, 'field_' . strval($field['id']), $actual_value, $field['cf_required'] == 1);
     }
 
     /**
@@ -131,14 +130,14 @@ class Hook_fields_member
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        $value = post_param($tmp_name,strval(INTEGER_MAGIC_NULL));
+        $value = post_param($tmp_name, strval(INTEGER_MAGIC_NULL));
         if (($value != '') && ($value != strval(INTEGER_MAGIC_NULL))) {
             $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($value);
-            $value = is_null($member_id)?'':strval($member_id);
+            $value = is_null($member_id) ? '' : strval($member_id);
         }
         return $value;
     }

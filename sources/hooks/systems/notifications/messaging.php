@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
-
 class Hook_Notification_messaging extends Hook_Notification__Staff
 {
     /**
@@ -41,7 +40,7 @@ class Hook_Notification_messaging extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['messaging'] = array(do_lang('notifications:MESSAGES'),do_lang('messaging:NOTIFICATION_TYPE_messaging'));
+        $list['messaging'] = array(do_lang('notifications:MESSAGES'), do_lang('messaging:NOTIFICATION_TYPE_messaging'));
         return $list;
     }
 }

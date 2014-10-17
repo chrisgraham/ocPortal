@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_sw_downloads
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_downloads
             return array();
         }
 
-        return array(array('main_awards' => array('YES_CELL','NO')),array());
+        return array(array('main_awards' => array('YES_CELL', 'NO')), array());
     }
 }

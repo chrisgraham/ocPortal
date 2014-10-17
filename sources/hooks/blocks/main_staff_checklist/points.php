@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_checklist_points
 {
     /**
@@ -31,10 +30,10 @@ class Hook_checklist_points
         if (addon_installed('points')) {
             require_lang('points');
 
-            $url = build_url(array('page' => 'admin_points','type' => 'logs'),'adminzone');
+            $url = build_url(array('page' => 'admin_points', 'type' => 'logs'), 'adminzone');
             $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA');
-            $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'f421d75a70956d3beddf16c3f8138f26','URL' => '','STATUS' => $status,'TASK' => urlise_lang(do_lang('NAG_MONITOR_GIFTS'),$url),'INFO' => ''));
-            return array(array($tpl,null,null,null));
+            $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'f421d75a70956d3beddf16c3f8138f26', 'URL' => '', 'STATUS' => $status, 'TASK' => urlise_lang(do_lang('NAG_MONITOR_GIFTS'), $url), 'INFO' => ''));
+            return array(array($tpl, null, null, null));
         }
         return array();
     }

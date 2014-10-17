@@ -29,7 +29,7 @@
  * @param  ?string                      The subject (NULL: default)
  * @param  ?array                       List of names (NULL: use email addresses as names)
  */
-function send_recommendation_email($name,$email_address,$message,$is_invite = false,$recommender_email = null,$subject = null,$names = null)
+function send_recommendation_email($name, $email_address, $message, $is_invite = false, $recommender_email = null, $subject = null, $names = null)
 {
     if (!is_array($email_address)) {
         $email_address = array($email_address);
@@ -38,7 +38,7 @@ function send_recommendation_email($name,$email_address,$message,$is_invite = fa
         $recommender_email = $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
     }
     if (is_null($subject)) {
-        $subject = do_lang('RECOMMEND_MEMBER_SUBJECT',get_site_name());
+        $subject = do_lang('RECOMMEND_MEMBER_SUBJECT', get_site_name());
     }
 
     require_code('mail');
@@ -46,7 +46,7 @@ function send_recommendation_email($name,$email_address,$message,$is_invite = fa
         $message = '(' . do_lang('NONE') . ')';
     }
 
-    mail_wrap(do_lang('RECOMMEND_MEMBER_SUBJECT',get_site_name()),$message,$email_address,is_null($names)?$email_address:$names,$recommender_email,$name);
+    mail_wrap(do_lang('RECOMMEND_MEMBER_SUBJECT', get_site_name()), $message, $email_address, is_null($names) ? $email_address : $names, $recommender_email, $name);
 }
 
 /**
@@ -61,9 +61,9 @@ function get_num_invites($member_id)
         return 1;
     } // Admin can always have another invite
 
-    $used = $GLOBALS['FORUM_DB']->query_select_value('f_invites','COUNT(*)',array('i_inviter' => $member_id));
+    $used = $GLOBALS['FORUM_DB']->query_select_value('f_invites', 'COUNT(*)', array('i_inviter' => $member_id));
     $per_day = floatval(get_option('invites_per_day'));
-    return intval($per_day*floor((time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member_id))/(60*60*24))-$used);
+    return intval($per_day * floor((time() - $GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member_id)) / (60 * 60 * 24)) - $used);
 }
 
 /**

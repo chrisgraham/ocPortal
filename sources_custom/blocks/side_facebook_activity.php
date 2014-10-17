@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_side_facebook_activity
 {
     /**
@@ -42,6 +41,6 @@ class Block_side_facebook_activity
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        return do_template('BLOCK_SIDE_FACEBOOK_ACTIVITY',array());
+        return do_template('BLOCK_SIDE_FACEBOOK_ACTIVITY', array());
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_permission_management
  */
-
 class Hook_sitemap_privilege_category extends Hook_sitemap_base
 {
     /**
@@ -29,12 +28,12 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
     public function handles_page_link($page_link)
     {
         $matches = array();
-        if (preg_match('#^([^:]*):admin_permissions:privileges#',$page_link,$matches) != 0) {
+        if (preg_match('#^([^:]*):admin_permissions:privileges#', $page_link, $matches) != 0) {
             $zone = $matches[1];
             $page = 'admin_permissions';
 
             require_code('site');
-            $test = _request_page($page,$zone);
+            $test = _request_page($page, $zone);
             if (($test !== false) && (($test[0] == 'MODULES_CUSTOM') || ($test[0] == 'MODULES'))) { // Ensure the relevant module really does exist in the given zone
                 if ($matches[0] != $page_link) {
                     return SITEMAP_NODE_HANDLED;
@@ -63,11 +62,11 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   List of node structures (NULL: working via callback).
      */
-    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    public function get_virtual_nodes($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $return_anyway = false)
     {
-        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
+        $nodes = ($callback === null || $return_anyway) ? array() : mixed();
 
-        if (($valid_node_types !== NULL) && (!in_array('_privilege_category',$valid_node_types))) {
+        if (($valid_node_types !== null) && (!in_array('_privilege_category', $valid_node_types))) {
             return $nodes;
         }
 
@@ -75,26 +74,26 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
             return $nodes;
         }
 
-        $page = $this->_make_zone_concrete($zone,$page_link);
+        $page = $this->_make_zone_concrete($zone, $page_link);
 
         require_all_lang();
 
-        $_sections = list_to_map('p_section',$GLOBALS['SITE_DB']->query_select('privilege_list',array('DISTINCT p_section')));
+        $_sections = list_to_map('p_section', $GLOBALS['SITE_DB']->query_select('privilege_list', array('DISTINCT p_section')));
         foreach ($_sections as $i => $s) {
             $_sections[$s['p_section']] = do_lang($s['p_section']);
         }
-        uasort($_sections,'strnatcasecmp');
+        uasort($_sections, 'strnatcasecmp');
 
-        if ($child_cutoff !== NULL) {
-            if (count($_sections)>$child_cutoff) {
+        if ($child_cutoff !== null) {
+            if (count($_sections) > $child_cutoff) {
                 return $nodes;
             }
         }
 
         foreach (array_keys($_sections) as $category) {
             $child_page_link = $zone . ':' . $page . ':privileges:' . $category;
-            $node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-            if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+            $node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather);
+            if (($callback === null || $return_anyway) && ($node !== null)) {
                 $nodes[] = $node;
             }
         }
@@ -121,10 +120,10 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
         $matches = array();
-        preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#',$page_link,$matches);
+        preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#', $page_link, $matches);
         $page = $matches[2];
         $privilege_category = $matches[4];
 
@@ -138,25 +137,25 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
         $struct = array(
             'title' => make_string_tempcode($title),
             'content_type' => '_privilege_category',
-            'content_id' => NULL,
+            'content_id' => null,
             'modifiers' => array(),
             'only_on_page' => '',
             'page_link' => $page_link,
-            'url' => NULL,
+            'url' => null,
             'extra_meta' => array(
-                'description' => NULL,
-                'image' => NULL,
-                'image_2x' => NULL,
-                'add_date' => NULL,
-                'edit_date' => NULL,
-                'submitter' => NULL,
-                'views' => NULL,
-                'rating' => NULL,
-                'meta_keywords' => NULL,
-                'meta_description' => NULL,
-                'categories' => NULL,
-                'validated' => NULL,
-                'db_row' => NULL,
+                'description' => null,
+                'image' => null,
+                'image_2x' => null,
+                'add_date' => null,
+                'edit_date' => null,
+                'submitter' => null,
+                'views' => null,
+                'rating' => null,
+                'meta_keywords' => null,
+                'meta_description' => null,
+                'categories' => null,
+                'validated' => null,
+                'db_row' => null,
             ),
             'permissions' => array(),
             'has_possible_children' => false,
@@ -165,17 +164,17 @@ class Hook_sitemap_privilege_category extends Hook_sitemap_base
             'sitemap_priority' => SITEMAP_IMPORTANCE_LOW,
             'sitemap_refreshfreq' => 'yearly',
 
-            'privilege_page' => NULL,
+            'privilege_page' => null,
         );
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

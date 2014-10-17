@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    backup
  */
-
 class Hook_cron_backups
 {
     /**
@@ -42,8 +41,8 @@ class Hook_cron_backups
                 require_code('backup');
                 $max_size = get_value('backup_max_size');
                 $b_type = get_value('backup_b_type');
-                global $MB2_FILE,$MB2_B_TYPE,$MB2_MAX_SIZE;
-                $end = ((get_option('backup_overwrite') != '1') || ($b_type == 'incremental'))?uniqid('',true):'scheduled';
+                global $MB2_FILE, $MB2_B_TYPE, $MB2_MAX_SIZE;
+                $end = ((get_option('backup_overwrite') != '1') || ($b_type == 'incremental')) ? uniqid('', true) : 'scheduled';
                 if ($b_type == 'full') {
                     $file = 'restore_' . $end;
                 } elseif ($b_type == 'incremental') {
@@ -58,7 +57,7 @@ class Hook_cron_backups
                 if ($backup_recurrance_days == 0) {
                     delete_value('backup_schedule_time');
                 } else {
-                    set_value('backup_schedule_time',strval($backup_schedule_time+$backup_recurrance_days*60*60*24));
+                    set_value('backup_schedule_time', strval($backup_schedule_time + $backup_recurrance_days * 60 * 60 * 24));
                 }
             }
         }

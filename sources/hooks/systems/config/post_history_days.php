@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_config_post_history_days
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_post_history_days
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'21';
+        return (get_forum_type() != 'ocf') ? null : '21';
     }
 }

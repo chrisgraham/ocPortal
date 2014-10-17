@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    actionlog
  */
-
 class Hook_rss_admin_recent_actions
 {
     /**
@@ -31,15 +30,15 @@ class Hook_rss_admin_recent_actions
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
-        if (!has_actual_page_access(get_member(),'admin_actionlog')) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'admin_actionlog')) {
+            return null;
         }
 
-        $filters = ocfilter_to_sqlfragment($_filters,'member_id','f_members',null,'member_id','id');
+        $filters = ocfilter_to_sqlfragment($_filters, 'member_id', 'f_members', null, 'member_id', 'id');
 
-        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'adminlogs WHERE date_and_time>' . strval($cutoff) . ' AND ' . $filters . ' ORDER BY date_and_time DESC',$max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'adminlogs WHERE date_and_time>' . strval($cutoff) . ' AND ' . $filters . ' ORDER BY date_and_time DESC', $max);
 
         require_all_lang();
 
@@ -52,32 +51,32 @@ class Hook_rss_admin_recent_actions
             }
             $author .= ' / ' . $row['ip'];
 
-            $news_date = date($date_string,$row['date_and_time']);
+            $news_date = date($date_string, $row['date_and_time']);
             $edit_date = escape_html('');
 
-            $type = do_lang($row['the_type'],null,null,null,null,false);
+            $type = do_lang($row['the_type'], null, null, null, null, false);
             if (is_null($type)) {
                 $type = $row['the_type'];
             }
             $news_title = xmlentities($type);
-            $_summary = $row['param_a'] . (($row['param_b'] == '')?'':' / ') . $row['param_b'];
+            $_summary = $row['param_a'] . (($row['param_b'] == '') ? '' : ' / ') . $row['param_b'];
             $summary = xmlentities($_summary);
             $news = escape_html('');
 
             $category = $type;
             $category_raw = $type;
 
-            $view_url = build_url(array('page' => 'admin_actionlog','type' => 'view','mode' => 'ocp','id' => $row['id']),'adminzone');
+            $view_url = build_url(array('page' => 'admin_actionlog', 'type' => 'view', 'mode' => 'ocp', 'id' => $row['id']), 'adminzone');
 
             if ($prefix == 'RSS_') {
-                $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => 'c237ee93e6ff879b09eb93048a1f539b','COMMENT_URL' => $view_url,'ID' => strval($row['id'])));
+                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'c237ee93e6ff879b09eb93048a1f539b', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
                 $if_comments = new ocp_tempcode();
             }
 
-            $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }
 
-        return array($content,do_lang('VIEW_ACTIONLOGS'));
+        return array($content, do_lang('VIEW_ACTIONLOGS'));
     }
 }

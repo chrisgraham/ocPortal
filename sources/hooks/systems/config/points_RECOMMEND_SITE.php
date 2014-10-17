@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    recommend
  */
-
 class Hook_config_points_RECOMMEND_SITE
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_RECOMMEND_SITE
      */
     public function get_default()
     {
-        return addon_installed('points')?'350':null;
+        return addon_installed('points') ? '350' : null;
     }
 }

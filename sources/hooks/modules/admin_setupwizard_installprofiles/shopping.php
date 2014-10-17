@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
-
 class Hook_admin_setupwizard_installprofiles_shopping
 {
     /**
@@ -41,7 +40,7 @@ class Hook_admin_setupwizard_installprofiles_shopping
     public function get_addon_list()
     {
         return array(
-            array('ecommerce','shopping','ssl','quizzes','random_quotes','recommend','polls','tickets','news','newsletter'),
+            array('ecommerce', 'shopping', 'ssl', 'quizzes', 'random_quotes', 'recommend', 'polls', 'tickets', 'news', 'newsletter'),
             array());
     }
 
@@ -84,10 +83,8 @@ class Hook_admin_setupwizard_installprofiles_shopping
                 'main_news',
                 'main_quotes',
             ),
-            'YES_CELL' => array(
-            ),
-            'PANEL_LEFT' => array(
-            ),
+            'YES_CELL' => array(),
+            'PANEL_LEFT' => array(),
             'PANEL_RIGHT' => array(
                 'main_newsletter_signup',
             ),
@@ -101,8 +98,7 @@ class Hook_admin_setupwizard_installprofiles_shopping
      */
     public function block_options()
     {
-        return array(
-        );
+        return array();
     }
 
     /**

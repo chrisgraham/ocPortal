@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
-
 class Block_top_notifications
 {
     /**
@@ -54,15 +53,15 @@ class Block_top_notifications
             return new ocp_tempcode();
         }
 
-        $max = isset($map['max'])?intval($map['max']):5;
+        $max = isset($map['max']) ? intval($map['max']) : 5;
 
         require_code('notification_poller');
 
-        list($notifications,$num_unread_web_notifications) = get_web_notifications($max);
+        list($notifications, $num_unread_web_notifications) = get_web_notifications($max);
 
-        list($pts,$num_unread_pts) = get_pts($max);
+        list($pts, $num_unread_pts) = get_pts($max);
 
-        return do_template('BLOCK_TOP_NOTIFICATIONS',array('_GUID' => '3fa04eb827741561440dbf1a65988b33','NUM_UNREAD_WEB_NOTIFICATIONS' => strval($num_unread_web_notifications),
+        return do_template('BLOCK_TOP_NOTIFICATIONS', array('_GUID' => '3fa04eb827741561440dbf1a65988b33', 'NUM_UNREAD_WEB_NOTIFICATIONS' => strval($num_unread_web_notifications),
             'NOTIFICATIONS' => $notifications,
 
             'NUM_UNREAD_PTS' => strval($num_unread_pts),

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Block_main_db_notes
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_db_notes
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param','title','scrolls');
+        $info['parameters'] = array('param', 'title', 'scrolls');
         return $info;
     }
 
@@ -46,16 +45,16 @@ class Block_main_db_notes
      */
     public function run($map)
     {
-        $file = array_key_exists('param',$map)?$map['param']:'admin_notes';
-        $title = array_key_exists('title',$map)?$map['title']:do_lang('NOTES');
-        $scrolls = array_key_exists('scrolls',$map)?$map['scrolls']:'0';
+        $file = array_key_exists('param', $map) ? $map['param'] : 'admin_notes';
+        $title = array_key_exists('title', $map) ? $map['title'] : do_lang('NOTES');
+        $scrolls = array_key_exists('scrolls', $map) ? $map['scrolls'] : '0';
 
-        $new = post_param('new',null);
+        $new = post_param('new', null);
         if (!is_null($new)) {
-            set_long_value('note_text_' . $file,$new);
-            log_it('NOTES',$file);
+            set_long_value('note_text_' . $file, $new);
+            log_it('NOTES', $file);
 
-            attach_message(do_lang_tempcode('SUCCESS'),'inform');
+            attach_message(do_lang_tempcode('SUCCESS'), 'inform');
         }
 
         $contents = get_long_value('note_text_' . $file);
@@ -69,12 +68,12 @@ class Block_main_db_notes
         foreach ($map as $key => $val) {
             $map_comcode .= ' ' . $key . '="' . addslashes($val) . '"';
         }
-        return do_template('BLOCK_MAIN_NOTES',array(
+        return do_template('BLOCK_MAIN_NOTES', array(
             '_GUID' => '2a9e1c512b66600583735552b56e0911',
             'TITLE' => $title,
             'BLOCK_NAME' => 'main_db_notes',
             'MAP' => $map_comcode,
-            'SCROLLS' => array_key_exists('scrolls',$map) && ($map['scrolls'] == '1'),
+            'SCROLLS' => array_key_exists('scrolls', $map) && ($map['scrolls'] == '1'),
             'CONTENTS' => $contents,
             'URL' => $post_url,
         ));

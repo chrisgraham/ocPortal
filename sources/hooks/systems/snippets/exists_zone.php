@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_zone_editor
  */
-
 class Hook_exists_zone
 {
     /**
@@ -34,11 +33,11 @@ class Hook_exists_zone
             return new ocp_tempcode();
         }
 
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_header_text',array('zone_name' => $zone));
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('zones', 'zone_header_text', array('zone_name' => $zone));
         if (is_null($test)) {
             return new ocp_tempcode();
         }
 
-        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($zone))));
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($zone))));
     }
 }

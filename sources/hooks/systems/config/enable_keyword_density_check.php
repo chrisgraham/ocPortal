@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_enable_keyword_density_check
 {
     /**

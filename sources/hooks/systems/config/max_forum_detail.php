@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_config_max_forum_detail
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_max_forum_detail
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'100';
+        return (get_forum_type() != 'ocf') ? null : '100';
     }
 }

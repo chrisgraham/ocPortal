@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
-
 class Hook_startup_notification_poller_init
 {
     /**

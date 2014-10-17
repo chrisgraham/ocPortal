@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_rss_comments
 {
     /**
@@ -31,59 +30,59 @@ class Hook_rss_comments
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($full_title,$cutoff,$prefix,$date_string,$max)
+    public function run($full_title, $cutoff, $prefix, $date_string, $max)
     {
         require_code('content');
 
         // Check permissions (this is HARD, we have to tunnel through content_meta_aware hooks)
-        $parts = explode('_',$full_title,2);
-        $hook = convert_ocportal_type_codes('feedback_type_code',$parts[0],'content_type');
+        $parts = explode('_', $full_title, 2);
+        $hook = convert_ocportal_type_codes('feedback_type_code', $parts[0], 'content_type');
         if ($hook != '') {
             require_code('content');
             $ob = get_content_object($hook);
             if (is_null($ob)) {
-                return NULL;
+                return null;
             }
             $info = $ob->info();
 
             // Category access
             $permissions_field = $info['permissions_type_code'];
             if (!is_null($permissions_field)) {
-                $cat = $GLOBALS['SITE_DB']->query_select_value_if_there($info['table'],$info['parent_category_field'],get_content_where_for_str_id($parts[1],$info));
+                $cat = $GLOBALS['SITE_DB']->query_select_value_if_there($info['table'], $info['parent_category_field'], get_content_where_for_str_id($parts[1], $info));
                 if (is_null($cat)) {
-                    return NULL;
+                    return null;
                 }
-                if (!has_category_access(get_member(),$permissions_field,$cat)) {
-                    return NULL;
+                if (!has_category_access(get_member(), $permissions_field, $cat)) {
+                    return null;
                 }
             }
 
             // Page/Zone access
             if (!is_null($info['view_page_link_pattern'])) {
-                $view_page_link_bits = explode(':',$info['view_page_link_pattern']);
+                $view_page_link_bits = explode(':', $info['view_page_link_pattern']);
                 $zone = $view_page_link_bits[0];
                 if ($zone == '_SEARCH') {
                     $zone = get_module_zone($view_page_link_bits[1]);
                 }
-                if (!has_actual_page_access(get_member(),$view_page_link_bits[1],$zone)) {
-                    return NULL;
+                if (!has_actual_page_access(get_member(), $view_page_link_bits[1], $zone)) {
+                    return null;
                 }
             }
 
             // Privacy
             if (addon_installed('content_privacy')) {
                 require_code('content_privacy');
-                if (!has_privacy_access($hook,$parts[1])) {
-                    return NULL;
+                if (!has_privacy_access($hook, $parts[1])) {
+                    return null;
                 }
             }
         } else {
-            $zone = get_page_zone($parts[0],false);
+            $zone = get_page_zone($parts[0], false);
             if (is_null($zone)) {
-                return NULL;
+                return null;
             }
-            if (!has_actual_page_access(get_member(),$parts[0],$zone)) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), $parts[0], $zone)) {
+                return null;
             }
         }
 
@@ -91,11 +90,11 @@ class Hook_rss_comments
 
         $content = new ocp_tempcode();
         // Comment posts
-        $forum = get_param('forum',get_option('comments_forum_name'));
+        $forum = get_param('forum', get_option('comments_forum_name'));
         $count = 0;
         $start = 0;
         do {
-            $_comments = $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$full_title),$count,min($max,1000),$start);
+            $_comments = $GLOBALS['FORUM_DRIVER']->get_forum_topic_posts($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum, $full_title), $count, min($max, 1000), $start);
             if (is_array($_comments)) {
                 $_comments = array_reverse($_comments);
 
@@ -103,12 +102,12 @@ class Hook_rss_comments
                     if (is_null($comment)) {
                         continue;
                     }
-                    if ($i+$start>$max) {
+                    if ($i + $start > $max) {
                         break 2;
                     }
 
                     $datetime_raw = $comment['date'];
-                    if ($datetime_raw<$cutoff) {
+                    if ($datetime_raw < $cutoff) {
                         break 2;
                     }
 
@@ -120,7 +119,7 @@ class Hook_rss_comments
                         $author = do_lang('UNKNOWN');
                     }
 
-                    $news_date = date($date_string,$datetime_raw);
+                    $news_date = date($date_string, $datetime_raw);
                     $edit_date = escape_html('');
 
                     $news_title = xmlentities($comment['title']);
@@ -137,17 +136,18 @@ class Hook_rss_comments
                     $category = '';
                     $category_raw = '';
 
-                    $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => new ocp_tempcode(),'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+                    $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => new ocp_tempcode(), 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
                 }
             }
 
             $start += 1000;
-        } while (count($_comments) == 1000);
+        }
+        while (count($_comments) == 1000);
 
         if (is_null($title)) {
             $title = do_lang('COMMENTS');
         }
 
-        return array($content,$title);
+        return array($content, $title);
     }
 }

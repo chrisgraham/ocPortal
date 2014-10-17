@@ -24,18 +24,18 @@
  * @param  ID_TEXT                      The type of resource (e.g. download)
  * @param  ID_TEXT                      The ID of the resource
  */
-function seo_meta_erase_storage($type,$id)
+function seo_meta_erase_storage($type, $id)
 {
-    $rows = $GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords','meta_description'),array('meta_for_type' => $type,'meta_for_id' => $id),'',1);
-    if (!array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select('seo_meta', array('meta_keywords', 'meta_description'), array('meta_for_type' => $type, 'meta_for_id' => $id), '', 1);
+    if (!array_key_exists(0, $rows)) {
         return;
     }
     delete_lang($rows[0]['meta_keywords']);
     delete_lang($rows[0]['meta_description']);
-    $GLOBALS['SITE_DB']->query_delete('seo_meta',array('meta_for_type' => $type,'meta_for_id' => $id),'',1);
+    $GLOBALS['SITE_DB']->query_delete('seo_meta', array('meta_for_type' => $type, 'meta_for_id' => $id), '', 1);
 
     if (function_exists('persistent_cache_delete')) {
-        persistent_cache_delete(array('seo',$type,$id));
+        persistent_cache_delete(array('seo', $type, $id));
     }
 }
 
@@ -47,27 +47,27 @@ function seo_meta_erase_storage($type,$id)
  * @param  boolean                      Whether to show a header
  * @return tempcode                     Form page tempcode fragment
  */
-function seo_get_fields($type,$id = null,$show_header = true)
+function seo_get_fields($type, $id = null, $show_header = true)
 {
     require_code('form_templates');
     if (is_null($id)) {
-        list($keywords,$description) = array('','');
+        list($keywords, $description) = array('', '');
     } else {
-        list($keywords,$description) = seo_meta_get_for($type,$id);
+        list($keywords, $description) = seo_meta_get_for($type, $id);
     }
 
     $fields = new ocp_tempcode();
     if ((get_option('enable_seo_fields') != 'no') && ((get_option('enable_seo_fields') != 'only_on_edit') || (!is_null($id)))) {
         if ($show_header) {
-            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array(
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array(
                 '_GUID' => '545aefd48d73cf01bdec7226dc6d93fb',
                 'SECTION_HIDDEN' => $keywords == '' && $description == '',
                 'TITLE' => do_lang_tempcode('SEO'),
-                'HELP' => (get_option('show_docs') === '0')?null:protect_from_escaping(symbol_tempcode('URLISE_LANG',array(do_lang('TUTORIAL_ON_THIS'),get_tutorial_url('tut_seo'),'tut_seo','1'))),
+                'HELP' => (get_option('show_docs') === '0') ? null : protect_from_escaping(symbol_tempcode('URLISE_LANG', array(do_lang('TUTORIAL_ON_THIS'), get_tutorial_url('tut_seo'), 'tut_seo', '1'))),
             )));
         }
-        $fields->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'),do_lang_tempcode('DESCRIPTION_META_KEYWORDS'),'meta_keywords[]',array_map('trim',explode(',',preg_replace('#,+#',',',$keywords))),0));
-        $fields->attach(form_input_line(do_lang_tempcode('META_DESCRIPTION'),do_lang_tempcode('DESCRIPTION_META_DESCRIPTION'),'meta_description',$description,false));
+        $fields->attach(form_input_line_multi(do_lang_tempcode('KEYWORDS'), do_lang_tempcode('DESCRIPTION_META_KEYWORDS'), 'meta_keywords[]', array_map('trim', explode(',', preg_replace('#,+#', ',', $keywords))), 0));
+        $fields->attach(form_input_line(do_lang_tempcode('META_DESCRIPTION'), do_lang_tempcode('DESCRIPTION_META_DESCRIPTION'), 'meta_description', $description, false));
     }
     return $fields;
 }
@@ -80,7 +80,7 @@ function seo_get_fields($type,$id = null,$show_header = true)
  * @param  SHORT_TEXT                   The keywords to use
  * @param  SHORT_TEXT                   The description to use
  */
-function seo_meta_set_for_explicit($type,$id,$keywords,$description)
+function seo_meta_set_for_explicit($type, $id, $keywords, $description)
 {
     if ($description == STRING_MAGIC_NULL) {
         return;
@@ -89,22 +89,22 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
         return;
     }
 
-    $description = str_replace("\n",' ',$description);
+    $description = str_replace("\n", ' ', $description);
 
-    $rows = $GLOBALS['SITE_DB']->query_select('seo_meta',array('meta_keywords','meta_description'),array('meta_for_type' => $type,'meta_for_id' => $id),'',1);
-    if (array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select('seo_meta', array('meta_keywords', 'meta_description'), array('meta_for_type' => $type, 'meta_for_id' => $id), '', 1);
+    if (array_key_exists(0, $rows)) {
         $map = array();
-        $map += lang_remap('meta_keywords',$rows[0]['meta_keywords'],$keywords);
-        $map += lang_remap('meta_description',$rows[0]['meta_description'],$description);
-        $GLOBALS['SITE_DB']->query_update('seo_meta',$map,array('meta_for_type' => $type,'meta_for_id' => $id),'',1);
+        $map += lang_remap('meta_keywords', $rows[0]['meta_keywords'], $keywords);
+        $map += lang_remap('meta_description', $rows[0]['meta_description'], $description);
+        $GLOBALS['SITE_DB']->query_update('seo_meta', $map, array('meta_for_type' => $type, 'meta_for_id' => $id), '', 1);
     } else {
         $map = array(
             'meta_for_type' => $type,
             'meta_for_id' => $id,
         );
-        $map += insert_lang('meta_keywords',$keywords,2);
-        $map += insert_lang('meta_description',$description,2);
-        $GLOBALS['SITE_DB']->query_insert('seo_meta',$map);
+        $map += insert_lang('meta_keywords', $keywords, 2);
+        $map += insert_lang('meta_description', $description, 2);
+        $GLOBALS['SITE_DB']->query_insert('seo_meta', $map);
     }
 
     if (function_exists('decache')) {
@@ -112,7 +112,7 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
     }
 
     if (function_exists('persistent_cache_delete')) {
-        persistent_cache_delete(array('seo',$type,$id));
+        persistent_cache_delete(array('seo', $type, $id));
     }
 }
 
@@ -123,15 +123,15 @@ function seo_meta_set_for_explicit($type,$id,$keywords,$description)
  * @param  SHORT_TEXT                   The description to use
  * @return array                        A pair: Keyword string generated, Description generated
  */
-function _seo_meta_find_data($keyword_sources,$description = '')
+function _seo_meta_find_data($keyword_sources, $description = '')
 {
     // These characters are considered to be word-characters
     require_code('textfiles');
-    $word_chars = explode("\n",read_text_file('word_characters','')); // We use this, as we have no easy multi-language way of detecting if something is a word character in non-latin alphabets (as they don't usually have upper/lower case which would be our detection technique)
+    $word_chars = explode("\n", read_text_file('word_characters', '')); // We use this, as we have no easy multi-language way of detecting if something is a word character in non-latin alphabets (as they don't usually have upper/lower case which would be our detection technique)
     foreach ($word_chars as $i => $word_char) {
         $word_chars[$i] = ocp_mb_trim($word_char);
     }
-    $common_words = explode("\n",read_text_file('too_common_words',''));
+    $common_words = explode("\n", read_text_file('too_common_words', ''));
     foreach ($common_words as $i => $common_word) {
         $common_words[$i] = ocp_mb_trim(ocp_mb_strtolower($common_word));
     }
@@ -150,7 +150,7 @@ function _seo_meta_find_data($keyword_sources,$description = '')
     foreach ($keyword_sources as $source) { // Look in all our sources
         $must_use = false;
         if (is_array($source)) {
-            list($source,$must_use) = $source;
+            list($source, $must_use) = $source;
         }
 
         $source = strip_comcode($source);
@@ -163,27 +163,29 @@ function _seo_meta_find_data($keyword_sources,$description = '')
         $len_b = ocp_mb_strlen($source);
         $len = $len_a;
         $unicode = false;
-        if ($len_b>$len_a) {
+        if ($len_b > $len_a) {
             $len = $len_b;
             $unicode = true;
         }
         $from = 0;
         $in_word = false;
         $word_is_caps = false;
-        while ($i<$len) {
+        while ($i < $len) {
             if ($unicode) { // Slower :(
-                $at = ocp_mb_substr($source,$i,1);
-                $is_word_char = array_key_exists($at,$word_chars_flip) || ocp_mb_strtolower($at) != ocp_mb_strtoupper($at);
+                $at = ocp_mb_substr($source, $i, 1);
+                $is_word_char = array_key_exists($at, $word_chars_flip) || ocp_mb_strtolower($at) != ocp_mb_strtoupper($at);
 
                 if ($in_word) {
                     // Exiting word
-                    if (($i == $len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at != ' ') || (/*continuation of Proper Noun*/ocp_mb_strtolower(ocp_mb_substr($source,$i+1,1)) == ocp_mb_substr($source,$i+1,1))))) {
-                        while ((ocp_mb_strlen($this_word) != 0) && (ocp_mb_substr($this_word,-1) == '\'' || ocp_mb_substr($this_word,-1) == '-' || ocp_mb_substr($this_word,-1) == '.')) {
-                            $this_word = ocp_mb_substr($this_word,0,ocp_mb_strlen($this_word)-1);
+                    if (($i == $len - 1) || ((!$is_word_char) && ((!$word_is_caps) || ($at != ' ') || (/*continuation of Proper Noun*/
+                                    ocp_mb_strtolower(ocp_mb_substr($source, $i + 1, 1)) == ocp_mb_substr($source, $i + 1, 1))))
+                    ) {
+                        while ((ocp_mb_strlen($this_word) != 0) && (ocp_mb_substr($this_word, -1) == '\'' || ocp_mb_substr($this_word, -1) == '-' || ocp_mb_substr($this_word, -1) == '.')) {
+                            $this_word = ocp_mb_substr($this_word, 0, ocp_mb_strlen($this_word) - 1);
                         }
-                        if (($i-$from) >= $min_word_length) {
-                            if (!array_key_exists(ocp_mb_strtolower($this_word),$common_words_flip)) {
-                                if (!array_key_exists($this_word,$keywords)) {
+                        if (($i - $from) >= $min_word_length) {
+                            if (!array_key_exists(ocp_mb_strtolower($this_word), $common_words_flip)) {
+                                if (!array_key_exists($this_word, $keywords)) {
                                     $keywords[$this_word] = 0;
                                 }
                                 if ($must_use) {
@@ -208,18 +210,20 @@ function _seo_meta_find_data($keyword_sources,$description = '')
                 }
             } else {
                 $at = $source[$i];
-                $is_word_char = array_key_exists($at,$word_chars_flip);
+                $is_word_char = array_key_exists($at, $word_chars_flip);
 
                 if ($in_word) {
                     // Exiting word
-                    if (($i == $len-1) || ((!$is_word_char) && ((!$word_is_caps) || ($at != ' ') || (/*continuation of Proper Noun*/strtolower(substr($source,$i+1,1)) == substr($source,$i+1,1))))) {
-                        $this_word = substr($source,$from,$i-$from);
-                        while ((strlen($this_word) != 0) && (substr($this_word,-1) == '\'' || substr($this_word,-1) == '-' || substr($this_word,-1) == '.')) {
-                            $this_word = substr($this_word,0,strlen($this_word)-1);
+                    if (($i == $len - 1) || ((!$is_word_char) && ((!$word_is_caps) || ($at != ' ') || (/*continuation of Proper Noun*/
+                                    strtolower(substr($source, $i + 1, 1)) == substr($source, $i + 1, 1))))
+                    ) {
+                        $this_word = substr($source, $from, $i - $from);
+                        while ((strlen($this_word) != 0) && (substr($this_word, -1) == '\'' || substr($this_word, -1) == '-' || substr($this_word, -1) == '.')) {
+                            $this_word = substr($this_word, 0, strlen($this_word) - 1);
                         }
-                        if (($i-$from) >= $min_word_length) {
-                            if (!array_key_exists($this_word,$common_words_flip)) {
-                                if (!array_key_exists($this_word,$keywords)) {
+                        if (($i - $from) >= $min_word_length) {
+                            if (!array_key_exists($this_word, $common_words_flip)) {
+                                if (!array_key_exists($this_word, $keywords)) {
                                     $keywords[$this_word] = 0;
                                 }
                                 if ($must_use) {
@@ -264,14 +268,14 @@ function _seo_meta_find_data($keyword_sources,$description = '')
     }
 
     require_code('xhtml');
-    $description = strip_comcode($description,true);
-    $description = trim(preg_replace('#\s+---+\s+#',' ',$description));
+    $description = strip_comcode($description, true);
+    $description = trim(preg_replace('#\s+---+\s+#', ' ', $description));
 
-    if (strlen($description)>160) {
-        $description = substr($description,0,157) . '...';
+    if (strlen($description) > 160) {
+        $description = substr($description, 0, 157) . '...';
     }
 
-    return array($imp,$description);
+    return array($imp, $description);
 }
 
 /**
@@ -283,10 +287,10 @@ function _seo_meta_find_data($keyword_sources,$description = '')
  * @param  SHORT_TEXT                   The description to use
  * @return SHORT_TEXT                   Keyword string generated (it's also saved in the DB, so usually you won't want to collect this)
  */
-function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
+function seo_meta_set_for_implicit($type, $id, $keyword_sources, $description)
 {
-    if ((!is_null(post_param('meta_keywords',null))) && ((post_param('meta_keywords') != '') || (post_param('meta_description') != ''))) {
-        seo_meta_set_for_explicit($type,$id,post_param('meta_keywords'),post_param('meta_description'));
+    if ((!is_null(post_param('meta_keywords', null))) && ((post_param('meta_keywords') != '') || (post_param('meta_description') != ''))) {
+        seo_meta_set_for_explicit($type, $id, post_param('meta_keywords'), post_param('meta_description'));
         return '';
     }
 
@@ -294,9 +298,9 @@ function seo_meta_set_for_implicit($type,$id,$keyword_sources,$description)
         return '';
     }
 
-    list($imp,$description) = _seo_meta_find_data($keyword_sources,$description);
+    list($imp, $description) = _seo_meta_find_data($keyword_sources, $description);
 
-    seo_meta_set_for_explicit($type,$id,$imp,$description);
+    seo_meta_set_for_explicit($type, $id, $imp, $description);
 
     if (function_exists('decache')) {
         decache('side_tag_cloud');

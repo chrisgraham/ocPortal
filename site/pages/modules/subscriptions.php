@@ -61,13 +61,13 @@ class Module_subscriptions
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         $dbs_bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('subscriptions',array(
+            $GLOBALS['SITE_DB']->create_table('subscriptions', array(
                 'id' => '*AUTO', // linked to IPN with this
                 's_type_code' => 'ID_TEXT',
                 's_member_id' => 'MEMBER',
@@ -84,7 +84,7 @@ class Module_subscriptions
                 's_length_units' => 'SHORT_TEXT',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('f_usergroup_subs',array(
+            $GLOBALS['SITE_DB']->create_table('f_usergroup_subs', array(
                 'id' => '*AUTO',
                 's_title' => 'SHORT_TRANS',
                 's_description' => 'LONG_TRANS__COMCODE',
@@ -101,8 +101,8 @@ class Module_subscriptions
             ));
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<5)) {
-            $GLOBALS['SITE_DB']->create_table('f_usergroup_sub_mails',array(
+        if ((is_null($upgrade_from)) || ($upgrade_from < 5)) {
+            $GLOBALS['SITE_DB']->create_table('f_usergroup_sub_mails', array(
                 'id' => '*AUTO',
                 'm_usergroup_sub_id' => 'AUTO_LINK',
                 'm_ref_point' => 'ID_TEXT', // start|term_start|term_end|expiry
@@ -112,19 +112,19 @@ class Module_subscriptions
             ));
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<5)) {
-            $GLOBALS['SITE_DB']->alter_table_field('subscriptions','s_special','ID_TEXT','s_purchase_id');
-            $GLOBALS['SITE_DB']->add_table_field('subscriptions','s_length','INTEGER',1);
-            $GLOBALS['SITE_DB']->add_table_field('subscriptions','s_length_units','SHORT_TEXT','m');
-            $subscriptions = $GLOBALS['SITE_DB']->query_select('subscriptions',array('*'));
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 5)) {
+            $GLOBALS['SITE_DB']->alter_table_field('subscriptions', 's_special', 'ID_TEXT', 's_purchase_id');
+            $GLOBALS['SITE_DB']->add_table_field('subscriptions', 's_length', 'INTEGER', 1);
+            $GLOBALS['SITE_DB']->add_table_field('subscriptions', 's_length_units', 'SHORT_TEXT', 'm');
+            $subscriptions = $GLOBALS['SITE_DB']->query_select('subscriptions', array('*'));
             foreach ($subscriptions as $sub) {
-                if (substr($sub['s_type_code'],0,9) != 'USERGROUP') {
+                if (substr($sub['s_type_code'], 0, 9) != 'USERGROUP') {
                     continue;
                 }
 
-                $usergroup_subscription_id = intval(substr($sub['s_type_code'],9));
-                $usergroup_subscription_rows = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('*'),array('id' => $usergroup_subscription_id),'',1);
-                if (!array_key_exists(0,$usergroup_subscription_rows)) {
+                $usergroup_subscription_id = intval(substr($sub['s_type_code'], 9));
+                $usergroup_subscription_rows = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs', array('*'), array('id' => $usergroup_subscription_id), '', 1);
+                if (!array_key_exists(0, $usergroup_subscription_rows)) {
                     continue;
                 }
                 $usergroup_subscription_row = $usergroup_subscription_rows[0];
@@ -133,10 +133,10 @@ class Module_subscriptions
                     's_length' => $usergroup_subscription_row['s_length'],
                     's_length_units' => $usergroup_subscription_row['s_length_units'],
                 );
-                $GLOBALS['SITE_DB']->query_update('subscriptions',$update_map,array('id' => $sub['id']),'',1);
+                $GLOBALS['SITE_DB']->query_update('subscriptions', $update_map, array('id' => $sub['id']), '', 1);
             }
 
-            $GLOBALS['SITE_DB']->add_table_field('f_usergroup_subs','s_auto_recur','BINARY',1);
+            $GLOBALS['SITE_DB']->add_table_field('f_usergroup_subs', 's_auto_recur', 'BINARY', 1);
         }
 
         $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_bak;
@@ -151,11 +151,11 @@ class Module_subscriptions
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
-        if ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('subscriptions','COUNT(*)')>0)) {
+        if ((!$check_perms || !is_guest($member_id)) && ($GLOBALS['SITE_DB']->query_select_value('subscriptions', 'COUNT(*)') > 0)) {
             return array(
-                'misc' => array('MY_SUBSCRIPTIONS','menu/adminzone/audit/ecommerce/subscriptions'),
+                'misc' => array('MY_SUBSCRIPTIONS', 'menu/adminzone/audit/ecommerce/subscriptions'),
             );
         }
         return array();
@@ -170,7 +170,7 @@ class Module_subscriptions
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ecommerce');
 
@@ -179,12 +179,12 @@ class Module_subscriptions
         }
 
         if ($type == 'cancel') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MY_SUBSCRIPTIONS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MY_SUBSCRIPTIONS'))));
 
             $this->title = get_screen_title('SUBSCRIPTION_CANCEL');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -198,7 +198,7 @@ class Module_subscriptions
         require_css('ecommerce');
 
         // Kill switch
-        if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(),'access_ecommerce_in_test_mode'))) {
+        if ((ecommerce_test_mode()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && (!has_privilege(get_member(), 'access_ecommerce_in_test_mode'))) {
             warn_exit(do_lang_tempcode('PURCHASE_DISABLED'));
         }
 
@@ -206,7 +206,7 @@ class Module_subscriptions
             access_denied('NOT_AS_GUEST');
         }
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->my();
@@ -225,8 +225,8 @@ class Module_subscriptions
     public function my()
     {
         $member_id = get_member();
-        if (has_privilege(get_member(),'assume_any_member')) {
-            $member_id = get_param_integer('id',$member_id);
+        if (has_privilege(get_member(), 'assume_any_member')) {
+            $member_id = get_param_integer('id', $member_id);
         }
 
         require_code('ecommerce_subscriptions');
@@ -237,7 +237,7 @@ class Module_subscriptions
             $subscriptions[] = prepare_templated_subscription($_subscription);
         }
 
-        return do_template('ECOM_SUBSCRIPTIONS_SCREEN',array('_GUID' => 'e39cd1883ba7b87599314c1f8b67902d','TITLE' => $this->title,'SUBSCRIPTIONS' => $subscriptions));
+        return do_template('ECOM_SUBSCRIPTIONS_SCREEN', array('_GUID' => 'e39cd1883ba7b87599314c1f8b67902d', 'TITLE' => $this->title, 'SUBSCRIPTIONS' => $subscriptions));
     }
 
     /**
@@ -248,7 +248,7 @@ class Module_subscriptions
     public function cancel()
     {
         $id = get_param_integer('id');
-        $via = $GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions','s_via',array('id' => $id));
+        $via = $GLOBALS['SITE_DB']->query_select_value_if_there('subscriptions', 's_via', array('id' => $id));
         if (is_null($via)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
@@ -259,15 +259,15 @@ class Module_subscriptions
             if ($hook->auto_cancel($id) !== true) {
                 // Because we cannot TRIGGER a REMOTE cancellation, we have it so the local user action triggers that notification, informing the staff to manually do a remote cancellation
                 require_code('notifications');
-                $trans_id = $GLOBALS['SITE_DB']->query_select_value('transactions','id',array('t_purchase_id' => strval($id)));
+                $trans_id = $GLOBALS['SITE_DB']->query_select_value('transactions', 'id', array('t_purchase_id' => strval($id)));
                 $username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
-                dispatch_notification('subscription_cancelled_staff',null,do_lang('SUBSCRIPTION_CANCELLED_SUBJECT',null,null,null,get_site_default_lang()),do_lang('SUBSCRIPTION_CANCELLED_BODY',$trans_id,$username,null,get_site_default_lang()));
+                dispatch_notification('subscription_cancelled_staff', null, do_lang('SUBSCRIPTION_CANCELLED_SUBJECT', null, null, null, get_site_default_lang()), do_lang('SUBSCRIPTION_CANCELLED_BODY', $trans_id, $username, null, get_site_default_lang()));
             }
         }
 
-        $GLOBALS['SITE_DB']->query_delete('subscriptions',array('id' => $id,'s_member_id' => get_member()),'',1);
+        $GLOBALS['SITE_DB']->query_delete('subscriptions', array('id' => $id, 's_member_id' => get_member()), '', 1);
 
-        $url = build_url(array('page' => '_SELF'),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF'), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

@@ -27,7 +27,7 @@
  * @param  ?string                      The title to use for the main links (a language string) (NULL: same as title)
  * @return tempcode                     The do next manager
  */
-function do_next_manager_hooked($title,$text,$type,$main_title = null)
+function do_next_manager_hooked($title, $text, $type, $main_title = null)
 {
     $links = array();
 
@@ -35,14 +35,14 @@ function do_next_manager_hooked($title,$text,$type,$main_title = null)
         $main_title = $title;
     }
 
-    $hooks = find_all_hooks('systems','page_groupings');
+    $hooks = find_all_hooks('systems', 'page_groupings');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/page_groupings/' . filter_naughty_harsh($hook));
-        $object = object_factory('Hook_page_groupings_' . filter_naughty_harsh($hook),true);
+        $object = object_factory('Hook_page_groupings_' . filter_naughty_harsh($hook), true);
         if (is_null($object)) {
             continue;
         }
-        $_links = $object->run(null,true);
+        $_links = $object->run(null, true);
         foreach ($_links as $link) {
             if (is_null($link)) {
                 continue;
@@ -54,7 +54,7 @@ function do_next_manager_hooked($title,$text,$type,$main_title = null)
                     if (!isset($link[2][1]['type'])) {
                         continue;
                     }
-                    if (in_array($link[2][1]['type'],array('site_meta','pages','social','collaboration','rich_content'))) {
+                    if (in_array($link[2][1]['type'], array('site_meta', 'pages', 'social', 'collaboration', 'rich_content'))) {
                         continue;
                     }
                 }
@@ -65,10 +65,10 @@ function do_next_manager_hooked($title,$text,$type,$main_title = null)
         }
     }
 
-    sort_maps_by($links,2);
+    sort_maps_by($links, 2);
 
     if (!is_null($text)) {
-        if (strpos($text,' ') === false) {
+        if (strpos($text, ' ') === false) {
             $_text = comcode_lang_string($text);
         } else {
             $_text = make_string_tempcode($text);
@@ -79,7 +79,7 @@ function do_next_manager_hooked($title,$text,$type,$main_title = null)
 
     set_helper_panel_text(comcode_lang_string('menus:DOC_HELPER_PANEL'));
 
-    return do_next_manager(is_null($text)?null:get_screen_title($title),$_text,$links,do_lang($main_title));
+    return do_next_manager(is_null($text) ? null : get_screen_title($title), $_text, $links, do_lang($main_title));
 }
 
 /**
@@ -108,14 +108,14 @@ function do_next_manager_hooked($title,$text,$type,$main_title = null)
  * @param  ?tempcode                    Categories section title (NULL: default, Categories)
  * @return tempcode                     The do next manager
  */
-function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_one = null,$url_edit_this = null,$url_edit_one = null,$url_view_this = null,$url_view_archive = null,$url_add_to_category = null,$url_add_one_category = null,$url_edit_one_category = null,$url_edit_this_category = null,$url_view_this_category = null,$entry_extras = null,$category_extras = null,$additional_extras = null,$additional_title = null,$intro = null,$entries_title = null,$categories_title = null)
+function do_next_manager($title, $text, $main = null, $main_title = null, $url_add_one = null, $url_edit_this = null, $url_edit_one = null, $url_view_this = null, $url_view_archive = null, $url_add_to_category = null, $url_add_one_category = null, $url_edit_one_category = null, $url_edit_this_category = null, $url_view_this_category = null, $entry_extras = null, $category_extras = null, $additional_extras = null, $additional_title = null, $intro = null, $entries_title = null, $categories_title = null)
 {
     if (is_null($intro)) {
         $intro = new ocp_tempcode();
     }
 
     require_code('failure');
-    $_text = _look_for_match_key_message(is_object($text)?$text->evaluate():$text,false,true);
+    $_text = _look_for_match_key_message(is_object($text) ? $text->evaluate() : $text, false, true);
     if (!is_null($_text)) {
         $text = $_text;
     }
@@ -123,17 +123,17 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
     require_lang('do_next');
     require_css('do_next');
 
-    $keep_simplified_donext = get_param_integer('keep_simplified_donext',null);
+    $keep_simplified_donext = get_param_integer('keep_simplified_donext', null);
     $simplified = ((($keep_simplified_donext !== 0) && (get_option('simplified_donext') == '1')) || ($keep_simplified_donext == 1));
 
     $sections = new ocp_tempcode();
 
     // Main section stuff (the "Main" section is not always shown - it is shown when the do-next screen is being used as a traditional menu, not as a followup-action screen)
     if (!is_null($main)) {
-        $sections->attach(_do_next_section($main,make_string_tempcode($main_title)));
+        $sections->attach(_do_next_section($main, make_string_tempcode($main_title)));
     }
 
-    $current_page_type = get_param('type','');
+    $current_page_type = get_param('type', '');
 
     // Entry stuff
     $entry_passed = array(
@@ -155,10 +155,10 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
             case 'menu/_generic_admin/add_one':
                 $x = $url_add_one;
                 if (($current_page_type == '_ad') || ($current_page_type == '_add_entry')) {
-                    if (get_param_integer('auto__add_one',0) == 1) {
+                    if (get_param_integer('auto__add_one', 0) == 1) {
                         $x[1]['auto__add_one'] = '1';
-                        $_url_redirect = build_url(array_merge(array('page' => $x[0]),$x[1]),$x[2]);
-                        return redirect_screen($title,$_url_redirect,$text);
+                        $_url_redirect = build_url(array_merge(array('page' => $x[0]), $x[1]), $x[2]);
+                        return redirect_screen($title, $_url_redirect, $text);
                     }
                     $auto_add = 'auto__add_one';
                 }
@@ -173,8 +173,8 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
                 $x = $url_view_this;
                 if (!is_null($x)) {
                     if ($simplified) {
-                        $_url_redirect = build_url(array_merge(array('page' => $x[0]),$x[1]),$x[2]);
-                        return redirect_screen($title,$_url_redirect,$text);
+                        $_url_redirect = build_url(array_merge(array('page' => $x[0]), $x[1]), $x[2]);
+                        return redirect_screen($title, $_url_redirect, $text);
                     }
                 }
                 break;
@@ -183,10 +183,10 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
                 break;
         }
         if (!is_null($x)) {
-            if (array_key_exists(3,$x)) {
-                $map = array($option,array($x[0],$x[1],$x[2]),$x[3]);
+            if (array_key_exists(3, $x)) {
+                $map = array($option, array($x[0], $x[1], $x[2]), $x[3]);
             } else {
-                $map = array($option,$x);
+                $map = array($option, $x);
             }
             if (!is_null($auto_add)) {
                 $map[5] = $auto_add;
@@ -195,9 +195,9 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
         }
     }
     if (!is_null($entry_extras)) {
-        $entry_passed_2 = array_merge($entry_passed_2,$entry_extras);
+        $entry_passed_2 = array_merge($entry_passed_2, $entry_extras);
     }
-    $sections->attach(_do_next_section($entry_passed_2,is_null($entries_title)?do_lang_tempcode('ENTRIES'):$entries_title));
+    $sections->attach(_do_next_section($entry_passed_2, is_null($entries_title) ? do_lang_tempcode('ENTRIES') : $entries_title));
 
     // Category stuff
     $category_passed = array(
@@ -214,10 +214,10 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
             case 'menu/_generic_admin/add_one_category':
                 $x = $url_add_one_category;
                 if (($current_page_type == '_ac') || ($current_page_type == '_add_category')) {
-                    if (get_param_integer('auto__add_one_category',0) == 1) {
+                    if (get_param_integer('auto__add_one_category', 0) == 1) {
                         $x[1]['auto__add_one_category'] = '1';
-                        $_url_redirect = build_url(array_merge(array('page' => $x[0]),$x[1]),$x[2]);
-                        return redirect_screen($title,$_url_redirect,$text);
+                        $_url_redirect = build_url(array_merge(array('page' => $x[0]), $x[1]), $x[2]);
+                        return redirect_screen($title, $_url_redirect, $text);
                     }
                     $auto_add = 'auto__add_one_category';
                 }
@@ -235,15 +235,15 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
         if (!is_null($x)) {
             if ($option == 'view_this' || $option == 'view_archive') {
                 if ($simplified) {
-                    $_url_redirect = build_url(array_merge(array('page' => $x[0]),$x[1]),$x[2]);
-                    return redirect_screen($title,$_url_redirect,$text);
+                    $_url_redirect = build_url(array_merge(array('page' => $x[0]), $x[1]), $x[2]);
+                    return redirect_screen($title, $_url_redirect, $text);
                 }
             }
 
-            if (array_key_exists(3,$x)) {
-                $map = array($option,array($x[0],$x[1],$x[2]),$x[3]);
+            if (array_key_exists(3, $x)) {
+                $map = array($option, array($x[0], $x[1], $x[2]), $x[3]);
             } else {
-                $map = array($option,$x);
+                $map = array($option, $x);
             }
             if (!is_null($auto_add)) {
                 $map[5] = $auto_add;
@@ -252,36 +252,36 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
         }
     }
     if (!is_null($category_extras)) {
-        $category_passed_2 = array_merge($category_passed_2,$category_extras);
+        $category_passed_2 = array_merge($category_passed_2, $category_extras);
     }
-    $sections->attach(_do_next_section($category_passed_2,is_null($categories_title)?do_lang_tempcode('CATEGORIES'):$categories_title));
+    $sections->attach(_do_next_section($category_passed_2, is_null($categories_title) ? do_lang_tempcode('CATEGORIES') : $categories_title));
 
     // Additional section stuff
     if (!is_null($additional_extras)) {
-        $sections->attach(_do_next_section($additional_extras,is_object($additional_title)?$additional_title:make_string_tempcode($additional_title)));
+        $sections->attach(_do_next_section($additional_extras, is_object($additional_title) ? $additional_title : make_string_tempcode($additional_title)));
     }
 
     if ((is_null($main)) && (get_option('global_donext_icons') == '1')) { // What-next
         // These go on a new row
         $disjunct_items = array(
-            array('menu/start',array(null,array(),'')),
-            array('menu/cms/cms',array(null,array(),'cms')),
-            array('menu/adminzone/adminzone',array(null,array(),'adminzone')),
+            array('menu/start', array(null, array(), '')),
+            array('menu/cms/cms', array(null, array(), 'cms')),
+            array('menu/adminzone/adminzone', array(null, array(), 'adminzone')),
         );
-        $sections->attach(_do_next_section($disjunct_items,do_lang_tempcode('GLOBAL_NAVIGATION')));
+        $sections->attach(_do_next_section($disjunct_items, do_lang_tempcode('GLOBAL_NAVIGATION')));
         $question = do_lang_tempcode('WHERE_NEXT');
     } else { // Where-next
         $question = do_lang_tempcode('WHAT_NEXT');
     }
 
     if ($simplified && count($entry_passed_2) != 0) {
-        $_url_redirect = build_url(array('page' => ''),'site');
+        $_url_redirect = build_url(array('page' => ''), 'site');
         require_code('templates_redirect_screen');
-        return redirect_screen($title,$_url_redirect,$text);
+        return redirect_screen($title, $_url_redirect, $text);
     }
 
     if ($text->evaluate() == do_lang('SUCCESS')) {
-        attach_message($text,'inform');
+        attach_message($text, 'inform');
         $text = mixed();
     }
 
@@ -289,7 +289,7 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
         return $sections;
     }
 
-    return do_template('DO_NEXT_SCREEN',array(
+    return do_template('DO_NEXT_SCREEN', array(
         '_GUID' => 'a00e89bece6b7ce870ad5096930d5a94',
         'INTRO' => $intro,
         'TEXT' => $text,
@@ -306,7 +306,7 @@ function do_next_manager($title,$text,$main = null,$main_title = null,$url_add_o
  * @param  tempcode                     The title for the section
  * @return tempcode                     The do next manager section
  */
-function _do_next_section($list,$title)
+function _do_next_section($list, $title)
 {
     if (count($list) == 0) {
         return new ocp_tempcode();
@@ -318,12 +318,12 @@ function _do_next_section($list,$title)
     foreach ($list as $i => $_option) {
         $url = $_option[1];
         if (!is_null($url)) {
-            $zone = array_key_exists(2,$url)?$url[2]:'';
+            $zone = array_key_exists(2, $url) ? $url[2] : '';
             $page = $url[0];
             if ($page == '_SELF') {
                 $page = get_page_name();
             }
-            if (((is_null($page)) && (has_zone_access(get_member(),$zone))) || ((!is_null($page)) && (has_actual_page_access(get_member(),$page,$zone)))) {
+            if (((is_null($page)) && (has_zone_access(get_member(), $zone))) || ((!is_null($page)) && (has_actual_page_access(get_member(), $page, $zone)))) {
                 $num_siblings++;
             } else {
                 $list[$i] = null;
@@ -340,37 +340,37 @@ function _do_next_section($list,$title)
 
         $option = $_option[0];
         $url_map = $_option[1];
-        $zone = array_key_exists(2,$url_map)?$url_map[2]:'';
+        $zone = array_key_exists(2, $url_map) ? $url_map[2] : '';
         $page = $url_map[0];
         if ($page == '_SELF') {
             $page = get_page_name();
         }
 
-        $description = (array_key_exists(2,$_option) && (!is_null($_option[2])))?$_option[2]:do_lang_tempcode('NEXT_ITEM_' . basename($option));
-        $url = (is_null($page))?build_url(array_merge($url_map[1],array('page' => '')),$zone):build_url(array_merge(array('page' => $page),$url_map[1]),$zone);
-        $doc = array_key_exists(3,$_option)?$_option[3]:'';
+        $description = (array_key_exists(2, $_option) && (!is_null($_option[2]))) ? $_option[2] : do_lang_tempcode('NEXT_ITEM_' . basename($option));
+        $url = (is_null($page)) ? build_url(array_merge($url_map[1], array('page' => '')), $zone) : build_url(array_merge(array('page' => $page), $url_map[1]), $zone);
+        $doc = array_key_exists(3, $_option) ? $_option[3] : '';
         if ((is_string($doc)) && ($doc != '')) {
-            if (preg_match('#^[:\w\d]+$#',$doc) == 0) {
-                $doc = comcode_to_tempcode($doc,null,true);
+            if (preg_match('#^[:\w\d]+$#', $doc) == 0) {
+                $doc = comcode_to_tempcode($doc, null, true);
             } else {
                 $doc = comcode_lang_string($doc);
             }
         }
-        $target = array_key_exists(4,$_option)?$_option[4]:null;
-        $auto_add = array_key_exists(5,$_option)?$_option[5]:null;
+        $target = array_key_exists(4, $_option) ? $_option[4] : null;
+        $auto_add = array_key_exists(5, $_option) ? $_option[5] : null;
 
-        $next_items->attach(do_template('DO_NEXT_ITEM',array(
+        $next_items->attach(do_template('DO_NEXT_ITEM', array(
             '_GUID' => 'f39b6055d1127edb452595e7eeaf2f01',
             'AUTO_ADD' => $auto_add,
             'I' => strval($i),
-            'I2' => strval(mt_rand(0,32000)) . '_' . strval($i),
+            'I2' => strval(mt_rand(0, 32000)) . '_' . strval($i),
             'NUM_SIBLINGS' => strval($num_siblings),
             'TARGET' => $target,
             'PICTURE' => $option,
             'DESCRIPTION' => $description,
             'URL' => $url,
             'DOC' => $doc,
-            'WARNING' => array_key_exists(3,$url)?$url[3]:'',
+            'WARNING' => array_key_exists(3, $url) ? $url[3] : '',
         )));
         $i++;
     }
@@ -379,7 +379,7 @@ function _do_next_section($list,$title)
         return new ocp_tempcode();
     }
 
-    return do_template('DO_NEXT_SECTION',array(
+    return do_template('DO_NEXT_SECTION', array(
         '_GUID' => '18589e9e8ec1971f692cb76d71f33ec1',
         'I' => strval($i),
         'TITLE' => $title,

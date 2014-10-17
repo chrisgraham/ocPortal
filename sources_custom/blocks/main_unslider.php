@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_main_unslider
 {
     /**
@@ -28,7 +27,7 @@ class Block_main_unslider
         $info['hack_version'] = null;
         $info['version'] = 1;
         $info['locked'] = false;
-        $info['parameters'] = array('pages','width','height','buttons','delay','speed','keypresses','slider_id','bgcolor');
+        $info['parameters'] = array('pages', 'width', 'height', 'buttons', 'delay', 'speed', 'keypresses', 'slider_id', 'bgcolor');
         return $info;
     }
 
@@ -58,44 +57,44 @@ class Block_main_unslider
         require_lang('unslider');
         require_css('unslider');
 
-        $pages = explode(',',isset($map['pages'])?$map['pages']:'slide1,slide2,slide3,slide4,slide5,slide6');
-        $width = isset($map['width'])?$map['width']:'100%';
+        $pages = explode(',', isset($map['pages']) ? $map['pages'] : 'slide1,slide2,slide3,slide4,slide5,slide6');
+        $width = isset($map['width']) ? $map['width'] : '100%';
         if ($width == '100%') {
             $width = '';
         }
-        $height = isset($map['height'])?$map['height']:'';
+        $height = isset($map['height']) ? $map['height'] : '';
         if (is_numeric($width)) {
             $width .= 'px';
         }
         if (is_numeric($height)) {
             $height .= 'px';
         }
-        $buttons = ((isset($map['buttons'])?$map['buttons']:'1') == '1');
-        $delay = strval(intval(isset($map['delay'])?$map['delay']:'3000'));
+        $buttons = ((isset($map['buttons']) ? $map['buttons'] : '1') == '1');
+        $delay = strval(intval(isset($map['delay']) ? $map['delay'] : '3000'));
         if ($delay == '0') {
             $delay = '';
         }
-        $speed = strval(intval(isset($map['speed'])?$map['speed']:'500'));
-        $keypresses = ((isset($map['keypresses'])?$map['keypresses']:'0') == '1');
-        $slider_id = isset($map['slider_id'])?$map['slider_id']:'unslider';
+        $speed = strval(intval(isset($map['speed']) ? $map['speed'] : '500'));
+        $keypresses = ((isset($map['keypresses']) ? $map['keypresses'] : '0') == '1');
+        $slider_id = isset($map['slider_id']) ? $map['slider_id'] : 'unslider';
 
-        $bgcolor = isset($map['bgcolor'])?str_replace('#','',$map['bgcolor']):'';
+        $bgcolor = isset($map['bgcolor']) ? str_replace('#', '', $map['bgcolor']) : '';
         $bgcolors = array();
-        if (strpos($bgcolor,',') === false) {
-            for ($i = 0;$i<count($pages);$i++) {
+        if (strpos($bgcolor, ',') === false) {
+            for ($i = 0; $i < count($pages); $i++) {
                 $bgcolors[$pages[$i]] = $bgcolor;
             }
         } else {
-            $_bgcolors = explode(',',$bgcolor);
-            for ($i = 0;$i<count($pages);$i++) {
-                $bgcolors[$pages[$i]] = isset($_bgcolors[$i])?$_bgcolors[$i]:'';
+            $_bgcolors = explode(',', $bgcolor);
+            for ($i = 0; $i < count($pages); $i++) {
+                $bgcolors[$pages[$i]] = isset($_bgcolors[$i]) ? $_bgcolors[$i] : '';
             }
         }
 
-        return do_template('BLOCK_MAIN_UNSLIDER',array('_GUID' => 'ae60f714ef84227c0cb958b65f7a253c','PAGES' => $pages,
+        return do_template('BLOCK_MAIN_UNSLIDER', array('_GUID' => 'ae60f714ef84227c0cb958b65f7a253c', 'PAGES' => $pages,
             'WIDTH' => $width,
             'HEIGHT' => $height,
-            'FLUID' => (substr($width,-1) == '%'),
+            'FLUID' => (substr($width, -1) == '%'),
             'BUTTONS' => $buttons,
             'DELAY' => $delay,
             'SPEED' => $speed,

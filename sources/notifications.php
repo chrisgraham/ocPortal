@@ -42,11 +42,11 @@ Any notifications are CC'd to the configured CC email address (if there is one).
 function init__notifications()
 {
     // Notifications will be sent from one of the following if not a specific member ID
-    define('A_FROM_SYSTEM_UNPRIVILEGED',-3); // Sent from system (website itself) *without* dangerous Comcode permission
-    define('A_FROM_SYSTEM_PRIVILEGED',-2); // Sent from system (website itself) *with* dangerous Comcode permission
+    define('A_FROM_SYSTEM_UNPRIVILEGED', -3); // Sent from system (website itself) *without* dangerous Comcode permission
+    define('A_FROM_SYSTEM_PRIVILEGED', -2); // Sent from system (website itself) *with* dangerous Comcode permission
 
     // Notifications will be sent to one of the following if not to a specific list of member IDs
-    define('A_TO_ANYONE_ENABLED',null);
+    define('A_TO_ANYONE_ENABLED', null);
 
     global $NOTIFICATION_SETTING_CACHE;
     $NOTIFICATION_SETTING_CACHE = array();
@@ -63,25 +63,25 @@ function init__notifications()
  */
 function _get_notification_ob_for_code($notification_code)
 {
-    $path = 'hooks/systems/notifications/' . filter_naughty(preg_replace('#\_\_\w*$#','',$notification_code));
+    $path = 'hooks/systems/notifications/' . filter_naughty(preg_replace('#\_\_\w*$#', '', $notification_code));
     if ((!is_file(get_file_base() . '/sources/' . $path . '.php')) && (!is_file(get_file_base() . '/sources_custom/' . $path . '.php'))) {
         require_all_lang();
-        $hooks = find_all_hooks('systems','notifications');
+        $hooks = find_all_hooks('systems', 'notifications');
         foreach (array_keys($hooks) as $hook) {
             $path = 'hooks/systems/notifications/' . filter_naughty($hook);
             require_code($path);
             $ob = object_factory('Hook_Notification_' . filter_naughty($hook));
-            if (method_exists($ob,'list_handled_codes')) {
-                if (array_key_exists($notification_code,$ob->list_handled_codes())) {
+            if (method_exists($ob, 'list_handled_codes')) {
+                if (array_key_exists($notification_code, $ob->list_handled_codes())) {
                     return $ob;
                 }
             }
         }
     } else { // Ah, we know already (file exists directly) - so quick route
         require_code($path);
-        return object_factory('Hook_Notification_' . filter_naughty(preg_replace('#\_\_\w*$#','',$notification_code)));
+        return object_factory('Hook_Notification_' . filter_naughty(preg_replace('#\_\_\w*$#', '', $notification_code)));
     }
-    return NULL;
+    return null;
     //return object_factory('Hook_Notification'); // default
 }
 
@@ -107,7 +107,7 @@ function _get_notification_ob_for_code($notification_code)
  * @param  ?array                       A list of attachments (each attachment being a map, path=>filename) (NULL: none)
  * @param  boolean                      Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
  */
-function dispatch_notification($notification_code,$code_category,$subject,$message,$to_member_ids = null,$from_member_id = null,$priority = 3,$store_in_staff_messaging_system = false,$no_cc = false,$no_notify_for__notification_code = null,$no_notify_for__code_category = null,$subject_prefix = '',$subject_suffix = '',$body_prefix = '',$body_suffix = '',$attachments = null,$use_real_from = false)
+function dispatch_notification($notification_code, $code_category, $subject, $message, $to_member_ids = null, $from_member_id = null, $priority = 3, $store_in_staff_messaging_system = false, $no_cc = false, $no_notify_for__notification_code = null, $no_notify_for__code_category = null, $subject_prefix = '', $subject_suffix = '', $body_prefix = '', $body_suffix = '', $attachments = null, $use_real_from = false)
 {
     global $NOTIFICATIONS_ON;
     if (!$NOTIFICATIONS_ON) {
@@ -115,7 +115,7 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
     }
 
     if ($subject == '') {
-        $subject = '<' . $notification_code . ' -- ' . (is_null($code_category)?'':$code_category) . '>';
+        $subject = '<' . $notification_code . ' -- ' . (is_null($code_category) ? '' : $code_category) . '>';
     }
 
     require_lang('notifications');
@@ -124,19 +124,20 @@ function dispatch_notification($notification_code,$code_category,$subject,$messa
         return;
     }
 
-    $dispatcher = new Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix,$subject_suffix,$body_prefix,$body_suffix,$attachments,$use_real_from);
+    $dispatcher = new Notification_dispatcher($notification_code, $code_category, $subject, $message, $to_member_ids, $from_member_id, $priority, $store_in_staff_messaging_system, $no_cc, $no_notify_for__notification_code, $no_notify_for__code_category, $subject_prefix, $subject_suffix, $body_prefix, $body_suffix, $attachments, $use_real_from);
 
-    if ((get_param_integer('keep_debug_notifications',0) == 1) || ($notification_code == 'task_completed')) {
+    if ((get_param_integer('keep_debug_notifications', 0) == 1) || ($notification_code == 'task_completed')) {
         $dispatcher->dispatch();
     } else {
         require_code('tasks');
-        call_user_func_array__long_task(do_lang('_SEND_NOTIFICATION'),get_screen_title('_SEND_NOTIFICATION'),'dispatch_notification',array($dispatcher),true,false,false);
+        call_user_func_array__long_task(do_lang('_SEND_NOTIFICATION'), get_screen_title('_SEND_NOTIFICATION'), 'dispatch_notification', array($dispatcher), true, false, false);
     }
 }
 
 /**
  * Dispatcher object.
  * Used to create a closure for a notification dispatch, so we can then tell that to send in the background (register_shutdown_function), for performance reasons.
+ *
  * @package    core_notifications
  */
 class Notification_dispatcher
@@ -181,14 +182,14 @@ class Notification_dispatcher
      * @param  ?array                   A list of attachments (each attachment being a map, path=>filename) (NULL: none)
      * @param  boolean                  Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
      */
-    public function Notification_dispatcher($notification_code,$code_category,$subject,$message,$to_member_ids,$from_member_id,$priority,$store_in_staff_messaging_system,$no_cc,$no_notify_for__notification_code,$no_notify_for__code_category,$subject_prefix = '',$subject_suffix = '',$body_prefix = '',$body_suffix = '',$attachments = null,$use_real_from = false)
+    public function Notification_dispatcher($notification_code, $code_category, $subject, $message, $to_member_ids, $from_member_id, $priority, $store_in_staff_messaging_system, $no_cc, $no_notify_for__notification_code, $no_notify_for__code_category, $subject_prefix = '', $subject_suffix = '', $body_prefix = '', $body_suffix = '', $attachments = null, $use_real_from = false)
     {
         $this->notification_code = $notification_code;
         $this->code_category = $code_category;
         $this->subject = $subject;
         $this->message = $message;
         $this->to_member_ids = $to_member_ids;
-        $this->from_member_id = is_null($from_member_id)?get_member():$from_member_id;
+        $this->from_member_id = is_null($from_member_id) ? get_member() : $from_member_id;
         $this->priority = $priority;
         $this->store_in_staff_messaging_system = $store_in_staff_messaging_system;
         $this->no_cc = $no_cc;
@@ -218,14 +219,14 @@ class Notification_dispatcher
         $no_cc = $this->no_cc;
 
         if ($GLOBALS['DEV_MODE']) {
-            if ((strpos($this->message,'keep_devtest') !== false) && ($this->notification_code != 'messaging') && ($this->notification_code != 'error_occurred') && ($this->notification_code != 'hack_attack') && ($this->notification_code != 'auto_ban') && (strpos($this->message,running_script('index')?static_evaluate_tempcode(build_url(array('page' => '_SELF'),'_SELF',null,true,false,true)):get_self_url_easy()) === false) && ((strpos(ocp_srv('HTTP_REFERER'),'keep_devtest') === false) || (strpos($this->message,ocp_srv('HTTP_REFERER')) === false))) {// Bad URL - it has to be general, not session-specific
+            if ((strpos($this->message, 'keep_devtest') !== false) && ($this->notification_code != 'messaging') && ($this->notification_code != 'error_occurred') && ($this->notification_code != 'hack_attack') && ($this->notification_code != 'auto_ban') && (strpos($this->message, running_script('index') ? static_evaluate_tempcode(build_url(array('page' => '_SELF'), '_SELF', null, true, false, true)) : get_self_url_easy()) === false) && ((strpos(ocp_srv('HTTP_REFERER'), 'keep_devtest') === false) || (strpos($this->message, ocp_srv('HTTP_REFERER')) === false))) {// Bad URL - it has to be general, not session-specific
                 fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
             }
         }
 
         $ob = _get_notification_ob_for_code($this->notification_code);
         if (is_null($ob)) {
-            if ((strpos($this->notification_code,'__') === false) && (get_page_name() != 'admin_setupwizard')) {// Setupwizard may have removed after register_shutdown_function was called
+            if ((strpos($this->notification_code, '__') === false) && (get_page_name() != 'admin_setupwizard')) {// Setupwizard may have removed after register_shutdown_function was called
                 fatal_exit('Missing notification code: ' . $this->notification_code);
             }
             return;
@@ -235,26 +236,26 @@ class Notification_dispatcher
         require_code('mail');
 
         if (($this->store_in_staff_messaging_system) && (addon_installed('staff_messaging'))) {
-            list($type,$id) = explode('_',$this->code_category,2);
-            $message_url = build_url(array('page' => 'admin_messaging','type' => 'view','id' => $id,'message_type' => $type),get_module_zone('admin_messaging'),null,false,false,true);
-            $message = do_lang('MESSAGING_NOTIFICATION_WRAPPER',$message,$message_url->evaluate());
+            list($type, $id) = explode('_', $this->code_category, 2);
+            $message_url = build_url(array('page' => 'admin_messaging', 'type' => 'view', 'id' => $id, 'message_type' => $type), get_module_zone('admin_messaging'), null, false, false, true);
+            $message = do_lang('MESSAGING_NOTIFICATION_WRAPPER', $message, $message_url->evaluate());
 
-            $post_title = $this->subject_prefix . post_param('title','') . $this->subject_suffix;
-            $post = $this->body_prefix . post_param('post','') . $this->body_suffix;
+            $post_title = $this->subject_prefix . post_param('title', '') . $this->subject_suffix;
+            $post = $this->body_prefix . post_param('post', '') . $this->body_suffix;
 
             require_code('feedback');
-            actualise_post_comment(true,$type,$id,$message_url,$subject,get_option('messaging_forum_name'),true,1,true,true,true,$post_title,$post);
+            actualise_post_comment(true, $type, $id, $message_url, $subject, get_option('messaging_forum_name'), true, 1, true, true, true, $post_title, $post);
         }
 
-        $testing = (get_param_integer('keep_debug_notifications',0) == 1);
+        $testing = (get_param_integer('keep_debug_notifications', 0) == 1);
 
         $start = 0;
         $max = 300;
         do {
-            list($members,$possibly_has_more) = $ob->list_members_who_have_enabled($this->notification_code,$this->code_category,$this->to_member_ids,$start,$max);
+            list($members, $possibly_has_more) = $ob->list_members_who_have_enabled($this->notification_code, $this->code_category, $this->to_member_ids, $start, $max);
 
             if (get_value('notification_safety_testing') === '1') {
-                if (count($members)>20) {
+                if (count($members) > 20) {
                     $members = array(6 => A_INSTANT_EMAIL); // This is just for testing, if lots of notifications going out it's probably a scary bug, so send just to Chris (#6) with a note
                     $message = 'OVER-ADDRESSED?' . "\n\n" . $message;
                 }
@@ -262,20 +263,21 @@ class Notification_dispatcher
 
             foreach ($members as $to_member_id => $setting) {
                 if (!is_null($this->no_notify_for__notification_code)) {
-                    if (notifications_enabled($this->no_notify_for__notification_code,$this->no_notify_for__code_category,$to_member_id)) {
+                    if (notifications_enabled($this->no_notify_for__notification_code, $this->no_notify_for__code_category, $to_member_id)) {
                         continue;
                     } // Signal they are getting some other notification for this
                 }
 
                 if (($to_member_id !== $this->from_member_id) || ($testing)) {
-                    $no_cc = _dispatch_notification_to_member($to_member_id,$setting,$this->notification_code,$this->code_category,$subject,$message,$this->from_member_id,$this->priority,$no_cc,$this->attachments,$this->use_real_from);
+                    $no_cc = _dispatch_notification_to_member($to_member_id, $setting, $this->notification_code, $this->code_category, $subject, $message, $this->from_member_id, $this->priority, $no_cc, $this->attachments, $this->use_real_from);
                 }
             }
 
             $start += $max;
-        } while ($possibly_has_more);
+        }
+        while ($possibly_has_more);
 
-        ocp_profile_end_for('Notification_dispatcher',$subject);
+        ocp_profile_end_for('Notification_dispatcher', $subject);
     }
 }
 
@@ -286,7 +288,7 @@ class Notification_dispatcher
  * @param  ?MEMBER                      Member to check for (NULL: just check globally)
  * @return boolean                      Whether it is available
  */
-function _notification_setting_available($setting,$member_id = null)
+function _notification_setting_available($setting, $member_id = null)
 {
     static $nsa_cache = array();
     if (isset($nsa_cache[$setting][$member_id])) {
@@ -320,11 +322,11 @@ function _notification_setting_available($setting,$member_id = null)
             $system_wide = (addon_installed('sms')) && (get_option('sms_api_id') != '');
             if ($system_wide && !is_null($member_id)) {
                 require_code('permissions');
-                if (has_privilege($member_id,'use_sms')) {
+                if (has_privilege($member_id, 'use_sms')) {
                     require_code('sms');
                     $cpf_values = $GLOBALS['FORUM_DRIVER']->get_custom_fields($member_id);
                     if (!is_null($cpf_values)) {
-                        if (array_key_exists('mobile_phone_number',$cpf_values)) {
+                        if (array_key_exists('mobile_phone_number', $cpf_values)) {
                             $for_member = (cleanup_mobile_number($cpf_values['mobile_phone_number']) != '');
                         }
                     }
@@ -335,7 +337,7 @@ function _notification_setting_available($setting,$member_id = null)
             $system_wide = (get_forum_type() == 'ocf') && (addon_installed('ocf_forum'));
             if ($system_wide && !is_null($member_id)) {
                 require_code('permissions');
-                $for_member = has_privilege($member_id,'use_pt');
+                $for_member = has_privilege($member_id, 'use_pt');
             }
             break;
     }
@@ -357,13 +359,13 @@ function _find_member_statistical_notification_type($to_member_id)
         return $cache[$to_member_id];
     }
 
-    $notifications_enabled = $GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_setting'),array('l_member_id' => $to_member_id,'l_code_category' => ''),'',100/*within reason*/);
-    if ((count($notifications_enabled) == 0) && (_notification_setting_available(A_INSTANT_EMAIL,$to_member_id))) { // Default to e-mail
+    $notifications_enabled = $GLOBALS['SITE_DB']->query_select('notifications_enabled', array('l_setting'), array('l_member_id' => $to_member_id, 'l_code_category' => ''), '', 100/*within reason*/);
+    if ((count($notifications_enabled) == 0) && (_notification_setting_available(A_INSTANT_EMAIL, $to_member_id))) { // Default to e-mail
         $setting = A_INSTANT_EMAIL;
     } else {
         $possible_settings = array();
-        foreach (array(A_INSTANT_SMS,A_INSTANT_EMAIL,A_DAILY_EMAIL_DIGEST,A_WEEKLY_EMAIL_DIGEST,A_MONTHLY_EMAIL_DIGEST,A_INSTANT_PT,A_WEB_NOTIFICATION) as $possible_setting) {
-            if (_notification_setting_available($possible_setting,$to_member_id)) {
+        foreach (array(A_INSTANT_SMS, A_INSTANT_EMAIL, A_DAILY_EMAIL_DIGEST, A_WEEKLY_EMAIL_DIGEST, A_MONTHLY_EMAIL_DIGEST, A_INSTANT_PT, A_WEB_NOTIFICATION) as $possible_setting) {
+            if (_notification_setting_available($possible_setting, $to_member_id)) {
                 $possible_settings[$possible_setting] = 0;
             }
         }
@@ -405,10 +407,10 @@ function _find_member_statistical_notification_type($to_member_id)
  * @param  boolean                      Whether we will make a "reply to" direct -- we only do this if we're allowed to disclose email addresses for this particular notification type (i.e. if it's a direct contact)
  * @return boolean                      New $no_cc setting
  */
-function _dispatch_notification_to_member($to_member_id,$setting,$notification_code,$code_category,$subject,$message,$from_member_id,$priority,$no_cc,$attachments,$use_real_from)
+function _dispatch_notification_to_member($to_member_id, $setting, $notification_code, $code_category, $subject, $message, $from_member_id, $priority, $no_cc, $attachments, $use_real_from)
 {
     // Fish out some general details of the sender
-    $to_name = $GLOBALS['FORUM_DRIVER']->get_username($to_member_id,true);
+    $to_name = $GLOBALS['FORUM_DRIVER']->get_username($to_member_id, true);
     $from_email = '';
     $from_name = '';
     $from_member_id_shown = db_get_first_id();
@@ -418,15 +420,15 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
             if ($from_email == '') {
                 $from_email = '';
             }
-            $from_name = $GLOBALS['FORUM_DRIVER']->get_username($from_member_id,true);
+            $from_name = $GLOBALS['FORUM_DRIVER']->get_username($from_member_id, true);
             $from_member_id_shown = $from_member_id;
         }
     } else {
         $use_real_from = false;
     }
-    $join_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($to_member_id,'m_join_time');
+    $join_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($to_member_id, 'm_join_time');
 
-    $db = (substr($notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+    $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
     // If none-specified, we'll need to be clever now
     if ($setting == A__STATISTICAL) {
@@ -439,25 +441,25 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
 
     // Send according to the listen setting...
 
-    if (_notification_setting_available(A_INSTANT_SMS,$to_member_id)) {
+    if (_notification_setting_available(A_INSTANT_SMS, $to_member_id)) {
         if (($setting & A_INSTANT_SMS) != 0) {
-            $wrapped_message = do_lang('NOTIFICATION_SMS_COMPLETE_WRAP',$subject,$message_to_send); // Lang string may be modified to include {2}, but would cost more. Default just has {1}.
+            $wrapped_message = do_lang('NOTIFICATION_SMS_COMPLETE_WRAP', $subject, $message_to_send); // Lang string may be modified to include {2}, but would cost more. Default just has {1}.
 
             require_code('sms');
-            $successes = sms_wrap($wrapped_message,array($to_member_id));
+            $successes = sms_wrap($wrapped_message, array($to_member_id));
             if ($successes == 0) { // Could not send
                 $setting = $setting | A_INSTANT_EMAIL; // Make sure it also goes to email then
-                $message_to_send = do_lang('INSTEAD_OF_SMS',$message);
+                $message_to_send = do_lang('INSTEAD_OF_SMS', $message);
             }
         }
     }
 
-    if (_notification_setting_available(A_INSTANT_EMAIL,$to_member_id)) {
+    if (_notification_setting_available(A_INSTANT_EMAIL, $to_member_id)) {
         if (($setting & A_INSTANT_EMAIL) != 0) {
             $to_email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($to_member_id);
             if ($to_email != '') {
-                $wrapped_subject = do_lang('NOTIFICATION_EMAIL_SUBJECT_WRAP',$subject,comcode_escape(get_site_name()));
-                $wrapped_message = do_lang($use_real_from?'NOTIFICATION_EMAIL_MESSAGE_WRAP_DIRECT_REPLY':'NOTIFICATION_EMAIL_MESSAGE_WRAP',$message_to_send,comcode_escape(get_site_name()));
+                $wrapped_subject = do_lang('NOTIFICATION_EMAIL_SUBJECT_WRAP', $subject, comcode_escape(get_site_name()));
+                $wrapped_message = do_lang($use_real_from ? 'NOTIFICATION_EMAIL_MESSAGE_WRAP_DIRECT_REPLY' : 'NOTIFICATION_EMAIL_MESSAGE_WRAP', $message_to_send, comcode_escape(get_site_name()));
 
                 mail_wrap(
                     $wrapped_subject,
@@ -469,7 +471,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
                     $priority,
                     null,
                     $no_cc,
-                    ($from_member_id<0)?$GLOBALS['FORUM_DRIVER']->get_guest_id():$from_member_id,
+                    ($from_member_id < 0) ? $GLOBALS['FORUM_DRIVER']->get_guest_id() : $from_member_id,
                     ($from_member_id == A_FROM_SYSTEM_PRIVILEGED),
                     false,
                     false,
@@ -487,12 +489,12 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
     }
 
     foreach (array(
-        A_DAILY_EMAIL_DIGEST,
-        A_WEEKLY_EMAIL_DIGEST,
-        A_MONTHLY_EMAIL_DIGEST,
-        A_WEB_NOTIFICATION,
-    ) as $frequency) {
-        if (!_notification_setting_available($frequency,$to_member_id)) {
+                 A_DAILY_EMAIL_DIGEST,
+                 A_WEEKLY_EMAIL_DIGEST,
+                 A_MONTHLY_EMAIL_DIGEST,
+                 A_WEB_NOTIFICATION,
+             ) as $frequency) {
+        if (!_notification_setting_available($frequency, $to_member_id)) {
             continue;
         }
 
@@ -506,7 +508,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
                     require_code('files2');
                     make_missing_directory($path);
                 }
-                @file_put_contents($path . '/latest.dat',strval(time()));
+                @file_put_contents($path . '/latest.dat', strval(time()));
             }
 
             $map = array(
@@ -514,37 +516,37 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
                 'd_from_member_id' => $from_member_id,
                 'd_to_member_id' => $to_member_id,
                 'd_priority' => $priority,
-                'd_no_cc' => $no_cc?1:0,
+                'd_no_cc' => $no_cc ? 1 : 0,
                 'd_date_and_time' => time(),
-                'd_notification_code' => substr($notification_code,0,80),
-                'd_code_category' => is_null($code_category)?'':$code_category,
+                'd_notification_code' => substr($notification_code, 0, 80),
+                'd_code_category' => is_null($code_category) ? '' : $code_category,
                 'd_frequency' => $frequency,
                 'd_read' => 0,
             );
-            $map += insert_lang('d_message',$message,4);
-            $GLOBALS['SITE_DB']->query_insert('digestives_tin',$map);
+            $map += insert_lang('d_message', $message, 4);
+            $GLOBALS['SITE_DB']->query_insert('digestives_tin', $map);
 
-            $GLOBALS['SITE_DB']->query_insert('digestives_consumed',array(
+            $GLOBALS['SITE_DB']->query_insert('digestives_consumed', array(
                 'c_member_id' => $to_member_id,
                 'c_frequency' => $frequency,
                 'c_time' => time(),
-            ),false,true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
+            ), false, true/*If we've not set up first digest time, make it the digest period from now; if we have then silent error is suppressed*/);
         }
     }
 
     $needs_manual_cc = false;
 
-    if (_notification_setting_available(A_INSTANT_PT,$to_member_id)) {
+    if (_notification_setting_available(A_INSTANT_PT, $to_member_id)) {
         if (($setting & A_INSTANT_PT) != 0) {
             require_code('ocf_topics_action');
             require_code('ocf_posts_action');
 
-            $wrapped_subject = do_lang('NOTIFICATION_PT_SUBJECT_WRAP',$subject);
-            $wrapped_message = do_lang($use_real_from?'NOTIFICATION_PT_MESSAGE_WRAP_DIRECT_REPLY':'NOTIFICATION_PT_MESSAGE_WRAP',$message_to_send);
+            $wrapped_subject = do_lang('NOTIFICATION_PT_SUBJECT_WRAP', $subject);
+            $wrapped_message = do_lang($use_real_from ? 'NOTIFICATION_PT_MESSAGE_WRAP_DIRECT_REPLY' : 'NOTIFICATION_PT_MESSAGE_WRAP', $message_to_send);
 
             // NB: These are posted by Guest (system) although the display name is set to the member triggering. This is intentional to stop said member getting unexpected replies.
-            $topic_id = ocf_make_topic(null,$wrapped_subject,'icons/14x14/ocf_topic_modifiers/announcement',1,1,0,0,0,$from_member_id_shown,$to_member_id,false,0,null,'');
-            ocf_make_post($topic_id,$wrapped_subject,$wrapped_message,0,true,1,0,($from_member_id<0)?do_lang('SYSTEM'):$from_name,null,null,$from_member_id_shown,null,null,null,false,true,null,true,$wrapped_subject,0,null,true,true,true,($from_member_id == A_FROM_SYSTEM_PRIVILEGED));
+            $topic_id = ocf_make_topic(null, $wrapped_subject, 'icons/14x14/ocf_topic_modifiers/announcement', 1, 1, 0, 0, 0, $from_member_id_shown, $to_member_id, false, 0, null, '');
+            ocf_make_post($topic_id, $wrapped_subject, $wrapped_message, 0, true, 1, 0, ($from_member_id < 0) ? do_lang('SYSTEM') : $from_name, null, null, $from_member_id_shown, null, null, null, false, true, null, true, $wrapped_subject, 0, null, true, true, true, ($from_member_id == A_FROM_SYSTEM_PRIVILEGED));
         }
     }
 
@@ -564,7 +566,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
                 $priority,
                 null,
                 true,
-                ($from_member_id<0)?null:$from_member_id,
+                ($from_member_id < 0) ? null : $from_member_id,
                 ($from_member_id == A_FROM_SYSTEM_PRIVILEGED),
                 false,
                 false,
@@ -588,7 +590,7 @@ function _dispatch_notification_to_member($to_member_id,$setting,$notification_c
  * @param  ?MEMBER                      The member being signed up (NULL: current member)
  * @param  ?integer                     Setting to use (NULL: default)
  */
-function enable_notifications($notification_code,$notification_category,$member_id = null,$setting = null)
+function enable_notifications($notification_code, $notification_category, $member_id = null, $setting = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
@@ -599,30 +601,30 @@ function enable_notifications($notification_code,$notification_category,$member_
 
     if (is_null($setting)) {
         $ob = _get_notification_ob_for_code($notification_code);
-        $setting = $ob->get_default_auto_setting($notification_code,$notification_category);
-        if (!_notification_setting_available($setting,$member_id)) {
+        $setting = $ob->get_default_auto_setting($notification_code, $notification_category);
+        if (!_notification_setting_available($setting, $member_id)) {
             $setting = _find_member_statistical_notification_type($member_id);
         }
     }
 
-    $db = (substr($notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+    $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-    $db->query_delete('notifications_enabled',array(
+    $db->query_delete('notifications_enabled', array(
         'l_member_id' => $member_id,
-        'l_notification_code' => substr($notification_code,0,80),
-        'l_code_category' => is_null($notification_category)?'':$notification_category,
+        'l_notification_code' => substr($notification_code, 0, 80),
+        'l_code_category' => is_null($notification_category) ? '' : $notification_category,
     ));
-    $db->query_insert('notifications_enabled',array(
+    $db->query_insert('notifications_enabled', array(
         'l_member_id' => $member_id,
-        'l_notification_code' => substr($notification_code,0,80),
-        'l_code_category' => is_null($notification_category)?'':$notification_category,
+        'l_notification_code' => substr($notification_code, 0, 80),
+        'l_code_category' => is_null($notification_category) ? '' : $notification_category,
         'l_setting' => $setting,
     ));
 
     if (($notification_code == 'comment_posted') && (get_forum_type() == 'ocf')) { // Sync comment_posted ones to also monitor the forum ones; no need for opposite way as comment ones already trigger forum ones
-        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$notification_category);
+        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'), $notification_category);
         if (!is_null($topic_id)) {
-            enable_notifications('ocf_topic',strval($topic_id),$member_id);
+            enable_notifications('ocf_topic', strval($topic_id), $member_id);
         }
     }
 
@@ -637,7 +639,7 @@ function enable_notifications($notification_code,$notification_category,$member_
  * @param  ?SHORT_TEXT                  The category within the notification code (NULL: none)
  * @param  ?MEMBER                      The member being de-signed up (NULL: current member)
  */
-function disable_notifications($notification_code,$notification_category,$member_id = null)
+function disable_notifications($notification_code, $notification_category, $member_id = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
@@ -646,18 +648,18 @@ function disable_notifications($notification_code,$notification_category,$member
         return;
     }
 
-    $db = (substr($notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+    $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-    $db->query_delete('notifications_enabled',array(
+    $db->query_delete('notifications_enabled', array(
         'l_member_id' => $member_id,
-        'l_notification_code' => substr($notification_code,0,80),
-        'l_code_category' => is_null($notification_category)?'':$notification_category,
+        'l_notification_code' => substr($notification_code, 0, 80),
+        'l_code_category' => is_null($notification_category) ? '' : $notification_category,
     ));
 
     if (($notification_code == 'comment_posted') && (get_forum_type() == 'ocf')) { // Sync comment_posted ones to the forum ones
-        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'),$notification_category);
+        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('comments_forum_name'), $notification_category);
         if (!is_null($topic_id)) {
-            disable_notifications('ocf_topic',strval($topic_id),$member_id);
+            disable_notifications('ocf_topic', strval($topic_id), $member_id);
         }
     }
 
@@ -673,9 +675,9 @@ function disable_notifications($notification_code,$notification_category,$member
  * @param  ?MEMBER                      The member being de-signed up (NULL: current member)
  * @return boolean                      Whether they are
  */
-function notifications_enabled($notification_code,$notification_category,$member_id = null)
+function notifications_enabled($notification_code, $notification_category, $member_id = null)
 {
-    return (notifications_setting($notification_code,$notification_category,$member_id) != A_NA);
+    return (notifications_setting($notification_code, $notification_category, $member_id) != A_NA);
 }
 
 /**
@@ -686,16 +688,16 @@ function notifications_enabled($notification_code,$notification_category,$member
  * @param  ?MEMBER                      The member being de-signed up (NULL: current member)
  * @return integer                      How they are
  */
-function notifications_setting($notification_code,$notification_category,$member_id = null)
+function notifications_setting($notification_code, $notification_category, $member_id = null)
 {
-    if ($member_id === NULL) {
+    if ($member_id === null) {
         $member_id = get_member();
     }
 
     $specific_where = array(
         'l_member_id' => $member_id,
-        'l_notification_code' => substr($notification_code,0,80),
-        'l_code_category' => ($notification_category === NULL)?'':$notification_category,
+        'l_notification_code' => substr($notification_code, 0, 80),
+        'l_code_category' => ($notification_category === null) ? '' : $notification_category,
     );
 
     global $NOTIFICATION_SETTING_CACHE;
@@ -703,28 +705,28 @@ function notifications_setting($notification_code,$notification_category,$member
         return $NOTIFICATION_SETTING_CACHE[serialize($specific_where)];
     }
 
-    $db = (substr($notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+    $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
-        'l_notification_code' => substr($notification_code,0,80),
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown', 'l_setting', array(
+        'l_notification_code' => substr($notification_code, 0, 80),
     ));
-    if ($test === NULL) {
-        $test = $db->query_select_value_if_there('notifications_enabled','l_setting',$specific_where);
+    if ($test === null) {
+        $test = $db->query_select_value_if_there('notifications_enabled', 'l_setting', $specific_where);
 
-        if (($test === NULL) && ($notification_category !== NULL)) {
-            $test = $db->query_select_value_if_there('notifications_enabled','l_setting',array(
+        if (($test === null) && ($notification_category !== null)) {
+            $test = $db->query_select_value_if_there('notifications_enabled', 'l_setting', array(
                 'l_member_id' => $member_id,
-                'l_notification_code' => substr($notification_code,0,80),
+                'l_notification_code' => substr($notification_code, 0, 80),
                 'l_code_category' => '',
             ));
         }
-        if ($test === NULL) {
+        if ($test === null) {
             $ob = _get_notification_ob_for_code($notification_code);
-            if ($ob === NULL) {
+            if ($ob === null) {
                 return A_NA;
             } // Can happen in template test sets, as this can be called up by a symbol
             //if ($ob===NULL) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-            $test = $ob->get_initial_setting($notification_code,$notification_category);
+            $test = $ob->get_initial_setting($notification_code, $notification_category);
         }
     }
 
@@ -738,18 +740,19 @@ function notifications_setting($notification_code,$notification_category,$member
  * @param  ID_TEXT                      The notification code
  * @param  ?SHORT_TEXT                  The category within the notification code (NULL: none)
  */
-function delete_all_notifications_on($notification_code,$notification_category)
+function delete_all_notifications_on($notification_code, $notification_category)
 {
-    $db = (substr($notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+    $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-    $db->query_delete('notifications_enabled',array(
-        'l_notification_code' => substr($notification_code,0,80),
-        'l_code_category' => is_null($notification_category)?'':$notification_category,
+    $db->query_delete('notifications_enabled', array(
+        'l_notification_code' => substr($notification_code, 0, 80),
+        'l_code_category' => is_null($notification_category) ? '' : $notification_category,
     ));
 }
 
 /**
  * Base class for notification hooks. Provides default implementations for all methods that provide full access to everyone, and interact with enabled table.
+ *
  * @package    core_notifications
  */
 class Hook_Notification
@@ -763,8 +766,8 @@ class Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $codename = preg_replace('#^Hook\_Notification\_#','',strtolower(get_class($this)));
-        $list[$codename] = array(do_lang('GENERAL'),do_lang('NOTIFICATION_TYPE_' . $codename));
+        $codename = preg_replace('#^Hook\_Notification\_#', '', strtolower(get_class($this)));
+        $list[$codename] = array(do_lang('GENERAL'), do_lang('NOTIFICATION_TYPE_' . $codename));
         return $list;
     }
 
@@ -787,9 +790,9 @@ class Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
-        return $this->_create_category_tree($notification_code,$id,false);
+        return $this->_create_category_tree($notification_code, $id, false);
     }
 
     /**
@@ -800,20 +803,20 @@ class Hook_Notification
      * @param  boolean                  Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
      * @return array                    Tree structure
      */
-    public function _create_category_tree($notification_code,$id,$for_any_member = false)
+    public function _create_category_tree($notification_code, $id, $for_any_member = false)
     {
         $page_links = array();
 
-        $db = (substr($notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+        $db = (substr($notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-        $notification_category = get_param('id',null);
+        $notification_category = get_param('id', null);
         $done_in_url = is_null($notification_category);
 
-        $map = array('l_notification_code' => substr($notification_code,0,80));
+        $map = array('l_notification_code' => substr($notification_code, 0, 80));
         if (!$for_any_member) {
             $map['l_member_id'] = get_member();
         }
-        $types = $db->query_select('notifications_enabled',array('DISTINCT l_code_category'),$map,'ORDER BY id DESC',200/*reasonable limit*/); // Already monitoring members who may not be friends
+        $types = $db->query_select('notifications_enabled', array('DISTINCT l_code_category'), $map, 'ORDER BY id DESC', 200/*reasonable limit*/); // Already monitoring members who may not be friends
         foreach ($types as $type) {
             if ($type['l_code_category'] != '') {
                 $page_links[] = array(
@@ -833,7 +836,7 @@ class Hook_Notification
                 'title' => $notification_category,
             );
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -856,7 +859,7 @@ class Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A__STATISTICAL;
     }
@@ -868,7 +871,7 @@ class Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Automatic setting
      */
-    public function get_default_auto_setting($notification_code,$category = null)
+    public function get_default_auto_setting($notification_code, $category = null)
     {
         return A__STATISTICAL;
     }
@@ -883,9 +886,9 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        return $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+        return $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
     }
 
     /**
@@ -900,17 +903,17 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_privilege($to_filter,$privilege,$only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+    public function _all_members_who_have_enabled_with_privilege($to_filter, $privilege, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
-        list($_members,$possibly_has_more) = $to_filter;
+        list($_members, $possibly_has_more) = $to_filter;
         $members = array();
         require_code('permissions');
         foreach ($_members as $member => $setting) {
-            if (has_privilege($member,$privilege)) {
+            if (has_privilege($member, $privilege)) {
                 $members[$member] = $setting;
             }
         }
-        return array($members,$possibly_has_more);
+        return array($members, $possibly_has_more);
     }
 
     /**
@@ -925,16 +928,16 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_zone_access($to_filter,$zone,$only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+    public function _all_members_who_have_enabled_with_zone_access($to_filter, $zone, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
-        list($_members,$possibly_has_more) = $to_filter;
+        list($_members, $possibly_has_more) = $to_filter;
         $members = array();
         foreach ($_members as $member => $setting) {
-            if (has_zone_access($member,$zone)) {
+            if (has_zone_access($member, $zone)) {
                 $members[$member] = $setting;
             }
         }
-        return array($members,$possibly_has_more);
+        return array($members, $possibly_has_more);
     }
 
     /**
@@ -949,16 +952,16 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_page_access($to_filter,$page,$only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+    public function _all_members_who_have_enabled_with_page_access($to_filter, $page, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
-        list($_members,$possibly_has_more) = $to_filter;
+        list($_members, $possibly_has_more) = $to_filter;
         $members = array();
         foreach ($_members as $member => $setting) {
-            if (has_actual_page_access($member,$page)) {
+            if (has_actual_page_access($member, $page)) {
                 $members[$member] = $setting;
             }
         }
-        return array($members,$possibly_has_more);
+        return array($members, $possibly_has_more);
     }
 
     /**
@@ -973,16 +976,16 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_category_access($to_filter,$category,$only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+    public function _all_members_who_have_enabled_with_category_access($to_filter, $category, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
-        list($_members,$possibly_has_more) = $to_filter;
+        list($_members, $possibly_has_more) = $to_filter;
         $members = array();
         foreach ($_members as $member => $setting) {
-            if (has_category_access($member,$category,$only_if_enabled_on__category)) {
+            if (has_category_access($member, $category, $only_if_enabled_on__category)) {
                 $members[$member] = $setting;
             }
         }
-        return array($members,$possibly_has_more);
+        return array($members, $possibly_has_more);
     }
 
     /**
@@ -993,9 +996,9 @@ class Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return boolean                  Whether they could
      */
-    public function member_could_potentially_enable($notification_code,$member_id,$category = null)
+    public function member_could_potentially_enable($notification_code, $member_id, $category = null)
     {
-        return $this->_is_member(null,null,$member_id);
+        return $this->_is_member(null, null, $member_id);
     }
 
     /**
@@ -1007,9 +1010,9 @@ class Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return boolean                  Whether they have
      */
-    public function member_has_enabled($notification_code,$member_id,$category = null)
+    public function member_has_enabled($notification_code, $member_id, $category = null)
     {
-        return $this->_is_member($notification_code,$category,$member_id);
+        return $this->_is_member($notification_code, $category, $member_id);
     }
 
     /**
@@ -1023,22 +1026,22 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+    public function _all_members_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
         global $NO_DB_SCOPE_CHECK;
         $bak = $NO_DB_SCOPE_CHECK;
         $NO_DB_SCOPE_CHECK = true;
 
-        $initial_setting = $this->get_initial_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category);
+        $initial_setting = $this->get_initial_setting($only_if_enabled_on__notification_code, $only_if_enabled_on__category);
         $has_by_default = ($initial_setting != A_NA);
 
-        $clause_1 = db_string_equal_to('l_notification_code',substr($only_if_enabled_on__notification_code,0,80));
-        $clause_2 = is_null($only_if_enabled_on__category)?db_string_equal_to('l_code_category',''):('(' . db_string_equal_to('l_code_category','') . ' OR ' . db_string_equal_to('l_code_category',$only_if_enabled_on__category) . ')');
+        $clause_1 = db_string_equal_to('l_notification_code', substr($only_if_enabled_on__notification_code, 0, 80));
+        $clause_2 = is_null($only_if_enabled_on__category) ? db_string_equal_to('l_code_category', '') : ('(' . db_string_equal_to('l_code_category', '') . ' OR ' . db_string_equal_to('l_code_category', $only_if_enabled_on__category) . ')');
 
         $clause_3 = '1=1';
         if (!is_null($to_member_ids)) {
             if (count($to_member_ids) == 0) {
-                return array(array(),false);
+                return array(array(), false);
             }
             $clause_3 = '(';
             foreach ($to_member_ids as $member_id) {
@@ -1050,17 +1053,17 @@ class Hook_Notification
             $clause_3 .= ')';
         }
 
-        $db = (substr($only_if_enabled_on__notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+        $db = (substr($only_if_enabled_on__notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown','l_setting',array(
-            'l_notification_code' => substr($only_if_enabled_on__notification_code,0,80),
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notification_lockdown', 'l_setting', array(
+            'l_notification_code' => substr($only_if_enabled_on__notification_code, 0, 80),
         ));
         if ((!is_null($test)) && (get_forum_type() == 'ocf')) {
-            $query_stub = 'SELECT m.id AS l_member_id,' . strval($test) . ' AS l_setting FROM ' . $db->get_table_prefix() . 'f_members m WHERE ' . str_replace('l_member_id','id',$clause_3);
+            $query_stub = 'SELECT m.id AS l_member_id,' . strval($test) . ' AS l_setting FROM ' . $db->get_table_prefix() . 'f_members m WHERE ' . str_replace('l_member_id', 'id', $clause_3);
             $query_stem = '';
         } else {
             if (($has_by_default) && (get_forum_type() == 'ocf') && (db_has_subqueries($db->connection_read))) { // Can only enumerate and join on a local OCF forum
-                $query_stub = 'SELECT m.id AS l_member_id,l_setting FROM ' . $db->get_table_prefix() . 'f_members m LEFT JOIN ' . $db->get_table_prefix() . 'notifications_enabled l ON ' . $clause_1 . ' AND ' . $clause_2 . ' AND ' . $clause_3 . ' AND m.id=l.l_member_id WHERE ' . str_replace('l_member_id','m.id',$clause_3) . ' AND ';
+                $query_stub = 'SELECT m.id AS l_member_id,l_setting FROM ' . $db->get_table_prefix() . 'f_members m LEFT JOIN ' . $db->get_table_prefix() . 'notifications_enabled l ON ' . $clause_1 . ' AND ' . $clause_2 . ' AND ' . $clause_3 . ' AND m.id=l.l_member_id WHERE ' . str_replace('l_member_id', 'm.id', $clause_3) . ' AND ';
                 $query_stem = 'NOT EXISTS(SELECT * FROM ' . $db->get_table_prefix() . 'notifications_enabled l WHERE m.id=l.l_member_id AND ' . $clause_1 . ' AND ' . $clause_2 . ' AND ' . $clause_3 . ' AND l_setting=' . strval(A_NA) . ')';
             } else {
                 $query_stub = 'SELECT l_member_id,l_setting FROM ' . $db->get_table_prefix() . 'notifications_enabled WHERE ';
@@ -1068,7 +1071,7 @@ class Hook_Notification
             }
         }
 
-        $results = $db->query($query_stub . $query_stem,$max,$start);
+        $results = $db->query($query_stub . $query_stem, $max, $start);
         foreach ($results as $i => $r) {
             if (is_null($results[$i]['l_setting'])) {
                 $results[$i]['l_setting'] = $initial_setting;
@@ -1079,7 +1082,7 @@ class Hook_Notification
 
         $possibly_has_more = (count($results) == $max);
 
-        return array(collapse_2d_complexity('l_member_id','l_setting',$results),$possibly_has_more);
+        return array(collapse_2d_complexity('l_member_id', 'l_setting', $results), $possibly_has_more);
     }
 
     /**
@@ -1090,18 +1093,19 @@ class Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_member($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id)
+    public function _is_member($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
         if (is_null($only_if_enabled_on__notification_code)) {
             return true;
         }
 
-        return notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
+        return notifications_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id);
     }
 }
 
 /**
  * Derived abstract base class of notification hooks that provides only staff access.
+ *
  * @package    core_notifications
  */
 class Hook_Notification__Staff extends Hook_Notification
@@ -1115,8 +1119,8 @@ class Hook_Notification__Staff extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $codename = preg_replace('#^Hook\_Notification\_#','',strtolower(get_class($this)));
-        $list[$codename] = array(do_lang('STAFF'),do_lang('NOTIFICATION_TYPE_' . $codename));
+        $codename = preg_replace('#^Hook\_Notification\_#', '', strtolower(get_class($this)));
+        $list[$codename] = array(do_lang('STAFF'), do_lang('NOTIFICATION_TYPE_' . $codename));
         return $list;
     }
 
@@ -1130,9 +1134,9 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        return $this->_all_staff_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+        return $this->_all_staff_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
     }
 
     /**
@@ -1143,9 +1147,9 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return boolean                  Whether they could
      */
-    public function member_could_potentially_enable($notification_code,$member_id,$category = null)
+    public function member_could_potentially_enable($notification_code, $member_id, $category = null)
     {
-        return $this->_is_staff(null,null,$member_id);
+        return $this->_is_staff(null, null, $member_id);
     }
 
     /**
@@ -1157,9 +1161,9 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return boolean                  Whether they are
      */
-    public function member_has_enabled($notification_code,$member_id,$category = null)
+    public function member_has_enabled($notification_code, $member_id, $category = null)
     {
-        return $this->_is_staff($notification_code,$category,$member_id);
+        return $this->_is_staff($notification_code, $category, $member_id);
     }
 
     /**
@@ -1172,19 +1176,19 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_staff_who_have_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$to_member_ids,$start,$max)
+    public function _all_staff_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
-        $initial_setting = $this->get_initial_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category);
+        $initial_setting = $this->get_initial_setting($only_if_enabled_on__notification_code, $only_if_enabled_on__category);
 
-        $db = (substr($only_if_enabled_on__notification_code,0,4) == 'ocf_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
+        $db = (substr($only_if_enabled_on__notification_code, 0, 4) == 'ocf_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
 
-        $admin_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),collapse_1d_complexity('group_id',$db->query_select('group_privileges',array('group_id'),array('privilege' => 'may_enable_staff_notifications'))));
-        $rows = $GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,$max,$start);
+        $admin_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(), collapse_1d_complexity('group_id', $db->query_select('group_privileges', array('group_id'), array('privilege' => 'may_enable_staff_notifications'))));
+        $rows = $GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups, $max, $start);
         $possibly_has_more = (count($rows) >= $max);
         if (!is_null($to_member_ids)) {
             $new_rows = array();
             foreach ($rows as $row) {
-                if (in_array($GLOBALS['FORUM_DRIVER']->mrow_id($row),$to_member_ids)) {
+                if (in_array($GLOBALS['FORUM_DRIVER']->mrow_id($row), $to_member_ids)) {
                     $new_rows[] = $row;
                 }
             }
@@ -1192,14 +1196,14 @@ class Hook_Notification__Staff extends Hook_Notification
         }
         $new_rows = array();
         foreach ($rows as $row) {
-            $test = notifications_setting($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$GLOBALS['FORUM_DRIVER']->mrow_id($row));
+            $test = notifications_setting($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $GLOBALS['FORUM_DRIVER']->mrow_id($row));
 
             if ($test != A_NA) {
                 $new_rows[$GLOBALS['FORUM_DRIVER']->mrow_id($row)] = $test;
             }
         }
 
-        return array($new_rows,$possibly_has_more);
+        return array($new_rows, $possibly_has_more);
     }
 
     /**
@@ -1210,11 +1214,11 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_staff($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id)
+    public function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
-        $test = is_null($only_if_enabled_on__notification_code)?true:notifications_enabled($only_if_enabled_on__notification_code,$only_if_enabled_on__category,$member_id);
+        $test = is_null($only_if_enabled_on__notification_code) ? true : notifications_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id);
 
         require_code('permissions');
-        return (($test) && (has_privilege($member_id,'may_enable_staff_notifications')));
+        return (($test) && (has_privilege($member_id, 'may_enable_staff_notifications')));
     }
 }

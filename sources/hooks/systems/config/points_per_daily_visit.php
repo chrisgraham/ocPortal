@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_config_points_per_daily_visit
 {
     /**

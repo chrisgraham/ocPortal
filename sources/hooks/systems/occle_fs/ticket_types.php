@@ -32,7 +32,7 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['SITE_DB']->query_select_value('ticket_types','COUNT(*)');
+        return $GLOBALS['SITE_DB']->query_select_value('ticket_types', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['SITE_DB']->query_select('ticket_types',array('id','ticket_type_name'),array($GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name') => $label));
+        $_ret = $GLOBALS['SITE_DB']->query_select('ticket_types', array('id', 'ticket_type_name'), array($GLOBALS['SITE_DB']->translate_field_ref('ticket_type_name') => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -73,7 +73,7 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['ticket_type'])) . ' AND  (' . db_string_equal_to('the_type','ADD_TICKET_TYPE') . ' OR ' . db_string_equal_to('the_type','EDIT_TICKET_TYPE') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['ticket_type'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_TICKET_TYPE') . ' OR ' . db_string_equal_to('the_type', 'EDIT_TICKET_TYPE') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -85,16 +85,16 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('tickets2');
 
-        $guest_emails_mandatory = $this->_default_property_int($properties,'guest_emails_mandatory');
-        $search_faq = $this->_default_property_int($properties,'search_faq');
+        $guest_emails_mandatory = $this->_default_property_int($properties, 'guest_emails_mandatory');
+        $search_faq = $this->_default_property_int($properties, 'search_faq');
 
-        $id = add_ticket_type($label,$guest_emails_mandatory,$search_faq);
+        $id = add_ticket_type($label, $guest_emails_mandatory, $search_faq);
         return strval($id);
     }
 
@@ -105,12 +105,12 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('ticket_types',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('ticket_types', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -130,18 +130,18 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('tickets2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $guest_emails_mandatory = $this->_default_property_int($properties,'guest_emails_mandatory');
-        $search_faq = $this->_default_property_int($properties,'search_faq');
+        $label = $this->_default_property_str($properties, 'label');
+        $guest_emails_mandatory = $this->_default_property_int($properties, 'guest_emails_mandatory');
+        $search_faq = $this->_default_property_int($properties, 'search_faq');
 
-        edit_ticket_type(intval($resource_id),$label,$guest_emails_mandatory,$search_faq);
+        edit_ticket_type(intval($resource_id), $label, $guest_emails_mandatory, $search_faq);
 
         return $resource_id;
     }
@@ -153,9 +153,9 @@ class Hook_occle_fs_ticket_types extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('tickets2');
         delete_ticket_type(intval($resource_id));

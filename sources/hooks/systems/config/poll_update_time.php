@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_config_poll_update_time
 {
     /**

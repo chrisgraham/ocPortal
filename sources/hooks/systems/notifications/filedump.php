@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_Notification_filedump extends Hook_Notification
 {
     /**
@@ -39,7 +38,7 @@ class Hook_Notification_filedump extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         require_code('files2');
 
@@ -47,9 +46,9 @@ class Hook_Notification_filedump extends Hook_Notification
         if (!is_null($id)) {
             $path .= '/' . $id;
         }
-        $files = get_directory_contents($path,'',false,false);
+        $files = get_directory_contents($path, '', false, false);
 
-        if (count($files)>30) {
+        if (count($files) > 30) {
             return array();
         } // Too many, so don't show
 
@@ -57,9 +56,9 @@ class Hook_Notification_filedump extends Hook_Notification
         foreach ($files as $file) {
             if (is_dir($path . '/' . $file)) {
                 $page_links[] = array(
-                    'id' => (($id == '')?'':($id . '/')) . $file,
+                    'id' => (($id == '') ? '' : ($id . '/')) . $file,
                     'title' => $file,
-                    'child_count' => count($this->create_category_tree($notification_code,(($id == '')?'':($id . '/')) . $file)),
+                    'child_count' => count($this->create_category_tree($notification_code, (($id == '') ? '' : ($id . '/')) . $file)),
                 );
             }
         }
@@ -74,7 +73,7 @@ class Hook_Notification_filedump extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -88,7 +87,7 @@ class Hook_Notification_filedump extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['filedump'] = array(do_lang('menus:CONTENT'),do_lang('filedump:NOTIFICATION_TYPE_filedump'));
+        $list['filedump'] = array(do_lang('menus:CONTENT'), do_lang('filedump:NOTIFICATION_TYPE_filedump'));
         return $list;
     }
 
@@ -102,10 +101,10 @@ class Hook_Notification_filedump extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'filedump',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'filedump', $notification_code, $category, $to_member_ids, $start, $max);
 
         return $members;
     }

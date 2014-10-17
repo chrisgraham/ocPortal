@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Notification_ocf_rank_promoted extends Hook_Notification
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_ocf_rank_promoted extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['ocf_promotion'] = array(do_lang('GROUPS'),do_lang('NOTIFICATION_TYPE_ocf_rank_promoted'));
+        $list['ocf_promotion'] = array(do_lang('GROUPS'), do_lang('NOTIFICATION_TYPE_ocf_rank_promoted'));
         return $list;
     }
 }

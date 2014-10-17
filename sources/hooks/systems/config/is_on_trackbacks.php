@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_config_is_on_trackbacks
 {
     /**

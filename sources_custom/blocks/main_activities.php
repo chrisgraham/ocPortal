@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-
 class Block_main_activities
 {
     /**
@@ -30,7 +29,7 @@ class Block_main_activities
         $info['version'] = 2;
         $info['update_require_upgrade'] = 1;
         $info['locked'] = false;
-        $info['parameters'] = array('max','start','param','member','mode','grow','refresh_time');
+        $info['parameters'] = array('max', 'start', 'param', 'member', 'mode', 'grow', 'refresh_time');
         return $info;
     }
 
@@ -50,10 +49,10 @@ class Block_main_activities
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('activities',array(
+            $GLOBALS['SITE_DB']->create_table('activities', array(
                 'id' => '*AUTO',
                 'a_member_id' => '*MEMBER',
                 'a_also_involving' => '?MEMBER',
@@ -69,21 +68,21 @@ class Block_main_activities
                 'a_is_public' => 'BINARY'
             ));
 
-            $GLOBALS['SITE_DB']->create_index('activities','a_member_id',array('a_member_id'));
-            $GLOBALS['SITE_DB']->create_index('activities','a_also_involving',array('a_also_involving'));
-            $GLOBALS['SITE_DB']->create_index('activities','a_time',array('a_time'));
-            $GLOBALS['SITE_DB']->create_index('activities','a_filtered_ordered',array('a_member_id','a_time'));
+            $GLOBALS['SITE_DB']->create_index('activities', 'a_member_id', array('a_member_id'));
+            $GLOBALS['SITE_DB']->create_index('activities', 'a_also_involving', array('a_also_involving'));
+            $GLOBALS['SITE_DB']->create_index('activities', 'a_time', array('a_time'));
+            $GLOBALS['SITE_DB']->create_index('activities', 'a_filtered_ordered', array('a_member_id', 'a_time'));
 
             require_code('activities_submission');
-            log_newest_activity(0,1000,true);
+            log_newest_activity(0, 1000, true);
 
-            add_privilege('SUBMISSION','syndicate_site_activity',false);
+            add_privilege('SUBMISSION', 'syndicate_site_activity', false);
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<2)) {
-            $GLOBALS['SITE_DB']->alter_table_field('activities','a_pagelink_1','SHORT_TEXT','a_page_link_1');
-            $GLOBALS['SITE_DB']->alter_table_field('activities','a_pagelink_2','SHORT_TEXT','a_page_link_2');
-            $GLOBALS['SITE_DB']->alter_table_field('activities','a_pagelink_3','SHORT_TEXT','a_page_link_3');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 2)) {
+            $GLOBALS['SITE_DB']->alter_table_field('activities', 'a_pagelink_1', 'SHORT_TEXT', 'a_page_link_1');
+            $GLOBALS['SITE_DB']->alter_table_field('activities', 'a_pagelink_2', 'SHORT_TEXT', 'a_page_link_2');
+            $GLOBALS['SITE_DB']->alter_table_field('activities', 'a_pagelink_3', 'SHORT_TEXT', 'a_page_link_3');
         }
     }
 
@@ -117,12 +116,12 @@ class Block_main_activities
         require_javascript('javascript_jquery');
         require_javascript('javascript_base64');
 
-        $refresh_time = array_key_exists('refresh_time',$map)?intval($map['refresh_time']):30;
-        $grow = array_key_exists('grow',$map)?($map['grow'] == '1'):true;
+        $refresh_time = array_key_exists('refresh_time', $map) ? intval($map['refresh_time']) : 30;
+        $grow = array_key_exists('grow', $map) ? ($map['grow'] == '1') : true;
 
         // See if we're displaying for a specific member
-        if ((array_key_exists('member',$map)) && ($map['member'] != '')) {
-            $member_ids = array_map('intval',explode(',',$map['member']));
+        if ((array_key_exists('member', $map)) && ($map['member'] != '')) {
+            $member_ids = array_map('intval', explode(',', $map['member']));
         } else {
             // No specific member. Use ourselves.
             $member_ids = array(get_member());
@@ -132,31 +131,31 @@ class Block_main_activities
         require_code('activities');
         require_code('addons');
 
-        $mode = array_key_exists('mode',$map)?$map['mode']:'all';
+        $mode = array_key_exists('mode', $map) ? $map['mode'] : 'all';
 
         $viewing_member = get_member();
 
-        list($proceed_selection,$whereville) = get_activity_querying_sql($viewing_member,$mode,$member_ids);
+        list($proceed_selection, $whereville) = get_activity_querying_sql($viewing_member, $mode, $member_ids);
 
-        $can_remove_others = has_zone_access($viewing_member,'adminzone');
+        $can_remove_others = has_zone_access($viewing_member, 'adminzone');
 
         $content = array();
 
         $block_id = get_block_id($map);
 
-        $max = get_param_integer($block_id . '_max',array_key_exists('max',$map)?intval($map['max']):10);
-        $start = get_param_integer($block_id . '_start',array_key_exists('start',$map)?intval($map['start']):0);
+        $max = get_param_integer($block_id . '_max', array_key_exists('max', $map) ? intval($map['max']) : 10);
+        $start = get_param_integer($block_id . '_start', array_key_exists('start', $map) ? intval($map['start']) : 0);
 
         if ($proceed_selection) {
-            $max_rows = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'activities WHERE ' . $whereville,false,true);
+            $max_rows = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'activities WHERE ' . $whereville, false, true);
 
             require_code('templates_pagination');
-            $pagination = pagination(do_lang('ACTIVITIES_TITLE'),$start,$block_id . '_start',$max,$block_id . '_max',$max_rows,false,5,null,'tab__activities');
+            $pagination = pagination(do_lang('ACTIVITIES_TITLE'), $start, $block_id . '_start', $max, $block_id . '_max', $max_rows, false, 5, null, 'tab__activities');
 
-            $activities = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'activities WHERE ' . $whereville . ' ORDER BY a_time DESC',$max,$start,false,true);
+            $activities = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'activities WHERE ' . $whereville . ' ORDER BY a_time DESC', $max, $start, false, true);
 
             foreach ($activities as $row) {
-                list($message,$member_avatar,$datetime,$member_url,$lang_string,$is_public) = render_activity($row);
+                list($message, $member_avatar, $datetime, $member_url, $lang_string, $is_public) = render_activity($row);
 
                 $username = $GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']);
                 if (is_null($username)) {
@@ -167,7 +166,7 @@ class Block_main_activities
                     'IS_PUBLIC' => $is_public,
                     'LANG_STRING' => $lang_string,
                     'ADDON' => $row['a_addon'],
-                    'ADDON_ICON' => ($row['a_addon'] == '')?'':find_addon_icon($row['a_addon']),
+                    'ADDON_ICON' => ($row['a_addon'] == '') ? '' : find_addon_icon($row['a_addon']),
                     'MESSAGE' => $message,
                     'AVATAR' => $member_avatar,
                     'MEMBER_ID' => strval($row['a_member_id']),
@@ -182,11 +181,11 @@ class Block_main_activities
             $pagination = new ocp_tempcode();
         }
 
-        return do_template('BLOCK_MAIN_ACTIVITIES',array(
+        return do_template('BLOCK_MAIN_ACTIVITIES', array(
             '_GUID' => 'b4de219116e1b8107553ee588717e2c9',
             'BLOCK_PARAMS' => block_params_arr_to_str($map),
             'MODE' => $mode,
-            'MEMBER_IDS' => implode(',',$member_ids),
+            'MEMBER_IDS' => implode(',', $member_ids),
             'CONTENT' => $content,
             'GROW' => $grow,
             'PAGINATION' => $pagination,

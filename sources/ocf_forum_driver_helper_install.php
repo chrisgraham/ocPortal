@@ -36,18 +36,18 @@
  * @param  ?string                      Default field value (NULL: standard for field type)
  * @return boolean                      Whether the custom field was created successfully
  */
-function _helper_install_create_custom_field($this_ref,$name,$length,$locked = 1,$viewable = 0,$settable = 0,$required = 0,$description = '',$type = 'long_text',$encrypted = 0,$default = null)
+function _helper_install_create_custom_field($this_ref, $name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0, $description = '', $type = 'long_text', $encrypted = 0, $default = null)
 {
     ocf_require_all_forum_stuff();
     require_code('ocf_members_action');
 
     $name = 'ocp_' . $name;
-    $id = $this_ref->connection->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $name));
+    $id = $this_ref->connection->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $name));
     if (is_null($id)) {
         if (is_null($default)) {
-            $default = (strpos($name,'points') !== false)?'0':'';
+            $default = (strpos($name, 'points') !== false) ? '0' : '';
         }
-        $id = ocf_make_custom_field($name,$locked,$description,$default,$viewable,$viewable,$settable,$encrypted,$type,$required);
+        $id = ocf_make_custom_field($name, $locked, $description, $default, $viewable, $viewable, $settable, $encrypted, $type, $required);
     }
     return !is_null($id);
 }
@@ -84,7 +84,7 @@ function _helper_install_specifics()
     $d['default'] = '';
     $d['description'] = do_lang_tempcode('DESCRIPTION_ADMIN_USERS_PASSWORD');
     $d['title'] = do_lang_tempcode('ADMIN_USERS_PASSWORD');
-    return array($a,$b,$c,$d);
+    return array($a, $b, $c, $d);
 }
 
 /**
@@ -100,7 +100,7 @@ function _helper_install_test_load_from($path)
     $PROBED_FORUM_CONFIG['sql_user'] = $GLOBALS['DB_STATIC_OBJECT']->db_default_user();
     $PROBED_FORUM_CONFIG['sql_pass'] = $GLOBALS['DB_STATIC_OBJECT']->db_default_password();
 
-    $base_url = post_param('base_url','http://' . ocp_srv('HTTP_HOST') . dirname(ocp_srv('SCRIPT_NAME')));
+    $base_url = post_param('base_url', 'http://' . ocp_srv('HTTP_HOST') . dirname(ocp_srv('SCRIPT_NAME')));
 
     $PROBED_FORUM_CONFIG['board_url'] = $base_url . '/forum';
     return true;

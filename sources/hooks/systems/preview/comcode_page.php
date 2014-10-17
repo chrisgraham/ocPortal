@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_Preview_comcode_page
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_comcode_page
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'cms_comcode_pages');
-        return array($applies,'comcode_page',false,array('post'));
+        $applies = (get_param('page', '') == 'cms_comcode_pages');
+        return array($applies, 'comcode_page', false, array('post'));
     }
 
     /**
@@ -43,19 +42,19 @@ class Hook_Preview_comcode_page
 
         $original_comcode = post_param('post');
 
-        $posting_ref_id = post_param_integer('posting_ref_id',mt_rand(0,100000));
-        $post_bits = do_comcode_attachments($original_comcode,'comcode_page',strval(-$posting_ref_id),true,$GLOBALS['SITE_DB']);
+        $posting_ref_id = post_param_integer('posting_ref_id', mt_rand(0, 100000));
+        $post_bits = do_comcode_attachments($original_comcode, 'comcode_page', strval(-$posting_ref_id), true, $GLOBALS['SITE_DB']);
         $post_comcode = $post_bits['comcode'];
         $post_html = $post_bits['tempcode'];
 
-        $output = do_template('COMCODE_PAGE_SCREEN',array(
-            'IS_PANEL' => (substr($codename,0,6) == 'panel_'),
+        $output = do_template('COMCODE_PAGE_SCREEN', array(
+            'IS_PANEL' => (substr($codename, 0, 6) == 'panel_'),
             'BEING_INCLUDED' => false,
             'SUBMITTER' => strval(get_member()),
             'TAGS' => '',
             'WARNING_DETAILS' => '',
             'EDIT_DATE_RAW' => strval(time()),
-            'SHOW_AS_EDIT' => (get_param_integer('show_as_edit',0) == 1),
+            'SHOW_AS_EDIT' => (get_param_integer('show_as_edit', 0) == 1),
             'CONTENT' => $post_html,
             'EDIT_URL' => '',
             'ADD_CHILD_URL' => '',
@@ -63,6 +62,6 @@ class Hook_Preview_comcode_page
             'ZONE' => $zone,
         ));
 
-        return array($output,$post_comcode);
+        return array($output, $post_comcode);
     }
 }

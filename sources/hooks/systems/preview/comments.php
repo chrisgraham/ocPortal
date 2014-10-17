@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_Preview_comments
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_comments
      */
     public function applies()
     {
-        $applies = ((addon_installed('ocf_forum')) && (get_param('page') != 'topicview') && (post_param_integer('_comment_form_post',0) == 1) && (is_null(post_param('hidFileID_file0',null))) && (is_null(post_param('file0',null))));
-        return array($applies,null,false);
+        $applies = ((addon_installed('ocf_forum')) && (get_param('page') != 'topicview') && (post_param_integer('_comment_form_post', 0) == 1) && (is_null(post_param('hidFileID_file0', null))) && (is_null(post_param('file0', null))));
+        return array($applies, null, false);
     }
 
     /**
@@ -40,7 +39,7 @@ class Hook_Preview_comments
     {
         // Find review, if there is one
         $individual_review_ratings = array();
-        $review_rating = post_param('review_rating','');
+        $review_rating = post_param('review_rating', '');
         if ($review_rating != '') {
             $individual_review_ratings[''] = array(
                 'REVIEW_TITLE' => '',
@@ -54,14 +53,14 @@ class Hook_Preview_comments
         // OCF renderings of poster
         static $hooks = null;
         if (is_null($hooks)) {
-            $hooks = find_all_hooks('modules','topicview');
+            $hooks = find_all_hooks('modules', 'topicview');
         }
         static $hook_objects = null;
         if (is_null($hook_objects)) {
             $hook_objects = array();
             foreach (array_keys($hooks) as $hook) {
                 require_code('hooks/modules/topicview/' . filter_naughty_harsh($hook));
-                $object = object_factory('Hook_' . filter_naughty_harsh($hook),true);
+                $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
                 if (is_null($object)) {
                     continue;
                 }
@@ -70,16 +69,16 @@ class Hook_Preview_comments
         }
         if (!is_guest()) {
             require_code('ocf_members2');
-            $poster_details = render_member_box(get_member(),false,$hooks,$hook_objects,false,null,false);
+            $poster_details = render_member_box(get_member(), false, $hooks, $hook_objects, false, null, false);
         } else {
             $custom_fields = new ocp_tempcode();
             $poster_details = new ocp_tempcode();
         }
         if (addon_installed('ocf_forum')) {
             if (is_guest()) {
-                $poster = do_template('OCF_POSTER_MEMBER',array('_GUID' => 'adbfe268015ca904c3f61020a7b0adde','ONLINE' => true,'ID' => strval(get_member()),'POSTER_DETAILS' => $poster_details,'PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(),false,true),'POSTER_USERNAME' => $poster_name));
+                $poster = do_template('OCF_POSTER_MEMBER', array('_GUID' => 'adbfe268015ca904c3f61020a7b0adde', 'ONLINE' => true, 'ID' => strval(get_member()), 'POSTER_DETAILS' => $poster_details, 'PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url(get_member(), false, true), 'POSTER_USERNAME' => $poster_name));
             } else {
-                $poster = do_template('OCF_POSTER_GUEST',array('_GUID' => '3992f4e69ac72a5b57289e5e802f5f48','IP_LINK' => '','POSTER_DETAILS' => $poster_details,'POSTER_USERNAME' => $poster_name));
+                $poster = do_template('OCF_POSTER_GUEST', array('_GUID' => '3992f4e69ac72a5b57289e5e802f5f48', 'IP_LINK' => '', 'POSTER_DETAILS' => $poster_details, 'POSTER_USERNAME' => $poster_name));
             }
         } else {
             $poster = make_string_tempcode(escape_html($poster_name)); // Should never happen actually, as applies discounts hook from even running
@@ -89,8 +88,8 @@ class Hook_Preview_comments
         $datetime_raw = time();
         $datetime = get_timezoned_date(time());
         $poster_url = $GLOBALS['FORUM_DRIVER']->member_profile_url(get_member());
-        $title = post_param('title','');
-        $tpl = do_template('POST',array(
+        $title = post_param('title', '');
+        $tpl = do_template('POST', array(
             '_GUID' => 'fe6913829896c0f0a615ecdb11fc5271',
             'INDIVIDUAL_REVIEW_RATINGS' => $individual_review_ratings,
             'HIGHLIGHT' => $highlight,
@@ -115,6 +114,6 @@ class Hook_Preview_comments
             'LAST_EDITED_RAW' => '',
             'LAST_EDITED' => '',
         ));
-        return array($tpl,null);
+        return array($tpl, null);
     }
 }

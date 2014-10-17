@@ -49,10 +49,10 @@ class Module_admin_xml_storage
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('XML_STORAGE','menu/adminzone/tools/bulk_content_actions/xml_storage'),
+            'misc' => array('XML_STORAGE', 'menu/adminzone/tools/bulk_content_actions/xml_storage'),
         );
     }
 
@@ -65,7 +65,7 @@ class Module_admin_xml_storage
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('xml_storage');
 
@@ -73,7 +73,7 @@ class Module_admin_xml_storage
 
         if ($type == '_import' || $type == '_export') {
             breadcrumb_set_self(do_lang_tempcode('_RESULTS'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('XML_STORAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('XML_STORAGE'))));
         }
 
         if ($type == 'misc') {
@@ -88,7 +88,7 @@ class Module_admin_xml_storage
             $this->title = get_screen_title('EXPORT');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -98,7 +98,7 @@ class Module_admin_xml_storage
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_code('xml_storage');
         require_lang('import');
@@ -128,24 +128,24 @@ class Module_admin_xml_storage
         require_code('form_templates');
 
         url_default_parameters__enable();
-        $import_url = build_url(array('page' => '_SELF','type' => '_import'),'_SELF');
+        $import_url = build_url(array('page' => '_SELF', 'type' => '_import'), '_SELF');
         $import_fields = new ocp_tempcode();
-        $import_fields->attach(form_input_huge(do_lang_tempcode('XML_DATA'),'','xml','',true));
-        $import_form = do_template('FORM',array('_GUID' => '82005575f2a31c362d4a1a79d7a0c247','TABINDEX' => strval(get_form_field_tabindex()),'URL' => $import_url,'HIDDEN' => '','TEXT' => do_lang_tempcode('XML_IMPORT_TEXT'),'FIELDS' => $import_fields,'SUBMIT_ICON' => 'menu___generic_admin__import','SUBMIT_NAME' => do_lang_tempcode('IMPORT')));
+        $import_fields->attach(form_input_huge(do_lang_tempcode('XML_DATA'), '', 'xml', '', true));
+        $import_form = do_template('FORM', array('_GUID' => '82005575f2a31c362d4a1a79d7a0c247', 'TABINDEX' => strval(get_form_field_tabindex()), 'URL' => $import_url, 'HIDDEN' => '', 'TEXT' => do_lang_tempcode('XML_IMPORT_TEXT'), 'FIELDS' => $import_fields, 'SUBMIT_ICON' => 'menu___generic_admin__import', 'SUBMIT_NAME' => do_lang_tempcode('IMPORT')));
         url_default_parameters__disable();
 
         $all_tables = find_all_xml_tables();
-        $export_url = build_url(array('page' => '_SELF','type' => '_export'),'_SELF');
+        $export_url = build_url(array('page' => '_SELF', 'type' => '_export'), '_SELF');
         $export_fields = new ocp_tempcode();
         $nice_tables = new ocp_tempcode();
         foreach ($all_tables as $table) {
             $nice_tables->attach(form_input_list_entry($table));
         }
         require_lang('comcode');
-        $export_fields->attach(form_input_multi_list(do_lang_tempcode('TABLES'),do_lang_tempcode('DESCRIPTION_TABLES'),'tables',$nice_tables,null,15));
-        $export_form = do_template('FORM',array('_GUID' => 'fafc396037e375bdd84582ef8170ec1b','TABINDEX' => strval(get_form_field_tabindex()),'URL' => $export_url,'HIDDEN' => '','TEXT' => do_lang_tempcode('XML_EXPORT_TEXT'),'FIELDS' => $export_fields,'SUBMIT_ICON' => 'menu___generic_admin__export','SUBMIT_NAME' => do_lang_tempcode('EXPORT')));
+        $export_fields->attach(form_input_multi_list(do_lang_tempcode('TABLES'), do_lang_tempcode('DESCRIPTION_TABLES'), 'tables', $nice_tables, null, 15));
+        $export_form = do_template('FORM', array('_GUID' => 'fafc396037e375bdd84582ef8170ec1b', 'TABINDEX' => strval(get_form_field_tabindex()), 'URL' => $export_url, 'HIDDEN' => '', 'TEXT' => do_lang_tempcode('XML_EXPORT_TEXT'), 'FIELDS' => $export_fields, 'SUBMIT_ICON' => 'menu___generic_admin__export', 'SUBMIT_NAME' => do_lang_tempcode('EXPORT')));
 
-        return do_template('XML_STORAGE_SCREEN',array('_GUID' => '8618fbb96fe29689dbbf8edd60444b1e','TITLE' => $this->title,'IMPORT_FORM' => $import_form,'EXPORT_FORM' => $export_form));
+        return do_template('XML_STORAGE_SCREEN', array('_GUID' => '8618fbb96fe29689dbbf8edd60444b1e', 'TITLE' => $this->title, 'IMPORT_FORM' => $import_form, 'EXPORT_FORM' => $export_form));
     }
 
     /**
@@ -161,7 +161,7 @@ class Module_admin_xml_storage
 
         $ops_nice = array();
         foreach ($ops as $op) {
-            $ops_nice[] = array('OP' => $op[0],'PARAM_A' => $op[1],'PARAM_B' => array_key_exists(2,$op)?$op[2]:'');
+            $ops_nice[] = array('OP' => $op[0], 'PARAM_A' => $op[1], 'PARAM_B' => array_key_exists(2, $op) ? $op[2] : '');
         }
 
         // Clear some cacheing
@@ -170,7 +170,7 @@ class Module_admin_xml_storage
         erase_block_cache();
         erase_persistent_cache();
 
-        return do_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array('_GUID' => '6960a7ab06fdccf81f480c3895eb8442','TITLE' => $this->title,'OPS' => $ops_nice));
+        return do_template('XML_STORAGE_IMPORT_RESULTS_SCREEN', array('_GUID' => '6960a7ab06fdccf81f480c3895eb8442', 'TITLE' => $this->title, 'OPS' => $ops_nice));
     }
 
     /**
@@ -180,12 +180,12 @@ class Module_admin_xml_storage
      */
     public function _export()
     {
-        if (!array_key_exists('tables',$_POST)) {
+        if (!array_key_exists('tables', $_POST)) {
             warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN'));
         }
 
         $xml = export_to_xml($_POST['tables']);
 
-        return do_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array('_GUID' => 'c7053f328b27709b529f2cd88513d85d','TITLE' => $this->title,'XML' => $xml));
+        return do_template('XML_STORAGE_EXPORT_RESULTS_SCREEN', array('_GUID' => 'c7053f328b27709b529f2cd88513d85d', 'TITLE' => $this->title, 'XML' => $xml));
     }
 }

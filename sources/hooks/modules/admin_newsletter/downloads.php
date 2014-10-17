@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_whats_news_downloads
 {
     /**
@@ -28,13 +27,13 @@ class Hook_whats_news_downloads
     public function choose_categories()
     {
         if (!addon_installed('downloads')) {
-            return NULL;
+            return null;
         }
 
         require_lang('downloads');
 
         require_code('downloads');
-        return array(create_selection_list_download_category_tree(),do_lang('SECTION_DOWNLOADS'));
+        return array(create_selection_list_download_category_tree(), do_lang('SECTION_DOWNLOADS'));
     }
 
     /**
@@ -45,7 +44,7 @@ class Hook_whats_news_downloads
      * @param  string                   Category filter to apply
      * @return array                    Tuple of result details
      */
-    public function run($cutoff_time,$lang,$filter)
+    public function run($cutoff_time, $lang, $filter)
     {
         if (!addon_installed('downloads')) {
             return array();
@@ -58,16 +57,16 @@ class Hook_whats_news_downloads
         $new = new ocp_tempcode();
 
         require_code('ocfiltering');
-        $or_list = ocfilter_to_sqlfragment($filter,'category_id');
+        $or_list = ocfilter_to_sqlfragment($filter, 'category_id');
 
         $privacy_join = '';
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('download','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('download', 'r', $GLOBALS['FORUM_DRIVER']->get_guest_id());
         }
 
-        $rows = $GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM ' . get_table_prefix() . 'download_downloads r' . $privacy_join . ' WHERE validated=1 AND add_date>' . strval($cutoff_time) . ' AND (' . $or_list . ')' . $privacy_where . ' ORDER BY add_date DESC',$max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT name,description,id,add_date,submitter FROM ' . get_table_prefix() . 'download_downloads r' . $privacy_join . ' WHERE validated=1 AND add_date>' . strval($cutoff_time) . ' AND (' . $or_list . ')' . $privacy_where . ' ORDER BY add_date DESC', $max);
 
         if (count($rows) == $max) {
             return array();
@@ -75,14 +74,14 @@ class Hook_whats_news_downloads
 
         foreach ($rows as $row) {
             $id = $row['id'];
-            $_url = build_url(array('page' => 'downloads','type' => 'entry','id' => $row['id']),get_module_zone('downloads'),null,false,false,true);
+            $_url = build_url(array('page' => 'downloads', 'type' => 'entry', 'id' => $row['id']), get_module_zone('downloads'), null, false, false, true);
             $url = $_url->evaluate();
-            $name = get_translated_text($row['name'],null,$lang);
-            $description = get_translated_text($row['description'],null,$lang);
-            $member_id = (is_guest($row['submitter']))?null:strval($row['submitter']);
+            $name = get_translated_text($row['name'], null, $lang);
+            $description = get_translated_text($row['description'], null, $lang);
+            $member_id = (is_guest($row['submitter'])) ? null : strval($row['submitter']);
             $thumb_url = mixed();
             if (addon_installed('galleries')) {
-                $thumbnail = $GLOBALS['SITE_DB']->query_select_value_if_there('images','thumb_url',array('cat' => 'download_' . strval($row['id'])),'ORDER BY add_date ASC');
+                $thumbnail = $GLOBALS['SITE_DB']->query_select_value_if_there('images', 'thumb_url', array('cat' => 'download_' . strval($row['id'])), 'ORDER BY add_date ASC');
                 if (!is_null($thumbnail)) {
                     if ($thumbnail != '') {
                         if (url_is_local($thumbnail)) {
@@ -93,9 +92,9 @@ class Hook_whats_news_downloads
                     }
                 }
             }
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => 'bbd85ed54500b9d6df998e3c835b45e9','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'DESCRIPTION' => $description,'CONTENT_TYPE' => 'download','CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => 'bbd85ed54500b9d6df998e3c835b45e9', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'download', 'CONTENT_ID' => strval($id))));
         }
 
-        return array($new,do_lang('SECTION_DOWNLOADS','','','',$lang));
+        return array($new, do_lang('SECTION_DOWNLOADS', '', '', '', $lang));
     }
 }

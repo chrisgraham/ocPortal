@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_themeing
  */
-
 class Hook_exists_theme
 {
     /**
@@ -34,6 +33,6 @@ class Hook_exists_theme
             return new ocp_tempcode();
         }
 
-        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($val))));
     }
 }

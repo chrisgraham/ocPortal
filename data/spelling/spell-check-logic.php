@@ -25,7 +25,7 @@
     fclose($x);*/
 
 
-if (strpos($_SERVER['SCRIPT_NAME'],'spell-check-logic.php') !== false) {
+if (strpos($_SERVER['SCRIPT_NAME'], 'spell-check-logic.php') !== false) {
     spellchecklogic();
 }
 
@@ -41,14 +41,14 @@ function sl_get_file_base()
     }
 
     $file_base = realpath(__FILE__);
-    $file_base = str_replace('\\','/',str_replace('\\\\','\\',$file_base));
-    $bits = explode('/',$file_base);
+    $file_base = str_replace('\\', '/', str_replace('\\\\', '\\', $file_base));
+    $bits = explode('/', $file_base);
     array_pop($bits);
     array_pop($bits);
     array_pop($bits);
     array_pop($bits);
     array_pop($bits);
-    return implode(DIRECTORY_SEPARATOR,$bits) . DIRECTORY_SEPARATOR;
+    return implode(DIRECTORY_SEPARATOR, $bits) . DIRECTORY_SEPARATOR;
 }
 
 /**
@@ -63,7 +63,7 @@ function sl_get_custom_file_base()
     }
 
     global $SITE_INFO;
-    return isset($SITE_INFO['custom_file_base'])?$SITE_INFO['custom_file_base']:sl_get_file_base();
+    return isset($SITE_INFO['custom_file_base']) ? $SITE_INFO['custom_file_base'] : sl_get_file_base();
 }
 
 /**
@@ -74,7 +74,7 @@ function sl_get_custom_file_base()
  */
 function sl_filter_naughty_harsh($in)
 {
-    if (preg_match('#^[a-zA-Z0-9_-]*$#',$in) != 0) {
+    if (preg_match('#^[a-zA-Z0-9_-]*$#', $in) != 0) {
         return $in;
     }
     exit();
@@ -88,7 +88,7 @@ function sl_filter_naughty_harsh($in)
  */
 function sl_mixed()
 {
-    return NULL;
+    return null;
 }
 
 /**
@@ -100,14 +100,14 @@ function sl_mixed()
  * @param  boolean                      Whether to return data, instead of output
  * @return array                        A map, possibly mispelled words, to suggestions
  */
-function spellchecklogic($type = null,$text = null,$words_skip = null,$ret = false)
+function spellchecklogic($type = null, $text = null, $words_skip = null, $ret = false)
 {
     error_reporting(E_ALL);
 
-    list($aspelldictionaries,$aspellcommand,$tempnam,$lang) = aspell_init();
+    list($aspelldictionaries, $aspellcommand, $tempnam, $lang) = aspell_init();
 
     if (is_null($type)) {
-        $type = array_key_exists('type',$_REQUEST)?$_REQUEST['type']:((array_key_exists('to_p_dict',$_REQUEST)?'save':'check'));
+        $type = array_key_exists('type', $_REQUEST) ? $_REQUEST['type'] : ((array_key_exists('to_p_dict', $_REQUEST) ? 'save' : 'check'));
     }
     if (is_null($text)) {
         $text = $_REQUEST['content'];
@@ -118,15 +118,15 @@ function spellchecklogic($type = null,$text = null,$words_skip = null,$ret = fal
 
     switch ($type) {
         case 'check':
-            return aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$words_skip,$ret);
+            return aspell_check($aspelldictionaries, $aspellcommand, $tempnam, $lang, $text, $words_skip, $ret);
         case 'save':
-            aspell_save($aspellcommand,$tempnam);
+            aspell_save($aspellcommand, $tempnam);
             break;
     }
     if (!is_null($tempnam)) {
         unlink($tempnam);
     }
-    return array(array(),array());
+    return array(array(), array());
 }
 
 /**
@@ -155,8 +155,8 @@ function wrap_exec($cmd)
 function aspell_init()
 {
     // Find the language
-    if ((!isset($_REQUEST['dictionary'])) || (strlen(trim($_REQUEST['dictionary']))<1)) {
-        $lang = function_exists('do_lang')?do_lang('dictionary'):'en_GB'; // Default to UK English (as per ocPortal)
+    if ((!isset($_REQUEST['dictionary'])) || (strlen(trim($_REQUEST['dictionary'])) < 1)) {
+        $lang = function_exists('do_lang') ? do_lang('dictionary') : 'en_GB'; // Default to UK English (as per ocPortal)
     } else {
         $lang = $_REQUEST['dictionary'];
     }
@@ -165,10 +165,10 @@ function aspell_init()
 
     $force_shell = false;
     if ((!function_exists('pspell_check')) || ($force_shell)) {
-        if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1') {
+        if (str_replace(array('on', 'true', 'yes'), array('1', '1', '1'), strtolower(ini_get('safe_mode'))) == '1') {
             exit('Spell Checker does not work with safe mode systems that do not have direct pspell support into PHP');
         }
-        if (strpos(@ini_get('disable_functions'),'shell_exec') !== false) {
+        if (strpos(@ini_get('disable_functions'), 'shell_exec') !== false) {
             exit('Spell Checker does not work on systems with shell_exec disabled that do not have direct pspell support into PHP');
         }
 
@@ -218,21 +218,21 @@ function aspell_init()
         // Old aspell doesn't know about encoding, which means that unicode will be broke, but we should at least let it try.
 
         $a_ver = array();
-        preg_match('/really [aA]spell ([0-9]+)\.([0-9]+)(?:\.([0-9]+))?/i',$aspell_version,$a_ver);
-        if (!array_key_exists(1,$a_ver)) {
+        preg_match('/really [aA]spell ([0-9]+)\.([0-9]+)(?:\.([0-9]+))?/i', $aspell_version, $a_ver);
+        if (!array_key_exists(1, $a_ver)) {
             $a_ver[1] = '1';
         }
-        if (!array_key_exists(2,$a_ver)) {
+        if (!array_key_exists(2, $a_ver)) {
             $a_ver[2] = '0';
         }
-        if (!array_key_exists(3,$a_ver)) {
+        if (!array_key_exists(3, $a_ver)) {
             $a_ver[3] = '0';
         }
 
-        $a_ver = array('major' => (integer)$a_ver[1],'minor' => (integer)$a_ver[2],'release' => (integer)$a_ver[3]);
+        $a_ver = array('major' => (integer)$a_ver[1], 'minor' => (integer)$a_ver[2], 'release' => (integer)$a_ver[3]);
         if (($a_ver['major'] >= 0) && ($a_ver['minor'] >= 60)) {
             $aspell_args .= ' -H --encoding=utf-8';
-        } elseif (preg_match('/--encoding/',wrap_exec($aspell . ' 2>&1')) != 0) {
+        } elseif (preg_match('/--encoding/', wrap_exec($aspell . ' 2>&1')) != 0) {
             $aspell_args .= ' --mode=none --add-filter=sgml --encoding=utf-8';
         } else {
             $aspell_args .= ' --mode=none --add-filter=sgml';
@@ -253,33 +253,33 @@ function aspell_init()
         require_once('../../../../_config.php');
     }
     $cookie_member_id = $SITE_INFO['user_cookie'];
-    $p_dicts_name = (array_key_exists($cookie_member_id,$_COOKIE))?sl_filter_naughty_harsh($_COOKIE[$cookie_member_id]):'guest';
+    $p_dicts_name = (array_key_exists($cookie_member_id, $_COOKIE)) ? sl_filter_naughty_harsh($_COOKIE[$cookie_member_id]) : 'guest';
     $p_dict_path = sl_get_custom_file_base() . '/data_custom/spelling/personal_dicts' . DIRECTORY_SEPARATOR . $p_dicts_name;
     if (!file_exists($p_dict_path)) {
-        @mkdir($p_dict_path,02770);
+        @mkdir($p_dict_path, 02770);
     }
 
     if (is_null($tempnam)) {
-        list($lang_stub,) = explode('_',$lang);
+        list($lang_stub,) = explode('_', $lang);
 
-        $charset = str_replace('ISO-','iso',str_replace('iso-','iso',do_lang('charset')));
+        $charset = str_replace('ISO-', 'iso', str_replace('iso-', 'iso', do_lang('charset')));
         if (DIRECTORY_SEPARATOR == '\\') { // Windows pSpell is buggy, so we can't use the replacement-pairs feature. Also need to replace data dir with special one.
-            $aspellcommand = @pspell_new_personal($p_dict_path . '/' . $lang_stub . '.pws',$lang,$spelling,'',$charset);
+            $aspellcommand = @pspell_new_personal($p_dict_path . '/' . $lang_stub . '.pws', $lang, $spelling, '', $charset);
             if ($aspellcommand === false) {
-                $aspellcommand = pspell_new_personal($p_dict_path . '/' . $lang_stub . '.pws',$lang,$spelling,'',$charset);
+                $aspellcommand = pspell_new_personal($p_dict_path . '/' . $lang_stub . '.pws', $lang, $spelling, '', $charset);
             }
         } else {
-            $aspellconfig = @pspell_config_create($lang,$spelling,'',$charset);
+            $aspellconfig = @pspell_config_create($lang, $spelling, '', $charset);
             if ($aspellconfig === false) {
-                $aspellconfig = pspell_config_create('en',$spelling,'',$charset);
+                $aspellconfig = pspell_config_create('en', $spelling, '', $charset);
             }
-            pspell_config_personal($aspellconfig,$p_dict_path . '/' . $lang_stub . '.pws');
-            pspell_config_repl($aspellconfig,$p_dict_path . '/' . $lang_stub . '.prepl');
+            pspell_config_personal($aspellconfig, $p_dict_path . '/' . $lang_stub . '.pws');
+            pspell_config_repl($aspellconfig, $p_dict_path . '/' . $lang_stub . '.prepl');
             $aspellcommand = pspell_new_config($aspellconfig);
             if (($aspellcommand === false) && ($lang != 'en')) { // Might be that we had a late fail on initialising that language
-                $aspellconfig = pspell_config_create('en',$spelling,'',$charset);
-                pspell_config_personal($aspellconfig,$p_dict_path . '/' . $lang_stub . '.pws');
-                pspell_config_repl($aspellconfig,$p_dict_path . '/' . $lang_stub . '.prepl');
+                $aspellconfig = pspell_config_create('en', $spelling, '', $charset);
+                pspell_config_personal($aspellconfig, $p_dict_path . '/' . $lang_stub . '.pws');
+                pspell_config_repl($aspellconfig, $p_dict_path . '/' . $lang_stub . '.prepl');
                 $aspellcommand = pspell_new_config($aspellconfig);
             }
         }
@@ -289,7 +289,7 @@ function aspell_init()
         }
     }
 
-    return array($aspelldictionaries,$aspellcommand,$tempnam,$lang);
+    return array($aspelldictionaries, $aspellcommand, $tempnam, $lang);
 }
 
 /**
@@ -305,25 +305,25 @@ function utf8_ord($chr)
             return ord($chr);
 
         case 2:
-            $ord = ord($chr[1])&63;
-            $ord = $ord|((ord($chr[0])&31) << 6);
+            $ord = ord($chr[1]) & 63;
+            $ord = $ord | ((ord($chr[0]) & 31) << 6);
             return $ord;
 
         case 3:
-            $ord = ord($chr[2])&63;
-            $ord = $ord|((ord($chr[1])&63) << 6);
-            $ord = $ord|((ord($chr[0])&15) << 12);
+            $ord = ord($chr[2]) & 63;
+            $ord = $ord | ((ord($chr[1]) & 63) << 6);
+            $ord = $ord | ((ord($chr[0]) & 15) << 12);
             return $ord;
 
         case 4:
-            $ord = ord($chr[3])&63;
-            $ord = $ord|((ord($chr[2])&63) << 6);
-            $ord = $ord|((ord($chr[1])&63) << 12);
-            $ord = $ord|((ord($chr[0])&7) << 18);
+            $ord = ord($chr[3]) & 63;
+            $ord = $ord | ((ord($chr[2]) & 63) << 6);
+            $ord = $ord | ((ord($chr[1]) & 63) << 12);
+            $ord = $ord | ((ord($chr[0]) & 7) << 18);
             return $ord;
 
         default :
-            trigger_error('Character not utf-8',E_USER_ERROR);
+            trigger_error('Character not utf-8', E_USER_ERROR);
     }
 }
 
@@ -350,16 +350,16 @@ function _utf8_ord($matches)
  * @param  boolean                      Whether to return data, instead of output
  * @return array                        A map, possibly mispelled words, to suggestions
  */
-function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$words_skip = null,$ret = false)
+function aspell_check($aspelldictionaries, $aspellcommand, $tempnam, $lang, $text, $words_skip = null, $ret = false)
 {
     if (is_null($words_skip)) {
         $words_skip = array();
     }
 
     // Convert UTF-8 multi-bytes into decimal character entities.  This is because aspell isn't fully utf8-aware
-    $text = preg_replace_callback('#([\xC0-\xDF][\x80-\xBF])#','_utf8_ord',$text);
-    $text = preg_replace_callback('#([\xE0-\xEF][\x80-\xBF][\x80-\xBF])#','_utf8_ord',$text);
-    $text = preg_replace_callback('#([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])#','_utf8_ord',$text);
+    $text = preg_replace_callback('#([\xC0-\xDF][\x80-\xBF])#', '_utf8_ord', $text);
+    $text = preg_replace_callback('#([\xE0-\xEF][\x80-\xBF][\x80-\xBF])#', '_utf8_ord', $text);
+    $text = preg_replace_callback('#([\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF])#', '_utf8_ord', $text);
 
     if (!$ret) {
         header('Content-Type: text/html; charset=utf-8');
@@ -380,16 +380,16 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
         $textarray = array();
 
         if (is_string($aspellcommand)) {
-            $fd = fopen($tempnam,'wb');
+            $fd = fopen($tempnam, 'wb');
             if ($fd !== false) {
-                $textarray = explode("\n",$text);
-                fwrite($fd,"!\n");
+                $textarray = explode("\n", $text);
+                fwrite($fd, "!\n");
                 foreach ($textarray as $value) {
                     // adding the carat to each line prevents the use of aspell commands within the text...
-                    fwrite($fd,"^$value\n");
+                    fwrite($fd, "^$value\n");
                 }
                 fclose($fd);
-                chmod($tempnam,0777);
+                chmod($tempnam, 0777);
                 //echo file_get_contents($tempnam);
 
                 // next run aspell
@@ -397,7 +397,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
                 //exit($aspellcommand.' 2>&1 > output.log');
                 //echo file_get_contents($tempnam);
                 //exit($aspellcommand);
-                $returnarray = explode("\n",$return);
+                $returnarray = explode("\n", $return);
                 //$returnlines=count($returnarray);
                 //print_r(htmlentities($return));
                 //$textlines=count($textarray);
@@ -406,44 +406,44 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
                 $poscorrect = 0;
                 foreach ($returnarray as $value) {
                     // if there is a correction here, processes it, else move the $textarray pointer to the next line
-                    if (substr($value,0,1) == '&') {
+                    if (substr($value, 0, 1) == '&') {
                         $counter++;
-                        $correction = explode(' ',$value);
+                        $correction = explode(' ', $value);
                         $word = $correction[1];
                         $suggest_count += $correction[2];
-                        $absposition = intval(substr($correction[3],0,-1))-1;
-                        $position = $absposition+$poscorrect;
+                        $absposition = intval(substr($correction[3], 0, -1)) - 1;
+                        $position = $absposition + $poscorrect;
                         //$niceposition=strval($lineindex).','.strval($absposition);
-                        $suggstart = strpos($value,':')+2;
-                        $suggestions = substr($value,$suggstart);
-                        $suggestionarray = explode(', ',$suggestions);
+                        $suggstart = strpos($value, ':') + 2;
+                        $suggestions = substr($value, $suggstart);
+                        $suggestionarray = explode(', ', $suggestions);
 
-                        $results[] = array($word,$suggestionarray);
+                        $results[] = array($word, $suggestionarray);
 
-                        $beforeword = substr($textarray[$lineindex],0,$position);
-                        $afterword = substr($textarray[$lineindex],$position+strlen($word));
+                        $beforeword = substr($textarray[$lineindex], 0, $position);
+                        $afterword = substr($textarray[$lineindex], $position + strlen($word));
                         $textarray[$lineindex] = $beforeword . '<span class="HA-spellcheck-error">' . $word . '</span>' . $afterword;
 
                         $suggestion_list = '';
                         foreach (array_keys($suggestionarray) as $value2) {
                             $suggestion_list .= $value2 . ',';
                         }
-                        $suggestion_list = substr($suggestion_list,0,strlen($suggestion_list)-1);
+                        $suggestion_list = substr($suggestion_list, 0, strlen($suggestion_list) - 1);
                         $varlines .= '"' . trim($word) . '":"' . trim($suggestion_list) . '",';
 
-                        $poscorrect = $poscorrect+41;
-                    } elseif (substr($value,0,1) == '#') { // ?
-                        $correction = explode(' ',$value);
+                        $poscorrect = $poscorrect + 41;
+                    } elseif (substr($value, 0, 1) == '#') { // ?
+                        $correction = explode(' ', $value);
                         $word = $correction[1];
-                        $results[] = array($word,array());
-                        $absposition = $correction[2]-1;
-                        $position = $absposition+$poscorrect;
+                        $results[] = array($word, array());
+                        $absposition = $correction[2] - 1;
+                        $position = $absposition + $poscorrect;
                         //$niceposition=strval($lineindex).','.strval($absposition);
-                        $beforeword = substr($textarray[$lineindex],0,$position);
-                        $afterword = substr($textarray[$lineindex],$position+strlen($word));
+                        $beforeword = substr($textarray[$lineindex], 0, $position);
+                        $afterword = substr($textarray[$lineindex], $position + strlen($word));
                         //$textarray[$lineindex]=$beforeword.$word.$afterword;
                         $textarray[$lineindex] = $beforeword . '<span class="HA-spellcheck-error">' . $word . '</span><span class="HA-spellcheck-suggestions">' . $word . '</span>' . $afterword;
-                        $poscorrect = $poscorrect+88+strlen($word);
+                        $poscorrect = $poscorrect + 88 + strlen($word);
                     } else {
                         //print "Done with line $lineindex, next line...<br><br>";
                         $poscorrect = 0;
@@ -458,22 +458,22 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
             //$len=strlen($text);
 
             // HTML tags vs text
-            $p_fragments = preg_split('#(\<.*\>)|(&.*;)#mU',$text,-1,PREG_SPLIT_DELIM_CAPTURE);
+            $p_fragments = preg_split('#(\<.*\>)|(&.*;)#mU', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
             foreach ($p_fragments as $p_frag) {
-                if ((strlen($p_frag)>0) && ($p_frag[0] != '<') && ($p_frag[0] != '&')) {
+                if ((strlen($p_frag) > 0) && ($p_frag[0] != '<') && ($p_frag[0] != '&')) {
                     // Tokenise words
-                    $fragments = preg_split('#([ \!\?\.,;\n\(\)\[\]\{\}\<\>"])#m',$p_frag,-1,PREG_SPLIT_DELIM_CAPTURE);
+                    $fragments = preg_split('#([ \!\?\.,;\n\(\)\[\]\{\}\<\>"])#m', $p_frag, -1, PREG_SPLIT_DELIM_CAPTURE);
                     foreach ($fragments as $word) {
-                        if (in_array($word,$words_skip)) {
+                        if (in_array($word, $words_skip)) {
                             continue;
                         }
 
-                        if ((preg_match('#[a-zA-Z\'\-]#',$word) != 0) && (!pspell_check($aspellcommand,$word))) {
+                        if ((preg_match('#[a-zA-Z\'\-]#', $word) != 0) && (!pspell_check($aspellcommand, $word))) {
                             $counter++;
 
                             // Handle suggestions
-                            $suggestions2 = pspell_suggest($aspellcommand,$word);
-                            $results[] = array($word,$suggestions2);
+                            $suggestions2 = pspell_suggest($aspellcommand, $word);
+                            $results[] = array($word, $suggestions2);
                             if (count($suggestions2) == 0) {
                                 $textarray[] = '<span class="HA-spellcheck-error">' . $word . '</span>';
                             } else {
@@ -482,7 +482,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
                                 foreach ($suggestions2 as $value) {
                                     $suggestion_list .= $value . ',';
                                 }
-                                $suggestion_list = substr($suggestion_list,0,strlen($suggestion_list)-1);
+                                $suggestion_list = substr($suggestion_list, 0, strlen($suggestion_list) - 1);
                                 $varlines .= '"' . trim($word) . '":"' . trim($suggestion_list) . '",';
 
                                 $textarray[] = '<span class="HA-spellcheck-error">' . trim($word) . '</span>'; // <span class="HA-spellcheck-suggestions">'.trim($word).'</span>
@@ -502,7 +502,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
         $infolines .= '"Total words suggested":"' . strval($suggest_count) . '"';
         //$infolines.=',"Total Lines Checked":"'.strval($returnlines).'"'; Who cares?
         $infolines .= '};';
-        $varlines = substr($varlines,0,strlen($varlines)-1);
+        $varlines = substr($varlines, 0, strlen($varlines) - 1);
         if (!$ret) {
             echo $varlines . '};' . $infolines . '</script>';
         }
@@ -519,7 +519,7 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
         }
 
         if (is_string($aspellcommand)) {
-            $dictionaries = str_replace("\n",",",wrap_exec($aspelldictionaries));
+            $dictionaries = str_replace("\n", ",", wrap_exec($aspelldictionaries));
             if (!$ret) {
                 echo '<div id="HA-spellcheck-dictionaries">' . $dictionaries . '</div>';
             }
@@ -540,44 +540,45 @@ function aspell_check($aspelldictionaries,$aspellcommand,$tempnam,$lang,$text,$w
  * @param  mixed                        aSpell call command
  * @param  PATH                         Temporary file name
  */
-function aspell_save($aspellcommand,$tempnam)
+function aspell_save($aspellcommand, $tempnam)
 {
-    $to_p_dict = isset($_REQUEST['to_p_dict'])?(is_array($_REQUEST['to_p_dict'])?$_REQUEST['to_p_dict']:explode(',',$_REQUEST['to_p_dict'])):array(); // List of words to add to personal dictionary.
-    $to_r_list = isset($_REQUEST['to_r_list'])?(is_array($_REQUEST['to_r_list'])?$_REQUEST['to_r_list']:explode(',',$_REQUEST['to_r_list'])):array(); // List of words to add to replacement list.
+    $to_p_dict = isset($_REQUEST['to_p_dict']) ? (is_array($_REQUEST['to_p_dict']) ? $_REQUEST['to_p_dict'] : explode(',', $_REQUEST['to_p_dict'])) : array(); // List of words to add to personal dictionary.
+    $to_r_list = isset($_REQUEST['to_r_list']) ? (is_array($_REQUEST['to_r_list']) ? $_REQUEST['to_r_list'] : explode(',', $_REQUEST['to_r_list'])) : array(); // List of words to add to replacement list.
     ob_start();
     //print_r($to_r_list);
-    if ((count($to_p_dict)>0) || (count($to_r_list)>0)) {
+    if ((count($to_p_dict) > 0) || (count($to_r_list) > 0)) {
         if (is_string($aspellcommand)) {
-            $fh = fopen($tempnam,'wb');
+            $fh = fopen($tempnam, 'wb');
             if ($fh !== false) {
                 foreach ($to_p_dict as $personal_word) {
                     $cmd = '&' . $personal_word . "\n";
                     //echo $cmd;
-                    fwrite($fh,$cmd,strlen($cmd));
+                    fwrite($fh, $cmd, strlen($cmd));
                 }
 
                 foreach ($to_r_list as $replace_pair) {
                     $cmd = '$$ra ' . $replace_pair[0] . ' , ' . $replace_pair[1] . "\n";
                     //echo $cmd;
-                    fwrite($fh,$cmd,strlen($cmd));
+                    fwrite($fh, $cmd, strlen($cmd));
                 }
                 $cmd = "#\n";
 
                 //echo $cmd;
-                fwrite($fh,$cmd,strlen($cmd));
+                fwrite($fh, $cmd, strlen($cmd));
                 fclose($fh);
             } else {
                 exit("Can't Write");
             }
             //echo $aspellcommand."\n";
-            /*echo */wrap_exec($aspellcommand . ' 2>&1');
+            /*echo */
+            wrap_exec($aspellcommand . ' 2>&1');
         } else {
             foreach ($to_p_dict as $personal_word) {
-                pspell_add_to_personal($aspellcommand,$personal_word);
+                pspell_add_to_personal($aspellcommand, $personal_word);
             }
 
             foreach ($to_r_list as $replace_pair) {
-                pspell_store_replacement($aspellcommand,$replace_pair[0],$replace_pair[1]);
+                pspell_store_replacement($aspellcommand, $replace_pair[0], $replace_pair[1]);
             }
 
             pspell_save_wordlist($aspellcommand);
@@ -593,18 +594,18 @@ function aspell_save($aspellcommand,$tempnam)
  */
 function sl_ocp_tempnam($prefix)
 {
-    $problem_saving = ((str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1') || ((function_exists('get_option')) && (get_option('force_local_temp_dir') == '1')) || ((@strval(ini_get('open_basedir')) != '') && (preg_match('#(^|:|;)/tmp($|:|;|/)#',ini_get('open_basedir')) == 0)));
+    $problem_saving = ((str_replace(array('on', 'true', 'yes'), array('1', '1', '1'), strtolower(ini_get('safe_mode'))) == '1') || ((function_exists('get_option')) && (get_option('force_local_temp_dir') == '1')) || ((@strval(ini_get('open_basedir')) != '') && (preg_match('#(^|:|;)/tmp($|:|;|/)#', ini_get('open_basedir')) == 0)));
     $local_path = sl_get_custom_file_base() . '/safe_mode_temp/';
     $server_path = '/tmp/';
-    $tmp_path = $problem_saving?$local_path:$server_path;
-    if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'),'tempnam') === false)) {
-        $tempnam = tempnam($tmp_path,'tmpfile__' . $prefix);
+    $tmp_path = $problem_saving ? $local_path : $server_path;
+    if ((function_exists('tempnam')) && (strpos(@ini_get('disable_functions'), 'tempnam') === false)) {
+        $tempnam = tempnam($tmp_path, 'tmpfile__' . $prefix);
         if (($tempnam === false) && (!$problem_saving)) {
-            $tempnam = tempnam($local_path,$prefix);
+            $tempnam = tempnam($local_path, $prefix);
         }
     } else {
-        $tempnam = $prefix . strval(mt_rand(0,min(2147483647,mt_getrandmax())));
-        $myfile = fopen($local_path . '/' . $tempnam,'wb');
+        $tempnam = $prefix . strval(mt_rand(0, min(2147483647, mt_getrandmax())));
+        $myfile = fopen($local_path . '/' . $tempnam, 'wb');
         fclose($myfile);
     }
     return $tempnam;

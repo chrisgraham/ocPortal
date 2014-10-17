@@ -23,7 +23,7 @@ function init__make_release()
     get_builds_path();
 
     // Tracking
-    global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY,$MAKE_INSTALLERS__TOTAL_DIRS,$MAKE_INSTALLERS__TOTAL_FILES;
+    global $MAKE_INSTALLERS__FILE_ARRAY, $MAKE_INSTALLERS__DIR_ARRAY, $MAKE_INSTALLERS__TOTAL_DIRS, $MAKE_INSTALLERS__TOTAL_FILES;
     $MAKE_INSTALLERS__FILE_ARRAY = array();
     $MAKE_INSTALLERS__DIR_ARRAY = array();
     $MAKE_INSTALLERS__TOTAL_DIRS = 0;
@@ -32,7 +32,7 @@ function init__make_release()
 
 function make_installers($skip_file_grab = false)
 {
-    global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY,$MAKE_INSTALLERS__TOTAL_DIRS,$MAKE_INSTALLERS__TOTAL_FILES;
+    global $MAKE_INSTALLERS__FILE_ARRAY, $MAKE_INSTALLERS__DIR_ARRAY, $MAKE_INSTALLERS__TOTAL_DIRS, $MAKE_INSTALLERS__TOTAL_FILES;
 
     require_code('files');
 
@@ -47,23 +47,23 @@ function make_installers($skip_file_grab = false)
     // Make necessary directories
     $builds_path = get_builds_path();
     if (!file_exists($builds_path . '/builds/build/')) {
-        @mkdir($builds_path . '/builds/build/',0777) or warn_exit('Could not make temporary build folder');
-        fix_permissions($builds_path . '/builds/build/',0777);
+        @mkdir($builds_path . '/builds/build/', 0777) or warn_exit('Could not make temporary build folder');
+        fix_permissions($builds_path . '/builds/build/', 0777);
     }
     if (!$skip_file_grab) {
         deldir_contents($builds_path . '/builds/build/' . $version_branch . '/');
     }
     if (!file_exists($builds_path . '/builds/build/' . $version_branch . '/')) {
-        mkdir($builds_path . '/builds/build/' . $version_branch . '/',0777) or warn_exit('Could not make branch build folder');
-        fix_permissions($builds_path . '/builds/build/' . $version_branch . '/',0777);
+        mkdir($builds_path . '/builds/build/' . $version_branch . '/', 0777) or warn_exit('Could not make branch build folder');
+        fix_permissions($builds_path . '/builds/build/' . $version_branch . '/', 0777);
     }
     if (!file_exists($builds_path . '/builds/' . $version_dotted . '/')) {
-        mkdir($builds_path . '/builds/' . $version_dotted . '/',0777) or warn_exit('Could not make version build folder');
-        fix_permissions($builds_path . '/builds/' . $version_dotted . '/',0777);
+        mkdir($builds_path . '/builds/' . $version_dotted . '/', 0777) or warn_exit('Could not make version build folder');
+        fix_permissions($builds_path . '/builds/' . $version_dotted . '/', 0777);
     }
 
     if (!$skip_file_grab) {
-        @copy(get_file_base() . '/install.php',$builds_path . '/builds/build/' . $version_branch . '/install.php');
+        @copy(get_file_base() . '/install.php', $builds_path . '/builds/build/' . $version_branch . '/install.php');
         fix_permissions($builds_path . '/builds/build/' . $version_branch . '/install.php');
 
         // Get file data array
@@ -83,10 +83,10 @@ function make_installers($skip_file_grab = false)
     $mszip = $builds_path . '/builds/' . $version_dotted . '/ocportal-' . $version_dotted . '-webpi.zip'; // Aka msappgallery, related to webmatrix
 
     // Flags
-    $make_quick = (get_param_integer('skip_quick',0) == 0);
-    $make_manual = (get_param_integer('skip_manual',0) == 0);
-    $make_bundled = (get_param_integer('skip_bundled',0) == 0);
-    $make_mszip = (get_param_integer('skip_mszip',0) == 0);
+    $make_quick = (get_param_integer('skip_quick', 0) == 0);
+    $make_manual = (get_param_integer('skip_manual', 0) == 0);
+    $make_bundled = (get_param_integer('skip_bundled', 0) == 0);
+    $make_mszip = (get_param_integer('skip_mszip', 0) == 0);
 
     if (function_exists('set_time_limit')) {
         @set_time_limit(0);
@@ -96,14 +96,14 @@ function make_installers($skip_file_grab = false)
     // Build quick installer
     if ($make_quick) {
         // Write out our installer data file
-        $data_file = fopen($builds_path . '/builds/' . $version_dotted . '/data.ocp','wb');
+        $data_file = fopen($builds_path . '/builds/' . $version_dotted . '/data.ocp', 'wb');
         require_code('zip');
         $zip_file_array = array();
         foreach ($MAKE_INSTALLERS__FILE_ARRAY as $filename => $data) {
-            $zip_file_array[] = array('time' => filemtime(get_file_base() . '/' . $filename),'data' => $data,'name' => $filename);
+            $zip_file_array[] = array('time' => filemtime(get_file_base() . '/' . $filename), 'data' => $data, 'name' => $filename);
         }
-        list($data,$offsets,$sizes) = create_zip_file($zip_file_array,false,true);
-        fwrite($data_file,$data);
+        list($data, $offsets, $sizes) = create_zip_file($zip_file_array, false, true);
+        fwrite($data_file, $data);
         fclose($data_file);
         fix_permissions($builds_path . '/builds/' . $version_dotted . '/data.ocp');
         $archive_size = filesize($builds_path . '/builds/' . $version_dotted . '/data.ocp');
@@ -125,7 +125,7 @@ function make_installers($skip_file_grab = false)
 
         // Build install.php, which has to have all our data.ocp file offsets put into it (data.ocp is an uncompressed zip, but the quick installer cheats - it can't truly read arbitrary zips)
         $code = file_get_contents(get_file_base() . '/install.php');
-        $auto_installer = fopen($builds_path . '/builds/' . $version_dotted . '/install.php','wb');
+        $auto_installer = fopen($builds_path . '/builds/' . $version_dotted . '/install.php', 'wb');
         $installer_start = "<?php
             /* QUICK INSTALLER CODE starts */
 
@@ -174,14 +174,14 @@ function make_installers($skip_file_grab = false)
             {
                     return {$file_count};
             }";
-        $installer_start = preg_replace('#^\t{3}#m','',$installer_start); // Format it correctly
-        fwrite($auto_installer,$installer_start);
+        $installer_start = preg_replace('#^\t{3}#m', '', $installer_start); // Format it correctly
+        fwrite($auto_installer, $installer_start);
         global $MAKE_INSTALLERS__DIR_ARRAY;
         foreach ($MAKE_INSTALLERS__DIR_ARRAY as $dir) {
-            fwrite($auto_installer,'$DIR_ARRAY[]=\'' . $dir . '\';' . "\n");
+            fwrite($auto_installer, '$DIR_ARRAY[]=\'' . $dir . '\';' . "\n");
         }
-        fwrite($auto_installer,'/* QUICK INSTALLER CODE ends */ ?' . '>');
-        fwrite($auto_installer,$code);
+        fwrite($auto_installer, '/* QUICK INSTALLER CODE ends */ ?' . '>');
+        fwrite($auto_installer, $code);
         fclose($auto_installer);
         fix_permissions($builds_path . '/builds/' . $version_dotted . '/install.php');
 
@@ -194,7 +194,7 @@ function make_installers($skip_file_grab = false)
         chdir(get_file_base() . '/data_custom/builds');
         $cmd = 'zip -r -9 ' . escapeshellarg($quick_zip) . ' ' . escapeshellarg('readme.txt');
         $output2 .= $cmd . ':' . "\n" . shell_exec($cmd);
-        $out .= do_build_zip_output($quick_zip,$output2);
+        $out .= do_build_zip_output($quick_zip, $output2);
 
         chdir(get_file_base());
     }
@@ -211,7 +211,7 @@ function make_installers($skip_file_grab = false)
         chdir($builds_path . '/builds/build/' . $version_branch);
         $cmd = 'zip -r -9 ' . escapeshellarg($manual_zip) . ' *';
         $output2 = shell_exec($cmd);
-        $out .= do_build_zip_output($manual_zip,$output2);
+        $out .= do_build_zip_output($manual_zip, $output2);
 
         chdir(get_file_base());
     }
@@ -222,9 +222,9 @@ function make_installers($skip_file_grab = false)
         @unlink($bundled . '.gz');
 
         // Copy some files we need
-        copy(get_file_base() . '/install.sql',$builds_path . '/builds/build/' . $version_branch . '/install.sql');
+        copy(get_file_base() . '/install.sql', $builds_path . '/builds/build/' . $version_branch . '/install.sql');
         fix_permissions($builds_path . '/builds/build/' . $version_branch . '/install.sql');
-        copy(get_file_base() . '/_config.php.template',$builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
+        copy(get_file_base() . '/_config.php.template', $builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
         fix_permissions($builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
 
         // Do the main work
@@ -232,13 +232,13 @@ function make_installers($skip_file_grab = false)
         $cmd = 'tar -cvf ' . escapeshellarg($bundled) . ' * --mode=a+X';
         $output2 = '';
         $cmd_result = shell_exec($cmd);
-        if ($cmd_result !== NULL) {
+        if ($cmd_result !== null) {
             $output2 .= $cmd_result;
         }
         chdir(get_file_base() . '/data_custom/builds');
         $cmd = 'tar -rvf ' . escapeshellarg($bundled) . ' readme.txt --mode=a+X';
         $cmd_result = shell_exec($cmd);
-        if ($cmd_result !== NULL) {
+        if ($cmd_result !== null) {
             $output2 .= $cmd_result;
         }
         //$out.=do_build_zip_output($v,$output2);  Don't mention, as will get auto-deleted after gzipping anyway
@@ -246,7 +246,7 @@ function make_installers($skip_file_grab = false)
         $cmd = 'gzip -n ' . escapeshellarg($bundled);
         shell_exec($cmd);
         @unlink($bundled);
-        $out .= do_build_zip_output($bundled . '.gz',$output2);
+        $out .= do_build_zip_output($bundled . '.gz', $output2);
 
         // Remove those files we copied
         unlink($builds_path . '/builds/build/' . $version_branch . '/install.sql');
@@ -263,42 +263,42 @@ function make_installers($skip_file_grab = false)
         }
 
         // Move files out temporarily
-        rename($builds_path . '/builds/build/' . $version_branch . '/_config.php',$builds_path . '/builds/build/_config.php');
-        rename($builds_path . '/builds/build/' . $version_branch . '/install.php',$builds_path . '/builds/build/install.php');
+        rename($builds_path . '/builds/build/' . $version_branch . '/_config.php', $builds_path . '/builds/build/_config.php');
+        rename($builds_path . '/builds/build/' . $version_branch . '/install.php', $builds_path . '/builds/build/install.php');
 
         // Put temporary files in main folder
-        copy(get_file_base() . '/_config.php.template',$builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
+        copy(get_file_base() . '/_config.php.template', $builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
         fix_permissions($builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
 
         // Copy some stuff we need
-        for ($i = 1;$i <= 4;$i++) {
-            copy(get_file_base() . '/install' . strval($i) . '.sql',$builds_path . '/builds/build/install' . strval($i) . '.sql');
+        for ($i = 1; $i <= 4; $i++) {
+            copy(get_file_base() . '/install' . strval($i) . '.sql', $builds_path . '/builds/build/install' . strval($i) . '.sql');
             fix_permissions($builds_path . '/builds/build/install' . strval($i) . '.sql');
         }
-        copy(get_file_base() . '/user.sql',$builds_path . '/builds/build/user.sql');
+        copy(get_file_base() . '/user.sql', $builds_path . '/builds/build/user.sql');
         fix_permissions($builds_path . '/builds/build/user.sql');
-        copy(get_file_base() . '/postinstall.sql',$builds_path . '/builds/build/postinstall.sql');
+        copy(get_file_base() . '/postinstall.sql', $builds_path . '/builds/build/postinstall.sql');
         fix_permissions($builds_path . '/builds/build/postinstall.sql');
-        copy(get_file_base() . '/manifest.xml',$builds_path . '/builds/build/manifest.xml');
+        copy(get_file_base() . '/manifest.xml', $builds_path . '/builds/build/manifest.xml');
         fix_permissions($builds_path . '/builds/build/manifest.xml');
-        copy(get_file_base() . '/parameters.xml',$builds_path . '/builds/build/parameters.xml');
+        copy(get_file_base() . '/parameters.xml', $builds_path . '/builds/build/parameters.xml');
         fix_permissions($builds_path . '/builds/build/parameters.xml');
 
         // Temporary renaming
-        rename($builds_path . '/builds/build/' . $version_branch,$builds_path . '/builds/build/ocportal');
+        rename($builds_path . '/builds/build/' . $version_branch, $builds_path . '/builds/build/ocportal');
 
         // Do the main work
         chdir($builds_path . '/builds/build');
         $cmd = 'zip -r -9 -v ' . escapeshellarg($mszip) . ' ocportal manifest.xml parameters.xml install1.sql install2.sql install3.sql install4.sql user.sql postinstall.sql';
         $output2 = shell_exec($cmd);
-        $out .= do_build_zip_output($mszip,$output2);
+        $out .= do_build_zip_output($mszip, $output2);
 
         // Undo temporary renaming
-        rename($builds_path . '/builds/build/ocportal',$builds_path . '/builds/build/' . $version_branch);
+        rename($builds_path . '/builds/build/ocportal', $builds_path . '/builds/build/' . $version_branch);
 
         // Move back files moved out temporarily
-        rename($builds_path . '/builds/build/_config.php',$builds_path . '/builds/build/' . $version_branch . '/_config.php');
-        rename($builds_path . '/builds/build/install.php',$builds_path . '/builds/build/' . $version_branch . '/install.php');
+        rename($builds_path . '/builds/build/_config.php', $builds_path . '/builds/build/' . $version_branch . '/_config.php');
+        rename($builds_path . '/builds/build/install.php', $builds_path . '/builds/build/' . $version_branch . '/install.php');
 
         // Remove temporary files from main folder
         unlink($builds_path . '/builds/build/' . $version_branch . '/_config.php.template');
@@ -332,7 +332,7 @@ function make_installers($skip_file_grab = false)
         </ul>';
 
     // To stop ocProducts-PHP complaining about non-synched files
-    global $_CREATED_FILES,$_MODIFIED_FILES;
+    global $_CREATED_FILES, $_MODIFIED_FILES;
     $_CREATED_FILES = array();
     $_MODIFIED_FILES = array();
 
@@ -343,35 +343,35 @@ function get_builds_path()
 {
     $builds_path = get_file_base() . '/exports';
     if (!file_exists($builds_path . '/builds')) {
-        mkdir($builds_path . '/builds',0777) or warn_exit('Could not make master build folder');
-        fix_permissions($builds_path . '/builds',0777);
+        mkdir($builds_path . '/builds', 0777) or warn_exit('Could not make master build folder');
+        fix_permissions($builds_path . '/builds', 0777);
     }
     return $builds_path;
 }
 
-function copy_r($path,$dest)
+function copy_r($path, $dest)
 {
     if (is_dir($path)) {
-        @mkdir($dest,0777);
-        fix_permissions($dest,0777);
+        @mkdir($dest, 0777);
+        fix_permissions($dest, 0777);
         $objects = scandir($path);
-        if (count($objects)>0) {
+        if (count($objects) > 0) {
             foreach ($objects as $file) {
                 if (($file == '.') || ($file == '..')) {
                     continue;
                 }
 
                 if (is_dir($path . '/' . $file)) {
-                    copy_r($path . '/' . $file,$dest . '/' . $file);
+                    copy_r($path . '/' . $file, $dest . '/' . $file);
                 } else {
-                    copy($path . '/' . $file,$dest . '/' . $file);
+                    copy($path . '/' . $file, $dest . '/' . $file);
                     fix_permissions($dest . '/' . $file);
                 }
             }
         }
         return true;
     } elseif (is_file($path)) {
-        return copy($path,$dest);
+        return copy($path, $dest);
     } else {
         return false;
     }
@@ -391,7 +391,7 @@ function do_build_directory_output($path)
     return '<li>Directory "' . escape_html($path) . '" traversed.</li>';
 }
 
-function do_build_zip_output($file,$new_output)
+function do_build_zip_output($file, $new_output)
 {
     $version_dotted = get_version_dotted();
 
@@ -400,15 +400,14 @@ function do_build_zip_output($file,$new_output)
         <div class="zip_surround">
         <h2>Compiling ZIP file "<a href="' . escape_html($file) . '" title="Download the file.">' . escape_html($builds_path . $version_dotted . '/' . $file) . '</a>"</h2>
         <p>' . nl2br(trim(escape_html($new_output))) . '</p>
-        </div>'
-    ;
+        </div>';
 }
 
-function populate_build_files_array($dir = '',$pretend_dir = '')
+function populate_build_files_array($dir = '', $pretend_dir = '')
 {
     require_code('files');
 
-    global $MAKE_INSTALLERS__FILE_ARRAY,$MAKE_INSTALLERS__DIR_ARRAY;
+    global $MAKE_INSTALLERS__FILE_ARRAY, $MAKE_INSTALLERS__DIR_ARRAY;
 
     $builds_path = get_builds_path();
 
@@ -427,16 +426,16 @@ function populate_build_files_array($dir = '',$pretend_dir = '')
     while (($file = readdir($dh)) !== false) {
         $is_dir = is_dir(get_file_base() . '/' . $dir . $file);
 
-        if (should_ignore_file($pretend_dir . $file,IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE,0)) {
+        if (should_ignore_file($pretend_dir . $file, IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_THEMES | IGNORE_NON_EN_SCATTERED_LANGS | IGNORE_BUNDLED_UNSHIPPED_VOLATILE, 0)) {
             continue;
         }
 
         if ($is_dir) {
             $num_files = count($MAKE_INSTALLERS__FILE_ARRAY);
             $MAKE_INSTALLERS__DIR_ARRAY[] = $pretend_dir . $file;
-            @mkdir($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file,0777);
-            fix_permissions($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file,0777);
-            $_out = populate_build_files_array($dir . $file . '/',$pretend_dir . $file . '/');
+            @mkdir($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file, 0777);
+            fix_permissions($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file, 0777);
+            $_out = populate_build_files_array($dir . $file . '/', $pretend_dir . $file . '/');
             if ($num_files == count($MAKE_INSTALLERS__FILE_ARRAY)) { // Empty, effectively (maybe was from a non-bundled addon) - don't use it
                 array_pop($MAKE_INSTALLERS__DIR_ARRAY);
                 rmdir($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file);
@@ -461,23 +460,21 @@ function populate_build_files_array($dir = '',$pretend_dir = '')
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = "<?php return; ?" . ">\n";
             } // So that code can't be executed
             elseif ($pretend_dir . $file == 'data_custom/execute_temp.php') {
-                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s',"function execute_temp()\n\n{\n}\n\n#",file_get_contents(get_file_base() . '/' . $dir . $file));
+                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s', "function execute_temp()\n\n{\n}\n\n#", file_get_contents(get_file_base() . '/' . $dir . $file));
             }
             // NB: 'data_custom/breadcrumbs.xml' and 'data_custom/fields.xml' are also volatile for users, but in git we're not allowed to mess with these without commit/release intent.
 
             // Update time of version in version.php
             elseif ($pretend_dir . $file == 'sources/version.php') {
-                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('/\d{10}/',strval(time()),file_get_contents(get_file_base() . '/' . $dir . $file),1);
-            }
-
-            // Copy file as-is
+                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('/\d{10}/', strval(time()), file_get_contents(get_file_base() . '/' . $dir . $file), 1);
+            } // Copy file as-is
             else {
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = file_get_contents(get_file_base() . '/' . $dir . $file);
             }
 
             // Write the file out
-            $tmp = fopen($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file,'wb');
-            fwrite($tmp,$MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file]);
+            $tmp = fopen($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file, 'wb');
+            fwrite($tmp, $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file]);
             fclose($tmp);
             fix_permissions($builds_path . '/builds/build/' . $version_branch . '/' . $pretend_dir . $file);
         }
@@ -506,16 +503,16 @@ function make_files_manifest() // Builds files.dat, the ocPortal file manifest (
         }
 
         if ($file == 'sources/version.php') {
-            $contents = preg_replace('/\d{10}/','',$contents);
+            $contents = preg_replace('/\d{10}/', '', $contents);
         } // Not interested in differences in file time
 
-        $files[$file] = array(sprintf('%u',crc32(preg_replace('#[\r\n\t ]#','',$contents))));
+        $files[$file] = array(sprintf('%u', crc32(preg_replace('#[\r\n\t ]#', '', $contents))));
     }
 
     $file_manifest = serialize($files);
 
-    $myfile = fopen(get_file_base() . '/data/files.dat','wb');
-    fwrite($myfile,$file_manifest);
+    $myfile = fopen(get_file_base() . '/data/files.dat', 'wb');
+    fwrite($myfile, $file_manifest);
     fclose($myfile);
     fix_permissions(get_file_base() . '/data/files.dat');
 
@@ -525,8 +522,8 @@ function make_files_manifest() // Builds files.dat, the ocPortal file manifest (
     require_code('version2');
     $version_branch = get_version_branch();
     $builds_path = get_builds_path();
-    $tmp = fopen($builds_path . '/builds/build/' . $version_branch . '/data/files.dat','wb');
-    fwrite($tmp,$file_manifest);
+    $tmp = fopen($builds_path . '/builds/build/' . $version_branch . '/data/files.dat', 'wb');
+    fwrite($tmp, $file_manifest);
     fclose($tmp);
     fix_permissions($builds_path . '/builds/build/' . $version_branch . '/data/files.dat');
 }

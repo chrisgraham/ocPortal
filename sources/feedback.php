@@ -24,12 +24,12 @@
 function init__feedback()
 {
     if (!defined('MAX_LIKES_TO_SHOW')) {
-        define('MAX_LIKES_TO_SHOW',20);
+        define('MAX_LIKES_TO_SHOW', 20);
     }
 
     if (!defined('RATING_TYPE_star_choice')) {
-        define('RATING_TYPE_star_choice',0);
-        define('RATING_TYPE_like_dislike',1);
+        define('RATING_TYPE_star_choice', 0);
+        define('RATING_TYPE_like_dislike', 1);
     }
 
     global $RATINGS_STRUCTURE;
@@ -50,19 +50,19 @@ function init__feedback()
  * @param  ID_TEXT                      The old category ID, which we may have overridden the comment forum against
  * @return ID_TEXT                      The comment topic forum
  */
-function process_overridden_comment_forum($feedback_code,$id,$category_id,$old_category_id)
+function process_overridden_comment_forum($feedback_code, $id, $category_id, $old_category_id)
 {
-    $forum_id = find_overridden_comment_forum($feedback_code,$category_id);
+    $forum_id = find_overridden_comment_forum($feedback_code, $category_id);
 
     if (($category_id != $old_category_id) && (get_forum_type() == 'ocf')) {
         // Move if needed
-        $old_forum_id = find_overridden_comment_forum($feedback_code,$old_category_id);
-        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id,$feedback_code . '_' . $id);
+        $old_forum_id = find_overridden_comment_forum($feedback_code, $old_category_id);
+        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($old_forum_id, $feedback_code . '_' . $id);
         if (!is_null($topic_id)) {
             $_forum_id = $GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_id);
             $_old_forum_id = $GLOBALS['FORUM_DRIVER']->forum_id_from_name($old_forum_id);
             require_code('ocf_topics_action2');
-            ocf_move_topics($_old_forum_id,$_forum_id,array($topic_id),false);
+            ocf_move_topics($_old_forum_id, $_forum_id, array($topic_id), false);
         }
     }
 
@@ -76,7 +76,7 @@ function process_overridden_comment_forum($feedback_code,$id,$category_id,$old_c
  * @param  ?ID_TEXT                     The category ID, which we may have overridden the comment forum against (NULL: no category ID to override against)
  * @return ID_TEXT                      The comment topic forum (may be integer as string, or string forum name - so use forum_id_from_name on the result)
  */
-function find_overridden_comment_forum($feedback_code,$category_id = null)
+function find_overridden_comment_forum($feedback_code, $category_id = null)
 {
     if (!is_null($category_id)) {
         $comment_topic_forum = get_value('comment_forum__' . $feedback_code . '__' . $category_id);
@@ -101,20 +101,20 @@ function find_overridden_comment_forum($feedback_code,$category_id = null)
  * @param  ID_TEXT                      Content ID
  * @return array                        A tuple: Content title (NULL: unknown), Submitter (NULL: unknown), URL (for use within current browser session), URL (for use in emails / sharing), Content meta aware info array
  */
-function get_details_behind_feedback_code($content_type,$content_id)
+function get_details_behind_feedback_code($content_type, $content_id)
 {
     require_code('content');
 
-    $content_type = convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+    $content_type = convert_ocportal_type_codes('feedback_type_code', $content_type, 'content_type');
     if ($content_type != '') {
         require_code('content');
         $cma_ob = get_content_object($content_type);
         $info = $cma_ob->info();
-        list($content_title,$submitter_id,$cma_info,,$content_url,$content_url_email_safe) = content_get_details($content_type,$content_id);
-        return array($content_title,$submitter_id,$content_url,$content_url_email_safe,$cma_info);
+        list($content_title, $submitter_id, $cma_info, , $content_url, $content_url_email_safe) = content_get_details($content_type, $content_id);
+        return array($content_title, $submitter_id, $content_url, $content_url_email_safe, $cma_info);
     }
 
-    return array(null,null,null,null,null);
+    return array(null, null, null, null, null);
 }
 
 /**
@@ -134,42 +134,42 @@ function get_details_behind_feedback_code($content_type,$content_id)
  * @param  ?TIME                        Time of comment topic (NULL: now)
  * @return array                        Tuple: Rating details, Comment details, Trackback details
  */
-function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comments,$allow_trackbacks,$validated,$submitter,$content_url,$content_title,$forum,$time = null)
+function embed_feedback_systems($page_name, $content_id, $allow_rating, $allow_comments, $allow_trackbacks, $validated, $submitter, $content_url, $content_title, $forum, $time = null)
 {
     // Sign up original poster for notifications
     if (get_forum_type() == 'ocf') {
-        $auto_monitor_contrib_content = $GLOBALS['OCF_DRIVER']->get_member_row_field($submitter,'m_auto_monitor_contrib_content');
+        $auto_monitor_contrib_content = $GLOBALS['OCF_DRIVER']->get_member_row_field($submitter, 'm_auto_monitor_contrib_content');
         if ($auto_monitor_contrib_content == 1) {
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notifications_enabled','l_setting',array(
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('notifications_enabled', 'l_setting', array(
                 'l_member_id' => $submitter,
                 'l_notification_code' => 'comment_posted',
                 'l_code_category' => $page_name . '_' . $content_id,
             ));
             if (is_null($test)) {
                 require_code('notifications');
-                enable_notifications('comment_posted',$page_name . '_' . $content_id,$submitter);
+                enable_notifications('comment_posted', $page_name . '_' . $content_id, $submitter);
             }
         }
     }
 
-    actualise_rating($allow_rating == 1,$page_name,$content_id,$content_url,$content_title);
-    if ((!is_null(post_param('title',null))) || ($validated == 1)) {
-        actualise_post_comment($allow_comments >= 1,$page_name,$content_id,$content_url,$content_title,$forum,false,null,false,false,false,null,null,$time);
+    actualise_rating($allow_rating == 1, $page_name, $content_id, $content_url, $content_title);
+    if ((!is_null(post_param('title', null))) || ($validated == 1)) {
+        actualise_post_comment($allow_comments >= 1, $page_name, $content_id, $content_url, $content_title, $forum, false, null, false, false, false, null, null, $time);
     }
-    $rating_details = get_rating_box($content_url,$content_title,$page_name,$content_id,$allow_rating == 1,$submitter);
-    $comment_details = get_comments($page_name,$allow_comments == 1,$content_id,false,$forum,null,null,false,null,$submitter,$allow_comments == 2);
-    $trackback_details = get_trackbacks($page_name,$content_id,$allow_trackbacks == 1);
+    $rating_details = get_rating_box($content_url, $content_title, $page_name, $content_id, $allow_rating == 1, $submitter);
+    $comment_details = get_comments($page_name, $allow_comments == 1, $content_id, false, $forum, null, null, false, null, $submitter, $allow_comments == 2);
+    $trackback_details = get_trackbacks($page_name, $content_id, $allow_trackbacks == 1);
 
     if (is_object($content_url)) {
         $content_url = $content_url->evaluate();
     }
 
-    $serialized_options = serialize(array($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time));
+    $serialized_options = serialize(array($page_name, $content_id, $allow_comments, $submitter, $content_url, $content_title, $forum, $time));
     require_code('crypt');
-    $hash = ratchet_hash($serialized_options,get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
+    $hash = ratchet_hash($serialized_options, get_site_salt()); // A little security, to ensure $serialized_options is not tampered with
 
     // AJAX support
-    $comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
+    $comment_details->attach(do_template('COMMENT_AJAX_HANDLER', array(
         '_GUID' => 'da533e0f637e4c90ca7ef5a9a23f3203',
         'OPTIONS' => $serialized_options,
         'HASH' => $hash,
@@ -177,7 +177,7 @@ function embed_feedback_systems($page_name,$content_id,$allow_rating,$allow_comm
         'IS_THREADED' => true,
     )));
 
-    return array($rating_details,$comment_details,$trackback_details);
+    return array($rating_details, $comment_details, $trackback_details);
 }
 
 /**
@@ -194,24 +194,24 @@ function post_comment_script()
     if (!is_array($_options)) {
         warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
     }
-    list($page_name,$content_id,$allow_comments,$submitter,$content_url,$content_title,$forum,$time) = $_options;
+    list($page_name, $content_id, $allow_comments, $submitter, $content_url, $content_title, $forum, $time) = $_options;
 
     // Check security
     $hash = either_param('hash');
     require_code('crypt');
-    if (ratchet_hash($options,get_site_salt()) != $hash) {
+    if (ratchet_hash($options, get_site_salt()) != $hash) {
         header('Content-Type: text/plain; charset=' . get_charset());
         exit();
     }
 
     // Post comment
-    actualise_post_comment($allow_comments >= 1,$page_name,$content_id,$content_url,$content_title,$forum,false,null,false,false,false,null,null,$time);
+    actualise_post_comment($allow_comments >= 1, $page_name, $content_id, $content_url, $content_title, $forum, false, null, false, false, false, null, null, $time);
 
     // Get new comments state
-    $comment_details = get_comments($page_name,$allow_comments == 1,$content_id,false,$forum,null,null,false,null,$submitter,$allow_comments == 2);
+    $comment_details = get_comments($page_name, $allow_comments == 1, $content_id, false, $forum, null, null, false, null, $submitter, $allow_comments == 2);
 
     // AJAX support
-    $comment_details->attach(do_template('COMMENT_AJAX_HANDLER',array(
+    $comment_details->attach(do_template('COMMENT_AJAX_HANDLER', array(
         '_GUID' => 'da533e0f637e4c90ca7ef5a9a23f3203',
         'OPTIONS' => $options,
         'HASH' => $hash,
@@ -235,10 +235,10 @@ function post_comment_script()
  * @param  ?MEMBER                      Content owner (NULL: none)
  * @return tempcode                     Tempcode for complete rating box
  */
-function get_rating_box($content_url,$content_title,$content_type,$content_id,$allow_rating,$submitter = null)
+function get_rating_box($content_url, $content_title, $content_type, $content_id, $allow_rating, $submitter = null)
 {
     if ($allow_rating) {
-        return display_rating($content_url,$content_title,$content_type,$content_id,'RATING_BOX',$submitter);
+        return display_rating($content_url, $content_title, $content_type, $content_id, 'RATING_BOX', $submitter);
     }
 
     return new ocp_tempcode();
@@ -255,15 +255,15 @@ function get_rating_box($content_url,$content_title,$content_type,$content_id,$a
  * @param  ?MEMBER                      Content owner (NULL: none)
  * @return tempcode                     Tempcode for complete trackback box
  */
-function display_rating($content_url,$content_title,$content_type,$content_id,$display_tpl = 'RATING_INLINE_STATIC',$submitter = null)
+function display_rating($content_url, $content_title, $content_type, $content_id, $display_tpl = 'RATING_INLINE_STATIC', $submitter = null)
 {
-    $rating_data = get_rating_simple_array($content_url,$content_title,$content_type,$content_id,'RATING_FORM',$submitter);
+    $rating_data = get_rating_simple_array($content_url, $content_title, $content_type, $content_id, 'RATING_FORM', $submitter);
 
     if (is_null($rating_data)) {
         return new ocp_tempcode();
     }
 
-    return do_template($display_tpl,$rating_data);
+    return do_template($display_tpl, $rating_data);
 }
 
 /**
@@ -277,7 +277,7 @@ function display_rating($content_url,$content_title,$content_type,$content_id,$d
  * @param  ?MEMBER                      Content owner (NULL: none)
  * @return ?array                       Current rating information (ready to be passed into a template). RATING is the rating (out of 10), NUM_RATINGS is the number of ratings so far, RATING_FORM is the tempcode of the rating box (NULL: rating disabled)
  */
-function get_rating_simple_array($content_url,$content_title,$content_type,$content_id,$form_tpl = 'RATING_FORM',$submitter = null)
+function get_rating_simple_array($content_url, $content_title, $content_type, $content_id, $form_tpl = 'RATING_FORM', $submitter = null)
 {
     if (get_option('is_on_rating') == '1') {
         global $RATING_DETAILS_CACHE;
@@ -290,18 +290,18 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
         // Work out structure first
         global $RATINGS_STRUCTURE;
         $all_rating_criteria = array();
-        if (array_key_exists($content_type,$RATINGS_STRUCTURE)) {
+        if (array_key_exists($content_type, $RATINGS_STRUCTURE)) {
             $likes = ($RATINGS_STRUCTURE[$content_type][0] == RATING_TYPE_like_dislike);
             foreach ($RATINGS_STRUCTURE[$content_type][1] as $r => $t) {
                 $rating_for_type = $content_type;
                 if ($r != '') {
                     $rating_for_type .= '_' . $r;
                 }
-                $all_rating_criteria[$rating_for_type] = array('TITLE' => $t,'TYPE' => $r,'RATING' => '0');
+                $all_rating_criteria[$rating_for_type] = array('TITLE' => $t, 'TYPE' => $r, 'RATING' => '0');
             }
         } else {
             $likes = (get_option('likes') == '1');
-            $all_rating_criteria[$content_type] = array('TITLE' => '','TYPE' => '','NUM_RATINGS' => '0','RATING' => '0');
+            $all_rating_criteria[$content_type] = array('TITLE' => '', 'TYPE' => '', 'NUM_RATINGS' => '0', 'RATING' => '0');
         }
 
         // Fill in structure
@@ -314,18 +314,18 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
                 $rating_for_type .= '_' . $rating_criteria['TYPE'];
             }
 
-            $_num_ratings = $GLOBALS['SITE_DB']->query_select('rating',array('COUNT(*) AS cnt','SUM(rating) AS compound_rating'),array('rating_for_type' => $rating_for_type,'rating_for_id' => $content_id),'',1);
+            $_num_ratings = $GLOBALS['SITE_DB']->query_select('rating', array('COUNT(*) AS cnt', 'SUM(rating) AS compound_rating'), array('rating_for_type' => $rating_for_type, 'rating_for_id' => $content_id), '', 1);
             $num_ratings = $_num_ratings[0]['cnt'];
-            if ($num_ratings>0) {
+            if ($num_ratings > 0) {
                 $rating = $_num_ratings[0]['compound_rating'];
-                $overall_num_ratings = max($overall_num_ratings,$num_ratings);
+                $overall_num_ratings = max($overall_num_ratings, $num_ratings);
 
-                if (($num_ratings<MAX_LIKES_TO_SHOW) && ($likes)) { // Show likes
+                if (($num_ratings < MAX_LIKES_TO_SHOW) && ($likes)) { // Show likes
                     if (is_null($liked_by)) {
                         $liked_by = array();
                     }
-                    if (count($liked_by)<MAX_LIKES_TO_SHOW) {
-                        $_liked_by = $GLOBALS['SITE_DB']->query_select('rating',array('rating_member'),array('rating_for_type' => $rating_for_type,'rating_for_id' => $content_id,'rating' => 10));
+                    if (count($liked_by) < MAX_LIKES_TO_SHOW) {
+                        $_liked_by = $GLOBALS['SITE_DB']->query_select('rating', array('rating_member'), array('rating_for_type' => $rating_for_type, 'rating_for_id' => $content_id, 'rating' => 10));
                         foreach ($_liked_by as $l) {
                             $username = $GLOBALS['FORUM_DRIVER']->get_username($l['rating_member']);
                             if (!is_null($username)) {
@@ -341,13 +341,13 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
                     }
                 }
 
-                $calculated_rating = intval(round($rating/floatval($num_ratings)));
+                $calculated_rating = intval(round($rating / floatval($num_ratings)));
                 $overall_rating += $calculated_rating;
 
-                $all_rating_criteria[$i] = array('NUM_RATINGS' => integer_format($num_ratings),'RATING' => strval($calculated_rating))+$all_rating_criteria[$i];
+                $all_rating_criteria[$i] = array('NUM_RATINGS' => integer_format($num_ratings), 'RATING' => strval($calculated_rating)) + $all_rating_criteria[$i];
 
                 $extra_meta_data = array();
-                $extra_meta_data['rating' . (($rating_criteria['TYPE'] == '')?'':('_' . $rating_criteria['TYPE']))] = strval($calculated_rating);
+                $extra_meta_data['rating' . (($rating_criteria['TYPE'] == '') ? '' : ('_' . $rating_criteria['TYPE']))] = strval($calculated_rating);
                 set_extra_request_metadata($extra_meta_data);
 
                 $has_ratings = true;
@@ -359,13 +359,13 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
         $rate_url = new ocp_tempcode();
         if ((get_option('allow_own_rate') == '0') && ($submitter === get_member()) && (!is_guest())) {
             $error = do_lang_tempcode('RATE_DENIED_OWN');
-        } elseif (!has_privilege(get_member(),'rate',get_page_name())) {
+        } elseif (!has_privilege(get_member(), 'rate', get_page_name())) {
             $error = do_lang_tempcode('RATE_DENIED');
-        } elseif (already_rated(array_keys($all_rating_criteria),$content_id)) {
+        } elseif (already_rated(array_keys($all_rating_criteria), $content_id)) {
             $error = do_lang_tempcode('NORATE');
         } else {
             static $self_url = null;
-            if ($self_url === NULL) {
+            if ($self_url === null) {
                 $self_url = get_self_url();
             }
             $rate_url = $self_url;
@@ -373,29 +373,30 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
 
         // Templating
         $tpl_params = array(
-            '_GUID' => 'x28e21cdbc38a3037d083f619bb311af',
-            'CONTENT_URL' => $content_url,
-            'CONTENT_TITLE' => $content_title,
-            'ERROR' => $error,
-            'CONTENT_TYPE' => $content_type,
-            'ID' => $content_id,
-            'URL' => $rate_url,
-            'ALL_RATING_CRITERIA' => $all_rating_criteria,
-            'OVERALL_NUM_RATINGS' => integer_format($overall_num_ratings),
-            'OVERALL_RATING' => strval(intval($overall_rating/floatval(count($all_rating_criteria)))),
-            'HAS_RATINGS' => $has_ratings,
-            'SIMPLISTIC' => (count($all_rating_criteria) == 1),
-            'LIKES' => $likes,
-            'LIKED_BY' => $liked_by,
-        )+$all_rating_criteria[$content_type]/*so can assume single rating criteria if want and reference that directly*/;
-        $rating_form = do_template($form_tpl,$tpl_params);
-        $ret = $tpl_params+array(
-            'RATING_FORM' => $rating_form,
-        );
+                '_GUID' => 'x28e21cdbc38a3037d083f619bb311af',
+                'CONTENT_URL' => $content_url,
+                'CONTENT_TITLE' => $content_title,
+                'ERROR' => $error,
+                'CONTENT_TYPE' => $content_type,
+                'ID' => $content_id,
+                'URL' => $rate_url,
+                'ALL_RATING_CRITERIA' => $all_rating_criteria,
+                'OVERALL_NUM_RATINGS' => integer_format($overall_num_ratings),
+                'OVERALL_RATING' => strval(intval($overall_rating / floatval(count($all_rating_criteria)))),
+                'HAS_RATINGS' => $has_ratings,
+                'SIMPLISTIC' => (count($all_rating_criteria) == 1),
+                'LIKES' => $likes,
+                'LIKED_BY' => $liked_by,
+            ) + $all_rating_criteria[$content_type]/*so can assume single rating criteria if want and reference that directly*/
+        ;
+        $rating_form = do_template($form_tpl, $tpl_params);
+        $ret = $tpl_params + array(
+                'RATING_FORM' => $rating_form,
+            );
         $RATING_DETAILS_CACHE[$content_type][$content_id][$form_tpl] = $ret;
         return $ret;
     }
-    return NULL;
+    return null;
 }
 
 /**
@@ -405,42 +406,42 @@ function get_rating_simple_array($content_url,$content_title,$content_type,$cont
  * @param  ID_TEXT                      The ID of the type that this rating is for
  * @return boolean                      Whether the resource has already been rated
  */
-function already_rated($rating_for_types,$content_id)
+function already_rated($rating_for_types, $content_id)
 {
     static $not = null;
-    if ($not === NULL) {
-        $not = ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test',0) == 1);
+    if ($not === null) {
+        $not = ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) && (get_param_integer('keep_rating_test', 0) == 1);
     }
     if ($not) {
         return false;
     }
 
     static $cache = array();
-    $cache_key = serialize(array($rating_for_types,$content_id));
+    $cache_key = serialize(array($rating_for_types, $content_id));
     if (isset($cache[$cache_key])) {
         return $cache[$cache_key];
     }
 
-    $more = (!is_guest())?' OR rating_member=' . strval(get_member()):'';
+    $more = (!is_guest()) ? ' OR rating_member=' . strval(get_member()) : '';
     $for_types = '';
     foreach ($rating_for_types as $rating_for_type) {
         if ($for_types != '') {
             $for_types .= ' OR ';
         }
-        $for_types .= db_string_equal_to('rating_for_type',$rating_for_type);
+        $for_types .= db_string_equal_to('rating_for_type', $rating_for_type);
     }
-    $query = 'SELECT COUNT(*) FROM ' . get_table_prefix() . 'rating WHERE (' . $for_types . ') AND ' . db_string_equal_to('rating_for_id',$content_id);
+    $query = 'SELECT COUNT(*) FROM ' . get_table_prefix() . 'rating WHERE (' . $for_types . ') AND ' . db_string_equal_to('rating_for_id', $content_id);
     $query .= ' AND (';
     static $ip_restrict = null;
-    if ($ip_restrict === NULL) {
+    if ($ip_restrict === null) {
         if ((!$GLOBALS['IS_ACTUALLY_ADMIN']) && (get_option('vote_member_ip_restrict') == '1')) {
-            $ip_restrict = db_string_equal_to('rating_ip',get_ip_address());
+            $ip_restrict = db_string_equal_to('rating_ip', get_ip_address());
         } else {
             $ip_restrict = '1=0';
         }
     }
     $query .= $ip_restrict . $more . ')';
-    $has_rated = $GLOBALS['SITE_DB']->query_value_if_there($query,false,true);
+    $has_rated = $GLOBALS['SITE_DB']->query_value_if_there($query, false, true);
 
     $ret = ($has_rated >= count($rating_for_types));
     $cache[$cache_key] = $ret;
@@ -457,7 +458,7 @@ function already_rated($rating_for_types,$content_id)
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know, but not first post so not important)
  */
-function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$content_title)
+function actualise_rating($allow_rating, $content_type, $content_id, $content_url, $content_title)
 {
     if ((get_option('is_on_rating') == '0') || (!$allow_rating)) {
         return;
@@ -465,7 +466,7 @@ function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$
 
     global $RATINGS_STRUCTURE;
     $all_rating_criteria = array();
-    if (array_key_exists($content_type,$RATINGS_STRUCTURE)) {
+    if (array_key_exists($content_type, $RATINGS_STRUCTURE)) {
         $all_rating_criteria = array_keys($RATINGS_STRUCTURE[$content_type][1]);
     } else {
         $all_rating_criteria[] = '';
@@ -473,18 +474,18 @@ function actualise_rating($allow_rating,$content_type,$content_id,$content_url,$
 
     foreach ($all_rating_criteria as $type) {
         // Has there actually been any rating?
-        $rating = post_param_integer('rating__' . $content_type . '__' . $type . '__' . $content_id,null);
+        $rating = post_param_integer('rating__' . $content_type . '__' . $type . '__' . $content_id, null);
         if (is_null($rating)) {
             return;
         }
 
-        actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
+        actualise_specific_rating($rating, get_page_name(), get_member(), $content_type, $type, $content_id, $content_url, $content_title);
     }
 
     actualise_give_rating_points();
 
     // Ok, so just thank 'em
-    attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'),'inform');
+    attach_message(do_lang_tempcode('THANKYOU_FOR_RATING'), 'inform');
 }
 
 /**
@@ -495,8 +496,8 @@ function actualise_give_rating_points()
     if ((!is_guest()) && (addon_installed('points'))) {
         require_code('points');
         $_count = point_info(get_member());
-        $count = array_key_exists('points_gained_rating',$_count)?$_count['points_gained_rating']:0;
-        $GLOBALS['FORUM_DRIVER']->set_custom_field(get_member(),'points_gained_rating',$count+1);
+        $count = array_key_exists('points_gained_rating', $_count) ? $_count['points_gained_rating'] : 0;
+        $GLOBALS['FORUM_DRIVER']->set_custom_field(get_member(), 'points_gained_rating', $count + 1);
     }
 }
 
@@ -513,30 +514,30 @@ function actualise_give_rating_points()
  * @param  ?string                      The title to where the commenting will pass back to (to put into the comment topic header) (NULL: don't know)
  * @param  mixed                        The URL to where the commenting will pass back to (to put into the comment topic header) (URLPATH or Tempcode)
  */
-function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$type,$content_id,$content_url,$content_title)
+function actualise_specific_rating($rating, $page_name, $member_id, $content_type, $type, $content_id, $content_url, $content_title)
 {
     if (!is_null($rating)) {
-        if (($rating>10) || ($rating<1)) {
+        if (($rating > 10) || ($rating < 1)) {
             log_hack_attack_and_exit('VOTE_CHEAT');
         }
     }
 
-    $rating_for_type = $content_type . (($type == '')?'':('_' . $type));
+    $rating_for_type = $content_type . (($type == '') ? '' : ('_' . $type));
 
-    if (!has_privilege($member_id,'rate',$page_name)) {
+    if (!has_privilege($member_id, 'rate', $page_name)) {
         return;
     }
-    $already_rated = already_rated(array($rating_for_type),$content_id);
+    $already_rated = already_rated(array($rating_for_type), $content_id);
     $past_rating = mixed();
     if (!is_null($rating)) {
         if ($already_rated) {
-            $past_rating = $GLOBALS['SITE_DB']->query_select_value_if_there('rating','rating',array('rating_for_type' => $rating_for_type,'rating_for_id' => $content_id,'rating_member' => $member_id,'rating_ip' => get_ip_address()));
+            $past_rating = $GLOBALS['SITE_DB']->query_select_value_if_there('rating', 'rating', array('rating_for_type' => $rating_for_type, 'rating_for_id' => $content_id, 'rating_member' => $member_id, 'rating_ip' => get_ip_address()));
             // Delete, in preparation for re-rating
-            $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => $rating_for_type,'rating_for_id' => $content_id,'rating_member' => $member_id,'rating_ip' => get_ip_address()));
+            $GLOBALS['SITE_DB']->query_delete('rating', array('rating_for_type' => $rating_for_type, 'rating_for_id' => $content_id, 'rating_member' => $member_id, 'rating_ip' => get_ip_address()));
         }
     }
 
-    list($_content_title,$submitter,,$safe_content_url,$cma_info) = get_details_behind_feedback_code($content_type,$content_id);
+    list($_content_title, $submitter, , $safe_content_url, $cma_info) = get_details_behind_feedback_code($content_type, $content_id);
     if (is_null($content_title)) {
         $content_title = $_content_title;
     }
@@ -545,9 +546,9 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
     }
 
     if (!is_null($rating)) {
-        $GLOBALS['SITE_DB']->query_insert('rating',array('rating_for_type' => $rating_for_type,'rating_for_id' => $content_id,'rating_member' => $member_id,'rating_ip' => get_ip_address(),'rating_time' => time(),'rating' => $rating));
+        $GLOBALS['SITE_DB']->query_insert('rating', array('rating_for_type' => $rating_for_type, 'rating_for_id' => $content_id, 'rating_member' => $member_id, 'rating_ip' => get_ip_address(), 'rating_time' => time(), 'rating' => $rating));
     } else {
-        $GLOBALS['SITE_DB']->query_delete('rating',array('rating_for_type' => $rating_for_type,'rating_for_id' => $content_id,'rating_member' => $member_id,'rating_ip' => get_ip_address()));
+        $GLOBALS['SITE_DB']->query_delete('rating', array('rating_for_type' => $rating_for_type, 'rating_for_id' => $content_id, 'rating_member' => $member_id, 'rating_ip' => get_ip_address()));
     }
 
     // Top rating / liked
@@ -557,10 +558,10 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
 
             // Special case. Would prefer not to hard-code, but important for usability
             if (($content_type == 'post') && ($content_title == '') && (get_forum_type() == 'ocf')) {
-                $content_title = do_lang('POST_IN',$GLOBALS['FORUM_DB']->query_select_value('f_topics','t_cache_first_title',array('id' => $GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id' => intval($content_id))))));
+                $content_title = do_lang('POST_IN', $GLOBALS['FORUM_DB']->query_select_value('f_topics', 't_cache_first_title', array('id' => $GLOBALS['FORUM_DB']->query_select_value('f_posts', 'p_topic_id', array('id' => intval($content_id))))));
             }
 
-            $content_type = convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+            $content_type = convert_ocportal_type_codes('feedback_type_code', $content_type, 'content_type');
 
             if ((!is_null($submitter)) && (!is_guest($submitter))) {
                 // Give points
@@ -568,56 +569,56 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
                     if ((addon_installed('points')) && (!$already_rated)) {
                         require_code('points2');
                         require_lang('points');
-                        system_gift_transfer(do_lang('CONTENT_LIKED'),intval(get_option('points_if_liked')),$submitter);
+                        system_gift_transfer(do_lang('CONTENT_LIKED'), intval(get_option('points_if_liked')), $submitter);
                     }
                 }
 
                 // Notification
                 require_code('notifications');
-                $displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
+                $displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true);
                 $username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
-                $subject = do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT',get_site_name(),($content_title == '')?ocp_mb_strtolower($content_type_title):$content_title,array($displayname,$username));
+                $subject = do_lang('CONTENT_LIKED_NOTIFICATION_MAIL_SUBJECT', get_site_name(), ($content_title == '') ? ocp_mb_strtolower($content_type_title) : $content_title, array($displayname, $username));
                 $rendered = '';
                 if ($content_type != '') {
                     require_code('content');
                     $cma_ob = get_content_object($content_type);
-                    $cma_content_row = content_get_row($content_id,$cma_ob->info());
+                    $cma_content_row = content_get_row($content_id, $cma_ob->info());
                     if (!is_null($cma_content_row)) {
-                        $rendered = preg_replace('#keep_session=\w*#','filtered=1',static_evaluate_tempcode($cma_ob->run($cma_content_row,'_SEARCH',true,true)));
+                        $rendered = preg_replace('#keep_session=\w*#', 'filtered=1', static_evaluate_tempcode($cma_ob->run($cma_content_row, '_SEARCH', true, true)));
                     }
                 }
-                $mail = do_lang('CONTENT_LIKED_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape(($content_title == '')?ocp_mb_strtolower($content_type_title):$content_title),array(comcode_escape(is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url),$rendered,comcode_escape($displayname),comcode_escape($username)));
-                dispatch_notification('like',null,$subject,$mail,array($submitter));
+                $mail = do_lang('CONTENT_LIKED_NOTIFICATION_MAIL', comcode_escape(get_site_name()), comcode_escape(($content_title == '') ? ocp_mb_strtolower($content_type_title) : $content_title), array(comcode_escape(is_object($safe_content_url) ? $safe_content_url->evaluate() : $safe_content_url), $rendered, comcode_escape($displayname), comcode_escape($username)));
+                dispatch_notification('like', null, $subject, $mail, array($submitter));
             }
 
             $privacy_ok = true;
-            $real_content_type = convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+            $real_content_type = convert_ocportal_type_codes('feedback_type_code', $content_type, 'content_type');
             if ((addon_installed('content_privacy')) && ($real_content_type != '')) {
                 require_code('content_privacy');
-                $privacy_ok = has_privacy_access($content_type,$content_id,$GLOBALS['FORUM_DRIVER']->get_guest_id());
+                $privacy_ok = has_privacy_access($content_type, $content_id, $GLOBALS['FORUM_DRIVER']->get_guest_id());
             }
             if ($privacy_ok) {
                 // Put on activity wall / whatever
                 require_code('users2');
-                if (may_view_content_behind(get_modal_user(),$real_content_type,$content_id,'feedback_type_code')) {
+                if (may_view_content_behind(get_modal_user(), $real_content_type, $content_id, 'feedback_type_code')) {
                     if (is_null($submitter)) {
                         $submitter = $GLOBALS['FORUM_DRIVER']->get_guest_id();
                     }
 
-                    $activity_type = ((is_null($submitter)) || (is_guest($submitter)))?'_ACTIVITY_LIKES':'ACTIVITY_LIKES';
-                    $_safe_content_url = is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url;
+                    $activity_type = ((is_null($submitter)) || (is_guest($submitter))) ? '_ACTIVITY_LIKES' : 'ACTIVITY_LIKES';
+                    $_safe_content_url = is_object($safe_content_url) ? $safe_content_url->evaluate() : $safe_content_url;
                     if ($_safe_content_url == '') {
-                        $_safe_content_url = preg_replace('#keep_session=\w*#','filtered=1',is_object($content_url)?$content_url->evaluate():$content_url);
+                        $_safe_content_url = preg_replace('#keep_session=\w*#', 'filtered=1', is_object($content_url) ? $content_url->evaluate() : $content_url);
                     }
                     $content_page_link = url_to_page_link($_safe_content_url);
                     require_code('activities');
                     if ($content_title == '') {
-                        syndicate_described_activity($activity_type . '_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,null,false,$submitter);
+                        syndicate_described_activity($activity_type . '_UNTITLED', ocp_mb_strtolower($content_type_title), $content_type_title, '', $content_page_link, '', '', convert_ocportal_type_codes('feedback_type_code', $content_type, 'addon_name'), 1, null, false, $submitter);
                     } else {
                         if ($content_type_title == $content_type) {
                             $activity_type .= '_UNTYPED';
                         }
-                        syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,null,false,$submitter);
+                        syndicate_described_activity($activity_type, $content_title, ocp_mb_strtolower($content_type_title), $content_type_title, $content_page_link, '', '', convert_ocportal_type_codes('feedback_type_code', $content_type, 'addon_name'), 1, null, false, $submitter);
                     }
                 }
             }
@@ -645,7 +646,7 @@ function actualise_specific_rating($rating,$page_name,$member_id,$content_type,$
  * @param  ?integer                     Maximum to load (NULL: default)
  * @return tempcode                     The tempcode for the comment topic
  */
-function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no_comments = false,$forum = null,$post_warning = null,$_comments = null,$explicit_allow = false,$reverse = null,$highlight_by_user = null,$allow_reviews = false,$num_to_show_limit = null)
+function get_comments($content_type, $allow_comments, $content_id, $invisible_if_no_comments = false, $forum = null, $post_warning = null, $_comments = null, $explicit_allow = false, $reverse = null, $highlight_by_user = null, $allow_reviews = false, $num_to_show_limit = null)
 {
     if (((get_option('is_on_comments') == '1') && (get_forum_type() != 'none') && ((get_forum_type() != 'ocf') || (addon_installed('ocf_forum'))) && (($allow_reviews) || ($allow_comments))) || ($explicit_allow)) {
         if (is_null($forum)) {
@@ -655,7 +656,7 @@ function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no
         require_code('topics');
         $renderer = new OCP_Topic();
 
-        return $renderer->render_as_comment_topic($content_type,$content_id,$allow_comments,$invisible_if_no_comments,$forum,$post_warning,$_comments,$explicit_allow,$reverse,$highlight_by_user,$allow_reviews,$num_to_show_limit);
+        return $renderer->render_as_comment_topic($content_type, $content_id, $allow_comments, $invisible_if_no_comments, $forum, $post_warning, $_comments, $explicit_allow, $reverse, $highlight_by_user, $allow_reviews, $num_to_show_limit);
     }
 
     return new ocp_tempcode(); // No franchise to render comments
@@ -666,11 +667,11 @@ function get_comments($content_type,$allow_comments,$content_id,$invisible_if_no
  *
  * @param  string                       Potentially complex topic title
  * @return string                       Simplified topic title
-*/
+ */
 function extract_topic_identifier($full_text)
 {
     $matches = array();
-    if (preg_match('#: \#(.*)$#',$full_text,$matches) != 0) {
+    if (preg_match('#: \#(.*)$#', $full_text, $matches) != 0) {
         return $matches[1];
     }
     return $full_text;
@@ -695,14 +696,14 @@ function extract_topic_identifier($full_text)
  * @param  ?TIME                        Time of comment topic (NULL: now)
  * @return boolean                      Whether a hidden post has been made
  */
-function actualise_post_comment($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum = null,$avoid_captcha = false,$validated = null,$explicit_allow = false,$no_success_message = false,$private = false,$post_title = null,$post = null,$time = null)
+function actualise_post_comment($allow_comments, $content_type, $content_id, $content_url, $content_title, $forum = null, $avoid_captcha = false, $validated = null, $explicit_allow = false, $no_success_message = false, $private = false, $post_title = null, $post = null, $time = null)
 {
     if (!$explicit_allow) {
         if ((get_option('is_on_comments') == '0') || (!$allow_comments)) {
             return false;
         }
 
-        if (!has_privilege(get_member(),'comment',get_page_name())) {
+        if (!has_privilege(get_member(), 'comment', get_page_name())) {
             return false;
         }
     }
@@ -714,21 +715,21 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
     $forum_tie = (get_option('is_on_strong_forum_tie') == '1');
 
     if (addon_installed('captcha')) {
-        if (((array_key_exists('post',$_POST)) && ($_POST['post'] != '')) && (!$avoid_captcha)) {
+        if (((array_key_exists('post', $_POST)) && ($_POST['post'] != '')) && (!$avoid_captcha)) {
             require_code('captcha');
             enforce_captcha();
         }
     }
 
     if (is_null($post_title)) {
-        $post_title = post_param('title',null);
+        $post_title = post_param('title', null);
     }
     if ((is_null($post_title)) && (!$forum_tie)) {
         return false;
     }
 
     if (is_null($post)) {
-        $post = post_param('post',null);
+        $post = post_param('post', null);
     }
     if (!is_null($post_title)) {
         if (($post == '') && ($post_title !== '')) {
@@ -737,16 +738,16 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
                 $post_title = '';
             }
             if ($post == '') {
-                warn_exit(do_lang_tempcode('NO_PARAMETER_SENT','post'));
+                warn_exit(do_lang_tempcode('NO_PARAMETER_SENT', 'post'));
             }
         }
     }
 
-    $email = trim(post_param('email',''));
+    $email = trim(post_param('email', ''));
     if ($email != '') {
-        $body = '> ' . str_replace("\n","\n" . '> ',$post);
-        if (substr($body,-2) == '> ') {
-            $body = substr($body,0,strlen($body)-2);
+        $body = '> ' . str_replace("\n", "\n" . '> ', $post);
+        if (substr($body, -2) == '> ') {
+            $body = substr($body, 0, strlen($body) - 2);
         }
         if (get_page_name() != 'tickets') {
             $post .= '{+START,IF,{$IS_ADMIN}}';
@@ -763,16 +764,16 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
         $forum = get_option('comments_forum_name');
     }
 
-    $content_url_flat = (is_object($content_url)?$content_url->evaluate():$content_url);
+    $content_url_flat = (is_object($content_url) ? $content_url->evaluate() : $content_url);
 
-    $_parent_id = post_param('parent_id','');
-    $parent_id = ($_parent_id == '')?null:intval($_parent_id);
+    $_parent_id = post_param('parent_id', '');
+    $parent_id = ($_parent_id == '') ? null : intval($_parent_id);
 
-    list(,$submitter,,$safe_content_url,$cma_info) = get_details_behind_feedback_code($content_type,$content_id);
+    list(, $submitter, , $safe_content_url, $cma_info) = get_details_behind_feedback_code($content_type, $content_id);
 
-    $poster_name_if_guest = post_param('poster_name_if_guest','');
-    list($topic_id,$is_hidden) = $GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
-        // Define scope
+    $poster_name_if_guest = post_param('poster_name_if_guest', '');
+    list($topic_id, $is_hidden) = $GLOBALS['FORUM_DRIVER']->make_post_forum_topic(
+    // Define scope
         $forum,
         $content_type . '_' . $content_id,
 
@@ -790,15 +791,15 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
         $time,
         null,
         $validated,
-        $explicit_allow?1:null,
+        $explicit_allow ? 1 : null,
         $explicit_allow,
         $poster_name_if_guest,
         $parent_id,
         false,
 
         // Do not send notifications to someone also getting one defined by the following
-        ((!$private) && ($post != ''))?'comment_posted':null,
-        ((!$private) && ($post != ''))?($content_type . '_' . $content_id):null,
+        ((!$private) && ($post != '')) ? 'comment_posted' : null,
+        ((!$private) && ($post != '')) ? ($content_type . '_' . $content_id) : null,
 
         null, // current time
         $submitter
@@ -814,7 +815,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
         if ((get_forum_type() == 'ocf') && (!is_null($GLOBALS['LAST_POST_ID']))) {
             $extra_review_ratings = array();
             global $REVIEWS_STRUCTURE;
-            if (array_key_exists($content_type,$REVIEWS_STRUCTURE)) {
+            if (array_key_exists($content_type, $REVIEWS_STRUCTURE)) {
                 $reviews_rating_criteria = $REVIEWS_STRUCTURE[$content_type];
             } else {
                 $reviews_rating_criteria[] = '';
@@ -822,14 +823,14 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
             foreach ($reviews_rating_criteria as $rating_type) {
                 // Has there actually been any rating?
-                $rating = post_param_integer('review_rating__' . fix_id($rating_type),null);
+                $rating = post_param_integer('review_rating__' . fix_id($rating_type), null);
 
                 if (!is_null($rating)) {
-                    if (($rating>10) || ($rating<1)) {
+                    if (($rating > 10) || ($rating < 1)) {
                         log_hack_attack_and_exit('VOTE_CHEAT');
                     }
 
-                    $GLOBALS['SITE_DB']->query_insert('review_supplement',array(
+                    $GLOBALS['SITE_DB']->query_insert('review_supplement', array(
                         'r_topic_id' => $GLOBALS['LAST_TOPIC_ID'],
                         'r_post_id' => $GLOBALS['LAST_POST_ID'],
                         'r_rating_type' => $rating_type,
@@ -843,7 +844,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
     }
 
     if ((!$private) && ($post != '')) {
-        $content_type = convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+        $content_type = convert_ocportal_type_codes('feedback_type_code', $content_type, 'content_type');
 
         $content_type_title = $content_type;
         if ((!is_null($cma_info)) && (isset($cma_info['content_type_label']))) {
@@ -852,55 +853,55 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
         // Notification
         require_code('notifications');
-        $displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
+        $displayname = $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true);
         $username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
-        $subject = do_lang('NEW_COMMENT_SUBJECT',get_site_name(),($content_title == '')?ocp_mb_strtolower($content_type_title):$content_title,array($post_title,$displayname,$username),get_site_default_lang());
+        $subject = do_lang('NEW_COMMENT_SUBJECT', get_site_name(), ($content_title == '') ? ocp_mb_strtolower($content_type_title) : $content_title, array($post_title, $displayname, $username), get_site_default_lang());
         $username = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
-        $message_raw = do_lang('NEW_COMMENT_BODY',comcode_escape(get_site_name()),comcode_escape(($content_title == '')?ocp_mb_strtolower($content_type_title):$content_title),array($post_title,post_param('post'),comcode_escape($content_url_flat),comcode_escape($displayname),strval(get_member()),comcode_escape($username)),get_site_default_lang());
+        $message_raw = do_lang('NEW_COMMENT_BODY', comcode_escape(get_site_name()), comcode_escape(($content_title == '') ? ocp_mb_strtolower($content_type_title) : $content_title), array($post_title, post_param('post'), comcode_escape($content_url_flat), comcode_escape($displayname), strval(get_member()), comcode_escape($username)), get_site_default_lang());
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            $privacy_limits = privacy_limits_for($content_type,$content_id);
+            $privacy_limits = privacy_limits_for($content_type, $content_id);
         } else {
             $privacy_limits = array();
         }
-        dispatch_notification('comment_posted',$content_type . '_' . $content_id,$subject,$message_raw,$privacy_limits);
+        dispatch_notification('comment_posted', $content_type . '_' . $content_id, $subject, $message_raw, $privacy_limits);
 
         // Is the user gonna automatically enable notifications for this?
         if (get_forum_type() == 'ocf') {
-            $auto_monitor_contrib_content = $GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(),'m_auto_monitor_contrib_content');
+            $auto_monitor_contrib_content = $GLOBALS['OCF_DRIVER']->get_member_row_field(get_member(), 'm_auto_monitor_contrib_content');
             if ($auto_monitor_contrib_content == 1) {
-                enable_notifications('comment_posted',$content_type . '_' . $content_id);
+                enable_notifications('comment_posted', $content_type . '_' . $content_id);
             }
         }
 
         $privacy_ok = true;
-        $real_content_type = convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+        $real_content_type = convert_ocportal_type_codes('feedback_type_code', $content_type, 'content_type');
         if ((addon_installed('content_privacy')) && ($real_content_type != '')) {
             require_code('content_privacy');
-            $privacy_ok = has_privacy_access($content_type,$content_id,$GLOBALS['FORUM_DRIVER']->get_guest_id());
+            $privacy_ok = has_privacy_access($content_type, $content_id, $GLOBALS['FORUM_DRIVER']->get_guest_id());
         }
         if ($privacy_ok) {
             // Activity
-            $real_content_type = convert_ocportal_type_codes('feedback_type_code',$content_type,'content_type');
+            $real_content_type = convert_ocportal_type_codes('feedback_type_code', $content_type, 'content_type');
             require_code('users2');
-            if (may_view_content_behind(get_modal_user(),$real_content_type,$content_id,'feedback_type_code')) {
+            if (may_view_content_behind(get_modal_user(), $real_content_type, $content_id, 'feedback_type_code')) {
                 if (is_null($submitter)) {
                     $submitter = $GLOBALS['FORUM_DRIVER']->get_guest_id();
                 }
-                $activity_type = ((is_null($submitter)) || (is_guest($submitter)))?'_ADDED_COMMENT_ON':'ADDED_COMMENT_ON';
-                $_safe_content_url = is_object($safe_content_url)?$safe_content_url->evaluate():$safe_content_url;
+                $activity_type = ((is_null($submitter)) || (is_guest($submitter))) ? '_ADDED_COMMENT_ON' : 'ADDED_COMMENT_ON';
+                $_safe_content_url = is_object($safe_content_url) ? $safe_content_url->evaluate() : $safe_content_url;
                 if ($_safe_content_url == '') {
-                    $_safe_content_url = preg_replace('#keep_session=\w*#','filtered=1',is_object($content_url)?$content_url->evaluate():$content_url);
+                    $_safe_content_url = preg_replace('#keep_session=\w*#', 'filtered=1', is_object($content_url) ? $content_url->evaluate() : $content_url);
                 }
                 $content_page_link = url_to_page_link($_safe_content_url);
                 require_code('activities');
                 if ($content_title == '') {
-                    syndicate_described_activity($activity_type . '_UNTITLED',ocp_mb_strtolower($content_type_title),$content_type_title,'',$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,null,false,$submitter);
+                    syndicate_described_activity($activity_type . '_UNTITLED', ocp_mb_strtolower($content_type_title), $content_type_title, '', $content_page_link, '', '', convert_ocportal_type_codes('feedback_type_code', $content_type, 'addon_name'), 1, null, false, $submitter);
                 } else {
                     if ($content_type_title == $content_type) {
                         $activity_type .= '_UNTYPED';
                     }
-                    syndicate_described_activity($activity_type,$content_title,ocp_mb_strtolower($content_type_title),$content_type_title,$content_page_link,'','',convert_ocportal_type_codes('feedback_type_code',$content_type,'addon_name'),1,null,false,$submitter);
+                    syndicate_described_activity($activity_type, $content_title, ocp_mb_strtolower($content_type_title), $content_type_title, $content_page_link, '', '', convert_ocportal_type_codes('feedback_type_code', $content_type, 'addon_name'), 1, null, false, $submitter);
                 }
             }
         }
@@ -908,7 +909,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
 
     if (($post != '') && ($forum_tie) && (!$no_success_message)) {
         require_code('site2');
-        assign_refresh($GLOBALS['FORUM_DRIVER']->topic_url($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum,$content_type . '_' . $content_id),$forum,true),0.0);
+        assign_refresh($GLOBALS['FORUM_DRIVER']->topic_url($GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum, $content_type . '_' . $content_id), $forum, true), 0.0);
     }
 
     if (($post != '') && (!$no_success_message)) {
@@ -929,7 +930,7 @@ function actualise_post_comment($allow_comments,$content_type,$content_id,$conte
  * @param  ?string                      The name of the forum to use (NULL: default comment forum)
  * @param  ?AUTO_LINK                   ID of spacer post (NULL: unknown)
  */
-function update_spacer_post($allow_comments,$content_type,$content_id,$content_url,$content_title,$forum = null,$post_id = null)
+function update_spacer_post($allow_comments, $content_type, $content_id, $content_url, $content_title, $forum = null, $post_id = null)
 {
     if ((get_option('is_on_comments') == '0') || (!$allow_comments)) {
         return;
@@ -938,7 +939,7 @@ function update_spacer_post($allow_comments,$content_type,$content_id,$content_u
         return;
     }
 
-    $home_link = is_null($content_title)?new ocp_tempcode():hyperlink($content_url,escape_html($content_title));
+    $home_link = is_null($content_title) ? new ocp_tempcode() : hyperlink($content_url, escape_html($content_title));
 
     if (is_null($forum)) {
         $forum = get_option('comments_forum_name');
@@ -955,26 +956,26 @@ function update_spacer_post($allow_comments,$content_type,$content_id,$content_u
     $content_title = strip_comcode($content_title);
 
     if (is_null($post_id)) {
-        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum_id,$content_type . '_' . $content_id);
+        $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum_id, $content_type . '_' . $content_id);
         if (is_null($topic_id)) {
             return;
         }
-        $post_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts','MIN(id)',array('p_topic_id' => $topic_id));
+        $post_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_posts', 'MIN(id)', array('p_topic_id' => $topic_id));
         if (is_null($post_id)) {
             return;
         }
     } else {
-        $topic_id = $GLOBALS['FORUM_DB']->query_select_value('f_posts','p_topic_id',array('id' => $post_id));
+        $topic_id = $GLOBALS['FORUM_DB']->query_select_value('f_posts', 'p_topic_id', array('id' => $post_id));
     }
 
-    $spacer_title = is_null($content_title)?($content_type . '_' . $content_id):($content_title . ' (#' . $content_type . '_' . $content_id . ')');
-    $spacer_post = '[semihtml]' . do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()) . '[/semihtml]';
+    $spacer_title = is_null($content_title) ? ($content_type . '_' . $content_id) : ($content_title . ' (#' . $content_type . '_' . $content_id . ')');
+    $spacer_post = '[semihtml]' . do_lang('SPACER_POST', $home_link->evaluate(), '', '', get_site_default_lang()) . '[/semihtml]';
 
     if (get_forum_type() == 'ocf') {
         require_code('ocf_posts_action3');
-        ocf_edit_post($post_id,1,is_null($content_title)?$spacer_title:$content_title,$spacer_post,0,0,null,false,false,'',false);
+        ocf_edit_post($post_id, 1, is_null($content_title) ? $spacer_title : $content_title, $spacer_post, 0, 0, null, false, false, '', false);
         require_code('ocf_topics_action2');
-        ocf_edit_topic($topic_id,do_lang('COMMENT') . ': #' . $content_type . '_' . $content_id,null,null,null,null,null,null,'',null,$home_link->evaluate(),false);
+        ocf_edit_topic($topic_id, do_lang('COMMENT') . ': #' . $content_type . '_' . $content_id, null, null, null, null, null, null, '', null, $home_link->evaluate(), false);
     }
 }
 
@@ -987,7 +988,7 @@ function update_spacer_post($allow_comments,$content_type,$content_id,$content_u
  * @param  ID_TEXT                      The type of details being fetched (currently: blank or XML)
  * @return tempcode                     Tempcode for complete trackback box
  */
-function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
+function get_trackbacks($content_type, $content_id, $allow_trackback, $type = '')
 {
     if (($type != '') && ($type != 'xml')) {
         $type = '';
@@ -996,7 +997,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
     if ((get_option('is_on_trackbacks') == '1') && ($allow_trackback)) {
         require_lang('trackbacks');
 
-        $trackbacks = $GLOBALS['SITE_DB']->query_select('trackbacks',array('*'),array('trackback_for_type' => $content_type,'trackback_for_id' => $content_id),'ORDER BY trackback_time DESC',300);
+        $trackbacks = $GLOBALS['SITE_DB']->query_select('trackbacks', array('*'), array('trackback_for_type' => $content_type, 'trackback_for_id' => $content_id), 'ORDER BY trackback_time DESC', 300);
 
         $content = new ocp_tempcode();
         $items = new ocp_tempcode();
@@ -1009,7 +1010,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
 
         foreach ($trackbacks as $value) {
             if ($type == '') {
-                $trackback_rendered = do_template('TRACKBACK',array(
+                $trackback_rendered = do_template('TRACKBACK', array(
                     '_GUID' => '128e21cdbc38a3037d083f619bb311ae',
                     'ID' => strval($value['id']),
                     'TIME_RAW' => strval($value['trackback_time']),
@@ -1021,7 +1022,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
                 ));
                 $content->attach($trackback_rendered);
             } else {
-                $trackback_rendered_xml = do_template('TRACKBACK_XML',array(
+                $trackback_rendered_xml = do_template('TRACKBACK_XML', array(
                     '_GUID' => 'a3fa8ab9f0e58bf2ad88b0980c186245',
                     'TITLE' => $value['trackback_title'],
                     'LINK' => $value['trackback_url'],
@@ -1031,8 +1032,8 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
             }
         }
 
-        if ((count($trackbacks)<1) && ($type == 'xml')) {
-            $trackback_xml_error = do_template('TRACKBACK_XML_ERROR',array(
+        if ((count($trackbacks) < 1) && ($type == 'xml')) {
+            $trackback_xml_error = do_template('TRACKBACK_XML_ERROR', array(
                 '_GUID' => '945e2fcb510816caf323ba3704209430',
                 'TRACKBACK_ERROR' => do_lang_tempcode('NO_TRACKBACKS'),
             ));
@@ -1040,7 +1041,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
         }
 
         if ($type == '') {
-            $output = do_template('TRACKBACK_WRAPPER',array(
+            $output = do_template('TRACKBACK_WRAPPER', array(
                 '_GUID' => '1bc2c42a54fdf4b0a10e8e1ea45f6e4f',
                 'TRACKBACKS' => $content,
                 'TRACKBACK_PAGE' => $content_type,
@@ -1048,7 +1049,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
                 'TRACKBACK_TITLE' => $CURRENT_SCREEN_TITLE,
             ));
         } else {
-            $trackback_xml = do_template('TRACKBACK_XML_LISTING',array(
+            $trackback_xml = do_template('TRACKBACK_XML_LISTING', array(
                 '_GUID' => '3bff402f15395f4648a2b5af33de8285',
                 'ITEMS' => $items,
                 'LINK_PAGE' => $content_type,
@@ -1072,7 +1073,7 @@ function get_trackbacks($content_type,$content_id,$allow_trackback,$type = '')
  * @param  ID_TEXT                      The ID of the type that this trackback is for
  * @return boolean                      Whether trackbacks are on
  */
-function actualise_post_trackback($allow_trackbacks,$content_type,$content_id)
+function actualise_post_trackback($allow_trackbacks, $content_type, $content_id)
 {
     if ((get_option('is_on_trackbacks') == '0') || (!$allow_trackbacks)) {
         return false;
@@ -1081,15 +1082,15 @@ function actualise_post_trackback($allow_trackbacks,$content_type,$content_id)
     require_code('antispam');
     inject_action_spamcheck();
 
-    $url = either_param('url',null);
+    $url = either_param('url', null);
     if (is_null($url)) {
         return false;
     }
-    $title = either_param('title',$url);
-    $excerpt = either_param('excerpt','');
-    $name = either_param('blog_name',$url);
+    $title = either_param('title', $url);
+    $excerpt = either_param('excerpt', '');
+    $name = either_param('blog_name', $url);
 
-    $GLOBALS['SITE_DB']->query_insert('trackbacks',array('trackback_for_type' => $content_type,'trackback_for_id' => $content_id,'trackback_ip' => get_ip_address(),'trackback_time' => time(),'trackback_url' => $url,'trackback_title' => $title,'trackback_excerpt' => $excerpt,'trackback_name' => $name));
+    $GLOBALS['SITE_DB']->query_insert('trackbacks', array('trackback_for_type' => $content_type, 'trackback_for_id' => $content_id, 'trackback_ip' => get_ip_address(), 'trackback_time' => time(), 'trackback_url' => $url, 'trackback_title' => $title, 'trackback_excerpt' => $excerpt, 'trackback_name' => $name));
 
     return true;
 }

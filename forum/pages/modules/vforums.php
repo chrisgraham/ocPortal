@@ -49,10 +49,10 @@ class Module_vforums
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
         if ($be_deferential) {
             return array();
@@ -60,17 +60,17 @@ class Module_vforums
 
         if ($check_perms && is_guest($member_id)) {
             return array(
-                'misc' => array('POSTS_SINCE','menu/social/forum/vforums/posts_since_last_visit'),
-                'unanswered' => array('UNANSWERED_TOPICS','menu/social/forum/vforums/unanswered_topics')
+                'misc' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
+                'unanswered' => array('UNANSWERED_TOPICS', 'menu/social/forum/vforums/unanswered_topics')
             );
         }
 
         return array(
-            'misc' => array('POSTS_SINCE','menu/social/forum/vforums/posts_since_last_visit'),
-            'unread' => array('TOPICS_UNREAD','menu/social/forum/vforums/unread_topics'),
-            'recently_read' => array('RECENTLY_READ','menu/social/forum/vforums/recently_read_topics'),
-            'unanswered' => array('UNANSWERED_TOPICS','menu/social/forum/vforums/unanswered_topics'),
-            'involved' => array('INVOLVED_TOPICS','menu/social/forum/vforums/involved_topics'),
+            'misc' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
+            'unread' => array('TOPICS_UNREAD', 'menu/social/forum/vforums/unread_topics'),
+            'recently_read' => array('RECENTLY_READ', 'menu/social/forum/vforums/recently_read_topics'),
+            'unanswered' => array('UNANSWERED_TOPICS', 'menu/social/forum/vforums/unanswered_topics'),
+            'involved' => array('INVOLVED_TOPICS', 'menu/social/forum/vforums/involved_topics'),
         );
     }
 
@@ -83,7 +83,7 @@ class Module_vforums
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf');
 
@@ -107,7 +107,7 @@ class Module_vforums
             $this->title = get_screen_title('RECENTLY_READ');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -126,7 +126,7 @@ class Module_vforums
 
         require_css('ocf');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
         if ($type == 'misc') {
             $content = $this->new_posts();
         } elseif ($type == 'unread') {
@@ -141,7 +141,7 @@ class Module_vforums
             $content = new ocp_tempcode();
         }
 
-        return do_template('OCF_VFORUM_SCREEN',array('_GUID' => '8dca548982d65500ab1800ceec2ddc61','TITLE' => $this->title,'CONTENT' => $content));
+        return do_template('OCF_VFORUM_SCREEN', array('_GUID' => '8dca548982d65500ab1800ceec2ddc61', 'TITLE' => $this->title, 'CONTENT' => $content));
     }
 
     /**
@@ -153,18 +153,18 @@ class Module_vforums
     {
         $title = do_lang_tempcode('POSTS_SINCE');
 
-        $seconds_back = get_param_integer('seconds_back',null);
+        $seconds_back = get_param_integer('seconds_back', null);
         if (is_null($seconds_back)) {
-            if (array_key_exists('last_visit',$_COOKIE)) {
+            if (array_key_exists('last_visit', $_COOKIE)) {
                 $last_time = intval($_COOKIE['last_visit']);
             } else {
-                $last_time = time()-60*60*24*7;
+                $last_time = time() - 60 * 60 * 24 * 7;
                 if (!$GLOBALS['DEV_MODE']) {
-                    attach_message(do_lang_tempcode('NO_LAST_VISIT'),'notice');
+                    attach_message(do_lang_tempcode('NO_LAST_VISIT'), 'notice');
                 }
             }
         } else {
-            $last_time = time()-$seconds_back;
+            $last_time = time() - $seconds_back;
         }
 
         $condition = 't_cache_last_time>' . strval($last_time);
@@ -175,9 +175,9 @@ class Module_vforums
             $order2 = 't_sunk ASC,' . $order2;
         }
 
-        $extra_tpl_map = array('FILTERING' => do_template('OCF_VFORUM_FILTERING',array()));
+        $extra_tpl_map = array('FILTERING' => do_template('OCF_VFORUM_FILTERING', array()));
 
-        return $this->_vforum($title,$condition,'t_cascading DESC,t_pinned DESC,' . $order2,true,$extra_tpl_map);
+        return $this->_vforum($title, $condition, 't_cascading DESC,t_pinned DESC,' . $order2, true, $extra_tpl_map);
     }
 
     /**
@@ -191,7 +191,7 @@ class Module_vforums
         $condition = array('(t_cache_num_posts=1 OR t_cache_num_posts<5 AND (SELECT COUNT(DISTINCT p2.p_poster) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p2 WHERE p2.p_topic_id=top.id)=1)');
         // NB: "t_cache_num_posts<5" above is an optimisation, to do accurate detection of "only poster" only if there are a handful of posts (scanning huge topics can be slow considering this is just to make a subquery pass). We assume that a topic is not consisting of a single user posting more than 5 times (and if so we can consider them a spammer so rule it out)
 
-        return $this->_vforum($title,$condition,'t_cache_last_time DESC',true);
+        return $this->_vforum($title, $condition, 't_cache_last_time DESC', true);
     }
 
     /**
@@ -208,7 +208,7 @@ class Module_vforums
         $title = do_lang_tempcode('INVOLVED_TOPICS');
         $condition = array('pos.p_poster=' . strval(get_member()));
 
-        return $this->_vforum($title,$condition,'t_cache_last_time DESC',true,null,$GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts pos LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics top ON top.id=pos.p_topic_id');
+        return $this->_vforum($title, $condition, 't_cache_last_time DESC', true, null, $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts pos LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics top ON top.id=pos.p_topic_id');
     }
 
     /**
@@ -223,9 +223,9 @@ class Module_vforums
         }
 
         $title = do_lang_tempcode('TOPICS_UNREAD');
-        $condition = array('l_time IS NOT NULL AND l_time<t_cache_last_time','l_time IS NULL AND t_cache_last_time>' . strval(time()-60*60*24*intval(get_option('post_history_days'))));
+        $condition = array('l_time IS NOT NULL AND l_time<t_cache_last_time', 'l_time IS NULL AND t_cache_last_time>' . strval(time() - 60 * 60 * 24 * intval(get_option('post_history_days'))));
 
-        return $this->_vforum($title,$condition,'t_cache_last_time DESC',true);
+        return $this->_vforum($title, $condition, 't_cache_last_time DESC', true);
     }
 
     /**
@@ -240,9 +240,9 @@ class Module_vforums
         }
 
         $title = do_lang_tempcode('RECENTLY_READ');
-        $condition = 'l_time>' . strval(time()-60*60*24*2);
+        $condition = 'l_time>' . strval(time() - 60 * 60 * 24 * 2);
 
-        return $this->_vforum($title,$condition,'l_time DESC',true);
+        return $this->_vforum($title, $condition, 'l_time DESC', true);
     }
 
     /**
@@ -256,31 +256,31 @@ class Module_vforums
      * @param  ?string                  The table to query (NULL: topic table)
      * @return tempcode                 The UI
      */
-    public function _vforum($title,$condition,$order,$no_pin = false,$extra_tpl_map = null,$initial_table = null)
+    public function _vforum($title, $condition, $order, $no_pin = false, $extra_tpl_map = null, $initial_table = null)
     {
-        $breadcrumbs = ocf_forum_breadcrumbs(db_get_first_id(),$title,get_param_integer('keep_forum_root',db_get_first_id()));
+        $breadcrumbs = ocf_forum_breadcrumbs(db_get_first_id(), $title, get_param_integer('keep_forum_root', db_get_first_id()));
         breadcrumb_add_segment($breadcrumbs);
 
-        $max = get_param_integer('forum_max',intval(get_option('forum_topics_per_page')));
-        $start = get_param_integer('forum_start',0);
-        $type = get_param('type','misc');
+        $max = get_param_integer('forum_max', intval(get_option('forum_topics_per_page')));
+        $start = get_param_integer('forum_start', 0);
+        $type = get_param('type', 'misc');
         $forum_name = do_lang_tempcode('VIRTUAL_FORUM');
 
         // Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this
-        if (($start>$max*5) && (is_guest()) && (!is_null(get_bot_type()))) {
+        if (($start > $max * 5) && (is_guest()) && (!is_null(get_bot_type()))) {
             access_denied('NOT_AS_GUEST');
         }
 
         // Find topics
         $extra = ' AND ';
-        if (!has_privilege(get_member(),'see_unvalidated')) {
+        if (!has_privilege(get_member(), 'see_unvalidated')) {
             $extra .= 't_validated=1 AND ';
         }
         require_code('ocf_forums');
         $extra .= get_forum_access_sql('top.t_forum_id');
         $max_rows = 0;
         $topic_rows = array();
-        foreach (is_array($condition)?$condition:array($condition) as $_condition) {
+        foreach (is_array($condition) ? $condition : array($condition) as $_condition) {
             $query = ' FROM ';
             if (!is_null($initial_table)) {
                 $query .= $initial_table;
@@ -299,17 +299,17 @@ class Module_vforums
                 $query .= ' GROUP BY top.id';
             }
             $query .= ' ORDER BY ' . $order;
-            $full_query = 'SELECT top.*,' . (is_guest()?'NULL as l_time':'l_time');
+            $full_query = 'SELECT top.*,' . (is_guest() ? 'NULL as l_time' : 'l_time');
             if (multi_lang_content()) {
                 $full_query .= ',t_cache_first_post AS p_post';
             } else {
                 $full_query .= ',p.p_post,p.p_post__text_parsed,p.p_post__source_user';
             }
             $full_query .= $query;
-            if (($start<200) && (is_null($initial_table)) && (multi_lang_content())) {
-                $topic_rows = array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start,false,false,array('t_cache_first_post' => '?LONG_TRANS__COMCODE')));
+            if (($start < 200) && (is_null($initial_table)) && (multi_lang_content())) {
+                $topic_rows = array_merge($topic_rows, $GLOBALS['FORUM_DB']->query($full_query, $max, $start, false, false, array('t_cache_first_post' => '?LONG_TRANS__COMCODE')));
             } else {
-                $topic_rows = array_merge($topic_rows,$GLOBALS['FORUM_DB']->query($full_query,$max,$start));
+                $topic_rows = array_merge($topic_rows, $GLOBALS['FORUM_DB']->query($full_query, $max, $start));
             }
             if ((can_arbitrary_groupby()) && (!is_null($initial_table))) {
                 $max_rows += $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(DISTINCT top.id) ' . $_query);
@@ -327,12 +327,12 @@ class Module_vforums
         }
         $involved = array();
         if (($or_list != '') && (!is_guest())) {
-            $involved = $GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE (' . $or_list . ') AND p_poster=' . strval(get_member()),null,null,false,true);
-            $involved = collapse_1d_complexity('p_topic_id',$involved);
+            $involved = $GLOBALS['FORUM_DB']->query('SELECT DISTINCT p_topic_id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE (' . $or_list . ') AND p_poster=' . strval(get_member()), null, null, false, true);
+            $involved = collapse_1d_complexity('p_topic_id', $involved);
         }
         $topics_array = array();
         foreach ($topic_rows as $topic_row) {
-            $topics_array[] = ocf_get_topic_array($topic_row,get_member(),$hot_topic_definition,in_array($topic_row['id'],$involved));
+            $topics_array[] = ocf_get_topic_array($topic_row, get_member(), $hot_topic_definition, in_array($topic_row['id'], $involved));
         }
 
         // Display topics
@@ -340,18 +340,18 @@ class Module_vforums
         $pinned = false;
         require_code('templates_pagination');
         $topic_wrapper = new ocp_tempcode();
-        $forum_name_map = collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE f_cache_num_posts>0'));
+        $forum_name_map = collapse_2d_complexity('id', 'f_name', $GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE f_cache_num_posts>0'));
         foreach ($topics_array as $topic) {
-            if ((!$no_pin) && ($pinned) && (!in_array('pinned',$topic['modifiers']))) {
+            if ((!$no_pin) && ($pinned) && (!in_array('pinned', $topic['modifiers']))) {
                 $topics->attach(do_template('OCF_PINNED_DIVIDER'));
             }
-            $pinned = in_array('pinned',$topic['modifiers']);
-            $forum_id = array_key_exists('forum_id',$topic)?$topic['forum_id']:null;
-            $_forum_name = array_key_exists($forum_id,$forum_name_map)?$forum_name_map[$forum_id]:do_lang_tempcode('PRIVATE_TOPICS');
-            $topics->attach(ocf_render_topic($topic,true,false,$_forum_name));
+            $pinned = in_array('pinned', $topic['modifiers']);
+            $forum_id = array_key_exists('forum_id', $topic) ? $topic['forum_id'] : null;
+            $_forum_name = array_key_exists($forum_id, $forum_name_map) ? $forum_name_map[$forum_id] : do_lang_tempcode('PRIVATE_TOPICS');
+            $topics->attach(ocf_render_topic($topic, true, false, $_forum_name));
         }
         if (!$topics->is_empty()) {
-            $pagination = pagination(do_lang_tempcode('FORUM_TOPICS'),$start,'forum_start',$max,'forum_max',$max_rows);
+            $pagination = pagination(do_lang_tempcode('FORUM_TOPICS'), $start, 'forum_start', $max, 'forum_max', $max_rows);
 
             $moderator_actions = '';
             $moderator_actions .= '<option value="mark_topics_read">' . do_lang('MARK_READ') . '</option>';
@@ -362,8 +362,8 @@ class Module_vforums
                 ocp_mark_as_escaped($moderator_actions);
             }
 
-            $action_url = build_url(array('page' => 'topics','redirect' => get_self_url(true)),get_module_zone('topics'));
-            $topic_wrapper = do_template('OCF_FORUM_TOPIC_WRAPPER',array(
+            $action_url = build_url(array('page' => 'topics', 'redirect' => get_self_url(true)), get_module_zone('topics'));
+            $topic_wrapper = do_template('OCF_FORUM_TOPIC_WRAPPER', array(
                 '_GUID' => '67356b4daacbed3e3d960d89a57d0a4a',
                 'MAX' => strval($max),
                 'ORDER' => '',
@@ -380,11 +380,11 @@ class Module_vforums
         }
 
         $_buttons = new ocp_tempcode();
-        $archive_url = $GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(),true);
-        $_buttons->attach(do_template('BUTTON_SCREEN',array('_GUID' => '8c928f1f703e9ba232a7033adee19a31','TITLE' => do_lang_tempcode('ROOT_FORUM'),'IMG' => 'buttons__all','IMMEDIATE' => false,'URL' => $archive_url)));
+        $archive_url = $GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(), true);
+        $_buttons->attach(do_template('BUTTON_SCREEN', array('_GUID' => '8c928f1f703e9ba232a7033adee19a31', 'TITLE' => do_lang_tempcode('ROOT_FORUM'), 'IMG' => 'buttons__all', 'IMMEDIATE' => false, 'URL' => $archive_url)));
         if ($title->evaluate() == do_lang('TOPICS_UNREAD')) {
-            $mark_read_url = build_url(array('page' => 'topics','type' => 'mark_read','id' => db_get_first_id()),get_module_zone('topics'));
-            $_buttons->attach(do_template('BUTTON_SCREEN',array('_GUID' => 'b96e17e77be6de6faf9eb340d7ba955a','TITLE' => do_lang_tempcode('ROOT_FORUM'),'IMG' => 'buttons__mark_read_forum','IMMEDIATE' => false,'URL' => $mark_read_url)));
+            $mark_read_url = build_url(array('page' => 'topics', 'type' => 'mark_read', 'id' => db_get_first_id()), get_module_zone('topics'));
+            $_buttons->attach(do_template('BUTTON_SCREEN', array('_GUID' => 'b96e17e77be6de6faf9eb340d7ba955a', 'TITLE' => do_lang_tempcode('ROOT_FORUM'), 'IMG' => 'buttons__mark_read_forum', 'IMMEDIATE' => false, 'URL' => $mark_read_url)));
         }
 
         $tpl_map = array(
@@ -399,6 +399,6 @@ class Module_vforums
         if (!is_null($extra_tpl_map)) {
             $tpl_map += $extra_tpl_map;
         }
-        return do_template('OCF_FORUM',$tpl_map);
+        return do_template('OCF_FORUM', $tpl_map);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_config_payment_gateway
 {
     /**
@@ -60,13 +59,13 @@ class Hook_config_payment_gateway
      * @param  tempcode                 The field description
      * @return tempcode                 The inputter
      */
-    public function field_inputter($name,$myrow,$human_name,$explanation)
+    public function field_inputter($name, $myrow, $human_name, $explanation)
     {
         $list = '';
-        $all_via = find_all_hooks('systems','ecommerce_via');
+        $all_via = find_all_hooks('systems', 'ecommerce_via');
         foreach (array_keys($all_via) as $via) {
-            $list .= static_evaluate_tempcode(form_input_list_entry($via,$via == get_option($name)));
+            $list .= static_evaluate_tempcode(form_input_list_entry($via, $via == get_option($name)));
         }
-        return form_input_list($human_name,$explanation,$name,make_string_tempcode($list));
+        return form_input_list($human_name, $explanation, $name, make_string_tempcode($list));
     }
 }

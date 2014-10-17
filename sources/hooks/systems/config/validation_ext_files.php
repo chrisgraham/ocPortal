@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_validation
  */
-
 class Hook_config_validation_ext_files
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_validation_ext_files
      */
     public function get_default()
     {
-        return NULL;//'0'; Way too slow for modern sites
+        return null;//'0'; Way too slow for modern sites
     }
 }

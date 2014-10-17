@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
-
 class Hook_Notification_content_validated extends Hook_Notification
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_content_validated extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['content_validated'] = array(do_lang('menus:CONTENT'),do_lang('unvalidated:NOTIFICATION_TYPE_content_validated'));
+        $list['content_validated'] = array(do_lang('menus:CONTENT'), do_lang('unvalidated:NOTIFICATION_TYPE_content_validated'));
         return $list;
     }
 }

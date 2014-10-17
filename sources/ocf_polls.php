@@ -26,17 +26,17 @@
  * @param  ?MEMBER                      The member we are checking for (NULL: current member).
  * @return boolean                      The answer.
  */
-function ocf_may_edit_poll_by($forum_id,$poll_owner,$member_id = null)
+function ocf_may_edit_poll_by($forum_id, $poll_owner, $member_id = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
     }
 
-    if (has_privilege($member_id,'edit_midrange_content','topics',array('forums',$forum_id))) {
+    if (has_privilege($member_id, 'edit_midrange_content', 'topics', array('forums', $forum_id))) {
         return true;
     }
 
-    if ((has_privilege($member_id,'edit_own_polls','topics',array('forums',$forum_id))) && ($member_id == $poll_owner)) {
+    if ((has_privilege($member_id, 'edit_own_polls', 'topics', array('forums', $forum_id))) && ($member_id == $poll_owner)) {
         return true;
     }
 
@@ -53,11 +53,11 @@ function ocf_may_edit_poll_by($forum_id,$poll_owner,$member_id = null)
  * @param  ?MEMBER                      The member we are checking for (NULL: current member).
  * @return boolean                      The answer.
  */
-function ocf_may_attach_poll($topic_id,$topic_owner = null,$has_poll_already = null,$forum_id = null,$member_id = null)
+function ocf_may_attach_poll($topic_id, $topic_owner = null, $has_poll_already = null, $forum_id = null, $member_id = null)
 {
     if (is_null($topic_owner)) {
-        $topic_info = $GLOBALS['FORUM_DB']->query_select('f_topics',array('*'),array('id' => $topic_id),'',1);
-        if (!array_key_exists(0,$topic_info)) {
+        $topic_info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('*'), array('id' => $topic_id), '', 1);
+        if (!array_key_exists(0, $topic_info)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $topic_owner = $topic_info[0]['t_cache_first_member_id'];
@@ -75,7 +75,7 @@ function ocf_may_attach_poll($topic_id,$topic_owner = null,$has_poll_already = n
     if (($topic_owner == $member_id) && (!is_guest($member_id))) {
         return true;
     }
-    if (ocf_may_moderate_forum($forum_id,$member_id)) {
+    if (ocf_may_moderate_forum($forum_id, $member_id)) {
         return true;
     }
 
@@ -90,17 +90,17 @@ function ocf_may_attach_poll($topic_id,$topic_owner = null,$has_poll_already = n
  * @param  ?MEMBER                      The member we are checking for (NULL: current member).
  * @return boolean                      The answer.
  */
-function ocf_may_delete_poll_by($forum_id,$poll_owner,$member_id = null)
+function ocf_may_delete_poll_by($forum_id, $poll_owner, $member_id = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
     }
 
-    if (has_privilege($member_id,'delete_midrange_content','topics',array('forums',$forum_id))) {
+    if (has_privilege($member_id, 'delete_midrange_content', 'topics', array('forums', $forum_id))) {
         return true;
     }
 
-    if ((has_privilege($member_id,'delete_own_midrange_content','topics',array('forums',$forum_id))) && ($member_id == $poll_owner)) {
+    if ((has_privilege($member_id, 'delete_own_midrange_content', 'topics', array('forums', $forum_id))) && ($member_id == $poll_owner)) {
         return true;
     }
 
@@ -114,14 +114,14 @@ function ocf_may_delete_poll_by($forum_id,$poll_owner,$member_id = null)
  * @param  boolean                      Whether we must record that the current member is requesting the results, blocking future voting for them.
  * @return array                        The map of results.
  */
-function ocf_poll_get_results($poll_id,$request_results = true)
+function ocf_poll_get_results($poll_id, $request_results = true)
 {
-    $poll_info = $GLOBALS['FORUM_DB']->query_select('f_polls',array('*'),array('id' => $poll_id),'',1);
-    if (!array_key_exists(0,$poll_info)) {
-        fatal_exit(do_lang_tempcode('_MISSING_RESOURCE','poll#' . strval($poll_id)));
+    $poll_info = $GLOBALS['FORUM_DB']->query_select('f_polls', array('*'), array('id' => $poll_id), '', 1);
+    if (!array_key_exists(0, $poll_info)) {
+        fatal_exit(do_lang_tempcode('_MISSING_RESOURCE', 'poll#' . strval($poll_id)));
     }
 
-    $_answers = $GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('*'),array('pa_poll_id' => $poll_id),'ORDER BY id');
+    $_answers = $GLOBALS['FORUM_DB']->query_select('f_poll_answers', array('*'), array('pa_poll_id' => $poll_id), 'ORDER BY id');
     $answers = array();
     foreach ($_answers as $_answer) {
         $answer = array();
@@ -138,15 +138,15 @@ function ocf_poll_get_results($poll_id,$request_results = true)
     if ($request_results) {
         // Forfeighting this by viewing results?
         if (is_guest()) {
-            $voted_already_map = array('pv_poll_id' => $poll_id,'pv_ip' => get_ip_address());
+            $voted_already_map = array('pv_poll_id' => $poll_id, 'pv_ip' => get_ip_address());
         } else {
-            $voted_already_map = array('pv_poll_id' => $poll_id,'pv_member_id' => get_member());
+            $voted_already_map = array('pv_poll_id' => $poll_id, 'pv_member_id' => get_member());
         }
-        $voted_already = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes','pv_member_id',$voted_already_map);
+        $voted_already = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_poll_votes', 'pv_member_id', $voted_already_map);
         if (is_null($voted_already)) {
-            $forfeight = !has_privilege(get_member(),'view_poll_results_before_voting');
+            $forfeight = !has_privilege(get_member(), 'view_poll_results_before_voting');
             if ($forfeight) {
-                $GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array(
+                $GLOBALS['FORUM_DB']->query_insert('f_poll_votes', array(
                     'pv_poll_id' => $poll_id,
                     'pv_member_id' => get_member(),
                     'pv_answer_id' => -1,

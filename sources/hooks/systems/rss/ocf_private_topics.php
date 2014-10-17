@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_rss_ocf_private_topics
 {
     /**
@@ -31,25 +30,25 @@ class Hook_rss_ocf_private_topics
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
         if (is_guest()) {
-            return NULL;
+            return null;
         }
 
         $member_id = get_member();
 
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
-        if (!has_actual_page_access($member_id,'forumview')) {
-            return NULL;
+        if (!has_actual_page_access($member_id, 'forumview')) {
+            return null;
         }
         if (is_guest()) {
-            return NULL;
+            return null;
         }
 
         require_code('ocf_notifications');
@@ -60,35 +59,35 @@ class Hook_rss_ocf_private_topics
             $id = strval($row['p_id']);
             $author = $row['t_cache_first_username'];
 
-            $news_date = date($date_string,$row['t_cache_first_time']);
-            $edit_date = date($date_string,$row['t_cache_last_time']);
+            $news_date = date($date_string, $row['t_cache_first_time']);
+            $edit_date = date($date_string, $row['t_cache_last_time']);
             if ($edit_date == $news_date) {
                 $edit_date = '';
             }
 
             $news_title = xmlentities($row['t_cache_first_title']);
-            $post_row = db_map_restrict($row,array('p_post'))+array('id' => $row['t_cache_first_post_id']);
-            $_summary = get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+            $post_row = db_map_restrict($row, array('p_post')) + array('id' => $row['t_cache_first_post_id']);
+            $_summary = get_translated_tempcode('f_posts', $post_row, 'p_post', $GLOBALS['FORUM_DB']);
             $summary = xmlentities($_summary->evaluate());
             $news = '';
 
             $category = do_lang('NA');
             $category_raw = '';
 
-            $_view_url = build_url(array('page' => 'topicview','id' => $row['t_id']),get_module_zone('forumview'));
+            $_view_url = build_url(array('page' => 'topicview', 'id' => $row['t_id']), get_module_zone('forumview'));
             $view_url = $_view_url->evaluate();
             $view_url .= '#' . strval($row['p_id']);
 
             if ($prefix == 'RSS_') {
-                $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => '448f736ecf0154960177c131dde76125','COMMENT_URL' => $view_url,'ID' => strval($row['p_id'])));
+                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '448f736ecf0154960177c131dde76125', 'COMMENT_URL' => $view_url, 'ID' => strval($row['p_id'])));
             } else {
                 $if_comments = new ocp_tempcode();
             }
 
-            $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }
 
         require_lang('ocf');
-        return array($content,do_lang('PRIVATE_TOPICS'));
+        return array($content, do_lang('PRIVATE_TOPICS'));
     }
 }

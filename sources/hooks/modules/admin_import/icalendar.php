@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_icalendar
 {
     /**

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
-
 class Hook_sw_stats
 {
     /**
@@ -50,7 +49,7 @@ class Hook_sw_stats
 
         require_lang('stats');
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_integer(do_lang_tempcode('STORE_TIME'),do_lang_tempcode('CONFIG_OPTION_stats_store_time'),'stats_store_time',intval($stats_store_time),true));
+        $fields->attach(form_input_integer(do_lang_tempcode('STORE_TIME'), do_lang_tempcode('CONFIG_OPTION_stats_store_time'), 'stats_store_time', intval($stats_store_time), true));
 
         return $fields;
     }
@@ -64,6 +63,6 @@ class Hook_sw_stats
             return;
         }
 
-        set_option('stats_store_time',post_param('stats_store_time'));
+        set_option('stats_store_time', post_param('stats_store_time'));
     }
 }

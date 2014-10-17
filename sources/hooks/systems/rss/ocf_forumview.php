@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_rss_ocf_forumview
 {
     /**
@@ -31,20 +30,20 @@ class Hook_rss_ocf_forumview
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
         if (!addon_installed('ocf_forum')) {
-            return NULL;
+            return null;
         }
 
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
-        if (!has_actual_page_access(get_member(),'forumview')) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'forumview')) {
+            return null;
         }
 
-        $filters = ocfilter_to_sqlfragment($_filters,'t_forum_id','f_forums','f_parent_forum','t_forum_id','id',true,true,$GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+        $filters = ocfilter_to_sqlfragment($_filters, 't_forum_id', 'f_forums', 'f_parent_forum', 't_forum_id', 'id', true, true, $GLOBALS['FORUM_DB']); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
         $sql = 'SELECT t.*';
         if (multi_lang_content()) {
@@ -56,45 +55,45 @@ class Hook_rss_ocf_forumview
         if (!multi_lang_content()) {
             $sql .= ' LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p ON p.id=t.t_cache_first_post_id';
         }
-        $sql .= ' WHERE t_cache_last_time>' . strval($cutoff) . (((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND t_validated=1 ':'') . ' AND ' . $filters;
+        $sql .= ' WHERE t_cache_last_time>' . strval($cutoff) . (((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) ? ' AND t_validated=1 ' : '') . ' AND ' . $filters;
         $sql .= ' ORDER BY t_cache_last_time DESC';
-        $rows = $GLOBALS['FORUM_DB']->query($sql,$max,null,false,true);
-        $categories = collapse_2d_complexity('id','f_name',$GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE f_cache_num_posts>0'));
+        $rows = $GLOBALS['FORUM_DB']->query($sql, $max, null, false, true);
+        $categories = collapse_2d_complexity('id', 'f_name', $GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE f_cache_num_posts>0'));
 
         $content = new ocp_tempcode();
         foreach ($rows as $row) {
-            if (((!is_null($row['t_forum_id'])) || ($row['t_pt_to'] == get_member())) && (has_category_access(get_member(),'forums',strval($row['t_forum_id'])))) {
+            if (((!is_null($row['t_forum_id'])) || ($row['t_pt_to'] == get_member())) && (has_category_access(get_member(), 'forums', strval($row['t_forum_id'])))) {
                 $id = strval($row['id']);
                 $author = $row['t_cache_first_username'];
 
-                $news_date = date($date_string,$row['t_cache_first_time']);
-                $edit_date = date($date_string,$row['t_cache_last_time']);
+                $news_date = date($date_string, $row['t_cache_first_time']);
+                $edit_date = date($date_string, $row['t_cache_last_time']);
                 if ($edit_date == $news_date) {
                     $edit_date = '';
                 }
 
                 $news_title = xmlentities($row['t_cache_first_title']);
-                $post_row = db_map_restrict($row,array('p_post'))+array('id' => $row['t_cache_first_post_id']);
-                $_summary = get_translated_tempcode('f_posts',$post_row,'p_post',$GLOBALS['FORUM_DB']);
+                $post_row = db_map_restrict($row, array('p_post')) + array('id' => $row['t_cache_first_post_id']);
+                $_summary = get_translated_tempcode('f_posts', $post_row, 'p_post', $GLOBALS['FORUM_DB']);
                 $summary = xmlentities($_summary->evaluate());
                 $news = '';
 
-                $category = array_key_exists($row['t_forum_id'],$categories)?$categories[$row['t_forum_id']]:do_lang('NA');
+                $category = array_key_exists($row['t_forum_id'], $categories) ? $categories[$row['t_forum_id']] : do_lang('NA');
                 $category_raw = strval($row['t_forum_id']);
 
-                $view_url = build_url(array('page' => 'topicview','id' => $row['id']),get_module_zone('forumview'),null,false,false,true);
+                $view_url = build_url(array('page' => 'topicview', 'id' => $row['id']), get_module_zone('forumview'), null, false, false, true);
 
                 if ($prefix == 'RSS_') {
-                    $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => 'f5dd7ba612b989bba5e2d496da5bf161','COMMENT_URL' => $view_url,'ID' => strval($row['id'])));
+                    $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'f5dd7ba612b989bba5e2d496da5bf161', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
                 } else {
                     $if_comments = new ocp_tempcode();
                 }
 
-                $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+                $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
             }
         }
 
         require_lang('ocf');
-        return array($content,do_lang('SECTION_FORUMS'));
+        return array($content, do_lang('SECTION_FORUMS'));
     }
 }

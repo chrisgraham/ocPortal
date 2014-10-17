@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_has_low_memory_limit
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_has_low_memory_limit
      */
     public function get_default()
     {
-        return ((ini_get('memory_limit') == '-1' || ini_get('memory_limit') == '0' || ini_get('memory_limit') == '')?'0':null);
+        return ((ini_get('memory_limit') == '-1' || ini_get('memory_limit') == '0' || ini_get('memory_limit') == '') ? '0' : null);
     }
 }

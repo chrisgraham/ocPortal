@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_reported_posts
  */
-
 class Hook_checklist_reported_posts
 {
     /**
@@ -44,15 +43,15 @@ class Hook_checklist_reported_posts
         $query = 'SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics ttop LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_read_logs l ON ttop.id=l.l_topic_id AND l.l_member_id=' . strval(get_member()) . ' WHERE ' . $where;
         $outstanding = $GLOBALS['FORUM_DB']->query_value_if_there($query);
 
-        if ($outstanding>0) {
-            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID' => 'e578142633c6f3d37776e82a869deb91'));
+        if ($outstanding > 0) {
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0', array('_GUID' => 'e578142633c6f3d37776e82a869deb91'));
         } else {
-            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID' => 'f578142633c6f3d37776e82a869deb91'));
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1', array('_GUID' => 'f578142633c6f3d37776e82a869deb91'));
         }
 
-        $url = $GLOBALS['FORUM_DRIVER']->forum_url($forum_id,true);
+        $url = $GLOBALS['FORUM_DRIVER']->forum_url($forum_id, true);
 
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => '9ee69e250c997730a3670ed77d681e5f','URL' => $url,'STATUS' => $status,'TASK' => do_lang_tempcode('REPORTED_POSTS_FORUM'),'INFO' => do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
-        return array(array($tpl,null,$outstanding,null));
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '9ee69e250c997730a3670ed77d681e5f', 'URL' => $url, 'STATUS' => $status, 'TASK' => do_lang_tempcode('REPORTED_POSTS_FORUM'), 'INFO' => do_lang_tempcode('NUM_QUEUE', escape_html(integer_format($outstanding)))));
+        return array(array($tpl, null, $outstanding, null));
     }
 }

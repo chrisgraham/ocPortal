@@ -25,11 +25,11 @@ function init__upload_syndication()
 {
     require_code('uploads');
 
-    define('UPLOAD_PRECEDENCE_NO',0);
-    define('UPLOAD_PRECEDENCE_LOW',1);
-    define('UPLOAD_PRECEDENCE_MEDIUM',5);
-    define('UPLOAD_PRECEDENCE_HIGH',10);
-    define('UPLOAD_PRECEDENCE_REGARDLESS',1000);
+    define('UPLOAD_PRECEDENCE_NO', 0);
+    define('UPLOAD_PRECEDENCE_LOW', 1);
+    define('UPLOAD_PRECEDENCE_MEDIUM', 5);
+    define('UPLOAD_PRECEDENCE_HIGH', 10);
+    define('UPLOAD_PRECEDENCE_REGARDLESS', 1000);
 }
 
 /**
@@ -44,7 +44,7 @@ function get_upload_syndication_json($file_handling_types)
 
     $all_hook_file_handling_types = 0;
 
-    $hooks = find_all_hooks('systems','upload_syndication');
+    $hooks = find_all_hooks('systems', 'upload_syndication');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
         $ob = object_factory('Hook_upload_syndication_' . $hook);
@@ -53,7 +53,7 @@ function get_upload_syndication_json($file_handling_types)
             if (($hook_file_handling_types & $file_handling_types) != 0) {
                 $all_hook_file_handling_types |= $hook_file_handling_types;
                 if (!$ob->happens_always()) {
-                    $struct[$hook] = array('label' => $ob->get_label(),'authorised' => $ob->is_authorised());
+                    $struct[$hook] = array('label' => $ob->get_label(), 'authorised' => $ob->is_authorised());
                 }
             }
         }
@@ -89,10 +89,10 @@ function get_upload_syndication_json($file_handling_types)
         }
     }
 
-    if ((function_exists('json_encode')) && (count($struct)>0)) {
-        return array(json_encode($struct),$syndicatable_filetypes);
+    if ((function_exists('json_encode')) && (count($struct) > 0)) {
+        return array(json_encode($struct), $syndicatable_filetypes);
     }
-    return array(null,$syndicatable_filetypes);
+    return array(null, $syndicatable_filetypes);
 }
 
 /**
@@ -112,14 +112,14 @@ function upload_syndication_auth_script()
     $label = $ob->get_label();
 
     if (!$success) {
-        warn_exit(do_lang_tempcode('FAILURE_UPLOAD_SYNDICATION_AUTH',escape_html($label)));
+        warn_exit(do_lang_tempcode('FAILURE_UPLOAD_SYNDICATION_AUTH', escape_html($label)));
     }
 
-    $tpl = do_template('UPLOAD_SYNDICATION_SETUP_SCREEN',array('_GUID' => '336ee1c1a5503a79ef426bbcdc4258fd','LABEL' => $label,
+    $tpl = do_template('UPLOAD_SYNDICATION_SETUP_SCREEN', array('_GUID' => '336ee1c1a5503a79ef426bbcdc4258fd', 'LABEL' => $label,
         'HOOK' => $hook,
         'NAME' => $name,
     ));
-    $echo = do_template('STANDALONE_HTML_WRAP',array('_GUID' => 'abde85be22df7fcfd51c5067f1b82e7a','TITLE' => do_lang_tempcode('UPLOAD_SYNDICATION_AUTH'),'CONTENT' => $tpl,'POPUP' => true));
+    $echo = do_template('STANDALONE_HTML_WRAP', array('_GUID' => 'abde85be22df7fcfd51c5067f1b82e7a', 'TITLE' => do_lang_tempcode('UPLOAD_SYNDICATION_AUTH'), 'CONTENT' => $tpl, 'POPUP' => true));
     $echo->handle_symbol_preprocessing();
     $echo->evaluate_echo();
 }
@@ -132,18 +132,18 @@ function upload_syndication_auth_script()
  */
 function upload_will_syndicate($name)
 {
-    $hooks = find_all_hooks('systems','upload_syndication');
+    $hooks = find_all_hooks('systems', 'upload_syndication');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
         $ob = object_factory('Hook_upload_syndication_' . $hook);
-        if ((post_param_integer('upload_syndicate__' . $hook . '__' . $name,0) == 1) || ($ob->happens_always())) {
+        if ((post_param_integer('upload_syndicate__' . $hook . '__' . $name, 0) == 1) || ($ob->happens_always())) {
             if (($ob->is_enabled()) && ($ob->is_authorised())) {
                 require_code('uploads');
                 is_plupload(true);
 
                 $hook_file_handling_types = $ob->get_file_handling_types();
-                $filename = isset($_FILES[$name]['name'])?$_FILES[$name]['name']:'';
-                if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) { // Check the upload API agrees this file matches the filetype bitmask
+                $filename = isset($_FILES[$name]['name']) ? $_FILES[$name]['name'] : '';
+                if (_check_enforcement_of_type(get_member(), $filename, $hook_file_handling_types, true)) { // Check the upload API agrees this file matches the filetype bitmask
                     return true;
                 }
             }
@@ -163,7 +163,7 @@ function upload_will_syndicate($name)
  * @param  boolean                      Whether to delete the local copy, if the current user has no upload quota. If no syndication was set, an error will be given.
  * @return URLPATH                      New URL (if we deleted the local copy, it will be a remote URL).
  */
-function handle_upload_syndication($name,$title,$description,$url,$filename,$remove_locally_if_no_quota)
+function handle_upload_syndication($name, $title, $description, $url, $filename, $remove_locally_if_no_quota)
 {
     if (!url_is_local($url)) {
         return $url;
@@ -175,17 +175,17 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
     $url = get_custom_base_url() . '/' . $url;
 
     $remote_urls = array();
-    $hooks = find_all_hooks('systems','upload_syndication');
+    $hooks = find_all_hooks('systems', 'upload_syndication');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/upload_syndication/' . filter_naughty($hook));
         $ob = object_factory('Hook_upload_syndication_' . $hook);
-        if ((post_param_integer('upload_syndicate__' . $hook . '__' . $name,0) == 1) || ($ob->happens_always())) {
+        if ((post_param_integer('upload_syndicate__' . $hook . '__' . $name, 0) == 1) || ($ob->happens_always())) {
             if (($ob->is_enabled()) && ($ob->is_authorised())) {
                 $hook_file_handling_types = $ob->get_file_handling_types();
-                if (_check_enforcement_of_type(get_member(),$filename,$hook_file_handling_types,true)) { // Check the upload API agrees this file matches the filetype bitmask
-                    $remote_url = $ob->syndicate($url,$filepath,$filename,$title,$description);
+                if (_check_enforcement_of_type(get_member(), $filename, $hook_file_handling_types, true)) { // Check the upload API agrees this file matches the filetype bitmask
+                    $remote_url = $ob->syndicate($url, $filepath, $filename, $title, $description);
                     if (!is_null($remote_url)) {
-                        $remote_urls[$hook] = array($remote_url,$ob->get_reference_precedence());
+                        $remote_urls[$hook] = array($remote_url, $ob->get_reference_precedence());
                         if ($ob->get_reference_precedence() == UPLOAD_PRECEDENCE_REGARDLESS) {// Cloud-filesystem use-case
                             $remove_locally_if_no_quota = true;
                         }
@@ -195,12 +195,12 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
         }
     }
 
-    $force_remove_locally = (post_param_integer('force_remove_locally',0) == 1);
+    $force_remove_locally = (post_param_integer('force_remove_locally', 0) == 1);
 
     if ($remove_locally_if_no_quota || $force_remove_locally) {
         require_code('files2');
-        $max_attach_size = get_max_file_size(get_member(),$GLOBALS['SITE_DB']);
-        $no_quota = (($max_attach_size == 0) && (ocf_get_member_best_group_property(get_member(),'max_daily_upload_mb') == 0));
+        $max_attach_size = get_max_file_size(get_member(), $GLOBALS['SITE_DB']);
+        $no_quota = (($max_attach_size == 0) && (ocf_get_member_best_group_property(get_member(), 'max_daily_upload_mb') == 0));
         if ($no_quota || $force_remove_locally) {
             if (url_is_local($new_url)) {
                 @unlink(get_custom_file_base() . '/' . rawurldecode($new_url));
@@ -209,10 +209,10 @@ function handle_upload_syndication($name,$title,$description,$url,$filename,$rem
 
             if (count($remote_urls) == 0) {
                 require_lang('upload_syndication');
-                warn_exit(do_lang_tempcode('UPLOAD_MUST_SYNDICATE',escape_html(get_site_name())));
+                warn_exit(do_lang_tempcode('UPLOAD_MUST_SYNDICATE', escape_html(get_site_name())));
             }
 
-            sort_maps_by($remote_urls,1);
+            sort_maps_by($remote_urls, 1);
 
             // The first element (URL in URL pair) of the last URL pair element
             $last_url = end($remote_urls);

@@ -49,14 +49,14 @@ class Module_admin_group_member_timeouts
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         return array(
-            'misc' => array('GROUP_MEMBER_TIMEOUTS','menu/adminzone/security/usergroups_temp'),
+            'misc' => array('GROUP_MEMBER_TIMEOUTS', 'menu/adminzone/security/usergroups_temp'),
         );
     }
 
@@ -70,16 +70,16 @@ class Module_admin_group_member_timeouts
     public function pre_run()
     {
         if (!cron_installed()) {
-            attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(get_tutorial_url('tut_configuration'))),'warn');
+            attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK', escape_html(get_tutorial_url('tut_configuration'))), 'warn');
         }
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('group_member_timeouts');
 
         $this->title = get_screen_title('GROUP_MEMBER_TIMEOUTS');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -89,7 +89,7 @@ class Module_admin_group_member_timeouts
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->manage();
@@ -111,17 +111,17 @@ class Module_admin_group_member_timeouts
         require_code('form_templates');
         require_code('templates_pagination');
 
-        $start = get_param_integer('start',0);
-        $max = get_param_integer('max',100);
-        $max_rows = $GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']->query_select_value('f_group_member_timeouts','COUNT(*)');
+        $start = get_param_integer('start', 0);
+        $max = get_param_integer('max', 100);
+        $max_rows = $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB']->query_select_value('f_group_member_timeouts', 'COUNT(*)');
 
         if (get_forum_type() == 'ocf') {
-            $num_usergroups = $GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
-            if ($num_usergroups>50) {
-                $_usergroups = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs s JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=s.s_group_id',array('g.id','g.g_name'),null,'ORDER BY g_order',1);
+            $num_usergroups = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
+            if ($num_usergroups > 50) {
+                $_usergroups = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs s JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=s.s_group_id', array('g.id', 'g.g_name'), null, 'ORDER BY g_order', 1);
                 $usergroups = array();
                 foreach ($_usergroups as $g) {
-                    $usergroups[$g['id']] = get_translated_text($g['g_name'],$GLOBALS['FORUM_DB']);
+                    $usergroups[$g['id']] = get_translated_text($g['g_name'], $GLOBALS['FORUM_DB']);
                 }
             } else {
                 $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
@@ -133,12 +133,12 @@ class Module_admin_group_member_timeouts
 
         single_field__start();
 
-        $rows = $GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']->query_select('f_group_member_timeouts',array('member_id','group_id','timeout'),null,'',$max,$start);
+        $rows = $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB']->query_select('f_group_member_timeouts', array('member_id', 'group_id', 'timeout'), null, '', $max, $start);
         $timeouts = array();
         foreach ($rows as $i => $row) {
             // Cleanup disassociated data
             if (!isset($usergroups[$row['group_id']])) {
-                $GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts',array('group_id' => $row['group_id']));
+                $GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts', array('group_id' => $row['group_id']));
                 continue;
             }
 
@@ -146,22 +146,22 @@ class Module_admin_group_member_timeouts
                 'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username($row['member_id']),
                 'MEMBER_ID' => strval($row['member_id']),
                 'GROUP_ID' => strval($row['group_id']),
-                'DATE_INPUT' => form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_' . strval($i),true,false,true,$row['timeout'],10,null,null),
+                'DATE_INPUT' => form_input_date(do_lang_tempcode('DATE'), new ocp_tempcode(), 'gmt_time_' . strval($i), true, false, true, $row['timeout'], 10, null, null),
             );
         }
 
-        $url = build_url(array('page' => '_SELF','type' => 'save'),'_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'save'), '_SELF');
 
-        $pagination = pagination(do_lang('GROUP_MEMBER_TIMEOUTS'),$start,'start',$max,'max',$max_rows);
+        $pagination = pagination(do_lang('GROUP_MEMBER_TIMEOUTS'), $start, 'start', $max, 'max', $max_rows);
 
         require_code('form_templates');
-        list($warning_details,$ping_url) = handle_conflict_resolution();
+        list($warning_details, $ping_url) = handle_conflict_resolution();
 
-        $ret = do_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN',array(
+        $ret = do_template('GROUP_MEMBER_TIMEOUT_MANAGE_SCREEN', array(
             'TITLE' => $this->title,
             'TIMEOUTS' => $timeouts,
             'GROUPS' => $usergroups,
-            'DATE_INPUT' => form_input_date(do_lang_tempcode('DATE'),new ocp_tempcode(),'gmt_time_new',true,false,true,null,10,null,null),
+            'DATE_INPUT' => form_input_date(do_lang_tempcode('DATE'), new ocp_tempcode(), 'gmt_time_new', true, false, true, null, 10, null, null),
             'URL' => $url,
             'PAGINATION' => $pagination,
             'PING_URL' => $ping_url,
@@ -185,24 +185,24 @@ class Module_admin_group_member_timeouts
         // Main edits
         foreach (array_keys($_POST) as $key) {
             $matches = array();
-            if (preg_match('#^gmt_username_(\d+)$#',$key,$matches) != 0) {
-                $old_group_id = post_param_integer('gmt_old_group_id_' . $matches[1],null);
-                $group_id = post_param_integer('gmt_group_id_' . $matches[1],null);
-                $username = post_param('gmt_username_' . $matches[1],'');
+            if (preg_match('#^gmt_username_(\d+)$#', $key, $matches) != 0) {
+                $old_group_id = post_param_integer('gmt_old_group_id_' . $matches[1], null);
+                $group_id = post_param_integer('gmt_group_id_' . $matches[1], null);
+                $username = post_param('gmt_username_' . $matches[1], '');
                 $time = get_input_date('gmt_time_' . $matches[1]);
 
-                $this->_save_group_member_timeout($old_group_id,$group_id,$username,$time);
+                $this->_save_group_member_timeout($old_group_id, $group_id, $username, $time);
             }
         }
 
         // Add new
 
-        $group_id = post_param_integer('gmt_group_id_new',null);
-        $username = post_param('gmt_username_new','');
+        $group_id = post_param_integer('gmt_group_id_new', null);
+        $username = post_param('gmt_username_new', '');
         $time = get_input_date('gmt_time_new');
 
         if ((!is_null($group_id)) && ($username != '') && (!is_null($time))) {
-            $this->_save_group_member_timeout(null,$group_id,$username,$time);
+            $this->_save_group_member_timeout(null, $group_id, $username, $time);
         }
 
         // Clean up
@@ -211,9 +211,9 @@ class Module_admin_group_member_timeouts
 
         // Redirect
 
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
 
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -224,28 +224,28 @@ class Module_admin_group_member_timeouts
      * @param  ID_TEXT                  The username
      * @param  TIME                     The expiry time
      */
-    public function _save_group_member_timeout($old_group_id,$group_id,$username,$time)
+    public function _save_group_member_timeout($old_group_id, $group_id, $username, $time)
     {
         $prefer_for_primary_group = false;//(post_param_integer('prefer_for_primary_group',0)==1); Don't promote this bad choice
 
         if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) { // Security issue, don't allow privilege elevation
             $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
-            if (in_array($group_id,$admin_groups)) {
+            if (in_array($group_id, $admin_groups)) {
                 warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
             }
         }
 
         $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
         if (is_null($member_id)) {
-            attach_message(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)),'warn');
+            attach_message(do_lang_tempcode('_MEMBER_NO_EXIST', escape_html($username)), 'warn');
         } else {
             if (!is_null($old_group_id)) {
-                $GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']->query_delete('f_group_member_timeouts',array(
+                $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB']->query_delete('f_group_member_timeouts', array(
                     'member_id' => $member_id,
                     'group_id' => $old_group_id,
-                ),'',1);
+                ), '', 1);
             }
-            set_member_group_timeout($member_id,$group_id,$time,$prefer_for_primary_group);
+            set_member_group_timeout($member_id, $group_id, $time, $prefer_for_primary_group);
         }
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_config_highlight_name
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_highlight_name
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'2000';
+        return (get_forum_type() != 'ocf') ? null : '2000';
     }
 }

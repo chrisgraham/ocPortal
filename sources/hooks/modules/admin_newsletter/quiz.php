@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_whats_news_quiz
 {
     /**
@@ -28,7 +27,7 @@ class Hook_whats_news_quiz
      * @param  string                   Category filter to apply
      * @return array                    Tuple of result details
      */
-    public function run($cutoff_time,$lang,$filter)
+    public function run($cutoff_time, $lang, $filter)
     {
         if (!addon_installed('quizzes')) {
             return array();
@@ -42,20 +41,20 @@ class Hook_whats_news_quiz
 
         $new = new ocp_tempcode();
 
-        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'quizzes WHERE q_add_date>' . strval($cutoff_time) . ' ORDER BY q_add_date DESC',$max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'quizzes WHERE q_add_date>' . strval($cutoff_time) . ' ORDER BY q_add_date DESC', $max);
         if (count($rows) == $max) {
             return array();
         }
         foreach ($rows as $row) {
             $id = $row['id'];
-            $_url = build_url(array('page' => 'quiz','type' => 'do','id' => $row['id']),get_module_zone('quiz'),null,false,false,true);
+            $_url = build_url(array('page' => 'quiz', 'type' => 'do', 'id' => $row['id']), get_module_zone('quiz'), null, false, false, true);
             $url = $_url->evaluate();
-            $name = get_translated_text($row['q_name'],null,$lang);
-            $description = get_translated_text($row['q_start_text'],null,$lang);
+            $name = get_translated_text($row['q_name'], null, $lang);
+            $description = get_translated_text($row['q_start_text'], null, $lang);
             $member_id = null;
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => '1a8cad8defc5b92eded5aee376250ae5','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'DESCRIPTION' => $description,'CONTENT_TYPE' => 'quiz','CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '1a8cad8defc5b92eded5aee376250ae5', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'quiz', 'CONTENT_ID' => strval($id))));
         }
 
-        return array($new,do_lang('QUIZZES','','','',$lang));
+        return array($new, do_lang('QUIZZES', '', '', '', $lang));
     }
 }

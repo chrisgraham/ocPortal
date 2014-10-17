@@ -24,6 +24,7 @@ require_code('database/shared/mysql');
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_mysql_dbx extends Database_super_mysql
@@ -42,47 +43,47 @@ class Database_Static_mysql_dbx extends Database_super_mysql
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (NULL: error)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
         if (!function_exists('dbx_connect')) {
             $error = 'dbx not on server (anymore?). Try using the \'mysql\' database driver. To use it, edit the _config.php config file.';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error);
+            critical_error('PASSON', $error);
         }
 
         // Potential cacheing
-        $x = serialize(array($db_name,$db_host));
-        if (array_key_exists($x,$this->cache_db)) {
-            return array($x,$db_name);
+        $x = serialize(array($db_name, $db_host));
+        if (array_key_exists($x, $this->cache_db)) {
+            return array($x, $db_name);
         }
 
-        $db = @dbx_connect('mysql',$db_host,$db_name,$db_user,$db_password,$persistent?1:0);
+        $db = @dbx_connect('mysql', $db_host, $db_name, $db_user, $db_password, $persistent ? 1 : 0);
         if (($db === false) || (is_null($db))) {
             $error = 'Could not connect to database/database-server';
             if ($fail_ok) {
                 echo $error . "\n";
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR')); // purposely not ===false
+            critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR')); // purposely not ===false
         }
         $this->last_select_db = $db;
 
         global $SITE_INFO;
-        if (!array_key_exists('database_charset',$SITE_INFO)) {
-            $SITE_INFO['database_charset'] = (strtolower(get_charset()) == 'utf-8')?'utf8':'latin1';
+        if (!array_key_exists('database_charset', $SITE_INFO)) {
+            $SITE_INFO['database_charset'] = (strtolower(get_charset()) == 'utf-8') ? 'utf8' : 'latin1';
         }
-        @dbx_query($db,'SET NAMES "' . addslashes($SITE_INFO['database_charset']) . '"');
-        @dbx_query($db,'SET WAIT_TIMEOUT=28800');
-        @dbx_query($db,'SET SQL_BIG_SELECTS=1');
+        @dbx_query($db, 'SET NAMES "' . addslashes($SITE_INFO['database_charset']) . '"');
+        @dbx_query($db, 'SET WAIT_TIMEOUT=28800');
+        @dbx_query($db, 'SET SQL_BIG_SELECTS=1');
         if ((get_forum_type() == 'ocf') && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) {
-            @dbx_query($db,'SET sql_mode=\'STRICT_ALL_TABLES\'');
+            @dbx_query($db, 'SET sql_mode=\'STRICT_ALL_TABLES\'');
         }
         // NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
-        return array($db,$db_name);
+        return array($db, $db_name);
     }
 
     /**
@@ -142,7 +143,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
         if (is_null($this->last_select_db)) {
             return addslashes($string);
         }
-        return dbx_escape_string($this->last_select_db,$string);
+        return dbx_escape_string($this->last_select_db, $string);
     }
 
     /**
@@ -156,63 +157,63 @@ class Database_Static_mysql_dbx extends Database_super_mysql
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db_parts,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    public function db_query($query, $db_parts, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
         list($db,) = $db_parts;
 
         if (isset($query[500000])) { // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
-            $test_result = $this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'',$db_parts,null,null,true);
+            $test_result = $this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'', $db_parts, null, null, true);
 
             if (!is_array($test_result)) {
-                return NULL;
+                return null;
             }
-            if (intval($test_result[0]['Value'])<intval(strlen($query)*1.2)) {
+            if (intval($test_result[0]['Value']) < intval(strlen($query) * 1.2)) {
                 /*@mysql_query('SET session max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); Does not work well, as MySQL server has gone away error will likely just happen instead */
 
                 if ($get_insert_id) {
-                    fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG',escape_html($query)));
+                    fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG', escape_html($query)));
                 }
-                return NULL;
+                return null;
             }
         }
 
-        if (($max !== NULL) && ($start !== NULL)) {
+        if (($max !== null) && ($start !== null)) {
             $query .= ' LIMIT ' . strval($start) . ',' . strval($max);
-        } elseif ($max !== NULL) {
+        } elseif ($max !== null) {
             $query .= ' LIMIT ' . strval($max);
-        } elseif ($start !== NULL) {
+        } elseif ($start !== null) {
             $query .= ' LIMIT ' . strval($start) . ',30000000';
         }
 
-        $results = @dbx_query($db,$query,DBX_RESULT_INFO);
-        if (($results === 0) && ((!$fail_ok) || (strpos(dbx_error($db),'is marked as crashed and should be repaired') !== false))) {
+        $results = @dbx_query($db, $query, DBX_RESULT_INFO);
+        if (($results === 0) && ((!$fail_ok) || (strpos(dbx_error($db), 'is marked as crashed and should be repaired') !== false))) {
             $err = dbx_error($db);
             if (function_exists('ocp_mark_as_escaped')) {
                 ocp_mark_as_escaped($err);
             }
-            if ((!running_script('upgrader')) && (!get_mass_import_mode()) && (strpos($err,'Duplicate entry') === false)) {
+            if ((!running_script('upgrader')) && (!get_mass_import_mode()) && (strpos($err, 'Duplicate entry') === false)) {
                 $matches = array();
-                if (preg_match('#/(\w+)\' is marked as crashed and should be repaired#U',$err,$matches) != 0) {
-                    $this->db_query('REPAIR TABLE ' . $matches[1],$db_parts);
+                if (preg_match('#/(\w+)\' is marked as crashed and should be repaired#U', $err, $matches) != 0) {
+                    $this->db_query('REPAIR TABLE ' . $matches[1], $db_parts);
                 }
 
-                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED', null, null, null, null, false))) {
                     fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
                 }
-                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+                fatal_exit(do_lang_tempcode('QUERY_FAILED', escape_html($query), ($err)));
             } else {
                 echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
-                return NULL;
+                return null;
             }
         }
 
-        $sub = substr(ltrim($query),0,7);
-        if ((is_object($results)) && (($sub == 'SELECT ') || ($sub == 'select ') || (strtoupper(substr(ltrim($query),0,8)) == 'EXPLAIN ') || (strtoupper(substr(ltrim($query),0,9)) == 'DESCRIBE ') || (strtoupper(substr(ltrim($query),0,5)) == 'SHOW ')) && ($results !== false)) {
+        $sub = substr(ltrim($query), 0, 7);
+        if ((is_object($results)) && (($sub == 'SELECT ') || ($sub == 'select ') || (strtoupper(substr(ltrim($query), 0, 8)) == 'EXPLAIN ') || (strtoupper(substr(ltrim($query), 0, 9)) == 'DESCRIBE ') || (strtoupper(substr(ltrim($query), 0, 5)) == 'SHOW ')) && ($results !== false)) {
             return $this->db_get_query_rows($results);
         }
 
         if ($get_insert_id) {
-            if (strtoupper(substr($query,0,7)) == 'UPDATE ') {
+            if (strtoupper(substr($query, 0, 7)) == 'UPDATE ') {
                 if (function_exists('mysql_affected_rows')) {
                     return mysql_affected_rows($db->handle);
                 } else {
@@ -220,14 +221,14 @@ class Database_Static_mysql_dbx extends Database_super_mysql
                 }
             }
 
-            if (strtoupper(substr($query,0,12)) == 'INSERT INTO ') {
-                $table = substr($query,12,strpos($query,' ',12)-12);
-                $rows = $this->db_query('SELECT MAX(id) AS x FROM ' . $table,$db_parts,1,0,false,false);
+            if (strtoupper(substr($query, 0, 12)) == 'INSERT INTO ') {
+                $table = substr($query, 12, strpos($query, ' ', 12) - 12);
+                $rows = $this->db_query('SELECT MAX(id) AS x FROM ' . $table, $db_parts, 1, 0, false, false);
                 return $rows[0]['x'];
             }
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -241,7 +242,7 @@ class Database_Static_mysql_dbx extends Database_super_mysql
         $num_fields = $results->cols;
         $names = array();
         $types = array();
-        for ($x = 0;$x<$num_fields;$x++) {
+        for ($x = 0; $x < $num_fields; $x++) {
             $names[$x] = $results->info['name'][$x];
             $types[$x] = $results->info['type'][$x];
         }

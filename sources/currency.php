@@ -45,7 +45,7 @@ function country_to_currency($country)
     $map = get_currency_map();
     $currency = null;
     foreach ($map as $tmp_currency => $countries) {
-        if (in_array($country,$countries)) {
+        if (in_array($country, $countries)) {
             $currency = $tmp_currency;
             break;
         }
@@ -62,13 +62,13 @@ function country_to_currency($country)
  * @param  boolean                      Whether to get as a string.
  * @return ?mixed                       The new amount as float, or if $string then as a string (NULL: failed to do it).
  */
-function currency_convert($amount,$from_currency,$to_currency = null,$string = false)
+function currency_convert($amount, $from_currency, $to_currency = null, $string = false)
 {
     // Check data
     $from_currency = strtoupper($from_currency);
     $map = get_currency_map();
-    if (!array_key_exists($from_currency,$map)) {
-        return NULL;
+    if (!array_key_exists($from_currency, $map)) {
+        return null;
     }
 
     if (is_null($to_currency)) {
@@ -76,7 +76,7 @@ function currency_convert($amount,$from_currency,$to_currency = null,$string = f
         // ========================================
 
         // keep_currency
-        $to_currency = get_param('keep_currency',null);
+        $to_currency = get_param('keep_currency', null);
         if (is_null($to_currency)) {
             // a specially named custom profile field for the currency.
             $to_currency = get_ocp_cpf('currency');
@@ -85,7 +85,7 @@ function currency_convert($amount,$from_currency,$to_currency = null,$string = f
             }
             if (is_null($to_currency)) {
                 // keep_country
-                $country = get_param('keep_country',null);
+                $country = get_param('keep_country', null);
                 if (!is_null($country)) {
                     $to_currency = country_to_currency($country);
                 }
@@ -111,33 +111,33 @@ function currency_convert($amount,$from_currency,$to_currency = null,$string = f
 
     // We'll use Google as a simple web service
     if ($from_currency == $to_currency) {
-        $new_amount = is_integer($amount)?floatval($amount):$amount;
+        $new_amount = is_integer($amount) ? floatval($amount) : $amount;
     } else {
-        $cache_key = 'currency_' . $from_currency . '_' . $to_currency . (is_float($amount)?float_to_raw_string($amount):strval($amount));
-        $_new_amount = get_long_value_newer_than($cache_key,time()-60*60*24*2);
-        $new_amount = is_null($_new_amount)?null:floatval($_new_amount);
+        $cache_key = 'currency_' . $from_currency . '_' . $to_currency . (is_float($amount) ? float_to_raw_string($amount) : strval($amount));
+        $_new_amount = get_long_value_newer_than($cache_key, time() - 60 * 60 * 24 * 2);
+        $new_amount = is_null($_new_amount) ? null : floatval($_new_amount);
         if (is_null($new_amount)) {
-            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'long_values WHERE the_name LIKE \'' . db_encode_like('currency_%') . '\' AND date_and_time<' . strval(time()-60*60*24*2)); // Cleanup
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'long_values WHERE the_name LIKE \'' . db_encode_like('currency_%') . '\' AND date_and_time<' . strval(time() - 60 * 60 * 24 * 2)); // Cleanup
 
-            $google_url = 'http://www.google.com/finance/converter?a=' . (is_float($amount)?float_to_raw_string($amount):strval($amount)) . '&from=' . $from_currency . '&to=' . strtoupper($to_currency);
-            $result = http_download_file($google_url,null,false);
+            $google_url = 'http://www.google.com/finance/converter?a=' . (is_float($amount) ? float_to_raw_string($amount) : strval($amount)) . '&from=' . $from_currency . '&to=' . strtoupper($to_currency);
+            $result = http_download_file($google_url, null, false);
             if (is_string($result)) {
                 $matches = array();
 
-                for ($i = 0;$i<strlen($result);$i++) { // bizarre unicode characters coming back from Google
-                    if (ord($result[$i])>127) {
+                for ($i = 0; $i < strlen($result); $i++) { // bizarre unicode characters coming back from Google
+                    if (ord($result[$i]) > 127) {
                         $result[$i] = ' ';
                     }
                 }
-                if (preg_match('#<span class=bld>([\d\., ]+) [A-Z]+</span>#U',$result,$matches) != 0) { // e.g. <b>1400 British pounds = 2 024.4 U.S. dollars</b>
-                    $new_amount = floatval(str_replace(',','',str_replace(' ','',$matches[1])));
+                if (preg_match('#<span class=bld>([\d\., ]+) [A-Z]+</span>#U', $result, $matches) != 0) { // e.g. <b>1400 British pounds = 2 024.4 U.S. dollars</b>
+                    $new_amount = floatval(str_replace(',', '', str_replace(' ', '', $matches[1])));
 
-                    set_long_value($cache_key,float_to_raw_string($new_amount));
+                    set_long_value($cache_key, float_to_raw_string($new_amount));
                 } else {
-                    return NULL;
+                    return null;
                 }
             } else { // no-can-do
-                $new_amount = is_integer($amount)?floatval($amount):$amount;
+                $new_amount = is_integer($amount) ? floatval($amount) : $amount;
                 $to_currency = $from_currency;
             }
         }
@@ -145,13 +145,13 @@ function currency_convert($amount,$from_currency,$to_currency = null,$string = f
 
     if ($string) {
         $ret = '';
-        if (in_array($to_currency,array('USD','AUD','CAD','SRD','SBD','SGD','NZD','NAD','MXN','LRD','GYD','FJD','SVC','XCD','COP','CLP','KYD','BND','BMD','BBD','BSD','ARS'))) {
+        if (in_array($to_currency, array('USD', 'AUD', 'CAD', 'SRD', 'SBD', 'SGD', 'NZD', 'NAD', 'MXN', 'LRD', 'GYD', 'FJD', 'SVC', 'XCD', 'COP', 'CLP', 'KYD', 'BND', 'BMD', 'BBD', 'BSD', 'ARS'))) {
             $ret .= '$';
-        } elseif (in_array($to_currency,array('GBP','SHP','LBP','JEP','GGP','GIP','FKP','EGP'))) {
+        } elseif (in_array($to_currency, array('GBP', 'SHP', 'LBP', 'JEP', 'GGP', 'GIP', 'FKP', 'EGP'))) {
             $ret .= '&pound;';
-        } elseif (in_array($to_currency,array('JPY'))) {
+        } elseif (in_array($to_currency, array('JPY'))) {
             $ret .= '&yen;';
-        } elseif (in_array($to_currency,array('EUR'))) {
+        } elseif (in_array($to_currency, array('EUR'))) {
             $ret .= '&euro;';
         }
         $ret .= escape_html(float_format($new_amount)) . '&nbsp;' . escape_html($to_currency);
@@ -169,7 +169,7 @@ function currency_convert($amount,$from_currency,$to_currency = null,$string = f
 function get_currency_map()
 {
     return array
-        (
+    (
         'AED' => array
         (
             'AE'

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_image_thumbs
 {
     /**
@@ -28,7 +27,7 @@ class Hook_image_thumbs
     public function info()
     {
         if (!function_exists('imagetypes')) {
-            return NULL;
+            return null;
         }
 
         $info = array();
@@ -68,7 +67,7 @@ class Hook_image_thumbs
                 $target = get_custom_file_base() . '/' . $dir . '_thumbs/' . $file;
                 if ((!file_exists($target)) && (is_image($full . '/' . $file))) {
                     require_code('images');
-                    convert_image($full . '/' . $file,$target,-1,-1,intval(get_option('thumb_width')));
+                    convert_image($full . '/' . $file, $target, -1, -1, intval(get_option('thumb_width')));
                 }
             }
         }

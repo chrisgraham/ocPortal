@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_config_points_ADD_IMAGE
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_ADD_IMAGE
      */
     public function get_default()
     {
-        return addon_installed('points')?'100':null;
+        return addon_installed('points') ? '100' : null;
     }
 }

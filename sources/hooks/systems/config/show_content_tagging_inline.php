@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_show_content_tagging_inline
 {
     /**

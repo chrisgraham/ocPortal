@@ -24,7 +24,7 @@
  * @param  PATH                         File path.
  * @param  boolean                      Whether to do a lossy convert.
  */
-function png_compress($path,$lossy = false)
+function png_compress($path, $lossy = false)
 {
     if (!is_file($path)) {
         return;
@@ -44,10 +44,10 @@ function png_compress($path,$lossy = false)
     $width = imagesx($img);
     $height = imagesy($img);
     $has_alpha = false;
-    for ($y = 0;$y<$height;$y++) {
-        for ($x = 0;$x<$width;$x++) {
-            $at = imagecolorat($img,$x,$y);
-            $parsed_colour = imagecolorsforindex($img,$at);
+    for ($y = 0; $y < $height; $y++) {
+        for ($x = 0; $x < $width; $x++) {
+            $at = imagecolorat($img, $x, $y);
+            $parsed_colour = imagecolorsforindex($img, $at);
             if ((isset($parsed_colour['alpha'])) && ($parsed_colour['alpha'] != 0)) {
                 $has_alpha = true;
             }
@@ -57,28 +57,28 @@ function png_compress($path,$lossy = false)
     // Product JPEG version, if relevant
     $trying_jpeg = (!$has_alpha) && ($lossy) && (get_value('save_jpegs_as_png') === '1');
     if ($trying_jpeg) {
-        imagejpeg($img,$path . '.jpeg_tmp',intval(get_option('jpeg_quality'))); // We will ultimately save as a .png which is actually the JPEG. We rely on ocPortal, and browsers, doing their magic detection of images (not just relying on mime types)
+        imagejpeg($img, $path . '.jpeg_tmp', intval(get_option('jpeg_quality'))); // We will ultimately save as a .png which is actually the JPEG. We rely on ocPortal, and browsers, doing their magic detection of images (not just relying on mime types)
         $jpeg_size = filesize($path . '.jpeg_tmp');
     }
 
     // Check we don't have too many colours for 8-bit
     $colours = array();
-    for ($y = 0;$y<$height;$y++) {
-        for ($x = 0;$x<$width;$x++) {
-            $at = imagecolorat($img,$x,$y);
+    for ($y = 0; $y < $height; $y++) {
+        for ($x = 0; $x < $width; $x++) {
+            $at = imagecolorat($img, $x, $y);
             if ($lossy) {
                 $at = $at & ~bindec('00001111' . '00001111' . '00001111' . '00111111');
             } // Reduce to a colour resolution of 16 distinct values on each of RGB, and 4 on A
             $colours[$at] = true;
-            if (count($colours)>300) { // Give some grace, but >300 is unworkable (at least 44 too many)
+            if (count($colours) > 300) { // Give some grace, but >300 is unworkable (at least 44 too many)
                 // Too many colours for 8-bit...
 
                 // Try as a JPEG?
                 if ($trying_jpeg) {
                     $png_size = filesize($path);
-                    if ($jpeg_size<$png_size) {
+                    if ($jpeg_size < $png_size) {
                         unlink($path);
-                        rename($path . '.jpeg_tmp',$path);
+                        rename($path . '.jpeg_tmp', $path);
                     } else {
                         unlink($path . '.jpeg_tmp');
                     }
@@ -96,21 +96,21 @@ function png_compress($path,$lossy = false)
     // Try as 8-bit...
 
     if ($has_alpha) {
-        $alphabg = imagecolorallocatealpha($img,0,0,0,127);
-        imagecolortransparent($img,$alphabg);
+        $alphabg = imagecolorallocatealpha($img, 0, 0, 0, 127);
+        imagecolortransparent($img, $alphabg);
     }
 
-    imagetruecolortopalette($img,true,256);
+    imagetruecolortopalette($img, true, 256);
 
-    imagesavealpha($img,true);
+    imagesavealpha($img, true);
 
-    imagepng($img,$path,9);
+    imagepng($img, $path, 9);
 
     if ($trying_jpeg) {
         $png_size = filesize($path); // Find size of 8-bit PNG
-        if ($jpeg_size<$png_size) {
+        if ($jpeg_size < $png_size) {
             unlink($path);
-            rename($path . '.jpeg_tmp',$path);
+            rename($path . '.jpeg_tmp', $path);
         } else {
             unlink($path . '.jpeg_tmp');
         }

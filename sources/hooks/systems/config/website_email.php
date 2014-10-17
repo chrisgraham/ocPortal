@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_website_email
 {
     /**
@@ -50,7 +49,7 @@ class Hook_config_website_email
     {
         $staff_address = get_option('staff_address');
         $website_email = 'website@' . get_domain();
-        if (substr($staff_address,-strlen(get_domain())-1) == '@' . get_domain()) {
+        if (substr($staff_address, -strlen(get_domain()) - 1) == '@' . get_domain()) {
             $website_email = $staff_address;
         }
         return $website_email;

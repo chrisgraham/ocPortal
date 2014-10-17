@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_config_download_entries_per_page
 {
     /**

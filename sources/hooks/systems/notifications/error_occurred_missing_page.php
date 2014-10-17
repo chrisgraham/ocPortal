@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_Notification_error_occurred_missing_page extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_error_occurred_missing_page extends Hook_Notification__S
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_error_occurred_missing_page extends Hook_Notification__S
     public function list_handled_codes()
     {
         $list = array();
-        $list['error_occurred_missing_page'] = array(do_lang('ERRORS'),do_lang('NOTIFICATION_TYPE_error_occurred_missing_page'));
+        $list['error_occurred_missing_page'] = array(do_lang('ERRORS'), do_lang('NOTIFICATION_TYPE_error_occurred_missing_page'));
         return $list;
     }
 }

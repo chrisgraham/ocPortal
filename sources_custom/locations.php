@@ -300,13 +300,13 @@ function find_continent($country)
 
     global $COUNTRY_LIST;
     foreach ($COUNTRY_LIST as $continent => $countries) {
-        if (in_array($country,$countries)) {
+        if (in_array($country, $countries)) {
             $cache[$country] = $continent;
             return $continent;
         }
     }
 
-    return NULL;
+    return null;
 }
 
 function find_iso_country_name($country)
@@ -319,14 +319,14 @@ function find_iso_country_name($country)
 
     global $COUNTRY_LIST;
     foreach ($COUNTRY_LIST as $countries) {
-        $code = array_search($country,$countries);
+        $code = array_search($country, $countries);
         if ($code !== false) {
             $cache[$country] = $code;
             return $code;
         }
     }
 
-    return NULL;
+    return null;
 }
 
 function find_country_name_from_iso($iso)
@@ -345,5 +345,5 @@ function find_country_name_from_iso($iso)
         }
     }
 
-    return NULL;
+    return null;
 }

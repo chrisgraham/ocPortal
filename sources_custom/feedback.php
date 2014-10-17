@@ -12,10 +12,10 @@
  */
 function init__feedback()
 {
-    define('MAX_LIKES_TO_SHOW',20);
+    define('MAX_LIKES_TO_SHOW', 20);
 
-    define('RATING_TYPE_star_choice',0);
-    define('RATING_TYPE_like_dislike',1);
+    define('RATING_TYPE_star_choice', 0);
+    define('RATING_TYPE_like_dislike', 1);
 
     global $RATINGS_STRUCTURE;
     $RATINGS_STRUCTURE = array(

@@ -8,19 +8,19 @@
 */
 
 /**
- * @license		http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
- * @copyright	ocProducts Ltd
- * @package		rootkit_detector
+ * @license        http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
+ * @copyright    ocProducts Ltd
+ * @package        rootkit_detector
  */
 
 /*EXTRA FUNCTIONS: mysql\_.+*/
 
 // Find ocPortal base directory, and chdir into it
-global $FILE_BASE,$RELATIVE_PATH;
-$FILE_BASE = (strpos(__FILE__,'./') === false)?__FILE__:realpath(__FILE__);
+global $FILE_BASE, $RELATIVE_PATH;
+$FILE_BASE = (strpos(__FILE__, './') === false) ? __FILE__ : realpath(__FILE__);
 $FILE_BASE = dirname($FILE_BASE);
 if (!is_file($FILE_BASE . '/sources/global.php')) {
-     
+
     $RELATIVE_PATH = basename($FILE_BASE);
     $FILE_BASE = dirname($FILE_BASE);
 } else {
@@ -28,7 +28,7 @@ if (!is_file($FILE_BASE . '/sources/global.php')) {
 }
 @chdir($FILE_BASE);
 
-$type = isset($_GET['type'])?$_GET['type']:'';
+$type = isset($_GET['type']) ? $_GET['type'] : '';
 
 rd_do_header();
 
@@ -57,7 +57,7 @@ if ($type == '') {
 END;
 
     if (isset($_SERVER['APPLICATION_ID'])) {// Google App Engine
-    echo <<<END
+        echo <<<END
 			<p>E-mail results to (required): <input type="text" name="email" /></p>
 END;
     }
@@ -77,7 +77,7 @@ END;
 
     $info_file = file_get_contents($FILE_BASE . '/_config.php');
     $matches = array();
-    if (preg_match('#\$SITE_INFO\[\'master_password\'\]=\'([^\']*)\';#',$info_file,$matches) == 0) {
+    if (preg_match('#\$SITE_INFO\[\'master_password\'\]=\'([^\']*)\';#', $info_file, $matches) == 0) {
         exit(':(');
     }
     global $SITE_INFO;
@@ -88,13 +88,13 @@ END;
         exit();
     }
 
-    $db = mysql_connect($settings['db_host'],$settings['db_user'],$settings['db_pass']);
+    $db = mysql_connect($settings['db_host'], $settings['db_user'], $settings['db_pass']);
     if ($db === false) {
         echo '<p>Could not connect (1)</p>';
         rd_do_footer();
         exit();
     }
-    if (!mysql_select_db($settings['db_name'],$db)) {
+    if (!mysql_select_db($settings['db_name'], $db)) {
         echo '<p>Could not connect (2)</p>';
         rd_do_footer();
         exit();
@@ -102,12 +102,12 @@ END;
 
     if (isset($_SERVER['APPLICATION_ID'])) { // Google App Engine
         if (isset($_GET['settings'])) { // Running out of the task queue
-            $settings = unserialize(get_magic_quotes_gpc()?stripslashes($_GET['settings']):$_GET['settings']);
+            $settings = unserialize(get_magic_quotes_gpc() ? stripslashes($_GET['settings']) : $_GET['settings']);
         } else { // Put into the task queue
             require_once('google/appengine/api/taskqueue/PushTask.php');
 
             $pushtask = '\google\appengine\api\taskqueue\PushTask'; // So does not give a parser error on older versions of PHP
-            $task = new $pushtask('/rootkit_detection.php',array('type' => 'go','settings' => serialize($settings)));
+            $task = new $pushtask('/rootkit_detection.php', array('type' => 'go', 'settings' => serialize($settings)));
             $task_name = $task->add();
 
             echo '<p>The task has been added to the GAE task queue.</p>';
@@ -115,22 +115,22 @@ END;
             exit();
         }
     }
-    
+
     $results = '';
 
     // Check database
     $prefix = $settings['db_prefix'];
     if (file_exists($FILE_BASE . '/sources/hooks/systems/addon_registry/calendar_events.php')) {
-        $multi_lang_content = isset($SITE_INFO['multi_lang_content'])?($SITE_INFO['multi_lang_content'] == '1'):true;
+        $multi_lang_content = isset($SITE_INFO['multi_lang_content']) ? ($SITE_INFO['multi_lang_content'] == '1') : true;
         if ($multi_lang_content) {
-            $r = mysql_query('SELECT * FROM ' . $prefix . 'calendar_events e LEFT JOIN ' . $prefix . 'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id',$db);
+            $r = mysql_query('SELECT * FROM ' . $prefix . 'calendar_events e LEFT JOIN ' . $prefix . 'translate t on e.e_content=t.id WHERE e_type=1 ORDER BY e.id', $db);
             if ($r !== false) {
                 while (($row = mysql_fetch_assoc($r)) !== false) {
                     $results .= "Cronjob: {$row['id']}=" . md5($row['text_original']) . "\n";
                 }
             }
         } else {
-            $r = mysql_query('SELECT * FROM ' . $prefix . 'calendar_events e WHERE e_type=1 ORDER BY e.id',$db);
+            $r = mysql_query('SELECT * FROM ' . $prefix . 'calendar_events e WHERE e_type=1 ORDER BY e.id', $db);
             if ($r !== false) {
                 while (($row = mysql_fetch_assoc($r)) !== false) {
                     $results .= "Cronjob: {$row['id']}=" . md5($row['e_content']) . "\n";
@@ -138,7 +138,7 @@ END;
             }
         }
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'f_groups WHERE g_is_super_admin=1 OR g_is_super_moderator=1 ORDER BY id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'f_groups WHERE g_is_super_admin=1 OR g_is_super_moderator=1 ORDER BY id', $db);
     $staff_groups = array();
     $pg = '';
     while (($row = mysql_fetch_assoc($r)) !== false) {
@@ -149,27 +149,27 @@ END;
         $staff_groups[] = $row['id'];
         $results .= "Staff-group: {$row['id']}=N/A\n";
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'f_members WHERE ' . $pg . ' ORDER BY id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'f_members WHERE ' . $pg . ' ORDER BY id', $db);
     while (($row = mysql_fetch_assoc($r)) !== false) {
         $results .= "In-staff-group (primary): {$row['id']}=N/A\n";
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'f_group_members WHERE (' . str_replace('m_primary_group','gm_group_id',$pg) . ') AND gm_validated=1 ORDER BY gm_member_id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'f_group_members WHERE (' . str_replace('m_primary_group', 'gm_group_id', $pg) . ') AND gm_validated=1 ORDER BY gm_member_id', $db);
     while (($row = mysql_fetch_assoc($r)) !== false) {
         $results .= "In-staff-group (secondary): {$row['gm_member_id']}=N/A\n";
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'group_zone_access WHERE zone_name=\'cms\' OR zone_name=\'adminzone\' OR zone_name=\'collaboration\' ORDER BY zone_name,group_id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'group_zone_access WHERE zone_name=\'cms\' OR zone_name=\'adminzone\' OR zone_name=\'collaboration\' ORDER BY zone_name,group_id', $db);
     while (($row = mysql_fetch_assoc($r)) !== false) {
         $results .= "Zone-access: {$row['zone_name']}/{$row['group_id']}=N/A\n";
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'group_privileges WHERE the_value=1 ORDER BY privilege,the_page,module_the_name,category_name,group_id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'group_privileges WHERE the_value=1 ORDER BY privilege,the_page,module_the_name,category_name,group_id', $db);
     while (($row = mysql_fetch_assoc($r)) !== false) {
         $results .= "Privileges: {$row['privilege']}/{$row['the_page']}/{$row['module_the_name']}/{$row['category_name']}/{$row['group_id']}={$row['the_value']}\n";
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'member_zone_access WHERE zone_name=\'cms\' OR zone_name=\'adminzone\' OR zone_name=\'collaboration\' ORDER BY zone_name,member_id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'member_zone_access WHERE zone_name=\'cms\' OR zone_name=\'adminzone\' OR zone_name=\'collaboration\' ORDER BY zone_name,member_id', $db);
     while (($row = mysql_fetch_assoc($r)) !== false) {
         $results .= "Member-Zone-access: {$row['zone_name']}/{$row['member_id']}=N/A\n";
     }
-    $r = mysql_query('SELECT * FROM ' . $prefix . 'member_privileges WHERE the_value=1 ORDER BY privilege,the_page,module_the_name,category_name,member_id',$db);
+    $r = mysql_query('SELECT * FROM ' . $prefix . 'member_privileges WHERE the_value=1 ORDER BY privilege,the_page,module_the_name,category_name,member_id', $db);
     while (($row = mysql_fetch_assoc($r)) !== false) {
         $results .= "Member-Privileges: {$row['privilege']}/{$row['the_page']}/{$row['module_the_name']}/{$row['category_name']}/{$row['member_id']}={$row['the_value']}\n";
     }
@@ -216,24 +216,24 @@ rd_do_footer();
 /**
  * Search inside a directory for files.
  *
- * @param  SHORT_TEXT	The directory path to search.
- * @return array			The HTML for the list box selection.
+ * @param  SHORT_TEXT    The directory path to search.
+ * @return array            The HTML for the list box selection.
  */
 function rd_do_dir($dir)
 {
     $out = array();
-    $_dir = ($dir == '')?'.':$dir;
+    $_dir = ($dir == '') ? '.' : $dir;
     $dh = @opendir($_dir);
     if ($dh !== false) {
         while (($file = readdir($dh)) !== false) {
-            if (!in_array($file,array('.','..','website_specific'))) {
+            if (!in_array($file, array('.', '..', 'website_specific'))) {
                 if (is_file($_dir . '/' . $file)) {
-                    $path = $dir . (($dir != '')?'/':'') . $file;
-                    if (substr($path,-4) == '.php') {
+                    $path = $dir . (($dir != '') ? '/' : '') . $file;
+                    if (substr($path, -4) == '.php') {
                         $out[] = $path;
                     }
                 } elseif (is_dir($_dir . '/' . $file)) {
-                    $out = array_merge($out,rd_do_dir($dir . (($dir != '')?'/':'') . $file));
+                    $out = array_merge($out, rd_do_dir($dir . (($dir != '') ? '/' : '') . $file));
                 }
             }
         }
@@ -254,7 +254,7 @@ function rd_do_header()
 		<link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
 		<style>/*<![CDATA[*/
 END;
-    @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
+    @print(preg_replace('#/\*\s*\*/\s*#', '', str_replace('url(\'\')', 'none', str_replace('url("")', 'none', preg_replace('#\{\$[^\}]*\}#', '', preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#', '$2', file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
     echo <<<END
 			.screen_title { text-decoration: underline; display: block; background: url('themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
 			.button_screen { padding: 0.5em 0.3em !important; }
@@ -282,22 +282,22 @@ END;
 /**
  * Check the given master password is valid.
  *
- * @param  SHORT_TEXT	Given master password
- * @return boolean		Whether it is valid
+ * @param  SHORT_TEXT    Given master password
+ * @return boolean        Whether it is valid
  */
 function rk_check_master_password($password_given)
 {
     global $SITE_INFO;
-    if (!array_key_exists('master_password',$SITE_INFO)) {
+    if (!array_key_exists('master_password', $SITE_INFO)) {
         exit('No master password defined in _config.php currently so cannot authenticate');
     }
     $actual_password_hashed = $SITE_INFO['master_password'];
-    if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$') !== false)) {
-        return password_verify($password_given,$actual_password_hashed);
+    if ((function_exists('password_verify')) && (strpos($actual_password_hashed, '$') !== false)) {
+        return password_verify($password_given, $actual_password_hashed);
     }
     $salt = '';
-    if ((substr($actual_password_hashed,0,1) == '!') && (strlen($actual_password_hashed) == 33)) {
-        $actual_password_hashed = substr($actual_password_hashed,1);
+    if ((substr($actual_password_hashed, 0, 1) == '!') && (strlen($actual_password_hashed) == 33)) {
+        $actual_password_hashed = substr($actual_password_hashed, 1);
         $salt = 'ocp';
     }
     return (((strlen($password_given) != 32) && ($actual_password_hashed == $password_given)) || ($actual_password_hashed == md5($password_given . $salt)));

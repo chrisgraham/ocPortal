@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Notification_ocf_member_joined_group extends Hook_Notification
 {
     /**
@@ -39,22 +38,22 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
         $map = array();
-        if (!has_privilege(get_member(),'see_hidden_groups')) {
+        if (!has_privilege(get_member(), 'see_hidden_groups')) {
             $map['g_hidden'] = 0;
         }
-        $types = $GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),$map);
+        $types = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), $map);
         foreach ($types as $type) {
             $page_links[] = array(
                 'id' => $type['id'],
-                'title' => get_translated_text($type['g_name'],$GLOBALS['FORUM_DB']),
+                'title' => get_translated_text($type['g_name'], $GLOBALS['FORUM_DB']),
             );
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -66,7 +65,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -80,7 +79,7 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['ocf_member_joined_group'] = array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_member_joined_group'));
+        $list['ocf_member_joined_group'] = array(do_lang('GROUPS'), do_lang('ocf:NOTIFICATION_TYPE_ocf_member_joined_group'));
         return $list;
     }
 
@@ -94,18 +93,18 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        list($members,$maybe_more) = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        list($members,$maybe_more) = $this->_all_members_who_have_enabled_with_page_access(array($members,$maybe_more),'groups',$notification_code,$category,$to_member_ids,$start,$max);
+        list($members, $maybe_more) = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        list($members, $maybe_more) = $this->_all_members_who_have_enabled_with_page_access(array($members, $maybe_more), 'groups', $notification_code, $category, $to_member_ids, $start, $max);
 
         if (is_numeric($category)) { // Filter if the group is hidden
-            $hidden = $GLOBALS['FORUM_DB']->query_select_value('f_groups','g_hidden',array('id' => intval($category)));
+            $hidden = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'g_hidden', array('id' => intval($category)));
 
             if ($hidden == 1) {
                 $members_new = array();
                 foreach ($members as $member_id => $setting) {
-                    if (has_privilege($member_id,'see_hidden_groups')) {
+                    if (has_privilege($member_id, 'see_hidden_groups')) {
                         $members_new[$member_id] = $setting;
                     }
                 }
@@ -113,6 +112,6 @@ class Hook_Notification_ocf_member_joined_group extends Hook_Notification
             }
         }
 
-        return array($members,$maybe_more);
+        return array($members, $maybe_more);
     }
 }

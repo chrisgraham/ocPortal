@@ -35,10 +35,10 @@ class Hook_occle_fs_news extends resource_fs_base
     {
         switch ($resource_type) {
             case 'news':
-                return $GLOBALS['SITE_DB']->query_select_value('news','COUNT(*)');
+                return $GLOBALS['SITE_DB']->query_select_value('news', 'COUNT(*)');
 
             case 'news_category':
-                return $GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)');
+                return $GLOBALS['SITE_DB']->query_select_value('news_categories', 'COUNT(*)');
         }
         return 0;
     }
@@ -50,11 +50,11 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
         switch ($resource_type) {
             case 'news':
-                $_ret = $GLOBALS['SITE_DB']->query_select('news',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('title') => $label));
+                $_ret = $GLOBALS['SITE_DB']->query_select('news', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('title') => $label));
                 $ret = array();
                 foreach ($_ret as $r) {
                     $ret[] = strval($r['id']);
@@ -62,7 +62,7 @@ class Hook_occle_fs_news extends resource_fs_base
                 return $ret;
 
             case 'news_category':
-                $_ret = $GLOBALS['SITE_DB']->query_select('news_categories',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('nc_title') => $label));
+                $_ret = $GLOBALS['SITE_DB']->query_select('news_categories', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('nc_title') => $label));
                 $ret = array();
                 foreach ($_ret as $r) {
                     $ret[] = strval($r['id']);
@@ -94,7 +94,7 @@ class Hook_occle_fs_news extends resource_fs_base
      */
     public function _get_folder_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_NEWS_CATEGORY') . ' OR ' . db_string_equal_to('the_type','EDIT_NEWS_CATEGORY') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_NEWS_CATEGORY') . ' OR ' . db_string_equal_to('the_type', 'EDIT_NEWS_CATEGORY') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -106,20 +106,20 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error)
      */
-    public function folder_add($filename,$path,$properties)
+    public function folder_add($filename, $path, $properties)
     {
         if ($path != '') {
             return false;
         } // Only one depth allowed for this resource type
 
-        list($properties,$label) = $this->_folder_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
         require_code('news2');
 
-        $img = $this->_default_property_str($properties,'rep_image');
-        $notes = $this->_default_property_str($properties,'notes');
-        $owner = $this->_default_property_int_null($properties,'owner');
-        $id = add_news_category($label,$img,$notes,$owner);
+        $img = $this->_default_property_str($properties, 'rep_image');
+        $notes = $this->_default_property_str($properties, 'notes');
+        $owner = $this->_default_property_int_null($properties, 'owner');
+        $id = add_news_category($label, $img, $notes, $owner);
         return strval($id);
     }
 
@@ -130,12 +130,12 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function folder_load($filename,$path)
+    public function folder_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('news_categories',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('news_categories', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -156,18 +156,18 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function folder_edit($filename,$path,$properties)
+    public function folder_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('news2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $img = $this->_default_property_str($properties,'rep_image');
-        $notes = $this->_default_property_str($properties,'notes');
-        $owner = $this->_default_property_int_null($properties,'owner');
+        $label = $this->_default_property_str($properties, 'label');
+        $img = $this->_default_property_str($properties, 'rep_image');
+        $notes = $this->_default_property_str($properties, 'notes');
+        $owner = $this->_default_property_int_null($properties, 'owner');
 
-        edit_news_category(intval($resource_id),$label,$img,$notes,$owner);
+        edit_news_category(intval($resource_id), $label, $img, $notes, $owner);
 
         return $resource_id;
     }
@@ -179,9 +179,9 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function folder_delete($filename,$path)
+    public function folder_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('news2');
         delete_news_category(intval($resource_id));
@@ -223,7 +223,7 @@ class Hook_occle_fs_news extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_NEWS') . ' OR ' . db_string_equal_to('the_type','EDIT_NEWS') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_NEWS') . ' OR ' . db_string_equal_to('the_type', 'EDIT_NEWS') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -235,10 +235,10 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -246,30 +246,30 @@ class Hook_occle_fs_news extends resource_fs_base
 
         require_code('news2');
 
-        $news = $this->_default_property_str($properties,'summary');
-        $author = $this->_default_property_str($properties,'author');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $news = $this->_default_property_str($properties, 'summary');
+        $author = $this->_default_property_str($properties, 'author');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','news',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','news',1);
-        $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','news',1);
-        $notes = $this->_default_property_str($properties,'notes');
-        $news_article = $this->_default_property_str($properties,'article');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'news', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'news', 1);
+        $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'news', 1);
+        $notes = $this->_default_property_str($properties, 'notes');
+        $news_article = $this->_default_property_str($properties, 'article');
         $main_news_category = $this->_integer_category($category);
         $news_category = array();
-        if ((array_key_exists('categories',$properties)) && ($properties['categories'] != '')) {
-            $news_category = array_map('intval',explode(',',$properties['categories']));
+        if ((array_key_exists('categories', $properties)) && ($properties['categories'] != '')) {
+            $news_category = array_map('intval', explode(',', $properties['categories']));
         }
-        $time = $this->_default_property_int_null($properties,'add_date');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $views = $this->_default_property_int($properties,'views');
-        $edit_date = $this->_default_property_int_null($properties,'edit_date');
-        $image = $this->_default_property_str($properties,'image');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
-        $id = add_news($label,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$time,$submitter,$views,$edit_date,null,$image,$meta_keywords,$meta_description);
+        $time = $this->_default_property_int_null($properties, 'add_date');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $views = $this->_default_property_int($properties, 'views');
+        $edit_date = $this->_default_property_int_null($properties, 'edit_date');
+        $image = $this->_default_property_str($properties, 'image');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
+        $id = add_news($label, $news, $author, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $news_article, $main_news_category, $news_category, $time, $submitter, $views, $edit_date, null, $image, $meta_keywords, $meta_description);
         return strval($id);
     }
 
@@ -280,17 +280,17 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('news',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('news', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
-        list($meta_keywords,$meta_description) = seo_meta_get_for('news',strval($row['id']));
+        list($meta_keywords, $meta_description) = seo_meta_get_for('news', strval($row['id']));
 
         return array(
             'label' => $row['title'],
@@ -320,11 +320,11 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -332,32 +332,32 @@ class Hook_occle_fs_news extends resource_fs_base
 
         require_code('news2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $news = $this->_default_property_str($properties,'summary');
-        $author = $this->_default_property_str($properties,'author');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $label = $this->_default_property_str($properties, 'label');
+        $news = $this->_default_property_str($properties, 'summary');
+        $author = $this->_default_property_str($properties, 'author');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','news',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','news',1);
-        $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','news',1);
-        $notes = $this->_default_property_str($properties,'notes');
-        $news_article = $this->_default_property_str($properties,'article');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'news', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'news', 1);
+        $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'news', 1);
+        $notes = $this->_default_property_str($properties, 'notes');
+        $news_article = $this->_default_property_str($properties, 'article');
         $main_news_category = $this->_integer_category($category);
         $news_category = array();
-        if ((array_key_exists('categories',$properties)) && ($properties['categories'] != '')) {
-            $news_category = array_map('intval',explode(',',$properties['categories']));
+        if ((array_key_exists('categories', $properties)) && ($properties['categories'] != '')) {
+            $news_category = array_map('intval', explode(',', $properties['categories']));
         }
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $views = $this->_default_property_int($properties,'views');
-        $edit_time = $this->_default_property_int_null($properties,'edit_date');
-        $image = $this->_default_property_str($properties,'image');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $views = $this->_default_property_int($properties, 'views');
+        $edit_time = $this->_default_property_int_null($properties, 'edit_date');
+        $image = $this->_default_property_str($properties, 'image');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
-        edit_news(intval($resource_id),$label,$news,$author,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$news_article,$main_news_category,$news_category,$meta_keywords,$meta_description,$image,$add_time,$edit_time,$views,$submitter,true);
+        edit_news(intval($resource_id), $label, $news, $author, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $news_article, $main_news_category, $news_category, $meta_keywords, $meta_description, $image, $add_time, $edit_time, $views, $submitter, true);
 
         return $resource_id;
     }
@@ -369,9 +369,9 @@ class Hook_occle_fs_news extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('news2');
         delete_news(intval($resource_id));

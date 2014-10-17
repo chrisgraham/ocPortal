@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_config_is_on_comments
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_is_on_comments
      */
     public function get_default()
     {
-        return has_no_forum()?null:'1';
+        return has_no_forum() ? null : '1';
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Block_main_leader_board
 {
     /**
@@ -48,7 +47,7 @@ class Block_main_leader_board
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'leader_board\'))';
-        $info['ttl'] = 60*15; // 15 minutes
+        $info['ttl'] = 60 * 15; // 15 minutes
         return $info;
     }
 
@@ -58,10 +57,10 @@ class Block_main_leader_board
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('leader_board',array(
+            $GLOBALS['SITE_DB']->create_table('leader_board', array(
                 'lb_member' => '*MEMBER',
                 'lb_points' => 'INTEGER',
                 'date_and_time' => '*TIME'
@@ -85,7 +84,7 @@ class Block_main_leader_board
      */
     public function run($map)
     {
-        $zone = array_key_exists('zone',$map)?$map['zone']:get_module_zone('leader_board');
+        $zone = array_key_exists('zone', $map) ? $map['zone'] : get_module_zone('leader_board');
 
         require_lang('leader_board');
         require_code('points');
@@ -101,22 +100,22 @@ class Block_main_leader_board
         $or_list = '1=1';
         $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
         $moderator_groups = $GLOBALS['FORUM_DRIVER']->get_moderator_groups();
-        foreach (array_merge($admin_groups,$moderator_groups) as $group_id) {
+        foreach (array_merge($admin_groups, $moderator_groups) as $group_id) {
             $or_list .= ' AND id<>' . strval($group_id);
         }
-        $has_rank_images = (get_forum_type() == 'ocf') && ($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups WHERE ' . $or_list . ' AND ' . db_string_not_equal_to('g_rank_image','')) != 0);
+        $has_rank_images = (get_forum_type() == 'ocf') && ($GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups WHERE ' . $or_list . ' AND ' . db_string_not_equal_to('g_rank_image', '')) != 0);
 
         foreach ($rows as $member => $points) {
-            $points_url = build_url(array('page' => 'points','type' => 'member','id' => $member),get_module_zone('points'));
+            $points_url = build_url(array('page' => 'points', 'type' => 'member', 'id' => $member), get_module_zone('points'));
 
-            $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member,true,true);
+            $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member, true, true);
 
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member);
             if (is_null($username)) {
                 continue;
             } // Deleted member now
 
-            $out->attach(do_template('POINTS_LEADER_BOARD_ROW',array(
+            $out->attach(do_template('POINTS_LEADER_BOARD_ROW', array(
                 '_GUID' => '68caa55091aade84bc7ca760e6655a45',
                 'ID' => strval($member),
                 'POINTS_URL' => $points_url,
@@ -129,9 +128,9 @@ class Block_main_leader_board
             $i++;
         }
 
-        $url = build_url(array('page' => 'leader_board'),$zone);
+        $url = build_url(array('page' => 'leader_board'), $zone);
 
-        return do_template('POINTS_LEADER_BOARD',array(
+        return do_template('POINTS_LEADER_BOARD', array(
             '_GUID' => 'c875cce925e73f46408acc0a153a2902',
             'URL' => $url,
             'LIMIT' => integer_format(intval(get_option('leader_board_size'))),

@@ -27,7 +27,7 @@
  * @param  ID_TEXT                      The menu type (determines what templates get used)
  * @return tempcode                     The generated tempcode of the menu
  */
-function build_comcode_menu($comcode,$menu,$source_member,$type)
+function build_comcode_menu($comcode, $menu, $source_member, $type)
 {
     // Reset
     $level = -1;
@@ -37,7 +37,7 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 
     // Loop
     $i = 0;
-    $lines = explode("\n",$comcode);
+    $lines = explode("\n", $comcode);
     $stack = array(); // Stores the previous level(s) if we are jumping down to a further one
     $root = _get_menu_root_wrapper();
     $root['content_id'] = $menu;
@@ -49,19 +49,19 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
 
     foreach ($lines as $line) {
         if (trim($line) == '') {
-            if (($i != 0) && ($i<count($lines)-2)) {
+            if (($i != 0) && ($i < count($lines) - 2)) {
                 $current = array(
                     'title' => '',
                     'content_type' => 'spacer',
-                    'content_id' => NULL,
+                    'content_id' => null,
                     'modifiers' => array(),
                     'only_on_page' => '',
-                    'page_link' => NULL,
-                    'url' => NULL,
+                    'page_link' => null,
+                    'url' => null,
                     'extra_meta' => array(
-                        'description' => NULL,
-                        'image' => NULL,
-                        'image_2x' => NULL,
+                        'description' => null,
+                        'image' => null,
+                        'image_2x' => null,
                     ),
                     'has_possible_children' => true,
                     'children' => array(),
@@ -76,24 +76,24 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
         $last_level = $level; // Only update our parent level if we actually went down a level last time
 
         // See what level we are on by counting the spaces
-        for ($levels = 1;$levels<10;$levels++) {
-            if ($line[$levels-1] != ' ') {
+        for ($levels = 1; $levels < 10; $levels++) {
+            if ($line[$levels - 1] != ' ') {
                 break;
             }
         }
-        $level = $levels-1;
+        $level = $levels - 1;
 
-        if ($level>$last_level+1) {
+        if ($level > $last_level + 1) {
             require_code('comcode_renderer');
-            comcode_parse_error(false,array('CCP_MENU_JUMPYNESS'),$i,$comcode);
+            comcode_parse_error(false, array('CCP_MENU_JUMPYNESS'), $i, $comcode);
         }
-        if (($last_level-$level == 0) && ($current_level['content_type'] == 'comcode_drawer_branch') && (strpos($line,'=') === false)) { // little hack to make case of branch having no children work
+        if (($last_level - $level == 0) && ($current_level['content_type'] == 'comcode_drawer_branch') && (strpos($line, '=') === false)) { // little hack to make case of branch having no children work
             $last_level++;
         }
-        for ($x = 0;$x<$last_level-$level;$x++) {
-            if (strpos($line,'=') !== false) {
+        for ($x = 0; $x < $last_level - $level; $x++) {
+            if (strpos($line, '=') !== false) {
                 require_code('comcode_renderer');
-                comcode_parse_error(false,array('CCP_MENU_JUMPYNESS'),$i,$comcode);
+                comcode_parse_error(false, array('CCP_MENU_JUMPYNESS'), $i, $comcode);
             }
 
             $this_level = $current_level;
@@ -113,17 +113,17 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
         }
 
         // Find where the URL starts
-        $pos = strpos($line,'=');
+        $pos = strpos($line, '=');
         // Find the caption
         if ($pos === false) {
-            $caption = rtrim(substr($line,($line[$level] != '+' && $line[$level] != '-')?$level:($level+1)));
+            $caption = rtrim(substr($line, ($line[$level] != '+' && $line[$level] != '-') ? $level : ($level + 1)));
         } else {
-            $caption = rtrim(substr($line,$level,$pos-$level));
+            $caption = rtrim(substr($line, $level, $pos - $level));
         }
 
         $modifiers = array();
         if ($caption[0] == '@') {
-            $caption = substr($caption,1);
+            $caption = substr($caption, 1);
         }
 
         // For childed branches
@@ -133,27 +133,27 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
                 $modifiers['expanded'] = 1;
             }
 
-            array_push($stack,$current_level);
+            array_push($stack, $current_level);
             $current_level = array(
                 'title' => make_string_tempcode($caption),
                 'content_type' => 'comcode_drawer_branch',
-                'content_id' => NULL,
+                'content_id' => null,
                 'modifiers' => $modifiers,
                 'only_on_page' => '',
-                'page_link' => NULL,
+                'page_link' => null,
                 'url' => '',
                 'extra_meta' => array(
-                    'description' => NULL,
-                    'image' => NULL,
-                    'image_2x' => NULL,
+                    'description' => null,
+                    'image' => null,
+                    'image_2x' => null,
                 ),
                 'has_possible_children' => true,
                 'children' => array(),
             );
         } else { // For simple link branches
-            $url = ltrim(substr($line,$pos+1));
+            $url = ltrim(substr($line, $pos + 1));
             if ($url[0] == '~') {
-                $url = substr($url,1);
+                $url = substr($url, 1);
                 $modifiers['new_window'] = 1;
             }
             /*elseif ($url[0]=='?')   Cache says no-no
@@ -165,15 +165,15 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
             $current_level['children'][] = array(
                 'title' => make_string_tempcode($caption),
                 'content_type' => 'comcode_end_branch',
-                'content_id' => NULL,
+                'content_id' => null,
                 'modifiers' => $modifiers,
                 'only_on_page' => '',
-                'page_link' => NULL,
-                'url' => @html_entity_decode($url,ENT_QUOTES,get_charset()),
+                'page_link' => null,
+                'url' => @html_entity_decode($url, ENT_QUOTES, get_charset()),
                 'extra_meta' => array(
-                    'description' => NULL,
-                    'image' => NULL,
-                    'image_2x' => NULL,
+                    'description' => null,
+                    'image' => null,
+                    'image_2x' => null,
                 ),
                 'has_possible_children' => true,
                 'children' => array(),
@@ -183,11 +183,11 @@ function build_comcode_menu($comcode,$menu,$source_member,$type)
         $i++;
     }
 
-    for ($x = 0;$x<count($stack);$x++) {
+    for ($x = 0; $x < count($stack); $x++) {
         $this_level = $current_level;
         $current_level = array_pop($stack);
         $current_level['children'][] = $this_level;
     }
 
-    return _render_menu($current_level,$source_member,$type);
+    return _render_menu($current_level, $source_member, $type);
 }

@@ -25,12 +25,12 @@
  */
 function init__users()
 {
-    global $MEMBERS_BLOCKED_CACHE,$MEMBERS_BLOCKING_US_CACHE;
+    global $MEMBERS_BLOCKED_CACHE, $MEMBERS_BLOCKING_US_CACHE;
     $MEMBERS_BLOCKED_CACHE = null;
     $MEMBERS_BLOCKING_US_CACHE = null;
-    global $SESSION_CACHE,$MEMBER_CACHED,$ADMIN_GROUP_CACHE,$MODERATOR_GROUP_CACHE,$USERGROUP_LIST_CACHE;
-    global $USER_NAME_CACHE,$MEMBER_EMAIL_CACHE,$USERS_GROUPS_CACHE;
-    global $SESSION_CONFIRMED_CACHE,$GETTING_MEMBER,$USER_THEME_CACHE,$EMOTICON_LEVELS,$EMOTICON_SET_DIR;
+    global $SESSION_CACHE, $MEMBER_CACHED, $ADMIN_GROUP_CACHE, $MODERATOR_GROUP_CACHE, $USERGROUP_LIST_CACHE;
+    global $USER_NAME_CACHE, $MEMBER_EMAIL_CACHE, $USERS_GROUPS_CACHE;
+    global $SESSION_CONFIRMED_CACHE, $GETTING_MEMBER, $USER_THEME_CACHE, $EMOTICON_LEVELS, $EMOTICON_SET_DIR;
     $EMOTICON_LEVELS = null;
     $USER_NAME_CACHE = array();
     $MEMBER_EMAIL_CACHE = array();
@@ -46,6 +46,7 @@ function init__users()
     global $IS_ACTUALLY;
     global $IS_ACTUALLY_ADMIN;
     /** Find whether ocPortal is running in SU mode, and therefore the real user is an admin
+     *
      * @global boolean $IS_ACTUALLY_ADMIN
      */
     $IS_ACTUALLY_ADMIN = false;
@@ -68,31 +69,31 @@ function init__users()
         if (get_option('session_prudence') != '1') {
             $where = '';
         } else {
-            $where = ' WHERE ' . db_string_equal_to('the_session',get_session_id()) . ' OR ' . db_string_equal_to('ip',get_ip_address(3));
+            $where = ' WHERE ' . db_string_equal_to('the_session', get_session_id()) . ' OR ' . db_string_equal_to('ip', get_ip_address(3));
         }
         $SESSION_CACHE = array();
         if ((get_forum_type() == 'ocf') && (get_db_site() == get_db_forums()) && (get_db_site_host() == get_db_forums_host())) {
             $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
-            $_s = $GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM ' . get_table_prefix() . 'sessions s LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'f_members m ON m.id=s.member_id' . $where,null,null,false,true);
-            $SESSION_CACHE = list_to_map('the_session',$_s);
+            $_s = $GLOBALS['SITE_DB']->query('SELECT s.*,m.m_primary_group FROM ' . get_table_prefix() . 'sessions s LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'f_members m ON m.id=s.member_id' . $where, null, null, false, true);
+            $SESSION_CACHE = list_to_map('the_session', $_s);
             $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
         } else {
-            $SESSION_CACHE = list_to_map('the_session',$GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'sessions' . $where));
+            $SESSION_CACHE = list_to_map('the_session', $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'sessions' . $where));
         }
         if (get_option('session_prudence') != '1') {
-            persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+            persistent_cache_set('SESSION_CACHE', $SESSION_CACHE);
         }
     }
 
     // Canonicalise various disparities in how HTTP auth environment variables are set
-    if (array_key_exists('REDIRECT_REMOTE_USER',$_SERVER)) {
-        $_SERVER['PHP_AUTH_USER'] = preg_replace('#@.*$#','',$_SERVER['REDIRECT_REMOTE_USER']);
+    if (array_key_exists('REDIRECT_REMOTE_USER', $_SERVER)) {
+        $_SERVER['PHP_AUTH_USER'] = preg_replace('#@.*$#', '', $_SERVER['REDIRECT_REMOTE_USER']);
     }
-    if (array_key_exists('PHP_AUTH_USER',$_SERVER)) {
-        $_SERVER['PHP_AUTH_USER'] = preg_replace('#@.*$#','',$_SERVER['PHP_AUTH_USER']);
+    if (array_key_exists('PHP_AUTH_USER', $_SERVER)) {
+        $_SERVER['PHP_AUTH_USER'] = preg_replace('#@.*$#', '', $_SERVER['PHP_AUTH_USER']);
     }
-    if (array_key_exists('REMOTE_USER',$_SERVER)) {
-        $_SERVER['PHP_AUTH_USER'] = preg_replace('#@.*$#','',$_SERVER['REMOTE_USER']);
+    if (array_key_exists('REMOTE_USER', $_SERVER)) {
+        $_SERVER['PHP_AUTH_USER'] = preg_replace('#@.*$#', '', $_SERVER['REMOTE_USER']);
     }
 
     $DOING_USERS_INIT = null;
@@ -103,18 +104,18 @@ function init__users()
  */
 function handle_logins()
 {
-    if (get_param_integer('httpauth',0) == 1) {
+    if (get_param_integer('httpauth', 0) == 1) {
         require_code('users_inactive_occasionals');
         force_httpauth();
     }
-    $username = trim(post_param('login_username',''));
+    $username = trim(post_param('login_username', ''));
     if (($username != '') && ($username != do_lang('GUEST'))) {
         require_code('users_active_actions');
         handle_active_login($username);
     }
 
     // If it was a log out
-    if ((get_page_name() == 'login') && (get_param('type','',true) == 'logout')) {
+    if ((get_page_name() == 'login') && (get_param('type', '', true) == 'logout')) {
         require_code('users_active_actions');
         handle_active_logout();
     }
@@ -127,12 +128,12 @@ function handle_logins()
  * @param  boolean                      Whether to just do a quick check, don't establish new sessions
  * @return boolean                      Whether the current member is a guest
  */
-function is_guest($member_id = null,$quick_only = false)
+function is_guest($member_id = null, $quick_only = false)
 {
     if (!isset($GLOBALS['FORUM_DRIVER'])) {
         return true;
     }
-    if ($member_id === NULL) {
+    if ($member_id === null) {
         $member_id = get_member($quick_only);
     }
     return ($GLOBALS['FORUM_DRIVER']->get_guest_id() == $member_id);
@@ -147,9 +148,9 @@ function is_guest($member_id = null,$quick_only = false)
  */
 function get_member($quick_only = false)
 {
-    global $SESSION_CACHE,$MEMBER_CACHED,$GETTING_MEMBER,$SITE_INFO;
+    global $SESSION_CACHE, $MEMBER_CACHED, $GETTING_MEMBER, $SITE_INFO;
 
-    if ($MEMBER_CACHED !== NULL) {
+    if ($MEMBER_CACHED !== null) {
         $GETTING_MEMBER = false;
         return $MEMBER_CACHED;
     }
@@ -160,13 +161,13 @@ function get_member($quick_only = false)
 
     // If lots of aging sessions, clean out
     reset($SESSION_CACHE);
-    if ((count($SESSION_CACHE)>50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time')))))) {
+    if ((count($SESSION_CACHE) > 50) && ($SESSION_CACHE[key($SESSION_CACHE)]['last_activity'] < time() - intval(60.0 * 60.0 * max(0.017, floatval(get_option('session_expiry_time')))))) {
         delete_expired_sessions_or_recover();
     }
 
     // Try via backdoor that someone with full server access can place
     $backdoor_ip_address = mixed(); // Enable to a real IP address to force login from FTP access (if lost admin password)
-    if (array_key_exists('backdoor_ip',$SITE_INFO)) {
+    if (array_key_exists('backdoor_ip', $SITE_INFO)) {
         $backdoor_ip_address = $SITE_INFO['backdoor_ip'];
     }
     if ((is_string($backdoor_ip_address)) && ($backdoor_ip_address != '') && (get_ip_address() == $backdoor_ip_address)) {
@@ -198,34 +199,34 @@ function get_member($quick_only = false)
 
     $member = null;
 
-    $cookie_bits = explode(':',str_replace('|',':',get_member_cookie()));
+    $cookie_bits = explode(':', str_replace('|', ':', get_member_cookie()));
     $base = $cookie_bits[0];
 
     // Try by session
     $session = get_session_id();
-    if (($session != '') && (get_param_integer('keep_force_htaccess',0) == 0)) {
+    if (($session != '') && (get_param_integer('keep_force_htaccess', 0) == 0)) {
         $ip = get_ip_address(3); // I hope AOL can cope with this
         $allow_unbound_guest = true; // Note: Guest sessions are not IP bound
         $member_row = null;
 
         if (
-            ($SESSION_CACHE !== NULL) &&
-            (array_key_exists($session,$SESSION_CACHE)) &&
-            ($SESSION_CACHE[$session] !== NULL) &&
-            (array_key_exists('member_id',$SESSION_CACHE[$session])) &&
+            ($SESSION_CACHE !== null) &&
+            (array_key_exists($session, $SESSION_CACHE)) &&
+            ($SESSION_CACHE[$session] !== null) &&
+            (array_key_exists('member_id', $SESSION_CACHE[$session])) &&
             ((get_option('ip_strict_for_sessions') == '0') || ($SESSION_CACHE[$session]['ip'] == $ip) || ((is_guest($SESSION_CACHE[$session]['member_id'])) && ($allow_unbound_guest)) || (($SESSION_CACHE[$session]['session_confirmed'] == 0) && (!is_guest($SESSION_CACHE[$session]['member_id'])))) &&
-            ($SESSION_CACHE[$session]['last_activity']>time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time')))))
+            ($SESSION_CACHE[$session]['last_activity'] > time() - intval(60.0 * 60.0 * max(0.017, floatval(get_option('session_expiry_time')))))
         ) {
             $member_row = $SESSION_CACHE[$session];
         }
-        if (($member_row !== NULL) && ((!array_key_exists($base,$_COOKIE)) || (!is_guest($member_row['member_id'])))) {
+        if (($member_row !== null) && ((!array_key_exists($base, $_COOKIE)) || (!is_guest($member_row['member_id'])))) {
             $member = $member_row['member_id'];
 
-            if (($member !== NULL) && ((time()-$member_row['last_activity'])>10)) { // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
+            if (($member !== null) && ((time() - $member_row['last_activity']) > 10)) { // Performance optimisation. Pointless re-storing the last_activity if less than 3 seconds have passed!
                 //$GLOBALS['SITE_DB']->query_update('sessions',array('last_activity'=>time(),'the_zone'=>get_zone_name(),'the_page'=>get_page_name()),array('the_session'=>$session),'',1);  Done in get_screen_title now
                 $SESSION_CACHE[$session]['last_activity'] = time();
                 if (get_option('session_prudence') != '1') {
-                    persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+                    persistent_cache_set('SESSION_CACHE', $SESSION_CACHE);
                 }
             }
             global $SESSION_CONFIRMED_CACHE;
@@ -236,11 +237,11 @@ function get_member($quick_only = false)
             }
 
             // Test this member still exists
-            if ($GLOBALS['FORUM_DRIVER']->get_username($member) === NULL) {
+            if ($GLOBALS['FORUM_DRIVER']->get_username($member) === null) {
                 $member = $GLOBALS['FORUM_DRIVER']->get_guest_id();
             }
 
-            if (array_key_exists($base,$_COOKIE)) {
+            if (array_key_exists($base, $_COOKIE)) {
                 global $IS_A_COOKIE_LOGIN;
                 $IS_A_COOKIE_LOGIN = true;
             }
@@ -250,19 +251,19 @@ function get_member($quick_only = false)
         }
     }
 
-    if (($member === NULL) && (get_session_id() == '') && (get_param_integer('keep_force_htaccess',0) == 0)) {
+    if (($member === null) && (get_session_id() == '') && (get_param_integer('keep_force_htaccess', 0) == 0)) {
         // Try by cookie (will defer to forum driver to authorise against detected cookie)
         require_code('users_inactive_occasionals');
         $member = try_cookie_login();
 
         // Can forum driver help more directly?
-        if (method_exists($GLOBALS['FORUM_DRIVER'],'get_member')) {
+        if (method_exists($GLOBALS['FORUM_DRIVER'], 'get_member')) {
             $member = $GLOBALS['FORUM_DRIVER']->get_member();
         }
     }
 
     // Try via additional login providers. They can choose whether to respect existing $member of get_session_id() settings. Some may do an account linkage, so we need to let them decide what to do.
-    $hooks = find_all_hooks('systems','login_providers');
+    $hooks = find_all_hooks('systems', 'login_providers');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/login_providers/' . $hook);
         $ob = object_factory('Hook_login_provider_' . $hook);
@@ -282,7 +283,7 @@ function get_member($quick_only = false)
     }
 
     // Guest or banned
-    if ($member === NULL) {
+    if ($member === null) {
         $member = $GLOBALS['FORUM_DRIVER']->get_guest_id();
         $is_guest = true;
     } else {
@@ -306,21 +307,21 @@ function get_member($quick_only = false)
     // If we are logged in, maybe do some further processing
     if (!$is_guest) {
         // Is there a su operation?
-        $ks = get_param('keep_su','');
+        $ks = get_param('keep_su', '');
         if ($ks != '') {
             require_code('users_inactive_occasionals');
             $member = try_su_login($member);
         }
 
         // Run hooks, if any exist
-        $hooks = find_all_hooks('systems','upon_login');
+        $hooks = find_all_hooks('systems', 'upon_login');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/upon_login/' . filter_naughty($hook));
-            $ob = object_factory('Hook_upon_login_' . filter_naughty($hook),true);
-            if ($ob === NULL) {
+            $ob = object_factory('Hook_upon_login_' . filter_naughty($hook), true);
+            if ($ob === null) {
                 continue;
             }
-            $ob->run(false,null,$member); // false means "not a new login attempt"
+            $ob->run(false, null, $member); // false means "not a new login attempt"
         }
     }
 
@@ -331,7 +332,7 @@ function get_member($quick_only = false)
     // We call this to ensure any HTTP-auth specific code has a chance to run
     is_httpauth_login();
 
-    if ($member !== NULL) {
+    if ($member !== null) {
         enforce_temporary_passwords($member);
 
         if (get_forum_type() == 'ocf') {
@@ -349,7 +350,7 @@ function get_member($quick_only = false)
  */
 function enforce_temporary_passwords($member)
 {
-    if ((get_forum_type() == 'ocf') && (running_script('index')) && ($member != db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_password_compat_scheme') == 'temporary') && (get_page_name() != 'lost_password') && ((get_page_name() != 'members') || (get_param('type','misc') != 'view'))) {
+    if ((get_forum_type() == 'ocf') && (running_script('index')) && ($member != db_get_first_id()) && (!$GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member, 'm_password_compat_scheme') == 'temporary') && (get_page_name() != 'lost_password') && ((get_page_name() != 'members') || (get_param('type', 'misc') != 'view'))) {
         require_code('users_active_actions');
         _enforce_temporary_passwords($member);
     }
@@ -374,9 +375,9 @@ function get_displayname($username)
         return $username;
     }
 
-    if (method_exists($GLOBALS['FORUM_DRIVER'],'get_displayname')) {
+    if (method_exists($GLOBALS['FORUM_DRIVER'], 'get_displayname')) {
         $displayname = $GLOBALS['FORUM_DRIVER']->get_displayname($username);
-        return ($displayname === NULL)?$username:$displayname;
+        return ($displayname === null) ? $username : $displayname;
     }
 
     return $username;
@@ -390,10 +391,10 @@ function get_displayname($username)
  * @param  string                       The string converted member-ID in actuality, although this function is more general
  * @return string                       The hashed data
  */
-function apply_forum_driver_md5_variant($data,$key)
+function apply_forum_driver_md5_variant($data, $key)
 {
-    if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_md5')) {
-        return $GLOBALS['FORUM_DRIVER']->forum_md5($data,$key);
+    if (method_exists($GLOBALS['FORUM_DRIVER'], 'forum_md5')) {
+        return $GLOBALS['FORUM_DRIVER']->forum_md5($data, $key);
     }
     return md5($data);
 }
@@ -407,13 +408,15 @@ function get_session_id()
 {
     $cookie_var = get_session_cookie();
 
-    if ((!isset($_COOKIE[$cookie_var])) || (/*To work around OcCLE's development mode trick*/$GLOBALS['DEV_MODE'] && running_script('occle'))) {
-        if (array_key_exists('keep_session',$_GET)) {
+    if ((!isset($_COOKIE[$cookie_var])) || (/*To work around OcCLE's development mode trick*/
+            $GLOBALS['DEV_MODE'] && running_script('occle'))
+    ) {
+        if (array_key_exists('keep_session', $_GET)) {
             return get_param('keep_session');
         }
         return '';
     }
-    return isset($_COOKIE[$cookie_var])?$_COOKIE[$cookie_var]:'';
+    return isset($_COOKIE[$cookie_var]) ? $_COOKIE[$cookie_var] : '';
 }
 
 /**
@@ -431,7 +434,7 @@ function is_httpauth_login()
     }
 
     require_code('ocf_members');
-    return ((array_key_exists('PHP_AUTH_USER',$_SERVER)) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
+    return ((array_key_exists('PHP_AUTH_USER', $_SERVER)) && (!is_null(ocf_authusername_is_bound_via_httpauth($_SERVER['PHP_AUTH_USER']))));
 }
 
 /**
@@ -463,9 +466,9 @@ function delete_expired_sessions_or_recover($member = null)
     $ip = get_ip_address(3);
 
     // Delete expired sessions; it's important we do this routinely, not randomly, as the session table is loaded up and can get large -- unless we aren't tracking online users, in which case the table is never loaded up
-    if ((get_value('disable_user_online_counting') !== '1') || (get_option('session_prudence') != '1') || (mt_rand(0,1000) == 123)) {
+    if ((get_value('disable_user_online_counting') !== '1') || (get_option('session_prudence') != '1') || (mt_rand(0, 1000) == 123)) {
         if (!$GLOBALS['SITE_DB']->table_is_locked('sessions')) {
-            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'sessions WHERE last_activity<' . strval(time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))));
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'sessions WHERE last_activity<' . strval(time() - intval(60.0 * 60.0 * max(0.017, floatval(get_option('session_expiry_time'))))));
         }
     }
 
@@ -474,27 +477,27 @@ function delete_expired_sessions_or_recover($member = null)
     $dirty_session_cache = false;
     global $SESSION_CACHE;
     foreach ($SESSION_CACHE as $_session => $row) {
-        if (!array_key_exists('member_id',$row)) {
+        if (!array_key_exists('member_id', $row)) {
             continue;
         } // Workaround to HipHop PHP weird bug
 
         // Delete expiry from cache
-        if ($row['last_activity']<time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time'))))) {
+        if ($row['last_activity'] < time() - intval(60.0 * 60.0 * max(0.017, floatval(get_option('session_expiry_time'))))) {
             $dirty_session_cache = true;
             unset($SESSION_CACHE[$_session]);
             continue;
         }
 
         // Get back to prior session if there was one
-        if ($member !== NULL) {
-            if (($row['member_id'] == $member) && (((get_option('ip_strict_for_sessions') == '0') && ($member != $GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip'] == $ip)) && ($row['last_activity']>time()-intval(60.0*60.0*max(0.017,floatval(get_option('session_expiry_time')))))) {
+        if ($member !== null) {
+            if (($row['member_id'] == $member) && (((get_option('ip_strict_for_sessions') == '0') && ($member != $GLOBALS['FORUM_DRIVER']->get_guest_id())) || ($row['ip'] == $ip)) && ($row['last_activity'] > time() - intval(60.0 * 60.0 * max(0.017, floatval(get_option('session_expiry_time')))))) {
                 $new_session = $_session;
             }
         }
     }
     if ($dirty_session_cache) {
         if (get_option('session_prudence') != '1') {
-            persistent_cache_set('SESSION_CACHE',$SESSION_CACHE);
+            persistent_cache_set('SESSION_CACHE', $SESSION_CACHE);
         }
     }
 
@@ -509,7 +512,7 @@ function delete_expired_sessions_or_recover($member = null)
 function get_member_cookie()
 {
     global $SITE_INFO;
-    if (!array_key_exists('user_cookie',$SITE_INFO)) {
+    if (!array_key_exists('user_cookie', $SITE_INFO)) {
         $SITE_INFO['user_cookie'] = 'ocp_member_id';
     }
     return $SITE_INFO['user_cookie'];
@@ -523,7 +526,7 @@ function get_member_cookie()
 function get_session_cookie()
 {
     global $SITE_INFO;
-    if (!array_key_exists('session_cookie',$SITE_INFO)) {
+    if (!array_key_exists('session_cookie', $SITE_INFO)) {
         $SITE_INFO['session_cookie'] = 'ocp_session';
     }
     return $SITE_INFO['session_cookie'];
@@ -537,7 +540,7 @@ function get_session_cookie()
 function get_pass_cookie()
 {
     global $SITE_INFO;
-    if (!array_key_exists('pass_cookie',$SITE_INFO)) {
+    if (!array_key_exists('pass_cookie', $SITE_INFO)) {
         $SITE_INFO['pass_cookie'] = 'ocp_member_hash';
     }
     return $SITE_INFO['pass_cookie'];
@@ -550,7 +553,7 @@ function get_pass_cookie()
  * @param  ?string                      The default value (NULL: just use the value NULL)
  * @return ?string                      The value stored in the cookie (NULL: the default default)
  */
-function ocp_admirecookie($name,$default = null)
+function ocp_admirecookie($name, $default = null)
 {
     if (!isset($_COOKIE[$name])) {
         return $default;
@@ -569,7 +572,7 @@ function ocp_admirecookie($name,$default = null)
  * @param  ?MEMBER                      Member to lookup for (NULL: current member)
  * @return string                       The value (blank: has a blank value, or does not exist)
  */
-function get_ocp_cpf($cpf,$member = null)
+function get_ocp_cpf($cpf, $member = null)
 {
     if (is_null($member)) {
         $member = get_member();
@@ -579,13 +582,13 @@ function get_ocp_cpf($cpf,$member = null)
     if (is_null($values)) {
         return '';
     }
-    if (array_key_exists($cpf,$values)) {
+    if (array_key_exists($cpf, $values)) {
         return $values[$cpf];
     }
 
     if (get_forum_type() == 'ocf') {
         $values = ocf_get_all_custom_fields_match_member($member);
-        if (array_key_exists($cpf,$values)) {
+        if (array_key_exists($cpf, $values)) {
             return $values[$cpf]['RAW'];
         }
     }
@@ -600,5 +603,5 @@ function get_ocp_cpf($cpf,$member = null)
  */
 function get_default_theme_name()
 {
-    return substr(preg_replace('#[^A-Za-z\d]#','_',get_site_name()),0,80);
+    return substr(preg_replace('#[^A-Za-z\d]#', '_', get_site_name()), 0, 80);
 }

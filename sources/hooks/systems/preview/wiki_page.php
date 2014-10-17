@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_Preview_wiki_page
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Preview_wiki_page
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'cms_wiki');
-        return array($applies,'wiki_page',false);
+        $applies = (get_param('page', '') == 'cms_wiki');
+        return array($applies, 'wiki_page', false);
     }
 }

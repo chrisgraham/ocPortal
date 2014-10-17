@@ -25,19 +25,19 @@ class newsletter_test_set extends ocp_test_case
         parent::setUp();
         require_code('newsletter');
 
-        $this->news_id = add_newsletter('New Offer','The new offer of the week.');
+        $this->news_id = add_newsletter('New Offer', 'The new offer of the week.');
 
         // Test the forum was actually created
-        $this->assertTrue('New Offer' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('newsletters','title',array('id' => $this->news_id))));
+        $this->assertTrue('New Offer' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('newsletters', 'title', array('id' => $this->news_id))));
     }
 
     public function testEditNewsletter()
     {
         // Test the forum edits
-        edit_newsletter($this->news_id,'Thanks','Thank you');
+        edit_newsletter($this->news_id, 'Thanks', 'Thank you');
 
         // Test the forum was actually created
-        $this->assertTrue('Thanks' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('newsletters','title',array('id' => $this->news_id))));
+        $this->assertTrue('Thanks' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('newsletters', 'title', array('id' => $this->news_id))));
     }
 
     public function tearDown()

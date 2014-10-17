@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
-
 class Hook_config_enable_boolean_search
 {
     /**

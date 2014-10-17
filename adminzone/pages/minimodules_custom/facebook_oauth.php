@@ -11,10 +11,10 @@ $title = get_screen_title('FACEBOOK_OAUTH');
 $facebook_appid = get_option('facebook_appid');
 
 if ($facebook_appid == '') {
-    $config_url = build_url(array('page' => 'admin_config','type' => 'category','id' => 'FEATURE','redirect' => get_self_url(true)),'_SELF',null,false,false,false,'group_FACEBOOK_SYNDICATION');
+    $config_url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => 'FEATURE', 'redirect' => get_self_url(true)), '_SELF', null, false, false, false, 'group_FACEBOOK_SYNDICATION');
     require_code('site2');
-    assign_refresh($config_url,0.0);
-    $echo = redirect_screen($title,$config_url,do_lang_tempcode('FACEBOOK_SETUP_FIRST'));
+    assign_refresh($config_url, 0.0);
+    $echo = redirect_screen($title, $config_url, do_lang_tempcode('FACEBOOK_SETUP_FIRST'));
     $echo->evaluate_echo();
     return;
 }
@@ -22,7 +22,7 @@ if ($facebook_appid == '') {
 require_code('hooks/systems/syndication/facebook');
 $ob = new Hook_Syndication_facebook();
 
-$result = $ob->auth_set(null,get_self_url(false,false,array('oauth_in_progress' => 1)));
+$result = $ob->auth_set(null, get_self_url(false, false, array('oauth_in_progress' => 1)));
 
 if ($result) {
     $out = do_lang_tempcode('FACEBOOK_OAUTH_SUCCESS');

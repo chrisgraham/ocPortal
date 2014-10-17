@@ -39,7 +39,7 @@ class sitemap_test_set extends ocp_test_case
         $consider_validation = false;
         $meta_gather = SITEMAP_GATHER__ALL;
 
-        $this->sitemap = retrieve_sitemap_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
+        $this->sitemap = retrieve_sitemap_node($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather);
         $this->flattened = $this->flatten_sitemap($this->sitemap);
 
         parent::setUp();
@@ -51,7 +51,7 @@ class sitemap_test_set extends ocp_test_case
             return array();
         }
 
-        $children = isset($sitemap['children'])?$sitemap['children']:null;
+        $children = isset($sitemap['children']) ? $sitemap['children'] : null;
         unset($sitemap['children']);
         $ret = array($sitemap['page_link'] => $sitemap);
 
@@ -61,7 +61,7 @@ class sitemap_test_set extends ocp_test_case
                 foreach ($_c as $k => $__c) {
                     if ($k != '' && $k != 'site:members:misc') {
                         //if (isset($ret[$k])) { @var_dump($ret);@exit($k); }
-                        $this->assertTrue(!isset($ret[$k]),'Duplicated page: ' . $k);
+                        $this->assertTrue(!isset($ret[$k]), 'Duplicated page: ' . $k);
                     }
 
                     $ret[$k] = $__c;
@@ -97,28 +97,28 @@ class sitemap_test_set extends ocp_test_case
 
         $page_groupings = get_page_grouping_links();
         foreach ($page_groupings as $link) {
-            if ($link === NULL) {
+            if ($link === null) {
                 continue;
             }
 
-            if (in_array($link[0],$applicable_page_groupings)) {
-                if (($link[0] == '') && (is_array($link[2])) && (!in_array($link[2][2]['type'],$applicable_page_groupings))) {
+            if (in_array($link[0], $applicable_page_groupings)) {
+                if (($link[0] == '') && (is_array($link[2])) && (!in_array($link[2][2]['type'], $applicable_page_groupings))) {
                     continue;
                 }
 
                 if (!is_object($link[3])) {
-                    $this->assertTrue(isset($link[4]),'Should be Tempcode for ' . serialize($link));
+                    $this->assertTrue(isset($link[4]), 'Should be Tempcode for ' . serialize($link));
                 } else {
                     if (!is_array($link[2])) {
                         continue;
                     }
 
-                    $test = _request_page($link[2][0],$link[2][2]);
+                    $test = _request_page($link[2][0], $link[2][2]);
                     if ($test === false) {
-                        $this->assertTrue(true,'Cannot locate page ' . $link[2][0]);
+                        $this->assertTrue(true, 'Cannot locate page ' . $link[2][0]);
                     } else {
-                        if (strpos($test[0],'_CUSTOM') === false) {
-                            $this->assertTrue(isset($link[4]),'No help defined for ' . $link[3]->evaluate());
+                        if (strpos($test[0], '_CUSTOM') === false) {
+                            $this->assertTrue(isset($link[4]), 'No help defined for ' . $link[3]->evaluate());
                         }
                     }
                 }
@@ -129,8 +129,8 @@ class sitemap_test_set extends ocp_test_case
     public function testHasIcons()
     {
         foreach ($this->flattened as $k => $c) {
-            if (preg_match('#^\w*:(\w*(:\w*)?)?$#',$k) != 0) {
-                if (in_array($k,array(
+            if (preg_match('#^\w*:(\w*(:\w*)?)?$#', $k) != 0) {
+                if (in_array($k, array(
                     'site:popup_blockers',
                     'site:userguide_chatcode',
                     'site:userguide_comcode',
@@ -140,14 +140,14 @@ class sitemap_test_set extends ocp_test_case
                     continue;
                 }
 
-                list($zone,$page) = explode(':',$k);
-                $test = _request_page($page,$zone);
+                list($zone, $page) = explode(':', $k);
+                $test = _request_page($page, $zone);
                 if ($test === false) {
                     continue;
                 }
 
-                if ((strpos($test[0],'_CUSTOM') === false) && (!in_array($k,array('adminzone:admin_config:base',':keymap')))) {
-                    $this->assertTrue($c['extra_meta']['image'] != '','Missing icon for: ' . $k);
+                if ((strpos($test[0], '_CUSTOM') === false) && (!in_array($k, array('adminzone:admin_config:base', ':keymap')))) {
+                    $this->assertTrue($c['extra_meta']['image'] != '', 'Missing icon for: ' . $k);
                 }
             }
         }
@@ -156,7 +156,7 @@ class sitemap_test_set extends ocp_test_case
     public function testNoOrphans()
     {
         foreach ($this->flattened as $c) {
-            $this->assertTrue(!isset($c['is_unexpected_orphan']),'Not tied in via page grouping ' . serialize($c));
+            $this->assertTrue(!isset($c['is_unexpected_orphan']), 'Not tied in via page grouping ' . serialize($c));
         }
     }
 
@@ -194,11 +194,11 @@ class sitemap_test_set extends ocp_test_case
 
         foreach ($this->flattened as $k => $c) {
             foreach ($props as $prop) {
-                $this->assertTrue(array_key_exists($prop,$c),'Missing property: ' . $prop . ' (for ' . $k . ')');
+                $this->assertTrue(array_key_exists($prop, $c), 'Missing property: ' . $prop . ' (for ' . $k . ')');
             }
             if (isset($c['extra_meta'])) {
                 foreach ($props_meta as $prop) {
-                    $this->assertTrue(array_key_exists($prop,$c['extra_meta']),'Missing meta property: ' . $prop . ' (for ' . $k . ')');
+                    $this->assertTrue(array_key_exists($prop, $c['extra_meta']), 'Missing meta property: ' . $prop . ' (for ' . $k . ')');
                 }
             }
         }

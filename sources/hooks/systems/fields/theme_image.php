@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_theme_image
 {
     /**
@@ -28,10 +27,10 @@ class Hook_fields_theme_image
     public function get_field_types()
     {
         require_code('themes2');
-        $images = get_all_image_ids_type('',true,null,null,true);
+        $images = get_all_image_ids_type('', true, null, null, true);
         $ret = array();
         foreach ($images as $image) {
-            $ret['th_' . $image] = do_lang_tempcode('FIELD_TYPE_theme_image_x',escape_html($image));
+            $ret['th_' . $image] = do_lang_tempcode('FIELD_TYPE_theme_image_x', escape_html($image));
         }
         return $ret;
     }
@@ -48,7 +47,7 @@ class Hook_fields_theme_image
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -58,9 +57,9 @@ class Hook_fields_theme_image
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -75,14 +74,14 @@ class Hook_fields_theme_image
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = 'default';
             }
         }
-        return array('short_text',$default,'short');
+        return array('short_text', $default, 'short');
     }
 
     /**
@@ -94,7 +93,7 @@ class Hook_fields_theme_image
      * @param  ?array                   List of fields the output is being limited to (NULL: N/A)
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev,$i,$only_fields)
+    public function render_field_value($field, $ev, $i, $only_fields)
     {
         if (is_object($ev)) {
             return $ev;
@@ -105,7 +104,7 @@ class Hook_fields_theme_image
         }
 
         $img_url = find_theme_image($ev);
-        if (!array_key_exists('c_name',$field)) {
+        if (!array_key_exists('c_name', $field)) {
             $field['c_name'] = 'other';
         }
         $tpl_set = $field['c_name'];
@@ -114,7 +113,7 @@ class Hook_fields_theme_image
             'image' => $img_url,
         ));
 
-        return do_template('CATALOGUE_' . $tpl_set . '_FIELD_PICTURE',array('I' => is_null($only_fields)?'-1':strval($i),'CATALOGUE' => $field['c_name'],'URL' => $img_url,'THUMB_URL' => $img_url),null,false,'CATALOGUE_DEFAULT_FIELD_PICTURE');
+        return do_template('CATALOGUE_' . $tpl_set . '_FIELD_PICTURE', array('I' => is_null($only_fields) ? '-1' : strval($i), 'CATALOGUE' => $field['c_name'], 'URL' => $img_url, 'THUMB_URL' => $img_url), null, false, 'CATALOGUE_DEFAULT_FIELD_PICTURE');
     }
 
     // ======================
@@ -131,10 +130,10 @@ class Hook_fields_theme_image
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
-        $ids = get_all_image_ids_type(substr($field['cf_type'],3),true);
-        return form_input_theme_image($_cf_name,$_cf_description,'field_' . strval($field['id']),$ids,null,$actual_value,null,$field['cf_required'] == 0);
+        $ids = get_all_image_ids_type(substr($field['cf_type'], 3), true);
+        return form_input_theme_image($_cf_name, $_cf_description, 'field_' . strval($field['id']), $ids, null, $actual_value, null, $field['cf_required'] == 0);
     }
 
     /**
@@ -146,10 +145,10 @@ class Hook_fields_theme_image
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        return post_param($tmp_name, $editing ? STRING_MAGIC_NULL : '');
     }
 }

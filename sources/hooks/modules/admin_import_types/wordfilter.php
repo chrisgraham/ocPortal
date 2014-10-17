@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wordfilter
  */
-
 class Hook_admin_import_types_wordfilter
 {
     /**

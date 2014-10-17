@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_Notification_catalogue_entry extends Hook_Notification
 {
     /**
@@ -39,18 +38,18 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         require_code('catalogues');
 
-        $name = substr($notification_code,strlen('catalogue_entry__'));
+        $name = substr($notification_code, strlen('catalogue_entry__'));
 
-        $total = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name' => $name));
-        if ($total>300) {
-            return parent::create_category_tree($notification_code,$id);
+        $total = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'COUNT(*)', array('c_name' => $name));
+        if ($total > 300) {
+            return parent::create_category_tree($notification_code, $id);
         } // Too many, so just allow removing UI
 
-        $page_links = get_catalogue_category_tree($name,is_null($id)?null:intval($id),null,null,1);
+        $page_links = get_catalogue_category_tree($name, is_null($id) ? null : intval($id), null, null, 1);
         $filtered = array();
         foreach ($page_links as $p) {
             if (strval($p['id']) !== $id) {
@@ -67,7 +66,7 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -81,17 +80,17 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues',array('c_name','c_title'));
+        $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues', array('c_name', 'c_title'));
         foreach ($catalogues as $catalogue) {
             $catalogue_name = $catalogue['c_name'];
-            if (substr($catalogue_name,0,1) == '_') {
+            if (substr($catalogue_name, 0, 1) == '_') {
                 continue;
             }
-            $nl = do_lang('catalogues:NOTIFICATION_TYPE_catalogue_entry__' . $catalogue_name,null,null,null,null,false);
+            $nl = do_lang('catalogues:NOTIFICATION_TYPE_catalogue_entry__' . $catalogue_name, null, null, null, null, false);
             if (is_null($nl)) {
-                $nl = do_lang('catalogues:NOTIFICATION_TYPE_catalogue_entry',get_translated_text($catalogue['c_title']));
+                $nl = do_lang('catalogues:NOTIFICATION_TYPE_catalogue_entry', get_translated_text($catalogue['c_title']));
             }
-            $list['catalogue_entry__' . $catalogue_name] = array(do_lang('menus:CONTENT'),$nl);
+            $list['catalogue_entry__' . $catalogue_name] = array(do_lang('menus:CONTENT'), $nl);
         }
         return $list;
     }
@@ -106,12 +105,12 @@ class Hook_Notification_catalogue_entry extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'catalogues',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'catalogues', $notification_code, $category, $to_member_ids, $start, $max);
         if (get_value('disable_cat_cat_perms') !== '1') {
-            $members = $this->_all_members_who_have_enabled_with_category_access($members,'catalogues_category',$notification_code,$category,$to_member_ids,$start,$max);
+            $members = $this->_all_members_who_have_enabled_with_category_access($members, 'catalogues_category', $notification_code, $category, $to_member_ids, $start, $max);
         }
 
         return $members;

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_disk_space
 {
     /**
@@ -30,7 +29,7 @@ class Hook_check_disk_space
         $warning = array();
         if (function_exists('disk_free_space')) {
             $disk_space = @disk_free_space(get_file_base());
-            if ((is_integer($disk_space)) && ($disk_space<25*1024*1024)) {
+            if ((is_integer($disk_space)) && ($disk_space < 25 * 1024 * 1024)) {
                 $warning[] = do_lang_tempcode('WARNING_DISK_SPACE');
             }
         }

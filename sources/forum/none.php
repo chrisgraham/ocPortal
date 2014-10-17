@@ -20,6 +20,7 @@
 
 /**
  * Forum Driver.
+ *
  * @package    core_forum_drivers
  */
 class forum_driver_none extends forum_driver_base
@@ -32,7 +33,7 @@ class forum_driver_none extends forum_driver_base
     public function get_admin_username()
     {
         global $SITE_INFO;
-        $ret = array_key_exists('admin_username',$SITE_INFO)?$SITE_INFO['admin_username']:'admin';
+        $ret = array_key_exists('admin_username', $SITE_INFO) ? $SITE_INFO['admin_username'] : 'admin';
         if ($ret == '') {
             $ret = 'admin';
         }
@@ -58,7 +59,7 @@ class forum_driver_none extends forum_driver_base
      */
     public function forum_get_lang($member)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -98,7 +99,7 @@ class forum_driver_none extends forum_driver_base
      * @param  integer                  The length of the new custom field
      * @return boolean                  Whether the custom field was created successfully
      */
-    public function install_create_custom_field($name,$length)
+    public function install_create_custom_field($name, $length)
     {
         return false;
     }
@@ -158,12 +159,12 @@ class forum_driver_none extends forum_driver_base
     public function get_emoticon_chooser($field_name = 'post')
     {
         require_code('comcode_compiler');
-        $emoticons = $GLOBALS['SITE_DB']->query_select('f_emoticons',array('*'),array('e_relevance_level' => 0));
+        $emoticons = $GLOBALS['SITE_DB']->query_select('f_emoticons', array('*'), array('e_relevance_level' => 0));
         $em = new ocp_tempcode();
         foreach ($emoticons as $emo) {
             $code = $emo['e_code'];
 
-            $em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID' => '0b51492b6e170db4466be74fdf312260','FIELD_NAME' => $field_name,'CODE' => $code,'IMAGE' => apply_emoticons($code))));
+            $em->attach(do_template('EMOTICON_CLICK_CODE', array('_GUID' => '0b51492b6e170db4466be74fdf312260', 'FIELD_NAME' => $field_name, 'CODE' => $code, 'IMAGE' => apply_emoticons($code))));
         }
 
         return $em;
@@ -199,10 +200,10 @@ class forum_driver_none extends forum_driver_base
         $EMOTICON_LEVELS = array();
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'f_emoticons WHERE e_relevance_level<4');
         foreach ($rows as $myrow) {
-            $this->EMOTICON_CACHE[$myrow['e_code']] = array('EMOTICON_IMG_CODE_THEMED',$myrow['e_theme_img_code'],$myrow['e_code']);
+            $this->EMOTICON_CACHE[$myrow['e_code']] = array('EMOTICON_IMG_CODE_THEMED', $myrow['e_theme_img_code'], $myrow['e_code']);
             $EMOTICON_LEVELS[$myrow['e_code']] = $myrow['e_relevance_level'];
         }
-        uksort($this->EMOTICON_CACHE,'strlen_sort');
+        uksort($this->EMOTICON_CACHE, 'strlen_sort');
         $this->EMOTICON_CACHE = array_reverse($this->EMOTICON_CACHE);
         return $this->EMOTICON_CACHE;
     }
@@ -214,7 +215,7 @@ class forum_driver_none extends forum_driver_base
      * @param  string                   The field name
      * @param  string                   The value
      */
-    public function set_custom_field($member,$field,$value)
+    public function set_custom_field($member, $field, $value)
     {
     }
 
@@ -240,7 +241,7 @@ class forum_driver_none extends forum_driver_base
         if ($name == $this->get_admin_username()) {
             return array(1);
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -261,9 +262,9 @@ class forum_driver_none extends forum_driver_base
      * @param  ID_TEXT                  The field
      * @return ?array                   The result (NULL: unknown)
      */
-    public function get_member_row_field($id,$field)
+    public function get_member_row_field($id, $field)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -370,10 +371,10 @@ class forum_driver_none extends forum_driver_base
         }
 
         if ($id == 1) {
-            $url = build_url(array('page' => 'authors','type' => 'misc','id' => $this->get_admin_username()),get_module_zone('authors'),null,false,false,true);
+            $url = build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $this->get_admin_username()), get_module_zone('authors'), null, false, false, true);
             return $url->evaluate();
         }
-        $url = build_url(array('page' => 'authors','type' => 'misc','id' => do_lang('GUEST')),get_module_zone('authors'),null,false,false,true);
+        $url = build_url(array('page' => 'authors', 'type' => 'misc', 'id' => do_lang('GUEST')), get_module_zone('authors'), null, false, false, true);
         return $url->evaluate();
     }
 
@@ -437,9 +438,9 @@ class forum_driver_none extends forum_driver_base
      * @param  SHORT_TEXT               The topic identifier
      * @return ?integer                 The topic ID (NULL: not found)
      */
-    public function find_topic_id_for_topic_identifier($forum,$topic_identifier)
+    public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -464,9 +465,9 @@ class forum_driver_none extends forum_driver_base
      * @param  boolean                  Whether the reply is only visible to staff
      * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
      */
-    public function make_post_forum_topic($forum_name,$topic_identifier,$member_id,$post_title,$_post,$content_title,$topic_identifier_encapsulation_prefix,$content_url = null,$time = null,$ip = null,$validated = null,$topic_validated = 1,$skip_post_checks = false,$poster_name_if_guest = '',$parent_id = null,$staff_only = false)
+    public function make_post_forum_topic($forum_name, $topic_identifier, $member_id, $post_title, $_post, $content_title, $topic_identifier_encapsulation_prefix, $content_url = null, $time = null, $ip = null, $validated = null, $topic_validated = 1, $skip_post_checks = false, $poster_name_if_guest = '', $parent_id = null, $staff_only = false)
     {
-        return array(null,false);
+        return array(null, false);
     }
 
     /**
@@ -484,12 +485,12 @@ class forum_driver_none extends forum_driver_base
      * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
      *
      * @param  integer                  The topic ID
-     * @param string         The forum ID
+     * @param  string         The forum ID
      * @return URLPATH                  The URL to the topic
      */
-    public function topic_url($id,$forum)
+    public function topic_url($id, $forum)
     {
-        $url = build_url(array('page' => 'news','id' => $id),get_module_zone('news'),null,false,false,true);
+        $url = build_url(array('page' => 'news', 'id' => $id), get_module_zone('news'), null, false, false, true);
         return $url->evaluate();
     }
 
@@ -497,12 +498,12 @@ class forum_driver_none extends forum_driver_base
      * Get a URL to the specified post ID.
      *
      * @param  integer                  The post ID
-     * @param string         The forum ID
+     * @param  string         The forum ID
      * @return URLPATH                  The URL to the post
      */
-    public function post_url($id,$forum)
+    public function post_url($id, $forum)
     {
-        $url = build_url(array('page' => 'news','id' => $id),get_module_zone('news'),null,false,false,true);
+        $url = build_url(array('page' => 'news', 'id' => $id), get_module_zone('news'), null, false, false, true);
         return $url->evaluate();
     }
 
@@ -528,9 +529,9 @@ class forum_driver_none extends forum_driver_base
      * @param  SHORT_TEXT               The topic description filter
      * @return ?array                   The array of topics (NULL: error)
      */
-    public function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title = '',$show_first_posts = false,$date_key = 'lasttime',$hot = false,$filter_topic_description = '')
+    public function show_forum_topics($name, $limit, $start, &$max_rows, $filter_topic_title = '', $show_first_posts = false, $date_key = 'lasttime', $hot = false, $filter_topic_description = '')
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -541,9 +542,9 @@ class forum_driver_none extends forum_driver_base
      * @param  integer                  Return primary members after this offset and secondary members after this offset
      * @return ?array                   The array of members (NULL: no members)
      */
-    public function member_group_query($groups,$max = null,$start = 0)
+    public function member_group_query($groups, $max = null, $start = 0)
     {
-        if (in_array(1,$groups)) {
+        if (in_array(1, $groups)) {
             return array(array(1));
         }
 
@@ -558,7 +559,7 @@ class forum_driver_none extends forum_driver_base
      */
     public function get_previous_member($member)
     {
-        return NULL; // Guest doesn't count
+        return null; // Guest doesn't count
     }
 
     /**
@@ -570,10 +571,10 @@ class forum_driver_none extends forum_driver_base
      */
     public function get_next_member($member)
     {
-        if ($member<1) {
+        if ($member < 1) {
             return 1;
         } else {
-            return NULL;
+            return null;
         }
     }
 
@@ -649,7 +650,7 @@ class forum_driver_none extends forum_driver_base
      * @param  ?integer                 Maximum number to return (limits to the most recent active) (NULL: no limit)
      * @return ?array                   The array of matched members (NULL: none found)
      */
-    public function get_matching_members($pattern,$limit = null)
+    public function get_matching_members($pattern, $limit = null)
     {
         return array();
     }
@@ -727,7 +728,7 @@ class forum_driver_none extends forum_driver_base
      */
     public function get_num_users_forums()
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -815,7 +816,7 @@ class forum_driver_none extends forum_driver_base
      */
     public function _get_usergroup_list()
     {
-        return array(0 => do_lang('GUESTS'),1 => do_lang('ADMINISTRATORS'));
+        return array(0 => do_lang('GUESTS'), 1 => do_lang('ADMINISTRATORS'));
     }
 
     /**
@@ -827,7 +828,7 @@ class forum_driver_none extends forum_driver_base
     public function _get_members_groups($member)
     {
         if ($member == 1) {
-            return array(db_get_first_id()+1);
+            return array(db_get_first_id() + 1);
         }
         return array(0);
     }
@@ -844,13 +845,13 @@ class forum_driver_none extends forum_driver_base
      * @param  boolean                  Whether this is a cookie login
      * @return array                    A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
      */
-    public function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login = false)
+    public function forum_authorise_login($username, $userid, $password_hashed, $password_raw, $cookie_login = false)
     {
         $out = array();
         $out['id'] = null;
 
         if (($username != $this->get_admin_username()) && ($userid != 1)) { // All hands to lifeboats
-            $out['error'] = (do_lang_tempcode('_MEMBER_NO_EXIST',$username));
+            $out['error'] = (do_lang_tempcode('_MEMBER_NO_EXIST', $username));
             return $out;
         }
 

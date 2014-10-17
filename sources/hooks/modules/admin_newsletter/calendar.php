@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_whats_news_calendar
 {
     /**
@@ -28,13 +27,13 @@ class Hook_whats_news_calendar
     public function choose_categories()
     {
         if (!addon_installed('calendar')) {
-            return NULL;
+            return null;
         }
 
         require_lang('calendar');
 
         require_code('calendar');
-        return array(create_selection_list_event_types(),do_lang('CALENDAR'));
+        return array(create_selection_list_event_types(), do_lang('CALENDAR'));
     }
 
     /**
@@ -45,7 +44,7 @@ class Hook_whats_news_calendar
      * @param  string                   Category filter to apply
      * @return array                    Tuple of result details
      */
-    public function run($cutoff_time,$lang,$filter)
+    public function run($cutoff_time, $lang, $filter)
     {
         if (!addon_installed('calendar')) {
             return array();
@@ -58,30 +57,30 @@ class Hook_whats_news_calendar
         $new = new ocp_tempcode();
 
         require_code('ocfiltering');
-        $or_list = ocfilter_to_sqlfragment($filter,'e_type');
+        $or_list = ocfilter_to_sqlfragment($filter, 'e_type');
 
         $privacy_join = '';
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('event','e',$GLOBALS['FORUM_DRIVER']->get_guest_id());
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('event', 'e', $GLOBALS['FORUM_DRIVER']->get_guest_id());
         }
 
-        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_events e ' . $privacy_where . ' WHERE e_add_date>' . strval($cutoff_time) . ' AND e_member_calendar IS NULL AND (' . $or_list . ')' . $privacy_where . ' ORDER BY e_add_date DESC',$max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_events e ' . $privacy_where . ' WHERE e_add_date>' . strval($cutoff_time) . ' AND e_member_calendar IS NULL AND (' . $or_list . ')' . $privacy_where . ' ORDER BY e_add_date DESC', $max);
         if (count($rows) == $max) {
             return array();
         }
 
         foreach ($rows as $row) {
             $id = $row['id'];
-            $_url = build_url(array('page' => 'calendar','type' => 'view','id' => $row['id']),get_module_zone('calendar'),null,false,false,true);
+            $_url = build_url(array('page' => 'calendar', 'type' => 'view', 'id' => $row['id']), get_module_zone('calendar'), null, false, false, true);
             $url = $_url->evaluate();
-            $name = get_translated_text($row['e_title'],null,$lang);
-            $description = get_translated_text($row['e_content'],null,$lang);
-            $member_id = (is_guest($row['e_submitter']))?null:strval($row['e_submitter']);
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => '654cafa75ec9f9b8e0e0fb666f28fb37','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'DESCRIPTION' => $description,'CONTENT_TYPE' => 'event','CONTENT_ID' => strval($id))));
+            $name = get_translated_text($row['e_title'], null, $lang);
+            $description = get_translated_text($row['e_content'], null, $lang);
+            $member_id = (is_guest($row['e_submitter'])) ? null : strval($row['e_submitter']);
+            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '654cafa75ec9f9b8e0e0fb666f28fb37', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'CONTENT_TYPE' => 'event', 'CONTENT_ID' => strval($id))));
         }
 
-        return array($new,do_lang('CALENDAR','','','',$lang));
+        return array($new, do_lang('CALENDAR', '', '', '', $lang));
     }
 }

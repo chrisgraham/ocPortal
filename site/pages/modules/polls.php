@@ -51,7 +51,7 @@ class Module_polls
 
         delete_privilege('choose_poll');
 
-        $GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type' => 'polls'));
+        $GLOBALS['SITE_DB']->query_delete('trackbacks', array('trackback_for_type' => 'polls'));
 
         $GLOBALS['FORUM_DRIVER']->install_delete_custom_field('points_gained_voting');
     }
@@ -62,10 +62,10 @@ class Module_polls
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('poll',array(
+            $GLOBALS['SITE_DB']->create_table('poll', array(
                 'id' => '*AUTO',
                 'question' => 'SHORT_TRANS__COMCODE',
                 'option1' => 'SHORT_TRANS__COMCODE',
@@ -101,26 +101,26 @@ class Module_polls
                 'edit_date' => '?TIME'
             ));
 
-            $GLOBALS['SITE_DB']->create_index('poll','poll_views',array('poll_views'));
-            $GLOBALS['SITE_DB']->create_index('poll','get_current',array('is_current'));
-            $GLOBALS['SITE_DB']->create_index('poll','ps',array('submitter'));
-            $GLOBALS['SITE_DB']->create_index('poll','padd_time',array('add_time'));
-            $GLOBALS['SITE_DB']->create_index('poll','date_and_time',array('date_and_time'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'poll_views', array('poll_views'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'get_current', array('is_current'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ps', array('submitter'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'padd_time', array('add_time'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'date_and_time', array('date_and_time'));
 
-            add_privilege('POLLS','choose_poll',false);
+            add_privilege('POLLS', 'choose_poll', false);
 
-            $GLOBALS['SITE_DB']->create_index('poll','ftjoin_pq',array('question'));
-            $GLOBALS['SITE_DB']->create_index('poll','ftjoin_po1',array('option1'));
-            $GLOBALS['SITE_DB']->create_index('poll','ftjoin_po2',array('option2'));
-            $GLOBALS['SITE_DB']->create_index('poll','ftjoin_po3',array('option3'));
-            $GLOBALS['SITE_DB']->create_index('poll','ftjoin_po4',array('option4'));
-            $GLOBALS['SITE_DB']->create_index('poll','ftjoin_po5',array('option5'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ftjoin_pq', array('question'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ftjoin_po1', array('option1'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ftjoin_po2', array('option2'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ftjoin_po3', array('option3'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ftjoin_po4', array('option4'));
+            $GLOBALS['SITE_DB']->create_index('poll', 'ftjoin_po5', array('option5'));
 
-            $GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_voting',20,1,0,0,0,'','integer');
+            $GLOBALS['FORUM_DRIVER']->install_create_custom_field('points_gained_voting', 20, 1, 0, 0, 0, '', 'integer');
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<5)) {
-            $GLOBALS['SITE_DB']->create_table('poll_votes',array(
+        if ((is_null($upgrade_from)) || ($upgrade_from < 5)) {
+            $GLOBALS['SITE_DB']->create_table('poll_votes', array(
                 'id' => '*AUTO',
                 'v_poll_id' => 'AUTO_LINK',
                 'v_voter_id' => '?MEMBER',
@@ -128,29 +128,29 @@ class Module_polls
                 'v_vote_for' => '?SHORT_INTEGER',
             ));
 
-            $GLOBALS['SITE_DB']->create_index('poll_votes','v_voter_id',array('v_voter_id'));
-            $GLOBALS['SITE_DB']->create_index('poll_votes','v_voter_ip',array('v_voter_ip'));
-            $GLOBALS['SITE_DB']->create_index('poll_votes','v_vote_for',array('v_vote_for'));
+            $GLOBALS['SITE_DB']->create_index('poll_votes', 'v_voter_id', array('v_voter_id'));
+            $GLOBALS['SITE_DB']->create_index('poll_votes', 'v_voter_ip', array('v_voter_ip'));
+            $GLOBALS['SITE_DB']->create_index('poll_votes', 'v_vote_for', array('v_vote_for'));
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<5)) {
-            $polls = $GLOBALS['SITE_DB']->query_select('poll',array('id','ip'));
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 5)) {
+            $polls = $GLOBALS['SITE_DB']->query_select('poll', array('id', 'ip'));
             foreach ($polls as $poll) {
-                $voters = explode('-',$poll['ip']);
+                $voters = explode('-', $poll['ip']);
                 foreach ($voters as $voter) {
-                    $GLOBALS['SITE_DB']->query_insert('poll_votes',array(
+                    $GLOBALS['SITE_DB']->query_insert('poll_votes', array(
                         'v_poll_id' => $poll['id'],
-                        'v_voter_id' => is_numeric($voter)?intval($voter):null,
-                        'v_voter_ip' => is_numeric($voter)?'':$voter,
-                        'v_vote_for' => NULL,
+                        'v_voter_id' => is_numeric($voter) ? intval($voter) : null,
+                        'v_voter_ip' => is_numeric($voter) ? '' : $voter,
+                        'v_vote_for' => null,
                     ));
                 }
             }
-            $GLOBALS['SITE_DB']->delete_table_field('poll','ip');
+            $GLOBALS['SITE_DB']->delete_table_field('poll', 'ip');
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<6)) {
-            $GLOBALS['SITE_DB']->create_index('poll','#poll_search__combined',array('question','option1','option2','option3','option4','option5'));
+        if ((is_null($upgrade_from)) || ($upgrade_from < 6)) {
+            $GLOBALS['SITE_DB']->create_index('poll', '#poll_search__combined', array('question', 'option1', 'option2', 'option3', 'option4', 'option5'));
         }
     }
 
@@ -163,10 +163,10 @@ class Module_polls
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('POLLS','menu/social/polls'),
+            'misc' => array('POLLS', 'menu/social/polls'),
         );
     }
 
@@ -182,7 +182,7 @@ class Module_polls
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('polls');
 
@@ -196,22 +196,22 @@ class Module_polls
             $id = get_param_integer('id');
 
             // Breadcrumbs
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('POLL_ARCHIVE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('POLL_ARCHIVE'))));
 
             // Load data
-            $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => $id),'',1);
-            if (!array_key_exists(0,$rows)) {
-                return warn_screen($this->title,do_lang_tempcode('MISSING_RESOURCE'));
+            $rows = $GLOBALS['SITE_DB']->query_select('poll', array('*'), array('id' => $id), '', 1);
+            if (!array_key_exists(0, $rows)) {
+                return warn_screen($this->title, do_lang_tempcode('MISSING_RESOURCE'));
             }
             $myrow = $rows[0];
             $_title = get_translated_text($myrow['question']);
 
             // Meta data
             set_extra_request_metadata(array(
-                'created' => date('Y-m-d',$myrow['add_time']),
+                'created' => date('Y-m-d', $myrow['add_time']),
                 'creator' => $GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
                 'publisher' => '', // blank means same as creator
-                'modified' => is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
+                'modified' => is_null($myrow['edit_date']) ? '' : date('Y-m-d', $myrow['edit_date']),
                 'type' => 'Poll',
                 'title' => $_title,
                 'identifier' => '_SEARCH:polls:view:' . strval($id),
@@ -226,7 +226,7 @@ class Module_polls
             $this->_title = $_title;
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -241,7 +241,7 @@ class Module_polls
         require_css('polls');
 
         // What are we doing?
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->view_polls();
@@ -260,9 +260,9 @@ class Module_polls
      */
     public function view_polls()
     {
-        $content = do_block('main_multi_content',array('param' => 'poll','efficient' => '0','zone' => '_SELF','sort' => 'recent','max' => '20','no_links' => '1','pagination' => '1','give_context' => '0','include_breadcrumbs' => '0','block_id' => 'module'));
+        $content = do_block('main_multi_content', array('param' => 'poll', 'efficient' => '0', 'zone' => '_SELF', 'sort' => 'recent', 'max' => '20', 'no_links' => '1', 'pagination' => '1', 'give_context' => '0', 'include_breadcrumbs' => '0', 'block_id' => 'module'));
 
-        return do_template('PAGINATION_SCREEN',array('_GUID' => 'bed3e31c98b35fea52a991e381e6cfaa','TITLE' => $this->title,'CONTENT' => $content));
+        return do_template('PAGINATION_SCREEN', array('_GUID' => 'bed3e31c98b35fea52a991e381e6cfaa', 'TITLE' => $this->title, 'CONTENT' => $content));
     }
 
     /**
@@ -277,9 +277,9 @@ class Module_polls
         $myrow = $this->myrow;
         $_title = $this->_title;
 
-        $date_raw = is_null($myrow['date_and_time'])?'':strval($myrow['date_and_time']);
+        $date_raw = is_null($myrow['date_and_time']) ? '' : strval($myrow['date_and_time']);
         $add_date_raw = strval($myrow['add_time']);
-        $edit_date_raw = is_null($myrow['edit_date'])?'':strval($myrow['edit_date']);
+        $edit_date_raw = is_null($myrow['edit_date']) ? '' : strval($myrow['edit_date']);
         $date = get_timezoned_date($myrow['date_and_time']);
         $add_date = get_timezoned_date($myrow['add_time']);
         $edit_date = get_timezoned_date($myrow['edit_date']);
@@ -288,28 +288,28 @@ class Module_polls
         if ((get_db_type() != 'xml') && (get_value('no_view_counts') !== '1') && (is_null(get_bot_type()))) {
             $myrow['poll_views']++;
             if (!$GLOBALS['SITE_DB']->table_is_locked('poll')) {
-                $GLOBALS['SITE_DB']->query_update('poll',array('poll_views' => $myrow['poll_views']),array('id' => $id),'',1,null,false,true);
+                $GLOBALS['SITE_DB']->query_update('poll', array('poll_views' => $myrow['poll_views']), array('id' => $id), '', 1, null, false, true);
             }
         }
 
         // Feedback
-        list($rating_details,$comment_details,$trackback_details) = embed_feedback_systems(
+        list($rating_details, $comment_details, $trackback_details) = embed_feedback_systems(
             get_page_name(),
             strval($id),
             $myrow['allow_rating'],
             $myrow['allow_comments'],
             $myrow['allow_trackbacks'],
-            is_null($myrow['date_and_time'])?0:1,
+            is_null($myrow['date_and_time']) ? 0 : 1,
             $myrow['submitter'],
-            build_url(array('page' => '_SELF','type' => 'view','id' => $id),'_SELF',null,false,false,true),
+            build_url(array('page' => '_SELF', 'type' => 'view', 'id' => $id), '_SELF', null, false, false, true),
             $_title,
             find_overridden_comment_forum('polls'),
             $myrow['add_time']
         );
 
         // Management links
-        if ((has_actual_page_access(null,'cms_polls',null,null)) && (has_edit_permission('high',get_member(),$myrow['submitter'],'cms_polls'))) {
-            $edit_url = build_url(array('page' => 'cms_polls','type' => '_ed','id' => $id),get_module_zone('cms_polls'));
+        if ((has_actual_page_access(null, 'cms_polls', null, null)) && (has_edit_permission('high', get_member(), $myrow['submitter'], 'cms_polls'))) {
+            $edit_url = build_url(array('page' => 'cms_polls', 'type' => '_ed', 'id' => $id), get_module_zone('cms_polls'));
         } else {
             $edit_url = new ocp_tempcode();
         }
@@ -318,7 +318,7 @@ class Module_polls
         $poll_details = do_block('main_poll');
 
         // Render
-        return do_template('POLL_SCREEN',array(
+        return do_template('POLL_SCREEN', array(
             '_GUID' => '1463a42354c3ad154e2c6bb0c96be3b9',
             'TITLE' => $this->title,
             'SUBMITTER' => strval($myrow['submitter']),

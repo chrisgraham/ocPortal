@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
-
 class Hook_config_shipping_cost_factor
 {
     /**

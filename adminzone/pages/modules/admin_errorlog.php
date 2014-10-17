@@ -49,10 +49,10 @@ class Module_admin_errorlog
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('ERROR_LOG','menu/adminzone/audit/errorlog'),
+            '!' => array('ERROR_LOG', 'menu/adminzone/audit/errorlog'),
         );
     }
 
@@ -65,7 +65,7 @@ class Module_admin_errorlog
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('errorlog');
 
@@ -73,7 +73,7 @@ class Module_admin_errorlog
 
         $this->title = get_screen_title('ERROR_LOG');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -88,10 +88,10 @@ class Module_admin_errorlog
         // Read in errors
         if (!GOOGLE_APPENGINE) {
             if (is_readable(get_custom_file_base() . '/data_custom/errorlog.php')) {
-                if (filesize(get_custom_file_base() . '/data_custom/errorlog.php')>1024*1024) {
-                    $myfile = fopen(get_custom_file_base() . '/data_custom/errorlog.php',GOOGLE_APPENGINE?'rb':'rt');
-                    fseek($myfile,-1024*500,SEEK_END);
-                    $lines = explode("\n",fread($myfile,1024*500));
+                if (filesize(get_custom_file_base() . '/data_custom/errorlog.php') > 1024 * 1024) {
+                    $myfile = fopen(get_custom_file_base() . '/data_custom/errorlog.php', GOOGLE_APPENGINE ? 'rb' : 'rt');
+                    fseek($myfile, -1024 * 500, SEEK_END);
+                    $lines = explode("\n", fread($myfile, 1024 * 500));
                     fclose($myfile);
                     unset($lines[0]);
                     $lines[] = '...';
@@ -105,9 +105,9 @@ class Module_admin_errorlog
             foreach ($lines as $line) {
                 $_line = trim($line);
 
-                if (($_line != '') && (strpos($_line,'<?php') === false)) {
+                if (($_line != '') && (strpos($_line, '<?php') === false)) {
                     $matches = array();
-                    if (preg_match('#^\[(.+?) (.+?)\] (.{1,20}):  ?(.*)#',$_line,$matches) != 0) {
+                    if (preg_match('#^\[(.+?) (.+?)\] (.{1,20}):  ?(.*)#', $_line, $matches) != 0) {
                         $stuff[] = $matches;
                     }
                 }
@@ -142,37 +142,37 @@ class Module_admin_errorlog
                         continue;
                     }
 
-                    $time = intval($app_log->getTimeUsec()/1000000.0);
+                    $time = intval($app_log->getTimeUsec() / 1000000.0);
 
-                    $stuff[] = array('',date('D-M-Y',$time),date('H:i:s',$time),$_level,$message);
+                    $stuff[] = array('', date('D-M-Y', $time), date('H:i:s', $time), $_level, $message);
                 }
             }
         }
 
         // Put errors into table
-        $start = get_param_integer('start',0);
-        $max = get_param_integer('max',50);
+        $start = get_param_integer('start', 0);
+        $max = get_param_integer('max', 50);
         $sortables = array('date_and_time' => do_lang_tempcode('DATE_TIME'));
-        $test = explode(' ',get_param('sort','date_and_time DESC'),2);
+        $test = explode(' ', get_param('sort', 'date_and_time DESC'), 2);
         if (count($test) == 1) {
             $test[1] = 'DESC';
         }
-        list($sortable,$sort_order) = $test;
-        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+        list($sortable, $sort_order) = $test;
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
         if ($sort_order == 'DESC') {
             $stuff = array_reverse($stuff);
         }
         require_code('templates_results_table');
-        $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'),do_lang_tempcode('TYPE'),do_lang_tempcode('MESSAGE')),$sortables,'sort',$sortable . ' ' . $sort_order);
+        $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('TYPE'), do_lang_tempcode('MESSAGE')), $sortables, 'sort', $sortable . ' ' . $sort_order);
         $fields = new ocp_tempcode();
-        for ($i = $start;$i<$start+$max;$i++) {
-            if (!array_key_exists($i,$stuff)) {
+        for ($i = $start; $i < $start + $max; $i++) {
+            if (!array_key_exists($i, $stuff)) {
                 break;
             }
 
-            $message = str_replace(get_file_base(),'',$stuff[$i][4]);
+            $message = str_replace(get_file_base(), '', $stuff[$i][4]);
 
             $fields->attach(results_entry(array(
                 escape_html($stuff[$i][1] . ' ' . $stuff[$i][2]),
@@ -180,22 +180,22 @@ class Module_admin_errorlog
                 escape_html($message)
             )));
         }
-        $error = results_table(do_lang_tempcode('ERROR_LOG'),$start,'start',$max,'max',$i,$fields_title,$fields,$sortables,$sortable,$sort_order,'sort',new ocp_tempcode());
+        $error = results_table(do_lang_tempcode('ERROR_LOG'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
 
         // Read in end of permissions file
         require_all_lang();
         if (is_readable(get_custom_file_base() . '/data_custom/permissioncheckslog.php')) {
-            $myfile = @fopen(get_custom_file_base() . '/data_custom/permissioncheckslog.php',GOOGLE_APPENGINE?'rb':'rt');
+            $myfile = @fopen(get_custom_file_base() . '/data_custom/permissioncheckslog.php', GOOGLE_APPENGINE ? 'rb' : 'rt');
             if ($myfile !== false) {
-                fseek($myfile,-40000,SEEK_END);
+                fseek($myfile, -40000, SEEK_END);
                 $data = '';
                 while (!feof($myfile)) {
-                    $data .= fread($myfile,8192);
+                    $data .= fread($myfile, 8192);
                 }
                 fclose($myfile);
-                $lines = explode("\n",$data);
+                $lines = explode("\n", $data);
                 if (count($lines) != 0) {
-                    if (strpos($lines[0],'<' . '?php') !== false) {
+                    if (strpos($lines[0], '<' . '?php') !== false) {
                         array_shift($lines);
                     } else {
                         if (strlen($data) == 40000) {
@@ -205,10 +205,10 @@ class Module_admin_errorlog
                 }
                 foreach ($lines as $i => $line) {
                     $matches = array();
-                    if (preg_match('#^\s+has\_specific\_permission: (\w+)#',$line,$matches) != 0) {
-                        $looked_up = do_lang('PRIVILEGE_' . $matches[1],null,null,null,null,false);
+                    if (preg_match('#^\s+has\_specific\_permission: (\w+)#', $line, $matches) != 0) {
+                        $looked_up = do_lang('PRIVILEGE_' . $matches[1], null, null, null, null, false);
                         if (!is_null($looked_up)) {
-                            $line = str_replace($matches[1],$looked_up,$line);
+                            $line = str_replace($matches[1], $looked_up, $line);
                             $lines[$i] = $line;
                         }
                     }
@@ -216,12 +216,12 @@ class Module_admin_errorlog
             }
 
             // Put permssions into table
-            $permission = implode("\n",$lines);
+            $permission = implode("\n", $lines);
         } else {
             $permission = '';
         }
 
-        $tpl = do_template('ERRORLOG_SCREEN',array('_GUID' => '9186c7beb6b722a52f39e2cbe16aded6','TITLE' => $this->title,'ERROR' => $error,'PERMISSION' => $permission));
+        $tpl = do_template('ERRORLOG_SCREEN', array('_GUID' => '9186c7beb6b722a52f39e2cbe16aded6', 'TITLE' => $this->title, 'ERROR' => $error, 'PERMISSION' => $permission));
 
         require_code('templates_internalise_screen');
         return internalise_own_screen($tpl);

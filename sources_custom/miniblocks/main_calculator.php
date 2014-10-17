@@ -13,7 +13,7 @@ require_javascript('javascript_validation');
 
 $message = $map['message'];
 $equation = $map['equation'];
-$equation = str_replace('math.','Math.',strtolower($equation)); // Name fields come out lower case, so equation needs to be
+$equation = str_replace('math.', 'Math.', strtolower($equation)); // Name fields come out lower case, so equation needs to be
 echo '<form onsubmit="event.returnValue=false; return false;" action="#" method="post">';
 foreach ($map as $key => $val) {
     $key = strtolower($key); // Firefox forces this, but we'll force it too just in case of browser inconsistency
@@ -24,7 +24,7 @@ foreach ($map as $key => $val) {
                     </p>';
     }
 }
-$uniqid = uniqid('',true);
+$uniqid = uniqid('', true);
 echo '
     <script>
         function calculate_sum_' . $uniqid . '(elements)

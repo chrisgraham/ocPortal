@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-
 class Hook_cron_tickets_email_integration
 {
     /**

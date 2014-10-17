@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_sitemap_page_grouping extends Hook_sitemap_base
 {
     /**
@@ -29,7 +28,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
     public function handles_page_link($page_link)
     {
         $matches = array();
-        if (preg_match('#^([^:]*):([^:]*):([^:]*)#',$page_link,$matches) != 0) {
+        if (preg_match('#^([^:]*):([^:]*):([^:]*)#', $page_link, $matches) != 0) {
             $zone = $matches[1];
             $page = $matches[2];
             $type = $matches[3];
@@ -60,12 +59,12 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$orphaned_pages = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $orphaned_pages = null, $return_anyway = false)
     {
         require_lang('menus');
 
         $matches = array();
-        preg_match('#^([^:]*):([^:]*):([^:]*)#',$page_link,$matches);
+        preg_match('#^([^:]*):([^:]*):([^:]*)#', $page_link, $matches);
         $page_grouping = $matches[3];
 
         $icon = mixed();
@@ -117,7 +116,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                 case 'site_meta':
                 case 'social':
                 default:
-                    $zone = (get_option('collapse_user_zones') == '1')?'':'site';
+                    $zone = (get_option('collapse_user_zones') == '1') ? '' : 'site';
                     break;
             }
         }
@@ -135,27 +134,27 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
         // Our node
         $struct = array(
-            'title' => is_object($lang_string)?$lang_string:do_lang_tempcode($lang_string),
+            'title' => is_object($lang_string) ? $lang_string : do_lang_tempcode($lang_string),
             'content_type' => 'page_grouping',
             'content_id' => $page_grouping,
             'modifiers' => array(),
             'only_on_page' => '',
             'page_link' => $deployed_page_link,
-            'url' => NULL,
+            'url' => null,
             'extra_meta' => array(
                 'description' => $description,
-                'image' => ($icon === NULL)?null:find_theme_image('icons/24x24/' . $icon),
-                'image_2x' => ($icon === NULL)?null:find_theme_image('icons/48x48/' . $icon),
-                'add_date' => NULL,
-                'edit_date' => NULL,
-                'submitter' => NULL,
-                'views' => NULL,
-                'rating' => NULL,
-                'meta_keywords' => NULL,
-                'meta_description' => NULL,
-                'categories' => NULL,
-                'validated' => NULL,
-                'db_row' => NULL,
+                'image' => ($icon === null) ? null : find_theme_image('icons/24x24/' . $icon),
+                'image_2x' => ($icon === null) ? null : find_theme_image('icons/48x48/' . $icon),
+                'add_date' => null,
+                'edit_date' => null,
+                'submitter' => null,
+                'views' => null,
+                'rating' => null,
+                'meta_keywords' => null,
+                'meta_description' => null,
+                'categories' => null,
+                'validated' => null,
+                'db_row' => null,
             ),
             'permissions' => array(
                 array(
@@ -164,26 +163,26 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                     'is_owned_at_this_level' => false,
                 ),
             ),
-            'children' => NULL,
+            'children' => null,
             'has_possible_children' => true,
 
             // These are likely to be changed in individual hooks
             'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
             'sitemap_refreshfreq' => 'weekly',
 
-            'privilege_page' => NULL,
+            'privilege_page' => null,
         );
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
         // Categories done after node callback, to ensure sensible ordering
-        if (($max_recurse_depth === NULL) || ($recurse_level<$max_recurse_depth)) {
+        if (($max_recurse_depth === null) || ($recurse_level < $max_recurse_depth)) {
             $children = array();
 
             $root_comcode_pages = get_root_comcode_pages($zone);
@@ -203,25 +202,25 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                         $children[] = array(
                             'title' => $title,
                             'content_type' => 'url',
-                            'content_id' => NULL,
+                            'content_id' => null,
                             'modifiers' => array(),
                             'only_on_page' => '',
-                            'page_link' => NULL,
+                            'page_link' => null,
                             'url' => $link[2],
                             'extra_meta' => array(
-                                'description' => NULL,
-                                'image' => NULL,
-                                'image_2x' => NULL,
-                                'add_date' => NULL,
-                                'edit_date' => NULL,
-                                'submitter' => NULL,
-                                'views' => NULL,
-                                'rating' => NULL,
-                                'meta_keywords' => NULL,
-                                'meta_description' => NULL,
-                                'categories' => NULL,
-                                'validated' => NULL,
-                                'db_row' => NULL,
+                                'description' => null,
+                                'image' => null,
+                                'image_2x' => null,
+                                'add_date' => null,
+                                'edit_date' => null,
+                                'submitter' => null,
+                                'views' => null,
+                                'rating' => null,
+                                'meta_keywords' => null,
+                                'meta_description' => null,
+                                'categories' => null,
+                                'validated' => null,
+                                'db_row' => null,
                             ),
                             'permissions' => array(),
                             'has_possible_children' => false,
@@ -237,7 +236,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                     $_zone = $link[2][2];
                     if ($zone != $_zone) { // Not doesn't match. If the page exists in our node's zone as a transparent redirect, override it as in here
                         require_code('site');
-                        $details = _request_page($page,$zone,'redirect');
+                        $details = _request_page($page, $zone, 'redirect');
                         if ($details !== false) {
                             $_zone = $zone;
                         }
@@ -256,7 +255,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                         }
                     }
 
-                    $details = $this->_request_page_details($page,$_zone);
+                    $details = $this->_request_page_details($page, $_zone);
                     if ($details === false) {
                         continue;
                     }
@@ -264,32 +263,33 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
                     $child_description = null;
                     if (isset($link[4])) {
-                        $child_description = (is_object($link[4]))?$link[4]:comcode_lang_string($link[4]);
+                        $child_description = (is_object($link[4])) ? $link[4] : comcode_lang_string($link[4]);
                     }
 
-                    $child_links[] = array($title,$child_page_link,$icon,$page_type,$child_description);
+                    $child_links[] = array($title, $child_page_link, $icon, $page_type, $child_description);
                 }
             }
 
             // Extra ones to get merged in? (orphaned children)
             if ($page_grouping == 'pages' || $page_grouping == 'tools' || $page_grouping == 'cms') {
-                if ($orphaned_pages === NULL) {
+                if ($orphaned_pages === null) {
                     // Any left-behind pages
                     $orphaned_pages = array();
-                    $pages = find_all_pages_wrap($zone,false,/*$consider_redirects=*/true);
+                    $pages = find_all_pages_wrap($zone, false,/*$consider_redirects=*/
+                        true);
                     foreach ($pages as $page => $page_type) {
                         if (is_integer($page)) {
                             $page = strval($page);
                         }
 
-                        if (preg_match('#^redirect:#',$page_type) != 0) {
-                            $details = $this->_request_page_details($page,$zone);
+                        if (preg_match('#^redirect:#', $page_type) != 0) {
+                            $details = $this->_request_page_details($page, $zone);
                             $page_type = strtolower($details[0]);
                             $pages[$page] = $page_type;
                         }
 
-                        if ((!isset($pages_found[$zone . ':' . $page])) && ((strpos($page_type,'comcode') === false) || (isset($root_comcode_pages[$page])))) {
-                            if ($this->_is_page_omitted_from_sitemap($zone,$page)) {
+                        if ((!isset($pages_found[$zone . ':' . $page])) && ((strpos($page_type, 'comcode') === false) || (isset($root_comcode_pages[$page])))) {
+                            if ($this->_is_page_omitted_from_sitemap($zone, $page)) {
                                 continue;
                             }
 
@@ -309,7 +309,7 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
 
                     $child_page_link = $zone . ':' . $page;
 
-                    $child_links[] = array(titleify($page),$child_page_link,null,$page_type,null);
+                    $child_links[] = array(titleify($page), $child_page_link, null, $page_type, null);
                 }
             }
 
@@ -321,14 +321,14 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                 $child_page_link = $child_link[1];
                 $page_type = $child_link[3];
 
-                $child_row = ($icon === NULL)?NULL/*we know nothing of relevance*/:array($title,$icon,$description);
+                $child_row = ($icon === null) ? null/*we know nothing of relevance*/ : array($title, $icon, $description);
 
-                if (($valid_node_types !== NULL) && (!in_array('page',$valid_node_types))) {
+                if (($valid_node_types !== null) && (!in_array('page', $valid_node_types))) {
                     continue;
                 }
 
-                if (strpos($page_type,'comcode') !== false) {
-                    if (($valid_node_types !== NULL) && (!in_array('comcode_page',$valid_node_types))) {
+                if (strpos($page_type, 'comcode') !== false) {
+                    if (($valid_node_types !== null) && (!in_array('comcode_page', $valid_node_types))) {
                         continue;
                     }
 
@@ -336,28 +336,28 @@ class Hook_sitemap_page_grouping extends Hook_sitemap_base
                         continue;
                     }
 
-                    $child_node = $comcode_page_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+                    $child_node = $comcode_page_sitemap_ob->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $child_row);
                 } else {
-                    if (($valid_node_types !== NULL) && (!in_array('page',$valid_node_types))) {
+                    if (($valid_node_types !== null) && (!in_array('page', $valid_node_types))) {
                         continue;
                     }
 
-                    if (preg_match('#^([^:]*):([^:]*)(:\w+=|$)#',$child_page_link,$matches) != 0) {
-                        $child_node = $page_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+                    if (preg_match('#^([^:]*):([^:]*)(:\w+=|$)#', $child_page_link, $matches) != 0) {
+                        $child_node = $page_sitemap_ob->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $child_row);
                     } else {
-                        $child_node = $entry_point_sitemap_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
+                        $child_node = $entry_point_sitemap_ob->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $child_row);
                     }
                 }
-                if ($child_node !== NULL) {
+                if ($child_node !== null) {
                     $children[] = $child_node;
                 }
             }
 
-            sort_maps_by($children,'title');
+            sort_maps_by($children, 'title');
 
             $struct['children'] = $children;
         }
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_admin_setupwizard_installprofiles_portfolio
 {
     /**
@@ -41,7 +40,7 @@ class Hook_admin_setupwizard_installprofiles_portfolio
     public function get_addon_list()
     {
         return array(
-            array('galleries','random_quotes','polls','news'),
+            array('galleries', 'random_quotes', 'polls', 'news'),
             array());
     }
 
@@ -82,10 +81,8 @@ class Hook_admin_setupwizard_installprofiles_portfolio
             'YES' => array(
                 'main_quotes',
             ),
-            'YES_CELL' => array(
-            ),
-            'PANEL_LEFT' => array(
-            ),
+            'YES_CELL' => array(),
+            'PANEL_LEFT' => array(),
             'PANEL_RIGHT' => array(
                 'side_galleries',
                 'main_image_fader',
@@ -101,8 +98,7 @@ class Hook_admin_setupwizard_installprofiles_portfolio
      */
     public function block_options()
     {
-        return array(
-        );
+        return array();
     }
 
     /**

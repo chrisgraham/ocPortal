@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Block_side_friends
 {
     /**
@@ -50,7 +49,7 @@ class Block_side_friends
             return new ocp_tempcode();
         } // Guest has no friends
 
-        if ((get_page_name() == 'chat') && (get_param('type','misc') == 'misc')) {// Don't want to show if actually on chat lobby, which already has this functionality
+        if ((get_page_name() == 'chat') && (get_param('type', 'misc') == 'misc')) {// Don't want to show if actually on chat lobby, which already has this functionality
             return new ocp_tempcode();
         }
 
@@ -60,10 +59,10 @@ class Block_side_friends
         require_css('chat');
         require_javascript('javascript_chat');
 
-        $max = array_key_exists('max',$map)?intval($map['max']):15;
+        $max = array_key_exists('max', $map) ? intval($map['max']) : 15;
 
-        $friends = show_im_contacts(null,true,$max);
+        $friends = show_im_contacts(null, true, $max);
 
-        return do_template('BLOCK_SIDE_FRIENDS',array('_GUID' => 'ce94db14f9a212f38d0fce1658866e2c','FRIENDS' => $friends));
+        return do_template('BLOCK_SIDE_FRIENDS', array('_GUID' => 'ce94db14f9a212f38d0fce1658866e2c', 'FRIENDS' => $friends));
     }
 }

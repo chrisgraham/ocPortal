@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_Notification_pointstore_request_quota extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_pointstore_request_quota extends Hook_Notification__Staf
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_pointstore_request_quota extends Hook_Notification__Staf
     public function list_handled_codes()
     {
         $list = array();
-        $list['pointstore_request_quota'] = array(do_lang('pointstore:POINTSTORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_quota'));
+        $list['pointstore_request_quota'] = array(do_lang('pointstore:POINTSTORE'), do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_quota'));
         return $list;
     }
 }

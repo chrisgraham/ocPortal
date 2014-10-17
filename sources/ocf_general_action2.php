@@ -27,20 +27,20 @@
  * @param  SHORT_TEXT                   The multi code specifying which forums this is applicable in.
  * @param  BINARY                       Whether to use this as the default post in applicable forum.
  */
-function ocf_edit_post_template($id,$title,$text,$forum_multi_code,$use_default_forums)
+function ocf_edit_post_template($id, $title, $text, $forum_multi_code, $use_default_forums)
 {
-    $GLOBALS['FORUM_DB']->query_update('f_post_templates',array(
+    $GLOBALS['FORUM_DB']->query_update('f_post_templates', array(
         't_title' => $title,
         't_text' => $text,
         't_forum_multi_code' => $forum_multi_code,
         't_use_default_forums' => $use_default_forums
-    ),array('id' => $id),'',1);
+    ), array('id' => $id), '', 1);
 
-    log_it('EDIT_POST_TEMPLATE',strval($id),$title);
+    log_it('EDIT_POST_TEMPLATE', strval($id), $title);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('post_template',strval($id));
+        generate_resourcefs_moniker('post_template', strval($id));
     }
 }
 
@@ -51,13 +51,13 @@ function ocf_edit_post_template($id,$title,$text,$forum_multi_code,$use_default_
  */
 function ocf_delete_post_template($id)
 {
-    $GLOBALS['FORUM_DB']->query_delete('f_post_templates',array('id' => $id),'',1);
+    $GLOBALS['FORUM_DB']->query_delete('f_post_templates', array('id' => $id), '', 1);
 
-    log_it('DELETE_POST_TEMPLATE',strval($id));
+    log_it('DELETE_POST_TEMPLATE', strval($id));
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        expunge_resourcefs_moniker('post_template',strval($id));
+        expunge_resourcefs_moniker('post_template', strval($id));
     }
 }
 
@@ -83,7 +83,7 @@ function import_custom_emoticons($remove_old_core = false)
             ':o',
         );
         foreach ($codes as $code) {
-            $GLOBALS['FORUM_DB']->query_update('f_emoticons',array('e_relevance_level' => 1),array('e_relevance_level' => 0,'e_code' => $code),'',1);
+            $GLOBALS['FORUM_DB']->query_update('f_emoticons', array('e_relevance_level' => 1), array('e_relevance_level' => 0, 'e_code' => $code), '', 1);
         }
     }
 
@@ -94,7 +94,7 @@ function import_custom_emoticons($remove_old_core = false)
     while (($f = readdir($dh)) !== false) {
         if (is_image($f)) {
             $ext = get_file_extension($f);
-            ocf_make_emoticon(':' . basename($f,'.' . $ext) . ':','ocf_emoticons/' . basename($f,'.' . $ext),0,0);
+            ocf_make_emoticon(':' . basename($f, '.' . $ext) . ':', 'ocf_emoticons/' . basename($f, '.' . $ext), 0, 0);
         }
     }
     closedir($dh);
@@ -111,29 +111,29 @@ function import_custom_emoticons($remove_old_core = false)
  * @param  BINARY                       Whether this may be used as a topic emoticon.
  * @param  BINARY                       Whether this may only be used by privileged members
  */
-function ocf_edit_emoticon($old_code,$code,$theme_img_code,$relevance_level,$use_topics,$is_special = 0)
+function ocf_edit_emoticon($old_code, $code, $theme_img_code, $relevance_level, $use_topics, $is_special = 0)
 {
     if ($code != $old_code) {
-        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','e_code',array('e_code' => $code));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons', 'e_code', array('e_code' => $code));
         if (!is_null($test)) {
-            warn_exit(do_lang_tempcode('CONFLICTING_EMOTICON_CODE',escape_html($code)));
+            warn_exit(do_lang_tempcode('CONFLICTING_EMOTICON_CODE', escape_html($code)));
         }
     }
 
-    $old_theme_img_code = $GLOBALS['FORUM_DB']->query_select_value('f_emoticons','e_theme_img_code',array('e_code' => $old_code));
+    $old_theme_img_code = $GLOBALS['FORUM_DB']->query_select_value('f_emoticons', 'e_theme_img_code', array('e_code' => $old_code));
 
-    $GLOBALS['FORUM_DB']->query_update('f_emoticons',array(
+    $GLOBALS['FORUM_DB']->query_update('f_emoticons', array(
         'e_code' => $code,
         'e_theme_img_code' => $theme_img_code,
         'e_relevance_level' => $relevance_level,
         'e_use_topics' => $use_topics,
         'e_is_special' => $is_special
-    ),array('e_code' => $old_code),'',1);
+    ), array('e_code' => $old_code), '', 1);
 
     require_code('themes2');
-    tidy_theme_img_code($theme_img_code,$old_theme_img_code,'f_emoticons','e_theme_img_code');
+    tidy_theme_img_code($theme_img_code, $old_theme_img_code, 'f_emoticons', 'e_theme_img_code');
 
-    log_it('EDIT_EMOTICON',$code,$theme_img_code);
+    log_it('EDIT_EMOTICON', $code, $theme_img_code);
 }
 
 /**
@@ -143,14 +143,14 @@ function ocf_edit_emoticon($old_code,$code,$theme_img_code,$relevance_level,$use
  */
 function ocf_delete_emoticon($code)
 {
-    $old_theme_img_code = $GLOBALS['FORUM_DB']->query_select_value('f_emoticons','e_theme_img_code',array('e_code' => $code));
+    $old_theme_img_code = $GLOBALS['FORUM_DB']->query_select_value('f_emoticons', 'e_theme_img_code', array('e_code' => $code));
 
-    $GLOBALS['FORUM_DB']->query_delete('f_emoticons',array('e_code' => $code),'',1);
+    $GLOBALS['FORUM_DB']->query_delete('f_emoticons', array('e_code' => $code), '', 1);
 
     require_code('themes2');
-    tidy_theme_img_code(null,$old_theme_img_code,'f_emoticons','e_theme_img_code');
+    tidy_theme_img_code(null, $old_theme_img_code, 'f_emoticons', 'e_theme_img_code');
 
-    log_it('DELETE_EMOTICON',$code);
+    log_it('DELETE_EMOTICON', $code);
 }
 
 /**
@@ -166,10 +166,10 @@ function ocf_delete_emoticon($code)
  * @param  ID_TEXT                      How to send regarding usergroups (blank: indiscriminately)
  * @set primary secondary
  */
-function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter,$usergroup,$usergroup_type)
+function ocf_edit_welcome_email($id, $name, $subject, $text, $send_time, $newsletter, $usergroup, $usergroup_type)
 {
-    $_subject = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_subject',array('id' => $id));
-    $_text = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_text',array('id' => $id));
+    $_subject = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails', 'w_subject', array('id' => $id));
+    $_text = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails', 'w_text', array('id' => $id));
     $map = array(
         'w_name' => $name,
         'w_newsletter' => $newsletter,
@@ -177,10 +177,10 @@ function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter,
         'w_usergroup' => $usergroup,
         'w_usergroup_type' => $usergroup_type,
     );
-    $map += lang_remap('w_subject',$_subject,$subject);
-    $map += lang_remap('w_text',$_text,$text);
-    $GLOBALS['SITE_DB']->query_update('f_welcome_emails',$map,array('id' => $id),'',1);
-    log_it('EDIT_WELCOME_EMAIL',strval($id),get_translated_text($_subject));
+    $map += lang_remap('w_subject', $_subject, $subject);
+    $map += lang_remap('w_text', $_text, $text);
+    $GLOBALS['SITE_DB']->query_update('f_welcome_emails', $map, array('id' => $id), '', 1);
+    log_it('EDIT_WELCOME_EMAIL', strval($id), get_translated_text($_subject));
 }
 
 /**
@@ -190,10 +190,10 @@ function ocf_edit_welcome_email($id,$name,$subject,$text,$send_time,$newsletter,
  */
 function ocf_delete_welcome_email($id)
 {
-    $_subject = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_subject',array('id' => $id));
-    $_text = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails','w_text',array('id' => $id));
-    log_it('DELETE_WELCOME_EMAIL',strval($id),get_translated_text($_subject));
-    $GLOBALS['SITE_DB']->query_delete('f_welcome_emails',array('id' => $id),'',1);
+    $_subject = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails', 'w_subject', array('id' => $id));
+    $_text = $GLOBALS['SITE_DB']->query_select_value('f_welcome_emails', 'w_text', array('id' => $id));
+    log_it('DELETE_WELCOME_EMAIL', strval($id), get_translated_text($_subject));
+    $GLOBALS['SITE_DB']->query_delete('f_welcome_emails', array('id' => $id), '', 1);
     delete_lang($_subject);
     delete_lang($_text);
 }
@@ -208,15 +208,15 @@ function ocf_get_forum_multi_code_field($forum_multi_code)
 {
     require_code('form_templates');
     if ($forum_multi_code != '') {
-        $selected = array_map('intval',explode(',',substr($forum_multi_code,1)));
+        $selected = array_map('intval', explode(',', substr($forum_multi_code, 1)));
         $type = $forum_multi_code[0];
     } else {
         $selected = null;
         $type = '+';
     }
     require_code('ocf_forums2');
-    $list = ocf_get_forum_tree_secure(null,null,true,$selected);
-    return form_input_all_and_not(do_lang_tempcode('SECTION_FORUMS'),do_lang_tempcode('USE_IN_ALL_FORUMS'),'forum_multi_code',$list,$type);
+    $list = ocf_get_forum_tree_secure(null, null, true, $selected);
+    return form_input_all_and_not(do_lang_tempcode('SECTION_FORUMS'), do_lang_tempcode('USE_IN_ALL_FORUMS'), 'forum_multi_code', $list, $type);
 }
 
 /**
@@ -229,7 +229,7 @@ function ocf_get_forum_multi_code_field($forum_multi_code)
  * @param  ?MEMBER                      The member performing the moderation (NULL: current member).
  * @param  ?TIME                        The time of the moderation (NULL: just now).
  */
-function ocf_mod_log_it($the_type,$param_a = '',$param_b = '',$reason = '',$by = null,$date_and_time = null)
+function ocf_mod_log_it($the_type, $param_a = '', $param_b = '', $reason = '', $by = null, $date_and_time = null)
 {
     if (is_null($date_and_time)) {
         $date_and_time = time();
@@ -238,7 +238,7 @@ function ocf_mod_log_it($the_type,$param_a = '',$param_b = '',$reason = '',$by =
         $by = get_member();
     }
 
-    $GLOBALS['FORUM_DB']->query_insert('f_moderator_logs',array(
+    $GLOBALS['FORUM_DB']->query_insert('f_moderator_logs', array(
         'l_the_type' => $the_type,
         'l_param_a' => $param_a,
         'l_param_b' => $param_b,

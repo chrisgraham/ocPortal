@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_config_is_on_lang_cache
 {
     /**

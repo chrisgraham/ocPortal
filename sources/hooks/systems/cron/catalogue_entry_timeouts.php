@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_cron_catalogue_entry_timeouts
 {
     /**
@@ -32,7 +31,7 @@ class Hook_cron_catalogue_entry_timeouts
         $time = time();
         $last_time = get_long_value('last_catalogue_entry_timeouts_calc');
         if (!is_null($last_time)) {
-            if (intval($last_time)>$time-6*60*60) {
+            if (intval($last_time) > $time - 6 * 60 * 60) {
                 return;
             } // Every 6 hours
         }
@@ -47,18 +46,19 @@ class Hook_cron_catalogue_entry_timeouts
 
             $start = 0;
             do {
-                $entries = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('id','ce_submitter','ce_last_moved'),array('cc_id' => $row['id']),'',1000,$start);
+                $entries = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('id', 'ce_submitter', 'ce_last_moved'), array('cc_id' => $row['id']), '', 1000, $start);
                 foreach ($entries as $entry) {
-                    $higher = has_privilege($entry['ce_submitter'],'high_catalogue_entry_timeout');
-                    $time_diff = $time-$entry['ce_last_moved'];
-                    $move_days = $higher?$row['cc_move_days_higher']:$row['cc_move_days_lower'];
-                    if ($time_diff/(60*60*24)>$move_days) {
-                        $GLOBALS['SITE_DB']->query_update('catalogue_entries',array('ce_last_moved' => $time,'cc_id' => $row['cc_move_target']),array('id' => $entry['id']),'',1);
+                    $higher = has_privilege($entry['ce_submitter'], 'high_catalogue_entry_timeout');
+                    $time_diff = $time - $entry['ce_last_moved'];
+                    $move_days = $higher ? $row['cc_move_days_higher'] : $row['cc_move_days_lower'];
+                    if ($time_diff / (60 * 60 * 24) > $move_days) {
+                        $GLOBALS['SITE_DB']->query_update('catalogue_entries', array('ce_last_moved' => $time, 'cc_id' => $row['cc_move_target']), array('id' => $entry['id']), '', 1);
                         $changed = true;
                     }
                 }
                 $start += 1000;
-            } while (count($entries) == 1000);
+            }
+            while (count($entries) == 1000);
 
             if ($changed) {
                 require_code('catalogues2');
@@ -67,6 +67,6 @@ class Hook_cron_catalogue_entry_timeouts
             }
         }
 
-        set_long_value('last_catalogue_entry_timeouts_calc',strval($time));
+        set_long_value('last_catalogue_entry_timeouts_calc', strval($time));
     }
 }

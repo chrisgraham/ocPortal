@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_sitemap_news extends Hook_sitemap_content
 {
     protected $content_type = 'news';
@@ -58,28 +57,28 @@ class Hook_sitemap_news extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
-        $_ = $this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-        if ($_ === NULL) {
-            return NULL;
+        $_ = $this->_create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+        if ($_ === null) {
+            return null;
         }
-        list($content_id,$row,$partial_struct) = $_;
+        list($content_id, $row, $partial_struct) = $_;
 
         $struct = array(
-            'sitemap_priority' => SITEMAP_IMPORTANCE_HIGH,
-            'sitemap_refreshfreq' => 'monthly',
+                'sitemap_priority' => SITEMAP_IMPORTANCE_HIGH,
+                'sitemap_refreshfreq' => 'monthly',
 
-            'privilege_page' => $this->get_privilege_page($page_link),
-        )+$partial_struct;
+                'privilege_page' => $this->get_privilege_page($page_link),
+            ) + $partial_struct;
 
         if (($meta_gather & SITEMAP_GATHER_CATEGORIES) != 0) {
             $categories = array();
 
-            $categories[] = get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id' => $row['news_category'])));
+            $categories[] = get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories', 'nc_title', array('id' => $row['news_category'])));
 
             $table = 'news_category_entries e JOIN ' . get_table_prefix() . 'news_categories c ON c.id=e.news_entry_category';
-            $_categories = $GLOBALS['SITE_DB']->query_select($table,array('nc_title'),array('e.news_entry' => intval($content_id)));
+            $_categories = $GLOBALS['SITE_DB']->query_select($table, array('nc_title'), array('e.news_entry' => intval($content_id)));
             foreach ($_categories as $_category) {
                 $categories[] = get_translated_text($_category['nc_title']);
             }
@@ -88,13 +87,13 @@ class Hook_sitemap_news extends Hook_sitemap_content
         }
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
-
 class Hook_config_awarded_items_per_page
 {
     /**

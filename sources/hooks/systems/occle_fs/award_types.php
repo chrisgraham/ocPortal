@@ -32,7 +32,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['SITE_DB']->query_select_value('award_types','COUNT(*)');
+        return $GLOBALS['SITE_DB']->query_select_value('award_types', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_award_types extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['SITE_DB']->query_select('award_types',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('a_title') => $label));
+        $_ret = $GLOBALS['SITE_DB']->query_select('award_types', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('a_title') => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -76,7 +76,7 @@ class Hook_occle_fs_award_types extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_AWARD_TYPE') . ' OR ' . db_string_equal_to('the_type','EDIT_AWARD_TYPE') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_AWARD_TYPE') . ' OR ' . db_string_equal_to('the_type', 'EDIT_AWARD_TYPE') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -88,22 +88,22 @@ class Hook_occle_fs_award_types extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('awards2');
 
-        $description = $this->_default_property_str($properties,'description');
-        $points = $this->_default_property_int($properties,'points');
-        $resource_type = $this->_default_property_str($properties,'resource_type');
+        $description = $this->_default_property_str($properties, 'description');
+        $points = $this->_default_property_int($properties, 'points');
+        $resource_type = $this->_default_property_str($properties, 'resource_type');
         if ($resource_type == '') {
             $resource_type = 'download';
         }
-        $hide_awardee = $this->_default_property_int($properties,'hide_awardee');
-        $update_time_hours = $this->_default_property_int($properties,'update_time_hours');
+        $hide_awardee = $this->_default_property_int($properties, 'hide_awardee');
+        $update_time_hours = $this->_default_property_int($properties, 'update_time_hours');
 
-        $id = add_award_type($label,$description,$points,$resource_type,$hide_awardee,$update_time_hours);
+        $id = add_award_type($label, $description, $points, $resource_type, $hide_awardee, $update_time_hours);
         return strval($id);
     }
 
@@ -114,12 +114,12 @@ class Hook_occle_fs_award_types extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('award_types', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -142,24 +142,24 @@ class Hook_occle_fs_award_types extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('awards2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $description = $this->_default_property_str($properties,'description');
-        $points = $this->_default_property_int($properties,'points');
-        $resource_type = $this->_default_property_str($properties,'resource_type');
+        $label = $this->_default_property_str($properties, 'label');
+        $description = $this->_default_property_str($properties, 'description');
+        $points = $this->_default_property_int($properties, 'points');
+        $resource_type = $this->_default_property_str($properties, 'resource_type');
         if ($resource_type == '') {
             $resource_type = 'download';
         }
-        $hide_awardee = $this->_default_property_int($properties,'hide_awardee');
-        $update_time_hours = $this->_default_property_int($properties,'update_time_hours');
+        $hide_awardee = $this->_default_property_int($properties, 'hide_awardee');
+        $update_time_hours = $this->_default_property_int($properties, 'update_time_hours');
 
-        edit_award_type(intval($resource_id),$label,$description,$points,$resource_type,$hide_awardee,$update_time_hours);
+        edit_award_type(intval($resource_id), $label, $description, $points, $resource_type, $hide_awardee, $update_time_hours);
 
         return $resource_id;
     }
@@ -171,9 +171,9 @@ class Hook_occle_fs_award_types extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('awards2');
         delete_award_type(intval($resource_id));

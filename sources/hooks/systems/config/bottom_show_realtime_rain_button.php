@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    realtime_rain
  */
-
 class Hook_config_bottom_show_realtime_rain_button
 {
     /**

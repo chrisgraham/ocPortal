@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Block_main_bottom_bar
 {
     /**
@@ -67,7 +66,7 @@ class Block_main_bottom_bar
         $users_online = new ocp_tempcode();
         $count = 0;
         require_code('users2');
-        $members = get_users_online(false,null,$count);
+        $members = get_users_online(false, null, $count);
         $groups_seen = array();
         $num_members = 0;
         $num_guests = 0;
@@ -83,9 +82,9 @@ class Block_main_bottom_bar
                 if (is_null($username)) {
                     continue;
                 }
-                $url = $GLOBALS['OCF_DRIVER']->member_profile_url($member,false,true);
-                if (!array_key_exists('m_primary_group',$bits)) {
-                    $bits['m_primary_group'] = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
+                $url = $GLOBALS['OCF_DRIVER']->member_profile_url($member, false, true);
+                if (!array_key_exists('m_primary_group', $bits)) {
+                    $bits['m_primary_group'] = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member, 'm_primary_group');
                 }
                 $pgid = $bits['m_primary_group'];//$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
                 if (is_null($pgid)) {
@@ -99,13 +98,13 @@ class Block_main_bottom_bar
                     $col = null;
                     $groups_seen = array();
                 }
-                $users_online->attach(do_template('OCF_USER_MEMBER',array('_GUID' => 'a9cb1af2a04b14edd70749c944495bff','FIRST' => $users_online->is_empty(),'COLOUR' => $col,'PROFILE_URL' => $url,'USERNAME' => $username,'USERGROUP' => $usergroup)));
+                $users_online->attach(do_template('OCF_USER_MEMBER', array('_GUID' => 'a9cb1af2a04b14edd70749c944495bff', 'FIRST' => $users_online->is_empty(), 'COLOUR' => $col, 'PROFILE_URL' => $url, 'USERNAME' => $username, 'USERGROUP' => $usergroup)));
                 $num_members++;
             }
             if ($num_guests != 0) {
                 if (!$users_online->is_empty() && do_lang('NUM_GUESTS') != '') {
                     $users_online->attach(do_lang_tempcode('LIST_SEP'));
-                    $users_online->attach(do_lang_tempcode('NUM_GUESTS',integer_format($num_guests)));
+                    $users_online->attach(do_lang_tempcode('NUM_GUESTS', integer_format($num_guests)));
                 }
             }
         }
@@ -115,11 +114,11 @@ class Block_main_bottom_bar
         if (get_option('enable_birthdays') != '0') {
             $_birthdays = ocf_find_birthdays();
             foreach ($_birthdays as $_birthday) {
-                $birthday_url = build_url(array('page' => 'topics','type' => 'birthday','id' => $_birthday['username']),get_module_zone('topics'));
-                $birthday = do_template('OCF_BIRTHDAY_LINK',array(
+                $birthday_url = build_url(array('page' => 'topics', 'type' => 'birthday', 'id' => $_birthday['username']), get_module_zone('topics'));
+                $birthday = do_template('OCF_BIRTHDAY_LINK', array(
                     '_GUID' => 'a98959187d37d80e134d47db7e3a52fa',
-                    'AGE' => array_key_exists('age',$_birthday)?integer_format($_birthday['age']):null,
-                    'PROFILE_URL' => $GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,true),
+                    'AGE' => array_key_exists('age', $_birthday) ? integer_format($_birthday['age']) : null,
+                    'PROFILE_URL' => $GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'], false, true),
                     'USERNAME' => $_birthday['username'],
                     'MEMBER_ID' => strval($_birthday['id']),
                     'BIRTHDAY_URL' => $birthday_url,
@@ -127,32 +126,32 @@ class Block_main_bottom_bar
                 $birthdays->attach($birthday);
             }
             if (!$birthdays->is_empty()) {
-                $birthdays = do_template('OCF_BIRTHDAYS',array('_GUID' => '03da2c0d46e76407d63bff22aac354bd','BIRTHDAYS' => $birthdays));
+                $birthdays = do_template('OCF_BIRTHDAYS', array('_GUID' => '03da2c0d46e76407d63bff22aac354bd', 'BIRTHDAYS' => $birthdays));
             }
         }
 
         // Usergroup keys
         $groups = array();
-        $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true,false,false,null,null,true);
+        $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true, false, false, null, null, true);
         foreach ($all_groups as $gid => $gtitle) {
             if ($gid == db_get_first_id()) {
                 continue;
             } // Throw out the first, guest
-            if (array_key_exists($gid,$groups_seen)) {
-                $groups[] = array('GCOLOUR' => get_group_colour($gid),'GID' => strval($gid),'GTITLE' => $gtitle);
+            if (array_key_exists($gid, $groups_seen)) {
+                $groups[] = array('GCOLOUR' => get_group_colour($gid), 'GID' => strval($gid), 'GTITLE' => $gtitle);
             }
         }
 
-        return do_template('BLOCK_MAIN_BOTTOM_BAR',array(
+        return do_template('BLOCK_MAIN_BOTTOM_BAR', array(
             '_GUID' => 'sdflkdlfd303frksdf',
-            'NEWEST_MEMBER_PROFILE_URL' => $GLOBALS['OCF_DRIVER']->member_profile_url($stats['newest_member_id'],false,true),
+            'NEWEST_MEMBER_PROFILE_URL' => $GLOBALS['OCF_DRIVER']->member_profile_url($stats['newest_member_id'], false, true),
             'NEWEST_MEMBER_USERNAME' => $stats['newest_member_username'],
             'NUM_MEMBERS' => integer_format($stats['num_members']),
             'NUM_TOPICS' => integer_format($stats['num_topics']),
             'NUM_POSTS' => integer_format($stats['num_posts']),
             'BIRTHDAYS' => $birthdays,
             'USERS_ONLINE' => $users_online,
-            'USERS_ONLINE_URL' => has_actual_page_access(get_member(),'users_online')?build_url(array('page' => 'users_online'),get_module_zone('users_online')):new ocp_tempcode(),
+            'USERS_ONLINE_URL' => has_actual_page_access(get_member(), 'users_online') ? build_url(array('page' => 'users_online'), get_module_zone('users_online')) : new ocp_tempcode(),
             'GROUPS' => $groups,
             '_NUM_GUESTS' => strval($num_guests),
             '_NUM_MEMBERS' => strval($num_members),

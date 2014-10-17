@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Block_main_image_fader_news
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_image_fader_news
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('title','max','time','param','zone','blogs','as_guest');
+        $info['parameters'] = array('title', 'max', 'time', 'param', 'zone', 'blogs', 'as_guest');
         return $info;
     }
 
@@ -63,23 +62,23 @@ class Block_main_image_fader_news
         require_code('news');
         require_css('news');
 
-        $cat = array_key_exists('param',$map)?$map['param']:'*';
+        $cat = array_key_exists('param', $map) ? $map['param'] : '*';
         if ($cat == '') {
             $cat = 'root';
         }
-        $mill = array_key_exists('time',$map)?intval($map['time']):8000; // milliseconds between animations
-        $zone = array_key_exists('zone',$map)?$map['zone']:get_module_zone('news');
-        $max = array_key_exists('max',$map)?intval($map['max']):5;
-        $blogs = array_key_exists('blogs',$map)?intval($map['blogs']):-1;
+        $mill = array_key_exists('time', $map) ? intval($map['time']) : 8000; // milliseconds between animations
+        $zone = array_key_exists('zone', $map) ? $map['zone'] : get_module_zone('news');
+        $max = array_key_exists('max', $map) ? intval($map['max']) : 5;
+        $blogs = array_key_exists('blogs', $map) ? intval($map['blogs']) : -1;
 
         $main_title = do_lang_tempcode('NEWS');
-        $_title = array_key_exists('title',$map)?$map['title']:'';
+        $_title = array_key_exists('title', $map) ? $map['title'] : '';
         if ($_title != '') {
             $main_title = protect_from_escaping(escape_html($_title));
         }
 
         require_code('ocfiltering');
-        $ocfilter = ocfilter_to_sqlfragment($cat,'id','news','NULL','news_category','id',true,true);
+        $ocfilter = ocfilter_to_sqlfragment($cat, 'id', 'news', 'NULL', 'news_category', 'id', true, true);
 
         $q_filter = '';
         if ($blogs === 0) {
@@ -95,15 +94,15 @@ class Block_main_image_fader_news
 
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            $as_guest = array_key_exists('as_guest',$map)?($map['as_guest'] == '1'):false;
-            $viewing_member_id = $as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('news','r',$viewing_member_id);
+            $as_guest = array_key_exists('as_guest', $map) ? ($map['as_guest'] == '1') : false;
+            $viewing_member_id = $as_guest ? $GLOBALS['FORUM_DRIVER']->get_guest_id() : mixed();
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('news', 'r', $viewing_member_id);
             $join .= $privacy_join;
             $q_filter .= $privacy_where;
         }
 
         $query = 'SELECT r.id,news_image,title,news,news_article,date_and_time,submitter,author FROM ' . get_table_prefix() . 'news r' . $join . ' WHERE ' . $ocfilter . $q_filter . ' AND validated=1 ORDER BY date_and_time DESC';
-        $all_rows = $GLOBALS['SITE_DB']->query($query,100/*reasonable amount*/);
+        $all_rows = $GLOBALS['SITE_DB']->query($query, 100/*reasonable amount*/);
         $news = array();
         require_code('images');
         foreach ($all_rows as $row) {
@@ -114,13 +113,13 @@ class Block_main_image_fader_news
                 'news_article' => $row['news_article'],
             );
 
-            $title = get_translated_tempcode('news',$just_news_row,'title');
+            $title = get_translated_tempcode('news', $just_news_row, 'title');
 
             $image_url = $row['news_image'];
             if ($image_url == '') {
                 $article = get_translated_text($row['news_article']);
                 $matches = array();
-                if (preg_match('#["\'\]](http:[^\'"\[\]]+\.(jpeg|jpg|gif|png))["\'\[]#i',$article,$matches) != 0) {
+                if (preg_match('#["\'\]](http:[^\'"\[\]]+\.(jpeg|jpg|gif|png))["\'\[]#i', $article, $matches) != 0) {
                     $image_url = $matches[1];
                 } else {
                     continue; // Invalid: no image
@@ -130,15 +129,15 @@ class Block_main_image_fader_news
                 $image_url = get_custom_base_url() . '/' . $image_url;
             }
 
-            $url_map = array('page' => 'news','type' => 'view','id' => $row['id'],'filter' => ($cat == '')?null:$cat);
+            $url_map = array('page' => 'news', 'type' => 'view', 'id' => $row['id'], 'filter' => ($cat == '') ? null : $cat);
             if ($blogs === 1) {
                 $url_map['blog'] = 1;
             }
-            $url = build_url($url_map,$zone);
+            $url = build_url($url_map, $zone);
 
-            $body = get_translated_tempcode('news',$just_news_row,'news');
+            $body = get_translated_tempcode('news', $just_news_row, 'news');
             if ($body->is_empty()) {
-                $body = get_translated_tempcode('news',$just_news_row,'news_article');
+                $body = get_translated_tempcode('news', $just_news_row, 'news_article');
             }
             if ($body->is_empty()) {
                 continue;
@@ -147,7 +146,7 @@ class Block_main_image_fader_news
             $date = get_timezoned_date($row['date_and_time']);
             $date_raw = strval($row['date_and_time']);
 
-            $author_url = (addon_installed('authors'))?build_url(array('page' => 'authors','type' => 'misc','id' => $row['author']),get_module_zone('authors')):new ocp_tempcode();
+            $author_url = (addon_installed('authors')) ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new ocp_tempcode();
 
             $news[] = array(
                 'TITLE' => $title,
@@ -168,19 +167,19 @@ class Block_main_image_fader_news
 
         if (count($news) == 0) {
             $submit_url = mixed();
-            if ((has_actual_page_access(null,($blogs === 1)?'cms_blogs':'cms_news',null,null)) && (has_submit_permission('mid',get_member(),get_ip_address(),($blogs === 1)?'cms_blogs':'cms_news',array('news',$cat)))) {
-                $submit_url = build_url(array('page' => ($blogs === 1)?'cms_blogs':'cms_news','type' => 'ad','cat' => $cat,'redirect' => SELF_REDIRECT),get_module_zone(($blogs === 1)?'cms_blogs':'cms_news'));
+            if ((has_actual_page_access(null, ($blogs === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), ($blogs === 1) ? 'cms_blogs' : 'cms_news', array('news', $cat)))) {
+                $submit_url = build_url(array('page' => ($blogs === 1) ? 'cms_blogs' : 'cms_news', 'type' => 'ad', 'cat' => $cat, 'redirect' => SELF_REDIRECT), get_module_zone(($blogs === 1) ? 'cms_blogs' : 'cms_news'));
             }
-            return do_template('BLOCK_NO_ENTRIES',array('_GUID' => 'ba84d65b8dd134ba6cd7b1b7bde99de2','HIGH' => false,'TITLE' => $main_title,'MESSAGE' => do_lang_tempcode('NO_ENTRIES'),'ADD_NAME' => do_lang_tempcode('ADD_NEWS'),'SUBMIT_URL' => $submit_url));
+            return do_template('BLOCK_NO_ENTRIES', array('_GUID' => 'ba84d65b8dd134ba6cd7b1b7bde99de2', 'HIGH' => false, 'TITLE' => $main_title, 'MESSAGE' => do_lang_tempcode('NO_ENTRIES'), 'ADD_NAME' => do_lang_tempcode('ADD_NEWS'), 'SUBMIT_URL' => $submit_url));
         }
 
-        $tmp = array('page' => 'news','type' => 'misc','filter' => ($cat == '')?null:$cat);
+        $tmp = array('page' => 'news', 'type' => 'misc', 'filter' => ($cat == '') ? null : $cat);
         if ($blogs != -1) {
             $tmp['blog'] = $blogs;
         }
-        $archive_url = build_url($tmp,$zone);
+        $archive_url = build_url($tmp, $zone);
 
-        return do_template('BLOCK_MAIN_IMAGE_FADER_NEWS',array('_GUID' => 'dbe34e6f670edfd74b15d3c4afbe615e','TITLE' => $main_title,
+        return do_template('BLOCK_MAIN_IMAGE_FADER_NEWS', array('_GUID' => 'dbe34e6f670edfd74b15d3c4afbe615e', 'TITLE' => $main_title,
             'ARCHIVE_URL' => $archive_url,
             'NEWS' => $news,
             'MILL' => strval($mill),

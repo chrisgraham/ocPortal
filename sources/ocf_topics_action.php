@@ -37,7 +37,7 @@
  * @param  SHORT_TEXT                   Link related to the topic (e.g. link to view a ticket).
  * @return AUTO_LINK                    The ID of the newly created topic.
  */
-function ocf_make_topic($forum_id,$description = '',$emoticon = '',$validated = null,$open = 1,$pinned = 0,$sunk = 0,$cascading = 0,$pt_from = null,$pt_to = null,$check_perms = true,$num_views = 0,$id = null,$description_link = '')
+function ocf_make_topic($forum_id, $description = '', $emoticon = '', $validated = null, $open = 1, $pinned = 0, $sunk = 0, $cascading = 0, $pt_from = null, $pt_to = null, $check_perms = true, $num_views = 0, $id = null, $description_link = '')
 {
     if (is_null($pinned)) {
         $pinned = 0;
@@ -54,14 +54,14 @@ function ocf_make_topic($forum_id,$description = '',$emoticon = '',$validated = 
 
     if ($check_perms) {
         require_code('ocf_topics');
-        if (!ocf_may_post_topic($forum_id,get_member())) {
+        if (!ocf_may_post_topic($forum_id, get_member())) {
             access_denied('I_ERROR');
         }
 
         if (!is_null($pt_to)) {
             decache(array(
-                array('side_ocf_personal_topics',array($pt_to)),
-                array('_new_pp',array($pt_to)),
+                array('side_ocf_personal_topics', array($pt_to)),
+                array('_new_pp', array($pt_to)),
             ));
         }
 
@@ -80,7 +80,7 @@ function ocf_make_topic($forum_id,$description = '',$emoticon = '',$validated = 
     }
 
     if ((is_null($validated)) || (($check_perms) && ($validated == 1))) {
-        if ((!is_null($forum_id)) && (!has_privilege(get_member(),'bypass_validation_midrange_content','topics',array('forums',$forum_id)))) {
+        if ((!is_null($forum_id)) && (!has_privilege(get_member(), 'bypass_validation_midrange_content', 'topics', array('forums', $forum_id)))) {
             $validated = 0;
         } else {
             $validated = 1;
@@ -97,23 +97,23 @@ function ocf_make_topic($forum_id,$description = '',$emoticon = '',$validated = 
         't_forum_id' => $forum_id,
         't_pt_from' => $pt_from,
         't_pt_to' => $pt_to,
-        't_description' => substr($description,0,255),
-        't_description_link' => substr($description_link,0,255),
+        't_description' => substr($description, 0, 255),
+        't_description_link' => substr($description_link, 0, 255),
         't_emoticon' => $emoticon,
         't_num_views' => $num_views,
         't_validated' => $validated,
         't_is_open' => $open,
-        't_poll_id' => NULL,
-        't_cache_first_post_id' => NULL,
-        't_cache_first_time' => NULL,
+        't_poll_id' => null,
+        't_cache_first_post_id' => null,
+        't_cache_first_time' => null,
         't_cache_first_title' => '',
         't_cache_first_username' => '',
-        't_cache_first_member_id' => NULL,
-        't_cache_last_post_id' => NULL,
-        't_cache_last_time' => NULL,
+        't_cache_first_member_id' => null,
+        't_cache_last_post_id' => null,
+        't_cache_last_time' => null,
         't_cache_last_title' => '',
         't_cache_last_username' => '',
-        't_cache_last_member_id' => NULL,
+        't_cache_last_member_id' => null,
         't_cache_num_posts' => 0,
         't_pt_from_category' => '',
         't_pt_to_category' => ''
@@ -127,15 +127,15 @@ function ocf_make_topic($forum_id,$description = '',$emoticon = '',$validated = 
         $map['id'] = $id;
     }
 
-    $topic_id = $GLOBALS['FORUM_DB']->query_insert('f_topics',$map,true);
+    $topic_id = $GLOBALS['FORUM_DB']->query_insert('f_topics', $map, true);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('topic',strval($topic_id),null,null,true);
+        generate_resourcefs_moniker('topic', strval($topic_id), null, null, true);
     }
 
     require_code('member_mentions');
-    dispatch_member_mention_notifications('topic',strval($topic_id));
+    dispatch_member_mention_notifications('topic', strval($topic_id));
 
     return $topic_id;
 }

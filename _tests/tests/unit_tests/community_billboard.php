@@ -29,15 +29,15 @@ class community_billboard_test_set extends ocp_test_case
         parent::setUp();
 
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 
         require_code('community_billboard');
 
-        $this->flag_id = add_community_billboard_message('test',3,'Welcome to ocPortal',1);
+        $this->flag_id = add_community_billboard_message('test', 3, 'Welcome to ocPortal', 1);
 
-        $this->assertTrue('Welcome to ocPortal' == $GLOBALS['SITE_DB']->query_select_value('community_billboard','notes',array('id' => $this->flag_id)));
+        $this->assertTrue('Welcome to ocPortal' == $GLOBALS['SITE_DB']->query_select_value('community_billboard', 'notes', array('id' => $this->flag_id)));
     }
 
     public function testEditCommunityBillboard()
@@ -47,13 +47,13 @@ class community_billboard_test_set extends ocp_test_case
         }
 
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 
-        edit_community_billboard_message($this->flag_id,'Tested','Thank you',0);
+        edit_community_billboard_message($this->flag_id, 'Tested', 'Thank you', 0);
 
-        $this->assertTrue('Thank you' == $GLOBALS['SITE_DB']->query_select_value('community_billboard','notes',array('id' => $this->flag_id)));
+        $this->assertTrue('Thank you' == $GLOBALS['SITE_DB']->query_select_value('community_billboard', 'notes', array('id' => $this->flag_id)));
     }
 
     public function tearDown()
@@ -63,7 +63,7 @@ class community_billboard_test_set extends ocp_test_case
         }
 
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_search_catalogue_entries
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_catalogue_entries
     public function info($check_permissions = true)
     {
         if (!module_installed('catalogues')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'catalogues')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'catalogues')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries','COUNT(*)') == 0) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('catalogue_entries', 'COUNT(*)') == 0) {
+            return null;
         }
 
         require_lang('catalogues');
@@ -52,14 +51,14 @@ class Hook_search_catalogue_entries
         $info['integer_category'] = true;
 
         $extra_sort_fields = array();
-        $catalogue_name = get_param('catalogue_name',null);
+        $catalogue_name = get_param('catalogue_name', null);
         if (!is_null($catalogue_name)) {
             require_code('fields');
 
-            $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name' => $catalogue_name,'cf_searchable' => 1,'cf_visible' => 1),'ORDER BY cf_order');
+            $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('id', 'cf_name', 'cf_type', 'cf_default'), array('c_name' => $catalogue_name, 'cf_searchable' => 1, 'cf_visible' => 1), 'ORDER BY cf_order');
             foreach ($rows as $i => $row) {
                 $ob = get_fields_hook($row['cf_type']);
-                $temp = $ob->inputted_to_sql_for_search($row,$i);
+                $temp = $ob->inputted_to_sql_for_search($row, $i);
                 if (is_null($temp)) { // Standard direct 'substring' search
                     $extra_sort_fields['f' . strval($i) . '_actual_value'] = get_translated_text($row['cf_name']);
                 }
@@ -89,24 +88,24 @@ class Hook_search_catalogue_entries
      */
     public function ajax_tree()
     {
-        $catalogue_name = get_param('catalogue_name','');
+        $catalogue_name = get_param('catalogue_name', '');
         if ($catalogue_name == '') {
-            $tree = create_selection_list_catalogues(null,true);
+            $tree = create_selection_list_catalogues(null, true);
             if ($tree->is_empty()) {
                 inform_exit(do_lang_tempcode('NO_ENTRIES'));
             }
 
             require_code('form_templates');
-            $fields = form_input_list(do_lang_tempcode('NAME'),'','catalogue_name',$tree,null,true);
-            $post_url = get_self_url(false,false,null,false,true);
+            $fields = form_input_list(do_lang_tempcode('NAME'), '', 'catalogue_name', $tree, null, true);
+            $post_url = get_self_url(false, false, null, false, true);
             $submit_name = do_lang_tempcode('PROCEED');
             $hidden = build_keep_post_fields();
 
             $title = get_screen_title('SEARCH');
-            return do_template('FORM_SCREEN',array('_GUID' => 'a2812ac8056903811f444682d45ee448','TARGET' => '_self','GET' => true,'SKIP_VALIDATION' => true,'HIDDEN' => $hidden,'TITLE' => $title,'TEXT' => '','URL' => $post_url,'FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__search','SUBMIT_NAME' => $submit_name));
+            return do_template('FORM_SCREEN', array('_GUID' => 'a2812ac8056903811f444682d45ee448', 'TARGET' => '_self', 'GET' => true, 'SKIP_VALIDATION' => true, 'HIDDEN' => $hidden, 'TITLE' => $title, 'TEXT' => '', 'URL' => $post_url, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__search', 'SUBMIT_NAME' => $submit_name));
         }
 
-        return array('choose_catalogue_category',array('catalogue_name' => $catalogue_name));
+        return array('choose_catalogue_category', array('catalogue_name' => $catalogue_name));
     }
 
     /**
@@ -118,29 +117,29 @@ class Hook_search_catalogue_entries
     {
         $fields = array();
         $catalogue_name = get_param('catalogue_name');
-        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name' => $catalogue_name,'cf_searchable' => 1,'cf_visible' => 1),'ORDER BY cf_order');
+        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('id', 'cf_name', 'cf_type', 'cf_default'), array('c_name' => $catalogue_name, 'cf_searchable' => 1, 'cf_visible' => 1), 'ORDER BY cf_order');
         require_code('fields');
         foreach ($rows as $row) {
             $ob = get_fields_hook($row['cf_type']);
             $temp = $ob->get_search_inputter($row);
             if (is_null($temp)) {
                 $type = '_TEXT';
-                $special = get_param('option_' . strval($row['id']),'');
+                $special = get_param('option_' . strval($row['id']), '');
                 $extra = '';
                 $display = get_translated_text($row['cf_name']);
-                if (strpos($display,do_lang('RANGE_REQUIRED_TAG')) !== false) { // FUDGEFUDGE: But leave
-                    $display = str_replace(do_lang('RANGE_REQUIRED_TAG'),do_lang('RANGE_REQUIRED_SEARCH_DESCRIP'),$display);
+                if (strpos($display, do_lang('RANGE_REQUIRED_TAG')) !== false) { // FUDGEFUDGE: But leave
+                    $display = str_replace(do_lang('RANGE_REQUIRED_TAG'), do_lang('RANGE_REQUIRED_SEARCH_DESCRIP'), $display);
                     if (!is_guest()) {
-                        $dob_year = intval($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_dob_year'));
+                        $dob_year = intval($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_dob_year'));
                         if ($dob_year != 0) {
-                            $special = integer_format(intval(date('Y',utctime_to_usertime(time())))-$dob_year);
+                            $special = integer_format(intval(date('Y', utctime_to_usertime(time()))) - $dob_year);
                         } // number_format'ing this is kind of funny actually
                     }
                     $extra = '_ranged';
                 }
-                $fields[] = array('NAME' => strval($row['id']) . $extra,'DISPLAY' => $display,'TYPE' => $type,'SPECIAL' => $special);
+                $fields[] = array('NAME' => strval($row['id']) . $extra, 'DISPLAY' => $display, 'TYPE' => $type, 'SPECIAL' => $special);
             } else {
-                $fields = array_merge($fields,$temp);
+                $fields = array_merge($fields, $temp);
             }
         }
         return $fields;
@@ -169,7 +168,7 @@ class Hook_search_catalogue_entries
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         if (!module_installed('catalogues')) {
             return array();
@@ -202,7 +201,7 @@ class Hook_search_catalogue_entries
         require_lang('catalogues');
 
         // Calculate our where clause (search)
-        $sq = build_search_submitter_clauses('ce_submitter',$author_id,$author);
+        $sq = build_search_submitter_clauses('ce_submitter', $author_id, $author);
         if (is_null($sq)) {
             return array();
         } else {
@@ -218,7 +217,7 @@ class Hook_search_catalogue_entries
             $where_clause .= ' AND ';
             $where_clause .= 'p.category_name IS NOT NULL';
         }
-        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
             $where_clause .= ' AND ';
             $where_clause .= 'ce_validated=1';
         }
@@ -228,17 +227,17 @@ class Hook_search_catalogue_entries
         $privacy_join = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('catalogue_entry','r');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('catalogue_entry', 'r');
             $where_clause .= $privacy_where;
         }
 
         // Calculate and perform query
-        $catalogue_name = get_param('catalogue_name','');
+        $catalogue_name = get_param('catalogue_name', '');
         $ranges = array();
         if ($catalogue_name != '') {
             $extra_select = '';
 
-            $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name','cf_type','cf_default'),array('c_name' => $catalogue_name,'cf_searchable' => 1),'ORDER BY cf_order');
+            $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('id', 'cf_name', 'cf_type', 'cf_default'), array('c_name' => $catalogue_name, 'cf_searchable' => 1), 'ORDER BY cf_order');
             $table = 'catalogue_entries r';
             $trans_fields = array('!' => '!');
             $nontrans_fields = array();
@@ -246,15 +245,15 @@ class Hook_search_catalogue_entries
             require_code('fields');
             foreach ($rows as $i => $row) {
                 $ob = get_fields_hook($row['cf_type']);
-                $temp = $ob->inputted_to_sql_for_search($row,$i);
+                $temp = $ob->inputted_to_sql_for_search($row, $i);
                 if (is_null($temp)) { // Standard direct 'substring' search
-                    list(,,$row_type) = $ob->get_field_value_row_bits($row);
+                    list(, , $row_type) = $ob->get_field_value_row_bits($row);
                     switch ($row_type) {
                         case 'long_trans':
                             $trans_fields['f' . strval($i) . '.cv_value'] = 'LONG_TRANS__COMCODE';
                             $table .= ' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_efv_long_trans f' . strval($i) . ' ON (f' . strval($i) . '.ce_id=r.id AND f' . strval($i) . '.cf_id=' . strval($row['id']) . ')';
                             if (multi_lang_content()) {
-                                $search_field = 't' . strval(count($trans_fields)-1) . '.text_original';
+                                $search_field = 't' . strval(count($trans_fields) - 1) . '.text_original';
                             } else {
                                 $search_field = 'f' . strval($i) . '.cv_value';
                             }
@@ -262,13 +261,13 @@ class Hook_search_catalogue_entries
                         case 'short_trans':
                             $trans_fields['f' . strval($i) . '.cv_value'] = 'SHORT_TRANS__COMCODE';
                             $table .= ' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_efv_short_trans f' . strval($i) . ' ON (f' . strval($i) . '.ce_id=r.id AND f' . strval($i) . '.cf_id=' . strval($row['id']) . ')';
-                            $search_field = 't' . strval(count($trans_fields)-1) . '.text_original';
+                            $search_field = 't' . strval(count($trans_fields) - 1) . '.text_original';
                             break;
                         case 'long':
                             $nontrans_fields[] = 'f' . strval($i) . '.cv_value';
                             $table .= ' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_efv_long f' . strval($i) . ' ON (f' . strval($i) . '.ce_id=r.id AND f' . strval($i) . '.cf_id=' . strval($row['id']) . ')';
                             if (multi_lang_content()) {
-                                $search_field = 't' . strval(count($trans_fields)-1) . '.text_original';
+                                $search_field = 't' . strval(count($trans_fields) - 1) . '.text_original';
                             } else {
                                 $search_field = 'f' . strval($i) . '.cv_value';
                             }
@@ -288,22 +287,22 @@ class Hook_search_catalogue_entries
                             break;
                     }
 
-                    $param = get_param('option_' . strval($row['id']),'');
+                    $param = get_param('option_' . strval($row['id']), '');
                     if ($param != '') {
                         $where_clause .= ' AND ';
 
-                        if ((substr($param,0,1) == '=') || ($row_type == 'integer') || ($row_type == 'float')) {
-                            $where_clause .= db_string_equal_to($search_field,substr($param,1));
+                        if ((substr($param, 0, 1) == '=') || ($row_type == 'integer') || ($row_type == 'float')) {
+                            $where_clause .= db_string_equal_to($search_field, substr($param, 1));
                         } else {
-                            if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob,'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!is_under_radar($param))) {
-                                $temp = db_full_text_assemble($param,true);
+                            if ((db_has_full_text($GLOBALS['SITE_DB']->connection_read)) && (method_exists($GLOBALS['SITE_DB']->static_ob, 'db_has_full_text_boolean')) && ($GLOBALS['SITE_DB']->static_ob->db_has_full_text_boolean()) && (!is_under_radar($param))) {
+                                $temp = db_full_text_assemble($param, true);
                             } else {
                                 list($temp,) = db_like_assemble($param);
                             }
-                            $where_clause .= preg_replace('#\?#',$search_field,$temp);
+                            $where_clause .= preg_replace('#\?#', $search_field, $temp);
                         }
                     } else {
-                        $param = get_param('option_' . strval($row['id']) . '_ranged','');
+                        $param = get_param('option_' . strval($row['id']) . '_ranged', '');
                         if ($param != '') {
                             $ranges[$row['id']] = $param;
                         }
@@ -316,7 +315,7 @@ class Hook_search_catalogue_entries
                         $where_clause .= $temp[4];
                     } else {
                         $trans_fields[$temp[0]] = 'LONG_TRANS__COMCODE';
-                        $non_trans_fields = array_merge($nontrans_fields,$temp[1]);
+                        $non_trans_fields = array_merge($nontrans_fields, $temp[1]);
                     }
                 }
                 if ($i == 0) {
@@ -325,7 +324,7 @@ class Hook_search_catalogue_entries
             }
 
             $where_clause .= ' AND ';
-            $where_clause .= db_string_equal_to('r.c_name',$catalogue_name);
+            $where_clause .= db_string_equal_to('r.c_name', $catalogue_name);
 
             $table .= $privacy_join;
 
@@ -333,24 +332,24 @@ class Hook_search_catalogue_entries
                 return array();
             } // No fields in catalogue -- very odd
             if ($g_or == '') {
-                $rows = get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,$trans_fields,$where_clause,$content_where,$remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id,' . $title_field . ' AS b_cv_value' . $extra_select,$nontrans_fields);
+                $rows = get_search_rows('catalogue_entry', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, $table, $trans_fields, $where_clause, $content_where, $remapped_orderer, 'r.*,r.id AS id,r.cc_id AS r_cc_id,' . $title_field . ' AS b_cv_value' . $extra_select, $nontrans_fields);
             } else {
-                $rows = get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table . ' LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access z ON (' . db_string_equal_to('z.module_the_name','catalogues_category') . ' AND z.category_name=r.cc_id AND ' . str_replace('group_id','z.group_id',$g_or) . ') LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access p ON (' . db_string_equal_to('p.module_the_name','catalogues_catalogue') . ' AND p.category_name=r.c_name AND ' . str_replace('group_id','p.group_id',$g_or) . ')',$trans_fields,$where_clause,$content_where,$remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id,' . $title_field . ' AS b_cv_value' . $extra_select,$nontrans_fields);
+                $rows = get_search_rows('catalogue_entry', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, $table . ' LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access z ON (' . db_string_equal_to('z.module_the_name', 'catalogues_category') . ' AND z.category_name=r.cc_id AND ' . str_replace('group_id', 'z.group_id', $g_or) . ') LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access p ON (' . db_string_equal_to('p.module_the_name', 'catalogues_catalogue') . ' AND p.category_name=r.c_name AND ' . str_replace('group_id', 'p.group_id', $g_or) . ')', $trans_fields, $where_clause, $content_where, $remapped_orderer, 'r.*,r.id AS id,r.cc_id AS r_cc_id,' . $title_field . ' AS b_cv_value' . $extra_select, $nontrans_fields);
             }
         } else {
-            if (multi_lang_content() && $GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) { // Big sites can't do indescriminate catalogue translatable searches for performance reasons
+            if (multi_lang_content() && $GLOBALS['SITE_DB']->query_select_value('translate', 'COUNT(*)') > 10000) { // Big sites can't do indescriminate catalogue translatable searches for performance reasons
                 $trans_fields = array();
                 $join = ' JOIN ' . get_table_prefix() . 'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id)';
-                $_remapped_orderer = str_replace('b_cv_value','c.cv_value',$remapped_orderer);
+                $_remapped_orderer = str_replace('b_cv_value', 'c.cv_value', $remapped_orderer);
                 $extra_select = '';
                 $non_trans_fields = array('c.cv_value');
             } else {
                 $join = ' LEFT JOIN ' . get_table_prefix() . 'catalogue_efv_short_trans a ON (r.id=a.ce_id AND f.id=a.cf_id) LEFT JOIN ' . get_table_prefix() . 'catalogue_efv_long_trans b ON (r.id=b.ce_id AND f.id=b.cf_id) LEFT JOIN ' . get_table_prefix() . 'catalogue_efv_long d ON (r.id=d.ce_id AND f.id=d.cf_id) LEFT JOIN ' . get_table_prefix() . 'catalogue_efv_short c ON (r.id=c.ce_id AND f.id=c.cf_id)';
                 //' LEFT JOIN '.get_table_prefix().'catalogue_efv_float g ON (r.id=g.ce_id AND f.id=g.cf_id) LEFT JOIN '.get_table_prefix().'catalogue_efv_integer h ON (r.id=h.ce_id AND f.id=h.cf_id)';
-                $trans_fields = array('a.cv_value' => 'LONG_TRANS__COMCODE','b.cv_value' => 'LONG_TRANS__COMCODE');
-                $_remapped_orderer = str_replace('b_cv_value','b.cv_value',$remapped_orderer);
+                $trans_fields = array('a.cv_value' => 'LONG_TRANS__COMCODE', 'b.cv_value' => 'LONG_TRANS__COMCODE');
+                $_remapped_orderer = str_replace('b_cv_value', 'b.cv_value', $remapped_orderer);
                 $extra_select = ',b.cv_value AS b_cv_value';
-                $non_trans_fields = array('c.cv_value','d.cv_value'/*,'g.cv_value','h.cv_value'*/);
+                $non_trans_fields = array('c.cv_value', 'd.cv_value'/*,'g.cv_value','h.cv_value'*/);
             }
 
             $where_clause .= ' AND ';
@@ -359,9 +358,9 @@ class Hook_search_catalogue_entries
             $join .= $privacy_join;
 
             if ($g_or == '') {
-                $rows = get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_fields f LEFT JOIN ' . get_table_prefix() . 'catalogue_entries r ON (r.c_name=f.c_name)' . $join,$trans_fields,$where_clause,$content_where,$_remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id' . $extra_select,$non_trans_fields);
+                $rows = get_search_rows('catalogue_entry', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'catalogue_fields f LEFT JOIN ' . get_table_prefix() . 'catalogue_entries r ON (r.c_name=f.c_name)' . $join, $trans_fields, $where_clause, $content_where, $_remapped_orderer, 'r.*,r.id AS id,r.cc_id AS r_cc_id' . $extra_select, $non_trans_fields);
             } else {
-                $rows = get_search_rows('catalogue_entry','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_fields f LEFT JOIN ' . get_table_prefix() . 'catalogue_entries r ON (r.c_name=f.c_name)' . $join . ((get_value('disable_cat_cat_perms') === '1')?'':(' LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access z ON (' . db_string_equal_to('z.module_the_name','catalogues_category') . ' AND z.category_name=r.cc_id AND ' . str_replace('group_id','z.group_id',$g_or) . ')')) . ' LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access p ON (' . db_string_equal_to('p.module_the_name','catalogues_catalogue') . ' AND p.category_name=r.c_name AND ' . str_replace('group_id','p.group_id',$g_or) . ')',$trans_fields,$where_clause,$content_where,$_remapped_orderer,'r.*,r.id AS id,r.cc_id AS r_cc_id' . $extra_select,$non_trans_fields);
+                $rows = get_search_rows('catalogue_entry', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'catalogue_fields f LEFT JOIN ' . get_table_prefix() . 'catalogue_entries r ON (r.c_name=f.c_name)' . $join . ((get_value('disable_cat_cat_perms') === '1') ? '' : (' LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access z ON (' . db_string_equal_to('z.module_the_name', 'catalogues_category') . ' AND z.category_name=r.cc_id AND ' . str_replace('group_id', 'z.group_id', $g_or) . ')')) . ' LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access p ON (' . db_string_equal_to('p.module_the_name', 'catalogues_catalogue') . ' AND p.category_name=r.c_name AND ' . str_replace('group_id', 'p.group_id', $g_or) . ')', $trans_fields, $where_clause, $content_where, $_remapped_orderer, 'r.*,r.id AS id,r.cc_id AS r_cc_id' . $extra_select, $non_trans_fields);
             }
         }
 
@@ -383,9 +382,9 @@ class Hook_search_catalogue_entries
             foreach ($rows as $i => $row) {
                 $catalogue_name = $row['c_name'];
                 $tpl_set = $catalogue_name;
-                $display = get_catalogue_entry_map($row,$SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue_name],'PAGE',$tpl_set,null);
+                $display = get_catalogue_entry_map($row, $SEARCH_CATALOGUE_ENTRIES_CATALOGUES_CACHE[$catalogue_name], 'PAGE', $tpl_set, null);
                 foreach ($ranges as $range_id => $range_key) {
-                    $bits = explode('-',$display['_FIELD_' . strval($range_id)]);
+                    $bits = explode('-', $display['_FIELD_' . strval($range_id)]);
                     if (count($bits) == 2) {
                         if ((intval($bits[0]) >= intval($range_key)) || (intval($bits[1]) <= intval($range_key))) {
                             $out[$i]['restricted'] = true;
@@ -394,9 +393,9 @@ class Hook_search_catalogue_entries
                     }
                 }
 
-                if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                     $out[$i]['orderer'] = $row[$remapped_orderer];
-                } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                     $out[$i]['orderer'] = $row[$remapped_orderer];
                 }
             }
@@ -404,9 +403,9 @@ class Hook_search_catalogue_entries
             foreach ($rows as $i => $row) {
                 $out[$i]['data'] = $row;
                 unset($rows[$i]);
-                if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+                if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                     $out[$i]['orderer'] = $row[$remapped_orderer];
-                } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+                } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                     $out[$i]['orderer'] = $row[$remapped_orderer];
                 }
             }
@@ -424,6 +423,6 @@ class Hook_search_catalogue_entries
     public function render($row)
     {
         require_code('catalogues');
-        return render_catalogue_entry_box($row,'_SEARCH');
+        return render_catalogue_entry_box($row, '_SEARCH');
     }
 }

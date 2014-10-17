@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_password_strength
 {
     /**
@@ -28,6 +27,6 @@ class Hook_password_strength
     public function run()
     {
         require_code('password_strength');
-        return make_string_tempcode(strval(test_password(either_param('password'),either_param('username',''))));
+        return make_string_tempcode(strval(test_password(either_param('password'), either_param('username', ''))));
     }
 }

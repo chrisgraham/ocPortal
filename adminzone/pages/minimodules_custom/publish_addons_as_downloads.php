@@ -9,14 +9,14 @@
 
 
 // Find existing category ID for a named category. Insert into the database if the category does not exist
-function find_addon_category_download_category($category_name,$parent_id = null)
+function find_addon_category_download_category($category_name, $parent_id = null)
 {
     if (is_null($parent_id)) {
         $parent_id = db_get_first_id();
     }
 
     require_code('downloads2');
-    $id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id' => $parent_id,$GLOBALS['SITE_DB']->translate_field_ref('category') => $category_name));
+    $id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'id', array('parent_id' => $parent_id, $GLOBALS['SITE_DB']->translate_field_ref('category') => $category_name));
     if (is_null($id)) {
         $description = '';
         switch ($category_name) {
@@ -26,10 +26,10 @@ function find_addon_category_download_category($category_name,$parent_id = null)
                 break;
         }
 
-        $cat_id = add_download_category($category_name,$parent_id,$description,'','');
+        $cat_id = add_download_category($category_name, $parent_id, $description, '', '');
         $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
         foreach (array_keys($all_groups) as $_group_id) {
-            $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($cat_id),'group_id' => $_group_id));
+            $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'downloads', 'category_name' => strval($cat_id), 'group_id' => $_group_id));
         }
         return $cat_id;
     }
@@ -41,12 +41,12 @@ function get_addons_list_under_category($category_name)
 {
     $addons_here = array();
 
-    $addons = find_all_hooks('systems','addon_registry');
+    $addons = find_all_hooks('systems', 'addon_registry');
     foreach ($addons as $addon => $place) {
         if ($place == 'sources_custom') {
             require_code('hooks/systems/addon_registry/' . $addon);
             $ob = object_factory('Hook_addon_registry_' . $addon);
-            if (method_exists($ob,'get_category')) {
+            if (method_exists($ob, 'get_category')) {
                 $category_name_here = $ob->get_category();
             } else {
                 $category_name_here = 'Uncategorised/Unstable';
@@ -66,12 +66,12 @@ function find_addon_category_list()
 {
     $categories = array();
 
-    $addons = find_all_hooks('systems','addon_registry');
+    $addons = find_all_hooks('systems', 'addon_registry');
     foreach ($addons as $addon => $place) {
         if ($place == 'sources_custom') {
             require_code('hooks/systems/addon_registry/' . $addon);
             $ob = object_factory('Hook_addon_registry_' . $addon);
-            if (method_exists($ob,'get_category')) {
+            if (method_exists($ob, 'get_category')) {
                 $category_name = $ob->get_category();
             } else {
                 $category_name = 'Uncategorised/Unstable';
@@ -85,7 +85,7 @@ function find_addon_category_list()
 }
 
 
-define('DOWNLOAD_OWNER',2); // Hard-coded ID of user that gets ownership of the downloads
+define('DOWNLOAD_OWNER', 2); // Hard-coded ID of user that gets ownership of the downloads
 
 require_code('addons2');
 require_code('version');
@@ -94,26 +94,26 @@ require_code('downloads2');
 require_code('files');
 require_code('tar');
 
-$target_cat = get_param('cat',null);
-if ($target_cat === NULL) {
+$target_cat = get_param('cat', null);
+if ($target_cat === null) {
     exit('Please pass the target category name in the URL (?cat=name).');
 }
-$version_branch = get_param('version_branch',null);
-if ($version_branch === NULL) {
+$version_branch = get_param('version_branch', null);
+if ($version_branch === null) {
     exit('Please pass the branch version in the URL (?version_branch=num.x).');
 }
 
-$parent_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id' => 1,$GLOBALS['SITE_DB']->translate_field_ref('category') => 'Addons'));
-$c_main_id = find_addon_category_download_category($target_cat,$parent_id);
+$parent_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'id', array('parent_id' => 1, $GLOBALS['SITE_DB']->translate_field_ref('category') => 'Addons'));
+$c_main_id = find_addon_category_download_category($target_cat, $parent_id);
 
 // Addons...
 
-if (get_param_integer('import_addons',1) == 1) {
+if (get_param_integer('import_addons', 1) == 1) {
     $addon_count = 0;
 
     $categories = find_addon_category_list();
     foreach ($categories as $category) {
-        $cid = find_addon_category_download_category($category,$c_main_id);
+        $cid = find_addon_category_download_category($category, $c_main_id);
         $addon_arr = get_addons_list_under_category($category);
         foreach ($addon_arr as $addon) {
             $addon_count++;
@@ -126,18 +126,18 @@ if (get_param_integer('import_addons',1) == 1) {
                 warn_exit('Missing: ' . $from);
             }
             if (!file_exists($to)) {
-                copy($from,$to);
+                copy($from, $to);
             }
 
             $addon_url = 'uploads/downloads/' . urlencode($file);
 
             $fsize = filesize(get_file_base() . '/' . urldecode($addon_url));
 
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url' => $addon_url));
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'url', array('url' => $addon_url));
             if (is_null($test)) {
-                $tar = tar_open($from,'rb');
-                $info_file = tar_get_file($tar,'addon.inf',true);
-                $info = better_parse_ini_file(null,$info_file['data']);
+                $tar = tar_open($from, 'rb');
+                $info_file = tar_get_file($tar, 'addon.inf', true);
+                $info = better_parse_ini_file(null, $info_file['data']);
                 tar_close($tar);
 
                 $name = titleify($info['name']);
@@ -147,7 +147,7 @@ if (get_param_integer('import_addons',1) == 1) {
                 $incompatibilities = $info['incompatibilities'];
                 $category = $info['category'];
                 $licence = $info['licence'];
-                $copyright_attribution = implode("\n",$info['copyright_attribution']);
+                $copyright_attribution = implode("\n", $info['copyright_attribution']);
 
                 if ($dependencies != '') {
                     $description .= "\n\n[title=\"2\"]System Requirements / Dependencies[/title]\n\n" . $dependencies;
@@ -166,11 +166,11 @@ if (get_param_integer('import_addons',1) == 1) {
                 if (is_null($download_owner)) {
                     $download_owner = DOWNLOAD_OWNER;
                 }
-                $download_id = add_download($cid,$name,$addon_url,$description,$author,'',null,1,1,2,1,'',$addon . '.tar',$fsize,0,0,null,null,0,0,$download_owner);
+                $download_id = add_download($cid, $name, $addon_url, $description, $author, '', null, 1, 1, 2, 1, '', $addon . '.tar', $fsize, 0, 0, null, null, 0, 0, $download_owner);
 
                 $screenshot_url = 'data_custom/addon_screenshots/' . $addon . '.png';
                 if (file_exists(get_custom_file_base() . '/' . $screenshot_url)) {
-                    add_image('','download_' . strval($download_id),'',$screenshot_url,'',1,0,0,0,'',null,null,null,0);
+                    add_image('', 'download_' . strval($download_id), '', $screenshot_url, '', 1, 0, 0, 0, '', null, null, null, 0);
                 }
             }
         }
@@ -185,30 +185,30 @@ if (get_param_integer('import_addons',1) == 1) {
 
 // Now themes...
 
-if (get_param_integer('import_themes',1) == 1) {
-    $cid = find_addon_category_download_category('Themes',$c_main_id);
-    $cid = find_addon_category_download_category('Professional Themes',$cid);
+if (get_param_integer('import_themes', 1) == 1) {
+    $cid = find_addon_category_download_category('Themes', $c_main_id);
+    $cid = find_addon_category_download_category('Professional Themes', $cid);
 
     $dh = opendir(get_custom_file_base() . '/exports/addons');
     $theme_count = 0;
     while (($file = readdir($dh)) !== false) {
-        if (preg_match('#^theme-.*\.tar$#',$file) != 0) {
+        if (preg_match('#^theme-.*\.tar$#', $file) != 0) {
             $theme_count++;
 
             $from = get_custom_file_base() . '/exports/addons/' . $file;
-            $new_file = basename($file,'.tar') . '-' . $version_branch . '.tar';
+            $new_file = basename($file, '.tar') . '-' . $version_branch . '.tar';
             $to = get_custom_file_base() . '/uploads/downloads/' . $new_file;
             @unlink($to);
-            copy($from,$to);
+            copy($from, $to);
             $addon_url = 'uploads/downloads/' . urlencode($new_file);
 
             $fsize = filesize(get_file_base() . '/' . urldecode($addon_url));
 
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','url',array('url' => $addon_url));
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'url', array('url' => $addon_url));
             if (is_null($test)) {
-                $tar = tar_open($from,'rb');
-                $info_file = tar_get_file($tar,'addon.inf',true);
-                $info = better_parse_ini_file(null,$info_file['data']);
+                $tar = tar_open($from, 'rb');
+                $info_file = tar_get_file($tar, 'addon.inf', true);
+                $info = better_parse_ini_file(null, $info_file['data']);
                 tar_close($tar);
 
                 $name = $info['name'];
@@ -219,11 +219,11 @@ if (get_param_integer('import_themes',1) == 1) {
                 if (is_null($download_owner)) {
                     $download_owner = DOWNLOAD_OWNER;
                 }
-                $download_id = add_download($cid,$name,$addon_url,$description,$author,'',null,1,1,2,1,'',$new_file,$fsize,0,0,null,null,0,0,$download_owner);
+                $download_id = add_download($cid, $name, $addon_url, $description, $author, '', null, 1, 1, 2, 1, '', $new_file, $fsize, 0, 0, null, null, 0, 0, $download_owner);
 
-                $screenshot_url = 'data_custom/addon_screenshots/' . urlencode(preg_replace('#^theme-#','theme__',preg_replace('#\d+$#','',basename($file,'.tar'))) . '.png');
+                $screenshot_url = 'data_custom/addon_screenshots/' . urlencode(preg_replace('#^theme-#', 'theme__', preg_replace('#\d+$#', '', basename($file, '.tar'))) . '.png');
                 if (file_exists(get_custom_file_base() . '/' . $screenshot_url)) {
-                    add_image('','download_' . strval($download_id),'',$screenshot_url,'',1,0,0,0,'',null,null,null,0);
+                    add_image('', 'download_' . strval($download_id), '', $screenshot_url, '', 1, 0, 0, 0, '', null, null, null, 0);
                 }
             }
         }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_config_callback_password
 {
     /**

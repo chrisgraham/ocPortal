@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_task_download_member_csv
 {
     /**
@@ -31,36 +30,36 @@ class Hook_task_download_member_csv
 
         $headers = array();
         $headers['Content-type'] = 'text/csv';
-        $headers['Content-Disposition'] = 'attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($filename))) . '"';
+        $headers['Content-Disposition'] = 'attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"';
 
         $ini_set = array();
         $ini_set['ocproducts.xss_detect'] = '0';
 
         $outfile_path = ocp_tempnam('csv');
-        $outfile = fopen($outfile_path,'w+b');
+        $outfile = fopen($outfile_path, 'w+b');
 
-        $fields = array('id','m_username','m_email_address','m_last_visit_time','m_cache_num_posts','m_pass_hash_salted','m_pass_salt','m_password_compat_scheme','m_signature','m_validated','m_join_time','m_primary_group','m_is_perm_banned','m_dob_day','m_dob_month','m_dob_year','m_reveal_age','m_language','m_allow_emails','m_allow_emails_from_staff');
+        $fields = array('id', 'm_username', 'm_email_address', 'm_last_visit_time', 'm_cache_num_posts', 'm_pass_hash_salted', 'm_pass_salt', 'm_password_compat_scheme', 'm_signature', 'm_validated', 'm_join_time', 'm_primary_group', 'm_is_perm_banned', 'm_dob_day', 'm_dob_month', 'm_dob_year', 'm_reveal_age', 'm_language', 'm_allow_emails', 'm_allow_emails_from_staff');
         if (addon_installed('ocf_member_avatars')) {
             $fields[] = 'm_avatar_url';
         }
         if (addon_installed('ocf_member_photos')) {
             $fields[] = 'm_photo_url';
         }
-        $member_count = $GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)');
+        $member_count = $GLOBALS['FORUM_DB']->query_select_value('f_members', 'COUNT(*)');
 
         // Read member groups
-        $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,false,true);
-        $member_groups_count = $GLOBALS['FORUM_DB']->query_select_value('f_group_members','COUNT(*)',array('gm_validated' => 1));
-        if ($member_groups_count<500) {
-            $member_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_member_id','gm_group_id'),array('gm_validated' => 1));
+        $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, false, true);
+        $member_groups_count = $GLOBALS['FORUM_DB']->query_select_value('f_group_members', 'COUNT(*)', array('gm_validated' => 1));
+        if ($member_groups_count < 500) {
+            $member_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members', array('gm_member_id', 'gm_group_id'), array('gm_validated' => 1));
         } else {
             $member_groups = array();
         }
 
         // Read CPFs
-        $cpfs = $GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type','cf_name'),null,'ORDER BY cf_order');
-        if ($member_count<700) {
-            $member_cpfs = list_to_map('mf_member_id',$GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('*')));
+        $cpfs = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_type', 'cf_name'), null, 'ORDER BY cf_order');
+        if ($member_count < 700) {
+            $member_cpfs = list_to_map('mf_member_id', $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields', array('*')));
         } else {
             $member_cpfs = array();
         }
@@ -69,7 +68,7 @@ class Hook_task_download_member_csv
         require_code('ocf_members_action2');
         $headings = member_get_csv_headings();
         foreach ($cpfs as $i => $c) { // CPFs take precedence over normal fields of the same name
-            $cpfs[$i]['_cf_name'] = get_translated_text($c['cf_name'],$GLOBALS['FORUM_DB']);
+            $cpfs[$i]['_cf_name'] = get_translated_text($c['cf_name'], $GLOBALS['FORUM_DB']);
             $headings[$cpfs[$i]['_cf_name']] = null;
         }
 
@@ -78,7 +77,7 @@ class Hook_task_download_member_csv
         if (addon_installed('ecommerce')) {
             require_lang('ecommerce');
 
-            $usergroup_subscription_rows = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id','s_title'));
+            $usergroup_subscription_rows = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs', array('id', 's_title'));
             foreach ($usergroup_subscription_rows as $usergroup_subscription_row) {
                 $item_name = get_translated_text($usergroup_subscription_row['s_title']);
                 $headings[$item_name . ' (' . do_lang('SUBSCRIPTION_START_TIME') . ')'] = null;
@@ -94,17 +93,17 @@ class Hook_task_download_member_csv
         // Output headings
         foreach (array_keys($headings) as $i => $h) {
             if ($i != 0) {
-                fwrite($outfile,',');
+                fwrite($outfile, ',');
             }
-            fwrite($outfile,'"' . str_replace('"','""',$h) . '"');
+            fwrite($outfile, '"' . str_replace('"', '""', $h) . '"');
         }
-        fwrite($outfile,"\n");
+        fwrite($outfile, "\n");
 
         // Output records
         $at = mixed();
         $start = 0;
         do {
-            $members = $GLOBALS['FORUM_DB']->query_select('f_members',$fields,null,'',200,$start);
+            $members = $GLOBALS['FORUM_DB']->query_select('f_members', $fields, null, '', 200, $start);
 
             if ($member_count >= 700) {
                 $or_list = '';
@@ -114,7 +113,7 @@ class Hook_task_download_member_csv
                     }
                     $or_list .= 'mf_member_id=' . strval($m['id']);
                 }
-                $member_cpfs = list_to_map('mf_member_id',$GLOBALS['FORUM_DB']->query('SELECT * FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_member_custom_fields WHERE ' . $or_list,null,null,false,true));
+                $member_cpfs = list_to_map('mf_member_id', $GLOBALS['FORUM_DB']->query('SELECT * FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_member_custom_fields WHERE ' . $or_list, null, null, false, true));
             }
 
             foreach ($members as $m) {
@@ -123,27 +122,28 @@ class Hook_task_download_member_csv
                 }
 
                 if ($member_groups_count >= 500) {
-                    $member_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members',array('gm_member_id','gm_group_id'),array('gm_validated' => 1,'gm_member_id' => $m['id']));
+                    $member_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members', array('gm_member_id', 'gm_group_id'), array('gm_validated' => 1, 'gm_member_id' => $m['id']));
                 }
 
-                $out = $this->_get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups,$subscription_types);
+                $out = $this->_get_csv_member_record($member_cpfs, $m, $groups, $headings, $cpfs, $member_groups, $subscription_types);
                 $i = 0;
                 foreach ($out as $wider) {
                     if ($i != 0) {
-                        fwrite($outfile,',');
+                        fwrite($outfile, ',');
                     }
-                    fwrite($outfile,'"' . str_replace('"','""',$wider) . '"');
+                    fwrite($outfile, '"' . str_replace('"', '""', $wider) . '"');
                     $i++;
                 }
-                fwrite($outfile,"\n");
+                fwrite($outfile, "\n");
             }
 
             $start += 200;
-        } while (count($members) == 200);
+        }
+        while (count($members) == 200);
 
         fclose($outfile);
 
-        return array('text/csv',array($filename,$outfile_path),$headers,$ini_set);
+        return array('text/csv', array($filename, $outfile_path), $headers, $ini_set);
     }
 
     /**
@@ -158,7 +158,7 @@ class Hook_task_download_member_csv
      * @param  array                    List of subscription types
      * @return array                    The row
      */
-    public function _get_csv_member_record($member_cpfs,$m,$groups,$headings,$cpfs,$member_groups,$subscription_types)
+    public function _get_csv_member_record($member_cpfs, $m, $groups, $headings, $cpfs, $member_groups, $subscription_types)
     {
         $at = mixed();
         $out = array();
@@ -167,35 +167,35 @@ class Hook_task_download_member_csv
             if (is_null($f)) {
                 continue;
             }
-            $parts = explode('/',$f);
+            $parts = explode('/', $f);
             $wider = '';
             foreach ($parts as $part) {
-                switch (substr($part,0,1)) {
+                switch (substr($part, 0, 1)) {
                     case '*': // lang string
-                        $at = get_translated_text($m[substr($part,1)],$GLOBALS['FORUM_DB']);
+                        $at = get_translated_text($m[substr($part, 1)], $GLOBALS['FORUM_DB']);
                         break;
 
                     case '!': // binary
-                        $at = ($m[substr($part,1)] == 1)?'Yes':'No'; // Hard-coded in English, because we need a multi-language standard
+                        $at = ($m[substr($part, 1)] == 1) ? 'Yes' : 'No'; // Hard-coded in English, because we need a multi-language standard
                         break;
 
                     case '&': // timestamp
-                        $at = date('Y-m-d',intval($m[substr($part,1)]));
+                        $at = date('Y-m-d', intval($m[substr($part, 1)]));
                         break;
 
                     case '#': // url
-                        $at = $m[substr($part,1)];
+                        $at = $m[substr($part, 1)];
                         if ((url_is_local($at)) && ($at != '')) {
                             $at = get_complex_base_url($at) . '/' . $at;
                         }
                         break;
 
                     case '@': // append other groups
-                        $at = isset($groups[$m[substr($part,1)]])?$groups[$m[substr($part,1)]]:'';
+                        $at = isset($groups[$m[substr($part, 1)]]) ? $groups[$m[substr($part, 1)]] : '';
 
                         foreach ($member_groups as $g) {
                             if ($g['gm_member_id'] == $m['id']) {
-                                if (array_key_exists($g['gm_group_id'],$groups)) {
+                                if (array_key_exists($g['gm_group_id'], $groups)) {
                                     $at .= '/' . $groups[$g['gm_group_id']];
                                 }
                             }
@@ -209,21 +209,21 @@ class Hook_task_download_member_csv
                 if ($wider != '') {
                     $wider .= '/';
                 }
-                $wider .= is_integer($at)?strval($at):(is_null($at)?'':$at);
+                $wider .= is_integer($at) ? strval($at) : (is_null($at) ? '' : $at);
             }
             $out[$written_heading] = $wider;
 
             $i++;
         }
         foreach ($cpfs as $c) {
-            if (!array_key_exists($m['id'],$member_cpfs)) {
+            if (!array_key_exists($m['id'], $member_cpfs)) {
                 $at = '';
             } else {
                 $at = $member_cpfs[$m['id']]['field_' . strval($c['id'])];
                 if (is_null($at)) {
                     $at = '';
                 } else {
-                    if (strpos($c['cf_type'],'_trans') !== false) {
+                    if (strpos($c['cf_type'], '_trans') !== false) {
                         $at = get_translated_text($at);
                     } elseif (!is_string($at)) {
                         $at = strval($at);
@@ -237,14 +237,14 @@ class Hook_task_download_member_csv
         if (addon_installed('ecommerce')) {
             require_code('ecommerce_subscriptions');
             require_lang('ecommerce');
-            $subscriptions = find_member_subscriptions($m['id'],true);
+            $subscriptions = find_member_subscriptions($m['id'], true);
             foreach ($subscription_types as $type_code => $item_name) {
                 if (isset($subscriptions[$type_code])) {
                     $sub = $subscriptions[$type_code];
-                    $start_time = date('Y/m/d',tz_time($sub['start_time'],get_site_timezone()));
-                    $term_start_time = date('Y/m/d',tz_time($sub['term_start_time'],get_site_timezone()));
-                    $term_end_time = date('Y/m/d',tz_time($sub['term_end_time'],get_site_timezone()));
-                    $expiry_time = date('Y/m/d',tz_time($sub['expiry_time'],get_site_timezone()));
+                    $start_time = date('Y/m/d', tz_time($sub['start_time'], get_site_timezone()));
+                    $term_start_time = date('Y/m/d', tz_time($sub['term_start_time'], get_site_timezone()));
+                    $term_end_time = date('Y/m/d', tz_time($sub['term_end_time'], get_site_timezone()));
+                    $expiry_time = date('Y/m/d', tz_time($sub['expiry_time'], get_site_timezone()));
                     $via = do_lang('PAYMENT_GATEWAY_' . $sub['via']);
                     $state = do_lang('PAYMENT_STATE_' . $sub['state']);
                 } else {

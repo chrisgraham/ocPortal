@@ -50,16 +50,16 @@ class Module_admin_sitemap
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'sitemap' => array('SITEMAP_EDITOR','menu/adminzone/structure/sitemap/sitemap_editor'),
+            'sitemap' => array('SITEMAP_EDITOR', 'menu/adminzone/structure/sitemap/sitemap_editor'),
         );
         if (!has_js()) {
             $ret += array(
-                'misc' => array('SITEMAP_TOOLS','menu/adminzone/structure/sitemap/sitemap_editor'),
-                'move' => array('MOVE_PAGES','menu/adminzone/structure/sitemap/page_move'),
-                'delete' => array('DELETE_PAGES','menu/adminzone/structure/sitemap/page_delete'),
+                'misc' => array('SITEMAP_TOOLS', 'menu/adminzone/structure/sitemap/sitemap_editor'),
+                'move' => array('MOVE_PAGES', 'menu/adminzone/structure/sitemap/page_move'),
+                'delete' => array('DELETE_PAGES', 'menu/adminzone/structure/sitemap/page_delete'),
             );
         }
         return $ret;
@@ -74,7 +74,7 @@ class Module_admin_sitemap
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('zones');
 
@@ -94,45 +94,45 @@ class Module_admin_sitemap
         }
 
         if ($type == 'sitemap') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES'))));
 
             $this->title = get_screen_title('SITEMAP_EDITOR');
         }
 
         if ($type == 'delete') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES'))));
 
             $this->title = get_screen_title('DELETE_PAGES');
         }
 
         if ($type == '_delete') {
             breadcrumb_set_self(do_lang_tempcode('CONFIRM'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:delete',do_lang_tempcode('DELETE_PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES')), array('_SELF:_SELF:delete', do_lang_tempcode('DELETE_PAGES'))));
 
             $this->title = get_screen_title('DELETE_PAGES');
         }
 
         if ($type == '__delete') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:delete',do_lang_tempcode('DELETE_PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES')), array('_SELF:_SELF:delete', do_lang_tempcode('DELETE_PAGES'))));
 
             $this->title = get_screen_title('DELETE_PAGES');
         }
 
         if ($type == 'move') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES'))));
 
             $this->title = get_screen_title('MOVE_PAGES');
         }
 
         if ($type == '_move') {
             breadcrumb_set_self(do_lang_tempcode('DONE'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('PAGES')),array('_SELF:_SELF:move',do_lang_tempcode('MOVE_PAGES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('PAGES')), array('_SELF:_SELF:move', do_lang_tempcode('MOVE_PAGES'))));
 
             $this->title = get_screen_title('MOVE_PAGES');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -145,7 +145,7 @@ class Module_admin_sitemap
         require_code('zones2');
         require_code('zones3');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->misc();
@@ -180,11 +180,11 @@ class Module_admin_sitemap
     public function misc()
     {
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('PAGES'),comcode_lang_string('DOC_PAGES'),
+        return do_next_manager(get_screen_title('PAGES'), comcode_lang_string('DOC_PAGES'),
             array(
-                array('menu/cms/comcode_page_edit',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('COMCODE_PAGE_EDIT')),
-                array('menu/adminzone/structure/sitemap/page_delete',array('_SELF',array('type' => 'delete'),'_SELF'),do_lang('DELETE_PAGES')),
-                array('menu/adminzone/structure/sitemap/page_move',array('_SELF',array('type' => 'move'),'_SELF'),do_lang('MOVE_PAGES')),
+                array('menu/cms/comcode_page_edit', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('COMCODE_PAGE_EDIT')),
+                array('menu/adminzone/structure/sitemap/page_delete', array('_SELF', array('type' => 'delete'), '_SELF'), do_lang('DELETE_PAGES')),
+                array('menu/adminzone/structure/sitemap/page_move', array('_SELF', array('type' => 'move'), '_SELF'), do_lang('MOVE_PAGES')),
             ),
             do_lang('PAGES')
         );
@@ -199,11 +199,11 @@ class Module_admin_sitemap
      * @param  tempcode                 The text to show (blank: default)
      * @return tempcode                 The UI
      */
-    public function do_next_manager($title,$page,$zone,$completion_text)
+    public function do_next_manager($title, $page, $zone, $completion_text)
     {
         require_code('zones2');
         require_code('zones3');
-        return sitemap_do_next_manager($title,$page,$zone,$completion_text);
+        return sitemap_do_next_manager($title, $page, $zone, $completion_text);
     }
 
     /**
@@ -217,14 +217,14 @@ class Module_admin_sitemap
 
         if (!has_js()) {
             // Send them to the page permissions screen
-            $url = build_url(array('page' => '_SELF','type' => 'page'),'_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'page'), '_SELF');
             require_code('site2');
-            assign_refresh($url,5.0);
-            return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITEMAP'));
+            assign_refresh($url, 5.0);
+            return redirect_screen($this->title, $url, do_lang_tempcode('NO_JS_ADVANCED_SCREEN_SITEMAP'));
         }
 
-        if (count($GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)')) >= 300) {
-            attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL',escape_html(integer_format(50))),'warn');
+        if (count($GLOBALS['SITE_DB']->query_select_value('zones', 'COUNT(*)')) >= 300) {
+            attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL', escape_html(integer_format(50))), 'warn');
         }
 
         require_javascript('javascript_ajax');
@@ -232,7 +232,7 @@ class Module_admin_sitemap
         require_javascript('javascript_dragdrop');
         require_javascript('javascript_sitemap_editor');
 
-        return do_template('SITEMAP_EDITOR_SCREEN',array('_GUID' => '2d42cb71e03d31c855a6b6467d2082d2','TITLE' => $this->title));
+        return do_template('SITEMAP_EDITOR_SCREEN', array('_GUID' => '2d42cb71e03d31c855a6b6467d2082d2', 'TITLE' => $this->title));
     }
 
     /**
@@ -242,19 +242,19 @@ class Module_admin_sitemap
      * @param  ?string                  Zone to not allow the selection of (NULL: none to filter out)
      * @return tempcode                 The UI
      */
-    public function _choose_zone($title,$no_go = null)
+    public function _choose_zone($title, $no_go = null)
     {
         $fields = new ocp_tempcode();
         require_code('form_templates');
 
         require_code('zones2');
         require_code('zones3');
-        $zones = create_selection_list_zones(null,is_null($no_go)?null:array($no_go));
-        $fields->attach(form_input_list(do_lang_tempcode('ZONE'),'','zone',$zones,null,true));
+        $zones = create_selection_list_zones(null, is_null($no_go) ? null : array($no_go));
+        $fields->attach(form_input_list(do_lang_tempcode('ZONE'), '', 'zone', $zones, null, true));
 
-        $post_url = get_self_url(false,false,null,false,true);
+        $post_url = get_self_url(false, false, null, false, true);
 
-        return do_template('FORM_SCREEN',array('_GUID' => 'df58e16290a783d24f9f81fc9227e6ff','GET' => true,'SKIP_VALIDATION' => true,'HIDDEN' => '','SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => do_lang_tempcode('CHOOSE'),'TITLE' => $title,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => ''));
+        return do_template('FORM_SCREEN', array('_GUID' => 'df58e16290a783d24f9f81fc9227e6ff', 'GET' => true, 'SKIP_VALIDATION' => true, 'HIDDEN' => '', 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => do_lang_tempcode('CHOOSE'), 'TITLE' => $title, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => ''));
     }
 
     /**
@@ -268,7 +268,7 @@ class Module_admin_sitemap
             warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
         }
 
-        $zone = get_param('zone',null);
+        $zone = get_param('zone', null);
         if (is_null($zone)) {
             return $this->_choose_zone($this->title);
         }
@@ -276,7 +276,7 @@ class Module_admin_sitemap
         require_code('form_templates');
         require_code('zones2');
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_delete'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_delete'), '_SELF');
         $submit_name = do_lang_tempcode('DELETE_PAGES');
 
         $fields = new ocp_tempcode();
@@ -286,18 +286,18 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (substr($type,0,7) == 'modules') {
-                $info = extract_module_info(zone_black_magic_filterer(get_file_base() . '/' . $zone . (($zone == '')?'':'/') . 'pages/' . $type . '/' . $page . '.php'));
-                if ((!is_null($info)) && (array_key_exists('locked',$info)) && ($info['locked'])) {
+            if (substr($type, 0, 7) == 'modules') {
+                $info = extract_module_info(zone_black_magic_filterer(get_file_base() . '/' . $zone . (($zone == '') ? '' : '/') . 'pages/' . $type . '/' . $page . '.php'));
+                if ((!is_null($info)) && (array_key_exists('locked', $info)) && ($info['locked'])) {
                     continue;
                 }
             }
-            $fields->attach(form_input_tick($zone . ':' . $page,do_lang_tempcode('_TYPE',escape_html($type)),'page__' . $page,false));
+            $fields->attach(form_input_tick($zone . ':' . $page, do_lang_tempcode('_TYPE', escape_html($type)), 'page__' . $page, false));
         }
 
-        $hidden = form_input_hidden('zone',$zone);
+        $hidden = form_input_hidden('zone', $zone);
 
-        return do_template('FORM_SCREEN',array(
+        return do_template('FORM_SCREEN', array(
             '_GUID' => 'a7310327788808856f1da4351f116b92',
             'SKIP_VALIDATION' => true,
             'FIELDS' => $fields,
@@ -324,9 +324,9 @@ class Module_admin_sitemap
         $pages = array();
         require_code('site');
         foreach ($_REQUEST as $key => $val) {
-            if ((substr($key,0,6) == 'page__') && ($val === '1')) {
-                $page = substr($key,6);
-                $page_details = _request_page($page,$zone,null,null,true);
+            if ((substr($key, 0, 6) == 'page__') && ($val === '1')) {
+                $page = substr($key, 6);
+                $page_details = _request_page($page, $zone, null, null, true);
                 $pages[$page] = strtolower($page_details[0]);
             }
         }
@@ -335,13 +335,13 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (either_param_integer('page__' . $page,0) == 1) {
-                $hidden->attach(form_input_hidden('page__' . $page,'1'));
+            if (either_param_integer('page__' . $page, 0) == 1) {
+                $hidden->attach(form_input_hidden('page__' . $page, '1'));
 
                 if (!$file->is_empty()) {
                     $file->attach(do_lang_tempcode('LIST_SEP'));
                 }
-                $file->attach(do_lang_tempcode('ZONE_WRITE',escape_html($zone),escape_html($page)));
+                $file->attach(do_lang_tempcode('ZONE_WRITE', escape_html($zone), escape_html($page)));
 
                 if ((get_file_base() != get_custom_file_base()) && ($type != 'comcode_custom')) {
                     warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
@@ -349,12 +349,12 @@ class Module_admin_sitemap
             }
         }
 
-        $url = build_url(array('page' => '_SELF','type' => '__delete'),'_SELF');
-        $text = do_lang_tempcode('CONFIRM_DELETE',escape_html($file));
+        $url = build_url(array('page' => '_SELF', 'type' => '__delete'), '_SELF');
+        $text = do_lang_tempcode('CONFIRM_DELETE', escape_html($file));
 
-        $hidden->attach(form_input_hidden('zone',$zone));
+        $hidden->attach(form_input_hidden('zone', $zone));
 
-        return do_template('CONFIRM_SCREEN',array('_GUID' => 'f732bb10942759c6ca5771d2d446c333','TITLE' => $this->title,'HIDDEN' => $hidden,'TEXT' => $text,'URL' => $url,'FIELDS' => ''));
+        return do_template('CONFIRM_SCREEN', array('_GUID' => 'f732bb10942759c6ca5771d2d446c333', 'TITLE' => $this->title, 'HIDDEN' => $hidden, 'TEXT' => $text, 'URL' => $url, 'FIELDS' => ''));
     }
 
     /**
@@ -364,7 +364,7 @@ class Module_admin_sitemap
      */
     public function __delete()
     {
-        $zone = post_param('zone',null);
+        $zone = post_param('zone', null);
 
         $afm_needed = false;
         $pages = find_all_pages_wrap($zone);
@@ -373,8 +373,8 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (post_param_integer('page__' . $page,0) == 1) {
-                if ((get_file_base() != get_custom_file_base()) && (strpos($type,'comcode_custom') !== false)) {
+            if (post_param_integer('page__' . $page, 0) == 1) {
+                if ((get_file_base() != get_custom_file_base()) && (strpos($type, 'comcode_custom') !== false)) {
                     warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
                 }
 
@@ -396,9 +396,9 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (post_param_integer('page__' . $page,0) == 1) {
+            if (post_param_integer('page__' . $page, 0) == 1) {
                 require_code('zones3');
-                delete_ocp_page($zone,$page,$type,$afm_needed);
+                delete_ocp_page($zone, $page, $type, $afm_needed);
             }
         }
 
@@ -406,7 +406,7 @@ class Module_admin_sitemap
 
         decache('menu');
 
-        return $this->do_next_manager($this->title,null,$zone,new ocp_tempcode());
+        return $this->do_next_manager($this->title, null, $zone, new ocp_tempcode());
     }
 
     /**
@@ -420,14 +420,14 @@ class Module_admin_sitemap
             warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
         }
 
-        $zone = get_param('zone',null);
+        $zone = get_param('zone', null);
         if (is_null($zone)) {
             return $this->_choose_zone($this->title);
         }
 
         require_code('form_templates');
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_move'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_move'), '_SELF');
         $submit_name = do_lang_tempcode('MOVE_PAGES');
 
         $fields = new ocp_tempcode();
@@ -438,26 +438,26 @@ class Module_admin_sitemap
             }
 
             // We can't move admin modules
-            if (($zone == 'adminzone') && (substr($page,0,6) == 'admin_') && (substr($type,0,6) == 'module')) {
+            if (($zone == 'adminzone') && (substr($page, 0, 6) == 'admin_') && (substr($type, 0, 6) == 'module')) {
                 continue;
             }
 
             // We can't move modules we've hard-optimised to be in a certain place
             global $MODULES_ZONES_CACHE_DEFAULT;
-            if (array_key_exists($page,$MODULES_ZONES_CACHE_DEFAULT)) {
+            if (array_key_exists($page, $MODULES_ZONES_CACHE_DEFAULT)) {
                 continue;
             }
 
-            $fields->attach(form_input_tick($page,do_lang_tempcode('_TYPE',escape_html($type)),'page__' . $page,false));
+            $fields->attach(form_input_tick($page, do_lang_tempcode('_TYPE', escape_html($type)), 'page__' . $page, false));
         }
         require_code('zones2');
         require_code('zones3');
         $zones = create_selection_list_zones();
-        $fields->attach(form_input_list(do_lang_tempcode('DESTINATION'),do_lang_tempcode('DESCRIPTION_DESTINATION_ZONE'),'destination_zone',$zones,null,true));
+        $fields->attach(form_input_list(do_lang_tempcode('DESTINATION'), do_lang_tempcode('DESCRIPTION_DESTINATION_ZONE'), 'destination_zone', $zones, null, true));
 
-        $hidden = form_input_hidden('zone',$zone);
+        $hidden = form_input_hidden('zone', $zone);
 
-        return do_template('FORM_SCREEN',array('_GUID' => '79869440ede2482fe51839df04b9d880','SKIP_VALIDATION' => true,'FIELDS' => $fields,'TITLE' => $this->title,'SUBMIT_ICON' => 'buttons__move','SUBMIT_NAME' => $submit_name,'TEXT' => paragraph(do_lang_tempcode('SELECT_PAGES_MOVE')),'URL' => $post_url,'HIDDEN' => $hidden));
+        return do_template('FORM_SCREEN', array('_GUID' => '79869440ede2482fe51839df04b9d880', 'SKIP_VALIDATION' => true, 'FIELDS' => $fields, 'TITLE' => $this->title, 'SUBMIT_ICON' => 'buttons__move', 'SUBMIT_NAME' => $submit_name, 'TEXT' => paragraph(do_lang_tempcode('SELECT_PAGES_MOVE')), 'URL' => $post_url, 'HIDDEN' => $hidden));
     }
 
     /**
@@ -471,28 +471,28 @@ class Module_admin_sitemap
             warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
         }
 
-        $zone = post_param('zone',null);
+        $zone = post_param('zone', null);
 
         if (is_null($zone)) {
-            $post_url = build_url(array('page' => '_SELF','type' => get_param('type')),'_SELF',null,true);
-            $hidden = build_keep_form_fields('',true);
+            $post_url = build_url(array('page' => '_SELF', 'type' => get_param('type')), '_SELF', null, true);
+            $hidden = build_keep_form_fields('', true);
 
-            return do_template('CONFIRM_SCREEN',array('_GUID' => 'c6e872cc62bdc7cf1c5157fbfdb2dfd6','TITLE' => $this->title,'TEXT' => do_lang_tempcode('Q_SURE'),'URL' => $post_url,'HIDDEN' => $hidden,'FIELDS' => ''));
+            return do_template('CONFIRM_SCREEN', array('_GUID' => 'c6e872cc62bdc7cf1c5157fbfdb2dfd6', 'TITLE' => $this->title, 'TEXT' => do_lang_tempcode('Q_SURE'), 'URL' => $post_url, 'HIDDEN' => $hidden, 'FIELDS' => ''));
         }
 
-        $new_zone = post_param('destination_zone',''/*Could be welcome zone so need to imply '' is valid*/);
-        if (substr($new_zone,-1) == ':') {
-            $new_zone = substr($new_zone,0,strlen($new_zone)-1);
+        $new_zone = post_param('destination_zone', ''/*Could be welcome zone so need to imply '' is valid*/);
+        if (substr($new_zone, -1) == ':') {
+            $new_zone = substr($new_zone, 0, strlen($new_zone) - 1);
         }
 
         $pages = array();
         require_code('site');
         foreach ($_POST as $key => $val) {
-            if ((substr($key,0,6) == 'page__') && ($val === '1')) {
-                $page = substr($key,6);
-                $page_details = _request_page($page,$zone,null,null,true);
+            if ((substr($key, 0, 6) == 'page__') && ($val === '1')) {
+                $page = substr($key, 6);
+                $page_details = _request_page($page, $zone, null, null, true);
                 $pages[$page] = strtolower($page_details[0]);
-                if (array_key_exists(3,$page_details)) {
+                if (array_key_exists(3, $page_details)) {
                     $pages[$page] .= '/' . $page_details[3];
                 }
             }
@@ -504,7 +504,7 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (post_param_integer('page__' . $page,0) == 1) {
+            if (post_param_integer('page__' . $page, 0) == 1) {
                 if ($type != 'comcode_custom') {
                     $afm_needed = true;
                 }
@@ -523,19 +523,19 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (post_param_integer('page__' . $page,0) == 1) {
-                if (substr($type,0,7) == 'modules') {
+            if (post_param_integer('page__' . $page, 0) == 1) {
+                if (substr($type, 0, 7) == 'modules') {
                     $_page = $page . '.php';
-                } elseif (substr($type,0,7) == 'comcode') {
+                } elseif (substr($type, 0, 7) == 'comcode') {
                     $_page = $page . '.txt';
-                } elseif (substr($type,0,4) == 'html') {
+                } elseif (substr($type, 0, 4) == 'html') {
                     $_page = $page . '.htm';
                 }
-                if (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page))) {
+                if (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page))) {
                     if (!$cannot_move->is_empty()) {
                         $cannot_move->attach(do_lang_tempcode('LIST_SEP'));
                     }
-                    $cannot_move->attach(do_lang_tempcode('PAGE_WRITE',escape_html($page)));
+                    $cannot_move->attach(do_lang_tempcode('PAGE_WRITE', escape_html($page)));
                     continue;
                 }
             }
@@ -547,42 +547,42 @@ class Module_admin_sitemap
                 $page = strval($page);
             }
 
-            if (post_param_integer('page__' . $page,0) == 1) {
+            if (post_param_integer('page__' . $page, 0) == 1) {
                 $moved_something = $page;
 
-                if (substr($type,0,7) == 'modules') {
+                if (substr($type, 0, 7) == 'modules') {
                     $_page = $page . '.php';
-                } elseif (substr($type,0,7) == 'comcode') {
+                } elseif (substr($type, 0, 7) == 'comcode') {
                     $_page = $page . '.txt';
-                } elseif (substr($type,0,4) == 'html') {
+                } elseif (substr($type, 0, 4) == 'html') {
                     $_page = $page . '.htm';
                 }
-                if (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page))) {
+                if (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page))) {
                     continue;
                 }
 
-                if (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page))) {
+                if (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page))) {
                     if ($afm_needed) {
-                        afm_move(zone_black_magic_filterer(filter_naughty($zone) . (($zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page,true),
-                                    zone_black_magic_filterer(filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page,true));
+                        afm_move(zone_black_magic_filterer(filter_naughty($zone) . (($zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page, true),
+                            zone_black_magic_filterer(filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page, true));
                     } else {
-                        rename(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page),
-                                    zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty($type) . '/' . $_page));
+                        rename(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page),
+                            zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty($type) . '/' . $_page));
                     }
                 }
 
                 // If a non-overridden one is there too, need to move that too
-                if ((strpos($type,'_custom') !== false) && (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '')?'/':'') . 'pages/' . filter_naughty(str_replace('_custom','',$type)) . '/' . $_page))) && (!file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty(str_replace('_custom','',$type)) . '/' . $_page)))) {
+                if ((strpos($type, '_custom') !== false) && (file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '') ? '/' : '') . 'pages/' . filter_naughty(str_replace('_custom', '', $type)) . '/' . $_page))) && (!file_exists(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty(str_replace('_custom', '', $type)) . '/' . $_page)))) {
                     if ($afm_needed) {
-                        afm_move(zone_black_magic_filterer(filter_naughty($zone) . (($zone != '')?'/':'') . 'pages/' . filter_naughty(str_replace('_custom','',$type)) . '/' . $_page,true),
-                                    zone_black_magic_filterer(filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty(str_replace('_custom','',$type)) . '/' . $_page,true));
+                        afm_move(zone_black_magic_filterer(filter_naughty($zone) . (($zone != '') ? '/' : '') . 'pages/' . filter_naughty(str_replace('_custom', '', $type)) . '/' . $_page, true),
+                            zone_black_magic_filterer(filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty(str_replace('_custom', '', $type)) . '/' . $_page, true));
                     } else {
-                        rename(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '')?'/':'') . 'pages/' . filter_naughty(str_replace('_custom','',$type)) . '/' . $_page),
-                                    zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '')?'/':'') . 'pages/' . filter_naughty(str_replace('_custom','',$type)) . '/' . $_page));
+                        rename(zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($zone) . (($zone != '') ? '/' : '') . 'pages/' . filter_naughty(str_replace('_custom', '', $type)) . '/' . $_page),
+                            zone_black_magic_filterer(get_custom_file_base() . '/' . filter_naughty($new_zone) . (($new_zone != '') ? '/' : '') . 'pages/' . filter_naughty(str_replace('_custom', '', $type)) . '/' . $_page));
                     }
                 }
 
-                log_it('MOVE_PAGES',$page);
+                log_it('MOVE_PAGES', $page);
             }
         }
         if (is_null($moved_something)) {
@@ -595,14 +595,14 @@ class Module_admin_sitemap
         if ($cannot_move->is_empty()) {
             $message = do_lang_tempcode('SUCCESS');
         } else {
-            $message = do_lang_tempcode('WOULD_NOT_OVERWRITE_BUT_SUCCESS',$cannot_move);
+            $message = do_lang_tempcode('WOULD_NOT_OVERWRITE_BUT_SUCCESS', $cannot_move);
         }
 
         decache('menu');
 
         if (has_js()) {
-            return inform_screen($this->title,$message); // Came from sitemap editor, so want to just close this window when done
+            return inform_screen($this->title, $message); // Came from sitemap editor, so want to just close this window when done
         }
-        return $this->do_next_manager($this->title,$moved_something,$new_zone,new ocp_tempcode());
+        return $this->do_next_manager($this->title, $moved_something, $new_zone, new ocp_tempcode());
     }
 }

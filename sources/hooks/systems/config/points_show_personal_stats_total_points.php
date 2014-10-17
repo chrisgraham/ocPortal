@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_config_points_show_personal_stats_total_points
 {
     /**

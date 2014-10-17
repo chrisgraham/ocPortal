@@ -26,7 +26,7 @@
  * @param  ?mixed                       Data. A refresh will only happen if an AJAX-check indicates this data has changed (NULL: no check)
  * @return tempcode                     The screen output, wrapped with some AJAX code
  */
-function internalise_own_screen($screen_content,$refresh_time = null,$refresh_if_changed = null)
+function internalise_own_screen($screen_content, $refresh_time = null, $refresh_if_changed = null)
 {
     if (!has_js()) {
         return $screen_content;
@@ -46,17 +46,17 @@ function internalise_own_screen($screen_content,$refresh_time = null,$refresh_if
         if (($key == 'ajax') || ($key == 'zone') || ($key == 'utheme')) {
             continue;
         }
-        if ((substr($key,0,5) == 'keep_') && (skippable_keep($key,$param))) {
+        if ((substr($key, 0, 5) == 'keep_') && (skippable_keep($key, $param))) {
             continue;
         }
         if (get_magic_quotes_gpc()) {
             $param = stripslashes($param);
         }
-        $params .= (($params == '')?'?':'&') . $key . '=' . urlencode($param);
+        $params .= (($params == '') ? '?' : '&') . $key . '=' . urlencode($param);
     }
-    $params .= (($params == '')?'?':'&') . 'ajax=1';
-    if (get_param('utheme','') != '') {
-        $params .= '&utheme=' . urlencode(get_param('utheme',$GLOBALS['FORUM_DRIVER']->get_theme()));
+    $params .= (($params == '') ? '?' : '&') . 'ajax=1';
+    if (get_param('utheme', '') != '') {
+        $params .= '&utheme=' . urlencode(get_param('utheme', $GLOBALS['FORUM_DRIVER']->get_theme()));
     }
     $params .= '&zone=' . urlencode(get_zone_name());
 
@@ -70,12 +70,12 @@ function internalise_own_screen($screen_content,$refresh_time = null,$refresh_if
         $change_detection_url = '';
     }
 
-    return do_template('INTERNALISED_AJAX_SCREEN',array(
+    return do_template('INTERNALISED_AJAX_SCREEN', array(
         '_GUID' => '06554eb227428fd5c648dee3c5b38185',
         'SCREEN_CONTENT' => $screen_content,
         'REFRESH_IF_CHANGED' => md5(serialize($refresh_if_changed)),
         'CHANGE_DETECTION_URL' => $change_detection_url,
         'URL' => $url,
-        'REFRESH_TIME' => is_null($refresh_time)?'':strval($refresh_time),
+        'REFRESH_TIME' => is_null($refresh_time) ? '' : strval($refresh_time),
     ));
 }

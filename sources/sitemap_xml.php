@@ -25,7 +25,7 @@ function init__sitemap_xml()
 {
     require_code('xml');
 
-    global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH;
+    global $SITEMAPS_OUT_FILE, $SITEMAPS_OUT_PATH, $SITEMAPS_OUT_TEMPPATH;
     $SITEMAPS_OUT_FILE = null;
     $SITEMAPS_OUT_PATH = null;
     $SITEMAPS_OUT_TEMPPATH = null;
@@ -45,11 +45,11 @@ function sitemap_xml_build()
     $path = get_custom_file_base() . '/ocp_sitemap.xml';
     if (!file_exists($path)) {
         if (!is_writable_wrap(dirname($path))) {
-            warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',escape_html('/')));
+            warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE', escape_html('/')));
         }
     } else {
         if (!is_writable_wrap($path)) {
-            warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html('ocp_sitemap.xml')));
+            warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html('ocp_sitemap.xml')));
         }
     }
 
@@ -62,14 +62,22 @@ function sitemap_xml_build()
     retrieve_sitemap_node(
         '',
         $callback,
-        /*$valid_node_types=*/NULL,
-        /*$child_cutoff=*/NULL,
-        /*$max_recurse_depth=*/NULL,
-        /*$require_permission_support=*/false,
-        /*$zone=*/'_SEARCH',
-        /*$use_page_groupings=*/false,
-        /*$consider_secondary_categories=*/false,
-        /*$consider_validation=*/false,
+        /*$valid_node_types=*/
+        null,
+        /*$child_cutoff=*/
+        null,
+        /*$max_recurse_depth=*/
+        null,
+        /*$require_permission_support=*/
+        false,
+        /*$zone=*/
+        '_SEARCH',
+        /*$use_page_groupings=*/
+        false,
+        /*$consider_secondary_categories=*/
+        false,
+        /*$consider_validation=*/
+        false,
         $meta_gather
     );
     _sitemap_xml_finished();
@@ -90,7 +98,7 @@ function ping_sitemap_xml($url)
     if (get_option('auto_submit_sitemap') == '1') {
         $ping = true;
         $base_url = get_base_url();
-        $not_local = (substr($base_url,0,16) != 'http://localhost') && (substr($base_url,0,16) != 'http://127.0.0.1') && (substr($base_url,0,15) != 'http://192.168.') && (substr($base_url,0,10) != 'http://10.');
+        $not_local = (substr($base_url, 0, 16) != 'http://localhost') && (substr($base_url, 0, 16) != 'http://127.0.0.1') && (substr($base_url, 0, 15) != 'http://192.168.') && (substr($base_url, 0, 10) != 'http://10.');
         if (($ping) && (get_option('site_closed') == '0') && ($not_local)) {
             // Submit to search engines
             $services = array(
@@ -100,7 +108,7 @@ function ping_sitemap_xml($url)
                 'http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=SitemapWriter&url=',
             );
             foreach ($services as $service) {
-                $out .= http_download_file($service . urlencode($url),null,false);
+                $out .= http_download_file($service . urlencode($url), null, false);
             }
         }
     }
@@ -114,9 +122,9 @@ function ping_sitemap_xml($url)
  */
 function _sitemap_xml_initialise($file_path)
 {
-    global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH,$LOADED_MONIKERS_CACHE;
+    global $SITEMAPS_OUT_FILE, $SITEMAPS_OUT_PATH, $SITEMAPS_OUT_TEMPPATH, $LOADED_MONIKERS_CACHE;
     $SITEMAPS_OUT_TEMPPATH = ocp_tempnam('ocpsmap'); // We write to temporary path first to minimise the time our target file is invalid (during generation)
-    $SITEMAPS_OUT_FILE = fopen($SITEMAPS_OUT_TEMPPATH,'wb');
+    $SITEMAPS_OUT_FILE = fopen($SITEMAPS_OUT_TEMPPATH, 'wb');
     $SITEMAPS_OUT_PATH = $file_path;
 
     if (function_exists('set_time_limit')) {
@@ -126,8 +134,8 @@ function _sitemap_xml_initialise($file_path)
     $GLOBALS['MEMORY_OVER_SPEED'] = true;
 
     // Load ALL URL ID monikers (for efficiency)
-    if ($GLOBALS['SITE_DB']->query_select_value('url_id_monikers','COUNT(*)',array('m_deprecated' => 0))<10000) {
-        $results = $GLOBALS['SITE_DB']->query_select('url_id_monikers',array('m_moniker','m_resource_page','m_resource_type','m_resource_id'),array('m_deprecated' => 0));
+    if ($GLOBALS['SITE_DB']->query_select_value('url_id_monikers', 'COUNT(*)', array('m_deprecated' => 0)) < 10000) {
+        $results = $GLOBALS['SITE_DB']->query_select('url_id_monikers', array('m_moniker', 'm_resource_page', 'm_resource_type', 'm_resource_id'), array('m_deprecated' => 0));
         foreach ($results as $result) {
             $LOADED_MONIKERS_CACHE[$result['m_resource_page']][$result['m_resource_type']][$result['m_resource_id']] = $result['m_moniker'];
         }
@@ -141,7 +149,7 @@ function _sitemap_xml_initialise($file_path)
     $blob = '<' . '?xml version="1.0" encoding="' . get_charset() . '"?' . '>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     ';
-    fwrite($SITEMAPS_OUT_FILE,$blob);
+    fwrite($SITEMAPS_OUT_FILE, $blob);
 }
 
 /**
@@ -149,18 +157,18 @@ function _sitemap_xml_initialise($file_path)
  */
 function _sitemap_xml_finished()
 {
-    global $SITEMAPS_OUT_FILE,$SITEMAPS_OUT_PATH,$SITEMAPS_OUT_TEMPPATH;
+    global $SITEMAPS_OUT_FILE, $SITEMAPS_OUT_PATH, $SITEMAPS_OUT_TEMPPATH;
 
     // End of file
     $blob = '
 </urlset>
     ';
-    fwrite($SITEMAPS_OUT_FILE,$blob);
+    fwrite($SITEMAPS_OUT_FILE, $blob);
 
     // Copy to final path / tidy up
     fclose($SITEMAPS_OUT_FILE);
     @unlink($SITEMAPS_OUT_PATH);
-    copy($SITEMAPS_OUT_TEMPPATH,$SITEMAPS_OUT_PATH);
+    copy($SITEMAPS_OUT_TEMPPATH, $SITEMAPS_OUT_PATH);
     @unlink($SITEMAPS_OUT_TEMPPATH);
     sync_file($SITEMAPS_OUT_PATH);
 }
@@ -175,10 +183,10 @@ function _sitemap_xml_serialize_sitemap_node($node)
     global $SITEMAPS_OUT_FILE;
 
     $page_link = $node['page_link'];
-    if ($page_link === NULL) {
+    if ($page_link === null) {
         return;
     }
-    list($zone,$attributes,$hash) = page_link_decode($page_link);
+    list($zone, $attributes, $hash) = page_link_decode($page_link);
 
     $add_date = $node['extra_meta']['add_date'];
     $edit_date = $node['extra_meta']['edit_date'];
@@ -186,11 +194,11 @@ function _sitemap_xml_serialize_sitemap_node($node)
 
     $langs = find_all_langs();
     foreach (array_keys($langs) as $lang) {
-        $url = _build_url($attributes+(($lang == get_site_default_lang())?array():array('keep_lang' => $lang)),$zone,null,false,false,true,$hash);
+        $url = _build_url($attributes + (($lang == get_site_default_lang()) ? array() : array('keep_lang' => $lang)), $zone, null, false, false, true, $hash);
 
-        $_lastmod_date = is_null($edit_date)?$add_date:$edit_date;
+        $_lastmod_date = is_null($edit_date) ? $add_date : $edit_date;
         if (!is_null($_lastmod_date)) {
-            $lastmod_date = '<lastmod>' . xmlentities(date('Y-m-d\TH:i:s',$_lastmod_date) . substr_replace(date('O',$_lastmod_date),':',3,0)) . '</lastmod>';
+            $lastmod_date = '<lastmod>' . xmlentities(date('Y-m-d\TH:i:s', $_lastmod_date) . substr_replace(date('O', $_lastmod_date), ':', 3, 0)) . '</lastmod>';
         }
         $lastmod_date = '<changefreq>' . xmlentities($node['sitemap_refreshfreq']) . '</changefreq>';
 
@@ -201,6 +209,6 @@ function _sitemap_xml_serialize_sitemap_node($node)
       <priority>' . float_to_raw_string($priority) . '</priority>
    </url>
         ';
-        fwrite($SITEMAPS_OUT_FILE,$url_blob);
+        fwrite($SITEMAPS_OUT_FILE, $url_blob);
     }
 }

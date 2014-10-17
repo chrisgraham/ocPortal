@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_max_execution_time
 {
     /**
@@ -28,7 +27,7 @@ class Hook_check_max_execution_time
     public function run()
     {
         $warning = array();
-        if ((is_numeric(@ini_get('max_execution_time'))) && (intval(@ini_get('max_execution_time'))>0) && (intval(@ini_get('max_execution_time'))<10) && (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1')) {
+        if ((is_numeric(@ini_get('max_execution_time'))) && (intval(@ini_get('max_execution_time')) > 0) && (intval(@ini_get('max_execution_time')) < 10) && (str_replace(array('on', 'true', 'yes'), array('1', '1', '1'), strtolower(ini_get('safe_mode'))) == '1')) {
             $warning[] = do_lang_tempcode('WARNING_MAX_EXECUTION_TIME');
         }
         return $warning;

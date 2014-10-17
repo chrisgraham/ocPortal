@@ -27,24 +27,24 @@ class overused_globals_test_set extends ocp_test_case
 
         require_code('files');
         require_code('files2');
-        $files = get_directory_contents(get_file_base(),'',true);
+        $files = get_directory_contents(get_file_base(), '', true);
         foreach ($files as $file) {
-            if ((substr($file,-4) == '.php') && (($file == 'install.php') || (!should_ignore_file($file,IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS)))) {
+            if ((substr($file, -4) == '.php') && (($file == 'install.php') || (!should_ignore_file($file, IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS)))) {
                 $done_for_file = array();
 
                 $contents = file_get_contents(get_file_base() . '/' . $file);
                 if ($file != 'install.php') {
-                    if (strpos($contents,'@chdir($FILE_BASE);') !== false) {
+                    if (strpos($contents, '@chdir($FILE_BASE);') !== false) {
                         continue;
                     }
                 } // Front end controller script, will have lots of globals
 
                 // global $FOO
-                $num_matches = preg_match_all('#^\s*global ([^;]*);#m',$contents,$matches);
-                for ($i = 0;$i<$num_matches;$i++) {
-                    $vars = explode(',',$matches[1][$i]);
+                $num_matches = preg_match_all('#^\s*global ([^;]*);#m', $contents, $matches);
+                for ($i = 0; $i < $num_matches; $i++) {
+                    $vars = explode(',', $matches[1][$i]);
                     foreach ($vars as $var) {
-                        $global = ltrim($var,'$');
+                        $global = ltrim($var, '$');
 
                         if (isset($done_for_file[$global])) {
                             continue;
@@ -60,8 +60,8 @@ class overused_globals_test_set extends ocp_test_case
                 }
 
                 // $GLOBALS['FOO']
-                $num_matches = preg_match_all('#\$GLOBALS\[\'(\w+)\'\]#',$contents,$matches);
-                for ($i = 0;$i<$num_matches;$i++) {
+                $num_matches = preg_match_all('#\$GLOBALS\[\'(\w+)\'\]#', $contents, $matches);
+                for ($i = 0; $i < $num_matches; $i++) {
                     $global = $matches[1][$i];
 
                     if (isset($done_for_file[$global])) {
@@ -77,8 +77,8 @@ class overused_globals_test_set extends ocp_test_case
                 }
 
                 // Global documentation, which makes a global 'sanctified' for use in many files
-                $num_matches = preg_match_all('#@global\s+[^\s]+\s+\$(\w+)#',$contents,$matches);
-                for ($i = 0;$i<$num_matches;$i++) {
+                $num_matches = preg_match_all('#@global\s+[^\s]+\s+\$(\w+)#', $contents, $matches);
+                for ($i = 0; $i < $num_matches; $i++) {
                     $global = $matches[1][$i];
                     $sanctified_globals[$global] = true;
                 }
@@ -88,8 +88,8 @@ class overused_globals_test_set extends ocp_test_case
         ksort($found_globals);
 
         foreach ($found_globals as $global => $count) {
-            if ((!isset($sanctified_globals[$global])) && (strpos($global,'_CACHE') === false) && ($global != 'FILE_BASE') && ($global != 'LAST_TOPIC_ID') && ($global != 'LAST_TOPIC_IS_NEW') && ($global != 'RELATIVE_PATH') && ($global != '_CREATED_FILES') && ($global != '_MODIFIED_FILES')) {
-                $this->assertTrue($count <= 6,'Don\'t over-use global variables (' . $global . ', ' . integer_format($count) . ' files using).');
+            if ((!isset($sanctified_globals[$global])) && (strpos($global, '_CACHE') === false) && ($global != 'FILE_BASE') && ($global != 'LAST_TOPIC_ID') && ($global != 'LAST_TOPIC_IS_NEW') && ($global != 'RELATIVE_PATH') && ($global != '_CREATED_FILES') && ($global != '_MODIFIED_FILES')) {
+                $this->assertTrue($count <= 6, 'Don\'t over-use global variables (' . $global . ', ' . integer_format($count) . ' files using).');
             }
         }
     }

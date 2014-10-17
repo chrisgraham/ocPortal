@@ -25,29 +25,29 @@ function download_gallery_script()
 {
     // Closed site
     $site_closed = get_option('site_closed');
-    if (($site_closed == '1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
+    if (($site_closed == '1') && (!has_privilege(get_member(), 'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
         header('Content-Type: text/plain');
         @exit(get_option('closed'));
     }
 
     $cat = get_param('cat');
 
-    if (!has_category_access(get_member(),'galleries',$cat)) {
+    if (!has_category_access(get_member(), 'galleries', $cat)) {
         access_denied('CATEGORY_ACCESS');
     }
 
-    check_privilege('may_download_gallery',array('galleries',$cat));
-    if ((strpos($cat,"\n") !== false) || (strpos($cat,"\r") !== false)) {
+    check_privilege('may_download_gallery', array('galleries', $cat));
+    if ((strpos($cat, "\n") !== false) || (strpos($cat, "\r") !== false)) {
         log_hack_attack_and_exit('HEADER_SPLIT_HACK');
     }
 
-    $num_videos = $GLOBALS['SITE_DB']->query_select_value('videos','COUNT(*)',array('cat' => $cat,'validated' => 1));
+    $num_videos = $GLOBALS['SITE_DB']->query_select_value('videos', 'COUNT(*)', array('cat' => $cat, 'validated' => 1));
 
     require_lang('galleries');
 
     require_code('tasks');
-    $ret = call_user_func_array__long_task(do_lang('DOWNLOAD_GALLERY_CONTENTS'),get_screen_title('DOWNLOAD_GALLERY_CONTENTS'),'download_gallery',array($cat),false,$num_videos == 0);
+    $ret = call_user_func_array__long_task(do_lang('DOWNLOAD_GALLERY_CONTENTS'), get_screen_title('DOWNLOAD_GALLERY_CONTENTS'), 'download_gallery', array($cat), false, $num_videos == 0);
 
-    $echo = globalise($ret,null,'',true);
+    $echo = globalise($ret, null, '', true);
     $echo->evaluate_echo(null);
 }

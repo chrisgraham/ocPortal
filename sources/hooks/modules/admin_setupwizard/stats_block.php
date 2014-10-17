@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
-
 class Hook_sw_stats_block
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_stats_block
             return array();
         }
 
-        return array(array(),array('side_stats' => array('PANEL_LEFT','PANEL_RIGHT')));
+        return array(array(), array('side_stats' => array('PANEL_LEFT', 'PANEL_RIGHT')));
     }
 }

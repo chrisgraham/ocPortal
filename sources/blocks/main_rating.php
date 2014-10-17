@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Block_main_rating
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_rating
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param','page','extra_param_from','title');
+        $info['parameters'] = array('param', 'page', 'extra_param_from', 'title');
         return $info;
     }
 
@@ -59,14 +58,14 @@ class Block_main_rating
      */
     public function run($map)
     {
-        if (!array_key_exists('param',$map)) {
+        if (!array_key_exists('param', $map)) {
             $map['param'] = 'main';
         }
-        if (!array_key_exists('page',$map)) {
+        if (!array_key_exists('page', $map)) {
             $map['page'] = get_page_name();
         }
 
-        if (array_key_exists('extra_param_from',$map)) {
+        if (array_key_exists('extra_param_from', $map)) {
             $extra = '_' . $map['extra_param_from'];
         } else {
             $extra = '';
@@ -75,14 +74,14 @@ class Block_main_rating
         require_code('feedback');
 
         $self_url = get_self_url();
-        $self_title = empty($map['title'])?$map['page']:$map['title'];
+        $self_title = empty($map['title']) ? $map['page'] : $map['title'];
         $id = $map['page'] . '_' . $map['param'] . $extra;
-        $test_changed = post_param('rating_' . $id,'');
+        $test_changed = post_param('rating_' . $id, '');
         if ($test_changed != '') {
             decache('main_rating');
         }
-        actualise_rating(true,'block_main_rating',$id,$self_url,$self_title);
+        actualise_rating(true, 'block_main_rating', $id, $self_url, $self_title);
 
-        return get_rating_box($self_url,$self_title,'block_main_rating',$id,true);
+        return get_rating_box($self_url, $self_title, 'block_main_rating', $id, true);
     }
 }

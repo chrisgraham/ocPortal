@@ -36,9 +36,9 @@ function init__ocf_notifications()
  * @param  ?TIME                        Only since this date (NULL: no limit).
  * @return array                        The personal post rows (with corresponding topic details).
  */
-function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_barrier = null)
+function ocf_get_pp_rows($limit = 5, $unread = true, $include_inline = true, $time_barrier = null)
 {
-    $cache_key = serialize(array($limit,$unread,$include_inline,$time_barrier));
+    $cache_key = serialize(array($limit, $unread, $include_inline, $time_barrier));
 
     global $PRIVATE_POST_ROWS_CACHE;
     if (isset($PRIVATE_POST_ROWS_CACHE[$cache_key])) {
@@ -52,7 +52,7 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
     $unread_clause = '';
     if ($unread) {
         $unread_clause = '
-            t_cache_last_time > ' . strval(time()-60*60*24*intval(get_option('post_history_days'))) . ' AND
+            t_cache_last_time > ' . strval(time() - 60 * 60 * 24 * intval(get_option('post_history_days'))) . ' AND
             (l_time IS NULL OR l_time < p.p_time) AND
         ';
     }
@@ -83,7 +83,7 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
     $query .= ' WHERE
     ' . $unread_clause . $time_clause . '
     t_pt_from=' . strval($member_id) . '
-    ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+    ' . (can_arbitrary_groupby() ? ' GROUP BY t.id' : '');
 
     $query .= ' UNION ';
 
@@ -104,7 +104,7 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
     $query .= ' WHERE
     ' . $unread_clause . $time_clause . '
     t_pt_to=' . strval($member_id) . '
-    ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+    ' . (can_arbitrary_groupby() ? ' GROUP BY t.id' : '');
 
     $query .= ' UNION ';
 
@@ -126,7 +126,7 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
     $query .= ' WHERE
     ' . $unread_clause . $time_clause . '
     i.s_member_id=' . strval($member_id) . '
-    ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+    ' . (can_arbitrary_groupby() ? ' GROUP BY t.id' : '');
 
     if ($include_inline) {
         $query .= ' UNION ';
@@ -148,13 +148,13 @@ function ocf_get_pp_rows($limit = 5,$unread = true,$include_inline = true,$time_
         $query .= ' WHERE
         ' . $unread_clause . $time_clause . '
         p.p_intended_solely_for=' . strval($member_id) . '
-        ' . (can_arbitrary_groupby()?' GROUP BY t.id':'');
+        ' . (can_arbitrary_groupby() ? ' GROUP BY t.id' : '');
     }
 
     $query .= ' ORDER BY t_cache_last_time DESC';
 
-    $ret = $GLOBALS['FORUM_DB']->query($query,$limit,null,false,true);
-    $ret = remove_duplicate_rows($ret,'t_id');
+    $ret = $GLOBALS['FORUM_DB']->query($query, $limit, null, false, true);
+    $ret = remove_duplicate_rows($ret, 't_id');
 
     $PRIVATE_POST_ROWS_CACHE[$cache_key] = $ret;
 
@@ -176,16 +176,16 @@ function generate_notifications($member_id)
         return $notifications_cache[$cache_identifier];
     }
 
-    $do_cacheing = ((get_option('is_on_block_cache') == '1') || (get_param_integer('keep_cache',0) == 1) || (get_param_integer('cache',0) == 1)) && ((get_param_integer('keep_cache',null) !== 0) && (get_param_integer('cache',null) !== 0));
+    $do_cacheing = ((get_option('is_on_block_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1)) && ((get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache', null) !== 0));
 
     $notifications = mixed();
     if ($do_cacheing) {
-        $_notifications = get_cache_entry('_new_pp',$cache_identifier,10000);
+        $_notifications = get_cache_entry('_new_pp', $cache_identifier, 10000);
 
         if (!is_null($_notifications)) {
-            list($__notifications,$num_unread_pps) = $_notifications;
+            list($__notifications, $num_unread_pps) = $_notifications;
             $notifications = new ocp_tempcode();
-            if (!$notifications->from_assembly($__notifications,true)) {
+            if (!$notifications->from_assembly($__notifications, true)) {
                 $notifications = null;
             }
         }
@@ -199,18 +199,18 @@ function generate_notifications($member_id)
         $notifications = new ocp_tempcode();
         $num_unread_pps = 0;
         foreach ($unread_pps as $unread_pp) {
-            $just_post_row = db_map_restrict($unread_pp,array('id','p_post'));
+            $just_post_row = db_map_restrict($unread_pp, array('id', 'p_post'));
 
-            $by_id = (is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id']))?$unread_pp['p_poster']:$unread_pp['t_cache_first_member_id'];
-            $by = is_guest($by_id)?do_lang('SYSTEM'):$GLOBALS['OCF_DRIVER']->get_username($by_id);
+            $by_id = (is_null($unread_pp['t_cache_first_member_id']) || !is_null($unread_pp['t_forum_id'])) ? $unread_pp['p_poster'] : $unread_pp['t_cache_first_member_id'];
+            $by = is_guest($by_id) ? do_lang('SYSTEM') : $GLOBALS['OCF_DRIVER']->get_username($by_id);
             if (is_null($by)) {
                 $by = do_lang('UNKNOWN');
             }
             $u_title = $unread_pp['t_cache_first_title'];
             if (is_null($unread_pp['t_forum_id'])) {
-                $type = do_lang_tempcode(($unread_pp['t_cache_first_post_id'] == $unread_pp['id'])?'NEW_PT_NOTIFICATION':'NEW_PP_NOTIFICATION');
+                $type = do_lang_tempcode(($unread_pp['t_cache_first_post_id'] == $unread_pp['id']) ? 'NEW_PT_NOTIFICATION' : 'NEW_PP_NOTIFICATION');
                 $num_unread_pps++;
-                $reply_url = build_url(array('page' => 'topics','type' => 'new_post','id' => $unread_pp['p_topic_id'],'quote' => $unread_pp['id']),get_module_zone('topics'));
+                $reply_url = build_url(array('page' => 'topics', 'type' => 'new_post', 'id' => $unread_pp['p_topic_id'], 'quote' => $unread_pp['id']), get_module_zone('topics'));
 
                 $additional_posts = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) AS cnt FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE p_topic_id=' . strval($unread_pp['p_topic_id']) . ' AND id>' . strval($unread_pp['id']));
             } else {
@@ -218,24 +218,24 @@ function generate_notifications($member_id)
                 if ($unread_pp['p_title'] != '') {
                     $u_title = $unread_pp['p_title'];
                 }
-                $reply_url = build_url(array('page' => 'topics','type' => 'new_post','id' => $unread_pp['p_topic_id'],'quote' => $unread_pp['id'],'intended_solely_for' => $unread_pp['p_poster']),get_module_zone('topics'));
+                $reply_url = build_url(array('page' => 'topics', 'type' => 'new_post', 'id' => $unread_pp['p_topic_id'], 'quote' => $unread_pp['id'], 'intended_solely_for' => $unread_pp['p_poster']), get_module_zone('topics'));
 
                 $additional_posts = 0;
             }
             $time_raw = $unread_pp['p_time'];
             $time = get_timezoned_date($unread_pp['p_time']);
-            $topic_url = $GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'],null,true);
-            $post = get_translated_tempcode('f_posts',$just_post_row,'p_post',$GLOBALS['FORUM_DB']);
+            $topic_url = $GLOBALS['OCF_DRIVER']->post_url($unread_pp['id'], null, true);
+            $post = get_translated_tempcode('f_posts', $just_post_row, 'p_post', $GLOBALS['FORUM_DB']);
             $description = $unread_pp['t_description'];
             if ($description != '') {
                 $description = ' (' . $description . ')';
             }
-            $profile_link = is_guest($by_id)?new ocp_tempcode():$GLOBALS['OCF_DRIVER']->member_profile_url($by_id,false,true);
-            $redirect = get_self_url(true,true);
-            $ignore_url = build_url(array('page' => 'topics','type' => 'mark_read_topic','id' => $unread_pp['p_topic_id'],'redirect' => $redirect),get_module_zone('topics'));
-            $ignore_url_2 = build_url(array('page' => 'topics','type' => 'mark_read_topic','id' => $unread_pp['p_topic_id'],'redirect' => $redirect,'ajax' => 1),get_module_zone('topics'));
+            $profile_link = is_guest($by_id) ? new ocp_tempcode() : $GLOBALS['OCF_DRIVER']->member_profile_url($by_id, false, true);
+            $redirect = get_self_url(true, true);
+            $ignore_url = build_url(array('page' => 'topics', 'type' => 'mark_read_topic', 'id' => $unread_pp['p_topic_id'], 'redirect' => $redirect), get_module_zone('topics'));
+            $ignore_url_2 = build_url(array('page' => 'topics', 'type' => 'mark_read_topic', 'id' => $unread_pp['p_topic_id'], 'redirect' => $redirect, 'ajax' => 1), get_module_zone('topics'));
             require_javascript('javascript_ajax');
-            $notifications->attach(do_template('OCF_NOTIFICATION',array(
+            $notifications->attach(do_template('OCF_NOTIFICATION', array(
                 '_GUID' => '3b224ea3f4da2f8f869a505b9756970a',
                 'ADDITIONAL_POSTS' => integer_format($additional_posts),
                 '_ADDITIONAL_POSTS' => strval($additional_posts),
@@ -257,12 +257,12 @@ function generate_notifications($member_id)
 
         if ($do_cacheing) {
             require_code('caches2');
-            put_into_cache('_new_pp',60*60*24,$cache_identifier,array($notifications->to_assembly(),$num_unread_pps));
+            put_into_cache('_new_pp', 60 * 60 * 24, $cache_identifier, array($notifications->to_assembly(), $num_unread_pps));
         }
 
         $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
     }
 
-    $notifications_cache[$cache_identifier] = array($notifications,$num_unread_pps);
-    return array($notifications,$num_unread_pps);
+    $notifications_cache[$cache_identifier] = array($notifications, $num_unread_pps);
+    return array($notifications, $num_unread_pps);
 }

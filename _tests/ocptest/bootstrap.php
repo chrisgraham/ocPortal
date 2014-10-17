@@ -20,8 +20,8 @@ function unit_testing_run()
 
     header('Content-Type: text/html');
 
-    @ini_set('ocproducts.type_strictness','0');
-    @ini_set('ocproducts.xss_detect','0');
+    @ini_set('ocproducts.type_strictness', '0');
+    @ini_set('ocproducts.xss_detect', '0');
 
     require_code('_tests/simpletest/unit_tester.php');
     require_code('_tests/simpletest/web_tester.php');
@@ -29,7 +29,7 @@ function unit_testing_run()
     require_code('_tests/simpletest/collector.php');
     require_code('_tests/ocptest/ocp_test_case.php');
 
-    $id = get_param('id',null);
+    $id = get_param('id', null);
     if (!is_null($id)) {
         //ob_start();
 
@@ -73,11 +73,11 @@ function find_testsets($dir = '')
     $tests = array();
     $dh = opendir(get_file_base() . '/_tests/tests' . $dir);
     while (($file = readdir($dh))) {
-        if ((is_dir(get_file_base() . '/_tests/tests' . $dir . '/' . $file)) && (substr($file,0,1) != '.')) {
-            $tests = array_merge($tests,find_testsets($dir . '/' . $file));
+        if ((is_dir(get_file_base() . '/_tests/tests' . $dir . '/' . $file)) && (substr($file, 0, 1) != '.')) {
+            $tests = array_merge($tests, find_testsets($dir . '/' . $file));
         } else {
-            if (substr($file,-4) == '.php') {
-                $tests[] = substr($dir . '/' . basename($file,'.php'),1);
+            if (substr($file, -4) == '.php') {
+                $tests[] = substr($dir . '/' . basename($file, '.php'), 1);
             }
         }
     }
@@ -93,7 +93,8 @@ function run_testset($testset)
     $suite = $loader->createSuiteFromClasses(
         $testset,
         array(basename($testset) . '_test_set'));
-   /*$result=*/$suite->run(new DefaultReporter());
+    /*$result=*/
+    $suite->run(new DefaultReporter());
 }
 
 function testset_do_header($title)
@@ -107,7 +108,7 @@ function testset_do_header($title)
 
         <style>
 END;
-    @print(file_get_contents(css_enforce('global','default',false)));
+    @print(file_get_contents(css_enforce('global', 'default', false)));
     echo <<<END
             .screen_title { text-decoration: underline; display: block; background: url('../themes/default/images/icons/48x48/menu/_generic_admin/tool.png') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
             a[target="_blank"], a[onclick$="window.open"] { padding-right: 0; }
@@ -119,7 +120,7 @@ END;
     if (@ob_end_flush() !== false) {
         @ob_start();
     } // Push out and recreate buffer
-flush();
+    flush();
 }
 
 function testset_do_footer()

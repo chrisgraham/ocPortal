@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_config_max_ip_addresses_per_subscriber
 {
     /**
@@ -48,16 +47,16 @@ class Hook_config_max_ip_addresses_per_subscriber
     public function get_default()
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
         if (!addon_installed('stats')) {
-            return NULL;
+            return null;
         }
         if (is_ocf_satellite_site()) {
-            return NULL;
+            return null;
         }
         if (!db_has_subqueries($GLOBALS['SITE_DB']->connection_write)) {
-            return NULL;
+            return null;
         }
 
         return '';

@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_main_facebook_comments
 {
     /**
@@ -48,6 +47,6 @@ class Block_main_facebook_comments
         if ($appid == '') {
             return new ocp_tempcode();
         }
-        return do_template('BLOCK_MAIN_FACEBOOK_COMMENTS',array('_GUID' => '99de0fd4bc8b3f57d4f9238b798bfcbf','URL' => 'http://developers.facebook.com/docs/reference/plugins/like-box'));
+        return do_template('BLOCK_MAIN_FACEBOOK_COMMENTS', array('_GUID' => '99de0fd4bc8b3f57d4f9238b798bfcbf', 'URL' => 'http://developers.facebook.com/docs/reference/plugins/like-box'));
     }
 }

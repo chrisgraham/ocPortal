@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
-
 class Block_menu
 {
     /**
@@ -34,7 +33,7 @@ class Block_menu
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('title','type','param','tray_status','silent_failure');
+        $info['parameters'] = array('title', 'type', 'param', 'tray_status', 'silent_failure');
         return $info;
     }
 
@@ -48,7 +47,7 @@ class Block_menu
         /* Ideally we would not cache as we would need to cache for all screens due to context sensitive link display (either you're here or match key filtering). However in most cases that only happens per page, so we will cache per page -- and people can turn off cacheing via the standard block parameter for that if needed.*/
         $info = array();
         $info['cache_on'] = array('block_menu__cache_on');
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*24*140;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24 * 140;
         return $info;
     }
 
@@ -60,13 +59,13 @@ class Block_menu
      */
     public function run($map)
     {
-        if (!array_key_exists('param',$map)) {
+        if (!array_key_exists('param', $map)) {
             $map['param'] = '';
         }
 
-        $type = array_key_exists('type',$map)?$map['type']:'embossed';
-        $silent_failure = array_key_exists('silent_failure',$map)?$map['silent_failure']:'0';
-        $tray_status = array_key_exists('tray_status',$map)?$map['tray_status']:'';
+        $type = array_key_exists('type', $map) ? $map['type'] : 'embossed';
+        $silent_failure = array_key_exists('silent_failure', $map) ? $map['silent_failure'] : '0';
+        $tray_status = array_key_exists('tray_status', $map) ? $map['tray_status'] : '';
 
         if ($type != 'tree') {
             $exists = file_exists(get_file_base() . '/themes/default/templates/MENU_BRANCH_' . $type . '.tpl');
@@ -86,11 +85,11 @@ class Block_menu
         }
 
         require_code('menus');
-        $menu = build_menu($type,$map['param'],$silent_failure == '1');
+        $menu = build_menu($type, $map['param'], $silent_failure == '1');
         $menu->handle_symbol_preprocessing(); // Optimisation: we are likely to have lots of page-links in here, so we want to spawn them to be detected for mass moniker loading
 
-        if ((array_key_exists('title',$map)) && ($map['title'] != '')) {
-            $menu = do_template('BLOCK_MENU',array('_GUID' => 'ae46aa37a9c5a526f43b26a391164436','CONTENT' => $menu,'TYPE' => $type,'PARAM' => $map['param'],'TRAY_STATUS' => $tray_status,'TITLE' => comcode_to_tempcode($map['title'],null,true)));
+        if ((array_key_exists('title', $map)) && ($map['title'] != '')) {
+            $menu = do_template('BLOCK_MENU', array('_GUID' => 'ae46aa37a9c5a526f43b26a391164436', 'CONTENT' => $menu, 'TYPE' => $type, 'PARAM' => $map['param'], 'TRAY_STATUS' => $tray_status, 'TITLE' => comcode_to_tempcode($map['title'], null, true)));
         }
 
         return $menu;
@@ -115,20 +114,20 @@ function block_menu__cache_on($map)
     particular menu block instance. cache="0". It won't hurt very much, menus are relatively fast.
     */
 
-    $menu = array_key_exists('param',$map)?$map['param']:'';
+    $menu = array_key_exists('param', $map) ? $map['param'] : '';
     $page = get_page_name();
-    $url_type = get_param('type','misc');
+    $url_type = get_param('type', 'misc');
     return array(
         $GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),
-        ((substr($menu,0,1) != '_') && (substr($menu,0,3) != '!!!') && (has_actual_page_access(get_member(),'admin_menus'))),
+        ((substr($menu, 0, 1) != '_') && (substr($menu, 0, 3) != '!!!') && (has_actual_page_access(get_member(), 'admin_menus'))),
         get_zone_name(),
         $page,
         $url_type,
-        ($page == 'catalogues' && $url_type == 'index')?get_param('id',''):'', // Catalogues need a little extra work to distinguish them
-        array_key_exists('type',$map)?$map['type']:'embossed',
+        ($page == 'catalogues' && $url_type == 'index') ? get_param('id', '') : '', // Catalogues need a little extra work to distinguish them
+        array_key_exists('type', $map) ? $map['type'] : 'embossed',
         $menu,
-        array_key_exists('title',$map)?$map['title']:'',
-        array_key_exists('silent_failure',$map)?$map['silent_failure']:'0',
-        array_key_exists('tray_status',$map)?$map['tray_status']:'',
+        array_key_exists('title', $map) ? $map['title'] : '',
+        array_key_exists('silent_failure', $map) ? $map['silent_failure'] : '0',
+        array_key_exists('tray_status', $map) ? $map['tray_status'] : '',
     );
 }

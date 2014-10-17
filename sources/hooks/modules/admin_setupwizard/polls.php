@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_sw_polls
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_polls
             return array();
         }
 
-        return array(array('main_poll' => array('NO','YES_CELL')),array());
+        return array(array('main_poll' => array('NO', 'YES_CELL')), array());
     }
 }

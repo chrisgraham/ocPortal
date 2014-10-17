@@ -18,10 +18,10 @@ class Mx_chat extends Module_chat
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('CHAT_LOBBY','menu/social/chat/chat'),
+            'misc' => array('CHAT_LOBBY', 'menu/social/chat/chat'),
         );
     }
 
@@ -39,7 +39,7 @@ class Mx_chat extends Module_chat
         }
 
         // What action are we going to do?
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if (function_exists('set_time_limit')) {
             @set_time_limit(200);
@@ -120,26 +120,26 @@ class Mx_chat extends Module_chat
         require_javascript('javascript_ajax_people_lists');
 
         // Starting an IM? The IM will popup by AJAX once the page loads, because it's in the system now
-        $enter_im = get_param_integer('enter_im',null);
+        $enter_im = get_param_integer('enter_im', null);
         if (!is_null($enter_im)) {
             require_code('chat2');
-            friend_add(get_member(),$enter_im);
+            friend_add(get_member(), $enter_im);
 
             $you = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
             $them = $GLOBALS['FORUM_DRIVER']->get_username($enter_im);
-            attach_message('Instant messaging has been disabled on this site, but you can arrange with members to connect via XMPP software (create a Private Topic, asking them to use XMPP, and tell them your username is ' . escape_html($you) . ' &ndash; we have auto-added ' . escape_html($them) . ' as an contact in your XMPP software).','warn');
+            attach_message('Instant messaging has been disabled on this site, but you can arrange with members to connect via XMPP software (create a Private Topic, asking them to use XMPP, and tell them your username is ' . escape_html($you) . ' &ndash; we have auto-added ' . escape_html($them) . ' as an contact in your XMPP software).', 'warn');
         }
 
         // Rooms
-        $room_url = build_url(array('page' => '_SELF','type' => 'room','id' => 'room_id'),'_SELF');
+        $room_url = build_url(array('page' => '_SELF', 'type' => 'room', 'id' => 'room_id'), '_SELF');
         $fields = '
             <ul id="rooms"></ul>
         ';
 
-        $seteffectslink = hyperlink(build_url(array('page' => '_SELF','type' => 'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
+        $seteffectslink = hyperlink(build_url(array('page' => '_SELF', 'type' => 'set_effects'/*,'redirect'=>get_self_url(true,true)*/), '_SELF'), do_lang_tempcode('CHAT_SET_EFFECTS'), true);
 
         $friends = array();
-        $friend_rows = $GLOBALS['SITE_DB']->query_select('chat_friends',array('*'),array('member_likes' => get_member()));
+        $friend_rows = $GLOBALS['SITE_DB']->query_select('chat_friends', array('*'), array('member_likes' => get_member()));
         foreach ($friend_rows as $br) {
             $u = $GLOBALS['FORUM_DRIVER']->get_username($br['member_liked']);
             if (!is_null($u)) {
@@ -147,8 +147,8 @@ class Mx_chat extends Module_chat
             }
         }
 
-        $password_hash = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-        return do_template('CHAT_LOBBY_SCREEN',array(
+        $password_hash = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_pass_hash_salted');
+        return do_template('CHAT_LOBBY_SCREEN', array(
             '_GUID' => 'fb96937da8ac1796b80f1f618ba9a01e',
             'CHATROOM_URL' => $room_url,
             'FRIENDS' => $friends,
@@ -170,19 +170,19 @@ class Mx_chat extends Module_chat
         require_javascript('javascript_posting');
 
         $prefs = @$_COOKIE['software_chat_prefs'];
-        $prefs = @explode(';',$prefs);
+        $prefs = @explode(';', $prefs);
         $room_id = get_param('id');
 
         $posting_name = do_lang_tempcode('SEND_MESSAGE');
 
-        $cs_post_url = build_url(array('page' => '_SELF','type' => 'options','id' => $room_id),'_SELF');
+        $cs_post_url = build_url(array('page' => '_SELF', 'type' => 'options', 'id' => $room_id), '_SELF');
 
         $yourname = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
 
-        $debug = (get_param_integer('debug',0) == 1)?'block':'none';
+        $debug = (get_param_integer('debug', 0) == 1) ? 'block' : 'none';
 
-        $seteffectslink = hyperlink(build_url(array('page' => '_SELF','type' => 'set_effects'/*,'redirect'=>get_self_url(true,true)*/),'_SELF'),do_lang_tempcode('CHAT_SET_EFFECTS'),true);
-        $logslink = hyperlink(get_base_url() . '/data_custom/jabber-logs/' . strtolower($room_id) . '@conference.' . get_domain(),'Chat logs',true);
+        $seteffectslink = hyperlink(build_url(array('page' => '_SELF', 'type' => 'set_effects'/*,'redirect'=>get_self_url(true,true)*/), '_SELF'), do_lang_tempcode('CHAT_SET_EFFECTS'), true);
+        $logslink = hyperlink(get_base_url() . '/data_custom/jabber-logs/' . strtolower($room_id) . '@conference.' . get_domain(), 'Chat logs', true);
 
         $links = array(
             $seteffectslink,
@@ -190,8 +190,8 @@ class Mx_chat extends Module_chat
         );
 
         $messages_php = find_script('messages');
-        $password_hash = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_pass_hash_salted');
-        return do_template('CHAT_ROOM_SCREEN',array(
+        $password_hash = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_pass_hash_salted');
+        return do_template('CHAT_ROOM_SCREEN', array(
             '_GUID' => '0b4adbe09e9cf38b2104b12b4381b256',
             'MESSAGES_PHP' => $messages_php,
             'PASSWORD_HASH' => $password_hash,
@@ -215,11 +215,11 @@ class Mx_chat extends Module_chat
      */
     public function chat_options()
     {
-        $value = preg_replace('#^\##','',post_param('text_colour',get_option('chat_default_post_colour'))) . ';' . post_param('font_name',get_option('chat_default_post_font')) . ';';
+        $value = preg_replace('#^\##', '', post_param('text_colour', get_option('chat_default_post_colour'))) . ';' . post_param('font_name', get_option('chat_default_post_font')) . ';';
         require_code('users_active_actions');
-        ocp_setcookie('software_chat_prefs',$value);
+        ocp_setcookie('software_chat_prefs', $value);
 
-        $url = build_url(array('page' => '_SELF','type' => 'room','id' => get_param('id'),'no_reenter_message' => 1),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'room', 'id' => get_param('id'), 'no_reenter_message' => 1), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

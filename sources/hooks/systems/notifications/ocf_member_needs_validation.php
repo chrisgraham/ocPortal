@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Notification_ocf_member_needs_validation extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_ocf_member_needs_validation extends Hook_Notification__S
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_INSTANT_EMAIL;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_ocf_member_needs_validation extends Hook_Notification__S
     public function list_handled_codes()
     {
         $list = array();
-        $list['ocf_member_needs_validation'] = array(do_lang('VALIDATION'),do_lang('ocf:NOTIFICATION_TYPE_ocf_member_needs_validation'));
+        $list['ocf_member_needs_validation'] = array(do_lang('VALIDATION'), do_lang('ocf:NOTIFICATION_TYPE_ocf_member_needs_validation'));
         return $list;
     }
 }

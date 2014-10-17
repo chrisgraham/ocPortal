@@ -49,26 +49,26 @@ class Module_forumview
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         $ret = array(
-            '!' => array('ROOT_FORUM','menu/social/forum/forums'),
+            '!' => array('ROOT_FORUM', 'menu/social/forum/forums'),
         );
         if ($support_crosslinks) {
             $ret += array(
-                '_SEARCH:topicview' => array('INLINE_PERSONAL_POSTS','menu/social/forum/inline_personal_posts'),
-                '_SEARCH:vforums:misc' => array('POSTS_SINCE','menu/social/forum/vforums/posts_since_last_visit'),
-                '_SEARCH:vforums:unanswered' => array('UNANSWERED_TOPICS','menu/social/forum/vforums/unanswered_topics')
+                '_SEARCH:topicview' => array('INLINE_PERSONAL_POSTS', 'menu/social/forum/inline_personal_posts'),
+                '_SEARCH:vforums:misc' => array('POSTS_SINCE', 'menu/social/forum/vforums/posts_since_last_visit'),
+                '_SEARCH:vforums:unanswered' => array('UNANSWERED_TOPICS', 'menu/social/forum/vforums/unanswered_topics')
             );
             if (!$check_perms || !is_guest($member_id)) {
                 $ret += array(
-                    '_SEARCH:vforums:unread' => array('TOPICS_UNREAD','menu/social/forum/vforums/unread_topics'),
-                    '_SEARCH:vforums:recently_read' => array('RECENTLY_READ','menu/social/forum/vforums/recently_read_topics'),
-                    '_SEARCH:vforums:involved' => array('INVOLVED_TOPICS','menu/social/forum/vforums/involved_topics'),
+                    '_SEARCH:vforums:unread' => array('TOPICS_UNREAD', 'menu/social/forum/vforums/unread_topics'),
+                    '_SEARCH:vforums:recently_read' => array('RECENTLY_READ', 'menu/social/forum/vforums/recently_read_topics'),
+                    '_SEARCH:vforums:involved' => array('INVOLVED_TOPICS', 'menu/social/forum/vforums/involved_topics'),
                 );
             }
         }
@@ -88,22 +88,22 @@ class Module_forumview
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf');
 
         inform_non_canonical_parameter('#^kfs_.*$#');
 
         if ($type == 'misc') {
-            $id = get_param_integer('id',db_get_first_id());
+            $id = get_param_integer('id', db_get_first_id());
 
-            $_forum_info = $GLOBALS['FORUM_DB']->query_select('f_forums',array('*'),array('id' => $id),'',1,null,false);
-            if (!array_key_exists(0,$_forum_info)) {
+            $_forum_info = $GLOBALS['FORUM_DB']->query_select('f_forums', array('*'), array('id' => $id), '', 1, null, false);
+            if (!array_key_exists(0, $_forum_info)) {
                 warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
             }
             $forum_info = $_forum_info[0];
 
-            $description_text = get_translated_text($forum_info['f_description'],$GLOBALS['FORUM_DB']);
+            $description_text = get_translated_text($forum_info['f_description'], $GLOBALS['FORUM_DB']);
 
             set_extra_request_metadata(array(
                 'created' => '',
@@ -120,15 +120,15 @@ class Module_forumview
 
             if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
                 require_code('awards');
-                $awards = is_null($id)?array():find_awards_for('forum',strval($id));
+                $awards = is_null($id) ? array() : find_awards_for('forum', strval($id));
             } else {
                 $awards = array();
             }
 
             $forum_name = $forum_info['f_name'];
-            $ltitle = do_lang_tempcode('NAMED_FORUM',make_fractionable_editable('forum',$id,$forum_name));
+            $ltitle = do_lang_tempcode('NAMED_FORUM', make_fractionable_editable('forum', $id, $forum_name));
 
-            $this->title = get_screen_title($ltitle,false,null,null,$awards);
+            $this->title = get_screen_title($ltitle, false, null, null, $awards);
 
             if (($forum_info['f_redirection'] != '') && (looks_like_url($forum_info['f_redirection']))) {
                 require_code('site2');
@@ -140,7 +140,7 @@ class Module_forumview
             set_feed_url('?mode=ocf_forumview&filter=' . strval($id));
 
             require_code('ocf_forums');
-            $breadcrumbs = ocf_forum_breadcrumbs($id,$forum_name,$forum_info['f_parent_forum']);
+            $breadcrumbs = ocf_forum_breadcrumbs($id, $forum_name, $forum_info['f_parent_forum']);
             breadcrumb_add_segment($breadcrumbs);
             $this->breadcrumbs = $breadcrumbs;
 
@@ -151,22 +151,22 @@ class Module_forumview
         if ($type == 'pt') {
             $this->title = get_screen_title('PRIVATE_TOPICS');
 
-            $root = get_param_integer('keep_forum_root',db_get_first_id());
-            $root_forum_name = $GLOBALS['FORUM_DB']->query_select_value('f_forums','f_name',array('id' => $root));
-            $breadcrumbs = hyperlink(build_url(array('page' => '_SELF','id' => ($root == db_get_first_id())?null:$root),'_SELF'),escape_html($root_forum_name),false,false,do_lang_tempcode('GO_BACKWARDS_TO',$root_forum_name),null,null,'up');
+            $root = get_param_integer('keep_forum_root', db_get_first_id());
+            $root_forum_name = $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'f_name', array('id' => $root));
+            $breadcrumbs = hyperlink(build_url(array('page' => '_SELF', 'id' => ($root == db_get_first_id()) ? null : $root), '_SELF'), escape_html($root_forum_name), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $root_forum_name), null, null, 'up');
             $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
-            $of_member_id = get_param_integer('id',get_member());
+            $of_member_id = get_param_integer('id', get_member());
             $pt_username = $GLOBALS['FORUM_DRIVER']->get_username($of_member_id);
-            $pt_displayname = $GLOBALS['FORUM_DRIVER']->get_username($of_member_id,true);
+            $pt_displayname = $GLOBALS['FORUM_DRIVER']->get_username($of_member_id, true);
             if (is_null($pt_username)) {
                 $pt_username = do_lang('UNKNOWN');
             }
-            $breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF',escape_html($pt_displayname),escape_html($pt_username)));
+            $breadcrumbs->attach(do_lang_tempcode('PRIVATE_TOPICS_OF', escape_html($pt_displayname), escape_html($pt_username)));
             $this->breadcrumbs = $breadcrumbs;
             $this->of_member_id = $of_member_id;
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -183,60 +183,60 @@ class Module_forumview
         }
         require_code('ocf_forumview');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
-        $current_filter_cat = get_param('category','');
+        $current_filter_cat = get_param('category', '');
 
         $default_max = intval(get_option('forum_topics_per_page'));
-        $max = get_param_integer('forum_max',$default_max);
-        if (($max>50) && (!has_privilege(get_member(),'remove_page_split'))) {
+        $max = get_param_integer('forum_max', $default_max);
+        if (($max > 50) && (!has_privilege(get_member(), 'remove_page_split'))) {
             $max = $default_max;
         }
 
-        $root = get_param_integer('keep_forum_root',db_get_first_id());
+        $root = get_param_integer('keep_forum_root', db_get_first_id());
 
         if ($type == 'pt') { // Not used anymore by default, but code still here
             $id = null;
             $forum_info = array();
-            $start = get_param_integer('forum_start',get_param_integer('kfs',0));
+            $start = get_param_integer('forum_start', get_param_integer('kfs', 0));
             $of_member_id = $this->of_member_id;
         } else {
             $id = $this->id;
             $forum_info = $this->forum_info;
-            $start = get_param_integer('forum_start',get_param_integer('kfs' . strval($id),0));
+            $start = get_param_integer('forum_start', get_param_integer('kfs' . strval($id), 0));
             $of_member_id = null;
         }
 
         // Don't allow guest bots to probe too deep into the forum index, it gets very slow; the XML Sitemap is for guiding to topics like this
-        if (($start>$max*5) && (is_guest()) && (!is_null(get_bot_type()))) {
+        if (($start > $max * 5) && (is_guest()) && (!is_null(get_bot_type()))) {
             access_denied('NOT_AS_GUEST');
         }
 
         require_code('ocf_general');
         ocf_set_context_forum($id);
 
-        $test = ocf_render_forumview($id,$forum_info,$current_filter_cat,$max,$start,$root,$of_member_id,$this->breadcrumbs);
+        $test = ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $start, $root, $of_member_id, $this->breadcrumbs);
         if (is_array($test)) {
-            list($content,$forum_name) = $test;
+            list($content, $forum_name) = $test;
         } else {
             return $test;
         }
 
         // Members viewing this forum
         if (is_null($id)) {
-            list($num_guests,$num_members,$members_viewing) = array(null,null,null);
+            list($num_guests, $num_members, $members_viewing) = array(null, null, null);
         } else {
             require_code('users2');
-            list($num_guests,$num_members,$members_viewing) = get_members_viewing_wrap('forumview','',strval($id),true);
+            list($num_guests, $num_members, $members_viewing) = get_members_viewing_wrap('forumview', '', strval($id), true);
         }
 
-        $tpl = do_template('OCF_FORUM_SCREEN',array(
+        $tpl = do_template('OCF_FORUM_SCREEN', array(
             '_GUID' => '9e9fd9110effd8a92b7a839a4fea60c5',
             'TITLE' => $this->title,
             'CONTENT' => $content,
-            'ID' => is_null($id)?'':strval($id),
-            'NUM_GUESTS' => is_null($num_guests)?'':integer_format($num_guests),
-            'NUM_MEMBERS' => is_null($num_members)?'':integer_format($num_members),
+            'ID' => is_null($id) ? '' : strval($id),
+            'NUM_GUESTS' => is_null($num_guests) ? '' : integer_format($num_guests),
+            'NUM_MEMBERS' => is_null($num_members) ? '' : integer_format($num_members),
             'MEMBERS_VIEWING' => $members_viewing,
         ));
 

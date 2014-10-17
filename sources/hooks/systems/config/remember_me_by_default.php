@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_remember_me_by_default
 {
     /**
@@ -30,7 +29,7 @@ class Hook_config_remember_me_by_default
         return array(
             'human_name' => 'REMEMBER_ME_BY_DEFAULT',
             'type' => 'tick',
-            'category' => (get_forum_type() == 'ocf')?'USERS':'FEATURE',
+            'category' => (get_forum_type() == 'ocf') ? 'USERS' : 'FEATURE',
             'group' => '_LOGIN',
             'explanation' => 'CONFIG_OPTION_remember_me_by_default',
             'shared_hosting_restricted' => '0',

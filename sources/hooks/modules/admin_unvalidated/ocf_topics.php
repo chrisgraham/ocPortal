@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_unvalidated_ocf_topics
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_ocf_topics
     public function info()
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         require_lang('ocf');

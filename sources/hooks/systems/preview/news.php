@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_Preview_news
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_news
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'cms_news') || (get_param('page','') == 'cms_blogs');
-        return array($applies,'news',false);
+        $applies = (get_param('page', '') == 'cms_news') || (get_param('page', '') == 'cms_blogs');
+        return array($applies, 'news', false);
     }
 
     /**
@@ -40,23 +39,23 @@ class Hook_Preview_news
     {
         $original_comcode = post_param('post');
 
-        $posting_ref_id = post_param_integer('posting_ref_id',mt_rand(0,100000));
-        $post_bits = do_comcode_attachments($original_comcode,'news',strval(-$posting_ref_id),true,$GLOBALS['SITE_DB']);
+        $posting_ref_id = post_param_integer('posting_ref_id', mt_rand(0, 100000));
+        $post_bits = do_comcode_attachments($original_comcode, 'news', strval(-$posting_ref_id), true, $GLOBALS['SITE_DB']);
         $post_comcode = $post_bits['comcode'];
         $post_html = $post_bits['tempcode'];
 
         $map_table_map = array();
         $map_table_map[post_param('label_for__title')] = post_param('title');
         $map_table_map[post_param('label_for__post')] = $post_html;
-        $map_table_map[post_param('label_for__news')] = comcode_to_tempcode(post_param('news',''));
+        $map_table_map[post_param('label_for__news')] = comcode_to_tempcode(post_param('news', ''));
 
         require_code('templates_map_table');
         $map_table_fields = new ocp_tempcode();
         foreach ($map_table_map as $key => $val) {
-            $map_table_fields->attach(map_table_field($key,$val,true));
+            $map_table_fields->attach(map_table_field($key, $val, true));
         }
-        $output = do_template('MAP_TABLE',array('_GUID' => '780aeedc08a960750fa4634e26db56d5','WIDTH' => '170','FIELDS' => $map_table_fields));
+        $output = do_template('MAP_TABLE', array('_GUID' => '780aeedc08a960750fa4634e26db56d5', 'WIDTH' => '170', 'FIELDS' => $map_table_fields));
 
-        return array($output,$post_comcode);
+        return array($output, $post_comcode);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_search_galleries
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_galleries
     public function info($check_permissions = true)
     {
         if (!module_installed('galleries')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'galleries')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'galleries')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)') <= 1) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('galleries', 'COUNT(*)') <= 1) {
+            return null;
         }
 
         require_lang('galleries');
@@ -86,7 +85,7 @@ class Hook_search_galleries
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         $remapped_orderer = '';
         switch ($sort) {
@@ -119,15 +118,15 @@ class Hook_search_galleries
         $where_clause .= 'name NOT LIKE \'' . db_encode_like('download\_%') . '\'';
 
         // Calculate and perform query
-        $rows = get_search_rows('gallery','name',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'galleries r',array('r.fullname' => 'SHORT_TRANS__COMCODE','r.description' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'galleries','name',true);
+        $rows = get_search_rows('gallery', 'name', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'galleries r', array('r.fullname' => 'SHORT_TRANS__COMCODE', 'r.description' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*', null, 'galleries', 'name', true);
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }
@@ -144,6 +143,6 @@ class Hook_search_galleries
     public function render($row)
     {
         require_code('galleries');
-        return render_gallery_box($row,'root',true,get_module_zone('galleries'),false,false);
+        return render_gallery_box($row, 'root', true, get_module_zone('galleries'), false, false);
     }
 }

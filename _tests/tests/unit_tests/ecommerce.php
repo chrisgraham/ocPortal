@@ -49,23 +49,22 @@ class ecommerce_test_set extends ocp_test_case
 
         require_code('adminzone/pages/modules/admin_orders.php');
         $this->admin_orders = new Module_admin_orders();
-        if (method_exists($this->admin_orders,'pre_run')) {
+        if (method_exists($this->admin_orders, 'pre_run')) {
             $this->admin_orders->pre_run();
         }
         $this->admin_orders->run();
 
-        $GLOBALS['SITE_DB']->query_insert('shopping_order',array(
-            'c_member'        =>    get_member(),
-            'session_id'        =>    get_session_id(),
-            'add_date'        =>    time(),
-            'tot_price'        =>    0.0,
-            'order_status'        =>    'NEW',
-            'notes'            =>    '',
-            'transaction_id'    =>    'ddfsfdsdfsdfs',
-            'purchase_through'    =>    'paypal',
-            'tax_opted_out'    =>    0,
+        $GLOBALS['SITE_DB']->query_insert('shopping_order', array(
+            'c_member' => get_member(),
+            'session_id' => get_session_id(),
+            'add_date' => time(),
+            'tot_price' => 0.0,
+            'order_status' => 'NEW',
+            'notes' => '',
+            'transaction_id' => 'ddfsfdsdfsdfs',
+            'purchase_through' => 'paypal',
+            'tax_opted_out' => 0,
         ));
-
         /*require_code('adminzone/pages/modules/admin_permissions_products.php');
         $this->admin_permission_products=new Module_admin_permissions_products();
         if (method_exists($this->admin_permission_products,'pre_run')) $this->admin_permission_products->pre_run();
@@ -154,7 +153,7 @@ class ecommerce_test_set extends ocp_test_case
 
     public function testOrderDetails()
     {
-        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'max(id)', array());
         $_GET['id'] = strval($this->order_id);
         return $this->admin_orders->order_details();
     }
@@ -166,7 +165,7 @@ class ecommerce_test_set extends ocp_test_case
 
     public function testAddNoteToOrderActuliser()
     {
-        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'max(id)', array());
         $_POST['order_id'] = $this->order_id;
         $_POST['note'] = 'Test note';
         $this->admin_orders->_add_note();
@@ -174,7 +173,7 @@ class ecommerce_test_set extends ocp_test_case
 
     public function testorderDispatch()
     {
-        $order_id = $GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order','max(id)',array('order_status' => 'ORDER_STATUS_payment_received'));
+        $order_id = $GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order', 'max(id)', array('order_status' => 'ORDER_STATUS_payment_received'));
         if (!is_null($order_id)) {
             $this->order_id = $order_id;
             $_GET['id'] = $this->order_id;
@@ -184,27 +183,27 @@ class ecommerce_test_set extends ocp_test_case
 
     public function testOrderDispatchNotification()
     {
-        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'max(id)', array());
         $this->admin_orders->send_dispatch_notification($this->order_id);
     }
 
     public function testDeleteOrder()
     {
-        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'max(id)', array());
         $_GET['id'] = $this->order_id;
         $this->admin_orders->delete_order();
     }
 
     public function testReturnOrder()
     {
-        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'max(id)', array());
         $_GET['id'] = $this->order_id;
         $this->admin_orders->return_order();
     }
 
     public function testholdOrder()
     {
-        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order','max(id)',array());
+        $this->order_id = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'max(id)', array());
         $_GET['id'] = $this->order_id;
         $this->admin_orders->hold_order();
     }
@@ -238,7 +237,6 @@ class ecommerce_test_set extends ocp_test_case
 
         $this->admin_orders->_order_export(true);
     }
-
     /*function testPermissionProductsUI()
     {
         $this->admin_permission_products->permissions_product_management();

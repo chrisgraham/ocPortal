@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_max_input_vars
 {
     /**
@@ -28,11 +27,11 @@ class Hook_check_max_input_vars
     public function run()
     {
         $warning = array();
-        foreach (array('max_input_vars','suhosin.post.max_vars','suhosin.request.max_vars') as $setting) {
-            if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting))>10)) {
+        foreach (array('max_input_vars', 'suhosin.post.max_vars', 'suhosin.request.max_vars') as $setting) {
+            if ((is_numeric(ini_get($setting))) && (intval(ini_get($setting)) > 10)) {
                 $this_setting_value = intval(ini_get($setting));
-                if ($this_setting_value<1000) {
-                    $warning[] = do_lang_tempcode('__SUHOSIN_MAX_VARS_TOO_LOW',escape_html($setting));
+                if ($this_setting_value < 1000) {
+                    $warning[] = do_lang_tempcode('__SUHOSIN_MAX_VARS_TOO_LOW', escape_html($setting));
                 }
             }
         }

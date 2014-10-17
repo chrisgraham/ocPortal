@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_search_ocf_within_topic
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_ocf_within_topic
     public function info($check_permissions = true)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'topicview')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'topicview')) {
+                return null;
             }
         }
 
-        if (get_param('search_under','',true) == '') {
-            return NULL;
+        if (get_param('search_under', '', true) == '') {
+            return null;
         }
 
         require_lang('ocf');
@@ -75,7 +74,7 @@ class Hook_search_ocf_within_topic
      */
     public function ajax_tree()
     {
-        return array('choose_topic',array('compound_list' => false));
+        return array('choose_topic', array('compound_list' => false));
     }
 
     /**
@@ -101,7 +100,7 @@ class Hook_search_ocf_within_topic
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         if (get_forum_type() != 'ocf') {
             return array();
@@ -124,7 +123,7 @@ class Hook_search_ocf_within_topic
         require_lang('ocf');
 
         // Calculate our where clause (search)
-        $sq = build_search_submitter_clauses('p_poster',$author_id,$author);
+        $sq = build_search_submitter_clauses('p_poster', $author_id, $author);
         if (is_null($sq)) {
             return array();
         } else {
@@ -135,7 +134,7 @@ class Hook_search_ocf_within_topic
             $where_clause .= 'p_time>' . strval($cutoff);
         }
 
-        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
             $where_clause .= ' AND ';
             $where_clause .= 'p_validated=1';
         }
@@ -143,15 +142,15 @@ class Hook_search_ocf_within_topic
         $where_clause .= 't_forum_id=p_cache_forum_id AND t_forum_id IS NOT NULL AND p_intended_solely_for IS NULL';
 
         // Calculate and perform query
-        $rows = get_search_rows(null,null,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_posts r JOIN ' . get_table_prefix() . 'f_topics s ON r.p_topic_id=s.id',array('!' => '!','r.p_post' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*,t_forum_id',array('r.p_title'),'forums','t_forum_id');
+        $rows = get_search_rows(null, null, $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'f_posts r JOIN ' . get_table_prefix() . 'f_topics s ON r.p_topic_id=s.id', array('!' => '!', 'r.p_post' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*,t_forum_id', array('r.p_title'), 'forums', 't_forum_id');
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }
@@ -168,6 +167,6 @@ class Hook_search_ocf_within_topic
     public function render($row)
     {
         require_code('ocf_posts2');
-        return render_post_box($row,false,false);
+        return render_post_box($row, false, false);
     }
 }

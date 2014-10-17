@@ -42,7 +42,8 @@ echo "
     fp_animation_fader.src='" . escape_html(find_theme_image('blank')) . "';
     function create_fader_frame(url,i)
     {
-        new Image().src=url;" . /* <<< pre-cache*/"
+        new Image().src=url;" . /* <<< pre-cache*/
+    "
         window.setTimeout(function()
         {
             var func=function()

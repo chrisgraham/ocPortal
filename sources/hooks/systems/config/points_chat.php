@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_config_points_chat
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_chat
      */
     public function get_default()
     {
-        return addon_installed('points')?'1':null;
+        return addon_installed('points') ? '1' : null;
     }
 }

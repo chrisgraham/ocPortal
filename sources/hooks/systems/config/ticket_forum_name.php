@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-
 class Hook_config_ticket_forum_name
 {
     /**
@@ -49,6 +48,6 @@ class Hook_config_ticket_forum_name
      */
     public function get_default()
     {
-        return do_lang('tickets:TICKET_FORUM_NAME','','','',get_site_default_lang());
+        return do_lang('tickets:TICKET_FORUM_NAME', '', '', '', get_site_default_lang());
     }
 }

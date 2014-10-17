@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_config_initial_banner_hits
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_initial_banner_hits
      */
     public function get_default()
     {
-        return (!addon_installed('banners'))?null:'100';
+        return (!addon_installed('banners')) ? null : '100';
     }
 }

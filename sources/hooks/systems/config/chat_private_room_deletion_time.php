@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_config_chat_private_room_deletion_time
 {
     /**

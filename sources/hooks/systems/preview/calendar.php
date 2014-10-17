@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_Preview_calendar
 {
     /**
@@ -28,7 +27,7 @@ class Hook_Preview_calendar
     public function applies()
     {
         require_code('uploads');
-        $applies = (get_param('page','') == 'cms_calendar') && ((get_param('type') == '_ed') || (get_param('type') == 'ad')) && ((is_plupload()) || (count($_FILES) != 0));
-        return array($applies,'calendar',false);
+        $applies = (get_param('page', '') == 'cms_calendar') && ((get_param('type') == '_ed') || (get_param('type') == 'ad')) && ((is_plupload()) || (count($_FILES) != 0));
+        return array($applies, 'calendar', false);
     }
 }

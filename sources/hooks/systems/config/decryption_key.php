@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_decryption_key
 {
     /**
@@ -49,8 +48,8 @@ class Hook_config_decryption_key
     {
         require_code('encryption');
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
-        return is_encryption_available()?'':null;
+        return is_encryption_available() ? '' : null;
     }
 }

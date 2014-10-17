@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_config_filedump_show_stats_count_total_files
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_filedump_show_stats_count_total_files
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

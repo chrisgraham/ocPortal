@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
-
 class Hook_config_ldap_member_class
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_ldap_member_class
      */
     public function get_default()
     {
-        return (get_option('ldap_is_windows') == '1')?'user':'posixAccount';
+        return (get_option('ldap_is_windows') == '1') ? 'user' : 'posixAccount';
     }
 }

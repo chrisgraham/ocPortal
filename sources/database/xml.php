@@ -60,15 +60,15 @@
  */
 function init__database__xml()
 {
-    global $SCHEMA_CACHE,$DIR_CONTENTS_CACHE;
+    global $SCHEMA_CACHE, $DIR_CONTENTS_CACHE;
     $SCHEMA_CACHE = array();
     $DIR_CONTENTS_CACHE = array();
 
-    global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMITER,$DELIMITERS_ALPHA;
-    $DELIMITERS = array_merge(array("\t",' ',"\n"),_get_sql_keywords());
+    global $DELIMITERS_FLIPPED, $DELIMITERS, $SYMBOL_DELIMITER, $DELIMITERS_ALPHA;
+    $DELIMITERS = array_merge(array("\t", ' ', "\n"), _get_sql_keywords());
     sort($DELIMITERS);
     $DELIMITERS_FLIPPED = array_flip($DELIMITERS);
-    $SYMBOL_DELIMITER = array_flip(array("\t",' ',"\n",'+','-','*','/','>','<','=',"'",'"',"\\'",'(',')',','));
+    $SYMBOL_DELIMITER = array_flip(array("\t", ' ', "\n", '+', '-', '*', '/', '>', '<', '=', "'", '"', "\\'", '(', ')', ','));
     foreach ($DELIMITERS as $d) {
         if (!isset($DELIMITERS_ALPHA[$d[0]])) {
             $DELIMITERS_ALPHA[$d[0]] = array();
@@ -83,9 +83,9 @@ function init__database__xml()
 
     // Support for chaining a DB- to make reads faster
     global $SITE_INFO;
-    if ((array_key_exists('db_chain_type',$SITE_INFO)) && (!running_script('xml_db_import')) && (get_param_integer('keep_no_chain',0) != 1)) {
+    if ((array_key_exists('db_chain_type', $SITE_INFO)) && (!running_script('xml_db_import')) && (get_param_integer('keep_no_chain', 0) != 1)) {
         require_code('database/' . $SITE_INFO['db_chain_type']);
-        $GLOBALS['XML_CHAIN_DB'] = new database_driver($SITE_INFO['db_chain'],$SITE_INFO['db_chain_host'],$SITE_INFO['db_chain_user'],$SITE_INFO['db_chain_password'],get_table_prefix(),false,object_factory('Database_Static_' . $SITE_INFO['db_chain_type']));
+        $GLOBALS['XML_CHAIN_DB'] = new database_driver($SITE_INFO['db_chain'], $SITE_INFO['db_chain_host'], $SITE_INFO['db_chain_user'], $SITE_INFO['db_chain_password'], get_table_prefix(), false, object_factory('Database_Static_' . $SITE_INFO['db_chain_type']));
     } else {
         $GLOBALS['XML_CHAIN_DB'] = null;
     }
@@ -103,20 +103,20 @@ function init__database__xml()
 function _get_sql_keywords()
 {
     return array(
-        'CONCAT','LENGTH','REPLACE',
+        'CONCAT', 'LENGTH', 'REPLACE',
         'WHERE',
-        'SELECT','FROM','AS','UNION','ALL','DISTINCT',
-        'INSERT','INTO','VALUES','UPDATE','SET','DELETE',
-        'ALTER','CREATE','DROP','ADD','CHANGE','RENAME','DEFAULT','TABLE','PRIMARY','KEY',
-        'LIKE','IF','NOT','IS','NULL','AND','OR','BETWEEN','IN','EXISTS',
-        'GROUP','BY','ORDER','ASC','DESC',
-        'JOIN','OUTER','INNER','LEFT','RIGHT','ON',
-        'COUNT','SUM','AVG','COALESCE','MAX','MIN',
+        'SELECT', 'FROM', 'AS', 'UNION', 'ALL', 'DISTINCT',
+        'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE',
+        'ALTER', 'CREATE', 'DROP', 'ADD', 'CHANGE', 'RENAME', 'DEFAULT', 'TABLE', 'PRIMARY', 'KEY',
+        'LIKE', 'IF', 'NOT', 'IS', 'NULL', 'AND', 'OR', 'BETWEEN', 'IN', 'EXISTS',
+        'GROUP', 'BY', 'ORDER', 'ASC', 'DESC',
+        'JOIN', 'OUTER', 'INNER', 'LEFT', 'RIGHT', 'ON',
+        'COUNT', 'SUM', 'AVG', 'COALESCE', 'MAX', 'MIN',
         'LIMIT',
-        '+','-','*','/',
-        '<>','>','<','>=','<=','=',
-        '"',"'","\\'",
-        '(',')',',',
+        '+', '-', '*', '/',
+        '<>', '>', '<', '>=', '<=', '=',
+        '"', "'", "\\'",
+        '(', ')', ',',
         // Anything else is put into a value token
         // Tokens are delimited by white space or one of the symbol tokens
     );
@@ -124,6 +124,7 @@ function _get_sql_keywords()
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_xml
@@ -211,7 +212,7 @@ class Database_Static_xml
      * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
      * @param  array                    The DB connection to make on
      */
-    public function db_create_index($table_name,$index_name,$_fields,$db)
+    public function db_create_index($table_name, $index_name, $_fields, $db)
     {
         // Indexes not supported
     }
@@ -223,11 +224,11 @@ class Database_Static_xml
      * @param  array                    A list of fields to put in the new key
      * @param  array                    The DB connection to make on
      */
-    public function db_change_primary_key($table_name,$new_key,$db)
+    public function db_change_primary_key($table_name, $new_key, $db)
     {
-        $this->db_query('UPDATE db_meta SET m_type=REPLACE(m_type,\'*\',\'\') WHERE ' . db_string_equal_to('m_table',$table_name),$db);
+        $this->db_query('UPDATE db_meta SET m_type=REPLACE(m_type,\'*\',\'\') WHERE ' . db_string_equal_to('m_table', $table_name), $db);
         foreach ($new_key as $_new_key) {
-            $this->db_query('UPDATE db_meta SET m_type=CONCAT(\'*\',m_type) WHERE ' . db_string_equal_to('m_table',$table_name) . ' AND ' . db_string_equal_to('m_name',$_new_key),$db);
+            $this->db_query('UPDATE db_meta SET m_type=CONCAT(\'*\',m_type) WHERE ' . db_string_equal_to('m_table', $table_name) . ' AND ' . db_string_equal_to('m_name', $_new_key), $db);
         }
     }
 
@@ -249,11 +250,11 @@ class Database_Static_xml
      * @param  array                    The DB connection to make on
      * @param  boolean                  Whether to only do it if it does not currently exist
      */
-    public function db_create_table($table_name,$fields,$db,$if_not_exists = false)
+    public function db_create_table($table_name, $fields, $db, $if_not_exists = false)
     {
         if (!is_null($GLOBALS['XML_CHAIN_DB'])) {
             // DB chaining: It's a write query, so needs doing on chained DB too
-            $GLOBALS['XML_CHAIN_DB']->static_ob->db_create_table($table_name,$fields,$GLOBALS['XML_CHAIN_DB']->connection_write,$if_not_exists);
+            $GLOBALS['XML_CHAIN_DB']->static_ob->db_create_table($table_name, $fields, $GLOBALS['XML_CHAIN_DB']->connection_write, $if_not_exists);
         }
 
         $path = $db[0] . '/' . $table_name;
@@ -264,7 +265,7 @@ class Database_Static_xml
 
         $found_key = false;
         foreach ($fields as $type) {
-            if (strpos($type,'*') !== false) {
+            if (strpos($type, '*') !== false) {
                 $found_key = true;
             }
         }
@@ -272,9 +273,9 @@ class Database_Static_xml
             fatal_exit('No key specified for table ' . $table_name);
         }
 
-        @mkdir($path,0777);
+        @mkdir($path, 0777);
         require_code('files');
-        fix_permissions($path,0777);
+        fix_permissions($path, 0777);
         sync_file($path);
     }
 
@@ -285,7 +286,7 @@ class Database_Static_xml
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_equal_to($attribute,$compare)
+    public function db_string_equal_to($attribute, $compare)
     {
         return $attribute . "='" . $this->db_escape_string($compare) . "'";
     }
@@ -297,7 +298,7 @@ class Database_Static_xml
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_not_equal_to($attribute,$compare)
+    public function db_string_not_equal_to($attribute, $compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
@@ -318,18 +319,18 @@ class Database_Static_xml
      * @param  ID_TEXT                  The table name
      * @param  array                    The DB connection to delete on
      */
-    public function db_drop_table_if_exists($table_name,$db)
+    public function db_drop_table_if_exists($table_name, $db)
     {
         if (!is_null($GLOBALS['XML_CHAIN_DB'])) {
             // DB chaining: It's a write query, so needs doing on chained DB too
-            $GLOBALS['XML_CHAIN_DB']->static_ob->db_drop_table_if_exists($table_name,$GLOBALS['XML_CHAIN_DB']->connection_write);
+            $GLOBALS['XML_CHAIN_DB']->static_ob->db_drop_table_if_exists($table_name, $GLOBALS['XML_CHAIN_DB']->connection_write);
         }
 
         $file_path = $db[0] . '/' . $table_name;
         $dh = @opendir($file_path);
         if ($dh !== false) {
             while (($file = readdir($dh)) !== false) {
-                if ((substr($file,-4) == '.xml') || (substr($file,-13) == '.xml-volatile')) {
+                if ((substr($file, -4) == '.xml') || (substr($file, -13) == '.xml-volatile')) {
                     unlink($file_path . '/' . $file);
                     sync_file($file_path . '/' . $file);
                 }
@@ -339,7 +340,7 @@ class Database_Static_xml
             sync_file($file_path);
         }
 
-        global $SCHEMA_CACHE,$DIR_CONTENTS_CACHE;
+        global $SCHEMA_CACHE, $DIR_CONTENTS_CACHE;
         unset($SCHEMA_CACHE[$table_name]);
         unset($DIR_CONTENTS_CACHE[$table_name]);
     }
@@ -383,15 +384,15 @@ class Database_Static_xml
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (NULL: failed)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
-        if ((strpos($db_name,'\\') === false) && (strpos($db_name,'/') === false)) {
+        if ((strpos($db_name, '\\') === false) && (strpos($db_name, '/') === false)) {
             $db_name = get_custom_file_base() . '/uploads/website_specific/' . $db_name;
         }
         if (!file_exists($db_name)) { // Will create on first usage
-            mkdir($db_name,0777);
+            mkdir($db_name, 0777);
             require_code('files');
-            fix_permissions($db_name,0777);
+            fix_permissions($db_name, 0777);
             sync_file($db_name);
         }
 
@@ -406,7 +407,7 @@ class Database_Static_xml
      */
     public function db_has_full_text($db)
     {
-        return is_null($GLOBALS['XML_CHAIN_DB'])?false:$GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text($GLOBALS['XML_CHAIN_DB']->connection_read);
+        return is_null($GLOBALS['XML_CHAIN_DB']) ? false : $GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text($GLOBALS['XML_CHAIN_DB']->connection_read);
     }
 
     /**
@@ -416,9 +417,9 @@ class Database_Static_xml
      * @param  boolean                  Whether to do a boolean full text search
      * @return string                   Part of a WHERE clause for doing full-text search
      */
-    public function db_full_text_assemble($content,$boolean)
+    public function db_full_text_assemble($content, $boolean)
     {
-        return is_null($GLOBALS['XML_CHAIN_DB'])?'':$GLOBALS['XML_CHAIN_DB']->static_ob->db_full_text_assemble($content,$boolean);
+        return is_null($GLOBALS['XML_CHAIN_DB']) ? '' : $GLOBALS['XML_CHAIN_DB']->static_ob->db_full_text_assemble($content, $boolean);
     }
 
     /**
@@ -428,7 +429,7 @@ class Database_Static_xml
      */
     public function db_has_full_text_boolean()
     {
-        return is_null($GLOBALS['XML_CHAIN_DB'])?false:$GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text_boolean($GLOBALS['XML_CHAIN_DB']->connection_read);
+        return is_null($GLOBALS['XML_CHAIN_DB']) ? false : $GLOBALS['XML_CHAIN_DB']->static_ob->db_has_full_text_boolean($GLOBALS['XML_CHAIN_DB']->connection_read);
     }
 
     /**
@@ -455,9 +456,9 @@ class Database_Static_xml
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false,$no_syndicate = false,$save_as_volatile = false)
+    public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false, $no_syndicate = false, $save_as_volatile = false)
     {
-        global $DELIMITERS_FLIPPED,$DELIMITERS,$SYMBOL_DELIMITER;
+        global $DELIMITERS_FLIPPED, $DELIMITERS, $SYMBOL_DELIMITER;
 
         // LEXING STAGE
         // ------------
@@ -468,7 +469,7 @@ class Database_Static_xml
         $tokens = array();
         $current_token = '';
         $doing_symbol_delimiter = true;
-        while ($i<$len) {
+        while ($i < $len) {
             $next = $query[$i];
 
             if (($next == "'") || ($next == '"')) {
@@ -482,7 +483,7 @@ class Database_Static_xml
                 $current_token = '';
 
                 $i++;
-                while ($i<$len) {
+                while ($i < $len) {
                     $next = $query[$i];
 
                     if ($next == '\\') {
@@ -505,7 +506,7 @@ class Database_Static_xml
                 $current_token = '';
                 $doing_symbol_delimiter = true;
             } else {
-                $symbol_delimiter_coming = ((isset($SYMBOL_DELIMITER[$next])) && ((isset($DELIMITERS_FLIPPED[$next])) || (($i+1<$len) && (isset($DELIMITERS_FLIPPED[$next . $query[$i+1]]))))); //  (NB: symbol delimiters are a maximum of two in length)
+                $symbol_delimiter_coming = ((isset($SYMBOL_DELIMITER[$next])) && ((isset($DELIMITERS_FLIPPED[$next])) || (($i + 1 < $len) && (isset($DELIMITERS_FLIPPED[$next . $query[$i + 1]]))))); //  (NB: symbol delimiters are a maximum of two in length)
                 if ( /*When token ends, which is..*/
                     ($symbol_delimiter_coming || $doing_symbol_delimiter) /*Case of toggling from symbol to text or vice-versa and we find a delimitor is coming. When symbol delimiter arrives or we are doing a symbol deliminator */
                     &&
@@ -531,21 +532,21 @@ class Database_Static_xml
             $i++;
         }
 
-        $query = substr($query,0,$len-1);
+        $query = substr($query, 0, $len - 1);
 
         // PARSING/EXECUTION STAGE
         // -----------------------
 
-        $random_key = mt_rand(0,min(2147483647,mt_getrandmax())); // Generated later, passed by reference. We will assume we only need one; multi inserts will need to each specify the key in full
+        $random_key = mt_rand(0, min(2147483647, mt_getrandmax())); // Generated later, passed by reference. We will assume we only need one; multi inserts will need to each specify the key in full
 
         if ((!is_null($GLOBALS['XML_CHAIN_DB'])) && (!$no_syndicate)) {
-            if (substr(strtoupper($query),0,7) == 'SELECT ') {
+            if (substr(strtoupper($query), 0, 7) == 'SELECT ') {
                 $chain_connection = &$GLOBALS['XML_CHAIN_DB']->connection_read;
             } else {
                 $chain_connection = &$GLOBALS['XML_CHAIN_DB']->connection_write;
             }
-            if (count($chain_connection)>4) { // Okay, we can't be lazy anymore
-                $chain_connection = call_user_func_array(array($GLOBALS['XML_CHAIN_DB']->static_ob,'db_get_connection'),$chain_connection);
+            if (count($chain_connection) > 4) { // Okay, we can't be lazy anymore
+                $chain_connection = call_user_func_array(array($GLOBALS['XML_CHAIN_DB']->static_ob, 'db_get_connection'), $chain_connection);
                 _general_db_init();
             }
 
@@ -553,31 +554,31 @@ class Database_Static_xml
                 case 'INSERT':
                     // DB chaining: It's a write query, so needs doing on chained DB too
                     //  But because it's an insert we may need to put in an auto-increment also
-                    $_inserts = $this->_do_query_insert__parse($tokens,$query,$db,$fail_ok);
+                    $_inserts = $this->_do_query_insert__parse($tokens, $query, $db, $fail_ok);
                     if (is_null($_inserts)) {
-                        return NULL;
+                        return null;
                     }
-                    list($table_name,$inserts) = $_inserts;
+                    list($table_name, $inserts) = $_inserts;
                     $insert_keys = array_keys($inserts[0]);
                     $query_new = 'INSERT INTO ' . $table_name . ' (';
-                    $schema = $this->_read_schema($db,$table_name,$fail_ok);
+                    $schema = $this->_read_schema($db, $table_name, $fail_ok);
                     global $TABLE_BASES;
                     foreach ($schema as $key => $val) {
-                        if ((preg_replace('#[^\w]#','',$val) == 'AUTO') && (!in_array($key,$insert_keys))) {
+                        if ((preg_replace('#[^\w]#', '', $val) == 'AUTO') && (!in_array($key, $insert_keys))) {
                             $insert_keys[] = $key;
                             foreach (array_keys($inserts) as $i) {
                                 if ($i != 0) {
-                                    $random_key = mt_rand(0,min(2147483647,mt_getrandmax()));
+                                    $random_key = mt_rand(0, min(2147483647, mt_getrandmax()));
                                 }
 
-                                $inserts[$i][$key] = isset($TABLE_BASES[$table_name])?$TABLE_BASES[$table_name]:$this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
-                                while ((file_exists($db[0] . '/' . $table_name . '/' . strval($inserts[$i][$key]) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema,$inserts[$i]) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . strval($inserts[$i][$key]) . '.xml-volatile')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema,$inserts[$i]) . '.xml-volatile'))) {
+                                $inserts[$i][$key] = isset($TABLE_BASES[$table_name]) ? $TABLE_BASES[$table_name] : $this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
+                                while ((file_exists($db[0] . '/' . $table_name . '/' . strval($inserts[$i][$key]) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema, $inserts[$i]) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . strval($inserts[$i][$key]) . '.xml-volatile')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema, $inserts[$i]) . '.xml-volatile'))) {
                                     if ($GLOBALS['IN_MINIKERNEL_VERSION']) { // In particular the f_groups/f_forum_groupings/calendar_types usage of tables references ID numbers for things. But let's just make all installer stuff linear
                                         $inserts[$i][$key]++;
-                                        $TABLE_BASES[$table_name] = $inserts[$i][$key]+1;
+                                        $TABLE_BASES[$table_name] = $inserts[$i][$key] + 1;
                                     } else {
                                         if ($i != 0) {
-                                            $random_key = mt_rand(0,min(2147483647,mt_getrandmax()));
+                                            $random_key = mt_rand(0, min(2147483647, mt_getrandmax()));
                                         }
                                         $inserts[$i][$key] = $random_key; // We don't use auto-increment, we use randomisation. As otherwise when people sync over revision control there'd be conflicts
                                     }
@@ -617,46 +618,46 @@ class Database_Static_xml
                         $query_new .= ')';
                     }
 
-                    $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query_new,$chain_connection,$max,$start,$fail_ok,$get_insert_id);
+                    $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query_new, $chain_connection, $max, $start, $fail_ok, $get_insert_id);
                     break;
 
                 case 'UPDATE':
                 case 'DELETE':
                     // DB chaining: It's a write query, so needs doing on chained DB too
-                    $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query,$chain_connection,$max,$start,$fail_ok,$get_insert_id);
+                    $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query, $chain_connection, $max, $start, $fail_ok, $get_insert_id);
                     break;
 
                 case 'SELECT':
-                    return $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query,$chain_connection,$max,$start,$fail_ok,$get_insert_id);
+                    return $GLOBALS['XML_CHAIN_DB']->static_ob->db_query($query, $chain_connection, $max, $start, $fail_ok, $get_insert_id);
             }
         }
 
         switch ($tokens[0]) {
             case 'ALTER':
-                return $this->_do_query_alter($tokens,$query,$db,$fail_ok);
+                return $this->_do_query_alter($tokens, $query, $db, $fail_ok);
 
             case 'CREATE':
-                return $this->_do_query_create($tokens,$query,$db,$fail_ok);
+                return $this->_do_query_create($tokens, $query, $db, $fail_ok);
 
             case 'INSERT':
-                return $this->_do_query_insert($tokens,$query,$db,$fail_ok,$get_insert_id,$random_key,$save_as_volatile);
+                return $this->_do_query_insert($tokens, $query, $db, $fail_ok, $get_insert_id, $random_key, $save_as_volatile);
 
             case 'UPDATE':
-                return $this->_do_query_update($tokens,$query,$db,$max,$start,$fail_ok);
+                return $this->_do_query_update($tokens, $query, $db, $max, $start, $fail_ok);
 
             case 'DELETE':
-                return $this->_do_query_delete($tokens,$query,$db,$max,$start,$fail_ok);
+                return $this->_do_query_delete($tokens, $query, $db, $max, $start, $fail_ok);
 
             case 'SELECT':
                 $at = 0;
-                $results = $this->_do_query_select($tokens,$query,$db,$max,$start,$fail_ok,$at);
+                $results = $this->_do_query_select($tokens, $query, $db, $max, $start, $fail_ok, $at);
                 return $results;
 
             case 'DROP':
-                return $this->_do_query_drop($tokens,$query,$db,$fail_ok);
+                return $this->_do_query_drop($tokens, $query, $db, $fail_ok);
         }
 
-        return $this->_bad_query($query,$fail_ok,'Unrecognised query type, ' . $tokens[0]);
+        return $this->_bad_query($query, $fail_ok, 'Unrecognised query type, ' . $tokens[0]);
     }
 
     /**
@@ -667,7 +668,7 @@ class Database_Static_xml
      */
     public function is_start_of_delimiter($looking)
     {
-        global $DELIMITERS_FLIPPED,$DELIMITERS,$DELIMITERS_ALPHA;
+        global $DELIMITERS_FLIPPED, $DELIMITERS, $DELIMITERS_ALPHA;
 
         $len = strlen($looking);
         $looking = strtoupper($looking);
@@ -676,7 +677,7 @@ class Database_Static_xml
         }
         if (isset($DELIMITERS_ALPHA[$looking[0]])) {
             foreach ($DELIMITERS_ALPHA[$looking[0]] as $d) {
-                if (substr($d,0,$len) == $looking) {
+                if (substr($d, 0, $len) == $looking) {
                     return true;
                 }
             }
@@ -692,16 +693,16 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   The schema map (NULL: not found)
      */
-    public function _read_schema($db,$table_name,$fail_ok = false)
+    public function _read_schema($db, $table_name, $fail_ok = false)
     {
         global $SCHEMA_CACHE;
-        if (array_key_exists($table_name,$SCHEMA_CACHE)) {
+        if (array_key_exists($table_name, $SCHEMA_CACHE)) {
             return $SCHEMA_CACHE[$table_name];
         }
 
         $table_prefix = get_table_prefix();
 
-        $schema_query = 'SELECT m_name,m_type FROM ' . $table_prefix . 'db_meta WHERE ' . db_string_equal_to('m_table',substr($table_name,strlen($table_prefix)));
+        $schema_query = 'SELECT m_name,m_type FROM ' . $table_prefix . 'db_meta WHERE ' . db_string_equal_to('m_table', substr($table_name, strlen($table_prefix)));
 
         if ($table_name == $table_prefix . 'db_meta') {
             $fields = array(
@@ -737,7 +738,7 @@ class Database_Static_xml
             if (get_db_type() != 'xml') {
                 $fields = $GLOBALS['SITE_DB']->query($schema_query);
             } else {
-                $fields = $this->db_query($schema_query,$db,null,null,$fail_ok);
+                $fields = $this->db_query($schema_query, $db, null, null, $fail_ok);
             }
             if (is_null($fields)) {
                 return array();
@@ -753,7 +754,7 @@ class Database_Static_xml
             if (!$fail_ok) {
                 fatal_exit('Internal error: missing schema for ' . $table_name);
             } else {
-                return NULL;
+                return null;
             }
         }
 
@@ -769,27 +770,27 @@ class Database_Static_xml
      * @param  array                    The data
      * @param  string                   Query that was executed
      */
-    public function _type_check($schema,$record,$query)
+    public function _type_check($schema, $record, $query)
     {
         foreach ($record as $key => $val) {
-            $schema_type = preg_replace('#[^\w]#','',$schema[$key]);
+            $schema_type = preg_replace('#[^\w]#', '', $schema[$key]);
 
             if (is_integer($val)) {
-                if (!in_array($schema_type,array('REAL','AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS'))) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but integer was given');
+                if (!in_array($schema_type, array('REAL', 'AUTO', 'AUTO_LINK', 'INTEGER', 'UINTEGER', 'SHORT_INTEGER', 'BINARY', 'MEMBER', 'GROUP', 'TIME', 'SHORT_TRANS', 'LONG_TRANS'))) {
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but integer was given');
                 }
 
-                if (($val<0) && ($schema_type == 'UINTEGER')) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field (negative number given)');
+                if (($val < 0) && ($schema_type == 'UINTEGER')) {
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field (negative number given)');
                 }
 
                 if (($val != 0) && ($val != 1) && ($schema_type == 'BINARY')) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field (number given was not 0 or 1)');
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field (number given was not 0 or 1)');
                 }
             } elseif (is_string($val)) {
                 $string_types = array(
                     'SHORT_TEXT' => 255,
-                    'LONG_TEXT' => NULL,
+                    'LONG_TEXT' => null,
                     'ID_TEXT' => 80,
                     'MINIID_TEXT' => 40,
                     'IP' => 40,
@@ -799,24 +800,24 @@ class Database_Static_xml
                     'UINTEGER' => 10, // Fudge as we need to send in unsigned integers using strings, as PHP can't hold them
                 );
 
-                if (!in_array($schema_type,array_keys($string_types))) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but string (' . $val . ') was given');
+                if (!in_array($schema_type, array_keys($string_types))) {
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but string (' . $val . ') was given');
                 }
 
                 $max_length = $string_types[$schema_type];
-                if ((!is_null($max_length)) && (strlen($val)>$max_length)) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field (text too long, maximum is ' . integer_format($max_length) . ')');
+                if ((!is_null($max_length)) && (strlen($val) > $max_length)) {
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field (text too long, maximum is ' . integer_format($max_length) . ')');
                 }
             } elseif (is_float($val)) {
-                if (!in_array($schema_type,array('REAL'))) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but float was given');
+                if (!in_array($schema_type, array('REAL'))) {
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but float was given');
                 }
             } elseif (is_null($val)) {
-                if (strpos($schema[$key],'?') === false) {
-                    $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but NULL was given');
+                if (strpos($schema[$key], '?') === false) {
+                    $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but NULL was given');
                 }
             } else {
-                $this->_bad_query($query,false,'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but ' . gettype($val) . ' was given');
+                $this->_bad_query($query, false, 'Database type strictness error: ' . $schema_type . ' wanted for ' . $key . ' field, but ' . gettype($val) . ' was given');
             }
         }
     }
@@ -834,7 +835,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
      * @return ?array                   The collected records (NULL: error)
      */
-    public function _read_all_records($db,$table_name,$table_as,$schema,$where_expr,$fail_ok,$query,$include_unused_fields = false)
+    public function _read_all_records($db, $table_name, $table_as, $schema, $where_expr, $fail_ok, $query, $include_unused_fields = false)
     {
         $records = array();
         $key_fragments = ''; // We can do a filename substring search to stop us having to parse ALL
@@ -842,15 +843,15 @@ class Database_Static_xml
         if ((!is_null($schema)) && (!is_null($where_expr))) { // Try for an efficient filename-based lookup
             $keys = array();
             foreach ($schema as $key => $type) {
-                if (strpos($type,'*') !== false) {
+                if (strpos($type, '*') !== false) {
                     $keys[] = $key;
                 }
             }
 
             foreach ($keys as $i => $key) {
-                if (strpos($key,'.') !== false) {
-                    if (substr($key,0,strpos($key,'.')) == $table_as) {
-                        $key = substr($key,strpos($key,'.')+1);
+                if (strpos($key, '.') !== false) {
+                    if (substr($key, 0, strpos($key, '.')) == $table_as) {
+                        $key = substr($key, strpos($key, '.') + 1);
                     } else {
                         continue;
                     }
@@ -860,8 +861,8 @@ class Database_Static_xml
             $keys = array_unique($keys);
 
             $key_lookup = true;
-            $where_expr_compressed = $this->_turn_where_expr_to_map($where_expr,$table_as,$schema);
-            $where_expr_compressed_b = $this->_turn_where_expr_to_map($where_expr,$table_as,$schema,true);
+            $where_expr_compressed = $this->_turn_where_expr_to_map($where_expr, $table_as, $schema);
+            $where_expr_compressed_b = $this->_turn_where_expr_to_map($where_expr, $table_as, $schema, true);
             $must_contain = array();
 
             foreach ($where_expr_compressed_b as $key => $val) {
@@ -895,10 +896,10 @@ class Database_Static_xml
                     $key_fragments .= ',';
                 }
                 if ($key != 'id') {
-                    $key_fragments .= preg_quote($key . '=','#');
+                    $key_fragments .= preg_quote($key . '=', '#');
                 }
 
-                if (!in_array($key,array_keys($where_expr_compressed))) {
+                if (!in_array($key, array_keys($where_expr_compressed))) {
                     $key_lookup = false;
                     $key_fragments .= '.*';
                 } else {
@@ -922,7 +923,7 @@ class Database_Static_xml
                                 } elseif (is_float($possible)) {
                                     $new_val = float_to_raw_string($possible);
                                 }
-                                $key_fragments .= preg_quote($this->_escape_name($new_val),'#');
+                                $key_fragments .= preg_quote($this->_escape_name($new_val), '#');
                             }
                             $key_fragments .= ')';
                             continue;
@@ -936,22 +937,22 @@ class Database_Static_xml
                         $new_val = float_to_raw_string($val);
                     }
 
-                    $key_fragments .= preg_quote($this->_escape_name($new_val),'#');
+                    $key_fragments .= preg_quote($this->_escape_name($new_val), '#');
                 }
             }
-            $key_buildup = $this->_guid($schema,$where_expr_compressed);
+            $key_buildup = $this->_guid($schema, $where_expr_compressed);
 
             if (($key_lookup) && ($key_buildup != '')) {
                 $file_exists_xml = file_exists($db[0] . '/' . $table_name . '/' . $key_buildup . '.xml');
                 $file_exists_xml_volatile = file_exists($db[0] . '/' . $table_name . '/' . $key_buildup . '.xml-volatile');
                 if (($file_exists_xml) || ($file_exists_xml_volatile)) {
-                    $the_key = preg_replace('#\.[\w\-]+$#','',$key_buildup);
-                    $suffix = $file_exists_xml?'.xml':'.xml-volatile';
-                    $records[$the_key] = $this->_read_record($db[0] . '/' . $table_name . '/' . $key_buildup . $suffix,$schema,null,$include_unused_fields);
+                    $the_key = preg_replace('#\.[\w\-]+$#', '', $key_buildup);
+                    $suffix = $file_exists_xml ? '.xml' : '.xml-volatile';
+                    $records[$the_key] = $this->_read_record($db[0] . '/' . $table_name . '/' . $key_buildup . $suffix, $schema, null, $include_unused_fields);
                     if ($table_name == get_table_prefix() . 'translate') {
                         $sup_file = $db[0] . '/' . $table_name . '/sup/' . $key_buildup . '.xml-volatile';
                         if (file_exists($sup_file)) {
-                            $sup_record = $this->_read_record($sup_file,$schema,null,$include_unused_fields);
+                            $sup_record = $this->_read_record($sup_file, $schema, null, $include_unused_fields);
                             $records[$the_key]['text_parsed'] = $sup_record['text_parsed'];
                         }
                     }
@@ -965,13 +966,13 @@ class Database_Static_xml
         global $DIR_CONTENTS_CACHE;
         if (!isset($DIR_CONTENTS_CACHE[$table_name])) {
             if (!file_exists($db[0] . '/' . $table_name)) {
-                mkdir($db[0] . '/' . $table_name,0777);
+                mkdir($db[0] . '/' . $table_name, 0777);
                 require_code('files');
-                fix_permissions($db[0] . '/' . $table_name,0777);
+                fix_permissions($db[0] . '/' . $table_name, 0777);
                 sync_file($db[0] . '/' . $table_name);
             }
             @chdir($db[0] . '/' . $table_name);
-            $dh = @glob('{,.}*.{xml,xml-volatile}',GLOB_NOSORT|GLOB_BRACE);
+            $dh = @glob('{,.}*.{xml,xml-volatile}', GLOB_NOSORT | GLOB_BRACE);
             if ($dh === false) {
                 $dh = array();
             }
@@ -986,32 +987,32 @@ class Database_Static_xml
             $dh = $DIR_CONTENTS_CACHE[$table_name];
         }
         if (($dh === false) && ($fail_ok)) {
-            return NULL;
+            return null;
         }
         if ($dh === false) {
-            critical_error('PASSON','Failure to read table ' . $table_name);
+            critical_error('PASSON', 'Failure to read table ' . $table_name);
         }
         $regexp = '#^' . $key_fragments . '(' . preg_quote('.xml') . '|' . preg_quote('.xml-volatile') . ')$#';
 
         foreach ($dh as $file) {
             if ($key_fragments != '') {
-                if (preg_match($regexp,$file) == 0) {
+                if (preg_match($regexp, $file) == 0) {
                     continue;
                 }
             }
             $full_path = $db[0] . '/' . $table_name . '/' . $file;
-            if ((strlen($full_path) >= 255) && (strpos(strtolower(PHP_OS),'win') !== false)) {
+            if ((strlen($full_path) >= 255) && (strpos(strtolower(PHP_OS), 'win') !== false)) {
                 continue;
             } // :(
-            $read = $this->_read_record($full_path,$schema,$must_contain,$include_unused_fields);
+            $read = $this->_read_record($full_path, $schema, $must_contain, $include_unused_fields);
             if (!is_null($read)) {
-                $the_key = preg_replace('#\.[\w\-]+$#','',$file);
+                $the_key = preg_replace('#\.[\w\-]+$#', '', $file);
                 $records[$the_key] = $read;
 
                 if ($table_name == get_table_prefix() . 'translate') {
-                    $sup_file = $db[0] . '/' . $table_name . '/sup/' . preg_replace('#\.\w+$#','',$file) . '.xml-volatile';
+                    $sup_file = $db[0] . '/' . $table_name . '/sup/' . preg_replace('#\.\w+$#', '', $file) . '.xml-volatile';
                     if (file_exists($sup_file)) {
-                        $records[$the_key] += $this->_read_record($sup_file,$schema,null,$include_unused_fields);
+                        $records[$the_key] += $this->_read_record($sup_file, $schema, null, $include_unused_fields);
                     }
                 }
             }
@@ -1029,47 +1030,47 @@ class Database_Static_xml
      * @param  boolean                  Whether to do a not-full-accurate search
      * @return array                    AND map
      */
-    public function _turn_where_expr_to_map($where_expr,$table_as,$schema = null,$not_full_accuracy = false)
+    public function _turn_where_expr_to_map($where_expr, $table_as, $schema = null, $not_full_accuracy = false)
     {
         if ($where_expr[0] == 'BRACKETED') {
-            return $this->_turn_where_expr_to_map($where_expr[1],$table_as,$schema,$not_full_accuracy);
+            return $this->_turn_where_expr_to_map($where_expr[1], $table_as, $schema, $not_full_accuracy);
         }
         if ($where_expr[0] == 'AND') {
-            return array_merge($this->_turn_where_expr_to_map($where_expr[1],$table_as,$schema,$not_full_accuracy),$this->_turn_where_expr_to_map($where_expr[2],$table_as,$schema,$not_full_accuracy));
+            return array_merge($this->_turn_where_expr_to_map($where_expr[1], $table_as, $schema, $not_full_accuracy), $this->_turn_where_expr_to_map($where_expr[2], $table_as, $schema, $not_full_accuracy));
         }
         if ($where_expr[0] == 'OR') {
-            $alpha = $this->_turn_where_expr_to_map($where_expr[1],$table_as,$schema,$not_full_accuracy);
-            $beta = $this->_turn_where_expr_to_map($where_expr[2],$table_as,$schema,$not_full_accuracy);
+            $alpha = $this->_turn_where_expr_to_map($where_expr[1], $table_as, $schema, $not_full_accuracy);
+            $beta = $this->_turn_where_expr_to_map($where_expr[2], $table_as, $schema, $not_full_accuracy);
             $_alpha = array_keys($alpha);
             $_beta = array_keys($beta);
             if ((count($alpha) == 1) && (count($beta) == 1) && ($_alpha == $_beta)) {
-                $alpha[$_alpha[0]] = array_merge(is_array($alpha[$_alpha[0]])?$alpha[$_alpha[0]]:array($alpha[$_alpha[0]]),is_array($beta[$_beta[0]])?$beta[$_beta[0]]:array($beta[$_beta[0]]));
+                $alpha[$_alpha[0]] = array_merge(is_array($alpha[$_alpha[0]]) ? $alpha[$_alpha[0]] : array($alpha[$_alpha[0]]), is_array($beta[$_beta[0]]) ? $beta[$_beta[0]] : array($beta[$_beta[0]]));
                 return $alpha;
             }
         }
         if (($where_expr[0] == '=') && ($where_expr[1][0] == 'LITERAL') && ($where_expr[2][0] == 'FIELD')) {
-            $where_expr = array($where_expr[0],$where_expr[2],$where_expr[1]);
+            $where_expr = array($where_expr[0], $where_expr[2], $where_expr[1]);
         }
         if (($where_expr[0] == 'LIKE') && ($where_expr[1][0] == 'FIELD') && ($where_expr[2][0] == 'LITERAL') && ($not_full_accuracy)) {
             $key = $where_expr[1][1];
             if ($table_as != '') {
-                $key = preg_replace('#^' . preg_quote($table_as,'#') . '\.#','',$key);
-                if (strpos($key,'.') !== false) {
+                $key = preg_replace('#^' . preg_quote($table_as, '#') . '\.#', '', $key);
+                if (strpos($key, '.') !== false) {
                     return array();
                 } // Not for our table
             }
 
-            if ((!is_null($schema)) && (!array_key_exists($key,$schema))) {
+            if ((!is_null($schema)) && (!array_key_exists($key, $schema))) {
                 return array();
             } // Not in our table (join involved. must be in other join)
 
-            if (substr($where_expr[2][1],0,1) == '%') {
-                $where_expr[2][1] = substr($where_expr[2][1],1);
+            if (substr($where_expr[2][1], 0, 1) == '%') {
+                $where_expr[2][1] = substr($where_expr[2][1], 1);
             }
-            if (substr($where_expr[2][1],-1) == '%') {
-                $where_expr[2][1] = substr($where_expr[2][1],0,strlen($where_expr[2][1])-1);
+            if (substr($where_expr[2][1], -1) == '%') {
+                $where_expr[2][1] = substr($where_expr[2][1], 0, strlen($where_expr[2][1]) - 1);
             }
-            if ((strpos($where_expr[2][1],'%') !== false) || (strpos($where_expr[2][1],'?') !== false)) {
+            if ((strpos($where_expr[2][1], '%') !== false) || (strpos($where_expr[2][1], '?') !== false)) {
                 return array();
             }
 
@@ -1078,12 +1079,12 @@ class Database_Static_xml
         if (($where_expr[0] == '=') && ($where_expr[1][0] == 'FIELD') && ($where_expr[2][0] == 'LITERAL')) {
             $key = $where_expr[1][1];
             if ($table_as != '') {
-                $key = preg_replace('#^' . preg_quote($table_as,'#') . '\.#','',$key);
-                if (strpos($key,'.') !== false) {
+                $key = preg_replace('#^' . preg_quote($table_as, '#') . '\.#', '', $key);
+                if (strpos($key, '.') !== false) {
                     return array();
                 } // Not for our table
             }
-            if ((!is_null($schema)) && (!array_key_exists($key,$schema))) {
+            if ((!is_null($schema)) && (!array_key_exists($key, $schema))) {
                 return array();
             } // Not in our table (join involved. must be in other join)
             return array($key => $where_expr[2][1]);
@@ -1100,7 +1101,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
      * @return ?array                   The record map (NULL: does not contain requested substrings)
      */
-    public function _read_record($path,$schema = null,$must_contain_strings = null,$include_unused_fields = false)
+    public function _read_record($path, $schema = null, $must_contain_strings = null, $include_unused_fields = false)
     {
         if (file_exists($path . '.mine')) {
             $path .= '.mine';
@@ -1120,21 +1121,21 @@ class Database_Static_xml
                             continue;
                         }
 
-                        if (strpos($file_contents,xmlentities($match2)) !== false) {
+                        if (strpos($file_contents, xmlentities($match2)) !== false) {
                             $found++;
                             break;
                         }
                     }
                     if ($found == 0) {
-                        return NULL;
+                        return null;
                     }
                 } else {
                     if ($match == '') {
                         continue;
                     }
 
-                    if (strpos($file_contents,xmlentities($match)) === false) {
-                        return NULL;
+                    if (strpos($file_contents, xmlentities($match)) === false) {
+                        return null;
                     }
                 }
             }
@@ -1144,9 +1145,9 @@ class Database_Static_xml
         if (!is_null($ob->error)) fatal_exit($ob->error);
         $_record=$ob->output;*/
         // This is much faster, even though it's a bit of a hack as it assumes all records are as ocPortal would write them
-        $bits = preg_split('#</?([^>]*)>#',$file_contents,-1,PREG_SPLIT_DELIM_CAPTURE);
+        $bits = preg_split('#</?([^>]*)>#', $file_contents, -1, PREG_SPLIT_DELIM_CAPTURE);
         $_record = array();
-        $bc = count($bits)-2;
+        $bc = count($bits) - 2;
         $i = 0;
         if (trim($bits[$i]) == '') {
             $i++;
@@ -1158,7 +1159,7 @@ class Database_Static_xml
         if (trim($bits[$i]) == '') {
             $i++;
         } // Whitespace between tags
-        while ($i<$bc) {
+        while ($i < $bc) {
             $field = $bits[$i];
             $i++;
             $data = $bits[$i];
@@ -1167,7 +1168,7 @@ class Database_Static_xml
             if (trim($bits[$i]) == '') {
                 $i++;
             } // Whitespace between tags
-            $_record[$field] = html_entity_decode($data,ENT_QUOTES,get_charset());
+            $_record[$field] = html_entity_decode($data, ENT_QUOTES, get_charset());
         }
 
         // Even if we did serialize with type information (we don't) we would still need to do type checking, because when we do add_table_field/alter_table_field we can't assume it will alter all non-committed records on other people's systems
@@ -1177,20 +1178,20 @@ class Database_Static_xml
             $record = array();
             foreach ($_record as $key => $val) {
                 $new_val = mixed();
-                if ((!array_key_exists($key,$schema)) && (!$include_unused_fields)) {
+                if ((!array_key_exists($key, $schema)) && (!$include_unused_fields)) {
                     continue;
                 } // Been deleted
                 $type = $schema[$key];
-                $schema_type = preg_replace('#[^\w]#','',$type);
+                $schema_type = preg_replace('#[^\w]#', '', $type);
 
-                if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS'))) {
-                    if (((is_null($val)) || ($val === '')) && (substr($type,0,1) == '?')) {
+                if (in_array($schema_type, array('AUTO', 'AUTO_LINK', 'INTEGER', 'UINTEGER', 'SHORT_INTEGER', 'BINARY', 'MEMBER', 'GROUP', 'TIME', 'SHORT_TRANS', 'LONG_TRANS'))) {
+                    if (((is_null($val)) || ($val === '')) && (substr($type, 0, 1) == '?')) {
                         $new_val = null;
                     } else {
                         $new_val = @intval($val);
                     }
-                } elseif (in_array($schema_type,array('REAL'))) {
-                    if (((is_null($val)) || ($val === '')) && (substr($type,0,1) == '?')) {
+                } elseif (in_array($schema_type, array('REAL'))) {
+                    if (((is_null($val)) || ($val === '')) && (substr($type, 0, 1) == '?')) {
                         $new_val = null;
                     } else {
                         $new_val = @floatval($val);
@@ -1205,16 +1206,16 @@ class Database_Static_xml
             }
 
             foreach ($schema as $key => $type) {
-                $schema_type = preg_replace('#[^\w]#','',$type);
+                $schema_type = preg_replace('#[^\w]#', '', $type);
 
-                if (in_array($schema_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS'))) {
-                    if (substr($type,0,1) == '?') {
+                if (in_array($schema_type, array('AUTO', 'AUTO_LINK', 'INTEGER', 'UINTEGER', 'SHORT_INTEGER', 'BINARY', 'MEMBER', 'GROUP', 'TIME', 'SHORT_TRANS', 'LONG_TRANS'))) {
+                    if (substr($type, 0, 1) == '?') {
                         $record[$key] = null;
                     } else {
                         $record[$key] = 0;
                     }
-                } elseif (in_array($schema_type,array('REAL'))) {
-                    if (substr($type,0,1) == '?') {
+                } elseif (in_array($schema_type, array('REAL'))) {
+                    if (substr($type, 0, 1) == '?') {
                         $record[$key] = 0.0;
                     } else {
                         $record[$key] = 0.0;
@@ -1236,13 +1237,13 @@ class Database_Static_xml
      * @param  array                    The list of record maps
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      */
-    public function _write_records($db,$table_name,$records,$fail_ok = false)
+    public function _write_records($db, $table_name, $records, $fail_ok = false)
     {
         foreach ($records as $guid => $record) {
             if (!is_string($guid)) {
                 $guid = strval($guid);
             } // As PHP can use type for array keys
-            $this->_write_record($db,$table_name,$guid,$record,$fail_ok);
+            $this->_write_record($db, $table_name, $guid, $record, $fail_ok);
         }
     }
 
@@ -1256,14 +1257,14 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      */
-    public function _write_record($db,$table_name,$guid,$record,$fail_ok = false,$save_as_volatile = false)
+    public function _write_record($db, $table_name, $guid, $record, $fail_ok = false, $save_as_volatile = false)
     {
-        $suffix = $save_as_volatile?'.xml-volatile':'.xml';
+        $suffix = $save_as_volatile ? '.xml-volatile' : '.xml';
 
         if (!file_exists($db[0] . '/' . $table_name)) {
-            mkdir($db[0] . '/' . $table_name,0777);
+            mkdir($db[0] . '/' . $table_name, 0777);
             require_code('files');
-            fix_permissions($db[0] . '/' . $table_name,0777);
+            fix_permissions($db[0] . '/' . $table_name, 0777);
             sync_file($db[0] . '/' . $table_name);
         }
 
@@ -1279,19 +1280,19 @@ class Database_Static_xml
             unset($record_copy['broken']);
             unset($record_copy['importance_level']);
             $record['text_parsed'] = '';
-            $this->_write_record($db,$table_name . '/sup',$guid,$record_copy,$fail_ok,true);
+            $this->_write_record($db, $table_name . '/sup', $guid, $record_copy, $fail_ok, true);
         }
 
-        if ((strlen($path)>255) && (strpos(strtolower(PHP_OS),'win') !== false)) {
-            attach_message('File path too long on Windows (' . $path . ')','warn');
+        if ((strlen($path) > 255) && (strpos(strtolower(PHP_OS), 'win') !== false)) {
+            attach_message('File path too long on Windows (' . $path . ')', 'warn');
             return;
         }
-        $myfile = fopen($path,GOOGLE_APPENGINE?'wb':'ab');
-        @flock($myfile,LOCK_EX);
+        $myfile = fopen($path, GOOGLE_APPENGINE ? 'wb' : 'ab');
+        @flock($myfile, LOCK_EX);
         if (!GOOGLE_APPENGINE) {
-            ftruncate($myfile,0);
+            ftruncate($myfile, 0);
         }
-        fwrite($myfile,"<ocportal>\n");
+        fwrite($myfile, "<ocportal>\n");
         $val = mixed();
         foreach ($record as $key => $val) {
             if (is_integer($val)) {
@@ -1303,13 +1304,13 @@ class Database_Static_xml
             if (is_null($val)) {
                 $val = '';
             }
-            fwrite($myfile,"\t<" . $key . ">" . xmlentities($val) . "</" . $key . ">\n");
+            fwrite($myfile, "\t<" . $key . ">" . xmlentities($val) . "</" . $key . ">\n");
         }
-        fwrite($myfile,"</ocportal>\n");
-        @flock($myfile,LOCK_UN);
+        fwrite($myfile, "</ocportal>\n");
+        @flock($myfile, LOCK_UN);
         fclose($myfile);
         require_code('files');
-        fix_permissions($path,0666);
+        fix_permissions($path, 0666);
         sync_file($path);
 
         /*if (file_exists($db[0].'/'.$table_name.'/.svn/prop-base/'))      If we want them in subversion as binary, but we probably don't as merging can often work
@@ -1324,12 +1325,12 @@ class Database_Static_xml
 
         unset($GLOBALS['DIR_CONTENTS_CACHE'][$table_name]);
 
-        $schema = $this->_read_schema($db,preg_replace('#/sup$#','',$table_name),$fail_ok);
+        $schema = $this->_read_schema($db, preg_replace('#/sup$#', '', $table_name), $fail_ok);
         if (!is_null($schema)) {
-            $new_guid = $this->_guid($schema,$record);
+            $new_guid = $this->_guid($schema, $record);
             $new_path = $db[0] . '/' . $table_name . '/' . $new_guid . $suffix;
             if ($path != $new_path) {
-                rename($path,$new_path);
+                rename($path, $new_path);
                 /*if (substr($path,-5)=='.mine')
                             unlink();  Yuck, messy, we will ignore this potential problem - people should not edit stuff that is conflicted */
             }
@@ -1342,7 +1343,7 @@ class Database_Static_xml
      * @param  PATH                     The file path
      * @param  array                    Database connection
      */
-    public function _delete_record($path,$db)
+    public function _delete_record($path, $db)
     {
         /* This generally is a bad idea. Things can get deleted then re-made, and we don't even need it. This command works better:
         svn status | grep '\!.*\.xml' | awk '{print $2;}' | xargs svn rm
@@ -1362,18 +1363,18 @@ class Database_Static_xml
         }*/
 
         if (file_exists($path)) {
-            $myfile = fopen($path,GOOGLE_APPENGINE?'wb':'ab');
-            @flock($myfile,LOCK_EX);
-            @flock($myfile,LOCK_UN);
+            $myfile = fopen($path, GOOGLE_APPENGINE ? 'wb' : 'ab');
+            @flock($myfile, LOCK_EX);
+            @flock($myfile, LOCK_UN);
             fclose($myfile);
             @unlink($path);
             sync_file($path);
         }
 
         if (file_exists($path . '.mine')) {
-            $myfile = fopen($path . '.mine',GOOGLE_APPENGINE?'wb':'ab');
-            @flock($myfile,LOCK_EX);
-            @flock($myfile,LOCK_UN);
+            $myfile = fopen($path . '.mine', GOOGLE_APPENGINE ? 'wb' : 'ab');
+            @flock($myfile, LOCK_EX);
+            @flock($myfile, LOCK_UN);
             fclose($myfile);
             unlink($path . '.mine');
             sync_file($path . '.mine');
@@ -1392,11 +1393,11 @@ class Database_Static_xml
      * @param  ?string                  The GUID representing what we have now (so we don't think we're conflicting with ourself) (NULL: not yet added)
      * @return boolean                  Whether there was a conflict
      */
-    public function _key_conflict_check($db,$table_name,$schema,$record,$query,$fail_ok,$existing_identity = null)
+    public function _key_conflict_check($db, $table_name, $schema, $record, $query, $fail_ok, $existing_identity = null)
     {
         $where = '';
         foreach ($schema as $key => $type) {
-            if (strpos($type,'*') === false) {
+            if (strpos($type, '*') === false) {
                 continue;
             }
 
@@ -1418,17 +1419,17 @@ class Database_Static_xml
             }
         }
 
-        $test_results = $this->db_query('SELECT * FROM ' . $table_name . ' WHERE ' . $where,$db,2,null,$fail_ok,false,true);
+        $test_results = $this->db_query('SELECT * FROM ' . $table_name . ' WHERE ' . $where, $db, 2, null, $fail_ok, false, true);
         if (count($test_results) == 0) {
             return false;
         }
-        if (count($test_results)>1) {
+        if (count($test_results) > 1) {
             return true;
         }
         if ((count($test_results) == 1) && (is_null($existing_identity))) {
             return true;
         }
-        $is_different = ($this->_guid($schema,$test_results[0]) != $existing_identity);
+        $is_different = ($this->_guid($schema, $test_results[0]) != $existing_identity);
         return $is_different;
     }
 
@@ -1441,39 +1442,38 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_drop($tokens,$query,$db,$fail_ok)
+    public function _do_query_drop($tokens, $query, $db, $fail_ok)
     {
         $at = 0;
-        if (!$this->_parsing_expects($at,$tokens,'DROP',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'DROP', $query)) {
+            return null;
         }
-        $type = $this->_parsing_read($at,$tokens,$query);
+        $type = $this->_parsing_read($at, $tokens, $query);
         if ($type == 'INDEX') {
-            $index_name = $this->_parsing_read($at,$tokens,$query);
-            if (!$this->_parsing_expects($at,$tokens,'ON',$query)) {
-                return NULL;
+            $index_name = $this->_parsing_read($at, $tokens, $query);
+            if (!$this->_parsing_expects($at, $tokens, 'ON', $query)) {
+                return null;
             }
-            $table_name = $this->_parsing_read($at,$tokens,$query);
-
+            $table_name = $this->_parsing_read($at, $tokens, $query);
             // We don't actually do indexes, so do nothing
         } elseif ($type == 'TABLE') {
             if ($tokens[$at] == 'IF') {
-                $this->_parsing_read($at,$tokens,$query);
-                if (!$this->_parsing_expects($at,$tokens,'EXISTS',$query)) {
-                    return NULL;
+                $this->_parsing_read($at, $tokens, $query);
+                if (!$this->_parsing_expects($at, $tokens, 'EXISTS', $query)) {
+                    return null;
                 }
             }
-            $table_name = $this->_parsing_read($at,$tokens,$query);
-            $this->db_drop_table_if_exists($table_name,$db);
+            $table_name = $this->_parsing_read($at, $tokens, $query);
+            $this->db_drop_table_if_exists($table_name, $db);
         } else {
-            return $this->_bad_query($query,$fail_ok,'Unrecognised DROP type, ' . $type);
+            return $this->_bad_query($query, $fail_ok, 'Unrecognised DROP type, ' . $type);
         }
 
-        if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-            return NULL;
+        if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+            return null;
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -1485,39 +1485,39 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_alter($tokens,$query,$db,$fail_ok)
+    public function _do_query_alter($tokens, $query, $db, $fail_ok)
     {
         global $SCHEMA_CACHE;
 
         $at = 0;
-        if (!$this->_parsing_expects($at,$tokens,'ALTER',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'ALTER', $query)) {
+            return null;
         }
-        if (!$this->_parsing_expects($at,$tokens,'TABLE',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'TABLE', $query)) {
+            return null;
         }
-        $table_name = $this->_parsing_read($at,$tokens,$query);
-        $op = $this->_parsing_read($at,$tokens,$query);
+        $table_name = $this->_parsing_read($at, $tokens, $query);
+        $op = $this->_parsing_read($at, $tokens, $query);
         switch ($op) {
             case 'RENAME':
-                $new_table_name = $this->_parsing_read($at,$tokens,$query);
-                rename($db[0] . '/' . $table_name,$db[0] . '/' . $new_table_name);
+                $new_table_name = $this->_parsing_read($at, $tokens, $query);
+                rename($db[0] . '/' . $table_name, $db[0] . '/' . $new_table_name);
                 unset($GLOBALS['DIR_CONTENTS_CACHE'][$table_name]);
                 break;
             case 'CHANGE':
             case 'ADD':
                 // Parse
-                $column_name = $this->_parsing_read($at,$tokens,$query);
+                $column_name = $this->_parsing_read($at, $tokens, $query);
                 if ($op == 'CHANGE') {
-                    $new_column_name = $this->_parsing_read($at,$tokens,$query);
+                    $new_column_name = $this->_parsing_read($at, $tokens, $query);
                 } else {
                     $new_column_name = $column_name;
                 }
-                $data_type = $this->_parsing_read($at,$tokens,$query);
-                $next = $this->_parsing_read($at,$tokens,$query,true);
+                $data_type = $this->_parsing_read($at, $tokens, $query);
+                $next = $this->_parsing_read($at, $tokens, $query, true);
                 if ($next == 'DEFAULT') {
-                    $_default = $this->_parsing_read_expression($at,$tokens,$query,$db,false,false,$fail_ok);
-                    $default = $this->_execute_expression($_default,array(),$query);
+                    $_default = $this->_parsing_read_expression($at, $tokens, $query, $db, false, false, $fail_ok);
+                    $default = $this->_execute_expression($_default, array(), $query);
                 } else {
                     $default = false;
 
@@ -1525,12 +1525,12 @@ class Database_Static_xml
                         $at--;
                     }
                 }
-                $next = $this->_parsing_read($at,$tokens,$query,true);
+                $next = $this->_parsing_read($at, $tokens, $query, true);
                 $allow_null = null; // No change
                 if (!is_null($next)) {
                     if ($next == 'NOT') {
-                        if (!$this->_parsing_expects($at,$tokens,'NULL',$query)) {
-                            return NULL;
+                        if (!$this->_parsing_expects($at, $tokens, 'NULL', $query)) {
+                            return null;
                         }
                     } elseif ($next == 'NULL') {
                         $allow_null = true;
@@ -1543,10 +1543,10 @@ class Database_Static_xml
                     if ($allow_null) {
                         $default = null;
                     } else {
-                        if (in_array($data_type,array('AUTO','AUTO_LINK','INTEGER','UINTEGER','SHORT_INTEGER','BINARY','MEMBER','GROUP','TIME','SHORT_TRANS','LONG_TRANS'))) {
-                            return $this->_bad_query($query,false,'No DEFAULT given and NULL not allowed');
-                        } elseif (in_array($data_type,array('REAL'))) {
-                            return $this->_bad_query($query,false,'No DEFAULT given and NULL not allowed');
+                        if (in_array($data_type, array('AUTO', 'AUTO_LINK', 'INTEGER', 'UINTEGER', 'SHORT_INTEGER', 'BINARY', 'MEMBER', 'GROUP', 'TIME', 'SHORT_TRANS', 'LONG_TRANS'))) {
+                            return $this->_bad_query($query, false, 'No DEFAULT given and NULL not allowed');
+                        } elseif (in_array($data_type, array('REAL'))) {
+                            return $this->_bad_query($query, false, 'No DEFAULT given and NULL not allowed');
                         } else {
                             $default = '';
                         }
@@ -1555,72 +1555,72 @@ class Database_Static_xml
 
                 // Execute
                 if ($op == 'ADD') {
-                    $records = $this->_read_all_records($db,$table_name,'',null,null,$fail_ok,$query);
+                    $records = $this->_read_all_records($db, $table_name, '', null, null, $fail_ok, $query);
                     if (is_null($records)) {
-                        return NULL;
+                        return null;
                     }
                     foreach (array_keys($records) as $guid) {
                         $records[$guid][$column_name] = $default;
                     }
-                    $this->_write_records($db,$table_name,$records,$fail_ok);
+                    $this->_write_records($db, $table_name, $records, $fail_ok);
 
-                    $this->_read_schema($db,$table_name); // Workaround with caching. It might be the directory contents cache for the db_meta table is not updated at exactly the right times, as the execution order can be off. If the directory contents cache is not updated and the schema is read, it may miss the new field. Therefore we need to force it to read now, then extend it.
-                    if (array_key_exists($table_name,$SCHEMA_CACHE)) {
+                    $this->_read_schema($db, $table_name); // Workaround with caching. It might be the directory contents cache for the db_meta table is not updated at exactly the right times, as the execution order can be off. If the directory contents cache is not updated and the schema is read, it may miss the new field. Therefore we need to force it to read now, then extend it.
+                    if (array_key_exists($table_name, $SCHEMA_CACHE)) {
                         $SCHEMA_CACHE[$table_name][$column_name] = $data_type;
                     }
                 } elseif ($op == 'CHANGE') {
                     // Actually we type-convert in real-time so no change actually needed. ocPortal would have updated the meta stuff separately
-                    if (array_key_exists($table_name,$SCHEMA_CACHE)) {
+                    if (array_key_exists($table_name, $SCHEMA_CACHE)) {
                         unset($SCHEMA_CACHE[$table_name][$column_name]);
                         $SCHEMA_CACHE[$table_name][$new_column_name] = $data_type;
                     }
 
                     if ($new_column_name != $column_name) {
-                        $records = $this->_read_all_records($db,$table_name,'',null,null,$fail_ok,$query,true);
+                        $records = $this->_read_all_records($db, $table_name, '', null, null, $fail_ok, $query, true);
                         if (is_null($records)) {
-                            return NULL;
+                            return null;
                         }
                         foreach (array_keys($records) as $guid) {
                             $records[$guid][$new_column_name] = $records[$guid][$column_name];
                             unset($records[$guid][$column_name]);
                         }
-                        $this->_write_records($db,$table_name,$records,$fail_ok);
+                        $this->_write_records($db, $table_name, $records, $fail_ok);
                     }
                 }
 
-                if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-                    return NULL;
+                if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+                    return null;
                 }
 
-                return NULL;
+                return null;
 
             case 'DROP':
                 // Parse
-                if (!$this->_parsing_expects($at,$tokens,'COLUMN',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, 'COLUMN', $query)) {
+                    return null;
                 }
-                $column_name = $this->_parsing_read($at,$tokens,$query);
+                $column_name = $this->_parsing_read($at, $tokens, $query);
 
                 // Execute
-                $records = $this->_read_all_records($db,$table_name,'',null,null,$fail_ok,$query);
+                $records = $this->_read_all_records($db, $table_name, '', null, null, $fail_ok, $query);
                 if (is_null($records)) {
-                    return NULL;
+                    return null;
                 }
                 foreach (array_keys($records) as $guid) {
                     unset($records[$guid][$column_name]);
                 }
-                $this->_write_records($db,$table_name,$records,$fail_ok);
+                $this->_write_records($db, $table_name, $records, $fail_ok);
 
                 unset($SCHEMA_CACHE[$table_name][$column_name]);
 
-                if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-                    return NULL;
+                if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+                    return null;
                 }
 
-                return NULL;
+                return null;
         }
 
-        return $this->_bad_query($query,false,'Expected ALTER TABLE ADD or ALTER TABLE DROP or ALTER TABLE CHANGE or ALTER TABLE RENAME');
+        return $this->_bad_query($query, false, 'Expected ALTER TABLE ADD or ALTER TABLE DROP or ALTER TABLE CHANGE or ALTER TABLE RENAME');
     }
 
     /**
@@ -1632,83 +1632,85 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_create($tokens,$query,$db,$fail_ok)
+    public function _do_query_create($tokens, $query, $db, $fail_ok)
     {
         $at = 0;
-        if (!$this->_parsing_expects($at,$tokens,'CREATE',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'CREATE', $query)) {
+            return null;
         }
-        if (!$this->_parsing_expects($at,$tokens,'TABLE',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'TABLE', $query)) {
+            return null;
         }
-        $table_name = $this->_parsing_read($at,$tokens,$query);
+        $table_name = $this->_parsing_read($at, $tokens, $query);
         $if_not_exists = false;
         if ($table_name == 'IF') {
-            if (!$this->_parsing_expects($at,$tokens,'NOT',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, 'NOT', $query)) {
+                return null;
             }
-            if (!$this->_parsing_expects($at,$tokens,'EXISTS',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, 'EXISTS', $query)) {
+                return null;
             }
-            $table_name = $this->_parsing_read($at,$tokens,$query);
+            $table_name = $this->_parsing_read($at, $tokens, $query);
             $if_not_exists = true;
         }
 
-        if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+            return null;
         }
         $fields = array();
         do {
-            $column_name = $this->_parsing_read($at,$tokens,$query);
+            $column_name = $this->_parsing_read($at, $tokens, $query);
             if ($column_name == 'PRIMARY') {
-                if (!$this->_parsing_expects($at,$tokens,'KEY',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, 'KEY', $query)) {
+                    return null;
                 }
-                if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                    return null;
                 }
                 do {
-                    $token = $this->_parsing_read($at,$tokens,$query);
+                    $token = $this->_parsing_read($at, $tokens, $query);
                     $fields[$token] = '*' . $fields[$token];
-                    $token = $this->_parsing_read($at,$tokens,$query);
-                } while ($token == ',');
+                    $token = $this->_parsing_read($at, $tokens, $query);
+                }
+                while ($token == ',');
                 $at--;
-                if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                    return null;
                 }
             } else {
                 $null = true;
-                $type = $this->_parsing_read($at,$tokens,$query);
+                $type = $this->_parsing_read($at, $tokens, $query);
 
-                $token = $this->_parsing_read($at,$tokens,$query);
+                $token = $this->_parsing_read($at, $tokens, $query);
                 if ($token == 'NOT') {
-                    if (!$this->_parsing_expects($at,$tokens,'NULL',$query)) {
-                        return NULL;
+                    if (!$this->_parsing_expects($at, $tokens, 'NULL', $query)) {
+                        return null;
                     }
                     $null = false;
                 } elseif ($token == 'PRIMARY') {
-                    if (!$this->_parsing_expects($at,$tokens,'KEY',$query)) {
-                        return NULL;
+                    if (!$this->_parsing_expects($at, $tokens, 'KEY', $query)) {
+                        return null;
                     }
                     $type = '*' . $type;
                 } else {
                     $at--;
                 }
 
-                $fields[$column_name] = ($null?'?':'') . $type;
+                $fields[$column_name] = ($null ? '?' : '') . $type;
             }
 
-            $next = $this->_parsing_read($at,$tokens,$query);
-        } while ($next == ',');
+            $next = $this->_parsing_read($at, $tokens, $query);
+        }
+        while ($next == ',');
         $at--;
-        if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+            return null;
         }
 
-        $this->db_create_table($table_name,$fields,$db,$if_not_exists);
+        $this->db_create_table($table_name, $fields, $db, $if_not_exists);
 
-        if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-            return NULL;
+        if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+            return null;
         }
     }
 
@@ -1724,14 +1726,14 @@ class Database_Static_xml
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The insert ID (NULL: not requested / error)
      */
-    public function _do_query_insert($tokens,$query,$db,$fail_ok,$get_insert_id,&$random_key,$save_as_volatile = false)
+    public function _do_query_insert($tokens, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
     {
-        $_inserts = $this->_do_query_insert__parse($tokens,$query,$db,$fail_ok);
+        $_inserts = $this->_do_query_insert__parse($tokens, $query, $db, $fail_ok);
         if (is_null($_inserts)) {
-            return NULL;
+            return null;
         }
-        list($table_name,$inserts) = $_inserts;
-        return $this->_do_query_insert__execute($inserts,$table_name,$query,$db,$fail_ok,$get_insert_id,$random_key,$save_as_volatile);
+        list($table_name, $inserts) = $_inserts;
+        return $this->_do_query_insert__execute($inserts, $table_name, $query, $db, $fail_ok, $get_insert_id, $random_key, $save_as_volatile);
     }
 
     /**
@@ -1743,69 +1745,72 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   A pair: the table, and the rows to insert (NULL: error)
      */
-    public function _do_query_insert__parse($tokens,$query,$db,$fail_ok)
+    public function _do_query_insert__parse($tokens, $query, $db, $fail_ok)
     {
         // Parse
         $at = 0;
-        if (!$this->_parsing_expects($at,$tokens,'INSERT',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'INSERT', $query)) {
+            return null;
         }
-        if (!$this->_parsing_expects($at,$tokens,'INTO',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'INTO', $query)) {
+            return null;
         }
-        $table_name = $this->_parsing_read($at,$tokens,$query);
-        if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-            return NULL;
+        $table_name = $this->_parsing_read($at, $tokens, $query);
+        if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+            return null;
         }
         $record_basic = array();
         $reverse_index = array();
         do {
-            $token = $this->_parsing_read($at,$tokens,$query);
+            $token = $this->_parsing_read($at, $tokens, $query);
             $record_basic[$token] = null;
             $reverse_index[] = $token;
-            $token = $this->_parsing_read($at,$tokens,$query);
-        } while ($token == ',');
-        $at--;
-        if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-            return NULL;
+            $token = $this->_parsing_read($at, $tokens, $query);
         }
-        if (!$this->_parsing_expects($at,$tokens,'VALUES',$query)) {
-            return NULL;
+        while ($token == ',');
+        $at--;
+        if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+            return null;
+        }
+        if (!$this->_parsing_expects($at, $tokens, 'VALUES', $query)) {
+            return null;
         }
         $inserts = array();
         do {
-            if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                return null;
             }
             $record = $record_basic;
             $i = 0;
             do {
-                $expr = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                $result = $this->_execute_expression($expr,array(),$query);
+                $expr = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                $result = $this->_execute_expression($expr, array(), $query);
                 $record[$reverse_index[$i]] = $result;
                 $i++;
-                $token = $this->_parsing_read($at,$tokens,$query);
-            } while ($token == ',');
+                $token = $this->_parsing_read($at, $tokens, $query);
+            }
+            while ($token == ',');
             $at--;
-            if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                return null;
             }
 
             // Store in our list
             $inserts[] = $record;
 
             // Continue
-            $token = $this->_parsing_read($at,$tokens,$query,true);
-        } while ($token === ',');
+            $token = $this->_parsing_read($at, $tokens, $query, true);
+        }
+        while ($token === ',');
         if (!is_null($token)) {
             $at--;
         }
 
-        if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-            return NULL;
+        if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+            return null;
         }
 
-        return array($table_name,$inserts);
+        return array($table_name, $inserts);
     }
 
     /**
@@ -1821,33 +1826,33 @@ class Database_Static_xml
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The insert ID (NULL: not requested / error)
      */
-    public function _do_query_insert__execute($inserts,$table_name,$query,$db,$fail_ok,$get_insert_id,&$random_key,$save_as_volatile = false)
+    public function _do_query_insert__execute($inserts, $table_name, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
     {
         global $TABLE_BASES;
 
         // Execute
         foreach ($inserts as $record_num => $record) {
             $insert_id = null;
-            $schema = $this->_read_schema($db,$table_name,$fail_ok);
+            $schema = $this->_read_schema($db, $table_name, $fail_ok);
             if (is_null($schema)) {
-                return NULL;
+                return null;
             }
             $no_key_conflict_check = false;
             foreach ($schema as $key => $val) {
-                if (!array_key_exists($key,$record)) { // Possibly an auto-generated key
-                    if (substr($key,-10) == '__text_parsed') {
+                if (!array_key_exists($key, $record)) { // Possibly an auto-generated key
+                    if (substr($key, -10) == '__text_parsed') {
                         $record[$key] = '';
-                    } elseif (substr($key,-13) == '__source_user') {
+                    } elseif (substr($key, -13) == '__source_user') {
                         $record[$key] = strval(db_get_first_id());
-                    } elseif (preg_replace('#[^\w]#','',$val) == 'AUTO') {
-                        $record[$key] = isset($TABLE_BASES[$table_name])?$TABLE_BASES[$table_name]:$this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
-                        while ((file_exists($db[0] . '/' . $table_name . '/' . strval($record[$key]) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema,$record) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . strval($record[$key]) . '.xml-volatile')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema,$record) . '.xml-volatile'))) {
+                    } elseif (preg_replace('#[^\w]#', '', $val) == 'AUTO') {
+                        $record[$key] = isset($TABLE_BASES[$table_name]) ? $TABLE_BASES[$table_name] : $this->db_get_first_id(); // We always want first record as '1', because we often reference it in a hard-coded way
+                        while ((file_exists($db[0] . '/' . $table_name . '/' . strval($record[$key]) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema, $record) . '.xml')) || (file_exists($db[0] . '/' . $table_name . '/' . strval($record[$key]) . '.xml-volatile')) || (file_exists($db[0] . '/' . $table_name . '/' . $this->_guid($schema, $record) . '.xml-volatile'))) {
                             if ($GLOBALS['IN_MINIKERNEL_VERSION']) { // In particular the f_groups/f_forum_groupings/calendar_types usage of tables references ID numbers for things. But let's just make all installer stuff linear
                                 $record[$key]++;
-                                $TABLE_BASES[$table_name] = $record[$key]+1;
+                                $TABLE_BASES[$table_name] = $record[$key] + 1;
                             } else {
                                 if ($record_num != 0) {
-                                    $random_key = mt_rand(0,min(2147483647,mt_getrandmax()));
+                                    $random_key = mt_rand(0, min(2147483647, mt_getrandmax()));
                                 }
                                 $record[$key] = $random_key; // We don't use auto-increment, we use randomisation. As otherwise when people sync over revision control there'd be conflicts
                             }
@@ -1857,21 +1862,21 @@ class Database_Static_xml
                             $no_key_conflict_check = true;
                         }
                     } else {
-                        return $this->_bad_query($query,false,'No default value provided for ' . $key);
+                        return $this->_bad_query($query, false, 'No default value provided for ' . $key);
                     }
                 }
             }
-            $guid = $this->_guid($schema,$record);
-            $this->_type_check($schema,$record,$query);
+            $guid = $this->_guid($schema, $record);
+            $this->_type_check($schema, $record, $query);
             if (!$no_key_conflict_check) {
-                if ($this->_key_conflict_check($db,$table_name,$schema,$record,$query,$fail_ok)) {
-                    return $this->_bad_query($query,$fail_ok,'A record already exists with this key');
+                if ($this->_key_conflict_check($db, $table_name, $schema, $record, $query, $fail_ok)) {
+                    return $this->_bad_query($query, $fail_ok, 'A record already exists with this key');
                 }
             }
-            $this->_write_record($db,$table_name,$guid,$record,$fail_ok,$save_as_volatile);
+            $this->_write_record($db, $table_name, $guid, $record, $fail_ok, $save_as_volatile);
         }
 
-        return $get_insert_id?$insert_id:null;
+        return $get_insert_id ? $insert_id : null;
     }
 
     /**
@@ -1886,72 +1891,72 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   The expression (NULL: error)
      */
-    public function _parsing_read_expression(&$at,$tokens,$query,$db,$look_for_connectives = true,$look_for_any_connectives = true,$fail_ok = false)
+    public function _parsing_read_expression(&$at, $tokens, $query, $db, $look_for_connectives = true, $look_for_any_connectives = true, $fail_ok = false)
     {
-        $token = $this->_parsing_read($at,$tokens,$query);
+        $token = $this->_parsing_read($at, $tokens, $query);
         $expr = array();
         $doing_not = false;
         switch ($token) {
             case 'REPLACE':
-                if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                    return null;
                 }
-                $expr1 = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                if (!$this->_parsing_expects($at,$tokens,',',$query)) {
-                    return NULL;
+                $expr1 = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                if (!$this->_parsing_expects($at, $tokens, ',', $query)) {
+                    return null;
                 }
-                $expr2 = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                if (!$this->_parsing_expects($at,$tokens,',',$query)) {
-                    return NULL;
+                $expr2 = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                if (!$this->_parsing_expects($at, $tokens, ',', $query)) {
+                    return null;
                 }
-                $expr3 = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                    return NULL;
+                $expr3 = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                    return null;
                 }
-                $expr = array('REPLACE',$expr1,$expr2,$expr3);
+                $expr = array('REPLACE', $expr1, $expr2, $expr3);
                 break;
 
             case 'CONCAT':
-                if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                    return null;
                 }
-                $expr1 = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                if (!$this->_parsing_expects($at,$tokens,',',$query)) {
-                    return NULL;
+                $expr1 = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                if (!$this->_parsing_expects($at, $tokens, ',', $query)) {
+                    return null;
                 }
-                $expr2 = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                    return NULL;
+                $expr2 = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                    return null;
                 }
-                $expr = array('CONCAT',$expr1,$expr2);
+                $expr = array('CONCAT', $expr1, $expr2);
                 break;
 
             case 'LENGTH':
-                if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                    return null;
                 }
-                $expr1 = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
-                if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                    return NULL;
+                $expr1 = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
+                if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                    return null;
                 }
-                $expr = array('LENGTH',$expr1);
+                $expr = array('LENGTH', $expr1);
                 break;
 
             case 'EXISTS':
-                if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                    return NULL;
+                if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                    return null;
                 }
-                $results = $this->_do_query_select($tokens,$query,$db,1,0,$fail_ok,$at,false);
-                if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                    return NULL;
+                $results = $this->_do_query_select($tokens, $query, $db, 1, 0, $fail_ok, $at, false);
+                if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                    return null;
                 }
-                $expr = array('EXISTS',$results);
+                $expr = array('EXISTS', $results);
                 break;
 
             case '(':
-                $expr = array('BRACKETED',$this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok));
-                if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                    return NULL;
+                $expr = array('BRACKETED', $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok));
+                if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                    return null;
                 }
                 break;
             case ')':
@@ -1960,10 +1965,10 @@ class Database_Static_xml
 
             case '"':
             case "'":
-                $token = $this->_parsing_read($at,$tokens,$query);
-                $expr = array('LITERAL',$token);
-                if ((!$this->_parsing_expects($at,$tokens,"'",$query)) && (!$this->_parsing_expects($at,$tokens,'"',$query))) {
-                    return NULL;
+                $token = $this->_parsing_read($at, $tokens, $query);
+                $expr = array('LITERAL', $token);
+                if ((!$this->_parsing_expects($at, $tokens, "'", $query)) && (!$this->_parsing_expects($at, $tokens, '"', $query))) {
+                    return null;
                 }
                 break;
 
@@ -1972,39 +1977,39 @@ class Database_Static_xml
                 break;
 
             case 'NOT':
-                $expr = array('NOT',$this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok));
+                $expr = array('NOT', $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok));
                 break;
 
             default: // infix op
                 $all_keywords = _get_sql_keywords();
-                if (!in_array($token,$all_keywords)) { // Must be a field reference then
+                if (!in_array($token, $all_keywords)) { // Must be a field reference then
                     if (is_numeric($token)) {
-                        if (strpos($token,'.') !== false) {
-                            $expr = array('LITERAL',floatval($token));
+                        if (strpos($token, '.') !== false) {
+                            $expr = array('LITERAL', floatval($token));
                         } else {
-                            $expr = array('LITERAL',intval($token));
+                            $expr = array('LITERAL', intval($token));
                         }
                     } else {
-                        $expr = array('FIELD',$token);
+                        $expr = array('FIELD', $token);
                     }
                 } elseif ($token == '-') {
-                    $token = $this->_parsing_read($at,$tokens,$query);
-                    if (strpos($token,'.') !== false) {
-                        $expr = array('LITERAL',-floatval($token));
+                    $token = $this->_parsing_read($at, $tokens, $query);
+                    if (strpos($token, '.') !== false) {
+                        $expr = array('LITERAL', -floatval($token));
                     } else {
-                        $expr = array('LITERAL',-intval($token));
+                        $expr = array('LITERAL', -intval($token));
                     }
                 } else {
-                    $this->_bad_query($query,false,'Unexpected token (' . $token . ') in expression');
+                    $this->_bad_query($query, false, 'Unexpected token (' . $token . ') in expression');
                 }
 
                 // Find the operation now linking across (NB: We're not implementing BODMAS, we assume SQL calculations are very simple and this we'll just do ltr order)
                 if ($look_for_any_connectives) {
-                    $token = $this->_parsing_read($at,$tokens,$query,true);
+                    $token = $this->_parsing_read($at, $tokens, $query, true);
 
                     if ($token == 'NOT') {
                         $doing_not = true;
-                        $token = $this->_parsing_read($at,$tokens,$query,true);
+                        $token = $this->_parsing_read($at, $tokens, $query, true);
                     }
 
                     switch ($token) {
@@ -2019,62 +2024,63 @@ class Database_Static_xml
                         case '=':
                         case '<>':
                         case 'LIKE':
-                            $expr = array($token,$expr,$this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok));
+                            $expr = array($token, $expr, $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok));
                             break;
 
                         case 'IS':
-                            $token = $this->_parsing_read($at,$tokens,$query);
+                            $token = $this->_parsing_read($at, $tokens, $query);
                             if ($token == 'NULL') {
-                                $expr = array('IS_NULL',$expr);
+                                $expr = array('IS_NULL', $expr);
                             } else {
                                 $at--;
-                                if (!$this->_parsing_expects($at,$tokens,'NOT',$query)) {
-                                    return NULL;
+                                if (!$this->_parsing_expects($at, $tokens, 'NOT', $query)) {
+                                    return null;
                                 }
-                                if (!$this->_parsing_expects($at,$tokens,'NULL',$query)) {
-                                    return NULL;
+                                if (!$this->_parsing_expects($at, $tokens, 'NULL', $query)) {
+                                    return null;
                                 }
-                                $expr = array('IS_NOT_NULL',$expr);
+                                $expr = array('IS_NOT_NULL', $expr);
                             }
                             break;
 
                         case 'BETWEEN':
-                            $expr1 = $this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
-                            if (!$this->_parsing_expects($at,$tokens,'AND',$query)) {
-                                return NULL;
+                            $expr1 = $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok);
+                            if (!$this->_parsing_expects($at, $tokens, 'AND', $query)) {
+                                return null;
                             }
-                            $expr2 = $this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
-                            $expr = array('BETWEEN',$expr,$expr1,$expr2);
+                            $expr2 = $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok);
+                            $expr = array('BETWEEN', $expr, $expr1, $expr2);
                             break;
 
                         case 'IN':
-                            if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                                return NULL;
+                            if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                                return null;
                             }
-                            $token = $this->_parsing_read($at,$tokens,$query);
+                            $token = $this->_parsing_read($at, $tokens, $query);
                             $at--;
                             $or_list = array();
                             if ($token == 'SELECT') {
-                                $results = $this->_do_query_select($tokens,$query,$db,null,0,$fail_ok,$at,false);
+                                $results = $this->_do_query_select($tokens, $query, $db, null, 0, $fail_ok, $at, false);
                                 foreach ($results as $result) {
                                     $result = array_values($result);
                                     $or_list[] = $result[0];
                                 }
                             } else {
                                 do {
-                                    $expr_in = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
+                                    $expr_in = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
                                     if (is_null($expr_in)) { // Force an exit
                                         break;
                                     }
                                     $or_list[] = $expr_in;
-                                    $token = $this->_parsing_read($at,$tokens,$query);
-                                } while ($token == ',');
+                                    $token = $this->_parsing_read($at, $tokens, $query);
+                                }
+                                while ($token == ',');
                                 $at--;
                             }
-                            if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                                return NULL;
+                            if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                                return null;
                             }
-                            $expr = array('IN',$expr,$or_list);
+                            $expr = array('IN', $expr, $or_list);
                             break;
 
                         default:
@@ -2085,7 +2091,7 @@ class Database_Static_xml
                     }
 
                     if ($doing_not) {
-                        $expr = array('NOT',$expr);
+                        $expr = array('NOT', $expr);
                     }
                 }
 
@@ -2094,15 +2100,15 @@ class Database_Static_xml
 
         // More connectives?
         if ($look_for_connectives) {
-            $token = $this->_parsing_read($at,$tokens,$query,true);
+            $token = $this->_parsing_read($at, $tokens, $query, true);
             if (!is_null($token)) {
                 switch ($token) {
                     case 'AND':
-                        $expr = array($token,$expr,$this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok));
+                        $expr = array($token, $expr, $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok));
                         break;
 
                     case 'OR':
-                        return array($token,$expr,$this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok)); // A bit of precedence, causes a fork
+                        return array($token, $expr, $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok)); // A bit of precedence, causes a fork
 
                     default:
                         $at--;
@@ -2122,49 +2128,49 @@ class Database_Static_xml
      * @param  string                   Query that was executed
      * @return ?mixed                   The result (NULL: error/NULL)
      */
-    public function _execute_expression($expr,$bindings,$query)
+    public function _execute_expression($expr, $bindings, $query)
     {
         switch ($expr[0]) {
             case 'BRACKETED':
-                return $this->_execute_expression($expr[1],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query);
 
             case 'LITERAL':
                 return $expr[1];
 
             case 'NULL':
-                return NULL;
+                return null;
 
             case 'FIELD':
                 //if (!array_key_exists($expr[1],$bindings)) {@var_dump($bindings);exit($expr[1]);}   // Useful for debugging
                 return $bindings[$expr[1]];
 
             case '+':
-                return $this->_execute_expression($expr[1],$bindings,$query)+$this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) + $this->_execute_expression($expr[2], $bindings, $query);
 
             case '-':
-                return $this->_execute_expression($expr[1],$bindings,$query)-$this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) - $this->_execute_expression($expr[2], $bindings, $query);
 
             case '*':
-                return $this->_execute_expression($expr[1],$bindings,$query)*$this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) * $this->_execute_expression($expr[2], $bindings, $query);
 
             case '/':
-                return $this->_execute_expression($expr[1],$bindings,$query)/$this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) / $this->_execute_expression($expr[2], $bindings, $query);
 
             case '>':
-                return $this->_execute_expression($expr[1],$bindings,$query)>$this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) > $this->_execute_expression($expr[2], $bindings, $query);
 
             case '<':
-                return $this->_execute_expression($expr[1],$bindings,$query)<$this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) < $this->_execute_expression($expr[2], $bindings, $query);
 
             case '>=':
-                return $this->_execute_expression($expr[1],$bindings,$query) >= $this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) >= $this->_execute_expression($expr[2], $bindings, $query);
 
             case '<=':
-                return $this->_execute_expression($expr[1],$bindings,$query) <= $this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) <= $this->_execute_expression($expr[2], $bindings, $query);
 
             case '=':
-                $a = $this->_execute_expression($expr[1],$bindings,$query);
-                $b = $this->_execute_expression($expr[2],$bindings,$query);
+                $a = $this->_execute_expression($expr[1], $bindings, $query);
+                $b = $this->_execute_expression($expr[2], $bindings, $query);
                 if (($expr[1][0] == 'FIELD') && ($expr[1][0] == 'FIELD')) { // Joins between non-equiv-typed fields
                     if ((is_integer($a)) && (!is_integer($b))) {
                         $a = strval($a);
@@ -2175,46 +2181,46 @@ class Database_Static_xml
                 return $a == $b;
 
             case '<>':
-                return $this->_execute_expression($expr[1],$bindings,$query) != $this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) != $this->_execute_expression($expr[2], $bindings, $query);
 
             case 'LIKE':
-                $value = $this->_execute_expression($expr[1],$bindings,$query);
-                $expr_eval = $this->_execute_expression($expr[2],$bindings,$query);
-                return simulated_wildcard_match($value,$expr_eval,true);
+                $value = $this->_execute_expression($expr[1], $bindings, $query);
+                $expr_eval = $this->_execute_expression($expr[2], $bindings, $query);
+                return simulated_wildcard_match($value, $expr_eval, true);
 
             case 'EXISTS':
                 return count($expr[1]) != 0;
 
             case 'NOT':
-                return !$this->_execute_expression($expr[1],$bindings,$query);
+                return !$this->_execute_expression($expr[1], $bindings, $query);
 
             case 'AND':
-                return $this->_execute_expression($expr[1],$bindings,$query) && $this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) && $this->_execute_expression($expr[2], $bindings, $query);
 
             case 'OR':
-                return $this->_execute_expression($expr[1],$bindings,$query) || $this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) || $this->_execute_expression($expr[2], $bindings, $query);
 
             case 'IS_NULL':
-                return is_null($this->_execute_expression($expr[1],$bindings,$query));
+                return is_null($this->_execute_expression($expr[1], $bindings, $query));
 
             case 'IS_NOT_NULL':
-                return !is_null($this->_execute_expression($expr[1],$bindings,$query));
+                return !is_null($this->_execute_expression($expr[1], $bindings, $query));
 
             case 'BETWEEN':
-                $comp = $this->_execute_expression($expr[1],$bindings,$query);
-                return $comp >= $this->_execute_expression($expr[2],$bindings,$query) && $comp <= $this->_execute_expression($expr[3],$bindings,$query);
+                $comp = $this->_execute_expression($expr[1], $bindings, $query);
+                return $comp >= $this->_execute_expression($expr[2], $bindings, $query) && $comp <= $this->_execute_expression($expr[3], $bindings, $query);
 
             case 'REPLACE':
-                return str_replace($this->_execute_expression($expr[2],$bindings,$query),$this->_execute_expression($expr[3],$bindings,$query),$this->_execute_expression($expr[1],$bindings,$query));
+                return str_replace($this->_execute_expression($expr[2], $bindings, $query), $this->_execute_expression($expr[3], $bindings, $query), $this->_execute_expression($expr[1], $bindings, $query));
 
             case 'CONCAT':
-                return $this->_execute_expression($expr[1],$bindings,$query) . $this->_execute_expression($expr[2],$bindings,$query);
+                return $this->_execute_expression($expr[1], $bindings, $query) . $this->_execute_expression($expr[2], $bindings, $query);
 
             case 'LENGTH':
-                return strlen($this->_execute_expression($expr[1],$bindings,$query));
+                return strlen($this->_execute_expression($expr[1], $bindings, $query));
 
             case 'IN':
-                $val = $this->_execute_expression($expr[1],$bindings,$query);
+                $val = $this->_execute_expression($expr[1], $bindings, $query);
                 foreach ($expr[2] as $in) {
                     if ($val == $in) {
                         return true;
@@ -2223,8 +2229,8 @@ class Database_Static_xml
                 return false;
         }
 
-        $this->_bad_query($query,false,'Internal error evaluating expression, ' . $expr[0] . ' not recognised in evaluation context');
-        return NULL;
+        $this->_bad_query($query, false, 'Internal error evaluating expression, ' . $expr[0] . ' not recognised in evaluation context');
+        return null;
     }
 
     /**
@@ -2238,54 +2244,55 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_update($tokens,$query,$db,$max,$start,$fail_ok)
+    public function _do_query_update($tokens, $query, $db, $max, $start, $fail_ok)
     {
         // Parse
         $at = 0;
-        if (!$this->_parsing_expects($at,$tokens,'UPDATE',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'UPDATE', $query)) {
+            return null;
         }
-        $table_name = $this->_parsing_read($at,$tokens,$query);
-        if (!$this->_parsing_expects($at,$tokens,'SET',$query)) {
-            return NULL;
+        $table_name = $this->_parsing_read($at, $tokens, $query);
+        if (!$this->_parsing_expects($at, $tokens, 'SET', $query)) {
+            return null;
         }
         $set = array();
         do {
-            $token = $this->_parsing_read($at,$tokens,$query);
+            $token = $this->_parsing_read($at, $tokens, $query);
 
-            if (!$this->_parsing_expects($at,$tokens,'=',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, '=', $query)) {
+                return null;
             }
-            $expr = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
+            $expr = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
             if (is_null($expr)) { // Force an exit
                 break;
             }
 
             $set[$token] = $expr;
 
-            $token = $this->_parsing_read($at,$tokens,$query,true);
-        } while ($token === ',');
+            $token = $this->_parsing_read($at, $tokens, $query, true);
+        }
+        while ($token === ',');
         if (!is_null($token)) {
             $at--;
         }
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if ($token === 'WHERE') {
-            $where_expr = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
+            $where_expr = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
         } else {
-            $where_expr = array('LITERAL',true);
+            $where_expr = array('LITERAL', true);
             if (!is_null($token)) {
                 $at--;
             }
         }
 
         // Execute
-        $schema = $this->_read_schema($db,$table_name,$fail_ok);
+        $schema = $this->_read_schema($db, $table_name, $fail_ok);
         if (is_null($schema)) {
-            return NULL;
+            return null;
         }
-        $records = $this->_read_all_records($db,$table_name,'',$schema,$where_expr,$fail_ok,$query);
+        $records = $this->_read_all_records($db, $table_name, '', $schema, $where_expr, $fail_ok, $query);
         if (is_null($records)) {
-            return NULL;
+            return null;
         }
         $i = 0;
         $done = 0;
@@ -2293,21 +2300,21 @@ class Database_Static_xml
             if (!is_string($guid)) {
                 $guid = strval($guid);
             } // As PHP can use type for array keys
-            $test = $this->_execute_expression($where_expr,$record,$query);
+            $test = $this->_execute_expression($where_expr, $record, $query);
             if ($test) {
                 if ($i >= $start) {
                     $record_new = array();
                     foreach ($set as $column_name => $expr) {
-                        $record_new[$column_name] = $this->_execute_expression($expr,$record,$query);
+                        $record_new[$column_name] = $this->_execute_expression($expr, $record, $query);
                     }
-                    $this->_type_check($schema,$record_new,$query);
-                    $record = $record_new+$record;
-                    if ($this->_key_conflict_check($db,$table_name,$schema,$record,$query,$fail_ok,$guid)) {
-                        return $this->_bad_query($query,$fail_ok,'A record already exists with a key we are updating to');
+                    $this->_type_check($schema, $record_new, $query);
+                    $record = $record_new + $record;
+                    if ($this->_key_conflict_check($db, $table_name, $schema, $record, $query, $fail_ok, $guid)) {
+                        return $this->_bad_query($query, $fail_ok, 'A record already exists with a key we are updating to');
                     }
-                    $this->_write_record($db,$table_name,$guid,$record,$fail_ok);
+                    $this->_write_record($db, $table_name, $guid, $record, $fail_ok);
                     $done++;
-                    if ((!is_null($max)) && ($done>$max)) {
+                    if ((!is_null($max)) && ($done > $max)) {
                         break;
                     }
                 }
@@ -2315,10 +2322,10 @@ class Database_Static_xml
             }
         }
 
-        if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-            return NULL;
+        if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+            return null;
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -2332,35 +2339,35 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_delete($tokens,$query,$db,$max,$start,$fail_ok)
+    public function _do_query_delete($tokens, $query, $db, $max, $start, $fail_ok)
     {
         // Parse
         $at = 0;
-        if (!$this->_parsing_expects($at,$tokens,'DELETE',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'DELETE', $query)) {
+            return null;
         }
-        if (!$this->_parsing_expects($at,$tokens,'FROM',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'FROM', $query)) {
+            return null;
         }
-        $table_name = $this->_parsing_read($at,$tokens,$query);
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $table_name = $this->_parsing_read($at, $tokens, $query);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if ($token === 'WHERE') {
-            $where_expr = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
+            $where_expr = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
         } else {
-            $where_expr = array('LITERAL',true);
+            $where_expr = array('LITERAL', true);
             if (!is_null($token)) {
                 $at--;
             }
         }
 
         // Execute
-        $schema = $this->_read_schema($db,$table_name,$fail_ok);
+        $schema = $this->_read_schema($db, $table_name, $fail_ok);
         if (is_null($schema)) {
-            return NULL;
+            return null;
         }
-        $records = $this->_read_all_records($db,$table_name,'',$schema,$where_expr,$fail_ok,$query);
+        $records = $this->_read_all_records($db, $table_name, '', $schema, $where_expr, $fail_ok, $query);
         if (is_null($records)) {
-            return NULL;
+            return null;
         }
         $i = 0;
         $done = 0;
@@ -2368,17 +2375,17 @@ class Database_Static_xml
             if (!is_string($guid)) {
                 $guid = strval($guid);
             } // As PHP can use type for array keys
-            $test = $this->_execute_expression($where_expr,$record,$query);
+            $test = $this->_execute_expression($where_expr, $record, $query);
             if ($test) {
                 if ($i >= $start) {
                     $path = $db[0] . '/' . $table_name . '/' . $guid . '.xml-volatile';
                     if (!file_exists($path)) {
                         $path = $db[0] . '/' . $table_name . '/' . $guid . '.xml';
                     }
-                    $this->_delete_record($path,$db);
+                    $this->_delete_record($path, $db);
                     unset($GLOBALS['DIR_CONTENTS_CACHE'][$table_name]);
                     $done++;
-                    if ((!is_null($max)) && ($done>$max)) {
+                    if ((!is_null($max)) && ($done > $max)) {
                         break;
                     }
                 }
@@ -2386,8 +2393,8 @@ class Database_Static_xml
             }
         }
 
-        if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-            return NULL;
+        if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+            return null;
         }
     }
 
@@ -2404,124 +2411,127 @@ class Database_Static_xml
      * @param  boolean                  Whether to not do the check to make sure we've parsed everything
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_select($tokens,$query,$db,$max,$start,$fail_ok,&$at,$do_end_check = true)
+    public function _do_query_select($tokens, $query, $db, $max, $start, $fail_ok, &$at, $do_end_check = true)
     {
         // Parse
-        if (!$this->_parsing_expects($at,$tokens,'SELECT',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'SELECT', $query)) {
+            return null;
         }
         $select = array();
         do {
-            $token = $this->_parsing_read($at,$tokens,$query);
+            $token = $this->_parsing_read($at, $tokens, $query);
             if ($token == '*') {
                 $select[] = array('*');
             } else {
                 switch ($token) {
                     case 'COALESCE':
-                        if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                            return NULL;
+                        if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                            return null;
                         }
-                        $expr1 = $this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
-                        if (!$this->_parsing_expects($at,$tokens,',',$query)) {
-                            return NULL;
+                        $expr1 = $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok);
+                        if (!$this->_parsing_expects($at, $tokens, ',', $query)) {
+                            return null;
                         }
-                        $expr2 = $this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
-                        if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                            return NULL;
+                        $expr2 = $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok);
+                        if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                            return null;
                         }
-                        $token = array('COALESCE',$expr1,$expr2);
+                        $token = array('COALESCE', $expr1, $expr2);
                         break;
                     case 'DISTINCT':
                         $token = array('DISTINCT');
-                        $d = $this->_parsing_read($at,$tokens,$query);
+                        $d = $this->_parsing_read($at, $tokens, $query);
                         if ($d == '(') {
-                            $d = $this->_parsing_read($at,$tokens,$query);
-                            if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                                return NULL;
+                            $d = $this->_parsing_read($at, $tokens, $query);
+                            if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                                return null;
                             }
                             $token[] = $d;
                         } else {
                             $at--;
                             do {
-                                $d = $this->_parsing_read($at,$tokens,$query);
+                                $d = $this->_parsing_read($at, $tokens, $query);
                                 $token[] = $d;
-                                $_token = $this->_parsing_read($at,$tokens,$query);
-                            } while ($_token == ',');
+                                $_token = $this->_parsing_read($at, $tokens, $query);
+                            }
+                            while ($_token == ',');
                             $at--;
                         }
                         break;
                     case 'COUNT':
-                        if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                            return NULL;
+                        if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                            return null;
                         }
-                        $token = array($token,$this->_parsing_read($at,$tokens,$query));
+                        $token = array($token, $this->_parsing_read($at, $tokens, $query));
                         if ($token[1] == 'DISTINCT') {
                             $token[1] = array('DISTINCT');
                             do {
-                                $d = $this->_parsing_read($at,$tokens,$query);
+                                $d = $this->_parsing_read($at, $tokens, $query);
                                 $token[1][] = $d;
-                                $_token = $this->_parsing_read($at,$tokens,$query);
-                            } while ($_token == ',');
+                                $_token = $this->_parsing_read($at, $tokens, $query);
+                            }
+                            while ($_token == ',');
                             $at--;
                         }
-                        if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                            return NULL;
+                        if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                            return null;
                         }
                         break;
                     case 'MAX':
                     case 'MIN':
                     case 'SUM':
                     case 'AVG':
-                        if (!$this->_parsing_expects($at,$tokens,'(',$query)) {
-                            return NULL;
+                        if (!$this->_parsing_expects($at, $tokens, '(', $query)) {
+                            return null;
                         }
                         $token = array($token);
-                        $next = $this->_parsing_read($at,$tokens,$query);
+                        $next = $this->_parsing_read($at, $tokens, $query);
                         if ($next == 'DISTINCT') {
                             $distinct = true;
                         } else {
                             $at--;
                             $distinct = false;
                         }
-                        $expr = $this->_parsing_read_expression($at,$tokens,$query,$db,false,true,$fail_ok);
+                        $expr = $this->_parsing_read_expression($at, $tokens, $query, $db, false, true, $fail_ok);
                         if ($distinct) {
-                            $token[1] = array('DISTINCT',$expr);
+                            $token[1] = array('DISTINCT', $expr);
                         } else {
                             $token[1] = $expr;
                         }
-                        if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                            return NULL;
+                        if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                            return null;
                         }
                         break;
                 }
 
-                $as_token = $this->_parsing_read($at,$tokens,$query);
+                $as_token = $this->_parsing_read($at, $tokens, $query);
                 if ($as_token == 'AS') {
-                    $as = $this->_parsing_read($at,$tokens,$query);
-                    $select[] = array('AS',$token,$as);
-                } elseif (($as_token == '*') && (substr($token,-1) == '.')) {
-                    $select[] = array('*',substr($token,0,strlen($token)-1));
+                    $as = $this->_parsing_read($at, $tokens, $query);
+                    $select[] = array('AS', $token, $as);
+                } elseif (($as_token == '*') && (substr($token, -1) == '.')) {
+                    $select[] = array('*', substr($token, 0, strlen($token) - 1));
                 } else {
                     $at--;
-                    $select[] = array('SIMPLE',$token);
+                    $select[] = array('SIMPLE', $token);
                 }
             }
 
-            $token = $this->_parsing_read($at,$tokens,$query);
-        } while ($token == ',');
+            $token = $this->_parsing_read($at, $tokens, $query);
+        }
+        while ($token == ',');
         $at--;
 
-        if (!$this->_parsing_expects($at,$tokens,'FROM',$query)) {
-            return NULL;
+        if (!$this->_parsing_expects($at, $tokens, 'FROM', $query)) {
+            return null;
         }
-        $table_name = $this->_parsing_read($at,$tokens,$query);
+        $table_name = $this->_parsing_read($at, $tokens, $query);
         if ($table_name == '(') {
             $closing_brackets_needed = 1;
-            $table_name = $this->_parsing_read($at,$tokens,$query);
+            $table_name = $this->_parsing_read($at, $tokens, $query);
         } else {
             $closing_brackets_needed = 0;
         }
-        $as_test = $this->_parsing_read($at,$tokens,$query,true);
+        $as_test = $this->_parsing_read($at, $tokens, $query, true);
         if ((!is_null($as_test)) && ($as_test != 'ON') && ($as_test != ')') && ($as_test != 'LIMIT') && ($as_test != 'GROUP') && ($as_test != 'ORDER') && ($as_test != 'WHERE') && ($as_test != 'LEFT') && ($as_test != 'RIGHT') && ($as_test != 'INNER') && ($as_test != 'JOIN')) {
             $as = $as_test;
         } else {
@@ -2531,8 +2541,8 @@ class Database_Static_xml
             }
         }
 
-        for ($i = 0;$i<$closing_brackets_needed;$i++) {
-            $br = $this->_parsing_read($at,$tokens,$query,true);
+        for ($i = 0; $i < $closing_brackets_needed; $i++) {
+            $br = $this->_parsing_read($at, $tokens, $query, true);
             if ($br === ')') {
                 $i--;
                 $closing_brackets_needed--;
@@ -2542,39 +2552,41 @@ class Database_Static_xml
             }
         }
 
-        $joins = array(array('SIMPLE',$table_name,$as));
+        $joins = array(array('SIMPLE', $table_name, $as));
         do {
-            $test = $this->_read_join($at,$tokens,$query,$db,$fail_ok,$closing_brackets_needed);
+            $test = $this->_read_join($at, $tokens, $query, $db, $fail_ok, $closing_brackets_needed);
             if (!is_null($test)) {
                 $joins[] = $test;
             }
-        } while (!is_null($test));
+        }
+        while (!is_null($test));
 
-        for ($i = 0;$i<$closing_brackets_needed;$i++) {
-            if (!$this->_parsing_expects($at,$tokens,')',$query)) {
-                return NULL;
+        for ($i = 0; $i < $closing_brackets_needed; $i++) {
+            if (!$this->_parsing_expects($at, $tokens, ')', $query)) {
+                return null;
             }
         }
 
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if ($token === 'WHERE') {
-            $where_expr = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
+            $where_expr = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
         } else {
-            $where_expr = array('LITERAL',true);
+            $where_expr = array('LITERAL', true);
             if (!is_null($token)) {
                 $at--;
             }
         }
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if ($token === 'GROUP') {
-            if (!$this->_parsing_expects($at,$tokens,'BY',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, 'BY', $query)) {
+                return null;
             }
             $group_by = array();
             do {
-                $group_by[] = $this->_parsing_read($at,$tokens,$query);
-                $test = $this->_parsing_read($at,$tokens,$query,true);
-            } while ($test === ',');
+                $group_by[] = $this->_parsing_read($at, $tokens, $query);
+                $test = $this->_parsing_read($at, $tokens, $query, true);
+            }
+            while ($test === ',');
             if (!is_null($test)) {
                 $at--;
             }
@@ -2584,17 +2596,17 @@ class Database_Static_xml
                 $at--;
             }
         }
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if ($token === 'ORDER') {
-            if (!$this->_parsing_expects($at,$tokens,'BY',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, 'BY', $query)) {
+                return null;
             }
             $orders = '';
             do {
-                $order = $this->_parsing_read($at,$tokens,$query);
-                $token = $this->_parsing_read($at,$tokens,$query,true);
+                $order = $this->_parsing_read($at, $tokens, $query);
+                $token = $this->_parsing_read($at, $tokens, $query, true);
                 $reverse = false;
-                if (($token === 'ASC') || ($token === 'DESC') || ($token === ',') || (!array_key_exists($token,$GLOBALS['DELIMITERS_FLIPPED']))) {
+                if (($token === 'ASC') || ($token === 'DESC') || ($token === ',') || (!array_key_exists($token, $GLOBALS['DELIMITERS_FLIPPED']))) {
                     if ($token == 'DESC') {
                         $reverse = true;
                     }
@@ -2621,8 +2633,9 @@ class Database_Static_xml
                     $orders .= '!';
                 }
                 $orders .= $order;
-                $test = $this->_parsing_read($at,$tokens,$query,true);
-            } while ($test === ',');
+                $test = $this->_parsing_read($at, $tokens, $query, true);
+            }
+            while ($test === ',');
             if (!is_null($token)) {
                 $at--;
             }
@@ -2633,15 +2646,15 @@ class Database_Static_xml
             }
         }
 
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if (!is_null($token)) {
             if ($token == 'LIMIT') {
-                $max = intval($this->_parsing_read($at,$tokens,$query));
-                $token = $this->_parsing_read($at,$tokens,$query,true);
+                $max = intval($this->_parsing_read($at, $tokens, $query));
+                $token = $this->_parsing_read($at, $tokens, $query, true);
                 if (!is_null($token)) {
                     if ($token == ',') {
                         $start = $max;
-                        $max = intval($this->_parsing_read($at,$tokens,$query));
+                        $max = intval($this->_parsing_read($at, $tokens, $query));
                     } else {
                         $at--;
                     }
@@ -2653,11 +2666,11 @@ class Database_Static_xml
 
         // Execute
         $done = 0;
-        if ((count($joins) == 1) && ($where_expr == array('LITERAL',true)) && ($select === array(array('SIMPLE',array('COUNT','*'))))) { // Quick fudge to get fast table counts
+        if ((count($joins) == 1) && ($where_expr == array('LITERAL', true)) && ($select === array(array('SIMPLE', array('COUNT', '*'))))) { // Quick fudge to get fast table counts
             global $DIR_CONTENTS_CACHE;
             if (!isset($DIR_CONTENTS_CACHE[$joins[0][1]])) {
                 @chdir($db[0] . '/' . $joins[0][1]);
-                $dh = @glob('{,.}*.{xml,xml-volatile}',GLOB_NOSORT|GLOB_BRACE);
+                $dh = @glob('{,.}*.{xml,xml-volatile}', GLOB_NOSORT | GLOB_BRACE);
                 if ($dh === false) {
                     $dh = array();
                 }
@@ -2680,14 +2693,14 @@ class Database_Static_xml
                 if ($join[0] == 'SIMPLE') {
                     $joined_as = $join[2];
 
-                    $schema = $this->_read_schema($db,$join[1],$fail_ok);
+                    $schema = $this->_read_schema($db, $join[1], $fail_ok);
 
                     if (is_null($schema)) {
-                        return NULL;
+                        return null;
                     }
-                    $records = $this->_read_all_records($db,$join[1],$joined_as,$schema,$where_expr,$fail_ok,$query);
+                    $records = $this->_read_all_records($db, $join[1], $joined_as, $schema, $where_expr, $fail_ok, $query);
                     if (is_null($records)) {
-                        return NULL;
+                        return null;
                     }
 
                     foreach ($schema as $k => $v) {
@@ -2706,11 +2719,11 @@ class Database_Static_xml
                         $records[$guid] = $new_record;
                     }
                 } else {
-                    $result = $this->_execute_join($db,$as,$join,$query,$records,$schema,$where_expr,$fail_ok);
+                    $result = $this->_execute_join($db, $as, $join, $query, $records, $schema, $where_expr, $fail_ok);
                     if (is_null($result)) {
-                        return NULL;
+                        return null;
                     }
-                    list($records,$schema) = $result;
+                    list($records, $schema) = $result;
                 }
             }
         }
@@ -2721,20 +2734,20 @@ class Database_Static_xml
                 foreach ($group_by as $v) {
                     $s[] = $record[$v];
                 }
-                if (!array_key_exists(serialize($s),$record_sets)) {
+                if (!array_key_exists(serialize($s), $record_sets)) {
                     $record_sets[serialize($s)] = array();
                 }
                 $record_sets[serialize($s)][] = $record;
             }
             $records = array();
             foreach ($record_sets as $set) { // Functions have special meaning in GROUP BY, and we need to compute them in the group-aware scope
-                $rep = $this->_function_set_scoping($set,$select,$set[0],$query);
+                $rep = $this->_function_set_scoping($set, $select, $set[0], $query);
                 $records[] = $rep;
             }
         } else {
             // Special handling for DISTINCT
             foreach ($select as $s) {
-                if ((array_key_exists(1,$s)) && ($s[0] != '*')) {
+                if ((array_key_exists(1, $s)) && ($s[0] != '*')) {
                     $s_term = $s[1];
                     if ($s[0] == 'SIMPLE') {
                         $s_as = $s[1];
@@ -2747,7 +2760,7 @@ class Database_Static_xml
                                 $index = array();
                                 foreach ($records as $set_item) {
                                     $val = array();
-                                    for ($di = 1;$di<count($s_term);$di++) {
+                                    for ($di = 1; $di < count($s_term); $di++) {
                                         $val[] = $set_item[$s_term[$di]];
                                     }
                                     $index[serialize($val)] = $set_item;
@@ -2762,14 +2775,14 @@ class Database_Static_xml
             // Now handle functions
             $single_result = false;
             foreach ($select as $s) {
-                if ((array_key_exists(1,$s)) && ($s[0] != '*') && (is_array($s[1]))) {
+                if ((array_key_exists(1, $s)) && ($s[0] != '*') && (is_array($s[1]))) {
                     if (($s[1][0] == 'MIN') || ($s[1][0] == 'MAX') || ($s[1][0] == 'SUM') || ($s[1][0] == 'COUNT') || ($s[1][0] == 'AVG')) {
                         $single_result = true;
                     }
                 }
             }
             foreach ($records as $i => $record) {
-                $records[$i] = $this->_function_set_scoping($records,$select,$record,$query);
+                $records[$i] = $this->_function_set_scoping($records, $select, $record, $query);
                 if ($single_result) {
                     $records = array($i => $records[$i]);
                     break;
@@ -2780,7 +2793,7 @@ class Database_Static_xml
         // Filter
         $pre_filtered_records = array();
         foreach ($records as $record) {
-            $test = $this->_execute_expression($where_expr,$record,$query);
+            $test = $this->_execute_expression($where_expr, $record, $query);
             if ($test) {
                 $pre_filtered_records[] = $record;
             }
@@ -2788,7 +2801,7 @@ class Database_Static_xml
 
         // Sort
         if (!is_null($orders)) {
-            sort_maps_by($pre_filtered_records,$orders);
+            sort_maps_by($pre_filtered_records, $orders);
         }
 
         // Cut
@@ -2812,18 +2825,18 @@ class Database_Static_xml
             foreach ($select as $want) {
                 switch ($want[0]) { // NB: COUNT, SUM, etc, already have their values rolled out into $record and we do not need to consider it here
                     case '*':
-                        if (array_key_exists(1,$want)) {
+                        if (array_key_exists(1, $want)) {
                             $filtered_record = array();
                             foreach ($record as $key => $val) {
-                                if (substr($key,0,strlen($want[1] . '.')) == $want[1] . '.') {
-                                    $filtered_record[substr($key,strlen($want[1] . '.'))] = $val;
+                                if (substr($key, 0, strlen($want[1] . '.')) == $want[1] . '.') {
+                                    $filtered_record[substr($key, strlen($want[1] . '.'))] = $val;
                                 }
                             }
                             $_record += $filtered_record;
                         } else {
                             $filtered_record = array();
                             foreach ($record as $key => $val) {
-                                if (strpos($key,'.') === false) {
+                                if (strpos($key, '.') === false) {
                                     $filtered_record[$key] = $val;
                                 }
                             }
@@ -2832,31 +2845,31 @@ class Database_Static_xml
                         break;
 
                     case 'SIMPLE':
-                        $param = is_array($want[1])?$want[1][0]:$want[1];
+                        $param = is_array($want[1]) ? $want[1][0] : $want[1];
                         if ($param == 'DISTINCT') {
                             $val = array();
                             $s_term = $want[1];
-                            for ($di = 1;$di<count($s_term);$di++) {
+                            for ($di = 1; $di < count($s_term); $di++) {
                                 $param = $s_term[$di];
 
-                                if (strpos($param,'.') === false) {
+                                if (strpos($param, '.') === false) {
                                     $_record[$param] = $record[$param];
                                 } else {
-                                    $_record[preg_replace('#^.*\.#','',$param)] = $record[$param];
+                                    $_record[preg_replace('#^.*\.#', '', $param)] = $record[$param];
                                 }
                             }
                         } else {
-                            if (strpos($param,'.') === false) {
+                            if (strpos($param, '.') === false) {
                                 $_record[$param] = $record[$param];
                             } else {
-                                $_record[preg_replace('#^.*\.#','',$param)] = $record[$param];
+                                $_record[preg_replace('#^.*\.#', '', $param)] = $record[$param];
                             }
                         }
 
                         break;
 
                     case 'AS':
-                        $_record[$want[2]] = $record[is_array($want[1])?$want[1][0]:$want[1]];
+                        $_record[$want[2]] = $record[is_array($want[1]) ? $want[1][0] : $want[1]];
                         break;
                 }
             }
@@ -2864,22 +2877,22 @@ class Database_Static_xml
         }
 
         if ((count($results) == 0) && (is_null($group_by))) { // If there are no records, but some functions, we need to add a row
-            $rep = $this->_function_set_scoping(array(),$select,array(),$query);
+            $rep = $this->_function_set_scoping(array(), $select, array(), $query);
             if (count($rep) != 0) {
                 foreach ($select as $want) {
                     switch ($want[0]) { // NB: COUNT, SUM, etc, already have their values rolled out into $record and we do not need to consider it here
                         case 'AS':
-                            if (isset($rep[is_array($want[1])?$want[1][0]:$want[1]])) {
-                                $old = $rep[is_array($want[1])?$want[1][0]:$want[1]];
-                                unset($rep[is_array($want[1])?$want[1][0]:$want[1]]);
+                            if (isset($rep[is_array($want[1]) ? $want[1][0] : $want[1]])) {
+                                $old = $rep[is_array($want[1]) ? $want[1][0] : $want[1]];
+                                unset($rep[is_array($want[1]) ? $want[1][0] : $want[1]]);
                             } else {
                                 $old = null;
                             }
                             $rep[$want[2]] = $old;
                             break;
                         case 'SIMPLE':
-                            if (!isset($rep[is_array($want[1])?$want[1][0]:$want[1]])) {
-                                $rep[is_array($want[1])?$want[1][0]:$want[1]] = null;
+                            if (!isset($rep[is_array($want[1]) ? $want[1][0] : $want[1]])) {
+                                $rep[is_array($want[1]) ? $want[1][0] : $want[1]] = null;
                             }
                             break;
                     }
@@ -2890,9 +2903,9 @@ class Database_Static_xml
         }
 
         // UNION clause?
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
         if ($token === 'UNION') {
-            $token = $this->_parsing_read($at,$tokens,$query);
+            $token = $this->_parsing_read($at, $tokens, $query);
             if ($token == 'ALL') {
                 $de_dupe = false;
             } else {
@@ -2900,24 +2913,24 @@ class Database_Static_xml
                 $at--;
             }
 
-            $results_b = $this->_do_query_select($tokens,$query,$db,$max,$start,$fail_ok,$at);
+            $results_b = $this->_do_query_select($tokens, $query, $db, $max, $start, $fail_ok, $at);
 
             if ($de_dupe) {
                 foreach ($results_b as $r) {
-                    if (!in_array($r,$results)) {
+                    if (!in_array($r, $results)) {
                         $results[] = $r;
                     }
                 }
             } else {
-                $results = array_merge($results,$results_b);
+                $results = array_merge($results, $results_b);
             }
         } else {
             if (!is_null($token)) {
                 $at--;
             }
             if ($do_end_check) {
-                if (!$this->_parsing_check_ended($at,$tokens,$query)) {
-                    return NULL;
+                if (!$this->_parsing_check_ended($at, $tokens, $query)) {
+                    return null;
                 }
             }
         }
@@ -2934,29 +2947,29 @@ class Database_Static_xml
      * @param  string                   Query that was executed
      * @return array                    The result row based on the set
      */
-    public function _function_set_scoping($set,$select,$rep,$query)
+    public function _function_set_scoping($set, $select, $rep, $query)
     {
         foreach ($select as $s) {
-            if ((array_key_exists(1,$s)) && ($s[0] != '*')) {
+            if ((array_key_exists(1, $s)) && ($s[0] != '*')) {
                 $s_term = $s[1];
-                $chosen_param_name = is_array($s[1])?$s[1][0]:$s[1]; // "AS" is handled elsewhere, for now we just store
+                $chosen_param_name = is_array($s[1]) ? $s[1][0] : $s[1]; // "AS" is handled elsewhere, for now we just store
                 if ($chosen_param_name == 'DISTINCT') {
-                    $chosen_param_name = is_array($s[1])?$s[1][1]:$s[1];
+                    $chosen_param_name = is_array($s[1]) ? $s[1][1] : $s[1];
                 }
                 if (is_array($s_term)) {
                     switch ($s_term[0]) {
                         case 'COALESCE':
-                            $val = $this->_execute_expression($s_term[1],$set[0],$query);
+                            $val = $this->_execute_expression($s_term[1], $set[0], $query);
                             if (is_null($val)) {
-                                $val = $this->_execute_expression($s_term[2],$set[0],$query);
+                                $val = $this->_execute_expression($s_term[2], $set[0], $query);
                             }
                             $rep[$chosen_param_name] = $val;
                             break;
                         case 'MAX':
                             $max = mixed();
                             foreach ($set as $set_item) {
-                                $val = $this->_execute_expression($s_term[1],$set_item,$query);
-                                if ((is_null($max)) || ($val>$max)) {
+                                $val = $this->_execute_expression($s_term[1], $set_item, $query);
+                                if ((is_null($max)) || ($val > $max)) {
                                     $max = $val;
                                 }
                             }
@@ -2965,8 +2978,8 @@ class Database_Static_xml
                         case 'MIN':
                             $min = mixed();
                             foreach ($set as $set_item) {
-                                $val = $this->_execute_expression($s_term[1],$set_item,$query);
-                                if ((is_null($min)) || ($val<$min)) {
+                                $val = $this->_execute_expression($s_term[1], $set_item, $query);
+                                if ((is_null($min)) || ($val < $min)) {
                                     $min = $val;
                                 }
                             }
@@ -2977,7 +2990,7 @@ class Database_Static_xml
                                 $index = array();
                                 foreach ($set as $set_item) {
                                     $val = array();
-                                    for ($di = 1;$di<count($s_term[1]);$di++) {
+                                    for ($di = 1; $di < count($s_term[1]); $di++) {
                                         $val[] = $set_item[$s_term[1][$di]];
                                     }
                                     $index[serialize($val)] = true;
@@ -2990,7 +3003,7 @@ class Database_Static_xml
                         case 'SUM':
                             $temp = 0;
                             foreach ($set as $set_item) {
-                                $val = $this->_execute_expression($s_term[1],$set_item,$query);
+                                $val = $this->_execute_expression($s_term[1], $set_item, $query);
                                 $temp += $val;
                             }
                             if (is_integer($temp)) {
@@ -3005,13 +3018,13 @@ class Database_Static_xml
                             } else {
                                 $temp = 0;
                                 foreach ($set as $set_item) {
-                                    $val = $this->_execute_expression($s_term[1],$set_item,$query);
+                                    $val = $this->_execute_expression($s_term[1], $set_item, $query);
                                     $temp += $val;
                                 }
                                 if (is_integer($temp)) {
-                                    $rep[$chosen_param_name] = floatval($temp)/floatval(count($set));
+                                    $rep[$chosen_param_name] = floatval($temp) / floatval(count($set));
                                 } else {
-                                    $rep[$chosen_param_name] = $temp/floatval(count($set));
+                                    $rep[$chosen_param_name] = $temp / floatval(count($set));
                                 }
                             }
                             break;
@@ -3033,34 +3046,34 @@ class Database_Static_xml
      * @param  integer                  How many closing brackets we expect
      * @return ?array                   Join condition (NULL: no join here)
      */
-    public function _read_join(&$at,$tokens,$query,$db,$fail_ok,&$closing_brackets_needed)
+    public function _read_join(&$at, $tokens, $query, $db, $fail_ok, &$closing_brackets_needed)
     {
-        $token = $this->_parsing_read($at,$tokens,$query,true);
+        $token = $this->_parsing_read($at, $tokens, $query, true);
 
         if (($token !== ',') && ($token !== 'JOIN') && ($token !== 'LEFT') && ($token !== 'RIGHT') && ($token !== 'INNER')) {
             if (!is_null($at)) {
                 $at--;
             }
-            return NULL;
+            return null;
         }
 
         if (($token != 'JOIN') && ($token != ',')) {
-            if (!$this->_parsing_expects($at,$tokens,'JOIN',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, 'JOIN', $query)) {
+                return null;
             }
         }
 
-        $join_table = $this->_parsing_read($at,$tokens,$query);
+        $join_table = $this->_parsing_read($at, $tokens, $query);
 
         if ($join_table == '(') {
             $closing_brackets_needed++;
-            $join_table = $this->_parsing_read($at,$tokens,$query);
+            $join_table = $this->_parsing_read($at, $tokens, $query);
         }
 
-        $joined_as_test = $this->_parsing_read($at,$tokens,$query,true);
+        $joined_as_test = $this->_parsing_read($at, $tokens, $query, true);
         if ((!is_null($joined_as_test)) && ($joined_as_test != 'ON') && ($joined_as_test != 'WHERE') && ($joined_as_test != ',') && ($joined_as_test != 'LEFT') && ($joined_as_test != 'RIGHT') && ($joined_as_test != 'INNER') && ($joined_as_test != 'JOIN')) {
             if ($joined_as_test == 'AS') {
-                $joined_as_test = $this->_parsing_read($at,$tokens,$query);
+                $joined_as_test = $this->_parsing_read($at, $tokens, $query);
             } // 'AS' is optional
             $joined_as = $joined_as_test;
         } else {
@@ -3071,16 +3084,16 @@ class Database_Static_xml
         }
 
         if ($token == ',') {
-            $on_expr = array('LITERAL',true);
+            $on_expr = array('LITERAL', true);
         } else {
-            if (!$this->_parsing_expects($at,$tokens,'ON',$query)) {
-                return NULL;
+            if (!$this->_parsing_expects($at, $tokens, 'ON', $query)) {
+                return null;
             }
-            $on_expr = $this->_parsing_read_expression($at,$tokens,$query,$db,true,true,$fail_ok);
+            $on_expr = $this->_parsing_read_expression($at, $tokens, $query, $db, true, true, $fail_ok);
         }
 
-        for ($i = 0;$i<$closing_brackets_needed;$i++) {
-            $br = $this->_parsing_read($at,$tokens,$query,true);
+        for ($i = 0; $i < $closing_brackets_needed; $i++) {
+            $br = $this->_parsing_read($at, $tokens, $query, true);
             if ($br === ')') {
                 $i--;
                 $closing_brackets_needed--;
@@ -3092,19 +3105,19 @@ class Database_Static_xml
 
         switch ($token) {
             case ',':
-                $join = array('JOIN',$join_table,$joined_as,$on_expr);
+                $join = array('JOIN', $join_table, $joined_as, $on_expr);
                 break;
             case 'JOIN':
-                $join = array('JOIN',$join_table,$joined_as,$on_expr);
+                $join = array('JOIN', $join_table, $joined_as, $on_expr);
                 break;
             case 'LEFT':
-                $join = array('LEFT_JOIN',$join_table,$joined_as,$on_expr);
+                $join = array('LEFT_JOIN', $join_table, $joined_as, $on_expr);
                 break;
             case 'RIGHT':
-                $join = array('RIGHT_JOIN',$join_table,$joined_as,$on_expr);
+                $join = array('RIGHT_JOIN', $join_table, $joined_as, $on_expr);
                 break;
             case 'INNER':
-                $join = array('INNER_JOIN',$join_table,$joined_as,$on_expr);
+                $join = array('INNER_JOIN', $join_table, $joined_as, $on_expr);
                 break;
         }
 
@@ -3120,18 +3133,18 @@ class Database_Static_xml
      * @param  string                   The renaming of our table, so we can recognise it in the join condition
      * @return array                    Altered join condition
      */
-    public function _setify_join_condition_for_optimisation($join_condition,$schema,$records,$joined_as)
+    public function _setify_join_condition_for_optimisation($join_condition, $schema, $records, $joined_as)
     {
         if ($join_condition[0] == 'AND') {
-            $join_condition_a = $this->_setify_join_condition_for_optimisation($join_condition[1],$schema,$records,$joined_as);
-            $join_condition_b = $this->_setify_join_condition_for_optimisation($join_condition[2],$schema,$records,$joined_as);
-            $join_condition = array('AND',$join_condition_a,$join_condition_b);
+            $join_condition_a = $this->_setify_join_condition_for_optimisation($join_condition[1], $schema, $records, $joined_as);
+            $join_condition_b = $this->_setify_join_condition_for_optimisation($join_condition[2], $schema, $records, $joined_as);
+            $join_condition = array('AND', $join_condition_a, $join_condition_b);
         } else {
             if ($join_condition[0] == '=') {
-                foreach (array(1,2) as $i) {
-                    if (($join_condition[$i][0] == 'FIELD') && ($join_condition[3-$i][0] == 'FIELD')) {
-                        $var = preg_replace('#^' . $joined_as . '\.#','',$join_condition[$i][1]);
-                        if (array_key_exists($var,$schema)) {
+                foreach (array(1, 2) as $i) {
+                    if (($join_condition[$i][0] == 'FIELD') && ($join_condition[3 - $i][0] == 'FIELD')) {
+                        $var = preg_replace('#^' . $joined_as . '\.#', '', $join_condition[$i][1]);
+                        if (array_key_exists($var, $schema)) {
                             $join_condition[$i][1] = array();
                             foreach ($records as $r) {
                                 $join_condition[$i][1][] = $r[$var];
@@ -3160,28 +3173,28 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   A pair: an array of results, an array of the schema for what has been joined (NULL: error)
      */
-    public function _execute_join($db,$joined_as_prior,$join,$query,$records,$schema,$where_expr,$fail_ok = false)
+    public function _execute_join($db, $joined_as_prior, $join, $query, $records, $schema, $where_expr, $fail_ok = false)
     {
         $joined_as = $join[2];
 
-        $schema_b = $this->_read_schema($db,$join[1],$fail_ok);
+        $schema_b = $this->_read_schema($db, $join[1], $fail_ok);
         foreach ($schema_b as $k => $v) {
             $schema_b[$join[2] . '.' . $k] = $v; // Needed so all scoped variables can be put in place as NULL's in a right variable
         }
         if (is_null($schema_b)) {
-            return NULL;
+            return null;
         }
         $join_condition = $join[3];
-        $join_condition = $this->_setify_join_condition_for_optimisation($join_condition,$schema,$records,$joined_as_prior);
-        $where_expr = $this->_setify_join_condition_for_optimisation($where_expr,$schema,$records,$joined_as_prior); // Good for implicit joins (,)
-        if ($where_expr == array('LITERAL',true)) {
+        $join_condition = $this->_setify_join_condition_for_optimisation($join_condition, $schema, $records, $joined_as_prior);
+        $where_expr = $this->_setify_join_condition_for_optimisation($where_expr, $schema, $records, $joined_as_prior); // Good for implicit joins (,)
+        if ($where_expr == array('LITERAL', true)) {
             $where_expr_combined = $join_condition;
         } else {
-            $where_expr_combined = array('AND',$where_expr,$join_condition);
+            $where_expr_combined = array('AND', $where_expr, $join_condition);
         }
-        $records_b = $this->_read_all_records($db,$join[1],$joined_as,$schema_b,$where_expr_combined,$fail_ok,$query);
+        $records_b = $this->_read_all_records($db, $join[1], $joined_as, $schema_b, $where_expr_combined, $fail_ok, $query);
         if (is_null($records_b)) {
-            return NULL;
+            return null;
         }
 
         // Handle the join as condition
@@ -3205,15 +3218,15 @@ class Database_Static_xml
                     foreach ($records_b as $r2) {
                         $join_scope = $r1;
                         foreach ($r2 as $key => $val) {
-                            if (array_key_exists($key,$join_scope)) { // Don't allow anything ambiguous
+                            if (array_key_exists($key, $join_scope)) { // Don't allow anything ambiguous
                                 unset($join_scope[$key]);
                             } else {
                                 $join_scope[$key] = $val;
                             }
                         }
-                        $test = $this->_execute_expression($join[3],$join_scope,$query);
+                        $test = $this->_execute_expression($join[3], $join_scope, $query);
                         if ($test) {
-                            $records_results[] = $r2+$r1;
+                            $records_results[] = $r2 + $r1;
                         }
                     }
                 }
@@ -3225,15 +3238,15 @@ class Database_Static_xml
                     foreach ($records as $r2) {
                         $join_scope = $r1;
                         foreach ($r2 as $key => $val) {
-                            if (array_key_exists($key,$join_scope)) { // Don't allow anything ambiguous
+                            if (array_key_exists($key, $join_scope)) { // Don't allow anything ambiguous
                                 unset($join_scope[$key]);
                             } else {
                                 $join_scope[$key] = $val;
                             }
                         }
-                        $test = $this->_execute_expression($join[3],$join_scope,$query);
+                        $test = $this->_execute_expression($join[3], $join_scope, $query);
                         if ($test) {
-                            $records_results[] = $r2+$r1;
+                            $records_results[] = $r2 + $r1;
                             $matched = true;
                         }
                     }
@@ -3252,15 +3265,15 @@ class Database_Static_xml
                     foreach ($records_b as $r2) {
                         $join_scope = $r1;
                         foreach ($r2 as $key => $val) {
-                            if (array_key_exists($key,$join_scope)) { // Don't allow anything ambiguous
+                            if (array_key_exists($key, $join_scope)) { // Don't allow anything ambiguous
                                 unset($join_scope[$key]);
                             } else {
                                 $join_scope[$key] = $val;
                             }
                         }
-                        $test = $this->_execute_expression($join[3],$join_scope,$query);
+                        $test = $this->_execute_expression($join[3], $join_scope, $query);
                         if ($test) {
-                            $records_results[] = $r2+$r1;
+                            $records_results[] = $r2 + $r1;
                             $matched = true;
                         }
                     }
@@ -3279,7 +3292,7 @@ class Database_Static_xml
             $schema[$k] = $v;
         }
 
-        return array($records_results,$schema);
+        return array($records_results, $schema);
     }
 
     /**
@@ -3291,18 +3304,18 @@ class Database_Static_xml
      * @param  boolean                  Whether it can return NULL if we're out of output (otherwise fails)
      * @return ?string                  Token read (NULL: error, read too far)
      */
-    public function _parsing_read(&$at,$tokens,$query,$fail_ok = false)
+    public function _parsing_read(&$at, $tokens, $query, $fail_ok = false)
     {
         $at++;
 
-        if (!array_key_exists($at-1,$tokens)) {
+        if (!array_key_exists($at - 1, $tokens)) {
             if ($fail_ok) {
-                return NULL;
+                return null;
             }
-            return $this->_bad_query($query,false,'Unexpected end of query');
+            return $this->_bad_query($query, false, 'Unexpected end of query');
         }
 
-        return preg_replace('#^`(.*)`$#','${1}',$tokens[$at-1]);
+        return preg_replace('#^`(.*)`$#', '${1}', $tokens[$at - 1]);
     }
 
     /**
@@ -3315,11 +3328,11 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return boolean                  Success status
      */
-    public function _parsing_expects(&$at,$tokens,$token,$query,$fail_ok = false)
+    public function _parsing_expects(&$at, $tokens, $token, $query, $fail_ok = false)
     {
-        $next = $this->_parsing_read($at,$tokens,$query,$fail_ok);
+        $next = $this->_parsing_read($at, $tokens, $query, $fail_ok);
         if ($next != $token) {
-            $this->_bad_query($query,$fail_ok,'Expected ' . $token . ' but got ' . $next . ' at token ' . strval($at));
+            $this->_bad_query($query, $fail_ok, 'Expected ' . $token . ' but got ' . $next . ' at token ' . strval($at));
             return false;
         }
         return true;
@@ -3334,13 +3347,14 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return boolean                  Success status
      */
-    public function _parsing_check_ended($at,$tokens,$query,$fail_ok = false)
+    public function _parsing_check_ended($at, $tokens, $query, $fail_ok = false)
     {
         do {
-            $token = $this->_parsing_read($at,$tokens,$query,true);
-        } while ($token === ';');
+            $token = $this->_parsing_read($at, $tokens, $query, true);
+        }
+        while ($token === ';');
         if (!is_null($token)) {
-            $this->_bad_query($query,$fail_ok,'Extra unexpected tokens in query at token #' . strval($at+1) . ', "' . $token . '"');
+            $this->_bad_query($query, $fail_ok, 'Extra unexpected tokens in query at token #' . strval($at + 1) . ', "' . $token . '"');
             return false;
         }
         return true;
@@ -3354,7 +3368,7 @@ class Database_Static_xml
      * @param  ?string                  Error message (NULL: none)
      * @return ?mixed                   Always returns null (NULL: error)
      */
-    public function _bad_query($query,$fail_ok = false,$error = null)
+    public function _bad_query($query, $fail_ok = false, $error = null)
     {
         if (!$fail_ok) {
             $msg = 'Failed on query: ' . $query;
@@ -3363,7 +3377,7 @@ class Database_Static_xml
             }
             fatal_exit($msg);
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -3373,15 +3387,15 @@ class Database_Static_xml
      * @param  ?array                   The record (NULL: don't have/use)
      * @return string                   The GUID
      */
-    public function _guid($schema = null,$record = null)
+    public function _guid($schema = null, $record = null)
     {
         if ((!is_null($schema)) && (!is_null($record))) {
             $guid = '';
             ksort($schema);
             $whole_key = true;
             foreach ($schema as $key => $type) {
-                if (strpos($type,'*') !== false) {
-                    if (array_key_exists($key,$record)) {
+                if (strpos($type, '*') !== false) {
+                    if (array_key_exists($key, $record)) {
                         $val = $record[$key];
 
                         if ($guid != '') {
@@ -3414,15 +3428,15 @@ class Database_Static_xml
             }
         }
 
-        $fuzz = strtoupper(md5(uniqid(strval(mt_rand(0,min(2147483647,mt_getrandmax()))),true)));
+        $fuzz = strtoupper(md5(uniqid(strval(mt_rand(0, min(2147483647, mt_getrandmax()))), true)));
 
         return '{'
-            . substr($fuzz,0,8) . '-'
-            . substr($fuzz,8,4) . '-'
-            . substr($fuzz,12,4) . '-'
-            . substr($fuzz,16,4) . '-'
-            . substr($fuzz,20,12)
-            . '}';
+        . substr($fuzz, 0, 8) . '-'
+        . substr($fuzz, 8, 4) . '-'
+        . substr($fuzz, 12, 4) . '-'
+        . substr($fuzz, 16, 4) . '-'
+        . substr($fuzz, 20, 12)
+        . '}';
     }
 
     /**
@@ -3433,7 +3447,7 @@ class Database_Static_xml
      */
     public function _escape_name($in)
     {
-        return str_replace(array('=',':',',','/','|'),array('!equals!','!colon!','!comma!','!slash!','!pipe!'),$in);
+        return str_replace(array('=', ':', ',', '/', '|'), array('!equals!', '!colon!', '!comma!', '!slash!', '!pipe!'), $in);
     }
 
     /**
@@ -3444,6 +3458,6 @@ class Database_Static_xml
      */
     public function _unescape_name($in)
     {
-        return str_replace(array('!equals!','!colon!','!comma!','!slash!','!pipe!'),array('=',':',',','/','|'),$in);
+        return str_replace(array('!equals!', '!colon!', '!comma!', '!slash!', '!pipe!'), array('=', ':', ',', '/', '|'), $in);
     }
 }

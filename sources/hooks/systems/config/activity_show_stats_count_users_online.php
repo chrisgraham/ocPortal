@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
-
 class Hook_config_activity_show_stats_count_users_online
 {
     /**

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_Preview_block_comcode
 {
     /**
@@ -27,12 +26,12 @@ class Hook_Preview_block_comcode
      */
     public function applies()
     {
-        if (!has_privilege(get_member(),'comcode_dangerous')) {
-            return array(false,null,false);
+        if (!has_privilege(get_member(), 'comcode_dangerous')) {
+            return array(false, null, false);
         }
 
-        $applies = !is_null(post_param('block',null));
-        return array($applies,null,false);
+        $applies = !is_null(post_param('block', null));
+        return array($applies, null, false);
     }
 
     /**
@@ -42,7 +41,7 @@ class Hook_Preview_block_comcode
      */
     public function run()
     {
-        if (!has_privilege(get_member(),'comcode_dangerous')) {
+        if (!has_privilege(get_member(), 'comcode_dangerous')) {
             access_denied('I_ERROR');
         }
 
@@ -54,13 +53,13 @@ class Hook_Preview_block_comcode
         $block = post_param('block');
         $parameters = get_block_parameters($block);
         foreach ($parameters as $parameter) {
-            if (($parameter == 'filter') && (in_array($block,array('bottom_news','main_news','side_news','side_news_archive')))) {
-                $value = post_param($parameter,'');
+            if (($parameter == 'filter') && (in_array($block, array('bottom_news', 'main_news', 'side_news', 'side_news_archive')))) {
+                $value = post_param($parameter, '');
             } else {
-                $value = post_param($parameter,'0');
+                $value = post_param($parameter, '0');
             }
             if ($value != '') {
-                $bparameters .= ' ' . $parameter . '="' . str_replace('"','\"',$value) . '"';
+                $bparameters .= ' ' . $parameter . '="' . str_replace('"', '\"', $value) . '"';
                 $bparameters_xml = '<blockParam key="' . escape_html($parameter) . '" val="' . escape_html($value) . '" />';
             }
         }
@@ -69,6 +68,6 @@ class Hook_Preview_block_comcode
 
         $preview = comcode_to_tempcode($comcode);
 
-        return array($preview,null);
+        return array($preview, null);
     }
 }

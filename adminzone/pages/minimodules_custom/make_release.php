@@ -24,13 +24,13 @@ If running on Windows, you need to install the following commands in your path..
 */
 
 restrictify();
-@ini_set('ocproducts.xss_detect','0');
+@ini_set('ocproducts.xss_detect', '0');
 
 disable_php_memory_limit();
 
-$type = get_param('type','0');
+$type = get_param('type', '0');
 
-$title = get_screen_title('ocPortal release assistance tool - step ' . strval(intval($type)+1) . '/3',false);
+$title = get_screen_title('ocPortal release assistance tool - step ' . strval(intval($type) + 1) . '/3', false);
 $title->evaluate_echo();
 
 switch ($type) {
@@ -48,32 +48,32 @@ switch ($type) {
 // Gather details
 function phase_0()
 {
-    $skip_check = (get_param_integer('skip',0) == 1)?'checked="checked"':'';
+    $skip_check = (get_param_integer('skip', 0) == 1) ? 'checked="checked"' : '';
 
     require_code('version2');
     $on_disk_version = get_version_dotted();
 
-    if (strpos($on_disk_version,'alpha') !== false) {
+    if (strpos($on_disk_version, 'alpha') !== false) {
         $release_description = 'This version is an alpha release of the next major version of ocPortal';
-    } elseif (strpos($on_disk_version,'beta') !== false) {
+    } elseif (strpos($on_disk_version, 'beta') !== false) {
         $release_description = 'This version is a beta release of the next major version of ocPortal';
-    } elseif (strpos($on_disk_version,'RC') !== false) {
+    } elseif (strpos($on_disk_version, 'RC') !== false) {
         $release_description = 'This version is a release candidate for the next major version of ocPortal';
-    } elseif (substr_count($on_disk_version,'.')<2) {
+    } elseif (substr_count($on_disk_version, '.') < 2) {
         $release_description = 'This version is the gold release of the next version of ocPortal';
     } else {
         $release_description = 'This version is a patch release that introduces a number of bug fixes since the last release';
     }
 
     $changes = 'All reported bugs since the last release have been fixed';
-    if (strpos($release_description,'patch release') !== false) {
+    if (strpos($release_description, 'patch release') !== false) {
         $changes .= ' (for a list of the more important fixes, see the [page="site:catalogues:index:bugs"]bugs catalogue[/page]).';
     }
-    if (strpos($release_description,'gold') !== false) {
+    if (strpos($release_description, 'gold') !== false) {
         $changes = 'TODO';
     }
 
-    $post_url = static_evaluate_tempcode(get_self_url(false,false,array('type' => '1')));
+    $post_url = static_evaluate_tempcode(get_self_url(false, false, array('type' => '1')));
 
     echo '
     <p>Have you run a code quality check on the non-module files (at the very least?). I am assuming that any non-trivial fixes have been tested.</p>
@@ -101,17 +101,17 @@ function phase_0()
             <fieldset>
             <legend>Upgrade necessity</legend>
             <p>Upgrading is&hellip;</p>
-            <input type="radio" name="needed" id="unrecommended" ' . ((strpos($release_description,'patch release') === false && strpos($release_description,'gold') === false)?'checked="checked" ':'') . 'value="not recommended for live sites" /><label for="unrecommended">&hellip;not recommended for live sites&hellip;</label><br />
-            <input type="radio" name="needed" id="not_needed" ' . ((strpos($release_description,'gold') !== false)?'checked="checked" ':'') . 'value="not necessary" /><label for="not_needed">&hellip;not necessary&hellip;</label><br />
+            <input type="radio" name="needed" id="unrecommended" ' . ((strpos($release_description, 'patch release') === false && strpos($release_description, 'gold') === false) ? 'checked="checked" ' : '') . 'value="not recommended for live sites" /><label for="unrecommended">&hellip;not recommended for live sites&hellip;</label><br />
+            <input type="radio" name="needed" id="not_needed" ' . ((strpos($release_description, 'gold') !== false) ? 'checked="checked" ' : '') . 'value="not necessary" /><label for="not_needed">&hellip;not necessary&hellip;</label><br />
             <input type="radio" name="needed" id="suggested" value="suggested" /><label for="suggested">&hellip;suggested&hellip;</label><br />
-            <input type="radio" name="needed" id="advised" ' . ((strpos($release_description,'patch release') !== false)?'checked="checked" ':'') . 'value="strongly advised" /><label for="advised">&hellip;strongly advised&hellip;</label><br />
+            <input type="radio" name="needed" id="advised" ' . ((strpos($release_description, 'patch release') !== false) ? 'checked="checked" ' : '') . 'value="strongly advised" /><label for="advised">&hellip;strongly advised&hellip;</label><br />
             <label for="justification">&hellip;due to</label><input type="text" name="justification" id="justification" value="" />
         </fieldset>
         <br />
         <fieldset>
             <legend style="display: none;">Submit</legend>
             <input type="checkbox" name="skip" id="skip" value="1" ' . $skip_check . ' /><label for="skip">Installer already compiled</label>
-            <input type="checkbox" name="bleeding_edge" ' . (((strpos($release_description,'patch release') === false) && (strpos($release_description,'gold') === false))?'checked="checked" ':'') . 'id="bleeding_edge" value="1" /><label for="bleeding_edge">Bleeding-edge release</label>
+            <input type="checkbox" name="bleeding_edge" ' . (((strpos($release_description, 'patch release') === false) && (strpos($release_description, 'gold') === false)) ? 'checked="checked" ' : '') . 'id="bleeding_edge" value="1" /><label for="bleeding_edge">Bleeding-edge release</label>
             <input type="checkbox" name="old_tree" id="old_tree" value="1" /><label for="old_tree">Older-tree maintenance release</label>
             <p><input type="submit" class="buttons__proceed button_screen" value="Shake it baby" /></p>
         </fieldset>
@@ -124,7 +124,7 @@ function phase_1_pre()
     echo '
     <p>As this is a substantial new release make sure you have done the following:</p>
     <ul>
-        <li>Run the <a href="' . escape_html(static_evaluate_tempcode(build_url(array('page' => 'plug_guid'),'adminzone'))) . '" target="_blank">plug_guid</a> tool to build needed GUIDs into the PHP.</li>
+        <li>Run the <a href="' . escape_html(static_evaluate_tempcode(build_url(array('page' => 'plug_guid'), 'adminzone'))) . '" target="_blank">plug_guid</a> tool to build needed GUIDs into the PHP.</li>
         <li>Build <kbd>install.sql</kbd> (taking into account it must run on different MySQL versions<!--- make sure the CREATE TABLE code is equivalent to the old version of the file, i.e. <kbd>DEFAULT CHARSET=utf8</kbd> is stripped-->). If you think you\'ve done it then the <a href="' . get_base_url() . '/_tests/?id=unit_tests/installsql" target="_blank">installsql unit test</a> will confirm.</li>
         <li>Run the <a href="' . escape_html(get_base_url() . '/_test') . '">unit tests</a><!--, with debug mode on, on the custom ocPortal PHP version-->.</li>
         <li>Test with a non-OCF forum driver (e.g. phpBB)</li>
@@ -140,11 +140,11 @@ function phase_1_pre()
     </ul>
     ';
 
-    if (strpos(file_get_contents(get_file_base() . '/install.sql'),file_get_contents(get_file_base() . '/install1.sql')) === false) {
+    if (strpos(file_get_contents(get_file_base() . '/install.sql'), file_get_contents(get_file_base() . '/install1.sql')) === false) {
         warn_exit('install1.sql seems out-dated. Run the \'installsql\' unit test.');
     }
 
-    $post_url = static_evaluate_tempcode(get_self_url(false,false,array('type' => '1')));
+    $post_url = static_evaluate_tempcode(get_self_url(false, false, array('type' => '1')));
 
     echo '
         <form action="' . escape_html($post_url) . '" method="post">
@@ -165,11 +165,11 @@ function phase_1_pre()
 function phase_1()
 {
     $version_dotted = post_param('version');
-    $is_bleeding_edge = (post_param_integer('bleeding_edge',0) == 1);
-    $is_old_tree = (post_param_integer('old_tree',0) == 1);
-    $is_substantial = (substr($version_dotted,-2) == '.0') || (strpos($version_dotted,'beta1') !== false) || (strpos($version_dotted,'RC1') !== false);
+    $is_bleeding_edge = (post_param_integer('bleeding_edge', 0) == 1);
+    $is_old_tree = (post_param_integer('old_tree', 0) == 1);
+    $is_substantial = (substr($version_dotted, -2) == '.0') || (strpos($version_dotted, 'beta1') !== false) || (strpos($version_dotted, 'RC1') !== false);
 
-    if ((post_param_integer('intermediary_tasks',0) == 0) && ($is_substantial) && (!$is_bleeding_edge)) {
+    if ((post_param_integer('intermediary_tasks', 0) == 0) && ($is_substantial) && (!$is_bleeding_edge)) {
         phase_1_pre();
         return;
     }
@@ -180,17 +180,17 @@ function phase_1()
     $justification = post_param('justification');
     $changes = post_param('changes');
     $descrip = post_param('descrip');
-    if (substr($descrip,-1) == '.') {
-        $descrip = substr($descrip,0,strlen($descrip)-1);
+    if (substr($descrip, -1) == '.') {
+        $descrip = substr($descrip, 0, strlen($descrip) - 1);
     }
-    $bleeding_edge = ($is_bleeding_edge?'1':'0');
-    $old_tree = ($is_old_tree?'1':'0');
+    $bleeding_edge = ($is_bleeding_edge ? '1' : '0');
+    $old_tree = ($is_old_tree ? '1' : '0');
 
-    if (post_param_integer('skip',0) == 0) {
+    if (post_param_integer('skip', 0) == 0) {
         echo make_installers();
     }
 
-    $post_url = static_evaluate_tempcode(get_self_url(false,false,array('type' => '2')));
+    $post_url = static_evaluate_tempcode(get_self_url(false, false, array('type' => '2')));
 
     echo '
         <form action="' . escape_html($post_url) . '" method="post">
@@ -211,8 +211,8 @@ function phase_1()
 function phase_2()
 {
     $justification = post_param('justification');
-    if (substr($justification,-1) == '.') {
-        $justification = substr($justification,0,strlen($justification)-1);
+    if (substr($justification, -1) == '.') {
+        $justification = substr($justification, 0, strlen($justification) - 1);
     }
     if ($justification != '') {
         $justification = ' due to ' . $justification;
@@ -227,11 +227,11 @@ function phase_2()
     $version_dotted = post_param('version');
     $version_branch = get_version_branch();
     $version_pretty = get_version_pretty__from_dotted($version_dotted);
-    $is_bleeding_edge = (post_param_integer('bleeding_edge',0) == 1);
-    $is_old_tree = (post_param_integer('old_tree',0) == 1);
-    $is_substantial = (substr($version_dotted,-2) == '.0') || (strpos($version_dotted,'beta1') !== false) || (strpos($version_dotted,'RC1') !== false);
+    $is_bleeding_edge = (post_param_integer('bleeding_edge', 0) == 1);
+    $is_old_tree = (post_param_integer('old_tree', 0) == 1);
+    $is_substantial = (substr($version_dotted, -2) == '.0') || (strpos($version_dotted, 'beta1') !== false) || (strpos($version_dotted, 'RC1') !== false);
 
-    $push_url = get_brand_base_url() . '/adminzone/index.php?page=_make_release&version=' . urlencode($version_dotted) . '&is_bleeding_edge=' . ($is_bleeding_edge?'1':'0') . '&is_old_tree=' . ($is_old_tree?'1':'0') . '&descrip=' . urlencode($descrip) . '&needed=' . urlencode($needed) . '&justification=' . urlencode($justification);
+    $push_url = get_brand_base_url() . '/adminzone/index.php?page=_make_release&version=' . urlencode($version_dotted) . '&is_bleeding_edge=' . ($is_bleeding_edge ? '1' : '0') . '&is_old_tree=' . ($is_old_tree ? '1' : '0') . '&descrip=' . urlencode($descrip) . '&needed=' . urlencode($needed) . '&justification=' . urlencode($justification);
 
     echo '
     <p>Here\'s a list of things for you to do. Get to it!</p>
@@ -302,7 +302,7 @@ function phase_2()
             <li><strong>Documentation</strong>: Upload the latest new documentation&hellip;<ul>
                     <li>Build new addon tutorial index (<a target="_blank" href="' . get_base_url() . '/adminzone/index.php?page=doc_index_build&amp;keep_devtest=1">doc_index_build minimodule</a>)</li>
                     <li>Create <a target="_blank" href="http://ocportal.com/adminzone/index.php?page=admin_zones&amp;type=add">docs' . strval(intval(ocp_version_number())) . ' zone</a> (Codename "docs' . strval(intval(ocp_version_number())) . '", Title "Documentation (version ' . strval(intval(ocp_version_number())) . ')", Theme "ocProducts", Default page "tutorials")</li>
-                    <li>Do this in a Linux shell on the ocPortal.com server: <kbd>rm docs' . strval(intval(ocp_version_number())-1) . ' ; mv docs docs' . strval(intval(ocp_version_number())-1) . ' ; rm -f docs' . strval(intval(ocp_version_number())) . '/pages/comcode_custom/EN/*.txt; ln -s docs' . strval(intval(ocp_version_number())) . ' docs; cd docs' . strval(intval(ocp_version_number()-1)) . '; mv api *.doc *.pdf *.zip *.xls ../docs/ ; cd ..</kbd></li>
+                    <li>Do this in a Linux shell on the ocPortal.com server: <kbd>rm docs' . strval(intval(ocp_version_number()) - 1) . ' ; mv docs docs' . strval(intval(ocp_version_number()) - 1) . ' ; rm -f docs' . strval(intval(ocp_version_number())) . '/pages/comcode_custom/EN/*.txt; ln -s docs' . strval(intval(ocp_version_number())) . ' docs; cd docs' . strval(intval(ocp_version_number() - 1)) . '; mv api *.doc *.pdf *.zip *.xls ../docs/ ; cd ..</kbd></li>
                     <li>Upload the latest <kbd>.txt</kbd> files from git for <kbd>docs/pages/comcode_custom/EN/</kbd> to the ocPortal.com server</li>
                     <li>Upload <kbd>data_custom/images/docs</kbd> files from git to the ocPortal.com server</li>
             </ul></li>

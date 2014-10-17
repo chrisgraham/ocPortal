@@ -19,13 +19,14 @@ function init__facebook_connect()
 
     // Initialise Facebook Connect
     require_code('facebook/facebook');
+
     class ocpFacebook extends BaseFacebook // We don't want any persistence - we store in normal ocPortal sessions/member rows
     {
-        protected function setPersistentData($key,$value)
+        protected function setPersistentData($key, $value)
         {
         }
 
-        protected function getPersistentData($key,$default = false)
+        protected function getPersistentData($key, $default = false)
         {
         }
 
@@ -41,15 +42,16 @@ function init__facebook_connect()
         {
         }
     }
+
     global $FACEBOOK_CONNECT;
     $FACEBOOK_CONNECT = mixed();
     $appid = get_option('facebook_appid');
     $appsecret = get_option('facebook_secret_code');
-    $FACEBOOK_CONNECT = new ocpFacebook(array('appId' => $appid,'secret' => $appsecret));
+    $FACEBOOK_CONNECT = new ocpFacebook(array('appId' => $appid, 'secret' => $appsecret));
 
     if (running_script('index')) {
         require_javascript('javascript_facebook');
-        attach_to_screen_footer(do_template('FACEBOOK_FOOTER',null,null,true,null,'.tpl','templates','default'));
+        attach_to_screen_footer(do_template('FACEBOOK_FOOTER', null, null, true, null, '.tpl', 'templates', 'default'));
     }
 }
 
@@ -57,7 +59,7 @@ function init__facebook_connect()
 function handle_facebook_connection_login($current_logged_in_member)
 {
     if (!class_exists('ocp_tempcode')) {
-        return NULL;
+        return null;
     }
 
     if (is_guest($current_logged_in_member)) {
@@ -87,28 +89,28 @@ function handle_facebook_connection_login($current_logged_in_member)
     if (!is_array($details)) {
         return $current_logged_in_member;
     }
-    $details2 = $FACEBOOK_CONNECT->api('/me',array('fields' => 'picture','type' => 'normal'));
+    $details2 = $FACEBOOK_CONNECT->api('/me', array('fields' => 'picture', 'type' => 'normal'));
     if (!is_array($details2)) { // NB: This can happen even if there is a Facebook session, if the session ID in the cookie has expired. In this case Guest will be the user until the frontend does a refresh
         return $current_logged_in_member;
     }
-    $details = array_merge($details,$details2);
+    $details = array_merge($details, $details2);
     if (!isset($details['name'])) {
         return $current_logged_in_member;
     }
     $username = $details['name'];
-    $photo_url = array_key_exists('picture',$details)?$details['picture']:'';
+    $photo_url = array_key_exists('picture', $details) ? $details['picture'] : '';
     if (is_array($photo_url)) {
         $photo_url = $photo_url['data']['url'];
     }
     if ($photo_url != '') {
         $photo_url = 'http://graph.facebook.com/' . strval($facebook_uid) . '/picture?type=large'; // In case URL changes
     }
-    $avatar_url = ($photo_url == '')?mixed():$photo_url;
+    $avatar_url = ($photo_url == '') ? mixed() : $photo_url;
     $photo_thumb_url = '';
     if ($photo_url != '') {
         $photo_thumb_url = $photo_url;
     }
-    $email_address = array_key_exists('email',$details)?$details['email']:'';
+    $email_address = array_key_exists('email', $details) ? $details['email'] : '';
     $timezone = mixed();
     if (isset($details['timezone'])) {
         require_code('temporal');
@@ -118,28 +120,28 @@ function handle_facebook_connection_login($current_logged_in_member)
     if (isset($details['locale'])) {
         $language = strtoupper($details['locale']);
     }
-    if ($language !== NULL) {
+    if ($language !== null) {
         if (!does_lang_exist($language)) {
-            $language = preg_replace('#\_.*$#','',$language);
+            $language = preg_replace('#\_.*$#', '', $language);
             if (!does_lang_exist($language)) {
                 $language = '';
             }
         }
     }
-    $dob = array_key_exists('birthday',$details)?$details['birthday']:'';
+    $dob = array_key_exists('birthday', $details) ? $details['birthday'] : '';
     $dob_day = mixed();
     $dob_month = mixed();
     $dob_year = mixed();
     if ($dob != '') {
-        $_dob = explode('/',$dob);
+        $_dob = explode('/', $dob);
         $dob_day = intval($_dob[1]);
         $dob_month = intval($_dob[0]);
         $dob_year = intval($_dob[2]);
     }
 
     // See if they have logged in before - i.e. have a synched account
-    $member_row = $GLOBALS['FORUM_DB']->query_select('f_members',array('*'),array('m_password_compat_scheme' => 'facebook','m_pass_hash_salted' => $facebook_uid),'ORDER BY id DESC',1);
-    $member_id = array_key_exists(0,$member_row)?$member_row[0]['id']:null;
+    $member_row = $GLOBALS['FORUM_DB']->query_select('f_members', array('*'), array('m_password_compat_scheme' => 'facebook', 'm_pass_hash_salted' => $facebook_uid), 'ORDER BY id DESC', 1);
+    $member_id = array_key_exists(0, $member_row) ? $member_row[0]['id'] : null;
     if (is_guest($member_id)) {
         $member_id = null;
     }
@@ -151,15 +153,15 @@ function handle_facebook_connection_login($current_logged_in_member)
         $member_id=NULL;
     }*/
 
-    if ((!is_null($member_id)) && ($current_logged_in_member !== NULL) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member != $member_id)) {
+    if ((!is_null($member_id)) && ($current_logged_in_member !== null) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member != $member_id)) {
         return $current_logged_in_member;
     } // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
 
     // If logged in before using Facebook, do some synching
     if (!is_null($member_id)) {
         $last_visit_time = $member_id[0]['m_last_visit_time'];
-        if ($timezone !== NULL) {
-            if ((!is_numeric($member_row[0]['m_timezone_offset'])) && (tz_time(time(),$timezone) == tz_time(time(),$member_row[0]['m_timezone_offset']))) {
+        if ($timezone !== null) {
+            if ((!is_numeric($member_row[0]['m_timezone_offset'])) && (tz_time(time(), $timezone) == tz_time(time(), $member_row[0]['m_timezone_offset']))) {
                 $timezone = $member_row[0]['m_timezone_offset'];
             } // If equivalent, don't change
         }
@@ -168,7 +170,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 
         // Username
         if (get_option('facebook_sync_username') == '1') {
-            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username' => $username));
+            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'id', array('m_username' => $username));
             if (is_null($test)) { // Make sure there's no conflict yet the name has changed
                 $update_map['m_username'] = $username;
             }
@@ -176,7 +178,7 @@ function handle_facebook_connection_login($current_logged_in_member)
 
         // DOB
         if (get_option('facebook_sync_dob') == '1') {
-            $update_map += array('m_dob_day' => $dob_day,'m_dob_month' => $dob_month,'m_dob_year' => $dob_year);
+            $update_map += array('m_dob_day' => $dob_day, 'm_dob_month' => $dob_month, 'm_dob_year' => $dob_year);
         }
 
         // Email
@@ -189,8 +191,8 @@ function handle_facebook_connection_login($current_logged_in_member)
         // Avatar/photos
         if (get_option('facebook_sync_avatar') == '1') {
             $test = $member_row[0]['m_avatar_url'];
-            if (($avatar_url !== NULL) && (($test == '') || (strpos($test,'facebook') !== false) || (strpos($test,'fbcdn') !== false))) {
-                if ($timezone !== NULL) {
+            if (($avatar_url !== null) && (($test == '') || (strpos($test, 'facebook') !== false) || (strpos($test, 'fbcdn') !== false))) {
+                if ($timezone !== null) {
                     $update_map['m_timezone_offset'] = $timezone;
                 }
                 $update_map['m_avatar_url'] = $avatar_url;
@@ -200,12 +202,12 @@ function handle_facebook_connection_login($current_logged_in_member)
         }
 
         // Run update
-        $GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('m_password_compat_scheme' => 'facebook','m_pass_hash_salted' => strval($facebook_uid)),'',1);
+        $GLOBALS['FORUM_DB']->query_update('f_members', $update_map, array('m_password_compat_scheme' => 'facebook', 'm_pass_hash_salted' => strval($facebook_uid)), '', 1);
 
         // Caching
-        if ((array_key_exists('m_username',$update_map)) && ($username != $member_row[0]['m_username'])) {
+        if ((array_key_exists('m_username', $update_map)) && ($username != $member_row[0]['m_username'])) {
             require_code('ocf_members_action2');
-            update_member_username_caching($member_id,$username);
+            update_member_username_caching($member_id, $username);
         }
     }
 
@@ -224,10 +226,10 @@ function handle_facebook_connection_login($current_logged_in_member)
                     exit();
             }*/
 
-            $GLOBALS['FORUM_DB']->query_update('f_members',array('m_password_compat_scheme' => 'facebook','m_pass_hash_salted' => $facebook_uid),array('id' => $current_logged_in_member),'',1);
+            $GLOBALS['FORUM_DB']->query_update('f_members', array('m_password_compat_scheme' => 'facebook', 'm_pass_hash_salted' => $facebook_uid), array('id' => $current_logged_in_member), '', 1);
             require_code('site');
             require_lang('facebook');
-            attach_message(do_lang_tempcode('FACEBOOK_ACCOUNT_CONNECTED',escape_html(get_site_name()),escape_html($GLOBALS['FORUM_DRIVER']->get_username($current_logged_in_member)),array(escape_html($username))),'inform');
+            attach_message(do_lang_tempcode('FACEBOOK_ACCOUNT_CONNECTED', escape_html(get_site_name()), escape_html($GLOBALS['FORUM_DRIVER']->get_username($current_logged_in_member)), array(escape_html($username))), 'inform');
             return $current_logged_in_member;
         }
 
@@ -236,11 +238,11 @@ function handle_facebook_connection_login($current_logged_in_member)
 
         if (get_option('facebook_allow_signups') == '0') {
             require_lang('facebook');
-            attach_message(do_lang_tempcode('FACEBOOK_SIGNUPS_DISABLED'),'warn');
-            return NULL;
+            attach_message(do_lang_tempcode('FACEBOOK_SIGNUPS_DISABLED'), 'warn');
+            return null;
         }
 
-        $completion_form_submitted = post_param('email_address','') != '';
+        $completion_form_submitted = post_param('email_address', '') != '';
 
         require_code('ocf_members_action2');
 
@@ -250,11 +252,11 @@ function handle_facebook_connection_login($current_logged_in_member)
         require_code('ocf_groups');
         require_code('ocf_members2');
         require_code('ocf_members_action');
-        $_custom_fields = ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true),null,null,null,1);
+        $_custom_fields = ocf_get_all_custom_fields_match(ocf_get_all_default_groups(true), null, null, null, 1);
         if ((!$completion_form_submitted) && (count($_custom_fields) != 0) && (get_option('finish_profile') == '1')) { // UI
             $GLOBALS['FACEBOOK_FINISHING_PROFILE'] = true;
-            $middle = ocf_member_external_linker_ask($username,'facebook',$email_address,$dob_day,$dob_month,$dob_year);
-            $tpl = globalise($middle,null,'',true);
+            $middle = ocf_member_external_linker_ask($username, 'facebook', $email_address, $dob_day, $dob_month, $dob_year);
+            $tpl = globalise($middle, null, '', true);
             $tpl->evaluate_echo();
             exit();
         } else { // Actualiser
@@ -266,30 +268,31 @@ function handle_facebook_connection_login($current_logged_in_member)
             if (($spam_check_level == 'EVERYTHING') || ($spam_check_level == 'ACTIONS') || ($spam_check_level == 'GUESTACTIONS') || ($spam_check_level == 'JOINING')) {
                 require_code('antispam');
                 check_rbls();
-                check_stopforumspam(post_param('username',$username),$email_address);
+                check_stopforumspam(post_param('username', $username), $email_address);
             }
 
-            $username = post_param('username',$username)/*user may have customised username*/;
+            $username = post_param('username', $username)/*user may have customised username*/
+            ;
             if ((count($_custom_fields) != 0) && (get_value('no_finish_profile') !== '1')) {// Was not auto-generated, so needs to be checked
-                ocf_check_name_valid($username,null,null);
+                ocf_check_name_valid($username, null, null);
             }
-            $member_id = ocf_member_external_linker($username,$facebook_uid,'facebook',false,$email_address,$dob_day,$dob_month,$dob_year,$timezone,$language,$avatar_url,$photo_url,$photo_thumb_url);
+            $member_id = ocf_member_external_linker($username, $facebook_uid, 'facebook', false, $email_address, $dob_day, $dob_month, $dob_year, $timezone, $language, $avatar_url, $photo_url, $photo_thumb_url);
         }
     }
 
     // Finalise the session
     if (!is_null($member_id)) {
         require_code('users_inactive_occasionals');
-        create_session($member_id,1,(isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
+        create_session($member_id, 1, (isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
     }
 
     // Store oAuth for syndication
     if (get_option('facebook_auto_syndicate') == '1') {
         if (!is_null($member_id)) {
-            set_long_value('facebook_oauth_token__' . strval($member_id),$FACEBOOK_CONNECT->getAccessToken());
+            set_long_value('facebook_oauth_token__' . strval($member_id), $FACEBOOK_CONNECT->getAccessToken());
 
             if (get_option('facebook_member_syndicate_to_page') == '1') {
-                set_long_value('facebook_syndicate_to_page__' . strval($member_id),'1');
+                set_long_value('facebook_syndicate_to_page__' . strval($member_id), '1');
             }
         }
     }

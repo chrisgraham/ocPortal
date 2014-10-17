@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
-
 class Hook_Notification_needs_validation extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_needs_validation extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_needs_validation extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['needs_validation'] = array(do_lang('VALIDATION'),do_lang('unvalidated:NOTIFICATION_TYPE_needs_validation'));
+        $list['needs_validation'] = array(do_lang('VALIDATION'), do_lang('unvalidated:NOTIFICATION_TYPE_needs_validation'));
         return $list;
     }
 }

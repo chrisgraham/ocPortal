@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
-
 class Module_classifieds
 {
     /**
@@ -47,10 +46,10 @@ class Module_classifieds
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('classifieds_prices',array(
+            $GLOBALS['SITE_DB']->create_table('classifieds_prices', array(
                 'id' => '*AUTO',
                 'c_catalogue_name' => 'ID_TEXT',
                 //'c_category_id'=>'?AUTO_LINK',
@@ -58,26 +57,26 @@ class Module_classifieds
                 'c_label' => 'SHORT_TRANS',
                 'c_price' => 'REAL',
             ));
-            $GLOBALS['SITE_DB']->create_index('classifieds_prices','c_catalogue_name',array('c_catalogue_name'));
+            $GLOBALS['SITE_DB']->create_index('classifieds_prices', 'c_catalogue_name', array('c_catalogue_name'));
 
             require_lang('classifieds');
 
             $prices = array(
-                'ONE_WEEK' => array(0.0,7),
-                'ONE_MONTH' => array(5.0,30),
-                'THREE_MONTHS' => array(12.0,90),
-                'SIX_MONTHS' => array(20.0,180),
-                'ONE_YEAR' => array(32.0,365),
+                'ONE_WEEK' => array(0.0, 7),
+                'ONE_MONTH' => array(5.0, 30),
+                'THREE_MONTHS' => array(12.0, 90),
+                'SIX_MONTHS' => array(20.0, 180),
+                'ONE_YEAR' => array(32.0, 365),
             );
             foreach ($prices as $level => $bits) {
-                list($price,$days) = $bits;
+                list($price, $days) = $bits;
                 $map = array(
                     'c_catalogue_name' => 'classifieds',
                     'c_days' => $days,
                     'c_price' => $price,
                 );
-                $map += insert_lang('c_label',do_lang('CLASSIFIEDS_DEFAULT_PRICE_LEVEL_' . $level),2);
-                $GLOBALS['SITE_DB']->query_insert('classifieds_prices',$map);
+                $map += insert_lang('c_label', do_lang('CLASSIFIEDS_DEFAULT_PRICE_LEVEL_' . $level), 2);
+                $GLOBALS['SITE_DB']->query_insert('classifieds_prices', $map);
             }
         }
     }
@@ -91,11 +90,11 @@ class Module_classifieds
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array();
         if (!$check_perms || !is_guest($member_id)) {
-            $ret['adverts'] = array('CLASSIFIED_ADVERTS','menu/classifieds');
+            $ret['adverts'] = array('CLASSIFIED_ADVERTS', 'menu/classifieds');
         }
         return $ret;
     }
@@ -111,14 +110,14 @@ class Module_classifieds
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        $type = get_param('type','adverts');
+        $type = get_param('type', 'adverts');
 
         require_lang('classifieds');
 
-        $member_id = get_param_integer('member_id',get_member());
-        $this->title = get_screen_title(($member_id == get_member())?'CLASSIFIED_ADVERTS':'_CLASSIFIED_ADVERTS',true,array($GLOBALS['FORUM_DRIVER']->get_username($member_id,true)));
+        $member_id = get_param_integer('member_id', get_member());
+        $this->title = get_screen_title(($member_id == get_member()) ? 'CLASSIFIED_ADVERTS' : '_CLASSIFIED_ADVERTS', true, array($GLOBALS['FORUM_DRIVER']->get_username($member_id, true)));
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -128,7 +127,7 @@ class Module_classifieds
      */
     public function run()
     {
-        $type = get_param('type','adverts');
+        $type = get_param('type', 'adverts');
 
         if ($type == 'adverts') {
             return $this->adverts();
@@ -147,7 +146,7 @@ class Module_classifieds
         require_code('catalogues');
         require_code('ecommerce');
 
-        $member_id = get_param_integer('member_id',get_member());
+        $member_id = get_param_integer('member_id', get_member());
 
         if (is_guest()) {
             access_denied('NOT_AS_GUEST');
@@ -155,24 +154,24 @@ class Module_classifieds
 
         enforce_personal_access($member_id);
 
-        $start = get_param_integer('classifieds_start',0);
-        $max = get_param_integer('classifieds_max',30);
+        $start = get_param_integer('classifieds_start', 0);
+        $max = get_param_integer('classifieds_max', 30);
 
         require_code('templates_pagination');
 
-        $max_rows = $GLOBALS['SITE_DB']->query_select_value('catalogue_entries e JOIN ' . get_table_prefix() . 'classifieds_prices c ON c.c_catalogue_name=e.c_name','COUNT(*)',array('ce_submitter' => $member_id));
+        $max_rows = $GLOBALS['SITE_DB']->query_select_value('catalogue_entries e JOIN ' . get_table_prefix() . 'classifieds_prices c ON c.c_catalogue_name=e.c_name', 'COUNT(*)', array('ce_submitter' => $member_id));
 
-        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries e JOIN ' . get_table_prefix() . 'classifieds_prices c ON c.c_catalogue_name=e.c_name',array('e.*'),array('ce_submitter' => $member_id),'GROUP BY e.id ORDER BY ce_add_date DESC');
+        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries e JOIN ' . get_table_prefix() . 'classifieds_prices c ON c.c_catalogue_name=e.c_name', array('e.*'), array('ce_submitter' => $member_id), 'GROUP BY e.id ORDER BY ce_add_date DESC');
         if (count($rows) == 0) {
             inform_exit(do_lang_tempcode('NO_ENTRIES'));
         }
 
         $ads = array();
         foreach ($rows as $row) {
-            $data_map = get_catalogue_entry_map($row,null,'CATEGORY','DEFAULT',get_param_integer('keep_catalogue_' . $row['c_name'] . '_root',null),null,array(0));
+            $data_map = get_catalogue_entry_map($row, null, 'CATEGORY', 'DEFAULT', get_param_integer('keep_catalogue_' . $row['c_name'] . '_root', null), null, array(0));
             $ad_title = $data_map['FIELD_0'];
 
-            $purchase_url = build_url(array('page' => 'purchase','type' => 'misc','filter' => 'CLASSIFIEDS_ADVERT','id' => $row['id']),get_module_zone('purchase'));
+            $purchase_url = build_url(array('page' => 'purchase', 'type' => 'misc', 'filter' => 'CLASSIFIEDS_ADVERT', 'id' => $row['id']), get_module_zone('purchase'));
 
             // We'll show all transactions against this ad
             $transaction_details = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'transactions WHERE t_purchase_id=' . strval($row['id']) . ' AND t_item LIKE \'' . db_encode_like('CLASSIFIEDS\_ADVERT\_%') . '\'');
@@ -201,8 +200,8 @@ class Module_classifieds
                     'T_VIA' => $t['t_via']
                 );
             }
-            $url_map = array('page' => 'catalogues','type' => 'entry','id' => $row['id']);
-            $url = build_url($url_map,'_SELF');
+            $url_map = array('page' => 'catalogues', 'type' => 'entry', 'id' => $row['id']);
+            $url = build_url($url_map, '_SELF');
 
             // No known expiry status: put on free, or let expire
             if ($row['ce_last_moved'] == $row['ce_add_date']) {
@@ -225,9 +224,9 @@ class Module_classifieds
             );
         }
 
-        $pagination = pagination(do_lang('_CLASSIFIED_ADVERTS'),$start,'classifieds_start',$max,'classifieds_max',$max_rows);
+        $pagination = pagination(do_lang('_CLASSIFIED_ADVERTS'), $start, 'classifieds_start', $max, 'classifieds_max', $max_rows);
 
-        $tpl = do_template('CLASSIFIED_ADVERTS_SCREEN',array('_GUID' => 'b25659c245a738b4f161dc87869d9edc','TITLE' => $this->title,'PAGINATION' => $pagination,'ADS' => $ads));
+        $tpl = do_template('CLASSIFIED_ADVERTS_SCREEN', array('_GUID' => 'b25659c245a738b4f161dc87869d9edc', 'TITLE' => $this->title, 'PAGINATION' => $pagination, 'ADS' => $ads));
 
         require_code('templates_internalise_screen');
         return internalise_own_screen($tpl);

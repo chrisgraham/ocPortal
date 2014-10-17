@@ -36,21 +36,21 @@ if (!function_exists('require_lang_compile')) {
      * @param  boolean                  Whether to just return if there was a loading error
      * @return boolean                  Whether we FAILED to load
      */
-    function require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors = false)
+    function require_lang_compile($codename, $lang, $type, $cache_path, $ignore_errors = false)
     {
-        global $LANGUAGE_STRINGS_CACHE,$REQUIRE_LANG_LOOP,$LANG_LOADED_LANG;
+        global $LANGUAGE_STRINGS_CACHE, $REQUIRE_LANG_LOOP, $LANG_LOADED_LANG;
 
-        $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache',0) == 1) || (get_param_integer('cache',0) == 1)) && (get_param_integer('keep_cache',null) !== 0) && (get_param_integer('cache',null) !== 0);
+        $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1)) && (get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache', null) !== 0);
         if ($desire_cache) {
             if (!$GLOBALS['IN_MINIKERNEL_VERSION']) {
                 global $DECACHED_COMCODE_LANG_STRINGS;
 
                 // Cleanup language strings
                 if (!$DECACHED_COMCODE_LANG_STRINGS) {
-                    $comcode_lang_strings = $GLOBALS['SITE_DB']->query('SELECT string_index FROM ' . get_table_prefix() . 'cached_comcode_pages WHERE ' . db_string_equal_to('the_zone','') . ' AND the_page LIKE \'' . db_encode_like($codename . ':') . '\'');
+                    $comcode_lang_strings = $GLOBALS['SITE_DB']->query('SELECT string_index FROM ' . get_table_prefix() . 'cached_comcode_pages WHERE ' . db_string_equal_to('the_zone', '') . ' AND the_page LIKE \'' . db_encode_like($codename . ':') . '\'');
                     if (!is_null($comcode_lang_strings)) {
                         foreach ($comcode_lang_strings as $comcode_lang_string) {
-                            $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',$comcode_lang_string);
+                            $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages', $comcode_lang_string);
                             delete_lang($comcode_lang_string['string_index']);
                         }
                     }
@@ -67,7 +67,7 @@ if (!function_exists('require_lang_compile')) {
         if ((@is_array($FILE_ARRAY)) && (file_array_exists('lang/' . $lang . '/' . $codename . '.ini'))) {
             $lang_file = 'lang/' . $lang . '/' . $codename . '.ini';
             $file = file_array_get($lang_file);
-            _get_lang_file_map($file,$load_target,null,true);
+            _get_lang_file_map($file, $load_target, null, true);
             $bad = true;
         } else {
             $bad = true;
@@ -76,7 +76,7 @@ if (!function_exists('require_lang_compile')) {
             // Load originals
             $lang_file = get_file_base() . '/lang/' . $lang . '/' . filter_naughty($codename) . '.ini';
             if (file_exists($lang_file)) { // Non-custom, Proper language
-                _get_lang_file_map($lang_file,$load_target,null,false);
+                _get_lang_file_map($lang_file, $load_target, null, false);
                 $bad = false;
             }
 
@@ -94,7 +94,7 @@ if (!function_exists('require_lang_compile')) {
                 }
             }
             if (($type != 'lang') && (file_exists($lang_file))) {
-                _get_lang_file_map($lang_file,$load_target,null,false);
+                _get_lang_file_map($lang_file, $load_target, null, false);
                 $bad = false;
                 $dirty = true; // Tainted from the official pack, so can't store server wide
             }
@@ -102,7 +102,7 @@ if (!function_exists('require_lang_compile')) {
             // NB: Merge op doesn't happen in require_lang. It happens when do_lang fails and then decides it has to force a recursion to do_lang(xx,fallback_lang()) which triggers require_lang(xx,fallback_lang()) when it sees it's not loaded
 
             if (($bad) && ($lang != fallback_lang())) { // Still some hope
-                require_lang($codename,fallback_lang(),$type,$ignore_errors);
+                require_lang($codename, fallback_lang(), $type, $ignore_errors);
                 $REQUIRE_LANG_LOOP--;
                 $fallback_cache_path = get_custom_file_base() . '/caches/lang/' . fallback_lang() . '/' . $codename . '.lcd';
                 if (file_exists($fallback_cache_path)) {
@@ -115,17 +115,17 @@ if (!function_exists('require_lang_compile')) {
                     $lang_codes = array_keys($fallback_map);
                     foreach ($fallback_map as $value) {
                         if (strlen($to_translate . $sep . $to_translate) >= 3000) {
-                            $translated = preg_split('#<span class="notranslate">[^<>]*----[^<>]*</span>#',google_translate($to_translate,$lang));
+                            $translated = preg_split('#<span class="notranslate">[^<>]*----[^<>]*</span>#', google_translate($to_translate, $lang));
                             foreach ($translated as $j => $t_value) {
-                                if (strtolower($lang_codes[$from+$j]) == $lang_codes[$from+$j]) {
-                                    $t_value = $fallback_map[$lang_codes[$from+$j]];
+                                if (strtolower($lang_codes[$from + $j]) == $lang_codes[$from + $j]) {
+                                    $t_value = $fallback_map[$lang_codes[$from + $j]];
                                 }
-                                if ($lang_codes[$from+$j] == 'locale') {
+                                if ($lang_codes[$from + $j] == 'locale') {
                                     $t_value = strtolower($lang) . '_' . strtoupper($lang);
                                 }
 
-                                $fallback_map[$lang_codes[$from+$j]] = $t_value;
-                                $load_target[$lang_codes[$from+$j]] = $t_value;
+                                $fallback_map[$lang_codes[$from + $j]] = $t_value;
+                                $load_target[$lang_codes[$from + $j]] = $t_value;
                             }
                             $from = $i;
                             $to_translate = '';
@@ -138,24 +138,24 @@ if (!function_exists('require_lang_compile')) {
 
                         $i++;
                     }
-                    $translated = preg_split('#<span class="notranslate">[^<>]*----[^<>]*</span>#',google_translate($to_translate,$lang));
+                    $translated = preg_split('#<span class="notranslate">[^<>]*----[^<>]*</span>#', google_translate($to_translate, $lang));
 
                     foreach ($translated as $j => $t_value) {
-                        if (strtolower($lang_codes[$from+$j]) == $lang_codes[$from+$j]) {
-                            $t_value = $fallback_map[$lang_codes[$from+$j]];
+                        if (strtolower($lang_codes[$from + $j]) == $lang_codes[$from + $j]) {
+                            $t_value = $fallback_map[$lang_codes[$from + $j]];
                         }
-                        if ($lang_codes[$from+$j] == 'locale') {
+                        if ($lang_codes[$from + $j] == 'locale') {
                             $t_value = strtolower($lang) . '_' . strtoupper($lang);
                         }
 
-                        $fallback_map[$lang_codes[$from+$j]] = $t_value;
-                        $load_target[$lang_codes[$from+$j]] = $t_value;
+                        $fallback_map[$lang_codes[$from + $j]] = $t_value;
+                        $load_target[$lang_codes[$from + $j]] = $t_value;
                     }
 
                     if ((function_exists('ocp_mb_substr')) && ($codename == 'dates')) {
                         foreach (array_keys($fallback_map) as $key) {
-                            if (substr($key,0,3) == 'FC_') {
-                                $test = ocp_mb_substr(trim($fallback_map[substr($key,3)]),0,1,true);
+                            if (substr($key, 0, 3) == 'FC_') {
+                                $test = ocp_mb_substr(trim($fallback_map[substr($key, 3)]), 0, 1, true);
                                 if ($test !== false) {
                                     $fallback_map[$key] = $test;
                                 }
@@ -163,13 +163,13 @@ if (!function_exists('require_lang_compile')) {
                         }
                     }
 
-                    $myfile = fopen($cache_path,'wb');
-                    fwrite($myfile,serialize($fallback_map));
+                    $myfile = fopen($cache_path, 'wb');
+                    fwrite($myfile, serialize($fallback_map));
                     fclose($myfile);
                     fix_permissions($cache_path);
                 }
 
-                if (!array_key_exists($lang,$LANG_LOADED_LANG)) {
+                if (!array_key_exists($lang, $LANG_LOADED_LANG)) {
                     $LANG_LOADED_LANG[$lang] = array();
                 }
                 $LANG_LOADED_LANG[$lang][$codename] = 1;
@@ -186,7 +186,7 @@ if (!function_exists('require_lang_compile')) {
                 }
 
                 if (($codename != 'critical_error') || ($lang != get_site_default_lang())) {
-                    fatal_exit(do_lang_tempcode('MISSING_LANG_FILE',escape_html($codename),escape_html($lang)));
+                    fatal_exit(do_lang_tempcode('MISSING_LANG_FILE', escape_html($codename), escape_html($lang)));
                 } else {
                     critical_error('CRIT_LANG');
                 }
@@ -196,28 +196,28 @@ if (!function_exists('require_lang_compile')) {
         if (is_null($GLOBALS['PERSISTENT_CACHE'])) {
             // Cache
             if ($desire_cache) {
-                $file = @fopen($cache_path,GOOGLE_APPENGINE?'wb':'ab'); // Will fail if cache dir missing .. e.g. in quick installer
+                $file = @fopen($cache_path, GOOGLE_APPENGINE ? 'wb' : 'ab'); // Will fail if cache dir missing .. e.g. in quick installer
                 if ($file) {
-                    @flock($file,LOCK_EX);
+                    @flock($file, LOCK_EX);
                     if (!GOOGLE_APPENGINE) {
-                        ftruncate($file,0);
+                        ftruncate($file, 0);
                     }
-                    if (fwrite($file,serialize($load_target))>0) {
+                    if (fwrite($file, serialize($load_target)) > 0) {
                         // Success
-                        @flock($file,LOCK_UN);
+                        @flock($file, LOCK_UN);
                         fclose($file);
                         require_code('files');
                         fix_permissions($cache_path);
                     } else {
                         // Failure
-                        @flock($file,LOCK_UN);
+                        @flock($file, LOCK_UN);
                         fclose($file);
                         @unlink($cache_path);
                     }
                 }
             }
         } else {
-            persistent_cache_set(array('LANG',$lang,$codename),$load_target,!$dirty);
+            persistent_cache_set(array('LANG', $lang, $codename), $load_target, !$dirty);
         }
 
         if ($desire_cache) {

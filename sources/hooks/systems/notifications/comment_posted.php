@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_Notification_comment_posted extends Hook_Notification
 {
     /**
@@ -39,11 +38,11 @@ class Hook_Notification_comment_posted extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
-        $categories = parent::create_category_tree($notification_code,$id);
+        $categories = parent::create_category_tree($notification_code, $id);
 
-        $notification_category = get_param('id',null);
+        $notification_category = get_param('id', null);
         if (!is_null($notification_category)) {
             $found = false;
             foreach ($categories as $i => $c) {
@@ -52,7 +51,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
                 }
             }
             if (!$found) {
-                $categories[] = array('id' => $notification_category,'title' => do_lang('UNKNOWN'));
+                $categories[] = array('id' => $notification_category, 'title' => do_lang('UNKNOWN'));
             }
         }
 
@@ -61,13 +60,13 @@ class Hook_Notification_comment_posted extends Hook_Notification
         $num_done = 0;
         foreach ($categories as $i => $c) {
             $matches = array();
-            if (preg_match('#^([^\_]*)\_(.*)$#',preg_replace('#^catalogues__\w+_#','catalogues_',$c['id']),$matches) != 0) {
-                $details = get_details_behind_feedback_code($matches[1],$matches[2]);
+            if (preg_match('#^([^\_]*)\_(.*)$#', preg_replace('#^catalogues__\w+_#', 'catalogues_', $c['id']), $matches) != 0) {
+                $details = get_details_behind_feedback_code($matches[1], $matches[2]);
                 $new_title = $details[0];
                 if ((!is_null($new_title)) && ($new_title != '')) {
                     $categories[$i]['title'] = $new_title;
                     $num_done++;
-                    if ($num_done>200) { // Reasonable limit
+                    if ($num_done > 200) { // Reasonable limit
                         unset($categories[$i]);
                     }
                 } else {
@@ -75,7 +74,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
                 }
             }
         }
-        sort_maps_by($categories,'title');
+        sort_maps_by($categories, 'title');
 
         return $categories;
     }
@@ -87,7 +86,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -99,7 +98,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Automatic setting
      */
-    public function get_default_auto_setting($notification_code,$category = null)
+    public function get_default_auto_setting($notification_code, $category = null)
     {
         return A_INSTANT_EMAIL;
     }
@@ -113,7 +112,7 @@ class Hook_Notification_comment_posted extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['comment_posted'] = array(do_lang('notifications:MESSAGES'),do_lang('NOTIFICATION_TYPE_comment_posted'));
+        $list['comment_posted'] = array(do_lang('notifications:MESSAGES'), do_lang('NOTIFICATION_TYPE_comment_posted'));
         return $list;
     }
 
@@ -127,20 +126,20 @@ class Hook_Notification_comment_posted extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        list($_members,$maybe_more) = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
+        list($_members, $maybe_more) = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
         if (!is_null($category)) { // Check permissions for content
             $matches = array();
-            if (preg_match('#^catalogues\_\_(.*)\_(\d+)$#',$category,$matches) != 0) {
-                list($type_id,$id) = array($matches[1],$matches[2]);
+            if (preg_match('#^catalogues\_\_(.*)\_(\d+)$#', $category, $matches) != 0) {
+                list($type_id, $id) = array($matches[1], $matches[2]);
             } else {
-                list($type_id,$id) = explode('_',$category,2);
+                list($type_id, $id) = explode('_', $category, 2);
             }
             $members = array();
             foreach ($_members as $member => $setting) {
                 require_code('content');
-                if (may_view_content_behind($member,$type_id,$id,'feedback_type_code')) {
+                if (may_view_content_behind($member, $type_id, $id, 'feedback_type_code')) {
                     $members[$member] = $setting;
                 }
             }
@@ -148,6 +147,6 @@ class Hook_Notification_comment_posted extends Hook_Notification
             $members = $_members;
         }
 
-        return array($members,$maybe_more);
+        return array($members, $maybe_more);
     }
 }

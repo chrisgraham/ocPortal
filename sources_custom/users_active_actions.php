@@ -6,7 +6,7 @@
 function handle_active_logout()
 {
     if (get_forum_type() == 'ocf') {
-        $compat = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(),'m_password_compat_scheme');
+        $compat = $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_password_compat_scheme');
     } else {
         $compat = '';
     }

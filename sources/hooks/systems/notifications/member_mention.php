@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_Notification_member_mention extends Hook_Notification
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_member_mention extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['member_mention'] = array(do_lang('MEMBERS'),do_lang('NOTIFICATION_TYPE_member_mention'));
+        $list['member_mention'] = array(do_lang('MEMBERS'), do_lang('NOTIFICATION_TYPE_member_mention'));
         return $list;
     }
 }

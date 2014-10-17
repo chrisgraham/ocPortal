@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-
 class Hook_admin_setupwizard_installprofiles_infosite
 {
     /**
@@ -40,7 +39,7 @@ class Hook_admin_setupwizard_installprofiles_infosite
     public function get_addon_list()
     {
         return array(
-            array('news','newsletter','syndication_blocks','quizzes','recommend','polls'),
+            array('news', 'newsletter', 'syndication_blocks', 'quizzes', 'recommend', 'polls'),
             array());
     }
 
@@ -82,10 +81,8 @@ class Hook_admin_setupwizard_installprofiles_infosite
                 'main_rss',
                 'main_quotes',
             ),
-            'YES_CELL' => array(
-            ),
-            'PANEL_LEFT' => array(
-            ),
+            'YES_CELL' => array(),
+            'PANEL_LEFT' => array(),
             'PANEL_RIGHT' => array(
                 'main_newsletter_signup',
                 'side_calendar',

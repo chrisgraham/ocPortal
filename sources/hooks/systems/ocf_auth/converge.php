@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_ocf_auth_converge
 {
     /**
@@ -31,7 +30,7 @@ class Hook_ocf_auth_converge
      * @param  array                    Row of OCF account
      * @return ?tempcode                Error message (NULL: none)
      */
-    public function auth($username,$userid,$password_hashed,$password_raw,$cookie_login,$row)
+    public function auth($username, $userid, $password_hashed, $password_raw, $cookie_login, $row)
     {
         if ($cookie_login) {
             if ($row['m_pass_hash_salted'] != $password_hashed) {
@@ -43,6 +42,6 @@ class Hook_ocf_auth_converge
             }
         }
 
-        return NULL;
+        return null;
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_checklist_blog
 {
     /**
@@ -37,8 +36,8 @@ class Hook_checklist_blog
 
         require_lang('news');
 
-        $admin_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
-        $staff = $GLOBALS['FORUM_DRIVER']->member_group_query(array_keys($admin_groups),100);
+        $admin_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(), $GLOBALS['FORUM_DRIVER']->get_moderator_groups());
+        $staff = $GLOBALS['FORUM_DRIVER']->member_group_query(array_keys($admin_groups), 100);
         if (count($staff) >= 100) {
             return array();
         }
@@ -60,19 +59,19 @@ class Hook_checklist_blog
 
         $seconds_ago = mixed();
         if (!is_null($date)) {
-            $status = ($seconds_ago>$limit_hours*60*60)?0:1;
+            $status = ($seconds_ago > $limit_hours * 60 * 60) ? 0 : 1;
         } else {
             $status = 0;
         }
 
-        $_status = ($status == 0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
+        $_status = ($status == 0) ? do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0') : do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
         require_code('config2');
         $config_url = config_option_url('blog_update_time');
 
-        $url = build_url(array('page' => 'cms_blogs','type' => 'ad'),get_module_zone('cms_blogs'));
-        list($info,$seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'a75d4a165aa5e16ad3aa06d2e0bab5db','CONFIG_URL' => $config_url,'URL' => $url,'STATUS' => $_status,'TASK' => do_lang_tempcode('BLOG'),'INFO' => $info));
-        return array(array($tpl,$seconds_due_in,null,'blog_update_time'));
+        $url = build_url(array('page' => 'cms_blogs', 'type' => 'ad'), get_module_zone('cms_blogs'));
+        list($info, $seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago, $limit_hours);
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'a75d4a165aa5e16ad3aa06d2e0bab5db', 'CONFIG_URL' => $config_url, 'URL' => $url, 'STATUS' => $_status, 'TASK' => do_lang_tempcode('BLOG'), 'INFO' => $info));
+        return array(array($tpl, $seconds_due_in, null, 'blog_update_time'));
     }
 }

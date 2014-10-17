@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_attachments_wiki_page
 {
     /**
@@ -27,12 +26,12 @@ class Hook_attachments_wiki_page
      * @param  object                   The database connection to check on
      * @return boolean                  Whether there is permission
      */
-    public function run($id,$connection)
+    public function run($id, $connection)
     {
         if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {
             return false;
         }
 
-        return (has_category_access(get_member(),'wiki_page',strval($id)));
+        return (has_category_access(get_member(), 'wiki_page', strval($id)));
     }
 }

@@ -27,7 +27,7 @@
  * @param  boolean                      Whether to accept failure.
  * @return ?string                      The result (NULL: failed).
  */
-function xml_rpc($url,$method,$params,$accept_failure = false)
+function xml_rpc($url, $method, $params, $accept_failure = false)
 {
     require_code('xml');
 
@@ -52,7 +52,7 @@ END;
 </methodCall>
 END;
 
-    $result = http_download_file($url,null,true,false,'ocPortal',array('_' => $rpc));
+    $result = http_download_file($url, null, true, false, 'ocPortal', array('_' => $rpc));
     return $result;
 }
 
@@ -66,11 +66,11 @@ function _xml_rpc_type_convert($_value)
 {
     switch (gettype($_value)) {
         case 'boolean':
-            $value = '<boolean>' . ($_value?'1':'0') . '</boolean>';
+            $value = '<boolean>' . ($_value ? '1' : '0') . '</boolean>';
             break;
         case 'array':
             $keys = array_keys($_value);
-            if ((count($_value)>0) && (!is_integer(array_pop($keys)))) {
+            if ((count($_value) > 0) && (!is_integer(array_pop($keys)))) {
                 $value = '<struct>';
                 foreach ($_value as $k => $v) {
                     $value .= '<name>' . $k . '</name><value>' . _xml_rpc_type_convert($v) . '</value>';

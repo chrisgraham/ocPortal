@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_exists_emoticon
 {
     /**
@@ -29,13 +28,13 @@ class Hook_exists_emoticon
     {
         $val = get_param('name');
 
-        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons','e_code',array('e_code' => $val));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons', 'e_code', array('e_code' => $val));
         if (is_null($test)) {
             return new ocp_tempcode();
         }
 
         require_lang('ocf');
 
-        return make_string_tempcode(strip_tags(strip_html(do_lang('CONFLICTING_EMOTICON_CODE',escape_html($val)))));
+        return make_string_tempcode(strip_tags(strip_html(do_lang('CONFLICTING_EMOTICON_CODE', escape_html($val)))));
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_integer
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_integer
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_integer
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return exact_match_sql($row,$i);
+        return exact_match_sql($row, $i);
     }
 
     // ===================
@@ -59,14 +58,14 @@ class Hook_fields_integer
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = '0';
             }
         }
-        return array('integer_unescaped',$default,'integer');
+        return array('integer_unescaped', $default, 'integer');
     }
 
     /**
@@ -76,7 +75,7 @@ class Hook_fields_integer
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -101,9 +100,9 @@ class Hook_fields_integer
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
-        return form_input_integer($_cf_name,$_cf_description,'field_' . strval($field['id']),(is_null($actual_value) || ($actual_value === ''))?null:intval($actual_value),$field['cf_required'] == 1);
+        return form_input_integer($_cf_name, $_cf_description, 'field_' . strval($field['id']), (is_null($actual_value) || ($actual_value === '')) ? null : intval($actual_value), $field['cf_required'] == 1);
     }
 
     /**
@@ -115,13 +114,13 @@ class Hook_fields_integer
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        $ret = post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        $ret = post_param($tmp_name, $editing ? STRING_MAGIC_NULL : '');
         if ($ret != STRING_MAGIC_NULL && $ret != '') {
-            $ret = str_pad($ret,10,'0',STR_PAD_LEFT);
+            $ret = str_pad($ret, 10, '0', STR_PAD_LEFT);
         }
         return $ret;
     }

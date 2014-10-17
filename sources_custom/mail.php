@@ -27,18 +27,18 @@
  * @param  ?TIME                        Implement the Require-Recipient-Valid-Since header (NULL: no restriction)
  * @return ?tempcode                    A full page (not complete XHTML) piece of tempcode to output (NULL: it worked so no tempcode message)
  */
-function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$from_email = '',$from_name = '',$priority = 3,$attachments = null,$no_cc = false,$as = null,$as_admin = false,$in_html = false,$coming_out_of_queue = false,$mail_template = 'MAIL',$bypass_queue = false,$extra_cc_addresses = null,$extra_bcc_addresses = null,$require_recipient_valid_since = null)
+function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = null, $from_email = '', $from_name = '', $priority = 3, $attachments = null, $no_cc = false, $as = null, $as_admin = false, $in_html = false, $coming_out_of_queue = false, $mail_template = 'MAIL', $bypass_queue = false, $extra_cc_addresses = null, $extra_bcc_addresses = null, $require_recipient_valid_since = null)
 {
     if (get_option('smtp_sockets_use') == '0') {
-        return non_overridden__mail_wrap($subject_line,$message_raw,$to_email,$to_name,$from_email,$from_name,$priority,$attachments,$no_cc,$as,$as_admin,$in_html,$coming_out_of_queue,$mail_template,$bypass_queue,$extra_cc_addresses,$extra_bcc_addresses,$require_recipient_valid_since);
+        return non_overridden__mail_wrap($subject_line, $message_raw, $to_email, $to_name, $from_email, $from_name, $priority, $attachments, $no_cc, $as, $as_admin, $in_html, $coming_out_of_queue, $mail_template, $bypass_queue, $extra_cc_addresses, $extra_bcc_addresses, $require_recipient_valid_since);
     }
 
     if (running_script('stress_test_loader')) {
-        return NULL;
+        return null;
     }
 
     if (@$GLOBALS['SITE_INFO']['no_email_output'] === '1') {
-        return NULL;
+        return null;
     }
 
     global $EMAIL_ATTACHMENTS;
@@ -66,22 +66,22 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
 
     if (!$coming_out_of_queue) {
         if (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages')) {
-            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'logged_mail_messages WHERE m_date_and_time<' . strval(time()-60*60*24*14) . ' AND m_queued=0');
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'logged_mail_messages WHERE m_date_and_time<' . strval(time() - 60 * 60 * 24 * 14) . ' AND m_queued=0');
         } // Log it all for 2 weeks, then delete
 
         $through_queue =
             (!$bypass_queue) &&
             ((get_option('mail_queue_debug') === '1') || ((get_option('mail_queue') === '1') &&
-            (cron_installed())));
+                    (cron_installed())));
         if (!is_null($attachments)) {
             foreach (array_keys($attachments) as $path) {
-                if ((substr($path,0,strlen(get_custom_file_base() . '/')) != get_custom_file_base() . '/') && (substr($path,0,strlen(get_file_base() . '/')) != get_file_base() . '/')) {
+                if ((substr($path, 0, strlen(get_custom_file_base() . '/')) != get_custom_file_base() . '/') && (substr($path, 0, strlen(get_file_base() . '/')) != get_file_base() . '/')) {
                     $through_queue = false;
                 }
             }
         }
 
-        $GLOBALS['SITE_DB']->query_insert('logged_mail_messages',array(
+        $GLOBALS['SITE_DB']->query_insert('logged_mail_messages', array(
             'm_subject' => $subject_line,
             'm_message' => $message_raw,
             'm_to_email' => serialize($to_email),
@@ -93,25 +93,25 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
             'm_from_name' => $from_name,
             'm_priority' => 3,
             'm_attachments' => serialize($attachments),
-            'm_no_cc' => $no_cc?1:0,
+            'm_no_cc' => $no_cc ? 1 : 0,
             'm_as' => $as,
-            'm_as_admin' => $as_admin?1:0,
-            'm_in_html' => $in_html?1:0,
+            'm_as_admin' => $as_admin ? 1 : 0,
+            'm_in_html' => $in_html ? 1 : 0,
             'm_date_and_time' => time(),
             'm_member_id' => get_member(),
             'm_url' => get_self_url(true),
-            'm_queued' => $through_queue?1:0,
+            'm_queued' => $through_queue ? 1 : 0,
             'm_template' => $mail_template,
         ));
 
         if ($through_queue) {
-            return NULL;
+            return null;
         }
     }
 
     global $SENDING_MAIL;
     if ($SENDING_MAIL) {
-        return NULL;
+        return null;
     }
     $SENDING_MAIL = true;
 
@@ -129,13 +129,13 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     $to_email = $to_email_new;
     if ($to_email == array()) {
         $SENDING_MAIL = false;
-        return NULL;
+        return null;
     }
     if ($to_email[0] == $staff_address) {
         $lang = get_site_default_lang();
     } else {
         $lang = user_lang();
-        if (method_exists($GLOBALS['FORUM_DRIVER'],'get_member_from_email_address')) {
+        if (method_exists($GLOBALS['FORUM_DRIVER'], 'get_member_from_email_address')) {
             $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_email_address($to_email[0]);
             if (!is_null($member_id)) {
                 $lang = get_lang($member_id);
@@ -158,13 +158,13 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
 
     ocp_profile_start_for('mail_wrap');
 
-    $theme = method_exists($GLOBALS['FORUM_DRIVER'],'get_theme')?$GLOBALS['FORUM_DRIVER']->get_theme():'default';
+    $theme = method_exists($GLOBALS['FORUM_DRIVER'], 'get_theme') ? $GLOBALS['FORUM_DRIVER']->get_theme() : 'default';
     if ($theme == 'default') { // Sucks, probably due to sending from Admin Zone...
         $theme = $GLOBALS['FORUM_DRIVER']->get_theme(''); // ... So get theme of welcome zone
     }
 
     // Our subject
-    $_subject = do_template('MAIL_SUBJECT',array('_GUID' => '4c7eefb7296e7b7d4f3a4ef0eeeca658','SUBJECT_LINE' => $subject_line),$lang,false,null,'.tpl','templates',$theme);
+    $_subject = do_template('MAIL_SUBJECT', array('_GUID' => '4c7eefb7296e7b7d4f3a4ef0eeeca658', 'SUBJECT_LINE' => $subject_line), $lang, false, null, '.tpl', 'templates', $theme);
     $subject = $_subject->evaluate($lang); // Note that this is slightly against spec, because characters aren't forced to be printable us-ascii. But it's better we allow this (which works in practice) than risk incompatibility via charset-base64 encoding.
 
     // Evaluate message. Needs doing early so we know if we have any headers
@@ -174,7 +174,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     if ($website_email == '') {
         $website_email = $from_email;
     }
-    $cc_address = $no_cc?'':get_option("cc_address");
+    $cc_address = $no_cc ? '' : get_option("cc_address");
 
     global $CID_IMG_ATTACHMENT;
     $CID_IMG_ATTACHMENT = array();
@@ -184,20 +184,21 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     global $LAX_COMCODE;
     $temp = $LAX_COMCODE;
     $LAX_COMCODE = true;
-    $html_content = comcode_to_tempcode($message_raw,$as,$as_admin);
+    $html_content = comcode_to_tempcode($message_raw, $as, $as_admin);
     $LAX_COMCODE = $temp;
     $GLOBALS['NO_LINK_TITLES'] = false;
     if (!$in_html) {
         $_html_content = $html_content->evaluate($lang);
-        $_html_content = preg_replace('#(keep|for)_session=\w*#','filtered=1',$_html_content);
-        $message_html = (strpos($_html_content,'<html') !== false)?make_string_tempcode($_html_content):do_template($mail_template,array('_GUID' => 'b23069c20202aa59b7450ebf8d49cde1','CSS' => '{CSS}','LOGOURL' => get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/'LANG' => $lang,'TITLE' => $subject,'CONTENT' => $_html_content),$lang,false,null,'.tpl','templates',$theme);
-        $css = css_tempcode(true,true,$message_html->evaluate($lang),$theme);
+        $_html_content = preg_replace('#(keep|for)_session=\w*#', 'filtered=1', $_html_content);
+        $message_html = (strpos($_html_content, '<html') !== false) ? make_string_tempcode($_html_content) : do_template($mail_template, array('_GUID' => 'b23069c20202aa59b7450ebf8d49cde1', 'CSS' => '{CSS}', 'LOGOURL' => get_logo_url(''),/*'LOGOMAP'=>get_option('logo_map'),*/
+                'LANG' => $lang, 'TITLE' => $subject, 'CONTENT' => $_html_content), $lang, false, null, '.tpl', 'templates', $theme);
+        $css = css_tempcode(true, true, $message_html->evaluate($lang), $theme);
         $_css = $css->evaluate($lang);
         if (get_option('allow_ext_images') != '1') {
-            $_css = preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$_css);
+            $_css = preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U', '_mail_css_rep_callback', $_css);
         }
         $html_evaluated = $message_html->evaluate($lang);
-        $html_evaluated = str_replace('{CSS}',$_css,$html_evaluated);
+        $html_evaluated = str_replace('{CSS}', $_css, $html_evaluated);
 
         // Cleanup the Comcode a bit
         $message_plain = comcode_to_clean_text($message_raw);
@@ -207,19 +208,19 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
 
     // Character set
     $regexp = '#^[\x' . dechex(32) . '-\x' . dechex(126) . ']*$#';
-    $charset = ((preg_match($regexp,$html_evaluated) == 0)?do_lang('charset',null,null,null,$lang):'us-ascii');
+    $charset = ((preg_match($regexp, $html_evaluated) == 0) ? do_lang('charset', null, null, null, $lang) : 'us-ascii');
 
     // CID attachments
     if (get_option('allow_ext_images') != '1') {
-        $html_evaluated = preg_replace_callback('#<img\s([^>]*)src="(http://[^"]*)"#U','_mail_img_rep_callback',$html_evaluated);
+        $html_evaluated = preg_replace_callback('#<img\s([^>]*)src="(http://[^"]*)"#U', '_mail_img_rep_callback', $html_evaluated);
         $matches = array();
-        foreach (array('#<([^"<>]*\s)style="([^"]*)"#','#<style( [^<>]*)?' . '>(.*)</style>#Us') as $over) {
-            $num_matches = preg_match_all($over,$html_evaluated,$matches);
-            for ($i = 0;$i<$num_matches;$i++) {
-                $altered_inner = preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U','_mail_css_rep_callback',$matches[2][$i]);
+        foreach (array('#<([^"<>]*\s)style="([^"]*)"#', '#<style( [^<>]*)?' . '>(.*)</style>#Us') as $over) {
+            $num_matches = preg_match_all($over, $html_evaluated, $matches);
+            for ($i = 0; $i < $num_matches; $i++) {
+                $altered_inner = preg_replace_callback('#url\(["\']?(http://[^"]*)["\']?\)#U', '_mail_css_rep_callback', $matches[2][$i]);
                 if ($matches[2][$i] != $altered_inner) {
-                    $altered_outer = str_replace($matches[2][$i],$altered_inner,$matches[0][$i]);
-                    $html_evaluated = str_replace($matches[0][$i],$altered_outer,$html_evaluated);
+                    $altered_outer = str_replace($matches[2][$i], $altered_inner, $matches[0][$i]);
+                    $html_evaluated = str_replace($matches[0][$i], $altered_outer, $html_evaluated);
                 }
             }
         }
@@ -227,7 +228,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     $cid_attachments = array();
     foreach ($CID_IMG_ATTACHMENT as $id => $img) {
         $file_path_stub = convert_url_to_path($img);
-        $mime_type = get_mime_type(get_file_extension($img),has_privilege($as,'comcode_dangerous'));
+        $mime_type = get_mime_type(get_file_extension($img), has_privilege($as, 'comcode_dangerous'));
         $filename = basename($img);
 
         if (!is_null($file_path_stub)) {
@@ -241,10 +242,10 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
         } else {
             $myfile = mixed();
             $matches = array();
-            if ((preg_match('#^' . preg_quote(find_script('attachment'),'#') . '\?id=(\d+)&amp;thumb=(0|1)#',$img,$matches) != 0) && (strpos($img,'forum_db=1') === false)) {
-                $rows = $GLOBALS['SITE_DB']->query_select('attachments',array('*'),array('id' => intval($matches[1])),'ORDER BY a_add_time DESC');
+            if ((preg_match('#^' . preg_quote(find_script('attachment'), '#') . '\?id=(\d+)&amp;thumb=(0|1)#', $img, $matches) != 0) && (strpos($img, 'forum_db=1') === false)) {
+                $rows = $GLOBALS['SITE_DB']->query_select('attachments', array('*'), array('id' => intval($matches[1])), 'ORDER BY a_add_time DESC');
                 require_code('attachments');
-                if ((array_key_exists(0,$rows)) && (has_attachment_access($as,intval($matches[1])))) {
+                if ((array_key_exists(0, $rows)) && (has_attachment_access($as, intval($matches[1])))) {
                     $myrow = $rows[0];
 
                     if ($matches[2] == '1') {
@@ -259,16 +260,16 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
                             $filename = $myrow['a_original_filename'];
                             require_code('mime_types');
                             $myfile = $_full;
-                            $mime_type = get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
+                            $mime_type = get_mime_type(get_file_extension($filename), has_privilege($as, 'comcode_dangerous'));
                         } else {
                             continue;
                         }
                     }
                 }
             }
-            if ($myfile === NULL) {
+            if ($myfile === null) {
                 $myfile = ocp_tempnam('email_attachment');
-                http_download_file($img,null,false,false,'ocPortal',null,null,null,null,null,$myfile);
+                http_download_file($img, null, false, false, 'ocPortal', null, null, null, null, null, $myfile);
                 if (filesize($myfile) == 0) {
                     continue;
                 }
@@ -294,12 +295,12 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
 
     // Attachments
     $real_attachments = array();
-    $attachments = array_merge(is_null($attachments)?array():$attachments,$EMAIL_ATTACHMENTS);
+    $attachments = array_merge(is_null($attachments) ? array() : $attachments, $EMAIL_ATTACHMENTS);
     if (!is_null($attachments)) {
         foreach ($attachments as $path => $filename) {
-            $mime_type = get_mime_type(get_file_extension($filename),has_privilege($as,'comcode_dangerous'));
+            $mime_type = get_mime_type(get_file_extension($filename), has_privilege($as, 'comcode_dangerous'));
 
-            if ((strpos($path,'://') === false) && (substr($path,0,5) != 'gs://')) {
+            if ((strpos($path, '://') === false) && (substr($path, 0, 5) != 'gs://')) {
                 $real_attachment = array(
                     'mime' => $mime_type,
                     'filename' => $filename,
@@ -308,7 +309,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
                 );
             } else {
                 $myfile = ocp_tempnam('email_attachment');
-                http_download_file($path,null,false,false,'ocPortal',null,null,null,null,null,$myfile);
+                http_download_file($path, null, false, false, 'ocPortal', null, null, null, null, null, $myfile);
                 if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) {
                     $mime_type = $GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
                 }
@@ -345,7 +346,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
     }
 
     // Create the Transport
-    $transport = Swift_SmtpTransport::newInstance($host,$port)
+    $transport = Swift_SmtpTransport::newInstance($host, $port)
         ->setUsername($username)
         ->setPassword($password);
     if (($port == 419) || ($port == 465) || ($port == 587)) {
@@ -363,7 +364,7 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
         }
     } else {
         foreach ($to_email as $i => $_to_email) {
-            $to_array[$_to_email] = is_array($to_name)?$to_name[$i]:$to_name;
+            $to_array[$_to_email] = is_array($to_name) ? $to_name[$i] : $to_name;
         }
     }
     $message = Swift_Message::newInstance($subject)
@@ -372,9 +373,8 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
         ->setTo($to_array)
         ->setPriority($priority)
         ->setCharset($charset)
-        ->setBody($html_evaluated,'text/html',$charset)
-        ->addPart($message_plain,'text/plain',$charset)
-        ;
+        ->setBody($html_evaluated, 'text/html', $charset)
+        ->addPart($message_plain, 'text/plain', $charset);
 
     if ($cc_address != '') {
         if (get_option('bcc') == '0') {
@@ -388,17 +388,17 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
 
     if ((count($to_email) == 1) && (!is_null($require_recipient_valid_since))) {
         $headers = $message->getHeaders();
-        $_require_recipient_valid_since = date('D, j M Y H:i:s',$require_recipient_valid_since);
-        $headers->addTextHeader('Require-Recipient-Valid-Since',$to_email[0] . '; ' . $_require_recipient_valid_since);
+        $_require_recipient_valid_since = date('D, j M Y H:i:s', $require_recipient_valid_since);
+        $headers->addTextHeader('Require-Recipient-Valid-Since', $to_email[0] . '; ' . $_require_recipient_valid_since);
     }
 
     // Attachments
     foreach ($real_attachments as $r) {
-        $attachment = Swift_Attachment::fromPath($r['path'],$r['mime'])->setFilename($r['filename'])->setDisposition('attachment');
+        $attachment = Swift_Attachment::fromPath($r['path'], $r['mime'])->setFilename($r['filename'])->setDisposition('attachment');
         $message->attach($attachment);
     }
     foreach ($cid_attachments as $r) {
-        $attachment = Swift_Attachment::fromPath($r['path'],$r['mime'])->setFilename($r['filename'])->setDisposition('attachment')->setId($r['cid']);
+        $attachment = Swift_Attachment::fromPath($r['path'], $r['mime'])->setFilename($r['filename'])->setDisposition('attachment')->setId($r['cid']);
         $message->attach($attachment);
     }
 
@@ -425,17 +425,17 @@ function mail_wrap($subject_line,$message_raw,$to_email = null,$to_name = null,$
         }
     }
 
-    ocp_profile_end_for('mail_wrap',$subject_line);
+    ocp_profile_end_for('mail_wrap', $subject_line);
 
     // Return / Error handling
     $SENDING_MAIL = false;
     if ($error != '') {
-        if (get_param_integer('keep_hide_mail_failure',0) == 0) {
+        if (get_param_integer('keep_hide_mail_failure', 0) == 0) {
             require_code('site');
-            attach_message(!is_null($error)?make_string_tempcode($error):do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))),'warn');
+            attach_message(!is_null($error) ? make_string_tempcode($error) : do_lang_tempcode('MAIL_FAIL', escape_html(get_option('staff_address'))), 'warn');
         } else {
-            return warn_screen(get_screen_title('ERROR_OCCURRED'),do_lang_tempcode('MAIL_FAIL',escape_html(get_option('staff_address'))));
+            return warn_screen(get_screen_title('ERROR_OCCURRED'), do_lang_tempcode('MAIL_FAIL', escape_html(get_option('staff_address'))));
         }
     }
-    return NULL;
+    return null;
 }

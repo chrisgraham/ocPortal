@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_config_topic_pin
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_topic_pin
      */
     public function get_default()
     {
-        return (!addon_installed('ocf_forum'))?null:'50';
+        return (!addon_installed('ocf_forum')) ? null : '50';
     }
 }

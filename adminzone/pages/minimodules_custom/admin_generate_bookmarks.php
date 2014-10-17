@@ -17,14 +17,14 @@ Neither dl nor dt tags should close.
 Folders can't themselves be links, so a node may have both a link and a separate folder (if it has children).
 */
 
-if (get_param_integer('debug',0) != 1) {
+if (get_param_integer('debug', 0) != 1) {
     header('Content-type: text/html; charset=' . get_charset());
     header('Content-Disposition: attachment; filename="bookmarks.html"');
 }
 
 $site_name = escape_html(get_site_name());
 
-@ini_set('ocproducts.xss_detect','0');
+@ini_set('ocproducts.xss_detect', '0');
 
 echo <<<END
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
@@ -42,13 +42,20 @@ END;
 require_code('sitemap');
 
 $root = retrieve_sitemap_node(
-    /*$page_link=*/'',
-    /*$callback=*/NULL,
-    /*$valid_node_types=*/array('root','zone','page_grouping','page','comcode_page'),
-    /*$child_cutoff=*/NULL,
-    /*$max_recurse_depth=*/NULL,
-    /*$require_permission_support=*/false,
-    /*$zone=*/'_SEARCH',
+/*$page_link=*/
+    '',
+    /*$callback=*/
+    null,
+    /*$valid_node_types=*/
+    array('root', 'zone', 'page_grouping', 'page', 'comcode_page'),
+    /*$child_cutoff=*/
+    null,
+    /*$max_recurse_depth=*/
+    null,
+    /*$require_permission_support=*/
+    false,
+    /*$zone=*/
+    '_SEARCH',
     true
 );
 
@@ -61,8 +68,8 @@ if (isset($root['children'])) {
 function bookmarks_process_node($node)
 {
     if (!is_null($node['page_link'])) {
-        list($zone,$attributes,$hash) = page_link_decode($node['page_link']);
-        $url = _build_url($attributes,$zone,null,false,false,true,$hash);
+        list($zone, $attributes, $hash) = page_link_decode($node['page_link']);
+        $url = _build_url($attributes, $zone, null, false, false, true, $hash);
     } else {
         $url = $node['url'];
     }
@@ -71,7 +78,7 @@ function bookmarks_process_node($node)
         echo '<DT><A HREF="' . escape_html($url) . '">' . escape_html($title) . '</A>' . "\n";
     }
 
-    if ((isset($node['children'])) && (count($node['children'])>0)) {
+    if ((isset($node['children'])) && (count($node['children']) > 0)) {
         echo '<DT><H3>' . escape_html($title) . '</H3>' . "\n";
         echo '<DL><p>' . "\n";
         foreach ($node['children'] as $child) {

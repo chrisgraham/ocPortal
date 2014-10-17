@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Block_main_trackback
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_trackback
         $info['hack_version'] = null;
         $info['version'] = 1;
         $info['locked'] = false;
-        $info['parameters'] = array('param','page','id');
+        $info['parameters'] = array('param', 'page', 'id');
         return $info;
     }
 
@@ -46,20 +45,20 @@ class Block_main_trackback
      */
     public function run($map)
     {
-        if (!array_key_exists('page',$map)) {
+        if (!array_key_exists('page', $map)) {
             $map['page'] = get_page_name();
         }
 
-        if (array_key_exists('id',$map)) {
+        if (array_key_exists('id', $map)) {
             $id = $map['id'];
         } else {
-            $id = get_param('id','0');
+            $id = get_param('id', '0');
         }
 
         require_code('feedback');
 
-        actualise_post_trackback(get_option('is_on_trackbacks') == '1',$map['page'],$id);
+        actualise_post_trackback(get_option('is_on_trackbacks') == '1', $map['page'], $id);
 
-        return get_trackbacks($map['page'],$id,get_option('is_on_trackbacks') == '1');
+        return get_trackbacks($map['page'], $id, get_option('is_on_trackbacks') == '1');
     }
 }

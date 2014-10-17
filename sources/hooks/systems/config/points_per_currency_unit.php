@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_config_points_per_currency_unit
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_per_currency_unit
      */
     public function get_default()
     {
-        return addon_installed('ecommerce')?'100.0':null;
+        return addon_installed('ecommerce') ? '100.0' : null;
     }
 }

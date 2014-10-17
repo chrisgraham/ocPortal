@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_admin_import_types_polls
 {
     /**

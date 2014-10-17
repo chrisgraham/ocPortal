@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_unvalidated_downloads
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_downloads
     public function info()
     {
         if (!module_installed('downloads')) {
-            return NULL;
+            return null;
         }
 
         require_lang('downloads');

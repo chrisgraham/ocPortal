@@ -30,7 +30,7 @@ function do_netlink($redir_url = '')
 
     // If we are redirecting
     if ($redir_url != '') {
-        if ((strpos($redir_url,"\n") !== false) || (strpos($redir_url,"\r") !== false)) {
+        if ((strpos($redir_url, "\n") !== false) || (strpos($redir_url, "\r") !== false)) {
             log_hack_attack_and_exit('HEADER_SPLIT_HACK');
         }
         header('Location: ' . $redir_url);
@@ -42,13 +42,13 @@ function do_netlink($redir_url = '')
 
     // For all the names in our network
     require_code('textfiles');
-    $lines = explode("\n",read_text_file('netlink',null,true));
+    $lines = explode("\n", read_text_file('netlink', null, true));
     if (count($lines) == 0) {
         return new ocp_tempcode();
     }
     $content = new ocp_tempcode();
     foreach ($lines as $line) {
-        $parts = explode('=',$line,2);
+        $parts = explode('=', $line, 2);
         if (count($parts) != 2) {
             continue;
         }
@@ -56,10 +56,10 @@ function do_netlink($redir_url = '')
         $url = trim($parts[1]);
 
         // Are we looking at the source site in the network?
-        $selected = (strtolower($url) == strtolower(get_param('source','')));
+        $selected = (strtolower($url) == strtolower(get_param('source', '')));
 
-        $content->attach(form_input_list_entry(base64_encode($url),$selected,$name));
+        $content->attach(form_input_list_entry(base64_encode($url), $selected, $name));
     }
 
-    return do_template('NETLINK',array('_GUID' => '180321222dc5dc99a231597c803f0726','CONTENT' => $content));
+    return do_template('NETLINK', array('_GUID' => '180321222dc5dc99a231597c803f0726', 'CONTENT' => $content));
 }

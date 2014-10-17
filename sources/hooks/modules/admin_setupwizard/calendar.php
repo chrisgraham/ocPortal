@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_sw_calendar
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_calendar
             return array();
         }
 
-        return array(array(),array('side_calendar' => array('PANEL_NONE','PANEL_RIGHT')));
+        return array(array(), array('side_calendar' => array('PANEL_NONE', 'PANEL_RIGHT')));
     }
 }

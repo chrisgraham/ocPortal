@@ -50,42 +50,42 @@ class Hook_vb3
         $info['product'] = 'vBulletin 3.0.x / 3.5.x';
         $info['prefix'] = 'vb3_';
         $info['import'] = array(
-                                'ocf_groups',
-                                'custom_comcode',
-                                'ocf_members',
-                                'ocf_member_files',
-                                'points_gifts_and_charges',
-                                'ocf_custom_profile_fields',
-                                'ocf_forum_groupings',
-                                'ocf_forums',
-                                'ocf_topics',
-                                'ocf_posts',
-                                'ocf_post_files',
-                                'ocf_polls_and_votes',
-                                'notifications',
-                                'ocf_private_topics',
-                                'wordfilter',
-                                'config',
-                                'calendar',
+            'ocf_groups',
+            'custom_comcode',
+            'ocf_members',
+            'ocf_member_files',
+            'points_gifts_and_charges',
+            'ocf_custom_profile_fields',
+            'ocf_forum_groupings',
+            'ocf_forums',
+            'ocf_topics',
+            'ocf_posts',
+            'ocf_post_files',
+            'ocf_polls_and_votes',
+            'notifications',
+            'ocf_private_topics',
+            'wordfilter',
+            'config',
+            'calendar',
 //                      'logs'
-                            );
+        );
         $info['dependencies'] = array( // This dependency tree is overdefined, but I wanted to make it clear what depends on what, rather than having a simplified version
-                                'ocf_members' => array('ocf_groups'),
-                                'ocf_member_files' => array('ocf_members'),
-                                'ocf_forums' => array('ocf_forum_groupings','ocf_members','ocf_groups'),
-                                'ocf_topics' => array('ocf_forums','ocf_members'),
-                                'ocf_polls_and_votes' => array('ocf_topics','ocf_members'),
-                                'ocf_posts' => array('custom_comcode','ocf_topics','ocf_members'),
-                                'ocf_post_files' => array('ocf_posts'),
-                                'notifications' => array('ocf_topics','ocf_members'),
-                                'ocf_private_topics' => array('custom_comcode','ocf_members'),
-                                'points_gifts_and_charges' => array('ocf_members'),
-                                'logs' => array('ocf_members','ocf_posts'),
-                                'calendar' => array('ocf_members'),
-                            );
-        $_cleanup_url = build_url(array('page' => 'admin_cleanup'),get_module_zone('admin_cleanup'));
+            'ocf_members' => array('ocf_groups'),
+            'ocf_member_files' => array('ocf_members'),
+            'ocf_forums' => array('ocf_forum_groupings', 'ocf_members', 'ocf_groups'),
+            'ocf_topics' => array('ocf_forums', 'ocf_members'),
+            'ocf_polls_and_votes' => array('ocf_topics', 'ocf_members'),
+            'ocf_posts' => array('custom_comcode', 'ocf_topics', 'ocf_members'),
+            'ocf_post_files' => array('ocf_posts'),
+            'notifications' => array('ocf_topics', 'ocf_members'),
+            'ocf_private_topics' => array('custom_comcode', 'ocf_members'),
+            'points_gifts_and_charges' => array('ocf_members'),
+            'logs' => array('ocf_members', 'ocf_posts'),
+            'calendar' => array('ocf_members'),
+        );
+        $_cleanup_url = build_url(array('page' => 'admin_cleanup'), get_module_zone('admin_cleanup'));
         $cleanup_url = $_cleanup_url->evaluate();
-        $info['message'] = (get_param('type','misc') != 'import' && get_param('type','misc') != 'hook')?new ocp_tempcode():do_lang_tempcode('FORUM_CACHE_CLEAR',escape_html($cleanup_url));
+        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new ocp_tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
 
         return $info;
     }
@@ -105,7 +105,7 @@ class Hook_vb3
         $servername = '';
         $config = array();
         if (!file_exists($file_base . '/includes/config.php')) {
-            warn_exit(do_lang_tempcode('BAD_IMPORT_PATH',escape_html('includes/config.php')));
+            warn_exit(do_lang_tempcode('BAD_IMPORT_PATH', escape_html('includes/config.php')));
         }
         require($file_base . '/includes/config.php');
 
@@ -123,7 +123,7 @@ class Hook_vb3
             $sql_tbl_prefix = $config['MasterServer']['servername'];
         }
 
-        return array($sql_database,$sql_user,$sql_pass,$sql_tbl_prefix,$sql_host);
+        return array($sql_database, $sql_user, $sql_pass, $sql_tbl_prefix, $sql_host);
     }
 
     /**
@@ -133,7 +133,7 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_config($db,$table_prefix,$file_base)
+    public function import_config($db, $table_prefix, $file_base)
     {
         $config_remapping = array(
             'bbactive' => '!site_closed',
@@ -155,19 +155,19 @@ class Hook_vb3
             if ($row['value'] == '') {
                 $row['value'] = $row['defaultvalue'];
             }
-            if (array_key_exists($row['varname'],$config_remapping)) {
+            if (array_key_exists($row['varname'], $config_remapping)) {
                 $value = $row['value'];
                 $remapping = $config_remapping[$row['varname']];
                 if ($remapping[0] == '!') {
-                    $remapping = substr($remapping,1);
-                    $value = strval(1-intval($value));
+                    $remapping = substr($remapping, 1);
+                    $value = strval(1 - intval($value));
                 }
-                set_option($remapping,$value);
+                set_option($remapping, $value);
             }
             $PROBED_FORUM_CONFIG[$row['varname']] = $row['value'];
         }
 
-        set_value('timezone',$PROBED_FORUM_CONFIG['timeoffset']);
+        set_value('timezone', $PROBED_FORUM_CONFIG['timeoffset']);
 
         // Now some usergroup options
         $groups = $GLOBALS['OCF_DRIVER']->get_usergroup_list();
@@ -177,7 +177,7 @@ class Hook_vb3
             'enablememberlist' => 'members',
         );
         foreach ($page_remap as $to) {
-            $GLOBALS['SITE_DB']->query_delete('group_page_access',array('page_name' => $to,'zone_name' => get_module_zone($to)));
+            $GLOBALS['SITE_DB']->query_delete('group_page_access', array('page_name' => $to, 'zone_name' => get_module_zone($to)));
         }
         foreach (array_keys($groups) as $id) {
             if ($GLOBALS['OCF_DRIVER']->is_super_admin($id)) {
@@ -186,20 +186,20 @@ class Hook_vb3
 
             foreach ($page_remap as $from => $to) {
                 if ($PROBED_FORUM_CONFIG[$from] == '1') {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name' => $to,'zone_name' => get_module_zone($to),'group_id' => $id));
+                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => $to, 'zone_name' => get_module_zone($to), 'group_id' => $id));
                 }
             }
 
             $map = array();
             $map['g_max_attachments_per_post'] = $PROBED_FORUM_CONFIG['attachlimit'];
             $map['g_max_post_length_comcode'] = $PROBED_FORUM_CONFIG['postmaxchars'];
-            if (array_key_exists('sigmax',$map)) {
+            if (array_key_exists('sigmax', $map)) {
                 $map['g_max_sig_length_comcode'] = $PROBED_FORUM_CONFIG['sigmax'];
             }
-            $GLOBALS['FORUM_DB']->query_update('f_groups',$map,array('id' => $id),'',1);
+            $GLOBALS['FORUM_DB']->query_update('f_groups', $map, array('id' => $id), '', 1);
 
-            set_privilege($id,'use_quick_reply',$PROBED_FORUM_CONFIG['quickreply']);
-            set_privilege($id,'comcode_dangerous',$PROBED_FORUM_CONFIG['allowhtml']);
+            set_privilege($id, 'use_quick_reply', $PROBED_FORUM_CONFIG['quickreply']);
+            set_privilege($id, 'comcode_dangerous', $PROBED_FORUM_CONFIG['allowhtml']);
         }
     }
 
@@ -210,7 +210,7 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_groups($db,$table_prefix,$file_base)
+    public function import_ocf_groups($db, $table_prefix, $file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'setting');
         $PROBED_FORUM_CONFIG = array();
@@ -226,7 +226,7 @@ class Hook_vb3
         $rows = $db->query('SELECT *,g.usergroupid AS usergroupid FROM ' . $table_prefix . 'usergroup g LEFT JOIN ' . $table_prefix . 'usergroupleader l ON g.usergroupid=l.usergroupid LEFT JOIN ' . $table_prefix . 'userpromotion p ON g.usergroupid=p.usergroupid');
         $remap_id = array();
         foreach ($rows as $row) {
-            if (import_check_if_imported('group',strval($row['usergroupid']))) {
+            if (import_check_if_imported('group', strval($row['usergroupid']))) {
                 continue;
             }
 
@@ -238,58 +238,58 @@ class Hook_vb3
             $row_promotion_target = null;
             $row_promotion_target = $row['joinusergroupid']; // This will be fixed when all the usergroups are added
 
-            $is_super_admin = (($row['adminpermissions']&2) != 0)?1:0;
-            $is_super_moderator = (($row['adminpermissions']&1) != 0)?1:0;
+            $is_super_admin = (($row['adminpermissions'] & 2) != 0) ? 1 : 0;
+            $is_super_moderator = (($row['adminpermissions'] & 1) != 0) ? 1 : 0;
 
-            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $row['title']));
+            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $row['title']));
             if (is_null($id_new)) {
-                $id_new = ocf_make_group($row['title'],0,$is_super_admin,$is_super_moderator,$row['usertitle'],'',$row_promotion_target,$row['reputation'],$row_group_leader,5,0,5,$row['attachlimit'],$row['avatarmaxwidth'],$row['avatarmaxheight'],$PROBED_FORUM_CONFIG['postmaxchars'],array_key_exists('sigmax',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['sigmax']:700);
+                $id_new = ocf_make_group($row['title'], 0, $is_super_admin, $is_super_moderator, $row['usertitle'], '', $row_promotion_target, $row['reputation'], $row_group_leader, 5, 0, 5, $row['attachlimit'], $row['avatarmaxwidth'], $row['avatarmaxheight'], $PROBED_FORUM_CONFIG['postmaxchars'], array_key_exists('sigmax', $PROBED_FORUM_CONFIG) ? $PROBED_FORUM_CONFIG['sigmax'] : 700);
             }
 
             // Zone permissions
-            if (!(($row['forumpermissions']&1) != 0) || (($row['genericoptions']&32) != 0)) {
-                $GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id' => $id_new));
+            if (!(($row['forumpermissions'] & 1) != 0) || (($row['genericoptions'] & 32) != 0)) {
+                $GLOBALS['SITE_DB']->query_delete('group_zone_access', array('group_id' => $id_new));
             }
 
             // Page permissions
             $denies = array();
-            if (($row['forumpermissions']&4) == 0) {
-                $denies[] = array('search',get_module_zone('search'));
+            if (($row['forumpermissions'] & 4) == 0) {
+                $denies[] = array('search', get_module_zone('search'));
             }
-            if (($row['forumpermissions']&8) == 0) {
-                $denies[] = array('contact_member',get_module_zone('contact_member'));
+            if (($row['forumpermissions'] & 8) == 0) {
+                $denies[] = array('contact_member', get_module_zone('contact_member'));
             }
-            if (($row['genericpermissions']&1) == 0) {
-                $denies[] = array('members',get_module_zone('members'));
+            if (($row['genericpermissions'] & 1) == 0) {
+                $denies[] = array('members', get_module_zone('members'));
             }
             foreach ($denies as $deny) {
-                list($page,$zone) = $deny;
-                $test = $GLOBALS['SITE_DB']->query_select_value_if_there('group_page_access','group_id',array('group_id' => $id_new,'zone_name' => $zone,'page_name' => $page));
+                list($page, $zone) = $deny;
+                $test = $GLOBALS['SITE_DB']->query_select_value_if_there('group_page_access', 'group_id', array('group_id' => $id_new, 'zone_name' => $zone, 'page_name' => $page));
                 if (is_null($test)) {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access',array('group_id' => $id_new,'zone_name' => $zone,'page_name' => $page));
+                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('group_id' => $id_new, 'zone_name' => $zone, 'page_name' => $page));
                 }
             }
 
             // privileges
-            set_privilege($id_new,'comcode_dangerous',$PROBED_FORUM_CONFIG['allowhtml'] == 1);
-            set_privilege($id_new,'bypass_word_filter',$PROBED_FORUM_CONFIG['censorwords'] == 0);
-            set_privilege($id_new,'use_quick_reply',$PROBED_FORUM_CONFIG['quickreply'] == 1);
-            set_privilege($id_new,'vote_in_polls',($row['forumpermissions']&32768) != 0);
-            set_privilege($id_new,'view_member_photos',($row['genericpermissions']&4096) != 0);
-            set_privilege($id_new,'view_any_profile_field',($row['genericpermissions']&262144) != 0);
-            set_privilege($id_new,'see_warnings',($row['genericpermissions']&8) != 0);
-            set_privilege($id_new,'warn_members',($row['genericpermissions']&16384) != 0);
-            set_privilege($id_new,'may_choose_custom_title',($row['genericpermissions']&2048) != 0);
+            set_privilege($id_new, 'comcode_dangerous', $PROBED_FORUM_CONFIG['allowhtml'] == 1);
+            set_privilege($id_new, 'bypass_word_filter', $PROBED_FORUM_CONFIG['censorwords'] == 0);
+            set_privilege($id_new, 'use_quick_reply', $PROBED_FORUM_CONFIG['quickreply'] == 1);
+            set_privilege($id_new, 'vote_in_polls', ($row['forumpermissions'] & 32768) != 0);
+            set_privilege($id_new, 'view_member_photos', ($row['genericpermissions'] & 4096) != 0);
+            set_privilege($id_new, 'view_any_profile_field', ($row['genericpermissions'] & 262144) != 0);
+            set_privilege($id_new, 'see_warnings', ($row['genericpermissions'] & 8) != 0);
+            set_privilege($id_new, 'warn_members', ($row['genericpermissions'] & 16384) != 0);
+            set_privilege($id_new, 'may_choose_custom_title', ($row['genericpermissions'] & 2048) != 0);
 
             $remap_id[$row['usergroupid']] = $id_new;
-            import_id_remap_put('group',strval($row['usergroupid']),$id_new);
+            import_id_remap_put('group', strval($row['usergroupid']), $id_new);
         }
 
         // Now we must fix promotion
         foreach ($rows as $row) {
             if (!is_null($row['joinusergroupid'])) {
                 $row_promotion_target = $remap_id[$row['joinusergroupid']];
-                $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_promotion_target' => $row_promotion_target),array('id' => $remap_id[$row['usergroupid']]),'',1);
+                $GLOBALS['FORUM_DB']->query_update('f_groups', array('g_promotion_target' => $row_promotion_target), array('id' => $remap_id[$row['usergroupid']]), '', 1);
             }
         }
     }
@@ -301,27 +301,27 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_members($db,$table_prefix,$file_base)
+    public function import_ocf_members($db, $table_prefix, $file_base)
     {
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT *,u.userid AS userid FROM ' . $table_prefix . 'user u LEFT JOIN ' . $table_prefix . 'administrator a ON u.userid=a.userid LEFT JOIN ' . $table_prefix . 'usertextfield t ON u.userid=t.userid ORDER BY u.userid',200,$row_start);
+            $rows = $db->query('SELECT *,u.userid AS userid FROM ' . $table_prefix . 'user u LEFT JOIN ' . $table_prefix . 'administrator a ON u.userid=a.userid LEFT JOIN ' . $table_prefix . 'usertextfield t ON u.userid=t.userid ORDER BY u.userid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('member',strval($row['userid']))) {
+                if (import_check_if_imported('member', strval($row['userid']))) {
                     continue;
                 }
 
                 $test = $GLOBALS['OCF_DRIVER']->get_member_from_username($row['username']);
                 if (!is_null($test)) {
-                    import_id_remap_put('member',strval($row['userid']),$test);
+                    import_id_remap_put('member', strval($row['userid']), $test);
                     continue;
                 }
 
                 $language = '';
                 if ($row['languageid'] != 0) {
                     $rows2 = $db->query('SELECT languagecode FROM ' . $table_prefix . 'language WHERE languageid=' . strval($row['languageid']));
-                    if (array_key_exists(0,$rows2)) {
+                    if (array_key_exists(0, $rows2)) {
                         $language = strtoupper($rows2[0]['languagecode']);
                         if ((!file_exists(get_custom_file_base() . '/lang_custom/' . $language)) && (!file_exists(get_file_base() . '/lang/' . $language))) {
                             $language = '';
@@ -329,28 +329,28 @@ class Hook_vb3
                     }
                 }
 
-                $primary_group = import_id_remap_get('group',strval($row['usergroupid']));
+                $primary_group = import_id_remap_get('group', strval($row['usergroupid']));
                 $secondary_groups = array();
                 if ($row['membergroupids'] != '') {
-                    $secondary_groups = explode(',',$row['membergroupids']);
+                    $secondary_groups = explode(',', $row['membergroupids']);
                 }
 
                 $custom_fields = array();
                 if ($row['homepage'] != '') {
-                    $custom_fields[ocf_make_boiler_custom_field('website')] = (strlen($row['homepage'])>0)?('[url]' . $row['homepage'] . '[/url]'):'';
+                    $custom_fields[ocf_make_boiler_custom_field('website')] = (strlen($row['homepage']) > 0) ? ('[url]' . $row['homepage'] . '[/url]') : '';
                 }
 
                 $signature = $row['signature'];
                 $validated = 1;
-                $reveal_age = ($row['birthday'] != '')?1:0;
-                $bits = explode('-',$row['birthday']);
+                $reveal_age = ($row['birthday'] != '') ? 1 : 0;
+                $bits = explode('-', $row['birthday']);
                 if (($reveal_age == 1) && (count($bits) == 3)) {
-                    list($bday_month,$bday_day,$bday_year) = $bits;
+                    list($bday_month, $bday_day, $bday_year) = $bits;
                 } else {
-                    list($bday_month,$bday_day,$bday_year) = array(0,0,0);
+                    list($bday_month, $bday_day, $bday_year) = array(0, 0, 0);
                 }
-                $title = ($row['customtitle'] == 1)?$row['usertitle']:'';
-                $views_signatures = $row['options']&1;
+                $title = ($row['customtitle'] == 1) ? $row['usertitle'] : '';
+                $views_signatures = $row['options'] & 1;
                 $preview_posts = 1;
 
                 // These are done in the members-files stage
@@ -364,28 +364,29 @@ class Hook_vb3
 
                 $requests = $db->query('SELECT * FROM ' . $table_prefix . 'usergrouprequest WHERE userid=' . strval($row['userid']));
                 foreach ($requests as $i => $request) {
-                    $requests[$i]['usergroupid'] = import_id_remap_get('group',strval($request['usergroupid']));
+                    $requests[$i]['usergroupid'] = import_id_remap_get('group', strval($request['usergroupid']));
                 }
 
-                $id_new = ocf_make_member($row['username'],$password,$row['email'],null,$bday_day,$bday_month,$bday_year,$custom_fields,strval($row['timezoneoffset']),$primary_group,$validated,$row['joindate'],$row['lastvisit'],'',$avatar_url,$signature,0,$preview_posts,$reveal_age,$title,$photo_url,$photo_thumb_url,$views_signatures,$row['autosubscribe'],$language,$row['options']&16,$row['options']&16,$row['ipaddress'],'',false,$type,$salt,1,($row['lastpost'] == 0)?$row['lastpost']:null);
+                $id_new = ocf_make_member($row['username'], $password, $row['email'], null, $bday_day, $bday_month, $bday_year, $custom_fields, strval($row['timezoneoffset']), $primary_group, $validated, $row['joindate'], $row['lastvisit'], '', $avatar_url, $signature, 0, $preview_posts, $reveal_age, $title, $photo_url, $photo_thumb_url, $views_signatures, $row['autosubscribe'], $language, $row['options'] & 16, $row['options'] & 16, $row['ipaddress'], '', false, $type, $salt, 1, ($row['lastpost'] == 0) ? $row['lastpost'] : null);
 
                 // Fix usergroup leadership
-                $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader' => $id_new),array('g_group_leader' => -$row['userid']));
+                $GLOBALS['FORUM_DB']->query_update('f_groups', array('g_group_leader' => $id_new), array('g_group_leader' => -$row['userid']));
 
-                import_id_remap_put('member',strval($row['userid']),$id_new);
+                import_id_remap_put('member', strval($row['userid']), $id_new);
 
                 // Set up usergroup membership
                 foreach ($secondary_groups as $group) {
-                    $group = import_id_remap_get('group',strval($group['usergroupid']));
-                    ocf_add_member_to_group($id_new,$group,1);
+                    $group = import_id_remap_get('group', strval($group['usergroupid']));
+                    ocf_add_member_to_group($id_new, $group, 1);
                 }
                 foreach ($requests as $request) {
-                    ocf_add_member_to_group($id_new,$request['usergroupid'],0);
+                    ocf_add_member_to_group($id_new, $request['usergroupid'], 0);
                 }
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -395,7 +396,7 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_member_files($db,$table_prefix,$file_base)
+    public function import_ocf_member_files($db, $table_prefix, $file_base)
     {
         global $STRICT_FILE;
 
@@ -410,32 +411,32 @@ class Hook_vb3
                 $extra = ',a.filedata AS avatardata,p.filedata AS profilepicdata';
             }
             $query = 'SELECT *,p.filename AS p_filename,a.filename AS a_filename,u.userid AS userid' . $extra . ' FROM ' . $table_prefix . 'user u LEFT JOIN ' . $table_prefix . 'customavatar a ON a.userid=u.userid LEFT JOIN ' . $table_prefix . 'customprofilepic p ON p.userid=u.userid ORDER BY u.userid';
-            $rows = $db->query($query,200,$row_start);
+            $rows = $db->query($query, 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('member_files',strval($row['userid']))) {
+                if (import_check_if_imported('member_files', strval($row['userid']))) {
                     continue;
                 }
 
-                $member_id = import_id_remap_get('member',strval($row['userid']));
+                $member_id = import_id_remap_get('member', strval($row['userid']));
 
                 $photo_url = '';
                 $photo_thumb_url = '';
                 if (!is_null($row['profilepicdata'])) {
-                    list($photo_url,$photo_thumb_url) = $this->data_to_disk($row['profilepicdata'],$row['p_filename'],'ocf_photos');
+                    list($photo_url, $photo_thumb_url) = $this->data_to_disk($row['profilepicdata'], $row['p_filename'], 'ocf_photos');
                 }
 
                 $avatar_url = '';
                 if (!is_null($row['avatardata'])) {
-                    list($avatar_url) = $this->data_to_disk($row['avatardata'],$row['a_filename'],'ocf_avatars',false);
+                    list($avatar_url) = $this->data_to_disk($row['avatardata'], $row['a_filename'], 'ocf_avatars', false);
                 } else {
                     if ($row['avatarid'] != 0) {
                         $avatar_rows = $db->query('SELECT * FROM ' . $table_prefix . 'avatar WHERE avatarid=' . strval($row['avatarid']));
                         $setting_row = $db->query('SELECT value,defaultvalue FROM ' . $table_prefix . 'setting WHERE varname=\'avatarpath\'');
-                        $setting = ($setting_row[0]['value'] == '')?$setting_row[0]['defaultvalue']:$setting_row[0]['value'];
-                        if (array_key_exists(0,$avatar_rows)) {
+                        $setting = ($setting_row[0]['value'] == '') ? $setting_row[0]['defaultvalue'] : $setting_row[0]['value'];
+                        if (array_key_exists(0, $avatar_rows)) {
                             $avatar_row = $avatar_rows[0];
                             $relpath = rawurldecode($avatar_row['avatarpath']);
-                            if ((file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . basename($relpath))) || (@rename($file_base . '/uploads/' . $setting . $relpath,get_custom_file_base() . '/uploads/ocf_avatars/' . basename($relpath)))) {
+                            if ((file_exists(get_custom_file_base() . '/uploads/ocf_avatars/' . basename($relpath))) || (@rename($file_base . '/uploads/' . $setting . $relpath, get_custom_file_base() . '/uploads/ocf_avatars/' . basename($relpath)))) {
                                 $avatar_url = 'uploads/ocf_avatars/' . basename($relpath);
                                 sync_file($avatar_url);
                             }
@@ -443,13 +444,14 @@ class Hook_vb3
                     }
                 }
 
-                $GLOBALS['FORUM_DB']->query_update('f_members',array('m_avatar_url' => $avatar_url,'m_photo_url' => $photo_url,'m_photo_thumb_url' => $photo_thumb_url),array('id' => $member_id),'',1);
+                $GLOBALS['FORUM_DB']->query_update('f_members', array('m_avatar_url' => $avatar_url, 'm_photo_url' => $photo_url, 'm_photo_thumb_url' => $photo_thumb_url), array('id' => $member_id), '', 1);
 
-                import_id_remap_put('member_files',strval($row['userid']),1);
+                import_id_remap_put('member_files', strval($row['userid']), 1);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -459,12 +461,12 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_custom_profile_fields($db,$table_prefix,$file_base)
+    public function import_ocf_custom_profile_fields($db, $table_prefix, $file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'profilefield');
         $members = $db->query('SELECT * FROM ' . $table_prefix . 'userfield');
         foreach ($rows as $row) {
-            if (import_check_if_imported('cpf',strval($row['profilefieldid']))) {
+            if (import_check_if_imported('cpf', strval($row['profilefieldid']))) {
                 continue;
             }
 
@@ -475,24 +477,24 @@ class Hook_vb3
                 $type = 'long_text';
             }
 
-            if (!array_key_exists('title',$row)) {
-                $row['title'] = $db->query_value_if_there('SELECT text FROM ' . $table_prefix . 'phrase WHERE ' . db_string_equal_to('product','vbulletin') . ' AND ' . db_string_equal_to('varname','field' . strval($row['profilefieldid']) . '_title'));
-                $row['description'] = $db->query_value_if_there('SELECT text FROM ' . $table_prefix . 'phrase WHERE ' . db_string_equal_to('product','vbulletin') . ' AND ' . db_string_equal_to('varname','field' . strval($row['profilefieldid']) . '_desc'));
+            if (!array_key_exists('title', $row)) {
+                $row['title'] = $db->query_value_if_there('SELECT text FROM ' . $table_prefix . 'phrase WHERE ' . db_string_equal_to('product', 'vbulletin') . ' AND ' . db_string_equal_to('varname', 'field' . strval($row['profilefieldid']) . '_title'));
+                $row['description'] = $db->query_value_if_there('SELECT text FROM ' . $table_prefix . 'phrase WHERE ' . db_string_equal_to('product', 'vbulletin') . ' AND ' . db_string_equal_to('varname', 'field' . strval($row['profilefieldid']) . '_desc'));
             }
-            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $row['title']));
+            $id_new = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $row['title']));
             if (is_null($id_new)) {
-                $id_new = ocf_make_custom_field($row['title'],0,$row['description'],'',1-$row['hidden'],1-$row['hidden'],$row['editable'],0,$type,$row['required'],$row['memberlist'],$row['memberlist'],$row['displayorder'],'',true);
+                $id_new = ocf_make_custom_field($row['title'], 0, $row['description'], '', 1 - $row['hidden'], 1 - $row['hidden'], $row['editable'], 0, $type, $row['required'], $row['memberlist'], $row['memberlist'], $row['displayorder'], '', true);
             }
 
             foreach ($members as $member) {
                 $v = $member['field' . strval($row['profilefieldid'])];
-                $member_id = import_id_remap_get('member',strval($member['userid']),true);
+                $member_id = import_id_remap_get('member', strval($member['userid']), true);
                 if (($v != '') && (!is_null($member_id))) {
-                    ocf_set_custom_field($member_id,$id_new,$v);
+                    ocf_set_custom_field($member_id, $id_new, $v);
                 }
             }
 
-            import_id_remap_put('cpf',strval($row['profilefieldid']),$id_new);
+            import_id_remap_put('cpf', strval($row['profilefieldid']), $id_new);
         }
     }
 
@@ -503,25 +505,25 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_forum_groupings($db,$table_prefix,$old_base_dir)
+    public function import_ocf_forum_groupings($db, $table_prefix, $old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'forum WHERE parentid=-1');
         foreach ($rows as $row) {
-            if (import_check_if_imported('category',strval($row['forumid']))) {
+            if (import_check_if_imported('category', strval($row['forumid']))) {
                 continue;
             }
 
             $title = $row['title'];
 
-            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','id',array('c_title' => $title));
+            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'id', array('c_title' => $title));
             if (!is_null($test)) {
-                import_id_remap_put('category',strval($row['forumid']),$test);
+                import_id_remap_put('category', strval($row['forumid']), $test);
                 continue;
             }
 
-            $id_new = ocf_make_forum_grouping($title,$row['description'],1);
+            $id_new = ocf_make_forum_grouping($title, $row['description'], 1);
 
-            import_id_remap_put('category',strval($row['forumid']),$id_new);
+            import_id_remap_put('category', strval($row['forumid']), $id_new);
         }
     }
 
@@ -532,14 +534,14 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_forums($db,$table_prefix,$old_base_dir)
+    public function import_ocf_forums($db, $table_prefix, $old_base_dir)
     {
         require_code('ocf_forums_action2');
 
         $remap_id = array();
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'forum WHERE parentid<>-1');
         foreach ($rows as $row) {
-            $remapped = import_id_remap_get('forum',strval($row['forumid']),true);
+            $remapped = import_id_remap_get('forum', strval($row['forumid']), true);
             if (!is_null($remapped)) {
                 $remap_id[$row['forumid']] = $remapped;
                 continue;
@@ -550,7 +552,7 @@ class Hook_vb3
             $position = $row['displayorder'];
             $post_count_increment = 1;//$row['options']&4096; This didn't work, not important though
 
-            $category_id = import_id_remap_get('category',strval($row['parentid']),true);
+            $category_id = import_id_remap_get('category', strval($row['parentid']), true);
             if (is_null($category_id)) {
                 $category_id = db_get_first_id();
             }
@@ -561,40 +563,40 @@ class Hook_vb3
             foreach ($permissions as $p) {
                 $x = $p['forumpermissions'];
                 $v = 0;
-                if (($x&2) != 0) {
+                if (($x & 2) != 0) {
                     $v = 1;
                 }
-                if (($x&16) != 0) {
+                if (($x & 16) != 0) {
                     $v = 2;
                 }
-                if ((($x&16) != 0) && (!(($x&131072) != 0))) {
+                if ((($x & 16) != 0) && (!(($x & 131072) != 0))) {
                     $v = 3;
                 }
-                if ((($x&16) != 0) && (!(($x&131072) != 0)) && (($x&64) != 0)) {
+                if ((($x & 16) != 0) && (!(($x & 131072) != 0)) && (($x & 64) != 0)) {
                     $v = 4;
                 }
-                if ((($x&16) != 0) && (($x&512) != 0)) {
+                if ((($x & 16) != 0) && (($x & 512) != 0)) {
                     $v = 5;
                 }
-                $group_id = import_id_remap_get('group',strval($p['usergroupid']));
+                $group_id = import_id_remap_get('group', strval($p['usergroupid']));
                 $access_mapping[$group_id] = $v;
             }
 
-            $id_new = ocf_make_forum($name,$description,$category_id,$access_mapping,$parent_forum,$position,$post_count_increment,0,'',$row['password'],$row['link']);
+            $id_new = ocf_make_forum($name, $description, $category_id, $access_mapping, $parent_forum, $position, $post_count_increment, 0, '', $row['password'], $row['link']);
 
             $remap_id[$row['forumid']] = $id_new;
-            import_id_remap_put('forum',strval($row['forumid']),$id_new);
+            import_id_remap_put('forum', strval($row['forumid']), $id_new);
         }
 
         // Now we must fix parenting
         foreach ($rows as $row) {
-            $parents = explode(',',$row['parentlist']);
-            if (array_key_exists(2,$parents)) {
-                $category_id = import_id_remap_get('category',strval($parents[1]),true);
-                $r = $parents[is_null($category_id)?1:2];
+            $parents = explode(',', $row['parentlist']);
+            if (array_key_exists(2, $parents)) {
+                $category_id = import_id_remap_get('category', strval($parents[1]), true);
+                $r = $parents[is_null($category_id) ? 1 : 2];
                 if ($r != -1) {
                     $parent_id = $remap_id[$r];
-                    $GLOBALS['FORUM_DB']->query_update('f_forums',array('f_parent_forum' => $parent_id),array('id' => $remap_id[$row['forumid']]),'',1);
+                    $GLOBALS['FORUM_DB']->query_update('f_forums', array('f_parent_forum' => $parent_id), array('id' => $remap_id[$row['forumid']]), '', 1);
                 }
             }
         }
@@ -607,63 +609,64 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_topics($db,$table_prefix,$file_base)
+    public function import_ocf_topics($db, $table_prefix, $file_base)
     {
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'thread WHERE visible=1 ORDER BY threadid',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'thread WHERE visible=1 ORDER BY threadid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('topic',strval($row['threadid']))) {
+                if (import_check_if_imported('topic', strval($row['threadid']))) {
                     continue;
                 }
 
-                $forum_id = import_id_remap_get('forum',strval($row['forumid']));
+                $forum_id = import_id_remap_get('forum', strval($row['forumid']));
 
                 $emoticon = $this->convert_topic_emoticon($row['iconid']);
 
-                $id_new = ocf_make_topic($forum_id,'',$emoticon,$row['visible'],$row['open'],$row['sticky'],0,0,null,null,false,$row['views']);
+                $id_new = ocf_make_topic($forum_id, '', $emoticon, $row['visible'], $row['open'], $row['sticky'], 0, 0, null, null, false, $row['views']);
 
-                import_id_remap_put('topic',strval($row['threadid']),$id_new);
+                import_id_remap_put('topic', strval($row['threadid']), $id_new);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
 
-        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'announcement ORDER BY announcementid',200,$row_start);
+        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'announcement ORDER BY announcementid', 200, $row_start);
         foreach ($rows as $row) {
-            if (import_check_if_imported('announcement',strval($row['announcementid']))) {
+            if (import_check_if_imported('announcement', strval($row['announcementid']))) {
                 continue;
             }
 
-            $forum_id = import_id_remap_get('forum',strval($row['forumid']));
+            $forum_id = import_id_remap_get('forum', strval($row['forumid']));
 
             $emoticon = '';
 
-            $sticky = ($row['enddate']<time())?1:0;
+            $sticky = ($row['enddate'] < time()) ? 1 : 0;
             $cascading = $sticky;
 
-            $id_new = ocf_make_topic($forum_id,'',$emoticon,1,0,$sticky,$cascading,0,null,null,false,$row['views']);
-            ocf_make_post($id_new,@html_entity_decode($row['title'],ENT_QUOTES,get_charset()),$this->fix_links($row['pagetext'],$db,$table_prefix),0,true,1,1,null,null,$row['startdate'],$row['userid'],null,null,null,false,false,$forum_id,false,$row['title']);
+            $id_new = ocf_make_topic($forum_id, '', $emoticon, 1, 0, $sticky, $cascading, 0, null, null, false, $row['views']);
+            ocf_make_post($id_new, @html_entity_decode($row['title'], ENT_QUOTES, get_charset()), $this->fix_links($row['pagetext'], $db, $table_prefix), 0, true, 1, 1, null, null, $row['startdate'], $row['userid'], null, null, null, false, false, $forum_id, false, $row['title']);
 
-            import_id_remap_put('announcement',strval($row['announcementid']),$id_new);
+            import_id_remap_put('announcement', strval($row['announcementid']), $id_new);
         }
 
         // Read logs
-        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'threadread',null,null,true);
+        $rows = $db->query('SELECT * FROM ' . $table_prefix . 'threadread', null, null, true);
         if (!is_null($rows)) {
             foreach ($rows as $row) {
-                $member_id = import_id_remap_get('member',$row['userid'],true);
-                $topic_id = import_id_remap_get('topic',$row['threadid'],true);
+                $member_id = import_id_remap_get('member', $row['userid'], true);
+                $topic_id = import_id_remap_get('topic', $row['threadid'], true);
                 if (is_null($member_id)) {
                     continue;
                 }
                 if (is_null($topic_id)) {
                     continue;
                 }
-                $new_row = array('l_member_id' => $member_id,'l_topic_id' => $topic_id,'l_time' => $row['readtime']);
-                $GLOBALS['FORUM_DB']->query_delete('f_read_logs',$new_row,'',1);
-                $GLOBALS['FORUM_DB']->query_insert('f_read_logs',$new_row);
+                $new_row = array('l_member_id' => $member_id, 'l_topic_id' => $topic_id, 'l_time' => $row['readtime']);
+                $GLOBALS['FORUM_DB']->query_delete('f_read_logs', $new_row, '', 1);
+                $GLOBALS['FORUM_DB']->query_insert('f_read_logs', $new_row);
             }
         }
     }
@@ -675,35 +678,35 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_posts($db,$table_prefix,$file_base)
+    public function import_ocf_posts($db, $table_prefix, $file_base)
     {
         global $STRICT_FILE;
 
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'post WHERE visible=1 ORDER BY postid',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'post WHERE visible=1 ORDER BY postid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('post',strval($row['postid']))) {
+                if (import_check_if_imported('post', strval($row['postid']))) {
                     continue;
                 }
 
-                $topic_id = import_id_remap_get('topic',strval($row['threadid']),true);
+                $topic_id = import_id_remap_get('topic', strval($row['threadid']), true);
                 if (is_null($topic_id)) {
-                    import_id_remap_put('post',strval($row['postid']),-1);
+                    import_id_remap_put('post', strval($row['postid']), -1);
                     continue;
                 }
-                $member_id = import_id_remap_get('member',strval($row['userid']),true);
+                $member_id = import_id_remap_get('member', strval($row['userid']), true);
                 if (is_null($member_id)) {
                     $member_id = db_get_first_id();
                 }
 
                 // This speeds up addition... using the cache can reduce about 7/8 of a query per post on average
                 global $TOPIC_FORUM_CACHE;
-                if (array_key_exists($topic_id,$TOPIC_FORUM_CACHE)) {
+                if (array_key_exists($topic_id, $TOPIC_FORUM_CACHE)) {
                     $forum_id = $TOPIC_FORUM_CACHE[$topic_id];
                 } else {
-                    $forum_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','t_forum_id',array('id' => $topic_id));
+                    $forum_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics', 't_forum_id', array('id' => $topic_id));
                     if (is_null($forum_id)) {
                         continue;
                     }
@@ -718,17 +721,18 @@ class Hook_vb3
                     $title = $row['title'];
                 }
 
-                $post = $this->fix_links($row['pagetext'],$db,$table_prefix);
+                $post = $this->fix_links($row['pagetext'], $db, $table_prefix);
 
                 $last_edit_by = null;
 
-                $id_new = ocf_make_post($topic_id,@html_entity_decode($title,ENT_QUOTES,get_charset()),$post,0,$row['parentid'] == 0,$row['visible'],0,$row['username'],$row['ipaddress'],$row['dateline'],$member_id,null,null,$last_edit_by,false,false,$forum_id,false);
+                $id_new = ocf_make_post($topic_id, @html_entity_decode($title, ENT_QUOTES, get_charset()), $post, 0, $row['parentid'] == 0, $row['visible'], 0, $row['username'], $row['ipaddress'], $row['dateline'], $member_id, null, null, $last_edit_by, false, false, $forum_id, false);
 
-                import_id_remap_put('post',strval($row['postid']),$id_new);
+                import_id_remap_put('post', strval($row['postid']), $id_new);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -739,7 +743,7 @@ class Hook_vb3
      */
     public function _fix_links_callback_topic($m)
     {
-        return 'index.php?page=topicview&id=' . strval(import_id_remap_get('topic',strval($m[2]),true));
+        return 'index.php?page=topicview&id=' . strval(import_id_remap_get('topic', strval($m[2]), true));
     }
 
     /**
@@ -750,7 +754,7 @@ class Hook_vb3
      */
     public function _fix_links_callback_post($m)
     {
-        return 'index.php?page=topicview&type=findpost&id=' . strval(import_id_remap_get('post',strval($m[2]),true));
+        return 'index.php?page=topicview&type=findpost&id=' . strval(import_id_remap_get('post', strval($m[2]), true));
     }
 
     /**
@@ -761,7 +765,7 @@ class Hook_vb3
      */
     public function _fix_links_callback_forum($m)
     {
-        return 'index.php?page=forumview&id=' . strval(import_id_remap_get('forum',strval($m[2]),true));
+        return 'index.php?page=forumview&id=' . strval(import_id_remap_get('forum', strval($m[2]), true));
     }
 
     /**
@@ -772,7 +776,7 @@ class Hook_vb3
      */
     public function _fix_links_callback_member($m)
     {
-        return 'index.php?page=members&type=view&id=' . strval(import_id_remap_get('member',strval($m[2]),true));
+        return 'index.php?page=members&type=view&id=' . strval(import_id_remap_get('member', strval($m[2]), true));
     }
 
     /**
@@ -783,18 +787,18 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @return string                   The new text field text
      */
-    public function fix_links($post,$db,$table_prefix)
+    public function fix_links($post, $db, $table_prefix)
     {
         global $OLD_BASE_URL;
         if (is_null($OLD_BASE_URL)) {
-            $rows = $db->query('SELECT value FROM ' . $table_prefix . 'setting WHERE ' . db_string_equal_to('varname','bburl'));
+            $rows = $db->query('SELECT value FROM ' . $table_prefix . 'setting WHERE ' . db_string_equal_to('varname', 'bburl'));
             $OLD_BASE_URL = $rows[0]['value'];
         }
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(showthread\.php\?t=)(\d*)(&page=\d+)?#',array($this,'_fix_links_callback_topic'),$post);
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(showpost\.php\?p=)(\d*)#',array($this,'_fix_links_callback_post'),$post);
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(forumdisplay\.php\?f=)(\d*)#',array($this,'_fix_links_callback_forum'),$post);
-        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(member\.php\?user=)(\d*)#',array($this,'_fix_links_callback_member'),$post);
-        $post = preg_replace('#\[size="?(\d+)"?\]#','[size="${1}of"]',$post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(showthread\.php\?t=)(\d*)(&page=\d+)?#', array($this, '_fix_links_callback_topic'), $post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(showpost\.php\?p=)(\d*)#', array($this, '_fix_links_callback_post'), $post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(forumdisplay\.php\?f=)(\d*)#', array($this, '_fix_links_callback_forum'), $post);
+        $post = preg_replace_callback('#' . preg_quote($OLD_BASE_URL) . '/(member\.php\?user=)(\d*)#', array($this, '_fix_links_callback_member'), $post);
+        $post = preg_replace('#\[size="?(\d+)"?\]#', '[size="${1}of"]', $post);
         return $post;
     }
 
@@ -805,7 +809,7 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_post_files($db,$table_prefix,$file_base)
+    public function import_ocf_post_files($db, $table_prefix, $file_base)
     {
         global $STRICT_FILE;
         require_code('attachments2');
@@ -814,40 +818,41 @@ class Hook_vb3
         $row_start = 0;
         $rows = array();
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'attachment ORDER BY attachmentid',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'attachment ORDER BY attachmentid', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('post_files',strval($row['attachmentid']))) {
+                if (import_check_if_imported('post_files', strval($row['attachmentid']))) {
                     continue;
                 }
 
-                $post_id = import_id_remap_get('post',strval($row['postid']),true);
+                $post_id = import_id_remap_get('post', strval($row['postid']), true);
                 if (is_null($post_id)) {
                     continue;
                 }
 
-                $post_row = $GLOBALS['FORUM_DB']->query_select('f_posts',array('p_time','p_poster','p_post'),array('id' => $post_id),'',1);
-                if (!array_key_exists(0,$post_row)) {
-                    import_id_remap_put('post_files',strval($row['attachmentid']),1);
+                $post_row = $GLOBALS['FORUM_DB']->query_select('f_posts', array('p_time', 'p_poster', 'p_post'), array('id' => $post_id), '', 1);
+                if (!array_key_exists(0, $post_row)) {
+                    import_id_remap_put('post_files', strval($row['attachmentid']), 1);
                     continue; // Orphaned post
                 }
-                $post = get_translated_text($post_row[0]['p_post'],$GLOBALS['SITE_DB']);
+                $post = get_translated_text($post_row[0]['p_post'], $GLOBALS['SITE_DB']);
                 $member_id = $post_row[0]['p_poster'];
 
-                list($url,$thumb_url) = $this->data_to_disk($row['filedata'],$row['filename'],'attachments',false,$row['thumbnail'],true);
-                $a_id = $GLOBALS['SITE_DB']->query_insert('attachments',array('a_member_id' => $member_id,'a_file_size' => $row['filesize'],'a_url' => $url,'a_thumb_url' => $thumb_url,'a_original_filename' => $row['filename'],'a_num_downloads' => $row['counter'],'a_last_downloaded_time' => NULL,'a_add_time' => $row['dateline'],'a_description' => ''),true);
+                list($url, $thumb_url) = $this->data_to_disk($row['filedata'], $row['filename'], 'attachments', false, $row['thumbnail'], true);
+                $a_id = $GLOBALS['SITE_DB']->query_insert('attachments', array('a_member_id' => $member_id, 'a_file_size' => $row['filesize'], 'a_url' => $url, 'a_thumb_url' => $thumb_url, 'a_original_filename' => $row['filename'], 'a_num_downloads' => $row['counter'], 'a_last_downloaded_time' => null, 'a_add_time' => $row['dateline'], 'a_description' => ''), true);
 
-                $GLOBALS['SITE_DB']->query_insert('attachment_refs',array('r_referer_type' => 'ocf_post','r_referer_id' => strval($post_id),'a_id' => $a_id));
+                $GLOBALS['SITE_DB']->query_insert('attachment_refs', array('r_referer_type' => 'ocf_post', 'r_referer_id' => strval($post_id), 'a_id' => $a_id));
                 $post .= "\n\n" . '[attachment]' . strval($a_id) . '[/attachment]';
 
                 ocf_over_msn();
-                $GLOBALS['FORUM_DB']->query_update('f_posts',update_lang_comcode_attachments('p_post',$post_row[0]['p_post'],$post,'ocf_post',strval($post_id)),array('id' => $post_id),'',1);
+                $GLOBALS['FORUM_DB']->query_update('f_posts', update_lang_comcode_attachments('p_post', $post_row[0]['p_post'], $post, 'ocf_post', strval($post_id)), array('id' => $post_id), '', 1);
                 ocf_over_local();
 
-                import_id_remap_put('post_files',strval($row['attachmentid']),1);
+                import_id_remap_put('post_files', strval($row['attachmentid']), 1);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -861,50 +866,50 @@ class Hook_vb3
      * @param  boolean                  Whether to obfuscate the file type
      * @return array                    A tuple containing the URL, and if requested, the thumbnail
      */
-    public function data_to_disk($data,$filename,$sections,$thumbnail = true,$thumbnail_data = '',$obfuscate = false)
+    public function data_to_disk($data, $filename, $sections, $thumbnail = true, $thumbnail_data = '', $obfuscate = false)
     {
         if ($filename == '') {
             $filetype = '';
-            if (substr($data,4,4) == 'JFIF') {
+            if (substr($data, 4, 4) == 'JFIF') {
                 $filetype = 'jpg';
-            } elseif (substr($data,0,3) == 'GIF') {
+            } elseif (substr($data, 0, 3) == 'GIF') {
                 $filetype = 'gif';
-            } elseif (substr($data,1,3) == 'PNG') {
+            } elseif (substr($data, 1, 3) == 'PNG') {
                 $filetype = 'png';
             }
 
             if ($filetype != '') {
-                $filename = uniqid('',true) . '.' . $filetype;
+                $filename = uniqid('', true) . '.' . $filetype;
             }
         }
         if ($filename != '') {
-            $filename = find_derivative_filename('uploads/' . $sections,$filename);
-            $path = get_custom_file_base() . '/uploads/' . $sections . '/' . $filename . ($obfuscate?'.dat':'');
-            $myfile = @fopen($path,'wb') or warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html('uploads/' . $sections . '/' . $filename . ($obfuscate?'.dat':''))));
-            if (fwrite($myfile,$data)<strlen($data)) {
+            $filename = find_derivative_filename('uploads/' . $sections, $filename);
+            $path = get_custom_file_base() . '/uploads/' . $sections . '/' . $filename . ($obfuscate ? '.dat' : '');
+            $myfile = @fopen($path, 'wb') or warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html('uploads/' . $sections . '/' . $filename . ($obfuscate ? '.dat' : ''))));
+            if (fwrite($myfile, $data) < strlen($data)) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
             fclose($myfile);
             fix_permissions($path);
             sync_file($path);
 
-            $url = 'uploads/' . $sections . '/' . $filename . ($obfuscate?'.dat':'');
+            $url = 'uploads/' . $sections . '/' . $filename . ($obfuscate ? '.dat' : '');
 
             if ($thumbnail_data == '') {
                 if ($thumbnail) {
                     $t_filename = $filename;
-                    $thumb_url = 'uploads/' . $sections . '_thumbs/' . find_derivative_filename('_thumbs',$t_filename,true);
+                    $thumb_url = 'uploads/' . $sections . '_thumbs/' . find_derivative_filename('_thumbs', $t_filename, true);
                     require_code('images');
-                    convert_image(get_custom_base_url() . '/' . $url,$thumb_url,-1,-1,intval(get_option('thumb_width')),false,null,true);
-                    return array($url,$thumb_url);
+                    convert_image(get_custom_base_url() . '/' . $url, $thumb_url, -1, -1, intval(get_option('thumb_width')), false, null, true);
+                    return array($url, $thumb_url);
                 } else {
-                    return array($url,'');
+                    return array($url, '');
                 }
             } else {
-                $thumb_filename = find_derivative_filename('uploads/' . $sections . '_thumbs',$filename);
+                $thumb_filename = find_derivative_filename('uploads/' . $sections . '_thumbs', $filename);
                 $path = get_custom_file_base() . '/uploads/' . $sections . '_thumbs/' . $thumb_filename;
-                $myfile = @fopen($path,'wb') or warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html('uploads/' . $sections . '_thumbs/' . $thumb_filename)));
-                if (fwrite($myfile,$thumbnail_data)<strlen($thumbnail_data)) {
+                $myfile = @fopen($path, 'wb') or warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html('uploads/' . $sections . '_thumbs/' . $thumb_filename)));
+                if (fwrite($myfile, $thumbnail_data) < strlen($thumbnail_data)) {
                     warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                 }
                 fclose($myfile);
@@ -912,10 +917,10 @@ class Hook_vb3
                 fix_permissions($path);
                 sync_file($path);
 
-                return array($url,$thumb_url);
+                return array($url, $thumb_url);
             }
         }
-        return array('','');
+        return array('', '');
     }
 
     /**
@@ -925,42 +930,42 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_polls_and_votes($db,$table_prefix,$file_base)
+    public function import_ocf_polls_and_votes($db, $table_prefix, $file_base)
     {
         $rows = $db->query('SELECT *,p.pollid AS pollid FROM ' . $table_prefix . 'poll p LEFT JOIN ' . $table_prefix . 'thread t ON p.pollid=t.pollid');
         foreach ($rows as $row) {
-            if (import_check_if_imported('poll',strval($row['pollid']))) {
+            if (import_check_if_imported('poll', strval($row['pollid']))) {
                 continue;
             }
 
-            $topic_id = import_id_remap_get('topic',strval($row['threadid']),true);
+            $topic_id = import_id_remap_get('topic', strval($row['threadid']), true);
             if (is_null($topic_id)) {
                 continue;
             }
 
             $is_open = $row['active'];
 
-            $answers = explode('|||',$row['options']);
-            $maximum = ($row['multiple'] == 1)?count($answers):1;
+            $answers = explode('|||', $row['options']);
+            $maximum = ($row['multiple'] == 1) ? count($answers) : 1;
 
             $rows2 = $db->query('SELECT * FROM ' . $table_prefix . 'pollvote WHERE pollid=' . $row['pollid']);
             foreach ($rows2 as $i => $row2) {
-                $rows2[$i]['userid'] = import_id_remap_get('member',strval($row2['userid']),true);
+                $rows2[$i]['userid'] = import_id_remap_get('member', strval($row2['userid']), true);
             }
 
-            $id_new = ocf_make_poll($topic_id,$row['question'],0,$is_open,1,$maximum,0,$answers,false);
+            $id_new = ocf_make_poll($topic_id, $row['question'], 0, $is_open, 1, $maximum, 0, $answers, false);
 
-            $answers = collapse_1d_complexity('id',$GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('id'),array('pa_poll_id' => $id_new))); // Effectively, a remapping from VB vote number to ocP vote number
+            $answers = collapse_1d_complexity('id', $GLOBALS['FORUM_DB']->query_select('f_poll_answers', array('id'), array('pa_poll_id' => $id_new))); // Effectively, a remapping from VB vote number to ocP vote number
 
             foreach ($rows2 as $row2) {
                 $member_id = $row2['userid'];
                 if ((!is_null($member_id)) && ($member_id != 0)) {
-                    $answer = array_key_exists($row2['voteoption']-1,$answers)?$answers[$row2['voteoption']-1]:-1;
-                    $GLOBALS['FORUM_DB']->query_insert('f_poll_votes',array('pv_poll_id' => $id_new,'pv_member_id' => $member_id,'pv_answer_id' => $answer,'pv_ip' => ''));
+                    $answer = array_key_exists($row2['voteoption'] - 1, $answers) ? $answers[$row2['voteoption'] - 1] : -1;
+                    $GLOBALS['FORUM_DB']->query_insert('f_poll_votes', array('pv_poll_id' => $id_new, 'pv_member_id' => $member_id, 'pv_answer_id' => $answer, 'pv_ip' => ''));
                 }
             }
 
-            import_id_remap_put('poll',strval($row['pollid']),$id_new);
+            import_id_remap_put('poll', strval($row['pollid']), $id_new);
         }
     }
 
@@ -971,77 +976,77 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_calendar($db,$table_prefix,$file_base)
+    public function import_calendar($db, $table_prefix, $file_base)
     {
         require_code('calendar2');
 
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'event');
         foreach ($rows as $row) {
-            if (import_check_if_imported('event',strval($row['eventid']))) {
+            if (import_check_if_imported('event', strval($row['eventid']))) {
                 continue;
             }
 
-            $submitter = import_id_remap_get('member',strval($row['userid']),true);
+            $submitter = import_id_remap_get('member', strval($row['userid']), true);
             if (is_null($submitter)) {
                 $submitter = $GLOBALS['OCF_DRIVER']->get_guest_id();
             }
 
             $recurrence = 'none';
             $recurrences = null;
-            $bits = explode('|',$row['recuroption']);
+            $bits = explode('|', $row['recuroption']);
             switch ($row['recurring']) {
                 case 1:
-                    $recurrence = 'daily ' . str_repeat('0',intval($bits[0])-1) . '1';
+                    $recurrence = 'daily ' . str_repeat('0', intval($bits[0]) - 1) . '1';
                     break;
                 case 2:
                     $recurrence = 'daily 1111100';
                     break;
                 case 3:
                     $recurrence = 'daily 0000000';
-                    if (($bits[1]&1) != 0) {
+                    if (($bits[1] & 1) != 0) {
                         $recurrence[6] = '1';
                     }
-                    if (($bits[1]&2) != 0) {
+                    if (($bits[1] & 2) != 0) {
                         $recurrence[7] = '1';
                     }
-                    if (($bits[1]&4) != 0) {
+                    if (($bits[1] & 4) != 0) {
                         $recurrence[8] = '1';
                     }
-                    if (($bits[1]&8) != 0) {
+                    if (($bits[1] & 8) != 0) {
                         $recurrence[9] = '1';
                     }
-                    if (($bits[1]&16) != 0) {
+                    if (($bits[1] & 16) != 0) {
                         $recurrence[10] = '1';
                     }
-                    if (($bits[1]&32) != 0) {
+                    if (($bits[1] & 32) != 0) {
                         $recurrence[11] = '1';
                     }
-                    if (($bits[1]&64) != 0) {
+                    if (($bits[1] & 64) != 0) {
                         $recurrence[12] = '1';
                     }
                     $recurrences = $bits[0]; // Guess
                     break;
                 case 4:
-                    $recurrence = 'monthly ' . str_repeat('0',intval($bits[1])-1) . '1';
+                    $recurrence = 'monthly ' . str_repeat('0', intval($bits[1]) - 1) . '1';
                     break;
                 case 5:
-                    $recurrence = 'monthly ' . str_repeat('0',intval($bits[0])-1) . '1';
+                    $recurrence = 'monthly ' . str_repeat('0', intval($bits[0]) - 1) . '1';
                     break;
                 case 6:
-                    $recurrence = 'yearly ' . str_repeat('0',intval($bits[0])-1) . '1';;
+                    $recurrence = 'yearly ' . str_repeat('0', intval($bits[0]) - 1) . '1';;
                     break;
                 case 7:
-                    $recurrence = 'yearly ' . str_repeat('0',intval($bits[0])-1) . '1';;
+                    $recurrence = 'yearly ' . str_repeat('0', intval($bits[0]) - 1) . '1';;
                     break;
             }
-            list($start_year,$start_month,$start_day,$start_hour,$start_minute) = explode('-',date('Y-m-d-h-i',strtotime($row['dateline'])));
-            list($end_year,$end_month,$end_day,$end_hour,$end_minute) = array(null,null,null,null,null);
+            list($start_year, $start_month, $start_day, $start_hour, $start_minute) = explode('-', date('Y-m-d-h-i', strtotime($row['dateline'])));
+            list($end_year, $end_month, $end_day, $end_hour, $end_minute) = array(null, null, null, null, null);
             ocf_over_msn();
-            $id_new = add_calendar_event(db_get_first_id()+1,$recurrence,$recurrences,0,$row['title'],$row['event'],3,$start_year,$start_month,$start_day,'day_of_month',$start_hour,$start_minute,$end_year,$end_month,$end_day,'day_of_month',$end_hour,$end_minute,null,1,null,1,1,1,1,'',$submitter,0,$row['dateline']);
+            $id_new = add_calendar_event(db_get_first_id() + 1, $recurrence, $recurrences, 0, $row['title'], $row['event'], 3, $start_year, $start_month, $start_day, 'day_of_month', $start_hour, $start_minute, $end_year, $end_month, $end_day, 'day_of_month', $end_hour, $end_minute, null, 1, null, 1, 1, 1, 1, '', $submitter, 0, $row['dateline']);
             ocf_over_local();
             if ($row['visible'] == 0) {
                 if (addon_installed('content_privacy')) {
-                    $GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+                    $GLOBALS['SITE_DB']->query_insert('content_privacy', array(
                         'content_type' => 'event',
                         'content_id' => strval($id_new),
                         'guest_view' => 0,
@@ -1051,7 +1056,7 @@ class Hook_vb3
                 }
             }
 
-            import_id_remap_put('event',strval($row['eventid']),$id_new);
+            import_id_remap_put('event', strval($row['eventid']), $id_new);
         }
     }
 
@@ -1062,7 +1067,7 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_ocf_private_topics($db,$table_prefix,$old_base_dir)
+    public function import_ocf_private_topics($db, $table_prefix, $old_base_dir)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'pm p LEFT JOIN ' . $table_prefix . 'pmtext t ON p.pmtextid=t.pmtextid WHERE folderid<>-1 AND title NOT LIKE \'' . db_encode_like('Sent:  %') . '\' ORDER BY dateline');
 
@@ -1070,14 +1075,14 @@ class Hook_vb3
         $groups = array();
         foreach ($rows as $row) {
             // Do some fiddling around for duplication
-            if ($row['fromuserid']>$row['userid']) {
+            if ($row['fromuserid'] > $row['userid']) {
                 $a = $row['userid'];
                 $b = $row['fromuserid'];
             } else {
                 $a = $row['fromuserid'];
                 $b = $row['userid'];
             }
-            $row['title'] = str_replace('Re: ','',$row['title']);
+            $row['title'] = str_replace('Re: ', '', $row['title']);
             $groups[strval($a) . ':' . strval($b) . ':' . $row['title']][] = $row;
         }
 
@@ -1085,20 +1090,20 @@ class Hook_vb3
         foreach ($groups as $group) {
             $row = $group[0];
 
-            if (import_check_if_imported('pt',strval($row['pmid']))) {
+            if (import_check_if_imported('pt', strval($row['pmid']))) {
                 continue;
             }
 
             // Create topic
-            $from_id = import_id_remap_get('member',strval($row['fromuserid']),true);
+            $from_id = import_id_remap_get('member', strval($row['fromuserid']), true);
             if (is_null($from_id)) {
                 $from_id = $GLOBALS['OCF_DRIVER']->get_guest_id();
             }
-            $to_id = import_id_remap_get('member',strval($row['userid']),true);
+            $to_id = import_id_remap_get('member', strval($row['userid']), true);
             if (is_null($to_id)) {
                 $to_id = $GLOBALS['OCF_DRIVER']->get_guest_id();
             }
-            $topic_id = ocf_make_topic(null,'',$this->convert_topic_emoticon($row['iconid']),1,1,0,0,0,$from_id,$to_id,false);
+            $topic_id = ocf_make_topic(null, '', $this->convert_topic_emoticon($row['iconid']), 1, 1, 0, 0, 0, $from_id, $to_id, false);
 
             $first_post = true;
             foreach ($group as $_postdetails) {
@@ -1108,24 +1113,24 @@ class Hook_vb3
                     $title = '';
                 }
 
-                $post = $this->fix_links($_postdetails['message'],$db,$table_prefix);
+                $post = $this->fix_links($_postdetails['message'], $db, $table_prefix);
                 $validated = 1;
-                $from_id = import_id_remap_get('member',strval($_postdetails['fromuserid']),true);
+                $from_id = import_id_remap_get('member', strval($_postdetails['fromuserid']), true);
                 if (is_null($from_id)) {
                     $from_id = $GLOBALS['OCF_DRIVER']->get_guest_id();
                 }
                 $poster_name_if_guest = $_postdetails['fromusername'];
-                $ip_address = $GLOBALS['OCF_DRIVER']->get_member_row_field($from_id,'m_ip_address');
+                $ip_address = $GLOBALS['OCF_DRIVER']->get_member_row_field($from_id, 'm_ip_address');
                 $time = $_postdetails['dateline'];
                 $poster = $from_id;
                 $last_edit_time = null;
                 $last_edit_by = null;
 
-                ocf_make_post($topic_id,$title,$post,0,$first_post,$validated,0,$poster_name_if_guest,$ip_address,$time,$poster,null,$last_edit_time,$last_edit_by,false,false,null,false);
+                ocf_make_post($topic_id, $title, $post, 0, $first_post, $validated, 0, $poster_name_if_guest, $ip_address, $time, $poster, null, $last_edit_time, $last_edit_by, false, false, null, false);
                 $first_post = false;
             }
 
-            import_id_remap_put('pt',strval($row['pmid']),$topic_id);
+            import_id_remap_put('pt', strval($row['pmid']), $topic_id);
         }
     }
 
@@ -1165,21 +1170,21 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_custom_comcode($db,$table_prefix,$file_base)
+    public function import_custom_comcode($db, $table_prefix, $file_base)
     {
         require_code('custom_comcode');
         require_code('comcode_compiler');
 
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'bbcode');
         foreach ($rows as $row) {
-            if (import_check_if_imported('custom_comcode',strval($row['bbcodeid']))) {
+            if (import_check_if_imported('custom_comcode', strval($row['bbcodeid']))) {
                 continue;
             }
 
             global $VALID_COMCODE_TAGS;
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag' => $row['bbcodetag']));
-            if ((array_key_exists($row['bbcodetag'],$VALID_COMCODE_TAGS)) || (!is_null($test))) {
-                import_id_remap_put('custom_comcode',strval($row['bbcodeid']),1);
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode', 'tag_tag', array('tag_tag' => $row['bbcodetag']));
+            if ((array_key_exists($row['bbcodetag'], $VALID_COMCODE_TAGS)) || (!is_null($test))) {
+                import_id_remap_put('custom_comcode', strval($row['bbcodeid']), 1);
                 continue;
             }
 
@@ -1194,9 +1199,9 @@ class Hook_vb3
             $block_tag = 0;
             $textual_tag = 1;
 
-            add_custom_comcode_tag($tag,$title,$description,$replace,$example,$parameters,$enabled,$dangerous_tag,$block_tag,$textual_tag);
+            add_custom_comcode_tag($tag, $title, $description, $replace, $example, $parameters, $enabled, $dangerous_tag, $block_tag, $textual_tag);
 
-            import_id_remap_put('custom_comcode',strval($row['bbcodeid']),1);
+            import_id_remap_put('custom_comcode', strval($row['bbcodeid']), 1);
         }
     }
 
@@ -1207,51 +1212,52 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_notifications($db,$table_prefix,$file_base)
+    public function import_notifications($db, $table_prefix, $file_base)
     {
         require_code('notifications');
 
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'subscribeforum');
         foreach ($rows as $row) {
-            if (import_check_if_imported('forum_notification',strval($row['subscribeforumid']))) {
+            if (import_check_if_imported('forum_notification', strval($row['subscribeforumid']))) {
                 continue;
             }
 
-            $member_id = import_id_remap_get('member',strval($row['userid']),true);
+            $member_id = import_id_remap_get('member', strval($row['userid']), true);
             if (is_null($member_id)) {
                 continue;
             }
-            $forum_id = import_id_remap_get('forum',strval($row['forumid']),true);
+            $forum_id = import_id_remap_get('forum', strval($row['forumid']), true);
             if (is_null($forum_id)) {
                 continue;
             }
-            enable_notifications('ocf_topic','forum:' . strval($forum_id),$member_id);
+            enable_notifications('ocf_topic', 'forum:' . strval($forum_id), $member_id);
 
-            import_id_remap_put('forum_notification',strval($row['subscribeforumid']),1);
+            import_id_remap_put('forum_notification', strval($row['subscribeforumid']), 1);
         }
         $row_start = 0;
         do {
-            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'subscribethread',200,$row_start);
+            $rows = $db->query('SELECT * FROM ' . $table_prefix . 'subscribethread', 200, $row_start);
             foreach ($rows as $row) {
-                if (import_check_if_imported('topic_notification',strval($row['subscribethreadid']))) {
+                if (import_check_if_imported('topic_notification', strval($row['subscribethreadid']))) {
                     continue;
                 }
 
-                $member_id = import_id_remap_get('member',strval($row['userid']),true);
+                $member_id = import_id_remap_get('member', strval($row['userid']), true);
                 if (is_null($member_id)) {
                     continue;
                 }
-                $topic_id = import_id_remap_get('topic',strval($row['threadid']),true);
+                $topic_id = import_id_remap_get('topic', strval($row['threadid']), true);
                 if (is_null($topic_id)) {
                     continue;
                 }
-                enable_notifications('ocf_topic',strval($topic_id),$member_id);
+                enable_notifications('ocf_topic', strval($topic_id), $member_id);
 
-                import_id_remap_put('topic_notification',strval($row['subscribethreadid']),1);
+                import_id_remap_put('topic_notification', strval($row['subscribethreadid']), 1);
             }
 
             $row_start += 200;
-        } while (count($rows)>0);
+        }
+        while (count($rows) > 0);
     }
 
     /**
@@ -1261,48 +1267,48 @@ class Hook_vb3
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_logs($db,$table_prefix,$file_base)
+    public function import_logs($db, $table_prefix, $file_base)
     {
         require_code('ocf_general_action2');
 
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'editlog');
         foreach ($rows as $row) {
-            if (import_check_if_imported('editlog',strval($row['postid']))) {
+            if (import_check_if_imported('editlog', strval($row['postid']))) {
                 continue;
             }
 
-            ocf_mod_log_it('EDIT_POST',strval(import_id_remap_get('post',strval($row['postid']),true)),'',$row['reason'],$row['userid'],$row['dateline']);
+            ocf_mod_log_it('EDIT_POST', strval(import_id_remap_get('post', strval($row['postid']), true)), '', $row['reason'], $row['userid'], $row['dateline']);
 
-            import_id_remap_put('editlog',strval($row['postid']),-1);
+            import_id_remap_put('editlog', strval($row['postid']), -1);
         }
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'deletionlog');
         foreach ($rows as $row) {
-            if (import_check_if_imported('deletionlog',strval($row['primaryid']))) {
+            if (import_check_if_imported('deletionlog', strval($row['primaryid']))) {
                 continue;
             }
 
             if ($row['type'] == 'post') {
-                ocf_mod_log_it('DELETE_POST','','',$row['reason'],$row['userid']);
+                ocf_mod_log_it('DELETE_POST', '', '', $row['reason'], $row['userid']);
             } elseif ($row['type'] == 'thread') {
-                ocf_mod_log_it('DELETE_TOPIC','','',$row['reason'],$row['userid']);
+                ocf_mod_log_it('DELETE_TOPIC', '', '', $row['reason'], $row['userid']);
             }
 
-            import_id_remap_put('deletionlog',strval($row['primaryid']),-1);
+            import_id_remap_put('deletionlog', strval($row['primaryid']), -1);
         }
-/*
-moderatorlog
- Closed
- Closed Thread
- Opened Thread
- Post * by * Removed
- Post * Edited
- Stuck
- Stuck Thread
- Thread edited. (visible: ?; open: ?; sticky: ?)
- Thread moved to '*'.
- Thread Removed
-adminlog
-*/
+        /*
+        moderatorlog
+         Closed
+         Closed Thread
+         Opened Thread
+         Post * by * Removed
+         Post * Edited
+         Stuck
+         Stuck Thread
+         Thread edited. (visible: ?; open: ?; sticky: ?)
+         Thread moved to '*'.
+         Thread Removed
+        adminlog
+        */
     }
 
     /**
@@ -1312,18 +1318,18 @@ adminlog
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_points_gifts_and_charges($db,$table_prefix,$file_base)
+    public function import_points_gifts_and_charges($db, $table_prefix, $file_base)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'reputation');
         foreach ($rows as $row) {
-            if (import_check_if_imported('points',strval($row['reputationid']))) {
+            if (import_check_if_imported('points', strval($row['reputationid']))) {
                 continue;
             }
 
             $time = $row['dateline'];
             $amount = $row['reputation'];
-            $viewer_member = import_id_remap_get('member',strval($row['whoadded']),true);
-            $member = import_id_remap_get('member',strval($row['userid']),true);
+            $viewer_member = import_id_remap_get('member', strval($row['whoadded']), true);
+            $member = import_id_remap_get('member', strval($row['userid']), true);
             $reason = $row['reason'];
             $anonymous = 0;
             $map = array(
@@ -1333,10 +1339,10 @@ adminlog
                 'gift_to' => $member,
                 'anonymous' => $anonymous,
             );
-            $map += insert_lang_comcode('reason',$reason,4);
-            $GLOBALS['SITE_DB']->query_insert('gifts',$map);
+            $map += insert_lang_comcode('reason', $reason, 4);
+            $GLOBALS['SITE_DB']->query_insert('gifts', $map);
 
-            import_id_remap_put('points',strval($row['reputationid']),-1);
+            import_id_remap_put('points', strval($row['reputationid']), -1);
         }
     }
 
@@ -1347,11 +1353,11 @@ adminlog
      * @param  string                   The table prefix the target prefix is using
      * @param  PATH                     The base directory we are importing from
      */
-    public function import_wordfilter($db,$table_prefix,$file_base)
+    public function import_wordfilter($db, $table_prefix, $file_base)
     {
-        $rows = $db->query('SELECT value FROM ' . $table_prefix . 'setting WHERE ' . db_string_equal_to('varname','censorwords'));
+        $rows = $db->query('SELECT value FROM ' . $table_prefix . 'setting WHERE ' . db_string_equal_to('varname', 'censorwords'));
         $censorwords = $rows[0]['value'];
-        foreach (explode(' ',$censorwords) as $word) {
+        foreach (explode(' ', $censorwords) as $word) {
             if ($word != '') {
                 add_wordfilter_word($word);
             }

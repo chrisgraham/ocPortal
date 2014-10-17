@@ -6,7 +6,6 @@
  * The stackoverflow.com post with this info is here:
  *    http://stackoverflow.com/questions/9902210/php-youtube-latest-video-feed-php-code-mechanism
  */
-
 /*EXTRA FUNCTIONS: json_decode*/
 
 class Block_youtube_channel
@@ -26,7 +25,7 @@ class Block_youtube_channel
         $info['version'] = 9;
         $info['locked'] = false;
         $info['update_require_upgrade'] = 1;
-        $info['parameters'] = array('name','title','template_main','template_style','start_video','max_videos','orderby','embed_allowed','show_player','player_align','player_width','player_height','style','nothumbplayer','thumbnail','formorelead','formoretext','formoreurl');
+        $info['parameters'] = array('name', 'title', 'template_main', 'template_style', 'start_video', 'max_videos', 'orderby', 'embed_allowed', 'show_player', 'player_align', 'player_width', 'player_height', 'style', 'nothumbplayer', 'thumbnail', 'formorelead', 'formoretext', 'formoreurl');
         return $info;
     }
 
@@ -54,33 +53,33 @@ class Block_youtube_channel
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
         //set up variables from parameters
-        $channel_name = array_key_exists('name',$map)?$map['name']:'holleywoodstudio';
-        $channel_title = array_key_exists('title',$map)?$map['title']:'';
-        $channel_tempmain = array_key_exists('template_main',$map)?$map['template_main']:'';
+        $channel_name = array_key_exists('name', $map) ? $map['name'] : 'holleywoodstudio';
+        $channel_title = array_key_exists('title', $map) ? $map['title'] : '';
+        $channel_tempmain = array_key_exists('template_main', $map) ? $map['template_main'] : '';
         if ($channel_tempmain) {
             $channel_tempmain = '_' . $channel_tempmain;
         }
         $channel_templatemain = 'BLOCK_YOUTUBE_CHANNEL' . $channel_tempmain;
-        $channel_tempstyle = array_key_exists('template_style',$map)?$map['template_style']:'';
+        $channel_tempstyle = array_key_exists('template_style', $map) ? $map['template_style'] : '';
         if ($channel_tempstyle) {
             $channel_tempstyle = '_' . $channel_tempstyle;
         }
         $channel_templatestyle = 'BLOCK_YOUTUBE_CHANNEL_STYLE' . $channel_tempstyle;
-        $channel_startvideo = array_key_exists('start_video',$map)?$map['start_video']:'1';
-        $channel_maxvideos = array_key_exists('max_videos',$map)?$map['max_videos']:'25';
-        $channel_orderby = array_key_exists('orderby',$map)?$map['orderby']:'1';
-        $channel_showplayer = array_key_exists('show_player',$map)?$map['show_player']:'1';
-        $channel_embedallowed = array_key_exists('embed_allowed',$map)?$map['embed_allowed']:'1';
-        $channel_playeralign = strtolower(array_key_exists('player_align',$map)?$map['player_align']:'center');
-        $channel_playerwidth = array_key_exists('player_width',$map)?$map['player_width']:'480';
-        $channel_playerheight = array_key_exists('player_height',$map)?$map['player_height']:'270';
-        $channel_style = array_key_exists('style',$map)?$map['style']:'1';
-        $channel_nothumbplayer = array_key_exists('nothumbplayer',$map)?$map['nothumbplayer']:'0';
-        $channel_formorelead = array_key_exists('formorelead',$map)?$map['formorelead']:'';
-        $channel_formoretext = array_key_exists('formoretext',$map)?$map['formoretext']:'';
-        $channel_formoreurl = array_key_exists('formoreurl',$map)?$map['formoreurl']:'';
+        $channel_startvideo = array_key_exists('start_video', $map) ? $map['start_video'] : '1';
+        $channel_maxvideos = array_key_exists('max_videos', $map) ? $map['max_videos'] : '25';
+        $channel_orderby = array_key_exists('orderby', $map) ? $map['orderby'] : '1';
+        $channel_showplayer = array_key_exists('show_player', $map) ? $map['show_player'] : '1';
+        $channel_embedallowed = array_key_exists('embed_allowed', $map) ? $map['embed_allowed'] : '1';
+        $channel_playeralign = strtolower(array_key_exists('player_align', $map) ? $map['player_align'] : 'center');
+        $channel_playerwidth = array_key_exists('player_width', $map) ? $map['player_width'] : '480';
+        $channel_playerheight = array_key_exists('player_height', $map) ? $map['player_height'] : '270';
+        $channel_style = array_key_exists('style', $map) ? $map['style'] : '1';
+        $channel_nothumbplayer = array_key_exists('nothumbplayer', $map) ? $map['nothumbplayer'] : '0';
+        $channel_formorelead = array_key_exists('formorelead', $map) ? $map['formorelead'] : '';
+        $channel_formoretext = array_key_exists('formoretext', $map) ? $map['formoretext'] : '';
+        $channel_formoreurl = array_key_exists('formoreurl', $map) ? $map['formoreurl'] : '';
         $channel_url = 'http://www.youtube.com/user/' . $channel_name;
-        $channel_thumbnail = array_key_exists('thumbnail',$map)?$map['thumbnail']:'0';
+        $channel_thumbnail = array_key_exists('thumbnail', $map) ? $map['thumbnail'] : '0';
 
         //create some working variables for working in foreach loop
         $temp_showplayer = $channel_showplayer;
@@ -90,23 +89,23 @@ class Block_youtube_channel
         $channel_error = '';
 
         //sanity checks on some critical input - if out of range or unknown values are detected, set them to a default value
-        if ($channel_startvideo<1) {
+        if ($channel_startvideo < 1) {
             $channel_startvideo = 1;
         }
-        if ($channel_maxvideos<1 || $channel_maxvideos>50) {
+        if ($channel_maxvideos < 1 || $channel_maxvideos > 50) {
             $channel_maxvideos = 25;
         }
-        if ($channel_orderby<1 || $channel_orderby>3) {
+        if ($channel_orderby < 1 || $channel_orderby > 3) {
             $channel_orderby = 1;
         }
-        if ($channel_showplayer<0 || $channel_showplayer>2) {
+        if ($channel_showplayer < 0 || $channel_showplayer > 2) {
             $channel_showplayer = 1;
         }
         if ($channel_playeralign != 'center' || $channel_playeralign != 'left' || $channel_playeralign != 'right') {
             $channel_playeralign = 'center';
         }
         //if ($channel_style<1 || $channel_style>3) $channel_style=1;
-        if ($channel_nothumbplayer<0 || $channel_nothumbplayer>1) {
+        if ($channel_nothumbplayer < 0 || $channel_nothumbplayer > 1) {
             $channel_nothumbplayer = 0;
         }
 
@@ -188,8 +187,8 @@ class Block_youtube_channel
                 }                                                                //if video has no dislikes, node will not be available - manually set it to 0
 
                 $ratingstotal = $likes + $dislikes;                                        //generate total number of likes and dislikes
-                if ($ratingstotal>0) {
-                    $likespercent = intval(round(($likes/$ratingstotal)*100));
+                if ($ratingstotal > 0) {
+                    $likespercent = intval(round(($likes / $ratingstotal) * 100));
                 }            //generate percentage of likes
                 else {
                     $likespercent = 0;
@@ -201,7 +200,7 @@ class Block_youtube_channel
                 else {
                     $rating = 0;
                 }                                                                //if video has no likes or dislikes, node will not be available - manually set rating is set to 0
-                if ($rating>0) {
+                if ($rating > 0) {
                     $ratingstars = intval(round($rating));
                 }                //generate full star rating of 1 to 5 stars (no half stars)
                 else {
@@ -211,7 +210,7 @@ class Block_youtube_channel
                 $minutes = 0;
                 $seconds = 0;                                                        //initialize minutes and seconds to 0
                 $seconds = $entry->{'media$group'}->{'yt$duration'}->seconds;        //get video duration in seconds
-                if ($seconds>1) {
+                if ($seconds > 1) {
                     $duration_text = "$seconds seconds";
                 }                    //if more than one second, use plural - seconds
                 else {
@@ -227,15 +226,15 @@ class Block_youtube_channel
                 }
 
                 //if video is more than 59 seconds, use minutes and seconds, and distinguish between singular and plural for both seconds and minutes.
-                if ($seconds>59) {
-                    $minutes = intval(floor($seconds/60));
-                    $seconds = $seconds-($minutes*60);
-                    if ($minutes>1) {
+                if ($seconds > 59) {
+                    $minutes = intval(floor($seconds / 60));
+                    $seconds = $seconds - ($minutes * 60);
+                    if ($minutes > 1) {
                         $minutes_text = 'minutes';
                     } else {
                         $minutes_text = 'minute';
                     }
-                    if ($seconds>1) {
+                    if ($seconds > 1) {
                         $seconds_text = 'seconds';
                     } else {
                         $seconds_text = 'second';
@@ -248,16 +247,16 @@ class Block_youtube_channel
                 }
 
                 //prepend zero(s) to minutes, if needed, when using numeric time format so we have 2-digit format
-                if ($minutes<1) {
+                if ($minutes < 1) {
                     $minutes = '00';
-                } elseif ($minutes>0 && $minutes<10) {
+                } elseif ($minutes > 0 && $minutes < 10) {
                     $minutes = '0' . strval($minutes);
                 }
 
                 //prepend zero(s) to seconds, if needed, when using numeric time format so we have 2-digit format
-                if ($seconds<1) {
+                if ($seconds < 1) {
                     $seconds = '00';
-                } elseif ($seconds>0 && $seconds<10) {
+                } elseif ($seconds > 0 && $seconds < 10) {
                     $seconds = '0' . strval($seconds);
                 }
 
@@ -291,7 +290,7 @@ class Block_youtube_channel
                 $thumbalt_5 = $thumb_img_5->{'yt$name'};
 
                 //if show player parameter is greater than 0, pass SHOWPLAYER set to 1 to template.
-                if ($temp_showplayer>0 && $i <= $temp_showplayer) {
+                if ($temp_showplayer > 0 && $i <= $temp_showplayer) {
                     $channel_showplayer = '1';
                 } else {
                     $channel_showplayer = '0';
@@ -306,7 +305,7 @@ class Block_youtube_channel
                 }
 
                 //style all of the meta info using the Style template and store it all in the content variable which is passed to the main template
-                $content->attach(do_template($channel_templatestyle,array(
+                $content->attach(do_template($channel_templatestyle, array(
                     'EMBED_ALLOWED' => $channel_embedallowed,
                     'EMBEDPLAYER_ALLOWED' => $allowembedding,
                     'VIDEO_ID' => $video_id,
@@ -377,7 +376,7 @@ class Block_youtube_channel
         }    //set error if channel request doesn't return a channel result
 
         //send styled content to the main template
-        return do_template($channel_templatemain,array(
+        return do_template($channel_templatemain, array(
             'CHANNEL_ERROR' => $channel_error,
             'CHANNEL_TITLE' => $channel_title,
             'CHANNEL_NAME' => $channel_name,
@@ -395,5 +394,5 @@ class Block_youtube_channel
  */
 function block_youtube_channel__cache_on($map)
 {
-    return array(array_key_exists('max_videos',$map)?intval($map['max_videos']):25,array_key_exists('start_video',$map)?intval($map['start_video']):1,array_key_exists('orderby',$map)?intval($map['orderby']):1,array_key_exists('embed_player',$map)?intval($map['embed_player']):1,array_key_exists('show_player',$map)?intval($map['show_player']):1,array_key_exists('style',$map)?intval($map['style']):1,array_key_exists('nothumbplayer',$map)?intval($map['nothumbplayer']):0,array_key_exists('thumbnail',$map)?intval($map['thumbnail']):0,array_key_exists('player_width',$map)?intval($map['player_width']):480,array_key_exists('player_height',$map)?intval($map['player_height']):270,array_key_exists('title',$map)?$map['title']:'',array_key_exists('player_align',$map)?$map['player_align']:'center',array_key_exists('formorelead',$map)?$map['formorelead']:'',array_key_exists('formoretext',$map)?$map['formoretext']:'',array_key_exists('formoreurl',$map)?$map['formoreurl']:'',array_key_exists('name',$map)?$map['name']:'holleywoodstudio',array_key_exists('template_main',$map)?$map['template_main']:'',array_key_exists('template_style',$map)?$map['template_style']:'');
+    return array(array_key_exists('max_videos', $map) ? intval($map['max_videos']) : 25, array_key_exists('start_video', $map) ? intval($map['start_video']) : 1, array_key_exists('orderby', $map) ? intval($map['orderby']) : 1, array_key_exists('embed_player', $map) ? intval($map['embed_player']) : 1, array_key_exists('show_player', $map) ? intval($map['show_player']) : 1, array_key_exists('style', $map) ? intval($map['style']) : 1, array_key_exists('nothumbplayer', $map) ? intval($map['nothumbplayer']) : 0, array_key_exists('thumbnail', $map) ? intval($map['thumbnail']) : 0, array_key_exists('player_width', $map) ? intval($map['player_width']) : 480, array_key_exists('player_height', $map) ? intval($map['player_height']) : 270, array_key_exists('title', $map) ? $map['title'] : '', array_key_exists('player_align', $map) ? $map['player_align'] : 'center', array_key_exists('formorelead', $map) ? $map['formorelead'] : '', array_key_exists('formoretext', $map) ? $map['formoretext'] : '', array_key_exists('formoreurl', $map) ? $map['formoreurl'] : '', array_key_exists('name', $map) ? $map['name'] : 'holleywoodstudio', array_key_exists('template_main', $map) ? $map['template_main'] : '', array_key_exists('template_style', $map) ? $map['template_style'] : '');
 }

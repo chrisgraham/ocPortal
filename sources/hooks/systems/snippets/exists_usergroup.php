@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_exists_usergroup
 {
     /**
@@ -29,11 +28,11 @@ class Hook_exists_usergroup
     {
         $val = get_param('name');
 
-        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $val));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $val));
         if (is_null($test)) {
             return new ocp_tempcode();
         }
 
-        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($val))));
     }
 }

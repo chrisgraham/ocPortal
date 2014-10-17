@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_Notification_quiz_results extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_quiz_results extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -51,18 +50,18 @@ class Hook_Notification_quiz_results extends Hook_Notification__Staff
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
-        $types = $GLOBALS['SITE_DB']->query_select('quizzes',array('id','q_name'));
+        $types = $GLOBALS['SITE_DB']->query_select('quizzes', array('id', 'q_name'));
         foreach ($types as $type) {
             $page_links[] = array(
                 'id' => $type['id'],
                 'title' => get_translated_text($type['q_name']),
             );
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -76,7 +75,7 @@ class Hook_Notification_quiz_results extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['quiz_results'] = array(do_lang('GENERAL'),do_lang('quiz:NOTIFICATION_TYPE_quiz_results'));
+        $list['quiz_results'] = array(do_lang('GENERAL'), do_lang('quiz:NOTIFICATION_TYPE_quiz_results'));
         return $list;
     }
 }

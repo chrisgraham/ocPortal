@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_validation
  */
-
 class Hook_config_validation_compat
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_validation_compat
      */
     public function get_default()
     {
-        return NULL; // Disabled by default, as option stands against ideas of progressive enhancement
+        return null; // Disabled by default, as option stands against ideas of progressive enhancement
     }
 }

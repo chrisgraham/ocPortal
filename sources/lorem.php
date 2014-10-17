@@ -23,7 +23,7 @@
  */
 function init__lorem()
 {
-    global $LOREM_RANDOM_VAR,$LOREM_AVOID_GLOBALISE;
+    global $LOREM_RANDOM_VAR, $LOREM_AVOID_GLOBALISE;
     $LOREM_RANDOM_VAR = 0;
     $LOREM_AVOID_GLOBALISE = false;
 }
@@ -253,11 +253,11 @@ function placeholder_form_with_field($field_name)
     $text = '<p>(A form would go here.)</p>';
 
     require_code('form_templates');
-    $hidden = form_input_hidden($field_name,'0');
+    $hidden = form_input_hidden($field_name, '0');
 
     //$field->attach(form_input_line_auto_load('test','test.','test','',false,'news'));
 
-    $form = do_lorem_template('FORM',array('TABINDEX' => placeholder_number(),'HIDDEN' => $hidden,'TEXT' => $text,'FIELDS' => placeholder_fields(),'URL' => placeholder_url(),'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => 'proceed'));
+    $form = do_lorem_template('FORM', array('TABINDEX' => placeholder_number(), 'HIDDEN' => $hidden, 'TEXT' => $text, 'FIELDS' => placeholder_fields(), 'URL' => placeholder_url(), 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => 'proceed'));
 
     return $form;
 }
@@ -352,7 +352,7 @@ function placeholder_button()
 function placeholder_options()
 {
     $text = '';
-    for ($i = 1;$i <= 3;$i++) {
+    for ($i = 1; $i <= 3; $i++) {
         $text .= '<option value="' . lorem_word() . '">' . lorem_word() . '</option>';
     }
 
@@ -368,7 +368,7 @@ function placeholder_options()
 function placeholder_array($num_elements = 3)
 {
     $array = array();
-    for ($i = 1;$i <= $num_elements;$i++) {
+    for ($i = 1; $i <= $num_elements; $i++) {
         $array[] = 'test' . strval($i);
     }
 
@@ -416,7 +416,7 @@ function placeholder_image()
  */
 function placeholder_date()
 {
-    return get_timezoned_date(12345-60*60*24*200);
+    return get_timezoned_date(12345 - 60 * 60 * 24 * 200);
 }
 
 /**
@@ -436,7 +436,7 @@ function placeholder_time()
  */
 function placeholder_date_raw()
 {
-    return strval(12345-60*60*24*200);
+    return strval(12345 - 60 * 60 * 24 * 200);
 }
 
 /**
@@ -508,9 +508,9 @@ function placeholder_blank()
 function placeholder_breadcrumbs()
 {
     $tpl_url = new ocp_tempcode();
-    $tpl_url->attach(hyperlink(placeholder_url(),escape_html(lorem_phrase()),false,false,do_lang_tempcode('GO_BACKWARDS_TO',lorem_phrase()),null,null,'up'));
+    $tpl_url->attach(hyperlink(placeholder_url(), escape_html(lorem_phrase()), false, false, do_lang_tempcode('GO_BACKWARDS_TO', lorem_phrase()), null, null, 'up'));
     $tpl_url->attach(do_lorem_template('BREADCRUMB_SEPARATOR'));
-    $tpl_url->attach(hyperlink(placeholder_url(),escape_html(lorem_phrase()),false,false,do_lang_tempcode('GO_BACKWARDS_TO',lorem_phrase()),null,null,'up'));
+    $tpl_url->attach(hyperlink(placeholder_url(), escape_html(lorem_phrase()), false, false, do_lang_tempcode('GO_BACKWARDS_TO', lorem_phrase()), null, null, 'up'));
     return $tpl_url;
 }
 
@@ -527,9 +527,9 @@ function placeholder_breadcrumbs()
  * @set    templates css
  * @return tempcode                     The tempcode for this template
  */
-function do_lorem_template($codename,$parameters = null,$lang = null,$light_error = false,$fallback = null,$suffix = '.tpl',$type = 'templates')
+function do_lorem_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $type = 'templates')
 {
-    return do_template($codename,$parameters,$lang,$light_error,$fallback,$suffix,$type);
+    return do_template($codename, $parameters, $lang, $light_error, $fallback, $suffix, $type);
 }
 
 /**
@@ -542,7 +542,7 @@ function do_lorem_template($codename,$parameters = null,$lang = null,$light_erro
  * @param  boolean                      Whether to include the header/footer/panels
  * @return tempcode                     Standalone page
  */
-function lorem_globalise($middle,$message = null,$type = '',$include_header_and_footer = false)
+function lorem_globalise($middle, $message = null, $type = '', $include_header_and_footer = false)
 {
     restore_output_state(true); // Here we reset some Tempcode environmental stuff, because template compilation or preprocessing may have dirtied things
 
@@ -553,7 +553,7 @@ function lorem_globalise($middle,$message = null,$type = '',$include_header_and_
     }
 
     $out = new ocp_tempcode();
-    $out->attach(do_lorem_template('GLOBAL_HTML_WRAP',array(
+    $out->attach(do_lorem_template('GLOBAL_HTML_WRAP', array(
         'MIDDLE' => $middle,
     )));
 
@@ -596,7 +596,7 @@ function placeholder_emoticons()
  */
 function placeholder_avatar()
 {
-    return find_theme_image('ocf_default_avatars/system',true);
+    return find_theme_image('ocf_default_avatars/system', true);
 }
 
 /**
@@ -609,7 +609,7 @@ function placeholder_emoticon_chooser()
     $em = new ocp_tempcode();
     foreach (placeholder_emoticons() as $emo) {
         $code = $emo[2];
-        $em->attach(do_lorem_template('EMOTICON_CLICK_CODE',array('_GUID' => '93968e9ff0308fff92d1d45e433557e2','FIELD_NAME' => 'post','CODE' => $code,'IMAGE' => apply_emoticons($code))));
+        $em->attach(do_lorem_template('EMOTICON_CLICK_CODE', array('_GUID' => '93968e9ff0308fff92d1d45e433557e2', 'FIELD_NAME' => 'post', 'CODE' => $code, 'IMAGE' => apply_emoticons($code))));
     }
     return $em;
 }
@@ -628,20 +628,20 @@ function placeholder_img_code($type = '')
     }
     $dh = opendir($path);
     while (($f = readdir($dh)) !== false) {
-        if (substr($f,-4) == '.png') {
-            return basename($f,'.png');
+        if (substr($f, -4) == '.png') {
+            return basename($f, '.png');
         }
-        if (substr($f,-4) == '.jpg') {
-            return basename($f,'.jpg');
+        if (substr($f, -4) == '.jpg') {
+            return basename($f, '.jpg');
         }
-        if (substr($f,-4) == '.jpeg') {
-            return basename($f,'.jpeg');
+        if (substr($f, -4) == '.jpeg') {
+            return basename($f, '.jpeg');
         }
-        if (substr($f,-4) == '.gif') {
-            return basename($f,'.gif');
+        if (substr($f, -4) == '.gif') {
+            return basename($f, '.gif');
         }
-        if (substr($f,-4) == '.ico') {
-            return basename($f,'.ico');
+        if (substr($f, -4) == '.ico') {
+            return basename($f, '.ico');
         }
     }
     return '';
@@ -656,13 +656,13 @@ function placeholder_pagination()
 {
     $selectors = new ocp_tempcode();
     foreach (placeholder_array() as $k => $v) {
-        $selectors->attach(do_lorem_template('PAGINATION_PER_PAGE_OPTION',array(
+        $selectors->attach(do_lorem_template('PAGINATION_PER_PAGE_OPTION', array(
             'SELECTED' => true,
             'VALUE' => strval($k),
             'NAME' => $v
         )));
     }
-    $per_page = do_lorem_template('PAGINATION_PER_PAGE',array(
+    $per_page = do_lorem_template('PAGINATION_PER_PAGE', array(
         'HIDDEN' => '',
         'URL' => placeholder_url(),
         'MAX_NAME' => 'max',
@@ -673,56 +673,56 @@ function placeholder_pagination()
     foreach (placeholder_array() as $k => $v) {
         $j = $k + 1;
         if ($k == 0) {
-            $parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER',array(
+            $parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER', array(
                 'P' => strval($j)
             )));
         } else {
-            $parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER_LINK',array(
+            $parts->attach(do_lorem_template('PAGINATION_PAGE_NUMBER_LINK', array(
                 'P' => strval($j),
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_phrase()
             )));
         }
     }
-    $first = do_lorem_template('PAGINATION_CONTINUE_FIRST',array(
+    $first = do_lorem_template('PAGINATION_CONTINUE_FIRST', array(
         'TITLE' => lorem_phrase(),
         'P' => placeholder_number(),
         'FIRST_URL' => placeholder_url()
     ));
-    $previous = do_lorem_template('PAGINATION_PREVIOUS_LINK',array(
+    $previous = do_lorem_template('PAGINATION_PREVIOUS_LINK', array(
         'TITLE' => lorem_phrase(),
         'P' => placeholder_date_raw(),
         'URL' => placeholder_url()
     ));
-    $previous->attach(do_lorem_template('PAGINATION_PREVIOUS',array(
+    $previous->attach(do_lorem_template('PAGINATION_PREVIOUS', array(
         'TITLE' => lorem_phrase(),
         'P' => placeholder_date_raw(),
     )));
-    $next = do_lorem_template('PAGINATION_NEXT_LINK',array(
-        'REL' => NULL,
+    $next = do_lorem_template('PAGINATION_NEXT_LINK', array(
+        'REL' => null,
         'TITLE' => lorem_phrase(),
         'NUM_PAGES' => placeholder_number(),
         'P' => placeholder_number(),
         'URL' => placeholder_url()
     ));
-    $next->attach(do_lorem_template('PAGINATION_NEXT',array(
+    $next->attach(do_lorem_template('PAGINATION_NEXT', array(
         'TITLE' => lorem_phrase(),
         'P' => placeholder_date_raw(),
     )));
-    $continues = do_lorem_template('PAGINATION_CONTINUE',array());
-    $last = do_lorem_template('PAGINATION_CONTINUE_LAST',array(
+    $continues = do_lorem_template('PAGINATION_CONTINUE', array());
+    $last = do_lorem_template('PAGINATION_CONTINUE_LAST', array(
         'TITLE' => lorem_phrase(),
         'P' => placeholder_number(),
         'LAST_URL' => placeholder_url()
     ));
-    $pages_list = do_lorem_template('PAGINATION_LIST_PAGES',array(
+    $pages_list = do_lorem_template('PAGINATION_LIST_PAGES', array(
         'URL' => placeholder_url(),
         'HIDDEN' => '',
         'START_NAME' => 'start',
         'LIST' => placeholder_options()
     ));
 
-    return do_lorem_template('PAGINATION_WRAP',array(
+    return do_lorem_template('PAGINATION_WRAP', array(
         'TEXT_ID' => lorem_phrase(),
         'PER_PAGE' => $per_page,
         'PREVIOUS' => $previous,
@@ -750,8 +750,8 @@ function find_comcodes()
     $zones = find_all_zones();
     $files = array();
     foreach ($zones as $zone) {
-        $z = $zone == ''?'pages':$zone;
-        $files[$z] = find_all_pages($zone,'comcode/' . fallback_lang(),'txt');
+        $z = $zone == '' ? 'pages' : $zone;
+        $files[$z] = find_all_pages($zone, 'comcode/' . fallback_lang(), 'txt');
     }
     return $files;
 }
@@ -766,8 +766,8 @@ function find_html()
     $zones = find_all_zones();
     $files = array();
     foreach ($zones as $zone) {
-        $z = $zone == ''?'pages':$zone;
-        $files[$z] = find_all_pages($zone,'html/' . fallback_lang(),'htm');
+        $z = $zone == '' ? 'pages' : $zone;
+        $files[$z] = find_all_pages($zone, 'html/' . fallback_lang(), 'htm');
     }
     return $files;
 }
@@ -781,17 +781,17 @@ function find_all_previews__by_template()
 {
     $all_previews = array();
 
-    $hooks = find_all_hooks('systems','addon_registry');
+    $hooks = find_all_hooks('systems', 'addon_registry');
     ksort($hooks);
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/addon_registry/' . $hook);
         $ob = object_factory('Hook_addon_registry_' . $hook);
 
-        if (method_exists($ob,'tpl_previews')) {
+        if (method_exists($ob, 'tpl_previews')) {
             $previews = $ob->tpl_previews();
 
             foreach ($previews as $tpl => $function) {
-                $all_previews[$tpl] = array($hook,'tpl_preview__' . $function);
+                $all_previews[$tpl] = array($hook, 'tpl_preview__' . $function);
             }
         }
     }
@@ -808,15 +808,15 @@ function find_all_previews__by_screen()
 {
     $all_previews = array();
 
-    $hooks = find_all_hooks('systems','addon_registry');
+    $hooks = find_all_hooks('systems', 'addon_registry');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/addon_registry/' . $hook);
         $ob = object_factory('Hook_addon_registry_' . $hook);
 
-        if (method_exists($ob,'tpl_previews')) {
+        if (method_exists($ob, 'tpl_previews')) {
             $previews = $ob->tpl_previews();
             foreach ($previews as $tpl => $function) {
-                if (!array_key_exists('tpl_preview__' . $function,$all_previews)) {
+                if (!array_key_exists('tpl_preview__' . $function, $all_previews)) {
                     $all_previews['tpl_preview__' . $function] = array();
                 }
                 $all_previews['tpl_preview__' . $function][] = $tpl;
@@ -835,15 +835,15 @@ function find_all_previews__by_screen()
  * @param  ID_TEXT                      The name of the screen preview
  * @return tempcode                     The previewed screen
  */
-function render_screen_preview($template,$hook,$function)
+function render_screen_preview($template, $hook, $function)
 {
     if (is_null($hook)) {
-        $hooks = find_all_hooks('systems','addon_registry');
+        $hooks = find_all_hooks('systems', 'addon_registry');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/addon_registry/' . $hook);
             $ob = object_factory('Hook_addon_registry_' . $hook);
 
-            if (method_exists($ob,'tpl_previews')) {
+            if (method_exists($ob, 'tpl_previews')) {
                 $previews = $ob->tpl_previews();
                 foreach ($previews as $_function) {
                     if ($function == 'tpl_preview__' . $_function) {
@@ -860,19 +860,19 @@ function render_screen_preview($template,$hook,$function)
     // Load all ini/js/css
     $files = $ob->get_file_list();
     foreach ($files as $file) {
-        if ((substr($file,-4) == '.ini') && (substr($file,0,8) == 'lang/EN/')) {
-            require_lang(basename($file,'.ini'));
+        if ((substr($file, -4) == '.ini') && (substr($file, 0, 8) == 'lang/EN/')) {
+            require_lang(basename($file, '.ini'));
         }
 
-        if ((substr($file,-4) == '.css') && (substr($file,0,7) == 'themes/')) {
-            require_css(basename($file,'.css'));
+        if ((substr($file, -4) == '.css') && (substr($file, 0, 7) == 'themes/')) {
+            require_css(basename($file, '.css'));
         }
 
-        if ((substr($file,-4) == '.tpl') && (substr($file,0,7) == 'themes/') && (substr($file,0,11) == 'JAVASCRIPT_') && ($file != 'JAVASCRIPT_NEED.tpl') && ($file != 'JAVASCRIPT_NEED_INLINE.tpl')) {
-            require_javascript(strtolower(basename($file,'.tpl')));
+        if ((substr($file, -4) == '.tpl') && (substr($file, 0, 7) == 'themes/') && (substr($file, 0, 11) == 'JAVASCRIPT_') && ($file != 'JAVASCRIPT_NEED.tpl') && ($file != 'JAVASCRIPT_NEED_INLINE.tpl')) {
+            require_javascript(strtolower(basename($file, '.tpl')));
         }
     }
-    $temp_name = substr($template,0,-4);
+    $temp_name = substr($template, 0, -4);
 
     if (is_full_screen_template($temp_name)) {
         $complete_html = true;
@@ -887,10 +887,10 @@ function render_screen_preview($template,$hook,$function)
     }
 
     // Render preview
-    $previews = call_user_func(array($ob,$function));
+    $previews = call_user_func(array($ob, $function));
 
     if ($text) {
-        $previews[0] = do_template('WITH_WHITESPACE',array('_GUID' => 'bcc1c95427d7f70524501955ba046d56','CONTENT' => $previews[0]));
+        $previews[0] = do_template('WITH_WHITESPACE', array('_GUID' => 'bcc1c95427d7f70524501955ba046d56', 'CONTENT' => $previews[0]));
     }
     $tmp = substr($function, 13);
 
@@ -948,19 +948,19 @@ function is_plain_text_template($temp_name)
 {
     return (
         $temp_name == 'BLOCK_TOP_NOTIFICATIONS' || $temp_name == 'MENU_BRANCH_zone' || $temp_name == 'MENU_SPACER_zone' || $temp_name == 'MENU_zone' || // In header, and uses IDs, so can't be used except in isolation
-        substr($temp_name,0,5) == 'MAIL_' ||
-        substr($temp_name,0,11) == 'JAVASCRIPT_' && $temp_name != 'JAVASCRIPT_NEED' && $temp_name != 'JAVASCRIPT_NEED_INLINE' ||
+        substr($temp_name, 0, 5) == 'MAIL_' ||
+        substr($temp_name, 0, 11) == 'JAVASCRIPT_' && $temp_name != 'JAVASCRIPT_NEED' && $temp_name != 'JAVASCRIPT_NEED_INLINE' ||
         $temp_name == 'JAVASCRIPT.tpl' ||
-        substr($temp_name,-9) === '_FCOMCODE' ||
-        substr($temp_name,-5) === '_MAIL' ||
-        substr($temp_name,-13) === '_FCOMCODEPAGE' ||
-        substr($temp_name,0,14) == 'TRACKBACK_XML_' ||
+        substr($temp_name, -9) === '_FCOMCODE' ||
+        substr($temp_name, -5) === '_MAIL' ||
+        substr($temp_name, -13) === '_FCOMCODEPAGE' ||
+        substr($temp_name, 0, 14) == 'TRACKBACK_XML_' ||
         $temp_name == 'OPENSEARCH' ||
         $temp_name == 'WYSIWYG_SETTINGS' ||
         $temp_name == 'ATTACHMENT_UI_DEFAULTS' ||
-        substr($temp_name,0,5) == 'OPML_' ||
-        substr($temp_name,0,5) == 'ATOM_' || substr($temp_name,0,4) == 'RSS_' ||
-        in_array($temp_name,get_text_templates())
+        substr($temp_name, 0, 5) == 'OPML_' ||
+        substr($temp_name, 0, 5) == 'ATOM_' || substr($temp_name, 0, 4) == 'RSS_' ||
+        in_array($temp_name, get_text_templates())
     );
 }
 
@@ -971,11 +971,11 @@ function is_plain_text_template($temp_name)
  * @param  ?tempcode                    The instantiated template (NULL: do not use as criteria, use other as criteria, which must iself be non-NULL)
  * @return boolean                      Whether it is
  */
-function is_full_screen_template($temp_name = null,$tempcode = null)
+function is_full_screen_template($temp_name = null, $tempcode = null)
 {
-    if ($temp_name === NULL) {
-        $pos = strpos($tempcode->evaluate(),'<html');
-        return ($pos !== false) && ($pos<400);
+    if ($temp_name === null) {
+        $pos = strpos($tempcode->evaluate(), '<html');
+        return ($pos !== false) && ($pos < 400);
     }
 
     return (

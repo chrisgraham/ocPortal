@@ -49,25 +49,25 @@ function qjs_get_domain()
     return 'localhost';
 }
 
-@ini_set('zlib.output_compression','On');
+@ini_set('zlib.output_compression', 'On');
 
 header('Pragma: public');
-$time = 400*60*60*24;
-header('Cache-Control: max-age=' . strval(time()+$time));
-header('Expires: ' . gmdate('D, d M Y H:i:s',time()+$time) . ' GMT');
-header('Last-Modified: ' . gmdate('D, d M Y H:i:s',time()-$time) . ' GMT');
+$time = 400 * 60 * 60 * 24;
+header('Cache-Control: max-age=' . strval(time() + $time));
+header('Expires: ' . gmdate('D, d M Y H:i:s', time() + $time) . ' GMT');
+header('Last-Modified: ' . gmdate('D, d M Y H:i:s', time() - $time) . ' GMT');
 
-$since = isset($_SERVER['SCRIPT_NAME'])?$_SERVER['HTTP_IF_MODIFIED_SINCE']:(isset($_ENV['HTTP_IF_MODIFIED_SINCE'])?$_ENV['HTTP_IF_MODIFIED_SINCE']:'');
+$since = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['HTTP_IF_MODIFIED_SINCE'] : (isset($_ENV['HTTP_IF_MODIFIED_SINCE']) ? $_ENV['HTTP_IF_MODIFIED_SINCE'] : '');
 if ($since != '') {
     header('HTTP/1.0 304 Not Modified');
     exit();
 }
 
-global $FILE_BASE,$SITE_INFO;
+global $FILE_BASE, $SITE_INFO;
 
 $domain = qjs_get_domain();
-$base_url = 'http://' . $domain . str_replace('%2F','/',rawurlencode(preg_replace('#/' . preg_quote($GLOBALS['RELATIVE_PATH'],'#') . '$#','',dirname($_SERVER['SCRIPT_NAME']))));
+$base_url = 'http://' . $domain . str_replace('%2F', '/', rawurlencode(preg_replace('#/' . preg_quote($GLOBALS['RELATIVE_PATH'], '#') . '$#', '', dirname($_SERVER['SCRIPT_NAME']))));
 
 header('Content-type: text/html');
-@ini_set('ocproducts.xss_detect','0');
-exit(str_replace(array('{$BASE_URL}'),array($base_url),file_get_contents($FILE_BASE . '/themes/default/templates/QUICK_JS_LOADER.tpl')));
+@ini_set('ocproducts.xss_detect', '0');
+exit(str_replace(array('{$BASE_URL}'), array($base_url), file_get_contents($FILE_BASE . '/themes/default/templates/QUICK_JS_LOADER.tpl')));

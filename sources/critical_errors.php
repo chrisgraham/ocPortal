@@ -18,8 +18,8 @@
  * @package    core
  */
 
-$cli = ((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'),'php_sapi_name') === false) && (php_sapi_name() == 'cli') && (empty($_SERVER['REMOTE_ADDR'])) && (empty($_ENV['REMOTE_ADDR'])));
-if (($cli) && (strpos($_SERVER['argv'][0],'critical_errors.php') !== false)) {
+$cli = ((function_exists('php_sapi_name')) && (strpos(@ini_get('disable_functions'), 'php_sapi_name') === false) && (php_sapi_name() == 'cli') && (empty($_SERVER['REMOTE_ADDR'])) && (empty($_ENV['REMOTE_ADDR'])));
+if (($cli) && (strpos($_SERVER['argv'][0], 'critical_errors.php') !== false)) {
     // Critical error monitoring mode
     chdir(dirname(dirname(__FILE__)));
     if (is_dir('critical_errors')) {
@@ -28,16 +28,16 @@ if (($cli) && (strpos($_SERVER['argv'][0],'critical_errors.php') !== false)) {
         }
         require_once('_config.php');
         global $SITE_INFO;
-        $email_to = isset($SITE_INFO['email_to'])?$SITE_INFO['email_to']:('webmaster@' . $SITE_INFO['domain']);
+        $email_to = isset($SITE_INFO['email_to']) ? $SITE_INFO['email_to'] : ('webmaster@' . $SITE_INFO['domain']);
         echo 'Monitoring for logged critical errors; we will email ' . $email_to . ' if we find anything.' . "\n";
         $last_run = time();
         while (true) {
             $dh = opendir('critical_errors');
             while (($f = readdir($dh)) !== false) {
-                if (substr($f,-4) == '.log') {
+                if (substr($f, -4) == '.log') {
                     if (filemtime('critical_errors/' . $f) >= $last_run) {
                         echo 'Found and emailing error ' . $f . "\n";
-                        mail($email_to,'Critical error logged','Critical error logged -- see critical_errors/' . $f . ' on the server.');
+                        mail($email_to, 'Critical error logged', 'Critical error logged -- see critical_errors/' . $f . ' on the server.');
                         break; // Enough, don't send more than once per 10 seconds
                     }
                 }
@@ -57,7 +57,7 @@ if (!function_exists('critical_error')) {
      * @param  ?string                  Relayed additional details (NULL: nothing relayed)
      * @param  boolean                  Whether to actually exit
      */
-    function critical_error($code,$relay = null,$exit = true)
+    function critical_error($code, $relay = null, $exit = true)
     {
         error_reporting(0);
 
@@ -69,8 +69,8 @@ if (!function_exists('critical_error')) {
         }
 
         if (!headers_sent()) {
-            if ((function_exists('browser_matches')) && ((is_null($relay)) || (strpos($relay,'Allowed memory') === false))) {
-                if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'),'IIS') === false)) {
+            if ((function_exists('browser_matches')) && ((is_null($relay)) || (strpos($relay, 'Allowed memory') === false))) {
+                if ((!browser_matches('ie')) && (strpos(ocp_srv('SERVER_SOFTWARE'), 'IIS') === false)) {
                     header('HTTP/1.0 500 Internal server error');
                 }
             }
@@ -141,14 +141,14 @@ if (!function_exists('critical_error')) {
 
         $extra = '';
 
-        if ((strpos($error,'Allowed memory') === false) && ((is_null($relay)) || (strpos($relay,'Stack trace') === false)) && (function_exists('ocp_srv')) && (((ocp_srv('REMOTE_ADDR') == ocp_srv('SERVER_ADDR')) && (ocp_srv('HTTP_X_FORWARDED_FOR') == '')) || ((isset($SITE_INFO['backdoor_ip'])) && (ocp_srv('REMOTE_ADDR') == $SITE_INFO['backdoor_ip']) && (ocp_srv('HTTP_X_FORWARDED_FOR') == '')) || (preg_match('#^localhost(\.|\:|$)#',ocp_srv('HTTP_HOST')) != 0) && (function_exists('get_base_url')) && (substr(get_base_url(),0,16) == 'http://localhost'))) {
+        if ((strpos($error, 'Allowed memory') === false) && ((is_null($relay)) || (strpos($relay, 'Stack trace') === false)) && (function_exists('ocp_srv')) && (((ocp_srv('REMOTE_ADDR') == ocp_srv('SERVER_ADDR')) && (ocp_srv('HTTP_X_FORWARDED_FOR') == '')) || ((isset($SITE_INFO['backdoor_ip'])) && (ocp_srv('REMOTE_ADDR') == $SITE_INFO['backdoor_ip']) && (ocp_srv('HTTP_X_FORWARDED_FOR') == '')) || (preg_match('#^localhost(\.|\:|$)#', ocp_srv('HTTP_HOST')) != 0) && (function_exists('get_base_url')) && (substr(get_base_url(), 0, 16) == 'http://localhost'))) {
             $_trace = debug_backtrace();
             $extra = '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
             foreach ($_trace as $stage) {
                 $traces = '';
                 foreach ($stage as $key => $value) {
                     try {
-                        if ((is_object($value) && (is_a($value,'ocp_tempcode'))) || (is_array($value) && (strlen(serialize($value))>500))) {
+                        if ((is_object($value) && (is_a($value, 'ocp_tempcode'))) || (is_array($value) && (strlen(serialize($value)) > 500))) {
                             $_value = gettype($value);
                         } else {
                             $_value = gettype($value);
@@ -160,7 +160,7 @@ if (!function_exists('critical_error')) {
                                     $_value = $value;
                                     break;
                                 default:
-                                    if (strpos($error,'Allowed memory') === false) { // Actually we don't call this code path for memory limit issues any more, as stack trace is useless (comes from the catch_fatal_errors function)
+                                    if (strpos($error, 'Allowed memory') === false) { // Actually we don't call this code path for memory limit issues any more, as stack trace is useless (comes from the catch_fatal_errors function)
                                         $_value = serialize($value);
                                     }
                                     break;
@@ -171,11 +171,11 @@ if (!function_exists('critical_error')) {
                     }
 
                     global $SITE_INFO;
-                    if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password'])>4)) {
-                        $_value = str_replace($SITE_INFO['db_site_password'],'(password removed)',$_value);
+                    if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password']) > 4)) {
+                        $_value = str_replace($SITE_INFO['db_site_password'], '(password removed)', $_value);
                     }
-                    if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4)) {
-                        $_value = str_replace($SITE_INFO['db_forums_password'],'(password removed)',$_value);
+                    if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password']) > 4)) {
+                        $_value = str_replace($SITE_INFO['db_forums_password'], '(password removed)', $_value);
                     }
 
                     $traces .= ucfirst($key) . ' -> ' . htmlentities($_value) . '<br />' . "\n";
@@ -195,12 +195,12 @@ if (!function_exists('critical_error')) {
     <title>Critical error</title>
     <style><![CDATA[
 END;
-            if (strpos($error,'Allowed memory') === false) {
+            if (strpos($error, 'Allowed memory') === false) {
                 $file_contents = file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css');
             } else {
                 $file_contents = ''; // Can't load files if dying due to memory limit
             }
-            $css = ((preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',$file_contents)))))));
+            $css = ((preg_replace('#/\*\s*\*/\s*#', '', str_replace('url(\'\')', 'none', str_replace('url("")', 'none', preg_replace('#\{\$[^\}]*\}#', '', preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#', '$2', $file_contents)))))));
             echo htmlentities($css);
             echo <<<END
         .screen_title { text-decoration: underline; display: block; min-height: 42px; padding: 3px 0 0 0; }
@@ -213,13 +213,13 @@ END;
         }
         echo '<h1 class="screen_title">Critical error &ndash; bailing out</h1>' . "\n" . '<div class="red_alert" role="error">' . $error . '</div>' . "\n";
         flush();
-        $script_name = isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
-        if ((strpos($script_name,'upgrader.php') !== false) && (strpos($error,'Allowed memory') === false)) {
+        $script_name = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : (isset($_ENV['SCRIPT_NAME']) ? $_ENV['SCRIPT_NAME'] : '');
+        if ((strpos($script_name, 'upgrader.php') !== false) && (strpos($error, 'Allowed memory') === false)) {
             require_code('upgrade');
-            echo '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Integrity check</h2><p><strong>If you think this problem could be due to corruption caused by a failed upgrade (e.g. time-out during extraction), check the following integrity check&hellip;</strong></p>',run_integrity_check(true),'</div></div><br />';
+            echo '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Integrity check</h2><p><strong>If you think this problem could be due to corruption caused by a failed upgrade (e.g. time-out during extraction), check the following integrity check&hellip;</strong></p>', run_integrity_check(true), '</div></div><br />';
         }
         flush();
-        echo $extra,"\n";
+        echo $extra, "\n";
         echo '<p>Details here are intended only for the website/system-administrator, not for regular website users.<br />&raquo; <strong>If you are a regular website user, please let the website staff deal with this problem.</strong></p>' . "\n" . '<p class="associated_details">Depending on the error, and only if the website installation finished, you may need to <a href="#" onclick="if (!window.confirm(\'Are you staff on this site?\')) return false; this.href=\'' . htmlentities($edit_url) . '\';">edit the installation options</a> (the <kbd>_config.php</kbd> file).</p>' . "\n" . '<p class="associated_details">ocProducts maintains full documentation for all procedures and tools. These may be found on the <a href="http://ocportal.com">ocPortal website</a>. If you are unable to easily solve this problem, we may be contacted from our website and can help resolve it for you.</p>' . "\n" . '<hr />' . "\n" . '<p style="font-size: 0.8em"><a href="http://ocportal.com/">ocPortal</a> is a <abbr title="Content Management System">CMS</abbr> for building websites, developed by ocProducts.</p>' . "\n";
         echo '</div></body>' . "\n" . '</html>';
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
@@ -227,21 +227,21 @@ END;
         $contents = ob_get_contents();
         $dir = get_custom_file_base() . '/critical_errors';
         if ((is_dir($dir)) && ((!isset($GLOBALS['SEMI_DEV_MODE'])) || (!$GLOBALS['SEMI_DEV_MODE']))) {
-            $code = uniqid('',true);
-            file_put_contents($dir . '/' . $code . '.log',$contents);
+            $code = uniqid('', true);
+            file_put_contents($dir . '/' . $code . '.log', $contents);
             ob_end_clean();
 
             @header('HTTP/1.0 500 Internal Server Error');
-            global $RELATIVE_PATH,$SITE_INFO;
+            global $RELATIVE_PATH, $SITE_INFO;
             if (isset($SITE_INFO['base_url'])) {
                 $back_path = $SITE_INFO['base_url'];
             } else {
-                $back_path = preg_replace('#[^/]+#','..',$RELATIVE_PATH);
+                $back_path = preg_replace('#[^/]+#', '..', $RELATIVE_PATH);
             }
             if (is_file(get_custom_file_base() . '/_critical_error.html')) {
-                $url = (($back_path == '')?'':($back_path . '/')) . '_critical_error.html?error_code=' . urlencode($code);
+                $url = (($back_path == '') ? '' : ($back_path . '/')) . '_critical_error.html?error_code=' . urlencode($code);
             } else {
-                $url = (($back_path == '')?'':($back_path . '/')) . 'index.php?page=_critical_error&error_code=' . urlencode($code);
+                $url = (($back_path == '') ? '' : ($back_path . '/')) . 'index.php?page=_critical_error&error_code=' . urlencode($code);
             }
             echo '<meta http-equiv="refresh" content="0;url=' . htmlentities($url) . '" />';
         } else {

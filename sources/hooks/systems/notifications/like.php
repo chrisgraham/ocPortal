@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_Notification_like extends Hook_Notification
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_like extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['like'] = array(do_lang('ACTIVITY'),do_lang('NOTIFICATION_TYPE_like'));
+        $list['like'] = array(do_lang('ACTIVITY'), do_lang('NOTIFICATION_TYPE_like'));
         return $list;
     }
 }

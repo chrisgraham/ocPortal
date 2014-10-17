@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    authors
  */
-
 class Hook_rss_authors
 {
     /**
@@ -31,20 +30,20 @@ class Hook_rss_authors
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
         if (!addon_installed('authors')) {
-            return NULL;
+            return null;
         }
 
-        if (!has_actual_page_access(get_member(),'authors')) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'authors')) {
+            return null;
         }
 
         $content = new ocp_tempcode();
-        $rows = $GLOBALS['SITE_DB']->query_select('authors',array('*'),null,'',1000);
+        $rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), null, '', 1000);
         if (count($rows) == 1000) {
-            return NULL;
+            return null;
         } // Too much
         foreach ($rows as $i => $row) {
             if ($i == $max) {
@@ -58,21 +57,21 @@ class Hook_rss_authors
             $edit_date = '';
 
             $news_title = xmlentities(escape_html($row['author']));
-            $_summary = get_translated_tempcode('authors',$row,'description');
+            $_summary = get_translated_tempcode('authors', $row, 'description');
             $summary = xmlentities($_summary->evaluate());
             $news = '';
 
             $category = '';
             $category_raw = '';
 
-            $view_url = build_url(array('page' => 'authors','type' => 'view','id' => $row['author']),get_module_zone('authors'),null,false,false,true);
+            $view_url = build_url(array('page' => 'authors', 'type' => 'view', 'id' => $row['author']), get_module_zone('authors'), null, false, false, true);
 
             $if_comments = new ocp_tempcode();
 
-            $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }
 
         require_lang('authors');
-        return array($content,do_lang('AUTHORS'));
+        return array($content, do_lang('AUTHORS'));
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_config_points_ADD_POLL
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_ADD_POLL
      */
     public function get_default()
     {
-        return addon_installed('points')?'150':null;
+        return addon_installed('points') ? '150' : null;
     }
 }

@@ -20,25 +20,25 @@ function is_ani($filename)
 
     $str_loc = 0;
     $count = 0;
-    while ($count<2) { // There is no point in continuing after we find a 2nd frame
-        $where1 = strpos($filecontents,"\x00\x21\xF9\x04",$str_loc);
+    while ($count < 2) { // There is no point in continuing after we find a 2nd frame
+        $where1 = strpos($filecontents, "\x00\x21\xF9\x04", $str_loc);
         if ($where1 === false) {
             break;
         } else {
-            $str_loc = $where1+1;
-            $where2 = strpos($filecontents,"\x00\x2C",$str_loc);
+            $str_loc = $where1 + 1;
+            $where2 = strpos($filecontents, "\x00\x2C", $str_loc);
             if ($where2 === false) {
                 break;
             } else {
-                if ($where1+8 == $where2) {
+                if ($where1 + 8 == $where2) {
                     $count++;
                 }
-                $str_loc = $where2+1;
+                $str_loc = $where2 + 1;
             }
         }
     }
 
-    if ($count>1) {
+    if ($count > 1) {
         return true;
     }
     return false;
@@ -59,11 +59,11 @@ class image_compression_test_set extends ocp_test_case
         require_code('files2');
         $files = get_directory_contents($base);
         foreach ($files as $file) {
-            if ((is_image($file)) && (substr($file,-4) != '.ico')) {
+            if ((is_image($file)) && (substr($file, -4) != '.ico')) {
                 $filesize = filesize($base . '/' . $file);
 
                 // Approximate base size
-                if (substr($file,-4) == '.gif') {
+                if (substr($file, -4) == '.gif') {
                     $filesize -= 800; // For the palette (not in all gifs, but needed for non-trivial ones)
                     $min_ratio = 0.8;
                     if (is_ani($base . '/' . $file)) {
@@ -73,13 +73,13 @@ class image_compression_test_set extends ocp_test_case
                     $filesize -= 73;
                     $min_ratio = 0.28;
                 }
-                if ($filesize<1) {
+                if ($filesize < 1) {
                     $filesize = 1;
                 }
 
-                list($width,$height) = getimagesize($base . '/' . $file);
-                $area = $width*$height;
-                $this->assertTrue(floatval($area)/floatval($filesize)>$min_ratio,'Rubbish compression density on ' . $file . ' theme image');
+                list($width, $height) = getimagesize($base . '/' . $file);
+                $area = $width * $height;
+                $this->assertTrue(floatval($area) / floatval($filesize) > $min_ratio, 'Rubbish compression density on ' . $file . ' theme image');
             }
         }
     }

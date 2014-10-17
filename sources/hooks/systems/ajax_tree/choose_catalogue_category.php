@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_choose_catalogue_category
 {
     /**
@@ -28,30 +27,30 @@ class Hook_choose_catalogue_category
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return string                   XML in the special category,entry format
      */
-    public function run($id,$options,$default = null)
+    public function run($id, $options, $default = null)
     {
         require_code('catalogues');
         require_lang('catalogues');
 
-        $catalogue_name = array_key_exists('catalogue_name',$options)?$options['catalogue_name']:null;
-        $addable_filter = array_key_exists('addable_filter',$options)?($options['addable_filter']):false;
-        $compound_list = array_key_exists('compound_list',$options)?$options['compound_list']:false;
-        $stripped_id = ($compound_list?preg_replace('#,.*$#','',$id):$id);
+        $catalogue_name = array_key_exists('catalogue_name', $options) ? $options['catalogue_name'] : null;
+        $addable_filter = array_key_exists('addable_filter', $options) ? ($options['addable_filter']) : false;
+        $compound_list = array_key_exists('compound_list', $options) ? $options['compound_list'] : false;
+        $stripped_id = ($compound_list ? preg_replace('#,.*$#', '', $id) : $id);
 
         if (is_null($catalogue_name)) {
             $tree = array();
-            $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues',array('c_name'));
+            $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues', array('c_name'));
             foreach ($catalogues as $catalogue) {
-                $tree = array_merge($tree,get_catalogue_category_tree($catalogue['c_name'],is_null($id)?null:intval($id),null,null,1,$addable_filter,$compound_list));
+                $tree = array_merge($tree, get_catalogue_category_tree($catalogue['c_name'], is_null($id) ? null : intval($id), null, null, 1, $addable_filter, $compound_list));
             }
         } else {
-            $tree = get_catalogue_category_tree($catalogue_name,is_null($id)?null:intval($id),null,null,1,$addable_filter,$compound_list);
+            $tree = get_catalogue_category_tree($catalogue_name, is_null($id) ? null : intval($id), null, null, 1, $addable_filter, $compound_list);
         }
 
-        $levels_to_expand = array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__' . substr(get_class($this),5)));
-        $options['levels_to_expand'] = max(0,$levels_to_expand-1);
+        $levels_to_expand = array_key_exists('levels_to_expand', $options) ? ($options['levels_to_expand']) : intval(get_long_value('levels_to_expand__' . substr(get_class($this), 5)));
+        $options['levels_to_expand'] = max(0, $levels_to_expand - 1);
 
-        if (!has_actual_page_access(null,'catalogues')) {
+        if (!has_actual_page_access(null, 'catalogues')) {
             $tree = array();
         }
 
@@ -72,9 +71,9 @@ class Hook_choose_catalogue_category
             $selectable = (($addable_filter !== true) || $t['addable']);
 
             $tag = 'category'; // category
-            $out .= '<' . $tag . ' id="' . xmlentities($_id) . '" title="' . xmlentities($title) . '" has_children="' . ($has_children?'true':'false') . '" selectable="' . ($selectable?'true':'false') . '"></' . $tag . '>';
+            $out .= '<' . $tag . ' id="' . xmlentities($_id) . '" title="' . xmlentities($title) . '" has_children="' . ($has_children ? 'true' : 'false') . '" selectable="' . ($selectable ? 'true' : 'false') . '"></' . $tag . '>';
 
-            if ($levels_to_expand>0) {
+            if ($levels_to_expand > 0) {
                 $out .= '<expand>' . xmlentities($_id) . '</expand>';
             }
         }
@@ -84,7 +83,7 @@ class Hook_choose_catalogue_category
             $cat = intval($default);
             while (!is_null($cat)) {
                 $out .= '<expand>' . strval($cat) . '</expand>';
-                $cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','cc_parent_id',array('id' => $cat));
+                $cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'cc_parent_id', array('id' => $cat));
             }
         }
 
@@ -100,26 +99,26 @@ class Hook_choose_catalogue_category
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return tempcode                 The nice list
      */
-    public function simple($id,$options,$it = null)
+    public function simple($id, $options, $it = null)
     {
         require_code('catalogues');
 
-        $catalogue_name = array_key_exists('catalogue_name',$options)?$options['catalogue_name']:null;
-        $addable_filter = array_key_exists('addable_filter',$options)?($options['addable_filter']):false;
-        $compound_list = array_key_exists('compound_list',$options)?$options['compound_list']:false;
+        $catalogue_name = array_key_exists('catalogue_name', $options) ? $options['catalogue_name'] : null;
+        $addable_filter = array_key_exists('addable_filter', $options) ? ($options['addable_filter']) : false;
+        $compound_list = array_key_exists('compound_list', $options) ? $options['compound_list'] : false;
 
         if (is_null($catalogue_name)) {
             $out = '';
 
             $out .= '<options>' . serialize($options) . '</options>';
 
-            $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues',array('c_name'));
+            $catalogues = $GLOBALS['SITE_DB']->query_select('catalogues', array('c_name'));
             foreach ($catalogues as $catalogue) {
-                $out .= static_evaluate_tempcode(create_selection_list_catalogue_category_tree($catalogue['c_name'],is_null($it)?null:intval($it),$addable_filter,$compound_list));
+                $out .= static_evaluate_tempcode(create_selection_list_catalogue_category_tree($catalogue['c_name'], is_null($it) ? null : intval($it), $addable_filter, $compound_list));
             }
             return make_string_tempcode($out);
         } else {
-            return create_selection_list_catalogue_category_tree($catalogue_name,is_null($it)?null:intval($it),$addable_filter,$compound_list);
+            return create_selection_list_catalogue_category_tree($catalogue_name, is_null($it) ? null : intval($it), $addable_filter, $compound_list);
         }
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-
 class Hook_attachments_ocf_signature
 {
     /**
@@ -27,7 +26,7 @@ class Hook_attachments_ocf_signature
      * @param  object                   The database connection to check on
      * @return boolean                  Whether there is permission
      */
-    public function run($id,$connection)
+    public function run($id, $connection)
     {
         if (get_forum_type() != 'ocf') {
             return false;

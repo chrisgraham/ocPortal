@@ -32,7 +32,7 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['FORUM_DB']->query_select_value('f_multi_moderations','COUNT(*)');
+        return $GLOBALS['FORUM_DB']->query_select_value('f_multi_moderations', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('mm_name') => $label));
+        $_ret = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations', array('id'), array($GLOBALS['FORUM_DB']->translate_field_ref('mm_name') => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -88,7 +88,7 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_MULTI_MODERATION') . ' OR ' . db_string_equal_to('the_type','EDIT_MULTI_MODERATION') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_MULTI_MODERATION') . ' OR ' . db_string_equal_to('the_type', 'EDIT_MULTI_MODERATION') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -100,21 +100,21 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('ocf_moderation_action');
 
-        $post_text = $this->_default_property_str($properties,'post_text');
-        $move_to = $this->_default_property_int($properties,'move_to');
-        $pin_state = $this->_default_property_int($properties,'pin_state');
-        $sink_state = $this->_default_property_int($properties,'sink_state');
-        $open_state = $this->_default_property_int($properties,'open_state');
-        $forum_multi_code = $this->_default_property_str($properties,'forum_multi_code');
-        $title_suffix = $this->_default_property_str($properties,'title_suffix');
+        $post_text = $this->_default_property_str($properties, 'post_text');
+        $move_to = $this->_default_property_int($properties, 'move_to');
+        $pin_state = $this->_default_property_int($properties, 'pin_state');
+        $sink_state = $this->_default_property_int($properties, 'sink_state');
+        $open_state = $this->_default_property_int($properties, 'open_state');
+        $forum_multi_code = $this->_default_property_str($properties, 'forum_multi_code');
+        $title_suffix = $this->_default_property_str($properties, 'title_suffix');
 
-        $id = ocf_make_multi_moderation($label,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code,$title_suffix);
+        $id = ocf_make_multi_moderation($label, $post_text, $move_to, $pin_state, $sink_state, $open_state, $forum_multi_code, $title_suffix);
         return strval($id);
     }
 
@@ -125,12 +125,12 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -155,23 +155,23 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('ocf_moderation_action2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $post_text = $this->_default_property_str($properties,'post_text');
-        $move_to = $this->_default_property_int($properties,'move_to');
-        $pin_state = $this->_default_property_int($properties,'pin_state');
-        $sink_state = $this->_default_property_int($properties,'sink_state');
-        $open_state = $this->_default_property_int($properties,'open_state');
-        $forum_multi_code = $this->_default_property_str($properties,'forum_multi_code');
-        $title_suffix = $this->_default_property_str($properties,'title_suffix');
+        $label = $this->_default_property_str($properties, 'label');
+        $post_text = $this->_default_property_str($properties, 'post_text');
+        $move_to = $this->_default_property_int($properties, 'move_to');
+        $pin_state = $this->_default_property_int($properties, 'pin_state');
+        $sink_state = $this->_default_property_int($properties, 'sink_state');
+        $open_state = $this->_default_property_int($properties, 'open_state');
+        $forum_multi_code = $this->_default_property_str($properties, 'forum_multi_code');
+        $title_suffix = $this->_default_property_str($properties, 'title_suffix');
 
-        ocf_edit_multi_moderation(intval($resource_id),$label,$post_text,$move_to,$pin_state,$sink_state,$open_state,$forum_multi_code,$title_suffix);
+        ocf_edit_multi_moderation(intval($resource_id), $label, $post_text, $move_to, $pin_state, $sink_state, $open_state, $forum_multi_code, $title_suffix);
 
         return $resource_id;
     }
@@ -183,9 +183,9 @@ class Hook_occle_fs_multi_moderations extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('ocf_moderation_action2');
         ocf_delete_multi_moderation(intval($resource_id));

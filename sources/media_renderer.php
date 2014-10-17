@@ -23,18 +23,18 @@
  */
 function init__media_renderer()
 {
-    define('MEDIA_RECOG_PRECEDENCE_SUPER',50);
-    define('MEDIA_RECOG_PRECEDENCE_HIGH',40);
-    define('MEDIA_RECOG_PRECEDENCE_MEDIUM',30);
-    define('MEDIA_RECOG_PRECEDENCE_LOW',20);
-    define('MEDIA_RECOG_PRECEDENCE_TRIVIAL',10);
-    define('MEDIA_RECOG_PRECEDENCE_NONE',0);
+    define('MEDIA_RECOG_PRECEDENCE_SUPER', 50);
+    define('MEDIA_RECOG_PRECEDENCE_HIGH', 40);
+    define('MEDIA_RECOG_PRECEDENCE_MEDIUM', 30);
+    define('MEDIA_RECOG_PRECEDENCE_LOW', 20);
+    define('MEDIA_RECOG_PRECEDENCE_TRIVIAL', 10);
+    define('MEDIA_RECOG_PRECEDENCE_NONE', 0);
 
-    define('MEDIA_TYPE_IMAGE',1);
-    define('MEDIA_TYPE_VIDEO',2);
-    define('MEDIA_TYPE_AUDIO',4);
-    define('MEDIA_TYPE_OTHER',8);
-    define('MEDIA_TYPE_ALL',15);
+    define('MEDIA_TYPE_IMAGE', 1);
+    define('MEDIA_TYPE_VIDEO', 2);
+    define('MEDIA_TYPE_AUDIO', 4);
+    define('MEDIA_TYPE_OTHER', 8);
+    define('MEDIA_TYPE_ALL', 15);
 }
 
 /**
@@ -48,19 +48,19 @@ function init__media_renderer()
  * @param  ?ID_TEXT                     Limit to a media rendering hook (NULL: no limit)
  * @return ?array                       The hooks (NULL: cannot find one)
  */
-function find_media_renderers($url,$attributes,$as_admin,$source_member,$acceptable_media = 15,$limit_to = null)
+function find_media_renderers($url, $attributes, $as_admin, $source_member, $acceptable_media = 15, $limit_to = null)
 {
     if (is_null($source_member)) {
         $source_member = get_member();
     }
-    if (has_privilege($source_member,'comcode_dangerous')) {
+    if (has_privilege($source_member, 'comcode_dangerous')) {
         $as_admin = true;
     }
 
-    $hooks = is_null($limit_to)?array_keys(find_all_hooks('systems','media_rendering')):array($limit_to);
+    $hooks = is_null($limit_to) ? array_keys(find_all_hooks('systems', 'media_rendering')) : array($limit_to);
     $obs = array();
     foreach ($hooks as $hook) {
-        if (($limit_to !== NULL) && ($limit_to != $hook)) {
+        if (($limit_to !== null) && ($limit_to != $hook)) {
             continue;
         }
 
@@ -68,23 +68,24 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
         $obs[$hook] = object_factory('Hook_media_rendering_' . $hook);
     }
 
-    if (($as_admin) && ($limit_to !== NULL)) {// Don't check mime-types etc if admin and forced type
+    if (($as_admin) && ($limit_to !== null)) {// Don't check mime-types etc if admin and forced type
         return array($limit_to);
     }
 
     $found = array();
     $matches = array();
-    if ((strpos($url,'/') === false) || (url_is_local($url))) {// Just a local file
-    // Unfortunately, just not reliable enough to use always (e.g. http://commons.wikimedia.org/wiki/File:Valmiki_Ramayana.jpg)
-    //if (preg_match('#\.(\w+)$#',preg_replace('#\#.*#','',$url)/*trim off hash component*/,$matches)!=0)
-    {
-        // Find via extension
-        require_code('mime_types'); }
+    if ((strpos($url, '/') === false) || (url_is_local($url))) {// Just a local file
+        // Unfortunately, just not reliable enough to use always (e.g. http://commons.wikimedia.org/wiki/File:Valmiki_Ramayana.jpg)
+        //if (preg_match('#\.(\w+)$#',preg_replace('#\#.*#','',$url)/*trim off hash component*/,$matches)!=0)
+        {
+            // Find via extension
+            require_code('mime_types');
+        }
         //$mime_type=get_mime_type($matches[1],$as_admin);
-        $mime_type = get_mime_type(get_file_extension($url),$as_admin);
+        $mime_type = get_mime_type(get_file_extension($url), $as_admin);
         if ($mime_type != 'application/octet-stream') {
             foreach ($hooks as $hook) {
-                if ((method_exists($obs[$hook],'recognises_mime_type')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0)) {
+                if ((method_exists($obs[$hook], 'recognises_mime_type')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0)) {
                     $result = $obs[$hook]->recognises_mime_type($mime_type);
                     if ($result != 0) {
                         $found[$hook] = $result;
@@ -96,7 +97,7 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
 
     // Find via URL recognition
     foreach ($hooks as $hook) {
-        if ((method_exists($obs[$hook],'recognises_url')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0)) {
+        if ((method_exists($obs[$hook], 'recognises_url')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0)) {
             $result = $obs[$hook]->recognises_url($url);
             if ($result != 0) {
                 $found[$hook] = $result;
@@ -113,15 +114,15 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
     // Find via download (oEmbed / mime-type) - last resort, as it is more 'costly' to do
     require_code('files2');
     $meta_details = get_webpage_meta_details($url);
-    if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type'] != '')) {
+    if ((array_key_exists('mime_type', $attributes)) && ($attributes['mime_type'] != '')) {
         $mime_type = $attributes['mime_type'];
     } else {
         $mime_type = $meta_details['t_mime_type'];
     }
     if ($meta_details['t_mime_type'] != '') {
         foreach ($hooks as $hook) {
-            if ((method_exists($obs[$hook],'recognises_mime_type')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0)) {
-                $result = $obs[$hook]->recognises_mime_type($mime_type,$meta_details);
+            if ((method_exists($obs[$hook], 'recognises_mime_type')) && (($acceptable_media & $obs[$hook]->get_media_type()) != 0)) {
+                $result = $obs[$hook]->recognises_mime_type($mime_type, $meta_details);
                 if ($result != 0) {
                     $found[$hook] = $result;
                 }
@@ -133,7 +134,7 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
         }
     }
 
-    return NULL;
+    return null;
 }
 
 /**
@@ -149,10 +150,10 @@ function find_media_renderers($url,$attributes,$as_admin,$source_member,$accepta
  * @param  ?URLPATH                     The URL to do media detection against (NULL: use $url)
  * @return ?tempcode                    The rendered version (NULL: cannot render)
  */
-function render_media_url($url,$url_safe,$attributes,$as_admin = false,$source_member = null,$acceptable_media = 15,$limit_to = null,$url_to_scan_against = null)
+function render_media_url($url, $url_safe, $attributes, $as_admin = false, $source_member = null, $acceptable_media = 15, $limit_to = null, $url_to_scan_against = null)
 {
     $hooks = find_media_renderers(
-        is_null($url_to_scan_against)?(is_object($url)?$url->evaluate():$url):$url_to_scan_against,
+        is_null($url_to_scan_against) ? (is_object($url) ? $url->evaluate() : $url) : $url_to_scan_against,
         $attributes,
         $as_admin,
         $source_member,
@@ -160,15 +161,15 @@ function render_media_url($url,$url_safe,$attributes,$as_admin = false,$source_m
         $limit_to
     );
     if (is_null($hooks)) {
-        return NULL;
+        return null;
     }
     $hook = reset($hooks);
 
     $ob = object_factory('Hook_media_rendering_' . $hook);
-    $ret = $ob->render($url,$url,$attributes,$as_admin,$source_member,$url_to_scan_against);
+    $ret = $ob->render($url, $url, $attributes, $as_admin, $source_member, $url_to_scan_against);
 
-    if (array_key_exists('float',$attributes)) {
-        $ret = do_template('FLOATER',array('_GUID' => '26410f89305c16ae9cb17dd02a4a7999','FLOAT' => $attributes['float'],'CONTENT' => $ret));
+    if (array_key_exists('float', $attributes)) {
+        $ret = do_template('FLOATER', array('_GUID' => '26410f89305c16ae9cb17dd02a4a7999', 'FLOAT' => $attributes['float'], 'CONTENT' => $ret));
     }
 
     return $ret;
@@ -183,26 +184,26 @@ function render_media_url($url,$url_safe,$attributes,$as_admin = false,$source_m
  * @param  ?MEMBER                      Member to run as (NULL: current member)
  * @return array                        Template-ready parameters
  */
-function _create_media_template_parameters($url,$attributes,$as_admin = false,$source_member = null)
+function _create_media_template_parameters($url, $attributes, $as_admin = false, $source_member = null)
 {
-    $_url = is_object($url)?$url->evaluate():$url;
+    $_url = is_object($url) ? $url->evaluate() : $url;
 
     if (is_null($source_member)) {
         $source_member = get_member();
     }
-    if (has_privilege($source_member,'comcode_dangerous')) {
+    if (has_privilege($source_member, 'comcode_dangerous')) {
         $as_admin = true;
     }
 
     // Put in defaults
-    $no_width = (!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width']));
-    $no_height = (!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height']));
+    $no_width = (!array_key_exists('width', $attributes)) || (!is_numeric($attributes['width']));
+    $no_height = (!array_key_exists('height', $attributes)) || (!is_numeric($attributes['height']));
     if ($no_width || $no_height) { // Try and work out the best default width/height, from the thumbnail if possible (image_websafe runs it's own code to do the equivalent, as that defaults to thumb_width rather than attachment_default_width&attachment_default_height)
         $_width = get_option('attachment_default_width');
         $_height = get_option('attachment_default_height');
-        if ((function_exists('getimagesize')) && (array_key_exists('thumb_url',$attributes)) && (((is_object($attributes['thumb_url'])) && (!$attributes['thumb_url']->is_empty()) || (is_string($attributes['thumb_url'])) && ($attributes['thumb_url'] != '')))) {
+        if ((function_exists('getimagesize')) && (array_key_exists('thumb_url', $attributes)) && (((is_object($attributes['thumb_url'])) && (!$attributes['thumb_url']->is_empty()) || (is_string($attributes['thumb_url'])) && ($attributes['thumb_url'] != '')))) {
             require_code('images');
-            list($_width,$_height) = _symbol_image_dims(array(is_object($attributes['thumb_url'])?$attributes['thumb_url']->evaluate():$attributes['thumb_url']));
+            list($_width, $_height) = _symbol_image_dims(array(is_object($attributes['thumb_url']) ? $attributes['thumb_url']->evaluate() : $attributes['thumb_url']));
         }
 
         if ($no_width) {
@@ -212,35 +213,35 @@ function _create_media_template_parameters($url,$attributes,$as_admin = false,$s
             $attributes['height'] = $_height;
         }
     }
-    if ((!array_key_exists('length',$attributes)) || (!is_numeric($attributes['length']))) {
+    if ((!array_key_exists('length', $attributes)) || (!is_numeric($attributes['length']))) {
         $attributes['length'] = '';
     }
-    if (!array_key_exists('thumb_url',$attributes)) {
+    if (!array_key_exists('thumb_url', $attributes)) {
         $attributes['thumb_url'] = '';
     }
-    if ((!array_key_exists('filename',$attributes)) || ($attributes['filename'] == '')) {
-        $attributes['filename'] = urldecode(basename(preg_replace('#\?.*#','',$_url)));
+    if ((!array_key_exists('filename', $attributes)) || ($attributes['filename'] == '')) {
+        $attributes['filename'] = urldecode(basename(preg_replace('#\?.*#', '', $_url)));
     }
-    if ((!array_key_exists('mime_type',$attributes)) || ($attributes['mime_type'] == '')) {
+    if ((!array_key_exists('mime_type', $attributes)) || ($attributes['mime_type'] == '')) {
         // As this is not necessarily a local file, we need to get the mime-type in the formal way.
         //  If this was an uploaded file (i.e. new file in the JS security context) with a dangerous mime type, it would have been blocked by now.
         require_code('files2');
         $meta_details = get_webpage_meta_details($_url);
         $attributes['mime_type'] = $meta_details['t_mime_type'];
     }
-    if (!array_key_exists('description',$attributes)) {
+    if (!array_key_exists('description', $attributes)) {
         $attributes['description'] = '';
     }
-    if ((!array_key_exists('filesize',$attributes)) || (!is_numeric($attributes['filesize']))) {
+    if ((!array_key_exists('filesize', $attributes)) || (!is_numeric($attributes['filesize']))) {
         $attributes['filesize'] = '';
     }
 
     // Framing. NB: Framed is not used by media types that imply their own framing (e.g. external videos)
-    $framed = ((!array_key_exists('framed',$attributes)) || ($attributes['framed'] != '0'));
+    $framed = ((!array_key_exists('framed', $attributes)) || ($attributes['framed'] != '0'));
 
-    $wysiwyg_editable = ((array_key_exists('wysiwyg_editable',$attributes)) && ($attributes['wysiwyg_editable'] != '0'));
+    $wysiwyg_editable = ((array_key_exists('wysiwyg_editable', $attributes)) && ($attributes['wysiwyg_editable'] != '0'));
 
-    $use_thumb = (!array_key_exists('thumb',$attributes)) || ($attributes['thumb'] == '1');
+    $use_thumb = (!array_key_exists('thumb', $attributes)) || ($attributes['thumb'] == '1');
 
     if (($_url != '') && (url_is_local($_url))) {
         if (is_file(get_custom_file_base() . '/' . urldecode($_url))) {
@@ -261,11 +262,11 @@ function _create_media_template_parameters($url,$attributes,$as_admin = false,$s
     // Put together template parameters
     return array(
         'URL' => $url,
-        'REMOTE_ID' => array_key_exists('remote_id',$attributes)?$attributes['remote_id']:'',
+        'REMOTE_ID' => array_key_exists('remote_id', $attributes) ? $attributes['remote_id'] : '',
         'THUMB_URL' => $attributes['thumb_url'],
         'FILENAME' => $attributes['filename'],
         'MIME_TYPE' => $attributes['mime_type'],
-        'CLICK_URL' => array_key_exists('click_url',$attributes)?$attributes['click_url']:null,
+        'CLICK_URL' => array_key_exists('click_url', $attributes) ? $attributes['click_url'] : null,
 
         'WIDTH' => $attributes['width'],
         'HEIGHT' => $attributes['height'],
@@ -273,12 +274,12 @@ function _create_media_template_parameters($url,$attributes,$as_admin = false,$s
         'LENGTH' => $attributes['length'],
 
         'FILESIZE' => $attributes['filesize'],
-        'CLEAN_FILESIZE' => is_numeric($attributes['filesize'])?clean_file_size(intval($attributes['filesize'])):'',
+        'CLEAN_FILESIZE' => is_numeric($attributes['filesize']) ? clean_file_size(intval($attributes['filesize'])) : '',
 
         'THUMB' => $use_thumb,
         'FRAMED' => $framed,
         'WYSIWYG_EDITABLE' => $wysiwyg_editable,
-        'NUM_DOWNLOADS' => array_key_exists('num_downloads',$attributes)?$attributes['num_downloads']:null,
-        'DESCRIPTION' => comcode_to_tempcode($attributes['description'],$source_member,$as_admin),
+        'NUM_DOWNLOADS' => array_key_exists('num_downloads', $attributes) ? $attributes['num_downloads'] : null,
+        'DESCRIPTION' => comcode_to_tempcode($attributes['description'], $source_member, $as_admin),
     );
 }

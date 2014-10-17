@@ -32,7 +32,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs','COUNT(*)');
+        return $GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('id'),array($GLOBALS['FORUM_DB']->translate_field_ref('s_title') => $label));
+        $_ret = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs', array('id'), array($GLOBALS['FORUM_DB']->translate_field_ref('s_title') => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -92,7 +92,7 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_USERGROUP_SUBSCRIPTION') . ' OR ' . db_string_equal_to('the_type','EDIT_USERGROUP_SUBSCRIPTION') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_USERGROUP_SUBSCRIPTION') . ' OR ' . db_string_equal_to('the_type', 'EDIT_USERGROUP_SUBSCRIPTION') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -104,27 +104,27 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('ecommerce2');
 
-        $description = $this->_default_property_str($properties,'description');
-        $cost = $this->_default_property_int($properties,'cost');
-        $length = $this->_default_property_int($properties,'length');
-        $length_units = $this->_default_property_str($properties,'length_units');
-        $auto_recur = $this->_default_property_int($properties,'auto_recur');
-        $group_id = $this->_default_property_int($properties,'group_id');
-        $uses_primary = $this->_default_property_int($properties,'uses_primary');
-        $enabled = $this->_default_property_int($properties,'enabled');
-        $mail_start = $this->_default_property_str($properties,'mail_start');
-        $mail_end = $this->_default_property_str($properties,'mail_end');
-        $mail_uhoh = $this->_default_property_str($properties,'mail_uhoh');
-        $_mails = $this->_default_property_str($properties,'mails');
-        $mails = ($_mails == '')?array():unserialize($_mails);
+        $description = $this->_default_property_str($properties, 'description');
+        $cost = $this->_default_property_int($properties, 'cost');
+        $length = $this->_default_property_int($properties, 'length');
+        $length_units = $this->_default_property_str($properties, 'length_units');
+        $auto_recur = $this->_default_property_int($properties, 'auto_recur');
+        $group_id = $this->_default_property_int($properties, 'group_id');
+        $uses_primary = $this->_default_property_int($properties, 'uses_primary');
+        $enabled = $this->_default_property_int($properties, 'enabled');
+        $mail_start = $this->_default_property_str($properties, 'mail_start');
+        $mail_end = $this->_default_property_str($properties, 'mail_end');
+        $mail_uhoh = $this->_default_property_str($properties, 'mail_uhoh');
+        $_mails = $this->_default_property_str($properties, 'mails');
+        $mails = ($_mails == '') ? array() : unserialize($_mails);
 
-        $id = add_usergroup_subscription($label,$description,$cost,$length,$length_units,$auto_recur,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh,$mails);
+        $id = add_usergroup_subscription($label, $description, $cost, $length, $length_units, $auto_recur, $group_id, $uses_primary, $enabled, $mail_start, $mail_end, $mail_uhoh, $mails);
         return strval($id);
     }
 
@@ -135,12 +135,12 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -148,12 +148,12 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
         $dbs_bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 
-        $_mails = $GLOBALS['FORUM_DB']->query_select('f_usergroup_sub_mails',array('*'),array('m_usergroup_sub_id' => intval($resource_id)),'ORDER BY id');
+        $_mails = $GLOBALS['FORUM_DB']->query_select('f_usergroup_sub_mails', array('*'), array('m_usergroup_sub_id' => intval($resource_id)), 'ORDER BY id');
         $mails = array();
         foreach ($_mails as $_mail) {
             $mails[] = array(
-                'subject' => get_translated_text($_mail['m_subject'],$GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']),
-                'body' => get_translated_text($_mail['m_body'],$GLOBALS[(get_forum_type() == 'ocf')?'FORUM_DB':'SITE_DB']),
+                'subject' => get_translated_text($_mail['m_subject'], $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB']),
+                'body' => get_translated_text($_mail['m_body'], $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB']),
                 'ref_point' => $_mail['m_ref_point'],
                 'ref_point_offset' => $_mail['m_ref_point_offset'],
             );
@@ -185,29 +185,29 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('ecommerce2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $description = $this->_default_property_str($properties,'description');
-        $cost = $this->_default_property_int($properties,'cost');
-        $length = $this->_default_property_int($properties,'length');
-        $length_units = $this->_default_property_str($properties,'length_units');
-        $auto_recur = $this->_default_property_int($properties,'auto_recur');
-        $group_id = $this->_default_property_int($properties,'group_id');
-        $uses_primary = $this->_default_property_int($properties,'uses_primary');
-        $enabled = $this->_default_property_int($properties,'enabled');
-        $mail_start = $this->_default_property_str($properties,'mail_start');
-        $mail_end = $this->_default_property_str($properties,'mail_end');
-        $mail_uhoh = $this->_default_property_str($properties,'mail_uhoh');
-        $_mails = $this->_default_property_str($properties,'mails');
-        $mails = ($_mails == '')?array():unserialize($_mails);
+        $label = $this->_default_property_str($properties, 'label');
+        $description = $this->_default_property_str($properties, 'description');
+        $cost = $this->_default_property_int($properties, 'cost');
+        $length = $this->_default_property_int($properties, 'length');
+        $length_units = $this->_default_property_str($properties, 'length_units');
+        $auto_recur = $this->_default_property_int($properties, 'auto_recur');
+        $group_id = $this->_default_property_int($properties, 'group_id');
+        $uses_primary = $this->_default_property_int($properties, 'uses_primary');
+        $enabled = $this->_default_property_int($properties, 'enabled');
+        $mail_start = $this->_default_property_str($properties, 'mail_start');
+        $mail_end = $this->_default_property_str($properties, 'mail_end');
+        $mail_uhoh = $this->_default_property_str($properties, 'mail_uhoh');
+        $_mails = $this->_default_property_str($properties, 'mails');
+        $mails = ($_mails == '') ? array() : unserialize($_mails);
 
-        edit_usergroup_subscription(intval($resource_id),$label,$description,$cost,$length,$length_units,$auto_recur,$group_id,$uses_primary,$enabled,$mail_start,$mail_end,$mail_uhoh,$mails);
+        edit_usergroup_subscription(intval($resource_id), $label, $description, $cost, $length, $length_units, $auto_recur, $group_id, $uses_primary, $enabled, $mail_start, $mail_end, $mail_uhoh, $mails);
 
         return $resource_id;
     }
@@ -219,9 +219,9 @@ class Hook_occle_fs_usergroup_subscriptions extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('ecommerce2');
         delete_usergroup_subscription(intval($resource_id));

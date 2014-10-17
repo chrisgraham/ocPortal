@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Block_main_pt_notifications
 {
     /**
@@ -56,7 +55,7 @@ class Block_main_pt_notifications
 
         if (!is_guest()) {
             require_code('ocf_notifications');
-            list($notifications,$num_unread_pps) = generate_notifications(get_member());
+            list($notifications, $num_unread_pps) = generate_notifications(get_member());
             if (!$notifications->is_empty()) {
                 require_javascript('javascript_ajax');
             }
@@ -65,6 +64,6 @@ class Block_main_pt_notifications
             $num_unread_pps = 0;
         }
 
-        return do_template('BLOCK_MAIN_PT_NOTIFICATIONS',array('_GUID' => '7606c3bf73f059ec5b194bc33d881763','NOTIFICATIONS' => $notifications));
+        return do_template('BLOCK_MAIN_PT_NOTIFICATIONS', array('_GUID' => '7606c3bf73f059ec5b194bc33d881763', 'NOTIFICATIONS' => $notifications));
     }
 }

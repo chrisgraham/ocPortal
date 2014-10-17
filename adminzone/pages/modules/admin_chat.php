@@ -43,14 +43,14 @@ class Module_admin_chat extends standard_crud_module
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_CHATROOMS','menu/social/chat/chat'),
+            'misc' => array('MANAGE_CHATROOMS', 'menu/social/chat/chat'),
         );
         $ret += parent::get_entry_points();
         $ret += array(
-            'delete_all' => array('DELETE_ALL_CHATROOMS','menu/_generic_admin/delete'),
+            'delete_all' => array('DELETE_ALL_CHATROOMS', 'menu/_generic_admin/delete'),
         );
         return $ret;
     }
@@ -64,17 +64,17 @@ class Module_admin_chat extends standard_crud_module
      * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
      */
-    public function pre_run($top_level = true,$type = null)
+    public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('chat');
 
         set_helper_panel_tutorial('tut_chat');
 
         if ($type == 'misc') {
-            $also_url = build_url(array('page' => 'cms_chat'),get_module_zone('cms_chat'));
-            attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS',escape_html($also_url->evaluate())),'inform',true);
+            $also_url = build_url(array('page' => 'cms_chat'), get_module_zone('cms_chat'));
+            attach_message(do_lang_tempcode('menus:ALSO_SEE_CMS', escape_html($also_url->evaluate())), 'inform', true);
         }
 
         if ($type == 'delete_all' || $type == '_delete_all') {
@@ -93,7 +93,7 @@ class Module_admin_chat extends standard_crud_module
     public function run_start($type)
     {
         $this->extra_donext_entries = array(
-            array('menu/_generic_admin/delete',array('_SELF',array('type' => 'delete_all'),'_SELF'),do_lang('DELETE_ALL_CHATROOMS')),
+            array('menu/_generic_admin/delete', array('_SELF', array('type' => 'delete_all'), '_SELF'), do_lang('DELETE_ALL_CHATROOMS')),
         );
 
         require_code('chat');
@@ -124,11 +124,11 @@ class Module_admin_chat extends standard_crud_module
         $this->edit_one_label = do_lang_tempcode('EDIT_CHATROOM');
 
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('MANAGE_CHATROOMS'),comcode_lang_string('DOC_CHAT'),
+        return do_next_manager(get_screen_title('MANAGE_CHATROOMS'), comcode_lang_string('DOC_CHAT'),
             array(
-                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_CHATROOM')),
-                array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_CHATROOM')),
-                array('menu/_generic_admin/delete',array('_SELF',array('type' => 'delete_all'),'_SELF'),do_lang('DELETE_ALL_CHATROOMS')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_CHATROOM')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_CHATROOM')),
+                array('menu/_generic_admin/delete', array('_SELF', array('type' => 'delete_all'), '_SELF'), do_lang('DELETE_ALL_CHATROOMS')),
             ),
             do_lang('MANAGE_CHATROOMS')
         );
@@ -141,12 +141,12 @@ class Module_admin_chat extends standard_crud_module
      */
     public function get_form_fields()
     {
-        list($fields,$hidden) = get_chatroom_fields();
+        list($fields, $hidden) = get_chatroom_fields();
 
         // Permissions
-        $fields->attach($this->get_permission_fields(null,null,true));
+        $fields->attach($this->get_permission_fields(null, null, true));
 
-        return array($fields,$hidden);
+        return array($fields, $hidden);
     }
 
     /**
@@ -158,14 +158,14 @@ class Module_admin_chat extends standard_crud_module
     {
         require_code('chat_lobby');
 
-        $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im' => 0),'ORDER BY room_name DESC',500);
+        $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('*'), array('is_im' => 0), 'ORDER BY room_name DESC', 500);
         if (count($rows) == 500) {
             warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
         }
         $fields = new ocp_tempcode();
         foreach ($rows as $row) {
             if (!handle_chatroom_pruning($row)) {
-                $fields->attach(form_input_list_entry(strval($row['id']),false,$row['room_name']));
+                $fields->attach(form_input_list_entry(strval($row['id']), false, $row['room_name']));
             }
         }
 
@@ -180,8 +180,8 @@ class Module_admin_chat extends standard_crud_module
      */
     public function fill_in_edit_form($id)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('id' => intval($id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('*'), array('id' => intval($id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $row = $rows[0];
@@ -195,16 +195,16 @@ class Module_admin_chat extends standard_crud_module
             $username = '';
         }//do_lang('UNKNOWN');
 
-        list($fields,$hidden) = get_chatroom_fields(intval($id),false,$row['room_name'],get_translated_text($row['c_welcome']),$username,$allow2,$allow2_groups,$disallow2,$disallow2_groups);
+        list($fields, $hidden) = get_chatroom_fields(intval($id), false, $row['room_name'], get_translated_text($row['c_welcome']), $username, $allow2, $allow2_groups, $disallow2, $disallow2_groups);
 
         // Permissions
         $fields->attach($this->get_permission_fields($id));
 
         $delete_fields = new ocp_tempcode();
-        $logs_url = build_url(array('page' => 'chat','type' => 'download_logs','id' => $id),get_module_zone('chat'));
-        $delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_CHATROOM',escape_html($logs_url->evaluate())),'delete',false));
+        $logs_url = build_url(array('page' => 'chat', 'type' => 'download_logs', 'id' => $id), get_module_zone('chat'));
+        $delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE_CHATROOM', escape_html($logs_url->evaluate())), 'delete', false));
 
-        return array($fields,$hidden,$delete_fields,null,true);
+        return array($fields, $hidden, $delete_fields, null, true);
     }
 
     /**
@@ -214,16 +214,16 @@ class Module_admin_chat extends standard_crud_module
      */
     public function add_actualisation()
     {
-        list($allow2,$allow2_groups,$disallow2,$disallow2_groups) = read_in_chat_perm_fields();
+        list($allow2, $allow2_groups, $disallow2, $disallow2_groups) = read_in_chat_perm_fields();
 
-        $meta_data = actual_meta_data_get_fields('chat',null);
+        $meta_data = actual_meta_data_get_fields('chat', null);
 
-        $id = add_chatroom(post_param('c_welcome'),post_param('room_name'),$GLOBALS['FORUM_DRIVER']->get_member_from_username(post_param('room_owner')),$allow2,$allow2_groups,$disallow2,$disallow2_groups,post_param('room_lang',user_lang()));
+        $id = add_chatroom(post_param('c_welcome'), post_param('room_name'), $GLOBALS['FORUM_DRIVER']->get_member_from_username(post_param('room_owner')), $allow2, $allow2_groups, $disallow2, $disallow2_groups, post_param('room_lang', user_lang()));
 
         $this->set_permissions($id);
 
         if (addon_installed('content_reviews')) {
-            content_review_set('chat',strval($id));
+            content_review_set('chat', strval($id));
         }
 
         return strval($id);
@@ -236,10 +236,10 @@ class Module_admin_chat extends standard_crud_module
      */
     public function edit_actualisation($id)
     {
-        $_room_owner = post_param('room_owner',STRING_MAGIC_NULL);
-        $room_owner = ($_room_owner == STRING_MAGIC_NULL)?INTEGER_MAGIC_NULL:$GLOBALS['FORUM_DRIVER']->get_member_from_username($_room_owner);
+        $_room_owner = post_param('room_owner', STRING_MAGIC_NULL);
+        $room_owner = ($_room_owner == STRING_MAGIC_NULL) ? INTEGER_MAGIC_NULL : $GLOBALS['FORUM_DRIVER']->get_member_from_username($_room_owner);
         if ($_room_owner != STRING_MAGIC_NULL) {
-            list($allow2,$allow2_groups,$disallow2,$disallow2_groups) = read_in_chat_perm_fields();
+            list($allow2, $allow2_groups, $disallow2, $disallow2_groups) = read_in_chat_perm_fields();
         } else {
             $allow2 = STRING_MAGIC_NULL;
             $allow2_groups = STRING_MAGIC_NULL;
@@ -247,14 +247,14 @@ class Module_admin_chat extends standard_crud_module
             $disallow2_groups = STRING_MAGIC_NULL;
         }
 
-        $meta_data = actual_meta_data_get_fields('chat',$id);
+        $meta_data = actual_meta_data_get_fields('chat', $id);
 
-        edit_chatroom(intval($id),post_param('c_welcome',STRING_MAGIC_NULL),post_param('room_name'),$room_owner,$allow2,$allow2_groups,$disallow2,$disallow2_groups,post_param('room_lang',STRING_MAGIC_NULL));
+        edit_chatroom(intval($id), post_param('c_welcome', STRING_MAGIC_NULL), post_param('room_name'), $room_owner, $allow2, $allow2_groups, $disallow2, $disallow2_groups, post_param('room_lang', STRING_MAGIC_NULL));
 
         $this->set_permissions($id);
 
         if (addon_installed('content_reviews')) {
-            content_review_set('chat',$id);
+            content_review_set('chat', $id);
         }
     }
 
@@ -277,11 +277,11 @@ class Module_admin_chat extends standard_crud_module
     {
         $fields = new ocp_tempcode();
         require_code('form_templates');
-        $fields->attach(form_input_tick(do_lang_tempcode('PROCEED'),do_lang_tempcode('Q_SURE'),'continue_delete',false));
+        $fields->attach(form_input_tick(do_lang_tempcode('PROCEED'), do_lang_tempcode('Q_SURE'), 'continue_delete', false));
         $posting_name = do_lang_tempcode('PROCEED');
-        $posting_url = build_url(array('page' => '_SELF','type' => '_delete_all'),'_SELF');
+        $posting_url = build_url(array('page' => '_SELF', 'type' => '_delete_all'), '_SELF');
         $text = paragraph(do_lang_tempcode('CONFIRM_DELETE_ALL_CHATROOMS'));
-        return do_template('FORM_SCREEN',array('_GUID' => 'fdf02f5b3a3b9ce6d1abaccf0970ed73','SKIP_VALIDATION' => true,'HIDDEN' => '','TITLE' => $this->title,'FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__delete','SUBMIT_NAME' => $posting_name,'URL' => $posting_url,'TEXT' => $text));
+        return do_template('FORM_SCREEN', array('_GUID' => 'fdf02f5b3a3b9ce6d1abaccf0970ed73', 'SKIP_VALIDATION' => true, 'HIDDEN' => '', 'TITLE' => $this->title, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'menu___generic_admin__delete', 'SUBMIT_NAME' => $posting_name, 'URL' => $posting_url, 'TEXT' => $text));
     }
 
     /**
@@ -291,14 +291,14 @@ class Module_admin_chat extends standard_crud_module
      */
     public function _delete_all()
     {
-        $delete = post_param_integer('continue_delete',0);
+        $delete = post_param_integer('continue_delete', 0);
         if ($delete != 1) {
-            $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
-            return redirect_screen($this->title,$url,do_lang_tempcode('CANCELLED'));
+            $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+            return redirect_screen($this->title, $url, do_lang_tempcode('CANCELLED'));
         } else {
             delete_all_chatrooms();
 
-            return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),null);
+            return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), null);
         }
     }
 }

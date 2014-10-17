@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_orphaned_uploads
 {
     /**
@@ -29,12 +28,12 @@ class Hook_orphaned_uploads
     {
         $dbs_bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
-        $urlpaths = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type' => 'URLPATH'));
+        $urlpaths = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_table'), array('m_type' => 'URLPATH'));
         $count = 0;
         foreach ($urlpaths as $urlpath) {
-            $count += $GLOBALS['SITE_DB']->query_select_value($urlpath['m_table'],'COUNT(*)');
-            if ($count>10000) {
-                return NULL;
+            $count += $GLOBALS['SITE_DB']->query_select_value($urlpath['m_table'], 'COUNT(*)');
+            if ($count > 10000) {
+                return null;
             } // Too much!
         }
         $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_bak;
@@ -55,6 +54,6 @@ class Hook_orphaned_uploads
     public function run()
     {
         require_code('tasks');
-        return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'),null,'find_orphaned_uploads');
+        return call_user_func_array__long_task(do_lang('ORPHANED_UPLOADS'), null, 'find_orphaned_uploads');
     }
 }

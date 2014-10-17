@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_task_download_gallery
 {
     /**
@@ -32,35 +31,35 @@ class Hook_task_download_gallery
         require_lang('galleries');
         require_code('zip');
 
-        $gallery_rows = $GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name' => $cat),'',1);
-        if (!array_key_exists(0,$gallery_rows)) {
-            return array(null,do_lang_tempcode('MISSING_RESOURCE'));
+        $gallery_rows = $GLOBALS['SITE_DB']->query_select('galleries', array('*'), array('name' => $cat), '', 1);
+        if (!array_key_exists(0, $gallery_rows)) {
+            return array(null, do_lang_tempcode('MISSING_RESOURCE'));
         }
         $gallery_row = $gallery_rows[0];
 
         $headers = array();
         $headers['Content-Type'] = 'application/octet-stream; authoritative=true;';
         $filename = 'gallery-' . $cat . '.zip';
-        $headers['Content-Disposition'] = 'attachment; filename="' . str_replace("\r",'',str_replace("\n",'',$filename)) . '"';
+        $headers['Content-Disposition'] = 'attachment; filename="' . str_replace("\r", '', str_replace("\n", '', $filename)) . '"';
 
         $ini_set = array();
         $ini_set['ocproducts.xss_detect'] = '0';
         $ini_set['zlib.output_compression'] = 'Off';
 
-        $rows_images = $GLOBALS['SITE_DB']->query_select('images',array('id','url','add_date'),array('cat' => $cat,'validated' => 1));
-        $rows_videos = $GLOBALS['SITE_DB']->query_select('videos',array('id','url','add_date'),array('cat' => $cat,'validated' => 1));
+        $rows_images = $GLOBALS['SITE_DB']->query_select('images', array('id', 'url', 'add_date'), array('cat' => $cat, 'validated' => 1));
+        $rows_videos = $GLOBALS['SITE_DB']->query_select('videos', array('id', 'url', 'add_date'), array('cat' => $cat, 'validated' => 1));
         $rows_combined = array();
         foreach ($rows_images as $row) {
-            $rows_combined[] = $row+array('content_type' => 'image');
+            $rows_combined[] = $row + array('content_type' => 'image');
         }
         foreach ($rows_videos as $row) {
-            $rows_combined[] = $row+array('content_type' => 'video');
+            $rows_combined[] = $row + array('content_type' => 'video');
         }
         $array = array();
         foreach ($rows_combined as $row) {
             if (addon_installed('content_privacy')) {
                 require_code('content_privacy');
-                if (!has_privacy_access($row['content_type'],strval($row['id']))) {
+                if (!has_privacy_access($row['content_type'], strval($row['id']))) {
                     continue;
                 }
             }
@@ -84,7 +83,7 @@ class Hook_task_download_gallery
                 $data = http_download_file($row['url']);
             }
 
-            $array[] = array('name' => preg_replace('#^uploads/galleries/#','',$name),'time' => $time,'data' => $data,'full_path' => $full_path);
+            $array[] = array('name' => preg_replace('#^uploads/galleries/#', '', $name), 'time' => $time, 'data' => $data, 'full_path' => $full_path);
         }
 
         if ($gallery_row['rep_image'] != '') {
@@ -101,13 +100,13 @@ class Hook_task_download_gallery
                 $name = basename(urldecode($gallery_row['rep_image']));
                 $data = http_download_file($gallery_row['rep_image']);
             }
-            $array[] = array('name' => preg_replace('#^uploads/(galleries|repimages)/#','',$name),'time' => $time,'data' => $data);
+            $array[] = array('name' => preg_replace('#^uploads/(galleries|repimages)/#', '', $name), 'time' => $time, 'data' => $data);
         }
 
         $outfile_path = ocp_tempnam('csv');
 
-        create_zip_file($array,false,false,$outfile_path);
+        create_zip_file($array, false, false, $outfile_path);
 
-        return array('application/octet-stream',array($filename,$outfile_path),$headers,$ini_set);
+        return array('application/octet-stream', array($filename, $outfile_path), $headers, $ini_set);
     }
 }

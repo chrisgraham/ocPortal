@@ -53,11 +53,11 @@ $target = $_GET['url'];
 if (get_magic_quotes_gpc()) {
     $target = stripslashes($target);
 }
-$target = str_replace(array("\r","\n"),array('',''),$target);
+$target = str_replace(array("\r", "\n"), array('', ''), $target);
 
 // Only allows redirections from our own server
 $domain = qr_get_domain();
 $OUR_SERVER = 'http://' . $domain;
-if (substr($_SERVER['HTTP_REFERER'],0,strlen($OUR_SERVER)) == $OUR_SERVER) {
+if (substr($_SERVER['HTTP_REFERER'], 0, strlen($OUR_SERVER)) == $OUR_SERVER) {
     header('Location: ' . $target);
 }

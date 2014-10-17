@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_config_point_logs_per_page
 {
     /**

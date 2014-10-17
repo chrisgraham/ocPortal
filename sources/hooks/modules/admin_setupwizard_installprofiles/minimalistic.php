@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-
 class Hook_admin_setupwizard_installprofiles_minimalistic
 {
     /**
@@ -40,10 +39,8 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
     public function get_addon_list()
     {
         return array(
-            array(
-            ),
-            array(
-            ),
+            array(),
+            array(),
             array(
                 'banners',
                 'ecommerce',
@@ -109,10 +106,8 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
             'YES' => array(
                 'main_news',
             ),
-            'YES_CELL' => array(
-            ),
-            'PANEL_LEFT' => array(
-            ),
+            'YES_CELL' => array(),
+            'PANEL_LEFT' => array(),
             'PANEL_RIGHT' => array(
                 'main_newsletter_signup',
                 'main_poll',
@@ -127,8 +122,7 @@ class Hook_admin_setupwizard_installprofiles_minimalistic
      */
     public function block_options()
     {
-        return array(
-        );
+        return array();
     }
 
     /**

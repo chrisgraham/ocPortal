@@ -50,10 +50,10 @@ class Module_supermembers
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('SUPER_MEMBERS','menu/collaboration/supermembers'),
+            '!' => array('SUPER_MEMBERS', 'menu/collaboration/supermembers'),
         );
     }
 
@@ -63,10 +63,10 @@ class Module_supermembers
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if ($upgrade_from == 2) {
-            set_option('supermembers_text','[html]' . get_option('supermembers_text') . '[/html]');
+            set_option('supermembers_text', '[html]' . get_option('supermembers_text') . '[/html]');
             return;
         }
     }
@@ -80,13 +80,13 @@ class Module_supermembers
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('supermembers');
 
         $this->title = get_screen_title('SUPER_MEMBERS');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -104,16 +104,16 @@ class Module_supermembers
         }
 
         $message = get_option('supermembers_text');
-        if (has_actual_page_access(get_member(),'admin_config')) {
+        if (has_actual_page_access(get_member(), 'admin_config')) {
             if ($message != '') {
                 $message .= ' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SECURITY#group_SUPER_MEMBERS}">' . do_lang('EDIT') . '</a></span>[/semihtml]';
             } // XHTMLXHTML
         }
-        $text = comcode_to_tempcode($message,null,true);
+        $text = comcode_to_tempcode($message, null, true);
 
-        $supermember_groups = collapse_1d_complexity('group_id',$GLOBALS['SITE_DB']->query_select('group_zone_access',array('group_id'),array('zone_name' => get_zone_name())));
-        $supermember_groups = array_merge($supermember_groups,$GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
-        $rows = $GLOBALS['FORUM_DRIVER']->member_group_query($supermember_groups,1000);
+        $supermember_groups = collapse_1d_complexity('group_id', $GLOBALS['SITE_DB']->query_select('group_zone_access', array('group_id'), array('zone_name' => get_zone_name())));
+        $supermember_groups = array_merge($supermember_groups, $GLOBALS['FORUM_DRIVER']->get_super_admin_groups());
+        $rows = $GLOBALS['FORUM_DRIVER']->member_group_query($supermember_groups, 1000);
         if (count($rows) >= 1000) {
             warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
         }
@@ -128,38 +128,38 @@ class Module_supermembers
             $current_group = $GLOBALS['FORUM_DRIVER']->mrow_group($r);
             $username = $GLOBALS['FORUM_DRIVER']->mrow_username($r);
 
-            if (!array_key_exists($current_group,$all_usergroups)) {
+            if (!array_key_exists($current_group, $all_usergroups)) {
                 continue;
             }
 
             if (($current_group != $old_group) && (!is_null($old_group))) {
                 $group_name = $all_usergroups[$old_group];
-                $groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP',array('_GUID' => '32c8427ff18523fcd6b89fb5df365a88','ENTRIES' => $groups_current,'GROUP_NAME' => $group_name)));
+                $groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP', array('_GUID' => '32c8427ff18523fcd6b89fb5df365a88', 'ENTRIES' => $groups_current, 'GROUP_NAME' => $group_name)));
                 $groups_current = array();
             }
 
             if (addon_installed('authors')) {
                 // Work out their skills from their author profile
-                $author_rows = $GLOBALS['SITE_DB']->query_select('authors',array('*'),array('member_id' => $id),'',1);
-                if (!array_key_exists(0,$author_rows)) {
-                    $author_rows = $GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author' => $username),'',1);
+                $author_rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), array('member_id' => $id), '', 1);
+                if (!array_key_exists(0, $author_rows)) {
+                    $author_rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), array('author' => $username), '', 1);
                 }
-                $skills = array_key_exists(0,$author_rows)?get_translated_tempcode('authors',$author_rows[0],'skills'):new ocp_tempcode();
+                $skills = array_key_exists(0, $author_rows) ? get_translated_tempcode('authors', $author_rows[0], 'skills') : new ocp_tempcode();
             } else {
                 $skills = new ocp_tempcode();
             }
 
-            $days = intval(round(floatval(time()-$GLOBALS['FORUM_DRIVER']->mrow_lastvisit($r))/(60.0*60.0*24.0)));
+            $days = intval(round(floatval(time() - $GLOBALS['FORUM_DRIVER']->mrow_lastvisit($r)) / (60.0 * 60.0 * 24.0)));
 
             // URL's to them
             if (addon_installed('authors')) {
-                $author_url = build_url(array('page' => 'authors','type' => 'misc','id' => $username),get_module_zone('authors'));
+                $author_url = build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $username), get_module_zone('authors'));
             } else {
                 $author_url = new ocp_tempcode();
             }
-            $points_url = addon_installed('points')?build_url(array('page' => 'points','type' => 'member','id' => $id),get_module_zone('points')):new ocp_tempcode();
-            $pm_url = $GLOBALS['FORUM_DRIVER']->member_pm_url($id,true);
-            $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
+            $points_url = addon_installed('points') ? build_url(array('page' => 'points', 'type' => 'member', 'id' => $id), get_module_zone('points')) : new ocp_tempcode();
+            $pm_url = $GLOBALS['FORUM_DRIVER']->member_pm_url($id, true);
+            $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($id, false, true);
 
             // Template
             $groups_current[] = array(
@@ -177,9 +177,9 @@ class Module_supermembers
         }
         if (count($groups_current) != 0) {
             $group_name = $all_usergroups[$old_group];
-            $groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP',array('_GUID' => 'd2cbe67dafa0dc9872f90fc8834d21ca','ENTRIES' => $groups_current,'GROUP_NAME' => $group_name)));
+            $groups->attach(do_template('SUPERMEMBERS_SCREEN_GROUP', array('_GUID' => 'd2cbe67dafa0dc9872f90fc8834d21ca', 'ENTRIES' => $groups_current, 'GROUP_NAME' => $group_name)));
         }
 
-        return do_template('SUPERMEMBERS_SCREEN',array('_GUID' => '93b875bc00b094810ca9cc3e2f4968b8','TITLE' => $this->title,'GROUPS' => $groups,'TEXT' => $text));
+        return do_template('SUPERMEMBERS_SCREEN', array('_GUID' => '93b875bc00b094810ca9cc3e2f4968b8', 'TITLE' => $this->title, 'GROUPS' => $groups, 'TEXT' => $text));
     }
 }

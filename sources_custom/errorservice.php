@@ -15,7 +15,7 @@
 
 function init__errorservice()
 {
-    define('OCP_SOLUTION_FORUM',283);
+    define('OCP_SOLUTION_FORUM', 283);
 }
 
 /**
@@ -24,7 +24,7 @@ function init__errorservice()
 function get_problem_match()
 {
     $version = get_param('version');
-    $error_message = get_param('error_message',false,true);
+    $error_message = get_param('error_message', false, true);
 
     $ret = get_problem_match_worker($error_message);
     header('Content-type: text/plain');
@@ -34,11 +34,11 @@ function get_problem_match()
         // Possible rebranding
         $brand = get_param('product');
         if (($brand != 'ocPortal') && ($brand != '')) {
-            $brand_base_url = get_param('product_site','');
+            $brand_base_url = get_param('product_site', '');
             if ($brand_base_url != '') {
-                $output = str_replace('ocPortal',$brand,$output);
-                $output = str_replace('ocProducts','The Developers',$output);
-                $output = str_replace(get_brand_base_url(),$brand_base_url,$output);
+                $output = str_replace('ocPortal', $brand, $output);
+                $output = str_replace('ocProducts', 'The Developers', $output);
+                $output = str_replace(get_brand_base_url(), $brand_base_url, $output);
             }
         }
         echo $output;
@@ -54,21 +54,21 @@ function get_problem_match()
 function get_problem_match_worker($error_message)
 {
     // Find matches. Stored in forum topics.
-    $_data = $GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('p_cache_forum_id' => OCP_SOLUTION_FORUM));
+    $_data = $GLOBALS['FORUM_DB']->query_select('f_posts', array('*'), array('p_cache_forum_id' => OCP_SOLUTION_FORUM));
     $matches = array();
     foreach ($_data as $d) {
-        $regexp = str_replace('\.\.\.','.*',str_replace('xxx','.*',preg_quote($d['p_title'],'#')));
-        if (preg_match('#' . $regexp . '#',$error_message) != 0) {
+        $regexp = str_replace('\.\.\.', '.*', str_replace('xxx', '.*', preg_quote($d['p_title'], '#')));
+        if (preg_match('#' . $regexp . '#', $error_message) != 0) {
             $matches[$d['p_title']] = array(
                 $d['id'],
-                get_translated_text($d['p_post'],$GLOBALS['FORUM_DB']),
-                get_translated_tempcode('f_posts',$d,'p_post',$GLOBALS['FORUM_DB'])
+                get_translated_text($d['p_post'], $GLOBALS['FORUM_DB']),
+                get_translated_tempcode('f_posts', $d, 'p_post', $GLOBALS['FORUM_DB'])
             );
         }
     }
 
     // Sort by how good the match is (string length)
-    uksort($matches,'strlen_sort');
+    uksort($matches, 'strlen_sort');
 
     // Return best-match result, after a cleanup
     return array_pop($matches);

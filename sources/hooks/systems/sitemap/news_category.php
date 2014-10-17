@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_sitemap_news_category extends Hook_sitemap_content
 {
     protected $content_type = 'news_category';
@@ -57,11 +56,11 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   List of node structures (NULL: working via callback).
      */
-    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    public function get_virtual_nodes($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $return_anyway = false)
     {
-        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
+        $nodes = ($callback === null || $return_anyway) ? array() : mixed();
 
-        if (($valid_node_types !== NULL) && (!in_array($this->content_type,$valid_node_types))) {
+        if (($valid_node_types !== null) && (!in_array($this->content_type, $valid_node_types))) {
             return $nodes;
         }
 
@@ -69,37 +68,38 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
             return $nodes;
         }
 
-        $page = $this->_make_zone_concrete($zone,$page_link);
+        $page = $this->_make_zone_concrete($zone, $page_link);
 
-        if ($child_cutoff !== NULL) {
-            $count = $GLOBALS['SITE_DB']->query_select_value('news_categories','COUNT(*)');
-            if ($count>$child_cutoff) {
+        if ($child_cutoff !== null) {
+            $count = $GLOBALS['SITE_DB']->query_select_value('news_categories', 'COUNT(*)');
+            if ($count > $child_cutoff) {
                 return $nodes;
             }
         }
 
         $start = 0;
         do {
-            $rows = $GLOBALS['SITE_DB']->query_select('news_categories',array('*'),null,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+            $rows = $GLOBALS['SITE_DB']->query_select('news_categories', array('*'), null, '', SITEMAP_MAX_ROWS_PER_LOOP, $start);
             foreach ($rows as $row) {
                 $child_page_link = $zone . ':' . $page . ':' . $this->screen_type . ':' . strval($row['id']);
-                if (strpos($page_link,':blog=0') !== false) {
+                if (strpos($page_link, ':blog=0') !== false) {
                     $child_page_link .= ':blog=0';
                 }
-                if (strpos($page_link,':blog=1') !== false) {
+                if (strpos($page_link, ':blog=1') !== false) {
                     $child_page_link .= ':blog=1';
                 }
-                $node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-                if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+                $node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+                if (($callback === null || $return_anyway) && ($node !== null)) {
                     $nodes[] = $node;
                 }
             }
 
             $start += SITEMAP_MAX_ROWS_PER_LOOP;
-        } while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
+        }
+        while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
 
         if (is_array($nodes)) {
-            sort_maps_by($nodes,'title');
+            sort_maps_by($nodes, 'title');
         }
 
         return $nodes;
@@ -124,43 +124,43 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
-        $_ = $this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-        if ($_ === NULL) {
-            return NULL;
+        $_ = $this->_create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+        if ($_ === null) {
+            return null;
         }
-        list($content_id,$row,$partial_struct) = $_;
+        list($content_id, $row, $partial_struct) = $_;
 
         $matches = array();
-        preg_match('#^([^:]*):([^:]*)#',$page_link,$matches);
+        preg_match('#^([^:]*):([^:]*)#', $page_link, $matches);
         $page = $matches[2];
 
-        $this->_make_zone_concrete($zone,$page_link);
+        $this->_make_zone_concrete($zone, $page_link);
 
         $struct = array(
-            'sitemap_priority' => SITEMAP_IMPORTANCE_HIGH,
-            'sitemap_refreshfreq' => 'daily',
+                'sitemap_priority' => SITEMAP_IMPORTANCE_HIGH,
+                'sitemap_refreshfreq' => 'daily',
 
-            'privilege_page' => $this->get_privilege_page($page_link),
-        )+$partial_struct;
+                'privilege_page' => $this->get_privilege_page($page_link),
+            ) + $partial_struct;
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
         // Categories done after node callback, to ensure sensible ordering
-        $children = $this->_get_children_nodes($content_id,$page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+        $children = $this->_get_children_nodes($content_id, $page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
         if (!is_null($children)) {
             foreach ($children as &$child) {
-                if (strpos($page_link,':blog=0') !== false) {
+                if (strpos($page_link, ':blog=0') !== false) {
                     $child['page_link'] .= ':blog=0';
                 }
-                if (strpos($page_link,':blog=1') !== false) {
+                if (strpos($page_link, ':blog=1') !== false) {
                     $child['page_link'] .= ':blog=1';
                 }
             }
@@ -168,19 +168,19 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
                 $child_hook_ob = 'news';
 
                 $skip_children = false;
-                if ($child_cutoff !== NULL) {
-                    $count = $GLOBALS['SITE_DB']->query_select_value('news_category_entries','COUNT(*)',array('news_entry_category' => intval($content_id)));
-                    if ($count>$child_cutoff) {
+                if ($child_cutoff !== null) {
+                    $count = $GLOBALS['SITE_DB']->query_select_value('news_category_entries', 'COUNT(*)', array('news_entry_category' => intval($content_id)));
+                    if ($count > $child_cutoff) {
                         $skip_children = true;
                     }
                 }
 
                 if (!$skip_children) {
-                    $child_rows = $GLOBALS['SITE_DB']->query_select('news_category_entries',array('news_entry'),array('news_entry_category' => intval($content_id)));
+                    $child_rows = $GLOBALS['SITE_DB']->query_select('news_category_entries', array('news_entry'), array('news_entry_category' => intval($content_id)));
                     foreach ($child_rows as $child_row) {
                         $child_page_link = $zone . ':' . $page . ':view:' . strval($child_row['news_entry']);
-                        $child_node = $child_hook_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather);
-                        if ($child_node !== NULL) {
+                        $child_node = $child_hook_ob->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather);
+                        if ($child_node !== null) {
                             $children[] = $child_node;
                         }
                     }
@@ -189,6 +189,6 @@ class Hook_sitemap_news_category extends Hook_sitemap_content
             $struct['children'] = $children;
         }
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

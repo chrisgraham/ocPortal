@@ -27,7 +27,7 @@
  * @param  ID_TEXT                      ID of the install profile
  * @return array                        Structure of pages
  */
-function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$installprofile)
+function _get_zone_pages($installprofileblocks, $block_options, $collapse_zones, $installprofile)
 {
     $page_structure = array();
 
@@ -35,10 +35,10 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
     $zone_blocks = array();
     $zone_blocks['site'] = array();
     foreach ($_POST as $key => $value) {
-        if (substr($key,0,6) == 'block_') {
-            $block = substr($key,6);
-            if (substr($block,0,5) == 'SITE_') {
-                $zone_blocks['site'][substr($block,5)] = $value;
+        if (substr($key, 0, 6) == 'block_') {
+            $block = substr($key, 6);
+            if (substr($block, 0, 5) == 'SITE_') {
+                $zone_blocks['site'][substr($block, 5)] = $value;
             }
         }
     }
@@ -76,7 +76,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
         foreach ($blocks as $block => $val) {
             $params = '';
             if (!is_null($block_options)) {
-                if (array_key_exists($block,$block_options)) {
+                if (array_key_exists($block, $block_options)) {
                     foreach ($block_options[$block] as $block_option => $block_option_value) {
                         $params .= ' ' . $block_option . '="' . comcode_escape($block_option_value) . '"';
                     }
@@ -93,18 +93,18 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
                 $main .= $block_comcode . "\n\n";
             }
             if ($val == 'YES_CELL') {
-                if ($cell_count%2 == 0) {
+                if ($cell_count % 2 == 0) {
                     $cells .= '[surround="fp_col_blocks_wrap"]';
                 }
-                $cells .= "\t" . '[surround="fp_col_block ' . (($cell_count%2 == 0)?'left':'right') . '"]' . "\n\t\t" . $block_comcode . "\n\t" . '[/surround]' . "\n";
-                if ($cell_count%2 == 1) {
+                $cells .= "\t" . '[surround="fp_col_block ' . (($cell_count % 2 == 0) ? 'left' : 'right') . '"]' . "\n\t\t" . $block_comcode . "\n\t" . '[/surround]' . "\n";
+                if ($cell_count % 2 == 1) {
                     $cells .= "[/surround]\n\n";
                 }
                 $cell_count++;
             }
         }
         if ($cells != '') { // Odd number of cells chosen, close off at odd point
-            if ($cell_count%2 == 1) {
+            if ($cell_count % 2 == 1) {
                 $cells .= "[/surround]\n\n";
             }
         }
@@ -133,7 +133,7 @@ function _get_zone_pages($installprofileblocks,$block_options,$collapse_zones,$i
         if ($installprofile == '') {
             $comcode .= "[block]side_personal_stats[/block]";
         }
-        if (post_param_integer('include_ocp_advert',0) == 1) {
+        if (post_param_integer('include_ocp_advert', 0) == 1) {
             $comcode .= '[center][url="' . get_brand_base_url() . '/?from=logo"][img="Powered by ocPortal"]' . get_brand_base_url() . '/uploads/website_specific/ocportal.com/logos/a.png[/img][/url][/center]';
         }
         $page_structure[$zone]['left'] = $comcode;

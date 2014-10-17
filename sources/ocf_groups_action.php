@@ -51,31 +51,31 @@
  * @param  boolean                      Whether permissions should be auto-copied
  * @return AUTO_LINK                    The ID of the new.
  */
-function ocf_make_group($name,$is_default = 0,$is_super_admin = 0,$is_super_moderator = 0,$title = '',$rank_image = '',$promotion_target = null,$promotion_threshold = null,$group_leader = null,$flood_control_submit_secs = null,$flood_control_access_secs = null,$max_daily_upload_mb = null,$max_attachments_per_post = null,$max_avatar_width = null,$max_avatar_height = null,$max_post_length_comcode = null,$max_sig_length_comcode = null,$gift_points_base = null,$gift_points_per_day = null,$enquire_on_new_ips = 0,$is_presented_at_install = 0,$hidden = 0,$order = null,$rank_image_pri_only = 1,$open_membership = 0,$is_private_club = 0,$uniqify = false,$comes_with_permissions = true)
+function ocf_make_group($name, $is_default = 0, $is_super_admin = 0, $is_super_moderator = 0, $title = '', $rank_image = '', $promotion_target = null, $promotion_threshold = null, $group_leader = null, $flood_control_submit_secs = null, $flood_control_access_secs = null, $max_daily_upload_mb = null, $max_attachments_per_post = null, $max_avatar_width = null, $max_avatar_height = null, $max_post_length_comcode = null, $max_sig_length_comcode = null, $gift_points_base = null, $gift_points_per_day = null, $enquire_on_new_ips = 0, $is_presented_at_install = 0, $hidden = 0, $order = null, $rank_image_pri_only = 1, $open_membership = 0, $is_private_club = 0, $uniqify = false, $comes_with_permissions = true)
 {
     require_code('global4');
-    prevent_double_submit('ADD_GROUP',null,$name);
+    prevent_double_submit('ADD_GROUP', null, $name);
 
     require_code('form_templates');
 
-    $flood_control_submit_secs = take_param_int_modeavg($flood_control_submit_secs,'g_flood_control_submit_secs','f_groups',0);
-    $flood_control_access_secs = take_param_int_modeavg($flood_control_access_secs,'g_flood_control_access_secs','f_groups',0);
-    $max_daily_upload_mb = take_param_int_modeavg($max_daily_upload_mb,'g_max_daily_upload_mb','f_groups',70);
-    $max_attachments_per_post = take_param_int_modeavg($max_attachments_per_post,'g_max_attachments_per_post','f_groups',50);
-    $max_avatar_width = take_param_int_modeavg($max_avatar_width,'g_max_avatar_width','f_groups',100);
-    $max_avatar_height = take_param_int_modeavg($max_avatar_height,'g_max_avatar_height','f_groups',100);
-    $max_post_length_comcode = take_param_int_modeavg($max_post_length_comcode,'g_max_post_length_comcode','f_groups',30000);
-    $max_sig_length_comcode = take_param_int_modeavg($max_sig_length_comcode,'g_max_sig_length_comcode','f_groups',700);
-    $gift_points_base = take_param_int_modeavg($gift_points_base,'g_gift_points_base','f_groups',25);
-    $gift_points_per_day = take_param_int_modeavg($gift_points_per_day,'g_gift_points_per_day','f_groups',1);
+    $flood_control_submit_secs = take_param_int_modeavg($flood_control_submit_secs, 'g_flood_control_submit_secs', 'f_groups', 0);
+    $flood_control_access_secs = take_param_int_modeavg($flood_control_access_secs, 'g_flood_control_access_secs', 'f_groups', 0);
+    $max_daily_upload_mb = take_param_int_modeavg($max_daily_upload_mb, 'g_max_daily_upload_mb', 'f_groups', 70);
+    $max_attachments_per_post = take_param_int_modeavg($max_attachments_per_post, 'g_max_attachments_per_post', 'f_groups', 50);
+    $max_avatar_width = take_param_int_modeavg($max_avatar_width, 'g_max_avatar_width', 'f_groups', 100);
+    $max_avatar_height = take_param_int_modeavg($max_avatar_height, 'g_max_avatar_height', 'f_groups', 100);
+    $max_post_length_comcode = take_param_int_modeavg($max_post_length_comcode, 'g_max_post_length_comcode', 'f_groups', 30000);
+    $max_sig_length_comcode = take_param_int_modeavg($max_sig_length_comcode, 'g_max_sig_length_comcode', 'f_groups', 700);
+    $gift_points_base = take_param_int_modeavg($gift_points_base, 'g_gift_points_base', 'f_groups', 25);
+    $gift_points_per_day = take_param_int_modeavg($gift_points_per_day, 'g_gift_points_per_day', 'f_groups', 1);
 
     if (!running_script('stress_test_loader')) {
-        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $name));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $name));
         if (!is_null($test)) {
             if ($uniqify) {
-                $name .= '_' . uniqid('',true);
+                $name .= '_' . uniqid('', true);
             } else {
-                warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+                warn_exit(do_lang_tempcode('ALREADY_EXISTS', escape_html($name)));
             }
         }
     }
@@ -89,7 +89,7 @@ function ocf_make_group($name,$is_default = 0,$is_super_admin = 0,$is_super_mode
 
     if (!running_script('stress_test_loader')) {
         if (is_null($order)) {
-            $order = $GLOBALS['FORUM_DB']->query_select_value('f_groups','MAX(g_order)');
+            $order = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'MAX(g_order)');
             if (is_null($order)) {
                 $order = 0;
             } else {
@@ -126,44 +126,44 @@ function ocf_make_group($name,$is_default = 0,$is_super_admin = 0,$is_super_mode
         'g_open_membership' => $open_membership,
         'g_is_private_club' => $is_private_club,
     );
-    $map += insert_lang('g_name',$name,2,$GLOBALS['FORUM_DB']);
-    $map += insert_lang('g_title',$title,2,$GLOBALS['FORUM_DB']);
-    $group_id = $GLOBALS['FORUM_DB']->query_insert('f_groups',$map,true);
+    $map += insert_lang('g_name', $name, 2, $GLOBALS['FORUM_DB']);
+    $map += insert_lang('g_title', $title, 2, $GLOBALS['FORUM_DB']);
+    $group_id = $GLOBALS['FORUM_DB']->query_insert('f_groups', $map, true);
 
-    if (($group_id>db_get_first_id()+8) && ($is_private_club == 0) && ($comes_with_permissions)) {
+    if (($group_id > db_get_first_id() + 8) && ($is_private_club == 0) && ($comes_with_permissions)) {
         // Copy permissions from members
         require_code('ocf_groups');
         $group_members = get_first_default_group();
-        $member_access = $GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('group_id' => $group_members));
+        $member_access = $GLOBALS['SITE_DB']->query_select('group_privileges', array('*'), array('group_id' => $group_members));
         foreach ($member_access as $access) {
             $access['group_id'] = $group_id;
-            $GLOBALS['SITE_DB']->query_insert('group_privileges',$access,false,true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
+            $GLOBALS['SITE_DB']->query_insert('group_privileges', $access, false, true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
         }
-        $member_access = $GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('group_id' => $group_members));
+        $member_access = $GLOBALS['SITE_DB']->query_select('group_category_access', array('*'), array('group_id' => $group_members));
         foreach ($member_access as $access) {
             $access['group_id'] = $group_id;
-            $GLOBALS['SITE_DB']->query_insert('group_category_access',$access,false,true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
+            $GLOBALS['SITE_DB']->query_insert('group_category_access', $access, false, true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
         }
-        $member_access = $GLOBALS['SITE_DB']->query_select('group_zone_access',array('*'),array('group_id' => $group_members));
+        $member_access = $GLOBALS['SITE_DB']->query_select('group_zone_access', array('*'), array('group_id' => $group_members));
         foreach ($member_access as $access) {
             $access['group_id'] = $group_id;
-            $GLOBALS['SITE_DB']->query_insert('group_zone_access',$access,false,true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
+            $GLOBALS['SITE_DB']->query_insert('group_zone_access', $access, false, true); // failsafe, in case we have put in some permissions for a group since deleted (can happen during install)
         }
     }
 
-    log_it('ADD_GROUP',strval($group_id),$name);
+    log_it('ADD_GROUP', strval($group_id), $name);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('group',strval($group_id),null,null,true);
+        generate_resourcefs_moniker('group', strval($group_id), null, null, true);
     }
 
     if ($is_private_club == 1) {
         require_code('notifications');
-        $subject = do_lang('NEW_CLUB_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$name);
-        $view_url = build_url(array('page' => 'groups','type' => 'view','id' => $group_id),get_module_zone('groups'),null,false,false,true);
-        $mail = do_lang('NEW_CLUB_NOTIFICATION_MAIL',get_site_name(),comcode_escape($name),array(comcode_escape($view_url->evaluate())));
-        dispatch_notification('ocf_club',null,$subject,$mail);
+        $subject = do_lang('NEW_CLUB_NOTIFICATION_MAIL_SUBJECT', get_site_name(), $name);
+        $view_url = build_url(array('page' => 'groups', 'type' => 'view', 'id' => $group_id), get_module_zone('groups'), null, false, false, true);
+        $mail = do_lang('NEW_CLUB_NOTIFICATION_MAIL', get_site_name(), comcode_escape($name), array(comcode_escape($view_url->evaluate())));
+        dispatch_notification('ocf_club', null, $subject, $mail);
     }
 
     persistent_cache_delete('GROUPS_COUNT');
@@ -172,7 +172,7 @@ function ocf_make_group($name,$is_default = 0,$is_super_admin = 0,$is_super_mode
     persistent_cache_delete('GROUPS_PO');
 
     require_code('member_mentions');
-    dispatch_member_mention_notifications('group',strval($group_id));
+    dispatch_member_mention_notifications('group', strval($group_id));
 
     return $group_id;
 }

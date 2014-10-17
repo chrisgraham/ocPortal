@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_main_facebook_facepile
 {
     /**
@@ -48,6 +47,6 @@ class Block_main_facebook_facepile
         if ($appid == '') {
             return new ocp_tempcode();
         }
-        return do_template('BLOCK_MAIN_FACEBOOK_FACEPILE',array());
+        return do_template('BLOCK_MAIN_FACEBOOK_FACEPILE', array());
     }
 }

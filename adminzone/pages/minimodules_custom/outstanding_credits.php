@@ -13,12 +13,12 @@
  * @package    ocportalcom_support_credits
  */
 
-$start = get_param_integer('start',0);
-$max = get_param_integer('max',50);
+$start = get_param_integer('start', 0);
+$max = get_param_integer('max', 50);
 if ($start == $max) {
-    $max = $start+50;
+    $max = $start + 50;
 }
-$csv = get_param_integer('csv',0) == 1;
+$csv = get_param_integer('csv', 0) == 1;
 if ($csv) {
     require_code('files2');
     if (function_exists('set_time_limit')) {
@@ -43,13 +43,13 @@ if (!is_null($field_id)) {
     $ujoin = do_lang_tempcode('JOIN_DATE');
     $ulast = do_lang_tempcode('LAST_VISIT_TIME');
 
-    $sortables = array('username' => $uname,'credits' => $ucredits,'join_date' => $ujoin,'last_visit' => $ulast);
-    $test = explode(' ',get_param('sort','username DESC'),2);
+    $sortables = array('username' => $uname, 'credits' => $ucredits, 'join_date' => $ujoin, 'last_visit' => $ulast);
+    $test = explode(' ', get_param('sort', 'username DESC'), 2);
     if (count($test) == 1) {
         $test[1] = 'DESC';
     }
-    list($sortable,$sort_order) = $test;
-    if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+    list($sortable, $sort_order) = $test;
+    if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
         log_hack_attack_and_exit('ORDERBY_HACK');
     }
     global $NON_CANONICAL_PARAMS;
@@ -72,14 +72,14 @@ if (!is_null($field_id)) {
     }
 
     require_code('templates_results_table');
-    $fields_title = results_field_title(array($uname,$ucredits,$ujoin,$ulast),$sortables,'sort',$sortable . ' ' . $sort_order);
+    $fields_title = results_field_title(array($uname, $ucredits, $ujoin, $ulast), $sortables, 'sort', $sortable . ' ' . $sort_order);
     $fields_values = new ocp_tempcode();
 
-    $members = $GLOBALS['FORUM_DB']->query('SELECT a.m_username AS m_username, a.m_join_time AS m_join_time, a.m_last_visit_time AS m_last_visit_time, b.mf_member_id AS mf_member_id, CAST(field_' . $field_id . ' AS UNSIGNED) AS field_' . strval($field_id) . ' FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_member_custom_fields b JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members a ON a.id=b.mf_member_id WHERE ' . db_string_not_equal_to('field_' . strval($field_id),'') . ' AND CAST(field_' . strval($field_id) . ' AS UNSIGNED)>0 ORDER BY ' . $orderby . ' ' . $sort_order . ' LIMIT ' . strval($start) . ', ' . strval($max));
-    if (count($members)<1) {
-        $msg_tpl = warn_screen($title,do_lang_tempcode('NO_RESULTS_SORRY'));
+    $members = $GLOBALS['FORUM_DB']->query('SELECT a.m_username AS m_username, a.m_join_time AS m_join_time, a.m_last_visit_time AS m_last_visit_time, b.mf_member_id AS mf_member_id, CAST(field_' . $field_id . ' AS UNSIGNED) AS field_' . strval($field_id) . ' FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_member_custom_fields b JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members a ON a.id=b.mf_member_id WHERE ' . db_string_not_equal_to('field_' . strval($field_id), '') . ' AND CAST(field_' . strval($field_id) . ' AS UNSIGNED)>0 ORDER BY ' . $orderby . ' ' . $sort_order . ' LIMIT ' . strval($start) . ', ' . strval($max));
+    if (count($members) < 1) {
+        $msg_tpl = warn_screen($title, do_lang_tempcode('NO_RESULTS_SORRY'));
         $msg_tpl->evaluate_echo();
-        return ;
+        return;
     }
     $total = 0;
     $i = 0;
@@ -104,21 +104,21 @@ if (!is_null($field_id)) {
             );
         }
 
-        $member_linked = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id,false,'',false);
-        $fields_values->attach(results_entry(array($member_linked,integer_format($credits),$member_join_date,$member_visit_date)));
+        $member_linked = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($member_id, false, '', false);
+        $fields_values->attach(results_entry(array($member_linked, integer_format($credits), $member_join_date, $member_visit_date)));
         $total += $credits;
         $i++;
     }
     if ($csv) {
-        make_csv($csv_data,'unspent_credits.csv');
+        make_csv($csv_data, 'unspent_credits.csv');
     }
     $msg = do_lang_tempcode('TOTAL_UNSPENT_SUPPORT_CREDITS', strval($total));
-    $list = results_table(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'),$start,'start',$max,'max',$i,$fields_title,$fields_values,$sortables,$sortable,$sort_order,'sort',$msg);
+    $list = results_table(do_lang_tempcode('UNSPENT_SUPPORT_CREDITS'), $start, 'start', $max, 'max', $i, $fields_title, $fields_values, $sortables, $sortable, $sort_order, 'sort', $msg);
 
-    $tpl = do_template('SUPPORT_CREDITS_OUTSTANDING_SCREEN',array('_GUID' => '71dadee5485e17a56907d45fa2c53f23','TITLE' => $title,'DATA' => $list));
+    $tpl = do_template('SUPPORT_CREDITS_OUTSTANDING_SCREEN', array('_GUID' => '71dadee5485e17a56907d45fa2c53f23', 'TITLE' => $title, 'DATA' => $list));
     $tpl->evaluate_echo();
 } else {
-    $msg_tpl = warn_screen($title,do_lang_tempcode('INVALID_FIELD_ID'));
+    $msg_tpl = warn_screen($title, do_lang_tempcode('INVALID_FIELD_ID'));
     $msg_tpl->evaluate_echo();
     return;
 }

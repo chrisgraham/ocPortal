@@ -22,6 +22,7 @@ require_code('forum/shared/vb');
 
 /**
  * Forum Driver.
+ *
  * @package    core_forum_drivers
  */
 class forum_driver_vb22 extends forum_driver_vb_shared
@@ -51,7 +52,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
         global $PROBED_FORUM_CONFIG;
         $a = array();
         $a['name'] = 'vb_table_prefix';
-        $a['default'] = array_key_exists('prefix',$PROBED_FORUM_CONFIG)?$PROBED_FORUM_CONFIG['prefix']:'';
+        $a['default'] = array_key_exists('prefix', $PROBED_FORUM_CONFIG) ? $PROBED_FORUM_CONFIG['prefix'] : '';
         $a['description'] = do_lang('MOST_DEFAULT');
         $a['title'] = 'VB ' . do_lang('TABLE_PREFIX');
         return array($a);
@@ -130,8 +131,8 @@ class forum_driver_vb22 extends forum_driver_vb_shared
     public function is_banned($member)
     {
         // Are they banned
-        $group = $this->get_member_row_field($member,'usergroupid');
-        $notbanned = $this->connection->query_select_value_if_there('usergroup','canview',array('usergroupid' => $group));
+        $group = $this->get_member_row_field($member, 'usergroupid');
+        $notbanned = $this->connection->query_select_value_if_there('usergroup', 'canview', array('usergroupid' => $group));
         if ($notbanned == 0) {
             return true;
         }
@@ -147,8 +148,8 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      */
     public function _is_staff($member)
     {
-        $usergroup = $this->get_member_row_field($member,'usergroupid');
-        if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup','ismoderator',array('usergroupid' => $usergroup)) == 1)) {
+        $usergroup = $this->get_member_row_field($member, 'usergroupid');
+        if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup', 'ismoderator', array('usergroupid' => $usergroup)) == 1)) {
             return true;
         }
         return false;
@@ -162,8 +163,8 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      */
     public function _is_super_admin($member)
     {
-        $usergroup = $this->get_member_row_field($member,'usergroupid');
-        if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup','cancontrolpanel',array('usergroupid' => $usergroup)) == 1)) {
+        $usergroup = $this->get_member_row_field($member, 'usergroupid');
+        if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup', 'cancontrolpanel', array('usergroupid' => $usergroup)) == 1)) {
             return true;
         }
         return false;
@@ -176,7 +177,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      */
     public function _get_super_admin_groups()
     {
-        return collapse_1d_complexity('usergroupid',$this->connection->query_select('usergroup',array('usergroupid'),array('cancontrolpanel' => 1)));
+        return collapse_1d_complexity('usergroupid', $this->connection->query_select('usergroup', array('usergroupid'), array('cancontrolpanel' => 1)));
     }
 
     /**
@@ -187,7 +188,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      */
     public function _get_moderator_groups()
     {
-        return collapse_1d_complexity('usergroupid',$this->connection->query_select('usergroup',array('usergroupid'),array('cancontrolpanel' => 0,'ismoderator' => 1)));
+        return collapse_1d_complexity('usergroupid', $this->connection->query_select('usergroup', array('usergroupid'), array('cancontrolpanel' => 0, 'ismoderator' => 1)));
     }
 
     /**
@@ -197,7 +198,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      */
     public function _get_usergroup_list()
     {
-        return collapse_2d_complexity('usergroupid','title',$this->connection->query_select('usergroup',array('usergroupid','title')));
+        return collapse_2d_complexity('usergroupid', 'title', $this->connection->query_select('usergroup', array('usergroupid', 'title')));
     }
 
     /**
@@ -212,7 +213,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
             return array(1);
         }
 
-        $group = $this->get_member_row_field($member,'usergroupid');
+        $group = $this->get_member_row_field($member, 'usergroupid');
         return array($group);
     }
 
@@ -228,22 +229,22 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      * @param  boolean                  Whether this is a cookie login
      * @return array                    A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
      */
-    public function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login = false)
+    public function forum_authorise_login($username, $userid, $password_hashed, $password_raw, $cookie_login = false)
     {
         $out = array();
         $out['id'] = null;
 
         if (is_null($userid)) {
-            $rows = $this->connection->query_select('user',array('*'),array('username' => $username),'',1);
-            if (array_key_exists(0,$rows)) {
+            $rows = $this->connection->query_select('user', array('*'), array('username' => $username), '', 1);
+            if (array_key_exists(0, $rows)) {
                 $this->MEMBER_ROWS_CACHED[$rows[0]['userid']] = $rows[0];
             }
         } else {
             $rows[0] = $this->get_member_row($userid);
         }
 
-        if (!array_key_exists(0,$rows)) { // All hands to lifeboats
-            $out['error'] = (do_lang_tempcode('_MEMBER_NO_EXIST',$username));
+        if (!array_key_exists(0, $rows)) { // All hands to lifeboats
+            $out['error'] = (do_lang_tempcode('_MEMBER_NO_EXIST', $username));
             return $out;
         }
         $row = $rows[0];

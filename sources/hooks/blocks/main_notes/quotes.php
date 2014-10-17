@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    random_quotes
  */
-
 class Hook_notes_quotes
 {
     /**
@@ -27,7 +26,7 @@ class Hook_notes_quotes
      */
     public function run($file)
     {
-        if ((strpos($file,'/quotes') !== false) || ($file == 'quotes')) {
+        if ((strpos($file, '/quotes') !== false) || ($file == 'quotes')) {
             decache('main_quotes');
         }
     }

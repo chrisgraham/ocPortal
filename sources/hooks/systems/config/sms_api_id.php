@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    sms
  */
-
 class Hook_config_sms_api_id
 {
     /**

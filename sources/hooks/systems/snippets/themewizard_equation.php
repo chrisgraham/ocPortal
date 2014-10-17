@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    themewizard
  */
-
 class Hook_themewizard_equation
 {
     /**
@@ -39,14 +38,14 @@ class Hook_themewizard_equation
         $css_file_contents = file_get_contents($css_path);
 
         $seed = find_theme_seed($theme);
-        $dark = (strpos($css_file_contents,',#000000,WB,') !== false);
+        $dark = (strpos($css_file_contents, ',#000000,WB,') !== false);
 
-        $colours = calculate_theme($seed,$theme,'equations','colours',$dark);
+        $colours = calculate_theme($seed, $theme, 'equations', 'colours', $dark);
         $parsed_equation = parse_css_colour_expression($equation);
         if (is_null($parsed_equation)) {
             return make_string_tempcode('');
         }
-        $answer = execute_css_colour_expression($parsed_equation,$colours[0]);
+        $answer = execute_css_colour_expression($parsed_equation, $colours[0]);
         if (is_null($answer)) {
             return make_string_tempcode('');
         }

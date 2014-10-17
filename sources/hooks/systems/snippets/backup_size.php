@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    backup
  */
-
 class Hook_backup_size
 {
     /**
@@ -35,11 +34,11 @@ class Hook_backup_size
         require_code('files2');
 
         $size = 0;
-        $max_size = get_param_integer('max_size')*1024*1024;
+        $max_size = get_param_integer('max_size') * 1024 * 1024;
         $files = get_directory_contents(get_custom_file_base());
         foreach ($files as $file) {
             $filesize = filesize(get_custom_file_base() . '/' . $file);
-            if ($filesize<$max_size) {
+            if ($filesize < $max_size) {
                 $size += $filesize;
             }
         }

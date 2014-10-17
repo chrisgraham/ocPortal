@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
-
 class Hook_config_forum_show_stats_count_members_active_this_month
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_forum_show_stats_count_members_active_this_month
      */
     public function get_default()
     {
-        return ((get_forum_type() == 'ocf') && (!has_no_forum()) && (addon_installed('stats_block')))?'0':null;
+        return ((get_forum_type() == 'ocf') && (!has_no_forum()) && (addon_installed('stats_block'))) ? '0' : null;
     }
 }

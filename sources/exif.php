@@ -26,7 +26,7 @@
  * @param  ?string                      This is the original filename of the photo which may contain metadata (NULL: derive from path)
  * @return array                        Map of meta data, using standard EXIF naming
  */
-function get_exif_data($path,$filename = null)
+function get_exif_data($path, $filename = null)
 {
     $out = array();
 
@@ -38,13 +38,13 @@ function get_exif_data($path,$filename = null)
         return array();
     } // EXIF extension not installed
 
-    $meta_data = @exif_read_data($path,'ANY_TAG');
+    $meta_data = @exif_read_data($path, 'ANY_TAG');
 
     if ($meta_data !== false) {
         $out += cleanup_exif($meta_data);
     }
 
-    $caption = get_exif_image_caption($path,$filename);
+    $caption = get_exif_image_caption($path, $filename);
     $out['UserComment'] = $caption;
 
     $out += _get_simple_gps($out);
@@ -90,14 +90,14 @@ function _get_simple_gps($exif)
     }
     $gps['LatDegree'] = $exif['GPSLatitude'][0];
     $gps['LatMinute'] = $exif['GPSLatitude'][1];
-    $gps['LatgSeconds'] = isset($exif['GPSLatitude'][2])?$exif['GPSLatitude'][2]:0;
+    $gps['LatgSeconds'] = isset($exif['GPSLatitude'][2]) ? $exif['GPSLatitude'][2] : 0;
     $gps['LongDegree'] = $exif['GPSLongitude'][0];
     $gps['LongMinute'] = $exif['GPSLongitude'][1];
-    $gps['LongSeconds'] = isset($exif['GPSLongitude'][2])?$exif['GPSLongitude'][2]:0;
+    $gps['LongSeconds'] = isset($exif['GPSLongitude'][2]) ? $exif['GPSLongitude'][2] : 0;
 
     // calculate the decimal degree
-    $result['Latitude'] = float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)),10);
-    $result['Longitude'] = float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)),10);
+    $result['Latitude'] = float_to_raw_string(floatval($lat_m) * ($gps['LatDegree'] + ($gps['LatMinute'] / 60.0) + ($gps['LatgSeconds'] / 3600.0)), 10);
+    $result['Longitude'] = float_to_raw_string(floatval($long_m) * ($gps['LongDegree'] + ($gps['LongMinute'] / 60.0) + ($gps['LongSeconds'] / 3600.0)), 10);
 
     return $result;
 }
@@ -110,7 +110,7 @@ function _get_simple_gps($exif)
  * @param  string                       This is the original filename of the photo which may contain metadata
  * @return string                       Whichever caption is found
  */
-function get_exif_image_caption($path,$filename)
+function get_exif_image_caption($path, $filename)
 {
     $comments = '';
 
@@ -119,15 +119,15 @@ function get_exif_image_caption($path,$filename)
     if (file_exists($csv_path)) {
         $del = ',';
 
-        @ini_set('auto_detect_line_endings','1');
-        $csv_file_handle = fopen($csv_path,'rt');
-        $csv_test_line = fgetcsv($csv_file_handle,10240,$del);
-        if ((count($csv_test_line) == 1) && (strpos($csv_test_line[0],';') !== false)) {
+        @ini_set('auto_detect_line_endings', '1');
+        $csv_file_handle = fopen($csv_path, 'rt');
+        $csv_test_line = fgetcsv($csv_file_handle, 10240, $del);
+        if ((count($csv_test_line) == 1) && (strpos($csv_test_line[0], ';') !== false)) {
             $del = ';';
         }
         rewind($csv_file_handle);
-        while (($csv_line = fgetcsv($csv_file_handle,10240,$del)) !== false) {
-            if (preg_match('#(^|/|\\\\)' . preg_quote(trim($csv_line[0]),'#') . '#',$filename) != 0) {
+        while (($csv_line = fgetcsv($csv_file_handle, 10240, $del)) !== false) {
+            if (preg_match('#(^|/|\\\\)' . preg_quote(trim($csv_line[0]), '#') . '#', $filename) != 0) {
                 $comments = trim($csv_line[1]);
                 break;
             }
@@ -135,32 +135,32 @@ function get_exif_image_caption($path,$filename)
         fclose($csv_file_handle);
     }
 
-    $file_pointer = fopen($path,'rb');
+    $file_pointer = fopen($path, 'rb');
 
     if (($comments == '') && ($file_pointer !== false)) { // Attempt XMP
-        $file_cap100 = fread($file_pointer,102400); // Read first 100k
+        $file_cap100 = fread($file_pointer, 102400); // Read first 100k
 
-        $x_start = strpos($file_cap100,'<x:xmpmeta');
-        $x_end = strpos($file_cap100,'</x:xmpmeta');
+        $x_start = strpos($file_cap100, '<x:xmpmeta');
+        $x_end = strpos($file_cap100, '</x:xmpmeta');
         if (($x_start !== false) && ($x_end !== false)) {
-            $file_cap = substr($file_cap100,$x_start,($x_end+12)-$x_start);
+            $file_cap = substr($file_cap100, $x_start, ($x_end + 12) - $x_start);
         } else {
-            $file_cap = ($x_start === false)?$file_cap100:substr($file_cap100,$x_start);
+            $file_cap = ($x_start === false) ? $file_cap100 : substr($file_cap100, $x_start);
         }
 
         if (isset($file_cap)) {
             $get_result = array();
 
-            preg_match('/<photoshop:Headline>(.*)<\/photoshop:Headline>/',$file_cap,$get_result); // Headline
-            if (array_key_exists(1,$get_result)) {
+            preg_match('/<photoshop:Headline>(.*)<\/photoshop:Headline>/', $file_cap, $get_result); // Headline
+            if (array_key_exists(1, $get_result)) {
                 $comments = $get_result[1];
             } else {
-                preg_match('/<dc:title[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:title>/',$file_cap,$get_result); // Title
-                if (array_key_exists(1,$get_result)) {
+                preg_match('/<dc:title[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:title>/', $file_cap, $get_result); // Title
+                if (array_key_exists(1, $get_result)) {
                     $comments = $get_result[1];
                 } else {
-                    preg_match('/<dc:description[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:description>/',$file_cap,$get_result); // Description
-                    if (array_key_exists(1,$get_result)) {
+                    preg_match('/<dc:description[^>]*>\s*<rdf:Alt[^>]*>\s*<rdf:li[^>]*>(.*)<\/rdf:li>\s*<\/rdf:Alt>\s*<\/dc:description>/', $file_cap, $get_result); // Description
+                    if (array_key_exists(1, $get_result)) {
                         $comments = $get_result[1];
                     }
                 }
@@ -175,36 +175,36 @@ function get_exif_image_caption($path,$filename)
         if ($meta_data !== false) {
             $meta_data = cleanup_exif($meta_data);
 
-            $comments = isset($meta_data['ImageDescription'])?$meta_data['ImageDescription']:'';
+            $comments = isset($meta_data['ImageDescription']) ? $meta_data['ImageDescription'] : '';
             if ($comments == '') {
-                $comments = isset($meta_data['Comments'])?$meta_data['Comments']:'';
+                $comments = isset($meta_data['Comments']) ? $meta_data['Comments'] : '';
             }
             if ($comments == '') {
-                $comments = isset($meta_data['Title'])?$meta_data['Title']:'';
+                $comments = isset($meta_data['Title']) ? $meta_data['Title'] : '';
             }
             if ($comments == '') {
-                $comments = isset($meta_data['COMPUTED']['UserComment'])?$meta_data['COMPUTED']['UserComment']:'';
+                $comments = isset($meta_data['COMPUTED']['UserComment']) ? $meta_data['COMPUTED']['UserComment'] : '';
             }
         }
     }
     if ($comments == '') { // IF XMP and EXIF fail, attempt IPTC binary
         if ((function_exists('iptcparse')) && (function_exists('getimagesize'))) {
             $meta_data2 = array();
-            @getimagesize($path,$meta_data2);
+            @getimagesize($path, $meta_data2);
             if (isset($meta_data2['APP13'])) {
                 $meta_data2 = iptcparse($meta_data2['APP13']);
 
                 if (is_array($meta_data2)) {
-                    if (array_key_exists('2#105',$meta_data2)) { // Headline 256 bytes
-                        if (array_key_exists(0,$meta_data2['2#105'])) {
+                    if (array_key_exists('2#105', $meta_data2)) { // Headline 256 bytes
+                        if (array_key_exists(0, $meta_data2['2#105'])) {
                             $comments = $meta_data2['2#105'][0];
                         }
-                    } elseif (array_key_exists('2#121',$meta_data2)) { // Local-Caption 256 bytes
-                        if (array_key_exists(0,$meta_data2['2#121'])) {
+                    } elseif (array_key_exists('2#121', $meta_data2)) { // Local-Caption 256 bytes
+                        if (array_key_exists(0, $meta_data2['2#121'])) {
                             $comments = $meta_data2['2#121'][0];
                         }
-                    } elseif (array_key_exists('2#120',$meta_data2)) { // Caption-Abstract (AKA description) 2000 bytes
-                        if (array_key_exists(0,$meta_data2['2#120'])) {
+                    } elseif (array_key_exists('2#120', $meta_data2)) { // Caption-Abstract (AKA description) 2000 bytes
+                        if (array_key_exists(0, $meta_data2['2#120'])) {
                             $comments = $meta_data2['2#120'][0];
                         }
                     }
@@ -214,16 +214,16 @@ function get_exif_image_caption($path,$filename)
     }
 
     // Remove pointless camera names that some vendors put in
-    if (strpos($comments,'SONY') !== false) {
+    if (strpos($comments, 'SONY') !== false) {
         $comments = '';
     }
-    if (strpos($comments,'CANON') !== false) {
+    if (strpos($comments, 'CANON') !== false) {
         $comments = '';
     }
-    if (strpos($comments,'NIKON') !== false) {
+    if (strpos($comments, 'NIKON') !== false) {
         $comments = '';
     }
-    if (strpos($comments,'OLYMPUS') !== false) {
+    if (strpos($comments, 'OLYMPUS') !== false) {
         $comments = '';
     }
 
@@ -240,7 +240,7 @@ function get_exif_image_caption($path,$filename)
  * @param  array                        The EXIF data
  * @param  ?array                       Extra meta data to store, against explicit field IDs (NULL: none)
  */
-function store_exif($content_type,$content_id,$exif,$map = null)
+function store_exif($content_type, $content_id, $exif, $map = null)
 {
     require_code('fields');
 
@@ -249,21 +249,21 @@ function store_exif($content_type,$content_id,$exif,$map = null)
     }
 
     // Get field values
-    $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id','cf_name'),array('c_name' => '_' . $content_type),'ORDER BY cf_order');
+    $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('id', 'cf_name'), array('c_name' => '_' . $content_type), 'ORDER BY cf_order');
     if (is_null($map)) {
         $map = array();
     }
     foreach ($fields as $field) {
-        $name = get_translated_text($field['cf_name'],null,'EN');
+        $name = get_translated_text($field['cf_name'], null, 'EN');
 
         if (isset($exif[$name])) {
             $map[$field['id']] = $exif[$name];
-        } elseif (isset($exif[str_replace(' ','',$name)])) {
-            $map[$field['id']] = $exif[str_replace(' ','',$name)];
+        } elseif (isset($exif[str_replace(' ', '', $name)])) {
+            $map[$field['id']] = $exif[str_replace(' ', '', $name)];
         } elseif ((isset($exif['COMPUTED']['ApertureFNumber'])) && ($name == 'Aperture')) {// PHP tidies up for us, we want to use this
             $map[$field['id']] = $exif['COMPUTED']['ApertureFNumber'];
-        } elseif (isset($exif[str_replace(' ','',$name . ' Value')])) {
-            $map[$field['id']] = $exif[str_replace(' ','',$name . ' Value')];
+        } elseif (isset($exif[str_replace(' ', '', $name . ' Value')])) {
+            $map[$field['id']] = $exif[str_replace(' ', '', $name . ' Value')];
         } elseif ((isset($exif['UndefinedTag:0xA434'])) && (($name == 'Lens') || ($name == 'Lens Model'))) {
             $map[$field['id']] = $exif['UndefinedTag:0xA434'];
         } elseif ((isset($exif['FNumber'])) && (($name == 'Lens') || ($name == 'Lens Model'))) {
@@ -282,18 +282,18 @@ function store_exif($content_type,$content_id,$exif,$map = null)
         return;
     }
 
-    $first_cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name' => '_' . $content_type));
+    $first_cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'MIN(id)', array('c_name' => '_' . $content_type));
 
     require_code('catalogues2');
 
-    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entry_linkage','catalogue_entry_id',array(
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entry_linkage', 'catalogue_entry_id', array(
         'content_type' => $content_type,
         'content_id' => $content_id,
     ));
     if (is_null($test)) {
-        $catalogue_entry_id = actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+        $catalogue_entry_id = actual_add_catalogue_entry($first_cat, 1, '', 0, 0, 0, $map);
 
-        $GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+        $GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage', array(
             'catalogue_entry_id' => $catalogue_entry_id,
             'content_type' => $content_type,
             'content_id' => $content_id,
@@ -316,13 +316,13 @@ function cleanup_exif($meta_data)
     foreach ($meta_data as $key => $val) {
         // Cleanup fractions
         if (is_string($val)) {
-            if (preg_match('#^[\d.]+/[\d.]+$#',$val) != 0) {
-                $temp = explode('/',$val);
+            if (preg_match('#^[\d.]+/[\d.]+$#', $val) != 0) {
+                $temp = explode('/', $val);
                 if ((is_numeric($temp[0])) && (is_numeric($temp[1]))) {
                     if (floatval($temp[1]) == 0.0) {
                         $val = floatval($temp[0]);
                     } else {
-                        $val = floatval($temp[0])/floatval($temp[1]);
+                        $val = floatval($temp[0]) / floatval($temp[1]);
                     }
                     if ($key === 'FocalLength') {
                         $val = float_format($val) . 'mm';
@@ -333,8 +333,8 @@ function cleanup_exif($meta_data)
 
         // Fix character sets
         if (is_string($val)) {
-            $val = preg_replace('#[[:cntrl:]]#','',$val);
-            $val = convert_to_internal_encoding($val,'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
+            $val = preg_replace('#[[:cntrl:]]#', '', $val);
+            $val = convert_to_internal_encoding($val, 'ISO-8859-1'/*EXIF uses this, is not really internationalised*/);
         } elseif (is_array($val)) {
             $val = cleanup_exif($val);
         }

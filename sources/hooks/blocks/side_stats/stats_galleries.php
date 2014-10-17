@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_stats_galleries
 {
     /**
@@ -36,18 +35,18 @@ class Hook_stats_galleries
         $bits = new ocp_tempcode();
 
         if (get_option('galleries_show_stats_count_galleries') == '1') {
-            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => '979bcf993db7c01ced08d8f8a696fec0','KEY' => do_lang_tempcode('GALLERIES'),'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'galleries WHERE name NOT LIKE \'' . db_encode_like('download_%') . '\'')))));
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '979bcf993db7c01ced08d8f8a696fec0', 'KEY' => do_lang_tempcode('GALLERIES'), 'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'galleries WHERE name NOT LIKE \'' . db_encode_like('download_%') . '\'')))));
         }
         if (get_option('galleries_show_stats_count_images') == '1') {
-            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => '0f06d6a5e1632bae0101a531912b1c29','KEY' => do_lang_tempcode('IMAGES'),'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('images','COUNT(*)')))));
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '0f06d6a5e1632bae0101a531912b1c29', 'KEY' => do_lang_tempcode('IMAGES'), 'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('images', 'COUNT(*)')))));
         }
         if (get_option('galleries_show_stats_count_videos') == '1') {
-            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE',array('_GUID' => 'a9274594cde52028fc810b7b780e9942','KEY' => do_lang_tempcode('VIDEOS'),'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('videos','COUNT(*)')))));
+            $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'a9274594cde52028fc810b7b780e9942', 'KEY' => do_lang_tempcode('VIDEOS'), 'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('videos', 'COUNT(*)')))));
         }
         if ($bits->is_empty_shell()) {
             return new ocp_tempcode();
         }
-        $section = do_template('BLOCK_SIDE_STATS_SECTION',array('_GUID' => '128d3b49ad53927dff65252735dd2106','SECTION' => do_lang_tempcode('GALLERIES'),'CONTENT' => $bits));
+        $section = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => '128d3b49ad53927dff65252735dd2106', 'SECTION' => do_lang_tempcode('GALLERIES'), 'CONTENT' => $bits));
 
         return $section;
     }

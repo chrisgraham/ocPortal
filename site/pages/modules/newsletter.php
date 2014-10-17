@@ -65,12 +65,12 @@ class Module_newsletter
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
             require_lang('newsletter');
 
-            $GLOBALS['SITE_DB']->create_table('newsletter',array(
+            $GLOBALS['SITE_DB']->create_table('newsletter', array(
                 'id' => '*AUTO',
                 'email' => 'SHORT_TEXT',
                 'join_time' => 'TIME',
@@ -81,10 +81,10 @@ class Module_newsletter
                 'n_forename' => 'SHORT_TEXT',
                 'n_surname' => 'SHORT_TEXT',
             ));
-            $GLOBALS['SITE_DB']->create_index('newsletter','welcomemails',array('join_time'));
-            $GLOBALS['SITE_DB']->create_index('newsletter','code_confirm',array('code_confirm'));
+            $GLOBALS['SITE_DB']->create_index('newsletter', 'welcomemails', array('join_time'));
+            $GLOBALS['SITE_DB']->create_index('newsletter', 'code_confirm', array('code_confirm'));
 
-            $GLOBALS['SITE_DB']->create_table('newsletter_archive',array(
+            $GLOBALS['SITE_DB']->create_table('newsletter_archive', array(
                 'id' => '*AUTO',
                 'date_and_time' => 'INTEGER',
                 'subject' => 'SHORT_TEXT',
@@ -93,27 +93,27 @@ class Module_newsletter
                 'importance_level' => 'INTEGER'
             ));
 
-            add_privilege('NEWSLETTER','change_newsletter_subscriptions',false);
+            add_privilege('NEWSLETTER', 'change_newsletter_subscriptions', false);
 
-            $GLOBALS['SITE_DB']->create_table('newsletters',array( // Would have been better named 'newsletter_subscribers' (but isn't for legacy reasons)
+            $GLOBALS['SITE_DB']->create_table('newsletters', array( // Would have been better named 'newsletter_subscribers' (but isn't for legacy reasons)
                 'id' => '*AUTO',
                 'title' => 'SHORT_TRANS',
                 'description' => 'LONG_TRANS',
             ));
 
             $map = array();
-            $map += lang_code_to_default_content('title','GENERAL');
-            $map += lang_code_to_default_content('description','NEWSLETTER_GENERAL');
-            $GLOBALS['SITE_DB']->query_insert('newsletters',$map);
+            $map += lang_code_to_default_content('title', 'GENERAL');
+            $map += lang_code_to_default_content('description', 'NEWSLETTER_GENERAL');
+            $GLOBALS['SITE_DB']->query_insert('newsletters', $map);
 
-            $GLOBALS['SITE_DB']->create_table('newsletter_subscribe',array(
+            $GLOBALS['SITE_DB']->create_table('newsletter_subscribe', array(
                 'newsletter_id' => '*AUTO_LINK',
                 'the_level' => 'SHORT_INTEGER',
                 'email' => '*SHORT_TEXT',
             ));
-            $GLOBALS['SITE_DB']->create_index('newsletter_subscribe','peopletosendto',array('the_level'));
+            $GLOBALS['SITE_DB']->create_index('newsletter_subscribe', 'peopletosendto', array('the_level'));
 
-            $GLOBALS['SITE_DB']->create_table('newsletter_drip_send',array(
+            $GLOBALS['SITE_DB']->create_table('newsletter_drip_send', array(
                 'id' => '*AUTO',
                 'd_inject_time' => 'TIME',
                 'd_subject' => 'SHORT_TEXT',
@@ -126,11 +126,11 @@ class Module_newsletter
                 'd_priority' => 'SHORT_INTEGER',
                 'd_template' => 'ID_TEXT',
             ));
-            $GLOBALS['SITE_DB']->create_index('newsletter_drip_send','d_inject_time',array('d_inject_time'));
+            $GLOBALS['SITE_DB']->create_index('newsletter_drip_send', 'd_inject_time', array('d_inject_time'));
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<9)) {
-            $GLOBALS['SITE_DB']->create_table('newsletter_periodic',array(
+        if ((is_null($upgrade_from)) || ($upgrade_from < 9)) {
+            $GLOBALS['SITE_DB']->create_table('newsletter_periodic', array(
                 'id' => '*AUTO',
                 'np_message' => 'LONG_TEXT',
                 'np_subject' => 'LONG_TEXT',
@@ -149,8 +149,8 @@ class Module_newsletter
             ));
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<9)) {
-            $GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send','d_template','ID_TEXT');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 9)) {
+            $GLOBALS['SITE_DB']->add_table_field('newsletter_drip_send', 'd_template', 'ID_TEXT');
         }
     }
 
@@ -163,13 +163,13 @@ class Module_newsletter
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
-        if ($GLOBALS['SITE_DB']->query_select_value('newsletters','COUNT(*)') == 0) {
+        if ($GLOBALS['SITE_DB']->query_select_value('newsletters', 'COUNT(*)') == 0) {
             return array();
         }
         return array(
-            'misc' => array('NEWSLETTER_JOIN','menu/site_meta/newsletters'),
+            'misc' => array('NEWSLETTER_JOIN', 'menu/site_meta/newsletters'),
         );
     }
 
@@ -182,12 +182,12 @@ class Module_newsletter
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('newsletter');
 
         if ($type == 'misc') {
-            $this->title = get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+            $this->title = get_screen_title('_NEWSLETTER_JOIN', true, array(get_option('newsletter_title')));
         }
 
         if ($type == 'unsub') {
@@ -196,24 +196,24 @@ class Module_newsletter
 
         if ($type == 'reset') {
             breadcrumb_set_self(do_lang_tempcode('NEWSLETTER_PASSWORD_BEEN_RESET'));
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', get_option('newsletter_title'))));
 
-            $this->title = get_screen_title(get_option('newsletter_title'),false);
+            $this->title = get_screen_title(get_option('newsletter_title'), false);
         }
 
         if ($type == 'confirm') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', get_option('newsletter_title'))));
 
-            $this->title = get_screen_title(get_option('newsletter_title'),false);
+            $this->title = get_screen_title(get_option('newsletter_title'), false);
         }
 
         if ($type == 'do') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',get_option('newsletter_title'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', get_option('newsletter_title'))));
 
-            $this->title = get_screen_title('_NEWSLETTER_JOIN',true,array(get_option('newsletter_title')));
+            $this->title = get_screen_title('_NEWSLETTER_JOIN', true, array(get_option('newsletter_title')));
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -223,7 +223,7 @@ class Module_newsletter
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->newsletter_form();
@@ -251,12 +251,12 @@ class Module_newsletter
      */
     public function newsletter_form()
     {
-        $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters',array('*'));
+        $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters', array('*'));
         if (count($newsletters) == 0) {
             inform_exit(do_lang_tempcode('NO_CATEGORIES'));
         }
 
-        $post_url = build_url(array('page' => '_SELF','type' => 'do'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => 'do'), '_SELF');
         $submit_name = do_lang_tempcode('NEWSLETTER_JOIN');
 
         require_code('form_templates');
@@ -264,48 +264,48 @@ class Module_newsletter
         url_default_parameters__enable();
 
         if (!is_guest()) {
-            $their_email = get_param('email',$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()));
+            $their_email = get_param('email', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()));
         } else {
-            $their_email = get_param('email','');
+            $their_email = get_param('email', '');
         }
         $forename = '';
         $surname = '';
 
         $message = get_option('newsletter_text');
-        if (has_actual_page_access(get_member(),'admin_config')) {
+        if (has_actual_page_access(get_member(), 'admin_config')) {
             if ($message != '') {
                 $message .= ' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:FEATURE#group_NEWSLETTER}">' . do_lang('EDIT') . '</a></span>[/semihtml]';
             }
         }
-        $text = comcode_to_tempcode($message,null,true);
+        $text = comcode_to_tempcode($message, null, true);
 
         // Build up the join form
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_line(do_lang_tempcode('EMAIL_ADDRESS'),do_lang_tempcode('DESCRIPTION_SUBSCRIBE_ADDRESS'),'email',$their_email,true));
-        $fields->attach(form_input_line(do_lang_tempcode('FORENAME'),'','forename',$forename,false));
-        $fields->attach(form_input_line(do_lang_tempcode('SURNAME'),'','surname',$surname,false));
-        $fields->attach(form_input_password(do_lang_tempcode('YOUR_PASSWORD'),do_lang_tempcode('DESCRIPTION_MAINTENANCE_PASSWORD'),'password',false));
-        $fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'),'','password_confirm',false));
+        $fields->attach(form_input_line(do_lang_tempcode('EMAIL_ADDRESS'), do_lang_tempcode('DESCRIPTION_SUBSCRIBE_ADDRESS'), 'email', $their_email, true));
+        $fields->attach(form_input_line(do_lang_tempcode('FORENAME'), '', 'forename', $forename, false));
+        $fields->attach(form_input_line(do_lang_tempcode('SURNAME'), '', 'surname', $surname, false));
+        $fields->attach(form_input_password(do_lang_tempcode('YOUR_PASSWORD'), do_lang_tempcode('DESCRIPTION_MAINTENANCE_PASSWORD'), 'password', false));
+        $fields->attach(form_input_password(do_lang_tempcode('CONFIRM_PASSWORD'), '', 'password_confirm', false));
         if (count(find_all_langs()) != 1) {
-            $fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),'','lang',create_selection_list_langs(user_lang())));
+            $fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'), '', 'lang', create_selection_list_langs(user_lang())));
         }
-        $level = get_param_integer('level',null);
+        $level = get_param_integer('level', null);
         if (is_null($level)) {
             $level = 3;
         }
-        $l = form_input_list_entry('0',false,do_lang_tempcode('NEWSLETTER_0'));
-        $l->attach(form_input_list_entry('1',$level == 1,do_lang_tempcode('NEWSLETTER_1')));
-        $l->attach(form_input_list_entry('2',$level == 2,do_lang_tempcode('NEWSLETTER_2')));
-        $l->attach(form_input_list_entry('3',$level == 3,do_lang_tempcode('NEWSLETTER_3')));
-        $l->attach(form_input_list_entry('4',$level == 4,do_lang_tempcode('NEWSLETTER_4')));
-        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => 'a87e4be6cbc070e66e25ad4ece429cc4','TITLE' => do_lang_tempcode('NEWSLETTER_SUBSCRIPTIONS'))));
+        $l = form_input_list_entry('0', false, do_lang_tempcode('NEWSLETTER_0'));
+        $l->attach(form_input_list_entry('1', $level == 1, do_lang_tempcode('NEWSLETTER_1')));
+        $l->attach(form_input_list_entry('2', $level == 2, do_lang_tempcode('NEWSLETTER_2')));
+        $l->attach(form_input_list_entry('3', $level == 3, do_lang_tempcode('NEWSLETTER_3')));
+        $l->attach(form_input_list_entry('4', $level == 4, do_lang_tempcode('NEWSLETTER_4')));
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'a87e4be6cbc070e66e25ad4ece429cc4', 'TITLE' => do_lang_tempcode('NEWSLETTER_SUBSCRIPTIONS'))));
         foreach ($newsletters as $newsletter) {
             $newsletter_title = get_translated_text($newsletter['title']);
             $newsletter_description = get_translated_text($newsletter['description']);
             if (get_option('interest_levels') == '1') {
-                $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR',make_string_tempcode(escape_html($newsletter_title))),do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL',escape_html($newsletter_description)),'level' . strval($newsletter['id']),$l));
+                $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR', make_string_tempcode(escape_html($newsletter_title))), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL', escape_html($newsletter_description)), 'level' . strval($newsletter['id']), $l));
             } else {
-                $fields->attach(form_input_tick(do_lang_tempcode('SUBSCRIBE_TO',make_string_tempcode(escape_html($newsletter_title))),make_string_tempcode(escape_html($newsletter_description)),'level' . strval($newsletter['id']),$level != 0));
+                $fields->attach(form_input_tick(do_lang_tempcode('SUBSCRIBE_TO', make_string_tempcode(escape_html($newsletter_title))), make_string_tempcode(escape_html($newsletter_description)), 'level' . strval($newsletter['id']), $level != 0));
             }
         }
 
@@ -328,7 +328,7 @@ class Module_newsletter
                     };
         ";
 
-        return do_template('FORM_SCREEN',array('_GUID' => '24d7575465152f450c5a8e62650bf6c8','JAVASCRIPT' => $javascript,'HIDDEN' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $post_url,'TITLE' => $this->title,'TEXT' => $text));
+        return do_template('FORM_SCREEN', array('_GUID' => '24d7575465152f450c5a8e62650bf6c8', 'JAVASCRIPT' => $javascript, 'HIDDEN' => '', 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => $submit_name, 'URL' => $post_url, 'TITLE' => $this->title, 'TEXT' => $text));
     }
 
     /**
@@ -343,32 +343,32 @@ class Module_newsletter
 
         // Add
         $email = trim(post_param('email'));
-        $password = trim(post_param('password',''));
+        $password = trim(post_param('password', ''));
         $forename = trim(post_param('forename'));
         $surname = trim(post_param('surname'));
-        if ($password != trim(post_param('password_confirm',''))) {
+        if ($password != trim(post_param('password_confirm', ''))) {
             warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));
         }
-        $lang = post_param('lang',user_lang());
+        $lang = post_param('lang', user_lang());
         if (!is_valid_email_address($email)) {
-            return warn_screen($this->title,do_lang_tempcode('IMPROPERLY_FILLED_IN'));
+            return warn_screen($this->title, do_lang_tempcode('IMPROPERLY_FILLED_IN'));
         }
 
         $message = do_lang_tempcode('NEWSLETTER_UPDATE');
-        $old_confirm = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter','code_confirm',array('email' => $email));
+        $old_confirm = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter', 'code_confirm', array('email' => $email));
 
         if (is_null($old_confirm)) { // New
             if ($password == '') {
                 $password = get_rand_password();
             }
 
-            $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
+            $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters', array('id'));
             $found_level = false;
             foreach ($newsletters as $newsletter) {
                 if (get_option('interest_levels') == '1') {
                     $level = post_param_integer('level' . strval($newsletter['id']));
                 } else {
-                    $level = post_param_integer('level' . strval($newsletter['id']),0);
+                    $level = post_param_integer('level' . strval($newsletter['id']), 0);
                     if ($level == 1) {
                         $level = 4;
                     }
@@ -381,9 +381,9 @@ class Module_newsletter
                 warn_exit(do_lang_tempcode('NOT_NEWSLETTER_SUBSCRIBER'));
             }
 
-            $code_confirm = mt_rand(1,32000);
+            $code_confirm = mt_rand(1, 32000);
             $salt = produce_salt();
-            $GLOBALS['SITE_DB']->query_insert('newsletter',array(
+            $GLOBALS['SITE_DB']->query_insert('newsletter', array(
                 'n_forename' => $forename,
                 'n_surname' => $surname,
                 'join_time' => time(),
@@ -391,47 +391,47 @@ class Module_newsletter
                 'email' => $email,
                 'code_confirm' => $code_confirm,
                 'pass_salt' => $salt,
-                'the_password' => ratchet_hash($password,$salt,PASSWORD_SALT),
+                'the_password' => ratchet_hash($password, $salt, PASSWORD_SALT),
             ));
-            $this->_send_confirmation($email,$code_confirm,null,$forename,$surname);
-            $message = do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email));
+            $this->_send_confirmation($email, $code_confirm, null, $forename, $surname);
+            $message = do_lang_tempcode('NEWSLETTER_CONFIRM', escape_html($email));
         } elseif ($old_confirm != 0) { // Reconfirm
-            $this->_send_confirmation($email,$old_confirm,null,$forename,$surname);
-            return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email)));
+            $this->_send_confirmation($email, $old_confirm, null, $forename, $surname);
+            return inform_screen($this->title, do_lang_tempcode('NEWSLETTER_CONFIRM', escape_html($email)));
         }
 
         // Okay, existing...
 
         // Change/make settings
-        $old_password = $GLOBALS['SITE_DB']->query_select_value('newsletter','the_password',array('email' => $email));
-        $old_salt = $GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email' => $email));
-        if ((!has_privilege(get_member(),'change_newsletter_subscriptions')) && ($old_password != '') && (!ratchet_hash_verify($password,$old_salt,$old_password,PASSWORD_SALT))) { // Access denied. People who can change any subscriptions can't get denied.
-            $_reset_url = build_url(array('page' => '_SELF','type' => 'reset','email' => $email),'_SELF');
+        $old_password = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'the_password', array('email' => $email));
+        $old_salt = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'pass_salt', array('email' => $email));
+        if ((!has_privilege(get_member(), 'change_newsletter_subscriptions')) && ($old_password != '') && (!ratchet_hash_verify($password, $old_salt, $old_password, PASSWORD_SALT))) { // Access denied. People who can change any subscriptions can't get denied.
+            $_reset_url = build_url(array('page' => '_SELF', 'type' => 'reset', 'email' => $email), '_SELF');
             $reset_url = $_reset_url->evaluate();
-            return warn_screen($this->title,do_lang_tempcode('NEWSLETTER_PASSWORD_RESET',escape_html($reset_url)));
+            return warn_screen($this->title, do_lang_tempcode('NEWSLETTER_PASSWORD_RESET', escape_html($reset_url)));
         } else {
-            $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
+            $newsletters = $GLOBALS['SITE_DB']->query_select('newsletters', array('id'));
             foreach ($newsletters as $newsletter) {
                 if (get_option('interest_levels') == '1') {
                     $level = post_param_integer('level' . strval($newsletter['id']));
                 } else {
-                    $level = post_param_integer('level' . strval($newsletter['id']),0);
+                    $level = post_param_integer('level' . strval($newsletter['id']), 0);
                     if ($level == 1) {
                         $level = 4;
                     }
                 }
                 // First we delete
-                $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('newsletter_id' => $newsletter['id'],'email' => $email),'',1);
+                $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe', array('newsletter_id' => $newsletter['id'], 'email' => $email), '', 1);
                 if ($level != 0) { // Then we put back if it's not a 0 level
-                    $GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array('newsletter_id' => $newsletter['id'],'email' => $email,'the_level' => $level));
+                    $GLOBALS['SITE_DB']->query_insert('newsletter_subscribe', array('newsletter_id' => $newsletter['id'], 'email' => $email, 'the_level' => $level));
                 }
 
                 // Update name
-                $GLOBALS['SITE_DB']->query_update('newsletter',array('n_forename' => $forename,'n_surname' => $surname),array('email' => $email),'',1);
+                $GLOBALS['SITE_DB']->query_update('newsletter', array('n_forename' => $forename, 'n_surname' => $surname), array('email' => $email), '', 1);
             }
         }
 
-        return inform_screen($this->title,$message);
+        return inform_screen($this->title, $message);
     }
 
     /**
@@ -444,17 +444,17 @@ class Module_newsletter
         require_code('crypt');
 
         $email = trim(get_param('email'));
-        $lang = $GLOBALS['SITE_DB']->query_select_value('newsletter','language',array('email' => $email));
-        $salt = $GLOBALS['SITE_DB']->query_select_value('newsletter','pass_salt',array('email' => $email));
+        $lang = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'language', array('email' => $email));
+        $salt = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'pass_salt', array('email' => $email));
         $new_password = produce_salt();
-        $GLOBALS['SITE_DB']->query_update('newsletter',array('the_password' => ratchet_hash($new_password,$salt,PASSWORD_SALT)),array('email' => $email),'',1);
+        $GLOBALS['SITE_DB']->query_update('newsletter', array('the_password' => ratchet_hash($new_password, $salt, PASSWORD_SALT)), array('email' => $email), '', 1);
 
-        $message = do_lang('NEWSLETTER_PASSWORD_CHANGE',comcode_escape(get_ip_address()),comcode_escape($new_password),null,$lang);
+        $message = do_lang('NEWSLETTER_PASSWORD_CHANGE', comcode_escape(get_ip_address()), comcode_escape($new_password), null, $lang);
 
         require_code('mail');
-        mail_wrap(get_option('newsletter_title'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
+        mail_wrap(get_option('newsletter_title'), $message, array($email), $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true));
 
-        return inform_screen($this->title,protect_from_escaping(do_lang('NEWSLETTER_PASSWORD_BEEN_RESET',null,null,null,$lang)));
+        return inform_screen($this->title, protect_from_escaping(do_lang('NEWSLETTER_PASSWORD_BEEN_RESET', null, null, null, $lang)));
     }
 
     /**
@@ -467,22 +467,22 @@ class Module_newsletter
         $id = get_param_integer('id');
         $hash = get_param('hash');
 
-        $_subscriber = $GLOBALS['SITE_DB']->query_select('newsletter',array('*'),array('id' => $id),'',1);
-        if (!array_key_exists(0,$_subscriber)) {
+        $_subscriber = $GLOBALS['SITE_DB']->query_select('newsletter', array('*'), array('id' => $id), '', 1);
+        if (!array_key_exists(0, $_subscriber)) {
             fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
         $subscriber = $_subscriber[0];
 
         require_code('crypt');
-        $needed_hash = ratchet_hash($subscriber['the_password'],'xunsub');
+        $needed_hash = ratchet_hash($subscriber['the_password'], 'xunsub');
 
         if ($hash != $needed_hash) {
             warn_exit(do_lang_tempcode('COULD_NOT_UNSUBSCRIBE'));
         }
 
-        $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe',array('email' => $subscriber['email']));
+        $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe', array('email' => $subscriber['email']));
 
-        return inform_screen($this->title,do_lang_tempcode('FULL_NEWSLETTER_UNSUBSCRIBED',escape_html(get_site_name())));
+        return inform_screen($this->title, do_lang_tempcode('FULL_NEWSLETTER_UNSUBSCRIBED', escape_html(get_site_name())));
     }
 
     /**
@@ -494,18 +494,18 @@ class Module_newsletter
      * @param  string                   Subscribers forename
      * @param  string                   Subscribers surname
      */
-    public function _send_confirmation($email,$code_confirm,$password,$forename,$surname)
+    public function _send_confirmation($email, $code_confirm, $password, $forename, $surname)
     {
         if (is_null($password)) {
             $password = do_lang('NEWSLETTER_PASSWORD_ENCRYPTED');
         }
 
-        $_url = build_url(array('page' => 'newsletter','type' => 'confirm','email' => $email,'confirm' => $code_confirm),'_SELF',null,false,true);
+        $_url = build_url(array('page' => 'newsletter', 'type' => 'confirm', 'email' => $email, 'confirm' => $code_confirm), '_SELF', null, false, true);
         $url = $_url->evaluate();
-        $message = do_lang('NEWSLETTER_SIGNUP_TEXT',comcode_escape($url),comcode_escape($password),array($forename,$surname,$email,get_site_name()));
+        $message = do_lang('NEWSLETTER_SIGNUP_TEXT', comcode_escape($url), comcode_escape($password), array($forename, $surname, $email, get_site_name()));
 
         require_code('mail');
-        mail_wrap(do_lang('NEWSLETTER_SIGNUP'),$message,array($email),$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true));
+        mail_wrap(do_lang('NEWSLETTER_SIGNUP'), $message, array($email), $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true));
     }
 
     /**
@@ -517,12 +517,12 @@ class Module_newsletter
     {
         $code_confirm = get_param_integer('confirm');
         $email = trim(get_param('email'));
-        $correct_confirm = $GLOBALS['SITE_DB']->query_select_value('newsletter','code_confirm',array('email' => $email));
+        $correct_confirm = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'code_confirm', array('email' => $email));
         if ($correct_confirm == $code_confirm) {
-            $GLOBALS['SITE_DB']->query_update('newsletter',array('code_confirm' => 0),array('email' => $email),'',1);
-            return inform_screen($this->title,do_lang_tempcode('NEWSLETTER_CONFIRMED'));
+            $GLOBALS['SITE_DB']->query_update('newsletter', array('code_confirm' => 0), array('email' => $email), '', 1);
+            return inform_screen($this->title, do_lang_tempcode('NEWSLETTER_CONFIRMED'));
         }
 
-        return warn_screen($this->title,do_lang_tempcode(($correct_confirm == 0)?'ALREADY_CONFIRMED':'INCORRECT_CONFIRMATION'));
+        return warn_screen($this->title, do_lang_tempcode(($correct_confirm == 0) ? 'ALREADY_CONFIRMED' : 'INCORRECT_CONFIRMATION'));
     }
 }

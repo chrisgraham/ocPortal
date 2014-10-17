@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_addon_management
  */
-
 class Hook_choose_ocportalcom_addon
 {
     /**
@@ -28,8 +27,8 @@ class Hook_choose_ocportalcom_addon
      */
     public function get_file($id)
     {
-        $stub = (get_param_integer('localhost',0) == 1)?get_base_url():'http://ocportal.com';
-        $v = 'Version ' . float_to_raw_string(ocp_version_number(),1);
+        $stub = (get_param_integer('localhost', 0) == 1) ? get_base_url() : 'http://ocportal.com';
+        $v = 'Version ' . float_to_raw_string(ocp_version_number(), 1);
         if (!is_null($id)) {
             $v = $id;
         }
@@ -39,10 +38,10 @@ class Hook_choose_ocportalcom_addon
         $utf = ($GLOBALS['HTTP_CHARSET'] == 'utf-8'); // We have to use 'U' in the regexp to work around a Chrome parser bug (we can't rely on convert_to_internal_encoding being 100% correct)
         require_code('character_sets');
         $contents = convert_to_internal_encoding($contents);
-        $contents = preg_replace('#^\s*\<' . '\?xml version="1.0" encoding="[^"]*"\?' . '\>\<request\>#' . ($utf?'U':''),'',$contents);
-        $contents = preg_replace('#</request>#' . ($utf?'U':''),'',$contents);
-        $contents = preg_replace('#<category [^>]*has_children="false"[^>]*>[^>]*</category>#' . ($utf?'U':''),'',$contents);
-        $contents = preg_replace('#<category [^>]*title="Manual install required"[^>]*>[^>]*</category>#' . ($utf?'U':''),'',$contents);
+        $contents = preg_replace('#^\s*\<' . '\?xml version="1.0" encoding="[^"]*"\?' . '\>\<request\>#' . ($utf ? 'U' : ''), '', $contents);
+        $contents = preg_replace('#</request>#' . ($utf ? 'U' : ''), '', $contents);
+        $contents = preg_replace('#<category [^>]*has_children="false"[^>]*>[^>]*</category>#' . ($utf ? 'U' : ''), '', $contents);
+        $contents = preg_replace('#<category [^>]*title="Manual install required"[^>]*>[^>]*</category>#' . ($utf ? 'U' : ''), '', $contents);
         return $contents;
     }
 
@@ -54,7 +53,7 @@ class Hook_choose_ocportalcom_addon
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return string                   XML in the special category,entry format
      */
-    public function run($id,$options,$default = null)
+    public function run($id, $options, $default = null)
     {
         return $this->get_file($id);
     }
@@ -68,25 +67,25 @@ class Hook_choose_ocportalcom_addon
      * @param  string                   Prefix titles with this
      * @return tempcode                 The nice list
      */
-    public function simple($id,$options,$it = null,$prefix = '')
+    public function simple($id, $options, $it = null, $prefix = '')
     {
         $file = $this->get_file($id);
 
         $list = new ocp_tempcode();
         if (is_null($id)) {// Root, needs an NA option
-            $list->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));
+            $list->attach(form_input_list_entry('', false, do_lang_tempcode('NA_EM')));
         }
 
         $matches = array();
 
-        $num_matches = preg_match_all('#<entry id="(\d+)"[^<>]* title="([^"]+)"#',$file,$matches);
-        for ($i = 0;$i<$num_matches;$i++) {
-            $list->attach(form_input_list_entry('http://ocportal.com/dload.php?id=' . $matches[1][$i],false,$prefix . $matches[2][$i]));
+        $num_matches = preg_match_all('#<entry id="(\d+)"[^<>]* title="([^"]+)"#', $file, $matches);
+        for ($i = 0; $i < $num_matches; $i++) {
+            $list->attach(form_input_list_entry('http://ocportal.com/dload.php?id=' . $matches[1][$i], false, $prefix . $matches[2][$i]));
         }
 
-        $num_matches = preg_match_all('#<category id="(\d+)" title="([^"]+)"#',$file,$matches);
-        for ($i = 0;$i<$num_matches;$i++) {
-            $list2 = $this->simple($matches[1][$i],$options,$it,$matches[2][$i] . ' > ');
+        $num_matches = preg_match_all('#<category id="(\d+)" title="([^"]+)"#', $file, $matches);
+        for ($i = 0; $i < $num_matches; $i++) {
+            $list2 = $this->simple($matches[1][$i], $options, $it, $matches[2][$i] . ' > ');
             $list->attach($list2);
         }
         return $list;

@@ -20,7 +20,7 @@ if (!function_exists('init__comcode_compiler')) {
                     }
             }
         ';
-        $in = str_replace('if ($as_admin)',$new_code . ' if ($as_admin)',$in);
+        $in = str_replace('if ($as_admin)', $new_code . ' if ($as_admin)', $in);
 
         $new_code = '
             global $OBSCURE_REPLACEMENTS;
@@ -34,14 +34,14 @@ if (!function_exists('init__comcode_compiler')) {
                     }
             }
         ';
-        $in = str_replace('// Null vector',$new_code,$in);
+        $in = str_replace('// Null vector', $new_code, $in);
 
         $new_code = '
             foreach ($OBSCURE_REPLACEMENTS as $rep => $from) {
                     $ahead = str_replace($rep,$from,$ahead);
             }
         ';
-        $in = str_replace('// Tidy up',$new_code,$in);
+        $in = str_replace('// Tidy up', $new_code, $in);
 
         return $in;
     }
@@ -50,7 +50,7 @@ if (!function_exists('init__comcode_compiler')) {
 function obscure_html_callback($matches)
 {
     global $OBSCURE_REPLACEMENTS;
-    $rep = uniqid('',true);
+    $rep = uniqid('', true);
     $OBSCURE_REPLACEMENTS[$rep] = $matches[0];
     return $rep;
 }

@@ -49,7 +49,7 @@ class Module_notifications
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() == 'ocf') {
             return array();
@@ -58,8 +58,8 @@ class Module_notifications
             return array();
         }
         return array(
-            'misc' => array('NOTIFICATION_MANAGEMENT','tool_buttons/notifications2'),
-            'browse' => array('NOTIFICATIONS','tool_buttons/notifications'),
+            'misc' => array('NOTIFICATION_MANAGEMENT', 'tool_buttons/notifications2'),
+            'browse' => array('NOTIFICATIONS', 'tool_buttons/notifications'),
         );
     }
 
@@ -74,20 +74,20 @@ class Module_notifications
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('notifications');
 
         if ($type == 'view') {
             $id = get_param_integer('id');
 
-            $rows = $GLOBALS['SITE_DB']->query_select('digestives_tin',array('*'),array('id' => $id),'',1);
-            if (!array_key_exists(0,$rows)) {
+            $rows = $GLOBALS['SITE_DB']->query_select('digestives_tin', array('*'), array('id' => $id), '', 1);
+            if (!array_key_exists(0, $rows)) {
                 warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
             }
             $row = $rows[0];
 
-            $this->title = get_screen_title('NOTIFICATION_VIEW',true,array(escape_html($row['d_subject'])));
+            $this->title = get_screen_title('NOTIFICATION_VIEW', true, array(escape_html($row['d_subject'])));
 
             $this->id = $id;
             $this->row = $row;
@@ -95,7 +95,7 @@ class Module_notifications
             $this->title = get_screen_title('NOTIFICATIONS');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -107,7 +107,7 @@ class Module_notifications
     {
         require_code('notifications2');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'browse') {
             return $this->browse();
@@ -133,16 +133,16 @@ class Module_notifications
      */
     public function browse()
     {
-        $start = get_param_integer('n_start',0);
-        $max = get_param_integer('n_max',50);
+        $start = get_param_integer('n_start', 0);
+        $max = get_param_integer('n_max', 50);
 
         require_code('notification_poller');
-        list($notifications,$max_rows) = get_web_notifications($max,$start);
+        list($notifications, $max_rows) = get_web_notifications($max, $start);
 
         require_code('templates_pagination');
-        $pagination = pagination(do_lang('NOTIFICATIONS'),$start,'n_start',$max,'n_max',$max_rows);
+        $pagination = pagination(do_lang('NOTIFICATIONS'), $start, 'n_start', $max, 'n_max', $max_rows);
 
-        return do_template('NOTIFICATION_BROWSE_SCREEN',array('_GUID' => '2b503097bcf97b3296c826e87131cf8e','TITLE' => $this->title,
+        return do_template('NOTIFICATION_BROWSE_SCREEN', array('_GUID' => '2b503097bcf97b3296c826e87131cf8e', 'TITLE' => $this->title,
             'NOTIFICATIONS' => $notifications,
             'PAGINATION' => $pagination,
         ));
@@ -159,17 +159,17 @@ class Module_notifications
         $row = $this->row;
 
         $member_id = $row['d_from_member_id'];
-        $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
-        $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,true);
+        $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id, true);
+        $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id, true);
         $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
 
-        $_message = get_translated_tempcode('digestives_tin',$row,'d_message');
+        $_message = get_translated_tempcode('digestives_tin', $row, 'd_message');
 
         if ($row['d_read'] == 0) {
-            $GLOBALS['SITE_DB']->query_update('digestives_tin',array('d_read' => 1),array('id' => $id),'',1);
+            $GLOBALS['SITE_DB']->query_update('digestives_tin', array('d_read' => 1), array('id' => $id), '', 1);
         }
 
-        return do_template('NOTIFICATION_VIEW_SCREEN',array('_GUID' => '0099edc0157ccd4544877e0e0e552dce','TITLE' => $this->title,
+        return do_template('NOTIFICATION_VIEW_SCREEN', array('_GUID' => '0099edc0157ccd4544877e0e0e552dce', 'TITLE' => $this->title,
             'ID' => strval($row['id']),
             'SUBJECT' => $row['d_subject'],
             'MESSAGE' => $_message,
@@ -195,7 +195,7 @@ class Module_notifications
     {
         $interface = notifications_ui(get_member());
 
-        return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
+        return do_template('NOTIFICATIONS_MANAGE_SCREEN', array(
             '_GUID' => '3c81043e6fd004baf9a36c68cb47ffe5',
             'TITLE' => $this->title,
             'INTERFACE' => $interface,

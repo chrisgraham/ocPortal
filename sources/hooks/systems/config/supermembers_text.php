@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    supermember_directory
  */
-
 class Hook_config_supermembers_text
 {
     /**

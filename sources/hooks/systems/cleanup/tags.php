@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_tags
 {
     /**
@@ -42,7 +41,7 @@ class Hook_tags
      */
     public function run()
     {
-        $hooks = find_all_hooks('systems','content_meta_aware');
+        $hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/content_meta_aware/' . $hook);
             $ob = object_factory('Hook_content_meta_aware_' . $hook);
@@ -58,14 +57,14 @@ class Hook_tags
                 } // Can't handle these cases
 
                 $sql = 'SELECT m.* FROM ' . get_table_prefix() . 'seo_meta m';
-                $sql .= ' LEFT JOIN ' . get_table_prefix() . $table . ' r ON r.' . $id_field . '=m.meta_for_id AND ' . db_string_equal_to('m.meta_for_type',$seo_type_code);
-                $sql .= ' WHERE r.' . $id_field . ' IS NULL AND ' . db_string_equal_to('m.meta_for_type',$seo_type_code);
-                $orphaned = $GLOBALS[(substr($table,0,2) == 'f_')?'FORUM_DB':'SITE_DB']->query($sql);
+                $sql .= ' LEFT JOIN ' . get_table_prefix() . $table . ' r ON r.' . $id_field . '=m.meta_for_id AND ' . db_string_equal_to('m.meta_for_type', $seo_type_code);
+                $sql .= ' WHERE r.' . $id_field . ' IS NULL AND ' . db_string_equal_to('m.meta_for_type', $seo_type_code);
+                $orphaned = $GLOBALS[(substr($table, 0, 2) == 'f_') ? 'FORUM_DB' : 'SITE_DB']->query($sql);
                 if (count($orphaned) != 0) {
                     foreach ($orphaned as $o) {
                         delete_lang($o['meta_keywords']);
                         delete_lang($o['meta_description']);
-                        $GLOBALS['SITE_DB']->query_delete('seo_meta',array('id' => $o['id']),'',1);
+                        $GLOBALS['SITE_DB']->query_delete('seo_meta', array('id' => $o['id']), '', 1);
                     }
                 }
             }

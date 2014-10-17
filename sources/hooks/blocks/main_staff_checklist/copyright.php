@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Hook_checklist_copyright
 {
     /**
@@ -30,19 +29,19 @@ class Hook_checklist_copyright
         $copyright = get_option('copyright');
 
         $matches = array();
-        if ((preg_match('#[^\d]\d\d\d\d-(\d\d(\d\d)?)([^\d]|$)#',$copyright,$matches) == 0) && (preg_match('#[^\d](\d\d(\d\d)?)([^\d]|$)#',$copyright,$matches) == 0)) {
+        if ((preg_match('#[^\d]\d\d\d\d-(\d\d(\d\d)?)([^\d]|$)#', $copyright, $matches) == 0) && (preg_match('#[^\d](\d\d(\d\d)?)([^\d]|$)#', $copyright, $matches) == 0)) {
             return array();
         }
 
-        if ((intval($matches[1])<intval(date('Y'))) && (intval($matches[1])<intval(substr(date('Y'),2)))) {
+        if ((intval($matches[1]) < intval(date('Y'))) && (intval($matches[1]) < intval(substr(date('Y'), 2)))) {
             $status = 0;
         } else {
             $status = 1;
             return array(); // We want to forget about this check entry if it's done for the year
         }
-        $_status = ($status == 0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
-        $url = build_url(array('page' => 'admin_config','type' => 'category','id' => 'SITE'),'adminzone');
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'c65f89a7af3ce753fc7eada742891400','URL' => '','STATUS' => $_status,'TASK' => urlise_lang(do_lang('NAG_COPYRIGHT_DATE'),$url)));
-        return array(array($tpl,($status == 0)?-1:0,null,null));
+        $_status = ($status == 0) ? do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0') : do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
+        $url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => 'SITE'), 'adminzone');
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'c65f89a7af3ce753fc7eada742891400', 'URL' => '', 'STATUS' => $_status, 'TASK' => urlise_lang(do_lang('NAG_COPYRIGHT_DATE'), $url)));
+        return array(array($tpl, ($status == 0) ? -1 : 0, null, null));
     }
 }

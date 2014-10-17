@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_tick
 {
     // ==============
@@ -35,11 +34,11 @@ class Hook_fields_tick
         $fields = array();
         $type = '_LIST';
         $special = new ocp_tempcode();
-        $special->attach(form_input_list_entry('',get_param('option_' . strval($row['id']),'') == '',do_lang_tempcode('NA_EM')));
-        $special->attach(form_input_list_entry('0',get_param('option_' . strval($row['id']),'') == '0',do_lang_tempcode('NO')));
-        $special->attach(form_input_list_entry('1',get_param('option_' . strval($row['id']),'') == '1',do_lang_tempcode('YES')));
-        $display = array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
-        $fields[] = array('NAME' => strval($row['id']),'DISPLAY' => $display,'TYPE' => $type,'SPECIAL' => $special);
+        $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', do_lang_tempcode('NA_EM')));
+        $special->attach(form_input_list_entry('0', get_param('option_' . strval($row['id']), '') == '0', do_lang_tempcode('NO')));
+        $special->attach(form_input_list_entry('1', get_param('option_' . strval($row['id']), '') == '1', do_lang_tempcode('YES')));
+        $display = array_key_exists('trans_name', $row) ? $row['trans_name'] : get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
+        $fields[] = array('NAME' => strval($row['id']), 'DISPLAY' => $display, 'TYPE' => $type, 'SPECIAL' => $special);
         return $fields;
     }
 
@@ -50,9 +49,9 @@ class Hook_fields_tick
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -67,14 +66,14 @@ class Hook_fields_tick
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = '0';
             }
         }
-        return array('integer_unescaped',$default,'integer');
+        return array('integer_unescaped', $default, 'integer');
     }
 
     /**
@@ -84,7 +83,7 @@ class Hook_fields_tick
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -93,7 +92,7 @@ class Hook_fields_tick
         if ($ev == '') {
             return do_lang_tempcode('NA_EM');
         }
-        return ($ev == '1')?do_lang_tempcode('YES'):do_lang_tempcode('NO');
+        return ($ev == '1') ? do_lang_tempcode('YES') : do_lang_tempcode('NO');
     }
 
     // ======================
@@ -110,16 +109,16 @@ class Hook_fields_tick
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if ($field['cf_required'] == 1) {
-            return form_input_tick($_cf_name,$_cf_description,'field_' . strval($field['id']),$actual_value == '1');
+            return form_input_tick($_cf_name, $_cf_description, 'field_' . strval($field['id']), $actual_value == '1');
         }
         $_list = new ocp_tempcode();
-        $_list->attach(form_input_list_entry('',is_null($actual_value) || ($actual_value === ''),do_lang_tempcode('NA_EM')));
-        $_list->attach(form_input_list_entry('0',$actual_value === '0',do_lang_tempcode('NO')));
-        $_list->attach(form_input_list_entry('1',$actual_value === '1',do_lang_tempcode('YES')));
-        return form_input_list($_cf_name,$_cf_description,'field_' . strval($field['id']),$_list,null,false,$field['cf_required'] == 1);
+        $_list->attach(form_input_list_entry('', is_null($actual_value) || ($actual_value === ''), do_lang_tempcode('NA_EM')));
+        $_list->attach(form_input_list_entry('0', $actual_value === '0', do_lang_tempcode('NO')));
+        $_list->attach(form_input_list_entry('1', $actual_value === '1', do_lang_tempcode('YES')));
+        return form_input_list($_cf_name, $_cf_description, 'field_' . strval($field['id']), $_list, null, false, $field['cf_required'] == 1);
     }
 
     /**
@@ -131,10 +130,10 @@ class Hook_fields_tick
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        return post_param($tmp_name,($editing && is_null(post_param('tick_on_form__' . $tmp_name,null)))?STRING_MAGIC_NULL:'');
+        return post_param($tmp_name, ($editing && is_null(post_param('tick_on_form__' . $tmp_name, null))) ? STRING_MAGIC_NULL : '');
     }
 }

@@ -26,6 +26,7 @@ For: php_oci8.dll
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_oracle
@@ -60,18 +61,18 @@ class Database_Static_oracle
      * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
      * @param  array                    The DB connection to make on
      */
-    public function db_create_index($table_name,$index_name,$_fields,$db)
+    public function db_create_index($table_name, $index_name, $_fields, $db)
     {
         if ($index_name[0] == '#') {
-            $index_name = substr($index_name,1);
-            $fields = explode(',',$_fields);
+            $index_name = substr($index_name, 1);
+            $fields = explode(',', $_fields);
             foreach ($fields as $field) {
-                $this->db_query('CREATE INDEX index' . $index_name . ' ON ' . $table_name . '(' . $field . ') INDEXTYPE IS CTXSYS.CONTEXT PARAMETERS(\'lexer theme_lexer\')',$db);
-                $this->db_query('EXEC DBMS_STATS.GATHER_TABLE_STATS(USER,\'' . $table_name . '\',cascade=>TRUE)',$db);
+                $this->db_query('CREATE INDEX index' . $index_name . ' ON ' . $table_name . '(' . $field . ') INDEXTYPE IS CTXSYS.CONTEXT PARAMETERS(\'lexer theme_lexer\')', $db);
+                $this->db_query('EXEC DBMS_STATS.GATHER_TABLE_STATS(USER,\'' . $table_name . '\',cascade=>TRUE)', $db);
             }
             return;
         }
-        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0,10000)) . ' ON ' . $table_name . '(' . $_fields . ')',$db);
+        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0, 10000)) . ' ON ' . $table_name . '(' . $_fields . ')', $db);
     }
 
     /**
@@ -81,10 +82,10 @@ class Database_Static_oracle
      * @param  array                    A list of fields to put in the new key
      * @param  array                    The DB connection to make on
      */
-    public function db_change_primary_key($table_name,$new_key,$db)
+    public function db_change_primary_key($table_name, $new_key, $db)
     {
-        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
-        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',',$new_key) . ')',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY', $db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',', $new_key) . ')', $db);
     }
 
     /**
@@ -94,9 +95,9 @@ class Database_Static_oracle
      * @param  boolean                  Whether to do a boolean full text search
      * @return string                   Part of a WHERE clause for doing full-text search
      */
-    public function db_full_text_assemble($content,$boolean)
+    public function db_full_text_assemble($content, $boolean)
     {
-        $content = str_replace('"','',$content);
+        $content = str_replace('"', '', $content);
         return 'CONTAINS ((?),\'' . $this->db_escape_string($content) . '\')';
     }
 
@@ -151,7 +152,7 @@ class Database_Static_oracle
      * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
      * @param  array                    The DB connection to make on
      */
-    public function db_create_table($table_name,$fields,$db)
+    public function db_create_table($table_name, $fields, $db)
     {
         $type_remap = $this->db_get_type_remap();
 
@@ -160,7 +161,7 @@ class Database_Static_oracle
         $trigger = false;
         foreach ($fields as $name => $type) {
             if ($type[0] == '*') { // Is a key
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 if ($keys != '') {
                     $keys .= ', ';
                 }
@@ -168,7 +169,7 @@ class Database_Static_oracle
             }
 
             if ($type[0] == '?') { // Is perhaps null
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 $perhaps_null = 'NULL';
             } else {
                 $perhaps_null = 'NOT NULL';
@@ -178,12 +179,12 @@ class Database_Static_oracle
                 $trigger = true;
             }
 
-            $type = isset($type_remap[$type])?$type_remap[$type]:$type;
+            $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
             $_fields .= '    ' . $name . ' ' . $type;
-            if (substr($name,-13) == '__text_parsed') {
+            if (substr($name, -13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
-            } elseif (substr($name,-13) == '__source_user') {
+            } elseif (substr($name, -13) == '__source_user') {
                 $_fields .= ' DEFAULT ' . strval(db_get_first_id());
             }
             $_fields .= ' ' . $perhaps_null . ',' . "\n";
@@ -192,7 +193,7 @@ class Database_Static_oracle
         $this->db_query('CREATE TABLE ' . $table_name . ' (
           ' . $_fields . '
           PRIMARY KEY (' . $keys . ')
-        )',$db,null,null);
+        )', $db, null, null);
 
         if ($trigger) {
             $query1 = "
@@ -208,8 +209,8 @@ class Database_Static_oracle
         END;
     ";
 
-            $parsed1 = ociparse($db,$query1);
-            $parsed2 = ociparse($db,$query2);
+            $parsed1 = ociparse($db, $query1);
+            $parsed2 = ociparse($db, $query2);
             @ociexecute($parsed1);
             ociexecute($parsed2);
         }
@@ -222,7 +223,7 @@ class Database_Static_oracle
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_equal_to($attribute,$compare)
+    public function db_string_equal_to($attribute, $compare)
     {
         return $attribute . " LIKE '" . $this->db_escape_string($compare) . "'";
     }
@@ -234,7 +235,7 @@ class Database_Static_oracle
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_not_equal_to($attribute,$compare)
+    public function db_string_not_equal_to($attribute, $compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
@@ -255,9 +256,9 @@ class Database_Static_oracle
      * @param  ID_TEXT                  The table name
      * @param  array                    The DB connection to delete on
      */
-    public function db_drop_table_if_exists($table,$db)
+    public function db_drop_table_if_exists($table, $db)
     {
-        $this->db_query('DROP TABLE ' . $table,$db,null,null,true);
+        $this->db_query('DROP TABLE ' . $table, $db, null, null, true);
     }
 
     /**
@@ -304,7 +305,7 @@ class Database_Static_oracle
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (NULL: failed)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
         if ($db_host != 'localhost') {
             fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
@@ -319,19 +320,19 @@ class Database_Static_oracle
             $error = 'The oracle PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error);
+            critical_error('PASSON', $error);
         }
 
-        $db = $persistent?@ociplogon($db_user,$db_password,$db_name):@ocilogon($db_user,$db_password,$db_name);
+        $db = $persistent ? @ociplogon($db_user, $db_password, $db_name) : @ocilogon($db_user, $db_password, $db_name);
         if ($db === false) {
             $error = 'Could not connect to database-server (' . ocierror() . ')';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
+            critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
         }
 
         if (!$db) {
@@ -370,8 +371,8 @@ class Database_Static_oracle
      */
     public function db_escape_string($string)
     {
-        $string = str_replace("'","''",$string);
-        return str_replace('&','\&',$string);
+        $string = str_replace("'", "''", $string);
+        return str_replace('&', '\&', $string);
     }
 
     /**
@@ -385,79 +386,79 @@ class Database_Static_oracle
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
-        if ((!is_null($start)) && (!is_null($max)) && (strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) {
+        if ((!is_null($start)) && (!is_null($max)) && (strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ')) {
             $old_query = $query;
 
             if (is_null($start)) {
                 $start = 0;
             }
 
-            $pos = strpos($old_query,'FROM ');
-            $pos2 = strpos($old_query,' ',$pos+5);
-            $pos3 = strpos($old_query,'WHERE ',$pos2);
+            $pos = strpos($old_query, 'FROM ');
+            $pos2 = strpos($old_query, ' ', $pos + 5);
+            $pos3 = strpos($old_query, 'WHERE ', $pos2);
             if ($pos3 === false) { // No where
-                $pos4 = strpos($old_query,' ORDER BY');
+                $pos4 = strpos($old_query, ' ORDER BY');
                 if ($pos4 === false) {
                     $pos4 = strlen($old_query);
                 }
-                $query = substr($old_query,0,$pos4) . ' WHERE rownum>=' . strval(intval($start));
+                $query = substr($old_query, 0, $pos4) . ' WHERE rownum>=' . strval(intval($start));
                 if (!is_null($max)) {
-                    $query .= ' AND rownum<' . strval(intval($start+$max));
+                    $query .= ' AND rownum<' . strval(intval($start + $max));
                 }
-                $query .= substr($old_query,$pos4);
+                $query .= substr($old_query, $pos4);
             } else {
-                $pos4 = strpos($old_query,' ORDER BY');
+                $pos4 = strpos($old_query, ' ORDER BY');
                 if ($pos4 === false) {
                     $pos4 = strlen($old_query);
                 }
-                $query = substr($old_query,0,$pos3) . 'WHERE (' . substr($old_query,$pos3+6,$pos4-$pos3-6) . ') AND rownum>=' . strval(intval($start));
+                $query = substr($old_query, 0, $pos3) . 'WHERE (' . substr($old_query, $pos3 + 6, $pos4 - $pos3 - 6) . ') AND rownum>=' . strval(intval($start));
                 if (!is_null($max)) {
-                    $query .= ' AND rownum<' . strval(intval($start+$max));
+                    $query .= ' AND rownum<' . strval(intval($start + $max));
                 }
-                $query .= substr($old_query,$pos4);
+                $query .= substr($old_query, $pos4);
             }
         }
 
-        $stmt = ociparse($db,$query,0);
+        $stmt = ociparse($db, $query, 0);
         $results = @ociexecute($stmt);
-        if ((($results === false) || ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results === true))) && (!$fail_ok)) {
+        if ((($results === false) || ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ') && ($results === true))) && (!$fail_ok)) {
             $err = ocierror($db);
             if (function_exists('ocp_mark_as_escaped')) {
                 ocp_mark_as_escaped($err);
             }
             if ((!running_script('upgrader')) && (!get_mass_import_mode())) {
-                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED', null, null, null, null, false))) {
                     fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
                 }
 
-                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+                fatal_exit(do_lang_tempcode('QUERY_FAILED', escape_html($query), ($err)));
             } else {
                 echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
-                return NULL;
+                return null;
             }
         }
 
-        if (($results !== true) && (strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results !== false)) {
+        if (($results !== true) && (strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ') && ($results !== false)) {
             return $this->db_get_query_rows($stmt);
         }
 
         if ($get_insert_id) {
-            if (strtoupper(substr($query,0,7)) == 'UPDATE ') {
-                return NULL;
+            if (strtoupper(substr($query, 0, 7)) == 'UPDATE ') {
+                return null;
             }
 
-            $pos = strpos($query,'(');
-            $table_name = substr($query,12,$pos-13);
+            $pos = strpos($query, '(');
+            $table_name = substr($query, 12, $pos - 13);
 
-            $stmt = ociparse($db,'SELECT gen_' . $table_name . '.CURRVAL AS v FROM dual');
+            $stmt = ociparse($db, 'SELECT gen_' . $table_name . '.CURRVAL AS v FROM dual');
             ociexecute($stmt);
             $ar2 = ocifetch($stmt);
             return $ar2[0];
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -467,7 +468,7 @@ class Database_Static_oracle
      * @param  ?integer                 Whether to start reading from (NULL: irrelevant for this forum driver)
      * @return array                    A list of row maps
      */
-    public function db_get_query_rows($stmt,$start = null)
+    public function db_get_query_rows($stmt, $start = null)
     {
         $out = array();
         $i = 0;
@@ -475,21 +476,21 @@ class Database_Static_oracle
         $num_fields = ocinumcols($stmt);
         $types = array();
         $names = array();
-        for ($x = 1;$x <= $num_fields;$x++) {
-            $types[$x] = ocicolumntype($stmt,$x);
-            $names[$x] = strtolower(ocicolumnname($stmt,$x));
+        for ($x = 1; $x <= $num_fields; $x++) {
+            $types[$x] = ocicolumntype($stmt, $x);
+            $names[$x] = strtolower(ocicolumnname($stmt, $x));
         }
         while (ocifetch($stmt)) {
             if ((is_null($start)) || ($i >= $start)) {
                 $newrow = array();
 
-                for ($j = 1;$j <= $num_fields;$j++) {
-                    $v = ociresult($stmt,$j);
+                for ($j = 1; $j <= $num_fields; $j++) {
+                    $v = ociresult($stmt, $j);
                     if (is_object($v)) {
                         $v = $v->load();
                     } // For CLOB's
                     if ($v === false) {
-                        fatal_exit(do_lang_tempcode('QUERY_FAILED',ocierror($stmt)));
+                        fatal_exit(do_lang_tempcode('QUERY_FAILED', ocierror($stmt)));
                     }
 
                     $name = $names[$j];

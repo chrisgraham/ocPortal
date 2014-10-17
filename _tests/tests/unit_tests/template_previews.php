@@ -33,7 +33,7 @@ class template_previews_test_set extends ocp_test_case
         $_GET['keep_has_js'] = '0';
         $GLOBALS['NO_QUERY_LIMIT'] = true;
         $_GET['keep_no_query_limit'] = '1';
-        @ini_set('memory_limit','-1');
+        @ini_set('memory_limit', '-1');
         $_GET['wide'] = '1';
         $_GET['keep_devtest'] = '1';
         $_GET['keep_has_js'] = '0';
@@ -46,18 +46,18 @@ class template_previews_test_set extends ocp_test_case
         $templates = array();
         $dh = opendir(get_file_base() . '/themes/default/templates');
         while (($f = readdir($dh)) !== false) {
-            if ((strtolower(substr($f,-4)) == '.tpl') && ($f[0] != '.')) {
+            if ((strtolower(substr($f, -4)) == '.tpl') && ($f[0] != '.')) {
                 $templates[] = $f;
             }
         }
 
         $all_previews = find_all_previews__by_template();
         foreach ($templates as $t) {
-            $this->assertFalse(((!array_key_exists($t,$all_previews)) && (substr($t,0,11) != 'JAVASCRIPT_') && ($t != 'JAVASCRIPT.tpl')),'Missing preview for: ' . $t);
+            $this->assertFalse(((!array_key_exists($t, $all_previews)) && (substr($t, 0, 11) != 'JAVASCRIPT_') && ($t != 'JAVASCRIPT.tpl')), 'Missing preview for: ' . $t);
         }
 
-        @ini_set('ocproducts.type_strictness','0');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.type_strictness', '0');
+        @ini_set('ocproducts.xss_detect', '0');
     }
 
     public function testScreenPreview()
@@ -65,7 +65,7 @@ class template_previews_test_set extends ocp_test_case
         require_code('validation');
         require_lang('validation');
 
-        global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED;
+        global $RECORD_TEMPLATES_USED, $RECORDED_TEMPLATES_USED;
         $RECORD_TEMPLATES_USED = true;
 
         $only_do_these = array( // If you want to test specific templates temporarily put the template names (without .tpl) in this array. But remove again before you commit!
@@ -73,10 +73,10 @@ class template_previews_test_set extends ocp_test_case
 
         $lists = find_all_previews__by_template();
         foreach ($lists as $template => $list) {
-            $temp_name = basename($template,'.tpl');
+            $temp_name = basename($template, '.tpl');
 
             if (count($only_do_these) != 0) {
-                if (!in_array($temp_name,$only_do_these)) {
+                if (!in_array($temp_name, $only_do_these)) {
                     continue;
                 }
             }
@@ -104,12 +104,12 @@ class template_previews_test_set extends ocp_test_case
             }
 
             $RECORDED_TEMPLATES_USED = array();
-            $out = render_screen_preview($template,$hook,$function);
+            $out = render_screen_preview($template, $hook, $function);
             $flag = false;
             foreach ($lists as $template_2 => $list_2) {
-                $temp_name_2 = basename($template_2,'.tpl');
+                $temp_name_2 = basename($template_2, '.tpl');
                 if (count($only_do_these) != 0) {
-                    if (!in_array($temp_name_2,$only_do_these)) {
+                    if (!in_array($temp_name_2, $only_do_these)) {
                         continue;
                     }
                 }
@@ -127,8 +127,8 @@ class template_previews_test_set extends ocp_test_case
                         continue;
                     }
 
-                    $this->assertTrue(in_array($temp_name_2,$RECORDED_TEMPLATES_USED),$template_2 . ' not used in preview as claimed in ' . $hook . '/' . $function);
-                    if (!in_array($temp_name_2,$RECORDED_TEMPLATES_USED)) {
+                    $this->assertTrue(in_array($temp_name_2, $RECORDED_TEMPLATES_USED), $template_2 . ' not used in preview as claimed in ' . $hook . '/' . $function);
+                    if (!in_array($temp_name_2, $RECORDED_TEMPLATES_USED)) {
                         $flag = true;
                     }
                 }
@@ -139,29 +139,29 @@ class template_previews_test_set extends ocp_test_case
             }
             $_out = $out->evaluate();
 
-            $result = check_xhtml($_out,false,false,false,true,true,false,false);
+            $result = check_xhtml($_out, false, false, false, true, true, false, false);
             if ((!is_null($result)) && (count($result['errors']) == 0)) {
                 $result = null;
             }
-            $this->assertTrue(is_null($result),$hook . '/' . $temp_name);
+            $this->assertTrue(is_null($result), $hook . '/' . $temp_name);
             if (!is_null($result)) {
                 require_code('view_modes');
-                display_validation_results($_out,$result,false,false);
+                display_validation_results($_out, $result, false, false);
             } else {
                 if (!$flag) {
-                    fclose(fopen(get_file_base() . '/_tests/screens_tested/' . $function . '.tmp','wb'));
+                    fclose(fopen(get_file_base() . '/_tests/screens_tested/' . $function . '.tmp', 'wb'));
                     fix_permissions(get_file_base() . '/_tests/screens_tested/' . $function . '.tmp');
                 }
             }
         }
 
-        @ini_set('ocproducts.type_strictness','0');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.type_strictness', '0');
+        @ini_set('ocproducts.xss_detect', '0');
     }
 
     public function testRepeatConsistency()
     {
-        global $STATIC_TEMPLATE_TEST_MODE,$EXTRA_SYMBOLS,$PREPROCESSABLE_SYMBOLS,$LOADED_TPL_CACHE,$BLOCKS_CACHE,$PANELS_CACHE;
+        global $STATIC_TEMPLATE_TEST_MODE, $EXTRA_SYMBOLS, $PREPROCESSABLE_SYMBOLS, $LOADED_TPL_CACHE, $BLOCKS_CACHE, $PANELS_CACHE;
         $STATIC_TEMPLATE_TEST_MODE = true;
 
         global $HAS_KEEP_IN_URL_CACHE;
@@ -191,7 +191,7 @@ class template_previews_test_set extends ocp_test_case
             $LOADED_TPL_CACHE = array();
             $BLOCKS_CACHE = array();
             $PANELS_CACHE = array();
-            $out1 = render_screen_preview($template,$hook,$function);
+            $out1 = render_screen_preview($template, $hook, $function);
             $_out1 = $out1->evaluate();
             restore_output_state();
             init__lorem();
@@ -199,28 +199,28 @@ class template_previews_test_set extends ocp_test_case
             $LOADED_TPL_CACHE = array();
             $BLOCKS_CACHE = array();
             $PANELS_CACHE = array();
-            $out2 = render_screen_preview($template,$hook,$function);
+            $out2 = render_screen_preview($template, $hook, $function);
             $_out2 = $out2->evaluate();
             restore_output_state();
             $different = ($_out1 != $_out2);
-            $this->assertFalse($different,'Screen preview not same each time, ' . $function);
+            $this->assertFalse($different, 'Screen preview not same each time, ' . $function);
 
             if (!$different) {
-                fclose(fopen(get_file_base() . '/_tests/screens_tested/consistency__' . $function . '.tmp','wb'));
+                fclose(fopen(get_file_base() . '/_tests/screens_tested/consistency__' . $function . '.tmp', 'wb'));
                 fix_permissions(get_file_base() . '/_tests/screens_tested/consistency__' . $function . '.tmp');
             } else {
-                $myfile = fopen(get_file_base() . '/_tests/screens_tested/v1__' . '.tmp','wb');
-                fwrite($myfile,$_out1);
+                $myfile = fopen(get_file_base() . '/_tests/screens_tested/v1__' . '.tmp', 'wb');
+                fwrite($myfile, $_out1);
                 fclose($myfile);
                 fix_permissions(get_file_base() . '/_tests/screens_tested/v1__' . '.tmp');
 
-                $myfile = fopen(get_file_base() . '/_tests/screens_tested/v2__' . '.tmp','wb');
-                fwrite($myfile,$_out2);
+                $myfile = fopen(get_file_base() . '/_tests/screens_tested/v2__' . '.tmp', 'wb');
+                fwrite($myfile, $_out2);
                 fclose($myfile);
                 fix_permissions(get_file_base() . '/_tests/screens_tested/v2__' . '.tmp');
 
                 require_code('diff');
-                var_dump(diff_simple_2($_out1,$_out2));
+                var_dump(diff_simple_2($_out1, $_out2));
 
                 exit('Error!');
             }
@@ -229,13 +229,13 @@ class template_previews_test_set extends ocp_test_case
             unset($out2);
         }
 
-        @ini_set('ocproducts.type_strictness','0');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.type_strictness', '0');
+        @ini_set('ocproducts.xss_detect', '0');
     }
 
     public function testNoMissingParams()
     {
-        global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW;
+        global $ATTACHED_MESSAGES, $ATTACHED_MESSAGES_RAW;
 
         $lists = find_all_previews__by_screen();
         foreach ($lists as $function => $tpls) {
@@ -256,34 +256,34 @@ class template_previews_test_set extends ocp_test_case
 
             $ATTACHED_MESSAGES = new ocp_tempcode();
             $ATTACHED_MESSAGES_RAW = array();
-            $out1 = render_screen_preview($template,$hook,$function);
+            $out1 = render_screen_preview($template, $hook, $function);
 
-            if ($ATTACHED_MESSAGES === NULL) {
+            if ($ATTACHED_MESSAGES === null) {
                 $ATTACHED_MESSAGES = new ocp_tempcode();
             }
-            $put_out = (!$ATTACHED_MESSAGES->is_empty()) || (count($ATTACHED_MESSAGES_RAW)>0);
-            $this->assertFalse($put_out,'Messages put out by ' . $function . '  (' . strip_tags($ATTACHED_MESSAGES->evaluate()) . ')');
+            $put_out = (!$ATTACHED_MESSAGES->is_empty()) || (count($ATTACHED_MESSAGES_RAW) > 0);
+            $this->assertFalse($put_out, 'Messages put out by ' . $function . '  (' . strip_tags($ATTACHED_MESSAGES->evaluate()) . ')');
 
             if (!$put_out) {
-                fclose(fopen(get_file_base() . '/_tests/screens_tested/nonemissing__' . $function . '.tmp','wb'));
+                fclose(fopen(get_file_base() . '/_tests/screens_tested/nonemissing__' . $function . '.tmp', 'wb'));
                 fix_permissions(get_file_base() . '/_tests/screens_tested/nonemissing__' . $function . '.tmp');
             }
 
             unset($out1);
         }
 
-        @ini_set('ocproducts.type_strictness','0');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.type_strictness', '0');
+        @ini_set('ocproducts.xss_detect', '0');
     }
 
     public function testNoRedundantFunctions()
     {
-        $hooks = find_all_hooks('systems','addon_registry');
+        $hooks = find_all_hooks('systems', 'addon_registry');
         foreach ($hooks as $hook => $place) {
             require_code('hooks/systems/addon_registry/' . $hook);
 
             $ob = object_factory('Hook_addon_registry_' . $hook);
-            if (!method_exists($ob,'tpl_previews')) {
+            if (!method_exists($ob, 'tpl_previews')) {
                 continue;
             }
             $used = array_unique($ob->tpl_previews());
@@ -291,37 +291,37 @@ class template_previews_test_set extends ocp_test_case
             $code = file_get_contents(get_file_base() . '/' . $place . '/hooks/systems/addon_registry/' . $hook . '.php');
 
             $matches = array();
-            $num_matches = preg_match_all('#function tpl\_preview\_\_(.*)\(#U',$code,$matches);
-            for ($i = 0;$i<$num_matches;$i++) {
-                $this->assertTrue(in_array($matches[1][$i],$used),'Non-used screen function ' . $matches[1][$i]);
+            $num_matches = preg_match_all('#function tpl\_preview\_\_(.*)\(#U', $code, $matches);
+            for ($i = 0; $i < $num_matches; $i++) {
+                $this->assertTrue(in_array($matches[1][$i], $used), 'Non-used screen function ' . $matches[1][$i]);
             }
         }
 
-        @ini_set('ocproducts.type_strictness','0');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.type_strictness', '0');
+        @ini_set('ocproducts.xss_detect', '0');
     }
 
     public function testNoDoublePreviews()
     {
         $all_used = array();
 
-        $hooks = find_all_hooks('systems','addon_registry');
+        $hooks = find_all_hooks('systems', 'addon_registry');
         foreach ($hooks as $hook => $place) {
             require_code('hooks/systems/addon_registry/' . $hook);
 
             $ob = object_factory('Hook_addon_registry_' . $hook);
-            if (!method_exists($ob,'tpl_previews')) {
+            if (!method_exists($ob, 'tpl_previews')) {
                 continue;
             }
             $used = array_unique($ob->tpl_previews());
             foreach (array_keys($used) as $u) {
-                $this->assertFalse(array_key_exists($u,$all_used),'Double defined ' . $u);
+                $this->assertFalse(array_key_exists($u, $all_used), 'Double defined ' . $u);
             }
             $all_used += $used;
         }
 
-        @ini_set('ocproducts.type_strictness','0');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.type_strictness', '0');
+        @ini_set('ocproducts.xss_detect', '0');
     }
 
 

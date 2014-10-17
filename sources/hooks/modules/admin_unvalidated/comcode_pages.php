@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_unvalidated_comcode_pages
 {
     /**
@@ -31,7 +30,7 @@ class Hook_unvalidated_comcode_pages
 
         $info = array();
         $info['db_table'] = 'comcode_pages';
-        $info['db_identifier'] = array('the_zone','the_page');
+        $info['db_identifier'] = array('the_zone', 'the_page');
         $info['db_validated'] = 'p_validated';
         $info['db_add_date'] = 'p_add_date';
         $info['db_edit_date'] = 'p_edit_date';

@@ -49,17 +49,17 @@ class Module_members
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         $ret = array(
-            'misc' => array('MEMBER_DIRECTORY','menu/social/members'),
+            'misc' => array('MEMBER_DIRECTORY', 'menu/social/members'),
         );
         if (!$check_perms || !is_guest($member_id)) {
-            $ret['view'] = array('MY_PROFILE','tabs/member_account/profile');
+            $ret['view'] = array('MY_PROFILE', 'tabs/member_account/profile');
         }
         return $ret;
     }
@@ -75,7 +75,7 @@ class Module_members
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf');
 
@@ -86,39 +86,39 @@ class Module_members
         }
 
         if ($type == 'view') {
-            $username = get_param('id',strval(get_member()));
+            $username = get_param('id', strval(get_member()));
             if ($username == '') {
                 $username = strval(get_member());
             }
             if (is_numeric($username)) {
-                $member_id_of = get_param_integer('id',get_member());
+                $member_id_of = get_param_integer('id', get_member());
                 if (is_guest($member_id_of)) {
                     access_denied('NOT_AS_GUEST');
                 }
-                $username = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_username');
+                $username = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_username');
                 if ((is_null($username)) || (is_guest($member_id_of))) {
                     warn_exit(do_lang_tempcode('MEMBER_NO_EXIST'));
                 }
             } else {
                 $member_id_of = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
                 if (is_null($member_id_of)) {
-                    warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username)));
+                    warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST', escape_html($username)));
                 }
             }
 
-            $join_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_join_time');
+            $join_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_join_time');
 
             $privacy_ok = true;
             if (addon_installed('content_privacy')) {
                 require_code('content_privacy');
-                $privacy_ok = has_privacy_access('_photo',strval($member_id_of),get_member());
+                $privacy_ok = has_privacy_access('_photo', strval($member_id_of), get_member());
             }
 
-            $photo_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_url');
-            if (($photo_url != '') && (addon_installed('ocf_member_photos')) && (has_privilege(get_member(),'view_member_photos')) && ($privacy_ok)) {
+            $photo_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_photo_url');
+            if (($photo_url != '') && (addon_installed('ocf_member_photos')) && (has_privilege(get_member(), 'view_member_photos')) && ($privacy_ok)) {
                 require_code('images');
-                $photo_thumb_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_thumb_url');
-                $photo_thumb_url = ensure_thumbnail($photo_url,$photo_thumb_url,(strpos($photo_url,'uploads/photos') !== false)?'photos':'ocf_photos','f_members',$member_id_of,'m_photo_thumb_url');
+                $photo_thumb_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_photo_thumb_url');
+                $photo_thumb_url = ensure_thumbnail($photo_url, $photo_thumb_url, (strpos($photo_url, 'uploads/photos') !== false) ? 'photos' : 'ocf_photos', 'f_members', $member_id_of, 'm_photo_thumb_url');
                 if (url_is_local($photo_url)) {
                     $photo_url = get_complex_base_url($photo_url) . '/' . $photo_url;
                 }
@@ -133,7 +133,7 @@ class Module_members
             $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id_of);
 
             set_extra_request_metadata(array(
-                'created' => date('Y-m-d',$join_time),
+                'created' => date('Y-m-d', $join_time),
                 'creator' => $username,
                 'publisher' => '', // blank means same as creator
                 'modified' => '',
@@ -141,22 +141,22 @@ class Module_members
                 'title' => '',
                 'identifier' => '_SEARCH:members:view:' . strval($member_id_of),
                 'description' => '',
-                'image' => (($avatar_url == '') && (has_privilege(get_member(),'view_member_photos')))?$photo_url:$avatar_url,
+                'image' => (($avatar_url == '') && (has_privilege(get_member(), 'view_member_photos'))) ? $photo_url : $avatar_url,
             ));
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . propagate_ocselect_page_link(),do_lang_tempcode('MEMBERS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc' . propagate_ocselect_page_link(), do_lang_tempcode('MEMBERS'))));
 
             if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
                 require_code('awards');
-                $awards = find_awards_for('member',strval($member_id_of));
+                $awards = find_awards_for('member', strval($member_id_of));
             } else {
                 $awards = array();
             }
 
             //$this->title=get_screen_title('MEMBER_PROFILE',true,array(make_fractionable_editable('member',$member_id_of,$username)),NULL,$awards);
-            $displayname = $GLOBALS['FORUM_DRIVER']->get_username($member_id_of,true);
+            $displayname = $GLOBALS['FORUM_DRIVER']->get_username($member_id_of, true);
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id_of);
-            $this->title = get_screen_title('MEMBER_PROFILE',true,array(escape_html($displayname),escape_html($username)),null,$awards);
+            $this->title = get_screen_title('MEMBER_PROFILE', true, array(escape_html($displayname), escape_html($username)), null, $awards);
 
             $this->member_id_of = $member_id_of;
             $this->username = $username;
@@ -164,7 +164,7 @@ class Module_members
             require_css('ocf_member_profiles');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -181,7 +181,7 @@ class Module_members
         }
         require_css('ocf');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->directory();
@@ -200,7 +200,7 @@ class Module_members
      */
     public function directory()
     {
-        $tpl = do_template('OCF_MEMBER_DIRECTORY_SCREEN',array(
+        $tpl = do_template('OCF_MEMBER_DIRECTORY_SCREEN', array(
             '_GUID' => '096767e9aaabce9cb3e6591b7bcf95b8',
             'TITLE' => $this->title,
         ));
@@ -219,6 +219,6 @@ class Module_members
         disable_php_memory_limit();
 
         require_code('ocf_profiles');
-        return render_profile_tabset($this->title,$this->member_id_of,get_member(),$this->username);
+        return render_profile_tabset($this->title, $this->member_id_of, get_member(), $this->username);
     }
 }

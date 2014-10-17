@@ -27,7 +27,7 @@
  * @param  string                       Prefix for field naming
  * @return tempcode                     The form fields
  */
-function get_privacy_form_fields($content_type,$content_id = null,$show_header = true,$prefix = '')
+function get_privacy_form_fields($content_type, $content_id = null, $show_header = true, $prefix = '')
 {
     if (is_guest()) {
         return new ocp_tempcode();
@@ -41,7 +41,7 @@ function get_privacy_form_fields($content_type,$content_id = null,$show_header =
     require_code('form_templates');
 
     if (!is_null($content_id)) {
-        $rows = $GLOBALS['SITE_DB']->query_select('content_privacy',null,array('content_type' => $content_type,'content_id' => $content_id));
+        $rows = $GLOBALS['SITE_DB']->query_select('content_privacy', null, array('content_type' => $content_type, 'content_id' => $content_id));
         if (count($rows) == 0) {
             $view_by_guests = true;
             $view_by_members = true;
@@ -51,26 +51,26 @@ function get_privacy_form_fields($content_type,$content_id = null,$show_header =
             $view_by_members = ($rows[0]['member_view'] == 1);
             $view_by_friends = ($rows[0]['friend_view'] == 1);
         }
-        $rows = $GLOBALS['SITE_DB']->query_select('content_primary__members',null,array('content_type' => $content_type,'content_id' => $content_id));
+        $rows = $GLOBALS['SITE_DB']->query_select('content_primary__members', null, array('content_type' => $content_type, 'content_id' => $content_id));
         $additional_access = array();
         foreach ($rows as $row) {
             $additional_access[] = $GLOBALS['FORUM_DRIVER']->get_username($row['member_id']);
         }
     } else {
-        $test = is_null($content_type)?null:$GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','AVG(guest_view)',array('content_type' => $content_type));
-        if ($test === NULL) {
+        $test = is_null($content_type) ? null : $GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy', 'AVG(guest_view)', array('content_type' => $content_type));
+        if ($test === null) {
             $view_by_guests = true;
         } else {
             $view_by_guests = (intval($test) == 1);
         }
-        $test = is_null($content_type)?null:$GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','AVG(member_view)',array('content_type' => $content_type));
-        if ($test === NULL) {
+        $test = is_null($content_type) ? null : $GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy', 'AVG(member_view)', array('content_type' => $content_type));
+        if ($test === null) {
             $view_by_members = true;
         } else {
             $view_by_members = (intval($test) == 1);
         }
-        $test = is_null($content_type)?null:$GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy','AVG(friend_view)',array('content_type' => $content_type));
-        if ($test === NULL) {
+        $test = is_null($content_type) ? null : $GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy', 'AVG(friend_view)', array('content_type' => $content_type));
+        if ($test === null) {
             $view_by_friends = true;
         } else {
             $view_by_friends = (intval($test) == 1);
@@ -81,17 +81,17 @@ function get_privacy_form_fields($content_type,$content_id = null,$show_header =
     $fields = new ocp_tempcode();
 
     if ($show_header) {
-        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '3f3bf4190c8f4973382f264e2a892044','SECTION_HIDDEN' => $view_by_guests,'TITLE' => do_lang_tempcode('PRIVACY_SETTINGS'))));
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '3f3bf4190c8f4973382f264e2a892044', 'SECTION_HIDDEN' => $view_by_guests, 'TITLE' => do_lang_tempcode('PRIVACY_SETTINGS'))));
     }
 
     $privacy_options = new ocp_tempcode();
-    $privacy_options->attach(form_input_list_entry('guests',$view_by_guests,do_lang_tempcode('VISIBLE_TO_GUESTS')));
-    $privacy_options->attach(form_input_list_entry('members',$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_MEMBERS')));
-    $privacy_options->attach(form_input_list_entry('friends',$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_FRIENDS')));
-    $privacy_options->attach(form_input_list_entry('staff',!$view_by_friends && !$view_by_members && !$view_by_guests,do_lang_tempcode('VISIBLE_TO_STAFF')));
-    $fields->attach(form_input_list(do_lang_tempcode('VISIBLE_TO'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO'),$prefix . 'privacy_level',$privacy_options));
+    $privacy_options->attach(form_input_list_entry('guests', $view_by_guests, do_lang_tempcode('VISIBLE_TO_GUESTS')));
+    $privacy_options->attach(form_input_list_entry('members', $view_by_members && !$view_by_guests, do_lang_tempcode('VISIBLE_TO_MEMBERS')));
+    $privacy_options->attach(form_input_list_entry('friends', $view_by_friends && !$view_by_members && !$view_by_guests, do_lang_tempcode('VISIBLE_TO_FRIENDS')));
+    $privacy_options->attach(form_input_list_entry('staff', !$view_by_friends && !$view_by_members && !$view_by_guests, do_lang_tempcode('VISIBLE_TO_STAFF')));
+    $fields->attach(form_input_list(do_lang_tempcode('VISIBLE_TO'), do_lang_tempcode('DESCRIPTION_VISIBLE_TO'), $prefix . 'privacy_level', $privacy_options));
 
-    $fields->attach(form_input_username_multi(do_lang_tempcode('ADDITIONAL_ACCESS'),do_lang_tempcode($show_header?'DESCRIPTION_ADDITIONAL_ACCESS':'DESCRIPTION_ADDITIONAL_ACCESS_RAW'),$prefix . 'privacy_friends_list_',$additional_access,0));
+    $fields->attach(form_input_username_multi(do_lang_tempcode('ADDITIONAL_ACCESS'), do_lang_tempcode($show_header ? 'DESCRIPTION_ADDITIONAL_ACCESS' : 'DESCRIPTION_ADDITIONAL_ACCESS_RAW'), $prefix . 'privacy_friends_list_', $additional_access, 0));
 
     return $fields;
 }
@@ -104,18 +104,18 @@ function get_privacy_form_fields($content_type,$content_id = null,$show_header =
  */
 function read_privacy_fields($prefix = '')
 {
-    $privacy_level = post_param($prefix . 'privacy_level','');
+    $privacy_level = post_param($prefix . 'privacy_level', '');
 
     $additional_access = array();
     foreach ($_POST as $key => $value) {
-        if (strpos($key,$prefix . 'privacy_friends_list_') === 0) {
+        if (strpos($key, $prefix . 'privacy_friends_list_') === 0) {
             if ($value != '') {
                 $additional_access[] = $value;
             }
         }
     }
 
-    return array($privacy_level,$additional_access);
+    return array($privacy_level, $additional_access);
 }
 
 /**
@@ -129,7 +129,7 @@ function read_privacy_fields($prefix = '')
  * @param  boolean                      Whether to send out invite notifications (only do this is it is a new content entry, rather than something obscure, like a member's photo)
  * @return boolean                      Whether it saved something
  */
-function save_privacy_form_fields($content_type,$content_id,$privacy_level,$additional_access,$send_invites = true)
+function save_privacy_form_fields($content_type, $content_id, $privacy_level, $additional_access, $send_invites = true)
 {
     if (fractional_edit()) {
         return false;
@@ -168,11 +168,11 @@ function save_privacy_form_fields($content_type,$content_id,$privacy_level,$addi
             $guest_view = 1;
             break;
     }
-    $GLOBALS['SITE_DB']->query_delete('content_privacy',array(
+    $GLOBALS['SITE_DB']->query_delete('content_privacy', array(
         'content_type' => $content_type,
         'content_id' => $content_id,
     ));
-    $GLOBALS['SITE_DB']->query_insert('content_privacy',array(
+    $GLOBALS['SITE_DB']->query_insert('content_privacy', array(
         'content_type' => $content_type,
         'content_id' => $content_id,
         'guest_view' => $guest_view,
@@ -180,25 +180,25 @@ function save_privacy_form_fields($content_type,$content_id,$privacy_level,$addi
         'friend_view' => $friend_view,
     ));
 
-    $rows = $GLOBALS['SITE_DB']->query_select('content_primary__members',array('member_id'),array('content_type' => $content_type,'content_id' => $content_id));
+    $rows = $GLOBALS['SITE_DB']->query_select('content_primary__members', array('member_id'), array('content_type' => $content_type, 'content_id' => $content_id));
     $currently_invited_members = array();
     foreach ($rows as $value) {
         $currently_invited_members[] = $value['member_id'];
     }
 
-    $GLOBALS['SITE_DB']->query_delete('content_primary__members',array('content_type' => $content_type,'content_id' => $content_id));
+    $GLOBALS['SITE_DB']->query_delete('content_primary__members', array('content_type' => $content_type, 'content_id' => $content_id));
 
     if (count($additional_access) != 0) {
         $invited_members = array();
         foreach ($additional_access as $member) {
             $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($member);
-            if ($member_id !== NULL) {
-                $GLOBALS['SITE_DB']->query_insert('content_primary__members',array(
+            if ($member_id !== null) {
+                $GLOBALS['SITE_DB']->query_insert('content_primary__members', array(
                     'member_id' => $member_id,
                     'content_type' => $content_type,
                     'content_id' => $content_id,
                 ));
-                if (!in_array($member_id,$currently_invited_members)) {
+                if (!in_array($member_id, $currently_invited_members)) {
                     $invited_members[] = $member_id;
                 }
             }
@@ -208,13 +208,13 @@ function save_privacy_form_fields($content_type,$content_id,$privacy_level,$addi
             require_lang('content_privacy');
             require_code('notifications');
             require_code('content');
-            list($content_title,$content_submitter,$cma_info,,,$content_url) = content_get_details($content_type,$content_id);
+            list($content_title, $content_submitter, $cma_info, , , $content_url) = content_get_details($content_type, $content_id);
             $content_submitter_username = $GLOBALS['FORUM_DRIVER']->get_username($content_submitter);
             $content_type_label = do_lang($cma_info['content_type_label']);
 
-            $subject = do_lang('NOTIFICATION_SUBJECT_invited_content',comcode_escape($content_submitter_username));
-            $mail = do_lang('NOTIFICATION_BODY_invited_content',comcode_escape($content_submitter_username),strtolower(comcode_escape($content_type_label)),array(comcode_escape($content_title),$content_url->evaluate(),comcode_escape($content_type_label)));
-            dispatch_notification('invited_content',null,$subject,$mail,$invited_members);
+            $subject = do_lang('NOTIFICATION_SUBJECT_invited_content', comcode_escape($content_submitter_username));
+            $mail = do_lang('NOTIFICATION_BODY_invited_content', comcode_escape($content_submitter_username), strtolower(comcode_escape($content_type_label)), array(comcode_escape($content_title), $content_url->evaluate(), comcode_escape($content_type_label)));
+            dispatch_notification('invited_content', null, $subject, $mail, $invited_members);
         }
     }
 
@@ -228,14 +228,14 @@ function save_privacy_form_fields($content_type,$content_id,$privacy_level,$addi
  * @param  ID_TEXT                      The content ID
  * @return boolean                      Whether it deleted something
  */
-function delete_privacy_form_fields($content_type,$content_id)
+function delete_privacy_form_fields($content_type, $content_id)
 {
     if (is_guest()) {
         return false;
     }
 
-    $GLOBALS['SITE_DB']->query_delete('content_privacy',array('content_type' => $content_type,'content_id' => $content_id),'',1);
-    $GLOBALS['SITE_DB']->query_delete('content_primary__members',array('content_type' => $content_type,'content_id' => $content_id));
+    $GLOBALS['SITE_DB']->query_delete('content_privacy', array('content_type' => $content_type, 'content_id' => $content_id), '', 1);
+    $GLOBALS['SITE_DB']->query_delete('content_primary__members', array('content_type' => $content_type, 'content_id' => $content_id));
 
     return true;
 }

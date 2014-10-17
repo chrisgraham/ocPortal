@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_calendar_recurrence_suggest
 {
     /**
@@ -39,6 +38,6 @@ class Hook_calendar_recurrence_suggest
 
         $default_monthly_spec_type = get_param('monthly_spec_type');
 
-        return monthly_spec_type_chooser($day_of_month,$month,$year,$default_monthly_spec_type);
+        return monthly_spec_type_chooser($day_of_month, $month, $year, $default_monthly_spec_type);
     }
 }

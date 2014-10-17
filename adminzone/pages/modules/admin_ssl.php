@@ -49,10 +49,10 @@ class Module_admin_ssl
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('SSL_CONFIGURATION','menu/adminzone/security/ssl'),
+            'misc' => array('SSL_CONFIGURATION', 'menu/adminzone/security/ssl'),
         );
     }
 
@@ -65,7 +65,7 @@ class Module_admin_ssl
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ssl');
 
@@ -73,7 +73,7 @@ class Module_admin_ssl
 
         $this->title = get_screen_title('SSL_CONFIGURATION');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -87,7 +87,7 @@ class Module_admin_ssl
             warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
         }
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'set') {
             return $this->set();
@@ -116,13 +116,13 @@ class Module_admin_ssl
                 if (!is_string($page)) {
                     $page = strval($page);
                 } // strval($page) as $page could have become numeric due to array imprecision
-                $ticked = is_page_https($zone,$page);
-                $content->attach(do_template('SSL_CONFIGURATION_ENTRY',array('_GUID' => 'a08c339d93834f968c8936b099c677a3','TICKED' => $ticked,'PAGE' => $page,'ZONE' => $zone)));
+                $ticked = is_page_https($zone, $page);
+                $content->attach(do_template('SSL_CONFIGURATION_ENTRY', array('_GUID' => 'a08c339d93834f968c8936b099c677a3', 'TICKED' => $ticked, 'PAGE' => $page, 'ZONE' => $zone)));
             }
         }
 
-        $url = build_url(array('page' => '_SELF','type' => 'set'),'_SELF');
-        return do_template('SSL_CONFIGURATION_SCREEN',array('_GUID' => '823f395205f0c018861847e80c622710','URL' => $url,'TITLE' => $this->title,'CONTENT' => $content));
+        $url = build_url(array('page' => '_SELF', 'type' => 'set'), '_SELF');
+        return do_template('SSL_CONFIGURATION_SCREEN', array('_GUID' => '823f395205f0c018861847e80c622710', 'URL' => $url, 'TITLE' => $this->title, 'CONTENT' => $content));
     }
 
     /**
@@ -140,10 +140,10 @@ class Module_admin_ssl
                     $page = strval($page);
                 } // strval($page) as $page could have become numeric due to array imprecision
                 $id = $zone . ':' . $page;
-                $value = post_param_integer('ssl_' . $zone . '__' . $page,0);
-                $GLOBALS['SITE_DB']->query_delete('https_pages',array('https_page_name' => $id),'',1);
+                $value = post_param_integer('ssl_' . $zone . '__' . $page, 0);
+                $GLOBALS['SITE_DB']->query_delete('https_pages', array('https_page_name' => $id), '', 1);
                 if ($value == 1) {
-                    $GLOBALS['SITE_DB']->query_insert('https_pages',array('https_page_name' => $id));
+                    $GLOBALS['SITE_DB']->query_insert('https_pages', array('https_page_name' => $id));
                 }
             }
         }
@@ -151,7 +151,7 @@ class Module_admin_ssl
         erase_persistent_cache();
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
-
 class Hook_main_custom_gfx_rollover_button
 {
     /**
@@ -27,43 +26,43 @@ class Hook_main_custom_gfx_rollover_button
      * @param  object                   The block itself (contains utility methods).
      * @return tempcode                 HTML to output.
      */
-    public function run($map,&$block)
+    public function run($map, &$block)
     {
-        if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support',gd_info())) || (@imagettfbbox(26.0,0.0,get_file_base() . '/data/fonts/Vera.ttf','test') === false)) {
+        if ((!function_exists('imagettftext')) || (!array_key_exists('FreeType Support', gd_info())) || (@imagettfbbox(26.0, 0.0, get_file_base() . '/data/fonts/Vera.ttf', 'test') === false)) {
             return do_lang_tempcode('REQUIRES_TTF');
         }
 
-        if (!array_key_exists('img1',$map)) {
+        if (!array_key_exists('img1', $map)) {
             $map['img1'] = 'button1';
         }
-        $img_path_1 = find_theme_image($map['img1'],true,true);
+        $img_path_1 = find_theme_image($map['img1'], true, true);
         if ($img_path_1 == '') {
-            return do_lang_tempcode('NO_SUCH_THEME_IMAGE',$map['img1']);
+            return do_lang_tempcode('NO_SUCH_THEME_IMAGE', $map['img1']);
         }
 
         $cache_id_1 = 'rollover1_' . md5(serialize($map));
-        $url_1 = $block->_do_image($cache_id_1,$map,$img_path_1);
+        $url_1 = $block->_do_image($cache_id_1, $map, $img_path_1);
         if (is_object($url_1)) {
             return $url_1;
         }
 
-        if (!array_key_exists('img2',$map)) {
+        if (!array_key_exists('img2', $map)) {
             $map['img2'] = 'button2';
         }
-        $img_path_2 = find_theme_image($map['img2'],true,true);
+        $img_path_2 = find_theme_image($map['img2'], true, true);
         if ($img_path_2 == '') {
-            return do_lang_tempcode('NO_SUCH_THEME_IMAGE',$map['img2']);
+            return do_lang_tempcode('NO_SUCH_THEME_IMAGE', $map['img2']);
         }
 
         $cache_id_2 = 'rollover2_' . md5(serialize($map));
-        $url_2 = $block->_do_image($cache_id_2,$map,$img_path_2);
+        $url_2 = $block->_do_image($cache_id_2, $map, $img_path_2);
         if (is_object($url_2)) {
             return $url_2;
         }
 
-        $comb_id = 'rollover_' . uniqid('',true);
+        $comb_id = 'rollover_' . uniqid('', true);
 
-        $ret = '<img id="' . php_addslashes($comb_id) . '" class="gfx_text_overlay" alt="' . str_replace("\n",' ',escape_html($map['data'])) . '" src="' . escape_html($url_1) . '" />';
+        $ret = '<img id="' . php_addslashes($comb_id) . '" class="gfx_text_overlay" alt="' . str_replace("\n", ' ', escape_html($map['data'])) . '" src="' . escape_html($url_1) . '" />';
         $ret .= trim('
             <script>// <![CDATA[
                     create_rollover("' . php_addslashes($comb_id) . '","' . php_addslashes($url_2) . '");

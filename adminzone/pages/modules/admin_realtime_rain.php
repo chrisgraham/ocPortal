@@ -49,10 +49,10 @@ class Module_admin_realtime_rain
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('_REALTIME_RAIN','menu/adminzone/audit/realtime_rain'),
+            '!' => array('_REALTIME_RAIN', 'menu/adminzone/audit/realtime_rain'),
         );
     }
 
@@ -65,13 +65,13 @@ class Module_admin_realtime_rain
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('realtime_rain');
 
         $this->title = get_screen_title('REALTIME_RAIN');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -87,16 +87,16 @@ class Module_admin_realtime_rain
 
         if (!has_js()) {
             // Send them to the page permissions screen
-            $url = build_url(array('page' => 'admin_stats','type' => 'misc'),'_SELF');
+            $url = build_url(array('page' => 'admin_stats', 'type' => 'misc'), '_SELF');
             require_code('site2');
-            assign_refresh($url,5.0);
-            return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_REALTIME'));
+            assign_refresh($url, 5.0);
+            return redirect_screen($this->title, $url, do_lang_tempcode('NO_JS_REALTIME'));
         }
 
-        $min_time = $GLOBALS['SITE_DB']->query_select_value('stats','MIN(date_and_time)');
+        $min_time = $GLOBALS['SITE_DB']->query_select_value('stats', 'MIN(date_and_time)');
         if (is_null($min_time)) {
             $min_time = time();
         }
-        return do_template('REALTIME_RAIN_OVERLAY',array('_GUID' => 'd7cb1b8286311a9505c3de2d1b9a5185','MIN_TIME' => strval($min_time)));
+        return do_template('REALTIME_RAIN_OVERLAY', array('_GUID' => 'd7cb1b8286311a9505c3de2d1b9a5185', 'MIN_TIME' => strval($min_time)));
     }
 }

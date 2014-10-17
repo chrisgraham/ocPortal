@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_task_ocf_topics_recache
 {
     /**
@@ -32,39 +31,41 @@ class Hook_task_ocf_topics_recache
         // Topics and posts
         $start = 0;
         do {
-            $topics = $GLOBALS['FORUM_DB']->query_select('f_topics',array('id','t_forum_id'),null,'',500,$start);
+            $topics = $GLOBALS['FORUM_DB']->query_select('f_topics', array('id', 't_forum_id'), null, '', 500, $start);
             foreach ($topics as $topic) {
                 require_code('ocf_posts_action2');
-                ocf_force_update_topic_cacheing($topic['id'],null,true,true);
+                ocf_force_update_topic_cacheing($topic['id'], null, true, true);
 
                 // NB: p_cache_forum_id must not be intval'd as may be null
                 if (is_null($topic['t_forum_id'])) {
                     $topic['t_forum_id'] = null;
                 }
-                $GLOBALS['FORUM_DB']->query_update('f_posts',array('p_cache_forum_id' => is_null($topic['t_forum_id'])?null:$topic['t_forum_id']),array('p_topic_id' => is_null($topic['id'])?null:$topic['id']));
+                $GLOBALS['FORUM_DB']->query_update('f_posts', array('p_cache_forum_id' => is_null($topic['t_forum_id']) ? null : $topic['t_forum_id']), array('p_topic_id' => is_null($topic['id']) ? null : $topic['id']));
             }
 
             $start += 500;
-        } while (array_key_exists(0,$topics));
+        }
+        while (array_key_exists(0, $topics));
 
         // Polls
         $start = 0;
         do {
-            $polls = $GLOBALS['FORUM_DB']->query_select('f_polls',array('id'),null,'',500,$start);
+            $polls = $GLOBALS['FORUM_DB']->query_select('f_polls', array('id'), null, '', 500, $start);
             foreach ($polls as $poll) {
-                $total_votes = $GLOBALS['FORUM_DB']->query_select_value('f_poll_votes','COUNT(*)',array('pv_poll_id' => $poll['id']));
-                $GLOBALS['FORUM_DB']->query_update('f_polls',array('po_cache_total_votes' => $total_votes),array('id' => $poll['id']),'',1);
+                $total_votes = $GLOBALS['FORUM_DB']->query_select_value('f_poll_votes', 'COUNT(*)', array('pv_poll_id' => $poll['id']));
+                $GLOBALS['FORUM_DB']->query_update('f_polls', array('po_cache_total_votes' => $total_votes), array('id' => $poll['id']), '', 1);
 
-                $answers = $GLOBALS['FORUM_DB']->query_select('f_poll_answers',array('id'),array('pa_poll_id' => $poll['id']));
+                $answers = $GLOBALS['FORUM_DB']->query_select('f_poll_answers', array('id'), array('pa_poll_id' => $poll['id']));
                 foreach ($answers as $answer) {
-                    $votes = $GLOBALS['FORUM_DB']->query_select_value('f_poll_votes','COUNT(*)',array('pv_answer_id' => $answer['id'],'pv_poll_id' => $poll['id']));
-                    $GLOBALS['FORUM_DB']->query_update('f_poll_answers',array('pa_cache_num_votes' => $votes),array('id' => $answer['id']),'',1);
+                    $votes = $GLOBALS['FORUM_DB']->query_select_value('f_poll_votes', 'COUNT(*)', array('pv_answer_id' => $answer['id'], 'pv_poll_id' => $poll['id']));
+                    $GLOBALS['FORUM_DB']->query_update('f_poll_answers', array('pa_cache_num_votes' => $votes), array('id' => $answer['id']), '', 1);
                 }
             }
 
             $start += 500;
-        } while (array_key_exists(0,$polls));
+        }
+        while (array_key_exists(0, $polls));
 
-        return NULL;
+        return null;
     }
 }

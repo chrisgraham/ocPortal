@@ -11,7 +11,7 @@ $synonyms = $admin->_synonyms();
 require_code('addons');
 $addons = array();
 $all_tutorials_referenced = array();
-$_addons = find_all_hooks('systems','addon_registry');
+$_addons = find_all_hooks('systems', 'addon_registry');
 ksort($_addons);
 foreach ($_addons as $addon => $place) {
     if ($place == 'sources') {
@@ -19,7 +19,7 @@ foreach ($_addons as $addon => $place) {
         $ob = object_factory('Hook_addon_registry_' . $addon);
 
         $tutorials = $ob->get_applicable_tutorials();
-        $all_tutorials_referenced = array_merge($all_tutorials_referenced,$tutorials);
+        $all_tutorials_referenced = array_merge($all_tutorials_referenced, $tutorials);
         if (count($tutorials) == 0) {
             warn_exit('Missing tutorial for: ' . $addon);
         }
@@ -31,19 +31,19 @@ foreach ($_addons as $addon => $place) {
         $stemmed_addon = $stemmer->stem($pretty);
         $_synonyms = array();
         foreach ($synonyms as $ss) {
-            if (in_array($ss[0],array('export','permission'))) {
+            if (in_array($ss[0], array('export', 'permission'))) {
                 continue;
             }
 
-            $_ss = array_map(array($stemmer,'stem'),$ss);
+            $_ss = array_map(array($stemmer, 'stem'), $ss);
 
-            if (in_array($stemmed_addon,$_ss)) {
-                $_synonyms = array_merge($_synonyms,$ss);
-                $test = array_search($stemmed_addon,$_synonyms);
+            if (in_array($stemmed_addon, $_ss)) {
+                $_synonyms = array_merge($_synonyms, $ss);
+                $test = array_search($stemmed_addon, $_synonyms);
                 if ($test !== false) {
                     unset($_synonyms[$test]);
                 }
-                $test = array_search($addon,$_synonyms);
+                $test = array_search($addon, $_synonyms);
                 if ($test !== false) {
                     unset($_synonyms[$test]);
                 }
@@ -52,9 +52,9 @@ foreach ($_addons as $addon => $place) {
 
         $addons[$addon] = array(
             'pretty' => $pretty,
-            'icon' => find_addon_icon($addon,false),
+            'icon' => find_addon_icon($addon, false),
             'description' => $ob->get_description(),
-            'core' => (substr($addon,0,4) == 'core'),
+            'core' => (substr($addon, 0, 4) == 'core'),
             'dependencies' => $dependencies['requires'],
             'tutorials' => $tutorials,
             'synonyms' => $_synonyms,
@@ -68,9 +68,9 @@ $tutorials = array();
 $unreferenced_tutorials = array();
 $dh = opendir(get_file_base() . '/docs/pages/comcode_custom/EN');
 while (($f = readdir($dh)) !== false) {
-    if (substr($f,-4) == '.txt') {
-        $tutorial = basename($f,'.txt');
-        if ((!in_array($tutorial,$all_tutorials_referenced)) && (substr($tutorial,0,4) == 'tut_') && ($tutorial != 'tut_addon_index')) {
+    if (substr($f, -4) == '.txt') {
+        $tutorial = basename($f, '.txt');
+        if ((!in_array($tutorial, $all_tutorials_referenced)) && (substr($tutorial, 0, 4) == 'tut_') && ($tutorial != 'tut_addon_index')) {
             $unreferenced_tutorials[] = $tutorial;
         }
     }
@@ -114,10 +114,10 @@ foreach ($addons as $addon => $addon_details) {
         <tr>
             <td>' . $icon . escape_html($addon_details['pretty']) . '<br />(<kbd>' . escape_html($addon) . '</kbd>)</td>
             <td>' . escape_html($addon_details['description']) . '</td>
-            <!--<td>' . escape_html($addon_details['core']?'Yes':'No') . '</td>-->
-            <td><kbd>' . implode('<br /><br />',array_map('escape_html',$addon_details['dependencies'])) . '</kbd></td>
+            <!--<td>' . escape_html($addon_details['core'] ? 'Yes' : 'No') . '</td>-->
+            <td><kbd>' . implode('<br /><br />', array_map('escape_html', $addon_details['dependencies'])) . '</kbd></td>
             <td>' . $tutorials . '</td>
-            <td>' . implode('<br /><br />',array_map('escape_html',$addon_details['synonyms'])) . '</td>
+            <td>' . implode('<br /><br />', array_map('escape_html', $addon_details['synonyms'])) . '</td>
             <td><a href="' . escape_html($addon_details['tracker_url']) . '">Link</a></td>
         </tr>
     ';
@@ -140,9 +140,9 @@ $out .= '</ul>';
 $path = get_custom_file_base() . '/docs/pages/comcode_custom/EN/tut_addon_index.txt';
 $addon_index_file = file_get_contents($path);
 $marker = '[staff_note]Automatic code inserts after this[/staff_note]';
-$pos = strpos($addon_index_file,$marker);
-$addon_index_file = substr($addon_index_file,0,$pos+strlen($marker)) . '[semihtml]' . str_replace(get_custom_base_url(),get_brand_base_url(),$out) . '[/semihtml]';
-file_put_contents($path,$addon_index_file);
+$pos = strpos($addon_index_file, $marker);
+$addon_index_file = substr($addon_index_file, 0, $pos + strlen($marker)) . '[semihtml]' . str_replace(get_custom_base_url(), get_brand_base_url(), $out) . '[/semihtml]';
+file_put_contents($path, $addon_index_file);
 fix_permissions($path);
 sync_file($path);
 
@@ -152,6 +152,6 @@ function get_tutorial_title($tutorial)
 {
     $contents = file_get_contents(get_custom_file_base() . '/docs/pages/comcode_custom/EN/' . $tutorial . '.txt');
     $matches = array();
-    preg_match('#\[title[^\[\]]*\](?-U)(ocPortal Tutorial: )?(?U)(.*)\[/title\]#Us',$contents,$matches);
+    preg_match('#\[title[^\[\]]*\](?-U)(ocPortal Tutorial: )?(?U)(.*)\[/title\]#Us', $contents, $matches);
     return $matches[2];
 }

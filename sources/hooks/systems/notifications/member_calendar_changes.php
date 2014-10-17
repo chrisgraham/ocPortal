@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_Notification_member_calendar_changes extends Hook_Notification__Staff
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_member_calendar_changes extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['member_calendar_changes'] = array(do_lang('calendar:CALENDAR'),do_lang('calendar:NOTIFICATION_TYPE_member_calendar_changes'));
+        $list['member_calendar_changes'] = array(do_lang('calendar:CALENDAR'), do_lang('calendar:NOTIFICATION_TYPE_member_calendar_changes'));
         return $list;
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    backup
  */
-
 class Hook_checklist_backup
 {
     /**
@@ -42,20 +41,20 @@ class Hook_checklist_backup
 
         $seconds_ago = mixed();
         if ($date != 0) {
-            $seconds_ago = time()-$date;
-            $status = (intval($seconds_ago)>$limit_hours*60*60)?0:1;
+            $seconds_ago = time() - $date;
+            $status = (intval($seconds_ago) > $limit_hours * 60 * 60) ? 0 : 1;
         } else {
             $status = 0;
         }
 
-        $_status = ($status == 0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
+        $_status = ($status == 0) ? do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0') : do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
         require_code('config2');
         $config_url = config_option_url('backup_time');
 
-        $url = build_url(array('page' => 'admin_backup','type' => 'misc'),'adminzone');
-        list($info,$seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => '432685ec6c9f7548ce8b488b6ce00030','CONFIG_URL' => $config_url,'URL' => $url,'STATUS' => $_status,'TASK' => do_lang_tempcode('BACKUP'),'INFO' => $info));
-        return array(array($tpl,$seconds_due_in,null,'backup_time'));
+        $url = build_url(array('page' => 'admin_backup', 'type' => 'misc'), 'adminzone');
+        list($info, $seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago, $limit_hours);
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '432685ec6c9f7548ce8b488b6ce00030', 'CONFIG_URL' => $config_url, 'URL' => $url, 'STATUS' => $_status, 'TASK' => do_lang_tempcode('BACKUP'), 'INFO' => $info));
+        return array(array($tpl, $seconds_due_in, null, 'backup_time'));
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-
 class Hook_admin_setupwizard_installprofiles_community
 {
     /**
@@ -40,7 +39,7 @@ class Hook_admin_setupwizard_installprofiles_community
     public function get_addon_list()
     {
         return array(
-            array('facebook_support'/*this will be downloaded as it is not bundled*/,'ocf_forum','points','pointstore','ocf_thematic_avatars','ocf_cartoon_avatars','calendar','chat','polls','users_online_block','forum_blocks','polls','newsletter'),
+            array('facebook_support'/*this will be downloaded as it is not bundled*/, 'ocf_forum', 'points', 'pointstore', 'ocf_thematic_avatars', 'ocf_cartoon_avatars', 'calendar', 'chat', 'polls', 'users_online_block', 'forum_blocks', 'polls', 'newsletter'),
             array());
     }
 
@@ -88,14 +87,13 @@ class Hook_admin_setupwizard_installprofiles_community
                 'main_content',
                 'main_poll',
             ),
-            'PANEL_LEFT' => array(
-            ),
+            'PANEL_LEFT' => array(),
             'PANEL_RIGHT' => array(
-                'side_users_online',
-                'side_stats',
-                'side_calendar',
-                'side_shoutbox',
-            )+((get_option('sitewide_im') == '1')?array('side_friends'):array()),
+                    'side_users_online',
+                    'side_stats',
+                    'side_calendar',
+                    'side_shoutbox',
+                ) + ((get_option('sitewide_im') == '1') ? array('side_friends') : array()),
         );
     }
 
@@ -106,8 +104,7 @@ class Hook_admin_setupwizard_installprofiles_community
      */
     public function block_options()
     {
-        return array(
-        );
+        return array();
     }
 
     /**

@@ -25,9 +25,9 @@
  * @param  integer                      Quote style
  * @return string                       Escaped version of input string
  */
-function xmlentities($string,$quote_style = ENT_COMPAT)
+function xmlentities($string, $quote_style = ENT_COMPAT)
 {
-    $ret = str_replace('>','&gt;',str_replace('<','&lt;',str_replace('"','&quot;',str_replace('&','&amp;',$string))));
+    $ret = str_replace('>', '&gt;', str_replace('<', '&lt;', str_replace('"', '&quot;', str_replace('&', '&amp;', $string))));
     if (function_exists('ocp_mark_as_escaped')) {
         ocp_mark_as_escaped($ret);
     }
@@ -41,13 +41,13 @@ function xmlentities($string,$quote_style = ENT_COMPAT)
  * @param  string                       The character set we are using for $data (both in and out)
  * @return string                       Valid XHTML
  */
-function convert_bad_entities($data,$charset = 'ISO-8859-1')
+function convert_bad_entities($data, $charset = 'ISO-8859-1')
 {
     if (defined('ENT_HTML401')) { // PHP5.4+, we must explicitly give the charset, but when we do it helps us
         if ((strtoupper($charset) != 'ISO-8859-1') && (strtoupper($charset) != 'UTF-8')) {
             $charset = 'ISO-8859-1';
         }
-        $table = array_flip(get_html_translation_table(HTML_ENTITIES,ENT_COMPAT|ENT_HTML401,$charset));
+        $table = array_flip(get_html_translation_table(HTML_ENTITIES, ENT_COMPAT | ENT_HTML401, $charset));
     } else {
         $table = array_flip(get_html_translation_table(HTML_ENTITIES));
 
@@ -63,19 +63,20 @@ function convert_bad_entities($data,$charset = 'ISO-8859-1')
     unset($table['&lt;']);
     unset($table['&quot;']);
 
-    return strtr($data,$table);
+    return strtr($data, $table);
 }
 
 /**
  * Simple XML reader.
+ *
  * @package    core
  */
 class ocp_simple_xml_reader
 {
     // Used during parsing
-    var $tag_stack,$attribute_stack,$children_stack,$text_stack;
+    var $tag_stack, $attribute_stack, $children_stack, $text_stack;
 
-    var $gleamed,$error;
+    var $gleamed, $error;
 
     /**
      * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.
@@ -101,7 +102,7 @@ class ocp_simple_xml_reader
 
         // Our internal charset
         $parser_charset = get_charset();
-        if (!in_array(strtoupper($parser_charset),array('ISO-8859-1','US-ASCII','UTF-8'))) {
+        if (!in_array(strtoupper($parser_charset), array('ISO-8859-1', 'US-ASCII', 'UTF-8'))) {
             $parser_charset = 'UTF-8';
         }
 
@@ -109,22 +110,22 @@ class ocp_simple_xml_reader
         if (function_exists('libxml_disable_entity_loader')) {
             libxml_disable_entity_loader();
         }
-        $xml_parser = function_exists('xml_parser_create_ns')?@xml_parser_create_ns($parser_charset):@xml_parser_create($parser_charset);
+        $xml_parser = function_exists('xml_parser_create_ns') ? @xml_parser_create_ns($parser_charset) : @xml_parser_create($parser_charset);
         if ($xml_parser === false) {
             $this->error = do_lang_tempcode('XML_PARSING_NOT_SUPPORTED');
             return; // PHP5 default build on windows comes with this function disabled, so we need to be able to escape on error
         }
-        xml_set_object($xml_parser,$this);
-        @xml_parser_set_option($xml_parser,XML_OPTION_TARGET_ENCODING,$parser_charset);
-        xml_set_element_handler($xml_parser,'startElement','endElement');
-        xml_set_character_data_handler($xml_parser,'startText');
+        xml_set_object($xml_parser, $this);
+        @xml_parser_set_option($xml_parser, XML_OPTION_TARGET_ENCODING, $parser_charset);
+        xml_set_element_handler($xml_parser, 'startElement', 'endElement');
+        xml_set_character_data_handler($xml_parser, 'startText');
 
-        if (strpos($xml_data,'<' . '?xml') === false) {
+        if (strpos($xml_data, '<' . '?xml') === false) {
             $xml_data = '<' . '?xml version="1.0" encoding="' . xmlentities($parser_charset) . '"?' . '>' . $xml_data;
         }
-        $xml_data = unixify_line_format($xml_data,$parser_charset); // Fixes Windows characters
+        $xml_data = unixify_line_format($xml_data, $parser_charset); // Fixes Windows characters
 
-        if (xml_parse($xml_parser,$xml_data,true) == 0) {
+        if (xml_parse($xml_parser, $xml_data, true) == 0) {
             warn_exit(xml_error_string(xml_get_error_code($xml_parser)));
         }
 
@@ -138,9 +139,9 @@ class ocp_simple_xml_reader
      * @param  string                   The name of the element found
      * @param  array                    Array of attributes of the element
      */
-    public function startElement($parser,$name,$attributes)
+    public function startElement($parser, $name, $attributes)
     {
-        array_push($this->tag_stack,strtolower($name));
+        array_push($this->tag_stack, strtolower($name));
         if ($attributes != array()) {
             $attributes_lowered = array();
             foreach ($attributes as $key => $val) {
@@ -148,9 +149,9 @@ class ocp_simple_xml_reader
             }
             $attributes = $attributes_lowered;
         }
-        array_push($this->attribute_stack,$attributes);
-        array_push($this->children_stack,array());
-        array_push($this->text_stack,'');
+        array_push($this->attribute_stack, $attributes);
+        array_push($this->children_stack, array());
+        array_push($this->text_stack, '');
     }
 
     /**
@@ -166,11 +167,11 @@ class ocp_simple_xml_reader
         $this_text = array_pop($this->text_stack);
 
         if (count($this->tag_stack) == 0) {
-            $this->gleamed = array($this_tag,$this_attributes,$this_text,$this_children);
+            $this->gleamed = array($this_tag, $this_attributes, $this_text, $this_children);
         } else {
             $next_top_tags_children = array_pop($this->children_stack);
-            $next_top_tags_children[] = array($this_tag,$this_attributes,$this_text,$this_children);
-            array_push($this->children_stack,$next_top_tags_children);
+            $next_top_tags_children[] = array($this_tag, $this_attributes, $this_text, $this_children);
+            array_push($this->children_stack, $next_top_tags_children);
         }
     }
 
@@ -180,15 +181,15 @@ class ocp_simple_xml_reader
      * @param  object                   The parser object (same as 'this')
      * @param  string                   The text
      */
-    public function startText($parser,$data)
+    public function startText($parser, $data)
     {
         $next_top_tags_text = array_pop($this->text_stack);
         $next_top_tags_text .= $data;
-        array_push($this->text_stack,$next_top_tags_text);
+        array_push($this->text_stack, $next_top_tags_text);
 
         $next_top_tags_children = array_pop($this->children_stack);
         $next_top_tags_children[] = $data;
-        array_push($this->children_stack,$next_top_tags_children);
+        array_push($this->children_stack, $next_top_tags_children);
     }
 
     /**
@@ -202,7 +203,7 @@ class ocp_simple_xml_reader
         $data = '';
         foreach ($children as $_) {
             if (is_array($_)) {
-                list($tag,$attributes,,$children) = $_;
+                list($tag, $attributes, , $children) = $_;
                 $drawn = '';
                 foreach ($attributes as $key => $val) {
                     $drawn .= $key . '=' . xmlentities($val);

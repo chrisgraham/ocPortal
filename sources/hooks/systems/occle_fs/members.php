@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_occle_fs_members
 {
     /**
@@ -28,23 +27,23 @@ class Hook_occle_fs_members
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~array                   The final directory listing (false: failure)
      */
-    public function listing($meta_dir,$meta_root_node,&$occle_fs)
+    public function listing($meta_dir, $meta_root_node, &$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
             return false;
         }
 
         $listing = array();
-        if (count($meta_dir)<1) {
+        if (count($meta_dir) < 1) {
             // We're listing the users
-            $cnt = $GLOBALS['SITE_DB']->query_select_value('f_members','COUNT(*)');
-            if ($cnt>1000) {
+            $cnt = $GLOBALS['SITE_DB']->query_select_value('f_members', 'COUNT(*)');
+            if ($cnt > 1000) {
                 return false;
             } // Too much to process
 
-            $users = $GLOBALS['SITE_DB']->query_select('f_members',array('id','m_username','m_join_time'));
+            $users = $GLOBALS['SITE_DB']->query_select('f_members', array('id', 'm_username', 'm_join_time'));
             foreach ($users as $user) {
-                $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($user['id'])) . ' AND  (' . db_string_equal_to('the_type','EDIT_EDIT_MEMBER_PROFILE') . ')';
+                $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($user['id'])) . ' AND  (' . db_string_equal_to('the_type', 'EDIT_EDIT_MEMBER_PROFILE') . ')';
                 $modification_time = $GLOBALS['SITE_DB']->query_value_if_there($query);
                 if (is_null($modification_time)) {
                     $modification_time = $user['m_join_time'];
@@ -53,15 +52,15 @@ class Hook_occle_fs_members
                 $listing[] = array(
                     $user['m_username'],
                     OCCLEFS_DIR,
-                    NULL/*don't calculate a filesize*/,
+                    null/*don't calculate a filesize*/,
                     $modification_time,
                 );
             }
         } elseif (count($meta_dir) == 1) {
             // We're listing the profile fields and custom profile fields of the specified member
             $username = $meta_dir[0];
-            $_member_data = $GLOBALS['SITE_DB']->query_select('f_members',array('*'),array('m_username' => $username),'',1);
-            if (!array_key_exists(0,$_member_data)) {
+            $_member_data = $GLOBALS['SITE_DB']->query_select('f_members', array('*'), array('m_username' => $username), '', 1);
+            if (!array_key_exists(0, $_member_data)) {
                 return false;
             }
             $member_data = $_member_data[0];
@@ -104,21 +103,21 @@ class Hook_occle_fs_members
             $listing[] = array(
                 'groups',
                 OCCLEFS_DIR,
-                NULL/*don't calculate a filesize*/,
+                null/*don't calculate a filesize*/,
                 $member_data['m_join_time'],
             );
 
             // Custom profile fields
-            $_member_custom_fields = $GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),array('mf_member_id' => $member_data['id']));
-            if (!array_key_exists(0,$_member_custom_fields)) {
+            $_member_custom_fields = $GLOBALS['SITE_DB']->query_select('f_member_custom_fields', array('*'), array('mf_member_id' => $member_data['id']));
+            if (!array_key_exists(0, $_member_custom_fields)) {
                 return false;
             }
             $member_custom_fields = $_member_custom_fields[0];
 
             foreach (array_keys($member_custom_fields) as $_i) {
-                $i = intval(substr($_i,strlen('field_')));
+                $i = intval(substr($_i, strlen('field_')));
                 $cpf_value = $member_custom_fields['field_' . strval($i)];
-                $cpf_name = get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields','cf_name',array('id' => $i)),$GLOBALS['FORUM_DB']);
+                $cpf_name = get_translated_text($GLOBALS['SITE_DB']->query_select_value('f_custom_fields', 'cf_name', array('id' => $i)), $GLOBALS['FORUM_DB']);
                 $listing[] = array(
                     $cpf_name,
                     OCCLEFS_FILE,
@@ -135,7 +134,7 @@ class Hook_occle_fs_members
             $groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]));
             $group_names = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
             foreach ($groups as $group) {
-                if (array_key_exists($group,$group_names)) {
+                if (array_key_exists($group, $group_names)) {
                     $listing[] = array(
                         $group_names[$group],
                         OCCLEFS_FILE,
@@ -160,17 +159,17 @@ class Hook_occle_fs_members
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
+    public function make_directory($meta_dir, $meta_root_node, $new_dir_name, &$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
             return false;
         }
 
-        if (count($meta_dir)<1) {
+        if (count($meta_dir) < 1) {
             // We're at the top level, and adding a new member
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
-            ocf_make_member($new_dir_name,'occle','',null,null,null,null,array(),null,null,1,null,null,'','','',0,1,1,'','','',1,1,null,1,1,null,'',false);
+            ocf_make_member($new_dir_name, 'occle', '', null, null, null, null, array(), null, null, 1, null, null, '', '', '', 0, 1, 1, '', '', '', 1, 1, null, 1, 1, null, '', false);
         } else {
             return false;
         } // Directories aren't allowed to be added anywhere else
@@ -187,13 +186,13 @@ class Hook_occle_fs_members
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
+    public function remove_directory($meta_dir, $meta_root_node, $dir_name, &$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
             return false;
         }
 
-        if (count($meta_dir)<1) {
+        if (count($meta_dir) < 1) {
             // We're at the top level, and removing a member
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
@@ -214,7 +213,7 @@ class Hook_occle_fs_members
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function remove_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
             return false;
@@ -222,7 +221,7 @@ class Hook_occle_fs_members
 
         if (count($meta_dir) == 1) {
             // We're in a member's directory, and deleting one of their profile fields
-            if (in_array($file_name,array(
+            if (in_array($file_name, array(
                 'id',
                 'theme',
                 'avatar',
@@ -253,10 +252,10 @@ class Hook_occle_fs_members
 
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
-            $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
+            $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
             if (is_null($field_id)) { // Should never happen, but sometimes on upgrades/corruption...
-                $GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name,10);
-                $field_id = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
+                $GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name, 10);
+                $field_id = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
             }
 
             ocf_delete_custom_field($field_id);
@@ -269,9 +268,9 @@ class Hook_occle_fs_members
             require_code('ocf_groups_action');
             require_code('ocf_groups_action2');
             $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-            $group_id = array_search($file_name,$groups);
+            $group_id = array_search($file_name, $groups);
             if ($group_id !== false) {
-                ocf_member_leave_group($group_id,$GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]));
+                ocf_member_leave_group($group_id, $GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]));
             } else {
                 return false;
             }
@@ -291,7 +290,7 @@ class Hook_occle_fs_members
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
             return false;
@@ -324,8 +323,8 @@ class Hook_occle_fs_members
                 'allow_e-mails_from_staff' => 'm_allow_emails_from_staff',
                 'max_attach_size' => 'm_max_email_attach_size_mb'
             );
-            if (array_key_exists($file_name,$coded_fields)) {
-                return $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members',$coded_fields[$file_name],array('id' => $GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])));
+            if (array_key_exists($file_name, $coded_fields)) {
+                return $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', $coded_fields[$file_name], array('id' => $GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])));
             }
 
             require_code('ocf_members');
@@ -333,13 +332,13 @@ class Hook_occle_fs_members
 
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
-            $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
+            $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
             if (is_null($field_id)) { // Should never happen, but sometimes on upgrades/corruption...
-                $GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name,10);
-                $field_id = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
+                $GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name, 10);
+                $field_id = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
             }
 
-            if (array_key_exists($field_id,$fields)) {
+            if (array_key_exists($field_id, $fields)) {
                 return $fields[$field_id];
             } else {
                 return false;
@@ -366,7 +365,7 @@ class Hook_occle_fs_members
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         if (get_forum_type() != 'ocf') {
             return false;
@@ -400,22 +399,22 @@ class Hook_occle_fs_members
                 'max_attach_size' => 'm_max_email_attach_size_mb',
                 'highlighted_name' => 'm_highlighted_name',
             );
-            if (array_key_exists($file_name,$coded_fields)) {
-                $GLOBALS['FORUM_DB']->query_update('f_members',array($coded_fields[$file_name] => $contents),array('id' => $GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])),'',1);
+            if (array_key_exists($file_name, $coded_fields)) {
+                $GLOBALS['FORUM_DB']->query_update('f_members', array($coded_fields[$file_name] => $contents), array('id' => $GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0])), '', 1);
                 return true;
             }
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
-            $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
+            $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
             if (is_null($field_id)) { // Should never happen, but sometimes on upgrades/corruption...
-                $GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name,10);
-                $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
+                $GLOBALS['FORUM_DRIVER']->install_create_custom_field($file_name, 10);
+                $field_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $file_name));
             }
 
             if (is_null($field_id)) {
                 $field_id = ocf_make_custom_field($file_name);
             }
-            ocf_set_custom_field($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]),$field_id,$contents);
+            ocf_set_custom_field($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]), $field_id, $contents);
         } elseif (count($meta_dir) == 2) {
             if ($meta_dir[1] != 'groups') {
                 return false;
@@ -425,9 +424,9 @@ class Hook_occle_fs_members
             require_code('ocf_groups_action');
             require_code('ocf_groups_action2');
             $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
-            $group_id = array_search($file_name,$groups);
+            $group_id = array_search($file_name, $groups);
             if ($group_id !== false) {
-                ocf_add_member_to_group($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]),$group_id,1);
+                ocf_add_member_to_group($GLOBALS['FORUM_DRIVER']->get_member_from_username($meta_dir[0]), $group_id, 1);
             } else {
                 return false;
             }

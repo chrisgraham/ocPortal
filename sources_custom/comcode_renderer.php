@@ -12,7 +12,7 @@ if (!function_exists('init__comcode_renderer')) {
     {
         $before = 'if ((isset($DANGEROUS_TAGS[$tag])) && (!$comcode_dangerous))';
         $after = 'if ((isset($DANGEROUS_TAGS[$tag])) && (!$comcode_dangerous) && (!comcode_white_listed($tag,$marker,$comcode)))';
-        $in = str_replace($before,$after,$in);
+        $in = str_replace($before, $after, $in);
 
         $before = '$urls=get_url(\'\',\'file\'.$_id,\'uploads/attachments\',2,OCP_UPLOAD_ANYTHING,(!array_key_exists(\'thumb\',$attributes)) || ($attributes[\'thumb\']!=\'0\'),\'\',\'\',true,true,true,true);';
         $after = $before . "
@@ -47,27 +47,27 @@ if (!function_exists('init__comcode_renderer')) {
                     }
             }
         ";
-        $in = str_replace($before,$after,$in);
+        $in = str_replace($before, $after, $in);
 
         return $in;
     }
 }
 
-function comcode_white_listed($tag,$marker,$comcode)
+function comcode_white_listed($tag, $marker, $comcode)
 {
-    $start_pos = strrpos(substr($comcode,0,$marker),'[' . $tag);
-    $end_pos = $marker-$start_pos;
-    $comcode_portion_at_and_after = substr($comcode,$start_pos);
-    $comcode_portion = substr($comcode_portion_at_and_after,0,$end_pos);
+    $start_pos = strrpos(substr($comcode, 0, $marker), '[' . $tag);
+    $end_pos = $marker - $start_pos;
+    $comcode_portion_at_and_after = substr($comcode, $start_pos);
+    $comcode_portion = substr($comcode_portion_at_and_after, 0, $end_pos);
 
     require_code('textfiles');
-    $whitelists = explode("\n",read_text_file('comcode_whitelist'));
+    $whitelists = explode("\n", read_text_file('comcode_whitelist'));
 
-    if (in_array($comcode_portion,$whitelists)) {
+    if (in_array($comcode_portion, $whitelists)) {
         return true;
     }
     foreach ($whitelists as $whitelist) {
-        if ((substr($whitelist,0,1) == '/') && (substr($whitelist,-1) == '/') && (preg_match($whitelist,$comcode_portion) != 0)) {
+        if ((substr($whitelist, 0, 1) == '/') && (substr($whitelist, -1) == '/') && (preg_match($whitelist, $comcode_portion) != 0)) {
             return true;
         }
     }

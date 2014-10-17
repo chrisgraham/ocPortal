@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 /*EXTRA FUNCTIONS: simplexml_load_string|hash_hmac*/
 
 class Block_side_amazon_wishlist
@@ -30,7 +29,7 @@ class Block_side_amazon_wishlist
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('wishlist_id','access_key','secret_key','domain','title');
+        $info['parameters'] = array('wishlist_id', 'access_key', 'secret_key', 'domain', 'title');
         return $info;
     }
 
@@ -43,7 +42,7 @@ class Block_side_amazon_wishlist
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'wishlist_id\',$map)?$map[\'wishlist_id\']:\'\',array_key_exists(\'access_key\',$map)?$map[\'access_key\']:\'\',array_key_exists(\'secret_key\',$map)?$map[\'secret_key\']:\'\',array_key_exists(\'domain\',$map)?$map[\'domain\']:\'\',array_key_exists(\'title\',$map)?$map[\'title\']:\'\')';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*5;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 5;
         return $info;
     }
 
@@ -60,15 +59,15 @@ class Block_side_amazon_wishlist
         require_lang('amazon');
 
         global $SECRET_KEY;
-        $title = (isset($map['title']) && strlen($map['title'])>0)?$map['title']:do_lang_tempcode('BLOCK_AMAZON_WISHLIST_TITLE');
-        if (!array_key_exists('wishlist_id',$map)) {
-            return do_lang_tempcode('NO_PARAMETER_SENT','wishlist_id');
+        $title = (isset($map['title']) && strlen($map['title']) > 0) ? $map['title'] : do_lang_tempcode('BLOCK_AMAZON_WISHLIST_TITLE');
+        if (!array_key_exists('wishlist_id', $map)) {
+            return do_lang_tempcode('NO_PARAMETER_SENT', 'wishlist_id');
         }
-        if (!array_key_exists('access_key',$map)) {
-            return do_lang_tempcode('NO_PARAMETER_SENT','access_key');
+        if (!array_key_exists('access_key', $map)) {
+            return do_lang_tempcode('NO_PARAMETER_SENT', 'access_key');
         }
-        if (!array_key_exists('secret_key',$map)) {
-            return do_lang_tempcode('NO_PARAMETER_SENT','secret_key');
+        if (!array_key_exists('secret_key', $map)) {
+            return do_lang_tempcode('NO_PARAMETER_SENT', 'secret_key');
         }
         $wishlist_id = $map['wishlist_id'];
         $access_key = $map['access_key'];
@@ -101,9 +100,10 @@ class Block_side_amazon_wishlist
                     }
                 }
             }
-        } while ($items->Lists->List->TotalPages>$i);
+        }
+        while ($items->Lists->List->TotalPages > $i);
 
-        return do_template('BLOCK_SIDE_AMAZON_WISHLIST',array('_GUID' => '3c5da7ade6aca4c30a3842e00d686d90','TITLE' => $title,'CONTENT' => $out));
+        return do_template('BLOCK_SIDE_AMAZON_WISHLIST', array('_GUID' => '3c5da7ade6aca4c30a3842e00d686d90', 'TITLE' => $title, 'CONTENT' => $out));
     }
 
     /**
@@ -113,18 +113,18 @@ class Block_side_amazon_wishlist
      * @param  LONG_TEXT                additional url params
      * @return SHORT_TEXT               Amazon web service URL with signature
      */
-    public function createSignature($url,$params = '')
+    public function createSignature($url, $params = '')
     {
         global $SECRET_KEY;
         $url_parts = parse_url($url);
         $query = array();
-        parse_str($url_parts['query'],$query);
-        uksort($query,'strcasecmp');
+        parse_str($url_parts['query'], $query);
+        uksort($query, 'strcasecmp');
         foreach ($query as $key => $value) {
-            $params .= $key . '=' . str_replace(array(':',','),array('%3A','%2C'),$value) . '&';
+            $params .= $key . '=' . str_replace(array(':', ','), array('%3A', '%2C'), $value) . '&';
         }
-        $signature = base64_encode(hash_hmac('sha256',"GET\n" . $url_parts['host'] . "\n" . $url_parts['path'] . "\n" . substr($params,0,-1),$SECRET_KEY,true));
-        $return = 'http://' . $url_parts['host'] . $url_parts['path'] . '?' . $params . 'Signature=' . str_replace(array('+','='),array('%2B','%3D'),$signature);
+        $signature = base64_encode(hash_hmac('sha256', "GET\n" . $url_parts['host'] . "\n" . $url_parts['path'] . "\n" . substr($params, 0, -1), $SECRET_KEY, true));
+        $return = 'http://' . $url_parts['host'] . $url_parts['path'] . '?' . $params . 'Signature=' . str_replace(array('+', '='), array('%2B', '%3D'), $signature);
 
         return $return;
     }

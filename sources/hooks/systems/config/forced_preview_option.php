@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_config_forced_preview_option
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_forced_preview_option
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'0';
+        return (get_forum_type() != 'ocf') ? null : '0';
     }
 }

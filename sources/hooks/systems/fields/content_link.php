@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_content_link
 {
     /**
@@ -27,7 +26,7 @@ class Hook_fields_content_link
      */
     public function get_field_types()
     {
-        $hooks = find_all_hooks('systems','content_meta_aware');
+        $hooks = find_all_hooks('systems', 'content_meta_aware');
         $ret = array();
         foreach (array_keys($hooks) as $hook) {
             if ($hook != 'catalogue_entry'/*got a better field hook specifically for catalogue entries*/) {
@@ -38,7 +37,7 @@ class Hook_fields_content_link
                 }
 
                 if ((is_file(get_file_base() . '/sources_custom/hooks/systems/content_meta_aware/' . $hook . '.php')) || (is_file(get_file_base() . '/sources/hooks/systems/content_meta_aware/' . $hook . '.php'))) {
-                    $ret['at_' . $declared_hook] = do_lang_tempcode('FIELD_TYPE_content_link_x',escape_html($hook));
+                    $ret['at_' . $declared_hook] = do_lang_tempcode('FIELD_TYPE_content_link_x', escape_html($hook));
                 }
             }
         }
@@ -57,7 +56,7 @@ class Hook_fields_content_link
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -67,9 +66,9 @@ class Hook_fields_content_link
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return exact_match_sql($row,$i);
+        return exact_match_sql($row, $i);
     }
 
     // ===================
@@ -84,13 +83,13 @@ class Hook_fields_content_link
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
         /*if ($required!==NULL)
         {
             Nothing special for this hook
         }*/
-        return array('short_unescaped',$default,'short');
+        return array('short_unescaped', $default, 'short');
     }
 
     /**
@@ -100,7 +99,7 @@ class Hook_fields_content_link
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -110,15 +109,15 @@ class Hook_fields_content_link
             return new ocp_tempcode();
         }
 
-        $type = preg_replace('#^choose\_#','',substr($field['cf_type'],3));
+        $type = preg_replace('#^choose\_#', '', substr($field['cf_type'], 3));
 
         require_code('content');
-        list($title,,$info) = content_get_details($type,$ev);
+        list($title, , $info) = content_get_details($type, $ev);
 
-        $page_link = str_replace('_WILD',$ev,$info['view_page_link_pattern']);
-        list($zone,$map) = page_link_decode($page_link);
+        $page_link = str_replace('_WILD', $ev, $info['view_page_link_pattern']);
+        list($zone, $map) = page_link_decode($page_link);
 
-        return hyperlink(build_url($map,$zone),$title,false,true);
+        return hyperlink(build_url($map, $zone), $title, false, true);
     }
 
     // ======================
@@ -135,50 +134,50 @@ class Hook_fields_content_link
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         $options = array();
-        $type = substr($field['cf_type'],3);
+        $type = substr($field['cf_type'], 3);
 
         // Nice tree list selection
         if ((is_file(get_file_base() . '/sources/hooks/systems/ajax_tree/choose_' . $type . '.php')) || (is_file(get_file_base() . '/sources_custom/hooks/systems/ajax_tree/choose_' . $type . '.php'))) {
             require_code('content');
-            list($nice_label) = content_get_details($type,$actual_value);
-            return form_input_tree_list($_cf_name,$_cf_description,'field_' . strval($field['id']),null,'choose_' . $type,$options,$field['cf_required'] == 1,$actual_value,false,null,false,$nice_label);
+            list($nice_label) = content_get_details($type, $actual_value);
+            return form_input_tree_list($_cf_name, $_cf_description, 'field_' . strval($field['id']), null, 'choose_' . $type, $options, $field['cf_required'] == 1, $actual_value, false, null, false, $nice_label);
         }
 
         // Simple list selection
         require_code('content');
         $ob = get_content_object($type);
         $info = $ob->info();
-        $db = $GLOBALS[(substr($type,0,4) == 'ocf_')?'FORUM_DB':'SITE_DB'];
+        $db = $GLOBALS[(substr($type, 0, 4) == 'ocf_') ? 'FORUM_DB' : 'SITE_DB'];
         $select = array();
-        append_content_select_for_id($select,$info);
+        append_content_select_for_id($select, $info);
         if (!is_null($info['title_field'])) {
             $select[] = $info['title_field'];
         }
-        $rows = $db->query_select($info['table'],$select,null,is_null($info['add_time_field'])?'':('ORDER BY ' . $info['add_time_field'] . ' DESC'),2000/*reasonable limit*/);
+        $rows = $db->query_select($info['table'], $select, null, is_null($info['add_time_field']) ? '' : ('ORDER BY ' . $info['add_time_field'] . ' DESC'), 2000/*reasonable limit*/);
         $list = new ocp_tempcode();
         $_list = array();
         foreach ($rows as $row) {
-            $id = extract_content_str_id_from_data($row,$info);
+            $id = extract_content_str_id_from_data($row, $info);
             if (is_null($info['title_field'])) {
                 $text = $id;
             } else {
-                $text = $info['title_field_dereference']?get_translated_text($row[$info['title_field']]):$row[$info['title_field']];
+                $text = $info['title_field_dereference'] ? get_translated_text($row[$info['title_field']]) : $row[$info['title_field']];
             }
             $_list[$id] = $text;
         }
-        if (count($_list)<2000) {
+        if (count($_list) < 2000) {
             asort($_list);
         }
         foreach ($_list as $id => $text) {
             if (!is_string($id)) {
                 $id = strval($id);
             }
-            $list->attach(form_input_list_entry($id,is_null($actual_value)?false:($actual_value === $id),$text));
+            $list->attach(form_input_list_entry($id, is_null($actual_value) ? false : ($actual_value === $id), $text));
         }
-        return form_input_list($_cf_name,$_cf_description,'field_' . strval($field['id']),$list,null,false,$field['cf_required'] == 1);
+        return form_input_list($_cf_name, $_cf_description, 'field_' . strval($field['id']), $list, null, false, $field['cf_required'] == 1);
     }
 
     /**
@@ -190,10 +189,10 @@ class Hook_fields_content_link
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        return post_param($tmp_name, $editing ? STRING_MAGIC_NULL : '');
     }
 }

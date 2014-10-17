@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Block_main_contact_catalogues
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_contact_catalogues
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('to','param','subject','body_prefix','body_suffix','subject_prefix','subject_suffix','redirect');
+        $info['parameters'] = array('to', 'param', 'subject', 'body_prefix', 'body_suffix', 'subject_prefix', 'subject_suffix', 'redirect');
         return $info;
     }
 
@@ -47,7 +46,7 @@ class Block_main_contact_catalogues
     {
         $info = array();
         $info['cache_on'] = '(post_param(\'subject\',\'\')!=\'\')?NULL:array(array_key_exists(\'param\',$map)?$map[\'param\']:\'\',array_key_exists(\'to\',$map)?$map[\'to\']:\'\',array_key_exists(\'redirect\',$map)?$map[\'redirect\']:\'\',array_key_exists(\'subject\',$map)?$map[\'subject\']:\'\',array_key_exists(\'body_prefix\',$map)?$map[\'body_prefix\']:\'\',array_key_exists(\'body_suffix\',$map)?$map[\'body_suffix\']:\'\',array_key_exists(\'subject_prefix\',$map)?$map[\'subject_prefix\']:\'\',array_key_exists(\'subject_suffix\',$map)?$map[\'subject_suffix\']:\'\')';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*24*7;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24 * 7;
         return $info;
     }
 
@@ -66,27 +65,27 @@ class Block_main_contact_catalogues
             $use_captcha = false;
         }
 
-        $catalogue_name = array_key_exists('param',$map)?$map['param']:'';
+        $catalogue_name = array_key_exists('param', $map) ? $map['param'] : '';
         if ($catalogue_name == '') {
-            $catalogue_name = $GLOBALS['SITE_DB']->query_select_value('catalogues','c_name');
+            $catalogue_name = $GLOBALS['SITE_DB']->query_select_value('catalogues', 'c_name');
         } // Random/arbitrary (first one that comes out of the DB)
 
-        $special_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name' => $catalogue_name),'ORDER BY cf_order');
+        $special_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => $catalogue_name), 'ORDER BY cf_order');
         require_code('fields');
 
-        $subject = array_key_exists('subject',$map)?$map['subject']:'';
+        $subject = array_key_exists('subject', $map) ? $map['subject'] : '';
         if ($subject == '') {
-            $subject = get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues','c_title'));
+            $subject = get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogues', 'c_title'));
         }
 
-        $body_prefix = array_key_exists('body_prefix',$map)?$map['body_prefix']:'';
-        $body_suffix = array_key_exists('body_suffix',$map)?$map['body_suffix']:'';
-        $subject_prefix = array_key_exists('subject_prefix',$map)?$map['subject_prefix']:'';
-        $subject_suffix = array_key_exists('subject_suffix',$map)?$map['subject_suffix']:'';
+        $body_prefix = array_key_exists('body_prefix', $map) ? $map['body_prefix'] : '';
+        $body_suffix = array_key_exists('body_suffix', $map) ? $map['body_suffix'] : '';
+        $subject_prefix = array_key_exists('subject_prefix', $map) ? $map['subject_prefix'] : '';
+        $subject_suffix = array_key_exists('subject_suffix', $map) ? $map['subject_suffix'] : '';
 
         $block_id = md5(serialize($map));
 
-        if (post_param('_block_id','') == $block_id) {
+        if (post_param('_block_id', '') == $block_id) {
             if ($use_captcha) {
                 enforce_captcha();
             }
@@ -94,27 +93,27 @@ class Block_main_contact_catalogues
             $field_results = array();
             foreach ($special_fields as $field_num => $field) {
                 $ob = get_fields_hook($field['cf_type']);
-                $inputted_value = $ob->inputted_to_field_value(false,$field,null);
+                $inputted_value = $ob->inputted_to_field_value(false, $field, null);
                 if (!is_null($inputted_value)) {
                     $field_results[get_translated_text($field['cf_name'])] = $inputted_value;
                 }
             }
 
             require_code('mail');
-            $to_email = array_key_exists('to',$map)?$map['to']:'';
+            $to_email = array_key_exists('to', $map) ? $map['to'] : '';
             if ($to_email == '') {
                 $to_email = null;
             }
-            form_to_email($subject_prefix . $subject . $subject_suffix,$body_prefix,$field_results,$to_email,$body_suffix,false);
+            form_to_email($subject_prefix . $subject . $subject_suffix, $body_prefix, $field_results, $to_email, $body_suffix, false);
 
             attach_message(do_lang_tempcode('SUCCESS'));
 
-            $redirect = array_key_exists('redirect',$map)?$map['redirect']:'';
+            $redirect = array_key_exists('redirect', $map) ? $map['redirect'] : '';
             if ($redirect != '') {
                 require_code('urls2');
                 $redirect = page_link_as_url($redirect);
                 require_code('site2');
-                assign_refresh($redirect,0.0);
+                assign_refresh($redirect, 0.0);
             }
         }
 
@@ -142,22 +141,22 @@ class Block_main_contact_catalogues
             $_cf_name = get_translated_text($field['cf_name']);
             $field_cat = '';
             $matches = array();
-            if (strpos($_cf_name,': ') !== false) {
-                $field_cat = substr($_cf_name,0,strpos($_cf_name,': '));
+            if (strpos($_cf_name, ': ') !== false) {
+                $field_cat = substr($_cf_name, 0, strpos($_cf_name, ': '));
                 if ($field_cat . ': ' == $_cf_name) {
                     $_cf_name = $field_cat; // Just been pulled out as heading, nothing after ": "
                 } else {
-                    $_cf_name = substr($_cf_name,strpos($_cf_name,': ')+2);
+                    $_cf_name = substr($_cf_name, strpos($_cf_name, ': ') + 2);
                 }
             }
-            if (!array_key_exists($field_cat,$field_groups)) {
+            if (!array_key_exists($field_cat, $field_groups)) {
                 $field_groups[$field_cat] = new ocp_tempcode();
             }
 
             $_cf_description = escape_html(get_translated_text($field['cf_description']));
 
             $GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'] = true;
-            $result = $ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,true,!array_key_exists($field_num+1,$special_fields));
+            $result = $ob->get_field_inputter($_cf_name, $_cf_description, $field, $default, true, !array_key_exists($field_num + 1, $special_fields));
             $GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'] = false;
 
             if (is_null($result)) {
@@ -170,10 +169,10 @@ class Block_main_contact_catalogues
                 $field_groups[$field_cat]->attach($result);
             }
 
-            $hidden->attach(form_input_hidden('label_for__field_' . strval($field['id']),$_cf_name));
+            $hidden->attach(form_input_hidden('label_for__field_' . strval($field['id']), $_cf_name));
 
             if (($field['cf_type'] == 'email') && (!$found_email)) {
-                $hidden->attach(form_input_hidden('field_tagged__field_' . strval($field['id']),'email'));
+                $hidden->attach(form_input_hidden('field_tagged__field_' . strval($field['id']), 'email'));
                 $found_email = true;
             }
 
@@ -181,29 +180,29 @@ class Block_main_contact_catalogues
             unset($ob);
         }
 
-        if (array_key_exists('',$field_groups)) { // Blank prefix must go first
+        if (array_key_exists('', $field_groups)) { // Blank prefix must go first
             $field_groups_blank = $field_groups[''];
             unset($field_groups['']);
-            $field_groups = array_merge(array($field_groups_blank),$field_groups);
+            $field_groups = array_merge(array($field_groups_blank), $field_groups);
         }
         foreach ($field_groups as $field_group_title => $extra_fields) {
             if (is_integer($field_group_title)) {
-                $field_group_title = ($field_group_title == 0)?'':strval($field_group_title);
+                $field_group_title = ($field_group_title == 0) ? '' : strval($field_group_title);
             }
 
             if ($field_group_title != '') {
-                $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => 'c0b9f22ef5767da57a1ff65c06af96a1','TITLE' => $field_group_title)));
+                $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'c0b9f22ef5767da57a1ff65c06af96a1', 'TITLE' => $field_group_title)));
             }
             $fields->attach($extra_fields);
         }
 
         url_default_parameters__disable();
 
-        $hidden->attach(form_input_hidden('subject',$subject));
-        $hidden->attach(form_input_hidden('_block_id',$block_id));
+        $hidden->attach(form_input_hidden('subject', $subject));
+        $hidden->attach(form_input_hidden('_block_id', $block_id));
 
         $url = get_self_url();
 
-        return do_template('FORM',array('_GUID' => '7dc3957edf3b47399b688d72fae54128','FIELDS' => $fields,'HIDDEN' => $hidden,'SUBMIT_ICON' => 'buttons__send','SUBMIT_NAME' => do_lang_tempcode('SEND'),'URL' => $url,'TEXT' => $text,'SECONDARY_FORM' => true));
+        return do_template('FORM', array('_GUID' => '7dc3957edf3b47399b688d72fae54128', 'FIELDS' => $fields, 'HIDDEN' => $hidden, 'SUBMIT_ICON' => 'buttons__send', 'SUBMIT_NAME' => do_lang_tempcode('SEND'), 'URL' => $url, 'TEXT' => $text, 'SECONDARY_FORM' => true));
     }
 }

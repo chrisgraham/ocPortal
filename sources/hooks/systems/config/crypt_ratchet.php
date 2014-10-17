@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_crypt_ratchet
 {
     /**
@@ -60,11 +59,12 @@ class Hook_config_crypt_ratchet
             $cost = 10;
             do {
                 $start = microtime(true);
-                password_hash('test',PASSWORD_BCRYPT,array('cost' => $cost));
+                password_hash('test', PASSWORD_BCRYPT, array('cost' => $cost));
                 $end = microtime(true);
-                $time_dif = ($end-$start);
+                $time_dif = ($end - $start);
                 $cost++;
-            } while (($time_dif<$time_target) && ($cost <= 31));
+            }
+            while (($time_dif < $time_target) && ($cost <= 31));
             $cost--;
         } else {
             $cost = 10;

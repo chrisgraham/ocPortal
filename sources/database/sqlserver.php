@@ -30,12 +30,13 @@ You need to go into your server properties and turn the security to "SQL Server 
  */
 function init__database__sqlserver()
 {
-    @ini_set('mssql.textlimit','300000');
-    @ini_set('mssql.textsize','300000');
+    @ini_set('mssql.textlimit', '300000');
+    @ini_set('mssql.textsize', '300000');
 }
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_sqlserver
@@ -71,19 +72,19 @@ class Database_Static_sqlserver
      * @param  array                    The DB connection to make on
      * @param  ID_TEXT                  The name of the unique key field for the table
      */
-    public function db_create_index($table_name,$index_name,$_fields,$db,$unique_key_field = 'id')
+    public function db_create_index($table_name, $index_name, $_fields, $db, $unique_key_field = 'id')
     {
         if ($index_name[0] == '#') {
             if (db_has_full_text($db)) {
-                $index_name = substr($index_name,1);
-                $unique_index_name = 'index' . $index_name . '_' . strval(mt_rand(0,10000));
-                $this->db_query('CREATE UNIQUE INDEX ' . $unique_index_name . ' ON ' . $table_name . '(' . $unique_key_field . ')',$db);
-                $this->db_query('CREATE FULLTEXT CATALOG ft AS DEFAULT',$db,null,null,true); // Might already exist
-                $this->db_query('CREATE FULLTEXT INDEX ON ' . $table_name . '(' . $_fields . ') KEY INDEX ' . $unique_index_name,$db,null,null,true);
+                $index_name = substr($index_name, 1);
+                $unique_index_name = 'index' . $index_name . '_' . strval(mt_rand(0, 10000));
+                $this->db_query('CREATE UNIQUE INDEX ' . $unique_index_name . ' ON ' . $table_name . '(' . $unique_key_field . ')', $db);
+                $this->db_query('CREATE FULLTEXT CATALOG ft AS DEFAULT', $db, null, null, true); // Might already exist
+                $this->db_query('CREATE FULLTEXT INDEX ON ' . $table_name . '(' . $_fields . ') KEY INDEX ' . $unique_index_name, $db, null, null, true);
             }
             return;
         }
-        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0,10000)) . ' ON ' . $table_name . '(' . $_fields . ')',$db);
+        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0, 10000)) . ' ON ' . $table_name . '(' . $_fields . ')', $db);
     }
 
     /**
@@ -93,10 +94,10 @@ class Database_Static_sqlserver
      * @param  array                    A list of fields to put in the new key
      * @param  array                    The DB connection to make on
      */
-    public function db_change_primary_key($table_name,$new_key,$db)
+    public function db_change_primary_key($table_name, $new_key, $db)
     {
-        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
-        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',',$new_key) . ')',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY', $db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',', $new_key) . ')', $db);
     }
 
     /**
@@ -106,9 +107,9 @@ class Database_Static_sqlserver
      * @param  boolean                  Whether to do a boolean full text search
      * @return string                   Part of a WHERE clause for doing full-text search
      */
-    public function db_full_text_assemble($content,$boolean)
+    public function db_full_text_assemble($content, $boolean)
     {
-        $content = str_replace('"','',$content);
+        $content = str_replace('"', '', $content);
         return 'CONTAINS ((?),\'' . $this->db_escape_string($content) . '\')';
     }
 
@@ -171,7 +172,7 @@ class Database_Static_sqlserver
      * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
      * @param  array                    The DB connection to make on
      */
-    public function db_create_table($table_name,$fields,$db)
+    public function db_create_table($table_name, $fields, $db)
     {
         $type_remap = $this->db_get_type_remap();
 
@@ -179,7 +180,7 @@ class Database_Static_sqlserver
         $keys = '';
         foreach ($fields as $name => $type) {
             if ($type[0] == '*') { // Is a key
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 if ($keys != '') {
                     $keys .= ', ';
                 }
@@ -187,18 +188,18 @@ class Database_Static_sqlserver
             }
 
             if ($type[0] == '?') { // Is perhaps null
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 $perhaps_null = 'NULL';
             } else {
                 $perhaps_null = 'NOT NULL';
             }
 
-            $type = isset($type_remap[$type])?$type_remap[$type]:$type;
+            $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
             $_fields .= '    ' . $name . ' ' . $type;
-            if (substr($name,-13) == '__text_parsed') {
+            if (substr($name, -13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
-            } elseif (substr($name,-13) == '__source_user') {
+            } elseif (substr($name, -13) == '__source_user') {
                 $_fields .= ' DEFAULT ' . strval(db_get_first_id());
             }
             $_fields .= ' ' . $perhaps_null . ',' . "\n";
@@ -208,7 +209,7 @@ class Database_Static_sqlserver
           ' . $_fields . '
           PRIMARY KEY (' . $keys . ')
         )';
-        $this->db_query($query,$db,null,null);
+        $this->db_query($query, $db, null, null);
     }
 
     /**
@@ -218,7 +219,7 @@ class Database_Static_sqlserver
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_equal_to($attribute,$compare)
+    public function db_string_equal_to($attribute, $compare)
     {
         return $attribute . " LIKE '" . $this->db_escape_string($compare) . "'";
     }
@@ -230,7 +231,7 @@ class Database_Static_sqlserver
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_not_equal_to($attribute,$compare)
+    public function db_string_not_equal_to($attribute, $compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
@@ -251,9 +252,9 @@ class Database_Static_sqlserver
      * @param  ID_TEXT                  The table name
      * @param  array                    The DB connection to delete on
      */
-    public function db_drop_table_if_exists($table,$db)
+    public function db_drop_table_if_exists($table, $db)
     {
-        $this->db_query('DROP TABLE ' . $table,$db,null,null,true);
+        $this->db_query('DROP TABLE ' . $table, $db, null, null, true);
     }
 
     /**
@@ -274,7 +275,7 @@ class Database_Static_sqlserver
      */
     public function db_encode_like($pattern)
     {
-        return $this->db_escape_string(str_replace('%','*',$pattern));
+        return $this->db_escape_string(str_replace('%', '*', $pattern));
     }
 
     /**
@@ -288,7 +289,7 @@ class Database_Static_sqlserver
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (NULL: failed)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
         // Potential cacheing
         if (isset($this->cache_db[$db_name][$db_host])) {
@@ -299,35 +300,35 @@ class Database_Static_sqlserver
             $error = 'The sqlserver PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error);
+            critical_error('PASSON', $error);
         }
 
         if (function_exists('sqlsrv_connect')) {
             if ($db_host == '127.0.0.1' || $db_host == 'localhost') {
                 $db_host = '(local)';
             }
-            $db = @sqlsrv_connect($db_host,($db_user == '')?array('Database' => $db_name):array('UID' => $db_user,'PWD' => $db_password,'Database' => $db_name));
+            $db = @sqlsrv_connect($db_host, ($db_user == '') ? array('Database' => $db_name) : array('UID' => $db_user, 'PWD' => $db_password, 'Database' => $db_name));
         } else {
-            $db = $persistent?@mssql_pconnect($db_host,$db_user,$db_password):@mssql_connect($db_host,$db_user,$db_password);
+            $db = $persistent ? @mssql_pconnect($db_host, $db_user, $db_password) : @mssql_connect($db_host, $db_user, $db_password);
         }
         if ($db === false) {
             $error = 'Could not connect to database-server (' . @strval($php_errormsg) . ')';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
+            critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
         }
         if (!function_exists('sqlsrv_connect')) {
-            if (!mssql_select_db($db_name,$db)) {
+            if (!mssql_select_db($db_name, $db)) {
                 $error = 'Could not connect to database (' . mssql_get_last_message() . ')';
                 if ($fail_ok) {
                     echo $error;
-                    return NULL;
+                    return null;
                 }
-                critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
+                critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
             }
         }
 
@@ -344,7 +345,7 @@ class Database_Static_sqlserver
     public function db_has_full_text($db)
     {
         global $SITE_INFO;
-        if (array_key_exists('skip_fulltext_sqlserver',$SITE_INFO)) {
+        if (array_key_exists('skip_fulltext_sqlserver', $SITE_INFO)) {
             return false;
         }
         return true;
@@ -368,7 +369,7 @@ class Database_Static_sqlserver
      */
     public function db_escape_string($string)
     {
-        return str_replace("'","''",$string);
+        return str_replace("'", "''", $string);
     }
 
     /**
@@ -382,42 +383,42 @@ class Database_Static_sqlserver
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
         if (!is_null($max)) {
             if (is_null($start)) {
                 $max += $start;
             }
 
-            if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) { // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
-                $query = 'SELECT TOP ' . strval(intval($max)) . substr($query,6);
+            if ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ')) { // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
+                $query = 'SELECT TOP ' . strval(intval($max)) . substr($query, 6);
             }
         }
 
         $GLOBALS['SUPPRESS_ERROR_DEATH'] = true;
         if (function_exists('sqlsrv_query')) {
-            $results = sqlsrv_query($db,$query,array(),array('Scrollable' => 'static'));
+            $results = sqlsrv_query($db, $query, array(), array('Scrollable' => 'static'));
         } else {
-            $results = mssql_query($query,$db);
+            $results = mssql_query($query, $db);
         }
         $GLOBALS['SUPPRESS_ERROR_DEATH'] = false;
-        if (($results === false) && (strtoupper(substr($query,0,12)) == 'INSERT INTO ') && (strpos($query,'(id, ') !== false)) {
-            $pos = strpos($query,'(');
-            $table_name = substr($query,12,$pos-13);
+        if (($results === false) && (strtoupper(substr($query, 0, 12)) == 'INSERT INTO ') && (strpos($query, '(id, ') !== false)) {
+            $pos = strpos($query, '(');
+            $table_name = substr($query, 12, $pos - 13);
             if (function_exists('sqlsrv_query')) {
-                @sqlsrv_query($db,'SET IDENTITY_INSERT ' . $table_name . ' ON');
+                @sqlsrv_query($db, 'SET IDENTITY_INSERT ' . $table_name . ' ON');
             } else {
-                @mssql_query('SET IDENTITY_INSERT ' . $table_name . ' ON',$db);
+                @mssql_query('SET IDENTITY_INSERT ' . $table_name . ' ON', $db);
             }
         }
         if (!is_null($start)) {
             if (function_exists('sqlsrv_fetch_array')) {
-                sqlsrv_fetch($results,SQLSRV_SCROLL_ABSOLUTE,$start-1);
+                sqlsrv_fetch($results, SQLSRV_SCROLL_ABSOLUTE, $start - 1);
             } else {
-                @mssql_data_seek($results,$start);
+                @mssql_data_seek($results, $start);
             }
         }
-        if ((($results === false) || ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) && ($results === true)) && (!$fail_ok)) {
+        if ((($results === false) || ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ')) && ($results === true)) && (!$fail_ok)) {
             if (function_exists('sqlsrv_errors')) {
                 $err = serialize(sqlsrv_errors());
             } else {
@@ -433,39 +434,39 @@ class Database_Static_sqlserver
                 }
             }
             if ((!running_script('upgrader')) && (!get_mass_import_mode())) {
-                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED', null, null, null, null, false))) {
                     fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
                 }
 
-                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+                fatal_exit(do_lang_tempcode('QUERY_FAILED', escape_html($query), ($err)));
             } else {
                 echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
-                return NULL;
+                return null;
             }
         }
 
-        if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results !== false) && ($results !== true)) {
+        if ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ') && ($results !== false) && ($results !== true)) {
             return $this->db_get_query_rows($results);
         }
 
         if ($get_insert_id) {
-            if (strtoupper(substr($query,0,7)) == 'UPDATE ') {
-                return NULL;
+            if (strtoupper(substr($query, 0, 7)) == 'UPDATE ') {
+                return null;
             }
 
-            $pos = strpos($query,'(');
-            $table_name = substr($query,12,$pos-13);
+            $pos = strpos($query, '(');
+            $table_name = substr($query, 12, $pos - 13);
             if (function_exists('sqlsrv_query')) {
-                $res2 = sqlsrv_query($db,'SELECT MAX(IDENTITYCOL) AS v FROM ' . $table_name);
-                $ar2 = sqlsrv_fetch_array($res2,SQLSRV_FETCH_ASSOC);
+                $res2 = sqlsrv_query($db, 'SELECT MAX(IDENTITYCOL) AS v FROM ' . $table_name);
+                $ar2 = sqlsrv_fetch_array($res2, SQLSRV_FETCH_ASSOC);
             } else {
-                $res2 = mssql_query('SELECT MAX(IDENTITYCOL) AS v FROM ' . $table_name,$db);
+                $res2 = mssql_query('SELECT MAX(IDENTITYCOL) AS v FROM ' . $table_name, $db);
                 $ar2 = mssql_fetch_array($res2);
             }
             return $ar2['v'];
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -475,7 +476,7 @@ class Database_Static_sqlserver
      * @param  ?integer                 Whether to start reading from (NULL: irrelevant for this forum driver)
      * @return array                    A list of row maps
      */
-    public function db_get_query_rows($results,$start = null)
+    public function db_get_query_rows($results, $start = null)
     {
         $out = array();
 
@@ -483,9 +484,9 @@ class Database_Static_sqlserver
             $num_fields = mssql_num_fields($results);
             $types = array();
             $names = array();
-            for ($x = 1;$x <= $num_fields;$x++) {
-                $types[$x-1] = mssql_field_type($results,$x-1);
-                $names[$x-1] = strtolower(mssql_field_name($results,$x-1));
+            for ($x = 1; $x <= $num_fields; $x++) {
+                $types[$x - 1] = mssql_field_type($results, $x - 1);
+                $names[$x - 1] = strtolower(mssql_field_name($results, $x - 1));
             }
 
             $i = 0;
@@ -518,7 +519,7 @@ class Database_Static_sqlserver
             }
         } else {
             if (function_exists('sqlsrv_fetch_array')) {
-                while (($row = sqlsrv_fetch_array($results,SQLSRV_FETCH_ASSOC)) !== NULL) {
+                while (($row = sqlsrv_fetch_array($results, SQLSRV_FETCH_ASSOC)) !== null) {
                     $out[] = $row;
                 }
             } else {

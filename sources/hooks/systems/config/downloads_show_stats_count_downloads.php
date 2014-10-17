@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_config_downloads_show_stats_count_downloads
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_downloads_show_stats_count_downloads
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

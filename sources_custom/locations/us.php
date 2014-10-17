@@ -69,5 +69,5 @@ function state_code_to_state_name($code)
         'WY' => 'Wyoming',
     );
 
-    return array_key_exists($code,$map)?$map[$code]:null;
+    return array_key_exists($code, $map) ? $map[$code] : null;
 }

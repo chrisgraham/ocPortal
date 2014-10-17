@@ -53,9 +53,9 @@ class Module_downloads
 
         delete_privilege('download');
 
-        $GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name' => 'downloads'));
+        $GLOBALS['SITE_DB']->query_delete('group_category_access', array('module_the_name' => 'downloads'));
 
-        $GLOBALS['SITE_DB']->query_delete('trackbacks',array('trackback_for_type' => 'downloads'));
+        $GLOBALS['SITE_DB']->query_delete('trackbacks', array('trackback_for_type' => 'downloads'));
 
         delete_value('download_bandwidth');
         delete_value('archive_size');
@@ -63,7 +63,7 @@ class Module_downloads
         delete_value('num_downloads_downloaded');
 
         require_code('files');
-        deldir_contents(get_custom_file_base() . '/uploads/downloads',true);
+        deldir_contents(get_custom_file_base() . '/uploads/downloads', true);
     }
 
     /**
@@ -72,12 +72,12 @@ class Module_downloads
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
             require_lang('downloads');
 
-            $GLOBALS['SITE_DB']->create_table('download_categories',array(
+            $GLOBALS['SITE_DB']->create_table('download_categories', array(
                 'id' => '*AUTO',
                 'category' => 'SHORT_TRANS',
                 'parent_id' => '?AUTO_LINK',
@@ -89,22 +89,22 @@ class Module_downloads
 
             $map = array(
                 'rep_image' => '',
-                'parent_id' => NULL,
+                'parent_id' => null,
                 'add_date' => time(),
                 'notes' => '',
             );
-            $map += insert_lang_comcode('description','',3);
-            $map += lang_code_to_default_content('category','DOWNLOADS_HOME');
-            $id = $GLOBALS['SITE_DB']->query_insert('download_categories',$map,true);
-            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
-            $GLOBALS['SITE_DB']->query_delete('group_category_access',array('module_the_name' => 'downloads'));
+            $map += insert_lang_comcode('description', '', 3);
+            $map += lang_code_to_default_content('category', 'DOWNLOADS_HOME');
+            $id = $GLOBALS['SITE_DB']->query_insert('download_categories', $map, true);
+            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
+            $GLOBALS['SITE_DB']->query_delete('group_category_access', array('module_the_name' => 'downloads'));
             foreach (array_keys($groups) as $group_id) {
-                $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($id),'group_id' => $group_id));
+                $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'downloads', 'category_name' => strval($id), 'group_id' => $group_id));
             }
 
-            $GLOBALS['SITE_DB']->create_index('download_categories','child_find',array('parent_id'));
+            $GLOBALS['SITE_DB']->create_index('download_categories', 'child_find', array('parent_id'));
 
-            $GLOBALS['SITE_DB']->create_table('download_downloads',array(
+            $GLOBALS['SITE_DB']->create_table('download_downloads', array(
                 'id' => '*AUTO',
                 'category_id' => 'AUTO_LINK',
                 'name' => 'SHORT_TRANS',
@@ -132,52 +132,52 @@ class Module_downloads
                 'download_licence' => '?AUTO_LINK',
                 'download_data_mash' => 'LONG_TEXT'
             ));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','download_views',array('download_views'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','category_list',array('category_id'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','recent_downloads',array('add_date'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','top_downloads',array('num_downloads'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','downloadauthor',array('author'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','dds',array('submitter'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','ddl',array('download_licence')); // For when deleting a download license
-            $GLOBALS['SITE_DB']->create_index('download_downloads','dvalidated',array('validated'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'download_views', array('download_views'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'category_list', array('category_id'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'recent_downloads', array('add_date'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'top_downloads', array('num_downloads'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'downloadauthor', array('author'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'dds', array('submitter'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'ddl', array('download_licence')); // For when deleting a download license
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'dvalidated', array('validated'));
 
-            $GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dname',array('name'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_ddescrip',array('description'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','ftjoin_dadditional',array('additional_details'));
-            $GLOBALS['SITE_DB']->create_index('download_categories','ftjoin_dccat',array('category'));
-            $GLOBALS['SITE_DB']->create_index('download_categories','ftjoin_dcdescrip',array('description'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'ftjoin_dname', array('name'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'ftjoin_ddescrip', array('description'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', 'ftjoin_dadditional', array('additional_details'));
+            $GLOBALS['SITE_DB']->create_index('download_categories', 'ftjoin_dccat', array('category'));
+            $GLOBALS['SITE_DB']->create_index('download_categories', 'ftjoin_dcdescrip', array('description'));
 
-            $GLOBALS['SITE_DB']->create_index('download_downloads','#download_data_mash',array('download_data_mash'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','#original_filename',array('original_filename'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', '#download_data_mash', array('download_data_mash'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', '#original_filename', array('original_filename'));
 
-            $GLOBALS['SITE_DB']->create_table('download_logging',array(
+            $GLOBALS['SITE_DB']->create_table('download_logging', array(
                 'id' => '*AUTO_LINK',
                 'member_id' => '*MEMBER',
                 'ip' => 'IP',
                 'date_and_time' => 'TIME'
             ));
-            $GLOBALS['SITE_DB']->create_index('download_logging','calculate_bandwidth',array('date_and_time'));
+            $GLOBALS['SITE_DB']->create_index('download_logging', 'calculate_bandwidth', array('date_and_time'));
 
-            $GLOBALS['SITE_DB']->create_table('download_licences',array(
+            $GLOBALS['SITE_DB']->create_table('download_licences', array(
                 'id' => '*AUTO',
                 'l_title' => 'SHORT_TEXT',
                 'l_text' => 'LONG_TEXT'
             ));
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<7)) {
-            add_privilege('_SECTION_DOWNLOADS','download',true);
+        if ((is_null($upgrade_from)) || ($upgrade_from < 7)) {
+            add_privilege('_SECTION_DOWNLOADS', 'download', true);
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<8)) {
-            $GLOBALS['SITE_DB']->create_index('download_categories','#dl_cat_search__combined',array('category','description'));
-            $GLOBALS['SITE_DB']->create_index('download_downloads','#dl_search__combined',array('original_filename','download_data_mash'));
+        if ((is_null($upgrade_from)) || ($upgrade_from < 8)) {
+            $GLOBALS['SITE_DB']->create_index('download_categories', '#dl_cat_search__combined', array('category', 'description'));
+            $GLOBALS['SITE_DB']->create_index('download_downloads', '#dl_search__combined', array('original_filename', 'download_data_mash'));
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<7)) {
-            $GLOBALS['SITE_DB']->alter_table_field('download_downloads','comments','LONG_TRANS','additional_details');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 7)) {
+            $GLOBALS['SITE_DB']->alter_table_field('download_downloads', 'comments', 'LONG_TRANS', 'additional_details');
 
-            $GLOBALS['SITE_DB']->alter_table_field('download_logging','the_user','*MEMBER','member_id');
+            $GLOBALS['SITE_DB']->alter_table_field('download_logging', 'the_user', '*MEMBER', 'member_id');
 
             delete_config_option('show_dload_trees');
         }
@@ -192,10 +192,10 @@ class Module_downloads
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('DOWNLOADS_HOME','menu/rich_content/downloads'),
+            'misc' => array('DOWNLOADS_HOME', 'menu/rich_content/downloads'),
         );
     }
 
@@ -216,7 +216,7 @@ class Module_downloads
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_code('downloads');
         require_lang('downloads');
@@ -228,21 +228,21 @@ class Module_downloads
         }
 
         if ($type == 'misc') {
-            $category_id = get_param_integer('id',db_get_first_id());
+            $category_id = get_param_integer('id', db_get_first_id());
 
-            $root = get_param_integer('keep_download_root',db_get_first_id());
+            $root = get_param_integer('keep_download_root', db_get_first_id());
 
             set_feed_url('?mode=downloads&filter=' . strval($category_id));
 
             // Get details
-            $rows = $GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('id' => $category_id),'',1);
-            if (!array_key_exists(0,$rows)) {
-                return warn_screen(get_screen_title('DOWNLOAD_CATEGORY'),do_lang_tempcode('MISSING_RESOURCE'));
+            $rows = $GLOBALS['SITE_DB']->query_select('download_categories', array('*'), array('id' => $category_id), '', 1);
+            if (!array_key_exists(0, $rows)) {
+                return warn_screen(get_screen_title('DOWNLOAD_CATEGORY'), do_lang_tempcode('MISSING_RESOURCE'));
             }
             $category = $rows[0];
 
             // Check access
-            if (!has_category_access(get_member(),'downloads',strval($category_id))) {
+            if (!has_category_access(get_member(), 'downloads', strval($category_id))) {
                 access_denied('CATEGORY_ACCESS');
             }
 
@@ -250,29 +250,29 @@ class Module_downloads
             $title_to_use = get_translated_text($category['category']);
             if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
                 require_code('awards');
-                $awards = find_awards_for('download_category',strval($category_id));
+                $awards = find_awards_for('download_category', strval($category_id));
             } else {
                 $awards = array();
             }
-            $this->title = get_screen_title('_DOWNLOAD_CATEGORY',true,array(make_fractionable_editable('download_category',$category_id,$title_to_use)),null,$awards);
+            $this->title = get_screen_title('_DOWNLOAD_CATEGORY', true, array(make_fractionable_editable('download_category', $category_id, $title_to_use)), null, $awards);
 
             // Breadcrumbs
-            $breadcrumbs = download_breadcrumbs($category_id,$root,true,get_zone_name(),true);
+            $breadcrumbs = download_breadcrumbs($category_id, $root, true, get_zone_name(), true);
             if (!$breadcrumbs->is_empty()) {
                 $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
             }
-            if ((has_privilege(get_member(),'open_virtual_roots')) && ($category_id != $root)) {
-                $url = get_self_url(false,false,array('keep_download_root' => $category_id));
-                $breadcrumbs->attach(hyperlink($url,escape_html($title_to_use),false,false,do_lang_tempcode('VIRTUAL_ROOT')));
+            if ((has_privilege(get_member(), 'open_virtual_roots')) && ($category_id != $root)) {
+                $url = get_self_url(false, false, array('keep_download_root' => $category_id));
+                $breadcrumbs->attach(hyperlink($url, escape_html($title_to_use), false, false, do_lang_tempcode('VIRTUAL_ROOT')));
             } else {
                 $breadcrumbs->attach($title_to_use);
             }
             breadcrumb_add_segment($breadcrumbs);
 
             // Meta data
-            seo_meta_load_for('downloads_category',strval($category_id),$title_to_use);
+            seo_meta_load_for('downloads_category', strval($category_id), $title_to_use);
             set_extra_request_metadata(array(
-                'created' => date('Y-m-d',$category['add_date']),
+                'created' => date('Y-m-d', $category['add_date']),
                 'creator' => '',
                 'publisher' => '', // blank means same as creator
                 'modified' => '',
@@ -285,7 +285,7 @@ class Module_downloads
             $main_rep_image = $category['rep_image'];
             if ($main_rep_image != '') {
                 set_extra_request_metadata(array(
-                    'image' => (url_is_local($main_rep_image)?(get_custom_base_url() . '/'):'') . $main_rep_image,
+                    'image' => (url_is_local($main_rep_image) ? (get_custom_base_url() . '/') : '') . $main_rep_image,
                 ));
             }
 
@@ -297,45 +297,45 @@ class Module_downloads
         if ($type == 'entry') {
             $id = get_param_integer('id');
 
-            $root = get_param_integer('keep_download_root',db_get_first_id(),true);
+            $root = get_param_integer('keep_download_root', db_get_first_id(), true);
 
             if (addon_installed('content_privacy')) {
                 require_code('content_privacy');
-                check_privacy('download',strval($id));
+                check_privacy('download', strval($id));
             }
 
             // Load from database
-            $rows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id' => $id),'',1);
-            if (!array_key_exists(0,$rows)) {
-                return warn_screen(get_screen_title('SECTION_DOWNLOADS'),do_lang_tempcode('MISSING_RESOURCE'));
+            $rows = $GLOBALS['SITE_DB']->query_select('download_downloads', array('*'), array('id' => $id), '', 1);
+            if (!array_key_exists(0, $rows)) {
+                return warn_screen(get_screen_title('SECTION_DOWNLOADS'), do_lang_tempcode('MISSING_RESOURCE'));
             }
             $myrow = $rows[0];
             set_feed_url('?mode=downloads&filter=' . strval($myrow['category_id']));
 
             // Permissions
-            if (!has_category_access(get_member(),'downloads',strval($myrow['category_id']))) {
+            if (!has_category_access(get_member(), 'downloads', strval($myrow['category_id']))) {
                 access_denied('CATEGORY_ACCESS');
             }
 
             $name = get_translated_text($myrow['name']);
 
             // Title
-            $title_to_use_tempcode = do_lang_tempcode('DOWNLOAD_TITLE',make_fractionable_editable('download',$id,$name));
-            $title_to_use = do_lang('DOWNLOAD_TITLE',$name);
+            $title_to_use_tempcode = do_lang_tempcode('DOWNLOAD_TITLE', make_fractionable_editable('download', $id, $name));
+            $title_to_use = do_lang('DOWNLOAD_TITLE', $name);
             if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
                 require_code('awards');
-                $awards = find_awards_for('download',strval($id));
+                $awards = find_awards_for('download', strval($id));
             } else {
                 $awards = array();
             }
-            $this->title = get_screen_title($title_to_use_tempcode,false,null,null,$awards);
+            $this->title = get_screen_title($title_to_use_tempcode, false, null, null, $awards);
 
             // SEO
-            seo_meta_load_for('downloads_download',strval($id),$title_to_use);
+            seo_meta_load_for('downloads_download', strval($id), $title_to_use);
 
             // Breadcrumbs
-            $breadcrumbs = download_breadcrumbs($myrow['category_id'],$root,false,get_zone_name());
-            breadcrumb_add_segment($breadcrumbs,protect_from_escaping('<span>' . $title_to_use_tempcode->evaluate() . '</span>'));
+            $breadcrumbs = download_breadcrumbs($myrow['category_id'], $root, false, get_zone_name());
+            breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . $title_to_use_tempcode->evaluate() . '</span>'));
 
             // Images in associated gallery
             $images_details = new ocp_tempcode();
@@ -346,15 +346,15 @@ class Module_downloads
                 require_lang('galleries');
                 $cat = 'download_' . strval($id);
                 $map = array('cat' => $cat);
-                if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+                if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
                     $map['validated'] = 1;
                 }
-                $rows = $GLOBALS['SITE_DB']->query_select('images',array('*'),$map,'ORDER BY id',200/*Stop sillyness, could be a DOS attack*/);
+                $rows = $GLOBALS['SITE_DB']->query_select('images', array('*'), $map, 'ORDER BY id', 200/*Stop sillyness, could be a DOS attack*/);
                 $div = 2;
                 $_out = new ocp_tempcode();
                 $_row = new ocp_tempcode();
                 require_code('images');
-                while (array_key_exists($counter,$rows)) {
+                while (array_key_exists($counter, $rows)) {
                     $row = $rows[$counter];
 
                     $view_url = $row['url'];
@@ -364,37 +364,37 @@ class Module_downloads
                     if (url_is_local($view_url)) {
                         $view_url = get_custom_base_url() . '/' . $view_url;
                     }
-                    $thumb_url = ensure_thumbnail($row['url'],$row['thumb_url'],'galleries','images',$row['id']);
-                    $image_description = get_translated_tempcode('images',$row,'description');
-                    $thumb = do_image_thumb($thumb_url,'');
-                    if ((has_actual_page_access(null,'cms_galleries',null,null)) && (has_edit_permission('mid',get_member(),$row['submitter'],'cms_galleries',array('galleries','download_' . strval($id))))) {
-                        $iedit_url = build_url(array('page' => 'cms_galleries','type' => '_ed','id' => $row['id']),get_module_zone('cms_galleries'));
+                    $thumb_url = ensure_thumbnail($row['url'], $row['thumb_url'], 'galleries', 'images', $row['id']);
+                    $image_description = get_translated_tempcode('images', $row, 'description');
+                    $thumb = do_image_thumb($thumb_url, '');
+                    if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('galleries', 'download_' . strval($id))))) {
+                        $iedit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ed', 'id' => $row['id']), get_module_zone('cms_galleries'));
                     } else {
                         $iedit_url = new ocp_tempcode();
                     }
-                    $_content = do_template('DOWNLOAD_SCREEN_IMAGE',array('_GUID' => 'fba0e309aa0ae04891e32c65a625b177','ID' => strval($row['id']),'VIEW_URL' => $view_url,'EDIT_URL' => $iedit_url,'THUMB' => $thumb,'DESCRIPTION' => $image_description));
+                    $_content = do_template('DOWNLOAD_SCREEN_IMAGE', array('_GUID' => 'fba0e309aa0ae04891e32c65a625b177', 'ID' => strval($row['id']), 'VIEW_URL' => $view_url, 'EDIT_URL' => $iedit_url, 'THUMB' => $thumb, 'DESCRIPTION' => $image_description));
 
-                    $_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL',array('_GUID' => '8400a832dbed64bb63f264eb3a038895','CONTENT' => $_content)));
+                    $_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL', array('_GUID' => '8400a832dbed64bb63f264eb3a038895', 'CONTENT' => $_content)));
 
-                    if (($counter%$div == 1) && ($counter != 0)) {
-                        $_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID' => '205c4f5387e98c534d5be1bdfcccdd7d','CELLS' => $_row)));
+                    if (($counter % $div == 1) && ($counter != 0)) {
+                        $_out->attach(do_template('DOWNLOAD_GALLERY_ROW', array('_GUID' => '205c4f5387e98c534d5be1bdfcccdd7d', 'CELLS' => $_row)));
                         $_row = new ocp_tempcode();
                     }
 
                     $counter++;
                 }
                 if (!$_row->is_empty()) {
-                    $_out->attach(do_template('DOWNLOAD_GALLERY_ROW',array('_GUID' => 'e9667ca2545ac72f85a873f236cbbd6f','CELLS' => $_row)));
+                    $_out->attach(do_template('DOWNLOAD_GALLERY_ROW', array('_GUID' => 'e9667ca2545ac72f85a873f236cbbd6f', 'CELLS' => $_row)));
                 }
                 $images_details = $_out;
             }
 
             // Meta data
             set_extra_request_metadata(array(
-                'created' => date('Y-m-d',$myrow['add_date']),
+                'created' => date('Y-m-d', $myrow['add_date']),
                 'creator' => $myrow['author'],
                 'publisher' => $GLOBALS['FORUM_DRIVER']->get_username($myrow['submitter']),
-                'modified' => is_null($myrow['edit_date'])?'':date('Y-m-d',$myrow['edit_date']),
+                'modified' => is_null($myrow['edit_date']) ? '' : date('Y-m-d', $myrow['edit_date']),
                 'type' => 'Download',
                 'title' => get_translated_text($myrow['name']),
                 'identifier' => '_SEARCH:downloads:view:' . strval($id),
@@ -415,7 +415,7 @@ class Module_downloads
             $this->title = get_screen_title('SECTION_DOWNLOADS');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -429,7 +429,7 @@ class Module_downloads
         require_css('downloads');
         require_code('files');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         // Decide what to do
         if ($type == 'misc') {
@@ -456,14 +456,14 @@ class Module_downloads
         $root = $this->root;
         $category = $this->category;
 
-        $cat_sort = get_param('cat_sort','t1.text_original ASC');
-        $sort = get_param('sort',get_option('downloads_default_sort_order'));
+        $cat_sort = get_param('cat_sort', 't1.text_original ASC');
+        $sort = get_param('sort', get_option('downloads_default_sort_order'));
 
-        $description = get_translated_tempcode('download_downloads',$category,'description');
+        $description = get_translated_tempcode('download_downloads', $category, 'description');
 
         // Sorting
         if (is_null($sort)) {
-            $sort = get_param('sort',null);
+            $sort = get_param('sort', null);
             if (is_null($sort)) {
                 $sort = 'name ASC';
             }
@@ -474,7 +474,8 @@ class Module_downloads
             && (strtoupper($sort) != strtoupper('compound_rating DESC')) && (strtoupper($sort) != strtoupper('compound_rating ASC'))
             && (strtoupper($sort) != strtoupper('average_rating DESC')) && (strtoupper($sort) != strtoupper('average_rating ASC'))
             && (strtoupper($sort) != strtoupper('fixed_random ASC'))
-            && (strtoupper($sort) != strtoupper('add_date DESC'))) {
+            && (strtoupper($sort) != strtoupper('add_date DESC'))
+        ) {
             log_hack_attack_and_exit('sortBY_HACK');
         }
         $_selectors = array(
@@ -491,40 +492,40 @@ class Module_downloads
         $selectors = new ocp_tempcode();
         foreach ($_selectors as $selector_value => $selector_name) {
             $selected = ($sort == $selector_value);
-            $selectors->attach(do_template('PAGINATION_SORTER',array('_GUID' => 'af660c0ebf014bb296d576b2854aa911','SELECTED' => $selected,'NAME' => do_lang_tempcode($selector_name),'VALUE' => $selector_value)));
+            $selectors->attach(do_template('PAGINATION_SORTER', array('_GUID' => 'af660c0ebf014bb296d576b2854aa911', 'SELECTED' => $selected, 'NAME' => do_lang_tempcode($selector_name), 'VALUE' => $selector_value)));
         }
-        $sort_url = get_self_url(false,false,array('sort' => NULL),false,true);
-        $sorting = do_template('PAGINATION_SORT',array('_GUID' => 'f4112dcd72d1dd04afbe7277a3871399','SORT' => 'sort','URL' => $sort_url,'SELECTORS' => $selectors));
+        $sort_url = get_self_url(false, false, array('sort' => null), false, true);
+        $sorting = do_template('PAGINATION_SORT', array('_GUID' => 'f4112dcd72d1dd04afbe7277a3871399', 'SORT' => 'sort', 'URL' => $sort_url, 'SELECTORS' => $selectors));
 
         // Get category contents
-        $subcategories = do_block('main_multi_content',array('param' => 'download_category','filter' => strval($category_id) . '>','efficient' => '0','zone' => '_SELF','sort' => 'title','max' => get_option('download_subcats_per_page'),'no_links' => '1','pagination' => '1','give_context' => '0','include_breadcrumbs' => '0','render_if_empty' => '0'));
+        $subcategories = do_block('main_multi_content', array('param' => 'download_category', 'filter' => strval($category_id) . '>', 'efficient' => '0', 'zone' => '_SELF', 'sort' => 'title', 'max' => get_option('download_subcats_per_page'), 'no_links' => '1', 'pagination' => '1', 'give_context' => '0', 'include_breadcrumbs' => '0', 'render_if_empty' => '0'));
         if (get_option('downloads_subcat_narrowin') == '1') {
             $filter = strval($category_id) . '*';
         } else {
             $filter = strval($category_id);
         }
-        $ocselect = either_param('active_filter','');
-        $entries = do_block('main_multi_content',array('param' => 'download','filter' => $filter,'efficient' => '0','zone' => '_SELF','sort' => $sort,'max' => get_option('download_entries_per_page'),'no_links' => '1','pagination' => '1','give_context' => '0','include_breadcrumbs' => '0','attach_to_url_filter' => '1','ocselect' => $ocselect,'block_id' => 'module'));
+        $ocselect = either_param('active_filter', '');
+        $entries = do_block('main_multi_content', array('param' => 'download', 'filter' => $filter, 'efficient' => '0', 'zone' => '_SELF', 'sort' => $sort, 'max' => get_option('download_entries_per_page'), 'no_links' => '1', 'pagination' => '1', 'give_context' => '0', 'include_breadcrumbs' => '0', 'attach_to_url_filter' => '1', 'ocselect' => $ocselect, 'block_id' => 'module'));
 
         // Management links
-        if (has_actual_page_access(null,'cms_downloads',null,array('downloads',strval($category_id)),'submit_midrange_content')) {
-            $submit_url = build_url(array('page' => 'cms_downloads','type' => 'ad','cat' => $category_id),get_module_zone('cms_downloads'));
+        if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'submit_midrange_content')) {
+            $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'ad', 'cat' => $category_id), get_module_zone('cms_downloads'));
         } else {
             $submit_url = new ocp_tempcode();
         }
-        if (has_actual_page_access(null,'cms_downloads',null,array('downloads',strval($category_id)),'submit_cat_midrange_content')) {
-            $add_cat_url = build_url(array('page' => 'cms_downloads','type' => 'ac','parent_id' => $category_id),get_module_zone('cms_downloads'));
+        if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'submit_cat_midrange_content')) {
+            $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'ac', 'parent_id' => $category_id), get_module_zone('cms_downloads'));
         } else {
             $add_cat_url = new ocp_tempcode();
         }
-        if (has_actual_page_access(null,'cms_downloads',null,array('downloads',strval($category_id)),'edit_cat_midrange_content')) {
-            $edit_cat_url = build_url(array('page' => 'cms_downloads','type' => '_ec','id' => $category_id),get_module_zone('cms_downloads'));
+        if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'edit_cat_midrange_content')) {
+            $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_ec', 'id' => $category_id), get_module_zone('cms_downloads'));
         } else {
             $edit_cat_url = new ocp_tempcode();
         }
 
         // Render
-        return do_template('DOWNLOAD_CATEGORY_SCREEN',array(
+        return do_template('DOWNLOAD_CATEGORY_SCREEN', array(
             '_GUID' => 'ebb3c8708695f6a30dbd4a03f8632047',
             'ID' => strval($category_id),
             'TAGS' => get_loaded_tags('download_categories'),
@@ -546,12 +547,12 @@ class Module_downloads
      */
     public function view_atoz_screen()
     {
-        $id = get_param('id',strval(db_get_first_id()));
+        $id = get_param('id', strval(db_get_first_id()));
 
         require_code('ocfiltering');
-        $sql_filter = ocfilter_to_sqlfragment(is_numeric($id)?($id . '*'):$id,'p.category_id','download_categories','parent_id','p.category_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+        $sql_filter = ocfilter_to_sqlfragment(is_numeric($id) ? ($id . '*') : $id, 'p.category_id', 'download_categories', 'parent_id', 'p.category_id', 'id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
-        if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)')>1000) {
+        if ($GLOBALS['SITE_DB']->query_select_value('download_downloads', 'COUNT(*)') > 1000) {
             warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
         }
 
@@ -559,21 +560,21 @@ class Module_downloads
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('download','p');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('download', 'p');
         }
 
         // Load up all data
         $cats = array();
-        $rows = $GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM ' . get_table_prefix() . 'download_downloads p' . $privacy_join . ' WHERE ' . (addon_installed('unvalidated')?'validated=1 AND ':'') . '(' . $sql_filter . ')' . $privacy_where . ' ORDER BY text_original ASC',null,null,false,true,array('name' => 'SHORT_TRANS'));
+        $rows = $GLOBALS['SITE_DB']->query('SELECT p.*,text_original FROM ' . get_table_prefix() . 'download_downloads p' . $privacy_join . ' WHERE ' . (addon_installed('unvalidated') ? 'validated=1 AND ' : '') . '(' . $sql_filter . ')' . $privacy_where . ' ORDER BY text_original ASC', null, null, false, true, array('name' => 'SHORT_TRANS'));
         foreach ($rows as $row) {
             $download_name = get_translated_text($row['name']);
-            $letter = strtoupper(substr($download_name,0,1));
+            $letter = strtoupper(substr($download_name, 0, 1));
 
-            if (!has_category_access(get_member(),'downloads',strval($row['category_id']))) {
+            if (!has_category_access(get_member(), 'downloads', strval($row['category_id']))) {
                 continue;
             }
 
-            if (!array_key_exists($letter,$cats)) {
+            if (!array_key_exists($letter, $cats)) {
                 $cats[$letter] = array();
             }
             $cats[$letter][] = $row;
@@ -597,7 +598,7 @@ class Module_downloads
             $out = new ocp_tempcode();
 
             foreach ($rows as $myrow) {
-                $out->attach(render_download_box($myrow,true,true/*breadcrumbs?*/,null,null,false/*context?*/));
+                $out->attach(render_download_box($myrow, true, true/*breadcrumbs?*/, null, null, false/*context?*/));
                 $has_download = true;
             }
 
@@ -607,24 +608,24 @@ class Module_downloads
         }
 
         // Management links
-        if ((is_numeric($id)) && (has_actual_page_access(null,'cms_downloads',null,array('downloads',$id),'submit_midrange_content'))) {
-            $submit_url = build_url(array('page' => 'cms_downloads','type' => 'ad','cat' => $id),get_module_zone('cms_downloads'));
+        if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'submit_midrange_content'))) {
+            $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'ad', 'cat' => $id), get_module_zone('cms_downloads'));
         } else {
             $submit_url = new ocp_tempcode();
         }
-        if ((is_numeric($id)) && (has_actual_page_access(null,'cms_downloads',null,array('downloads',$id),'submit_cat_midrange_content'))) {
-            $add_cat_url = build_url(array('page' => 'cms_downloads','type' => 'ac','parent_id' => $id),get_module_zone('cms_downloads'));
+        if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'submit_cat_midrange_content'))) {
+            $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'ac', 'parent_id' => $id), get_module_zone('cms_downloads'));
         } else {
             $add_cat_url = new ocp_tempcode();
         }
-        if ((is_numeric($id)) && (has_actual_page_access(null,'cms_downloads',null,array('downloads',$id),'edit_cat_midrange_content'))) {
-            $edit_cat_url = build_url(array('page' => 'cms_downloads','type' => '_ec','id' => $id),get_module_zone('cms_downloads'));
+        if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'edit_cat_midrange_content'))) {
+            $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_ec', 'id' => $id), get_module_zone('cms_downloads'));
         } else {
             $edit_cat_url = new ocp_tempcode();
         }
 
         // Render
-        return do_template('DOWNLOAD_ALL_SCREEN',array(
+        return do_template('DOWNLOAD_ALL_SCREEN', array(
             '_GUID' => 'ed853b11e66917aeff3eb23767f70011',
             'TITLE' => $this->title,
             'SUBMIT_URL' => $submit_url,
@@ -649,7 +650,7 @@ class Module_downloads
         $root = $this->root;
 
         // Feedback
-        list($rating_details,$comment_details,$trackback_details) = embed_feedback_systems(
+        list($rating_details, $comment_details, $trackback_details) = embed_feedback_systems(
             get_page_name(),
             strval($id),
             $myrow['allow_rating'],
@@ -657,9 +658,9 @@ class Module_downloads
             $myrow['allow_trackbacks'],
             $myrow['validated'],
             $myrow['submitter'],
-            build_url(array('page' => '_SELF','type' => 'entry','id' => $id),'_SELF',null,false,false,true),
+            build_url(array('page' => '_SELF', 'type' => 'entry', 'id' => $id), '_SELF', null, false, false, true),
             $name,
-            find_overridden_comment_forum('downloads',strval($myrow['category_id'])),
+            find_overridden_comment_forum('downloads', strval($myrow['category_id'])),
             $myrow['add_date']
         );
 
@@ -667,7 +668,7 @@ class Module_downloads
         if ((get_db_type() != 'xml') && (get_value('no_view_counts') !== '1') && (is_null(get_bot_type()))) {
             $myrow['download_views']++;
             if (!$GLOBALS['SITE_DB']->table_is_locked('download_downloads')) {
-                $GLOBALS['SITE_DB']->query_update('download_downloads',array('download_views' => $myrow['download_views']),array('id' => $id),'',1,null,false,true);
+                $GLOBALS['SITE_DB']->query_update('download_downloads', array('download_views' => $myrow['download_views']), array('id' => $id), '', 1, null, false, true);
             }
         }
 
@@ -675,55 +676,55 @@ class Module_downloads
 
         // Validation
         if (($myrow['validated'] == 0) && (addon_installed('unvalidated'))) {
-            if ((!has_privilege(get_member(),'jump_to_unvalidated')) && ((is_guest()) || ($myrow['submitter'] != get_member()))) {
-                access_denied('PRIVILEGE','jump_to_unvalidated');
+            if ((!has_privilege(get_member(), 'jump_to_unvalidated')) && ((is_guest()) || ($myrow['submitter'] != get_member()))) {
+                access_denied('PRIVILEGE', 'jump_to_unvalidated');
             }
 
-            $warning_details->attach(do_template('WARNING_BOX',array('_GUID' => '5b1781b8fbb1ef9b8f47693afcff02b9','WARNING' => do_lang_tempcode((get_param_integer('redirected',0) == 1)?'UNVALIDATED_TEXT_NON_DIRECT':'UNVALIDATED_TEXT'))));
+            $warning_details->attach(do_template('WARNING_BOX', array('_GUID' => '5b1781b8fbb1ef9b8f47693afcff02b9', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? 'UNVALIDATED_TEXT_NON_DIRECT' : 'UNVALIDATED_TEXT'))));
         }
 
         // Cost warning
         if (($myrow['download_cost'] != 0) && (addon_installed('points'))) {
             require_lang('points');
-            $warning_details->attach(do_template('WARNING_BOX',array('_GUID' => '05fc448bf79b373385723c5af5ec93af','WARNING' => do_lang_tempcode('WILL_COST',integer_format($myrow['download_cost'])))));
+            $warning_details->attach(do_template('WARNING_BOX', array('_GUID' => '05fc448bf79b373385723c5af5ec93af', 'WARNING' => do_lang_tempcode('WILL_COST', integer_format($myrow['download_cost'])))));
         }
 
         // Management links
         $edit_url = new ocp_tempcode();
         $add_img_url = new ocp_tempcode();
-        if ((has_actual_page_access(null,'cms_downloads',null,null)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_downloads',array('downloads',$myrow['category_id'])))) {
-            $edit_url = build_url(array('page' => 'cms_downloads','type' => '_ed','id' => $id),get_module_zone('cms_downloads'));
+        if ((has_actual_page_access(null, 'cms_downloads', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_downloads', array('downloads', $myrow['category_id'])))) {
+            $edit_url = build_url(array('page' => 'cms_downloads', 'type' => '_ed', 'id' => $id), get_module_zone('cms_downloads'));
         }
         if (addon_installed('galleries')) {
-            if ((has_actual_page_access(null,'cms_galleries',null,null)) && (has_edit_permission('mid',get_member(),$myrow['submitter'],'cms_galleries',array('galleries','download_' . strval($id))))) {
+            if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', 'download_' . strval($id))))) {
                 require_lang('galleries');
-                $add_img_url = build_url(array('page' => 'cms_galleries','type' => 'ad','cat' => 'download_' . strval($id)),get_module_zone('cms_galleries'));
+                $add_img_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => 'download_' . strval($id)), get_module_zone('cms_galleries'));
             }
         }
 
         // Outmoding
         if (!is_null($myrow['out_mode_id'])) {
-            $outmode_url = build_url(array('page' => '_SELF','type' => 'entry','id' => $myrow['out_mode_id']),'_SELF');
+            $outmode_url = build_url(array('page' => '_SELF', 'type' => 'entry', 'id' => $myrow['out_mode_id']), '_SELF');
         } else {
             $outmode_url = new ocp_tempcode();
         }
 
         // Stats
-        $add_date = get_timezoned_date($myrow['add_date'],false);
+        $add_date = get_timezoned_date($myrow['add_date'], false);
 
         // Additional information
-        $additional_details = get_translated_tempcode('download_downloads',$myrow,'additional_details');
+        $additional_details = get_translated_tempcode('download_downloads', $myrow, 'additional_details');
 
         // Edit date
         if (!is_null($myrow['edit_date'])) {
-            $edit_date = make_string_tempcode(get_timezoned_date($myrow['edit_date'],false));
+            $edit_date = make_string_tempcode(get_timezoned_date($myrow['edit_date'], false));
         } else {
             $edit_date = new ocp_tempcode();
         }
 
         // Download link
         $author = $myrow['author'];
-        $author_url = addon_installed('authors')?build_url(array('page' => 'authors','type' => 'misc','id' => $author),get_module_zone('authors')):new ocp_tempcode();
+        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $author), get_module_zone('authors')) : new ocp_tempcode();
 
         // Licence
         $licence_title = null;
@@ -731,31 +732,31 @@ class Module_downloads
         $licence_hyperlink = null;
         $licence = $myrow['download_licence'];
         if (!is_null($licence)) {
-            $licence_title = $GLOBALS['SITE_DB']->query_select_value_if_there('download_licences','l_title',array('id' => $licence));
+            $licence_title = $GLOBALS['SITE_DB']->query_select_value_if_there('download_licences', 'l_title', array('id' => $licence));
             if (!is_null($licence_title)) {
                 $keep = symbol_tempcode('KEEP');
                 $licence_url = find_script('download_licence') . '?id=' . strval($licence) . $keep->evaluate();
-                $licence_hyperlink = do_template('HYPERLINK_POPUP_WINDOW',array('_GUID' => '10582f28c37ee7e9e462fdbd6a2cb8dd','TITLE' => '','CAPTION' => $licence_title,'URL' => $licence_url,'WIDTH' => '600','HEIGHT' => '500','REL' => 'license'));
+                $licence_hyperlink = do_template('HYPERLINK_POPUP_WINDOW', array('_GUID' => '10582f28c37ee7e9e462fdbd6a2cb8dd', 'TITLE' => '', 'CAPTION' => $licence_title, 'URL' => $licence_url, 'WIDTH' => '600', 'HEIGHT' => '500', 'REL' => 'license'));
             } else {
                 $licence = null; // Orphaned
             }
         }
 
-        $may_download = has_privilege(get_member(),'download','downloads',array(strval($myrow['category_id'])));
+        $may_download = has_privilege(get_member(), 'download', 'downloads', array(strval($myrow['category_id'])));
 
         // Render
-        return do_template('DOWNLOAD_SCREEN',array(
+        return do_template('DOWNLOAD_SCREEN', array(
             '_GUID' => 'a9af438f84783d0d38c20b5f9a62dbdb',
             'ORIGINAL_FILENAME' => $myrow['original_filename'],
             'URL' => $myrow['url'],
             'NUM_IMAGES' => strval($num_images),
             'TAGS' => get_loaded_tags('downloads'),
-            'LICENCE' => is_null($licence)?null:strval($licence),
+            'LICENCE' => is_null($licence) ? null : strval($licence),
             'LICENCE_TITLE' => $licence_title,
             'LICENCE_HYPERLINK' => $licence_hyperlink,
             'SUBMITTER' => strval($myrow['submitter']),
             'EDIT_DATE' => $edit_date,
-            'EDIT_DATE_RAW' => is_null($myrow['edit_date'])?'':strval($myrow['edit_date']),
+            'EDIT_DATE_RAW' => is_null($myrow['edit_date']) ? '' : strval($myrow['edit_date']),
             'VIEWS' => integer_format($myrow['download_views']),
             'NAME' => $name,
             'DATE' => $add_date,
@@ -766,7 +767,7 @@ class Module_downloads
             'WARNING_DETAILS' => $warning_details,
             'EDIT_URL' => $edit_url,
             'ADD_IMG_URL' => $add_img_url,
-            'DESCRIPTION' => get_translated_tempcode('download_downloads',$myrow,'description'),
+            'DESCRIPTION' => get_translated_tempcode('download_downloads', $myrow, 'description'),
             'ADDITIONAL_DETAILS' => $additional_details,
             'IMAGES_DETAILS' => $images_details,
             'ID' => strval($id),

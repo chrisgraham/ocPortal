@@ -25,7 +25,7 @@
  * @param  string                       The username that will go with the password
  * @return integer                      Password strength (1-10)
  */
-function test_password($password,$username = '')
+function test_password($password, $username = '')
 {
     if (strlen($password) == 0) {
         return 1;
@@ -58,31 +58,29 @@ function test_password($password,$username = '')
     // Check if length is 16 - 35 chars
     if ($length >= 16 && $length <= 35) {
         $strength += 2;
-    }
-
-    // Check if length greater than 35 chars
-    elseif ($length>35) {
+    } // Check if length greater than 35 chars
+    elseif ($length > 35) {
         $strength += 3;
     }
 
     // Get the numbers in the password
     $numbers = array();
-    preg_match_all('/[0-9]/',$password,$numbers);
+    preg_match_all('/[0-9]/', $password, $numbers);
     $strength += count($numbers[0]);
 
     // Check for special chars
     $specialchars = array();
-    preg_match_all('/[|!@#$%&*\/=?,;.:\-_+~^]/',$password,$specialchars);
+    preg_match_all('/[|!@#$%&*\/=?,;.:\-_+~^]/', $password, $specialchars);
     $strength += count($specialchars[0]);
 
     // Get the number of unique chars
-    $chars = preg_split('#(.)#',$password,null,PREG_SPLIT_DELIM_CAPTURE);
-    $num_unique_chars = count(array_unique($chars))-1;
-    $strength += $num_unique_chars*2;
+    $chars = preg_split('#(.)#', $password, null, PREG_SPLIT_DELIM_CAPTURE);
+    $num_unique_chars = count(array_unique($chars)) - 1;
+    $strength += $num_unique_chars * 2;
 
     // Strength is a number 1-10
     $strength = $strength > 99 ? 99 : $strength;
-    $strength = intval(ceil(floatval($strength)/10.0+1.0));
+    $strength = intval(ceil(floatval($strength) / 10.0 + 1.0));
 
     return $strength;
 }

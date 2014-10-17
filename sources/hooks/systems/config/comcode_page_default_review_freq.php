@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_config_comcode_page_default_review_freq
 {
     /**

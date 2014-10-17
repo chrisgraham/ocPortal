@@ -49,7 +49,7 @@ function external_db()
 {
     $db_type = get_long_value('external_db_login__db_type');
     if (is_null($db_type)) {
-        return NULL;
+        return null;
     }
     $db_name = get_long_value('external_db_login__db_name');
     $db_host = get_long_value('external_db_login__db_host');
@@ -57,7 +57,7 @@ function external_db()
     $db_password = get_long_value('external_db_login__db_password');
 
     require_code('database/' . filter_naughty($db_type));
-    $db = new database_driver($db_name,$db_host,$db_user,$db_password,'',false,object_factory('Database_Static_' . $db_type));
+    $db = new database_driver($db_name, $db_host, $db_user, $db_password, '', false, object_factory('Database_Static_' . $db_type));
 
     return $db;
 }
@@ -72,31 +72,31 @@ function external_db_user_from_session()
 {
     $coookie_session_name = get_long_value('external_db_login__session_name');
     if (empty($_COOKIE[$coookie_session_name])) {
-        return NULL;
+        return null;
     } // No session
     $cookie = $_COOKIE[$coookie_session_name];
 
     $db = external_db();
 
     // Look for existing session. The particular system we are integrating has a ASP.net cookie session, and the ASP.net session contains the database session ID (yes, over-complex)
-    ini_set('allow_url_open','1');
+    ini_set('allow_url_open', '1');
     $opts = array(
         'http' => array(
-        'method' => "GET",
-        'header' =>
-            "Accept-language: en\r\n" .
-            "Cookie: ASP.NET_SessionId=" . $cookie . "\r\n"
+            'method' => "GET",
+            'header' =>
+                "Accept-language: en\r\n" .
+                "Cookie: ASP.NET_SessionId=" . $cookie . "\r\n"
         )
     );
     $context = stream_context_create($opts);
     $url = 'https://' . $_SERVER['HTTP_HOST'] . '/DumpSession.aspx'; // Call a script we made in ASP.net, grabbing the DB session ID
-    $session_id = file_get_contents($url,false,$context);
+    $session_id = file_get_contents($url, false, $context);
     if ($session_id == '') {
-        return NULL;
+        return null;
     }
-    $sql = 'SELECT u.* FROM tblUserSession s JOIN tbllogin u ON s.IDUser=u.Userid WHERE ' . $db->static_ob->db_string_equal_to('s.IDSession',$session_id);
+    $sql = 'SELECT u.* FROM tblUserSession s JOIN tbllogin u ON s.IDUser=u.Userid WHERE ' . $db->static_ob->db_string_equal_to('s.IDSession', $session_id);
     $records = $db->query($sql);
-    return isset($records[0])?$records[0]:null; // If not set it's odd, remote session for a non-existent remote user
+    return isset($records[0]) ? $records[0] : null; // If not set it's odd, remote session for a non-existent remote user
 }
 
 /**
@@ -105,18 +105,18 @@ function external_db_user_from_session()
  * @param  MEMBER                       Authorised member.
  * @param  array                        User record to sync.
  */
-function external_db_user_sync($member,$record)
+function external_db_user_sync($member, $record)
 {
     $username_field = get_long_value('external_db_login__username_field');
     $password_field = get_long_value('external_db_login__password_field');
     $email_address_field = get_long_value('external_db_login__email_address_field');
 
     require_code('crypt');
-    $salt = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_pass_salt');
+    $salt = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member, 'm_pass_salt');
     if ($salt == '') {
         $salt = produce_salt();
     }
-    $new = ratchet_hash($record[$password_field],$salt);
+    $new = ratchet_hash($record[$password_field], $salt);
 
     $update_map = array(
         'm_email_address' => $record[$email_address_field],
@@ -137,7 +137,7 @@ function external_db_user_sync($member,$record)
     //      This code has been originally written with the intent of providing a stepping stone, so we are not all that concerned about synching stuff back
     //      You could of course edit the other system to re-sync with ocPortal upon login
 
-    $GLOBALS['FORUM_DB']->query_update('f_members',$update_map,array('id' => $member),'',1);
+    $GLOBALS['FORUM_DB']->query_update('f_members', $update_map, array('id' => $member), '', 1);
 }
 
 /**
@@ -174,7 +174,7 @@ function external_db_user_add($record)
         $dob_field = get_long_value('external_db_login__dob_field');
         if (!empty($dob_field)) {
             if ($record[$dob_field] != '') {
-                list($dob_year,$dob_month,$dob_day) = explode('-',$record[$dob_field]);
+                list($dob_year, $dob_month, $dob_day) = explode('-', $record[$dob_field]);
             }
         }
     }
@@ -185,7 +185,7 @@ function external_db_user_add($record)
     require_code('ocf_groups');
     require_code('ocf_members2');
     require_code('ocf_members_action');
-    $member = ocf_member_external_linker($username,$password,'',false,$email_address,$dob_day,$dob_month,$dob_year);
+    $member = ocf_member_external_linker($username, $password, '', false, $email_address, $dob_day, $dob_month, $dob_year);
 
     return $member;
 }

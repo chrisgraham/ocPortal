@@ -19,7 +19,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_list
 {
     // ==============
@@ -34,18 +33,18 @@ class Hook_fields_list
      */
     public function get_search_inputter($row)
     {
-        $current = get_param('option_' . strval($row['id']),'');
+        $current = get_param('option_' . strval($row['id']), '');
 
         $fields = array();
         $type = '_LIST';
         $special = new ocp_tempcode();
-        $special->attach(form_input_list_entry('',get_param('option_' . strval($row['id']),'') == '','---'));
-        $list = ($row['cf_default'] == '')?array():explode('|',$row['cf_default']);
-        $display = array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
+        $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', '---'));
+        $list = ($row['cf_default'] == '') ? array() : explode('|', $row['cf_default']);
+        $display = array_key_exists('trans_name', $row) ? $row['trans_name'] : get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
         foreach ($list as $l) {
-            $special->attach(form_input_list_entry($l,$current != '' && $current === $l));
+            $special->attach(form_input_list_entry($l, $current != '' && $current === $l));
         }
-        $fields[] = array('NAME' => strval($row['id']),'DISPLAY' => $display,'TYPE' => $type,'SPECIAL' => $special);
+        $fields[] = array('NAME' => strval($row['id']), 'DISPLAY' => $display, 'TYPE' => $type, 'SPECIAL' => $special);
         return $fields;
     }
 
@@ -56,9 +55,9 @@ class Hook_fields_list
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return exact_match_sql($row,$i,'long');
+        return exact_match_sql($row, $i, 'long');
     }
 
     // ===================
@@ -73,14 +72,14 @@ class Hook_fields_list
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
-                $default = preg_replace('#\|.*#','',$default);
+                $default = preg_replace('#\|.*#', '', $default);
             }
         }
-        return array('long_unescaped',$default,'long');
+        return array('long_unescaped', $default, 'long');
     }
 
     /**
@@ -90,7 +89,7 @@ class Hook_fields_list
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -111,20 +110,20 @@ class Hook_fields_list
      * @param  ?string                  The actual current value of the field (NULL: none)
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value)
     {
         $default = $field['cf_default'];
         if ($actual_value === $default || $actual_value === '') {
             $actual_value = null;
         }
-        $list = ($default == '')?array():explode('|',$default);
+        $list = ($default == '') ? array() : explode('|', $default);
         $_list = new ocp_tempcode();
-        if ((($field['cf_required'] == 0) || ($actual_value == '') || (is_null($actual_value))) && (!in_array('',$list))) {
-            if (($field['cf_required'] == 0) || (!in_array(do_lang('OTHER'),$list))) {
-                if ((array_key_exists(0,$list)) && ($list[0] == do_lang('NOT_DISCLOSED'))) {
+        if ((($field['cf_required'] == 0) || ($actual_value == '') || (is_null($actual_value))) && (!in_array('', $list))) {
+            if (($field['cf_required'] == 0) || (!in_array(do_lang('OTHER'), $list))) {
+                if ((array_key_exists(0, $list)) && ($list[0] == do_lang('NOT_DISCLOSED'))) {
                     $actual_value = $list[0]; // "Not Disclosed" will become the default if it is there
                 } else {
-                    $_list->attach(form_input_list_entry('',true,do_lang_tempcode('NA_EM')));
+                    $_list->attach(form_input_list_entry('', true, do_lang_tempcode('NA_EM')));
                 }
             }
         }
@@ -138,9 +137,9 @@ class Hook_fields_list
                 $l_nice = find_country_name_from_iso($l);
             }
             $selected = ($l === $actual_value || is_null($actual_value) && $l == do_lang('OTHER') && $field['cf_required'] == 1);
-            $_list->attach(form_input_list_entry($l,$selected,$l_nice));
+            $_list->attach(form_input_list_entry($l, $selected, $l_nice));
         }
-        return form_input_list($_cf_name,$_cf_description,'field_' . strval($field['id']),$_list,null,false,$field['cf_required'] == 1);
+        return form_input_list($_cf_name, $_cf_description, 'field_' . strval($field['id']), $_list, null, false, $field['cf_required'] == 1);
     }
 
     /**
@@ -152,10 +151,10 @@ class Hook_fields_list
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        return post_param($tmp_name, $editing ? STRING_MAGIC_NULL : '');
     }
 }

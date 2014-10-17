@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_members_ecommerce
 {
     /**
@@ -41,13 +40,13 @@ class Hook_members_ecommerce
             $modules[]=array('views',do_lang_tempcode('MY_SUBSCRIPTIONS'),build_url(array('page'=>'subscriptions','type'=>'misc','id'=>$member_id),get_module_zone('subscriptions')),'menu/adminzone/audit/ecommerce/subscriptions');
         */
 
-        if ($GLOBALS['SITE_DB']->query_select_value('invoices','COUNT(*)',array('i_member_id' => $member_id)) != 0) {
-            $modules[] = array('views',do_lang_tempcode('MY_INVOICES'),build_url(array('page' => 'invoices','type' => 'misc','id' => $member_id),get_module_zone('invoices')),'menu/adminzone/audit/ecommerce/invoices');
+        if ($GLOBALS['SITE_DB']->query_select_value('invoices', 'COUNT(*)', array('i_member_id' => $member_id)) != 0) {
+            $modules[] = array('views', do_lang_tempcode('MY_INVOICES'), build_url(array('page' => 'invoices', 'type' => 'misc', 'id' => $member_id), get_module_zone('invoices')), 'menu/adminzone/audit/ecommerce/invoices');
         }
 
-        if (has_actual_page_access(get_member(),'admin_ecommerce',get_module_zone('admin_ecommerce'))) {
+        if (has_actual_page_access(get_member(), 'admin_ecommerce', get_module_zone('admin_ecommerce'))) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
-            $modules[] = array('views',do_lang_tempcode('CREATE_INVOICE'),build_url(array('page' => 'admin_invoices','type' => 'ad','to' => $username),get_module_zone('admin_invoices')),'menu/adminzone/audit/ecommerce/create_invoice');
+            $modules[] = array('views', do_lang_tempcode('CREATE_INVOICE'), build_url(array('page' => 'admin_invoices', 'type' => 'ad', 'to' => $username), get_module_zone('admin_invoices')), 'menu/adminzone/audit/ecommerce/create_invoice');
         }
 
         return $modules;
@@ -61,7 +60,7 @@ class Hook_members_ecommerce
      */
     public function get_sections($member_id)
     {
-        if (($member_id != get_member()) && (!has_privilege(get_member(),'view_any_profile_field'))) {
+        if (($member_id != get_member()) && (!has_privilege(get_member(), 'view_any_profile_field'))) {
             return array();
         }
 
@@ -89,6 +88,6 @@ class Hook_members_ecommerce
 
         require_lang('ecommerce');
 
-        return array(do_template('MEMBER_SUBSCRIPTION_STATUS',array('SUBSCRIPTIONS' => $subscriptions,'MEMBER_ID' => strval($member_id))));
+        return array(do_template('MEMBER_SUBSCRIPTION_STATUS', array('SUBSCRIPTIONS' => $subscriptions, 'MEMBER_ID' => strval($member_id))));
     }
 }

@@ -35,13 +35,13 @@ class bump_member_group_timeout_test_set extends ocp_test_case
         $member_id = 3;
         $group_id = 4;
 
-        bump_member_group_timeout($member_id,$group_id,-10,false);
+        bump_member_group_timeout($member_id, $group_id, -10, false);
 
-        $this->assertTrue(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertTrue(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
 
         cleanup_member_timeouts();
 
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
     }
 
     public function testMemberGroupTimeoutPrimary()
@@ -49,13 +49,13 @@ class bump_member_group_timeout_test_set extends ocp_test_case
         $member_id = 3;
         $group_id = 4;
 
-        bump_member_group_timeout($member_id,$group_id,-10,true);
+        bump_member_group_timeout($member_id, $group_id, -10, true);
 
-        $this->assertTrue(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertTrue(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
 
         cleanup_member_timeouts();
 
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
     }
 
     public function testMemberGroupTimeoutKickout()
@@ -63,14 +63,14 @@ class bump_member_group_timeout_test_set extends ocp_test_case
         $member_id = 3;
         $group_id = 4;
 
-        bump_member_group_timeout($member_id,$group_id,10,false);
+        bump_member_group_timeout($member_id, $group_id, 10, false);
         cleanup_member_timeouts();
-        $this->assertTrue(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertTrue(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
 
-        bump_member_group_timeout($member_id,$group_id,-30,false);
+        bump_member_group_timeout($member_id, $group_id, -30, false);
         cleanup_member_timeouts();
 
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
     }
 
     public function testMemberGroupTimeoutTimeAddition()
@@ -78,14 +78,14 @@ class bump_member_group_timeout_test_set extends ocp_test_case
         $member_id = 3;
         $group_id = 4;
 
-        bump_member_group_timeout($member_id,$group_id,-10,false);
-        bump_member_group_timeout($member_id,$group_id,30,false);
+        bump_member_group_timeout($member_id, $group_id, -10, false);
+        bump_member_group_timeout($member_id, $group_id, 30, false);
         cleanup_member_timeouts();
-        $this->assertTrue(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertTrue(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
 
-        bump_member_group_timeout($member_id,$group_id,-30,false);
+        bump_member_group_timeout($member_id, $group_id, -30, false);
         cleanup_member_timeouts();
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
     }
 
     public function testMemberGroupTimeoutTimeSubtraction()
@@ -93,10 +93,10 @@ class bump_member_group_timeout_test_set extends ocp_test_case
         $member_id = 3;
         $group_id = 4;
 
-        bump_member_group_timeout($member_id,$group_id,10,false);
-        bump_member_group_timeout($member_id,$group_id,-30,false);
+        bump_member_group_timeout($member_id, $group_id, 10, false);
+        bump_member_group_timeout($member_id, $group_id, -30, false);
         cleanup_member_timeouts();
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
     }
 
     public function testMemberGroupTimeoutDouble()
@@ -104,17 +104,17 @@ class bump_member_group_timeout_test_set extends ocp_test_case
         $group_id = 4;
 
         $member_id = 3;
-        bump_member_group_timeout($member_id,$group_id,-10,false);
-        $this->assertTrue(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        bump_member_group_timeout($member_id, $group_id, -10, false);
+        $this->assertTrue(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
 
         $member_id = 4;
-        bump_member_group_timeout($member_id,$group_id,-10,false);
-        $this->assertTrue(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
+        bump_member_group_timeout($member_id, $group_id, -10, false);
+        $this->assertTrue(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id)));
 
         cleanup_member_timeouts();
 
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups(3)));
-        $this->assertFalse(in_array($group_id,$GLOBALS['FORUM_DRIVER']->get_members_groups(4)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups(3)));
+        $this->assertFalse(in_array($group_id, $GLOBALS['FORUM_DRIVER']->get_members_groups(4)));
     }
 
     public function tearDown()

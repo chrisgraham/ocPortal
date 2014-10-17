@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_main_facebook_friends
 {
     /**
@@ -28,7 +27,7 @@ class Block_main_facebook_friends
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('stream','fans','logobar','show_fanpage_link','fanpage_name');
+        $info['parameters'] = array('stream', 'fans', 'logobar', 'show_fanpage_link', 'fanpage_name');
         return $info;
     }
 
@@ -41,7 +40,7 @@ class Block_main_facebook_friends
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'logobar\',$map)?$map[\'logobar\']:0,array_key_exists(\'stream\',$map)?$map[\'stream\']:0,array_key_exists(\'fans\',$map)?$map[\'fans\']:10,array_key_exists(\'show_fanpage_link\',$map)?$map[\'show_fanpage_link\']:1,array_key_exists(\'fanpage_name\',$map)?$map[\'fanpage_name\']:\'\')';
-        $info['ttl'] = 60*5;
+        $info['ttl'] = 60 * 5;
         return $info;
     }
 
@@ -63,16 +62,16 @@ class Block_main_facebook_friends
             return new ocp_tempcode();
         }
 
-        $stream = array_key_exists('stream',$map)?$map['stream']:'0';
-        $fans = array_key_exists('fans',$map)?$map['fans']:'10';
-        $logobar = array_key_exists('logobar',$map)?$map['logobar']:'0';
+        $stream = array_key_exists('stream', $map) ? $map['stream'] : '0';
+        $fans = array_key_exists('fans', $map) ? $map['fans'] : '10';
+        $logobar = array_key_exists('logobar', $map) ? $map['logobar'] : '0';
 
-        $show_fanpage_link = array_key_exists('show_fanpage_link',$map)?$map['show_fanpage_link']:'0';
-        $fanpage_name = (isset($map['fanpage_name']) && strlen($map['fanpage_name'])>0)?$map['fanpage_name']:get_site_name();
+        $show_fanpage_link = array_key_exists('show_fanpage_link', $map) ? $map['show_fanpage_link'] : '0';
+        $fanpage_name = (isset($map['fanpage_name']) && strlen($map['fanpage_name']) > 0) ? $map['fanpage_name'] : get_site_name();
 
         $out = new ocp_tempcode();
 
-        return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS',array(
+        return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS', array(
             '_GUID' => '5f4dc97379346496d8b8152a56a9ec84',
             'TITLE' => do_lang_tempcode('BLOCK_FACEBOOK_FRIENDS_TITLE'),
             'CONTENT' => $out,

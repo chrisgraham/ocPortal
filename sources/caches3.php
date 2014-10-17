@@ -42,7 +42,7 @@ function auto_decache($changed_base_url)
     erase_persistent_cache();
     if ($changed_base_url) {
         erase_comcode_page_cache();
-        set_long_value('last_base_url',get_base_url(false));
+        set_long_value('last_base_url', get_base_url(false));
     }
 }
 
@@ -56,15 +56,15 @@ function ocportal_cleanup($caches = null)
 {
     require_lang('cleanup');
 
-    $max_time = intval(round(floatval(ini_get('max_execution_time'))/1.5));
-    if ($max_time<60*4) {
+    $max_time = intval(round(floatval(ini_get('max_execution_time')) / 1.5));
+    if ($max_time < 60 * 4) {
         if (function_exists('set_time_limit')) {
             @set_time_limit(0);
         }
     }
     $messages = new ocp_tempcode();
-    $hooks = find_all_hooks('systems','cleanup');
-    if ((array_key_exists('ocf',$hooks)) && (array_key_exists('ocf_topics',$hooks))) {
+    $hooks = find_all_hooks('systems', 'cleanup');
+    if ((array_key_exists('ocf', $hooks)) && (array_key_exists('ocf_topics', $hooks))) {
         // A little re-ordering
         $temp = $hooks['ocf'];
         unset($hooks['ocf']);
@@ -73,21 +73,21 @@ function ocportal_cleanup($caches = null)
 
     if (!is_null($caches)) {
         foreach ($caches as $cache) {
-            if (array_key_exists($cache,$hooks)) {
+            if (array_key_exists($cache, $hooks)) {
                 require_code('hooks/systems/cleanup/' . filter_naughty_harsh($cache));
-                $object = object_factory('Hook_' . filter_naughty_harsh($cache),true);
+                $object = object_factory('Hook_' . filter_naughty_harsh($cache), true);
                 if (is_null($object)) {
                     continue;
                 }
                 $messages->attach($object->run());
             } else {
-                $messages->attach(paragraph(do_lang_tempcode('_MISSING_RESOURCE',escape_html($cache))));
+                $messages->attach(paragraph(do_lang_tempcode('_MISSING_RESOURCE', escape_html($cache))));
             }
         }
     } else {
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/cleanup/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_' . filter_naughty_harsh($hook),true);
+            $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }
@@ -109,7 +109,7 @@ function erase_block_cache()
 {
     ocp_profile_start_for('erase_tempcode_cache');
 
-    $GLOBALS['SITE_DB']->query_delete('cache_on',null,'',null,null,true);
+    $GLOBALS['SITE_DB']->query_delete('cache_on', null, '', null, null, true);
     $GLOBALS['SITE_DB']->query_delete('cache');
     erase_persistent_cache();
 
@@ -129,17 +129,17 @@ function erase_comcode_cache()
     ocp_profile_start_for('erase_comcode_cache');
 
     if (multi_lang_content()) {
-        if ((substr(get_db_type(),0,5) == 'mysql') && (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices','i_fields',array('i_table' => 'translate','i_name' => 'decache'))))) {
-            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE ' . db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+        if ((substr(get_db_type(), 0, 5) == 'mysql') && (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('db_meta_indices', 'i_fields', array('i_table' => 'translate', 'i_name' => 'decache'))))) {
+            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'translate FORCE INDEX (decache) SET text_parsed=\'\' WHERE ' . db_string_not_equal_to('text_parsed', '')/*this WHERE is so indexing helps*/);
         } else {
-            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'translate SET text_parsed=\'\' WHERE ' . db_string_not_equal_to('text_parsed','')/*this WHERE is so indexing helps*/);
+            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'translate SET text_parsed=\'\' WHERE ' . db_string_not_equal_to('text_parsed', '')/*this WHERE is so indexing helps*/);
         }
     } else {
         global $TABLE_LANG_FIELDS_CACHE;
         foreach ($TABLE_LANG_FIELDS_CACHE as $table => $fields) {
             foreach (array_keys($fields) as $field) {
-                if (strpos($field,'__COMCODE') !== false) {
-                    $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . $table . ' SET ' . $field . '__text_parsed=\'\' WHERE ' . db_string_not_equal_to($field . '__text_parsed','')/*this WHERE is so indexing helps*/);
+                if (strpos($field, '__COMCODE') !== false) {
+                    $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . $table . ' SET ' . $field . '__text_parsed=\'\' WHERE ' . db_string_not_equal_to($field . '__text_parsed', '')/*this WHERE is so indexing helps*/);
                 }
             }
         }
@@ -161,7 +161,7 @@ function erase_thumb_cache()
             continue;
         }
 
-        $GLOBALS['SITE_DB']->query_update($field['m_table'],array($field['m_name'] => ''));
+        $GLOBALS['SITE_DB']->query_update($field['m_table'], array($field['m_name'] => ''));
     }
     $full = get_custom_file_base() . '/uploads/auto_thumbs';
     $dh = @opendir($full);
@@ -189,7 +189,7 @@ function erase_cached_language()
             make_missing_directory($path);
         } else {
             while (false !== ($file = readdir($_dir))) {
-                if (substr($file,-4) == '.lcd') {
+                if (substr($file, -4) == '.lcd') {
                     if (running_script('index')) {
                         $key = 'page__' . get_zone_name() . '__' . get_page_name();
                     } else {
@@ -200,7 +200,7 @@ function erase_cached_language()
                     } // Will be open/locked
 
                     $i = 0;
-                    while ((@unlink($path . '/' . $file) === false) && ($i<5)) {
+                    while ((@unlink($path . '/' . $file) === false) && ($i < 5)) {
                         if (!file_exists($path . '/' . $file)) {
                             break;
                         } // Race condition, gone already
@@ -208,7 +208,7 @@ function erase_cached_language()
                         $i++;
                     }
                     if ($i >= 5) {
-                        if ((file_exists($path . '/' . $file)) && (substr($file,0,5) != 'page_') && (substr($file,0,7) != 'script_')) {
+                        if ((file_exists($path . '/' . $file)) && (substr($file, 0, 5) != 'page_') && (substr($file, 0, 7) != 'script_')) {
                             @unlink($path . '/' . $file) or intelligent_write_error($path . '/' . $file);
                         }
                     }
@@ -252,9 +252,9 @@ function erase_cached_templates($preserve_some = false)
                 make_missing_directory($path);
             } else {
                 while (false !== ($file = readdir($_dir))) {
-                    if ((substr($file,-4) == '.tcd') || (substr($file,-4) == '.tcp') || ((!$preserve_some) && ((substr($file,-3) == '.js') || (substr($file,-4) == '.css')))) {
+                    if ((substr($file, -4) == '.tcd') || (substr($file, -4) == '.tcp') || ((!$preserve_some) && ((substr($file, -3) == '.js') || (substr($file, -4) == '.css')))) {
                         $i = 0;
-                        while ((@unlink($path . $file) === false) && ($i<5)) {
+                        while ((@unlink($path . $file) === false) && ($i < 5)) {
                             if (!file_exists($path . $file)) {
                                 break;
                             } // Race condition, gone already
@@ -277,7 +277,7 @@ function erase_cached_templates($preserve_some = false)
         $_dir = @opendir($path);
         if ($_dir !== false) {
             while (false !== ($file = readdir($_dir))) {
-                if (substr($file,-14) == '_tree_made.htm') {
+                if (substr($file, -14) == '_tree_made.htm') {
                     @unlink($path . $file);
                 }
             }
@@ -312,15 +312,16 @@ function erase_comcode_page_cache()
     $GLOBALS['NO_QUERY_LIMIT'] = true;
 
     do {
-        $rows = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),null,'',50,null,true,array());
+        $rows = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages', array('string_index'), null, '', 50, null, true, array());
         if (is_null($rows)) {
             $rows = array();
         }
         foreach ($rows as $row) {
             delete_lang($row['string_index']);
-            $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('string_index' => $row['string_index']));
+            $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages', array('string_index' => $row['string_index']));
         }
-    } while (count($rows) != 0);
+    }
+    while (count($rows) != 0);
     erase_persistent_cache();
 
     $GLOBALS['NO_QUERY_LIMIT'] = false;

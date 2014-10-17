@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_unvalidated_wiki
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_wiki
     public function info()
     {
         if (!module_installed('wiki')) {
-            return NULL;
+            return null;
         }
 
         require_lang('wiki');

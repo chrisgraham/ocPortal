@@ -25,26 +25,26 @@
  */
 function get_download_bandwidth()
 {
-    $value = intval(get_value_newer_than('download_bandwidth',time()-60*60*24));
+    $value = intval(get_value_newer_than('download_bandwidth', time() - 60 * 60 * 24));
 
     if ($value == 0) {
-        $total = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',array('validated' => 1));
-        if ($total>200) { // Fast but won't work on some databases
-            $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','SUM(file_size*num_downloads)',array('validated' => 1));
+        $total = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'COUNT(*)', array('validated' => 1));
+        if ($total > 200) { // Fast but won't work on some databases
+            $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'SUM(file_size*num_downloads)', array('validated' => 1));
         } else {
             $value = 0;
 
-            $rows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('url','num_downloads'),array('validated' => 1));
+            $rows = $GLOBALS['SITE_DB']->query_select('download_downloads', array('url', 'num_downloads'), array('validated' => 1));
             foreach ($rows as $myrow) {
                 if (url_is_local($myrow['url'])) {
                     $file = get_custom_file_base() . '/' . rawurldecode($myrow['url']);
                     if (file_exists($file)) {
-                        $value += filesize($file)*$myrow['num_downloads'];
+                        $value += filesize($file) * $myrow['num_downloads'];
                     }
                 }
             }
             if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-                set_value('download_bandwidth',strval($value));
+                set_value('download_bandwidth', strval($value));
             }
         }
     }
@@ -59,14 +59,14 @@ function get_download_bandwidth()
  */
 function get_download_archive_size()
 {
-    $value = intval(get_value_newer_than('archive_size',time()-60*60*24));
+    $value = intval(get_value_newer_than('archive_size', time() - 60 * 60 * 24));
     if ($value == 0) {
-        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','SUM(file_size)',array('validated' => 1));
-        if (!(intval($value)>0)) {
+        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'SUM(file_size)', array('validated' => 1));
+        if (!(intval($value) > 0)) {
             $value = 0;
         }
         if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-            set_value('archive_size',strval($value));
+            set_value('archive_size', strval($value));
         }
     }
 
@@ -80,15 +80,15 @@ function get_download_archive_size()
  */
 function get_num_archive_downloads()
 {
-    $value = intval(get_value_newer_than('num_archive_downloads',time()-60*60*24));
+    $value = intval(get_value_newer_than('num_archive_downloads', time() - 60 * 60 * 24));
 
     if ($value == 0) {
-        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',array('validated' => 1));
-        if (!(intval($value)>0)) {
+        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'COUNT(*)', array('validated' => 1));
+        if (!(intval($value) > 0)) {
             $value = 0;
         }
         if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-            set_value('num_archive_downloads',strval($value));
+            set_value('num_archive_downloads', strval($value));
         }
     }
 
@@ -102,15 +102,15 @@ function get_num_archive_downloads()
  */
 function get_num_downloads_downloaded()
 {
-    $value = intval(get_value_newer_than('num_downloads_downloaded',time()-60*60*24));
+    $value = intval(get_value_newer_than('num_downloads_downloaded', time() - 60 * 60 * 24));
 
     if ($value == 0) {
-        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','SUM(num_downloads)',array('validated' => 1));
-        if (!(intval($value)>0)) {
+        $value = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'SUM(num_downloads)', array('validated' => 1));
+        if (!(intval($value) > 0)) {
             $value = 0;
         }
         if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-            set_value('num_downloads_downloaded',strval($value));
+            set_value('num_downloads_downloaded', strval($value));
         }
     }
 

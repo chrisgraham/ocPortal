@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_short_trans_multi
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_short_trans_multi
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_short_trans_multi
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -60,14 +59,14 @@ class Hook_fields_short_trans_multi
      * @param  ?object                  Database connection (NULL: main site database)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null,$db = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null, $db = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = 'default';
             }
         }
-        return array('long_trans',$default,'long_trans');
+        return array('long_trans', $default, 'long_trans');
     }
 
     /**
@@ -77,13 +76,13 @@ class Hook_fields_short_trans_multi
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
         }
         $ret = new ocp_tempcode();
-        foreach (($ev == '')?array():explode("\n",$ev) as $ev) {
+        foreach (($ev == '') ? array() : explode("\n", $ev) as $ev) {
             $ret->attach(paragraph(comcode_to_tempcode($ev)));
         }
         return $ret;
@@ -103,12 +102,12 @@ class Hook_fields_short_trans_multi
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if (is_null($actual_value)) {
             $actual_value = '';
         } // Plug anomaly due to unusual corruption
-        return form_input_line_multi($_cf_name,$_cf_description,'field_' . strval($field['id']),explode("\n",$actual_value),($field['cf_required'] == 1)?1:0);
+        return form_input_line_multi($_cf_name, $_cf_description, 'field_' . strval($field['id']), explode("\n", $actual_value), ($field['cf_required'] == 1) ? 1 : 0);
     }
 
     /**
@@ -120,25 +119,26 @@ class Hook_fields_short_trans_multi
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $i = 0;
         $value = '';
         do {
             $tmp_name = 'field_' . strval($id) . '_' . strval($i);
-            $_value = post_param($tmp_name,null);
+            $_value = post_param($tmp_name, null);
             if ((is_null($_value)) && ($i == 0)) {
-                return $editing?STRING_MAGIC_NULL:'';
+                return $editing ? STRING_MAGIC_NULL : '';
             }
-            if (($_value !== NULL) && ($_value != '')) {
+            if (($_value !== null) && ($_value != '')) {
                 if ($value != '') {
                     $value .= "\n";
                 }
                 $value .= $_value;
             }
             $i++;
-        } while ($_value !== NULL);
+        }
+        while ($_value !== null);
         return $value;
     }
 }

@@ -13,29 +13,29 @@
  * @package    code_quality
  */
 
-@ini_set('memory_limit','-1');
-error_reporting (E_ALL);
+@ini_set('memory_limit', '-1');
+error_reporting(E_ALL);
 if (function_exists('set_time_limit')) {
     @set_time_limit(1000);
 }
 global $OCPORTAL_PATH;
 $OCPORTAL_PATH = dirname(dirname(dirname(__FILE__)));
 
-function parse_file($to_use,$verbose = false,$very_verbose = false,$i = null,$count = null)
+function parse_file($to_use, $verbose = false, $very_verbose = false, $i = null, $count = null)
 {
-    global $TOKENS,$TEXT,$FILENAME,$OCPORTAL_PATH;
+    global $TOKENS, $TEXT, $FILENAME, $OCPORTAL_PATH;
     $FILENAME = $to_use;
 
-    if (($OCPORTAL_PATH != '') && (substr($FILENAME,0,strlen($OCPORTAL_PATH)) == $OCPORTAL_PATH)) {
-        $FILENAME = substr($FILENAME,strlen($OCPORTAL_PATH));
-        if (substr($FILENAME,0,1) == DIRECTORY_SEPARATOR) {
-            $FILENAME = substr($FILENAME,1);
+    if (($OCPORTAL_PATH != '') && (substr($FILENAME, 0, strlen($OCPORTAL_PATH)) == $OCPORTAL_PATH)) {
+        $FILENAME = substr($FILENAME, strlen($OCPORTAL_PATH));
+        if (substr($FILENAME, 0, 1) == DIRECTORY_SEPARATOR) {
+            $FILENAME = substr($FILENAME, 1);
         }
-        if (substr($FILENAME,0,1) == DIRECTORY_SEPARATOR) {
-            $FILENAME = substr($FILENAME,1);
+        if (substr($FILENAME, 0, 1) == DIRECTORY_SEPARATOR) {
+            $FILENAME = substr($FILENAME, 1);
         }
     }
-    $TEXT = str_replace("\r",'',file_get_contents($to_use));
+    $TEXT = str_replace("\r", '', file_get_contents($to_use));
 
     if ($verbose) {
         echo '<hr /><p>DOING ' . $to_use . '</p>';
@@ -80,7 +80,7 @@ function parse_file($to_use,$verbose = false,$very_verbose = false,$i = null,$co
 
 function cnl()
 {
-    return !isset($_SERVER['argv'])?'<br />':"\n";
+    return !isset($_SERVER['argv']) ? '<br />' : "\n";
 }
 
 function get_custom_file_base()
@@ -97,8 +97,8 @@ function get_file_base()
 
 function unixify_line_format($in)
 {
-    $in = str_replace("\r\n","\n",$in);
-    return str_replace("\r","\n",$in);
+    $in = str_replace("\r\n", "\n", $in);
+    return str_replace("\r", "\n", $in);
 }
 
 function object_factory($class)
@@ -106,21 +106,21 @@ function object_factory($class)
     return new $class;
 }
 
-function find_all_hooks($type,$entry)
+function find_all_hooks($type, $entry)
 {
     $out = array();
 
-    if (strpos($type,'..') !== false) {
+    if (strpos($type, '..') !== false) {
         $type = filter_naughty($type);
     }
-    if (strpos($entry,'..') !== false) {
+    if (strpos($entry, '..') !== false) {
         $entry = filter_naughty($entry);
     }
     $dir = get_file_base() . '/sources/hooks/' . $type . '/' . $entry;
     $dh = @scandir($dir);
     if ($dh !== false) {
         foreach ($dh as $file) {
-            $basename = basename($file,'.php');
+            $basename = basename($file, '.php');
             if (($file[0] != '.') && ($file == $basename . '.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/) {
                 $out[$basename] = 'sources';
             }
@@ -131,7 +131,7 @@ function find_all_hooks($type,$entry)
     $dh = @scandir($dir);
     if ($dh !== false) {
         foreach ($dh as $file) {
-            $basename = basename($file,'.php');
+            $basename = basename($file, '.php');
             if (($file[0] != '.') && ($file == $basename . '.php')/* && (preg_match('#^[\w\-]*$#',$basename)!=0) Let's trust - performance*/) {
                 $out[$basename] = 'sources_custom';
             }
@@ -146,18 +146,18 @@ function get_charset()
     return 'utf-8';
 }
 
-function do_dir($dir,$no_custom = false,$orig_priority = false,$avoid = null)
+function do_dir($dir, $no_custom = false, $orig_priority = false, $avoid = null)
 {
     global $OCPORTAL_PATH;
     require_once($OCPORTAL_PATH . '/sources/files.php');
     init__files();
 
     $out = array();
-    $_dir = ($dir == '')?'.':$dir;
+    $_dir = ($dir == '') ? '.' : $dir;
     $dh = opendir($_dir);
     if ($dh) {
         while (($file = readdir($dh)) !== false) {
-            if ((!is_null($avoid)) && (in_array($file,$avoid))) {
+            if ((!is_null($avoid)) && (in_array($file, $avoid))) {
                 continue;
             }
 
@@ -165,29 +165,29 @@ function do_dir($dir,$no_custom = false,$orig_priority = false,$avoid = null)
             if ($no_custom) {
                 $bitmask = $bitmask | IGNORE_CUSTOM_ZONES | IGNORE_CUSTOM_DIR_CONTENTS | IGNORE_NONBUNDLED_SCATTERED;
             }
-            $stripped_path = preg_replace('#^' . preg_quote($OCPORTAL_PATH . '/','#') . '#','',$dir . '/') . $file;
+            $stripped_path = preg_replace('#^' . preg_quote($OCPORTAL_PATH . '/', '#') . '#', '', $dir . '/') . $file;
             if ($stripped_path == 'exports') {
                 continue;
             } // Would be covered by IGNORE_NONBUNDLED_SCATTERED, but we don't always have that
-            if (should_ignore_file($stripped_path,$bitmask,0)) {
+            if (should_ignore_file($stripped_path, $bitmask, 0)) {
                 continue;
             }
 
             if ($file[0] != '.') {
                 if (is_file($_dir . '/' . $file)) {
-                    if (substr($file,-4,4) == '.php') {
-                        $path = $dir . (($dir != '')?'/':'') . $file;
+                    if (substr($file, -4, 4) == '.php') {
+                        $path = $dir . (($dir != '') ? '/' : '') . $file;
                         if ($orig_priority) {
-                            $alt = str_replace('_custom','',$path);
+                            $alt = str_replace('_custom', '', $path);
                         } else {
-                            $alt = str_replace('modules/','modules_custom/',str_replace('sources/','sources_custom/',$path));
+                            $alt = str_replace('modules/', 'modules_custom/', str_replace('sources/', 'sources_custom/', $path));
                         }
                         if (($alt == $path) || (!file_exists($alt))) {
                             $out[] = $path;
                         }
                     }
                 } elseif (is_dir($_dir . '/' . $file)) {
-                    $out = array_merge($out,do_dir($dir . (($dir != '')?'/':'') . $file,$no_custom,$orig_priority));
+                    $out = array_merge($out, do_dir($dir . (($dir != '') ? '/' : '') . $file, $no_custom, $orig_priority));
                 }
             }
         }
@@ -200,13 +200,13 @@ function check_parameters()
     return true;
 }
 
-function die_error($system,$pos,$line,$message)
+function die_error($system, $pos, $line, $message)
 {
     global $FILENAME;
     throw new Exception('ERROR "' . $FILENAME . '" ' . $line . ' ' . $pos . ' ' . 'PHP: ' . $message);
 }
 
-function warn_error($system,$pos,$line,$message)
+function warn_error($system, $pos, $line, $message)
 {
     global $FILENAME;
     echo 'WARNING "' . $FILENAME . '" ' . $line . ' ' . $pos . ' ' . 'PHP: ' . $message . cnl();
@@ -214,11 +214,11 @@ function warn_error($system,$pos,$line,$message)
 
 function get_file_extension($name)
 {
-    $dot_pos = strrpos($name,'.');
+    $dot_pos = strrpos($name, '.');
     if ($dot_pos === false) {
         return '';
     }
-    return strtolower(substr($name,$dot_pos+1));
+    return strtolower(substr($name, $dot_pos + 1));
 }
 
 function die_html_trace($message)
@@ -234,7 +234,7 @@ function die_html_trace($message)
             if ($key == 'file') {
                 continue;
             }
-            $_value = var_export($value,true);
+            $_value = var_export($value, true);
             $traces .= ucfirst($key) . ' -> ' . htmlentities($_value) . '<br />';
         }
         $trace .= '<p>' . $traces . '</p>';
@@ -243,35 +243,35 @@ function die_html_trace($message)
     exit('<span style="color: blue">' . $trace . '</span>');
 }
 
-function pos_to_line_details($i,$absolute = false)
+function pos_to_line_details($i, $absolute = false)
 {
-    global $TEXT,$TOKENS;
+    global $TEXT, $TOKENS;
     if ((!$absolute) && (!isset($TOKENS[$i]))) {
         $i = -1;
     }
     if ($i == -1) {
-        return array(0,0,'');
+        return array(0, 0, '');
     }
-    $j = $absolute?$i:$TOKENS[$i][count($TOKENS[$i])-1];
-    $line = substr_count(substr($TEXT,0,$j),"\n")+1;
-    $pos = $j-strrpos(substr($TEXT,0,$j),"\n");
-    $l_s = strrpos(substr($TEXT,0,$j+1),"\n")+1;
+    $j = $absolute ? $i : $TOKENS[$i][count($TOKENS[$i]) - 1];
+    $line = substr_count(substr($TEXT, 0, $j), "\n") + 1;
+    $pos = $j - strrpos(substr($TEXT, 0, $j), "\n");
+    $l_s = strrpos(substr($TEXT, 0, $j + 1), "\n") + 1;
     if ($l_s == 1) {
         $l_s = 0;
     }
-    $full_line = @strval(htmlentities(substr($TEXT,$l_s,strpos($TEXT,"\n",$j)-1-$l_s)));
+    $full_line = @strval(htmlentities(substr($TEXT, $l_s, strpos($TEXT, "\n", $j) - 1 - $l_s)));
 
-    return array($pos,$line,$full_line);
+    return array($pos, $line, $full_line);
 }
 
-function log_warning($warning,$i = -1,$absolute = false)
+function log_warning($warning, $i = -1, $absolute = false)
 {
-    global $TEXT,$FILENAME,$START_TIME,$MYFILE_WARNINGS;
+    global $TEXT, $FILENAME, $START_TIME, $MYFILE_WARNINGS;
 
     if (($i == -1) && (isset($GLOBALS['I']))) {
         $i = $GLOBALS['I'];
     }
-    list($pos,$line,$full_line) = pos_to_line_details($i,$absolute);
+    list($pos, $line, $full_line) = pos_to_line_details($i, $absolute);
 
     echo 'WARNING "' . $FILENAME . '" ' . $line . ' ' . $pos . ' ' . 'PHP: ' . $warning . cnl();
 // if (!isset($MYFILE_WARNINGS)) $MYFILE_WARNINGS=fopen('warnings_'.$START_TIME.'.log','at');
@@ -279,14 +279,14 @@ function log_warning($warning,$i = -1,$absolute = false)
     //fclose($MYFILE_WARNINGS);
 }
 
-function log_special($type,$value)
+function log_special($type, $value)
 {
     global $START_TIME;
 
     if (!isset($GLOBALS[$type])) {
-        $GLOBALS[$type] = fopen('special_' . $START_TIME . '_' . $type . '.log','at');
+        $GLOBALS[$type] = fopen('special_' . $START_TIME . '_' . $type . '.log', 'at');
     }
-    fwrite($GLOBALS[$type],$value . "\n");
+    fwrite($GLOBALS[$type], $value . "\n");
     //fclose($GLOBALS[$$type]);
 }
 
@@ -305,28 +305,28 @@ function filter_naughty($in)
     return $in;
 }
 
-function do_lang_tempcode($x,$a = null,$b = null,$c = null,$d = null)
+function do_lang_tempcode($x, $a = null, $b = null, $c = null, $d = null)
 {
     global $PARSED;
     if (!isset($PARSED)) {
         $temp = file_get_contents('lang/php.ini');
-        $temp_2 = explode("\n",$temp);
+        $temp_2 = explode("\n", $temp);
         $PARSED = array();
         foreach ($temp_2 as $p) {
-            $pos = strpos($p,'=');
+            $pos = strpos($p, '=');
             if ($pos !== false) {
-                $PARSED[substr($p,0,$pos)] = substr($p,$pos+1);
+                $PARSED[substr($p, 0, $pos)] = substr($p, $pos + 1);
             }
         }
     }
-    $out = strip_tags(str_replace('{1}',$a,str_replace('{2}',$b,$PARSED[$x])));
+    $out = strip_tags(str_replace('{1}', $a, str_replace('{2}', $b, $PARSED[$x])));
     if (is_string($c)) {
-        $out = str_replace('{3}',$c,$out);
+        $out = str_replace('{3}', $c, $out);
     } else {
-        $out = @str_replace('{3}',$c[0],$out);
-        $out = @str_replace('{4}',$c[1],$out);
-        $out = @str_replace('{5}',$c[2],$out);
-        $out = @str_replace('{6}',$c[3],$out);
+        $out = @str_replace('{3}', $c[0], $out);
+        $out = @str_replace('{4}', $c[1], $out);
+        $out = @str_replace('{5}', $c[2], $out);
+        $out = @str_replace('{6}', $c[3], $out);
     }
     return rtrim($out);
 }
@@ -338,8 +338,8 @@ function escape_html($in)
 
 function fatal_exit($message)
 {
-    global $TO_USE,$LINE,$OCPORTAL_PATH;
-    echo('ISSUE "' . substr($TO_USE,strlen($OCPORTAL_PATH)+1) . '" ' . strval($LINE) . ' 0 ' . $message . cnl());
+    global $TO_USE, $LINE, $OCPORTAL_PATH;
+    echo('ISSUE "' . substr($TO_USE, strlen($OCPORTAL_PATH) + 1) . '" ' . strval($LINE) . ' 0 ' . $message . cnl());
 }
 
 if (!function_exists('is_alphanumeric')) {
@@ -350,16 +350,16 @@ if (!function_exists('is_alphanumeric')) {
      * @param  boolean                  Whether to check stricter identifier-validity
      * @return boolean                  Whether the string is alphanumeric or not
      */
-    function is_alphanumeric($string,$strict = false)
+    function is_alphanumeric($string, $strict = false)
     {
         if ($strict) {
-            return preg_match('#^[\w\-]*$#',$string) != 0;
+            return preg_match('#^[\w\-]*$#', $string) != 0;
         }
 
-        $test = @preg_match('#^[\pL\w\-\.]*$#u',$string) != 0; // unicode version, may fail on some servers
+        $test = @preg_match('#^[\pL\w\-\.]*$#u', $string) != 0; // unicode version, may fail on some servers
         if ($test !== false) {
             return $test;
         }
-        return preg_match('#^[\w\-\.]*$#',$string) != 0;
+        return preg_match('#^[\w\-\.]*$#', $string) != 0;
     }
 }

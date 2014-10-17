@@ -33,19 +33,19 @@
  * @param  ?ID_TEXT                     Name of the height field in the table (NULL: none)
  * @return URLPATH                      Transcoded file (or original URL if no change was made)
  */
-function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_filename_field,$width_field,$height_field)
+function transcode_video($url, $table, $local_id, $local_id_field, $url_field, $orig_filename_field, $width_field, $height_field)
 {
     $orig_url = $url;
 
     // If there is a locally uploaded file, that is not in a web-safe format, go convert it to such
-    if ((preg_match('#http\:\/\/#i',$url) == 0) && (preg_match('#\.(flv|mp4|webm|mp3)$#i',$url) == 0)) {
+    if ((preg_match('#http\:\/\/#i', $url) == 0) && (preg_match('#\.(flv|mp4|webm|mp3)$#i', $url) == 0)) {
         require_code('files');
 
         // ZENCODER
 
         if ((get_option('transcoding_zencoder_api_key') != '') && (get_option('transcoding_zencoder_ftp_path') != '')) {
             if (running_locally()) {
-                attach_message(do_lang_tempcode('TRANSCODING_LOCALHOST'),'inform');
+                attach_message(do_lang_tempcode('TRANSCODING_LOCALHOST'), 'inform');
                 $notifications = '';
             } else {
                 $notifications = '
@@ -58,18 +58,18 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
             $test = false;
 
             require_code('images');
-            $extension = is_audio($url,true)?'mp3':'mp4';
+            $extension = is_audio($url, true) ? 'mp3' : 'mp4';
 
             require_code('xml');
-            $transcoded_filename = uniqid('transcoded',true) . '--' . rawurldecode(preg_replace('#\.\w+$#','',basename($url))) . '.' . $extension;
+            $transcoded_filename = uniqid('transcoded', true) . '--' . rawurldecode(preg_replace('#\.\w+$#', '', basename($url))) . '.' . $extension;
             $xml = '<' . '?xml version="1.0" encoding="UTF-8"?' . '>
                     <api-request>
                             <api_key>' . xmlentities(get_option('transcoding_zencoder_api_key')) . '</api_key>
-                            <input>' . xmlentities(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url) . '</input>
-                            <test>' . ($test?'1':'0') . '</test>
+                            <input>' . xmlentities(url_is_local($url) ? (get_custom_base_url() . '/' . $url) : $url) . '</input>
+                            <test>' . ($test ? '1' : '0') . '</test>
                             <outputs type="array">
                                         <output>
-                                                        <url>' . rtrim(get_option('transcoding_zencoder_ftp_path'),'/') . '/' . $transcoded_filename . '</url>
+                                                        <url>' . rtrim(get_option('transcoding_zencoder_ftp_path'), '/') . '/' . $transcoded_filename . '</url>
                                                         <width>' . xmlentities(get_option('video_width_setting')) . '</width>
                                                         <speed>2</speed>
                                                         <video_bitrate>' . xmlentities(get_option('video_bitrate')) . '</video_bitrate>
@@ -79,14 +79,14 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
                             </outputs>
                     </api-request>
             ';
-            $response = http_download_file('https://app.zencoder.com/api/jobs',null,true,false,'ocPortal',array($xml),null,null,null,null,null,null,null,12.0,true);
+            $response = http_download_file('https://app.zencoder.com/api/jobs', null, true, false, 'ocPortal', array($xml), null, null, null, null, null, null, null, 12.0, true);
 
             $matches = array();
-            if (preg_match('#<id[^>]*>(\d+)</id>#',$response,$matches) != 0) {
-                attach_message(do_lang_tempcode('TRANSCODING_IN_PROGRESS'),'inform');
+            if (preg_match('#<id[^>]*>(\d+)</id>#', $response, $matches) != 0) {
+                attach_message(do_lang_tempcode('TRANSCODING_IN_PROGRESS'), 'inform');
 
                 // Store details, so callback knows how to update DB
-                $GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
+                $GLOBALS['SITE_DB']->query_insert('video_transcoding', array(
                     't_id' => $matches[1],
                     't_local_id' => $local_id,
                     't_local_id_field' => $local_id_field,
@@ -94,15 +94,15 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
                     't_url' => $url,
                     't_table' => $table,
                     't_url_field' => $url_field,
-                    't_orig_filename_field' => is_null($orig_filename_field)?'':$orig_filename_field,
-                    't_width_field' => is_null($width_field)?'':$width_field,
-                    't_height_field' => is_null($height_field)?'':$height_field,
+                    't_orig_filename_field' => is_null($orig_filename_field) ? '' : $orig_filename_field,
+                    't_width_field' => is_null($width_field) ? '' : $width_field,
+                    't_height_field' => is_null($height_field) ? '' : $height_field,
                     't_output_filename' => $transcoded_filename,
                 ));
             } else {
-                attach_message(do_lang_tempcode('TRANSCODING_ERROR'),'warn');
+                attach_message(do_lang_tempcode('TRANSCODING_ERROR'), 'warn');
                 if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) {
-                    attach_message('Full response: ' . $response,'inform');
+                    attach_message('Full response: ' . $response, 'inform');
                 }
             }
 
@@ -113,22 +113,22 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 
         $transcoding_server = get_option('transcoding_server');
         if ($transcoding_server != '') {
-            http_download_file($transcoding_server . '/receive_script.php?file=' . urlencode(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url));
+            http_download_file($transcoding_server . '/receive_script.php?file=' . urlencode(url_is_local($url) ? (get_custom_base_url() . '/' . $url) : $url));
 
-            attach_message(do_lang_tempcode('TRANSCODING_IN_PROGRESS'),'inform');
+            attach_message(do_lang_tempcode('TRANSCODING_IN_PROGRESS'), 'inform');
 
             // Store details, so callback knows how to update DB
-            $GLOBALS['SITE_DB']->query_insert('video_transcoding',array(
-                't_id' => 'ocptrans_' . uniqid('',true),
+            $GLOBALS['SITE_DB']->query_insert('video_transcoding', array(
+                't_id' => 'ocptrans_' . uniqid('', true),
                 't_local_id' => $local_id,
                 't_local_id_field' => $local_id_field,
                 't_error' => '',
                 't_url' => $url,
                 't_table' => $table,
                 't_url_field' => $url_field,
-                't_orig_filename_field' => is_null($orig_filename_field)?'':$orig_filename_field,
-                't_width_field' => is_null($width_field)?'':$width_field,
-                't_height_field' => is_null($height_field)?'':$height_field,
+                't_orig_filename_field' => is_null($orig_filename_field) ? '' : $orig_filename_field,
+                't_width_field' => is_null($width_field) ? '' : $width_field,
+                't_height_field' => is_null($height_field) ? '' : $height_field,
                 't_output_filename' => rawurldecode(basename($url)),
             ));
 
@@ -137,7 +137,7 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
 
         // IMMEDIATE LOCAL FFMPEG
 
-        if (strpos(@ini_get('disable_functions'),'shell_exec') !== false) {
+        if (strpos(@ini_get('disable_functions'), 'shell_exec') !== false) {
             return $url;
         } // Can't do
 
@@ -153,18 +153,18 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
         $video_bitrate = get_option('video_bitrate'); // video bitrate to be set
 
         $file_path = get_file_base() . '/' . rawurldecode($url);
-        $file_path = preg_replace('#(\\\|/)#',DIRECTORY_SEPARATOR,$file_path);
+        $file_path = preg_replace('#(\\\|/)#', DIRECTORY_SEPARATOR, $file_path);
 
         // get_mime_type
         require_code('mime_types');
         $file_ext = get_file_extension($file_path);
-        $input_mime_type = get_mime_type($file_ext,true);
+        $input_mime_type = get_mime_type($file_ext, true);
 
-        if ((preg_match('#video\/#i',$input_mime_type) != 0) && ($ffmpeg_path != '')) {
+        if ((preg_match('#video\/#i', $input_mime_type) != 0) && ($ffmpeg_path != '')) {
             // It is video
-            $output_path = preg_replace('#\.' . preg_quote($file_ext,'#') . '$#','',$file_path) . '.mp4';
+            $output_path = preg_replace('#\.' . preg_quote($file_ext, '#') . '$#', '', $file_path) . '.mp4';
             $shell_command = '"' . $ffmpeg_path . 'ffmpeg" -i ' . escapeshellarg_wrap($file_path) . ' -y -f mp4 -vcodec libx264 -b ' . escapeshellarg_wrap($video_bitrate) . 'Kb -ab ' . escapeshellarg_wrap($audio_bitrate) . 'Kb -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -ar 22050 -ac 2 -aspect 16:9 -s ' . escapeshellarg_wrap($video_width_setting . ':' . $video_height_setting) . ' ' . escapeshellarg_wrap($output_path);
-            $shell_commands = array($shell_command . ' -map 0.1:0.0 -map 0.0:0.1',$shell_command . ' -map 0.0:0.0 -map 0.1:0.1');
+            $shell_commands = array($shell_command . ' -map 0.1:0.0 -map 0.0:0.1', $shell_command . ' -map 0.0:0.0 -map 0.1:0.1');
             foreach ($shell_commands as $shell_command) {
                 shell_exec($shell_command);
                 if (@filesize($output_path)) {
@@ -173,22 +173,22 @@ function transcode_video($url,$table,$local_id,$local_id_field,$url_field,$orig_
             }
             if (@filesize($output_path)) {
                 shell_exec('"' . $ffmpeg_path . 'MP4Box" -inter 500 ' . ' ' . escapeshellarg_wrap($output_path));
-                $url = preg_replace('#\.' . preg_quote($file_ext,'#') . '$#','',$url) . '.mp4';
+                $url = preg_replace('#\.' . preg_quote($file_ext, '#') . '$#', '', $url) . '.mp4';
             }
-        } elseif ((preg_match('#audio\/#i',$input_mime_type) != 0) && ($ffmpeg_path != '')) {
+        } elseif ((preg_match('#audio\/#i', $input_mime_type) != 0) && ($ffmpeg_path != '')) {
             // It is audio
-            $output_path = preg_replace('#\.' . preg_quote($file_ext,'#') . '$#','',$file_path) . '.mp3';
+            $output_path = preg_replace('#\.' . preg_quote($file_ext, '#') . '$#', '', $file_path) . '.mp3';
             $shell_command = '"' . $ffmpeg_path . 'ffmpeg" -y -i ' . escapeshellarg_wrap($file_path) . ' -ab ' . escapeshellarg_wrap($audio_bitrate) . 'Kb ' . escapeshellarg_wrap($output_path);
             shell_exec($shell_command);
             if (@filesize($output_path)) {
-                $url = preg_replace('#\.' . preg_quote($file_ext,'#') . '$#','',$url) . '.mp3';
+                $url = preg_replace('#\.' . preg_quote($file_ext, '#') . '$#', '', $url) . '.mp3';
             }
         }
     }
 
     // If it's happened already, save this back
     if (($url != $orig_url) && (!is_null($local_id_field))) {
-        $GLOBALS['SITE_DB']->query_update($table,array($url_field => $url),array($local_id_field => $local_id),'',1);
+        $GLOBALS['SITE_DB']->query_update($table, array($url_field => $url), array($local_id_field => $local_id), '', 1);
     }
 
     // No success :(
@@ -206,11 +206,11 @@ function zencoder_receive_script()
 
     $data = file_get_contents('php://input'); // E.g. '<api-notification><state>finished</state><id>797351</id></api-notification>';
 
-    if ((($num_matches = preg_match_all('#<id[^>]*>(\d+)</id>#',$data,$matches)) != 0) || (($num_matches = preg_match_all('#"id":\s*(\d+)#',$data,$matches)) != 0)) {
-        if (strpos($data,'finished') !== false) {
+    if ((($num_matches = preg_match_all('#<id[^>]*>(\d+)</id>#', $data, $matches)) != 0) || (($num_matches = preg_match_all('#"id":\s*(\d+)#', $data, $matches)) != 0)) {
+        if (strpos($data, 'finished') !== false) {
             store_transcoding_success($matches[$num_matches][0]);
             echo 'Done';
-        } elseif (strpos($data,'failed') !== false) {
+        } elseif (strpos($data, 'failed') !== false) {
             store_transcoding_failure($matches[$num_matches][0]);
         }
     } else {
@@ -226,7 +226,7 @@ function zencoder_receive_script()
 function store_transcoding_failure($transcoder_id)
 {
     require_lang('galleries');
-    $GLOBALS['SITE_DB']->query_update('video_transcoding',array('t_error' => do_lang('TRANSCODING_ERROR_2')),array('t_id' => $transcoder_id),'',1);
+    $GLOBALS['SITE_DB']->query_update('video_transcoding', array('t_error' => do_lang('TRANSCODING_ERROR_2')), array('t_id' => $transcoder_id), '', 1);
 }
 
 /**
@@ -235,24 +235,24 @@ function store_transcoding_failure($transcoder_id)
  * @param  ID_TEXT                      Transcoding ID
  * @param  ?URLPATH                     Transcoded URL (NULL: Discerned using t_output_filename field, which we assume is where transcoder has copied file to)
  */
-function store_transcoding_success($transcoder_id,$new_url = null)
+function store_transcoding_success($transcoder_id, $new_url = null)
 {
     if (function_exists('set_time_limit')) {
         @set_time_limit(0);
     }
 
     // Stuff about the transcoding
-    $descript_rows = $GLOBALS['SITE_DB']->query_select('video_transcoding',array('*'),array(
+    $descript_rows = $GLOBALS['SITE_DB']->query_select('video_transcoding', array('*'), array(
         't_id' => $transcoder_id,
-    ),'',1);
-    if (!array_key_exists(0,$descript_rows)) {
+    ), '', 1);
+    if (!array_key_exists(0, $descript_rows)) {
         return;
     } // No match
     $descript_row = $descript_rows[0];
 
     // The database for for what has been transcoded
-    $rows = $GLOBALS['SITE_DB']->query_select($descript_row['t_table'],array('*'),array($descript_row['t_url_field'] => $descript_row['t_url']),'',1,null,false,array());
-    if (!array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select($descript_row['t_table'], array('*'), array($descript_row['t_url_field'] => $descript_row['t_url']), '', 1, null, false, array());
+    if (!array_key_exists(0, $rows)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
     $row = $rows[0];
@@ -260,9 +260,9 @@ function store_transcoding_success($transcoder_id,$new_url = null)
     // Deal with old file
     $old_file_path = get_custom_file_base() . '/' . rawurldecode($row['url']);
     if (url_is_local($descript_row['t_url'])) {
-        $new_file_path = str_replace('/uploads/galleries/','/uploads/galleries/pre_transcoding/',$old_file_path);
+        $new_file_path = str_replace('/uploads/galleries/', '/uploads/galleries/pre_transcoding/', $old_file_path);
         if (file_exists(get_custom_file_base() . '/uploads/galleries/pre_transcoding')) { // Move the old media file to the archive directory
-            @rename($old_file_path,$new_file_path);
+            @rename($old_file_path, $new_file_path);
             sync_file($old_file_path);
             sync_file($new_file_path);
         } else { // Delete old media
@@ -274,8 +274,8 @@ function store_transcoding_success($transcoder_id,$new_url = null)
     // Update width/height, to what we specified we want to transcode to
     $ext = get_file_extension($descript_row['t_output_filename']);
     require_code('mime_types');
-    $mime_type = get_mime_type($ext,true);
-    if (substr($mime_type,0,6) != 'audio/') {
+    $mime_type = get_mime_type($ext, true);
+    if (substr($mime_type, 0, 6) != 'audio/') {
         if ($descript_row['t_width_field'] != '') {
             $row[$descript_row['t_width_field']] = intval(get_option('video_width_setting'));
         }
@@ -293,7 +293,7 @@ function store_transcoding_success($transcoder_id,$new_url = null)
 
     // Update original filename
     if ($descript_row['t_orig_filename_field'] != '') {
-        $row[$descript_row['t_orig_filename_field']] = preg_replace('#\..*$#','.' . $ext,$row[$descript_row['t_orig_filename_field']]);
+        $row[$descript_row['t_orig_filename_field']] = preg_replace('#\..*$#', '.' . $ext, $row[$descript_row['t_orig_filename_field']]);
     }
 
     // Update URL to transcoded one
@@ -305,6 +305,6 @@ function store_transcoding_success($transcoder_id,$new_url = null)
 
     // Update record to point to new file
     if (!is_null($descript_row['t_local_id_field'])) {
-        $GLOBALS['SITE_DB']->query_update($descript_row['t_table'],$row,array($descript_row['t_local_id_field'] => $descript_row['t_local_id']),'',1);
+        $GLOBALS['SITE_DB']->query_update($descript_row['t_table'], $row, array($descript_row['t_local_id_field'] => $descript_row['t_local_id']), '', 1);
     }
 }

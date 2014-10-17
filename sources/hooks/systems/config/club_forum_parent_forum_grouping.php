@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_clubs
  */
-
 class Hook_config_club_forum_parent_forum_grouping
 {
     /**

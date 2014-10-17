@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_side_google_search
 {
     /**
@@ -41,7 +40,7 @@ class Block_side_google_search
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'page_name\',$map)?$map[\'page_name\']:\'google_search\')';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*5;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 5;
         return $info;
     }
 
@@ -57,8 +56,8 @@ class Block_side_google_search
 
         require_lang('google_search');
 
-        $page_name = !empty($map['page_name'])?$map['page_name']:'_google_search';
+        $page_name = !empty($map['page_name']) ? $map['page_name'] : '_google_search';
 
-        return do_template('BLOCK_SIDE_GOOGLE_SEARCH',array('_GUID' => 'e42a949234538f8c2f9a8e96bc43056d','TITLE' => do_lang_tempcode('BLOCK_GOOGLE_TITLE'),'PAGE_NAME' => $page_name));
+        return do_template('BLOCK_SIDE_GOOGLE_SEARCH', array('_GUID' => 'e42a949234538f8c2f9a8e96bc43056d', 'TITLE' => do_lang_tempcode('BLOCK_GOOGLE_TITLE'), 'PAGE_NAME' => $page_name));
     }
 }

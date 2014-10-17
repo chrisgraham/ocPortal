@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    recommend
  */
-
 class Block_main_screen_actions
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_screen_actions
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('title','url');
+        $info['parameters'] = array('title', 'url');
         return $info;
     }
 
@@ -50,23 +49,23 @@ class Block_main_screen_actions
 
         require_lang('recommend');
 
-        $from = isset($map['url'])?$map['url']:'';
+        $from = isset($map['url']) ? $map['url'] : '';
         if ($from == '') {
             $from = get_self_url(true);
         }
 
-        $_map = array('page' => 'recommend','from' => $from);
-        if (array_key_exists('title',$map)) {
+        $_map = array('page' => 'recommend', 'from' => $from);
+        if (array_key_exists('title', $map)) {
             $_map['title'] = $map['title'];
         }
-        $recommend_url = build_url($_map,'_SEARCH');
+        $recommend_url = build_url($_map, '_SEARCH');
 
-        return do_template('BLOCK_MAIN_SCREEN_ACTIONS',array(
+        return do_template('BLOCK_MAIN_SCREEN_ACTIONS', array(
             '_GUID' => '2f5ceee4e1cc3d31c184c62e0710b1c3',
-            'PRINT_URL' => get_self_url(true,false,array('wide_print' => 1)),
+            'PRINT_URL' => get_self_url(true, false, array('wide_print' => 1)),
             'RECOMMEND_URL' => $recommend_url,
-            'EASY_SELF_URL' => str_replace("'",'',urlencode(get_self_url(true))),
-            'TITLE' => array_key_exists('title',$map)?$map['title']:'',
+            'EASY_SELF_URL' => str_replace("'", '', urlencode(get_self_url(true))),
+            'TITLE' => array_key_exists('title', $map) ? $map['title'] : '',
         ));
     }
 }

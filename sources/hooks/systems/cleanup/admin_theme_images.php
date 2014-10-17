@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_admin_theme_images
 {
     /**
@@ -46,13 +45,13 @@ class Hook_admin_theme_images
 
         persistent_cache_delete('THEME_IMAGES');
 
-        $paths = $GLOBALS['SITE_DB']->query_select('theme_images',array('path','id'));
+        $paths = $GLOBALS['SITE_DB']->query_select('theme_images', array('path', 'id'));
         foreach ($paths as $path) {
             if ($path['path'] == '') {
-                $GLOBALS['SITE_DB']->query_delete('theme_images',$path,'',1);
-            } elseif (preg_match('#^themes/[^/]+/images_custom/+' . preg_quote($path['id'],'#') . '\.#',$path['path']) != 0) {
+                $GLOBALS['SITE_DB']->query_delete('theme_images', $path, '', 1);
+            } elseif (preg_match('#^themes/[^/]+/images_custom/+' . preg_quote($path['id'], '#') . '\.#', $path['path']) != 0) {
                 if ((!file_exists(get_custom_file_base() . '/' . $path['path'])) && (!file_exists(get_file_base() . '/' . $path['path']))) {
-                    $GLOBALS['SITE_DB']->query_delete('theme_images',$path,'',1);
+                    $GLOBALS['SITE_DB']->query_delete('theme_images', $path, '', 1);
                 }
             }
         }

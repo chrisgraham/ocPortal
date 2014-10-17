@@ -34,10 +34,10 @@ class user_test_set extends ocp_test_case
             ocf_delete_member($this->member_id);
         }
 
-        $this->member_id = ocf_make_member('testmember','123456','test@test.com',array(),10,1,1980,array(),null,null,1,null,null,'',null,'',0,0,1,'','','',1,1,null,1,1,null,'',true,null,'',1,null,0,'*','');
+        $this->member_id = ocf_make_member('testmember', '123456', 'test@test.com', array(), 10, 1, 1980, array(), null, null, 1, null, null, '', null, '', 0, 0, 1, '', '', '', 1, 1, null, 1, 1, null, '', true, null, '', 1, null, 0, '*', '');
 
         // Test the forum was actually created
-        $this->assertTrue('testmember' == $GLOBALS['FORUM_DB']->query_select_value('f_members','m_username',array('id' => $this->member_id)));
+        $this->assertTrue('testmember' == $GLOBALS['FORUM_DB']->query_select_value('f_members', 'm_username', array('id' => $this->member_id)));
     }
 
     public function testEdituser()
@@ -60,26 +60,26 @@ class user_test_set extends ocp_test_case
             null, // language
             1, // allow_emails
             1, // allow_emails_from_staff
-            NULL, // validated
-            NULL, // username
-            NULL, // password
-            NULL, // highlighted_name
+            null, // validated
+            null, // username
+            null, // password
+            null, // highlighted_name
             '*', // pt_allow
             '', // pt_rules_text
-            NULL, // on_probation_until
-            NULL, // join_time
-            NULL, // avatar_url
-            NULL, // signature
-            NULL, // is_perm_banned
-            NULL, // photo_url
-            NULL, // photo_thumb_url
-            NULL, // salt
-            NULL, // password_compatibility_scheme
+            null, // on_probation_until
+            null, // join_time
+            null, // avatar_url
+            null, // signature
+            null, // is_perm_banned
+            null, // photo_url
+            null, // photo_thumb_url
+            null, // salt
+            null, // password_compatibility_scheme
             false // skip_checks
         );
 
         // Test the forum was actually created
-        $this->assertTrue('testing@test.com' == $GLOBALS['FORUM_DB']->query_select_value('f_members','m_email_address',array('id' => $this->member_id)));
+        $this->assertTrue('testing@test.com' == $GLOBALS['FORUM_DB']->query_select_value('f_members', 'm_email_address', array('id' => $this->member_id)));
     }
 
     public function tearDown()

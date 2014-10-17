@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-
 class Hook_Preview_setupwizard
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_setupwizard
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'admin_setupwizard') && (get_param('type') == 'step8');
-        return array($applies,null,false);
+        $applies = (get_param('page', '') == 'admin_setupwizard') && (get_param('type') == 'step8');
+        return array($applies, null, false);
     }
 
     /**
@@ -39,12 +38,12 @@ class Hook_Preview_setupwizard
     public function run()
     {
         $_GET['keep_theme_seed'] = post_param('seed_hex');
-        $_GET['keep_theme_dark'] = post_param('dark','0');
+        $_GET['keep_theme_dark'] = post_param('dark', '0');
         $_GET['keep_theme_source'] = 'default';
         $_GET['keep_theme_algorithm'] = 'equations';
 
-        $preview = request_page($GLOBALS['SITE_DB']->query_select_value('zones','zone_default_page'),true,'');
+        $preview = request_page($GLOBALS['SITE_DB']->query_select_value('zones', 'zone_default_page'), true, '');
 
-        return array($preview,null);
+        return array($preview, null);
     }
 }

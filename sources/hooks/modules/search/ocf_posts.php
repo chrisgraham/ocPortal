@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_search_ocf_posts
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_ocf_posts
     public function info($check_permissions = true)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'topicview')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'topicview')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)') == 0) {
-            return NULL;
+        if ($GLOBALS['FORUM_DB']->query_select_value('f_posts', 'COUNT(*)') == 0) {
+            return null;
         }
 
         require_lang('ocf');
@@ -48,8 +47,8 @@ class Hook_search_ocf_posts
         $info['lang'] = do_lang_tempcode('FORUM_POSTS');
         $info['default'] = false;
         $info['special_on'] = array();
-        $info['special_off'] = array('open' => do_lang_tempcode('POST_SEARCH_OPEN'),'closed' => do_lang_tempcode('POST_SEARCH_CLOSED'),'pinned' => do_lang_tempcode('POST_SEARCH_PINNED'),'starter' => do_lang_tempcode('POST_SEARCH_STARTER'));
-        if ((has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        $info['special_off'] = array('open' => do_lang_tempcode('POST_SEARCH_OPEN'), 'closed' => do_lang_tempcode('POST_SEARCH_CLOSED'), 'pinned' => do_lang_tempcode('POST_SEARCH_PINNED'), 'starter' => do_lang_tempcode('POST_SEARCH_STARTER'));
+        if ((has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
             $info['special_off']['unvalidated'] = do_lang_tempcode('POST_SEARCH_UNVALIDATED');
         }
         $info['category'] = 'p_cache_forum_id';
@@ -77,7 +76,7 @@ class Hook_search_ocf_posts
      */
     public function ajax_tree()
     {
-        return array('choose_forum',array('compound_list' => true));
+        return array('choose_forum', array('compound_list' => true));
     }
 
     /**
@@ -103,9 +102,9 @@ class Hook_search_ocf_posts
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
-        if (in_array($content,array(
+        if (in_array($content, array(
             do_lang('POSTS_WITHIN_TOPIC'),
             do_lang('SEARCH_POSTS_WITHIN_TOPIC'),
             do_lang('SEARCH_FORUM_POSTS'),
@@ -135,7 +134,7 @@ class Hook_search_ocf_posts
         require_lang('ocf');
 
         // Calculate our where clause (search)
-        $sq = build_search_submitter_clauses('p_poster',$author_id,$author);
+        $sq = build_search_submitter_clauses('p_poster', $author_id, $author);
         if (is_null($sq)) {
             return array();
         } else {
@@ -145,23 +144,23 @@ class Hook_search_ocf_posts
             $where_clause .= ' AND ';
             $where_clause .= 'p_time>' . strval($cutoff);
         }
-        if (get_param_integer('option_ocf_posts_unvalidated',0) == 1) {
+        if (get_param_integer('option_ocf_posts_unvalidated', 0) == 1) {
             $where_clause .= ' AND ';
             $where_clause .= 'r.p_validated=0';
         }
-        if (get_param_integer('option_ocf_posts_open',0) == 1) {
+        if (get_param_integer('option_ocf_posts_open', 0) == 1) {
             $where_clause .= ' AND ';
             $where_clause .= 's.t_is_open=1';
         }
-        if (get_param_integer('option_ocf_posts_closed',0) == 1) {
+        if (get_param_integer('option_ocf_posts_closed', 0) == 1) {
             $where_clause .= ' AND ';
             $where_clause .= 's.t_is_open=0';
         }
-        if (get_param_integer('option_ocf_posts_pinned',0) == 1) {
+        if (get_param_integer('option_ocf_posts_pinned', 0) == 1) {
             $where_clause .= ' AND ';
             $where_clause .= 's.t_pinned=1';
         }
-        if (get_param_integer('option_ocf_posts_starter',0) == 1) {
+        if (get_param_integer('option_ocf_posts_starter', 0) == 1) {
             $where_clause .= ' AND ';
             $where_clause .= 's.t_cache_first_post_id=r.id';
         }
@@ -172,21 +171,21 @@ class Hook_search_ocf_posts
         }
         $where_clause .= ')';
 
-        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
             $where_clause .= ' AND ';
             $where_clause .= 'p_validated=1';
         }
 
         // Calculate and perform query
-        $rows = get_search_rows(null,null,$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'f_posts r JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics s ON r.p_topic_id=s.id',array('!' => '!','r.p_post' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*,t_forum_id,t_cache_first_title',array('r.p_title'/*,'s.t_description' Performance problem due to how full text works*/),'forums','t_forum_id');
+        $rows = get_search_rows(null, null, $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'f_posts r JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics s ON r.p_topic_id=s.id', array('!' => '!', 'r.p_post' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*,t_forum_id,t_cache_first_title', array('r.p_title'/*,'s.t_description' Performance problem due to how full text works*/), 'forums', 't_forum_id');
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }
@@ -204,6 +203,6 @@ class Hook_search_ocf_posts
     {
         require_code('ocf_posts2');
 
-        return render_post_box($row,false);
+        return render_post_box($row, false);
     }
 }

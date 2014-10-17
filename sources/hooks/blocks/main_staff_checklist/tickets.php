@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-
 class Hook_checklist_tickets
 {
     /**
@@ -37,7 +36,7 @@ class Hook_checklist_tickets
 
         $outstanding = 0;
 
-        $tickets = get_tickets(get_member(),null,false,true);
+        $tickets = get_tickets(get_member(), null, false, true);
         if (!is_null($tickets)) {
             foreach ($tickets as $topic) {
                 if ($topic['closed'] == 0) {
@@ -46,15 +45,15 @@ class Hook_checklist_tickets
             }
         }
 
-        if ($outstanding>0) {
-            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID' => 'g578142633c6f3d37776e82a869deb91'));
+        if ($outstanding > 0) {
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0', array('_GUID' => 'g578142633c6f3d37776e82a869deb91'));
         } else {
-            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID' => 'h578142633c6f3d37776e82a869deb91'));
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1', array('_GUID' => 'h578142633c6f3d37776e82a869deb91'));
         }
 
-        $url = build_url(array('page' => 'tickets','type' => 'misc'),get_module_zone('tickets'));
+        $url = build_url(array('page' => 'tickets', 'type' => 'misc'), get_module_zone('tickets'));
 
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => '8202af47a2f1d24675acbe4c6d20c8b4','URL' => $url,'STATUS' => $status,'TASK' => do_lang_tempcode('SUPPORT_TICKETS'),'INFO' => do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($outstanding)))));
-        return array(array($tpl,null,$outstanding,null));
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '8202af47a2f1d24675acbe4c6d20c8b4', 'URL' => $url, 'STATUS' => $status, 'TASK' => do_lang_tempcode('SUPPORT_TICKETS'), 'INFO' => do_lang_tempcode('NUM_QUEUE', escape_html(integer_format($outstanding)))));
+        return array(array($tpl, null, $outstanding, null));
     }
 }

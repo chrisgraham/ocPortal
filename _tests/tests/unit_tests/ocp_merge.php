@@ -128,10 +128,10 @@ class ocp_merge_test_set extends ocp_test_case
 
         $c = file_get_contents(get_file_base() . '/sources/hooks/modules/admin_import/ocp_merge.php');
 
-        $tables = $GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
+        $tables = $GLOBALS['SITE_DB']->query_select('db_meta', array('DISTINCT m_table'));
         foreach ($tables as $table) {
-            if (!in_array($table['m_table'],$non_core_tables)) {
-                $this->assertTrue(strpos($c,$table['m_table']) !== false,'No import defined for ' . $table['m_table']);
+            if (!in_array($table['m_table'], $non_core_tables)) {
+                $this->assertTrue(strpos($c, $table['m_table']) !== false, 'No import defined for ' . $table['m_table']);
             }
         }
     }

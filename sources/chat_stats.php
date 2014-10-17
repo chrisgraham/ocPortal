@@ -22,32 +22,32 @@
  * Get the number of people using the chat system at the moment. Note that this is intentionally different from 'users online' even if site wide IM is enabled- it has a 60 second timeout, so it really is active people.
  *
  * @return integer                      The number of people on the chat system
-*/
+ */
 function get_num_chatters()
 {
     // We need to get all the messages that were posted in the last x minutes, and count them
     if (!defined('CHAT_ACTIVITY_PRUNE')) {
-        define('CHAT_ACTIVITY_PRUNE',25);
+        define('CHAT_ACTIVITY_PRUNE', 25);
     }
-    return $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT member_id) FROM ' . get_table_prefix() . 'chat_active a LEFT JOIN ' . get_table_prefix() . 'sessions s ON s.the_user=a.member_id WHERE session_invisible=0 AND date_and_time>=' . strval(time()-CHAT_ACTIVITY_PRUNE));
+    return $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT member_id) FROM ' . get_table_prefix() . 'chat_active a LEFT JOIN ' . get_table_prefix() . 'sessions s ON s.the_user=a.member_id WHERE session_invisible=0 AND date_and_time>=' . strval(time() - CHAT_ACTIVITY_PRUNE));
 }
 
 /**
  * Get the number of chatrooms in the database. By default, there is only one, but more may be added via the admin panel.
  *
  * @return  integer        The number of chatrooms in the database
-*/
+ */
 function get_num_chatrooms()
 {
-    return $GLOBALS['SITE_DB']->query_select_value('chat_rooms','COUNT(*)',array('is_im' => 0));
+    return $GLOBALS['SITE_DB']->query_select_value('chat_rooms', 'COUNT(*)', array('is_im' => 0));
 }
 
 /**
  * Get the total number of chat posts in all the chatrooms.
  *
  * @return  integer        The number of chat posts in the database
-*/
+ */
 function get_num_chatposts()
 {
-    return $GLOBALS['SITE_DB']->query_select_value('chat_messages','COUNT(*)');
+    return $GLOBALS['SITE_DB']->query_select_value('chat_messages', 'COUNT(*)');
 }

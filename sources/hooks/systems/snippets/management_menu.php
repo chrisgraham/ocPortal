@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
-
 class Hook_management_menu
 {
     /**
@@ -27,9 +26,9 @@ class Hook_management_menu
      */
     public function run()
     {
-        if (has_zone_access(get_member(),'adminzone')) {
+        if (has_zone_access(get_member(), 'adminzone')) {
             require_code('menus');
-            return build_stored_menu('popup','_management');
+            return build_stored_menu('popup', '_management');
         }
         return new ocp_tempcode();
     }

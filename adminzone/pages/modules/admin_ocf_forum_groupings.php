@@ -46,20 +46,20 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         if ($be_deferential) {
-            return NULL;
+            return null;
         }
 
         $ret = array(
-            'misc' => array('FORUM_GROUPINGS','menu/_generic_admin/view_this_category'),
-            'ed' => array(do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EDIT_FORUM_GROUPING'),make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings','COUNT(*)',null,'',true))))),'menu/_generic_admin/view_this_category'),
-        )+parent::get_entry_points();
+                'misc' => array('FORUM_GROUPINGS', 'menu/_generic_admin/view_this_category'),
+                'ed' => array(do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_FORUM_GROUPING'), make_string_tempcode(escape_html(integer_format($GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'COUNT(*)', null, '', true))))), 'menu/_generic_admin/view_this_category'),
+            ) + parent::get_entry_points();
 
         return $ret;
     }
@@ -73,16 +73,16 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
      */
-    public function pre_run($top_level = true,$type = null)
+    public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf');
         require_css('ocf_admin');
 
         set_helper_panel_tutorial('tut_forums');
 
-        breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc',do_lang_tempcode('SECTION_FORUMS'))));
+        breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_forums:misc', do_lang_tempcode('SECTION_FORUMS'))));
 
         return parent::pre_run($top_level);
     }
@@ -96,8 +96,8 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     {
         $this->extra_donext_whatever_title = do_lang('SECTION_FORUMS');
         $this->extra_donext_whatever = array(
-            array('menu/_generic_admin/add_one',array('admin_ocf_forums',array('type' => 'ad'),get_module_zone('admin_ocf_forums'))),
-            array('menu/_generic_admin/edit_one',array('admin_ocf_forums',array('type' => 'ed'),get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'ad'), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'ed'), get_module_zone('admin_ocf_forums'))),
         );
 
         $this->add_one_cat_label = do_lang_tempcode('ADD_FORUM_GROUPING');
@@ -125,14 +125,14 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      * @param  BINARY                   Whether the forum grouping is expanded by default when shown in the forum view
      * @return array                    A pair: The input fields, Hidden fields
      */
-    public function get_form_fields($title = '',$description = '',$expanded_by_default = 1)
+    public function get_form_fields($title = '', $description = '', $expanded_by_default = 1)
     {
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-        $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-        $fields->attach(form_input_tick(do_lang_tempcode('EXPANDED_BY_DEFAULT'),do_lang_tempcode('DESCRIPTION_EXPANDED_BY_DEFAULT'),'expanded_by_default',$expanded_by_default == 1));
+        $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
+        $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, false));
+        $fields->attach(form_input_tick(do_lang_tempcode('EXPANDED_BY_DEFAULT'), do_lang_tempcode('DESCRIPTION_EXPANDED_BY_DEFAULT'), 'expanded_by_default', $expanded_by_default == 1));
 
-        return array($fields,new ocp_tempcode());
+        return array($fields, new ocp_tempcode());
     }
 
     /**
@@ -145,15 +145,15 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     {
         require_code('templates_results_table');
 
-        $current_ordering = get_param('sort','c_title ASC',true);
-        if (strpos($current_ordering,' ') === false) {
+        $current_ordering = get_param('sort', 'c_title ASC', true);
+        if (strpos($current_ordering, ' ') === false) {
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
-        list($sortable,$sort_order) = explode(' ',$current_ordering,2);
+        list($sortable, $sort_order) = explode(' ', $current_ordering, 2);
         $sortables = array(
             'c_title' => do_lang_tempcode('TITLE'),
         );
-        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
 
@@ -161,22 +161,22 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
             do_lang_tempcode('TITLE'),
             do_lang_tempcode('EXPANDED_BY_DEFAULT'),
             do_lang_tempcode('ACTIONS'),
-        ),$sortables,'sort',$sortable . ' ' . $sort_order);
+        ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
         $fields = new ocp_tempcode();
 
         require_code('form_templates');
-        list($rows,$max_rows) = $this->get_entry_rows(false,$current_ordering);
+        list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
         foreach ($rows as $row) {
-            $edit_link = build_url($url_map+array('id' => $row['id']),'_SELF');
+            $edit_link = build_url($url_map + array('id' => $row['id']), '_SELF');
 
-            $fields->attach(results_entry(array($row['c_title'],($row['c_expanded_by_default'] == 1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT') . ' #' . strval($row['id']))))),true);
+            $fields->attach(results_entry(array($row['c_title'], ($row['c_expanded_by_default'] == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO'), protect_from_escaping(hyperlink($edit_link, do_lang_tempcode('EDIT'), false, true, do_lang('EDIT') . ' #' . strval($row['id']))))), true);
         }
 
         $search_url = null;
         $archive_url = null;
 
-        return array(results_table(do_lang($this->menu_label),either_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false,$search_url,$archive_url);
+        return array(results_table(do_lang($this->menu_label), either_param_integer('start', 0), 'start', either_param_integer('max', 20), 'max', $max_rows, $header_row, $fields, $sortables, $sortable, $sort_order), false, $search_url, $archive_url);
     }
 
     /**
@@ -200,21 +200,21 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
     {
         $id = intval($_id);
 
-        $m = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'),array('id' => $id),'',1);
-        if (!array_key_exists(0,$m)) {
+        $m = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings', array('*'), array('id' => $id), '', 1);
+        if (!array_key_exists(0, $m)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $r = $m[0];
 
         $delete_fields = new ocp_tempcode();
 
-        list($fields,$hidden) = $this->get_form_fields($r['c_title'],$r['c_description'],$r['c_expanded_by_default']);
+        list($fields, $hidden) = $this->get_form_fields($r['c_title'], $r['c_description'], $r['c_expanded_by_default']);
         $list = ocf_create_selection_list_forum_groupings($id);
         if (!$list->is_empty()) {
-            $delete_fields->attach(form_input_list(do_lang_tempcode('TARGET'),do_lang_tempcode('DESCRIPTION_FORUM_MOVE_TARGET'),'target_forum_grouping',$list));
+            $delete_fields->attach(form_input_list(do_lang_tempcode('TARGET'), do_lang_tempcode('DESCRIPTION_FORUM_MOVE_TARGET'), 'target_forum_grouping', $list));
         }
 
-        return array($fields,$hidden,$delete_fields);
+        return array($fields, $hidden, $delete_fields);
     }
 
     /**
@@ -225,8 +225,8 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      */
     public function may_delete_this($id)
     {
-        $count = $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','COUNT(*)');
-        return $count>1;
+        $count = $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings', 'COUNT(*)');
+        return $count > 1;
     }
 
     /**
@@ -236,10 +236,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      */
     public function add_actualisation()
     {
-        $tmp = strval(ocf_make_forum_grouping(post_param('title'),post_param('description'),post_param_integer('expanded_by_default',0)));
+        $tmp = strval(ocf_make_forum_grouping(post_param('title'), post_param('description'), post_param_integer('expanded_by_default', 0)));
         $this->extra_donext_whatever = array(
-            array('menu/_generic_admin/add_one',array('admin_ocf_forums',array('type' => 'ad','forum_grouping_id' => $tmp),get_module_zone('admin_ocf_forums'))),
-            array('menu/_generic_admin/edit_one',array('admin_ocf_forums',array('type' => 'ed'),get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'ad', 'forum_grouping_id' => $tmp), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'ed'), get_module_zone('admin_ocf_forums'))),
         );
         return $tmp;
     }
@@ -251,10 +251,10 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      */
     public function edit_actualisation($id)
     {
-        ocf_edit_forum_grouping(intval($id),post_param('title'),post_param('description',STRING_MAGIC_NULL),post_param_integer('expanded_by_default',fractional_edit()?INTEGER_MAGIC_NULL:0));
+        ocf_edit_forum_grouping(intval($id), post_param('title'), post_param('description', STRING_MAGIC_NULL), post_param_integer('expanded_by_default', fractional_edit() ? INTEGER_MAGIC_NULL : 0));
         $this->extra_donext_whatever = array(
-            array('menu/_generic_admin/add_one',array('admin_ocf_forums',array('type' => 'ad','forum_grouping_id' => $id),get_module_zone('admin_ocf_forums'))),
-            array('menu/_generic_admin/edit_one',array('admin_ocf_forums',array('type' => 'ed'),get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/add_one', array('admin_ocf_forums', array('type' => 'ad', 'forum_grouping_id' => $id), get_module_zone('admin_ocf_forums'))),
+            array('menu/_generic_admin/edit_one', array('admin_ocf_forums', array('type' => 'ed'), get_module_zone('admin_ocf_forums'))),
         );
     }
 
@@ -265,6 +265,6 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      */
     public function delete_actualisation($id)
     {
-        ocf_delete_forum_grouping(intval($id),post_param_integer('target_forum_grouping'));
+        ocf_delete_forum_grouping(intval($id), post_param_integer('target_forum_grouping'));
     }
 }

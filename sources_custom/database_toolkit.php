@@ -17,15 +17,15 @@ function xml_dump_script()
         warn_exit('It makes no sense to run this script if you are not running the XML database driver.');
     }
     global $SITE_INFO;
-    if (array_key_exists('db_chain_type',$SITE_INFO)) {
+    if (array_key_exists('db_chain_type', $SITE_INFO)) {
         require_code('database/' . $SITE_INFO['db_chain_type']);
-        $chain_db = new database_driver($SITE_INFO['db_chain'],$SITE_INFO['db_chain_host'],$SITE_INFO['db_chain_user'],$SITE_INFO['db_chain_password'],get_table_prefix(),false,object_factory('Database_Static_' . $SITE_INFO['db_chain_type']));
+        $chain_db = new database_driver($SITE_INFO['db_chain'], $SITE_INFO['db_chain_host'], $SITE_INFO['db_chain_user'], $SITE_INFO['db_chain_password'], get_table_prefix(), false, object_factory('Database_Static_' . $SITE_INFO['db_chain_type']));
     } else {
         warn_exit('It makes no sense to run this script if you have not set up the following config options in _config.php: db_chain_type, db_chain_host, db_chain_user, db_chain_password, db_chain');
     }
     $chain_connection = &$chain_db->connection_write;
-    if (count($chain_connection)>4) { // Okay, we can't be lazy anymore
-        $chain_connection = call_user_func_array(array($chain_db->static_ob,'db_get_connection'),$chain_connection);
+    if (count($chain_connection) > 4) { // Okay, we can't be lazy anymore
+        $chain_connection = call_user_func_array(array($chain_db->static_ob, 'db_get_connection'), $chain_connection);
         _general_db_init();
     }
 
@@ -35,12 +35,12 @@ function xml_dump_script()
     $GLOBALS['DEV_MODE'] = false;
     $GLOBALS['SEMI_DEV_MODE'] = false;
 
-    @ini_set('ocproducts.xss_detect','0');
+    @ini_set('ocproducts.xss_detect', '0');
 
     if (strtolower(ocp_srv('REQUEST_METHOD')) == 'get') { // Interface
-        $from = get_param('from',null);
-        $skip = get_param('skip',null);
-        $only = get_param('only',null);
+        $from = get_param('from', null);
+        $skip = get_param('skip', null);
+        $only = get_param('only', null);
 
         echo '
         <!DOCTYPE html>
@@ -55,17 +55,16 @@ function xml_dump_script()
         echo '<form title="Choose tables" method="post" action="' . escape_html(get_self_url(true)) . '">';
 
         $tables = array_keys(find_all_tables($GLOBALS['SITE_DB']));
-        $mysql_status = list_to_map('Name',$chain_db->query('SHOW TABLE STATUS'));
+        $mysql_status = list_to_map('Name', $chain_db->query('SHOW TABLE STATUS'));
         $mysql_tables = array_keys($mysql_status);
         foreach ($tables as $table_name) {
             $default_selected =
                 (((!is_null($from)) && ($table_name >= $from)) ||
-                ((!is_null($only)) && (in_array($table_name,explode(',',$only))))) &&
-                ((!is_null($skip)) || (!in_array($table_name,explode(',',$skip))))
-            ;
+                    ((!is_null($only)) && (in_array($table_name, explode(',', $only))))) &&
+                ((!is_null($skip)) || (!in_array($table_name, explode(',', $skip))));
 
-            $missing = !in_array(get_table_prefix() . $table_name,$mysql_tables);
-            $count_mismatch = !$missing && $chain_db->query_select_value($table_name,'COUNT(*)') != $GLOBALS['SITE_DB']->query_select_value($table_name,'COUNT(*)');
+            $missing = !in_array(get_table_prefix() . $table_name, $mysql_tables);
+            $count_mismatch = !$missing && $chain_db->query_select_value($table_name, 'COUNT(*)') != $GLOBALS['SITE_DB']->query_select_value($table_name, 'COUNT(*)');
             $date_mismatch = false;
             if ((!$missing) && (!$count_mismatch)) {
                 $last_m_time = null;
@@ -73,15 +72,15 @@ function xml_dump_script()
                 $dh = @opendir($path);
                 if ($dh !== false) {
                     while (($f = readdir($dh)) !== false) {
-                        if ((substr($f,-4) == '.dat') || (substr($f,-4) == '.xml')) {
-                            $last_m_time = @max($last_m_time,filemtime($path . '/' . $f));
+                        if ((substr($f, -4) == '.dat') || (substr($f, -4) == '.xml')) {
+                            $last_m_time = @max($last_m_time, filemtime($path . '/' . $f));
                         } // @ because of the 255 read filepath limit on Windows
                     }
                     closedir($dh);
                 }
                 if (!is_null($last_m_time)) {
                     $mysql_time = strtotime($mysql_status[get_table_prefix() . $table_name]['Update_time']);
-                    $date_mismatch = ($mysql_time<$last_m_time); // We can't do "!=" as last m-time for MySQL could well by the last sync time
+                    $date_mismatch = ($mysql_time < $last_m_time); // We can't do "!=" as last m-time for MySQL could well by the last sync time
                 }
             }
 
@@ -90,12 +89,12 @@ function xml_dump_script()
             echo '
                     <div style="width: 500px">
                             <span style="float: right; font-style: italic">
-                            ' . ($missing?'[table is missing]':'') . '
-                            ' . ($count_mismatch?'[different record-counts]':'') . '
-                            ' . ($date_mismatch?'[different last-modified-time]':'') . '
+                            ' . ($missing ? '[table is missing]' : '') . '
+                            ' . ($count_mismatch ? '[different record-counts]' : '') . '
+                            ' . ($date_mismatch ? '[different last-modified-time]' : '') . '
                             </span>
 
-                            <input ' . (($needs_doing)?'checked="checked" ':'') . 'type="checkbox" name="table_' . htmlentities($table_name) . '" id="table_' . htmlentities($table_name) . '" value="1" />
+                            <input ' . (($needs_doing) ? 'checked="checked" ' : '') . 'type="checkbox" name="table_' . htmlentities($table_name) . '" id="table_' . htmlentities($table_name) . '" value="1" />
                             <label for="table_' . htmlentities($table_name) . '">' . htmlentities($table_name) . '</label>
                     </div>
             ';
@@ -118,11 +117,11 @@ function xml_dump_script()
     $skip = null;
     $only = '';
     foreach (array_keys($_POST) as $key) {
-        if (substr($key,0,6) == 'table_') {
+        if (substr($key, 0, 6) == 'table_') {
             if ($only != '') {
                 $only .= ',';
             }
-            $only .= substr($key,6);
+            $only .= substr($key, 6);
         }
     }
     if ($only == '') {
@@ -132,15 +131,15 @@ function xml_dump_script()
 
     @header('Content-type: text/plain');
 
-    $sql = get_sql_dump(true,true,$from,is_null($skip)?array():explode(',',$skip),is_null($only)?null:explode(',',$only));
+    $sql = get_sql_dump(true, true, $from, is_null($skip) ? array() : explode(',', $skip), is_null($only) ? null : explode(',', $only));
 
     $cnt = count($sql);
     foreach ($sql as $i => $s) {
-        print('Executing query ' . strval($i+1) . '/' . strval($cnt) . ' ... ' . $s . "\n\n");
+        print('Executing query ' . strval($i + 1) . '/' . strval($cnt) . ' ... ' . $s . "\n\n");
         flush();
 
-        $fail_ok = (substr($s,0,5) == 'ALTER');
-        $chain_db->static_ob->db_query($s,$chain_connection,null,null,$fail_ok,false);
+        $fail_ok = (substr($s, 0, 5) == 'ALTER');
+        $chain_db->static_ob->db_query($s, $chain_connection, null, null, $fail_ok, false);
     }
 
     print('!!Done!!');
@@ -154,7 +153,7 @@ function xml_dump_script()
  */
 function find_all_tables($db)
 {
-    $fields = $db->query_select('db_meta',array('m_table','m_name','m_type'),null,'ORDER BY m_table');
+    $fields = $db->query_select('db_meta', array('m_table', 'm_name', 'm_type'), null, 'ORDER BY m_table');
     $tables = array();
     foreach ($fields as $field) {
         if (!isset($tables[$field['m_table']])) {
@@ -162,8 +161,8 @@ function find_all_tables($db)
         }
         $tables[$field['m_table']][$field['m_name']] = $field['m_type'];
     }
-    $tables['db_meta'] = array('m_table' => '*ID_TEXT','m_name' => '*ID_TEXT','m_type' => 'ID_TEXT');
-    $tables['db_meta_indices'] = array('i_table' => '*ID_TEXT','i_name' => '*ID_TEXT','i_fields' => '*ID_TEXT');
+    $tables['db_meta'] = array('m_table' => '*ID_TEXT', 'm_name' => '*ID_TEXT', 'm_type' => 'ID_TEXT');
+    $tables['db_meta_indices'] = array('i_table' => '*ID_TEXT', 'i_name' => '*ID_TEXT', 'i_fields' => '*ID_TEXT');
 
     ksort($tables);
 
@@ -181,7 +180,7 @@ function find_all_tables($db)
  * @param  boolean                      Whether to echo out
  * @return array                        The SQL statements
  */
-function get_sql_dump($include_drops = false,$output_statuses = false,$from = null,$skip = null,$only = null,$echo = false)
+function get_sql_dump($include_drops = false, $output_statuses = false, $from = null, $skip = null, $only = null, $echo = false)
 {
     if (is_null($skip)) {
         $skip = array();
@@ -193,13 +192,13 @@ function get_sql_dump($include_drops = false,$output_statuses = false,$from = nu
 
     // Tables
     foreach ($tables as $table_name => $fields) {
-        if ((!is_null($from)) && ($table_name<$from)) {
+        if ((!is_null($from)) && ($table_name < $from)) {
             continue;
         }
-        if (in_array($table_name,$skip)) {
+        if (in_array($table_name, $skip)) {
             continue;
         }
-        if ((!is_null($only)) && (!in_array($table_name,$only))) {
+        if ((!is_null($only)) && (!in_array($table_name, $only))) {
             continue;
         }
 
@@ -216,7 +215,7 @@ function get_sql_dump($include_drops = false,$output_statuses = false,$from = nu
             }
         }
 
-        $out[] = db_create_table($table_name,$fields);
+        $out[] = db_create_table($table_name, $fields);
         if ($echo) {
             echo $out[0];
             $out = array();
@@ -225,7 +224,7 @@ function get_sql_dump($include_drops = false,$output_statuses = false,$from = nu
         // Data
         $start = 0;
         do {
-            $data = $GLOBALS['SITE_DB']->query_select($table_name,array('*'),null,'',100,$start,false,array());
+            $data = $GLOBALS['SITE_DB']->query_select($table_name, array('*'), null, '', 100, $start, false, array());
             foreach ($data as $map) {
                 $keys = '';
                 $all_values = array();
@@ -236,11 +235,11 @@ function get_sql_dump($include_drops = false,$output_statuses = false,$from = nu
                     }
                     $keys .= $key;
 
-                    $_value = (!is_array($value))?array($value):$value;
+                    $_value = (!is_array($value)) ? array($value) : $value;
 
                     $v = mixed();
                     foreach ($_value as $i => $v) {
-                        if (!array_key_exists($i,$all_values)) {
+                        if (!array_key_exists($i, $all_values)) {
                             $all_values[$i] = '';
                         }
                         $values = $all_values[$i];
@@ -273,15 +272,16 @@ function get_sql_dump($include_drops = false,$output_statuses = false,$from = nu
             }
 
             $start += 100;
-        } while (count($data) != 0);
+        }
+        while (count($data) != 0);
     }
 
     // Indexes
-    $indexes = $GLOBALS['SITE_DB']->query_select('db_meta_indices',array('*'));
+    $indexes = $GLOBALS['SITE_DB']->query_select('db_meta_indices', array('*'));
     foreach ($indexes as $index) {
         $index_name = $index['i_name'];
         if ($index_name[0] == '#') {
-            $index_name = substr($index_name,1);
+            $index_name = substr($index_name, 1);
             $type = 'FULLTEXT';
         } else {
             $type = 'INDEX';
@@ -337,7 +337,7 @@ function db_get_type_remap()
  * @param  array                        A map of field names to ocPortal field types (with *#? encodings)
  * @return string                       The SQL for it
  */
-function db_create_table($table_name,$fields)
+function db_create_table($table_name, $fields)
 {
     $type_remap = db_get_type_remap();
 
@@ -345,7 +345,7 @@ function db_create_table($table_name,$fields)
     $keys = '';
     foreach ($fields as $name => $type) {
         if ($type[0] == '*') { // Is a key
-            $type = substr($type,1);
+            $type = substr($type, 1);
             if ($keys != '') {
                 $keys .= ', ';
             }
@@ -353,18 +353,18 @@ function db_create_table($table_name,$fields)
         }
 
         if ($type[0] == '?') { // Is perhaps null
-            $type = substr($type,1);
+            $type = substr($type, 1);
             $perhaps_null = 'NULL';
         } else {
             $perhaps_null = 'NOT NULL';
         }
 
-        $type = isset($type_remap[$type])?$type_remap[$type]:$type;
+        $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
         $_fields .= '     ' . $name . ' ' . $type;
-        if (substr($name,-13) == '__text_parsed') {
+        if (substr($name, -13) == '__text_parsed') {
             $_fields .= ' DEFAULT \'\'';
-        } elseif (substr($name,-13) == '__source_user') {
+        } elseif (substr($name, -13) == '__source_user') {
             $_fields .= ' DEFAULT ' . strval(db_get_first_id());
         }
         $_fields .= ' ' . $perhaps_null . ',' . "\n";

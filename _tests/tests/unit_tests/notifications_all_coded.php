@@ -25,16 +25,16 @@ class notifications_all_coded_test_set extends ocp_test_case
         }
 
         // Ensure all notification types used
-        $hooks = find_all_hooks('systems','notifications');
+        $hooks = find_all_hooks('systems', 'notifications');
 
         require_code('files2');
         $php_path = find_php_path();
         $contents = get_directory_contents(get_file_base());
         foreach ($contents as $c) {
-            if ((substr($c,-4) == '.php') && (basename($c) != 'errorlog.php') && (basename($c) != 'phpstub.php') && (basename($c) != 'permissioncheckslog.php')) {
+            if ((substr($c, -4) == '.php') && (basename($c) != 'errorlog.php') && (basename($c) != 'phpstub.php') && (basename($c) != 'permissioncheckslog.php')) {
                 foreach (array_keys($hooks) as $hook) {
                     $file = file_get_contents($c);
-                    if (preg_match('#dispatch_notification\(\s*\'' . $hook . '\'#',$file) != 0) {
+                    if (preg_match('#dispatch_notification\(\s*\'' . $hook . '\'#', $file) != 0) {
                         unset($hooks[$hook]);
                     }
                 }
@@ -56,7 +56,7 @@ class notifications_all_coded_test_set extends ocp_test_case
             'classifieds',
         );
         foreach (array_keys($hooks) as $hook) {
-            $this->assertTrue(in_array($hook,$allowed),$hook . ' is unused');
+            $this->assertTrue(in_array($hook, $allowed), $hook . ' is unused');
         }
     }
 }

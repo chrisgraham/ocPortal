@@ -49,14 +49,14 @@ class Module_admin_ocf_history
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         return array(
-            'misc' => array('POST_HISTORY','buttons/history'),
+            'misc' => array('POST_HISTORY', 'buttons/history'),
         );
     }
 
@@ -69,15 +69,15 @@ class Module_admin_ocf_history
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf');
         require_css('ocf_admin');
 
         if ($type == 'misc') {
-            $member_id = get_param_integer('member_id',-1);
-            $post_id = get_param_integer('post_id',-1);
-            $topic_id = get_param_integer('topic_id',-1);
+            $member_id = get_param_integer('member_id', -1);
+            $post_id = get_param_integer('post_id', -1);
+            $topic_id = get_param_integer('topic_id', -1);
 
             if ($member_id != -1) {
                 $this->title = get_screen_title('POST_HISTORY_MEMBER');
@@ -102,7 +102,7 @@ class Module_admin_ocf_history
             $this->title = get_screen_title('POST_HISTORY');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -119,7 +119,7 @@ class Module_admin_ocf_history
         }
         require_css('ocf');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->gui();
@@ -146,9 +146,9 @@ class Module_admin_ocf_history
     {
         check_privilege('view_content_history');
 
-        $member_id = get_param_integer('member_id',-1);
-        $post_id = get_param_integer('post_id',-1);
-        $topic_id = get_param_integer('topic_id',-1);
+        $member_id = get_param_integer('member_id', -1);
+        $post_id = get_param_integer('post_id', -1);
+        $topic_id = get_param_integer('topic_id', -1);
 
         $where = array();
         if ($member_id != -1) {
@@ -164,12 +164,12 @@ class Module_admin_ocf_history
             $where = null;
         }
 
-        $start = get_param_integer('start',0);
-        $max = get_param_integer('max',40);
+        $start = get_param_integer('start', 0);
+        $max = get_param_integer('max', 40);
 
-        $max_rows = $GLOBALS['FORUM_DB']->query_select_value('f_post_history','COUNT(*)',$where);
+        $max_rows = $GLOBALS['FORUM_DB']->query_select_value('f_post_history', 'COUNT(*)', $where);
 
-        $posts = $GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),$where,'ORDER BY h_action_date_and_time DESC',$max,$start);
+        $posts = $GLOBALS['FORUM_DB']->query_select('f_post_history', array('*'), $where, 'ORDER BY h_action_date_and_time DESC', $max, $start);
         $content = new ocp_tempcode();
         foreach ($posts as $post) {
             $create_date_and_time = get_timezoned_date($post['h_create_date_and_time']);
@@ -178,19 +178,19 @@ class Module_admin_ocf_history
             $alterer_member = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($post['h_alterer_member_id']);
 
             // Action/Link
-            $topic_exists = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics','id',array('id' => $post['h_topic_id']));
+            $topic_exists = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics', 'id', array('id' => $post['h_topic_id']));
             if (!is_null($topic_exists)) {
                 if (($post['h_action'] == 'EDIT_POST')) {
-                    $relates_to = build_url(array('page' => 'topicview','type' => 'findpost','id' => $post['h_post_id']),get_module_zone('topicview'));
+                    $relates_to = build_url(array('page' => 'topicview', 'type' => 'findpost', 'id' => $post['h_post_id']), get_module_zone('topicview'));
                     $relates_to->attach('#post_' . strval($post['h_post_id']));
                     $relates_text = do_lang_tempcode('VIEW_POST');
                     $relates_tooltip = 'post#' . strval($post['h_post_id']);
                 } elseif (($post['h_action'] == 'DELETE_POST')) {
-                    $relates_to = build_url(array('page' => 'topicview','id' => $post['h_topic_id']),get_module_zone('topicview'));
+                    $relates_to = build_url(array('page' => 'topicview', 'id' => $post['h_topic_id']), get_module_zone('topicview'));
                     $relates_text = do_lang_tempcode('VIEW_TOPIC');
                     $relates_tooltip = 'topic#' . strval($post['h_topic_id']);
                 }
-                $link = hyperlink($relates_to,$relates_text,false,true,$relates_tooltip);
+                $link = hyperlink($relates_to, $relates_text, false, true, $relates_tooltip);
             } else {
                 $link = new ocp_tempcode();
             }
@@ -198,20 +198,20 @@ class Module_admin_ocf_history
 
             // Buttons
             $buttons = new ocp_tempcode();
-            if (has_privilege(get_member(),'delete_content_history')) { // Delete permanently
-                $url = build_url(array('page' => '_SELF','type' => 'delete','h_id' => $post['id']),'_SELF',null,true);
-                $buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID' => '11c9f9ef4a646493544cb29778134960','IMMEDIATE' => true,'URL' => $url,'IMG' => 'menu___generic_admin__delete','FULL_TITLE' => do_lang_tempcode('DELETE_HISTORY_POST'),'TITLE' => do_lang_tempcode('DELETE_HISTORY_POST'))));
+            if (has_privilege(get_member(), 'delete_content_history')) { // Delete permanently
+                $url = build_url(array('page' => '_SELF', 'type' => 'delete', 'h_id' => $post['id']), '_SELF', null, true);
+                $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '11c9f9ef4a646493544cb29778134960', 'IMMEDIATE' => true, 'URL' => $url, 'IMG' => 'menu___generic_admin__delete', 'FULL_TITLE' => do_lang_tempcode('DELETE_HISTORY_POST'), 'TITLE' => do_lang_tempcode('DELETE_HISTORY_POST'))));
             }
-            if ((has_privilege(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action'] == 'DELETE_POST')) { // Restore
-                $url = build_url(array('page' => '_SELF','type' => 'restore','h_id' => $post['id']),'_SELF',null,true);
-                $buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID' => '49623e00065f488bb27097bb722232dc','IMMEDIATE' => true,'URL' => $url,'IMG' => 'buttons__restore','FULL_TITLE' => do_lang_tempcode('RESTORE_HISTORY_POST'),'TITLE' => do_lang_tempcode('RESTORE_HISTORY_POST'))));
+            if ((has_privilege(get_member(), 'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action'] == 'DELETE_POST')) { // Restore
+                $url = build_url(array('page' => '_SELF', 'type' => 'restore', 'h_id' => $post['id']), '_SELF', null, true);
+                $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '49623e00065f488bb27097bb722232dc', 'IMMEDIATE' => true, 'URL' => $url, 'IMG' => 'buttons__restore', 'FULL_TITLE' => do_lang_tempcode('RESTORE_HISTORY_POST'), 'TITLE' => do_lang_tempcode('RESTORE_HISTORY_POST'))));
             }
-            if ((has_privilege(get_member(),'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action'] == 'EDIT_POST')) { // Restore
-                $url = build_url(array('page' => '_SELF','type' => 'revert','h_id' => $post['id']),'_SELF',null,true);
-                $buttons->attach(do_template('BUTTON_SCREEN_ITEM',array('_GUID' => '3f41d4d399676972c01ebb14f6ee56db','IMMEDIATE' => true,'URL' => $url,'IMG' => 'buttons__choose','FULL_TITLE' => do_lang_tempcode('REVERT_HISTORY_POST'),'TITLE' => do_lang_tempcode('REVERT_HISTORY_POST'))));
+            if ((has_privilege(get_member(), 'restore_content_history')) && (!is_null($topic_exists)) && ($post['h_action'] == 'EDIT_POST')) { // Restore
+                $url = build_url(array('page' => '_SELF', 'type' => 'revert', 'h_id' => $post['id']), '_SELF', null, true);
+                $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '3f41d4d399676972c01ebb14f6ee56db', 'IMMEDIATE' => true, 'URL' => $url, 'IMG' => 'buttons__choose', 'FULL_TITLE' => do_lang_tempcode('REVERT_HISTORY_POST'), 'TITLE' => do_lang_tempcode('REVERT_HISTORY_POST'))));
             }
 
-            $content->attach(do_template('OCF_HISTORY_POST',array(
+            $content->attach(do_template('OCF_HISTORY_POST', array(
                 '_GUID' => 'f3512689a8b3fcf4215f63f9f340cdac',
                 'LABEL' => do_lang_tempcode('BEFORE_ACTION'),
                 'LINK' => $link,
@@ -227,19 +227,19 @@ class Module_admin_ocf_history
             )));
         }
         if ((count($posts) != 0) && ($post_id != -1)) {
-            $original_post = $GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id' => $post_id),'',1);
-            if (array_key_exists(0,$original_post)) {
+            $original_post = $GLOBALS['FORUM_DB']->query_select('f_posts', array('*'), array('id' => $post_id), '', 1);
+            if (array_key_exists(0, $original_post)) {
                 $action = do_lang('CURRENT');
-                $link = hyperlink(build_url(array('page' => 'topicview','type' => 'findpost','id' => $post_id),get_module_zone('topicview')),do_lang_tempcode('VIEW_POST'),false,true);
+                $link = hyperlink(build_url(array('page' => 'topicview', 'type' => 'findpost', 'id' => $post_id), get_module_zone('topicview')), do_lang_tempcode('VIEW_POST'), false, true);
                 $buttons = new ocp_tempcode();
                 $action_date_and_time = '';
                 $action_date_and_time_raw = '';
                 $owner_member = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($original_post[0]['p_poster']);
                 $alterer_member = new ocp_tempcode();
-                $before = get_translated_text($original_post[0]['p_post'],$GLOBALS['FORUM_DB']);
+                $before = get_translated_text($original_post[0]['p_post'], $GLOBALS['FORUM_DB']);
                 $create_date_and_time = get_timezoned_date($original_post[0]['p_time']);
                 $create_date_and_time_raw = strval($original_post[0]['p_time']);
-                $content2 = do_template('OCF_HISTORY_POST',array(
+                $content2 = do_template('OCF_HISTORY_POST', array(
                     '_GUID' => 'a3512689a8b3fcf4215f63f9f340cdac',
                     'LABEL' => do_lang_tempcode('CURRENT_STATUS'),
                     'LINK' => $link,
@@ -259,9 +259,9 @@ class Module_admin_ocf_history
         }
 
         require_code('templates_pagination');
-        $pagination = pagination(do_lang_tempcode('POST_HISTORY'),$start,'start',$max,'max',$max_rows);
+        $pagination = pagination(do_lang_tempcode('POST_HISTORY'), $start, 'start', $max, 'max', $max_rows);
 
-        $tpl = do_template('OCF_HISTORY_SCREEN',array('_GUID' => '7dd45ce985fc7222771368336c3f19e4','PAGINATION' => $pagination,'TITLE' => $this->title,'CONTENT' => $content));
+        $tpl = do_template('OCF_HISTORY_SCREEN', array('_GUID' => '7dd45ce985fc7222771368336c3f19e4', 'PAGINATION' => $pagination, 'TITLE' => $this->title, 'CONTENT' => $content));
         require_code('templates_internalise_screen');
         return internalise_own_screen($tpl);
     }
@@ -276,8 +276,8 @@ class Module_admin_ocf_history
         check_privilege('restore_content_history');
 
         $id = get_param_integer('h_id');
-        $post = $GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),array('id' => $id),'',1);
-        if (!array_key_exists(0,$post)) {
+        $post = $GLOBALS['FORUM_DB']->query_select('f_post_history', array('*'), array('id' => $id), '', 1);
+        if (!array_key_exists(0, $post)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $post = $post[0];
@@ -287,10 +287,10 @@ class Module_admin_ocf_history
         if (is_null($owner_username)) {
             $owner_username = do_lang('UNKNOWN');
         }
-        ocf_make_post($post['h_topic_id'],'',$post['h_before'],0,false,1,0,$owner_username,null,$post['h_create_date_and_time'],$post['h_owner_member_id'],null,time(),get_member(),false,true,null,true,'',0,null,false,false,false,false,null,false);
+        ocf_make_post($post['h_topic_id'], '', $post['h_before'], 0, false, 1, 0, $owner_username, null, $post['h_create_date_and_time'], $post['h_owner_member_id'], null, time(), get_member(), false, true, null, true, '', 0, null, false, false, false, false, null, false);
 
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF',null,true);
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF', null, true);
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -303,23 +303,23 @@ class Module_admin_ocf_history
         check_privilege('restore_content_history');
 
         $id = get_param_integer('h_id');
-        $post = $GLOBALS['FORUM_DB']->query_select('f_post_history',array('*'),array('id' => $id),'',1);
-        if (!array_key_exists(0,$post)) {
+        $post = $GLOBALS['FORUM_DB']->query_select('f_post_history', array('*'), array('id' => $id), '', 1);
+        if (!array_key_exists(0, $post)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $post = $post[0];
-        $post2 = $GLOBALS['FORUM_DB']->query_select('f_posts',array('*'),array('id' => $post['h_post_id']),'',1);
-        if (!array_key_exists(0,$post2)) {
+        $post2 = $GLOBALS['FORUM_DB']->query_select('f_posts', array('*'), array('id' => $post['h_post_id']), '', 1);
+        if (!array_key_exists(0, $post2)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $post2 = $post2[0];
         require_code('ocf_posts_action');
         require_code('ocf_posts_action2');
         require_code('ocf_posts_action3');
-        ocf_edit_post($post['h_post_id'],$post2['p_validated'],$post2['p_title'],$post['h_before'],0,$post2['p_is_emphasised'],$post2['p_intended_solely_for'],false,false,do_lang('REVERT_HISTORY_POST'));
+        ocf_edit_post($post['h_post_id'], $post2['p_validated'], $post2['p_title'], $post['h_before'], 0, $post2['p_is_emphasised'], $post2['p_intended_solely_for'], false, false, do_lang('REVERT_HISTORY_POST'));
 
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF',null,true);
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF', null, true);
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -331,9 +331,9 @@ class Module_admin_ocf_history
     {
         check_privilege('delete_content_history');
 
-        $GLOBALS['FORUM_DB']->query_delete('f_post_history',array('id' => get_param_integer('h_id')),'',1);
+        $GLOBALS['FORUM_DB']->query_delete('f_post_history', array('id' => get_param_integer('h_id')), '', 1);
 
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF',null,true);
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF', null, true);
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    random_quotes
  */
-
 class Hook_admin_import_types_quotes
 {
     /**

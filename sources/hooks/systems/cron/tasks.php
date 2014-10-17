@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_cron_tasks
 {
     /**
@@ -28,7 +27,7 @@ class Hook_cron_tasks
         if (!GOOGLE_APPENGINE) { // GAE has its own external task queue
             require_code('tasks');
 
-            $task_rows = $GLOBALS['SITE_DB']->query_select('task_queue',array('*'),array('t_locked' => 0));
+            $task_rows = $GLOBALS['SITE_DB']->query_select('task_queue', array('*'), array('t_locked' => 0));
             foreach ($task_rows as $task_row) {
                 require_code('files');
                 //$url=find_script('tasks').'?id='.strval($task_row['id']).'&secure_ref='.urlencode($task_row['t_secure_ref']);

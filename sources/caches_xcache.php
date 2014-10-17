@@ -22,6 +22,7 @@
 
 /**
  * Cache Driver.
+ *
  * @package    core
  */
 class ocp_xcache
@@ -37,7 +38,7 @@ class ocp_xcache
     {
         if (is_null($this->objects_list)) {
             $this->objects_list = xcache_get(get_file_base() . 'PERSISTENT_CACHE_OBJECTS');
-            if ($this->objects_list === NULL) {
+            if ($this->objects_list === null) {
                 $this->objects_list = array();
             }
         }
@@ -51,14 +52,14 @@ class ocp_xcache
      * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (NULL: don't care)
      * @return ?mixed                   The data (NULL: not found / NULL entry)
      */
-    public function get($key,$min_cache_date = null)
+    public function get($key, $min_cache_date = null)
     {
         $data = xcache_get($key);
         if ($data === false) {
-            return NULL;
+            return null;
         }
-        if ((!is_null($min_cache_date)) && ($data[0]<$min_cache_date)) {
-            return NULL;
+        if ((!is_null($min_cache_date)) && ($data[0] < $min_cache_date)) {
+            return null;
         }
         return $data[1];
     }
@@ -71,16 +72,16 @@ class ocp_xcache
      * @param  integer                  Various flags (parameter not used)
      * @param  ?integer                 The expiration time in seconds (NULL: no expiry)
      */
-    public function set($key,$data,$flags = 0,$expire_secs = null)
+    public function set($key, $data, $flags = 0, $expire_secs = null)
     {
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
-        if (!array_key_exists($key,$objects_list)) {
+        if (!array_key_exists($key, $objects_list)) {
             $objects_list[$key] = true;
-            xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+            xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
         }
 
-        xcache_set($key,array(time(),$data),$expire_secs);
+        xcache_set($key, array(time(), $data), $expire_secs);
     }
 
     /**
@@ -93,7 +94,7 @@ class ocp_xcache
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
         unset($objects_list[$key]);
-        xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
         xcache_unset($key);
     }
@@ -105,7 +106,7 @@ class ocp_xcache
     {
         // Update list of persistent-objects
         $objects_list = array();
-        xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
         xcache_unset_by_prefix('');
     }

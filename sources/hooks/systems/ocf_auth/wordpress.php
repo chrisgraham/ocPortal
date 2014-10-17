@@ -19,7 +19,6 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
-
 class Hook_ocf_auth_wordpress
 {
     /**
@@ -33,7 +32,7 @@ class Hook_ocf_auth_wordpress
      * @param  array                    Row of OCF account
      * @return ?tempcode                Error message (NULL: none)
      */
-    public function auth($username,$userid,$password_hashed,$password_raw,$cookie_login,$row)
+    public function auth($username, $userid, $password_hashed, $password_raw, $cookie_login, $row)
     {
         if (class_exists('PasswordHash')) { // 'if' just there for code quality checker
             $wp_hasher = new PasswordHash(8, true);
@@ -43,7 +42,7 @@ class Hook_ocf_auth_wordpress
             }
         }
 
-        return NULL;
+        return null;
     }
 }
 
@@ -73,7 +72,7 @@ class PasswordHash
 
         $this->portable_hashes = $portable_hashes;
 
-        $this->random_state = microtime(false) . (function_exists('getmypid') ? strval(getmypid()) : '') . uniqid(strval(mt_rand(0,mt_getrandmax())), true);
+        $this->random_state = microtime(false) . (function_exists('getmypid') ? strval(getmypid()) : '') . uniqid(strval(mt_rand(0, mt_getrandmax())), true);
     }
 
     public function get_random_bytes($count)
@@ -121,7 +120,8 @@ class PasswordHash
             }
             $i++;
             $output .= $this->itoa64[($value >> 18) & 0x3f];
-        } while ($i < $count);
+        }
+        while ($i < $count);
 
         return $output;
     }
@@ -169,7 +169,8 @@ class PasswordHash
         do {
             $hash = pack('H*', md5($hash . $password));
             --$count;
-        } while ($count>0);
+        }
+        while ($count > 0);
 
         $output = substr($setting, 0, 12);
         $output .= $this->encode64($hash, 16);
@@ -234,7 +235,8 @@ class PasswordHash
             $c1 |= $c2 >> 6;
             $output .= $itoa64[$c1];
             $output .= $itoa64[$c2 & 0x3f];
-        } while (true);
+        }
+        while (true);
 
         return $output;
     }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki_sync
  */
-
 /*function init__site__pages__modules_custom__wiki($code)      TODO: This will need to be done in Mx_wiki as we cannot mix code overrides with code rewriting
 {
     $code=str_replace(
@@ -49,7 +48,7 @@ class Mx_wiki extends Module_wiki
             return parent::changes();
         }
 
-        $_id = get_param('id',null);
+        $_id = get_param('id', null);
         $id = null;
         if (!is_null($_id)) {
             list($id,) = get_param_wiki_chain('id');
@@ -58,12 +57,12 @@ class Mx_wiki extends Module_wiki
 
             $page_name = find_filename_for_wiki_page($id);
 
-            if (substr($url,-1) != '/') {
+            if (substr($url, -1) != '/') {
                 $url .= '/';
             }
             $url .= $page_name . '.txt';
         }
 
-        return redirect_screen($this->title,$url);
+        return redirect_screen($this->title, $url);
     }
 }

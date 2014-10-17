@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_task_find_orphaned_uploads
 {
     /**
@@ -34,17 +33,17 @@ class Hook_task_find_orphaned_uploads
 
         // Find known paths
         $known_urls = array();
-        $urlpaths = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type' => 'URLPATH'));
+        $urlpaths = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_table'), array('m_type' => 'URLPATH'));
         $base_url = get_base_url();
         foreach ($urlpaths as $urlpath) {
-            $ofs = $GLOBALS['SITE_DB']->query_select($urlpath['m_table'],array($urlpath['m_name']));
+            $ofs = $GLOBALS['SITE_DB']->query_select($urlpath['m_table'], array($urlpath['m_name']));
             foreach ($ofs as $of) {
                 $url = $of[$urlpath['m_name']];
                 if (url_is_local($url)) {
                     $known_urls[rawurldecode($url)] = 1;
                 } else {
-                    if (substr($url,0,strlen($base_url)) == $base_url) {
-                        $known_urls[substr($url,strlen($base_url)+1)] = 1;
+                    if (substr($url, 0, strlen($base_url)) == $base_url) {
+                        $known_urls[substr($url, strlen($base_url) + 1)] = 1;
                     }
                 }
             }
@@ -53,18 +52,18 @@ class Hook_task_find_orphaned_uploads
         $all_files = $this->do_dir('uploads');
         $orphaned = array();
         foreach ($all_files as $file) {
-            if (!array_key_exists($file,$known_urls)) {
-                $orphaned[] = array('URL' => get_base_url() . '/' . str_replace('%2F','/',rawurlencode($file)));
+            if (!array_key_exists($file, $known_urls)) {
+                $orphaned[] = array('URL' => get_base_url() . '/' . str_replace('%2F', '/', rawurlencode($file)));
             }
         }
 
         $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_bak;
 
-        $ret = do_template('CLEANUP_ORPHANED_UPLOADS',array(
+        $ret = do_template('CLEANUP_ORPHANED_UPLOADS', array(
             '_GUID' => '21049d738f67554cff0891d343c02ad3',
             'FOUND' => $orphaned,
         ));
-        return array('text/html',$ret);
+        return array('text/html', $ret);
     }
 
     /**
@@ -76,11 +75,11 @@ class Hook_task_find_orphaned_uploads
     public function do_dir($dir)
     {
         $out = array();
-        $_dir = ($dir == '')?'.':$dir;
+        $_dir = ($dir == '') ? '.' : $dir;
         $dh = @opendir($_dir);
         if ($dh !== false) {
             while (($file = readdir($dh)) !== false) {
-                if (in_array($file,array('filedump','auto_thumbs','website_specific','index.html','.htaccess'))) {
+                if (in_array($file, array('filedump', 'auto_thumbs', 'website_specific', 'index.html', '.htaccess'))) {
                     continue;
                 }
 
@@ -88,7 +87,7 @@ class Hook_task_find_orphaned_uploads
                     if (is_file($_dir . '/' . $file)) {
                         $out[] = $_dir . '/' . $file;
                     } elseif (is_dir($_dir . '/' . $file)) {
-                        $out = array_merge($out,$this->do_dir($dir . (($dir != '')?'/':'') . $file));
+                        $out = array_merge($out, $this->do_dir($dir . (($dir != '') ? '/' : '') . $file));
                     }
                 }
             }

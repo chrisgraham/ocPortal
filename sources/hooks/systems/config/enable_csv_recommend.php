@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    recommend
  */
-
 class Hook_config_enable_csv_recommend
 {
     /**

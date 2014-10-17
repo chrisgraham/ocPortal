@@ -27,7 +27,7 @@ class config_lang_strings_test_set extends ocp_test_case
 
     public function testStrings()
     {
-        $hooks = find_all_hooks('systems','config');
+        $hooks = find_all_hooks('systems', 'config');
         $options = array();
         foreach (array_keys($hooks) as $hook) {
             $path = get_file_base() . '/sources/hooks/systems/config/' . filter_naughty($hook) . '.php';
@@ -41,12 +41,12 @@ class config_lang_strings_test_set extends ocp_test_case
             $details = $ob->get_details();
             $options[] = $details;
 
-            $this->assertTrue(strpos($code,"@package\t\t" . $details['addon']) !== false,'Addon definition mismatch in ' . $hook);
+            $this->assertTrue(strpos($code, "@package\t\t" . $details['addon']) !== false, 'Addon definition mismatch in ' . $hook);
         }
         require_all_lang();
         foreach ($options as $option) {
-            $test = do_lang($option['human_name'],null,null,null,null,false);
-            $this->assertFalse(is_null($test),'Error on: ' . $option['human_name']);
+            $test = do_lang($option['human_name'], null, null, null, null, false);
+            $this->assertFalse(is_null($test), 'Error on: ' . $option['human_name']);
         }
     }
 

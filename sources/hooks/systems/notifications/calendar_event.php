@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_Notification_calendar_event extends Hook_Notification
 {
     /**
@@ -39,20 +38,20 @@ class Hook_Notification_calendar_event extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
-        $types = $GLOBALS['SITE_DB']->query_select('calendar_types',array('id','t_title'));
+        $types = $GLOBALS['SITE_DB']->query_select('calendar_types', array('id', 't_title'));
         foreach ($types as $type) {
-            if ((has_category_access(get_member(),'calendar',strval($type['id']))) && ($type['id'] != db_get_first_id())) {
+            if ((has_category_access(get_member(), 'calendar', strval($type['id']))) && ($type['id'] != db_get_first_id())) {
                 $page_links[] = array(
                     'id' => $type['id'],
                     'title' => get_translated_text($type['t_title']),
                 );
             }
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -64,7 +63,7 @@ class Hook_Notification_calendar_event extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -78,7 +77,7 @@ class Hook_Notification_calendar_event extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['calendar_event'] = array(do_lang('menus:CONTENT'),do_lang('calendar:NOTIFICATION_TYPE_calendar_event'));
+        $list['calendar_event'] = array(do_lang('menus:CONTENT'), do_lang('calendar:NOTIFICATION_TYPE_calendar_event'));
         return $list;
     }
 
@@ -92,11 +91,11 @@ class Hook_Notification_calendar_event extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'calendar',$notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_category_access($members,'calendar',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'calendar', $notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_category_access($members, 'calendar', $notification_code, $category, $to_member_ids, $start, $max);
 
         return $members;
     }

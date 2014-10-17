@@ -23,13 +23,14 @@
  */
 function init__forum_stub()
 {
-    global $IS_SUPER_ADMIN_CACHE,$IS_STAFF_CACHE;
+    global $IS_SUPER_ADMIN_CACHE, $IS_STAFF_CACHE;
     $IS_SUPER_ADMIN_CACHE = array();
     $IS_STAFF_CACHE = array();
 }
 
 /**
  * Forum Driver base class.
+ *
  * @package    core
  */
 class forum_driver_base
@@ -47,7 +48,7 @@ class forum_driver_base
      */
     public function install_delete_custom_field($name)
     {
-        if (method_exists($this,'_install_delete_custom_field')) {
+        if (method_exists($this, '_install_delete_custom_field')) {
             $this->_install_delete_custom_field($name);
         }
     }
@@ -70,14 +71,14 @@ class forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
      * @return mixed                    The URL
      */
-    public function member_profile_url($id,$definitely_profile = false,$tempcode_okay = false)
+    public function member_profile_url($id, $definitely_profile = false, $tempcode_okay = false)
     {
         $url = mixed();
 
-        if ((!$definitely_profile) && ($id != $this->get_guest_id()) && (addon_installed('chat')) && (has_privilege(get_member(),'start_im'))) {
+        if ((!$definitely_profile) && ($id != $this->get_guest_id()) && (addon_installed('chat')) && (has_privilege(get_member(), 'start_im'))) {
             $username_click_im = get_option('username_click_im');
             if ($username_click_im == '1') {
-                $url = build_url(array('page' => 'chat','type' => 'misc','enter_im' => $id),get_module_zone('chat'));
+                $url = build_url(array('page' => 'chat', 'type' => 'misc', 'enter_im' => $id), get_module_zone('chat'));
                 if (!$tempcode_okay) {
                     $url = $url->evaluate();
                 }
@@ -85,12 +86,12 @@ class forum_driver_base
             }
         }
 
-        $url = $this->_member_profile_url($id,$tempcode_okay);
+        $url = $this->_member_profile_url($id, $tempcode_okay);
         if (($tempcode_okay) && (!is_object($url))) {
             $url = make_string_tempcode($url);
         }
         if ((get_forum_type() != 'none') && (get_forum_type() != 'ocf') && (get_option('forum_in_portal') == '1')) {
-            $url = build_url(array('page' => 'forums','url' => $url),get_module_zone('forums'));
+            $url = build_url(array('page' => 'forums', 'url' => $url), get_module_zone('forums'));
             if (!$tempcode_okay) {
                 $url = $url->evaluate();
             }
@@ -107,19 +108,19 @@ class forum_driver_base
      * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
      * @return tempcode                 The hyperlink
      */
-    public function member_profile_hyperlink($id,$definitely_profile = false,$_username = '',$use_displayname = true)
+    public function member_profile_hyperlink($id, $definitely_profile = false, $_username = '', $use_displayname = true)
     {
         if (is_guest($id)) {
-            return ($_username == '')?do_lang_tempcode('GUEST'):make_string_tempcode(escape_html($_username));
+            return ($_username == '') ? do_lang_tempcode('GUEST') : make_string_tempcode(escape_html($_username));
         }
         if ($_username == '') {
-            $_username = $this->get_username($id,$use_displayname);
+            $_username = $this->get_username($id, $use_displayname);
         }
         if (is_null($_username)) {
             return do_lang_tempcode('UNKNOWN');
         }
-        $url = $this->member_profile_url($id,$definitely_profile,true);
-        return hyperlink($url,$_username,false,true);
+        $url = $this->member_profile_url($id, $definitely_profile, true);
+        return hyperlink($url, $_username, false, true);
     }
 
     /**
@@ -131,7 +132,7 @@ class forum_driver_base
     {
         $url = $this->_join_url();
         if ((get_forum_type() != 'none') && (get_forum_type() != 'ocf') && (get_option('forum_in_portal') == '1')) {
-            $url = build_url(array('page' => 'forums','url' => $url),get_module_zone('forums'));
+            $url = build_url(array('page' => 'forums', 'url' => $url), get_module_zone('forums'));
         }
         return $url;
     }
@@ -146,7 +147,7 @@ class forum_driver_base
     {
         $url = $this->_users_online_url($tempcode_okay);
         if ((get_forum_type() != 'none') && (get_forum_type() != 'ocf') && (get_option('forum_in_portal') == '1')) {
-            $url = build_url(array('page' => 'forums','url' => $url),get_module_zone('forums'));
+            $url = build_url(array('page' => 'forums', 'url' => $url), get_module_zone('forums'));
         }
         return $url;
     }
@@ -158,11 +159,11 @@ class forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL
      */
-    public function member_pm_url($id,$tempcode_okay = false)
+    public function member_pm_url($id, $tempcode_okay = false)
     {
-        $url = $this->_member_pm_url($id,$tempcode_okay);
+        $url = $this->_member_pm_url($id, $tempcode_okay);
         if ((get_forum_type() != 'none') && (get_forum_type() != 'ocf') && (get_option('forum_in_portal') == '1')) {
-            $url = build_url(array('page' => 'forums','url' => $url),get_module_zone('forums'));
+            $url = build_url(array('page' => 'forums', 'url' => $url), get_module_zone('forums'));
         }
         return $url;
     }
@@ -174,11 +175,11 @@ class forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL
      */
-    public function forum_url($id,$tempcode_okay = false)
+    public function forum_url($id, $tempcode_okay = false)
     {
-        $url = $this->_forum_url($id,$tempcode_okay);
+        $url = $this->_forum_url($id, $tempcode_okay);
         if ((get_forum_type() != 'none') && (get_forum_type() != 'ocf') && (get_option('forum_in_portal') == '1')) {
-            $url = build_url(array('page' => 'forums','url' => $url),get_module_zone('forums'));
+            $url = build_url(array('page' => 'forums', 'url' => $url), get_module_zone('forums'));
         }
         return $url;
     }
@@ -190,15 +191,15 @@ class forum_driver_base
      * @param  boolean                  Whether to use the displayname rather than the username (if we have them)
      * @return ?SHORT_TEXT              The username (NULL: deleted member)
      */
-    public function get_username($id,$use_displayname = false)
+    public function get_username($id, $use_displayname = false)
     {
         if ($id == $this->get_guest_id()) {
             require_code('lang');
             if (!function_exists('do_lang')) {
                 return 'Guest';
             }
-            $ret = do_lang('GUEST',null,null,null,null,false);
-            if ($ret === NULL) {
+            $ret = do_lang('GUEST', null, null, null, null, false);
+            if ($ret === null) {
                 $ret = 'Guest';
             }
             return $ret;
@@ -233,7 +234,7 @@ class forum_driver_base
     public function get_member_email_address($id)
     {
         global $MEMBER_EMAIL_CACHE;
-        if (array_key_exists($id,$MEMBER_EMAIL_CACHE)) {
+        if (array_key_exists($id, $MEMBER_EMAIL_CACHE)) {
             return $MEMBER_EMAIL_CACHE[$id];
         }
 
@@ -249,7 +250,7 @@ class forum_driver_base
      * @param  boolean                  Whether to avoid checking the staff filter (i.e. ignore M.S.N.'s)
      * @return boolean                  The answer
      */
-    public function is_staff($id,$skip_staff_filter = false)
+    public function is_staff($id, $skip_staff_filter = false)
     {
         if (is_guest($id)) {
             return false;
@@ -257,12 +258,12 @@ class forum_driver_base
 
         if (!$skip_staff_filter) {
             global $IS_STAFF_CACHE;
-            if (array_key_exists($id,$IS_STAFF_CACHE)) {
+            if (array_key_exists($id, $IS_STAFF_CACHE)) {
                 return $IS_STAFF_CACHE[$id];
             }
 
-            if ((isset($this->connection)) && ($this->connection->connection_write != $GLOBALS['SITE_DB']->connection_write) && (get_option('is_on_staff_filter',true) === '1') && (get_forum_type() != 'none') && (!$GLOBALS['FORUM_DRIVER']->disable_staff_filter())) {
-                if (strpos(strtolower(get_ocp_cpf('sites',$id)),strtolower(substr(get_site_name(),0,200))) === false) {
+            if ((isset($this->connection)) && ($this->connection->connection_write != $GLOBALS['SITE_DB']->connection_write) && (get_option('is_on_staff_filter', true) === '1') && (get_forum_type() != 'none') && (!$GLOBALS['FORUM_DRIVER']->disable_staff_filter())) {
+                if (strpos(strtolower(get_ocp_cpf('sites', $id)), strtolower(substr(get_site_name(), 0, 200))) === false) {
                     $IS_STAFF_CACHE[$id] = false;
                     return false;
                 }
@@ -283,7 +284,7 @@ class forum_driver_base
      */
     public function disable_staff_filter()
     {
-        if (method_exists($this,'_disable_staff_filter')) {
+        if (method_exists($this, '_disable_staff_filter')) {
             return $this->_disable_staff_filter();
         }
 
@@ -321,7 +322,7 @@ class forum_driver_base
     public function get_super_admin_groups()
     {
         global $ADMIN_GROUP_CACHE;
-        if ($ADMIN_GROUP_CACHE !== NULL) {
+        if ($ADMIN_GROUP_CACHE !== null) {
             return $ADMIN_GROUP_CACHE;
         }
 
@@ -337,7 +338,7 @@ class forum_driver_base
      */
     public function get_moderator_groups()
     {
-        global $MODERATOR_GROUP_CACHE,$IN_MINIKERNEL_VERSION;
+        global $MODERATOR_GROUP_CACHE, $IN_MINIKERNEL_VERSION;
         if ((!is_null($MODERATOR_GROUP_CACHE)) && ((!$IN_MINIKERNEL_VERSION) || ($MODERATOR_GROUP_CACHE != array()))) {
             return $MODERATOR_GROUP_CACHE;
         }
@@ -358,14 +359,14 @@ class forum_driver_base
      * @param  boolean                  Whether to completely skip hidden usergroups
      * @return array                    The map
      */
-    public function get_usergroup_list($hide_hidden = false,$only_permissive = false,$force_show_all = false,$force_find = null,$for_member = null,$skip_hidden = false)
+    public function get_usergroup_list($hide_hidden = false, $only_permissive = false, $force_show_all = false, $force_find = null, $for_member = null, $skip_hidden = false)
     {
         global $USERGROUP_LIST_CACHE;
         if ((!is_null($USERGROUP_LIST_CACHE)) && (isset($USERGROUP_LIST_CACHE[$hide_hidden][$only_permissive][$force_show_all][serialize($force_find)][$for_member][$skip_hidden]))) {
             return $USERGROUP_LIST_CACHE[$hide_hidden][$only_permissive][$force_show_all][serialize($force_find)][$for_member][$skip_hidden];
         }
 
-        $ret = $this->_get_usergroup_list($hide_hidden,$only_permissive,$force_show_all,$force_find,$for_member,$skip_hidden);
+        $ret = $this->_get_usergroup_list($hide_hidden, $only_permissive, $force_show_all, $force_find, $for_member, $skip_hidden);
         if (count($ret) != 0) { // Conditional is for when installing... can't cache at point of there being no usergroups
             if (is_null($USERGROUP_LIST_CACHE)) {
                 $USERGROUP_LIST_CACHE = array();
@@ -383,11 +384,11 @@ class forum_driver_base
      * @param  boolean                  Whether to take probation into account
      * @return array                    The list of usergroups
      */
-    public function get_members_groups($id,$skip_secret = false,$handle_probation = true)
+    public function get_members_groups($id, $skip_secret = false, $handle_probation = true)
     {
         if ((is_guest($id)) && (get_forum_type() == 'ocf')) {
             static $ret = null;
-            if ($ret === NULL) {
+            if ($ret === null) {
                 $ret = array(db_get_first_id());
             }
             return $ret;
@@ -398,7 +399,7 @@ class forum_driver_base
             return $USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation];
         }
 
-        $ret = $this->_get_members_groups($id,$skip_secret,$handle_probation);
+        $ret = $this->_get_members_groups($id, $skip_secret, $handle_probation);
         $USERS_GROUPS_CACHE[$id][$skip_secret][$handle_probation] = $ret;
         return $ret;
     }
@@ -413,8 +414,8 @@ class forum_driver_base
     {
         global $SITE_INFO;
 
-        if ($zone_for !== NULL) {
-            $zone_theme = $GLOBALS['SITE_DB']->query_select_value('zones','zone_theme',array('zone_name' => $zone_for));
+        if ($zone_for !== null) {
+            $zone_theme = $GLOBALS['SITE_DB']->query_select_value('zones', 'zone_theme', array('zone_name' => $zone_for));
             if ($zone_theme != '-1') {
                 if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks'] != '1')) {
                     if (!is_dir(get_custom_file_base() . '/themes/' . $zone_theme)) {
@@ -428,39 +429,39 @@ class forum_driver_base
         }
 
         global $USER_THEME_CACHE;
-        if ($USER_THEME_CACHE !== NULL) {
+        if ($USER_THEME_CACHE !== null) {
             return $USER_THEME_CACHE;
         }
 
         global $IN_MINIKERNEL_VERSION;
         if (($IN_MINIKERNEL_VERSION) || (in_safe_mode())) {
-            if ($zone_for === NULL) {
+            if ($zone_for === null) {
                 $zone_for = get_zone_name();
             }
-            return ($zone_for === 'adminzone' || $zone_for === 'cms')?'admin':'default';
+            return ($zone_for === 'adminzone' || $zone_for === 'cms') ? 'admin' : 'default';
         }
 
         // Try hardcoded in URL
-        $USER_THEME_CACHE = filter_naughty(get_param('keep_theme',get_param('utheme','-1')));
+        $USER_THEME_CACHE = filter_naughty(get_param('keep_theme', get_param('utheme', '-1')));
         if ($USER_THEME_CACHE != '-1') {
             if ((!is_dir(get_file_base() . '/themes/' . $USER_THEME_CACHE)) && (!is_dir(get_custom_file_base() . '/themes/' . $USER_THEME_CACHE))) {
                 $theme = $USER_THEME_CACHE;
                 $USER_THEME_CACHE = 'default';
                 require_code('site');
-                attach_message(do_lang_tempcode('NO_SUCH_THEME',escape_html($theme)),'warn');
+                attach_message(do_lang_tempcode('NO_SUCH_THEME', escape_html($theme)), 'warn');
                 $USER_THEME_CACHE = null;
             } else {
                 global $ZONE;
-                $zone_theme = ($ZONE === NULL)?$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name' => get_zone_name())):$ZONE['zone_theme'];
+                $zone_theme = ($ZONE === null) ? $GLOBALS['SITE_DB']->query_select_value_if_there('zones', 'zone_theme', array('zone_name' => get_zone_name())) : $ZONE['zone_theme'];
 
                 require_code('permissions');
-                if (($USER_THEME_CACHE == 'default') || ($USER_THEME_CACHE == $zone_theme) || (has_category_access(get_member(),'theme',$USER_THEME_CACHE))) {
+                if (($USER_THEME_CACHE == 'default') || ($USER_THEME_CACHE == $zone_theme) || (has_category_access(get_member(), 'theme', $USER_THEME_CACHE))) {
                     return $USER_THEME_CACHE;
                 } else {
                     $theme = $USER_THEME_CACHE;
                     $USER_THEME_CACHE = 'default';
                     require_code('site');
-                    attach_message(do_lang_tempcode('NO_THEME_PERMISSION',escape_html($theme)),'warn');
+                    attach_message(do_lang_tempcode('NO_THEME_PERMISSION', escape_html($theme)), 'warn');
                     $USER_THEME_CACHE = null;
                 }
             }
@@ -470,9 +471,9 @@ class forum_driver_base
 
         // Try hardcoded in ocPortal
         global $ZONE;
-        $zone_theme = ($ZONE === NULL)?$GLOBALS['SITE_DB']->query_select_value_if_there('zones','zone_theme',array('zone_name' => get_zone_name())):$ZONE['zone_theme'];
-        $default_theme = ((get_page_name() == 'login') && (get_option('root_zone_login_theme') == '1'))?$GLOBALS['SITE_DB']->query_select_value('zones','zone_theme',array('zone_name' => '')):$zone_theme;
-        if (($default_theme !== NULL) && ($default_theme != '-1')) {
+        $zone_theme = ($ZONE === null) ? $GLOBALS['SITE_DB']->query_select_value_if_there('zones', 'zone_theme', array('zone_name' => get_zone_name())) : $ZONE['zone_theme'];
+        $default_theme = ((get_page_name() == 'login') && (get_option('root_zone_login_theme') == '1')) ? $GLOBALS['SITE_DB']->query_select_value('zones', 'zone_theme', array('zone_name' => '')) : $zone_theme;
+        if (($default_theme !== null) && ($default_theme != '-1')) {
             if ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks'] != '1')) {
                 if (!is_dir(get_custom_file_base() . '/themes/' . $default_theme)) {
                     $default_theme = '-1';
@@ -499,7 +500,7 @@ class forum_driver_base
             $USER_THEME_CACHE = 'default';
         }
         require_code('permissions');
-        if (($USER_THEME_CACHE != 'default') && (!has_category_access(get_member(),'theme',$USER_THEME_CACHE))) {
+        if (($USER_THEME_CACHE != 'default') && (!has_category_access(get_member(), 'theme', $USER_THEME_CACHE))) {
             $USER_THEME_CACHE = 'default';
         }
 
@@ -539,7 +540,7 @@ class forum_driver_base
      * @param  array                    List of post IDs
      * @return array                    Extra details
      */
-    public function get_post_remaining_details($topic_id,$post_ids)
+    public function get_post_remaining_details($topic_id, $post_ids)
     {
         return array();
     }

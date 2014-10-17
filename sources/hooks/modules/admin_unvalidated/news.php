@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_unvalidated_news
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_news
     public function info()
     {
         if (!module_installed('news')) {
-            return NULL;
+            return null;
         }
 
         require_lang('news');

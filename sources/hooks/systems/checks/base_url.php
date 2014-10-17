@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_base_url
 {
     /**
@@ -36,16 +35,16 @@ class Hook_check_base_url
         } else {
             $test_url = get_base_url() . '/index.php'; // But this definitely must exist
         }
-        $test = http_download_file($test_url,0,false,true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
+        $test = http_download_file($test_url, 0, false, true); // Should return a 200 blank, not an HTTP error or a redirect; actual data would be an ocP error
 
         if (
             (is_null($test)) &&
             ($HTTP_MESSAGE !== '200') && ($HTTP_MESSAGE !== '401') && ((!is_file(get_file_base() . '/install.php')) || ($HTTP_MESSAGE !== '500'))
         ) {
             if (($HTTP_MESSAGE == 'no-data') && (get_option('ip_forwarding') == '0')) {
-                $warning[] = do_lang_tempcode('config:ENABLE_IP_FORWARDING',do_lang('config:IP_FORWARDING'));
+                $warning[] = do_lang_tempcode('config:ENABLE_IP_FORWARDING', do_lang('config:IP_FORWARDING'));
             } else {
-                $warning[] = do_lang_tempcode((substr(get_base_url(),0,11) == 'http://www.')?'HTTP_REDIRECT_PROBLEM_WITHWWW':'HTTP_REDIRECT_PROBLEM_WITHOUTWWW',escape_html(get_base_url() . '/config_editor.php'));
+                $warning[] = do_lang_tempcode((substr(get_base_url(), 0, 11) == 'http://www.') ? 'HTTP_REDIRECT_PROBLEM_WITHWWW' : 'HTTP_REDIRECT_PROBLEM_WITHOUTWWW', escape_html(get_base_url() . '/config_editor.php'));
             }
         }
 

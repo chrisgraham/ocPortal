@@ -52,12 +52,12 @@ if (!function_exists('mu_result')) {
     function mu_result($path)
     {
         $normal_bore = get_file_base() . '/uploads/website_specific/ocportal.com/upgrades/tars/';
-        if (substr($path,0,strlen($normal_bore)) == $normal_bore) {
-            $path = get_file_base() . '/upgrades/' . substr($path,strlen($normal_bore));
+        if (substr($path, 0, strlen($normal_bore)) == $normal_bore) {
+            $path = get_file_base() . '/upgrades/' . substr($path, strlen($normal_bore));
         }
 
         $base_url = get_base_url();
-        $url = $base_url . '/' . rawurldecode(substr($path,strlen(get_file_base())+1));
+        $url = $base_url . '/' . rawurldecode(substr($path, strlen(get_file_base()) + 1));
 
         require_code('files');
 
@@ -75,12 +75,12 @@ echo <<<END
                     <div class="standardbox_main_classic"><div class="float_surrounder">
 END;
 
-$from_version = get_param('from_version',null);
+$from_version = get_param('from_version', null);
 if (is_null($from_version)) {
-    $a = post_param('from_version_a',null);
-    $b = post_param('from_version_b',null);
-    $c = post_param('from_version_c',null);
-    $d = post_param('from_version_d',null);
+    $a = post_param('from_version_a', null);
+    $b = post_param('from_version_b', null);
+    $c = post_param('from_version_c', null);
+    $d = post_param('from_version_d', null);
     if ((is_null($a)) || (is_null($b)) || (is_null($c))) {
         mu_ui();
         echo <<<END
@@ -92,10 +92,10 @@ END;
         return;
     }
 
-    $a = rtrim(preg_replace('#^(0\s)#','',$a));
-    $b = rtrim(preg_replace('#^(0\s)#','',$b));
-    $c = rtrim(preg_replace('#^(0\s)#','',$c));
-    $d = rtrim(preg_replace('#^(0\s)#','',$d));
+    $a = rtrim(preg_replace('#^(0\s)#', '', $a));
+    $b = rtrim(preg_replace('#^(0\s)#', '', $b));
+    $c = rtrim(preg_replace('#^(0\s)#', '', $c));
+    $d = rtrim(preg_replace('#^(0\s)#', '', $d));
 
     $from_version = $a;
     if ($b != '') {
@@ -111,10 +111,10 @@ END;
 $from_version = get_version_dotted__from_anything($from_version); // Canonicalise
 
 require_code('uploads/website_specific/ocportal.com/upgrades/make_upgrader.php');
-$ret = make_upgrade_get_path($from_version,$to_version);
+$ret = make_upgrade_get_path($from_version, $to_version);
 
 if (!is_null($ret[1])) {
-     
+
     echo '<p>' . $ret[1] . '</p>';
 }
 

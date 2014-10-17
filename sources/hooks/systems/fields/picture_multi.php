@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_picture_multi
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_picture_multi
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_picture_multi
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -59,10 +58,10 @@ class Hook_fields_picture_multi
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
         unset($field);
-        return array('long_unescaped',$default,'long');
+        return array('long_unescaped', $default, 'long');
     }
 
     /**
@@ -78,7 +77,7 @@ class Hook_fields_picture_multi
      * @param  ?ID_TEXT                 Name of the URL field in the table (NULL: N/A)
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev,$i,$only_fields,$table = null,$id = null,$id_field = null,$url_field = null)
+    public function render_field_value($field, $ev, $i, $only_fields, $table = null, $id = null, $id_field = null, $url_field = null)
     {
         if (is_object($ev)) {
             return $ev;
@@ -89,7 +88,7 @@ class Hook_fields_picture_multi
         }
 
         $ret = new ocp_tempcode();
-        $evs = explode("\n",$ev);
+        $evs = explode("\n", $ev);
         foreach ($evs as $i => $ev) {
             $img_url = $ev;
             if (url_is_local($img_url)) {
@@ -105,11 +104,11 @@ class Hook_fields_picture_multi
                 }
                 $file_thumb = get_custom_file_base() . '/uploads/auto_thumbs/' . $new_name;
                 if (!file_exists($file_thumb)) {
-                    convert_image($img_url,$file_thumb,-1,-1,intval(get_option('thumb_width')),false);
+                    convert_image($img_url, $file_thumb, -1, -1, intval(get_option('thumb_width')), false);
                 }
                 $img_thumb_url = get_custom_base_url() . '/uploads/auto_thumbs/' . rawurlencode($new_name);
             }
-            if (!array_key_exists('c_name',$field)) {
+            if (!array_key_exists('c_name', $field)) {
                 $field['c_name'] = 'other';
             }
             $tpl_set = $field['c_name'];
@@ -120,14 +119,14 @@ class Hook_fields_picture_multi
                 );
             }
 
-            if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/)) {
+            if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts', $field)/*not a CPF*/)) {
                 $keep = symbol_tempcode('KEEP');
                 $download_url = find_script('catalogue_file') . '?file=' . urlencode(basename($img_url)) . '&table=' . urlencode($table) . '&id=' . urlencode(strval($id)) . '&id_field=' . urlencode($id_field) . '&url_field=' . urlencode($url_field) . $keep->evaluate();
             } else {
                 $download_url = $img_url;
             }
 
-            $ret->attach(do_template('CATALOGUE_' . $tpl_set . '_FIELD_PICTURE',array('I' => is_null($only_fields)?'-1':strval($i),'CATALOGUE' => $field['c_name'],'URL' => $download_url,'THUMB_URL' => $img_thumb_url),null,false,'CATALOGUE_DEFAULT_FIELD_PICTURE'));
+            $ret->attach(do_template('CATALOGUE_' . $tpl_set . '_FIELD_PICTURE', array('I' => is_null($only_fields) ? '-1' : strval($i), 'CATALOGUE' => $field['c_name'], 'URL' => $download_url, 'THUMB_URL' => $img_thumb_url), null, false, 'CATALOGUE_DEFAULT_FIELD_PICTURE'));
         }
         return $ret;
     }
@@ -146,15 +145,15 @@ class Hook_fields_picture_multi
      * @param  boolean                  Whether this is for a new entry
      * @return ?array                   A pair: The Tempcode for the input field, Tempcode for hidden fields (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         $say_required = ($field['cf_required'] == 1) && (($actual_value == '') || (is_null($actual_value)));
-        $ffield = form_input_upload_multi($_cf_name,$_cf_description,'field_' . strval($field['id']),$say_required,null,($field['cf_required'] == 1)?NULL/*so unlink option not shown*/:(($actual_value == '')?null:explode("\n",$actual_value)),true,str_replace(' ','',get_option('valid_images')));
+        $ffield = form_input_upload_multi($_cf_name, $_cf_description, 'field_' . strval($field['id']), $say_required, null, ($field['cf_required'] == 1) ? null/*so unlink option not shown*/ : (($actual_value == '') ? null : explode("\n", $actual_value)), true, str_replace(' ', '', get_option('valid_images')));
 
         $hidden = new ocp_tempcode();
-        handle_max_file_size($hidden,'image');
+        handle_max_file_size($hidden, 'image');
 
-        return array($ffield,$hidden);
+        return array($ffield, $hidden);
     }
 
     /**
@@ -166,10 +165,10 @@ class Hook_fields_picture_multi
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         if (is_null($upload_dir)) {
-            return NULL;
+            return null;
         }
 
         if (!fractional_edit()) {
@@ -177,14 +176,14 @@ class Hook_fields_picture_multi
 
             $value = '';
 
-            $_old_value = ((is_null($old_value)) || ($old_value['cv_value'] == ''))?array():explode("\n",$old_value['cv_value']);
+            $_old_value = ((is_null($old_value)) || ($old_value['cv_value'] == '')) ? array() : explode("\n", $old_value['cv_value']);
 
             require_code('uploads');
             is_plupload(true);
 
             if ($editing) {
                 foreach ($_old_value as $i => $_value) {
-                    $unlink = (post_param_integer('field_' . strval($id) . '_' . strval($i+1) . '_unlink',0) == 1);
+                    $unlink = (post_param_integer('field_' . strval($id) . '_' . strval($i + 1) . '_unlink', 0) == 1);
                     if ($unlink) {
                         @unlink(get_custom_file_base() . '/' . rawurldecode($_value));
                         sync_file(rawurldecode($_value));
@@ -200,7 +199,7 @@ class Hook_fields_picture_multi
             $i = 1;
             do {
                 $tmp_name = 'field_' . strval($id) . '_' . strval($i);
-                $temp = get_url($tmp_name . '_url',$tmp_name,$upload_dir,0,OCP_UPLOAD_IMAGE);
+                $temp = get_url($tmp_name . '_url', $tmp_name, $upload_dir, 0, OCP_UPLOAD_IMAGE);
                 $_value = $temp[0];
                 if ($_value != '') {
                     if ($value != '') {
@@ -210,7 +209,8 @@ class Hook_fields_picture_multi
                 }
 
                 $i++;
-            } while (array_key_exists($tmp_name,$_FILES));
+            }
+            while (array_key_exists($tmp_name, $_FILES));
         } else {
             return STRING_MAGIC_NULL;
         }
@@ -225,7 +225,7 @@ class Hook_fields_picture_multi
     public function cleanup($value)
     {
         if ($value['cv_value'] != '') {
-            $files = explode("\n",$value['cv_value']);
+            $files = explode("\n", $value['cv_value']);
             foreach ($files as $file) {
                 @unlink(get_custom_file_base() . '/' . rawurldecode($file));
                 sync_file(rawurldecode($file));

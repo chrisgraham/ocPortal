@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_search_catalogue_categories
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_catalogue_categories
     public function info($check_permissions = true)
     {
         if (!module_installed('catalogues')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'catalogues')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'catalogues')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)') == 0) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)') == 0) {
+            return null;
         }
 
         require_lang('catalogues');
@@ -86,7 +85,7 @@ class Hook_search_catalogue_categories
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         if (!module_installed('catalogues')) {
             return array();
@@ -125,18 +124,18 @@ class Hook_search_catalogue_categories
 
         // Calculate and perform query
         if ($g_or == '') {
-            $rows = get_search_rows('catalogue_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_categories r',array('r.cc_title' => 'SHORT_TRANS','r.cc_description' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
+            $rows = get_search_rows('catalogue_category', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'catalogue_categories r', array('r.cc_title' => 'SHORT_TRANS', 'r.cc_description' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*');
         } else {
-            $rows = get_search_rows('catalogue_category','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'catalogue_categories r' . ((get_value('disable_cat_cat_perms') === '1')?'':(' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access z ON (' . db_string_equal_to('z.module_the_name','catalogues_category') . ' AND z.category_name=r.id AND ' . str_replace('group_id','z.group_id',$g_or) . ')')) . ' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access p ON (' . db_string_equal_to('p.module_the_name','catalogues_catalogue') . ' AND p.category_name=r.c_name AND ' . str_replace('group_id','p.group_id',$g_or) . ')',array('r.cc_title' => 'SHORT_TRANS','r.cc_description' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*');
+            $rows = get_search_rows('catalogue_category', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'catalogue_categories r' . ((get_value('disable_cat_cat_perms') === '1') ? '' : (' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access z ON (' . db_string_equal_to('z.module_the_name', 'catalogues_category') . ' AND z.category_name=r.id AND ' . str_replace('group_id', 'z.group_id', $g_or) . ')')) . ' JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'group_category_access p ON (' . db_string_equal_to('p.module_the_name', 'catalogues_catalogue') . ' AND p.category_name=r.c_name AND ' . str_replace('group_id', 'p.group_id', $g_or) . ')', array('r.cc_title' => 'SHORT_TRANS', 'r.cc_description' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*');
         }
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }

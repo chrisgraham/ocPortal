@@ -5,28 +5,28 @@
 if (function_exists('set_time_limit')) {
     @set_time_limit(0);
 }
-ini_set('allow_url_fopen','1');
-ini_set('display_errors','1');
+ini_set('allow_url_fopen', '1');
+ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
 // This may want hard-coding if it does not detect correctly
-$transcoder_server = 'http://' . (isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:(function_exists('gethostname')?get_hostname():'localhost')) . dirname($_SERVER['SCRIPT_NAME']);
-$liveserver = str_replace('/transcoder','',$transcoder_server);
+$transcoder_server = 'http://' . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (function_exists('gethostname') ? get_hostname() : 'localhost')) . dirname($_SERVER['SCRIPT_NAME']);
+$liveserver = str_replace('/transcoder', '', $transcoder_server);
 
 //mencoder path
-define('MENCODER_PATH','/usr/local/bin/');
+define('MENCODER_PATH', '/usr/local/bin/');
 
 //video width to be set
-define('VIDEO_WIDTH_SETTING',720);
+define('VIDEO_WIDTH_SETTING', 720);
 
 //video height to be set
-define('VIDEO_HEIGHT_SETTING',480);
+define('VIDEO_HEIGHT_SETTING', 480);
 
 //audio bitrate to be set
-define('AUDIO_BITRATE',192);
+define('AUDIO_BITRATE', 192);
 
 //video bitrate to be set
-define('VIDEO_BITRATE',1500);
+define('VIDEO_BITRATE', 1500);
 
 /**
  * Find the mime type for the given file extension. It does not take into account whether the file type has been white-listed or not, and returns a binary download mime type for any unknown extensions.
@@ -65,7 +65,7 @@ function tr_get_mime_type($extension)
         'mid' => 'audio/midi',
     );
 
-    if (array_key_exists($extension,$mime_types)) {
+    if (array_key_exists($extension, $mime_types)) {
         return $mime_types[$extension];
     }
 
@@ -82,7 +82,7 @@ function tr_get_mime_type($extension)
 function transcode($path)
 {
     //if there is a locally uploaded file, that is not in flv/m4v/mp3 format go transcode it
-    if ((preg_match('#http\:\/\/#i',$path) == 0) && (preg_match('#\.(m4v|mp4|flv|mp3)$#i',$path) == 0)) {
+    if ((preg_match('#http\:\/\/#i', $path) == 0) && (preg_match('#\.(m4v|mp4|flv|mp3)$#i', $path) == 0)) {
         //mencoder path
         $mencoder_path = MENCODER_PATH;//'C:/Program Files/MPlayer/';
 
@@ -98,7 +98,7 @@ function transcode($path)
         //video bitrate to be set
         $video_bitrate = VIDEO_BITRATE;//250;
 
-        $file_path = preg_replace('#\\\#','/',$path);
+        $file_path = preg_replace('#\\\#', '/', $path);
 
         $matches = array();
         preg_match('/[^?]*/', $file_path, $matches);
@@ -108,17 +108,17 @@ function transcode($path)
 
         $file_ext = '';
         if (count($pattern) > 1) {
-            $filenamepart = $pattern[count($pattern)-1][0];
+            $filenamepart = $pattern[count($pattern) - 1][0];
             preg_match('/[^?]*/', $filenamepart, $matches);
             $file_ext = $matches[0];
         }
 
         // get mime type
         $input_mime_type = tr_get_mime_type(strtolower($file_ext));
-        $is_video = preg_match('#video\/#i',$input_mime_type) != 0;
-        $is_audio = preg_match('#audio\/#i',$input_mime_type) != 0;
+        $is_video = preg_match('#video\/#i', $input_mime_type) != 0;
+        $is_audio = preg_match('#audio\/#i', $input_mime_type) != 0;
         if ((!$is_audio) && (!$is_video)) {
-            if (filesize($path)>1024*1024*30) {
+            if (filesize($path) > 1024 * 1024 * 30) {
                 $is_video = true;
             } else {
                 $is_audio = true;
@@ -127,16 +127,16 @@ function transcode($path)
 
         if ($is_video) {
             $file_type = 'm4v';
-            $path = preg_replace('#' . preg_quote($file_ext,'#') . '$#', '', $path) . $file_type;
-            $path = str_replace('/queue/','/done/',$path);
+            $path = preg_replace('#' . preg_quote($file_ext, '#') . '$#', '', $path) . $file_type;
+            $path = str_replace('/queue/', '/done/', $path);
         } elseif ($is_audio) {
-            $path = preg_replace('#' . preg_quote($file_ext,'#') . '$#', '', $path) . 'mp3';
-            $path = str_replace('/queue/','/done/',$path);
+            $path = preg_replace('#' . preg_quote($file_ext, '#') . '$#', '', $path) . 'mp3';
+            $path = str_replace('/queue/', '/done/', $path);
         }
 
         if ($is_video) {
-            $output_path = preg_replace('#' . preg_quote($file_ext,'#') . '$#', '', $file_path) . $file_type;
-            $output_path = str_replace('/queue/','/done/',$output_path);
+            $output_path = preg_replace('#' . preg_quote($file_ext, '#') . '$#', '', $file_path) . $file_type;
+            $output_path = str_replace('/queue/', '/done/', $output_path);
 
             /* mencoder too buggy
             if ($file_type=='m4v')
@@ -155,7 +155,7 @@ function transcode($path)
 
             if ($file_type == 'm4v') {
                 $shell_command = '"' . $mencoder_path . 'ffmpeg" -i ' . escapeshellarg($file_path) . ' -y -f mp4 -vcodec libx264 -b ' . escapeshellcmd($video_bitrate) . 'K -ab ' . escapeshellcmd($audio_bitrate) . 'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -vpre libx264-default -acodec aac -strict experimental -ar 22050 -ac 2 -aspect 16:9 -s ' . escapeshellcmd($video_width_setting . ':' . $video_height_setting) . ' ' . escapeshellarg($output_path);
-                foreach (array($shell_command . ' -map 0.1:0.0 -map 0.0:0.1',$shell_command . ' -map 0.0:0.0 -map 0.1:0.1') as $shell_command) {
+                foreach (array($shell_command . ' -map 0.1:0.0 -map 0.0:0.1', $shell_command . ' -map 0.0:0.0 -map 0.1:0.1') as $shell_command) {
                     echo '[' . date('d/m/Y h:i:s') . '] DOING SHELL COMMAND: ' . $shell_command . "\n";
                     shell_exec($shell_command . ' 2>&1 >> log.txt');
                     if (@filesize($output_path)) {
@@ -165,7 +165,7 @@ function transcode($path)
                 shell_exec('"' . $mencoder_path . 'MP4Box" -inter 500 ' . ' ' . escapeshellarg($output_path) . ' 2>&1 >> log.txt');
             } else { // flv
                 $shell_command = '"' . $mencoder_path . 'ffmpeg" -i ' . escapeshellarg($file_path) . ' -y -f flv -vcodec flv -b ' . escapeshellcmd($video_bitrate) . 'K -ab ' . escapeshellcmd($audio_bitrate) . 'K -r ntsc-film -g 240 -qmin 2 -qmax 15 -acodec libmp3lame -ar 22050 -ac 2 -aspect 16:9 -s ' . escapeshellcmd($video_width_setting . ':' . $video_height_setting) . ' ' . escapeshellarg($output_path);
-                foreach (array($shell_command . ' -map 0.1:0.0 -map 0.0:0.1',$shell_command . ' -map 0.0:0.0 -map 0.1:0.1') as $shell_command) {
+                foreach (array($shell_command . ' -map 0.1:0.0 -map 0.0:0.1', $shell_command . ' -map 0.0:0.0 -map 0.1:0.1') as $shell_command) {
                     echo '[' . date('d/m/Y h:i:s') . '] DOING SHELL COMMAND: ' . $shell_command . "\n";
                     shell_exec($shell_command . ' 2>&1 >> log.txt');
                     if (@filesize($output_path)) {
@@ -174,8 +174,8 @@ function transcode($path)
                 }
             }
         } elseif ($is_audio) {
-            $output_path = preg_replace('#' . preg_quote($file_ext,'#') . '$#', '', $file_path) . 'mp3';
-            $output_path = str_replace('/queue/','/done/',$output_path);
+            $output_path = preg_replace('#' . preg_quote($file_ext, '#') . '$#', '', $file_path) . 'mp3';
+            $output_path = str_replace('/queue/', '/done/', $output_path);
 
             //it is audio
             $shell_command = '"' . $mencoder_path . 'ffmpeg" -y -i ' . escapeshellarg($file_path) . ' -ab ' . escapeshellcmd($audio_bitrate) . 'K ' . escapeshellarg($output_path);
@@ -191,11 +191,9 @@ function transcode($path)
 }
 
 
-
-
 while (true) {
-    $queue_dir = preg_replace('#\\\#','/',getcwd()) . '/queue';
-    $fail_dir = preg_replace('#\\\#','/',getcwd()) . '/fail';
+    $queue_dir = preg_replace('#\\\#', '/', getcwd()) . '/queue';
+    $fail_dir = preg_replace('#\\\#', '/', getcwd()) . '/fail';
     $dh = opendir($queue_dir);
 
     while (($file = readdir($dh)) !== false) {
@@ -211,7 +209,7 @@ while (true) {
                 unlink($queue_dir . '/' . $file);
 
                 if (is_string(strstr($done_path, '/done/'))) {
-                    $relative_url = 'done/' . rawurlencode(str_replace(dirname($done_path) . '/','',$done_path));
+                    $relative_url = 'done/' . rawurlencode(str_replace(dirname($done_path) . '/', '', $done_path));
                     $call = $liveserver . '/data_custom/receive_transcoded_file.php?url=' . $transcoder_server . $relative_url;
                     echo '[' . date('d/m/Y h:i:s') . '] Calling: ' . $call . "\n";
                     file_get_contents($call);
@@ -220,7 +218,7 @@ while (true) {
                 echo '[' . date('d/m/Y h:i:s') . '] Could not find output file (' . $done_path . ')' . "\n";
 
                 @unlink($queue_dir . '/' . $file);
-                rename($queue_dir . '/' . $file,$fail_dir . '/' . $file);
+                rename($queue_dir . '/' . $file, $fail_dir . '/' . $file);
             }
         }
     }

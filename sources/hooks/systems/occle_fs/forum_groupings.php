@@ -32,7 +32,7 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings','COUNT(*)');
+        return $GLOBALS['FORUM_DB']->query_select_value('f_forum_groupings', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('id'),array('c_title' => $label));
+        $_ret = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings', array('id'), array('c_title' => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -83,7 +83,7 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_FORUM_GROUPING') . ' OR ' . db_string_equal_to('the_type','EDIT_FORUM_GROUPING') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_FORUM_GROUPING') . ' OR ' . db_string_equal_to('the_type', 'EDIT_FORUM_GROUPING') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -95,19 +95,19 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('ocf_forums_action');
 
-        $description = $this->_default_property_str($properties,'description');
-        $expanded_by_default = $this->_default_property_int_null($properties,'expanded_by_default');
+        $description = $this->_default_property_str($properties, 'description');
+        $expanded_by_default = $this->_default_property_int_null($properties, 'expanded_by_default');
         if (is_null($expanded_by_default)) {
             $expanded_by_default = 1;
         }
 
-        $id = ocf_make_forum_grouping($label,$description,$expanded_by_default);
+        $id = ocf_make_forum_grouping($label, $description, $expanded_by_default);
         return strval($id);
     }
 
@@ -118,12 +118,12 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -143,21 +143,21 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('ocf_forums_action2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $description = $this->_default_property_str($properties,'description');
-        $expanded_by_default = $this->_default_property_int_null($properties,'expanded_by_default');
+        $label = $this->_default_property_str($properties, 'label');
+        $description = $this->_default_property_str($properties, 'description');
+        $expanded_by_default = $this->_default_property_int_null($properties, 'expanded_by_default');
         if (is_null($expanded_by_default)) {
             $expanded_by_default = 1;
         }
 
-        ocf_edit_forum_grouping(intval($resource_id),$label,$description,$expanded_by_default);
+        ocf_edit_forum_grouping(intval($resource_id), $label, $description, $expanded_by_default);
 
         return $resource_id;
     }
@@ -169,9 +169,9 @@ class Hook_occle_fs_forum_groupings extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('ocf_forums_action2');
         ocf_delete_forum_grouping(intval($resource_id));

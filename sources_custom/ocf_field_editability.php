@@ -22,7 +22,7 @@
  * @param  ID_TEXT                      The special type of the user (built-in types are: <blank>, ldap, httpauth, <name of import source>)
  * @return boolean                      Whether the field is editable
  */
-function ocf_field_editable($field_name,$special_type)
+function ocf_field_editable($field_name, $special_type)
 {
     switch ($field_name) {
         case 'username':
@@ -82,7 +82,6 @@ function ocf_field_editable($field_name,$special_type)
                     break;
             }
             break;
-
     }
 
     return true;

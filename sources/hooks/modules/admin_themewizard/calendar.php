@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_admin_themewizard_calendar
 {
     /**
@@ -27,6 +26,6 @@ class Hook_admin_themewizard_calendar
      */
     public function run()
     {
-        return array(array('calendar/priority*',),array());
+        return array(array('calendar/priority*',), array());
     }
 }

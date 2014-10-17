@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
-
 class Hook_config_ldap_is_windows
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_ldap_is_windows
      */
     public function get_default()
     {
-        return (DIRECTORY_SEPARATOR == '/')?'0':'1';
+        return (DIRECTORY_SEPARATOR == '/') ? '0' : '1';
     }
 }

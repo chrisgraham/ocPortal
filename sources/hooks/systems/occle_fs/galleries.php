@@ -23,7 +23,7 @@ require_code('resource_fs');
 class Hook_occle_fs_galleries extends resource_fs_base
 {
     public $folder_resource_type = 'gallery';
-    var $file_resource_type = array('image','video');
+    var $file_resource_type = array('image', 'video');
 
     /**
      * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.
@@ -36,10 +36,10 @@ class Hook_occle_fs_galleries extends resource_fs_base
         switch ($resource_type) {
             case 'image':
             case 'video':
-                return $GLOBALS['SITE_DB']->query_select_value($resource_type . 's','COUNT(*)');
+                return $GLOBALS['SITE_DB']->query_select_value($resource_type . 's', 'COUNT(*)');
 
             case 'gallery':
-                return $GLOBALS['SITE_DB']->query_select_value('galleries','COUNT(*)');
+                return $GLOBALS['SITE_DB']->query_select_value('galleries', 'COUNT(*)');
         }
         return 0;
     }
@@ -51,12 +51,12 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
         switch ($resource_type) {
             case 'image':
             case 'video':
-                $_ret = $GLOBALS['SITE_DB']->query_select($resource_type . 's',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('title') => $label));
+                $_ret = $GLOBALS['SITE_DB']->query_select($resource_type . 's', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('title') => $label));
                 $ret = array();
                 foreach ($_ret as $r) {
                     $ret[] = strval($r['id']);
@@ -64,8 +64,8 @@ class Hook_occle_fs_galleries extends resource_fs_base
                 return $ret;
 
             case 'gallery':
-                $ret = $GLOBALS['SITE_DB']->query_select('galleries',array('name'),array($GLOBALS['SITE_DB']->translate_field_ref('fullname') => $label));
-                return collapse_1d_complexity('name',$ret);
+                $ret = $GLOBALS['SITE_DB']->query_select('galleries', array('name'), array($GLOBALS['SITE_DB']->translate_field_ref('fullname') => $label));
+                return collapse_1d_complexity('name', $ret);
         }
         return array();
     }
@@ -107,7 +107,7 @@ class Hook_occle_fs_galleries extends resource_fs_base
      */
     public function _get_folder_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',$row['name']) . ' AND  (' . db_string_equal_to('the_type','ADD_GALLERY') . ' OR ' . db_string_equal_to('the_type','EDIT_GALLERY') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', $row['name']) . ' AND  (' . db_string_equal_to('the_type', 'ADD_GALLERY') . ' OR ' . db_string_equal_to('the_type', 'EDIT_GALLERY') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -119,40 +119,40 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error)
      */
-    public function folder_add($filename,$path,$properties)
+    public function folder_add($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
         if ($category == '') {
             $category = 'root';
         }/*return false;*/ // Can't create more than one root
 
-        list($properties,$label) = $this->_folder_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
         require_code('galleries2');
 
-        $name = $this->_default_property_str($properties,'name'); // We don't use name for the label, although we do default name from label. Without other resource types we do use codenames as labels as often there is no other choice of label (even if there is a title, it's often optional).
+        $name = $this->_default_property_str($properties, 'name'); // We don't use name for the label, although we do default name from label. Without other resource types we do use codenames as labels as often there is no other choice of label (even if there is a title, it's often optional).
         if ($name == '') {
             $name = $this->_create_name_from_label($label);
         }
-        $description = $this->_default_property_str($properties,'description');
-        $notes = $this->_default_property_str($properties,'notes');
+        $description = $this->_default_property_str($properties, 'description');
+        $notes = $this->_default_property_str($properties, 'notes');
         $parent_id = $category;
-        $accept_images = $this->_default_property_int_modeavg($properties,'accept_images','galleries',1);
-        $accept_videos = $this->_default_property_int_modeavg($properties,'accept_videos','galleries',1);
-        $is_member_synched = $this->_default_property_int($properties,'is_member_synched');
-        $flow_mode_interface = $this->_default_property_int($properties,'flow_mode_interface');
-        $rep_image = $this->_default_property_str($properties,'rep_image');
-        $watermark_top_left = $this->_default_property_str($properties,'watermark_top_left');
-        $watermark_top_right = $this->_default_property_str($properties,'watermark_top_right');
-        $watermark_bottom_left = $this->_default_property_str($properties,'watermark_bottom_left');
-        $watermark_bottom_right = $this->_default_property_str($properties,'watermark_bottom_right');
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','galleries',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
-        $add_date = $this->_default_property_int_null($properties,'add_date');
-        $g_owner = $this->_default_property_int_null($properties,'owner');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
-        $name = add_gallery($name,$label,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$allow_rating,$allow_comments,false,$add_date,$g_owner,$meta_keywords,$meta_description,true);
+        $accept_images = $this->_default_property_int_modeavg($properties, 'accept_images', 'galleries', 1);
+        $accept_videos = $this->_default_property_int_modeavg($properties, 'accept_videos', 'galleries', 1);
+        $is_member_synched = $this->_default_property_int($properties, 'is_member_synched');
+        $flow_mode_interface = $this->_default_property_int($properties, 'flow_mode_interface');
+        $rep_image = $this->_default_property_str($properties, 'rep_image');
+        $watermark_top_left = $this->_default_property_str($properties, 'watermark_top_left');
+        $watermark_top_right = $this->_default_property_str($properties, 'watermark_top_right');
+        $watermark_bottom_left = $this->_default_property_str($properties, 'watermark_bottom_left');
+        $watermark_bottom_right = $this->_default_property_str($properties, 'watermark_bottom_right');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'galleries', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'galleries', 1);
+        $add_date = $this->_default_property_int_null($properties, 'add_date');
+        $g_owner = $this->_default_property_int_null($properties, 'owner');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
+        $name = add_gallery($name, $label, $description, $notes, $parent_id, $accept_images, $accept_videos, $is_member_synched, $flow_mode_interface, $rep_image, $watermark_top_left, $watermark_top_right, $watermark_bottom_left, $watermark_bottom_right, $allow_rating, $allow_comments, false, $add_date, $g_owner, $meta_keywords, $meta_description, true);
         return $name;
     }
 
@@ -163,17 +163,17 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function folder_load($filename,$path)
+    public function folder_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('galleries',array('*'),array('name' => $resource_id),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('galleries', array('*'), array('name' => $resource_id), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
-        list($meta_keywords,$meta_description) = seo_meta_get_for($resource_type,strval($row['id']));
+        list($meta_keywords, $meta_description) = seo_meta_get_for($resource_type, strval($row['id']));
 
         return array(
             'label' => $row['fullname'],
@@ -206,38 +206,38 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function folder_edit($filename,$path,$properties)
+    public function folder_edit($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('galleries2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $name = $this->_default_property_str_null($properties,'name');
-        if ($name === NULL) {
+        $label = $this->_default_property_str($properties, 'label');
+        $name = $this->_default_property_str_null($properties, 'name');
+        if ($name === null) {
             $name = $this->_create_name_from_label($label);
         }
-        $description = $this->_default_property_str($properties,'description');
-        $notes = $this->_default_property_str($properties,'notes');
+        $description = $this->_default_property_str($properties, 'description');
+        $notes = $this->_default_property_str($properties, 'notes');
         $parent_id = $category;
-        $accept_images = $this->_default_property_int_modeavg($properties,'accept_images','galleries',1);
-        $accept_videos = $this->_default_property_int_modeavg($properties,'accept_videos','galleries',1);
-        $is_member_synched = $this->_default_property_int($properties,'is_member_synched');
-        $flow_mode_interface = $this->_default_property_int($properties,'flow_mode_interface');
-        $rep_image = $this->_default_property_str($properties,'rep_image');
-        $watermark_top_left = $this->_default_property_str($properties,'watermark_top_left');
-        $watermark_top_right = $this->_default_property_str($properties,'watermark_top_right');
-        $watermark_bottom_left = $this->_default_property_str($properties,'watermark_bottom_left');
-        $watermark_bottom_right = $this->_default_property_str($properties,'watermark_bottom_right');
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','galleries',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','galleries',1);
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $g_owner = $this->_default_property_int_null($properties,'owner');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $accept_images = $this->_default_property_int_modeavg($properties, 'accept_images', 'galleries', 1);
+        $accept_videos = $this->_default_property_int_modeavg($properties, 'accept_videos', 'galleries', 1);
+        $is_member_synched = $this->_default_property_int($properties, 'is_member_synched');
+        $flow_mode_interface = $this->_default_property_int($properties, 'flow_mode_interface');
+        $rep_image = $this->_default_property_str($properties, 'rep_image');
+        $watermark_top_left = $this->_default_property_str($properties, 'watermark_top_left');
+        $watermark_top_right = $this->_default_property_str($properties, 'watermark_top_right');
+        $watermark_bottom_left = $this->_default_property_str($properties, 'watermark_bottom_left');
+        $watermark_bottom_right = $this->_default_property_str($properties, 'watermark_bottom_right');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'galleries', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'galleries', 1);
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $g_owner = $this->_default_property_int_null($properties, 'owner');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
-        $name = edit_gallery($resource_id,$name,$label,$description,$notes,$parent_id,$accept_images,$accept_videos,$is_member_synched,$flow_mode_interface,$rep_image,$watermark_top_left,$watermark_top_right,$watermark_bottom_left,$watermark_bottom_right,$meta_keywords,$meta_description,$allow_rating,$allow_comments,$g_owner,$add_time,true,true);
+        $name = edit_gallery($resource_id, $name, $label, $description, $notes, $parent_id, $accept_images, $accept_videos, $is_member_synched, $flow_mode_interface, $rep_image, $watermark_top_left, $watermark_top_right, $watermark_bottom_left, $watermark_bottom_right, $meta_keywords, $meta_description, $allow_rating, $allow_comments, $g_owner, $add_time, true, true);
 
         return $resource_id;
     }
@@ -249,9 +249,9 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function folder_delete($filename,$path)
+    public function folder_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('galleries2');
         delete_gallery($resource_id);
@@ -294,13 +294,13 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  ID_TEXT                  The resource ID
      * @return ID_TEXT                  The filename
      */
-    public function file_convert_id_to_filename($resource_type,$resource_id)
+    public function file_convert_id_to_filename($resource_type, $resource_id)
     {
         if ($resource_type == 'video') {
-            return 'VIDEO-' . parent::file_convert_id_to_filename($resource_type,$resource_id,'video');
+            return 'VIDEO-' . parent::file_convert_id_to_filename($resource_type, $resource_id, 'video');
         }
 
-        return parent::file_convert_id_to_filename($resource_type,$resource_id);
+        return parent::file_convert_id_to_filename($resource_type, $resource_id);
     }
 
     /**
@@ -311,11 +311,11 @@ class Hook_occle_fs_galleries extends resource_fs_base
      */
     public function file_convert_filename_to_id($filename)
     {
-        if (substr($filename,0,6) == 'VIDEO-') {
-            return parent::file_convert_filename_to_id(substr($filename,6),'video');
+        if (substr($filename, 0, 6) == 'VIDEO-') {
+            return parent::file_convert_filename_to_id(substr($filename, 6), 'video');
         }
 
-        return parent::file_convert_filename_to_id($filename,'image');
+        return parent::file_convert_filename_to_id($filename, 'image');
     }
 
     /**
@@ -327,10 +327,10 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  ?ID_TEXT                 Resource type to try to force (NULL: do not force)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties,$force_type = null)
+    public function file_add($filename, $path, $properties, $force_type = null)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -338,54 +338,54 @@ class Hook_occle_fs_galleries extends resource_fs_base
 
         require_code('galleries2');
 
-        $description = $this->_default_property_str($properties,'description');
-        $url = $this->_default_property_str($properties,'url');
-        $thumb_url = $this->_default_property_str($properties,'thumb_url');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $description = $this->_default_property_str($properties, 'description');
+        $url = $this->_default_property_str($properties, 'url');
+        $thumb_url = $this->_default_property_str($properties, 'thumb_url');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $notes = $this->_default_property_str($properties,'notes');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $add_date = $this->_default_property_int_null($properties,'add_date');
-        $edit_date = $this->_default_property_int_null($properties,'edit_date');
-        $views = $this->_default_property_int($properties,'views');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $notes = $this->_default_property_str($properties, 'notes');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $add_date = $this->_default_property_int_null($properties, 'add_date');
+        $edit_date = $this->_default_property_int_null($properties, 'edit_date');
+        $views = $this->_default_property_int($properties, 'views');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
         require_code('images');
-        if ((((is_image($url)) || ($url == '')) && ((!array_key_exists('video_length',$properties)) || ($properties['video_length'] == '')) || ($force_type === 'image')) && ($force_type !== 'video')) {
-            $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','images',1);
-            $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','images',1);
-            $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','images',1);
+        if ((((is_image($url)) || ($url == '')) && ((!array_key_exists('video_length', $properties)) || ($properties['video_length'] == '')) || ($force_type === 'image')) && ($force_type !== 'video')) {
+            $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'images', 1);
+            $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'images', 1);
+            $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'images', 1);
 
-            $accept_images = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','accept_images',array('name' => $category));
+            $accept_images = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'accept_images', array('name' => $category));
             if ($accept_images === 0) {
                 return false;
             }
 
-            $id = add_image($label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$submitter,$add_date,$edit_date,$views,null,$meta_keywords,$meta_description);
+            $id = add_image($label, $category, $description, $url, $thumb_url, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $submitter, $add_date, $edit_date, $views, null, $meta_keywords, $meta_description);
         } else {
-            $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','videos',1);
-            $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','videos',1);
-            $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','videos',1);
+            $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'videos', 1);
+            $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'videos', 1);
+            $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'videos', 1);
 
-            $accept_videos = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','accept_videos',array('name' => $category));
+            $accept_videos = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'accept_videos', array('name' => $category));
             if ($accept_videos === 0) {
                 return false;
             }
 
-            $video_length = $this->_default_property_int($properties,'video_length');
-            $video_width = $this->_default_property_int_null($properties,'video_width');
+            $video_length = $this->_default_property_int($properties, 'video_length');
+            $video_width = $this->_default_property_int_null($properties, 'video_width');
             if (is_null($video_width)) {
                 $video_width = 720;
             }
-            $video_height = $this->_default_property_int_null($properties,'video_height');
+            $video_height = $this->_default_property_int_null($properties, 'video_height');
             if (is_null($video_height)) {
                 $video_height = 576;
             }
 
-            $id = add_video($label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$submitter,$add_date,$edit_date,$views,null,$meta_keywords,$meta_description);
+            $id = add_video($label, $category, $description, $url, $thumb_url, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $video_length, $video_width, $video_height, $submitter, $add_date, $edit_date, $views, null, $meta_keywords, $meta_description);
         }
 
         return strval($id);
@@ -398,17 +398,17 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select($resource_type . 's',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select($resource_type . 's', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
-        list($meta_keywords,$meta_description) = seo_meta_get_for($resource_type,strval($row['id']));
+        list($meta_keywords, $meta_description) = seo_meta_get_for($resource_type, strval($row['id']));
 
         $ret = array(
             'label' => $row['title'],
@@ -449,11 +449,11 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -461,54 +461,54 @@ class Hook_occle_fs_galleries extends resource_fs_base
 
         require_code('galleries2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $description = $this->_default_property_str($properties,'description');
-        $url = $this->_default_property_str($properties,'url');
-        $thumb_url = $this->_default_property_str($properties,'thumb_url');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $label = $this->_default_property_str($properties, 'label');
+        $description = $this->_default_property_str($properties, 'description');
+        $url = $this->_default_property_str($properties, 'url');
+        $thumb_url = $this->_default_property_str($properties, 'thumb_url');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $notes = $this->_default_property_str($properties,'notes');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $edit_time = $this->_default_property_int_null($properties,'edit_date');
-        $views = $this->_default_property_int($properties,'views');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $notes = $this->_default_property_str($properties, 'notes');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $edit_time = $this->_default_property_int_null($properties, 'edit_date');
+        $views = $this->_default_property_int($properties, 'views');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
         if ($resource_type == 'image') {
-            $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','images',1);
-            $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','images',1);
-            $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','images',1);
+            $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'images', 1);
+            $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'images', 1);
+            $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'images', 1);
 
-            $accept_images = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','accept_images',array('name' => $category));
+            $accept_images = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'accept_images', array('name' => $category));
             if ($accept_images === 0) {
                 return false;
             }
 
-            edit_image(intval($resource_id),$label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+            edit_image(intval($resource_id), $label, $category, $description, $url, $thumb_url, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $meta_keywords, $meta_description, $edit_time, $add_time, $views, $submitter, true);
         } else {
-            $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','videos',1);
-            $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','videos',1);
-            $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','videos',1);
+            $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'videos', 1);
+            $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'videos', 1);
+            $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'videos', 1);
 
-            $accept_videos = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','accept_videos',array('name' => $category));
+            $accept_videos = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'accept_videos', array('name' => $category));
             if ($accept_videos === 0) {
                 return false;
             }
 
-            $video_length = $this->_default_property_int($properties,'video_length');
-            $video_width = $this->_default_property_int_null($properties,'video_width');
+            $video_length = $this->_default_property_int($properties, 'video_length');
+            $video_width = $this->_default_property_int_null($properties, 'video_width');
             if (is_null($video_width)) {
                 $video_width = 720;
             }
-            $video_height = $this->_default_property_int_null($properties,'video_height');
+            $video_height = $this->_default_property_int_null($properties, 'video_height');
             if (is_null($video_height)) {
                 $video_height = 576;
             }
 
-            edit_video(intval($resource_id),$label,$category,$description,$url,$thumb_url,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$video_length,$video_width,$video_height,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,true);
+            edit_video(intval($resource_id), $label, $category, $description, $url, $thumb_url, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $video_length, $video_width, $video_height, $meta_keywords, $meta_description, $edit_time, $add_time, $views, $submitter, true);
         }
 
         return $resource_id;
@@ -521,9 +521,9 @@ class Hook_occle_fs_galleries extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('galleries2');
         require_code('images');

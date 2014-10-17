@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_admin_themewizard_chat
 {
     /**
@@ -27,6 +26,6 @@ class Hook_admin_themewizard_chat
      */
     public function run()
     {
-        return array(array('chatcodeeditor/*',),array());
+        return array(array('chatcodeeditor/*',), array());
     }
 }

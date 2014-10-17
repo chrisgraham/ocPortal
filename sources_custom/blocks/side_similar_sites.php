@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 /*EXTRA FUNCTIONS: json_decode*/
 
 class Block_side_similar_sites
@@ -30,7 +29,7 @@ class Block_side_similar_sites
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('criteria','max');
+        $info['parameters'] = array('criteria', 'max');
         return $info;
     }
 
@@ -43,7 +42,7 @@ class Block_side_similar_sites
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'criteria\',$map)?$map[\'criteria\']:\'\',array_key_exists(\'max\',$map)?$map[\'max\']:3)';
-        $info['ttl'] = 60*5;
+        $info['ttl'] = 60 * 5;
         return $info;
     }
 
@@ -59,13 +58,13 @@ class Block_side_similar_sites
 
         require_lang('similar_sites');
 
-        $criteria = array_key_exists('criteria',$map)?$map['criteria']:get_option('site_scope');
-        $max = (isset($map['max']) && intval($map['max'])>0)?intval($map['max']):3;
+        $criteria = array_key_exists('criteria', $map) ? $map['criteria'] : get_option('site_scope');
+        $max = (isset($map['max']) && intval($map['max']) > 0) ? intval($map['max']) : 3;
 
         $set_search_terms = '';
         $set_search_url = 'related:' . $criteria;
 
-        $search_results_array = $this->retrieveGoogleSearch($set_search_terms,$set_search_url);
+        $search_results_array = $this->retrieveGoogleSearch($set_search_terms, $set_search_url);
 
         $out = '<ul>';
         $links_count = 0;
@@ -80,10 +79,10 @@ class Block_side_similar_sites
 
         $out .= '</ul>';
 
-        return do_template('BLOCK_SIDE_SIMILAR_SITES',array('_GUID' => '0eeeec88a1496aa8b0db3580dcaa4ed8','TITLE' => do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'),'CONTENT' => $out,'CRITERIA' => $criteria));
+        return do_template('BLOCK_SIDE_SIMILAR_SITES', array('_GUID' => '0eeeec88a1496aa8b0db3580dcaa4ed8', 'TITLE' => do_lang_tempcode('BLOCK_SIMILAR_SITES_TITLE'), 'CONTENT' => $out, 'CRITERIA' => $criteria));
     }
 
-    public function retrieveGoogleSearch($search_terms = 'example',$search_url = 'related:example.com')
+    public function retrieveGoogleSearch($search_terms = 'example', $search_url = 'related:example.com')
     {
         require_code('files');
         $google_base_url = 'http://ajax.googleapis.com/ajax/services/search/web';
@@ -92,7 +91,7 @@ class Block_side_similar_sites
 
         $returned_google_search = http_download_file($google_full_url);
 
-        $returned_google_search_arr = json_decode($returned_google_search,true);
+        $returned_google_search_arr = json_decode($returned_google_search, true);
 
         return $returned_google_search_arr['responseData']['results'];
     }

@@ -31,17 +31,17 @@ function init__type_validation()
          * @param  boolean              Whether to check stricter identifier-validity
          * @return boolean              Whether the string is alphanumeric or not
          */
-        function is_alphanumeric($string,$strict = false)
+        function is_alphanumeric($string, $strict = false)
         {
             if ($strict) {
-                return preg_match('#^[\w\-]*$#',$string) != 0;
+                return preg_match('#^[\w\-]*$#', $string) != 0;
             }
 
-            $test = @preg_match('#^[\pL\w\-\.]*$#u',$string) != 0; // unicode version, may fail on some servers
+            $test = @preg_match('#^[\pL\w\-\.]*$#u', $string) != 0; // unicode version, may fail on some servers
             if ($test !== false) {
                 return $test;
             }
-            return preg_match('#^[\w\-\.]*$#',$string) != 0;
+            return preg_match('#^[\w\-\.]*$#', $string) != 0;
         }
     }
 }
@@ -58,5 +58,5 @@ function is_valid_email_address($string)
         return false;
     }
 
-    return (preg_match('#^[\w\.\-\+]+@[\w\.\-]+$#',$string) != 0); // Put "\.[a-zA-Z0-9_\-]+" before $ to ensure a two+ part domain
+    return (preg_match('#^[\w\.\-\+]+@[\w\.\-]+$#', $string) != 0); // Put "\.[a-zA-Z0-9_\-]+" before $ to ensure a two+ part domain
 }

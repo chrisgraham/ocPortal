@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_config_transcoding_zencoder_ftp_path
 {
     /**

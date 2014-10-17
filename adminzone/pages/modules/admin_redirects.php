@@ -55,10 +55,10 @@ class Module_admin_redirects
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('redirects',array(
+            $GLOBALS['SITE_DB']->create_table('redirects', array(
                 'r_from_page' => '*ID_TEXT',
                 'r_from_zone' => '*ID_TEXT',
                 'r_to_page' => 'ID_TEXT',
@@ -66,31 +66,31 @@ class Module_admin_redirects
                 'r_is_transparent' => 'BINARY',
             ));
 
-            $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page' => 'rules','r_from_zone' => 'site','r_to_page' => 'rules','r_to_zone' => '','r_is_transparent' => 1));
-            $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page' => 'rules','r_from_zone' => 'forum','r_to_page' => 'rules','r_to_zone' => '','r_is_transparent' => 1));
-            $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page' => 'authors','r_from_zone' => 'collaboration','r_to_page' => 'authors','r_to_zone' => 'site','r_is_transparent' => 1));
+            $GLOBALS['SITE_DB']->query_insert('redirects', array('r_from_page' => 'rules', 'r_from_zone' => 'site', 'r_to_page' => 'rules', 'r_to_zone' => '', 'r_is_transparent' => 1));
+            $GLOBALS['SITE_DB']->query_insert('redirects', array('r_from_page' => 'rules', 'r_from_zone' => 'forum', 'r_to_page' => 'rules', 'r_to_zone' => '', 'r_is_transparent' => 1));
+            $GLOBALS['SITE_DB']->query_insert('redirects', array('r_from_page' => 'authors', 'r_from_zone' => 'collaboration', 'r_to_page' => 'authors', 'r_to_zone' => 'site', 'r_is_transparent' => 1));
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<3)) {
+        if ((is_null($upgrade_from)) || ($upgrade_from < 3)) {
             $zones = find_all_zones();
-            if (!in_array('site',$zones)) {
+            if (!in_array('site', $zones)) {
                 $zones[] = 'site';
             }
             foreach ($zones as $zone) {
                 if (!file_exists(get_file_base() . '/' . $zone . '/pages/comcode/' . fallback_lang() . '/panel_top.txt')) {
-                    $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page' => 'panel_top','r_from_zone' => $zone,'r_to_page' => 'panel_top','r_to_zone' => '','r_is_transparent' => 1));
+                    $GLOBALS['SITE_DB']->query_insert('redirects', array('r_from_page' => 'panel_top', 'r_from_zone' => $zone, 'r_to_page' => 'panel_top', 'r_to_zone' => '', 'r_is_transparent' => 1));
                 }
             }
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<4)) {
+        if ((is_null($upgrade_from)) || ($upgrade_from < 4)) {
             $zones = find_all_zones();
-            if (!in_array('site',$zones)) {
+            if (!in_array('site', $zones)) {
                 $zones[] = 'site';
             }
             foreach ($zones as $zone) {
                 if (!file_exists(get_file_base() . '/' . $zone . '/pages/comcode/' . fallback_lang() . '/panel_bottom.txt')) {
-                    $GLOBALS['SITE_DB']->query_insert('redirects',array('r_from_page' => 'panel_bottom','r_from_zone' => $zone,'r_to_page' => 'panel_bottom','r_to_zone' => '','r_is_transparent' => 1),false,true);
+                    $GLOBALS['SITE_DB']->query_insert('redirects', array('r_from_page' => 'panel_bottom', 'r_from_zone' => $zone, 'r_to_page' => 'panel_bottom', 'r_to_zone' => '', 'r_is_transparent' => 1), false, true);
                 }
             }
         }
@@ -105,10 +105,10 @@ class Module_admin_redirects
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('REDIRECTS','menu/adminzone/structure/redirects'),
+            'misc' => array('REDIRECTS', 'menu/adminzone/structure/redirects'),
         );
     }
 
@@ -121,13 +121,13 @@ class Module_admin_redirects
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('redirects');
 
         $this->title = get_screen_title('REDIRECTS');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -137,7 +137,7 @@ class Module_admin_redirects
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->gui();
@@ -158,20 +158,20 @@ class Module_admin_redirects
     {
         require_css('redirects_editor');
 
-        $post_url = build_url(array('page' => '_SELF','type' => 'actual'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => 'actual'), '_SELF');
         $fields = new ocp_tempcode();
-        $rows = $GLOBALS['SITE_DB']->query_select('redirects',array('*'));
-        $num_zones = $GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
+        $rows = $GLOBALS['SITE_DB']->query_select('redirects', array('*'));
+        $num_zones = $GLOBALS['SITE_DB']->query_select_value('zones', 'COUNT(*)');
         require_code('zones3');
         foreach ($rows as $i => $row) {
-            if ($num_zones>50) {
+            if ($num_zones > 50) {
                 $from_zones = new ocp_tempcode();
             } else {
                 $from_zones = create_selection_list_zones($row['r_from_zone']);
-                $from_zones->attach(form_input_list_entry('*',$row['r_from_zone'] == '*',do_lang_tempcode('_ALL')));
+                $from_zones->attach(form_input_list_entry('*', $row['r_from_zone'] == '*', do_lang_tempcode('_ALL')));
             }
-            $to_zones = ($num_zones>50)?new ocp_tempcode():create_selection_list_zones($row['r_to_zone']);
-            $fields->attach(do_template('REDIRECTE_TABLE_REDIRECT',array(
+            $to_zones = ($num_zones > 50) ? new ocp_tempcode() : create_selection_list_zones($row['r_to_zone']);
+            $fields->attach(do_template('REDIRECTE_TABLE_REDIRECT', array(
                 '_GUID' => 'fd1ea392a98e588bb1f553464d315ef0',
                 'I' => strval($i),
                 'FROM_ZONE' => $row['r_from_zone'],
@@ -184,8 +184,8 @@ class Module_admin_redirects
                 'NAME' => 'is_transparent_' . strval($i),
             )));
         }
-        $default = explode(':',get_param('page_link','*:'),2);
-        if ($num_zones>50) {
+        $default = explode(':', get_param('page_link', '*:'), 2);
+        if ($num_zones > 50) {
             $to_zones = new ocp_tempcode();
             $from_zones = new ocp_tempcode();
         } else {
@@ -194,9 +194,9 @@ class Module_admin_redirects
             $to_zones->attach($zones);
             $from_zones = new ocp_tempcode();
             $from_zones->attach($zones);
-            $from_zones->attach(form_input_list_entry('*',$default[0] == '*',do_lang_tempcode('_ALL')));
+            $from_zones->attach(form_input_list_entry('*', $default[0] == '*', do_lang_tempcode('_ALL')));
         }
-        $new = do_template('REDIRECTE_TABLE_REDIRECT',array(
+        $new = do_template('REDIRECTE_TABLE_REDIRECT', array(
             '_GUID' => 'cbf0eb4f745a6bf7b10e1f7d6d95d10f',
             'I' => 'new',
             'FROM_ZONE' => '',
@@ -210,14 +210,14 @@ class Module_admin_redirects
         ));
 
         require_code('form_templates');
-        list($warning_details,$ping_url) = handle_conflict_resolution();
+        list($warning_details, $ping_url) = handle_conflict_resolution();
 
         $notes = get_long_value('notes');
         if (is_null($notes)) {
             $notes = '';
         }
 
-        return do_template('REDIRECTE_TABLE_SCREEN',array(
+        return do_template('REDIRECTE_TABLE_SCREEN', array(
             '_GUID' => '2a9add73f6dd0b8288c0c84fc7242763',
             'NOTES' => $notes,
             'PING_URL' => $ping_url,
@@ -246,11 +246,11 @@ class Module_admin_redirects
                 $val = stripslashes($val);
             }
 
-            if ((substr($key,0,10) == 'from_page_') && ($val != '')) {
-                $their_i = array_search($val,$found);
-                $i = substr($key,10);
+            if ((substr($key, 0, 10) == 'from_page_') && ($val != '')) {
+                $their_i = array_search($val, $found);
+                $i = substr($key, 10);
                 if (($their_i !== false) && (post_param('from_zone_' . $i) == post_param('from_zone_' . strval($their_i)))) {
-                    warn_exit(do_lang_tempcode('DUPLICATE_PAGE_REDIRECT',post_param('from_zone_' . $i) . ':' . $val));
+                    warn_exit(do_lang_tempcode('DUPLICATE_PAGE_REDIRECT', post_param('from_zone_' . $i) . ':' . $val));
                 }
                 $found[$i] = $val;
             }
@@ -265,13 +265,13 @@ class Module_admin_redirects
             }
 
             if ($val != '') {
-                $GLOBALS['SITE_DB']->query_insert('redirects',array(
+                $GLOBALS['SITE_DB']->query_insert('redirects', array(
                     'r_from_page' => post_param('from_page_' . $i),
                     'r_from_zone' => post_param('from_zone_' . $i),
                     'r_to_page' => post_param('to_page_' . $i),
                     'r_to_zone' => post_param('to_zone_' . $i),
-                    'r_is_transparent' => post_param_integer('is_transparent_' . $i,0)
-                ),false,true); // Avoid problem when same key entered twice
+                    'r_is_transparent' => post_param_integer('is_transparent_' . $i, 0)
+                ), false, true); // Avoid problem when same key entered twice
             }
         }
 
@@ -281,13 +281,13 @@ class Module_admin_redirects
         log_it('SET_REDIRECTS');
 
         // Personal notes
-        if (!is_null(post_param('notes',null))) {
+        if (!is_null(post_param('notes', null))) {
             $notes = post_param('notes');
-            set_long_value('notes',$notes);
+            set_long_value('notes', $notes);
         }
 
         // Redirect them back to editing screen
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    printer_friendly_block
  */
-
 class Hook_sw_printer_friendly_block
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_printer_friendly_block
             return array();
         }
 
-        return array(array(),array('side_printer_friendly' => array('PANEL_NONE','PANEL_NONE')));
+        return array(array(), array('side_printer_friendly' => array('PANEL_NONE', 'PANEL_NONE')));
     }
 }

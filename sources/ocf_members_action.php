@@ -61,13 +61,13 @@
  * @param  ?TIME                        When the member is on probation until (NULL: not on probation)
  * @return AUTO_LINK                    The ID of the new member.
  */
-function ocf_make_member($username,$password,$email_address,$secondary_groups,$dob_day,$dob_month,$dob_year,$custom_fields,$timezone = null,$primary_group = null,$validated = 1,$join_time = null,$last_visit_time = null,$theme = '',$avatar_url = null,$signature = '',$is_perm_banned = 0,$preview_posts = null,$reveal_age = 0,$title = '',$photo_url = '',$photo_thumb_url = '',$views_signatures = 1,$auto_monitor_contrib_content = null,$language = null,$allow_emails = 1,$allow_emails_from_staff = 1,$ip_address = null,$validated_email_confirm_code = '',$check_correctness = true,$password_compatibility_scheme = null,$salt = '',$last_submit_time = null,$id = null,$highlighted_name = 0,$pt_allow = '*',$pt_rules_text = '',$on_probation_until = null)
+function ocf_make_member($username, $password, $email_address, $secondary_groups, $dob_day, $dob_month, $dob_year, $custom_fields, $timezone = null, $primary_group = null, $validated = 1, $join_time = null, $last_visit_time = null, $theme = '', $avatar_url = null, $signature = '', $is_perm_banned = 0, $preview_posts = null, $reveal_age = 0, $title = '', $photo_url = '', $photo_thumb_url = '', $views_signatures = 1, $auto_monitor_contrib_content = null, $language = null, $allow_emails = 1, $allow_emails_from_staff = 1, $ip_address = null, $validated_email_confirm_code = '', $check_correctness = true, $password_compatibility_scheme = null, $salt = '', $last_submit_time = null, $id = null, $highlighted_name = 0, $pt_allow = '*', $pt_rules_text = '', $on_probation_until = null)
 {
     require_code('form_templates');
 
-    $preview_posts = take_param_int_modeavg($preview_posts,'m_preview_posts','f_members',0);
+    $preview_posts = take_param_int_modeavg($preview_posts, 'm_preview_posts', 'f_members', 0);
     if (is_null($auto_monitor_contrib_content)) {
-        $auto_monitor_contrib_content = (get_option('allow_auto_notifications') == '0')?0:1;
+        $auto_monitor_contrib_content = (get_option('allow_auto_notifications') == '0') ? 0 : 1;
     }
 
     if (is_null($password_compatibility_scheme)) {
@@ -101,7 +101,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
         } else {
             if ((get_option('random_avatars') == '1') && (!running_script('stress_test_loader'))) {
                 require_code('themes2');
-                $codes = get_all_image_ids_type('ocf_default_avatars/default_set',false,$GLOBALS['FORUM_DB']);
+                $codes = get_all_image_ids_type('ocf_default_avatars/default_set', false, $GLOBALS['FORUM_DB']);
                 shuffle($codes);
                 $results = array();
                 foreach ($codes as $code) {
@@ -109,7 +109,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
                         continue;
                     }
 
-                    $count = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','SUM(m_cache_num_posts)',array('m_avatar_url' => find_theme_image($code,false,true)));
+                    $count = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'SUM(m_cache_num_posts)', array('m_avatar_url' => find_theme_image($code, false, true)));
                     if (is_null($count)) {
                         $count = 0;
                     }
@@ -117,12 +117,12 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
                 }
                 @asort($results); // @'d as type checker fails for some odd reason
                 $found_avatars = array_keys($results);
-                $avatar_url = find_theme_image(array_shift($found_avatars),true,true);
+                $avatar_url = find_theme_image(array_shift($found_avatars), true, true);
             }
 
             if (is_null($avatar_url)) {
-                $GLOBALS['SITE_DB']->query_delete('theme_images',array('id' => 'ocf_default_avatars/default','path' => '')); // In case failure cached, gets very confusing
-                $avatar_url = find_theme_image('ocf_default_avatars/default',true,true);
+                $GLOBALS['SITE_DB']->query_delete('theme_images', array('id' => 'ocf_default_avatars/default', 'path' => '')); // In case failure cached, gets very confusing
+                $avatar_url = find_theme_image('ocf_default_avatars/default', true, true);
                 if (is_null($avatar_url)) {
                     $avatar_url = '';
                 }
@@ -131,13 +131,13 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
     }
 
     if ($check_correctness) {
-        if (!in_array($password_compatibility_scheme,array('ldap','httpauth'))) {
-            ocf_check_name_valid($username,null,($password_compatibility_scheme == '')?$password:null);
+        if (!in_array($password_compatibility_scheme, array('ldap', 'httpauth'))) {
+            ocf_check_name_valid($username, null, ($password_compatibility_scheme == '') ? $password : null);
         }
-        if ((!function_exists('has_actual_page_access')) || (!has_actual_page_access(get_member(),'admin_ocf_members'))) {
+        if ((!function_exists('has_actual_page_access')) || (!has_actual_page_access(get_member(), 'admin_ocf_members'))) {
             require_code('type_validation');
             if ((!is_valid_email_address($email_address)) && ($email_address != '')) {
-                warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS',escape_html($email_address)));
+                warn_exit(do_lang_tempcode('_INVALID_EMAIL_ADDRESS', escape_html($email_address)));
             }
         }
     }
@@ -176,19 +176,19 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
     if (($salt == '') && (($password_compatibility_scheme == '') || ($password_compatibility_scheme == 'temporary'))) {
         require_code('crypt');
         $salt = produce_salt();
-        $password_salted = ratchet_hash($password,$salt);
+        $password_salted = ratchet_hash($password, $salt);
     } else {
         $password_salted = $password;
     }
 
     // Supplement custom field values given with defaults, and check constraints
-    $all_fields = list_to_map('id',ocf_get_all_custom_fields_match(array_merge(array($primary_group),$secondary_groups)));
+    $all_fields = list_to_map('id', ocf_get_all_custom_fields_match(array_merge(array($primary_group), $secondary_groups)));
     require_code('fields');
     foreach ($all_fields as $field) {
         $field_id = $field['id'];
 
-        if (array_key_exists($field_id,$custom_fields)) {
-            if (($check_correctness) && ($field[array_key_exists('cf_show_on_join_form',$field)?'cf_show_on_join_form':'cf_required'] == 0) && ($field['cf_owner_set'] == 0) && (!has_actual_page_access(get_member(),'admin_ocf_members'))) {
+        if (array_key_exists($field_id, $custom_fields)) {
+            if (($check_correctness) && ($field[array_key_exists('cf_show_on_join_form', $field) ? 'cf_show_on_join_form' : 'cf_required'] == 0) && ($field['cf_owner_set'] == 0) && (!has_actual_page_access(get_member(), 'admin_ocf_members'))) {
                 access_denied('I_ERROR');
             }
         }
@@ -237,31 +237,31 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
         'm_profile_views' => 0,
         'm_total_sessions' => 0,
     );
-    $map += insert_lang_comcode('m_signature',$signature,4,$GLOBALS['FORUM_DB']);
-    $map += insert_lang_comcode('m_pt_rules_text',$pt_rules_text,4,$GLOBALS['FORUM_DB']);
+    $map += insert_lang_comcode('m_signature', $signature, 4, $GLOBALS['FORUM_DB']);
+    $map += insert_lang_comcode('m_pt_rules_text', $pt_rules_text, 4, $GLOBALS['FORUM_DB']);
     if (!is_null($id)) {
         $map['id'] = $id;
     }
-    $member_id = $GLOBALS['FORUM_DB']->query_insert('f_members',$map,true);
+    $member_id = $GLOBALS['FORUM_DB']->query_insert('f_members', $map, true);
 
     if (get_option('signup_fullname') == '1') {
-        $GLOBALS['FORUM_DRIVER']->set_custom_field($id,'fullname',preg_replace('# \(\d+\)$#','',$username));
+        $GLOBALS['FORUM_DRIVER']->set_custom_field($id, 'fullname', preg_replace('# \(\d+\)$#', '', $username));
     }
 
     if ($check_correctness) {
         // If it was an invite/recommendation, award the referrer
         if (addon_installed('recommend')) {
-            $inviter = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites','i_inviter',array('i_email_address' => $email_address),'ORDER BY i_time');
+            $inviter = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites', 'i_inviter', array('i_email_address' => $email_address), 'ORDER BY i_time');
             if (!is_null($inviter)) {
                 if (addon_installed('points')) {
                     require_code('points2');
                     require_lang('recommend');
-                    system_gift_transfer(do_lang('RECOMMEND_SITE_TO',$username,get_site_name()),intval(get_option('points_RECOMMEND_SITE')),$inviter);
+                    system_gift_transfer(do_lang('RECOMMEND_SITE_TO', $username, get_site_name()), intval(get_option('points_RECOMMEND_SITE')), $inviter);
                 }
                 if (addon_installed('chat')) {
                     require_code('chat2');
-                    friend_add($inviter,$member_id);
-                    friend_add($member_id,$inviter);
+                    friend_add($inviter, $member_id);
+                    friend_add($member_id, $inviter);
                 }
             }
         }
@@ -271,9 +271,9 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 
     // Store custom fields
     $row = array('mf_member_id' => $member_id);
-    $all_fields_types = collapse_2d_complexity('id','cf_type',$all_fields);
+    $all_fields_types = collapse_2d_complexity('id', 'cf_type', $all_fields);
     foreach ($custom_fields as $field_num => $value) {
-        if (!array_key_exists($field_num,$all_fields_types)) {
+        if (!array_key_exists($field_num, $all_fields_types)) {
             continue;
         } // Trying to set a field we're not allowed to (doesn't apply to our group)
 
@@ -281,17 +281,17 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
     }
 
     // Set custom field row
-    $all_fields_regardless = $GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_type','cf_default'));
+    $all_fields_regardless = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_type', 'cf_default'));
     foreach ($all_fields_regardless as $field) {
         $ob = get_fields_hook($field['cf_type']);
-        list(,,$storage_type) = $ob->get_field_value_row_bits($field);
+        list(, , $storage_type) = $ob->get_field_value_row_bits($field);
 
-        if (array_key_exists('field_' . strval($field['id']),$row)) {
+        if (array_key_exists('field_' . strval($field['id']), $row)) {
             $value = $row['field_' . strval($field['id'])];
         } else {
             $value = $field['cf_default'];
-            if (strpos($value,'|') !== false) {
-                $value = preg_replace('#\|.*$#','',$value);
+            if (strpos($value, '|') !== false) {
+                $value = preg_replace('#\|.*$#', '', $value);
             }
         }
 
@@ -300,25 +300,25 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
             switch ($storage_type) {
                 case 'short_trans':
                 case 'long_trans':
-                    $row = insert_lang_comcode('field_' . strval($field['id']),$value,3,$GLOBALS['FORUM_DB'])+$row;
+                    $row = insert_lang_comcode('field_' . strval($field['id']), $value, 3, $GLOBALS['FORUM_DB']) + $row;
                     break;
                 case 'integer':
-                    $row['field_' . strval($field['id'])] = ($value == '')?null:intval($value);
+                    $row['field_' . strval($field['id'])] = ($value == '') ? null : intval($value);
                     break;
                 case 'float':
-                    $row['field_' . strval($field['id'])] = ($value == '')?null:floatval($value);
+                    $row['field_' . strval($field['id'])] = ($value == '') ? null : floatval($value);
                     break;
             }
         }
     }
-    $GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields',$row);
+    $GLOBALS['FORUM_DB']->query_insert('f_member_custom_fields', $row);
 
     // Any secondary work...
 
     foreach ($secondary_groups as $g) {
         if ($g != $primary_group) {
-            $GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id' => $member_id,'gm_group_id' => $g),'',1);
-            $GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
+            $GLOBALS['FORUM_DB']->query_delete('f_group_members', array('gm_member_id' => $member_id, 'gm_group_id' => $g), '', 1);
+            $GLOBALS['FORUM_DB']->query_insert('f_group_members', array(
                 'gm_group_id' => $g,
                 'gm_member_id' => $member_id,
                 'gm_validated' => 1
@@ -326,7 +326,7 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
         }
     }
 
-    $GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+    $GLOBALS['FORUM_DB']->query_insert('f_group_join_log', array(
         'member_id' => $member_id,
         'usergroup_id' => $primary_group,
         'join_time' => time()
@@ -340,19 +340,19 @@ function ocf_make_member($username,$password,$email_address,$secondary_groups,$d
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('member',strval($member_id),null,null,true);
+        generate_resourcefs_moniker('member', strval($member_id), null, null, true);
     }
 
     $password_change_days = get_option('password_change_days');
-    if (intval($password_change_days)>0) {
+    if (intval($password_change_days) > 0) {
         if ($password_compatibility_scheme == '') {
             require_code('password_rules');
-            bump_password_change_date($member_id,$password,$password_salted,$salt);
+            bump_password_change_date($member_id, $password, $password_salted, $salt);
         }
     }
 
     require_code('member_mentions');
-    dispatch_member_mention_notifications('member',strval($member_id));
+    dispatch_member_mention_notifications('member', strval($member_id));
 
     if (function_exists('decache')) {
         decache('main_members');
@@ -371,7 +371,7 @@ function ocf_make_boiler_custom_field($type)
 {
     $_type = 'long_trans';
 
-    if (substr($type,0,3) == 'im_' || substr($type,0,3) == 'sn_') {
+    if (substr($type, 0, 3) == 'im_' || substr($type, 0, 3) == 'sn_') {
         $_type = 'short_text';
     } elseif ($type == 'location') {
         $_type = 'short_text';
@@ -402,7 +402,7 @@ function ocf_make_boiler_custom_field($type)
     global $CUSTOM_FIELD_CACHE;
     $CUSTOM_FIELD_CACHE = array();
 
-    if (substr($type,0,4) == 'ocp_') {
+    if (substr($type, 0, 4) == 'ocp_') {
         $title = do_lang('SPECIAL_CPF__' . $type);
         $description = '';
     } else {
@@ -410,7 +410,7 @@ function ocf_make_boiler_custom_field($type)
         $description = do_lang('DEFAULT_CPF_' . $type . '_DESCRIPTION');
     }
 
-    return ocf_make_custom_field($title,0,$description,'',$public_view,$owner_view,$owner_set,0,$_type,$required,$show_in_posts,$show_in_post_previews,null,'',true);
+    return ocf_make_custom_field($title, 0, $description, '', $public_view, $owner_view, $owner_set, 0, $_type, $required, $show_in_posts, $show_in_post_previews, null, '', true);
 }
 
 /**
@@ -423,7 +423,7 @@ function get_cpf_storage_for($type)
 {
     require_code('fields');
     $ob = get_fields_hook($type);
-    list(,,$storage_type) = $ob->get_field_value_row_bits(array('id' => NULL,'cf_type' => $type,'cf_default' => ''));
+    list(, , $storage_type) = $ob->get_field_value_row_bits(array('id' => null, 'cf_type' => $type, 'cf_default' => ''));
     $_type = 'SHORT_TEXT';
     switch ($storage_type) {
         case 'short_trans':
@@ -464,7 +464,7 @@ function get_cpf_storage_for($type)
             break;
     }
 
-    return array($_type,$index);
+    return array($_type, $index);
 }
 
 /**
@@ -489,10 +489,10 @@ function get_cpf_storage_for($type)
  * @param  BINARY                       Whether the field is to be shown on the join form
  * @return AUTO_LINK                    The ID of the new custom profile field.
  */
-function ocf_make_custom_field($name,$locked = 0,$description = '',$default = '',$public_view = 0,$owner_view = 0,$owner_set = 0,$encrypted = 0,$type = 'long_text',$required = 0,$show_in_posts = 0,$show_in_post_previews = 0,$order = null,$only_group = '',$no_name_dupe = false,$show_on_join_form = 0)
+function ocf_make_custom_field($name, $locked = 0, $description = '', $default = '', $public_view = 0, $owner_view = 0, $owner_set = 0, $encrypted = 0, $type = 'long_text', $required = 0, $show_in_posts = 0, $show_in_post_previews = 0, $order = null, $only_group = '', $no_name_dupe = false, $show_on_join_form = 0)
 {
     require_code('global4');
-    prevent_double_submit('ADD_CUSTOM_PROFILE_FIELD',null,$name);
+    prevent_double_submit('ADD_CUSTOM_PROFILE_FIELD', null, $name);
 
     $dbs_back = $GLOBALS['NO_DB_SCOPE_CHECK'];
     $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -508,7 +508,7 @@ function ocf_make_custom_field($name,$locked = 0,$description = '',$default = ''
     }
 
     if ($no_name_dupe) {
-        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $name));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('cf_name') => $name));
         if (!is_null($test)) {
             $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_back;
             return $test;
@@ -516,7 +516,7 @@ function ocf_make_custom_field($name,$locked = 0,$description = '',$default = ''
     }
 
     if (is_null($order)) {
-        $order = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields','MAX(cf_order)');
+        $order = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields', 'MAX(cf_order)');
         if (is_null($order)) {
             $order = 0;
         } else {
@@ -538,36 +538,36 @@ function ocf_make_custom_field($name,$locked = 0,$description = '',$default = ''
         'cf_only_group' => $only_group,
         'cf_show_on_join_form' => $show_on_join_form
     );
-    $map += insert_lang('cf_name',$name,2,$GLOBALS['FORUM_DB']);
-    $map += insert_lang('cf_description',$description,2,$GLOBALS['FORUM_DB']);
-    $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields',$map+array('cf_encrypted' => $encrypted),true,true);
+    $map += insert_lang('cf_name', $name, 2, $GLOBALS['FORUM_DB']);
+    $map += insert_lang('cf_description', $description, 2, $GLOBALS['FORUM_DB']);
+    $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields', $map + array('cf_encrypted' => $encrypted), true, true);
     if (is_null($id)) {
-        $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields',$map,true);
+        $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields', $map, true);
     } // Still upgrading, cf_encrypted does not exist yet
 
-    list($_type,$index) = get_cpf_storage_for($type);
+    list($_type, $index) = get_cpf_storage_for($type);
 
     require_code('database_action');
-    $GLOBALS['FORUM_DB']->add_table_field('f_member_custom_fields','field_' . strval($id),$_type); // Default will be made explicit when we insert rows
-    $indices_count = $GLOBALS['FORUM_DB']->query_select_value('db_meta_indices','COUNT(*)',array('i_table' => 'f_member_custom_fields'));
-    if ($indices_count<60) { // Could be 64 but trying to be careful here...
+    $GLOBALS['FORUM_DB']->add_table_field('f_member_custom_fields', 'field_' . strval($id), $_type); // Default will be made explicit when we insert rows
+    $indices_count = $GLOBALS['FORUM_DB']->query_select_value('db_meta_indices', 'COUNT(*)', array('i_table' => 'f_member_custom_fields'));
+    if ($indices_count < 60) { // Could be 64 but trying to be careful here...
         if ($index) {
             if ($_type != 'LONG_TEXT') {
-                $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf' . strval($id),array('field_' . strval($id)),'mf_member_id');
+                $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields', 'mcf' . strval($id), array('field_' . strval($id)), 'mf_member_id');
             }
-            if (strpos($_type,'_TEXT') !== false) {
-                $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf_ft_' . strval($id),array('field_' . strval($id)),'mf_member_id');
+            if (strpos($_type, '_TEXT') !== false) {
+                $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields', '#mcf_ft_' . strval($id), array('field_' . strval($id)), 'mf_member_id');
             }
-        } elseif ((strpos($type,'trans') !== false) || ($type == 'posting_field')) { // for efficient joins
-            $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf' . strval($id),array('field_' . strval($id)),'mf_member_id');
+        } elseif ((strpos($type, 'trans') !== false) || ($type == 'posting_field')) { // for efficient joins
+            $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields', 'mcf' . strval($id), array('field_' . strval($id)), 'mf_member_id');
         }
     }
 
-    log_it('ADD_CUSTOM_PROFILE_FIELD',strval($id),$name);
+    log_it('ADD_CUSTOM_PROFILE_FIELD', strval($id), $name);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('cpf',strval($id),null,null,true);
+        generate_resourcefs_moniker('cpf', strval($id), null, null, true);
     }
 
     if (function_exists('decache')) {

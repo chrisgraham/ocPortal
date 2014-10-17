@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_occle_fs_home
 {
     /**
@@ -28,7 +27,7 @@ class Hook_occle_fs_home
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~array                   The final directory listing (false: failure)
      */
-    public function listing($meta_dir,$meta_root_node,&$occle_fs)
+    public function listing($meta_dir, $meta_root_node, &$occle_fs)
     {
         $path = get_custom_file_base() . '/uploads/filedump';
         foreach ($meta_dir as $meta_dir_section) {
@@ -41,11 +40,11 @@ class Hook_occle_fs_home
         if (is_dir($path)) {
             $dh = opendir($path);
             while (($file = readdir($dh)) !== false) {
-                if (!should_ignore_file($file,IGNORE_ACCESS_CONTROLLERS)) {
+                if (!should_ignore_file($file, IGNORE_ACCESS_CONTROLLERS)) {
                     $listing[] = array(
                         $file,
-                        is_dir($path . '/' . $file)?OCCLEFS_DIR:OCCLEFS_FILE,
-                        is_dir($path . '/' . $file)?null:filesize($path . '/' . $file),
+                        is_dir($path . '/' . $file) ? OCCLEFS_DIR : OCCLEFS_FILE,
+                        is_dir($path . '/' . $file) ? null : filesize($path . '/' . $file),
                         filemtime($path . '/' . $file),
                     );
                 }
@@ -65,7 +64,7 @@ class Hook_occle_fs_home
      * @param  array                    A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
+    public function make_directory($meta_dir, $meta_root_node, $new_dir_name, &$occle_fs)
     {
         $new_dir_name = filter_naughty($new_dir_name);
         $path = get_custom_file_base() . '/uploads/filedump';
@@ -74,8 +73,8 @@ class Hook_occle_fs_home
         }
 
         if ((is_dir($path)) && (!file_exists($path . '/' . $new_dir_name))) {
-            $ret = @mkdir($path . '/' . $new_dir_name,0777) or warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path . '/' . $new_dir_name)));
-            fix_permissions($path . '/' . $new_dir_name,0777);
+            $ret = @mkdir($path . '/' . $new_dir_name, 0777) or warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html($path . '/' . $new_dir_name)));
+            fix_permissions($path . '/' . $new_dir_name, 0777);
             sync_file($path . '/' . $new_dir_name);
             return $ret;
         } else {
@@ -92,7 +91,7 @@ class Hook_occle_fs_home
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
+    public function remove_directory($meta_dir, $meta_root_node, $dir_name, &$occle_fs)
     {
         $dir_name = filter_naughty($dir_name);
         $path = get_custom_file_base() . '/uploads/filedump';
@@ -103,7 +102,7 @@ class Hook_occle_fs_home
         if ((is_dir($path)) && (file_exists($path . '/' . $dir_name))) {
             require_code('files');
             deldir_contents($path . '/' . $dir_name);
-            $ret = @rmdir($path . '/' . $dir_name) or warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path . '/' . $dir_name)));
+            $ret = @rmdir($path . '/' . $dir_name) or warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html($path . '/' . $dir_name)));
             sync_file($path . '/' . $dir_name);
             return true;
         } else {
@@ -120,7 +119,7 @@ class Hook_occle_fs_home
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function remove_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         $file_name = filter_naughty($file_name);
         $path = get_custom_file_base() . '/uploads/filedump';
@@ -146,7 +145,7 @@ class Hook_occle_fs_home
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         $file_name = filter_naughty($file_name);
         $path = get_custom_file_base() . '/uploads/filedump';
@@ -171,7 +170,7 @@ class Hook_occle_fs_home
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         $file_name = filter_naughty($file_name);
         $path = get_custom_file_base() . '/uploads/filedump';
@@ -180,10 +179,10 @@ class Hook_occle_fs_home
         }
 
         if ((is_dir($path)) && (((file_exists($path . '/' . $file_name)) && (is_writable_wrap($path . '/' . $file_name))) || ((!file_exists($path . '/' . $file_name)) && (is_writable_wrap($path))))) {
-            $fh = @fopen($path . '/' . $file_name,GOOGLE_APPENGINE?'wb':'wt') or intelligent_write_error($path . '/' . $file_name);
-            $output = fwrite($fh,$contents);
+            $fh = @fopen($path . '/' . $file_name, GOOGLE_APPENGINE ? 'wb' : 'wt') or intelligent_write_error($path . '/' . $file_name);
+            $output = fwrite($fh, $contents);
             fclose($fh);
-            if ($output<strlen($contents)) {
+            if ($output < strlen($contents)) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
             fix_permissions($path . '/' . $file_name);

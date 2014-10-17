@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_fs_etc
 {
     /**
@@ -28,29 +27,29 @@ class Hook_occle_fs_etc
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~array                   The final directory listing (false: failure)
      */
-    public function listing($meta_dir,$meta_root_node,&$occle_fs)
+    public function listing($meta_dir, $meta_root_node, &$occle_fs)
     {
         require_all_lang();
 
         require_code('resource_fs');
 
-        if (count($meta_dir)>0) {
+        if (count($meta_dir) > 0) {
             return false;
         } // Directory doesn't exist
         load_options();
 
-        $query = 'SELECT param_a,MAX(date_and_time) AS date_and_time FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','CONFIGURATION') . ' GROUP BY param_a';
-        $modification_times = collapse_2d_complexity('param_a','date_and_time',$GLOBALS['SITE_DB']->query($query));
+        $query = 'SELECT param_a,MAX(date_and_time) AS date_and_time FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type', 'CONFIGURATION') . ' GROUP BY param_a';
+        $modification_times = collapse_2d_complexity('param_a', 'date_and_time', $GLOBALS['SITE_DB']->query($query));
 
         $listing = array();
-        $hooks = find_all_hooks('systems','config');
+        $hooks = find_all_hooks('systems', 'config');
         foreach (array_keys($hooks) as $option) {
             $value = get_option($option);
             if (is_null($value)) {
                 continue;
             }
 
-            $modification_time = array_key_exists($option,$modification_times)?$modification_times[$option]:null;
+            $modification_time = array_key_exists($option, $modification_times) ? $modification_times[$option] : null;
 
             $listing[] = array(
                 $option,
@@ -61,7 +60,7 @@ class Hook_occle_fs_etc
         }
 
         require_code('resource_fs');
-        $hooks = find_all_hooks('systems','occle_fs_extended_config');
+        $hooks = find_all_hooks('systems', 'occle_fs_extended_config');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/occle_fs_extended_config/' . filter_naughty($hook));
             $ob = object_factory('Hook_occle_fs_extended_config__' . $hook);
@@ -70,7 +69,7 @@ class Hook_occle_fs_etc
             $listing[] = array(
                 '_' . $hook . 's' . '.' . RESOURCEFS_DEFAULT_EXTENSION,
                 OCCLEFS_FILE,
-                NULL/*don't calculate a filesize*/,
+                null/*don't calculate a filesize*/,
                 $modification_time,
             );
         }
@@ -87,7 +86,7 @@ class Hook_occle_fs_etc
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
+    public function make_directory($meta_dir, $meta_root_node, $new_dir_name, &$occle_fs)
     {
         return false;
     }
@@ -101,7 +100,7 @@ class Hook_occle_fs_etc
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
+    public function remove_directory($meta_dir, $meta_root_node, $dir_name, &$occle_fs)
     {
         return false;
     }
@@ -115,9 +114,9 @@ class Hook_occle_fs_etc
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function remove_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
-        if (count($meta_dir)>0) {
+        if (count($meta_dir) > 0) {
             return false;
         } // Directory doesn't exist
 
@@ -133,23 +132,23 @@ class Hook_occle_fs_etc
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
-        if (count($meta_dir)>0) {
+        if (count($meta_dir) > 0) {
             return false;
         } // Directory doesn't exist
 
         require_code('resource_fs');
 
-        $hooks = find_all_hooks('systems','occle_fs_extended_config');
-        $extended_config_filename = preg_replace('#^\_(.*)s' . preg_quote('.' . RESOURCEFS_DEFAULT_EXTENSION,'#') . '$#','${1}',$file_name);
-        if (array_key_exists($extended_config_filename,$hooks)) {
+        $hooks = find_all_hooks('systems', 'occle_fs_extended_config');
+        $extended_config_filename = preg_replace('#^\_(.*)s' . preg_quote('.' . RESOURCEFS_DEFAULT_EXTENSION, '#') . '$#', '${1}', $file_name);
+        if (array_key_exists($extended_config_filename, $hooks)) {
             require_code('hooks/systems/occle_fs_extended_config/' . filter_naughty($extended_config_filename));
             $ob = object_factory('Hook_occle_fs_extended_config__' . $extended_config_filename);
-            return $ob->read_file($meta_dir,$meta_root_node,$file_name,$occle_fs);
+            return $ob->read_file($meta_dir, $meta_root_node, $file_name, $occle_fs);
         }
 
-        $option = get_option($file_name,true);
+        $option = get_option($file_name, true);
         if (is_null($option)) {
             return false;
         }
@@ -166,29 +165,29 @@ class Hook_occle_fs_etc
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         require_code('config2');
         require_code('resource_fs');
 
-        if (count($meta_dir)>0) {
+        if (count($meta_dir) > 0) {
             return false;
         } // Directory doesn't exist
 
-        $hooks = find_all_hooks('systems','occle_fs_extended_config');
-        $extended_config_filename = preg_replace('#^\_(.*)s' . preg_quote('.' . RESOURCEFS_DEFAULT_EXTENSION,'#') . '$#','${1}',$file_name);
-        if (array_key_exists($extended_config_filename,$hooks)) {
+        $hooks = find_all_hooks('systems', 'occle_fs_extended_config');
+        $extended_config_filename = preg_replace('#^\_(.*)s' . preg_quote('.' . RESOURCEFS_DEFAULT_EXTENSION, '#') . '$#', '${1}', $file_name);
+        if (array_key_exists($extended_config_filename, $hooks)) {
             require_code('hooks/systems/occle_fs_extended_config/' . filter_naughty($extended_config_filename));
             $ob = object_factory('Hook_occle_fs_extended_config__' . $extended_config_filename);
-            return $ob->write_file($meta_dir,$meta_root_node,$file_name,$contents,$occle_fs);
+            return $ob->write_file($meta_dir, $meta_root_node, $file_name, $contents, $occle_fs);
         }
 
-        $value = get_option($file_name,true);
+        $value = get_option($file_name, true);
         if (is_null($value)) {
             return false;
         } // File doesn't exist
 
-        set_option($file_name,$contents);
+        set_option($file_name, $contents);
 
         return true;
     }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    image_slider
  */
-
 class Block_main_image_slider
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_image_slider
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param','time','zone','order','as_guest','transitions','width','height');
+        $info['parameters'] = array('param', 'time', 'zone', 'order', 'as_guest', 'transitions', 'width', 'height');
         return $info;
     }
 
@@ -54,18 +53,18 @@ class Block_main_image_slider
 
         require_code('galleries');
 
-        $cat = empty($map['param'])?'root':$map['param'];
-        $mill = array_key_exists('time',$map)?intval($map['time']):8000; // milliseconds between animations
-        $width = empty($map['width'])?750:intval($map['width']);
-        $height = empty($map['height'])?300:intval($map['height']);
-        $zone = array_key_exists('zone',$map)?$map['zone']:get_module_zone('galleries');
-        $order = array_key_exists('order',$map)?$map['order']:'';
+        $cat = empty($map['param']) ? 'root' : $map['param'];
+        $mill = array_key_exists('time', $map) ? intval($map['time']) : 8000; // milliseconds between animations
+        $width = empty($map['width']) ? 750 : intval($map['width']);
+        $height = empty($map['height']) ? 300 : intval($map['height']);
+        $zone = array_key_exists('zone', $map) ? $map['zone'] : get_module_zone('galleries');
+        $order = array_key_exists('order', $map) ? $map['order'] : '';
 
-        $_transitions = array_key_exists('transitions',$map)?$map['transitions']:'cube|cubeRandom|block|cubeStop|cubeHide|cubeSize|horizontal|showBars|showBarsRandom|tube|fade|fadeFour|paralell|blind|blindHeight|blindWidth|directionTop|directionBottom|directionRight|directionLeft|cubeStopRandom|cubeSpread|cubeJelly|glassCube|glassBlock|circles|circlesInside|circlesRotate|cubeShow|upBars|downBars|hideBars|swapBars|swapBarsBack|swapBlocks|cut|random|randomSmart';
-        $transitions = ($_transitions == '')?array():explode('|',$_transitions);
+        $_transitions = array_key_exists('transitions', $map) ? $map['transitions'] : 'cube|cubeRandom|block|cubeStop|cubeHide|cubeSize|horizontal|showBars|showBarsRandom|tube|fade|fadeFour|paralell|blind|blindHeight|blindWidth|directionTop|directionBottom|directionRight|directionLeft|cubeStopRandom|cubeSpread|cubeJelly|glassCube|glassBlock|circles|circlesInside|circlesRotate|cubeShow|upBars|downBars|hideBars|swapBars|swapBarsBack|swapBlocks|cut|random|randomSmart';
+        $transitions = ($_transitions == '') ? array() : explode('|', $_transitions);
 
         require_code('ocfiltering');
-        $cat_select = ocfilter_to_sqlfragment($cat,'cat','galleries','parent_id','cat','name',false,false);
+        $cat_select = ocfilter_to_sqlfragment($cat, 'cat', 'galleries', 'parent_id', 'cat', 'name', false, false);
 
         $extra_join_image = '';
         $extra_join_video = '';
@@ -74,25 +73,25 @@ class Block_main_image_slider
 
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            $as_guest = array_key_exists('as_guest',$map)?($map['as_guest'] == '1'):false;
-            $viewing_member_id = $as_guest?$GLOBALS['FORUM_DRIVER']->get_guest_id():mixed();
-            list($privacy_join_video,$privacy_where_video) = get_privacy_where_clause('video','r',$viewing_member_id);
-            list($privacy_join_image,$privacy_where_image) = get_privacy_where_clause('image','r',$viewing_member_id);
+            $as_guest = array_key_exists('as_guest', $map) ? ($map['as_guest'] == '1') : false;
+            $viewing_member_id = $as_guest ? $GLOBALS['FORUM_DRIVER']->get_guest_id() : mixed();
+            list($privacy_join_video, $privacy_where_video) = get_privacy_where_clause('video', 'r', $viewing_member_id);
+            list($privacy_join_image, $privacy_where_image) = get_privacy_where_clause('image', 'r', $viewing_member_id);
             $extra_join_image .= $privacy_join_image;
             $extra_join_video .= $privacy_join_video;
             $extra_where_image .= $privacy_where_image;
             $extra_where_video .= $privacy_where_video;
         }
 
-        $image_rows = $GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,url,title,description,\'image\' AS content_type FROM ' . get_table_prefix() . 'images r ' . $extra_join_image . ' WHERE ' . $cat_select . $extra_where_image . ' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,null,false,true,array('title' => 'SHORT_TRANS','description' => 'LONG_TRANS'));
-        $video_rows = $GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,thumb_url AS url,title,description,\'video\' AS content_type FROM ' . get_table_prefix() . 'videos r ' . $extra_join_video . ' WHERE ' . $cat_select . $extra_where_video . ' AND validated=1 ORDER BY add_date ASC',100/*reasonable amount*/,null,false,true,array('title' => 'SHORT_TRANS','description' => 'LONG_TRANS'));
+        $image_rows = $GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,url,title,description,\'image\' AS content_type FROM ' . get_table_prefix() . 'images r ' . $extra_join_image . ' WHERE ' . $cat_select . $extra_where_image . ' AND validated=1 ORDER BY add_date ASC', 100/*reasonable amount*/, null, false, true, array('title' => 'SHORT_TRANS', 'description' => 'LONG_TRANS'));
+        $video_rows = $GLOBALS['SITE_DB']->query('SELECT r.id,thumb_url,thumb_url AS url,title,description,\'video\' AS content_type FROM ' . get_table_prefix() . 'videos r ' . $extra_join_video . ' WHERE ' . $cat_select . $extra_where_video . ' AND validated=1 ORDER BY add_date ASC', 100/*reasonable amount*/, null, false, true, array('title' => 'SHORT_TRANS', 'description' => 'LONG_TRANS'));
         $all_rows = array();
         if ($order != '') {
-            foreach (explode(',',$order) as $o) {
-                $num = substr($o,1);
+            foreach (explode(',', $order) as $o) {
+                $num = substr($o, 1);
 
                 if (is_numeric($num)) {
-                    switch (substr($o,0,1)) {
+                    switch (substr($o, 0, 1)) {
                         case 'i':
                             foreach ($image_rows as $i => $row) {
                                 if ($row['id'] == intval($num)) {
@@ -114,7 +113,7 @@ class Block_main_image_slider
             }
         }
 
-        $all_rows = array_merge($all_rows,$image_rows,$video_rows);
+        $all_rows = array_merge($all_rows, $image_rows, $video_rows);
 
         require_code('images');
 
@@ -130,12 +129,12 @@ class Block_main_image_slider
                 $full_url = get_custom_base_url() . '/' . $full_url;
             }
 
-            $view_url = build_url(array('page' => 'galleries','type' => $row['content_type'],'id' => $row['id']),$zone);
+            $view_url = build_url(array('page' => 'galleries', 'type' => $row['content_type'], 'id' => $row['id']), $zone);
 
-            $just_media_row = db_map_restrict($row,array('id','description'));
+            $just_media_row = db_map_restrict($row, array('id', 'description'));
 
             $title = get_translated_text($row['title']);
-            $description = get_translated_tempcode($row['content_type'] . 's',$just_media_row,'description');
+            $description = get_translated_tempcode($row['content_type'] . 's', $just_media_row, 'description');
 
             $images[] = array(
                 'URL' => $url,
@@ -143,16 +142,16 @@ class Block_main_image_slider
                 'VIEW_URL' => $view_url,
                 'TITLE' => $title,
                 'DESCRIPTION' => $description,
-                'TRANSITION_TYPE' => isset($transitions[$i])?$transitions[$i]:'',
+                'TRANSITION_TYPE' => isset($transitions[$i]) ? $transitions[$i] : '',
             );
         }
 
         if (count($images) == 0) {
             $submit_url = mixed();
-            if ((has_actual_page_access(null,'cms_galleries',null,null)) && (has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries',array('galleries',$cat))) && (can_submit_to_gallery($cat))) {
-                $submit_url = build_url(array('page' => 'cms_galleries','type' => 'ad','cat' => $cat,'redirect' => SELF_REDIRECT),get_module_zone('cms_galleries'));
+            if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $cat))) && (can_submit_to_gallery($cat))) {
+                $submit_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => $cat, 'redirect' => SELF_REDIRECT), get_module_zone('cms_galleries'));
             }
-            return do_template('BLOCK_NO_ENTRIES',array(
+            return do_template('BLOCK_NO_ENTRIES', array(
                 'HIGH' => false,
                 'TITLE' => do_lang_tempcode('GALLERY'),
                 'MESSAGE' => do_lang_tempcode('NO_ENTRIES'),
@@ -161,13 +160,13 @@ class Block_main_image_slider
             ));
         }
 
-        $nice_cat = str_replace('*','',$cat);
-        if (preg_match('#^[\w\_]+$#',$nice_cat) == 0) {
+        $nice_cat = str_replace('*', '', $cat);
+        if (preg_match('#^[\w\_]+$#', $nice_cat) == 0) {
             $nice_cat = 'root';
         }
-        $gallery_url = build_url(array('page' => 'galleries','type' => 'misc','id' => $nice_cat),$zone);
+        $gallery_url = build_url(array('page' => 'galleries', 'type' => 'misc', 'id' => $nice_cat), $zone);
 
-        return do_template('BLOCK_MAIN_IMAGE_SLIDER',array(
+        return do_template('BLOCK_MAIN_IMAGE_SLIDER', array(
             'GALLERY_URL' => $gallery_url,
             'IMAGES' => $images,
             'MILL' => strval($mill),

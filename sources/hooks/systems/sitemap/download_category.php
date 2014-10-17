@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_sitemap_download_category extends Hook_sitemap_content
 {
     protected $content_type = 'download_category';
@@ -57,11 +56,11 @@ class Hook_sitemap_download_category extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   List of node structures (NULL: working via callback).
      */
-    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    public function get_virtual_nodes($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $return_anyway = false)
     {
-        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
+        $nodes = ($callback === null || $return_anyway) ? array() : mixed();
 
-        if (($valid_node_types !== NULL) && (!in_array($this->content_type,$valid_node_types))) {
+        if (($valid_node_types !== null) && (!in_array($this->content_type, $valid_node_types))) {
             return $nodes;
         }
 
@@ -69,28 +68,29 @@ class Hook_sitemap_download_category extends Hook_sitemap_content
             return $nodes;
         }
 
-        $page = $this->_make_zone_concrete($zone,$page_link);
+        $page = $this->_make_zone_concrete($zone, $page_link);
 
-        if ($child_cutoff !== NULL) {
-            $count = $GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)',array('parent_id' => db_get_first_id()));
-            if ($count>$child_cutoff) {
+        if ($child_cutoff !== null) {
+            $count = $GLOBALS['SITE_DB']->query_select_value('download_categories', 'COUNT(*)', array('parent_id' => db_get_first_id()));
+            if ($count > $child_cutoff) {
                 return $nodes;
             }
         }
 
         $start = 0;
         do {
-            $rows = $GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('parent_id' => NULL),'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+            $rows = $GLOBALS['SITE_DB']->query_select('download_categories', array('*'), array('parent_id' => null), '', SITEMAP_MAX_ROWS_PER_LOOP, $start);
             foreach ($rows as $row) {
                 $child_page_link = $zone . ':' . $page . ':' . $this->screen_type . ':' . strval($row['id']);
-                $node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-                if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+                $node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+                if (($callback === null || $return_anyway) && ($node !== null)) {
                     $nodes[] = $node;
                 }
             }
 
             $start += SITEMAP_MAX_ROWS_PER_LOOP;
-        } while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
+        }
+        while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
 
         return $nodes;
     }
@@ -114,13 +114,13 @@ class Hook_sitemap_download_category extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
-        $_ = $this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-        if ($_ === NULL) {
-            return NULL;
+        $_ = $this->_create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+        if ($_ === null) {
+            return null;
         }
-        list($content_id,$row,$partial_struct) = $_;
+        list($content_id, $row, $partial_struct) = $_;
 
         // level 0 = root
         // level 1 = zone
@@ -131,24 +131,24 @@ class Hook_sitemap_download_category extends Hook_sitemap_content
         }
 
         $struct = array(
-            'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
-            'sitemap_refreshfreq' => 'weekly',
+                'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
+                'sitemap_refreshfreq' => 'weekly',
 
-            'privilege_page' => $this->get_privilege_page($page_link),
-        )+$partial_struct;
+                'privilege_page' => $this->get_privilege_page($page_link),
+            ) + $partial_struct;
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
         // Categories done after node callback, to ensure sensible ordering
-        $children = $this->_get_children_nodes($content_id,$page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+        $children = $this->_get_children_nodes($content_id, $page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
         $struct['children'] = $children;
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

@@ -24,18 +24,18 @@ class authors_test_set extends ocp_test_case
 
         require_code('authors');
 
-        add_author('author1','www.google.com',3,'happy','play','','');
+        add_author('author1', 'www.google.com', 3, 'happy', 'play', '', '');
 
-        add_author('author2','www.yahoo.com',3,'welcome','drama','','');
+        add_author('author2', 'www.yahoo.com', 3, 'welcome', 'drama', '', '');
 
         // Test the forum was actually created
-        $this->assertTrue('author1' == $GLOBALS['FORUM_DB']->query_select_value('authors','author',array('author' => 'author1')));
+        $this->assertTrue('author1' == $GLOBALS['FORUM_DB']->query_select_value('authors', 'author', array('author' => 'author1')));
     }
 
     public function testMergeauthors()
     {
         // Test the forum edits
-        merge_authors('author1','author2');
+        merge_authors('author1', 'author2');
     }
 
     public function tearDown()

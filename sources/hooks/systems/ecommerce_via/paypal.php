@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_paypal
 {
     /**
@@ -27,7 +26,7 @@ class Hook_paypal
      */
     public function _get_payment_address()
     {
-        return trim(ecommerce_test_mode()?get_option('ipn_test'):get_option('ipn'));
+        return trim(ecommerce_test_mode() ? get_option('ipn_test') : get_option('ipn'));
     }
 
     /**
@@ -50,7 +49,7 @@ class Hook_paypal
      * @param  ID_TEXT                  The currency to use.
      * @return tempcode                 The button.
      */
-    public function make_transaction_button($type_code,$item_name,$purchase_id,$amount,$currency)
+    public function make_transaction_button($type_code, $item_name, $purchase_id, $amount, $currency)
     {
         $payment_address = $this->_get_payment_address();
         $ipn_url = $this->_get_remote_form_url();
@@ -66,7 +65,7 @@ class Hook_paypal
             $user_details['country'] = get_ocp_cpf('country');
         }
 
-        return do_template('ECOM_BUTTON_VIA_PAYPAL',array(
+        return do_template('ECOM_BUTTON_VIA_PAYPAL', array(
             '_GUID' => 'b0d48992ed17325f5e2330bf90c85762',
             'TYPE_CODE' => $type_code,
             'ITEM_NAME' => $item_name,
@@ -92,13 +91,13 @@ class Hook_paypal
      * @param  ID_TEXT                  The currency to use.
      * @return tempcode                 The button.
      */
-    public function make_subscription_button($type_code,$item_name,$purchase_id,$amount,$length,$length_units,$currency)
+    public function make_subscription_button($type_code, $item_name, $purchase_id, $amount, $length, $length_units, $currency)
     {
         // NB: We don't support PayPal's "recur_times", but that's fine because it's really not that useful (we can just set a long non-recurring subscription to the same effect)
 
         $payment_address = $this->_get_payment_address();
         $ipn_url = $this->_get_remote_form_url();
-        return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL',array(
+        return do_template('ECOM_SUBSCRIPTION_BUTTON_VIA_PAYPAL', array(
             '_GUID' => '7c8b9ce1f60323e118da1bef416adff3',
             'TYPE_CODE' => $type_code,
             'ITEM_NAME' => $item_name,
@@ -120,7 +119,7 @@ class Hook_paypal
      */
     public function make_cancel_button($purchase_id)
     {
-        return do_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL',array('_GUID' => '091d7449161eb5c4f6129cf89e5e8e7e','PURCHASE_ID' => $purchase_id));
+        return do_template('ECOM_CANCEL_BUTTON_VIA_PAYPAL', array('_GUID' => '091d7449161eb5c4f6129cf89e5e8e7e', 'PURCHASE_ID' => $purchase_id));
     }
 
     /**
@@ -131,7 +130,7 @@ class Hook_paypal
      */
     public function auto_cancel($trans_id)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -142,7 +141,7 @@ class Hook_paypal
      */
     public function get_transaction_fee($amount)
     {
-        return round(0.25+0.034*$amount,2);
+        return round(0.25 + 0.034 * $amount, 2);
     }
 
     /**
@@ -152,36 +151,36 @@ class Hook_paypal
      */
     public function handle_transaction()
     {
-        $purchase_id = post_param_integer('custom','-1');
+        $purchase_id = post_param_integer('custom', '-1');
 
         // Read in stuff we'll just log
-        $reason_code = post_param('reason_code','');
-        $pending_reason = post_param('pending_reason','');
-        $memo = post_param('memo','');
+        $reason_code = post_param('reason_code', '');
+        $pending_reason = post_param('pending_reason', '');
+        $memo = post_param('memo', '');
         foreach (array_keys($_POST) as $key) { // Custom product options go onto the memo
             $matches = array();
-            if (preg_match('#^option_selection(\d+)$#',$key,$matches) != 0) {
-                $memo .= "\n" . post_param('option_name' . $matches[1],'') . ' = ' . post_param('option_selection' . $matches[1],'');
+            if (preg_match('#^option_selection(\d+)$#', $key, $matches) != 0) {
+                $memo .= "\n" . post_param('option_name' . $matches[1], '') . ' = ' . post_param('option_selection' . $matches[1], '');
             }
         }
-        $txn_id = post_param('txn_id',''); // May be blank for subscription, will be overwritten for them
-        $parent_txn_id = post_param('parent_txn_id','-1');
+        $txn_id = post_param('txn_id', ''); // May be blank for subscription, will be overwritten for them
+        $parent_txn_id = post_param('parent_txn_id', '-1');
 
         // Work out how much money was made for the hook
-        $mc_gross = post_param('mc_gross',''); // May be blank for subscription
-        $tax = post_param('tax','');
-        if (($tax != '') && (intval($tax)>0) && ($mc_gross != '')) {
-            $mc_gross = float_to_raw_string(floatval($mc_gross)-floatval($tax));
+        $mc_gross = post_param('mc_gross', ''); // May be blank for subscription
+        $tax = post_param('tax', '');
+        if (($tax != '') && (intval($tax) > 0) && ($mc_gross != '')) {
+            $mc_gross = float_to_raw_string(floatval($mc_gross) - floatval($tax));
         }
         /*$shipping=post_param('shipping','');  Actually, the hook will have added shipping to the overall product cost
         if (($shipping!='') && (intval($shipping)>0) && ($mc_gross!='')) $mc_gross=float_to_raw_string(floatval($mc_gross)-floatval($shipping));*/
-        $mc_currency = post_param('mc_currency',''); // May be blank for subscription
+        $mc_currency = post_param('mc_currency', ''); // May be blank for subscription
 
         // More stuff that we might need
-        $period = post_param('period3','');
+        $period = post_param('period3', '');
 
         // Valid transaction types / pre-processing for $item_name based on mapping rules
-        $txn_type = post_param('txn_type',null);
+        $txn_type = post_param('txn_type', null);
         switch ($txn_type) {
             // Product
             case 'web_accept':
@@ -201,7 +200,7 @@ class Hook_paypal
             // Cart
             case 'cart':
                 require_lang('shopping');
-                $item_name = do_lang('CART_ORDER',$purchase_id); // We will detect as the correct cart-order from the re-mapped item_name. This is a specially recognised item naming, reserved for cart products.
+                $item_name = do_lang('CART_ORDER', $purchase_id); // We will detect as the correct cart-order from the re-mapped item_name. This is a specially recognised item naming, reserved for cart products.
                 break;
 
             // (Non-supported)
@@ -226,7 +225,7 @@ class Hook_paypal
             default:
                 exit(); // Non-supported for IPN in ocPortal
         }
-        $payment_status = post_param('payment_status','');
+        $payment_status = post_param('payment_status', '');
         switch ($payment_status) {
             // Subscription
             case '': // We map certain values of txn_type for subscriptions over to payment_status, as subscriptions have no payment status but similar data in txn_type which we do not use
@@ -240,7 +239,7 @@ class Hook_paypal
                         }
 
                         // SECURITY: Check user is not giving themselves a free trial (we don't support trials)
-                        if ((post_param('amount1','') != '') || (post_param('amount2','') != '') || (post_param('mc_amount1','') != '') || (post_param('mc_amount2','') != '') || (post_param('period1','') != '') || (post_param('period2','') != '')) {
+                        if ((post_param('amount1', '') != '') || (post_param('amount2', '') != '') || (post_param('mc_amount1', '') != '') || (post_param('mc_amount2', '') != '') || (post_param('period1', '') != '') || (post_param('period2', '') != '')) {
                             fatal_ipn_exit(do_lang('IPN_BAD_TRIAL'));
                         }
 
@@ -282,7 +281,7 @@ class Hook_paypal
             case 'Created':
                 $payment_status = 'Completed';
                 break;
-            
+
             // (Non-supported)
             case 'Reversed':
             case 'Refunded':
@@ -296,7 +295,7 @@ class Hook_paypal
         }
 
         // SECURITY: Ignore sandbox transactions if we are not in test mode
-        if (post_param_integer('test_ipn',0) == 1) {
+        if (post_param_integer('test_ipn', 0) == 1) {
             if (!ecommerce_test_mode()) {
                 exit();
             }
@@ -305,21 +304,22 @@ class Hook_paypal
         // SECURITY: Post back to PayPal system to validate
         if ((!ecommerce_test_mode()) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())/*allow debugging if your test IP was intentionally back-doored*/)) {
             require_code('files');
-            $pure_post = isset($GLOBALS['PURE_POST'])?$GLOBALS['PURE_POST']:$_POST;
+            $pure_post = isset($GLOBALS['PURE_POST']) ? $GLOBALS['PURE_POST'] : $_POST;
             if (get_magic_quotes_gpc()) {
-                $pure_post = array_map('stripslashes',$pure_post);
+                $pure_post = array_map('stripslashes', $pure_post);
             }
             $x = 0;
             $res = mixed();
             do { // Try up to 3 times
-                $res = http_download_file('http://' . (ecommerce_test_mode()?'www.sandbox.paypal.com':'www.paypal.com') . '/cgi-bin/webscr',null,false,false,'ocPortal',$pure_post+array('cmd' => '_notify-validate'));
+                $res = http_download_file('http://' . (ecommerce_test_mode() ? 'www.sandbox.paypal.com' : 'www.paypal.com') . '/cgi-bin/webscr', null, false, false, 'ocPortal', $pure_post + array('cmd' => '_notify-validate'));
                 $x++;
-            } while ((is_null($res)) && ($x<3));
+            }
+            while ((is_null($res)) && ($x < 3));
             if (is_null($res)) {
                 fatal_ipn_exit(do_lang('IPN_SOCKET_ERROR'));
             }
-            if (!(strcmp($res,'VERIFIED') == 0)) {
-                fatal_ipn_exit(do_lang('IPN_UNVERIFIED') . ' - ' . $res . ' - ' . flatten_slashed_array($pure_post,true),strpos($res,'<html') !== false);
+            if (!(strcmp($res, 'VERIFIED') == 0)) {
+                fatal_ipn_exit(do_lang('IPN_UNVERIFIED') . ' - ' . $res . ' - ' . flatten_slashed_array($pure_post, true), strpos($res, '<html') !== false);
             }
         }
 
@@ -341,7 +341,7 @@ class Hook_paypal
             $this->store_shipping_address($purchase_id);
         }
 
-        return array($purchase_id,$item_name,$payment_status,$reason_code,$pending_reason,$memo,$mc_gross,$mc_currency,$txn_id,$parent_txn_id,$period);
+        return array($purchase_id, $item_name, $payment_status, $reason_code, $pending_reason, $memo, $mc_gross, $mc_currency, $txn_id, $parent_txn_id, $period);
     }
 
     /**
@@ -352,13 +352,13 @@ class Hook_paypal
      * @param  AUTO_LINK                Order ID.
      * @return tempcode                 The button.
      */
-    public function make_cart_transaction_button($items,$currency,$order_id)
+    public function make_cart_transaction_button($items, $currency, $order_id)
     {
         $payment_address = $this->_get_payment_address();
 
         $ipn_url = $this->_get_remote_form_url();
 
-        $notification_text = do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT',strval($order_id));
+        $notification_text = do_lang_tempcode('CHECKOUT_NOTIFICATION_TEXT', strval($order_id));
 
         $user_details = array();
 
@@ -372,7 +372,7 @@ class Hook_paypal
             $user_details['country'] = get_ocp_cpf('country');
         }
 
-        return do_template('ECOM_CART_BUTTON_VIA_PAYPAL',array(
+        return do_template('ECOM_CART_BUTTON_VIA_PAYPAL', array(
             '_GUID' => '89b7edf976ef0143dd8dfbabd3378c95',
             'ITEMS' => $items,
             'CURRENCY' => $currency,
@@ -392,28 +392,28 @@ class Hook_paypal
      */
     public function store_shipping_address($order_id)
     {
-        if (is_null(post_param('address_name',null))) {
-            return NULL;
+        if (is_null(post_param('address_name', null))) {
+            return null;
         }
 
-        if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order_addresses','id',array('order_id' => $order_id)))) {
+        if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('shopping_order_addresses', 'id', array('order_id' => $order_id)))) {
             $shipping_address = array();
             $shipping_address['order_id'] = $order_id;
-            $shipping_address['address_name'] = post_param('address_name','');
-            $shipping_address['address_street'] = post_param('address_street','');
-            $shipping_address['address_zip'] = post_param('address_zip','');
-            $shipping_address['address_city'] = post_param('address_city','');
+            $shipping_address['address_name'] = post_param('address_name', '');
+            $shipping_address['address_street'] = post_param('address_street', '');
+            $shipping_address['address_zip'] = post_param('address_zip', '');
+            $shipping_address['address_city'] = post_param('address_city', '');
             $shipping_address['address_state'] = '';
-            $shipping_address['address_country'] = post_param('address_country','');
-            $shipping_address['receiver_email'] = post_param('payer_email','');
-            $shipping_address['contact_phone'] = post_param('contact_phone','');
-            $shipping_address['first_name'] = post_param('first_name','');
-            $shipping_address['last_name'] = post_param('last_name','');
+            $shipping_address['address_country'] = post_param('address_country', '');
+            $shipping_address['receiver_email'] = post_param('payer_email', '');
+            $shipping_address['contact_phone'] = post_param('contact_phone', '');
+            $shipping_address['first_name'] = post_param('first_name', '');
+            $shipping_address['last_name'] = post_param('last_name', '');
 
-            return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses',$shipping_address,true);
+            return $GLOBALS['SITE_DB']->query_insert('shopping_order_addresses', $shipping_address, true);
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -423,6 +423,6 @@ class Hook_paypal
      */
     public function get_callback_url_message()
     {
-        return get_param('message',null,true);
+        return get_param('message', null, true);
     }
 }

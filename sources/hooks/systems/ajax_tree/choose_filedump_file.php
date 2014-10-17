@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_choose_filedump_file
 {
     /**
@@ -28,9 +27,9 @@ class Hook_choose_filedump_file
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return string                   XML in the special category,entry format
      */
-    public function run($id,$options,$default = null)
+    public function run($id, $options, $default = null)
     {
-        if ($id === NULL) {
+        if ($id === null) {
             $id = '';
         }
 
@@ -41,8 +40,8 @@ class Hook_choose_filedump_file
             $fullpath .= '/' . $id;
         }
 
-        $levels_to_expand = array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__' . substr(get_class($this),5)));
-        $options['levels_to_expand'] = max(0,$levels_to_expand-1);
+        $levels_to_expand = array_key_exists('levels_to_expand', $options) ? ($options['levels_to_expand']) : intval(get_long_value('levels_to_expand__' . substr(get_class($this), 5)));
+        $options['levels_to_expand'] = max(0, $levels_to_expand - 1);
 
         $folder = ((isset($options['folder'])) && ($options['folder'])); // We want to select folders, not files
 
@@ -50,28 +49,28 @@ class Hook_choose_filedump_file
 
         $out .= '<options>' . serialize($options) . '</options>';
 
-        if ((has_actual_page_access(null,'filedump')) && (file_exists($fullpath))) {
-            $files = get_directory_contents($fullpath,'',false,false);
+        if ((has_actual_page_access(null, 'filedump')) && (file_exists($fullpath))) {
+            $files = get_directory_contents($fullpath, '', false, false);
             foreach ($files as $f) {
-                $description = $GLOBALS['SITE_DB']->query_select_value_if_there('filedump','description',array('name' => basename($f),'path' => $id . '/'));
+                $description = $GLOBALS['SITE_DB']->query_select_value_if_there('filedump', 'description', array('name' => basename($f), 'path' => $id . '/'));
 
-                $entry_id = 'uploads/filedump/' . (($id == '')?'':(rawurlencode($id) . '/')) . rawurlencode($f);
+                $entry_id = 'uploads/filedump/' . (($id == '') ? '' : (rawurlencode($id) . '/')) . rawurlencode($f);
 
                 if (is_dir($fullpath . '/' . $f)) {
-                    $has_children = (count(get_directory_contents($fullpath . '/' . $f,'',false,false))>0);
+                    $has_children = (count(get_directory_contents($fullpath . '/' . $f, '', false, false)) > 0);
 
-                    $out .= '<category id="' . xmlentities((($id == '')?'':($id . '/')) . $f) . '" title="' . xmlentities($f) . '" has_children="' . ($has_children?'true':'false') . '" selectable="' . ($folder?'true':'false') . '"></category>';
+                    $out .= '<category id="' . xmlentities((($id == '') ? '' : ($id . '/')) . $f) . '" title="' . xmlentities($f) . '" has_children="' . ($has_children ? 'true' : 'false') . '" selectable="' . ($folder ? 'true' : 'false') . '"></category>';
 
-                    if ($levels_to_expand>0) {
-                        $out .= '<expand>' . xmlentities((($id == '')?'':($id . '/')) . $f) . '</expand>';
+                    if ($levels_to_expand > 0) {
+                        $out .= '<expand>' . xmlentities((($id == '') ? '' : ($id . '/')) . $f) . '</expand>';
                     }
                 } elseif (!$folder) {
                     if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f))) {
                         if ((is_null($description)) || (get_translated_text($description) == '')) {
                             $_description = '';
                             if (is_image($f)) {
-                                $url = get_custom_base_url() . '/uploads/filedump/' . (($id == '')?'':($id . '/')) . $f;
-                                $_description = static_evaluate_tempcode(do_image_thumb($url,'',true,false,null,null,true));
+                                $url = get_custom_base_url() . '/uploads/filedump/' . (($id == '') ? '' : ($id . '/')) . $f;
+                                $_description = static_evaluate_tempcode(do_image_thumb($url, '', true, false, null, null, true));
                             }
                         } else {
                             $_description = escape_html(get_translated_text($description));
@@ -84,7 +83,7 @@ class Hook_choose_filedump_file
             // Mark parent cats for pre-expansion
             if ((!is_null($default)) && ($default != '')) {
                 $cat = '';
-                foreach (explode('/',$default) as $_cat) {
+                foreach (explode('/', $default) as $_cat) {
                     if ($_cat != '') {
                         $cat .= '/';
                         $cat .= $_cat;
@@ -105,23 +104,23 @@ class Hook_choose_filedump_file
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return tempcode                 The nice list
      */
-    public function simple($id,$options,$it = null)
+    public function simple($id, $options, $it = null)
     {
         $out = '';
 
-        if (has_actual_page_access(null,'filedump')) {
+        if (has_actual_page_access(null, 'filedump')) {
             require_code('images');
             require_code('files2');
             $fullpath = get_custom_file_base() . '/uploads/filedump';
             if ($id != '') {
                 $fullpath .= '/' . $id;
             }
-            $tree = get_directory_contents($fullpath,'');
+            $tree = get_directory_contents($fullpath, '');
 
             foreach ($tree as $f) {
                 if ((!isset($options['only_images'])) || (!$options['only_images']) || (is_image($f))) {
-                    $rel = preg_replace('#^' . preg_quote($id,'#') . '/#','',$f);
-                    $out .= '<option value="' . escape_html('uploads/filedump/' . $f) . '"' . (($it === $f)?' selected="selected"':'') . '>' . escape_html($rel) . '</option>';
+                    $rel = preg_replace('#^' . preg_quote($id, '#') . '/#', '', $f);
+                    $out .= '<option value="' . escape_html('uploads/filedump/' . $f) . '"' . (($it === $f) ? ' selected="selected"' : '') . '>' . escape_html($rel) . '</option>';
                 }
             }
         }

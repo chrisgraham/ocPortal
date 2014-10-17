@@ -23,15 +23,15 @@
  */
 function init__config()
 {
-    global $VALUE_OPTIONS_CACHE,$IN_MINIKERNEL_VERSION;
+    global $VALUE_OPTIONS_CACHE, $IN_MINIKERNEL_VERSION;
     if (!$IN_MINIKERNEL_VERSION) {
         load_options();
 
         $VALUE_OPTIONS_CACHE = persistent_cache_get('VALUES');
         if (!is_array($VALUE_OPTIONS_CACHE)) {
-            $VALUE_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('values',array('*'));
-            $VALUE_OPTIONS_CACHE = list_to_map('the_name',$VALUE_OPTIONS_CACHE);
-            persistent_cache_set('VALUES',$VALUE_OPTIONS_CACHE);
+            $VALUE_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('values', array('*'));
+            $VALUE_OPTIONS_CACHE = list_to_map('the_name', $VALUE_OPTIONS_CACHE);
+            persistent_cache_set('VALUES', $VALUE_OPTIONS_CACHE);
         }
     } else {
         $VALUE_OPTIONS_CACHE = array();
@@ -47,8 +47,8 @@ function init__config()
     if ((get_db_type() == 'xml') && (!running_script('xml_db_import')) && (is_file(get_file_base() . '/data_custom/xml_db_import.php')) && (is_dir(get_file_base() . '/.svn'))) {
         $last_xml_import = get_value('last_xml_import');
         $mod_time = filemtime(get_file_base() . '/.svn');
-        if ((is_null($last_xml_import)) || (intval($last_xml_import)<$mod_time)) {
-            set_value('last_xml_import',strval(time()));
+        if ((is_null($last_xml_import)) || (intval($last_xml_import) < $mod_time)) {
+            set_value('last_xml_import', strval(time()));
 
             header('Location: ' . get_base_url() . '/data_custom/xml_db_import.php');
             exit();
@@ -65,12 +65,12 @@ function multi_lang()
 {
     global $MULTI_LANG_CACHE;
 
-    if ($MULTI_LANG_CACHE !== NULL) {
+    if ($MULTI_LANG_CACHE !== null) {
         return $MULTI_LANG_CACHE;
     }
 
     $MULTI_LANG_CACHE = persistent_cache_get('MULTI_LANG');
-    if ($MULTI_LANG_CACHE !== NULL) {
+    if ($MULTI_LANG_CACHE !== null) {
         return $MULTI_LANG_CACHE;
     }
 
@@ -81,7 +81,7 @@ function multi_lang()
 
     require_code('config2');
     $ret = _multi_lang();
-    persistent_cache_set('MULTI_LANG',$ret);
+    persistent_cache_set('MULTI_LANG', $ret);
     return $ret;
 }
 
@@ -90,21 +90,21 @@ function multi_lang()
  */
 function load_options()
 {
-    global $CONFIG_OPTIONS_CACHE,$CONFIG_OPTIONS_BEING_CACHED;
+    global $CONFIG_OPTIONS_CACHE, $CONFIG_OPTIONS_BEING_CACHED;
 
     $CONFIG_OPTIONS_BEING_CACHED = function_exists('persistent_cache_get');
 
-    $CONFIG_OPTIONS_CACHE = $CONFIG_OPTIONS_BEING_CACHED?persistent_cache_get('OPTIONS'):null;
+    $CONFIG_OPTIONS_CACHE = $CONFIG_OPTIONS_BEING_CACHED ? persistent_cache_get('OPTIONS') : null;
     if (is_array($CONFIG_OPTIONS_CACHE)) {
         return;
     }
 
-    $CONFIG_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('config',array('*'),null,'',null,null,true);
+    $CONFIG_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('config', array('*'), null, '', null, null, true);
 
-    if ($CONFIG_OPTIONS_CACHE === NULL) {
+    if ($CONFIG_OPTIONS_CACHE === null) {
         if ($GLOBALS['SITE_DB']->table_exists('config')) { // LEGACY: Has to use old naming from pre v10
-            $CONFIG_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('config',array('the_name AS c_name','config_value AS c_value','config_value AS c_value_trans','if(the_type=\'transline\' OR the_type=\'transtext\' OR the_type=\'comcodeline\' OR the_type=\'comcodetext\',1,0) AS c_needs_dereference','c_set'),null,'',null,null,true);
-            if ($CONFIG_OPTIONS_CACHE === NULL) {
+            $CONFIG_OPTIONS_CACHE = $GLOBALS['SITE_DB']->query_select('config', array('the_name AS c_name', 'config_value AS c_value', 'config_value AS c_value_trans', 'if(the_type=\'transline\' OR the_type=\'transtext\' OR the_type=\'comcodeline\' OR the_type=\'comcodetext\',1,0) AS c_needs_dereference', 'c_set'), null, '', null, null, true);
+            if ($CONFIG_OPTIONS_CACHE === null) {
                 critical_error('DATABASE_FAIL');
             }
         } else {
@@ -112,10 +112,10 @@ function load_options()
         }
     }
 
-    $CONFIG_OPTIONS_CACHE = list_to_map('c_name',$CONFIG_OPTIONS_CACHE);
+    $CONFIG_OPTIONS_CACHE = list_to_map('c_name', $CONFIG_OPTIONS_CACHE);
 
     if ($CONFIG_OPTIONS_BEING_CACHED) {
-        persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+        persistent_cache_set('OPTIONS', $CONFIG_OPTIONS_CACHE);
     }
 }
 
@@ -126,7 +126,7 @@ function load_options()
  * @param  boolean                      Where to accept a missing option (and return NULL)
  * @return ?SHORT_TEXT                  The value (NULL: either null value, or no option found whilst $missing_ok set)
  */
-function get_option($name,$missing_ok = false)
+function get_option($name, $missing_ok = false)
 {
     global $CONFIG_OPTIONS_CACHE;
 
@@ -137,7 +137,7 @@ function get_option($name,$missing_ok = false)
         } // Upgrade scenario, probably can't do this robustly
 
         if ($missing_ok) {
-            return NULL;
+            return null;
         }
 
         global $GET_OPTION_LOOP;
@@ -145,7 +145,7 @@ function get_option($name,$missing_ok = false)
 
         require_code('config2');
         $value = get_default_option($name);
-        set_option($name,$value,0);
+        set_option($name, $value, 0);
 
         $GET_OPTION_LOOP = 0;
     }
@@ -165,7 +165,7 @@ function get_option($name,$missing_ok = false)
 
         global $CONFIG_OPTIONS_BEING_CACHED;
         if ($CONFIG_OPTIONS_BEING_CACHED) {
-            persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+            persistent_cache_set('OPTIONS', $CONFIG_OPTIONS_CACHE);
         }
 
         return $value;
@@ -177,7 +177,7 @@ function get_option($name,$missing_ok = false)
 
     global $CONFIG_OPTIONS_BEING_CACHED;
     if ($CONFIG_OPTIONS_BEING_CACHED) {
-        persistent_cache_set('OPTIONS',$CONFIG_OPTIONS_CACHE);
+        persistent_cache_set('OPTIONS', $CONFIG_OPTIONS_CACHE);
     }
 
     return $value;
@@ -191,7 +191,7 @@ function get_option($name,$missing_ok = false)
  */
 function get_long_value($name)
 {
-    return $GLOBALS['SITE_DB']->query_select_value_if_there('long_values','the_value',array('the_name' => $name),'',running_script('install'));
+    return $GLOBALS['SITE_DB']->query_select_value_if_there('long_values', 'the_value', array('the_name' => $name), '', running_script('install'));
 }
 
 /**
@@ -201,9 +201,9 @@ function get_long_value($name)
  * @param  TIME                         The cutoff time (an absolute time, not a relative "time ago")
  * @return ?SHORT_TEXT                  The value (NULL: value newer than not found)
  */
-function get_long_value_newer_than($name,$cutoff)
+function get_long_value_newer_than($name, $cutoff)
 {
-    return $GLOBALS['SITE_DB']->query_value_if_there('SELECT the_value FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'long_values WHERE date_and_time>' . strval($cutoff) . ' AND ' . db_string_equal_to('the_name',$name));
+    return $GLOBALS['SITE_DB']->query_value_if_there('SELECT the_value FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'long_values WHERE date_and_time>' . strval($cutoff) . ' AND ' . db_string_equal_to('the_name', $name));
 }
 
 /**
@@ -212,11 +212,11 @@ function get_long_value_newer_than($name,$cutoff)
  * @param  ID_TEXT                      The name of the value
  * @param  ?SHORT_TEXT                  The value (NULL: delete it)
  */
-function set_long_value($name,$value)
+function set_long_value($name, $value)
 {
-    $GLOBALS['SITE_DB']->query_delete('long_values',array('the_name' => $name),'',1);
-    if ($value !== NULL) {
-        $GLOBALS['SITE_DB']->query_insert('long_values',array('date_and_time' => time(),'the_value' => $value,'the_name' => $name));
+    $GLOBALS['SITE_DB']->query_delete('long_values', array('the_name' => $name), '', 1);
+    if ($value !== null) {
+        $GLOBALS['SITE_DB']->query_insert('long_values', array('date_and_time' => time(), 'the_value' => $value, 'the_name' => $name));
     }
 }
 
@@ -228,9 +228,9 @@ function set_long_value($name,$value)
  * @param  boolean                      Whether to also check server environmental variables
  * @return ?SHORT_TEXT                  The value (NULL: value not found and default is NULL)
  */
-function get_value($name,$default = null,$env_also = false)
+function get_value($name, $default = null, $env_also = false)
 {
-    global $IN_MINIKERNEL_VERSION,$VALUE_OPTIONS_CACHE;
+    global $IN_MINIKERNEL_VERSION, $VALUE_OPTIONS_CACHE;
     if ($IN_MINIKERNEL_VERSION) {
         return $default;
     }
@@ -256,15 +256,15 @@ function get_value($name,$default = null,$env_also = false)
  * @param  TIME                         The cutoff time (an absolute time, not a relative "time ago")
  * @return ?SHORT_TEXT                  The value (NULL: value newer than not found)
  */
-function get_value_newer_than($name,$cutoff)
+function get_value_newer_than($name, $cutoff)
 {
-    $cutoff -= mt_rand(0,200); // Bit of scattering to stop locking issues if lots of requests hit this at once in the middle of a hit burst (whole table is read each page requests, and mysql will lock the table on set_value - causes horrible out-of-control buildups)
+    $cutoff -= mt_rand(0, 200); // Bit of scattering to stop locking issues if lots of requests hit this at once in the middle of a hit burst (whole table is read each page requests, and mysql will lock the table on set_value - causes horrible out-of-control buildups)
 
     global $VALUE_OPTIONS_CACHE;
-    if ((array_key_exists($name,$VALUE_OPTIONS_CACHE)) && ($VALUE_OPTIONS_CACHE[$name]['date_and_time']>$cutoff)) {
+    if ((array_key_exists($name, $VALUE_OPTIONS_CACHE)) && ($VALUE_OPTIONS_CACHE[$name]['date_and_time'] > $cutoff)) {
         return $VALUE_OPTIONS_CACHE[$name]['the_value'];
     }
-    return NULL;
+    return null;
 }
 
 /**
@@ -273,19 +273,19 @@ function get_value_newer_than($name,$cutoff)
  * @param  ID_TEXT                      The name of the value
  * @param  SHORT_TEXT                   The value
  */
-function set_value($name,$value)
+function set_value($name, $value)
 {
     global $VALUE_OPTIONS_CACHE;
-    $existed_before = array_key_exists($name,$VALUE_OPTIONS_CACHE);
+    $existed_before = array_key_exists($name, $VALUE_OPTIONS_CACHE);
     $VALUE_OPTIONS_CACHE[$name]['the_value'] = $value;
     $VALUE_OPTIONS_CACHE[$name]['date_and_time'] = time();
     if ($existed_before) {
-        $GLOBALS['SITE_DB']->query_update('values',array('date_and_time' => time(),'the_value' => $value),array('the_name' => $name),'',1,null,false,true);
+        $GLOBALS['SITE_DB']->query_update('values', array('date_and_time' => time(), 'the_value' => $value), array('the_name' => $name), '', 1, null, false, true);
     } else {
-        $GLOBALS['SITE_DB']->query_insert('values',array('date_and_time' => time(),'the_value' => $value,'the_name' => $name),false,true); // Allow failure, if there is a race condition
+        $GLOBALS['SITE_DB']->query_insert('values', array('date_and_time' => time(), 'the_value' => $value, 'the_name' => $name), false, true); // Allow failure, if there is a race condition
     }
     if (function_exists('persistent_cache_set')) {
-        persistent_cache_set('VALUES',$VALUE_OPTIONS_CACHE);
+        persistent_cache_set('VALUES', $VALUE_OPTIONS_CACHE);
     }
 }
 
@@ -296,7 +296,7 @@ function set_value($name,$value)
  */
 function delete_value($name)
 {
-    $GLOBALS['SITE_DB']->query_delete('values',array('the_name' => $name),'',1);
+    $GLOBALS['SITE_DB']->query_delete('values', array('the_name' => $name), '', 1);
     if (function_exists('persistent_cache_delete')) {
         persistent_cache_delete('VALUES');
     }
@@ -310,7 +310,7 @@ function delete_value($name)
  * @param  ID_TEXT                      The codename for the stat
  * @param  integer                      What to increment the statistic by
  */
-function update_stat($stat,$increment)
+function update_stat($stat, $increment)
 {
     if (running_script('stress_test_loader')) {
         return;
@@ -320,8 +320,8 @@ function update_stat($stat,$increment)
     if (is_null($current)) {
         $current = '0';
     }
-    $new = intval($current)+$increment;
-    set_value($stat,strval($new));
+    $new = intval($current) + $increment;
+    set_value($stat, strval($new));
 }
 
 /**

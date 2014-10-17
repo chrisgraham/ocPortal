@@ -49,16 +49,16 @@ class Module_admin_zones
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('ZONES','menu/adminzone/structure/zones/zones'),
-            'add' => array('ADD_ZONE','menu/_generic_admin/add_one'),
-            'edit' => array('EDIT_ZONE','menu/_generic_admin/edit_one'),
+            'misc' => array('ZONES', 'menu/adminzone/structure/zones/zones'),
+            'add' => array('ADD_ZONE', 'menu/_generic_admin/add_one'),
+            'edit' => array('EDIT_ZONE', 'menu/_generic_admin/edit_one'),
         );
 
         if (!$be_deferential) {
-            $ret['editor'] = array('ZONE_EDITOR','menu/adminzone/structure/zones/zone_editor');
+            $ret['editor'] = array('ZONE_EDITOR', 'menu/adminzone/structure/zones/zone_editor');
         }
 
         return $ret;
@@ -98,7 +98,7 @@ class Module_admin_zones
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('zones');
 
@@ -115,17 +115,17 @@ class Module_admin_zones
         }
 
         if ($type == '_editor') {
-            $id = get_param('id',''); // '' needed for short URLs
+            $id = get_param('id', ''); // '' needed for short URLs
             if ($id == '/') {
                 $id = '';
             }
 
-            $nice_zone_name = ($id == '')?do_lang('_WELCOME'):$id;
+            $nice_zone_name = ($id == '') ? do_lang('_WELCOME') : $id;
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:editor',do_lang_tempcode('ZONE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:editor', do_lang_tempcode('ZONE'))));
             breadcrumb_set_self($nice_zone_name);
 
-            $this->title = get_screen_title('_ZONE_EDITOR',true,array(escape_html($nice_zone_name)));
+            $this->title = get_screen_title('_ZONE_EDITOR', true, array(escape_html($nice_zone_name)));
 
             $this->id = $id;
             $this->nice_zone_name = $nice_zone_name;
@@ -136,7 +136,7 @@ class Module_admin_zones
         }
 
         if ($type == 'add') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ZONES'))));
 
             $this->title = get_screen_title('ADD_ZONE');
         }
@@ -146,20 +146,20 @@ class Module_admin_zones
         }
 
         if ($type == 'edit') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ZONES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
 
             $this->title = get_screen_title('EDIT_ZONE');
         }
 
         if ($type == '_edit') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('ZONES')),array('_SELF:_SELF:edit_zone',do_lang_tempcode('CHOOSE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('ZONES')), array('_SELF:_SELF:edit_zone', do_lang_tempcode('CHOOSE'))));
 
             $this->title = get_screen_title('EDIT_ZONE');
         }
 
         if ($type == '__edit') {
-            $delete = post_param_integer('delete',0);
+            $delete = post_param_integer('delete', 0);
             if ($delete == 1) {
                 $this->title = get_screen_title('DELETE_ZONE');
             } else {
@@ -167,7 +167,7 @@ class Module_admin_zones
             }
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -182,7 +182,7 @@ class Module_admin_zones
 
         require_css('zone_editor');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->misc();
@@ -223,10 +223,10 @@ class Module_admin_zones
     public function misc()
     {
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('ZONES'),comcode_lang_string('DOC_ZONES'),
+        return do_next_manager(get_screen_title('ZONES'), comcode_lang_string('DOC_ZONES'),
             array(
-                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'add'),'_SELF'),do_lang('ADD_ZONE')),
-                array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'edit'),'_SELF'),do_lang('EDIT_ZONE')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add'), '_SELF'), do_lang('ADD_ZONE')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'edit'), '_SELF'), do_lang('EDIT_ZONE')),
             ),
             do_lang('ZONES')
         );
@@ -239,7 +239,7 @@ class Module_admin_zones
      */
     public function editor()
     {
-        return $this->edit_zone('_editor',get_screen_title('ZONE_EDITOR'));
+        return $this->edit_zone('_editor', get_screen_title('ZONE_EDITOR'));
     }
 
     /**
@@ -252,7 +252,7 @@ class Module_admin_zones
         $id = $this->id;
         $nice_zone_name = $this->nice_zone_name;
 
-        $lang = choose_language($this->title,true);
+        $lang = choose_language($this->title, true);
         if (is_object($lang)) {
             return $lang;
         }
@@ -267,33 +267,33 @@ class Module_admin_zones
 
         if (!has_js()) {
             // Send them to the page permissions screen
-            $url = build_url(array('page' => '_SELF','type' => 'edit'),'_SELF');
+            $url = build_url(array('page' => '_SELF', 'type' => 'edit'), '_SELF');
             require_code('site2');
-            assign_refresh($url,5.0);
-            return redirect_screen($this->title,$url,do_lang_tempcode('NO_JS_ADVANCED_SCREEN_ZONE_EDITOR'));
+            assign_refresh($url, 5.0);
+            return redirect_screen($this->title, $url, do_lang_tempcode('NO_JS_ADVANCED_SCREEN_ZONE_EDITOR'));
         }
 
         // After completion prep/relay
-        $_default_redirect = build_url(array('page' => ''),$id);
+        $_default_redirect = build_url(array('page' => ''), $id);
         $default_redirect = $_default_redirect->evaluate();
-        $post_url = build_url(array('page' => '_SELF','type' => '__editor','lang' => $lang,'redirect' => get_param('redirect',$default_redirect),'id' => $id),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '__editor', 'lang' => $lang, 'redirect' => get_param('redirect', $default_redirect), 'id' => $id), '_SELF');
 
         // Zone editing stuff
-        $rows = $GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name' => $id),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('zones', array('*'), array('zone_name' => $id), '', 1);
+        if (!array_key_exists(0, $rows)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $row = $rows[0];
-        $header_text = get_translated_text($row['zone_header_text'],null,$lang);
+        $header_text = get_translated_text($row['zone_header_text'], null, $lang);
         $default_page = $row['zone_default_page'];
-        list($fields,,) = $this->get_form_fields(true,get_translated_text($row['zone_title'],null,$lang),$default_page,$header_text,$row['zone_theme'],$row['zone_require_session'],$id);
+        list($fields, ,) = $this->get_form_fields(true, get_translated_text($row['zone_title'], null, $lang), $default_page, $header_text, $row['zone_theme'], $row['zone_require_session'], $id);
 
         // Page editing stuff
         $editor = array();
-        foreach (array('panel_left',$default_page,'panel_right') as $i => $for) {
-            $page_info = _request_page($for,$id,null,$lang);
+        foreach (array('panel_left', $default_page, 'panel_right') as $i => $for) {
+            $page_info = _request_page($for, $id, null, $lang);
             if ($page_info === false) {
-                $page_info = array('COMCODE_CUSTOM',$id,$for,$lang);
+                $page_info = array('COMCODE_CUSTOM', $id, $for, $lang);
             }
             $is_comcode = false;
             $redirecting_to = null;
@@ -320,11 +320,11 @@ class Module_admin_zones
                     $type = do_lang_tempcode('MINIMODULE');
                     break;
                 case 'REDIRECT':
-                    $type = do_lang_tempcode('REDIRECT_PAGE_TO',escape_html($page_info[1]['r_to_zone']),escape_html($page_info[1]['r_to_page']));
+                    $type = do_lang_tempcode('REDIRECT_PAGE_TO', escape_html($page_info[1]['r_to_zone']), escape_html($page_info[1]['r_to_page']));
                     $redirecting_to = $page_info[1]['r_to_zone'];
                     $current_for = $page_info[1]['r_to_page'];
 
-                    $page_info = _request_page($current_for,$redirecting_to,null,$lang);
+                    $page_info = _request_page($current_for, $redirecting_to, null, $lang);
                     if ($page_info !== false) {
                         switch ($page_info[0]) {
                             case 'COMCODE_CUSTOM_PURE':
@@ -342,29 +342,29 @@ class Module_admin_zones
             }
             $class = '';
             $w = false;
-            $current_zone = is_null($redirecting_to)?$id:$redirecting_to;
+            $current_zone = is_null($redirecting_to) ? $id : $redirecting_to;
             $default_parsed = null;
             if ($is_comcode) {
-                $fullpath = zone_black_magic_filterer((($page_info[0] == 'comcode' || $pure)?get_file_base():get_custom_file_base()) . '/' . $current_zone . '/pages/' . strtolower($page_info[0]) . '/' . $lang . '/' . $current_for . '.txt');
+                $fullpath = zone_black_magic_filterer((($page_info[0] == 'comcode' || $pure) ? get_file_base() : get_custom_file_base()) . '/' . $current_zone . '/pages/' . strtolower($page_info[0]) . '/' . $lang . '/' . $current_for . '.txt');
                 if (!file_exists($fullpath)) {
-                    $fullpath = zone_black_magic_filterer((($page_info[0] == 'comcode' || $pure)?get_file_base():get_custom_file_base()) . '/' . $current_zone . '/pages/' . strtolower($page_info[0]) . '/' . get_site_default_lang() . '/' . $current_for . '.txt');
+                    $fullpath = zone_black_magic_filterer((($page_info[0] == 'comcode' || $pure) ? get_file_base() : get_custom_file_base()) . '/' . $current_zone . '/pages/' . strtolower($page_info[0]) . '/' . get_site_default_lang() . '/' . $current_for . '.txt');
                 }
                 if (file_exists($fullpath)) {
-                    $tmp = fopen($fullpath,'rb');
-                    @flock($tmp,LOCK_SH);
+                    $tmp = fopen($fullpath, 'rb');
+                    @flock($tmp, LOCK_SH);
                     $comcode = file_get_contents($fullpath);
-                    @flock($tmp,LOCK_UN);
+                    @flock($tmp, LOCK_UN);
                     fclose($tmp);
-                    $default_parsed = comcode_to_tempcode($comcode,null,false,60,null,null,true);
+                    $default_parsed = comcode_to_tempcode($comcode, null, false, 60, null, null, true);
                 } else {
                     $comcode = '';
                 }
 
-                $edit_url = build_url(array('page' => 'cms_comcode_pages','type' => '_ed','page_link' => $current_zone . ':' . $current_for),get_module_zone('cms_comcode_pages'));
+                $edit_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $current_zone . ':' . $current_for), get_module_zone('cms_comcode_pages'));
 
                 // WYSIWYG?
                 require_javascript('javascript_editing');
-                $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($comcode,'{$,page hint: no_wysiwyg}') === false));
+                $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($comcode, '{$,page hint: no_wysiwyg}') === false));
                 attach_wysiwyg();
                 if ($w) {
                     $class .= ' wysiwyg';
@@ -382,20 +382,20 @@ class Module_admin_zones
                 $settings = null;
                 $button = 'block';
                 $comcode_editor = new ocp_tempcode();
-                $comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID' => '0acc5dcf299325d0cf55871923148a54','DIVIDER' => false,'FIELD_NAME' => $field_name,'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button),'B' => $button)));
+                $comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON', array('_GUID' => '0acc5dcf299325d0cf55871923148a54', 'DIVIDER' => false, 'FIELD_NAME' => $field_name, 'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button), 'B' => $button)));
                 $button = 'comcode';
-                $comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON',array('_GUID' => '1acc5dcf299325d0cf55871923148a54','DIVIDER' => false,'FIELD_NAME' => $field_name,'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button),'B' => $button)));
+                $comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON', array('_GUID' => '1acc5dcf299325d0cf55871923148a54', 'DIVIDER' => false, 'FIELD_NAME' => $field_name, 'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button), 'B' => $button)));
             }
 
-            $preview = (substr($page_info[0],0,6) == 'MODULE')?null:request_page($for,false,$id,null,true);
+            $preview = (substr($page_info[0], 0, 6) == 'MODULE') ? null : request_page($for, false, $id, null, true);
             if (!is_null($preview)) {
                 $_preview = $preview->evaluate();
-                if ((!$is_comcode) || (strpos($comcode,'<') !== false)) { // Save RAM by only doing this if needed
+                if ((!$is_comcode) || (strpos($comcode, '<') !== false)) { // Save RAM by only doing this if needed
                     require_code('xhtml');
-                    $_preview = xhtmlise_html($_preview,true); // Fix potential errors by passing it through our XHTML fixer functions
+                    $_preview = xhtmlise_html($_preview, true); // Fix potential errors by passing it through our XHTML fixer functions
                 } else {
                     $new = $_preview;
-                    if (preg_replace('#\s+#','',$new) != preg_replace('#\s+#','',$_preview)) { // If it was changed there was probably an error
+                    if (preg_replace('#\s+#', '', $new) != preg_replace('#\s+#', '', $_preview)) { // If it was changed there was probably an error
                         $_preview = $new;
                         $_preview .= do_lang('BROKEN_XHTML_FIXED');
                     }
@@ -404,12 +404,13 @@ class Module_admin_zones
                 $_preview = null;
             }
 
-            $is_panel = (substr($for,0,6) == 'panel_');
+            $is_panel = (substr($for, 0, 6) == 'panel_');
 
             require_code('zones3');
-            $zone_list = ($for == $current_for)?create_selection_list_zones($redirecting_to,array($id)):new ocp_tempcode() /*not simple so leave field out*/;
+            $zone_list = ($for == $current_for) ? create_selection_list_zones($redirecting_to, array($id)) : new ocp_tempcode() /*not simple so leave field out*/
+            ;
 
-            $editor[$for] = static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL',array(
+            $editor[$for] = static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL', array(
                 '_GUID' => 'f32ac84fe18b90497acd4afa27698bf0',
                 'DEFAULT_PARSED' => $default_parsed,
                 'CLASS' => $class,
@@ -427,9 +428,9 @@ class Module_admin_zones
             )));
         }
 
-        list($warning_details,$ping_url) = handle_conflict_resolution($id);
+        list($warning_details, $ping_url) = handle_conflict_resolution($id);
 
-        return do_template('ZONE_EDITOR_SCREEN',array(
+        return do_template('ZONE_EDITOR_SCREEN', array(
             '_GUID' => '3cb1aab6b16444484e82d22f2c8f1e9a',
             'ID' => $id,
             'LANG' => $lang,
@@ -450,42 +451,42 @@ class Module_admin_zones
      */
     public function __editor()
     {
-        $lang = choose_language($this->title,true);
+        $lang = choose_language($this->title, true);
         if (is_object($lang)) {
             return $lang;
         }
 
-        $id = get_param('id','');
+        $id = get_param('id', '');
 
         // Edit settings
         $_title = post_param('title');
         $default_page = post_param('default_page');
         $header_text = post_param('header_text');
         $theme = post_param('theme');
-        $require_session = post_param_integer('require_session',0);
-        actual_edit_zone($id,$_title,$default_page,$header_text,$theme,$require_session,$id);
+        $require_session = post_param_integer('require_session', 0);
+        actual_edit_zone($id, $_title, $default_page, $header_text, $theme, $require_session, $id);
         if ($id != '') {
             $this->set_permissions($id);
         }
 
         // Edit pages
-        foreach (array('panel_left','start','panel_right') as $for) {
-            $redirect = post_param('redirect_' . $for,null);
+        foreach (array('panel_left', 'start', 'panel_right') as $for) {
+            $redirect = post_param('redirect_' . $for, null);
             if (!is_null($redirect)) {
                 if (addon_installed('redirects_editor')) {
-                    $GLOBALS['SITE_DB']->query_delete('redirects',array(
+                    $GLOBALS['SITE_DB']->query_delete('redirects', array(
                         'r_from_page' => $for,
                         'r_from_zone' => $id,
-                    ),'',1);
+                    ), '', 1);
 
                     if ($redirect != $id) {
-                        $GLOBALS['SITE_DB']->query_insert('redirects',array(
+                        $GLOBALS['SITE_DB']->query_insert('redirects', array(
                             'r_from_page' => $for,
                             'r_from_zone' => $id,
                             'r_to_page' => $for,
                             'r_to_zone' => $redirect,
                             'r_is_transparent' => 1,
-                        ),false,true); // Avoid problem when same key entered twice
+                        ), false, true); // Avoid problem when same key entered twice
                     } else {
                         $redirect = null;
                     }
@@ -494,10 +495,10 @@ class Module_admin_zones
                 }
             }
 
-            $comcode = post_param($for,null);
+            $comcode = post_param($for, null);
             if (!is_null($comcode)) {
                 // Where to save to
-                $fullpath = zone_black_magic_filterer(get_custom_file_base() . (((is_null($redirect)?$id:$redirect) == '')?'':'/') . (is_null($redirect)?$id:$redirect) . '/pages/comcode_custom/' . $lang . '/' . $for . '.txt');
+                $fullpath = zone_black_magic_filterer(get_custom_file_base() . (((is_null($redirect) ? $id : $redirect) == '') ? '' : '/') . (is_null($redirect) ? $id : $redirect) . '/pages/comcode_custom/' . $lang . '/' . $for . '.txt');
 
                 // Make dir if needed
                 if (!file_exists(dirname($fullpath))) {
@@ -508,31 +509,31 @@ class Module_admin_zones
                 // Store revision
                 if ((file_exists($fullpath)) && (get_option('store_revisions') == '1')) {
                     $time = time();
-                    @copy($fullpath,$fullpath . '.' . strval($time)) or intelligent_write_error($fullpath . '.' . strval($time));
+                    @copy($fullpath, $fullpath . '.' . strval($time)) or intelligent_write_error($fullpath . '.' . strval($time));
                     fix_permissions($fullpath . '.' . strval($time));
                     sync_file($fullpath . '.' . strval($time));
                 }
 
                 // Save
-                $myfile = @fopen($fullpath,GOOGLE_APPENGINE?'wb':'at') or intelligent_write_error($fullpath);
-                @flock($myfile,LOCK_EX);
+                $myfile = @fopen($fullpath, GOOGLE_APPENGINE ? 'wb' : 'at') or intelligent_write_error($fullpath);
+                @flock($myfile, LOCK_EX);
                 if (!GOOGLE_APPENGINE) {
-                    ftruncate($myfile,0);
+                    ftruncate($myfile, 0);
                 }
-                if (fwrite($myfile,$comcode)<strlen($comcode)) {
+                if (fwrite($myfile, $comcode) < strlen($comcode)) {
                     warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                 }
-                @flock($myfile,LOCK_UN);
+                @flock($myfile, LOCK_UN);
                 fclose($myfile);
                 fix_permissions($fullpath);
                 sync_file($fullpath);
 
                 // De-cache
-                $caches = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages',array('string_index'),array('the_zone' => is_null($redirect)?$id:$redirect,'the_page' => $for));
+                $caches = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages', array('string_index'), array('the_zone' => is_null($redirect) ? $id : $redirect, 'the_page' => $for));
                 foreach ($caches as $cache) {
                     delete_lang($cache['string_index']);
                 }
-                $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages',array('the_zone' => is_null($redirect)?$id:$redirect,'the_page' => $for));
+                $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages', array('the_zone' => is_null($redirect) ? $id : $redirect, 'the_page' => $for));
             }
         }
 
@@ -540,7 +541,7 @@ class Module_admin_zones
 
         // Redirect
         $url = get_param('redirect');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -555,7 +556,7 @@ class Module_admin_zones
      * @param  ?ID_TEXT                 Name of the zone (NULL: unknown)
      * @return array                    A tuple: The tempcode for the fields, hidden fields, and extra JavaScript
      */
-    public function get_form_fields($in_zone_editor = false,$title = '',$default_page = 'start',$header_text = '',$theme = null,$require_session = 0,$zone = null)
+    public function get_form_fields($in_zone_editor = false, $title = '', $default_page = 'start', $header_text = '', $theme = null, $require_session = 0, $zone = null)
     {
         require_lang('permissions');
 
@@ -571,83 +572,83 @@ class Module_admin_zones
         $hidden = new ocp_tempcode();
 
         require_code('form_templates');
-        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
-        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('DEFAULT_PAGE'),do_lang_tempcode('DESCRIPTION_DEFAULT_PAGE'),'default_page',$default_page,true));
-        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('HEADER_TEXT'),do_lang_tempcode('DESCRIPTION_HEADER_TEXT'),'header_text',$header_text,false));
+        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
+        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('DEFAULT_PAGE'), do_lang_tempcode('DESCRIPTION_DEFAULT_PAGE'), 'default_page', $default_page, true));
+        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('HEADER_TEXT'), do_lang_tempcode('DESCRIPTION_HEADER_TEXT'), 'header_text', $header_text, false));
         $list = '';
 
         // Theme
         require_code('themes2');
-        $entries = create_selection_list_themes($theme,false,true);
-        $fields .= static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'),do_lang_tempcode((get_forum_type() == 'ocf')?'_DESCRIPTION_THEME_OCF':'_DESCRIPTION_THEME',get_default_theme_name()),'theme',$entries));
+        $entries = create_selection_list_themes($theme, false, true);
+        $fields .= static_evaluate_tempcode(form_input_list(do_lang_tempcode('THEME'), do_lang_tempcode((get_forum_type() == 'ocf') ? '_DESCRIPTION_THEME_OCF' : '_DESCRIPTION_THEME', get_default_theme_name()), 'theme', $entries));
 
-        $fields .= static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => 'b997e901934b59fa72c944e0ce6fc1b0','SECTION_HIDDEN' => true,'TITLE' => do_lang_tempcode('ADVANCED'))));
-        $fields .= static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'),do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'),'require_session',($require_session == 1)));
+        $fields .= static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'b997e901934b59fa72c944e0ce6fc1b0', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('ADVANCED'))));
+        $fields .= static_evaluate_tempcode(form_input_tick(do_lang_tempcode('REQUIRE_SESSION'), do_lang_tempcode('DESCRIPTION_REQUIRE_SESSION'), 'require_session', ($require_session == 1)));
 
         $base_url = '';
-        if (($zone !== NULL) && ($zone != '')) {
+        if (($zone !== null) && ($zone != '')) {
             global $SITE_INFO;
             if (isset($SITE_INFO['ZONE_MAPPING_' . $zone])) {
                 $base_url = 'http://' . $SITE_INFO['ZONE_MAPPING_' . $zone][0] . '/' . $SITE_INFO['ZONE_MAPPING_' . $zone][1];
             }
         }
-        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('ZONE_BASE_URL'),do_lang_tempcode('DESCRIPTION_ZONE_BASE_URL'),'base_url',$base_url,false));
+        $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('ZONE_BASE_URL'), do_lang_tempcode('DESCRIPTION_ZONE_BASE_URL'), 'base_url', $base_url, false));
 
         if ((!$in_zone_editor) && (!is_null($zone)) && (addon_installed('zone_logos'))) {
             // Logos
-            handle_max_file_size($hidden,'image');
+            handle_max_file_size($hidden, 'image');
             require_code('themes2');
             $themes = find_all_themes();
             foreach ($themes as $theme => $theme_name) {
-                $fields .= static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '8c4c1267060970f8b89d1068d03280a7','SECTION_HIDDEN' => true,'TITLE' => do_lang_tempcode('THEME_LOGO',escape_html($theme_name)))));
+                $fields .= static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '8c4c1267060970f8b89d1068d03280a7', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('THEME_LOGO', escape_html($theme_name)))));
 
                 require_code('themes2');
-                $ids = get_all_image_ids_type('logo',false,null,$theme);
+                $ids = get_all_image_ids_type('logo', false, null, $theme);
 
                 $set_name = 'logo_choose_' . $theme;
                 $required = true;
                 $set_title = do_lang_tempcode('LOGO');
-                $field_set = (count($ids) == 0)?new ocp_tempcode():alternate_fields_set__start($set_name);
+                $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
 
-                $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','logo_upload_' . $theme,$required,null,null,true,str_replace(' ','',get_option('valid_images'))));
+                $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'logo_upload_' . $theme, $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 
                 $current_logo = 'logo/' . $zone . '-logo';
-                if (!in_array($current_logo,$ids)) {
+                if (!in_array($current_logo, $ids)) {
                     $current_logo = 'logo/-logo';
                 }
 
                 foreach ($ids as $id) {
-                    $test = find_theme_image($id,true,false,$theme);
+                    $test = find_theme_image($id, true, false, $theme);
                     if ($test == '') {
-                        $test = find_theme_image($id,false,false,'default');
+                        $test = find_theme_image($id, false, false, 'default');
                     }
                     if (($test == '') && ($id == $current_logo)) {
                         $current_logo = $ids[0];
                     }
                 }
-                $field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'),'','logo_select_' . $theme,$ids,null,$current_logo,null,false,null,$theme));
+                $field_set->attach(form_input_theme_image(do_lang_tempcode('STOCK'), '', 'logo_select_' . $theme, $ids, null, $current_logo, null, false, null, $theme));
 
-                $fields .= static_evaluate_tempcode(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+                $fields .= static_evaluate_tempcode(alternate_fields_set__end($set_name, $set_title, '', $field_set, $required));
             }
         }
 
         if ($zone !== '') {
-            $fields .= static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '579ab823f5f8ec7b48e3b59af8a64ba2','TITLE' => do_lang_tempcode('PERMISSIONS'))));
+            $fields .= static_evaluate_tempcode(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '579ab823f5f8ec7b48e3b59af8a64ba2', 'TITLE' => do_lang_tempcode('PERMISSIONS'))));
 
             // Permissions
             $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
-            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+            $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
             foreach ($groups as $id => $name) {
-                if (in_array($id,$admin_groups)) {
+                if (in_array($id, $admin_groups)) {
                     continue;
                 }
 
-                $perhaps = is_null($zone)?true:$GLOBALS['SITE_DB']->query_select_value_if_there('group_zone_access','zone_name',array('zone_name' => $zone,'group_id' => $id));
-                $fields .= static_evaluate_tempcode(form_input_tick(do_lang_tempcode('ACCESS_FOR',escape_html($name)),do_lang_tempcode('DESCRIPTION_ACCESS_FOR',escape_html($name)),'access_' . strval($id),!is_null($perhaps)));
+                $perhaps = is_null($zone) ? true : $GLOBALS['SITE_DB']->query_select_value_if_there('group_zone_access', 'zone_name', array('zone_name' => $zone, 'group_id' => $id));
+                $fields .= static_evaluate_tempcode(form_input_tick(do_lang_tempcode('ACCESS_FOR', escape_html($name)), do_lang_tempcode('DESCRIPTION_ACCESS_FOR', escape_html($name)), 'access_' . strval($id), !is_null($perhaps)));
             }
         }
 
-        return array(make_string_tempcode($fields),$hidden,$javascript);
+        return array(make_string_tempcode($fields), $hidden, $javascript);
     }
 
     /**
@@ -667,7 +668,7 @@ class Module_admin_zones
         $change_htaccess = (($url_scheme == 'HTM') || ($url_scheme == 'SIMPLE'));
         $htaccess_path = get_file_base() . '/.htaccess';
         if (($change_htaccess) && (file_exists($htaccess_path)) && (!is_writable_wrap($htaccess_path))) {
-            attach_message(do_lang_tempcode('HTM_SHORT_URLS_CARE'),'warn');
+            attach_message(do_lang_tempcode('HTM_SHORT_URLS_CARE'), 'warn');
         }
 
         require_code('form_templates');
@@ -675,13 +676,13 @@ class Module_admin_zones
         url_default_parameters__enable();
 
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_NAME'),'zone','',true));
-        list($_fields,$hidden,$javascript) = $this->get_form_fields();
+        $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'zone', '', true));
+        list($_fields, $hidden, $javascript) = $this->get_form_fields();
         $fields->attach($_fields);
 
         url_default_parameters__disable();
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_add'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_add'), '_SELF');
         $submit_name = do_lang_tempcode('ADD_ZONE');
         $text = paragraph(do_lang_tempcode('ZONE_ADD_TEXT'));
 
@@ -705,7 +706,7 @@ class Module_admin_zones
                     };
         ";
 
-        return do_template('FORM_SCREEN',array('_GUID' => 'd8f08884cc370672c2e5604aefe78c6c','JAVASCRIPT' => $javascript,'HIDDEN' => $hidden,'SUBMIT_ICON' => 'menu___generic_admin__add_one','SUBMIT_NAME' => $submit_name,'TITLE' => $this->title,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => $text));
+        return do_template('FORM_SCREEN', array('_GUID' => 'd8f08884cc370672c2e5604aefe78c6c', 'JAVASCRIPT' => $javascript, 'HIDDEN' => $hidden, 'SUBMIT_ICON' => 'menu___generic_admin__add_one', 'SUBMIT_NAME' => $submit_name, 'TITLE' => $this->title, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => $text));
     }
 
     /**
@@ -732,18 +733,18 @@ class Module_admin_zones
         $default_page = post_param('default_page');
         $header_text = post_param('header_text');
         $theme = post_param('theme');
-        $require_session = post_param_integer('require_session',0);
-        $base_url = post_param('base_url','');
+        $require_session = post_param_integer('require_session', 0);
+        $base_url = post_param('base_url', '');
 
-        actual_add_zone($zone,$_title,$default_page,$header_text,$theme,$require_session,false,$base_url);
+        actual_add_zone($zone, $_title, $default_page, $header_text, $theme, $require_session, false, $base_url);
 
         sync_htaccess_with_zones();
 
         $this->set_permissions($zone);
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => $default_page),$zone);
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => $default_page), $zone);
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -753,18 +754,18 @@ class Module_admin_zones
      * @param  ?tempcode                The title to use (NULL: the EDIT_ZONE title)
      * @return tempcode                 The UI
      */
-    public function edit_zone($type = '_edit',$title = null)
+    public function edit_zone($type = '_edit', $title = null)
     {
         if (is_null($title)) {
             $title = $this->title;
         }
 
-        $start = get_param_integer('start',0);
-        $max = get_param_integer('max',50);
+        $start = get_param_integer('start', 0);
+        $max = get_param_integer('max', 50);
 
-        $_zones = find_all_zones(false,true,false,$start,$max);
+        $_zones = find_all_zones(false, true, false, $start, $max);
 
-        $url_map = array('page' => '_SELF','type' => $type);
+        $url_map = array('page' => '_SELF', 'type' => $type);
         if ($type == '_editor') {
             $url_map['wide'] = 1;
         }
@@ -772,10 +773,10 @@ class Module_admin_zones
         require_code('templates_results_table');
 
         $current_ordering = 'name ASC';
-        if (strpos($current_ordering,' ') === false) {
+        if (strpos($current_ordering, ' ') === false) {
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
-        list($sortable,$sort_order) = explode(' ',$current_ordering,2);
+        list($sortable, $sort_order) = explode(' ', $current_ordering, 2);
         $sortables = array();
 
         $header_row = results_field_title(array(
@@ -785,31 +786,31 @@ class Module_admin_zones
             do_lang_tempcode('THEME'),
             do_lang_tempcode('REQUIRE_SESSION'),
             do_lang_tempcode('ACTIONS'),
-        ),$sortables,'sort',$sortable . ' ' . $sort_order);
+        ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
         $fields = new ocp_tempcode();
 
         require_code('form_templates');
-        $max_rows = $GLOBALS['SITE_DB']->query_select_value('zones','COUNT(*)');
+        $max_rows = $GLOBALS['SITE_DB']->query_select_value('zones', 'COUNT(*)');
         foreach ($_zones as $_zone_details) {
-            list($zone_name,$zone_title,$zone_default_page,$remaining_row) = $_zone_details;
+            list($zone_name, $zone_title, $zone_default_page, $remaining_row) = $_zone_details;
 
-            $edit_link = build_url($url_map+array('id' => $zone_name),'_SELF');
+            $edit_link = build_url($url_map + array('id' => $zone_name), '_SELF');
 
             $fields->attach(results_entry(array(
-                hyperlink(build_url(array('page' => ''),$zone_name),($zone_name == '')?do_lang_tempcode('NA_EM'):make_string_tempcode(escape_html($zone_name))),
+                hyperlink(build_url(array('page' => ''), $zone_name), ($zone_name == '') ? do_lang_tempcode('NA_EM') : make_string_tempcode(escape_html($zone_name))),
                 $zone_title,
                 $zone_default_page,
-                ($remaining_row['zone_theme'] == '-1')?do_lang_tempcode('NA_EM'):hyperlink(build_url(array('page' => 'admin_themes'),'adminzone'),escape_html($remaining_row['zone_theme'])),
-                ($remaining_row['zone_require_session'] == 1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),
-                protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$zone_name)),
-            )),true);
+                ($remaining_row['zone_theme'] == '-1') ? do_lang_tempcode('NA_EM') : hyperlink(build_url(array('page' => 'admin_themes'), 'adminzone'), escape_html($remaining_row['zone_theme'])),
+                ($remaining_row['zone_require_session'] == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO'),
+                protect_from_escaping(hyperlink($edit_link, do_lang_tempcode('EDIT'), false, true, $zone_name)),
+            )), true);
         }
 
-        $table = results_table(do_lang('ZONES'),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order);
+        $table = results_table(do_lang('ZONES'), get_param_integer('start', 0), 'start', either_param_integer('max', 20), 'max', $max_rows, $header_row, $fields, $sortables, $sortable, $sort_order);
 
         $text = do_lang_tempcode('CHOOSE_EDIT_LIST');
-        $tpl = do_template('COLUMNED_TABLE_SCREEN',array('_GUID' => 'a33d3ff1178e7898b42acd83b38b5dcb','TITLE' => $title,'TEXT' => $text,'TABLE' => $table,'SUBMIT_ICON' => 'menu___generic_admin__edit_this','SUBMIT_NAME' => NULL,'POST_URL' => get_self_url()));
+        $tpl = do_template('COLUMNED_TABLE_SCREEN', array('_GUID' => 'a33d3ff1178e7898b42acd83b38b5dcb', 'TITLE' => $title, 'TEXT' => $text, 'TABLE' => $table, 'SUBMIT_ICON' => 'menu___generic_admin__edit_this', 'SUBMIT_NAME' => null, 'POST_URL' => get_self_url()));
 
         require_code('templates_internalise_screen');
         return internalise_own_screen($tpl);
@@ -824,49 +825,49 @@ class Module_admin_zones
     {
         require_lang('themes');
 
-        $zone = get_param('id',''); // '' needed for short URLs
+        $zone = get_param('id', ''); // '' needed for short URLs
         if ($zone == '/') {
             $zone = '';
         }
 
-        $rows = $GLOBALS['SITE_DB']->query_select('zones',array('*'),array('zone_name' => $zone),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('zones', array('*'), array('zone_name' => $zone), '', 1);
+        if (!array_key_exists(0, $rows)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $row = $rows[0];
 
         $header_text = get_translated_text($row['zone_header_text']);
-        list($fields,$hidden,$javascript) = $this->get_form_fields(false,get_translated_text($row['zone_title']),$row['zone_default_page'],$header_text,$row['zone_theme'],$row['zone_require_session'],$zone);
-        $hidden->attach(form_input_hidden('zone',$zone));
-        $no_delete_zones = (get_forum_type() == 'ocf')?array('','adminzone','forum'):array('','adminzone');
-        $no_rename_zones = array('','adminzone','forum');
-        $no_rename = (appengine_is_live()) || (in_array($zone,$no_rename_zones)) || (get_file_base() != get_custom_file_base());
+        list($fields, $hidden, $javascript) = $this->get_form_fields(false, get_translated_text($row['zone_title']), $row['zone_default_page'], $header_text, $row['zone_theme'], $row['zone_require_session'], $zone);
+        $hidden->attach(form_input_hidden('zone', $zone));
+        $no_delete_zones = (get_forum_type() == 'ocf') ? array('', 'adminzone', 'forum') : array('', 'adminzone');
+        $no_rename_zones = array('', 'adminzone', 'forum');
+        $no_rename = (appengine_is_live()) || (in_array($zone, $no_rename_zones)) || (get_file_base() != get_custom_file_base());
         if ($no_rename) {
-            $hidden->attach(form_input_hidden('new_zone',$zone));
+            $hidden->attach(form_input_hidden('new_zone', $zone));
         } else {
-            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => 'b6915d8e00ae36d2f47e44bbbb14ae69','TITLE' => do_lang_tempcode('ACTIONS'))));
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'b6915d8e00ae36d2f47e44bbbb14ae69', 'TITLE' => do_lang_tempcode('ACTIONS'))));
             $rename_label = 'DESCRIPTION_ZONE_RENAME';
-            if (in_array($zone,array('site','cms','collaboration'))) {
+            if (in_array($zone, array('site', 'cms', 'collaboration'))) {
                 $rename_label = 'DESCRIPTION_ZONE_RENAME_DEFAULT_ZONE';
             }
-            $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode($rename_label),'new_zone',$zone,true));
+            $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'), do_lang_tempcode($rename_label), 'new_zone', $zone, true));
         }
-        if ((!in_array($zone,$no_delete_zones)) && (!appengine_is_live()) && (is_null($GLOBALS['CURRENT_SHARE_USER']))) {
+        if ((!in_array($zone, $no_delete_zones)) && (!appengine_is_live()) && (is_null($GLOBALS['CURRENT_SHARE_USER']))) {
             if ($no_rename) {
-                $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '2fec0bddfe975b573da9bbd68ec16689','TITLE' => do_lang_tempcode('ACTIONS'))));
+                $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '2fec0bddfe975b573da9bbd68ec16689', 'TITLE' => do_lang_tempcode('ACTIONS'))));
             }
-            $fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+            $fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false));
         }
 
-        $map = array('page' => '_SELF','type' => '__edit');
-        $url = get_param('redirect',null);
+        $map = array('page' => '_SELF', 'type' => '__edit');
+        $url = get_param('redirect', null);
         if (!is_null($url)) {
             $map['redirect'] = $url;
         }
-        $post_url = build_url($map,'_SELF');
+        $post_url = build_url($map, '_SELF');
         $submit_name = do_lang_tempcode('SAVE');
 
-        return do_template('FORM_SCREEN',array('_GUID' => '54a578646aed86da06f30c459c9586c2','JAVASCRIPT' => $javascript,'HIDDEN' => $hidden,'SUBMIT_ICON' => 'menu___generic_admin__edit_this','SUBMIT_NAME' => $submit_name,'TITLE' => $this->title,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => ''));
+        return do_template('FORM_SCREEN', array('_GUID' => '54a578646aed86da06f30c459c9586c2', 'JAVASCRIPT' => $javascript, 'HIDDEN' => $hidden, 'SUBMIT_ICON' => 'menu___generic_admin__edit_this', 'SUBMIT_NAME' => $submit_name, 'TITLE' => $this->title, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => ''));
     }
 
     /**
@@ -878,28 +879,28 @@ class Module_admin_zones
     {
         $zone = post_param('zone');
 
-        $delete = post_param_integer('delete',0);
+        $delete = post_param_integer('delete', 0);
 
         if (($delete == 1) && (!appengine_is_live())) {
             actual_delete_zone($zone);
 
             // Show it worked / Refresh
-            $_url = build_url(array('page' => '_SELF','type' => 'edit'),'_SELF');
-            return redirect_screen($this->title,$_url,do_lang_tempcode('SUCCESS'));
+            $_url = build_url(array('page' => '_SELF', 'type' => 'edit'), '_SELF');
+            return redirect_screen($this->title, $_url, do_lang_tempcode('SUCCESS'));
         } else {
             $_title = post_param('title');
             $default_page = post_param('default_page');
             $header_text = post_param('header_text');
             $theme = post_param('theme');
-            $require_session = post_param_integer('require_session',0);
-            $base_url = post_param('base_url','');
+            $require_session = post_param_integer('require_session', 0);
+            $base_url = post_param('base_url', '');
 
             $new_zone = post_param('new_zone');
             if ($new_zone != $zone) {
                 appengine_live_guard();
                 check_zone_name($new_zone);
             }
-            actual_edit_zone($zone,$_title,$default_page,$header_text,$theme,$require_session,$new_zone,false,false,$base_url);
+            actual_edit_zone($zone, $_title, $default_page, $header_text, $theme, $require_session, $new_zone, false, false, $base_url);
 
             if ($new_zone != '') {
                 $this->set_permissions($new_zone);
@@ -914,20 +915,20 @@ class Module_admin_zones
                 $themes = find_all_themes();
                 foreach (array_keys($themes) as $theme) {
                     $iurl = '';
-                    if ((is_plupload()) || (((array_key_exists('logo_upload_' . $theme,$_FILES)) && (is_uploaded_file($_FILES['logo_upload_' . $theme]['tmp_name']))))) {
-                        $urls = get_url('','logo_upload_' . $theme,'themes/' . $theme . '/images_custom',0,OCP_UPLOAD_IMAGE);
+                    if ((is_plupload()) || (((array_key_exists('logo_upload_' . $theme, $_FILES)) && (is_uploaded_file($_FILES['logo_upload_' . $theme]['tmp_name']))))) {
+                        $urls = get_url('', 'logo_upload_' . $theme, 'themes/' . $theme . '/images_custom', 0, OCP_UPLOAD_IMAGE);
                         $iurl = $urls[0];
                     }
                     if ($iurl == '') {
-                        $theme_img_code = post_param('logo_select_' . $theme,'');
+                        $theme_img_code = post_param('logo_select_' . $theme, '');
                         if ($theme_img_code == '') {
                             continue; // Probably a theme was added half-way
                             //warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
                         }
-                        $iurl = find_theme_image($theme_img_code,false,true,$theme);
+                        $iurl = find_theme_image($theme_img_code, false, true, $theme);
                     }
-                    $GLOBALS['SITE_DB']->query_delete('theme_images',array('id' => 'logo/' . $new_zone . '-logo','theme' => $theme,'lang' => get_site_default_lang()),'',1);
-                    $GLOBALS['SITE_DB']->query_insert('theme_images',array('id' => 'logo/' . $new_zone . '-logo','theme' => $theme,'path' => $iurl,'lang' => get_site_default_lang()));
+                    $GLOBALS['SITE_DB']->query_delete('theme_images', array('id' => 'logo/' . $new_zone . '-logo', 'theme' => $theme, 'lang' => get_site_default_lang()), '', 1);
+                    $GLOBALS['SITE_DB']->query_insert('theme_images', array('id' => 'logo/' . $new_zone . '-logo', 'theme' => $theme, 'path' => $iurl, 'lang' => get_site_default_lang()));
                     persistent_cache_delete('THEME_IMAGES');
                 }
             }
@@ -935,12 +936,12 @@ class Module_admin_zones
             sync_htaccess_with_zones();
 
             // Show it worked / Refresh
-            $url = get_param('redirect',null);
+            $url = get_param('redirect', null);
             if (is_null($url)) {
-                $_url = build_url(array('page' => '_SELF','type' => 'edit'),'_SELF');
+                $_url = build_url(array('page' => '_SELF', 'type' => 'edit'), '_SELF');
                 $url = $_url->evaluate();
             }
-            return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+            return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
         }
     }
 
@@ -951,17 +952,17 @@ class Module_admin_zones
      */
     public function set_permissions($zone)
     {
-        $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+        $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
         $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
         foreach (array_keys($groups) as $id) {
-            if (in_array($id,$admin_groups)) {
+            if (in_array($id, $admin_groups)) {
                 continue;
             }
 
-            $value = post_param_integer('access_' . strval($id),0);
-            $GLOBALS['SITE_DB']->query_delete('group_zone_access',array('zone_name' => $zone,'group_id' => $id),'',1);
+            $value = post_param_integer('access_' . strval($id), 0);
+            $GLOBALS['SITE_DB']->query_delete('group_zone_access', array('zone_name' => $zone, 'group_id' => $id), '', 1);
             if ($value == 1) {
-                $GLOBALS['SITE_DB']->query_insert('group_zone_access',array('zone_name' => $zone,'group_id' => $id));
+                $GLOBALS['SITE_DB']->query_insert('group_zone_access', array('zone_name' => $zone, 'group_id' => $id));
             }
         }
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    users_online_block
  */
-
 class Hook_config_usersonline_show_newest_member
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_usersonline_show_newest_member
      */
     public function get_default()
     {
-        return ((has_no_forum()) || (get_forum_type() != 'ocf'))?null:'1';
+        return ((has_no_forum()) || (get_forum_type() != 'ocf')) ? null : '1';
     }
 }

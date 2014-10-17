@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_task_export_catalogue
 {
     /**
@@ -32,12 +31,12 @@ class Hook_task_export_catalogue
 
         $headers = array();
         $headers['Content-type'] = 'text/csv';
-        $headers['Content-Disposition'] = 'attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($filename))) . '"';
+        $headers['Content-Disposition'] = 'attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"';
 
         $ini_set = array();
         $ini_set['ocproducts.xss_detect'] = '0';
 
-        $catalogue_row = $GLOBALS['SITE_DB']->query_select('catalogues',array('*'),array('c_name' => $catalogue_name),'',null,null,true);
+        $catalogue_row = $GLOBALS['SITE_DB']->query_select('catalogues', array('*'), array('c_name' => $catalogue_name), '', null, null, true);
         if (is_null($catalogue_row)) {
             $catalogue_row = array();
         }
@@ -48,22 +47,22 @@ class Hook_task_export_catalogue
         $category_names = array();
 
         $outfile_path = ocp_tempnam('csv');
-        $outfile = fopen($outfile_path,'w+b');
+        $outfile = fopen($outfile_path, 'w+b');
 
-        $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name' => $catalogue_name),'ORDER BY cf_order');
+        $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => $catalogue_name), 'ORDER BY cf_order');
         global $CAT_FIELDS_CACHE;
         $CAT_FIELDS_CACHE[$catalogue_name] = $fields;
-        fwrite($outfile,'ID,');
-        fwrite($outfile,'CATEGORY');
+        fwrite($outfile, 'ID,');
+        fwrite($outfile, 'CATEGORY');
         foreach ($fields as $k) {
-            fwrite($outfile,',');
-            fwrite($outfile,'"' . str_replace('"','""',get_translated_text($k['cf_name'])) . '"');
+            fwrite($outfile, ',');
+            fwrite($outfile, '"' . str_replace('"', '""', get_translated_text($k['cf_name'])) . '"');
         }
-        fwrite($outfile,"\n");
+        fwrite($outfile, "\n");
 
         $start = 0;
         do {
-            $entry_rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('c_name' => $catalogue_name),'ORDER BY ce_add_date ASC',4000,$start);
+            $entry_rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('*'), array('c_name' => $catalogue_name), 'ORDER BY ce_add_date ASC', 4000, $start);
 
             foreach ($entry_rows as $entry_row) {
                 if (is_null($entry_row)) {
@@ -73,7 +72,7 @@ class Hook_task_export_catalogue
                     $entry_row = $entry_row[0];
                 }
 
-                $details = get_catalogue_entry_field_values($catalogue_name,$entry_row);
+                $details = get_catalogue_entry_field_values($catalogue_name, $entry_row);
 
                 $better_results = array();
                 foreach ($details as $i => $val) {
@@ -81,24 +80,25 @@ class Hook_task_export_catalogue
                 }
 
                 if (!isset($category_names[$entry_row['cc_id']])) {
-                    if (!array_key_exists($entry_row['cc_id'],$category_names)) {
-                        $category_names[$entry_row['cc_id']] = get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogue_categories','cc_title',array('id' => $entry_row['cc_id'])));
+                    if (!array_key_exists($entry_row['cc_id'], $category_names)) {
+                        $category_names[$entry_row['cc_id']] = get_translated_text($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'cc_title', array('id' => $entry_row['cc_id'])));
                     }
                 }
-                fwrite($outfile,strval($entry_row['id']) . ',');
-                fwrite($outfile,'"' . str_replace('"','""',$category_names[$entry_row['cc_id']]) . '"');
+                fwrite($outfile, strval($entry_row['id']) . ',');
+                fwrite($outfile, '"' . str_replace('"', '""', $category_names[$entry_row['cc_id']]) . '"');
                 foreach ($better_results as $v) {
-                    fwrite($outfile,',');
-                    fwrite($outfile,'"' . str_replace('"','""',$v) . '"');
+                    fwrite($outfile, ',');
+                    fwrite($outfile, '"' . str_replace('"', '""', $v) . '"');
                 }
-                fwrite($outfile,"\n");
+                fwrite($outfile, "\n");
             }
 
             $start += 4000;
-        } while (count($entry_rows) != 0);
+        }
+        while (count($entry_rows) != 0);
 
         fclose($outfile);
 
-        return array('text/csv',array($filename,$outfile_path),$headers,$ini_set);
+        return array('text/csv', array($filename, $outfile_path), $headers, $ini_set);
     }
 }

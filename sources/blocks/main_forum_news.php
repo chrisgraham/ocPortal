@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
-
 class Block_main_forum_news
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_forum_news
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param','forum','member_based','date_key','title');
+        $info['parameters'] = array('param', 'forum', 'member_based', 'date_key', 'title');
         return $info;
     }
 
@@ -47,7 +46,7 @@ class Block_main_forum_news
     {
         $info = array();
         $info['cache_on'] = 'array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'forum\',$map)?$map[\'forum\']:\'Announcements\',array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'date_key\',$map)?$map[\'date_key\']:\'firsttime\')';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60;
         return $info;
     }
 
@@ -67,74 +66,74 @@ class Block_main_forum_news
         require_css('news');
         require_code('xhtml');
 
-        $num_topics = array_key_exists('param',$map)?intval($map['param']):14;
-        $forum_name = array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS');
+        $num_topics = array_key_exists('param', $map) ? intval($map['param']) : 14;
+        $forum_name = array_key_exists('forum', $map) ? $map['forum'] : do_lang('NEWS');
 
         $num_topics = intval($num_topics);
 
-        $date_key = array_key_exists('date_key',$map)?$map['date_key']:'firsttime';
+        $date_key = array_key_exists('date_key', $map) ? $map['date_key'] : 'firsttime';
 
         $rows = array();
         $archive_url = null;
         $submit_url = new ocp_tempcode();
 
         $forum_ids = array();
-        if ((get_forum_type() == 'ocf') && ((strpos($forum_name,',') !== false) || (preg_match('#\d[-\*\+]#',$forum_name) != 0) || (is_numeric($forum_name)))) {
+        if ((get_forum_type() == 'ocf') && ((strpos($forum_name, ',') !== false) || (preg_match('#\d[-\*\+]#', $forum_name) != 0) || (is_numeric($forum_name)))) {
             require_code('ocfiltering');
-            $forum_names = ocfilter_to_idlist_using_db($forum_name,'id','f_forums','f_forums','f_parent_forum','f_parent_forum','id',true,true,$GLOBALS['FORUM_DB']);
+            $forum_names = ocfilter_to_idlist_using_db($forum_name, 'id', 'f_forums', 'f_forums', 'f_parent_forum', 'f_parent_forum', 'id', true, true, $GLOBALS['FORUM_DB']);
         } else {
-            $forum_names = explode(',',$forum_name);
+            $forum_names = explode(',', $forum_name);
         }
         foreach ($forum_names as $forum_name) {
-            $forum_name = is_integer($forum_name)?strval($forum_name):trim($forum_name);
+            $forum_name = is_integer($forum_name) ? strval($forum_name) : trim($forum_name);
 
             if ($forum_name == '<announce>') {
                 $forum_id = null;
             } else {
-                $forum_id = is_numeric($forum_name)?intval($forum_name):$GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
+                $forum_id = is_numeric($forum_name) ? intval($forum_name) : $GLOBALS['FORUM_DRIVER']->forum_id_from_name($forum_name);
             }
 
             if (!is_null($forum_id)) {
                 $forum_ids[$forum_id] = $forum_name;
                 if (is_null($archive_url)) {
-                    $archive_url = $GLOBALS['FORUM_DRIVER']->forum_url($forum_id,true); // First forum will count as archive
+                    $archive_url = $GLOBALS['FORUM_DRIVER']->forum_url($forum_id, true); // First forum will count as archive
                     if (get_forum_type() == 'ocf') {
-                        $submit_url = build_url(array('page' => 'topics','type' => 'new_topic','id' => $forum_id),get_module_zone('topics'));
+                        $submit_url = build_url(array('page' => 'topics', 'type' => 'new_topic', 'id' => $forum_id), get_module_zone('topics'));
                     }
                 }
             }
         }
 
         $max_rows = 0;
-        $rows = $GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids,$num_topics,0,$max_rows,'',true,$date_key);
+        $rows = $GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids, $num_topics, 0, $max_rows, '', true, $date_key);
         if (is_null($rows)) {
             $rows = array();
         }
 
-        sort_maps_by($rows,$date_key);
-        $rows = array_reverse($rows,false);
+        sort_maps_by($rows, $date_key);
+        $rows = array_reverse($rows, false);
 
         $_title = do_lang_tempcode('NEWS');
-        if ((array_key_exists('title',$map)) && ($map['title'] != '')) {
+        if ((array_key_exists('title', $map)) && ($map['title'] != '')) {
             $_title = protect_from_escaping(escape_html($map['title']));
         }
 
         $i = 0;
         $news_text = new ocp_tempcode();
-        while (array_key_exists($i,$rows)) {
+        while (array_key_exists($i, $rows)) {
             $myrow = $rows[$i];
 
             $id = $myrow['id'];
             $date = get_timezoned_date($myrow[$date_key]);
-            $author_url = (((array_key_exists('member_based',$map)) && ($map['member_based'] == '1')) || (!addon_installed('authors')))?new ocp_tempcode():build_url(array('page' => 'authors','type' => 'misc','author' => $myrow['firstusername']),get_module_zone('authors'));
+            $author_url = (((array_key_exists('member_based', $map)) && ($map['member_based'] == '1')) || (!addon_installed('authors'))) ? new ocp_tempcode() : build_url(array('page' => 'authors', 'type' => 'misc', 'author' => $myrow['firstusername']), get_module_zone('authors'));
             $author = $myrow['firstusername'];
             $news_title = $myrow['title'];
-            $news = is_object($myrow['firstpost'])?$myrow['firstpost']:make_string_tempcode(xhtmlise_html($myrow['firstpost']));
+            $news = is_object($myrow['firstpost']) ? $myrow['firstpost'] : make_string_tempcode(xhtmlise_html($myrow['firstpost']));
             if (is_null($news)) {
                 $news = '';
             }
-            $full_url = $GLOBALS['FORUM_DRIVER']->topic_url($id,'',true);
-            $news_text->attach(do_template('NEWS_BOX',array(
+            $full_url = $GLOBALS['FORUM_DRIVER']->topic_url($id, '', true);
+            $news_text->attach(do_template('NEWS_BOX', array(
                 '_GUID' => '12fa98717a768ccbe28884bdbae0313b',
                 'GIVE_CONTEXT' => false,
                 'TRUNCATE' => false,
@@ -159,7 +158,7 @@ class Block_main_forum_news
                 'AUTHOR' => $author,
                 'AUTHOR_URL' => $author_url,
                 'NEWS' => $news,
-                'FORUM_ID' => isset($myrow['forum_id'])?strval($myrow['forum_id']):'',
+                'FORUM_ID' => isset($myrow['forum_id']) ? strval($myrow['forum_id']) : '',
             )));
 
             $i++;
@@ -169,17 +168,17 @@ class Block_main_forum_news
             }
         }
         if ($news_text->is_empty()) {
-            return do_template('BLOCK_NO_ENTRIES',array('_GUID' => 'f55c90205b4c80162494fc5e2b565ce6','HIGH' => false,'TITLE' => $_title,'MESSAGE' => do_lang_tempcode('NO_NEWS'),'ADD_NAME' => do_lang_tempcode('ADD_TOPIC'),'SUBMIT_URL' => $submit_url));
+            return do_template('BLOCK_NO_ENTRIES', array('_GUID' => 'f55c90205b4c80162494fc5e2b565ce6', 'HIGH' => false, 'TITLE' => $_title, 'MESSAGE' => do_lang_tempcode('NO_NEWS'), 'ADD_NAME' => do_lang_tempcode('ADD_TOPIC'), 'SUBMIT_URL' => $submit_url));
         }
 
         if (is_null($forum_id)) {
             $archive_url = '';
         }
 
-        return do_template('BLOCK_MAIN_FORUM_NEWS',array(
+        return do_template('BLOCK_MAIN_FORUM_NEWS', array(
             '_GUID' => '36b05da9aed5a2056bdb266e2ce4be9f',
             'TITLE' => $_title,
-            'FORUM_NAME' => array_key_exists('forum',$map)?$map['forum']:do_lang('NEWS'),
+            'FORUM_NAME' => array_key_exists('forum', $map) ? $map['forum'] : do_lang('NEWS'),
             'CONTENT' => $news_text,
             'BRIEF' => new ocp_tempcode(),
             'ARCHIVE_URL' => $archive_url,

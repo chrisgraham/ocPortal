@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_main_forum_name
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_main_forum_name
      */
     public function get_default()
     {
-        return has_no_forum()?null:do_lang('DEFAULT_FORUM_TITLE','','','',get_site_default_lang());
+        return has_no_forum() ? null : do_lang('DEFAULT_FORUM_TITLE', '', '', '', get_site_default_lang());
     }
 }

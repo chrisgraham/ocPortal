@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
-
 class Hook_task_send_newsletter
 {
     /**
@@ -36,7 +35,7 @@ class Hook_task_send_newsletter
      * @param  ID_TEXT                  The template used to show the email
      * @return ?array                   A tuple of at least 2: Return mime-type, content (either Tempcode, or a string, or a filename and file-path pair to a temporary file), map of HTTP headers if transferring immediately, map of ini_set commands if transferring immediately (NULL: show standard success message)
      */
-    public function run($message,$subject,$lang,$send_details,$html_only,$from_email,$from_name,$priority,$csv_data,$mail_template)
+    public function run($message, $subject, $lang, $send_details, $html_only, $from_email, $from_name, $priority, $csv_data, $mail_template)
     {
         require_code('newsletter');
         require_code('mail');
@@ -53,7 +52,7 @@ class Hook_task_send_newsletter
 
         $start = 0;
         do {
-            list($addresses,$hashes,$usernames,$forenames,$surnames,$ids,) = newsletter_who_send_to($send_details,$lang,$start,100,false,$csv_data);
+            list($addresses, $hashes, $usernames, $forenames, $surnames, $ids,) = newsletter_who_send_to($send_details, $lang, $start, 100, false, $csv_data);
 
             // Send to all
             foreach ($addresses as $i => $email_address) {
@@ -62,29 +61,29 @@ class Hook_task_send_newsletter
                 }
 
                 // Variable substitution in body
-                if ($needs_substitutions === NULL || $needs_substitutions) {
-                    $newsletter_message_substituted = (strpos($message,'{') === false)?$message:newsletter_variable_substitution($message,$subject,$forenames[$i],$surnames[$i],$usernames[$i],$email_address,$ids[$i],$hashes[$i]);
+                if ($needs_substitutions === null || $needs_substitutions) {
+                    $newsletter_message_substituted = (strpos($message, '{') === false) ? $message : newsletter_variable_substitution($message, $subject, $forenames[$i], $surnames[$i], $usernames[$i], $email_address, $ids[$i], $hashes[$i]);
 
-                    if ($needs_substitutions === NULL) {
+                    if ($needs_substitutions === null) {
                         $needs_substitutions = ($newsletter_message_substituted != $message);
                     }
                 } else {
                     $newsletter_message_substituted = $message;
                 }
                 $in_html = false;
-                if (strpos($newsletter_message_substituted,'<html') === false) {
+                if (strpos($newsletter_message_substituted, '<html') === false) {
                     if ($html_only == 1) {
-                        $_m = comcode_to_tempcode($newsletter_message_substituted,get_member(),true);
+                        $_m = comcode_to_tempcode($newsletter_message_substituted, get_member(), true);
                         $newsletter_message_substituted = $_m->evaluate($lang);
                         $in_html = true;
                     }
                 } else {
-                    if ($needs_tempcode === NULL || $needs_tempcode) {
+                    if ($needs_tempcode === null || $needs_tempcode) {
                         require_code('tempcode_compiler');
                         $_m = template_to_tempcode($newsletter_message_substituted);
                         $temp = $_m->evaluate($lang);
 
-                        if ($needs_tempcode === NULL) {
+                        if ($needs_tempcode === null) {
                             $needs_tempcode = (trim($temp) != trim($newsletter_message_substituted));
                         }
 
@@ -94,7 +93,7 @@ class Hook_task_send_newsletter
                 }
 
                 if (!is_null($last_cron)) {
-                    $GLOBALS['SITE_DB']->query_insert('newsletter_drip_send',array(
+                    $GLOBALS['SITE_DB']->query_insert('newsletter_drip_send', array(
                         'd_inject_time' => time(),
                         'd_subject' => $subject,
                         'd_message' => $newsletter_message_substituted,
@@ -107,7 +106,7 @@ class Hook_task_send_newsletter
                         'd_template' => $mail_template,
                     ));
                 } else {
-                    mail_wrap($subject,$newsletter_message_substituted,array($email_address),array($usernames[$i]),$from_email,$from_name,$priority,null,true,null,true,$in_html,false,$mail_template);
+                    mail_wrap($subject, $newsletter_message_substituted, array($email_address), array($usernames[$i]), $from_email, $from_name, $priority, null, true, null, true, $in_html, false, $mail_template);
                 }
 
                 if (function_exists('gc_collect_cycles')) {
@@ -115,8 +114,9 @@ class Hook_task_send_newsletter
                 } // Stop problem with PHP leaking memory
             }
             $start += 100;
-        } while (array_key_exists(0,$addresses));
+        }
+        while (array_key_exists(0, $addresses));
 
-        return array('text/html',do_lang_tempcode('SENDING_NEWSLETTER'));
+        return array('text/html', do_lang_tempcode('SENDING_NEWSLETTER'));
     }
 }

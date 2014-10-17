@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_config_ffmpeg_path
 {
     /**
@@ -49,7 +48,7 @@ class Hook_config_ffmpeg_path
     public function get_default()
     {
         if (GOOGLE_APPENGINE) {
-            return NULL;
+            return null;
         }
         return '';
     }

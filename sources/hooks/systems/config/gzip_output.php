@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_gzip_output
 {
     /**
@@ -48,7 +47,7 @@ class Hook_config_gzip_output
     public function get_default()
     {
         if (GOOGLE_APPENGINE) {
-            return NULL;
+            return null;
         }
         return '0';
     }

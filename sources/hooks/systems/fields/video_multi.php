@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_video_multi
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_video_multi
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_video_multi
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -59,10 +58,10 @@ class Hook_fields_video_multi
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
         unset($field);
-        return array('long_unescaped',$default,'long');
+        return array('long_unescaped', $default, 'long');
     }
 
     /**
@@ -79,7 +78,7 @@ class Hook_fields_video_multi
      * @param  ?MEMBER                  Submitter (NULL: current member)
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev,$i,$only_fields,$table = null,$id = null,$id_field = null,$url_field = null,$submitter = null)
+    public function render_field_value($field, $ev, $i, $only_fields, $table = null, $id = null, $id_field = null, $url_field = null, $submitter = null)
     {
         if (is_object($ev)) {
             return $ev;
@@ -100,11 +99,11 @@ class Hook_fields_video_multi
         }
 
         $ret = new ocp_tempcode();
-        $evs = explode("\n",$ev);
+        $evs = explode("\n", $ev);
         foreach ($evs as $ev) {
             if (addon_installed('galleries')) {
                 if ((!is_null($table)) && (!is_null($id)) && (!is_null($id_field)) && (!is_null($url_field))) {
-                    $ev = transcode_video($ev,$table,$id,$id_field,$url_field,null,null,null);
+                    $ev = transcode_video($ev, $table, $id, $id_field, $url_field, null, null, null);
                 }
 
                 $thumb_url = create_video_thumb($ev);
@@ -113,18 +112,18 @@ class Hook_fields_video_multi
             }
 
             $stripped_ev = $ev;
-            if (substr($stripped_ev,0,strlen(get_custom_base_url() . '/')) == get_custom_base_url() . '/') {
-                $stripped_ev = substr($stripped_ev,strlen(get_custom_base_url() . '/'));
+            if (substr($stripped_ev, 0, strlen(get_custom_base_url() . '/')) == get_custom_base_url() . '/') {
+                $stripped_ev = substr($stripped_ev, strlen(get_custom_base_url() . '/'));
             }
             if ((!url_is_local($stripped_ev)) || (!addon_installed('galleries'))) {
                 $width = intval(get_option('attachment_default_width'));
                 $height = intval(get_option('attachment_default_height'));
                 $length = 0;
             } else {
-                list($width,$height,$length) = get_video_details(get_custom_file_base() . '/' . rawurldecode($stripped_ev),basename($stripped_ev));
+                list($width, $height, $length) = get_video_details(get_custom_file_base() . '/' . rawurldecode($stripped_ev), basename($stripped_ev));
             }
 
-            if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts',$field)/*not a CPF*/)) {
+            if ((url_is_local($ev)) && (!array_key_exists('cf_show_in_posts', $field)/*not a CPF*/)) {
                 $keep = symbol_tempcode('KEEP');
                 $download_url = find_script('catalogue_file') . '?file=' . urlencode(basename($ev)) . '&table=' . urlencode($table) . '&id=' . urlencode(strval($id)) . '&id_field=' . urlencode($id_field) . '&url_field=' . urlencode($url_field) . $keep->evaluate();
             } else {
@@ -135,14 +134,14 @@ class Hook_fields_video_multi
             require_code('mime_types');
             require_code('files');
 
-            $as_admin = has_privilege($submitter,'comcode_dangerous');
+            $as_admin = has_privilege($submitter, 'comcode_dangerous');
 
             $attributes = array(
                 'thumb_url' => $thumb_url,
                 'width' => strval($width),
                 'height' => strval($height),
-                'length' => ($length == 0)?'':strval($length),
-                'mime_type' => get_mime_type(get_file_extension($download_url),$as_admin), // will not render as dangerous stuff (swf's etc), unless admin
+                'length' => ($length == 0) ? '' : strval($length),
+                'mime_type' => get_mime_type(get_file_extension($download_url), $as_admin), // will not render as dangerous stuff (swf's etc), unless admin
                 'context' => 'field_hook',
             );
 
@@ -175,16 +174,16 @@ class Hook_fields_video_multi
      * @param  boolean                  Whether this is for a new entry
      * @return ?array                   A pair: The Tempcode for the input field, Tempcode for hidden fields (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         $say_required = ($field['cf_required'] == 1) && (($actual_value == '') || (is_null($actual_value)));
         require_code('galleries');
-        $ffield = form_input_upload_multi($_cf_name,$_cf_description,'field_' . strval($field['id']),$say_required,null,($field['cf_required'] == 1)?NULL/*so unlink option not shown*/:(($actual_value == '')?null:explode("\n",$actual_value)),true,get_allowed_video_file_types());
+        $ffield = form_input_upload_multi($_cf_name, $_cf_description, 'field_' . strval($field['id']), $say_required, null, ($field['cf_required'] == 1) ? null/*so unlink option not shown*/ : (($actual_value == '') ? null : explode("\n", $actual_value)), true, get_allowed_video_file_types());
 
         $hidden = new ocp_tempcode();
         handle_max_file_size($hidden);
 
-        return array($ffield,$hidden);
+        return array($ffield, $hidden);
     }
 
     /**
@@ -196,10 +195,10 @@ class Hook_fields_video_multi
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         if (is_null($upload_dir)) {
-            return NULL;
+            return null;
         }
 
         if (!fractional_edit()) {
@@ -207,14 +206,14 @@ class Hook_fields_video_multi
 
             $value = '';
 
-            $_old_value = ((is_null($old_value)) || ($old_value['cv_value'] == ''))?array():explode("\n",$old_value['cv_value']);
+            $_old_value = ((is_null($old_value)) || ($old_value['cv_value'] == '')) ? array() : explode("\n", $old_value['cv_value']);
 
             require_code('uploads');
             is_plupload(true);
 
             if ($editing) {
                 foreach ($_old_value as $i => $_value) {
-                    $unlink = (post_param_integer('field_' . strval($id) . '_' . strval($i+1) . '_unlink',0) == 1);
+                    $unlink = (post_param_integer('field_' . strval($id) . '_' . strval($i + 1) . '_unlink', 0) == 1);
                     if ($unlink) {
                         @unlink(get_custom_file_base() . '/' . rawurldecode($_value));
                         sync_file(rawurldecode($_value));
@@ -230,7 +229,7 @@ class Hook_fields_video_multi
             $i = 1;
             do {
                 $tmp_name = 'field_' . strval($id) . '_' . strval($i);
-                $temp = get_url($tmp_name . '_url',$tmp_name,$upload_dir,0,OCP_UPLOAD_VIDEO);
+                $temp = get_url($tmp_name . '_url', $tmp_name, $upload_dir, 0, OCP_UPLOAD_VIDEO);
                 $_value = $temp[0];
                 if ($_value != '') {
                     if ($value != '') {
@@ -240,7 +239,8 @@ class Hook_fields_video_multi
                 }
 
                 $i++;
-            } while (array_key_exists($tmp_name,$_FILES));
+            }
+            while (array_key_exists($tmp_name, $_FILES));
         } else {
             return STRING_MAGIC_NULL;
         }
@@ -255,7 +255,7 @@ class Hook_fields_video_multi
     public function cleanup($value)
     {
         if ($value['cv_value'] != '') {
-            $files = explode("\n",$value['cv_value']);
+            $files = explode("\n", $value['cv_value']);
             foreach ($files as $file) {
                 @unlink(get_custom_file_base() . '/' . rawurldecode($file));
                 sync_file(rawurldecode($file));

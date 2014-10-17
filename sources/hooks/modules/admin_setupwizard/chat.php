@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_sw_chat
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_chat
             return array();
         }
 
-        return array(array(),array('side_shoutbox' => array('PANEL_NONE','PANEL_RIGHT')));
+        return array(array(), array('side_shoutbox' => array('PANEL_NONE', 'PANEL_RIGHT')));
     }
 }

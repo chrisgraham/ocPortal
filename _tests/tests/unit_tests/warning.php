@@ -19,6 +19,7 @@
 class warning_test_set extends ocp_test_case
 {
     public $warn_id;
+
     public function setUp()
     {
         parent::setUp();
@@ -28,19 +29,19 @@ class warning_test_set extends ocp_test_case
 
         $this->establish_admin_session();
 
-        $this->warn_id = ocf_make_warning(1,'nothing',null,null,1,null,null,0,'',0,0,null);
+        $this->warn_id = ocf_make_warning(1, 'nothing', null, null, 1, null, null, 0, '', 0, 0, null);
 
         // Test the forum was actually created
-        $this->assertTrue('nothing' == $GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_explanation',array('id' => $this->warn_id)));
+        $this->assertTrue('nothing' == $GLOBALS['FORUM_DB']->query_select_value('f_warnings', 'w_explanation', array('id' => $this->warn_id)));
     }
 
     public function testEditWarning()
     {
         // Test the forum edits
-        ocf_edit_warning($this->warn_id,'something',1);
+        ocf_edit_warning($this->warn_id, 'something', 1);
 
         // Test the forum was actually created
-        $this->assertTrue('something' == $GLOBALS['FORUM_DB']->query_select_value('f_warnings','w_explanation',array('id' => $this->warn_id)));
+        $this->assertTrue('something' == $GLOBALS['FORUM_DB']->query_select_value('f_warnings', 'w_explanation', array('id' => $this->warn_id)));
     }
 
     public function tearDown()

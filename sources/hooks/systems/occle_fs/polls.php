@@ -32,7 +32,7 @@ class Hook_occle_fs_polls extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['SITE_DB']->query_select_value('poll','COUNT(*)');
+        return $GLOBALS['SITE_DB']->query_select_value('poll', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_polls extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['SITE_DB']->query_select('poll',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('question') => $label));
+        $_ret = $GLOBALS['SITE_DB']->query_select('poll', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('question') => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -101,22 +101,22 @@ class Hook_occle_fs_polls extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('polls2');
 
-        $a1 = $this->_default_property_str($properties,'answer1');
-        $a2 = $this->_default_property_str($properties,'answer2');
-        $a3 = $this->_default_property_str($properties,'answer3');
-        $a4 = $this->_default_property_str($properties,'answer4');
-        $a5 = $this->_default_property_str($properties,'answer5');
-        $a6 = $this->_default_property_str($properties,'answer6');
-        $a7 = $this->_default_property_str($properties,'answer7');
-        $a8 = $this->_default_property_str($properties,'answer8');
-        $a9 = $this->_default_property_str($properties,'answer9');
-        $a10 = $this->_default_property_str($properties,'answer10');
+        $a1 = $this->_default_property_str($properties, 'answer1');
+        $a2 = $this->_default_property_str($properties, 'answer2');
+        $a3 = $this->_default_property_str($properties, 'answer3');
+        $a4 = $this->_default_property_str($properties, 'answer4');
+        $a5 = $this->_default_property_str($properties, 'answer5');
+        $a6 = $this->_default_property_str($properties, 'answer6');
+        $a7 = $this->_default_property_str($properties, 'answer7');
+        $a8 = $this->_default_property_str($properties, 'answer8');
+        $a9 = $this->_default_property_str($properties, 'answer9');
+        $a10 = $this->_default_property_str($properties, 'answer10');
         $num_options = 10;
         if ($a10 == '') {
             $num_options = 9;
@@ -145,27 +145,27 @@ class Hook_occle_fs_polls extends resource_fs_base
         if ($a2 == '') {
             $num_options = 1;
         }
-        $current = $this->_default_property_int($properties,'current');
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','poll',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','poll',1);
-        $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','poll',1);
-        $notes = $this->_default_property_str($properties,'notes');
-        $time = $this->_default_property_int_null($properties,'add_date');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $use_time = $this->_default_property_int_null($properties,'use_time');
-        $v1 = $this->_default_property_int($properties,'votes1');
-        $v2 = $this->_default_property_int($properties,'votes2');
-        $v3 = $this->_default_property_int($properties,'votes3');
-        $v4 = $this->_default_property_int($properties,'votes4');
-        $v5 = $this->_default_property_int($properties,'votes5');
-        $v6 = $this->_default_property_int($properties,'votes6');
-        $v7 = $this->_default_property_int($properties,'votes7');
-        $v8 = $this->_default_property_int($properties,'votes8');
-        $v9 = $this->_default_property_int($properties,'votes9');
-        $v10 = $this->_default_property_int($properties,'votes10');
-        $views = $this->_default_property_int($properties,'views');
-        $edit_date = $this->_default_property_int_null($properties,'edit_date');
-        $id = add_poll($label,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$current,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$time,$submitter,$use_time,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$v10,$views,$edit_date);
+        $current = $this->_default_property_int($properties, 'current');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'poll', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'poll', 1);
+        $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'poll', 1);
+        $notes = $this->_default_property_str($properties, 'notes');
+        $time = $this->_default_property_int_null($properties, 'add_date');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $use_time = $this->_default_property_int_null($properties, 'use_time');
+        $v1 = $this->_default_property_int($properties, 'votes1');
+        $v2 = $this->_default_property_int($properties, 'votes2');
+        $v3 = $this->_default_property_int($properties, 'votes3');
+        $v4 = $this->_default_property_int($properties, 'votes4');
+        $v5 = $this->_default_property_int($properties, 'votes5');
+        $v6 = $this->_default_property_int($properties, 'votes6');
+        $v7 = $this->_default_property_int($properties, 'votes7');
+        $v8 = $this->_default_property_int($properties, 'votes8');
+        $v9 = $this->_default_property_int($properties, 'votes9');
+        $v10 = $this->_default_property_int($properties, 'votes10');
+        $views = $this->_default_property_int($properties, 'views');
+        $edit_date = $this->_default_property_int_null($properties, 'edit_date');
+        $id = add_poll($label, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $num_options, $current, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $time, $submitter, $use_time, $v1, $v2, $v3, $v4, $v5, $v6, $v7, $v8, $v9, $v10, $views, $edit_date);
         return strval($id);
     }
 
@@ -176,12 +176,12 @@ class Hook_occle_fs_polls extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('poll',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('poll', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -229,24 +229,24 @@ class Hook_occle_fs_polls extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('polls2');
 
-        $label = $this->_default_property_str($properties,'label');
-        $a1 = $this->_default_property_str($properties,'answer1');
-        $a2 = $this->_default_property_str($properties,'answer2');
-        $a3 = $this->_default_property_str($properties,'answer3');
-        $a4 = $this->_default_property_str($properties,'answer4');
-        $a5 = $this->_default_property_str($properties,'answer5');
-        $a6 = $this->_default_property_str($properties,'answer6');
-        $a7 = $this->_default_property_str($properties,'answer7');
-        $a8 = $this->_default_property_str($properties,'answer8');
-        $a9 = $this->_default_property_str($properties,'answer9');
-        $a10 = $this->_default_property_str($properties,'answer10');
+        $label = $this->_default_property_str($properties, 'label');
+        $a1 = $this->_default_property_str($properties, 'answer1');
+        $a2 = $this->_default_property_str($properties, 'answer2');
+        $a3 = $this->_default_property_str($properties, 'answer3');
+        $a4 = $this->_default_property_str($properties, 'answer4');
+        $a5 = $this->_default_property_str($properties, 'answer5');
+        $a6 = $this->_default_property_str($properties, 'answer6');
+        $a7 = $this->_default_property_str($properties, 'answer7');
+        $a8 = $this->_default_property_str($properties, 'answer8');
+        $a9 = $this->_default_property_str($properties, 'answer9');
+        $a10 = $this->_default_property_str($properties, 'answer10');
         $num_options = 10;
         if ($a10 == '') {
             $num_options = 9;
@@ -275,28 +275,28 @@ class Hook_occle_fs_polls extends resource_fs_base
         if ($a2 == '') {
             $num_options = 1;
         }
-        $current = $this->_default_property_int($properties,'current');
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','poll',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','poll',1);
-        $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','poll',1);
-        $notes = $this->_default_property_str($properties,'notes');
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $use_time = $this->_default_property_int_null($properties,'use_time');
-        $v1 = $this->_default_property_int($properties,'votes1');
-        $v2 = $this->_default_property_int($properties,'votes2');
-        $v3 = $this->_default_property_int($properties,'votes3');
-        $v4 = $this->_default_property_int($properties,'votes4');
-        $v5 = $this->_default_property_int($properties,'votes5');
-        $v6 = $this->_default_property_int($properties,'votes6');
-        $v7 = $this->_default_property_int($properties,'votes7');
-        $v8 = $this->_default_property_int($properties,'votes8');
-        $v9 = $this->_default_property_int($properties,'votes9');
-        $v10 = $this->_default_property_int($properties,'votes10');
-        $views = $this->_default_property_int($properties,'views');
-        $edit_time = $this->_default_property_int_null($properties,'edit_date');
+        $current = $this->_default_property_int($properties, 'current');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'poll', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'poll', 1);
+        $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'poll', 1);
+        $notes = $this->_default_property_str($properties, 'notes');
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $use_time = $this->_default_property_int_null($properties, 'use_time');
+        $v1 = $this->_default_property_int($properties, 'votes1');
+        $v2 = $this->_default_property_int($properties, 'votes2');
+        $v3 = $this->_default_property_int($properties, 'votes3');
+        $v4 = $this->_default_property_int($properties, 'votes4');
+        $v5 = $this->_default_property_int($properties, 'votes5');
+        $v6 = $this->_default_property_int($properties, 'votes6');
+        $v7 = $this->_default_property_int($properties, 'votes7');
+        $v8 = $this->_default_property_int($properties, 'votes8');
+        $v9 = $this->_default_property_int($properties, 'votes9');
+        $v10 = $this->_default_property_int($properties, 'votes10');
+        $views = $this->_default_property_int($properties, 'views');
+        $edit_time = $this->_default_property_int_null($properties, 'edit_date');
 
-        edit_poll(intval($resource_id),$label,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$a10,$num_options,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$edit_time,$add_time,$views,$submitter,true);
+        edit_poll(intval($resource_id), $label, $a1, $a2, $a3, $a4, $a5, $a6, $a7, $a8, $a9, $a10, $num_options, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $edit_time, $add_time, $views, $submitter, true);
 
         return $resource_id;
     }
@@ -308,9 +308,9 @@ class Hook_occle_fs_polls extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('polls2');
         delete_poll(intval($resource_id));

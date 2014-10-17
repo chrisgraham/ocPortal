@@ -49,14 +49,14 @@ class Module_admin_trackbacks
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
-        if ((get_option('is_on_trackbacks') == '0') || ($GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks','COUNT(*)',null,'',true) == 0)) {
-            return NULL;
+        if ((get_option('is_on_trackbacks') == '0') || ($GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks', 'COUNT(*)', null, '', true) == 0)) {
+            return null;
         }
 
         return array(
-            'misc' => array('MANAGE_TRACKBACKS','menu/adminzone/audit/trackbacks'),
+            'misc' => array('MANAGE_TRACKBACKS', 'menu/adminzone/audit/trackbacks'),
         );
     }
 
@@ -69,7 +69,7 @@ class Module_admin_trackbacks
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('trackbacks');
 
@@ -83,7 +83,7 @@ class Module_admin_trackbacks
             $this->title = get_screen_title('DELETE_TRACKBACKS');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -93,7 +93,7 @@ class Module_admin_trackbacks
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->choose();
@@ -112,11 +112,11 @@ class Module_admin_trackbacks
      */
     public function choose()
     {
-        $trackback_rows = $GLOBALS['SITE_DB']->query_select('trackbacks',array('*'),null,'ORDER BY id DESC',1000);
+        $trackback_rows = $GLOBALS['SITE_DB']->query_select('trackbacks', array('*'), null, 'ORDER BY id DESC', 1000);
 
         $trackbacks = '';
         foreach ($trackback_rows as $value) {
-            $trackbacks .= static_evaluate_tempcode(do_template('TRACKBACK',array(
+            $trackbacks .= static_evaluate_tempcode(do_template('TRACKBACK', array(
                 '_GUID' => 'eb005ff4cf387e4c18cbc862c38555e3',
                 'ID' => strval($value['id']),
                 'TIME_RAW' => strval($value['trackback_time']),
@@ -128,7 +128,7 @@ class Module_admin_trackbacks
             )));
         }
 
-        return do_template('TRACKBACK_DELETE_SCREEN',array('_GUID' => '51f7e4c1976bcaf120758d2c86771289','TITLE' => $this->title,'TRACKBACKS' => $trackbacks,'LOTS' => count($trackback_rows) == 1000));
+        return do_template('TRACKBACK_DELETE_SCREEN', array('_GUID' => '51f7e4c1976bcaf120758d2c86771289', 'TITLE' => $this->title, 'TRACKBACKS' => $trackbacks, 'LOTS' => count($trackback_rows) == 1000));
     }
 
     /**
@@ -143,22 +143,22 @@ class Module_admin_trackbacks
                 continue;
             }
 
-            if (substr($key,0,10) == 'trackback_') {
-                $id = intval(substr($key,10));
+            if (substr($key, 0, 10) == 'trackback_') {
+                $id = intval(substr($key, 10));
                 switch ($val) {
                     case '2':
                         if (addon_installed('securitylogging')) {
-                            $trackback_ip = $GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks','trackback_ip',array('id' => $id));
+                            $trackback_ip = $GLOBALS['SITE_DB']->query_select_value_if_there('trackbacks', 'trackback_ip', array('id' => $id));
                             if (is_null($trackback_ip)) {
                                 break;
                             }
                             require_code('failure');
-                            add_ip_ban($trackback_ip,do_lang('TRACKBACK_SPAM'));
-                            syndicate_spammer_report($trackback_ip,'','',do_lang('TRACKBACK_SPAM'),true);
+                            add_ip_ban($trackback_ip, do_lang('TRACKBACK_SPAM'));
+                            syndicate_spammer_report($trackback_ip, '', '', do_lang('TRACKBACK_SPAM'), true);
                         }
-                        // Intentionally no 'break' line below
+                    // Intentionally no 'break' line below
                     case '1':
-                        $GLOBALS['SITE_DB']->query_delete('trackbacks',array('id' => $id),'',1);
+                        $GLOBALS['SITE_DB']->query_delete('trackbacks', array('id' => $id), '', 1);
                         break;
                     // (zero is do nothing)
                 }
@@ -167,11 +167,11 @@ class Module_admin_trackbacks
 
         // Show it worked / Refresh
         $text = do_lang_tempcode('SUCCESS');
-        $url = get_param('redirect',null);
+        $url = get_param('redirect', null);
         if (is_null($url)) {
-            $_url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
+            $_url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
             $url = $_url->evaluate();
         }
-        return redirect_screen($this->title,$url,$text);
+        return redirect_screen($this->title, $url, $text);
     }
 }

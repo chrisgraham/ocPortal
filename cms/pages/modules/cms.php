@@ -49,10 +49,10 @@ class Module_cms
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('CMS','menu/cms/cms'),
+            '!' => array('CMS', 'menu/cms/cms'),
         );
     }
 
@@ -65,7 +65,7 @@ class Module_cms
      */
     public function pre_run()
     {
-        $type = get_param('type','cms');
+        $type = get_param('type', 'cms');
 
         require_code('menus');
 
@@ -73,7 +73,7 @@ class Module_cms
 
         $this->title = get_screen_title('menus:MODULE_TRANS_NAME_cms');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -85,6 +85,6 @@ class Module_cms
     {
         require_code('templates_donext');
 
-        return do_next_manager_hooked('menus:CMS_ZONE','menus:DOC_CMS','cms','menus:MODULE_TRANS_NAME_cms');
+        return do_next_manager_hooked('menus:CMS_ZONE', 'menus:DOC_CMS', 'cms', 'menus:MODULE_TRANS_NAME_cms');
     }
 }

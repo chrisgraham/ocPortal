@@ -34,7 +34,7 @@ function get_catalogue_fields($catalogue_name = null)
         if (!is_null($catalogue_name)) {
             $where += array('c_name' => $catalogue_name);
         }
-        $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),$where,'ORDER BY cf_order');
+        $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), $where, 'ORDER BY cf_order');
         $CAT_FIELDS_CACHE[$catalogue_name] = $fields;
     }
     return $fields;
@@ -54,14 +54,14 @@ function get_fields_hook($type)
     }
 
     $path = 'hooks/systems/fields/' . filter_naughty($type);
-    if ((!/*common ones we know have hooks*/in_array($type,array('author','auto_increment','codename','color','content_link','date','email','float','guid','integer','just_date','just_time','list','long_text','long_trans','page_link','password','picture','video','posting_field','radiolist','random','reference','short_text','short_trans','theme_image','tick','upload','url','member'))) && (!is_file(get_file_base() . '/sources/' . $path . '.php')) && (!is_file(get_file_base() . '/sources_custom/' . $path . '.php'))) {
-        $hooks = find_all_hooks('systems','fields');
+    if ((!/*common ones we know have hooks*/in_array($type, array('author', 'auto_increment', 'codename', 'color', 'content_link', 'date', 'email', 'float', 'guid', 'integer', 'just_date', 'just_time', 'list', 'long_text', 'long_trans', 'page_link', 'password', 'picture', 'video', 'posting_field', 'radiolist', 'random', 'reference', 'short_text', 'short_trans', 'theme_image', 'tick', 'upload', 'url', 'member'))) && (!is_file(get_file_base() . '/sources/' . $path . '.php')) && (!is_file(get_file_base() . '/sources_custom/' . $path . '.php'))) {
+        $hooks = find_all_hooks('systems', 'fields');
         foreach (array_keys($hooks) as $hook) {
             $path = 'hooks/systems/fields/' . filter_naughty($hook);
             require_code($path);
             $ob = object_factory('Hook_fields_' . filter_naughty($hook));
-            if (method_exists($ob,'get_field_types')) {
-                if (array_key_exists($type,$ob->get_field_types($type))) {
+            if (method_exists($ob, 'get_field_types')) {
+                if (array_key_exists($type, $ob->get_field_types($type))) {
                     $fields_hook_cache[$type] = $ob;
                     return $ob;
                 }
@@ -89,11 +89,11 @@ function manage_custom_fields_donext_link($content_type)
         $ob = get_content_object($content_type);
         $info = $ob->info();
 
-        if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues'))) {
-            $exists = !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name' => '_' . $content_type)));
+        if ((array_key_exists('supports_custom_fields', $info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_catalogues')) && (has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_catalogues'))) {
+            $exists = !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues', 'c_name', array('c_name' => '_' . $content_type)));
 
             return array(
-                array('menu/cms/catalogues/edit_one_catalogue',array('cms_catalogues',array('type' => $exists?'_edit_catalogue':'add_catalogue','id' => '_' . $content_type,'redirect' => get_self_url(true)),get_module_zone('cms_catalogues')),do_lang('EDIT_CUSTOM_FIELDS',do_lang($info['content_type_label']))),
+                array('menu/cms/catalogues/edit_one_catalogue', array('cms_catalogues', array('type' => $exists ? '_edit_catalogue' : 'add_catalogue', 'id' => '_' . $content_type, 'redirect' => get_self_url(true)), get_module_zone('cms_catalogues')), do_lang('EDIT_CUSTOM_FIELDS', do_lang($info['content_type_label']))),
             );
         }
     }
@@ -116,13 +116,13 @@ function manage_custom_fields_entry_points($content_type)
         $ob = get_content_object($content_type);
         $info = $ob->info();
 
-        if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(),'submit_cat_highrange_content','cms_catalogues')) && (has_privilege(get_member(),'edit_cat_highrange_content','cms_catalogues'))) {
-            $count = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields','COUNT(*)',array('c_name' => '_' . $content_type));
+        if ((array_key_exists('supports_custom_fields', $info)) && ($info['supports_custom_fields']) && (has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_catalogues')) && (has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_catalogues'))) {
+            $count = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields', 'COUNT(*)', array('c_name' => '_' . $content_type));
             $exists = ($count != 0);
 
             return array(
-                '_SEARCH:cms_catalogues:' . ($exists?'_edit_catalogue':'add_catalogue') . ':_' . $content_type => array(
-                    do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('EDIT_CUSTOM_FIELDS',do_lang($info['content_type_label'])),make_string_tempcode(escape_html(integer_format($count)))),
+                '_SEARCH:cms_catalogues:' . ($exists ? '_edit_catalogue' : 'add_catalogue') . ':_' . $content_type => array(
+                    do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('EDIT_CUSTOM_FIELDS', do_lang($info['content_type_label'])), make_string_tempcode(escape_html(integer_format($count)))),
                     'menu/cms/catalogues/edit_one_catalogue'
                 ),
             );
@@ -144,14 +144,14 @@ function has_tied_catalogue($content_type)
         require_code('content');
         $ob = get_content_object($content_type);
         $info = $ob->info();
-        if ((array_key_exists('supports_custom_fields',$info)) && ($info['supports_custom_fields'])) {
-            $exists = !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues','c_name',array('c_name' => '_' . $content_type)));
+        if ((array_key_exists('supports_custom_fields', $info)) && ($info['supports_custom_fields'])) {
+            $exists = !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('catalogues', 'c_name', array('c_name' => '_' . $content_type)));
             if ($exists) {
-                $first_cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','MIN(id)',array('c_name' => '_' . $content_type));
+                $first_cat = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'MIN(id)', array('c_name' => '_' . $content_type));
                 if (is_null($first_cat)) { // Repair needed, must have a category
                     require_code('catalogues2');
                     require_lang('catalogues');
-                    actual_add_catalogue_category('_' . $content_type,do_lang('CUSTOM_FIELDS_FOR',do_lang($info['content_type_label'])),'','',null);
+                    actual_add_catalogue_category('_' . $content_type, do_lang('CUSTOM_FIELDS_FOR', do_lang($info['content_type_label'])), '', '', null);
                 }
 
                 return true;
@@ -168,9 +168,9 @@ function has_tied_catalogue($content_type)
  * @param  ID_TEXT                      Content entry ID
  * @return ?AUTO_LINK                   Bound catalogue entry ID (NULL: none)
  */
-function get_bound_content_entry($content_type,$id)
+function get_bound_content_entry($content_type, $id)
 {
-    return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entry_linkage','catalogue_entry_id',array(
+    return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_entry_linkage', 'catalogue_entry_id', array(
         'content_type' => $content_type,
         'content_id' => $id,
     ));
@@ -186,50 +186,50 @@ function get_bound_content_entry($content_type,$id)
  * @param  ?array                       Limit fields to a set (NULL: no limit)
  * @param  boolean                      Whether $field_filter is a whitelist (if false, it is a blacklist)
  */
-function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_filter = null,$field_filter_whitelist = true)
+function append_form_custom_fields($content_type, $id, &$fields, &$hidden, $field_filter = null, $field_filter_whitelist = true)
 {
     require_code('catalogues');
 
-    $catalogue_entry_id = get_bound_content_entry($content_type,$id);
+    $catalogue_entry_id = get_bound_content_entry($content_type, $id);
     if (!is_null($catalogue_entry_id)) {
-        $special_fields = get_catalogue_entry_field_values('_' . $content_type,$catalogue_entry_id);
+        $special_fields = get_catalogue_entry_field_values('_' . $content_type, $catalogue_entry_id);
     } else {
-        $special_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name' => '_' . $content_type),'ORDER BY cf_order');
+        $special_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => '_' . $content_type), 'ORDER BY cf_order');
     }
 
     $field_groups = array();
 
     require_code('fields');
     foreach ($special_fields as $field_num => $field) {
-        if ((!is_null($field_filter)) && ($field_filter_whitelist) && (!in_array($field['id'],$field_filter))) {
+        if ((!is_null($field_filter)) && ($field_filter_whitelist) && (!in_array($field['id'], $field_filter))) {
             continue;
         }
-        if ((!is_null($field_filter)) && (!$field_filter_whitelist) && (in_array($field['id'],$field_filter))) {
+        if ((!is_null($field_filter)) && (!$field_filter_whitelist) && (in_array($field['id'], $field_filter))) {
             continue;
         }
 
         $ob = get_fields_hook($field['cf_type']);
-        $default = get_param('field_' . strval($field['id']),array_key_exists('effective_value_pure',$field)?$field['effective_value_pure']:$field['cf_default']);
+        $default = get_param('field_' . strval($field['id']), array_key_exists('effective_value_pure', $field) ? $field['effective_value_pure'] : $field['cf_default']);
 
         $_cf_name = get_translated_text($field['cf_name']);
         $field_cat = '';
         $matches = array();
-        if (strpos($_cf_name,': ') !== false) {
-            $field_cat = substr($_cf_name,0,strpos($_cf_name,': '));
+        if (strpos($_cf_name, ': ') !== false) {
+            $field_cat = substr($_cf_name, 0, strpos($_cf_name, ': '));
             if ($field_cat . ': ' == $_cf_name) {
                 $_cf_name = $field_cat; // Just been pulled out as heading, nothing after ": "
             } else {
-                $_cf_name = substr($_cf_name,strpos($_cf_name,': ')+2);
+                $_cf_name = substr($_cf_name, strpos($_cf_name, ': ') + 2);
             }
         }
-        if (!array_key_exists($field_cat,$field_groups)) {
+        if (!array_key_exists($field_cat, $field_groups)) {
             $field_groups[$field_cat] = new ocp_tempcode();
         }
 
         $_cf_description = escape_html(get_translated_text($field['cf_description']));
 
         $GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'] = true;
-        $result = $ob->get_field_inputter($_cf_name,$_cf_description,$field,$default,true,!array_key_exists($field_num+1,$special_fields));
+        $result = $ob->get_field_inputter($_cf_name, $_cf_description, $field, $default, true, !array_key_exists($field_num + 1, $special_fields));
         $GLOBALS['NO_DEV_MODE_FULLSTOP_CHECK'] = false;
 
         if (is_null($result)) {
@@ -243,24 +243,24 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_fi
             $field_groups[$field_cat]->attach($result);
         }
 
-        $hidden->attach(form_input_hidden('label_for__field_' . strval($field['id']),$_cf_name));
+        $hidden->attach(form_input_hidden('label_for__field_' . strval($field['id']), $_cf_name));
 
         unset($result);
         unset($ob);
     }
 
-    if (array_key_exists('',$field_groups)) { // Blank prefix must go first
+    if (array_key_exists('', $field_groups)) { // Blank prefix must go first
         $field_groups_blank = $field_groups[''];
         unset($field_groups['']);
-        $field_groups = array_merge(array($field_groups_blank),$field_groups);
+        $field_groups = array_merge(array($field_groups_blank), $field_groups);
     }
     foreach ($field_groups as $field_group_title => $extra_fields) {
         if (is_integer($field_group_title)) {
-            $field_group_title = ($field_group_title == 0)?'':strval($field_group_title);
+            $field_group_title = ($field_group_title == 0) ? '' : strval($field_group_title);
         }
 
         if ($field_group_title != '') {
-            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '58937f03882cc09276fa100933eb6041','TITLE' => $field_group_title)));
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '58937f03882cc09276fa100933eb6041', 'TITLE' => $field_group_title)));
         }
         $fields->attach($extra_fields);
     }
@@ -273,7 +273,7 @@ function append_form_custom_fields($content_type,$id,&$fields,&$hidden,$field_fi
  * @param  ID_TEXT                      Content entry ID
  * @param  ?ID_TEXT                     Content entry ID (prior to possible rename) (NULL: definitely unchanged)
  */
-function save_form_custom_fields($content_type,$id,$old_id = null)
+function save_form_custom_fields($content_type, $id, $old_id = null)
 {
     if (fractional_edit()) {
         return;
@@ -283,20 +283,20 @@ function save_form_custom_fields($content_type,$id,$old_id = null)
         $old_id = $id;
     }
 
-    $existing = get_bound_content_entry($content_type,$old_id);
+    $existing = get_bound_content_entry($content_type, $old_id);
 
     require_code('catalogues');
 
     // Get field values
-    $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('*'),array('c_name' => '_' . $content_type),'ORDER BY cf_order');
+    $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => '_' . $content_type), 'ORDER BY cf_order');
     $map = array();
     require_code('fields');
     foreach ($fields as $field) {
         $ob = get_fields_hook($field['cf_type']);
 
-        list(,,$storage_type) = $ob->get_field_value_row_bits($field);
+        list(, , $storage_type) = $ob->get_field_value_row_bits($field);
 
-        $value = $ob->inputted_to_field_value(!is_null($existing),$field,'uploads/catalogues',is_null($existing)?null:_get_catalogue_entry_field($field['id'],$existing,$storage_type));
+        $value = $ob->inputted_to_field_value(!is_null($existing), $field, 'uploads/catalogues', is_null($existing) ? null : _get_catalogue_entry_field($field['id'], $existing, $storage_type));
 
         $map[$field['id']] = $value;
     }
@@ -304,20 +304,20 @@ function save_form_custom_fields($content_type,$id,$old_id = null)
         return;
     }
 
-    $first_cat = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','MIN(id)',array('c_name' => '_' . $content_type));
+    $first_cat = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'MIN(id)', array('c_name' => '_' . $content_type));
     if (is_null($first_cat)) {
         require_code('catalogues2');
-        $first_cat = actual_add_catalogue_category('_' . $content_type,do_lang('DEFAULT'),'','',null);
+        $first_cat = actual_add_catalogue_category('_' . $content_type, do_lang('DEFAULT'), '', '', null);
     }
 
     require_code('catalogues2');
 
     if (!is_null($existing)) {
-        actual_edit_catalogue_entry($existing,$first_cat,1,'',0,0,0,$map);
+        actual_edit_catalogue_entry($existing, $first_cat, 1, '', 0, 0, 0, $map);
     } else {
-        $catalogue_entry_id = actual_add_catalogue_entry($first_cat,1,'',0,0,0,$map);
+        $catalogue_entry_id = actual_add_catalogue_entry($first_cat, 1, '', 0, 0, 0, $map);
 
-        $GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage',array(
+        $GLOBALS['SITE_DB']->query_insert('catalogue_entry_linkage', array(
             'catalogue_entry_id' => $catalogue_entry_id,
             'content_type' => $content_type,
             'content_id' => $id,
@@ -331,15 +331,15 @@ function save_form_custom_fields($content_type,$id,$old_id = null)
  * @param  ID_TEXT                      Content type hook codename
  * @param  ID_TEXT                      Content entry ID
  */
-function delete_form_custom_fields($content_type,$id)
+function delete_form_custom_fields($content_type, $id)
 {
     require_code('catalogues2');
 
-    $existing = get_bound_content_entry($content_type,$id);
+    $existing = get_bound_content_entry($content_type, $id);
     if (!is_null($existing)) {
         actual_delete_catalogue_entry($existing);
 
-        $GLOBALS['SITE_DB']->query_delete('catalogue_entry_linkage',array(
+        $GLOBALS['SITE_DB']->query_delete('catalogue_entry_linkage', array(
             'catalogue_entry_id' => $existing,
         ));
     }
@@ -352,18 +352,18 @@ function delete_form_custom_fields($content_type,$id)
  * @param  boolean                      Whether to only show options in the same storage set as $type
  * @return tempcode                     List of field types
  */
-function create_selection_list_field_type($type = '',$limit_to_storage_set = false)
+function create_selection_list_field_type($type = '', $limit_to_storage_set = false)
 {
     require_lang('fields');
 
-    $all_types = find_all_hooks('systems','fields');
+    $all_types = find_all_hooks('systems', 'fields');
     if ($limit_to_storage_set) { // Already set, so we need to do a search to see what we can limit our types to (things with the same backend DB storage)
         $ob = get_fields_hook($type);
         $types = array();
-        list(,,$db_type) = $ob->get_field_value_row_bits(null);
+        list(, , $db_type) = $ob->get_field_value_row_bits(null);
         foreach ($all_types as $this_type => $hook_type) {
             $ob = get_fields_hook($this_type);
-            list(,,$this_db_type) = $ob->get_field_value_row_bits(null);
+            list(, , $this_db_type) = $ob->get_field_value_row_bits(null);
 
             if ($this_db_type == $db_type) {
                 $types[$this_type] = $hook_type;
@@ -373,12 +373,12 @@ function create_selection_list_field_type($type = '',$limit_to_storage_set = fal
         $types = $all_types;
     }
     $orderings = array(
-        do_lang_tempcode('FIELD_TYPES__TEXT'),'short_trans','short_trans_multi','short_text','short_text_multi','long_trans','long_text','posting_field','codename','password','email',
-        do_lang_tempcode('FIELD_TYPES__NUMBERS'),'integer','float',
-        do_lang_tempcode('FIELD_TYPES__CHOICES'),'list','radiolist','tick','multilist','tick_multi','combo','combo_multi',
-        do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'),'upload','upload_multi','picture','picture_multi','video','video_multi','url','url_multi','page_link','theme_image','theme_image_multi',
-        do_lang_tempcode('FIELD_TYPES__MAGIC'),'auto_increment','random','guid',
-        do_lang_tempcode('FIELD_TYPES__REFERENCES'),'isbn','reference','reference_multi','content_link','content_link_multi','member','member_multi','author',
+        do_lang_tempcode('FIELD_TYPES__TEXT'), 'short_trans', 'short_trans_multi', 'short_text', 'short_text_multi', 'long_trans', 'long_text', 'posting_field', 'codename', 'password', 'email',
+        do_lang_tempcode('FIELD_TYPES__NUMBERS'), 'integer', 'float',
+        do_lang_tempcode('FIELD_TYPES__CHOICES'), 'list', 'radiolist', 'tick', 'multilist', 'tick_multi', 'combo', 'combo_multi',
+        do_lang_tempcode('FIELD_TYPES__UPLOADSANDURLS'), 'upload', 'upload_multi', 'picture', 'picture_multi', 'video', 'video_multi', 'url', 'url_multi', 'page_link', 'theme_image', 'theme_image_multi',
+        do_lang_tempcode('FIELD_TYPES__MAGIC'), 'auto_increment', 'random', 'guid',
+        do_lang_tempcode('FIELD_TYPES__REFERENCES'), 'isbn', 'reference', 'reference_multi', 'content_link', 'content_link_multi', 'member', 'member_multi', 'author',
         //do_lang_tempcode('FIELD_TYPES__OTHER'),'date',       Will go under OTHER automatically
     );
     $_types = array();
@@ -391,7 +391,7 @@ function create_selection_list_field_type($type = '',$limit_to_storage_set = fal
             $_types[] = $o;
             $done_one_in_section = false;
         } else {
-            if (array_key_exists($o,$types)) {
+            if (array_key_exists($o, $types)) {
                 $_types[] = $o;
                 unset($types[$o]);
                 $done_one_in_section = true;
@@ -402,7 +402,7 @@ function create_selection_list_field_type($type = '',$limit_to_storage_set = fal
         array_pop($_types);
     }
     if (count($types) != 0) {
-        $types = array_merge($_types,array(do_lang_tempcode('FIELD_TYPES__OTHER')),array_keys($types));
+        $types = array_merge($_types, array(do_lang_tempcode('FIELD_TYPES__OTHER')), array_keys($types));
     } else {
         $types = $_types;
     }
@@ -412,25 +412,25 @@ function create_selection_list_field_type($type = '',$limit_to_storage_set = fal
     foreach ($types as $_type) {
         if (is_object($_type)) {
             if (!$_type_list->is_empty()) {
-                $type_list->attach(form_input_list_group($last_type,$_type_list));
+                $type_list->attach(form_input_list_group($last_type, $_type_list));
             }
             $_type_list = new ocp_tempcode();
             $last_type = $_type;
         } else {
             $ob = get_fields_hook($_type);
-            if (method_exists($ob,'get_field_types')) {
+            if (method_exists($ob, 'get_field_types')) {
                 $sub_types = $ob->get_field_types();
             } else {
                 $sub_types = array($_type => do_lang_tempcode('FIELD_TYPE_' . $_type));
             }
 
             foreach ($sub_types as $__type => $_title) {
-                $_type_list->attach(form_input_list_entry($__type,($__type == $type),$_title));
+                $_type_list->attach(form_input_list_entry($__type, ($__type == $type), $_title));
             }
         }
     }
     if (!$_type_list->is_empty()) {
-        $type_list->attach(form_input_list_group($last_type,$_type_list));
+        $type_list->attach(form_input_list_group($last_type, $_type_list));
     }
 
     return make_string_tempcode($type_list->evaluate()); // XHTMLXHTML

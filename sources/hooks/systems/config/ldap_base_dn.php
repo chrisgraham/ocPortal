@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
-
 class Hook_config_ldap_base_dn
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_ldap_base_dn
      */
     public function get_default()
     {
-        return 'dc=' . str_replace('.',',dc=',get_domain());
+        return 'dc=' . str_replace('.', ',dc=', get_domain());
     }
 }

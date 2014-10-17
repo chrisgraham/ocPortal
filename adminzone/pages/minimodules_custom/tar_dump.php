@@ -17,13 +17,13 @@ require_code('tar');
 
 $filename = 'ocportal-' . get_site_name() . '.' . date('Y-m-d') . '.tar';
 
-header('Content-Disposition: attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($filename))) . '"');
+header('Content-Disposition: attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"');
 
-$tar = tar_open(null,'wb');
+$tar = tar_open(null, 'wb');
 
-$max_size = get_param_integer('max_size',null);
-$subpath = get_param('path','');
-tar_add_folder($tar,null,get_file_base() . (($subpath == '')?'':'/') . $subpath,$max_size,$subpath,null,null,false,true);
+$max_size = get_param_integer('max_size', null);
+$subpath = get_param('path', '');
+tar_add_folder($tar, null, get_file_base() . (($subpath == '') ? '' : '/') . $subpath, $max_size, $subpath, null, null, false, true);
 
 tar_close($tar);
 

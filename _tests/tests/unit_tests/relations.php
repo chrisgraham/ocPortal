@@ -21,7 +21,7 @@ class relations_test_set extends ocp_test_case
     public function testRelationsdefined()
     {
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 
@@ -42,7 +42,7 @@ class relations_test_set extends ocp_test_case
         foreach ($all_links as $l) {
             $_l = $l['m_table'] . '.' . $l['m_name'];
 
-            $this->assertFalse(!array_key_exists($_l,$links),'Link not described: ' . $_l);
+            $this->assertFalse(!array_key_exists($_l, $links), 'Link not described: ' . $_l);
         }
     }
 }

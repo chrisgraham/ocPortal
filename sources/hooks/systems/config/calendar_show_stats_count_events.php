@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_config_calendar_show_stats_count_events
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_calendar_show_stats_count_events
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_rss_calendar
 {
     /**
@@ -31,31 +30,31 @@ class Hook_rss_calendar
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
         if (!addon_installed('calendar')) {
-            return NULL;
+            return null;
         }
 
-        if (!has_actual_page_access(get_member(),'calendar')) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'calendar')) {
+            return null;
         }
 
-        $filters = ocfilter_to_sqlfragment($_filters,'c.id','calendar_types',null,'e_type','id');
+        $filters = ocfilter_to_sqlfragment($_filters, 'c.id', 'calendar_types', null, 'e_type', 'id');
 
         $content = new ocp_tempcode();
-        $_categories = $GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_types c WHERE ' . $filters,null,null,false,true,array('t_title' => 'SHORT_TRANS__COMCODE'));
+        $_categories = $GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_types c WHERE ' . $filters, null, null, false, true, array('t_title' => 'SHORT_TRANS__COMCODE'));
         foreach ($_categories as $i => $_category) {
             $_categories[$i]['_t_title'] = get_translated_text($_category['t_title']);
         }
-        $categories = collapse_2d_complexity('id','_t_title',$_categories);
+        $categories = collapse_2d_complexity('id', '_t_title', $_categories);
         $period_start = utctime_to_usertime($cutoff);
-        $period_end = utctime_to_usertime(time()*2-$cutoff);
+        $period_end = utctime_to_usertime(time() * 2 - $cutoff);
         if (is_float($period_end)) {
             $period_end = intval($period_end);
         }
         require_code('calendar');
-        $rows = calendar_matches(get_member(),get_member(),!has_privilege(get_member(),'assume_any_member'),$period_start,$period_end,null,false,get_param_integer('private',null));
+        $rows = calendar_matches(get_member(), get_member(), !has_privilege(get_member(), 'assume_any_member'), $period_start, $period_end, null, false, get_param_integer('private', null));
         $rows = array_reverse($rows);
         foreach ($rows as $i => $_row) {
             if ($i == $max) {
@@ -64,7 +63,7 @@ class Hook_rss_calendar
 
             $row = $_row[1];
 
-            if (!array_key_exists('id',$row)) {
+            if (!array_key_exists('id', $row)) {
                 continue;
             } // RSS event
 
@@ -73,36 +72,36 @@ class Hook_rss_calendar
 
             // The "add" date'll be actually used for the event time
             $_news_date = $_row[2];
-            $news_date = date($date_string,usertime_to_utctime($_news_date));
+            $news_date = date($date_string, usertime_to_utctime($_news_date));
 
             // The edit date'll be the latest of add/edit
-            $edit_date = is_null($row['e_edit_date'])?date($date_string,$row['e_add_date']):date($date_string,$row['e_edit_date']);
+            $edit_date = is_null($row['e_edit_date']) ? date($date_string, $row['e_add_date']) : date($date_string, $row['e_edit_date']);
 
-            $just_event_row = db_map_restrict($row,array('id','e_content'));
+            $just_event_row = db_map_restrict($row, array('id', 'e_content'));
 
             $news_title = xmlentities(escape_html(get_translated_text($row['e_title'])));
-            $_summary = get_translated_tempcode('calendar_events',$just_event_row,'e_content');
+            $_summary = get_translated_tempcode('calendar_events', $just_event_row, 'e_content');
             $summary = xmlentities($_summary->evaluate());
             $news = '';
 
-            $category = array_key_exists($row['e_type'],$categories)?$categories[$row['e_type']]:'';
+            $category = array_key_exists($row['e_type'], $categories) ? $categories[$row['e_type']] : '';
             $category_raw = strval($row['e_type']);
 
-            $view_url = build_url(array('page' => 'calendar','type' => 'view','id' => $row['id']),get_module_zone('calendar'),null,false,false,true);
+            $view_url = build_url(array('page' => 'calendar', 'type' => 'view', 'id' => $row['id']), get_module_zone('calendar'), null, false, false, true);
 
-            if (!array_key_exists('allow_comments',$row)) {
+            if (!array_key_exists('allow_comments', $row)) {
                 $row['allow_comments'] = 1;
             }
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
-                $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => '202a32693ce54d9ce960b72e66714df0','COMMENT_URL' => $view_url,'ID' => strval($row['id'])));
+                $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '202a32693ce54d9ce960b72e66714df0', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
                 $if_comments = new ocp_tempcode();
             }
 
-            $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+            $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }
 
         require_lang('calendar');
-        return array($content,do_lang('CALENDAR'));
+        return array($content, do_lang('CALENDAR'));
     }
 }

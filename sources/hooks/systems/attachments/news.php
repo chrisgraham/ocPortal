@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_attachments_news
 {
     /**
@@ -27,7 +26,7 @@ class Hook_attachments_news
      * @param  object                   The database connection to check on
      * @return boolean                  Whether there is permission
      */
-    public function run($id,$connection)
+    public function run($id, $connection)
     {
         if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {
             return false;
@@ -35,15 +34,15 @@ class Hook_attachments_news
 
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            if (!has_privacy_access('news',$id)) {
+            if (!has_privacy_access('news', $id)) {
                 return false;
             }
         }
 
-        $cat_id = $GLOBALS['SITE_DB']->query_select_value_if_there('news','news_category',array('id' => intval($id)));
+        $cat_id = $GLOBALS['SITE_DB']->query_select_value_if_there('news', 'news_category', array('id' => intval($id)));
         if (is_null($cat_id)) {
             return false;
         }
-        return (has_category_access(get_member(),'news',strval($cat_id)));
+        return (has_category_access(get_member(), 'news', strval($cat_id)));
     }
 }

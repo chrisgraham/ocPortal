@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_config_show_gallery_counts
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_show_gallery_counts
      */
     public function get_default()
     {
-        return ((get_forum_type() == 'ocf')?'0':null);
+        return ((get_forum_type() == 'ocf') ? '0' : null);
     }
 }

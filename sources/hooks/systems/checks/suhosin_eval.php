@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_suhosin_eval
 {
     /**
@@ -29,7 +28,7 @@ class Hook_check_suhosin_eval
     {
         $warning = array();
         if (ini_get('suhosin.executor.disable_eval') == '1') {
-            $warning[] = do_lang_tempcode('DISABLED_FUNCTION','eval');
+            $warning[] = do_lang_tempcode('DISABLED_FUNCTION', 'eval');
         }
         return $warning;
     }

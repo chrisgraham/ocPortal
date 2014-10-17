@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_show_personal_usergroup
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_show_personal_usergroup
      */
     public function get_default()
     {
-        return has_no_forum()?null:'1';
+        return has_no_forum() ? null : '1';
     }
 }

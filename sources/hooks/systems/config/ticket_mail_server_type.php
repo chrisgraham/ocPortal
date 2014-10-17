@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-
 class Hook_config_ticket_mail_server_type
 {
     /**
@@ -48,7 +47,7 @@ class Hook_config_ticket_mail_server_type
     public function get_default()
     {
         if (GOOGLE_APPENGINE) {
-            return NULL;
+            return null;
         }
 
         return 'imap';

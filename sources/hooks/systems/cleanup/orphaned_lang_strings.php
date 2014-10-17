@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_orphaned_lang_strings
 {
     /**
@@ -28,11 +27,11 @@ class Hook_orphaned_lang_strings
     public function info()
     {
         if (!multi_lang_content()) {
-            return NULL;
+            return null;
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('translate','COUNT(*)')>10000) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('translate', 'COUNT(*)') > 10000) {
+            return null;
         } // Too much, and we don't have much use for it outside development anyway
 
         $info = array();
@@ -51,6 +50,6 @@ class Hook_orphaned_lang_strings
     public function run()
     {
         require_code('tasks');
-        return call_user_func_array__long_task(do_lang('ORPHANED_LANG_STRINGS'),null,'find_orphaned_lang_strings');
+        return call_user_func_array__long_task(do_lang('ORPHANED_LANG_STRINGS'), null, 'find_orphaned_lang_strings');
     }
 }

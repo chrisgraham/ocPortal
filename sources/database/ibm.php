@@ -28,6 +28,7 @@ to the mdb file). In the properties there is option to choose username and passw
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_ibm
@@ -62,12 +63,12 @@ class Database_Static_ibm
      * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
      * @param  array                    The DB connection to make on
      */
-    public function db_create_index($table_name,$index_name,$_fields,$db)
+    public function db_create_index($table_name, $index_name, $_fields, $db)
     {
         if ($index_name[0] == '#') {
             return;
         }
-        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0,10000)) . ' ON ' . $table_name . '(' . $_fields . ')',$db);
+        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0, 10000)) . ' ON ' . $table_name . '(' . $_fields . ')', $db);
     }
 
     /**
@@ -77,10 +78,10 @@ class Database_Static_ibm
      * @param  array                    A list of fields to put in the new key
      * @param  array                    The DB connection to make on
      */
-    public function db_change_primary_key($table_name,$new_key,$db)
+    public function db_change_primary_key($table_name, $new_key, $db)
     {
-        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
-        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',',$new_key) . ')',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY', $db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',', $new_key) . ')', $db);
     }
 
     /**
@@ -134,7 +135,7 @@ class Database_Static_ibm
      * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
      * @param  array                    The DB connection to make on
      */
-    public function db_create_table($table_name,$fields,$db)
+    public function db_create_table($table_name, $fields, $db)
     {
         $type_remap = $this->db_get_type_remap();
 
@@ -142,7 +143,7 @@ class Database_Static_ibm
         $keys = '';
         foreach ($fields as $name => $type) {
             if ($type[0] == '*') { // Is a key
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 if ($keys != '') {
                     $keys .= ', ';
                 }
@@ -150,18 +151,18 @@ class Database_Static_ibm
             }
 
             if ($type[0] == '?') { // Is perhaps null
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 $perhaps_null = '';
             } else {
                 $perhaps_null = 'NOT NULL';
             }
 
-            $type = isset($type_remap[$type])?$type_remap[$type]:$type;
+            $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
             $_fields .= '    ' . $name . ' ' . $type;
-            if (substr($name,-13) == '__text_parsed') {
+            if (substr($name, -13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
-            } elseif (substr($name,-13) == '__source_user') {
+            } elseif (substr($name, -13) == '__source_user') {
                 $_fields .= ' DEFAULT ' . strval(db_get_first_id());
             }
             $_fields .= ' ' . $perhaps_null . ',' . "\n";
@@ -171,7 +172,7 @@ class Database_Static_ibm
           ' . $_fields . '
           PRIMARY KEY (' . $keys . ')
         )';
-        $this->db_query($query,$db,null,null);
+        $this->db_query($query, $db, null, null);
     }
 
     /**
@@ -181,7 +182,7 @@ class Database_Static_ibm
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_equal_to($attribute,$compare)
+    public function db_string_equal_to($attribute, $compare)
     {
         return $attribute . " LIKE '" . $this->db_escape_string($compare) . "'";
     }
@@ -193,7 +194,7 @@ class Database_Static_ibm
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_not_equal_to($attribute,$compare)
+    public function db_string_not_equal_to($attribute, $compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
@@ -214,9 +215,9 @@ class Database_Static_ibm
      * @param  ID_TEXT                  The table name
      * @param  array                    The DB connection to delete on
      */
-    public function db_drop_table_if_exists($table,$db)
+    public function db_drop_table_if_exists($table, $db)
     {
-        $this->db_query('DROP TABLE ' . $table,$db,null,null,true);
+        $this->db_query('DROP TABLE ' . $table, $db, null, null, true);
     }
 
     /**
@@ -263,7 +264,7 @@ class Database_Static_ibm
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (NULL: failed)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
         if ($db_host != 'localhost') {
             fatal_exit(do_lang_tempcode('ONLY_LOCAL_HOST_FOR_TYPE'));
@@ -278,19 +279,19 @@ class Database_Static_ibm
             $error = 'The ODBC PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error);
+            critical_error('PASSON', $error);
         }
 
-        $db = $persistent?@odbc_pconnect($db_name,$db_user,$db_password):@odbc_connect($db_name,$db_user,$db_password);
+        $db = $persistent ? @odbc_pconnect($db_name, $db_user, $db_password) : @odbc_connect($db_name, $db_user, $db_password);
         if ($db === false) {
             $error = 'Could not connect to database-server (' . odbc_errormsg() . ')';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
+            critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
         }
 
         if (!$db) {
@@ -319,7 +320,7 @@ class Database_Static_ibm
      */
     public function db_escape_string($string)
     {
-        return str_replace("'","''",$string);
+        return str_replace("'", "''", $string);
     }
 
     /**
@@ -333,54 +334,54 @@ class Database_Static_ibm
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
         if (!is_null($max)) {
             if (is_null($start)) {
                 $max += $start;
             }
 
-            if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) { // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
-                $query .= ' FETCH FIRST ' . strval($max+$start) . ' ROWS ONLY';
+            if ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ')) { // Unfortunately we can't apply to DELETE FROM and update :(. But its not too important, LIMIT'ing them was unnecessarily anyway
+                $query .= ' FETCH FIRST ' . strval($max + $start) . ' ROWS ONLY';
             }
         }
 
-        $results = @odbc_exec($db,$query);
+        $results = @odbc_exec($db, $query);
         if (($results === false) && (!$fail_ok)) {
             $err = odbc_errormsg($db);
             if (function_exists('ocp_mark_as_escaped')) {
                 ocp_mark_as_escaped($err);
             }
             if ((!running_script('upgrader')) && (!get_mass_import_mode())) {
-                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED', null, null, null, null, false))) {
                     fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
                 }
 
-                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+                fatal_exit(do_lang_tempcode('QUERY_FAILED', escape_html($query), ($err)));
             } else {
                 echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
-                return NULL;
+                return null;
             }
         }
 
-        if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && (!$results !== false)) {
+        if ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ') && (!$results !== false)) {
             return $this->db_get_query_rows($results);
         }
 
         if ($get_insert_id) {
-            if (strtoupper(substr($query,0,7)) == 'UPDATE ') {
-                return NULL;
+            if (strtoupper(substr($query, 0, 7)) == 'UPDATE ') {
+                return null;
             }
 
-            $pos = strpos($query,'(');
-            $table_name = substr($query,12,$pos-13);
+            $pos = strpos($query, '(');
+            $table_name = substr($query, 12, $pos - 13);
 
-            $res2 = odbc_exec($db,'SELECT MAX(id) FROM ' . $table_name);
+            $res2 = odbc_exec($db, 'SELECT MAX(id) FROM ' . $table_name);
             $ar2 = odbc_fetch_row($res2);
             return $ar2[0];
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -390,7 +391,7 @@ class Database_Static_ibm
      * @param  ?integer                 Whether to start reading from (NULL: irrelevant for this forum driver)
      * @return array                    A list of row maps
      */
-    public function db_get_query_rows($results,$start = null)
+    public function db_get_query_rows($results, $start = null)
     {
         $out = array();
         $i = 0;
@@ -398,17 +399,17 @@ class Database_Static_ibm
         $num_fields = odbc_num_fields($results);
         $types = array();
         $names = array();
-        for ($x = 1;$x <= $num_fields;$x++) {
-            $types[$x] = odbc_field_type($results,$x);
-            $names[$x] = odbc_field_name($results,$x);
+        for ($x = 1; $x <= $num_fields; $x++) {
+            $types[$x] = odbc_field_type($results, $x);
+            $names[$x] = odbc_field_name($results, $x);
         }
 
         while (odbc_fetch_row($results)) {
             if ((is_null($start)) || ($i >= $start)) {
                 $newrow = array();
 
-                for ($j = 1;$j <= $num_fields;$j++) {
-                    $v = odbc_result($results,$j);
+                for ($j = 1; $j <= $num_fields; $j++) {
+                    $v = odbc_result($results, $j);
 
                     $type = $types[$j];
                     $name = strtolower($names[$j]);
@@ -430,7 +431,7 @@ class Database_Static_ibm
             $i++;
         }
         odbc_free_result($results);
-    //   echo '<p>End '.microtime(false);
+        //   echo '<p>End '.microtime(false);
         return $out;
     }
 }

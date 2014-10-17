@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Preview_ocf_emoticon
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_ocf_emoticon
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'admin_ocf_emoticons');
-        return array($applies,null,false);
+        $applies = (get_param('page', '') == 'admin_ocf_emoticons');
+        return array($applies, null, false);
     }
 
     /**
@@ -40,14 +39,14 @@ class Hook_Preview_ocf_emoticon
     {
         require_code('uploads');
 
-        $urls = get_url('','file','safe_mode_temp',0,OCP_UPLOAD_IMAGE,false);
+        $urls = get_url('', 'file', 'safe_mode_temp', 0, OCP_UPLOAD_IMAGE, false);
         if ($urls[0] == '') {
-            if (!is_null(post_param_integer('id',null))) {
-                $rows = $GLOBALS['SITE_DB']->query_select('ocf_emoticons',array('e_theme_img_code'),array('id' => post_param_integer('id')),'',1);
+            if (!is_null(post_param_integer('id', null))) {
+                $rows = $GLOBALS['SITE_DB']->query_select('ocf_emoticons', array('e_theme_img_code'), array('id' => post_param_integer('id')), '', 1);
                 $urls = $rows[0];
 
                 $url = find_theme_image($urls['e_theme_img_code']);
-            } elseif (!is_null(post_param('theme_img_code',null))) {
+            } elseif (!is_null(post_param('theme_img_code', null))) {
                 $url = find_theme_image(post_param('theme_img_code'));
             } else {
                 warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
@@ -57,8 +56,8 @@ class Hook_Preview_ocf_emoticon
         }
 
         require_code('images');
-        $preview = do_image_thumb(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url,post_param('code'),true);
+        $preview = do_image_thumb(url_is_local($url) ? (get_custom_base_url() . '/' . $url) : $url, post_param('code'), true);
 
-        return array($preview,null);
+        return array($preview, null);
     }
 }

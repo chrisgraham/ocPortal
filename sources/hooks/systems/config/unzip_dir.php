@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_unzip_dir
 {
     /**
@@ -48,8 +47,8 @@ class Hook_config_unzip_dir
     public function get_default()
     {
         if (function_exists('zip_open')) {
-            return NULL;
+            return null;
         }
-        return (DIRECTORY_SEPARATOR == '/')?'/tmp/':ocp_srv('TMP');
+        return (DIRECTORY_SEPARATOR == '/') ? '/tmp/' : ocp_srv('TMP');
     }
 }

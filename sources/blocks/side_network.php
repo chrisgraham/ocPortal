@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    msn
  */
-
 class Block_side_network
 {
     /**
@@ -47,7 +46,7 @@ class Block_side_network
     {
         $info = array();
         $info['cache_on'] = '';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60;
         return $info;
     }
 
@@ -60,16 +59,16 @@ class Block_side_network
     public function run($map)
     {
         $netlinks = get_option('network_links');
-        if (strlen($netlinks)>0) {
+        if (strlen($netlinks) > 0) {
             require_code('character_sets');
 
-            $data = http_download_file($netlinks,null,false);
+            $data = http_download_file($netlinks, null, false);
             if (is_null($data)) {
-                $if_network = do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER',escape_html($netlinks));
+                $if_network = do_lang_tempcode('HTTP_DOWNLOAD_NO_SERVER', escape_html($netlinks));
             } else {
                 $if_network = make_string_tempcode(convert_to_internal_encoding($data));
             }
-            return do_template('BLOCK_SIDE_NETWORK',array('_GUID' => '5fe8867b9f69670ad61e6c78b956fab2','CONTENT' => $if_network));
+            return do_template('BLOCK_SIDE_NETWORK', array('_GUID' => '5fe8867b9f69670ad61e6c78b956fab2', 'CONTENT' => $if_network));
         }
         return new ocp_tempcode();
     }

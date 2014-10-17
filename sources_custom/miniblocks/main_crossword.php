@@ -13,12 +13,12 @@ require_css('crossword');
 require_code('php-crossword/php_crossword.class');
 
 $id = $map['param'];
-$cols = array_key_exists('cols',$map)?intval($map['cols']):15;
-$rows = array_key_exists('rows',$map)?intval($map['rows']):15;
-$max_words = array_key_exists('max_words',$map)?intval($map['max_words']):15;
+$cols = array_key_exists('cols', $map) ? intval($map['cols']) : 15;
+$rows = array_key_exists('rows', $map) ? intval($map['rows']) : 15;
+$max_words = array_key_exists('max_words', $map) ? intval($map['max_words']) : 15;
 
 $cache_id = $id . '_' . strval($cols) . '_' . strval($rows) . '_' . strval($max_words);
-$cached = get_cache_entry('main_crossword',$cache_id);
+$cached = get_cache_entry('main_crossword', $cache_id);
 if (is_null($cached)) {
     $pc = new PHP_Crossword($rows, $cols);
 
@@ -33,18 +33,18 @@ if (is_null($cached)) {
     }
 
     $params = array(
-        'colors'    => 0,
-        'fillflag'    => 0,
-        'cellflag'    => ''
-        );
+        'colors' => 0,
+        'fillflag' => 0,
+        'cellflag' => ''
+    );
 
     $html = $pc->getHTML($params);
     $words = $pc->getWords();
 
     require_code('caches2');
-    put_into_cache('main_crossword',60*60*24*5000,$cache_id,array($html,$words));
+    put_into_cache('main_crossword', 60 * 60 * 24 * 5000, $cache_id, array($html, $words));
 } else {
-    list($html,$words) = $cached;
+    list($html, $words) = $cached;
 }
 
 echo '<div class="float_surrounder crossword">';
@@ -59,13 +59,13 @@ END;
 
 $word_hints = '';
 foreach ($words as $key => $word) {
-    $_key = escape_html(strval($key+1));
+    $_key = escape_html(strval($key + 1));
     $_question = escape_html($word['question']);
     $_word = $word['word'];
     if ($word_hints != '') {
         $word_hints .= ', ';
     }
-    $word_hints .= strval($key+1) . '=' . $_word;
+    $word_hints .= strval($key + 1) . '=' . $_word;
     echo <<<END
 <tr>
     <td>{$_key}.</td>
@@ -83,5 +83,5 @@ echo $html;
 echo '</div>';
 
 if ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
-    attach_message('As you are staff you can see that the answers are as follows: ' . $word_hints,'inform');
+    attach_message('As you are staff you can see that the answers are as follows: ' . $word_hints, 'inform');
 }

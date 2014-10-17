@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
-
 class Hook_config_ldap_bind_rdn
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_ldap_bind_rdn
      */
     public function get_default()
     {
-        return (DIRECTORY_SEPARATOR == '/')?'NotManager':'NotAdministrator';
+        return (DIRECTORY_SEPARATOR == '/') ? 'NotManager' : 'NotAdministrator';
     }
 }

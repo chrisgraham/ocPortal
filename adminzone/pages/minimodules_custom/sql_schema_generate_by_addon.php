@@ -21,16 +21,16 @@ $tables_by = get_tables_by_addon();
 
 foreach ($tables_by as $t => $ts) {
     $path = get_custom_file_base() . '/uploads/website_specific/ocportal_erd__' . $t . '.sql';
-    $myfile = fopen($path,GOOGLE_APPENGINE?'wb':'wt');
+    $myfile = fopen($path, GOOGLE_APPENGINE ? 'wb' : 'wt');
     $tables = array();
     foreach ($ts as $table) {
-        if (!array_key_exists($table,$all_tables)) {
+        if (!array_key_exists($table, $all_tables)) {
             continue;
         } // Not installed
 
         $tables[$table] = $all_tables[$table];
     }
-    fwrite($myfile,get_innodb_table_sql($tables,$all_tables));
+    fwrite($myfile, get_innodb_table_sql($tables, $all_tables));
     fclose($myfile);
     fix_permissions($path);
     sync_file($path);

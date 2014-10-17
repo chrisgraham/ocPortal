@@ -20,6 +20,7 @@
 
 /**
  * Base class for VB forum drivers.
+ *
  * @package    core_forum_drivers
  */
 class forum_driver_vb_shared extends forum_driver_base
@@ -31,7 +32,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function check_db()
     {
-        $test = $this->connection->query('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'user',null,null,true);
+        $test = $this->connection->query('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'user', null, null, true);
         return !is_null($test);
     }
 
@@ -43,7 +44,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_top_posters($limit)
     {
-        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user WHERE userid<>' . strval($this->get_guest_id()) . ' ORDER BY posts DESC',$limit);
+        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user WHERE userid<>' . strval($this->get_guest_id()) . ' ORDER BY posts DESC', $limit);
     }
 
     /**
@@ -54,7 +55,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function forum_get_lang($member)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -88,29 +89,29 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  BINARY                   Whether the field is required
      * @return boolean                  Whether the custom field was created successfully
      */
-    public function install_create_custom_field($name,$length,$locked = 1,$viewable = 0,$settable = 0,$required = 0)
+    public function install_create_custom_field($name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0)
     {
-        if (!array_key_exists('vb_table_prefix',$_POST)) {
+        if (!array_key_exists('vb_table_prefix', $_POST)) {
             $_POST['vb_table_prefix'] = '';
         } // for now
 
         $name = 'ocp_' . $name;
         if ((!isset($GLOBALS['SITE_INFO']['vb_version'])) || ($GLOBALS['SITE_INFO']['vb_version'] >= 3.6)) {
-            $r = $this->connection->query('SELECT f.profilefieldid FROM ' . $this->connection->get_table_prefix() . 'profilefield f LEFT JOIN ' . $this->connection->get_table_prefix() . 'phrase p ON (' . db_string_equal_to('product','vbulletin') . ' AND p.varname=CONCAT(\'field\',f.profilefieldid,\'_title\')) WHERE ' . db_string_equal_to('p.text',$name));
+            $r = $this->connection->query('SELECT f.profilefieldid FROM ' . $this->connection->get_table_prefix() . 'profilefield f LEFT JOIN ' . $this->connection->get_table_prefix() . 'phrase p ON (' . db_string_equal_to('product', 'vbulletin') . ' AND p.varname=CONCAT(\'field\',f.profilefieldid,\'_title\')) WHERE ' . db_string_equal_to('p.text', $name));
         } else {
-            $r = $this->connection->query('SELECT profilefieldid FROM ' . $_POST['vb_table_prefix'] . 'profilefield WHERE ' . db_string_equal_to('title',$name) . '\'');
+            $r = $this->connection->query('SELECT profilefieldid FROM ' . $_POST['vb_table_prefix'] . 'profilefield WHERE ' . db_string_equal_to('title', $name) . '\'');
         }
 
-        if (!array_key_exists(0,$r)) {
+        if (!array_key_exists(0, $r)) {
             if ((!isset($GLOBALS['SITE_INFO']['vb_version'])) || ($GLOBALS['SITE_INFO']['vb_version'] >= 3.6)) {
-                $key = $this->connection->query_insert('profilefield',array('required' => $required,'hidden' => 1-$viewable,'maxlength' => $length,'size' => $length,'editable' => $settable),true);
-                $this->connection->query_insert('phrase',array('languageid' => 0,'varname' => 'field' . strval($key) . '_title','fieldname' => 'cprofilefield','text' => $name,'product' => 'vbulletin','username' => '','dateline' => 0,'version' => ''));
+                $key = $this->connection->query_insert('profilefield', array('required' => $required, 'hidden' => 1 - $viewable, 'maxlength' => $length, 'size' => $length, 'editable' => $settable), true);
+                $this->connection->query_insert('phrase', array('languageid' => 0, 'varname' => 'field' . strval($key) . '_title', 'fieldname' => 'cprofilefield', 'text' => $name, 'product' => 'vbulletin', 'username' => '', 'dateline' => 0, 'version' => ''));
             } else {
-                $this->connection->query('INSERT INTO ' . $_POST['vb_table_prefix'] . 'profilefield (title,description,required,hidden,maxlength,size,editable) VALUES (\'' . db_escape_string($name) . '\',\'\',' . strval(intval($required)) . ',' . strval(intval(1-$viewable)) . ',\'' . strval($length) . '\',\'' . strval($length) . '\',' . strval(intval($settable)) . ')');
+                $this->connection->query('INSERT INTO ' . $_POST['vb_table_prefix'] . 'profilefield (title,description,required,hidden,maxlength,size,editable) VALUES (\'' . db_escape_string($name) . '\',\'\',' . strval(intval($required)) . ',' . strval(intval(1 - $viewable)) . ',\'' . strval($length) . '\',\'' . strval($length) . '\',' . strval(intval($settable)) . ')');
                 $_key = $this->connection->query('SELECT MAX(profilefieldid) AS v FROM ' . $_POST['vb_table_prefix'] . 'profilefield');
                 $key = $_key[0]['v'];
             }
-            $this->connection->query('ALTER TABLE ' . $_POST['vb_table_prefix'] . 'userfield ADD field' . strval($key) . ' TEXT',null,null,true);
+            $this->connection->query('ALTER TABLE ' . $_POST['vb_table_prefix'] . 'userfield ADD field' . strval($key) . ' TEXT', null, null, true);
             return true;
         }
         return false;
@@ -136,11 +137,11 @@ class forum_driver_vb_shared extends forum_driver_base
     public function get_emoticon_chooser($field_name = 'post')
     {
         require_code('comcode_compiler');
-        $emoticons = $this->connection->query_select('smilie',array('*'));
+        $emoticons = $this->connection->query_select('smilie', array('*'));
         $em = new ocp_tempcode();
         foreach ($emoticons as $emo) {
             $code = $emo['smilietext'];
-            $em->attach(do_template('EMOTICON_CLICK_CODE',array('_GUID' => 'a9dabba90bc5e781de02ab57ebfc6e8d','FIELD_NAME' => $field_name,'CODE' => $code,'IMAGE' => apply_emoticons($code))));
+            $em->attach(do_template('EMOTICON_CLICK_CODE', array('_GUID' => 'a9dabba90bc5e781de02ab57ebfc6e8d', 'FIELD_NAME' => $field_name, 'CODE' => $code, 'IMAGE' => apply_emoticons($code))));
         }
 
         return $em;
@@ -152,9 +153,9 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  AUTO_LINK                The topic ID
      * @param  boolean                  True: pin it, False: unpin it
      */
-    public function pin_topic($id,$pin = true)
+    public function pin_topic($id, $pin = true)
     {
-        $this->connection->query_update('threads',array('sticky' => $pin?1:0),array('threadid' => $id),'',1);
+        $this->connection->query_update('threads', array('sticky' => $pin ? 1 : 0), array('threadid' => $id), '', 1);
     }
 
     /**
@@ -165,9 +166,9 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_mrow($name)
     {
-        $rows = $this->connection->query_select('user',array('*'),array('username' => $name),'',1);
-        if (!array_key_exists(0,$rows)) {
-            return NULL;
+        $rows = $this->connection->query_select('user', array('*'), array('username' => $name), '', 1);
+        if (!array_key_exists(0, $rows)) {
+            return null;
         }
         return $rows[0];
     }
@@ -310,7 +311,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function forum_id_from_name($forum_name)
     {
-        return is_numeric($forum_name)?intval($forum_name):$this->connection->query_select_value_if_there('forum','forumid',array('title' => $forum_name));
+        return is_numeric($forum_name) ? intval($forum_name) : $this->connection->query_select_value_if_there('forum', 'forumid', array('title' => $forum_name));
     }
 
     /**
@@ -320,14 +321,14 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  SHORT_TEXT               The topic identifier
      * @return ?integer                 The topic ID (NULL: not found)
      */
-    public function find_topic_id_for_topic_identifier($forum,$topic_identifier)
+    public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
     {
         if (is_integer($forum)) {
             $forum_id = $forum;
         } else {
             $forum_id = $this->forum_id_from_name($forum);
         }
-        return $this->connection->query_value_if_there('SELECT threadid FROM ' . $this->connection->get_table_prefix() . 'thread WHERE forumid=' . strval($forum_id) . ' AND (' . db_string_equal_to('title',$topic_identifier) . ' OR title LIKE \'%: #' . db_encode_like($topic_identifier) . '\')');
+        return $this->connection->query_value_if_there('SELECT threadid FROM ' . $this->connection->get_table_prefix() . 'thread WHERE forumid=' . strval($forum_id) . ' AND (' . db_string_equal_to('title', $topic_identifier) . ' OR title LIKE \'%: #' . db_encode_like($topic_identifier) . '\')');
     }
 
     /**
@@ -352,7 +353,7 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  boolean                  Whether the reply is only visible to staff
      * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
      */
-    public function make_post_forum_topic($forum_name,$topic_identifier,$member,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url = null,$time = null,$ip = null,$validated = null,$topic_validated = 1,$skip_post_checks = false,$poster_name_if_guest = '',$parent_id = null,$staff_only = false)
+    public function make_post_forum_topic($forum_name, $topic_identifier, $member, $post_title, $post, $content_title, $topic_identifier_encapsulation_prefix, $content_url = null, $time = null, $ip = null, $validated = null, $topic_validated = 1, $skip_post_checks = false, $poster_name_if_guest = '', $parent_id = null, $staff_only = false)
     {
         if (is_null($time)) {
             $time = time();
@@ -362,34 +363,34 @@ class forum_driver_vb_shared extends forum_driver_base
         }
         $forum_id = $this->forum_id_from_name($forum_name);
         if (is_null($forum_id)) {
-            warn_exit(do_lang_tempcode('MISSING_FORUM',escape_html($forum_name)));
+            warn_exit(do_lang_tempcode('MISSING_FORUM', escape_html($forum_name)));
         }
         $username = $this->get_username($member);
-        $topic_id = $this->find_topic_id_for_topic_identifier($forum_name,$topic_identifier);
+        $topic_id = $this->find_topic_id_for_topic_identifier($forum_name, $topic_identifier);
         $is_new = is_null($topic_id);
         if ($is_new) {
-            $topic_id = $this->connection->query_insert('thread',array('title' => $content_title . ', ' . $topic_identifier_encapsulation_prefix . ': #' . $topic_identifier,'lastpost' => $time,'forumid' => $forum_id,'open' => 1,'postusername' => $username,'postuserid' => $member,'lastposter' => $username,'dateline' => $time,'visible' => 1),true);
-            $home_link = hyperlink($content_url,escape_html($content_title));
-            $this->connection->query_insert('post',array('threadid' => $topic_id,'username' => do_lang('SYSTEM','','','',get_site_default_lang()),'userid' => 0,'title' => '','dateline' => $time,'pagetext' => do_lang('SPACER_POST',$home_link->evaluate(),'','',get_site_default_lang()),'allowsmilie' => 1,'ipaddress' => '127.0.0.1','visible' => 1));
-            $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'forum SET threadcount=(threadcount+1) WHERE forumid=' . strval($forum_id),1);
+            $topic_id = $this->connection->query_insert('thread', array('title' => $content_title . ', ' . $topic_identifier_encapsulation_prefix . ': #' . $topic_identifier, 'lastpost' => $time, 'forumid' => $forum_id, 'open' => 1, 'postusername' => $username, 'postuserid' => $member, 'lastposter' => $username, 'dateline' => $time, 'visible' => 1), true);
+            $home_link = hyperlink($content_url, escape_html($content_title));
+            $this->connection->query_insert('post', array('threadid' => $topic_id, 'username' => do_lang('SYSTEM', '', '', '', get_site_default_lang()), 'userid' => 0, 'title' => '', 'dateline' => $time, 'pagetext' => do_lang('SPACER_POST', $home_link->evaluate(), '', '', get_site_default_lang()), 'allowsmilie' => 1, 'ipaddress' => '127.0.0.1', 'visible' => 1));
+            $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'forum SET threadcount=(threadcount+1) WHERE forumid=' . strval($forum_id), 1);
         }
 
         $GLOBALS['LAST_TOPIC_ID'] = $topic_id;
         $GLOBALS['LAST_TOPIC_IS_NEW'] = $is_new;
 
         if ($post == '') {
-            return array($topic_id,false);
+            return array($topic_id, false);
         }
 
-        $last_post_id = $this->connection->query_insert('post',array('threadid' => $topic_id,'username' => $username,'userid' => $member,'title' => $post_title,'dateline' => $time,'pagetext' => $post,'allowsmilie' => 1,'ipaddress' => $ip,'visible' => 1),true);
-        $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'forum SET replycount=(replycount+1), lastpost=' . strval($time) . ', lastposter=\'' . db_escape_string($username) . '\' WHERE forumid=' . strval($forum_id),1);
+        $last_post_id = $this->connection->query_insert('post', array('threadid' => $topic_id, 'username' => $username, 'userid' => $member, 'title' => $post_title, 'dateline' => $time, 'pagetext' => $post, 'allowsmilie' => 1, 'ipaddress' => $ip, 'visible' => 1), true);
+        $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'forum SET replycount=(replycount+1), lastpost=' . strval($time) . ', lastposter=\'' . db_escape_string($username) . '\' WHERE forumid=' . strval($forum_id), 1);
         if ((!isset($GLOBALS['SITE_INFO']['vb_version'])) || ($GLOBALS['SITE_INFO']['vb_version'] >= 3.6)) {
-            $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'thread SET lastpostid=' . strval($last_post_id) . ', replycount=(replycount+1), lastpost=' . strval($time) . ', lastposter=\'' . db_escape_string($username) . '\' WHERE threadid=' . strval($topic_id),1);
+            $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'thread SET lastpostid=' . strval($last_post_id) . ', replycount=(replycount+1), lastpost=' . strval($time) . ', lastposter=\'' . db_escape_string($username) . '\' WHERE threadid=' . strval($topic_id), 1);
         } else {
-            $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'thread SET replycount=(replycount+1), lastpost=' . strval($time) . ', lastposter=\'' . db_escape_string($username) . '\' WHERE threadid=' . strval($topic_id),1);
+            $this->connection->query('UPDATE ' . $this->connection->get_table_prefix() . 'thread SET replycount=(replycount+1), lastpost=' . strval($time) . ', lastposter=\'' . db_escape_string($username) . '\' WHERE threadid=' . strval($topic_id), 1);
         }
 
-        return array($topic_id,false);
+        return array($topic_id, false);
     }
 
     /**
@@ -403,14 +404,14 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  boolean                  Whether to show in reverse
      * @return mixed                    The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
      */
-    public function get_forum_topic_posts($topic_id,&$count,$max = 100,$start = 0,$mark_read = true,$reverse = false)
+    public function get_forum_topic_posts($topic_id, &$count, $max = 100, $start = 0, $mark_read = true, $reverse = false)
     {
         if (is_null($topic_id)) {
             return (-2);
         }
-        $order = $reverse?'dateline DESC':'dateline';
-        $rows = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'post WHERE threadid=' . strval($topic_id) . ' AND pagetext NOT LIKE \'' . db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20) . '%') . '\' ORDER BY ' . $order,$max,$start);
-        $count = $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'post WHERE threadid=' . strval($topic_id) . ' AND pagetext NOT LIKE \'' . db_encode_like(substr(do_lang('SPACER_POST','','','',get_site_default_lang()),0,20) . '%') . '\'');
+        $order = $reverse ? 'dateline DESC' : 'dateline';
+        $rows = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'post WHERE threadid=' . strval($topic_id) . ' AND pagetext NOT LIKE \'' . db_encode_like(substr(do_lang('SPACER_POST', '', '', '', get_site_default_lang()), 0, 20) . '%') . '\' ORDER BY ' . $order, $max, $start);
+        $count = $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'post WHERE threadid=' . strval($topic_id) . ' AND pagetext NOT LIKE \'' . db_encode_like(substr(do_lang('SPACER_POST', '', '', '', get_site_default_lang()), 0, 20) . '%') . '\'');
         $out = array();
         foreach ($rows as $myrow) {
             $temp = array();
@@ -418,7 +419,7 @@ class forum_driver_vb_shared extends forum_driver_base
             global $LAX_COMCODE;
             $temp2 = $LAX_COMCODE;
             $LAX_COMCODE = true;
-            $temp['message'] = comcode_to_tempcode(@html_entity_decode($myrow['pagetext'],ENT_QUOTES,get_charset()),$myrow['userid']);
+            $temp['message'] = comcode_to_tempcode(@html_entity_decode($myrow['pagetext'], ENT_QUOTES, get_charset()), $myrow['userid']);
             $LAX_COMCODE = $temp2;
             $temp['member'] = $myrow['userid'];
             $temp['date'] = $myrow['dateline'];
@@ -433,10 +434,10 @@ class forum_driver_vb_shared extends forum_driver_base
      * Get a URL to the specified topic ID. Most forums don't require the second parameter, but some do, so it is required in the interface.
      *
      * @param  integer                  The topic ID
-     * @param string         The forum ID
+     * @param  string         The forum ID
      * @return URLPATH                  The URL to the topic
      */
-    public function topic_url($id,$forum)
+    public function topic_url($id, $forum)
     {
         return get_forum_base_url() . '/showthread.php?threadid=' . strval($id);
     }
@@ -445,10 +446,10 @@ class forum_driver_vb_shared extends forum_driver_base
      * Get a URL to the specified post ID.
      *
      * @param  integer                  The post ID
-     * @param string       The forum ID
+     * @param  string       The forum ID
      * @return URLPATH                  The URL to the post
      */
-    public function post_url($id,$forum)
+    public function post_url($id, $forum)
     {
         return get_forum_base_url() . '/showpost.php?p=' . strval($id);
     }
@@ -475,14 +476,14 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  SHORT_TEXT               The topic description filter
      * @return ?array                   The array of topics (NULL: error)
      */
-    public function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title = '',$show_first_posts = false,$date_key = 'lasttime',$hot = false,$filter_topic_description = '')
+    public function show_forum_topics($name, $limit, $start, &$max_rows, $filter_topic_title = '', $show_first_posts = false, $date_key = 'lasttime', $hot = false, $filter_topic_description = '')
     {
         if (is_integer($name)) {
             $id_list = 'forumid=' . strval($name);
         } elseif (!is_array($name)) {
             $id = $this->forum_id_from_name($name);
             if (is_null($id)) {
-                return NULL;
+                return null;
             }
             $id_list = 'forumid=' . strval($id);
         } else {
@@ -494,18 +495,18 @@ class forum_driver_vb_shared extends forum_driver_base
                 $id_list .= 'forumid=' . strval($id);
             }
             if ($id_list == '') {
-                return NULL;
+                return null;
             }
         }
 
-        $topic_filter = ($filter_topic_title != '')?('AND title LIKE \'' . db_encode_like($filter_topic_title) . '\''):'';
-        $rows = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'thread WHERE (' . $id_list . ') ' . $topic_filter . ' ORDER BY ' . (($date_key == 'lastpost')?'last_post':'dateline') . ' DESC',$limit,$start);
+        $topic_filter = ($filter_topic_title != '') ? ('AND title LIKE \'' . db_encode_like($filter_topic_title) . '\'') : '';
+        $rows = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'thread WHERE (' . $id_list . ') ' . $topic_filter . ' ORDER BY ' . (($date_key == 'lastpost') ? 'last_post' : 'dateline') . ' DESC', $limit, $start);
         $max_rows = $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'thread WHERE (' . $id_list . ') ' . $topic_filter);
         $out = array();
         foreach ($rows as $i => $r) {
             $out[$i] = array();
             $out[$i]['id'] = $r['threadid'];
-            $out[$i]['num'] = $r['replycount']+1;
+            $out[$i]['num'] = $r['replycount'] + 1;
             $out[$i]['title'] = $r['title'];
             $out[$i]['description'] = $r['title'];
             $out[$i]['firstusername'] = $r['postusername'];
@@ -514,8 +515,8 @@ class forum_driver_vb_shared extends forum_driver_base
             $out[$i]['firsttime'] = $r['dateline'];
             $out[$i]['lasttime'] = $r['lastpost'];
             $out[$i]['closed'] = ($r['open'] == 0);
-            $fp_rows = $this->connection->query('SELECT title,pagetext,userid FROM ' . $this->connection->get_table_prefix() . 'post WHERE pagetext NOT LIKE \'' . db_encode_like(do_lang('SPACER_POST','','','',get_site_default_lang()) . '%') . '\' AND threadid=' . strval($out[$i]['id']) . ' ORDER BY dateline',1);
-            if (!array_key_exists(0,$fp_rows)) {
+            $fp_rows = $this->connection->query('SELECT title,pagetext,userid FROM ' . $this->connection->get_table_prefix() . 'post WHERE pagetext NOT LIKE \'' . db_encode_like(do_lang('SPACER_POST', '', '', '', get_site_default_lang()) . '%') . '\' AND threadid=' . strval($out[$i]['id']) . ' ORDER BY dateline', 1);
+            if (!array_key_exists(0, $fp_rows)) {
                 unset($out[$i]);
                 continue;
             }
@@ -524,16 +525,16 @@ class forum_driver_vb_shared extends forum_driver_base
                 global $LAX_COMCODE;
                 $temp = $LAX_COMCODE;
                 $LAX_COMCODE = true;
-                $out[$i]['firstpost'] = comcode_to_tempcode(@html_entity_decode($fp_rows[0]['pagetext'],ENT_QUOTES,get_charset()),$fp_rows[0]['userid']);
+                $out[$i]['firstpost'] = comcode_to_tempcode(@html_entity_decode($fp_rows[0]['pagetext'], ENT_QUOTES, get_charset()), $fp_rows[0]['userid']);
                 $LAX_COMCODE = $temp;
             }
-            $fp_rows = $this->connection->query('SELECT title,pagetext,userid FROM ' . $this->connection->get_table_prefix() . 'post WHERE pagetext NOT LIKE \'' . db_encode_like(do_lang('SPACER_POST','','','',get_site_default_lang()) . '%') . '\' AND threadid=' . strval($out[$i]['id']) . ' ORDER BY dateline DESC',1);
+            $fp_rows = $this->connection->query('SELECT title,pagetext,userid FROM ' . $this->connection->get_table_prefix() . 'post WHERE pagetext NOT LIKE \'' . db_encode_like(do_lang('SPACER_POST', '', '', '', get_site_default_lang()) . '%') . '\' AND threadid=' . strval($out[$i]['id']) . ' ORDER BY dateline DESC', 1);
             $out[$i]['lastmemberid'] = $fp_rows[0]['userid'];
         }
         if (count($out) != 0) {
             return $out;
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -544,7 +545,7 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  integer                  Return primary members after this offset and secondary members after this offset
      * @return ?array                   The array of members (NULL: no members)
      */
-    public function member_group_query($groups,$max = null,$start = 0)
+    public function member_group_query($groups, $max = null, $start = 0)
     {
         $_groups = '';
         foreach ($groups as $group) {
@@ -553,7 +554,7 @@ class forum_driver_vb_shared extends forum_driver_base
             }
             $_groups .= 'usergroupid=' . strval($group);
         }
-        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user WHERE ' . $_groups . ' ORDER BY usergroupid,userid ASC',$max,$start);
+        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user WHERE ' . $_groups . ' ORDER BY usergroupid,userid ASC', $max, $start);
     }
 
     /**
@@ -589,9 +590,9 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function probe_ip($ip)
     {
-        $a = $this->connection->query_select('user',array('DISTINCT userid AS id'),array('ipaddress' => $ip));
-        $b = $this->connection->query_select('post',array('DISTINCT userid AS id'),array('ipaddress' => $ip));
-        return array_merge($a,$b);
+        $a = $this->connection->query_select('user', array('DISTINCT userid AS id'), array('ipaddress' => $ip));
+        $b = $this->connection->query_select('post', array('DISTINCT userid AS id'), array('ipaddress' => $ip));
+        return array_merge($a, $b);
     }
 
     /**
@@ -606,7 +607,7 @@ class forum_driver_vb_shared extends forum_driver_base
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
         }
-        return $this->get_member_row_field($member,'username');
+        return $this->get_member_row_field($member, 'username');
     }
 
     /**
@@ -617,7 +618,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function _get_member_email_address($member)
     {
-        return $this->get_member_row_field($member,'email');
+        return $this->get_member_row_field($member, 'email');
     }
 
     /**
@@ -628,7 +629,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_member_email_allowed($member)
     {
-        return ($this->get_member_row_field($member,'options')&16) != 0;
+        return ($this->get_member_row_field($member, 'options') & 16) != 0;
     }
 
     /**
@@ -639,7 +640,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_member_join_timestamp($member)
     {
-        return $this->get_member_row_field($member,'joindate');
+        return $this->get_member_row_field($member, 'joindate');
     }
 
     /**
@@ -649,10 +650,10 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  ?integer                 Maximum number to return (limits to the most recent active) (NULL: no limit)
      * @return ?array                   The array of matched members (NULL: none found)
      */
-    public function get_matching_members($pattern,$limit = null)
+    public function get_matching_members($pattern, $limit = null)
     {
-        $rows = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user WHERE username LIKE \'' . db_encode_like($pattern) . '\' AND userid<>' . strval($this->get_guest_id()) . ' ORDER BY lastactivity DESC',$limit);
-        sort_maps_by($rows,'username');
+        $rows = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user WHERE username LIKE \'' . db_encode_like($pattern) . '\' AND userid<>' . strval($this->get_guest_id()) . ' ORDER BY lastactivity DESC', $limit);
+        sort_maps_by($rows, 'username');
         return $rows;
     }
 
@@ -664,7 +665,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_post_count($member)
     {
-        $c = $this->get_member_row_field($member,'posts');
+        $c = $this->get_member_row_field($member, 'posts');
         if (is_null($c)) {
             return 0;
         }
@@ -679,7 +680,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_topic_count($member)
     {
-        return $this->connection->query_select_value('thread','COUNT(*)',array('postuserid' => $member));
+        return $this->connection->query_select_value('thread', 'COUNT(*)', array('postuserid' => $member));
     }
 
     /**
@@ -703,16 +704,16 @@ class forum_driver_vb_shared extends forum_driver_base
             return $this->EMOTICON_CACHE;
         }
         $this->EMOTICON_CACHE = array();
-        $rows = $this->connection->query_select('smilie',array('*'));
+        $rows = $this->connection->query_select('smilie', array('*'));
         $this->EMOTICON_CACHE = array();
         foreach ($rows as $myrow) {
             $src = $myrow['smiliepath'];
             if (url_is_local($src)) {
                 $src = $this->get_emo_dir() . $src;
             }
-            $this->EMOTICON_CACHE[$myrow['smilietext']] = array('EMOTICON_IMG_CODE_DIR',$src,$myrow['smilietext']);
+            $this->EMOTICON_CACHE[$myrow['smilietext']] = array('EMOTICON_IMG_CODE_DIR', $src, $myrow['smilietext']);
         }
-        uksort($this->EMOTICON_CACHE,'strlen_sort');
+        uksort($this->EMOTICON_CACHE, 'strlen_sort');
         $this->EMOTICON_CACHE = array_reverse($this->EMOTICON_CACHE);
         return $this->EMOTICON_CACHE;
     }
@@ -727,8 +728,8 @@ class forum_driver_vb_shared extends forum_driver_base
         $table = 'style';
         $codename = 'title';
 
-        $rows = $this->connection->query_select($table,array($codename));
-        return collapse_1d_complexity($codename,$rows);
+        $rows = $this->connection->query_select($table, array($codename));
+        return collapse_1d_complexity($codename, $rows);
     }
 
     /**
@@ -744,35 +745,35 @@ class forum_driver_vb_shared extends forum_driver_base
 
         // Load in remapper
         require_code('files');
-        $map = file_exists(get_file_base() . '/themes/map.ini')?better_parse_ini_file(get_file_base() . '/themes/map.ini'):array();
+        $map = file_exists(get_file_base() . '/themes/map.ini') ? better_parse_ini_file(get_file_base() . '/themes/map.ini') : array();
 
         if (!$skip_member_specific) {
             // Work out
             $member = get_member();
-            if ($member>0) {
-                $skin = $this->get_member_row_field($member,'styleid');
+            if ($member > 0) {
+                $skin = $this->get_member_row_field($member, 'styleid');
             } else {
                 $skin = 0;
             }
-            if ($skin>0) { // User has a custom theme
-                $vb = $this->connection->query_select_value_if_there('style','title',array('styleid' => $skin));
+            if ($skin > 0) { // User has a custom theme
+                $vb = $this->connection->query_select_value_if_there('style', 'title', array('styleid' => $skin));
                 if (!is_null($vb)) {
-                    $def = array_key_exists($vb,$map)?$map[$vb]:$vb;
+                    $def = array_key_exists($vb, $map) ? $map[$vb] : $vb;
                 }
             }
         }
 
         // Look for a skin according to our site name (we bother with this instead of 'default' because ocPortal itself likes to never choose a theme when forum-theme integration is on: all forum [via map] or all ocPortal seems cleaner, although it is complex)
-        if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
-            $vb = $this->connection->query_select_value_if_there('style','title',array('title' => get_site_name()));
+        if ((!(strlen($def) > 0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
+            $vb = $this->connection->query_select_value_if_there('style', 'title', array('title' => get_site_name()));
             if (!is_null($vb)) {
-                $def = array_key_exists($vb,$map)?$map[$vb]:$vb;
+                $def = array_key_exists($vb, $map) ? $map[$vb] : $vb;
             }
         }
 
         // Hmm, just the very-default then
-        if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
-            $def = array_key_exists('default',$map)?$map['default']:'default';
+        if ((!(strlen($def) > 0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
+            $def = array_key_exists('default', $map) ? $map['default'] : 'default';
         }
 
         return $def;
@@ -785,7 +786,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_num_users_forums()
     {
-        return $this->connection->query_value_if_there('SELECT COUNT(DISTINCT userid) FROM ' . $this->connection->get_table_prefix() . 'session WHERE lastactivity>' . strval(time()-60*intval(get_option('users_online_time'))));
+        return $this->connection->query_value_if_there('SELECT COUNT(DISTINCT userid) FROM ' . $this->connection->get_table_prefix() . 'session WHERE lastactivity>' . strval(time() - 60 * intval(get_option('users_online_time'))));
     }
 
     /**
@@ -795,7 +796,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_members()
     {
-        return $this->connection->query_select_value('user','COUNT(*)');
+        return $this->connection->query_select_value('user', 'COUNT(*)');
     }
 
     /**
@@ -805,7 +806,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_topics()
     {
-        return $this->connection->query_select_value('thread','COUNT(*)');
+        return $this->connection->query_select_value('thread', 'COUNT(*)');
     }
 
     /**
@@ -815,7 +816,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_num_forum_posts()
     {
-        return $this->connection->query_select_value('post','COUNT(*)');
+        return $this->connection->query_select_value('post', 'COUNT(*)');
     }
 
     /**
@@ -825,7 +826,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function _get_num_new_forum_posts()
     {
-        return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'post WHERE dateline>' . strval(time()-60*60*24));
+        return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'post WHERE dateline>' . strval(time() - 60 * 60 * 24));
     }
 
     /**
@@ -835,21 +836,21 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  string                   The field name
      * @param  string                   The value
      */
-    public function set_custom_field($member,$field,$value)
+    public function set_custom_field($member, $field, $value)
     {
         if ((!isset($GLOBALS['SITE_INFO']['vb_version'])) || ($GLOBALS['SITE_INFO']['vb_version'] >= 3.6)) {
-            $id = $this->connection->query_value_if_there('SELECT f.profilefieldid FROM ' . $this->connection->get_table_prefix() . 'profilefield f LEFT JOIN ' . $this->connection->get_table_prefix() . 'phrase p ON (' . db_string_equal_to('product','vbulletin') . ' AND p.varname=CONCAT(\'field\',f.profilefieldid,\'_title\')) WHERE ' . db_string_equal_to('p.text','ocp_' . $field));
+            $id = $this->connection->query_value_if_there('SELECT f.profilefieldid FROM ' . $this->connection->get_table_prefix() . 'profilefield f LEFT JOIN ' . $this->connection->get_table_prefix() . 'phrase p ON (' . db_string_equal_to('product', 'vbulletin') . ' AND p.varname=CONCAT(\'field\',f.profilefieldid,\'_title\')) WHERE ' . db_string_equal_to('p.text', 'ocp_' . $field));
         } else {
-            $id = $this->connection->query_select_value_if_there('profilefield','profilefieldid',array('title' => 'ocp_' . $field));
+            $id = $this->connection->query_select_value_if_there('profilefield', 'profilefieldid', array('title' => 'ocp_' . $field));
         }
         if (is_null($id)) {
             return;
         }
-        $old = $this->connection->query_select_value_if_there('userfield','userid',array('userid' => $member));
+        $old = $this->connection->query_select_value_if_there('userfield', 'userid', array('userid' => $member));
         if (is_null($old)) {
-            $this->connection->query_insert('userfield',array('userid' => $member));
+            $this->connection->query_insert('userfield', array('userid' => $member));
         }
-        $this->connection->query_update('userfield',array('field' . strval($id) => $value),array('userid' => $member),'',1);
+        $this->connection->query_update('userfield', array('field' . strval($id) => $value), array('userid' => $member), '', 1);
     }
 
     /**
@@ -861,18 +862,18 @@ class forum_driver_vb_shared extends forum_driver_base
     public function get_custom_fields($member)
     {
         if ((!isset($GLOBALS['SITE_INFO']['vb_version'])) || ($GLOBALS['SITE_INFO']['vb_version'] >= 3.6)) {
-            $rows = $this->connection->query('SELECT f.profilefieldid,p.text AS title FROM ' . $this->connection->get_table_prefix() . 'profilefield f LEFT JOIN ' . $this->connection->get_table_prefix() . 'phrase p ON (' . db_string_equal_to('product','vbulletin') . ' AND p.varname=CONCAT(\'field\',f.profilefieldid,\'_title\')) WHERE p.text LIKE \'' . db_encode_like('ocp_%') . '\'');
+            $rows = $this->connection->query('SELECT f.profilefieldid,p.text AS title FROM ' . $this->connection->get_table_prefix() . 'profilefield f LEFT JOIN ' . $this->connection->get_table_prefix() . 'phrase p ON (' . db_string_equal_to('product', 'vbulletin') . ' AND p.varname=CONCAT(\'field\',f.profilefieldid,\'_title\')) WHERE p.text LIKE \'' . db_encode_like('ocp_%') . '\'');
         } else {
             $rows = $this->connection->query('SELECT profilefieldid,title FROM ' . $this->connection->get_table_prefix() . 'profilefield WHERE title LIKE \'' . db_encode_like('ocp_%') . '\'');
         }
-        $values = $this->connection->query_select('userfield',array('*'),array('userid' => $member),'',1);
-        if (!array_key_exists(0,$values)) {
-            return NULL;
+        $values = $this->connection->query_select('userfield', array('*'), array('userid' => $member), '', 1);
+        if (!array_key_exists(0, $values)) {
+            return null;
         }
 
         $out = array();
         foreach ($rows as $row) {
-            $title = substr($row['title'],4);
+            $title = substr($row['title'], 4);
             $out[$title] = $values[0]['field' . strval($row['profilefieldid'])];
         }
         return $out;
@@ -886,7 +887,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_member_from_username($name)
     {
-        return $this->connection->query_select_value_if_there('user','userid',array('username' => $name));
+        return $this->connection->query_select_value_if_there('user', 'userid', array('username' => $name));
     }
 
     /**
@@ -897,7 +898,7 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_member_ip($member)
     {
-        return $this->get_member_row_field($member,'ipaddress');
+        return $this->get_member_row_field($member, 'ipaddress');
     }
 
     /**
@@ -908,11 +909,11 @@ class forum_driver_vb_shared extends forum_driver_base
      */
     public function get_member_row($member)
     {
-        if (array_key_exists($member,$this->MEMBER_ROWS_CACHED)) {
+        if (array_key_exists($member, $this->MEMBER_ROWS_CACHED)) {
             return $this->MEMBER_ROWS_CACHED[$member];
         }
 
-        $rows = $this->connection->query_select('user',array('*'),array('userid' => $member),'',1);
+        $rows = $this->connection->query_select('user', array('*'), array('userid' => $member), '', 1);
         if ($member == $this->get_guest_id()) {
             $rows[0]['username'] = do_lang('GUEST');
             $rows[0]['email'] = null;
@@ -922,8 +923,8 @@ class forum_driver_vb_shared extends forum_driver_base
             $rows[0]['styleid'] = null;
             $rows[0]['usergroupid'] = 1;
         }
-        if (!array_key_exists(0,$rows)) {
-            return NULL;
+        if (!array_key_exists(0, $rows)) {
+            return null;
         }
         $this->MEMBER_ROWS_CACHED[$member] = $rows[0];
         return $this->MEMBER_ROWS_CACHED[$member];
@@ -936,9 +937,9 @@ class forum_driver_vb_shared extends forum_driver_base
      * @param  string                   The field identifier
      * @return mixed                    The field
      */
-    public function get_member_row_field($member,$field)
+    public function get_member_row_field($member, $field)
     {
         $row = $this->get_member_row($member);
-        return is_null($row)?null:$row[$field];
+        return is_null($row) ? null : $row[$field];
     }
 }

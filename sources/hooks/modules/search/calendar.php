@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_search_calendar
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_calendar
     public function info($check_permissions = true)
     {
         if (!module_installed('calendar')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'calendar')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'calendar')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('calendar_events','COUNT(*)') == 0) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('calendar_events', 'COUNT(*)') == 0) {
+            return null;
         }
 
         require_lang('calendar');
@@ -86,7 +85,7 @@ class Hook_search_calendar
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         require_lang('calendar');
 
@@ -106,7 +105,7 @@ class Hook_search_calendar
         // Calculate our where clause (search)
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('event','r',null,'r.e_member_calendar=' . strval(get_member()));
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('event', 'r', null, 'r.e_member_calendar=' . strval(get_member()));
             $table .= $privacy_join;
             $where_clause .= $privacy_where;
         }
@@ -117,7 +116,7 @@ class Hook_search_calendar
             $where_clause .= ' OR e_member_calendar=' . strval(get_member());
         }
         $where_clause .= ')';
-        $sq = build_search_submitter_clauses('e_submitter',$author_id,$author);
+        $sq = build_search_submitter_clauses('e_submitter', $author_id, $author);
         if (is_null($sq)) {
             return array();
         } else {
@@ -129,21 +128,21 @@ class Hook_search_calendar
         }
         $where_clause .= ' AND ';
         $where_clause .= 'e_type<>' . strval(db_get_first_id());
-        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
             $where_clause .= ' AND ';
             $where_clause .= 'validated=1';
         }
 
         // Calculate and perform query
-        $rows = get_search_rows('event','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,$table,array('r.e_title' => 'SHORT_TRANS','r.e_content' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'calendar','e_type');
+        $rows = get_search_rows('event', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, $table, array('r.e_title' => 'SHORT_TRANS', 'r.e_content' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*', null, 'calendar', 'e_type');
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }

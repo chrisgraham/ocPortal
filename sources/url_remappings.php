@@ -41,36 +41,36 @@ function get_remappings($url_scheme)
     switch ($url_scheme) {
         case 'PG':
             if (addon_installed('wiki')) {
-                $rules[] = array(array('page' => 'wiki','type' => 'misc','id' => NULL),'pg/s/ID',false);
+                $rules[] = array(array('page' => 'wiki', 'type' => 'misc', 'id' => null), 'pg/s/ID', false);
             }
-            $rules[] = array(array('page' => NULL,'type' => NULL,'id' => NULL),'pg/PAGE/TYPE/ID',false);
-            $rules[] = array(array('page' => NULL,'type' => NULL),'pg/PAGE/TYPE',false);
-            $rules[] = array(array('page' => NULL),'pg/PAGE',false);
-            $rules[] = array(array('page' => ''),'pg',false);
-            $rules[] = array(array(),'pg',true);
+            $rules[] = array(array('page' => null, 'type' => null, 'id' => null), 'pg/PAGE/TYPE/ID', false);
+            $rules[] = array(array('page' => null, 'type' => null), 'pg/PAGE/TYPE', false);
+            $rules[] = array(array('page' => null), 'pg/PAGE', false);
+            $rules[] = array(array('page' => ''), 'pg', false);
+            $rules[] = array(array(), 'pg', true);
             break;
 
         case 'HTM':
             if (addon_installed('wiki')) {
-                $rules[] = array(array('page' => 'wiki','type' => 'misc','id' => NULL),'s/ID.htm',false);
+                $rules[] = array(array('page' => 'wiki', 'type' => 'misc', 'id' => null), 's/ID.htm', false);
             }
-            $rules[] = array(array('page' => NULL,'type' => NULL,'id' => NULL),'PAGE/TYPE/ID.htm',false);
-            $rules[] = array(array('page' => NULL,'type' => NULL),'PAGE/TYPE.htm',false);
-            $rules[] = array(array('page' => NULL),'PAGE.htm',false);
-            $rules[] = array(array('page' => ''),'',false);
-            $rules[] = array(array(),'',false);
+            $rules[] = array(array('page' => null, 'type' => null, 'id' => null), 'PAGE/TYPE/ID.htm', false);
+            $rules[] = array(array('page' => null, 'type' => null), 'PAGE/TYPE.htm', false);
+            $rules[] = array(array('page' => null), 'PAGE.htm', false);
+            $rules[] = array(array('page' => ''), '', false);
+            $rules[] = array(array(), '', false);
             break;
 
         case 'SIMPLE':
             if (addon_installed('wiki')) {
-                $rules[] = array(array('page' => 'wiki','type' => 'misc','id' => NULL),'s/ID',false);
+                $rules[] = array(array('page' => 'wiki', 'type' => 'misc', 'id' => null), 's/ID', false);
             }
-            $rules[] = array(array('page' => NULL,'type' => NULL,'id' => NULL),'PAGE/TYPE/ID',false);
-            $rules[] = array(array('page' => NULL,'type' => 'misc'),'PAGE',false);
-            $rules[] = array(array('page' => NULL,'type' => NULL),'PAGE/TYPE',false);
-            $rules[] = array(array('page' => NULL),'PAGE',false);
-            $rules[] = array(array('page' => ''),'',false);
-            $rules[] = array(array(),'',false);
+            $rules[] = array(array('page' => null, 'type' => null, 'id' => null), 'PAGE/TYPE/ID', false);
+            $rules[] = array(array('page' => null, 'type' => 'misc'), 'PAGE', false);
+            $rules[] = array(array('page' => null, 'type' => null), 'PAGE/TYPE', false);
+            $rules[] = array(array('page' => null), 'PAGE', false);
+            $rules[] = array(array('page' => ''), '', false);
+            $rules[] = array(array(), '', false);
             break;
     }
 

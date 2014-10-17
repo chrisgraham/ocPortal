@@ -82,19 +82,19 @@ function ocf_over_msn()
  * @param  boolean                      If it is okay to fail to find a mapping
  * @return ?AUTO_LINK                   The new ID (NULL: not found)
  */
-function import_id_remap_get($type,$id_old,$fail_ok = false)
+function import_id_remap_get($type, $id_old, $fail_ok = false)
 {
     global $REMAP_CACHE;
-    if ((array_key_exists($type,$REMAP_CACHE)) && (array_key_exists($id_old,$REMAP_CACHE[$type]))) {
+    if ((array_key_exists($type, $REMAP_CACHE)) && (array_key_exists($id_old, $REMAP_CACHE[$type]))) {
         return $REMAP_CACHE[$type][$id_old];
     }
 
-    $value = $GLOBALS['SITE_DB']->query_select_value_if_there('import_id_remap','id_new',array('id_session' => get_session_id(),'id_type' => $type,'id_old' => $id_old));
+    $value = $GLOBALS['SITE_DB']->query_select_value_if_there('import_id_remap', 'id_new', array('id_session' => get_session_id(), 'id_type' => $type, 'id_old' => $id_old));
     if (is_null($value)) {
         if ($fail_ok) {
-            return NULL;
+            return null;
         }
-        warn_exit(do_lang_tempcode('IMPORT_NOT_IMPORTED',$type,$id_old));
+        warn_exit(do_lang_tempcode('IMPORT_NOT_IMPORTED', $type, $id_old));
     }
     $REMAP_CACHE[$type][$id_old] = $value;
     return $value;
@@ -107,9 +107,9 @@ function import_id_remap_get($type,$id_old,$fail_ok = false)
  * @param  string                       The source (old, original) ID of the mapping
  * @return boolean                      Whether it has been imported
  */
-function import_check_if_imported($type,$id_old)
+function import_check_if_imported($type, $id_old)
 {
-    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('import_id_remap','id_new',array('id_session' => get_session_id(),'id_type' => $type,'id_old' => $id_old));
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('import_id_remap', 'id_new', array('id_session' => get_session_id(), 'id_type' => $type, 'id_old' => $id_old));
     return !is_null($test);
 }
 
@@ -120,9 +120,9 @@ function import_check_if_imported($type,$id_old)
  * @param  string                       The source (old, original) ID of the mapping
  * @param  AUTO_LINK                    The destination (new) ID of the mapping
  */
-function import_id_remap_put($type,$id_old,$id_new)
+function import_id_remap_put($type, $id_old, $id_new)
 {
-    $GLOBALS['SITE_DB']->query_insert('import_id_remap',array('id_session' => get_session_id(),'id_type' => $type,'id_old' => $id_old,'id_new' => $id_new));
+    $GLOBALS['SITE_DB']->query_insert('import_id_remap', array('id_session' => get_session_id(), 'id_type' => $type, 'id_old' => $id_old, 'id_new' => $id_new));
 }
 
 /**
@@ -132,11 +132,11 @@ function import_id_remap_put($type,$id_old,$id_new)
  * @param  SHORT_TEXT                   Replacement (blank: block entirely)
  * @param  BINARY                       Whether to perform a substring match
  */
-function add_wordfilter_word($word,$replacement = '',$substr = 0)
+function add_wordfilter_word($word, $replacement = '', $substr = 0)
 {
-    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('wordfilter','word',array('word' => $word));
+    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('wordfilter', 'word', array('word' => $word));
     if (is_null($test)) {
-        $GLOBALS['SITE_DB']->query_insert('wordfilter',array('word' => $word,'w_replacement' => $replacement,'w_substr' => $substr));
+        $GLOBALS['SITE_DB']->query_insert('wordfilter', array('word' => $word, 'w_replacement' => $replacement, 'w_substr' => $substr));
     }
 }
 
@@ -148,10 +148,10 @@ function add_wordfilter_word($word,$replacement = '',$substr = 0)
  * @param  boolean                      Whether GIF files are made as PNG fiels
  * @return string                       Filename to use
  */
-function find_derivative_filename($dir,$file,$shun_gif = false)
+function find_derivative_filename($dir, $file, $shun_gif = false)
 {
-    if (($shun_gif) && (substr($file,-4) == '.gif')) {
-        $file = substr($file,0,strlen($file)-4) . '.png';
+    if (($shun_gif) && (substr($file, -4) == '.gif')) {
+        $file = substr($file, 0, strlen($file) - 4) . '.png';
     }
 
     $_file = $file;
@@ -171,8 +171,8 @@ function find_derivative_filename($dir,$file,$shun_gif = false)
  */
 function i_force_refresh()
 {
-    if (array_key_exists('I_REFRESH_URL',$GLOBALS)) {
-        if ((strpos($GLOBALS['I_REFRESH_URL'],"\n") !== false) || (strpos($GLOBALS['I_REFRESH_URL'],"\r") !== false)) {
+    if (array_key_exists('I_REFRESH_URL', $GLOBALS)) {
+        if ((strpos($GLOBALS['I_REFRESH_URL'], "\n") !== false) || (strpos($GLOBALS['I_REFRESH_URL'], "\r") !== false)) {
             log_hack_attack_and_exit('HEADER_SPLIT_HACK');
         }
 
@@ -199,14 +199,14 @@ function post_import_cleanup()
  */
 function set_database_index_maintenance($on)
 {
-    if (strpos(get_db_type(),'mysql') !== false) {
+    if (strpos(get_db_type(), 'mysql') !== false) {
         global $NO_DB_SCOPE_CHECK;
         $NO_DB_SCOPE_CHECK = true;
 
-        $tables = $GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
+        $tables = $GLOBALS['SITE_DB']->query_select('db_meta', array('DISTINCT m_table'));
         foreach ($tables as $table) {
             $tbl = $table['m_table'];
-            $GLOBALS['SITE_DB']->query('ALTER TABLE ' . $GLOBALS['SITE_DB']->get_table_prefix() . $tbl . ' ' . ($on?'ENABLE':'DISABLE') . ' KEYS');
+            $GLOBALS['SITE_DB']->query('ALTER TABLE ' . $GLOBALS['SITE_DB']->get_table_prefix() . $tbl . ' ' . ($on ? 'ENABLE' : 'DISABLE') . ' KEYS');
         }
     }
 }

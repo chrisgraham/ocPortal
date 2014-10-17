@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_email_exists
 {
     /**
@@ -29,13 +28,13 @@ class Hook_email_exists
     {
         $val = get_param('name');
 
-        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','m_username',array('m_email_address' => $val));
+        $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'm_username', array('m_email_address' => $val));
         if (is_null($test)) {
             return new ocp_tempcode();
         }
 
         require_lang('ocf');
 
-        return make_string_tempcode(strip_tags(strip_html(do_lang('EMAIL_ADDRESS_IN_USE',escape_html(get_site_name())))));
+        return make_string_tempcode(strip_tags(strip_html(do_lang('EMAIL_ADDRESS_IN_USE', escape_html(get_site_name())))));
     }
 }

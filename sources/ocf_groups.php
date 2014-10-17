@@ -45,30 +45,30 @@ function init__ocf_groups()
  * @param  ID_TEXT                      Overridden GUID to send to templates (blank: none)
  * @return tempcode                     The usergroup box
  */
-function render_group_box($row,$zone = '_SEARCH',$give_context = true,$guid = '')
+function render_group_box($row, $zone = '_SEARCH', $give_context = true, $guid = '')
 {
     require_lang('ocf');
 
-    $url = build_url(array('page' => 'groups','type' => 'view','id' => $row['id']),get_module_zone('groups'));
+    $url = build_url(array('page' => 'groups', 'type' => 'view', 'id' => $row['id']), get_module_zone('groups'));
 
     $_title = ocf_get_group_name($row['id']);
-    $title = $give_context?do_lang('CONTENT_IS_OF_TYPE',do_lang('GROUP'),$_title):$_title;
+    $title = $give_context ? do_lang('CONTENT_IS_OF_TYPE', do_lang('GROUP'), $_title) : $_title;
 
-    $summary = get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+    $summary = get_translated_text($row['g_name'], $GLOBALS['FORUM_DB']);
 
     $num_members = ocf_get_group_members_raw_count($row['id']);
-    $entry_details = do_lang_tempcode('GROUP_NUM_MEMBERS',escape_html(integer_format($num_members)));
+    $entry_details = do_lang_tempcode('GROUP_NUM_MEMBERS', escape_html(integer_format($num_members)));
 
-    return do_template('SIMPLE_PREVIEW_BOX',array(
-        '_GUID' => ($guid != '')?$guid:'efeac1c8465974edd27bb0d805c4fbe0',
+    return do_template('SIMPLE_PREVIEW_BOX', array(
+        '_GUID' => ($guid != '') ? $guid : 'efeac1c8465974edd27bb0d805c4fbe0',
         'ID' => strval($row['id']),
         'TITLE' => $title,
         'TITLE_PLAIN' => $_title,
         'SUMMARY' => $summary,
         'ENTRY_DETAILS' => $entry_details,
         'URL' => $url,
-        'FRACTIONAL_EDIT_FIELD_NAME' => $give_context?null:'name',
-        'FRACTIONAL_EDIT_FIELD_URL' => $give_context?null:'_SEARCH:admin_ocf_groups:__ed:' . strval($row['id']),
+        'FRACTIONAL_EDIT_FIELD_NAME' => $give_context ? null : 'name',
+        'FRACTIONAL_EDIT_FIELD_URL' => $give_context ? null : '_SEARCH:admin_ocf_groups:__ed:' . strval($row['id']),
     ));
 }
 
@@ -80,11 +80,11 @@ function render_group_box($row,$zone = '_SEARCH',$give_context = true,$guid = ''
  */
 function ocf_create_selection_list_usergroups($it = null)
 {
-    $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
-    $_m = $GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),($group_count>200)?array('g_is_private_club' => 0):null,'ORDER BY g_order');
+    $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
+    $_m = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), ($group_count > 200) ? array('g_is_private_club' => 0) : null, 'ORDER BY g_order');
     $entries = new ocp_tempcode();
     foreach ($_m as $m) {
-        $entries->attach(form_input_list_entry(strval($m['id']),$it === $m['id'],get_translated_text($m['g_name'],$GLOBALS['FORUM_DB'])));
+        $entries->attach(form_input_list_entry(strval($m['id']), $it === $m['id'], get_translated_text($m['g_name'], $GLOBALS['FORUM_DB'])));
     }
 
     return $entries;
@@ -108,35 +108,35 @@ function get_first_default_group()
  * @param  boolean                      The functionality does not usually consider configured default groups [unless there's just one], because this is a layer of uncertainity (the user PICKS one of these). If you want to return all configured default groups, set this parameter to true.
  * @return array                        The list of default IDs.
  */
-function ocf_get_all_default_groups($include_primary = false,$include_all_configured_default_groups = false)
+function ocf_get_all_default_groups($include_primary = false, $include_all_configured_default_groups = false)
 {
     if ((!$include_primary) && ($include_all_configured_default_groups)) {
         warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
     }
 
     global $ALL_DEFAULT_GROUPS_CACHE;
-    if (array_key_exists($include_primary?1:0,$ALL_DEFAULT_GROUPS_CACHE)) {
-        return $ALL_DEFAULT_GROUPS_CACHE[$include_primary?1:0];
+    if (array_key_exists($include_primary ? 1 : 0, $ALL_DEFAULT_GROUPS_CACHE)) {
+        return $ALL_DEFAULT_GROUPS_CACHE[$include_primary ? 1 : 0];
     }
 
-    $rows = $GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_default' => 1,'g_is_presented_at_install' => 0),'ORDER BY g_order');
-    $groups = collapse_1d_complexity('id',$rows);
+    $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id'), array('g_is_default' => 1, 'g_is_presented_at_install' => 0), 'ORDER BY g_order');
+    $groups = collapse_1d_complexity('id', $rows);
 
     if ($include_primary) {
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_groups',array('id'),array('g_is_presented_at_install' => 1),'ORDER BY g_order');
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id'), array('g_is_presented_at_install' => 1), 'ORDER BY g_order');
         if (($include_all_configured_default_groups) || (count($rows) == 1) || (get_option('show_first_join_page') == '0')) { // If just 1 then we won't have presented a choice on the join form, so should inject that 1 as the default group as it is implied
-            $groups = array_merge($groups,collapse_1d_complexity('id',$rows));
+            $groups = array_merge($groups, collapse_1d_complexity('id', $rows));
         }
 
         if (count($rows) == 0) {
-            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array('id' => db_get_first_id()+8));
+            $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array('id' => db_get_first_id() + 8));
             if (!is_null($test)) {
-                $groups[] = db_get_first_id()+8;
+                $groups[] = db_get_first_id() + 8;
             }
         }
     }
 
-    $ALL_DEFAULT_GROUPS_CACHE[$include_primary?1:0] = $groups;
+    $ALL_DEFAULT_GROUPS_CACHE[$include_primary ? 1 : 0] = $groups;
     return $groups;
 }
 
@@ -150,11 +150,11 @@ function ocf_ensure_groups_cached($groups)
     global $USER_GROUPS_CACHED;
 
     if ($groups === '*') {
-        $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups','COUNT(*)');
-        $rows = $GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),($group_count>200)?array('g_is_private_club' => 0):null);
+        $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
+        $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('*'), ($group_count > 200) ? array('g_is_private_club' => 0) : null);
         foreach ($rows as $row) {
-            $row['g__name'] = get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
-            $row['g__title'] = get_translated_text($row['g_title'],$GLOBALS['FORUM_DB']);
+            $row['g__name'] = get_translated_text($row['g_name'], $GLOBALS['FORUM_DB']);
+            $row['g__title'] = get_translated_text($row['g_title'], $GLOBALS['FORUM_DB']);
             $USER_GROUPS_CACHED[$row['id']] = $row;
         }
         return;
@@ -165,10 +165,10 @@ function ocf_ensure_groups_cached($groups)
     $groups_to_load = '';
     $counter = 0;
     foreach ($groups as $group) {
-        if (!array_key_exists($group,$USER_GROUPS_CACHED)) {
-            if (($count !== NULL) && ($count<100)) {
+        if (!array_key_exists($group, $USER_GROUPS_CACHED)) {
+            if (($count !== null) && ($count < 100)) {
                 $USER_GROUPS_CACHED[$group] = persistent_cache_get('GROUP_' . strval($group));
-                if ($USER_GROUPS_CACHED[$group] !== NULL) {
+                if ($USER_GROUPS_CACHED[$group] !== null) {
                     continue;
                 }
             }
@@ -183,7 +183,7 @@ function ocf_ensure_groups_cached($groups)
     if ($counter == 0) {
         return;
     }
-    $extra_groups = $GLOBALS['FORUM_DB']->query('SELECT g.* FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g WHERE ' . $groups_to_load,null,null,false,true,array('g_name' => 'SHORT_TRANS','g_title' => 'SHORT_TRANS'));
+    $extra_groups = $GLOBALS['FORUM_DB']->query('SELECT g.* FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g WHERE ' . $groups_to_load, null, null, false, true, array('g_name' => 'SHORT_TRANS', 'g_title' => 'SHORT_TRANS'));
 
     if (count($extra_groups) != $counter) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -191,14 +191,14 @@ function ocf_ensure_groups_cached($groups)
 
     foreach ($extra_groups as $extra_group) {
         if (function_exists('get_translated_text')) {
-            $extra_group['g__name'] = get_translated_text($extra_group['g_name'],$GLOBALS['FORUM_DB']);
-            $extra_group['g__title'] = get_translated_text($extra_group['g_title'],$GLOBALS['FORUM_DB']);
+            $extra_group['g__name'] = get_translated_text($extra_group['g_name'], $GLOBALS['FORUM_DB']);
+            $extra_group['g__title'] = get_translated_text($extra_group['g_title'], $GLOBALS['FORUM_DB']);
         }
 
         $USER_GROUPS_CACHED[$extra_group['id']] = $extra_group;
 
-        if (($count !== NULL) && ($count<100)) {
-            persistent_cache_set('GROUP_' . strval($extra_group['id']),$extra_group);
+        if (($count !== null) && ($count < 100)) {
+            persistent_cache_set('GROUP_' . strval($extra_group['id']), $extra_group);
         }
     }
 }
@@ -210,26 +210,26 @@ function ocf_ensure_groups_cached($groups)
  * @param  boolean                      Whether to hide the name if it is a hidden group.
  * @return tempcode                     The link.
  */
-function ocf_get_group_link($id,$hide_hidden = true)
+function ocf_get_group_link($id, $hide_hidden = true)
 {
-    $_row = $GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('id' => $id),'',1);
-    if (!array_key_exists(0,$_row)) {
+    $_row = $GLOBALS['FORUM_DB']->query_select('f_groups', array('*'), array('id' => $id), '', 1);
+    if (!array_key_exists(0, $_row)) {
         return make_string_tempcode(do_lang('UNKNOWN'));
     }
     $row = $_row[0];
 
     if ($row['id'] == db_get_first_id()) {
-        return make_string_tempcode(escape_html(get_translated_text($row['g_name'],$GLOBALS['FORUM_DB'])));
+        return make_string_tempcode(escape_html(get_translated_text($row['g_name'], $GLOBALS['FORUM_DB'])));
     }
 
-    $name = ocf_get_group_name($row['id'],$hide_hidden);
+    $name = ocf_get_group_name($row['id'], $hide_hidden);
 
-    $see_hidden = has_privilege(get_member(),'see_hidden_groups');
+    $see_hidden = has_privilege(get_member(), 'see_hidden_groups');
     if ((!$see_hidden) && ($row['g_hidden'] == 1)) {
         return make_string_tempcode(escape_html($name));
     }
 
-    return hyperlink(build_url(array('page' => 'groups','type' => 'view','id' => $row['id']),get_module_zone('groups')),$name,false,true);
+    return hyperlink(build_url(array('page' => 'groups', 'type' => 'view', 'id' => $row['id']), get_module_zone('groups')), $name, false, true);
 }
 
 /**
@@ -239,13 +239,13 @@ function ocf_get_group_link($id,$hide_hidden = true)
  * @param  boolean                      Whether to hide the name if it is a hidden group.
  * @return string                       The usergroup name.
  */
-function ocf_get_group_name($group,$hide_hidden = true)
+function ocf_get_group_name($group, $hide_hidden = true)
 {
-    $name = ocf_get_group_property($group,'name',$hide_hidden);
+    $name = ocf_get_group_property($group, 'name', $hide_hidden);
     if (is_string($name)) {
         return $name;
     }
-    return get_translated_text($name,$GLOBALS['FORUM_DB']);
+    return get_translated_text($name, $GLOBALS['FORUM_DB']);
 }
 
 /**
@@ -256,13 +256,13 @@ function ocf_get_group_name($group,$hide_hidden = true)
  * @param  boolean                      Whether to hide the name if it is a hidden group.
  * @return mixed                        The property value.
  */
-function ocf_get_group_property($group,$property,$hide_hidden = true)
+function ocf_get_group_property($group, $property, $hide_hidden = true)
 {
     ocf_ensure_groups_cached(array($group));
     global $USER_GROUPS_CACHED;
 
     if ($hide_hidden) {
-        if (($property == 'name') && ($USER_GROUPS_CACHED[$group]['g_hidden'] == 1) && (!has_privilege(get_member(),'see_hidden_groups'))) {
+        if (($property == 'name') && ($USER_GROUPS_CACHED[$group]['g_hidden'] == 1) && (!has_privilege(get_member(), 'see_hidden_groups'))) {
             return do_lang('UNKNOWN');
         }
     }
@@ -277,9 +277,9 @@ function ocf_get_group_property($group,$property,$hide_hidden = true)
  * @param  ID_TEXT                      The identifier of the property.
  * @return mixed                        The property value.
  */
-function ocf_get_member_best_group_property($member_id,$property)
+function ocf_get_member_best_group_property($member_id, $property)
 {
-    return ocf_get_best_group_property($GLOBALS['OCF_DRIVER']->get_members_groups($member_id,false,true),$property);
+    return ocf_get_best_group_property($GLOBALS['OCF_DRIVER']->get_members_groups($member_id, false, true), $property);
 }
 
 /**
@@ -289,12 +289,12 @@ function ocf_get_member_best_group_property($member_id,$property)
  * @param  ID_TEXT                      The identifier of the property.
  * @return mixed                        The best property value ('best' is dependant on the property we are looking at).
  */
-function ocf_get_best_group_property($groups,$property)
+function ocf_get_best_group_property($groups, $property)
 {
-    $big_is_better = array('gift_points_per_day','gift_points_base','enquire_on_new_ips','is_super_admin','is_super_moderator','max_daily_upload_mb','max_attachments_per_post','max_avatar_width','max_avatar_height','max_post_length_comcode','max_sig_length_comcode');
+    $big_is_better = array('gift_points_per_day', 'gift_points_base', 'enquire_on_new_ips', 'is_super_admin', 'is_super_moderator', 'max_daily_upload_mb', 'max_attachments_per_post', 'max_avatar_width', 'max_avatar_height', 'max_post_length_comcode', 'max_sig_length_comcode');
     //$small_and_perfectly_formed=array('flood_control_submit_secs','flood_control_access_secs'); Not needed by elimination, but nice to have here as a note
 
-    $go_super_size = in_array($property,$big_is_better);
+    $go_super_size = in_array($property, $big_is_better);
 
     global $USER_GROUPS_CACHED;
     ocf_ensure_groups_cached($groups);
@@ -303,8 +303,9 @@ function ocf_get_best_group_property($groups,$property)
     foreach ($groups as $group) {
         $this_value = $USER_GROUPS_CACHED[$group]['g_' . $property];
         if ((is_null($best_value_so_far)) ||
-            (($best_value_so_far<$this_value) && ($go_super_size)) ||
-            (($best_value_so_far>$this_value) && (!$go_super_size))) {
+            (($best_value_so_far < $this_value) && ($go_super_size)) ||
+            (($best_value_so_far > $this_value) && (!$go_super_size))
+        ) {
             $best_value_so_far = $this_value;
         }
     }
@@ -320,7 +321,7 @@ function ocf_get_best_group_property($groups,$property)
  * @param  boolean                      Whether to include implicit groups
  * @return array                        Reverse list (e.g. array(1=>1,2=>1,3=>1) for someone in (1,2,3)).
  */
-function ocf_get_members_groups($member_id = null,$skip_secret = false,$handle_probation = true,$include_implicit = true)
+function ocf_get_members_groups($member_id = null, $skip_secret = false, $handle_probation = true, $include_implicit = true)
 {
     if (is_guest($member_id)) {
         $ret = array();
@@ -333,12 +334,12 @@ function ocf_get_members_groups($member_id = null,$skip_secret = false,$handle_p
     }
 
     if (($handle_probation) && ((!$GLOBALS['IS_VIA_BACKDOOR']) || ($member_id != get_member()))) {
-        $opt = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id,'m_on_probation_until');
-        if ((!is_null($opt)) && ($opt>time())) {
+        $opt = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id, 'm_on_probation_until');
+        if ((!is_null($opt)) && ($opt > time())) {
             global $PROBATION_GROUP_CACHE;
             if (is_null($PROBATION_GROUP_CACHE)) {
                 $probation_group = get_option('probation_usergroup');
-                $PROBATION_GROUP = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('name') => $probation_group));
+                $PROBATION_GROUP = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('name') => $probation_group));
                 if (is_null($PROBATION_GROUP_CACHE)) {
                     $PROBATION_GROUP_CACHE = false;
                 }
@@ -349,7 +350,8 @@ function ocf_get_members_groups($member_id = null,$skip_secret = false,$handle_p
         }
     }
 
-    $skip_secret = (($skip_secret) && ((/*For installer*/!function_exists('get_member')) || ($member_id != get_member())) && ((!function_exists('has_privilege')) || (!has_privilege(get_member(),'see_hidden_groups'))));
+    $skip_secret = (($skip_secret) && ((/*For installer*/
+            !function_exists('get_member')) || ($member_id != get_member())) && ((!function_exists('has_privilege')) || (!has_privilege(get_member(), 'see_hidden_groups'))));
 
     global $GROUP_MEMBERS_CACHE;
     if (isset($GROUP_MEMBERS_CACHE[$member_id][$skip_secret][$handle_probation])) {
@@ -360,13 +362,13 @@ function ocf_get_members_groups($member_id = null,$skip_secret = false,$handle_p
 
     // Now implicit usergroup hooks
     if ($include_implicit) {
-        $hooks = find_all_hooks('systems','ocf_implicit_usergroups');
+        $hooks = find_all_hooks('systems', 'ocf_implicit_usergroups');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/ocf_implicit_usergroups/' . $hook);
             $ob = object_factory('Hook_implicit_usergroups_' . $hook);
             $group_ids = $ob->get_bound_group_ids();
             foreach ($group_ids as $group_id) {
-                if ($ob->is_member_within($member_id,$group_id)) {
+                if ($ob->is_member_within($member_id, $group_id)) {
                     $groups[$group_id] = 1;
                 }
             }
@@ -375,16 +377,16 @@ function ocf_get_members_groups($member_id = null,$skip_secret = false,$handle_p
 
     require_code('ocf_members');
     if ((!function_exists('ocf_is_ldap_member')/*can happen if said in safe mode and detecting safe mode when choosing whether to avoid a custom file via admin permission which requires this function to run*/) || (!ocf_is_ldap_member($member_id))) {
-        $_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members m LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=m.gm_group_id',array('gm_group_id','g_hidden'),array('gm_member_id' => $member_id,'gm_validated' => 1),'ORDER BY g.g_order');
+        $_groups = $GLOBALS['FORUM_DB']->query_select('f_group_members m LEFT JOIN ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_groups g ON g.id=m.gm_group_id', array('gm_group_id', 'g_hidden'), array('gm_member_id' => $member_id, 'gm_validated' => 1), 'ORDER BY g.g_order');
         foreach ($_groups as $group) {
             $groups[$group['gm_group_id']] = 1;
         }
         if (!isset($GLOBALS['OCF_DRIVER'])) { // We didn't init fully (MICRO_BOOTUP), but now we dug a hole - get out of it
-            if (method_exists($GLOBALS['FORUM_DRIVER'],'forum_layer_initialise')) {
+            if (method_exists($GLOBALS['FORUM_DRIVER'], 'forum_layer_initialise')) {
                 $GLOBALS['FORUM_DRIVER']->forum_layer_initialise();
             }
         }
-        $primary_group = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_primary_group');
+        $primary_group = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_primary_group');
         if (is_null($primary_group)) {
             $primary_group = db_get_first_id();
         }
@@ -410,10 +412,10 @@ function ocf_get_members_groups($member_id = null,$skip_secret = false,$handle_p
         $GROUP_MEMBERS_CACHE[$member_id][true][$handle_probation] = $groups;
 
         // Mirror to f_group_members table, so direct queries will also get it (we need to do listings of group members, for instance)
-        $GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id' => $member_id));
+        $GLOBALS['FORUM_DB']->query_delete('f_group_members', array('gm_member_id' => $member_id));
         foreach (array_keys($groups) as $group_id) {
-            $GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id' => $member_id,'gm_group_id' => $group_id),'',1);
-            $GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
+            $GLOBALS['FORUM_DB']->query_delete('f_group_members', array('gm_member_id' => $member_id, 'gm_group_id' => $group_id), '', 1);
+            $GLOBALS['FORUM_DB']->query_insert('f_group_members', array(
                 'gm_group_id' => $group_id,
                 'gm_member_id' => $member_id,
                 'gm_validated' => 1
@@ -438,5 +440,5 @@ function find_usergroup_id($title)
             return $id;
         }
     }
-    return NULL;
+    return null;
 }

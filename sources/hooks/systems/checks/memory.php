@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_memory
 {
     /**
@@ -28,7 +27,7 @@ class Hook_check_memory
     public function run()
     {
         $warning = array();
-        if ((function_exists('memory_get_usage')) && (@ini_get('memory_limit') != '') && (@ini_get('memory_limit') != '-1') && (@ini_get('memory_limit') != '0') && (intval(trim(str_replace('M','',@ini_get('memory_limit'))))<32)) {
+        if ((function_exists('memory_get_usage')) && (@ini_get('memory_limit') != '') && (@ini_get('memory_limit') != '-1') && (@ini_get('memory_limit') != '0') && (intval(trim(str_replace('M', '', @ini_get('memory_limit')))) < 32)) {
             $warning[] = do_lang_tempcode('LOW_MEMORY_LIMIT');
         }
         return $warning;

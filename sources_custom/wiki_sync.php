@@ -28,17 +28,17 @@ function find_wiki_disk_meta_set()
     $dh = opendir($dir);
     while (($f = readdir($dh)) !== false) {
         $matches = array();
-        if (preg_match('#^(.*)\.txt$#',$f,$matches) != 0) {
+        if (preg_match('#^(.*)\.txt$#', $f, $matches) != 0) {
             $name = $matches[1];
 
             $contents = file_get_contents($dir . '/' . $f);
 
             $matches2 = array();
-            preg_match('#\[title sub="Written by ([^"]*)"\](.*)\[/title\]#U',$contents,$matches2);
+            preg_match('#\[title sub="Written by ([^"]*)"\](.*)\[/title\]#U', $contents, $matches2);
             $page_title = $matches2[2];
 
             $submitters = array();
-            $authors = explode(',',$matches2[1]);
+            $authors = explode(',', $matches2[1]);
             foreach ($authors as $author) {
                 $author = trim($author);
                 if ($author != 'ocProducts') { // Sneakily added this for ocPortal.com
@@ -50,8 +50,8 @@ function find_wiki_disk_meta_set()
             }
 
             $matches3 = array();
-            preg_match('#\{\$SET,keywords,(.*)\}#U',$contents,$matches3);
-            $keywords = explode(',',$matches[3][1]);
+            preg_match('#\{\$SET,keywords,(.*)\}#U', $contents, $matches3);
+            $keywords = explode(',', $matches[3][1]);
 
             $set[$name] = array(
                 'page_title' => $page_title,
@@ -85,11 +85,11 @@ function import_wiki_from_disk()
 {
     // TODO
     // For each page
-        // Try to bind to existing
-            // Edit
-        // Or add new
+    // Try to bind to existing
+    // Edit
+    // Or add new
     // Any existing pages not referenced
-        // Delete
+    // Delete
 }
 
 function wiki_git_commit_and_push()
@@ -115,7 +115,7 @@ function wiki_git_pull()
 }
 
 // Call this when adding/editing pages ; plus also from a unit test
-function enforce_wiki_constraints($page_id,$new_page_title)
+function enforce_wiki_constraints($page_id, $new_page_title)
 {
     // TODO
     // Ensure is unique

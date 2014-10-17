@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_task_ocf_members_recache
 {
     /**
@@ -35,15 +34,16 @@ class Hook_task_ocf_members_recache
         // Members
         $start = 0;
         do {
-            $members = $GLOBALS['FORUM_DB']->query_select('f_members',array('id'),null,'',500,$start);
+            $members = $GLOBALS['FORUM_DB']->query_select('f_members', array('id'), null, '', 500, $start);
             foreach ($members as $member) {
                 ocf_force_update_member_post_count($member['id']);
-                $num_warnings = $GLOBALS['FORUM_DB']->query_select_value('f_warnings','COUNT(*)',array('w_member_id' => $member['id'],'w_is_warning' => 1));
-                $GLOBALS['FORUM_DB']->query_update('f_members',array('m_cache_warnings' => $num_warnings),array('id' => $member['id']),'',1);
+                $num_warnings = $GLOBALS['FORUM_DB']->query_select_value('f_warnings', 'COUNT(*)', array('w_member_id' => $member['id'], 'w_is_warning' => 1));
+                $GLOBALS['FORUM_DB']->query_update('f_members', array('m_cache_warnings' => $num_warnings), array('id' => $member['id']), '', 1);
             }
             $start += 500;
-        } while (array_key_exists(0,$members));
+        }
+        while (array_key_exists(0, $members));
 
-        return NULL;
+        return null;
     }
 }

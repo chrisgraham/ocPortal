@@ -22,6 +22,7 @@
 
 /**
  * Cache Driver.
+ *
  * @package    core
  */
 class ocp_wincache
@@ -37,8 +38,8 @@ class ocp_wincache
     {
         if (is_null($this->objects_list)) {
             $success = false;
-            $this->objects_list = wincache_ucache_get(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$success);
-            if ($this->objects_list === NULL || !$success) {
+            $this->objects_list = wincache_ucache_get(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $success);
+            if ($this->objects_list === null || !$success) {
                 $this->objects_list = array();
             }
         }
@@ -52,15 +53,15 @@ class ocp_wincache
      * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (NULL: don't care)
      * @return ?mixed                   The data (NULL: not found / NULL entry)
      */
-    public function get($key,$min_cache_date = null)
+    public function get($key, $min_cache_date = null)
     {
         $success = false;
-        $data = wincache_ucache_get($key,$success);
+        $data = wincache_ucache_get($key, $success);
         if (!$success) {
-            return NULL;
+            return null;
         }
-        if ((!is_null($min_cache_date)) && ($data[0]<$min_cache_date)) {
-            return NULL;
+        if ((!is_null($min_cache_date)) && ($data[0] < $min_cache_date)) {
+            return null;
         }
         return $data[1];
     }
@@ -73,19 +74,19 @@ class ocp_wincache
      * @param  integer                  Various flags (parameter not used)
      * @param  ?integer                 The expiration time in seconds (NULL: no expiry)
      */
-    public function set($key,$data,$flags = 0,$expire_secs = null)
+    public function set($key, $data, $flags = 0, $expire_secs = null)
     {
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
-        if (!array_key_exists($key,$objects_list)) {
+        if (!array_key_exists($key, $objects_list)) {
             $objects_list[$key] = true;
-            wincache_ucache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+            wincache_ucache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
         }
 
         if ($expire_secs == -1) {
             $expire_secs = 0;
         }
-        wincache_ucache_set($key,array(time(),$data),$expire_secs);
+        wincache_ucache_set($key, array(time(), $data), $expire_secs);
     }
 
     /**
@@ -98,7 +99,7 @@ class ocp_wincache
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
         unset($objects_list[$key]);
-        wincache_ucache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        wincache_ucache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
         wincache_ucache_delete($key);
     }
@@ -110,7 +111,7 @@ class ocp_wincache
     {
         // Update list of persistent-objects
         $objects_list = array();
-        wincache_ucache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        wincache_ucache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
         wincache_ucache_clear();
     }

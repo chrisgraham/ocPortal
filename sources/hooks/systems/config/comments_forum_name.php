@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_comments_forum_name
 {
     /**
@@ -49,6 +48,6 @@ class Hook_config_comments_forum_name
      */
     public function get_default()
     {
-        return has_no_forum()?null:do_lang('COMMENT_FORUM_NAME','','','',get_site_default_lang());
+        return has_no_forum() ? null : do_lang('COMMENT_FORUM_NAME', '', '', '', get_site_default_lang());
     }
 }

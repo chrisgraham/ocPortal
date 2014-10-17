@@ -99,7 +99,7 @@ echo "
             {
                     option=document.createElement('option');
                     element.add(option,null);
-                    set_inner_html(option,'" . addslashes(do_lang('SELECT_OTHER_FIRST','xxx')) . "'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label));
+                    set_inner_html(option,'" . addslashes(do_lang('SELECT_OTHER_FIRST', 'xxx')) . "'.replace(/xxx/g,cpf_fields[cpf_field.csv_parent_heading].label));
                     option.value='';
             } else // Parent is set, so we need to filter possibilities
             {

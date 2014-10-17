@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_site_closed
 {
     /**
@@ -48,7 +47,7 @@ class Hook_config_site_closed
      */
     public function get_default()
     {
-        return $GLOBALS['DEV_MODE']?'0':'1';
+        return $GLOBALS['DEV_MODE'] ? '0' : '1';
     }
 
     /**
@@ -60,11 +59,11 @@ class Hook_config_site_closed
      * @param  tempcode                 The field description
      * @return tempcode                 The inputter
      */
-    public function field_inputter($name,$myrow,$human_name,$explanation)
+    public function field_inputter($name, $myrow, $human_name, $explanation)
     {
         $list = '';
-        $list .= static_evaluate_tempcode(form_input_radio_entry($name,'0','0' == get_option($name),do_lang('CLOSED')));
-        $list .= static_evaluate_tempcode(form_input_radio_entry($name,'1','1' == get_option($name),do_lang('OPEN')));
-        return form_input_radio($human_name,$explanation,$name,make_string_tempcode($list),true);
+        $list .= static_evaluate_tempcode(form_input_radio_entry($name, '0', '0' == get_option($name), do_lang('CLOSED')));
+        $list .= static_evaluate_tempcode(form_input_radio_entry($name, '1', '1' == get_option($name), do_lang('OPEN')));
+        return form_input_radio($human_name, $explanation, $name, make_string_tempcode($list), true);
     }
 }

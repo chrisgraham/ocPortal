@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_language_editing
  */
-
 class Hook_config_google_translate_api_key
 {
     /**

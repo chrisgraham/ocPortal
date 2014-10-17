@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Hook_checklist_forum
 {
     /**
@@ -31,12 +30,12 @@ class Hook_checklist_forum
         if (!has_no_forum()) {
             $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA');
             if (get_forum_type() == 'ocf') {
-                $url = build_url(array('page' => 'vforums','type' => 'unread'),get_module_zone('vforums'));
+                $url = build_url(array('page' => 'vforums', 'type' => 'unread'), get_module_zone('vforums'));
             } else {
                 $url = make_string_tempcode(get_forum_base_url());
             }
-            $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'a2cdfc2ea5db2d8c13a4d9eafa9b644b','URL' => '','STATUS' => $status,'TASK' => urlise_lang(do_lang('NAG_FORUMS'),$url),'INFO' => ''));
-            return array(array($tpl,null,null,null));
+            $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'a2cdfc2ea5db2d8c13a4d9eafa9b644b', 'URL' => '', 'STATUS' => $status, 'TASK' => urlise_lang(do_lang('NAG_FORUMS'), $url), 'INFO' => ''));
+            return array(array($tpl, null, null, null));
         }
         return array();
     }

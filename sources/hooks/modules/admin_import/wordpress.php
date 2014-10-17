@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
-
 class Hook_wordpress
 {
     /**

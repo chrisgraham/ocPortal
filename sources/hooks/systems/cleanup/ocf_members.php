@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_ocf_members
 {
     /**
@@ -28,13 +27,13 @@ class Hook_ocf_members
     public function info()
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         } else {
             ocf_require_all_forum_stuff();
         }
 
-        if (($GLOBALS['FORUM_DB']->query_select_value('f_members','COUNT(*)')>5000) && ($GLOBALS['FORUM_DB']->query_select_value('f_members','MAX(m_cache_num_posts)')>50)) {// Too much work, unless we have due to an obvious issue
-            return NULL;
+        if (($GLOBALS['FORUM_DB']->query_select_value('f_members', 'COUNT(*)') > 5000) && ($GLOBALS['FORUM_DB']->query_select_value('f_members', 'MAX(m_cache_num_posts)') > 50)) {// Too much work, unless we have due to an obvious issue
+            return null;
         }
 
         require_lang('ocf');
@@ -59,6 +58,6 @@ class Hook_ocf_members
         }
 
         require_code('tasks');
-        return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'),null,'ocf_members_recache');
+        return call_user_func_array__long_task(do_lang('CACHE_MEMBERS'), null, 'ocf_members_recache');
     }
 }

@@ -35,12 +35,12 @@ class posts_test_set extends ocp_test_case
 
         $this->establish_admin_session();
 
-        $this->topic_id = ocf_make_topic(db_get_first_id(),'Test');
+        $this->topic_id = ocf_make_topic(db_get_first_id(), 'Test');
 
-        $this->post_id = ocf_make_post($this->topic_id,'welcome','welcome to the posts',0,false,null,0,null,null,null,null,null,null,null,true,true,null,true,'',0,null,false,false,false);
+        $this->post_id = ocf_make_post($this->topic_id, 'welcome', 'welcome to the posts', 0, false, null, 0, null, null, null, null, null, null, null, true, true, null, true, '', 0, null, false, false, false);
 
         // Test the forum was actually created
-        $this->assertTrue('welcome' == $GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('id' => $this->post_id)));
+        $this->assertTrue('welcome' == $GLOBALS['FORUM_DB']->query_select_value('f_posts', 'p_title', array('id' => $this->post_id)));
     }
 
     public function testEditPosts()
@@ -48,15 +48,15 @@ class posts_test_set extends ocp_test_case
         $this->establish_admin_session();
 
         // Test the forum edits
-        ocf_edit_post($this->post_id,1,'take care','the post editing',0,0,null,true,false,'Nothing');
+        ocf_edit_post($this->post_id, 1, 'take care', 'the post editing', 0, 0, null, true, false, 'Nothing');
 
         // Test the forum was actually created
-        $this->assertTrue('take care' == $GLOBALS['FORUM_DB']->query_select_value('f_posts','p_title',array('id' => $this->post_id)));
+        $this->assertTrue('take care' == $GLOBALS['FORUM_DB']->query_select_value('f_posts', 'p_title', array('id' => $this->post_id)));
     }
 
     public function tearDown()
     {
-        if (!ocf_delete_posts_topic($this->topic_id,array($this->post_id),'Nothing')) {
+        if (!ocf_delete_posts_topic($this->topic_id, array($this->post_id), 'Nothing')) {
             ocf_delete_topic($this->topic_id);
         }
         parent::tearDown();

@@ -53,10 +53,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('diseases',array(
+            $GLOBALS['SITE_DB']->create_table('diseases', array(
                 'id' => '*AUTO',
                 'name' => 'SHORT_TEXT',
                 'image' => 'URLPATH',
@@ -70,7 +70,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
                 'enabled' => 'BINARY'
             ));
 
-            $GLOBALS['SITE_DB']->create_table('members_diseases',array(
+            $GLOBALS['SITE_DB']->create_table('members_diseases', array(
                 'member_id' => '*MEMBER',
                 'disease_id' => '*AUTO_LINK',
                 'sick' => 'BINARY',
@@ -78,18 +78,18 @@ class Module_admin_ocdeadpeople extends standard_crud_module
                 'immunisation' => 'BINARY',
             ));
 
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'Zombiism','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Zombiism vaccine','cure_price' => 100,'immunisation' => 'Immunise yourself from Zombiism','immunisation_price' => 50,'spread_rate' => 12,'points_per_spread' => 10,'last_spread_time' => 0,'enabled' => 1),true);
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'A bad case of Hiccups','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Hiccup vaccine','cure_price' => 100,'immunisation' => 'Immunise yourself from the Hiccups','immunisation_price' => 50,'spread_rate' => 12,'points_per_spread' => 10,'last_spread_time' => 0,'enabled' => 1),true);
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'Vampirism','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Vampirism vaccine','cure_price' => 100,'immunisation' => 'Immunise yourself against Vampirism','immunisation_price' => 50,'spread_rate' => 12,'points_per_spread' => 10,'last_spread_time' => 0,'enabled' => 1),true);
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'The Flu','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Flu vaccine','cure_price' => 100,'immunisation' => 'Immunise yourself against the Flu','immunisation_price' => 50,'spread_rate' => 12,'points_per_spread' => 10,'last_spread_time' => 0,'enabled' => 1),true);
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'Lice','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Lice-Away Spray','cure_price' => 100,'immunisation' => 'Lice repellant','immunisation_price' => 50,'spread_rate' => 12,'points_per_spread' => 10,'last_spread_time' => 0,'enabled' => 1),true);
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'Fleas','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Flea spray','cure_price' => 100,'immunisation' => 'Flea repellant','immunisation_price' => 50,'spread_rate' => 12,'points_per_spread' => 10,'last_spread_time' => 0,'enabled' => 1),true);
-            $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => 'Man-Flu','image' => 'uploads/diseases_addon/hazard.jpg','cure' => 'Lots and lots of TLC','cure_price' => 1000,'immunisation' => 'Anti Man-Flu Serum','immunisation_price' => 250,'spread_rate' => 12,'points_per_spread' => 100,'last_spread_time' => 0,'enabled' => 1),true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'Zombiism', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Zombiism vaccine', 'cure_price' => 100, 'immunisation' => 'Immunise yourself from Zombiism', 'immunisation_price' => 50, 'spread_rate' => 12, 'points_per_spread' => 10, 'last_spread_time' => 0, 'enabled' => 1), true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'A bad case of Hiccups', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Hiccup vaccine', 'cure_price' => 100, 'immunisation' => 'Immunise yourself from the Hiccups', 'immunisation_price' => 50, 'spread_rate' => 12, 'points_per_spread' => 10, 'last_spread_time' => 0, 'enabled' => 1), true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'Vampirism', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Vampirism vaccine', 'cure_price' => 100, 'immunisation' => 'Immunise yourself against Vampirism', 'immunisation_price' => 50, 'spread_rate' => 12, 'points_per_spread' => 10, 'last_spread_time' => 0, 'enabled' => 1), true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'The Flu', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Flu vaccine', 'cure_price' => 100, 'immunisation' => 'Immunise yourself against the Flu', 'immunisation_price' => 50, 'spread_rate' => 12, 'points_per_spread' => 10, 'last_spread_time' => 0, 'enabled' => 1), true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'Lice', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Lice-Away Spray', 'cure_price' => 100, 'immunisation' => 'Lice repellant', 'immunisation_price' => 50, 'spread_rate' => 12, 'points_per_spread' => 10, 'last_spread_time' => 0, 'enabled' => 1), true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'Fleas', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Flea spray', 'cure_price' => 100, 'immunisation' => 'Flea repellant', 'immunisation_price' => 50, 'spread_rate' => 12, 'points_per_spread' => 10, 'last_spread_time' => 0, 'enabled' => 1), true);
+            $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => 'Man-Flu', 'image' => 'uploads/diseases_addon/hazard.jpg', 'cure' => 'Lots and lots of TLC', 'cure_price' => 1000, 'immunisation' => 'Anti Man-Flu Serum', 'immunisation_price' => 250, 'spread_rate' => 12, 'points_per_spread' => 100, 'last_spread_time' => 0, 'enabled' => 1), true);
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<3)) {
-            $GLOBALS['SITE_DB']->alter_table_field('members_diseases','desease_id','AUTO_LINK','disease_id');
-            $GLOBALS['SITE_DB']->alter_table_field('members_diseases','user_id','*MEMBER','member_id');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 3)) {
+            $GLOBALS['SITE_DB']->alter_table_field('members_diseases', 'desease_id', 'AUTO_LINK', 'disease_id');
+            $GLOBALS['SITE_DB']->alter_table_field('members_diseases', 'user_id', '*MEMBER', 'member_id');
         }
     }
 
@@ -114,11 +114,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('MANAGE_DISEASES','menu/ocdeadpeople_log'),
-        )+parent::get_entry_points();
+            'misc' => array('MANAGE_DISEASES', 'menu/ocdeadpeople_log'),
+        ) + parent::get_entry_points();
     }
 
     public $title;
@@ -130,16 +130,16 @@ class Module_admin_ocdeadpeople extends standard_crud_module
      * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
      */
-    public function pre_run($top_level = true,$type = null)
+    public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocdeadpeople');
 
         set_helper_panel_tutorial('tut_subcom');
 
         if ($type == 'view') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('OCDEADPEOPLE_TITLE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('OCDEADPEOPLE_TITLE'))));
             breadcrumb_set_self(do_lang_tempcode('VIEW_DISEASE'));
         }
 
@@ -182,10 +182,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     public function misc()
     {
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'),comcode_lang_string('DOC_OCDEADPEOPLE'),
+        return do_next_manager(get_screen_title('OCDEADPEOPLE_TITLE'), comcode_lang_string('DOC_OCDEADPEOPLE'),
             array(
-                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_DISEASE')),
-                array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_DISEASE')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_DISEASE')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_DISEASE')),
             ),
             do_lang('OCDEADPEOPLE_TITLE')
         );
@@ -204,11 +204,11 @@ class Module_admin_ocdeadpeople extends standard_crud_module
         $points_per_spread = 10;
         $enabled = do_lang_tempcode('DISEASE_DISABLED');
 
-        $id = get_param_integer('id',0);
-        if ($id>0) {
-            $rows = $GLOBALS['SITE_DB']->query_select('diseases',array('*'),array('id' => $id));
+        $id = get_param_integer('id', 0);
+        if ($id > 0) {
+            $rows = $GLOBALS['SITE_DB']->query_select('diseases', array('*'), array('id' => $id));
 
-            if (isset($rows[0]['id']) && $rows[0]['id']>0) {
+            if (isset($rows[0]['id']) && $rows[0]['id'] > 0) {
                 $id = $rows[0]['id'];
                 $name = $rows[0]['name'];
                 $image = $rows[0]['image'];
@@ -218,44 +218,44 @@ class Module_admin_ocdeadpeople extends standard_crud_module
                 $immunization_price = $rows[0]['immunisation_price'];
                 $spread_rate = $rows[0]['spread_rate'];
                 $points_per_spread = $rows[0]['points_per_spread'];
-                $enabled = ($rows[0]['enabled'] == 1)?do_lang_tempcode('DISEASE_ENABLED'):do_lang_tempcode('DISEASE_DISABLED');
+                $enabled = ($rows[0]['enabled'] == 1) ? do_lang_tempcode('DISEASE_ENABLED') : do_lang_tempcode('DISEASE_DISABLED');
             }
         }
 
         require_code('templates_map_table');
-        return map_table(get_screen_title('VIEW_DISEASE'),array('NAME' => $name,'IMAGE' => $image,'CURE' => $cure,'CURE_PRICE' => integer_format($cure_price),'IMMUNIZATION' => $immunization,'IMMUNIZATION_PRICE' => integer_format($immunization_price),'SPREAD_RATE' => integer_format($spread_rate),'POINTS_PER_SPREAD' => integer_format($points_per_spread),'ENABLED' => $enabled));
+        return map_table(get_screen_title('VIEW_DISEASE'), array('NAME' => $name, 'IMAGE' => $image, 'CURE' => $cure, 'CURE_PRICE' => integer_format($cure_price), 'IMMUNIZATION' => $immunization, 'IMMUNIZATION_PRICE' => integer_format($immunization_price), 'SPREAD_RATE' => integer_format($spread_rate), 'POINTS_PER_SPREAD' => integer_format($points_per_spread), 'ENABLED' => $enabled));
     }
 
-    public function get_form_fields($id = null,$name = '',$image = '',$cure = '',$cure_price = 10,$immunization = '',$immunization_price = 5,$spread_rate = 12,$points_per_spread = 10,$enabled = 0)
+    public function get_form_fields($id = null, $name = '', $image = '', $cure = '', $cure_price = 10, $immunization = '', $immunization_price = 5, $spread_rate = 12, $points_per_spread = 10, $enabled = 0)
     {
         $fields = new ocp_tempcode();
         $hidden = new ocp_tempcode();
 
         require_code('form_templates');
 
-        $fields->attach(form_input_line(do_lang_tempcode('DISEASE'),do_lang_tempcode('DESCRIPTION_DISEASE'),'name',$name,true));
+        $fields->attach(form_input_line(do_lang_tempcode('DISEASE'), do_lang_tempcode('DESCRIPTION_DISEASE'), 'name', $name, true));
 
         $set_name = 'image';
         $required = true;
         $set_title = do_lang_tempcode('IMAGE');
         $field_set = alternate_fields_set__start($set_name);
 
-        $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','image',false,null,null,true,str_replace(' ','',get_option('valid_images'))));
-        $field_set->attach(form_input_url(do_lang_tempcode('URL'),'','url',$image,false));
+        $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'image', false, null, null, true, str_replace(' ', '', get_option('valid_images'))));
+        $field_set->attach(form_input_url(do_lang_tempcode('URL'), '', 'url', $image, false));
 
-        $fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,$image));
+        $fields->attach(alternate_fields_set__end($set_name, $set_title, '', $field_set, $required, $image));
 
-        handle_max_file_size($hidden,'image');
+        handle_max_file_size($hidden, 'image');
 
-        $fields->attach(form_input_line(do_lang_tempcode('CURE'),do_lang_tempcode('DESCRIPTION_CURE'),'cure',$cure,true));
-        $fields->attach(form_input_line(do_lang_tempcode('CURE_PRICE'),'','cure_price',strval($cure_price),true));
-        $fields->attach(form_input_line(do_lang_tempcode('IMMUNIZATION'),do_lang_tempcode('DESCRIPTION_IMMUNIZATION'),'immunization',$immunization,true));
-        $fields->attach(form_input_line(do_lang_tempcode('IMMUNIZATION_PRICE'),'','immunization_price',strval($immunization_price),true));
-        $fields->attach(form_input_line(do_lang_tempcode('SPREAD_RATE'),do_lang_tempcode('DESCRIPTION_SPREAD_RATE'),'spread_rate',strval($spread_rate),true));
-        $fields->attach(form_input_line(do_lang_tempcode('POINTS_PER_SPREAD'),do_lang_tempcode('DESCRIPTION_POINTS_PER_SPREAD'),'points_per_spread',strval($points_per_spread),true));
-        $fields->attach(form_input_tick(do_lang_tempcode('DISEASE_ENABLED'),do_lang_tempcode('DESCRIPTION_DISEASE_ENABLED'),'enabled',$enabled == 1));
+        $fields->attach(form_input_line(do_lang_tempcode('CURE'), do_lang_tempcode('DESCRIPTION_CURE'), 'cure', $cure, true));
+        $fields->attach(form_input_line(do_lang_tempcode('CURE_PRICE'), '', 'cure_price', strval($cure_price), true));
+        $fields->attach(form_input_line(do_lang_tempcode('IMMUNIZATION'), do_lang_tempcode('DESCRIPTION_IMMUNIZATION'), 'immunization', $immunization, true));
+        $fields->attach(form_input_line(do_lang_tempcode('IMMUNIZATION_PRICE'), '', 'immunization_price', strval($immunization_price), true));
+        $fields->attach(form_input_line(do_lang_tempcode('SPREAD_RATE'), do_lang_tempcode('DESCRIPTION_SPREAD_RATE'), 'spread_rate', strval($spread_rate), true));
+        $fields->attach(form_input_line(do_lang_tempcode('POINTS_PER_SPREAD'), do_lang_tempcode('DESCRIPTION_POINTS_PER_SPREAD'), 'points_per_spread', strval($points_per_spread), true));
+        $fields->attach(form_input_tick(do_lang_tempcode('DISEASE_ENABLED'), do_lang_tempcode('DESCRIPTION_DISEASE_ENABLED'), 'enabled', $enabled == 1));
 
-        return array($fields,$hidden);
+        return array($fields, $hidden);
     }
 
     /**
@@ -267,10 +267,10 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     {
         $fields = new ocp_tempcode();
 
-        $rows = $GLOBALS['SITE_DB']->query_select('diseases',array('*'),null);
+        $rows = $GLOBALS['SITE_DB']->query_select('diseases', array('*'), null);
 
         foreach ($rows as $row) {
-            $fields->attach(form_input_list_entry(strval($row['id']),false,$row['name']));
+            $fields->attach(form_input_list_entry(strval($row['id']), false, $row['name']));
         }
 
         return $fields;
@@ -284,8 +284,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
      */
     public function fill_in_edit_form($id)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('diseases',array('*'),array('id' => intval($id)));
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('diseases', array('*'), array('id' => intval($id)));
+        if (!array_key_exists(0, $rows)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $myrow = $rows[0];
@@ -300,7 +300,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
         $points_per_spread = $myrow['points_per_spread'];
         $enabled = $myrow['enabled'];
 
-        $ret = $this->get_form_fields($id,$name,$image,$cure,$cure_price,$immunization,$immunization_price,$spread_rate,$points_per_spread,$enabled);
+        $ret = $this->get_form_fields($id, $name, $image, $cure, $cure_price, $immunization, $immunization_price, $spread_rate, $points_per_spread, $enabled);
 
         return $ret;
     }
@@ -312,17 +312,17 @@ class Module_admin_ocdeadpeople extends standard_crud_module
      */
     public function add_actualisation()
     {
-        $name = post_param('name','');
-        $image = post_param('image','');
-        $cure = post_param('cure','');
-        $cure_price = post_param('cure_price',0);
-        $immunization = post_param('immunization','');
-        $immunization_price = post_param('immunization_price',0);
-        $spread_rate = post_param('spread_rate',12);
-        $points_per_spread = post_param('points_per_spread',10);
-        $enabled = post_param('enabled',0);
+        $name = post_param('name', '');
+        $image = post_param('image', '');
+        $cure = post_param('cure', '');
+        $cure_price = post_param('cure_price', 0);
+        $immunization = post_param('immunization', '');
+        $immunization_price = post_param('immunization_price', 0);
+        $spread_rate = post_param('spread_rate', 12);
+        $points_per_spread = post_param('points_per_spread', 10);
+        $enabled = post_param('enabled', 0);
 
-        $id = $GLOBALS['SITE_DB']->query_insert('diseases',array('name' => $name,'image' => $image,'cure' => $cure,'cure_price' => $cure_price,'immunisation' => $immunization,'immunisation_price' => $immunization_price,'spread_rate' => $spread_rate,'points_per_spread' => $points_per_spread,'last_spread_time' => 0,'enabled' => $enabled),true);
+        $id = $GLOBALS['SITE_DB']->query_insert('diseases', array('name' => $name, 'image' => $image, 'cure' => $cure, 'cure_price' => $cure_price, 'immunisation' => $immunization, 'immunisation_price' => $immunization_price, 'spread_rate' => $spread_rate, 'points_per_spread' => $points_per_spread, 'last_spread_time' => 0, 'enabled' => $enabled), true);
 
         return strval($id);
     }
@@ -336,32 +336,32 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     public function edit_actualisation($id)
     {
         $id = intval($id);
-        $name = post_param('name','');
-        $cure = post_param('cure','');
-        $cure_price = post_param('cure_price',0);
-        $immunization = post_param('immunization','');
-        $immunization_price = post_param('immunization_price',0);
-        $spread_rate = post_param('spread_rate',12);
-        $points_per_spread = post_param('points_per_spread',10);
-        $enabled = post_param('enabled',0);
+        $name = post_param('name', '');
+        $cure = post_param('cure', '');
+        $cure_price = post_param('cure_price', 0);
+        $immunization = post_param('immunization', '');
+        $immunization_price = post_param('immunization_price', 0);
+        $spread_rate = post_param('spread_rate', 12);
+        $points_per_spread = post_param('points_per_spread', 10);
+        $enabled = post_param('enabled', 0);
 
         require_code('uploads');
 
-        $urls = get_url('url','image','uploads/diseases_addon',0,OCP_UPLOAD_IMAGE,false,'','');
+        $urls = get_url('url', 'image', 'uploads/diseases_addon', 0, OCP_UPLOAD_IMAGE, false, '', '');
 
         if ($urls[0] == '') {
             warn_exit(do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
         }
 
-        if ((substr($urls[0],0,8) != 'uploads/') && (is_null(http_download_file($urls[0],0,false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B']))) {
-            attach_message($GLOBALS['HTTP_MESSAGE_B'],'warn');
+        if ((substr($urls[0], 0, 8) != 'uploads/') && (is_null(http_download_file($urls[0], 0, false))) && (!is_null($GLOBALS['HTTP_MESSAGE_B']))) {
+            attach_message($GLOBALS['HTTP_MESSAGE_B'], 'warn');
         }
 
         $url = $urls[0];
 
-        $GLOBALS['SITE_DB']->query_update('diseases',array('name' => $name,'image' => $url,'cure' => $cure,'cure_price' => $cure_price,'immunisation' => $immunization,'immunisation_price' => $immunization_price,'spread_rate' => $spread_rate,'points_per_spread' => $points_per_spread,'enabled' => $enabled),array('id' => $id),'',1);
+        $GLOBALS['SITE_DB']->query_update('diseases', array('name' => $name, 'image' => $url, 'cure' => $cure, 'cure_price' => $cure_price, 'immunisation' => $immunization, 'immunisation_price' => $immunization_price, 'spread_rate' => $spread_rate, 'points_per_spread' => $points_per_spread, 'enabled' => $enabled), array('id' => $id), '', 1);
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -372,6 +372,6 @@ class Module_admin_ocdeadpeople extends standard_crud_module
     public function delete_actualisation($id)
     {
         $id = intval($id);
-        $GLOBALS['SITE_DB']->query_delete('diseases',array('id' => $id),'',1);
+        $GLOBALS['SITE_DB']->query_delete('diseases', array('id' => $id), '', 1);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    devguide
  */
-
 class Block_main_code_documentor
 {
     /**
@@ -47,7 +46,7 @@ class Block_main_code_documentor
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'param\',$map)?$map[\'param\']:\'support\')';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:120;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 120;
         return $info;
     }
 
@@ -66,14 +65,14 @@ class Block_main_code_documentor
 
         disable_php_memory_limit();
 
-        $filename = (array_key_exists('param',$map)?$map['param']:'sources/global2') . '.php';
-        if (substr($filename,-8) == '.php.php') {
-            $filename = substr($filename,0,strlen($filename)-4);
+        $filename = (array_key_exists('param', $map) ? $map['param'] : 'sources/global2') . '.php';
+        if (substr($filename, -8) == '.php.php') {
+            $filename = substr($filename, 0, strlen($filename) - 4);
         }
 
-        $full_path = ((get_file_base() != '')?(get_file_base() . '/'):'') . filter_naughty($filename);
+        $full_path = ((get_file_base() != '') ? (get_file_base() . '/') : '') . filter_naughty($filename);
         if (!file_exists($full_path)) {
-            return paragraph(do_lang_tempcode('MISSING_RESOURCE'),'','red_alert');
+            return paragraph(do_lang_tempcode('MISSING_RESOURCE'), '', 'red_alert');
         }
 
         $_classes = get_php_file_api($filename);
@@ -89,14 +88,14 @@ class Block_main_code_documentor
             $functions = new ocp_tempcode();
 
             foreach ($class['functions'] as $function) {
-                $ret = render_php_function($function,$class);
+                $ret = render_php_function($function, $class);
                 $functions->attach($ret[0]);
                 $function_summaries->attach($ret[1]);
             }
 
-            $classes->attach(do_template('PHP_CLASS',array('_GUID' => '5d58fc42c5fd3a5dd190f3f3699610c2','CLASS_NAME' => $class['name'],'FUNCTION_SUMMARIES' => $function_summaries,'FUNCTIONS' => $functions)));
+            $classes->attach(do_template('PHP_CLASS', array('_GUID' => '5d58fc42c5fd3a5dd190f3f3699610c2', 'CLASS_NAME' => $class['name'], 'FUNCTION_SUMMARIES' => $function_summaries, 'FUNCTIONS' => $functions)));
         }
 
-        return do_template('PHP_FILE',array('_GUID' => '6f422e6a6e846d49864d7325b212109f','FILENAME' => $filename,'CLASSES' => $classes));
+        return do_template('PHP_FILE', array('_GUID' => '6f422e6a6e846d49864d7325b212109f', 'FILENAME' => $filename, 'CLASSES' => $classes));
     }
 }

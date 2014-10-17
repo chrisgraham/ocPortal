@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_fs_root
 {
     /**
@@ -28,22 +27,22 @@ class Hook_occle_fs_root
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~array                   The final directory listing (false: failure)
      */
-    public function listing($meta_dir,$meta_root_node,&$occle_fs)
+    public function listing($meta_dir, $meta_root_node, &$occle_fs)
     {
         $override_path = $this->_customise_directory($meta_dir);
-        $nonoverride_path = $this->_customise_directory($meta_dir,false);
+        $nonoverride_path = $this->_customise_directory($meta_dir, false);
 
         $listing = array();
         $ok = false;
-        foreach (array($override_path,$nonoverride_path) as $path) {
+        foreach (array($override_path, $nonoverride_path) as $path) {
             if (is_dir($path)) {
                 $dh = opendir($path);
                 while (($file = readdir($dh)) !== false) {
-                    if (($file != '.') && ($file != '..') && ($file != '.git') && ((strpos($file,'_custom') === false) || (!file_exists($path . str_replace('_custom','',$file))))) {
+                    if (($file != '.') && ($file != '..') && ($file != '.git') && ((strpos($file, '_custom') === false) || (!file_exists($path . str_replace('_custom', '', $file))))) {
                         $listing[] = array(
                             $file,
-                            is_dir($path . $file)?OCCLEFS_DIR:OCCLEFS_FILE,
-                            is_dir($path . $file)?null:filesize($path . $file),
+                            is_dir($path . $file) ? OCCLEFS_DIR : OCCLEFS_FILE,
+                            is_dir($path . $file) ? null : filesize($path . $file),
                             filemtime($path . $file),
                         );
                     }
@@ -67,14 +66,14 @@ class Hook_occle_fs_root
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function make_directory($meta_dir,$meta_root_node,$new_dir_name,&$occle_fs)
+    public function make_directory($meta_dir, $meta_root_node, $new_dir_name, &$occle_fs)
     {
         $new_dir_name = filter_naughty($new_dir_name);
         $path = $this->_customise_directory($meta_dir);
 
         if ((is_dir($path)) && (!file_exists($path . $new_dir_name)) && (is_writable_wrap($path))) {
-            $ret = @mkdir($path . $new_dir_name,0777) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',$path . $new_dir_name));
-            fix_permissions($path . $new_dir_name,0777);
+            $ret = @mkdir($path . $new_dir_name, 0777) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY', $path . $new_dir_name));
+            fix_permissions($path . $new_dir_name, 0777);
             sync_file($path . $new_dir_name);
             return $ret;
         } else {
@@ -91,7 +90,7 @@ class Hook_occle_fs_root
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_directory($meta_dir,$meta_root_node,$dir_name,&$occle_fs)
+    public function remove_directory($meta_dir, $meta_root_node, $dir_name, &$occle_fs)
     {
         $dir_name = filter_naughty($dir_name);
         $path = $this->_customise_directory($meta_dir);
@@ -99,7 +98,7 @@ class Hook_occle_fs_root
         if ((is_dir($path)) && (file_exists($path . $dir_name)) && (is_writable_wrap($path . $dir_name))) {
             require_code('files');
             deldir_contents($path . $dir_name);
-            $ret = @rmdir($path . $dir_name) or warn_exit(do_lang_tempcode('WRITE_ERROR',escape_html($path . $dir_name)));
+            $ret = @rmdir($path . $dir_name) or warn_exit(do_lang_tempcode('WRITE_ERROR', escape_html($path . $dir_name)));
             sync_file($path . $dir_name);
             return true;
         } else {
@@ -116,7 +115,7 @@ class Hook_occle_fs_root
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function remove_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function remove_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         $file_name = filter_naughty($file_name);
         $path = $this->_customise_directory($meta_dir);
@@ -139,12 +138,12 @@ class Hook_occle_fs_root
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         $file_name = filter_naughty($file_name);
         $path = $this->_customise_directory($meta_dir);
         if (!file_exists($path . $file_name)) {
-            $path = $this->_customise_directory($meta_dir,false);
+            $path = $this->_customise_directory($meta_dir, false);
         }
 
         if ((is_dir($path)) && (file_exists($path . $file_name)) && (is_readable($path . $file_name))) {
@@ -164,16 +163,16 @@ class Hook_occle_fs_root
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         $file_name = filter_naughty($file_name);
         $path = $this->_customise_directory($meta_dir);
 
         if ((is_dir($path)) && (((file_exists($path . $file_name)) && (is_writable_wrap($path . $file_name))) || ((!file_exists($path . $file_name)) && (is_writable_wrap($path))))) {
-            $fh = @fopen($path . $file_name,GOOGLE_APPENGINE?'wb':'wt') or intelligent_write_error($path . $file_name);
-            $output = fwrite($fh,$contents);
+            $fh = @fopen($path . $file_name, GOOGLE_APPENGINE ? 'wb' : 'wt') or intelligent_write_error($path . $file_name);
+            $output = fwrite($fh, $contents);
             fclose($fh);
-            if ($output<strlen($contents)) {
+            if ($output < strlen($contents)) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
             fix_permissions($path . $file_name);
@@ -191,15 +190,15 @@ class Hook_occle_fs_root
      * @param  boolean                  Whether to rewrite to be the alternative override directory
      * @return string                   Customised path
      */
-    public function _customise_directory($directory,$change_to_override = true)
+    public function _customise_directory($directory, $change_to_override = true)
     {
-        $dir_replacements = array('sources','comcode','html','minimodules','modules','data','lang','text','images','templates');
+        $dir_replacements = array('sources', 'comcode', 'html', 'minimodules', 'modules', 'data', 'lang', 'text', 'images', 'templates');
 
         $path = get_custom_file_base() . '/';
         $previous_dir_section = '';
         foreach ($directory as $dir_section) {
             if ($change_to_override) {
-                if (in_array($dir_section,$dir_replacements)) {
+                if (in_array($dir_section, $dir_replacements)) {
                     $dir_section .= '_custom';
                 }
             }
@@ -209,8 +208,8 @@ class Hook_occle_fs_root
         }
 
         if (!file_exists($path)) {
-            $ret = @mkdir($path,0777,true) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',$path));
-            fix_permissions($path,0777);
+            $ret = @mkdir($path, 0777, true) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY', $path));
+            fix_permissions($path, 0777);
             sync_file($path);
         }
 

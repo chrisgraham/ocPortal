@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_tick_multi
 {
     // ==============
@@ -35,13 +34,13 @@ class Hook_fields_tick_multi
         $fields = array();
         $type = '_LIST';
         $special = new ocp_tempcode();
-        $special->attach(form_input_list_entry('',get_param('option_' . strval($row['id']),'') == '','---'));
-        $list = explode('|',$row['cf_default']);
-        $display = array_key_exists('trans_name',$row)?$row['trans_name']:get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
+        $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', '---'));
+        $list = explode('|', $row['cf_default']);
+        $display = array_key_exists('trans_name', $row) ? $row['trans_name'] : get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
         foreach ($list as $l) {
-            $special->attach(form_input_list_entry($l,get_param('option_' . strval($row['id']),'') == $l));
+            $special->attach(form_input_list_entry($l, get_param('option_' . strval($row['id']), '') == $l));
         }
-        $fields[] = array('NAME' => strval($row['id']),'DISPLAY' => $display,'TYPE' => $type,'SPECIAL' => $special);
+        $fields[] = array('NAME' => strval($row['id']), 'DISPLAY' => $display, 'TYPE' => $type, 'SPECIAL' => $special);
         return $fields;
     }
 
@@ -52,9 +51,9 @@ class Hook_fields_tick_multi
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return nl_delim_match_sql($row,$i,'long');
+        return nl_delim_match_sql($row, $i, 'long');
     }
 
     // ===================
@@ -69,13 +68,13 @@ class Hook_fields_tick_multi
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
         /*if ($required!==NULL)
         {
             Nothing special for this hook
         }*/
-        return array('long_unescaped',$default,'long');
+        return array('long_unescaped', $default, 'long');
     }
 
     /**
@@ -85,20 +84,20 @@ class Hook_fields_tick_multi
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
         }
         $all = array();
-        $exploded = ($ev == '')?array():array_flip(explode("\n",$ev));
-        foreach (explode('|',$field['cf_default']) as $option) {
-            $all[] = array('OPTION' => $option,'HAS' => isset($exploded[$option]));
+        $exploded = ($ev == '') ? array() : array_flip(explode("\n", $ev));
+        foreach (explode('|', $field['cf_default']) as $option) {
+            $all[] = array('OPTION' => $option, 'HAS' => isset($exploded[$option]));
         }
-        if (!array_key_exists('c_name',$field)) {
+        if (!array_key_exists('c_name', $field)) {
             $field['c_name'] = 'other';
         }
-        return do_template('CATALOGUE_' . $field['c_name'] . '_FIELD_MULTILIST',array('_GUID' => 'x28e21cdbc38a3037d083f619bb31dae','ALL' => $all,'FIELD_ID' => strval($field['id'])),null,false,'CATALOGUE_DEFAULT_FIELD_MULTILIST');
+        return do_template('CATALOGUE_' . $field['c_name'] . '_FIELD_MULTILIST', array('_GUID' => 'x28e21cdbc38a3037d083f619bb31dae', 'ALL' => $all, 'FIELD_ID' => strval($field['id'])), null, false, 'CATALOGUE_DEFAULT_FIELD_MULTILIST');
     }
 
     // ======================
@@ -114,16 +113,16 @@ class Hook_fields_tick_multi
      * @param  ?string                  The actual current value of the field (NULL: none)
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value)
     {
         $default = $field['cf_default'];
-        $list = explode('|',$default);
+        $list = explode('|', $default);
         $_list = array();
-        $exploded = explode("\n",$actual_value);
+        $exploded = explode("\n", $actual_value);
         foreach ($list as $i => $l) {
-            $_list[] = array($l,'field_' . strval($field['id']) . '_' . strval($i),in_array($l,$exploded),'');
+            $_list[] = array($l, 'field_' . strval($field['id']) . '_' . strval($i), in_array($l, $exploded), '');
         }
-        return form_input_various_ticks($_list,$_cf_description,null,$_cf_name);
+        return form_input_various_ticks($_list, $_cf_description, null, $_cf_name);
     }
 
     /**
@@ -135,20 +134,20 @@ class Hook_fields_tick_multi
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $default = $field['cf_default'];
-        $list = explode('|',$default);
+        $list = explode('|', $default);
 
         if (fractional_edit()) {
-            return $editing?STRING_MAGIC_NULL:'';
+            return $editing ? STRING_MAGIC_NULL : '';
         }
 
         $id = $field['id'];
         $value = '';
         foreach ($list as $i => $l) {
             $tmp_name = 'field_' . strval($id) . '_' . strval($i);
-            if (post_param_integer($tmp_name,0) == 1) {
+            if (post_param_integer($tmp_name, 0) == 1) {
                 if ($value != '') {
                     $value .= "\n";
                 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_smtp_from_address
 {
     /**
@@ -48,10 +47,10 @@ class Hook_config_smtp_from_address
     public function get_default()
     {
         if (!function_exists('fsockopen')) {
-            return NULL;
+            return null;
         }
-        if (strpos(@ini_get('disable_functions'),'shell_exec') !== false) {
-            return NULL;
+        if (strpos(@ini_get('disable_functions'), 'shell_exec') !== false) {
+            return null;
         }
         return '';
     }

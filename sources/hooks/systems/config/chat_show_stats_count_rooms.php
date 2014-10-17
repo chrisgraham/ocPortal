@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_config_chat_show_stats_count_rooms
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_chat_show_stats_count_rooms
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
-
 class Hook_cron_stats_clean
 {
     /**
@@ -30,7 +29,7 @@ class Hook_cron_stats_clean
         }
 
         if (!$GLOBALS['SITE_DB']->table_is_locked('stats')) {
-            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'stats WHERE date_and_time<' . strval(time()-60*60*24*intval(get_option('stats_store_time'))));
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'stats WHERE date_and_time<' . strval(time() - 60 * 60 * 24 * intval(get_option('stats_store_time'))));
         }
     }
 }

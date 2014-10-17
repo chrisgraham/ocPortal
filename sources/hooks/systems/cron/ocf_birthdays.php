@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_cron_ocf_birthdays
 {
     /**
@@ -27,7 +26,7 @@ class Hook_cron_ocf_birthdays
     {
         $this_birthday_day = date('d/m/Y');
         if (get_long_value('last_birthday_day') !== $this_birthday_day) {
-            set_long_value('last_birthday_day',$this_birthday_day);
+            set_long_value('last_birthday_day', $this_birthday_day);
 
             require_lang('ocf');
 
@@ -35,23 +34,23 @@ class Hook_cron_ocf_birthdays
             $_birthdays = ocf_find_birthdays();
             $birthdays = new ocp_tempcode();
             foreach ($_birthdays as $_birthday) {
-                $member_url = $GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'],false,true);
+                $member_url = $GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'], false, true);
                 $username = $_birthday['username'];
                 //$displayname=$GLOBALS['OCF_DRIVER']->get_username($_birthday['id'],true);
                 $displayname = $GLOBALS['OCF_DRIVER']->get_displayname($username);
-                $birthday_url = build_url(array('page' => 'topics','type' => 'birthday','id' => $_birthday['username']),get_module_zone('topics'));
+                $birthday_url = build_url(array('page' => 'topics', 'type' => 'birthday', 'id' => $_birthday['username']), get_module_zone('topics'));
 
                 require_code('notifications');
 
-                $subject = do_lang('BIRTHDAY_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$displayname,$username);
-                $mail = do_lang('BIRTHDAY_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array($member_url->evaluate(),$birthday_url->evaluate(),comcode_escape($displayname),strval($_birthday['id']),get_base_url(),urlencode($username)));
+                $subject = do_lang('BIRTHDAY_NOTIFICATION_MAIL_SUBJECT', get_site_name(), $displayname, $username);
+                $mail = do_lang('BIRTHDAY_NOTIFICATION_MAIL', comcode_escape(get_site_name()), comcode_escape($username), array($member_url->evaluate(), $birthday_url->evaluate(), comcode_escape($displayname), strval($_birthday['id']), get_base_url(), urlencode($username)));
 
                 if (addon_installed('chat')) {
-                    $friends = $GLOBALS['SITE_DB']->query_select('chat_friends',array('member_likes'),array('member_liked' => $_birthday['id']));
-                    dispatch_notification('ocf_friend_birthday',null,$subject,$mail,collapse_1d_complexity('member_likes',$friends));
+                    $friends = $GLOBALS['SITE_DB']->query_select('chat_friends', array('member_likes'), array('member_liked' => $_birthday['id']));
+                    dispatch_notification('ocf_friend_birthday', null, $subject, $mail, collapse_1d_complexity('member_likes', $friends));
                 }
 
-                dispatch_notification('ocf_birthday',null,$subject,$mail);
+                dispatch_notification('ocf_birthday', null, $subject, $mail);
             }
         }
     }

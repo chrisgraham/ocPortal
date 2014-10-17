@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    content_reviews
  */
-
 class Hook_Notification_content_reviews extends Hook_Notification__Staff
 {
     /**
@@ -39,11 +38,11 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
-        $_hooks = find_all_hooks('systems','content_meta_aware');
+        $_hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($_hooks) as $content_type) {
             require_code('content');
             $object = get_content_object($content_type);
@@ -55,7 +54,7 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
                 continue;
             }
 
-            $lang = do_lang($info['content_type_label'],null,null,null,null,false);
+            $lang = do_lang($info['content_type_label'], null, null, null, null, false);
             if (is_null($lang)) {
                 continue;
             }
@@ -66,7 +65,7 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
             );
         }
 
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -80,8 +79,8 @@ class Hook_Notification_content_reviews extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['content_reviews'] = array(do_lang('menus:CONTENT'),do_lang('content_reviews:NOTIFICATION_TYPE_content_reviews'));
-        $list['content_reviews__own'] = array(do_lang('menus:CONTENT'),do_lang('content_reviews:NOTIFICATION_TYPE_content_reviews__own'));
+        $list['content_reviews'] = array(do_lang('menus:CONTENT'), do_lang('content_reviews:NOTIFICATION_TYPE_content_reviews'));
+        $list['content_reviews__own'] = array(do_lang('menus:CONTENT'), do_lang('content_reviews:NOTIFICATION_TYPE_content_reviews__own'));
         return $list;
     }
 }

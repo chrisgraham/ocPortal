@@ -25,24 +25,24 @@ class usergroup_test_set extends ocp_test_case
         parent::setUp();
         require_code('ecommerce2');
 
-        $this->usr_grp_id = add_usergroup_subscription('test','test','123',12,'y',1,1,1,1,' ',' ',' ',array());
+        $this->usr_grp_id = add_usergroup_subscription('test', 'test', '123', 12, 'y', 1, 1, 1, 1, ' ', ' ', ' ', array());
 
         // Test the forum was actually created
-        $this->assertTrue(12 == $GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs','s_length',array('id' => $this->usr_grp_id)));
+        $this->assertTrue(12 == $GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs', 's_length', array('id' => $this->usr_grp_id)));
     }
 
     public function testEditusergroup()
     {
         // Test the forum edits
-        edit_usergroup_subscription($this->usr_grp_id,'Edit usergroup subscription','new edit','122',3,'y',1,0,1,1,' ',' ',' ',array());
+        edit_usergroup_subscription($this->usr_grp_id, 'Edit usergroup subscription', 'new edit', '122', 3, 'y', 1, 0, 1, 1, ' ', ' ', ' ', array());
 
         // Test the forum was actually created
-        $this->assertTrue(3 == $GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs','s_length',array('id' => $this->usr_grp_id)));
+        $this->assertTrue(3 == $GLOBALS['FORUM_DB']->query_select_value('f_usergroup_subs', 's_length', array('id' => $this->usr_grp_id)));
     }
 
     public function tearDown()
     {
-        delete_usergroup_subscription($this->usr_grp_id,'test@test.com');
+        delete_usergroup_subscription($this->usr_grp_id, 'test@test.com');
         parent::tearDown();
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_unvalidated_calendar
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_calendar
     public function info()
     {
         if (!module_installed('calendar')) {
-            return NULL;
+            return null;
         }
 
         require_lang('calendar');

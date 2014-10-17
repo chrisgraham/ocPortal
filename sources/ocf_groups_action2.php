@@ -25,11 +25,11 @@
  * @param  MEMBER                       The member.
  * @return boolean                      The answer.
  */
-function ocf_may_control_group($group_id,$member_id)
+function ocf_may_control_group($group_id, $member_id)
 {
-    $leader = ocf_get_group_property($group_id,'group_leader');
-    $is_super_admin = ocf_get_group_property($group_id,'is_super_admin');
-    return (($member_id === $leader) || ($GLOBALS['OCF_DRIVER']->is_super_admin($member_id)) || ((has_privilege($member_id,'control_usergroups')) && ($is_super_admin == 0)));
+    $leader = ocf_get_group_property($group_id, 'group_leader');
+    $is_super_admin = ocf_get_group_property($group_id, 'is_super_admin');
+    return (($member_id === $leader) || ($GLOBALS['OCF_DRIVER']->is_super_admin($member_id)) || ((has_privilege($member_id, 'control_usergroups')) && ($is_super_admin == 0)));
 }
 
 /**
@@ -64,19 +64,19 @@ function ocf_may_control_group($group_id,$member_id)
  * @param  ?BINARY                      Whether this usergroup is a private club. Private clubs may be managed in the CMS zone, and do not have any special permissions - except over their own associated forum. (NULL: do not change)
  * @param  boolean                      Whether to force the title as unique, if there's a conflict
  */
-function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_moderator,$title,$rank_image,$promotion_target,$promotion_threshold,$group_leader,$flood_control_submit_secs,$flood_control_access_secs,$max_daily_upload_mb,$max_attachments_per_post,$max_avatar_width,$max_avatar_height,$max_post_length_comcode,$max_sig_length_comcode,$gift_points_base,$gift_points_per_day,$enquire_on_new_ips,$is_presented_at_install,$hidden,$order,$rank_image_pri_only,$open_membership,$is_private_club,$uniqify = false)
+function ocf_edit_group($group_id, $name, $is_default, $is_super_admin, $is_super_moderator, $title, $rank_image, $promotion_target, $promotion_threshold, $group_leader, $flood_control_submit_secs, $flood_control_access_secs, $max_daily_upload_mb, $max_attachments_per_post, $max_avatar_width, $max_avatar_height, $max_post_length_comcode, $max_sig_length_comcode, $gift_points_base, $gift_points_per_day, $enquire_on_new_ips, $is_presented_at_install, $hidden, $order, $rank_image_pri_only, $open_membership, $is_private_club, $uniqify = false)
 {
-    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','id',array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $name));
+    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $name));
     if ((!is_null($test)) && ($test != $group_id)) {
         if ($uniqify) {
-            $name .= '_' . uniqid('',true);
+            $name .= '_' . uniqid('', true);
         } else {
-            warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($name)));
+            warn_exit(do_lang_tempcode('ALREADY_EXISTS', escape_html($name)));
         }
     }
 
-    $_group_info = $GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','g_title','g_rank_image'),array('id' => $group_id),'',1);
-    if (!array_key_exists(0,$_group_info)) {
+    $_group_info = $GLOBALS['FORUM_DB']->query_select('f_groups', array('g_name', 'g_title', 'g_rank_image'), array('id' => $group_id), '', 1);
+    if (!array_key_exists(0, $_group_info)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
     $_name = $_group_info[0]['g_name'];
@@ -84,7 +84,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
 
     $map = array();
     if (!is_null($name)) {
-        $map += lang_remap('g_name',$_name,$name,$GLOBALS['FORUM_DB']);
+        $map += lang_remap('g_name', $_name, $name, $GLOBALS['FORUM_DB']);
     }
     if (!is_null($is_default)) {
         $map['g_is_default'] = $is_default;
@@ -100,7 +100,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
     }
     $map['g_group_leader'] = $group_leader;
     if (!is_null($title)) {
-        $map += lang_remap('g_title',$_title,$title,$GLOBALS['FORUM_DB']);
+        $map += lang_remap('g_title', $_title, $title, $GLOBALS['FORUM_DB']);
     }
     $map['g_promotion_target'] = $promotion_target;
     $map['g_promotion_threshold'] = $promotion_threshold;
@@ -156,19 +156,19 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
         $map['g_is_private_club'] = $is_private_club;
     }
 
-    $GLOBALS['FORUM_DB']->query_update('f_groups',$map,array('id' => $group_id),'',1);
+    $GLOBALS['FORUM_DB']->query_update('f_groups', $map, array('id' => $group_id), '', 1);
 
     require_code('urls2');
-    suggest_new_idmoniker_for('groups','view',strval($group_id),'',$name);
+    suggest_new_idmoniker_for('groups', 'view', strval($group_id), '', $name);
 
     require_code('themes2');
-    tidy_theme_img_code($rank_image,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
+    tidy_theme_img_code($rank_image, $_group_info[0]['g_rank_image'], 'f_groups', 'g_rank_image', $GLOBALS['FORUM_DB']);
 
-    log_it('EDIT_GROUP',strval($group_id),$name);
+    log_it('EDIT_GROUP', strval($group_id), $name);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('group',strval($group_id));
+        generate_resourcefs_moniker('group', strval($group_id));
     }
 
     persistent_cache_delete('GROUPS');
@@ -181,7 +181,7 @@ function ocf_edit_group($group_id,$name,$is_default,$is_super_admin,$is_super_mo
  * @param  AUTO_LINK                    The ID of the usergroup to delete.
  * @param  ?GROUP                       The usergroup to move primary members to (NULL: main members).
  */
-function ocf_delete_group($group_id,$target_group = null)
+function ocf_delete_group($group_id, $target_group = null)
 {
     $orig_target_group = $target_group;
     require_code('ocf_groups');
@@ -189,49 +189,49 @@ function ocf_delete_group($group_id,$target_group = null)
         $target_group = get_first_default_group();
     }
 
-    if (($group_id == db_get_first_id()+0) || ($group_id == db_get_first_id()+1) || ($group_id == db_get_first_id()+8)) {
+    if (($group_id == db_get_first_id() + 0) || ($group_id == db_get_first_id() + 1) || ($group_id == db_get_first_id() + 8)) {
         fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
     }
 
-    $_group_info = $GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','g_title','g_rank_image'),array('id' => $group_id),'',1);
-    if (!array_key_exists(0,$_group_info)) {
+    $_group_info = $GLOBALS['FORUM_DB']->query_select('f_groups', array('g_name', 'g_title', 'g_rank_image'), array('id' => $group_id), '', 1);
+    if (!array_key_exists(0, $_group_info)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
     $_name = $_group_info[0]['g_name'];
     $_title = $_group_info[0]['g_title'];
-    $name = get_translated_text($_name,$GLOBALS['FORUM_DB']);
-    delete_lang($_name,$GLOBALS['FORUM_DB']);
-    delete_lang($_title,$GLOBALS['FORUM_DB']);
+    $name = get_translated_text($_name, $GLOBALS['FORUM_DB']);
+    delete_lang($_name, $GLOBALS['FORUM_DB']);
+    delete_lang($_title, $GLOBALS['FORUM_DB']);
 
-    $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_promotion_target' => NULL),array('g_promotion_target' => $group_id));
-    $GLOBALS['FORUM_DB']->query_update('f_members',array('m_primary_group' => $target_group),array('m_primary_group' => $group_id));
+    $GLOBALS['FORUM_DB']->query_update('f_groups', array('g_promotion_target' => null), array('g_promotion_target' => $group_id));
+    $GLOBALS['FORUM_DB']->query_update('f_members', array('m_primary_group' => $target_group), array('m_primary_group' => $group_id));
     if (!is_null($orig_target_group)) {
-        $GLOBALS['FORUM_DB']->query_update('f_group_members',array('gm_group_id' => $target_group),array('gm_group_id' => $group_id),'',null,null,false,true);
+        $GLOBALS['FORUM_DB']->query_update('f_group_members', array('gm_group_id' => $target_group), array('gm_group_id' => $group_id), '', null, null, false, true);
     }
-    $GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id' => $group_id));
-    $GLOBALS['FORUM_DB']->query_delete('f_groups',array('id' => $group_id),'',1);
+    $GLOBALS['FORUM_DB']->query_delete('f_group_members', array('gm_group_id' => $group_id));
+    $GLOBALS['FORUM_DB']->query_delete('f_groups', array('id' => $group_id), '', 1);
     // No need to delete ocPortal permission stuff, as it could be on any MSN site, and ocPortal is coded with a tolerance due to the forum driver system. However, to be tidy...
-    $GLOBALS['SITE_DB']->query_delete('group_privileges',array('group_id' => $group_id));
-    $GLOBALS['SITE_DB']->query_delete('group_zone_access',array('group_id' => $group_id));
-    $GLOBALS['SITE_DB']->query_delete('group_category_access',array('group_id' => $group_id));
-    $GLOBALS['SITE_DB']->query_delete('group_page_access',array('group_id' => $group_id));
+    $GLOBALS['SITE_DB']->query_delete('group_privileges', array('group_id' => $group_id));
+    $GLOBALS['SITE_DB']->query_delete('group_zone_access', array('group_id' => $group_id));
+    $GLOBALS['SITE_DB']->query_delete('group_category_access', array('group_id' => $group_id));
+    $GLOBALS['SITE_DB']->query_delete('group_page_access', array('group_id' => $group_id));
     if (addon_installed('ecommerce')) {
-        $GLOBALS['FORUM_DB']->query_delete('f_usergroup_subs',array('s_group_id' => $group_id));
+        $GLOBALS['FORUM_DB']->query_delete('f_usergroup_subs', array('s_group_id' => $group_id));
     }
-    $GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts',array('group_id' => $group_id));
+    $GLOBALS['FORUM_DB']->query_delete('f_group_member_timeouts', array('group_id' => $group_id));
 
     require_code('themes2');
-    tidy_theme_img_code(null,$_group_info[0]['g_rank_image'],'f_groups','g_rank_image',$GLOBALS['FORUM_DB']);
+    tidy_theme_img_code(null, $_group_info[0]['g_rank_image'], 'f_groups', 'g_rank_image', $GLOBALS['FORUM_DB']);
 
     if (addon_installed('catalogues')) {
-        update_catalogue_content_ref('group',strval($group_id),'');
+        update_catalogue_content_ref('group', strval($group_id), '');
     }
 
-    log_it('DELETE_GROUP',strval($group_id),$name);
+    log_it('DELETE_GROUP', strval($group_id), $name);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        expunge_resourcefs_moniker('group',strval($group_id));
+        expunge_resourcefs_moniker('group', strval($group_id));
     }
 
     persistent_cache_delete('GROUPS_COUNT');
@@ -246,12 +246,12 @@ function ocf_delete_group($group_id,$target_group = null)
  * @param  GROUP                        The usergroup to apply to.
  * @param  ?MEMBER                      The member applying (NULL: current member).
  */
-function ocf_member_ask_join_group($group_id,$member_id = null)
+function ocf_member_ask_join_group($group_id, $member_id = null)
 {
     require_code('notifications');
 
-    $group_info = $GLOBALS['FORUM_DB']->query_select('f_groups',array('g_name','g_group_leader'),array('id' => $group_id),'',1);
-    if (!array_key_exists(0,$group_info)) {
+    $group_info = $GLOBALS['FORUM_DB']->query_select('f_groups', array('g_name', 'g_group_leader'), array('id' => $group_id), '', 1);
+    if (!array_key_exists(0, $group_info)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
 
@@ -263,7 +263,7 @@ function ocf_member_ask_join_group($group_id,$member_id = null)
         return;
     }
 
-    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_group_members','gm_validated',array('gm_member_id' => $member_id,'gm_group_id' => $group_id));
+    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_group_members', 'gm_validated', array('gm_member_id' => $member_id, 'gm_group_id' => $group_id));
     if (!is_null($test)) {
         if ($test == 1) {
             warn_exit(do_lang_tempcode('ALREADY_IN_GROUP'));
@@ -273,18 +273,18 @@ function ocf_member_ask_join_group($group_id,$member_id = null)
 
     $validated = 0;
     $in = $GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
-    $test = $GLOBALS['FORUM_DB']->query_select_value('f_groups','g_is_presented_at_install',array('id' => $group_id));
+    $test = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'g_is_presented_at_install', array('id' => $group_id));
     if ($test == 1) {
         $validated = 1;
     }
 
-    $GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
+    $GLOBALS['FORUM_DB']->query_insert('f_group_members', array(
         'gm_group_id' => $group_id,
         'gm_member_id' => $member_id,
         'gm_validated' => $validated
     ));
     if ($validated == 1) {
-        $GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+        $GLOBALS['FORUM_DB']->query_insert('f_group_join_log', array(
             'member_id' => $member_id,
             'usergroup_id' => $group_id,
             'join_time' => time()
@@ -292,20 +292,20 @@ function ocf_member_ask_join_group($group_id,$member_id = null)
     }
 
     if ($validated == 0) {
-        $group_name = get_translated_text($group_info[0]['g_name'],$GLOBALS['FORUM_DB']);
-        $_url = build_url(array('page' => 'groups','type' => 'view','id' => $group_id),get_module_zone('groups'),null,false,false,true);
+        $group_name = get_translated_text($group_info[0]['g_name'], $GLOBALS['FORUM_DB']);
+        $_url = build_url(array('page' => 'groups', 'type' => 'view', 'id' => $group_id), get_module_zone('groups'), null, false, false, true);
         $url = $_url->evaluate();
-        $their_username = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id,'m_username');
+        $their_username = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_username');
 
         $leader_id = $group_info[0]['g_group_leader'];
         if (!is_null($leader_id)) {
-            $mail = do_lang('GROUP_JOIN_REQUEST_MAIL',comcode_escape($their_username),comcode_escape($group_name),array($url),get_lang($leader_id));
-            $subject = do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',null,null,null,get_lang($leader_id));
-            dispatch_notification('ocf_group_join_request',null,$subject,$mail,array($leader_id));
+            $mail = do_lang('GROUP_JOIN_REQUEST_MAIL', comcode_escape($their_username), comcode_escape($group_name), array($url), get_lang($leader_id));
+            $subject = do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT', null, null, null, get_lang($leader_id));
+            dispatch_notification('ocf_group_join_request', null, $subject, $mail, array($leader_id));
         } else {
-            $mail = do_lang('GROUP_JOIN_REQUEST_MAIL',comcode_escape($their_username),comcode_escape($group_name),array($url),get_site_default_lang());
-            $subject = do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT',null,null,null,get_site_default_lang());
-            dispatch_notification('ocf_group_join_request_staff',null,$subject,$mail,null,get_member(),3,false,false,null,null,'','','','',null,true);
+            $mail = do_lang('GROUP_JOIN_REQUEST_MAIL', comcode_escape($their_username), comcode_escape($group_name), array($url), get_site_default_lang());
+            $subject = do_lang('GROUP_JOIN_REQUEST_MAIL_SUBJECT', null, null, null, get_site_default_lang());
+            dispatch_notification('ocf_group_join_request_staff', null, $subject, $mail, null, get_member(), 3, false, false, null, null, '', '', '', '', null, true);
         }
     }
 }
@@ -316,7 +316,7 @@ function ocf_member_ask_join_group($group_id,$member_id = null)
  * @param  GROUP                        The usergroup to remove from.
  * @param  ?MEMBER                      The member leaving (NULL: current member).
  */
-function ocf_member_leave_group($group_id,$member_id = null)
+function ocf_member_leave_group($group_id, $member_id = null)
 {
     if (is_null($member_id)) {
         $member_id = get_member();
@@ -326,19 +326,19 @@ function ocf_member_leave_group($group_id,$member_id = null)
         return;
     }
 
-    $group_leader = $GLOBALS['FORUM_DB']->query_select_value('f_groups','g_group_leader',array('id' => $group_id));
+    $group_leader = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'g_group_leader', array('id' => $group_id));
     if ($group_leader == $member_id) {
-        $GLOBALS['FORUM_DB']->query_update('f_groups',array('g_group_leader' => NULL),array('id' => $group_id),'',1);
+        $GLOBALS['FORUM_DB']->query_update('f_groups', array('g_group_leader' => null), array('id' => $group_id), '', 1);
     }
 
-    $GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_group_id' => $group_id,'gm_member_id' => $member_id),'',1);
-    
-    $GLOBALS['FORUM_DB']->query_delete('f_group_join_log',array(
+    $GLOBALS['FORUM_DB']->query_delete('f_group_members', array('gm_group_id' => $group_id, 'gm_member_id' => $member_id), '', 1);
+
+    $GLOBALS['FORUM_DB']->query_delete('f_group_join_log', array(
         'member_id' => $member_id,
         'usergroup_id' => $group_id,
     ));
 
-    log_it('MEMBER_REMOVED_FROM_GROUP',strval($member_id),strval($group_id));
+    log_it('MEMBER_REMOVED_FROM_GROUP', strval($member_id), strval($group_id));
 }
 
 /**
@@ -348,46 +348,46 @@ function ocf_member_leave_group($group_id,$member_id = null)
  * @param  GROUP                        The usergroup.
  * @param  BINARY                       Whether the member is validated into the usergroup.
  */
-function ocf_add_member_to_group($member_id,$id,$validated = 1)
+function ocf_add_member_to_group($member_id, $id, $validated = 1)
 {
     if (ocf_is_ldap_member($member_id)) {
         return;
     }
 
-    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups','g_is_presented_at_install',array('id' => $id));
+    $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'g_is_presented_at_install', array('id' => $id));
     if (is_null($test)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
 
     if ($validated == 1) {
-        $GLOBALS['FORUM_DB']->query_delete('f_group_members',array(
+        $GLOBALS['FORUM_DB']->query_delete('f_group_members', array(
             'gm_group_id' => $id,
             'gm_member_id' => $member_id,
             'gm_validated' => 0
-        ),'',1);
+        ), '', 1);
     }
-    $GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
+    $GLOBALS['FORUM_DB']->query_insert('f_group_members', array(
         'gm_group_id' => $id,
         'gm_member_id' => $member_id,
         'gm_validated' => $validated
-    ),false,true);
+    ), false, true);
 
-    log_it('MEMBER_ADDED_TO_GROUP',strval($member_id),strval($id));
+    log_it('MEMBER_ADDED_TO_GROUP', strval($member_id), strval($id));
 
-    if (ocf_get_group_property($id,'hidden') == 0) {
+    if (ocf_get_group_property($id, 'hidden') == 0) {
         require_lang('ocf');
         require_code('notifications');
         $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
-        $displayname = $GLOBALS['FORUM_DRIVER']->get_username($member_id,true);
+        $displayname = $GLOBALS['FORUM_DRIVER']->get_username($member_id, true);
         $group_name = ocf_get_group_name($id);
-        $subject = do_lang('MJG_NOTIFICATION_MAIL_SUBJECT',get_site_name(),$username,$group_name);
-        $group_url = build_url(array('page' => 'groups','type' => 'view','id' => $id),get_module_zone('groups'),null,false,false,true);
-        $mail = do_lang('MJG_NOTIFICATION_MAIL',comcode_escape(get_site_name()),comcode_escape($username),array(comcode_escape($group_name),$group_url->evaluate(),comcode_escape($displayname)));
-        dispatch_notification('ocf_member_joined_group',strval($id),$subject,$mail);
+        $subject = do_lang('MJG_NOTIFICATION_MAIL_SUBJECT', get_site_name(), $username, $group_name);
+        $group_url = build_url(array('page' => 'groups', 'type' => 'view', 'id' => $id), get_module_zone('groups'), null, false, false, true);
+        $mail = do_lang('MJG_NOTIFICATION_MAIL', comcode_escape(get_site_name()), comcode_escape($username), array(comcode_escape($group_name), $group_url->evaluate(), comcode_escape($displayname)));
+        dispatch_notification('ocf_member_joined_group', strval($id), $subject, $mail);
     }
 
     if ($validated == 1) {
-        $GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+        $GLOBALS['FORUM_DB']->query_insert('f_group_join_log', array(
             'member_id' => $member_id,
             'usergroup_id' => $id,
             'join_time' => time()
@@ -403,7 +403,7 @@ function ocf_add_member_to_group($member_id,$id,$validated = 1)
  * @param  boolean                      Whether the member is being declined membership.
  * @param  string                       The reason given for declining.
  */
-function ocf_member_validate_into_group($group_id,$prospective_member_id,$decline = false,$reason = '')
+function ocf_member_validate_into_group($group_id, $prospective_member_id, $decline = false, $reason = '')
 {
     if (ocf_is_ldap_member($prospective_member_id)) {
         return;
@@ -411,37 +411,37 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
 
     require_code('notifications');
 
-    $GLOBALS['FORUM_DB']->query_delete('f_group_members',array('gm_member_id' => $prospective_member_id,'gm_group_id' => $group_id),'',1);
+    $GLOBALS['FORUM_DB']->query_delete('f_group_members', array('gm_member_id' => $prospective_member_id, 'gm_group_id' => $group_id), '', 1);
 
     $name = ocf_get_group_name($group_id);
 
     if (!$decline) {
-        $GLOBALS['FORUM_DB']->query_insert('f_group_members',array(
+        $GLOBALS['FORUM_DB']->query_insert('f_group_members', array(
             'gm_group_id' => $group_id,
             'gm_member_id' => $prospective_member_id,
             'gm_validated' => 1
         ));
 
-        $GLOBALS['FORUM_DB']->query_insert('f_group_join_log',array(
+        $GLOBALS['FORUM_DB']->query_insert('f_group_join_log', array(
             'member_id' => $prospective_member_id,
             'usergroup_id' => $group_id,
             'join_time' => time()
         ));
 
-        log_it('MEMBER_ADDED_TO_GROUP',strval($prospective_member_id),strval($group_id));
+        log_it('MEMBER_ADDED_TO_GROUP', strval($prospective_member_id), strval($group_id));
 
-        $mail = do_lang('GROUP_ACCEPTED_MAIL',get_site_name(),$name,null,get_lang($prospective_member_id));
-        $subject = do_lang('GROUP_ACCEPTED_MAIL_SUBJECT',$name,null,null,get_lang($prospective_member_id));
+        $mail = do_lang('GROUP_ACCEPTED_MAIL', get_site_name(), $name, null, get_lang($prospective_member_id));
+        $subject = do_lang('GROUP_ACCEPTED_MAIL_SUBJECT', $name, null, null, get_lang($prospective_member_id));
     } else {
         if ($reason != '') {
-            $mail = do_lang('GROUP_DECLINED_MAIL_REASON',comcode_escape(get_site_name()),comcode_escape($name),comcode_escape($reason),get_lang($prospective_member_id));
+            $mail = do_lang('GROUP_DECLINED_MAIL_REASON', comcode_escape(get_site_name()), comcode_escape($name), comcode_escape($reason), get_lang($prospective_member_id));
         } else {
-            $mail = do_lang('GROUP_DECLINED_MAIL',comcode_escape(get_site_name()),comcode_escape($name),null,get_lang($prospective_member_id));
+            $mail = do_lang('GROUP_DECLINED_MAIL', comcode_escape(get_site_name()), comcode_escape($name), null, get_lang($prospective_member_id));
         }
-        $subject = do_lang('GROUP_DECLINED_MAIL_SUBJECT',$name,null,null,get_lang($prospective_member_id));
+        $subject = do_lang('GROUP_DECLINED_MAIL_SUBJECT', $name, null, null, get_lang($prospective_member_id));
     }
 
-    dispatch_notification('ocf_group_declined',null,$subject,$mail,array($prospective_member_id));
+    dispatch_notification('ocf_group_declined', null, $subject, $mail, array($prospective_member_id));
 }
 
 /**
@@ -450,12 +450,12 @@ function ocf_member_validate_into_group($group_id,$prospective_member_id,$declin
  * @param  GROUP                        The that is having it's permissions replaced.
  * @param  GROUP                        The that the permissions are being drawn from.
  */
-function ocf_group_absorb_privileges_of($to,$from)
+function ocf_group_absorb_privileges_of($to, $from)
 {
-    _ocf_group_absorb_privileges_of($to,$from,'group_category_access');
-    _ocf_group_absorb_privileges_of($to,$from,'group_zone_access');
-    _ocf_group_absorb_privileges_of($to,$from,'group_page_access');
-    _ocf_group_absorb_privileges_of($to,$from,'group_privileges');
+    _ocf_group_absorb_privileges_of($to, $from, 'group_category_access');
+    _ocf_group_absorb_privileges_of($to, $from, 'group_zone_access');
+    _ocf_group_absorb_privileges_of($to, $from, 'group_page_access');
+    _ocf_group_absorb_privileges_of($to, $from, 'group_privileges');
 }
 
 /**
@@ -467,25 +467,25 @@ function ocf_group_absorb_privileges_of($to,$from)
  * @param  ID_TEXT                      The name of the field in the table that holds the ID.
  * @param  boolean                      Whether the operation is being carried out over the OCF driver.
  */
-function _ocf_group_absorb_privileges_of($to,$from,$table,$id = 'group_id',$ocf = false)
+function _ocf_group_absorb_privileges_of($to, $from, $table, $id = 'group_id', $ocf = false)
 {
     if ($to == $from) {
         fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
     }
 
     if ($ocf) {
-        $GLOBALS['FORUM_DB']->query_delete($table,array($id => $to));
-        $rows = $GLOBALS['FORUM_DB']->query_select($table,array('*'),array($id => $from));
+        $GLOBALS['FORUM_DB']->query_delete($table, array($id => $to));
+        $rows = $GLOBALS['FORUM_DB']->query_select($table, array('*'), array($id => $from));
         foreach ($rows as $row) {
             $row[$id] = $to;
-            $GLOBALS['FORUM_DB']->query_insert($table,$row);
+            $GLOBALS['FORUM_DB']->query_insert($table, $row);
         }
     } else {
-        $GLOBALS['SITE_DB']->query_delete($table,array($id => $to));
-        $rows = $GLOBALS['SITE_DB']->query_select($table,array('*'),array($id => $from));
+        $GLOBALS['SITE_DB']->query_delete($table, array($id => $to));
+        $rows = $GLOBALS['SITE_DB']->query_select($table, array('*'), array($id => $from));
         foreach ($rows as $row) {
             $row[$id] = $to;
-            $GLOBALS['SITE_DB']->query_insert($table,$row);
+            $GLOBALS['SITE_DB']->query_insert($table, $row);
         }
     }
 }

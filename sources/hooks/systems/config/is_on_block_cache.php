@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_config_is_on_block_cache
 {
     /**
@@ -50,6 +49,6 @@ class Hook_config_is_on_block_cache
         if (GOOGLE_APPENGINE) {
             return '1';
         }
-        return $GLOBALS['SEMI_DEV_MODE']?'0':'1';
+        return $GLOBALS['SEMI_DEV_MODE'] ? '0' : '1';
     }
 }

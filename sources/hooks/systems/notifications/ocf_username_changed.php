@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Notification_ocf_username_changed extends Hook_Notification
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_ocf_username_changed extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['ocf_username_changed'] = array(do_lang('MEMBERS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_username_changed'));
+        $list['ocf_username_changed'] = array(do_lang('MEMBERS'), do_lang('ocf:NOTIFICATION_TYPE_ocf_username_changed'));
         return $list;
     }
 }

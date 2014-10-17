@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Hook_Notification_checklist_task extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_checklist_task extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_checklist_task extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['checklist_task'] = array(do_lang('STAFF'),do_lang('staff_checklist:NOTIFICATION_TYPE_checklist_task'));
+        $list['checklist_task'] = array(do_lang('STAFF'), do_lang('staff_checklist:NOTIFICATION_TYPE_checklist_task'));
         return $list;
     }
 }

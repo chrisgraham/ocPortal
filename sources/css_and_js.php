@@ -39,7 +39,7 @@ function init__css_and_js()
  * @set equations hsv
  * @return string                       The sheet
  */
-function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
+function css_inherit($css_file, $theme, $destination_theme, $seed, $dark, $algorithm)
 {
     // Find source
     $fullpath = get_custom_file_base() . '/themes/' . $theme . '/css_custom/' . $css_file . '.css';
@@ -66,35 +66,35 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
     // Re-seed
     if (!is_null($seed)) {
         // Not actually needed
-        $sheet = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},seed,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#' . $seed . ',seed,100% ' . $seed . '}',$sheet);
-        $sheet = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},WB,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#' . $seed . ',WB,100% ' . ($dark?'000000':'FFFFFF') . '}',$sheet);
-        $sheet = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},BW,100% [A-Fa-f0-9]{6}\}#','{$THEME_WIZARD_COLOR,#' . $seed . ',BW,100% ' . ($dark?'FFFFFF':'000000') . '}',$sheet);
+        $sheet = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},seed,100% [A-Fa-f0-9]{6}\}#', '{$THEME_WIZARD_COLOR,#' . $seed . ',seed,100% ' . $seed . '}', $sheet);
+        $sheet = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},WB,100% [A-Fa-f0-9]{6}\}#', '{$THEME_WIZARD_COLOR,#' . $seed . ',WB,100% ' . ($dark ? '000000' : 'FFFFFF') . '}', $sheet);
+        $sheet = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[A-Fa-f0-9]{6},BW,100% [A-Fa-f0-9]{6}\}#', '{$THEME_WIZARD_COLOR,#' . $seed . ',BW,100% ' . ($dark ? 'FFFFFF' : '000000') . '}', $sheet);
 
         require_code('themewizard');
-        list($colours,$landscape) = calculate_theme($seed,$theme,$algorithm,'colours',$dark);
+        list($colours, $landscape) = calculate_theme($seed, $theme, $algorithm, 'colours', $dark);
 
         // The main thing (THEME_WIZARD_COLOR is not executed in full by Tempcode, so we need to sub it according to our theme wizard landscape)
         foreach ($landscape as $peak) {
             $from = $peak[2];
-            $to = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[\da-fA-F]{6},#','{$THEME_WIZARD_COLOR,#' . $peak[3] . ',',$peak[2]);
-            $sheet = str_replace($from,$to,$sheet);
+            $to = preg_replace('#\{\$THEME_WIZARD_COLOR,\#[\da-fA-F]{6},#', '{$THEME_WIZARD_COLOR,#' . $peak[3] . ',', $peak[2]);
+            $sheet = str_replace($from, $to, $sheet);
         }
     }
 
     // Copy to tmp file
-    $temp_file = get_custom_file_base() . '/themes/' . $destination_theme . '/css_custom/' . basename($fullpath,'.css') . '__tmp_copy.css';
-    $myfile = @fopen($temp_file,GOOGLE_APPENGINE?'wb':'at') or intelligent_write_error($temp_file);
-    @flock($myfile,LOCK_EX);
+    $temp_file = get_custom_file_base() . '/themes/' . $destination_theme . '/css_custom/' . basename($fullpath, '.css') . '__tmp_copy.css';
+    $myfile = @fopen($temp_file, GOOGLE_APPENGINE ? 'wb' : 'at') or intelligent_write_error($temp_file);
+    @flock($myfile, LOCK_EX);
     if (!GOOGLE_APPENGINE) {
-        ftruncate($myfile,0);
+        ftruncate($myfile, 0);
     }
-    fwrite($myfile,$sheet);
-    @flock($myfile,LOCK_UN);
+    fwrite($myfile, $sheet);
+    @flock($myfile, LOCK_UN);
     fclose($myfile);
     fix_permissions($temp_file);
 
     // Load up as Tempcode
-    $_sheet = _css_compile($destination_theme,$destination_theme,$css_file . '__tmp_copy',$temp_file,false);
+    $_sheet = _css_compile($destination_theme, $destination_theme, $css_file . '__tmp_copy', $temp_file, false);
     @unlink($temp_file);
     sync_file($temp_file);
     $sheet = $_sheet[1];
@@ -109,12 +109,12 @@ function css_inherit($css_file,$theme,$destination_theme,$seed,$dark,$algorithm)
  * @param  PATH                         Full path to the JS file
  * @param  boolean                      Whether to also do minification
  */
-function js_compile($j,$js_cache_path,$minify = true)
+function js_compile($j, $js_cache_path, $minify = true)
 {
     ocp_profile_start_for('js_compile');
 
     require_lang('javascript');
-    global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
+    global $KEEP_MARKERS, $SHOW_EDIT_LINKS;
     $temp_keep_markers = $KEEP_MARKERS;
     $temp_show_edit_links = $SHOW_EDIT_LINKS;
     $KEEP_MARKERS = false;
@@ -122,22 +122,22 @@ function js_compile($j,$js_cache_path,$minify = true)
     $tpl_params = array();
     if ($j == 'javascript_staff') {
         $url_patterns = array();
-        $cma_hooks = find_all_hooks('systems','content_meta_aware');
+        $cma_hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($cma_hooks) as $content_type) {
             require_code('content');
             $content_type_ob = get_content_object($content_type);
             $info = $content_type_ob->info();
             if (!is_null($info['view_page_link_pattern'])) {
-                list($zone,$attributes,) = page_link_decode($info['view_page_link_pattern']);
-                $url = build_url($attributes,$zone,null,false,false,true);
+                list($zone, $attributes,) = page_link_decode($info['view_page_link_pattern']);
+                $url = build_url($attributes, $zone, null, false, false, true);
                 $url_patterns[$url->evaluate()] = array(
                     'PATTERN' => $url->evaluate(),
                     'HOOK' => $content_type,
                 );
             }
             if (!is_null($info['edit_page_link_pattern'])) {
-                list($zone,$attributes,) = page_link_decode($info['edit_page_link_pattern']);
-                $url = build_url($attributes,$zone,null,false,false,true);
+                list($zone, $attributes,) = page_link_decode($info['edit_page_link_pattern']);
+                $url = build_url($attributes, $zone, null, false, false, true);
                 $url_patterns[$url->evaluate()] = array(
                     'PATTERN' => $url->evaluate(),
                     'HOOK' => $content_type,
@@ -147,7 +147,7 @@ function js_compile($j,$js_cache_path,$minify = true)
         $tpl_params['URL_PATTERNS'] = array_values($url_patterns);
     }
     require_code('tempcode');
-    $js = do_template(strtoupper($j),$tpl_params);
+    $js = do_template(strtoupper($j), $tpl_params);
     $KEEP_MARKERS = $temp_keep_markers;
     $SHOW_EDIT_LINKS = $temp_show_edit_links;
     global $ATTACHED_MESSAGES_RAW;
@@ -164,29 +164,29 @@ function js_compile($j,$js_cache_path,$minify = true)
     } else {
         $contents = '/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.' . "\n" . 'INSTEAD EDIT THE TEMPLATE FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A TEMPLATES_CUSTOM OVERRIDE. */' . "\n\n" . $out;
     }
-    $js_file = @fopen($js_cache_path,GOOGLE_APPENGINE?'wb':'at');
+    $js_file = @fopen($js_cache_path, GOOGLE_APPENGINE ? 'wb' : 'at');
     if ($js_file === false) {
         intelligent_write_error($js_cache_path . '.tmp');
     }
-    @flock($js_file,LOCK_EX);
+    @flock($js_file, LOCK_EX);
     if (!GOOGLE_APPENGINE) {
-        ftruncate($js_file,0);
+        ftruncate($js_file, 0);
     }
-    if (fwrite($js_file,$contents)<strlen($contents)) {
+    if (fwrite($js_file, $contents) < strlen($contents)) {
         warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
     }
-    @flock($js_file,LOCK_UN);
+    @flock($js_file, LOCK_UN);
     fclose($js_file);
     fix_permissions($js_cache_path . '.tmp');
-    @rename($js_cache_path . '.tmp',$js_cache_path);
+    @rename($js_cache_path . '.tmp', $js_cache_path);
     sync_file($js_cache_path);
     if (!$success_status) {
-        @touch($js_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
+        @touch($js_cache_path, time() - 60 * 60 * 24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
     } else {
         compress_ocp_stub_file($js_cache_path);
     }
 
-    ocp_profile_end_for('js_compile',$j);
+    ocp_profile_end_for('js_compile', $j);
 }
 
 /**
@@ -197,15 +197,15 @@ function js_compile($j,$js_cache_path,$minify = true)
 function compress_ocp_stub_file($stub_file)
 {
     if (function_exists('gzencode')) {
-        $myfile = @fopen($stub_file . '.gz',GOOGLE_APPENGINE?'wb':'at');
+        $myfile = @fopen($stub_file . '.gz', GOOGLE_APPENGINE ? 'wb' : 'at');
         if ($myfile !== false) {
-            $compressed = gzencode(file_get_contents($stub_file),9);
+            $compressed = gzencode(file_get_contents($stub_file), 9);
 
-            @flock($myfile,LOCK_EX);
+            @flock($myfile, LOCK_EX);
             if (!GOOGLE_APPENGINE) {
-                ftruncate($myfile,0);
+                ftruncate($myfile, 0);
             }
-            if (fwrite($myfile,$compressed)<strlen($compressed)) {
+            if (fwrite($myfile, $compressed) < strlen($compressed)) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
             fclose($myfile);
@@ -226,45 +226,45 @@ function compress_ocp_stub_file($stub_file)
  * @param  PATH                         Full path to where the cached CSS file will go
  * @param  boolean                      Whether to also do minification
  */
-function css_compile($active_theme,$theme,$c,$fullpath,$css_cache_path,$minify = true)
+function css_compile($active_theme, $theme, $c, $fullpath, $css_cache_path, $minify = true)
 {
     ocp_profile_start_for('css_compile');
 
     if ($c != 'global') { // We need to make sure the global.css file is parsed, as it contains some shared THEME_WIZARD_COLOR variables that Tempcode will pick up on
-        $found = find_template_place('global','',$active_theme,'.css','css');
+        $found = find_template_place('global', '', $active_theme, '.css', 'css');
         $d_theme = $found[0];
         $global_fullpath = get_custom_file_base() . '/themes/' . $d_theme . $found[1] . 'global.css';
         if (!is_file($global_fullpath)) {
             $global_fullpath = get_file_base() . '/themes/' . $d_theme . $found[1] . 'global.css';
         }
 
-        _css_compile($active_theme,$d_theme,'global',$global_fullpath,false);
+        _css_compile($active_theme, $d_theme, 'global', $global_fullpath, false);
     }
 
-    list($success_status,$out) = _css_compile($active_theme,$theme,$c,$fullpath,$minify);
-    $css_file = @fopen($css_cache_path,GOOGLE_APPENGINE?'wb':'at');
+    list($success_status, $out) = _css_compile($active_theme, $theme, $c, $fullpath, $minify);
+    $css_file = @fopen($css_cache_path, GOOGLE_APPENGINE ? 'wb' : 'at');
     if ($css_file === false) {
         intelligent_write_error($css_cache_path . '.tmp');
     }
-    @flock($css_file,LOCK_EX);
+    @flock($css_file, LOCK_EX);
     if (!GOOGLE_APPENGINE) {
-        ftruncate($css_file,0);
+        ftruncate($css_file, 0);
     }
-    if (fwrite($css_file,$out)<strlen($out)) {
+    if (fwrite($css_file, $out) < strlen($out)) {
         warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
     }
-    @flock($css_file,LOCK_UN);
+    @flock($css_file, LOCK_UN);
     fclose($css_file);
     fix_permissions($css_cache_path . '.tmp');
-    @rename($css_cache_path . '.tmp',$css_cache_path);
+    @rename($css_cache_path . '.tmp', $css_cache_path);
     sync_file($css_cache_path);
     if (!$success_status) {
-        @touch($css_cache_path,time()-60*60*24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
+        @touch($css_cache_path, time() - 60 * 60 * 24); // Fudge it so it's going to auto expire. We do have to write the file as it's referenced, but we want it to expire instantly so that any errors will reshow.
     } else {
         compress_ocp_stub_file($css_cache_path);
     }
 
-    ocp_profile_end_for('css_compile',$c);
+    ocp_profile_end_for('css_compile', $c);
 }
 
 /**
@@ -288,9 +288,9 @@ function _css_ocp_include($matches)
         }
     }
     if (!is_file($fullpath)) {
-        return array(false,'');
+        return array(false, '');
     }
-    return _css_compile($CSS_COMPILE_ACTIVE_THEME,$theme,$c,$fullpath);
+    return _css_compile($CSS_COMPILE_ACTIVE_THEME, $theme, $c, $fullpath);
 }
 
 /**
@@ -303,9 +303,9 @@ function _css_ocp_include($matches)
  * @param  boolean                      Whether to also do minification
  * @return array                        A pair: success status, The text of the compiled file
  */
-function _css_compile($active_theme,$theme,$c,$fullpath,$minify = true)
+function _css_compile($active_theme, $theme, $c, $fullpath, $minify = true)
 {
-    global $KEEP_MARKERS,$SHOW_EDIT_LINKS;
+    global $KEEP_MARKERS, $SHOW_EDIT_LINKS;
     $keep_markers = $KEEP_MARKERS;
     $show_edit_links = $SHOW_EDIT_LINKS;
     $KEEP_MARKERS = false;
@@ -320,13 +320,13 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify = true)
     require_code('tempcode_compiler');
     global $ATTACHED_MESSAGES_RAW;
     $num_msgs_before = count($ATTACHED_MESSAGES_RAW);
-    $css = _do_template($theme,(strpos($fullpath,'/css_custom/') !== false)?'/css_custom/':'/css/',$c,$c,user_lang(),'.css',$active_theme);
+    $css = _do_template($theme, (strpos($fullpath, '/css_custom/') !== false) ? '/css_custom/' : '/css/', $c, $c, user_lang(), '.css', $active_theme);
     $out = $css->evaluate();
     $num_msgs_after = count($ATTACHED_MESSAGES_RAW);
     global $CSS_COMPILE_ACTIVE_THEME;
     $CSS_COMPILE_ACTIVE_THEME = $active_theme;
-    $out = preg_replace_callback('#\@ocp\_include\(\'?(\w+)/(\w+)/(\w+)\'?\);#','_css_ocp_include',$out);
-    $out = preg_replace('#/\*\s*\*/#','',$out); // strip empty comments (would have encapsulated Tempcode comments)
+    $out = preg_replace_callback('#\@ocp\_include\(\'?(\w+)/(\w+)/(\w+)\'?\);#', '_css_ocp_include', $out);
+    $out = preg_replace('#/\*\s*\*/#', '', $out); // strip empty comments (would have encapsulated Tempcode comments)
     if ($minify) {
         $out = css_minify($out);
     }
@@ -337,10 +337,10 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify = true)
             $out = '/* DO NOT EDIT. THIS IS A CACHE FILE AND WILL GET OVERWRITTEN RANDOMLY.' . "\n" . 'INSTEAD EDIT THE CSS FROM WITHIN THE ADMIN ZONE, OR BY MANUALLY EDITING A CSS_CUSTOM OVERRIDE. */' . "\n\n" . $out;
         }
     }
-    if ($num_msgs_after>$num_msgs_before) { // Was an error (e.g. missing theme image), so don't cache so that the error will be visible on refresh and hence debugged
-        return array(false,$out);
+    if ($num_msgs_after > $num_msgs_before) { // Was an error (e.g. missing theme image), so don't cache so that the error will be visible on refresh and hence debugged
+        return array(false, $out);
     }
-    return array(true,$out);
+    return array(true, $out);
 }
 
 /**
@@ -351,8 +351,8 @@ function _css_compile($active_theme,$theme,$c,$fullpath,$minify = true)
  */
 function js_minify($js)
 {
-    if (strpos(substr($js,0,1000),'no minify') !== false) {
-        return str_replace('/*no minify*/','',$js);
+    if (strpos(substr($js, 0, 1000), 'no minify') !== false) {
+        return str_replace('/*no minify*/', '', $js);
     }
 
     require_code('jsmin');

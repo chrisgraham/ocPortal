@@ -27,10 +27,11 @@ function init__failure()
     $DONE_ONE_WEB_SERVICE = false;
 
     if (!defined('MAX_STACK_TRACE_VALUE_LENGTH')) {
-        define('MAX_STACK_TRACE_VALUE_LENGTH',300);
+        define('MAX_STACK_TRACE_VALUE_LENGTH', 300);
     }
 
     /** Whether we want errors to result in simple text responses. Useful for AJAX scripts.
+     *
      * @global boolean $WANT_TEXT_ERRORS
      */
     global $WANT_TEXT_ERRORS;
@@ -45,20 +46,20 @@ function init__failure()
  */
 function suggest_fatalistic()
 {
-    if ((may_see_stack_dumps()) && (get_param_integer('keep_fatalistic',0) == 0) && (running_script('index'))) {
+    if ((may_see_stack_dumps()) && (get_param_integer('keep_fatalistic', 0) == 0) && (running_script('index'))) {
         if (count($_POST) == 0) {
-            $stack_trace_url = build_url(array('page' => '_SELF','keep_fatalistic' => 1),'_SELF',null,true);
-            $st = do_lang_tempcode('WARN_TO_STACK_TRACE',escape_html($stack_trace_url->evaluate()));
+            $stack_trace_url = build_url(array('page' => '_SELF', 'keep_fatalistic' => 1), '_SELF', null, true);
+            $st = do_lang_tempcode('WARN_TO_STACK_TRACE', escape_html($stack_trace_url->evaluate()));
         } elseif (count($_FILES) == 0) {
-            $stack_trace_url = build_url(array('page' => '_SELF','keep_fatalistic' => 1),'_SELF',null,true);
+            $stack_trace_url = build_url(array('page' => '_SELF', 'keep_fatalistic' => 1), '_SELF', null, true);
             $p = build_keep_post_fields();
-            $st = do_lang_tempcode('WARN_TO_STACK_TRACE_2',escape_html($stack_trace_url->evaluate()),$p->evaluate());
+            $st = do_lang_tempcode('WARN_TO_STACK_TRACE_2', escape_html($stack_trace_url->evaluate()), $p->evaluate());
         } else {
-            $stack_trace_url = build_url(array('page' => '','keep_fatalistic' => 1),'');
-            $st = do_lang_tempcode('WARN_TO_STACK_TRACE_3',escape_html($stack_trace_url->evaluate()));
+            $stack_trace_url = build_url(array('page' => '', 'keep_fatalistic' => 1), '');
+            $st = do_lang_tempcode('WARN_TO_STACK_TRACE_3', escape_html($stack_trace_url->evaluate()));
         }
         require_code('site');
-        attach_message($st,'inform');
+        attach_message($st, 'inform');
     }
 }
 
@@ -69,7 +70,7 @@ function suggest_fatalistic()
  * @param  boolean                      Whether mzip was used.
  * @return tempcode                     Error message.
  */
-function zip_error($errno,$mzip = false)
+function zip_error($errno, $mzip = false)
 {
     $zip_file_function_errors = array( // Based on comment from php.net
         'ZIPARCHIVE::ER_MULTIDISK' => 'Multi-disk zip archives not supported.',
@@ -102,7 +103,7 @@ function zip_error($errno,$mzip = false)
             $errmsg = $error_message;
         }
     }
-    return do_lang_tempcode($mzip?'ZIP_ERROR_MZIP':'ZIP_ERROR',$errmsg);
+    return do_lang_tempcode($mzip ? 'ZIP_ERROR_MZIP' : 'ZIP_ERROR', $errmsg);
 }
 
 /**
@@ -113,7 +114,7 @@ function zip_error($errno,$mzip = false)
  * @param  boolean                      Whether the parameter is a POST parameter
  * @return string                       Fixed parameter (usually the function won't return [instead will give an error], but in special cases, it can filter an invalid return)
  */
-function _param_invalid($name,$ret,$posted)
+function _param_invalid($name, $ret, $posted)
 {
     // Invalid params can happen for many reasons:
     //  [/url] getting onto the end of URLs by bad URL extractors getting URLs out of Comcode
@@ -132,7 +133,7 @@ function _param_invalid($name,$ret,$posted)
 
     if (!is_null($ret)) {
         // Try and recover by stripping junk off...
-        $test = preg_replace('#[^\d]+$#','',$ret);
+        $test = preg_replace('#[^\d]+$#', '', $ret);
         if (is_numeric($test)) {
             return $test;
         }
@@ -155,7 +156,7 @@ function _param_invalid($name,$ret,$posted)
  * @param  ?boolean                     Whether the parameter is a POST parameter (NULL: undetermined)
  * @param  array                        The array we're extracting parameters from
  */
-function improperly_filled_in($name,$posted,$array)
+function improperly_filled_in($name, $posted, $array)
 {
     require_code('tempcode');
 
@@ -166,13 +167,13 @@ function improperly_filled_in($name,$posted,$array)
     }
 
     if ($name == 'login_username') {
-        warn_exit(do_lang_tempcode('NO_PARAMETER_SENT_SPECIAL',escape_html($name)));
+        warn_exit(do_lang_tempcode('NO_PARAMETER_SENT_SPECIAL', escape_html($name)));
     }
 
     if ((!isset($array[$name])) && (($name == 'id') || ($name == 'type')) && (!headers_sent())) {
         set_http_status_code('404');
     }
-    warn_exit(do_lang_tempcode('NO_PARAMETER_SENT',escape_html($name)));
+    warn_exit(do_lang_tempcode('NO_PARAMETER_SENT', escape_html($name)));
 }
 
 /**
@@ -186,9 +187,9 @@ function improperly_filled_in_post($name)
 
     if ((count($_POST) == 0) && (get_option('user_postsize_errors') == '1')) {
         require_code('files');
-        $upload_max_filesize = (ini_get('upload_max_filesize') == '0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('upload_max_filesize')));
-        $post_max_size = (ini_get('post_max_size') == '0')?do_lang('NA'):clean_file_size(php_return_bytes(ini_get('post_max_size')));
-        warn_exit(do_lang_tempcode((get_param_integer('uploading',0) == 1)?'SHOULD_HAVE_BEEN_POSTED_FILE_ERROR':'SHOULD_HAVE_BEEN_POSTED',escape_html($name),escape_html($post_max_size),escape_html($upload_max_filesize)));
+        $upload_max_filesize = (ini_get('upload_max_filesize') == '0') ? do_lang('NA') : clean_file_size(php_return_bytes(ini_get('upload_max_filesize')));
+        $post_max_size = (ini_get('post_max_size') == '0') ? do_lang('NA') : clean_file_size(php_return_bytes(ini_get('post_max_size')));
+        warn_exit(do_lang_tempcode((get_param_integer('uploading', 0) == 1) ? 'SHOULD_HAVE_BEEN_POSTED_FILE_ERROR' : 'SHOULD_HAVE_BEEN_POSTED', escape_html($name), escape_html($post_max_size), escape_html($upload_max_filesize)));
     }
 
     // We didn't give some required input
@@ -205,11 +206,11 @@ function improperly_filled_in_post($name)
  * @param  integer                      The line the error occurred on
  * @param  integer                      The syslog type (used by GAE logging)
  */
-function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_type)
+function _ocportal_error_handler($type, $errno, $errstr, $errfile, $errline, $syslog_type)
 {
     if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) {
         // Turn off MSN, as this increases stability
-        if ((array_key_exists('MSN_DB',$GLOBALS)) && (!is_null($GLOBALS['MSN_DB']))) {
+        if ((array_key_exists('MSN_DB', $GLOBALS)) && (!is_null($GLOBALS['MSN_DB']))) {
             $GLOBALS['FORUM_DB'] = $GLOBALS['MSN_DB'];
             $GLOBALS['MSN_DB'] = null;
         }
@@ -231,30 +232,30 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
     }
 
     // Put into error log
-    if (get_param_integer('keep_fatalistic',0) == 0) {
+    if (get_param_integer('keep_fatalistic', 0) == 0) {
         $php_error_label = $errstr . ' in ' . $errfile . ' on line ' . strval($errline) . ' @ ' . get_self_url_easy();
         /*$log.="\n";
         ob_start();
         debug_print_backtrace(); Does not work consistently, sometimes just kills PHP
         $log.=ob_get_clean();*/
         if ((function_exists('syslog')) && (GOOGLE_APPENGINE)) {
-            syslog($syslog_type,$php_error_label);
+            syslog($syslog_type, $php_error_label);
         }
-        @error_log('PHP ' . ucwords($type) . ': ' . $php_error_label,0);
+        @error_log('PHP ' . ucwords($type) . ': ' . $php_error_label, 0);
     }
 
     if (!$GLOBALS['SUPPRESS_ERROR_DEATH']) { // Don't display - die as normal
         $error_str = 'PHP ' . strtoupper($type) . ' [' . strval($errno) . '] ' . $errstr . ' in ' . $errfile . ' on line ' . strval($errline);
 
         if ($type == 'error') {
-            critical_error('EMERGENCY',escape_html($error_str));
+            critical_error('EMERGENCY', escape_html($error_str));
         }
 
-        @ini_set('display_errors','0');
+        @ini_set('display_errors', '0');
         fatal_exit($error_str);
     } else {
         require_code('site');
-        attach_message(protect_from_escaping($out),'warn'); // Display
+        attach_message(protect_from_escaping($out), 'warn'); // Display
     }
 }
 
@@ -267,27 +268,27 @@ function _ocportal_error_handler($type,$errno,$errstr,$errfile,$errline,$syslog_
  * @param  boolean                      Whether match key messages / redirects should be supported
  * @return tempcode                     The warn page
  */
-function _warn_screen($title,$text,$provide_back = true,$support_match_key_messages = false)
+function _warn_screen($title, $text, $provide_back = true, $support_match_key_messages = false)
 {
-    $tmp = _look_for_match_key_message(is_object($text)?$text->evaluate():$text,!$support_match_key_messages);
+    $tmp = _look_for_match_key_message(is_object($text) ? $text->evaluate() : $text, !$support_match_key_messages);
     if (!is_null($tmp)) {
         $text = $tmp;
     }
 
-    $text_eval = is_object($text)?$text->evaluate():$text;
+    $text_eval = is_object($text) ? $text->evaluate() : $text;
 
     if ($text_eval == do_lang('MISSING_RESOURCE')) {
         set_http_status_code('404');
         if (ocp_srv('HTTP_REFERER') != '') {
-            relay_error_notification($text_eval . ' ' . do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
+            relay_error_notification($text_eval . ' ' . do_lang('REFERRER', ocp_srv('HTTP_REFERER'), substr(get_browser_string(), 0, 255)), false, 'error_occurred_missing_resource');
         }
     }
 
-    if (get_param_integer('keep_fatalistic',0) == 1) {
+    if (get_param_integer('keep_fatalistic', 0) == 1) {
         fatal_exit($text);
     }
 
-    return do_template('WARN_SCREEN',array('_GUID' => 'a762a7ac8cd08623a0ed6413d9250d97','TITLE' => $title,'WEBSERVICE_RESULT' => get_webservice_result($text),'TEXT' => $text,'PROVIDE_BACK' => $provide_back));
+    return do_template('WARN_SCREEN', array('_GUID' => 'a762a7ac8cd08623a0ed6413d9250d97', 'TITLE' => $title, 'WEBSERVICE_RESULT' => get_webservice_result($text), 'TEXT' => $text, 'PROVIDE_BACK' => $provide_back));
 }
 
 /**
@@ -299,7 +300,7 @@ function _warn_screen($title,$text,$provide_back = true,$support_match_key_messa
 function _sanitise_error_msg($text)
 {
     // Strip paths, for security reasons
-    return str_replace(array(get_custom_file_base() . '/',get_file_base() . '/'),array('',''),$text);
+    return str_replace(array(get_custom_file_base() . '/', get_file_base() . '/'), array('', ''), $text);
 }
 
 /**
@@ -307,9 +308,9 @@ function _sanitise_error_msg($text)
  *
  * @param  mixed                        The error message (string or tempcode)
  * @param  ID_TEXT                      Name of the terminal page template
- * @param  boolean                      ?Whether match key messages / redirects should be supported (NULL: detect)
+ * @param  boolean ?Whether match key messages / redirects should be supported (NULL: detect)
  */
-function _generic_exit($text,$template,$support_match_key_messages = false)
+function _generic_exit($text, $template, $support_match_key_messages = false)
 {
     @ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
@@ -320,21 +321,21 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
     } else {
         $text = _sanitise_error_msg($text);
     }
-    $text_eval = is_object($text)?$text->evaluate():$text;
+    $text_eval = is_object($text) ? $text->evaluate() : $text;
 
     global $RUNNING_TASK;
     if ($RUNNING_TASK) {
         require_code('notifications');
         require_lang('tasks');
         $n_subject = do_lang('_TASK_FAILED_SUBJECT');
-        $n_message = do_lang('TASK_FAILED_BODY','[semihtml]' . $text_eval . '[/semihtml]');
-        dispatch_notification('task_completed',null,$n_subject,$n_message,array(get_member()),A_FROM_SYSTEM_PRIVILEGED,2);
+        $n_message = do_lang('TASK_FAILED_BODY', '[semihtml]' . $text_eval . '[/semihtml]');
+        dispatch_notification('task_completed', null, $n_subject, $n_message, array(get_member()), A_FROM_SYSTEM_PRIVILEGED, 2);
     }
 
     if (is_null($support_match_key_messages)) {
-        $support_match_key_messages = in_array($text_eval,array(do_lang('NO_ENTRIES'),do_lang('NO_CATEGORIES')));
+        $support_match_key_messages = in_array($text_eval, array(do_lang('NO_ENTRIES'), do_lang('NO_CATEGORIES')));
     }
-    $tmp = _look_for_match_key_message($text_eval,false,!$support_match_key_messages);
+    $tmp = _look_for_match_key_message($text_eval, false, !$support_match_key_messages);
     if (!is_null($tmp)) {
         $text = $tmp;
     }
@@ -343,11 +344,11 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
     if ($WANT_TEXT_ERRORS) {
         header('Content-Type: text/plain');
         set_http_status_code('500');
-        @ini_set('ocproducts.xss_detect','0');
-        exit(is_object($text)?strip_html($text->evaluate()):$text);
+        @ini_set('ocproducts.xss_detect', '0');
+        exit(is_object($text) ? strip_html($text->evaluate()) : $text);
     }
 
-    if ((get_param_integer('keep_fatalistic',0) == 1) || (running_script('occle'))) {
+    if ((get_param_integer('keep_fatalistic', 0) == 1) || (running_script('occle'))) {
         fatal_exit($text);
     }
 
@@ -366,7 +367,7 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
                 set_http_status_code('404');
             }
             if (ocp_srv('HTTP_REFERER') != '') {
-                relay_error_notification($text_eval . ' ' . do_lang('REFERRER',ocp_srv('HTTP_REFERER'),substr(get_browser_string(),0,255)),false,'error_occurred_missing_resource');
+                relay_error_notification($text_eval . ' ' . do_lang('REFERRER', ocp_srv('HTTP_REFERER'), substr(get_browser_string(), 0, 255)), false, 'error_occurred_missing_resource');
             }
         } elseif ($template == 'WARN_SCREEN') {
             if (!headers_sent()) {
@@ -375,18 +376,18 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
         }
     }
 
-    if ((array_key_exists('MSN_DB',$GLOBALS)) && (!is_null($GLOBALS['MSN_DB']))) {
+    if ((array_key_exists('MSN_DB', $GLOBALS)) && (!is_null($GLOBALS['MSN_DB']))) {
         $GLOBALS['FORUM_DB'] = $GLOBALS['MSN_DB'];
         $GLOBALS['MSN_DB'] = null;
     }
 
     global $EXITING;
     if ((running_script('upgrader')) || (!function_exists('get_screen_title'))) {
-        critical_error('PASSON',is_object($text)?$text->evaluate():$text);
+        critical_error('PASSON', is_object($text) ? $text->evaluate() : $text);
     }
 
     if (($EXITING == 1) || (!function_exists('get_member'))) {
-        critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
+        critical_error('EMERGENCY', is_object($text) ? $text->evaluate() : escape_html($text));
     }
     $EXITING++;
     if (!function_exists('do_header')) {
@@ -395,21 +396,21 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
 
     if ((get_forum_type() == 'ocf') && (get_db_type() != 'xml')) {
         require_code('ocf_groups');
-        $restrict_answer = ocf_get_best_group_property($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()),'flood_control_submit_secs');
+        $restrict_answer = ocf_get_best_group_property($GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()), 'flood_control_submit_secs');
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
-        $GLOBALS['SITE_DB']->query_update('f_members',array('m_last_submit_time' => time()-$restrict_answer-1),array('id' => get_member()),'',1);
+        $GLOBALS['SITE_DB']->query_update('f_members', array('m_last_submit_time' => time() - $restrict_answer - 1), array('id' => get_member()), '', 1);
         $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
     }
 
     if (($template == 'INFORM_SCREEN') && (is_object($GLOBALS['DISPLAYED_TITLE']))) {
-        $title = get_screen_title($GLOBALS['DISPLAYED_TITLE'],false);
+        $title = get_screen_title($GLOBALS['DISPLAYED_TITLE'], false);
     } else {
-        $title = get_screen_title(($template == 'INFORM_SCREEN')?'MESSAGE':'ERROR_OCCURRED');
+        $title = get_screen_title(($template == 'INFORM_SCREEN') ? 'MESSAGE' : 'ERROR_OCCURRED');
     }
 
-    $middle = do_template($template,array('TITLE' => $title,'TEXT' => $text,'PROVIDE_BACK' => true));
-    $echo = globalise($middle,null,'',true);
-    $echo->evaluate_echo(null,true);
+    $middle = do_template($template, array('TITLE' => $title, 'TEXT' => $text, 'PROVIDE_BACK' => true));
+    $echo = globalise($middle, null, '', true);
+    $echo->evaluate_echo(null, true);
     exit();
 }
 
@@ -421,11 +422,11 @@ function _generic_exit($text,$template,$support_match_key_messages = false)
  */
 function _inet_pton($ip)
 {
-    $_ip = explode(':',$ip);
+    $_ip = explode(':', $ip);
     $normalised_ip = '';
-    $normalised_ip .= str_pad('',(4*(8-count($_ip))),'0000',STR_PAD_LEFT); // Fill out trimmed 0's on left
+    $normalised_ip .= str_pad('', (4 * (8 - count($_ip))), '0000', STR_PAD_LEFT); // Fill out trimmed 0's on left
     foreach ($_ip as $seg) {// Copy rest in
-        $normalised_ip .= str_pad($seg,4,'0',STR_PAD_LEFT);
+        $normalised_ip .= str_pad($seg, 4, '0', STR_PAD_LEFT);
     } // Pad out each component in full, building up $normalised_ip
     return $normalised_ip;
 }
@@ -437,44 +438,44 @@ function _inet_pton($ip)
  * @param  SHORT_TEXT                   CIDR range (e.g. 204.93.240.0/24)
  * @return boolean                      Whether it is
  */
-function ip_cidr_check($ip,$cidr)
+function ip_cidr_check($ip, $cidr)
 {
-    if ((strpos($ip,':') === false) !== (strpos($cidr,':') === false)) {
+    if ((strpos($ip, ':') === false) !== (strpos($cidr, ':') === false)) {
         return false;
     } // Different IP address type
 
-    if (strpos($ip,':') === false) {
+    if (strpos($ip, ':') === false) {
         // IPv4...
 
-        list($net,$maskbits) = explode('/',$cidr,2);
+        list($net, $maskbits) = explode('/', $cidr, 2);
 
         $ip_net = ip2long($net);
-        $ip_mask = ~((1 << (32-intval($maskbits)))-1);
+        $ip_mask = ~((1 << (32 - intval($maskbits))) - 1);
 
         $ip_ip = ip2long($ip);
 
-        return (($ip_ip&$ip_mask) == $ip_net);
+        return (($ip_ip & $ip_mask) == $ip_net);
     }
 
     // IPv6...
 
-    $unpacked = unpack('A16',_inet_pton($ip));
+    $unpacked = unpack('A16', _inet_pton($ip));
     $binaryip = '';
-    for ($i = 0;$i<strlen($unpacked[1]);$i++) {
+    for ($i = 0; $i < strlen($unpacked[1]); $i++) {
         $char = $unpacked[1][$i];
-        $binaryip .= str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+        $binaryip .= str_pad(decbin(ord($char)), 8, '0', STR_PAD_LEFT);
     }
 
-    list($net,$maskbits) = explode('/',$cidr,2);
-    $unpacked = unpack('A16',_inet_pton($net));
+    list($net, $maskbits) = explode('/', $cidr, 2);
+    $unpacked = unpack('A16', _inet_pton($net));
     $binarynet = '';
-    for ($i = 0;$i<strlen($unpacked[1]);$i++) {
+    for ($i = 0; $i < strlen($unpacked[1]); $i++) {
         $char = $unpacked[1][$i];
-        $binarynet .= str_pad(decbin(ord($char)),8,'0',STR_PAD_LEFT);
+        $binarynet .= str_pad(decbin(ord($char)), 8, '0', STR_PAD_LEFT);
     }
 
-    $ip_net_bits = substr($binaryip,0,intval($maskbits));
-    $net_bits = substr($binarynet,0,intval($maskbits));
+    $ip_net_bits = substr($binaryip, 0, intval($maskbits));
+    $net_bits = substr($binarynet, 0, intval($maskbits));
     return ($ip_net_bits == $net_bits);
 }
 
@@ -487,7 +488,7 @@ function ip_cidr_check($ip,$cidr)
  * @param  boolean                      Whether to silently log the hack rather than also exiting
  * @param  boolean                      Whether a ban should be immediate
  */
-function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b = '',$silent = false,$instant_ban = false)
+function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_b = '', $silent = false, $instant_ban = false)
 {
     if (function_exists('set_time_limit')) {
         @set_time_limit(4);
@@ -523,7 +524,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
         }
     } else {
         $id = db_get_first_id();
-        $username = function_exists('do_lang')?do_lang('UNKNOWN'):'Unknown';
+        $username = function_exists('do_lang') ? do_lang('UNKNOWN') : 'Unknown';
     }
 
     $url = ocp_srv('SCRIPT_NAME') . '?' . ocp_srv('QUERY_STRING');
@@ -535,27 +536,27 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
         $post .= $key . '=>' . $val . "\n\n";
     }
 
-    $count = $GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)',array('ip' => $ip));
+    $count = $GLOBALS['SITE_DB']->query_select_value('hackattack', 'COUNT(*)', array('ip' => $ip));
     $alt_ip = false;
     if (!is_null($ip2)) {
-        $count2 = $GLOBALS['SITE_DB']->query_select_value('hackattack','COUNT(*)',array('ip' => $ip2));
-        if ($count2>$count) {
+        $count2 = $GLOBALS['SITE_DB']->query_select_value('hackattack', 'COUNT(*)', array('ip' => $ip2));
+        if ($count2 > $count) {
             $count = $count2;
             $alt_ip = true;
         }
     }
     $hack_threshold = intval(get_option('hack_ban_threshold'));
-    if ((array_key_exists('FORUM_DRIVER',$GLOBALS)) && (function_exists('get_member')) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) {
+    if ((array_key_exists('FORUM_DRIVER', $GLOBALS)) && (function_exists('get_member')) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) {
         $count = 0;
     }
     $new_row = array(
-        'user_agent' => fix_bad_unicode(substr(get_browser_string(),0,255)),
-        'referer' => fix_bad_unicode(substr(ocp_srv('HTTP_REFERER'),0,255)),
-        'user_os' => fix_bad_unicode(substr(get_os_string(),0,255)),
+        'user_agent' => fix_bad_unicode(substr(get_browser_string(), 0, 255)),
+        'referer' => fix_bad_unicode(substr(ocp_srv('HTTP_REFERER'), 0, 255)),
+        'user_os' => fix_bad_unicode(substr(get_os_string(), 0, 255)),
         'reason' => $reason,
-        'reason_param_a' => fix_bad_unicode(substr($reason_param_a,0,255)),
-        'reason_param_b' => fix_bad_unicode(substr($reason_param_b,0,255)),
-        'url' => fix_bad_unicode(substr($url,0,255)),
+        'reason_param_a' => fix_bad_unicode(substr($reason_param_a, 0, 255)),
+        'reason_param_b' => fix_bad_unicode(substr($reason_param_b, 0, 255)),
+        'url' => fix_bad_unicode(substr($url, 0, 255)),
         'data_post' => fix_bad_unicode($post),
         'member_id' => $id,
         'date_and_time' => time(),
@@ -579,12 +580,12 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
         );
         $se_ip_lists[get_base_url() . '/data_custom/no_banning.txt'] = false;
         $ip_stack = array();
-        $ip_bits = explode((strpos($alt_ip?$ip2:$ip,'.') !== false)?'.':':',$alt_ip?$ip2:$ip);
+        $ip_bits = explode((strpos($alt_ip ? $ip2 : $ip, '.') !== false) ? '.' : ':', $alt_ip ? $ip2 : $ip);
         foreach ($ip_bits as $i => $ip_bit) {
             $buildup = '';
-            for ($j = 0;$j <= $i;$j++) {
+            for ($j = 0; $j <= $i; $j++) {
                 if ($buildup != '') {
-                    $buildup .= (strpos($alt_ip?$ip2:$ip,'.') !== false)?'.':':';
+                    $buildup .= (strpos($alt_ip ? $ip2 : $ip, '.') !== false) ? '.' : ':';
                 }
                 $buildup .= $ip_bits[$j];
             }
@@ -592,17 +593,17 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
         }
         $is_se = false;
         foreach ($se_ip_lists as $ip_list => $is_proxy) {
-            $ip_list_file = http_download_file($ip_list,null,false);
+            $ip_list_file = http_download_file($ip_list, null, false);
             if (is_string($ip_list_file)) {
-                $ip_list_array = explode("\n",$ip_list_file);
+                $ip_list_array = explode("\n", $ip_list_file);
                 foreach ($ip_stack as $ip_s) {
                     foreach ($ip_list_array as $_ip_list_array) {
-                        if (strpos($ip_s,'/') === false) {
+                        if (strpos($ip_s, '/') === false) {
                             if ($ip_s == $_ip_list_array) {
                                 $is_se = true;
                             }
                         } else {
-                            if (ip_cidr_check($ip_s,$_ip_list_array)) {
+                            if (ip_cidr_check($ip_s, $_ip_list_array)) {
                                 $is_se = true;
                             }
                         }
@@ -613,18 +614,18 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
                 }
             }
         }
-        $dns = @gethostbyaddr($alt_ip?$ip2:$ip);
-        if ((preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i',@ini_get('disable_functions')) != 0) || (@gethostbyname($dns) === ($alt_ip?$ip2:$ip))) { // Verify it's not faking the DNS
-            $se_domain_names = array('googlebot.com','google.com','msn.com','yahoo.com','ask.com','aol.com');
+        $dns = @gethostbyaddr($alt_ip ? $ip2 : $ip);
+        if ((preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i', @ini_get('disable_functions')) != 0) || (@gethostbyname($dns) === ($alt_ip ? $ip2 : $ip))) { // Verify it's not faking the DNS
+            $se_domain_names = array('googlebot.com', 'google.com', 'msn.com', 'yahoo.com', 'ask.com', 'aol.com');
             foreach ($se_domain_names as $domain_name) {
-                if (substr($dns,-strlen($domain_name)-1) == '.' . $domain_name) {
+                if (substr($dns, -strlen($domain_name) - 1) == '.' . $domain_name) {
                     $is_se = true;
                     break;
                 }
             }
         }
-        if ((!$is_se) && (($alt_ip?$ip2:$ip) != '127.0.0.1')) {
-            $rows = $GLOBALS['SITE_DB']->query_select('hackattack',array('*'),array('ip' => $alt_ip?$ip2:$ip));
+        if ((!$is_se) && (($alt_ip ? $ip2 : $ip) != '127.0.0.1')) {
+            $rows = $GLOBALS['SITE_DB']->query_select('hackattack', array('*'), array('ip' => $alt_ip ? $ip2 : $ip));
             $rows[] = $new_row;
             $summary = '[list]';
             $is_spammer = false;
@@ -632,33 +633,33 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
                 if ($row['reason'] == 'LAME_SPAM_HACK') {
                     $is_spammer = true;
                 }
-                $full_reason = do_lang($row['reason'],$row['reason_param_a'],$row['reason_param_b'],null,get_site_default_lang());
+                $full_reason = do_lang($row['reason'], $row['reason_param_a'], $row['reason_param_b'], null, get_site_default_lang());
                 $summary .= "\n" . '[*]' . $full_reason . "\n" . $row['url'] . "\n" . get_timezoned_date($row['date_and_time']);
             }
             $summary .= "\n" . '[/list]';
             if ($is_spammer) {
                 require_code('failure_spammers');
-                syndicate_spammer_report($alt_ip?$ip2:$ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
+                syndicate_spammer_report($alt_ip ? $ip2 : $ip, is_guest() ? '' : $GLOBALS['FORUM_DRIVER']->get_username(get_member()), $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), do_lang('SPAM_REPORT_TRIGGERED_SPAM_HEURISTICS'));
             }
-            $ban_happened = add_ip_ban($alt_ip?$ip2:$ip,$full_reason);
-            $_ip_ban_url = build_url(array('page' => 'admin_ip_ban','type' => 'misc'),get_module_zone('admin_ip_ban'),null,false,false,true);
+            $ban_happened = add_ip_ban($alt_ip ? $ip2 : $ip, $full_reason);
+            $_ip_ban_url = build_url(array('page' => 'admin_ip_ban', 'type' => 'misc'), get_module_zone('admin_ip_ban'), null, false, false, true);
             $ip_ban_url = $_ip_ban_url->evaluate();
             if ($ban_happened) {
-                $ip_ban_todo = do_lang('AUTO_BAN_HACK_MESSAGE',$alt_ip?$ip2:$ip,integer_format($hack_threshold),array($summary,$ip_ban_url),get_site_default_lang());
+                $ip_ban_todo = do_lang('AUTO_BAN_HACK_MESSAGE', $alt_ip ? $ip2 : $ip, integer_format($hack_threshold), array($summary, $ip_ban_url), get_site_default_lang());
             }
         }
     }
-    $GLOBALS['SITE_DB']->query_insert('hackattack',$new_row);
+    $GLOBALS['SITE_DB']->query_insert('hackattack', $new_row);
     if (!is_null($ip2)) {
         $new_row['ip'] = $ip2;
-        $GLOBALS['SITE_DB']->query_insert('hackattack',$new_row);
+        $GLOBALS['SITE_DB']->query_insert('hackattack', $new_row);
     }
 
     if (function_exists('do_lang')) {
-        $reason_full = do_lang($reason,$reason_param_a,$reason_param_b,null,get_site_default_lang());
+        $reason_full = do_lang($reason, $reason_param_a, $reason_param_b, null, get_site_default_lang());
         $_stack_trace = get_html_trace();
-        $stack_trace = str_replace('html','&#104;tml',$_stack_trace->evaluate());
-        $time = get_timezoned_date(time(),true,true,true);
+        $stack_trace = str_replace('html', '&#104;tml', $_stack_trace->evaluate());
+        $time = get_timezoned_date(time(), true, true, true);
         $message = do_template(
             'HACK_ATTEMPT_MAIL',
             array(
@@ -682,13 +683,13 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
         require_code('notifications');
 
         if (($reason != 'CAPTCHAFAIL_HACK') && ($reason != 'LAME_SPAM_HACK')) {
-            $subject = do_lang('HACK_ATTACK_SUBJECT',$ip,null,null,get_site_default_lang());
-            dispatch_notification('hack_attack',null,$subject,$message->evaluate(get_site_default_lang(),false),null,A_FROM_SYSTEM_PRIVILEGED);
+            $subject = do_lang('HACK_ATTACK_SUBJECT', $ip, null, null, get_site_default_lang());
+            dispatch_notification('hack_attack', null, $subject, $message->evaluate(get_site_default_lang(), false), null, A_FROM_SYSTEM_PRIVILEGED);
         }
 
         if (!is_null($ip_ban_todo)) {
-            $subject = do_lang('AUTO_BAN_SUBJECT',$ip,null,null,get_site_default_lang());
-            dispatch_notification('auto_ban',null,$subject,$ip_ban_todo,null,A_FROM_SYSTEM_PRIVILEGED);
+            $subject = do_lang('AUTO_BAN_SUBJECT', $ip, null, null, get_site_default_lang());
+            dispatch_notification('auto_ban', null, $subject, $ip_ban_todo, null, A_FROM_SYSTEM_PRIVILEGED);
         }
     }
 
@@ -710,7 +711,7 @@ function _log_hack_attack_and_exit($reason,$reason_param_a = '',$reason_param_b 
  * @param  boolean                      Whether this is a positive ban (as opposed to a cached negative)
  * @return boolean                      Whether a change actually happened
  */
-function add_ip_ban($ip,$descrip = '',$ban_until = null,$ban_positive = true)
+function add_ip_ban($ip, $descrip = '', $ban_until = null, $ban_positive = true)
 {
     if (!addon_installed('securitylogging')) {
         return false;
@@ -720,34 +721,34 @@ function add_ip_ban($ip,$descrip = '',$ban_until = null,$ban_positive = true)
     }
 
     require_code('global4');
-    if ((!is_null($ban_until)) && (ip_banned($ip,true))) {
+    if ((!is_null($ban_until)) && (ip_banned($ip, true))) {
         return false;
     } // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
 
-    $GLOBALS['SITE_DB']->query_delete('banned_ip',array('ip' => $ip),'',1);
-    $GLOBALS['SITE_DB']->query_insert('banned_ip',array('ip' => $ip,'i_descrip' => $descrip,'i_ban_until' => $ban_until,'i_ban_positive' => $ban_positive?1:0),false,true); // To stop weird race-like conditions
+    $GLOBALS['SITE_DB']->query_delete('banned_ip', array('ip' => $ip), '', 1);
+    $GLOBALS['SITE_DB']->query_insert('banned_ip', array('ip' => $ip, 'i_descrip' => $descrip, 'i_ban_until' => $ban_until, 'i_ban_positive' => $ban_positive ? 1 : 0), false, true); // To stop weird race-like conditions
     persistent_cache_delete('IP_BANS');
     if ((is_writable_wrap(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess')) && (is_null($ban_until))) {
-        $myfile = fopen(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess',GOOGLE_APPENGINE?'rb':'rt');
-        @flock($myfile,LOCK_SH);
+        $myfile = fopen(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess', GOOGLE_APPENGINE ? 'rb' : 'rt');
+        @flock($myfile, LOCK_SH);
         $original_contents = file_get_contents(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess');
-        @flock($myfile,LOCK_UN);
+        @flock($myfile, LOCK_UN);
         fclose($myfile);
-        $ip_cleaned = str_replace('*','',$ip);
-        $ip_cleaned = str_replace('..','.',$ip_cleaned);
-        $ip_cleaned = str_replace('..','.',$ip_cleaned);
-        if (strpos($original_contents,"\n" . 'deny from ' . $ip_cleaned) === false) {
-            $contents = str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)' . "\n" . 'deny from ' . $ip_cleaned,$original_contents);
+        $ip_cleaned = str_replace('*', '', $ip);
+        $ip_cleaned = str_replace('..', '.', $ip_cleaned);
+        $ip_cleaned = str_replace('..', '.', $ip_cleaned);
+        if (strpos($original_contents, "\n" . 'deny from ' . $ip_cleaned) === false) {
+            $contents = str_replace('# deny from xxx.xx.x.x (leave this comment here!)', '# deny from xxx.xx.x.x (leave this comment here!)' . "\n" . 'deny from ' . $ip_cleaned, $original_contents);
             if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) { // Safer
-                if (file_put_contents(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess',$contents,LOCK_EX)<strlen($contents)) {
-                    file_put_contents(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess',$original_contents,LOCK_EX);
+                if (file_put_contents(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess', $contents, LOCK_EX) < strlen($contents)) {
+                    file_put_contents(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess', $original_contents, LOCK_EX);
                     warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                 }
             } else {
-                $myfile = fopen(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess',GOOGLE_APPENGINE?'wb':'wt');
-                if (fwrite($myfile,$contents)<strlen($contents)) {
+                $myfile = fopen(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess', GOOGLE_APPENGINE ? 'wb' : 'wt');
+                if (fwrite($myfile, $contents) < strlen($contents)) {
                     rewind($myfile);
-                    fwrite($myfile,$original_contents);
+                    fwrite($myfile, $original_contents);
                     warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                 }
                 fclose($myfile);
@@ -770,25 +771,25 @@ function remove_ip_ban($ip)
         return;
     }
 
-    $GLOBALS['SITE_DB']->query_delete('banned_ip',array('ip' => $ip),'',1);
+    $GLOBALS['SITE_DB']->query_delete('banned_ip', array('ip' => $ip), '', 1);
     persistent_cache_delete('IP_BANS');
     if (is_writable_wrap(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess')) {
         $contents = file_get_contents(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess');
-        $ip_cleaned = str_replace('*','',$ip);
-        $ip_cleaned = str_replace('..','.',$ip_cleaned);
-        $ip_cleaned = str_replace('..','.',$ip_cleaned);
+        $ip_cleaned = str_replace('*', '', $ip);
+        $ip_cleaned = str_replace('..', '.', $ip_cleaned);
+        $ip_cleaned = str_replace('..', '.', $ip_cleaned);
         if (trim($ip_cleaned) != '') {
-            $contents = str_replace("\n" . 'deny from ' . $ip_cleaned . "\n","\n",$contents);
-            $contents = str_replace("\r" . 'deny from ' . $ip_cleaned . "\r","\r",$contents); // Just in case
-            $myfile = fopen(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess',GOOGLE_APPENGINE?'wb':'wt');
-            if (fwrite($myfile,$contents)<strlen($contents)) {
+            $contents = str_replace("\n" . 'deny from ' . $ip_cleaned . "\n", "\n", $contents);
+            $contents = str_replace("\r" . 'deny from ' . $ip_cleaned . "\r", "\r", $contents); // Just in case
+            $myfile = fopen(get_file_base() . DIRECTORY_SEPARATOR . '.htaccess', GOOGLE_APPENGINE ? 'wb' : 'wt');
+            if (fwrite($myfile, $contents) < strlen($contents)) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
             fclose($myfile);
             sync_file('.htaccess');
         }
     }
-    $GLOBALS['SITE_DB']->query_delete('hackattack',array('ip' => $ip));
+    $GLOBALS['SITE_DB']->query_delete('hackattack', array('ip' => $ip));
 }
 
 /**
@@ -800,20 +801,20 @@ function remove_ip_ban($ip)
 function get_webservice_result($error_message)
 {
     if (get_domain() == 'ocportal.com') {
-        return NULL;
+        return null;
     }
     if (get_domain() == 'localhost') {
-        return NULL;
+        return null;
     } // In case of no Internet connection
 
-    if ((!function_exists('has_zone_access')) || (!has_zone_access(get_member(),'adminzone'))) {
-        return NULL;
+    if ((!function_exists('has_zone_access')) || (!has_zone_access(get_member(), 'adminzone'))) {
+        return null;
     }
 
     require_code('files');
     global $DONE_ONE_WEB_SERVICE;
-    if (($GLOBALS['DOWNLOAD_LEVEL']>0) || ($DONE_ONE_WEB_SERVICE)) {
-        return NULL;
+    if (($GLOBALS['DOWNLOAD_LEVEL'] > 0) || ($DONE_ONE_WEB_SERVICE)) {
+        return null;
     }
     $DONE_ONE_WEB_SERVICE = true;
 
@@ -822,7 +823,7 @@ function get_webservice_result($error_message)
     }
 
     if ($GLOBALS['HTTP_STATUS_CODE'] == '401') {
-        return NULL;
+        return null;
     }
 
     // Get message IN ENGLISH
@@ -830,10 +831,10 @@ function get_webservice_result($error_message)
         global $LANGUAGE_STRINGS_CACHE;
         foreach ($LANGUAGE_STRINGS_CACHE as $_) {
             foreach ($_ as $key => $val) {
-                $regexp = preg_replace('#\\\{\d+\\\}#','.*',preg_quote($val,'#'));
+                $regexp = preg_replace('#\\\{\d+\\\}#', '.*', preg_quote($val, '#'));
                 if ($regexp != '.*') {
-                    if (preg_match('#' . $regexp . '#',$error_message) != 0) {
-                        $_error_message = do_lang($key,'','','',fallback_lang(),false);
+                    if (preg_match('#' . $regexp . '#', $error_message) != 0) {
+                        $_error_message = do_lang($key, '', '', '', fallback_lang(), false);
                         if (!is_null($_error_message)) {
                             $error_message = $_error_message;
                         }
@@ -850,13 +851,13 @@ function get_webservice_result($error_message)
         $brand = 'ocPortal';
     }
 
-    $result = http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/errorservice.php?version=' . float_to_raw_string(ocp_version_number()) . '&error_message=' . rawurlencode($error_message) . '&product=' . rawurlencode($brand),null,false);
+    $result = http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/errorservice.php?version=' . float_to_raw_string(ocp_version_number()) . '&error_message=' . rawurlencode($error_message) . '&product=' . rawurlencode($brand), null, false);
     if ($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'] != 'text/plain') {
-        return NULL;
+        return null;
     }
 
     if ($result == '') {
-        return NULL;
+        return null;
     }
     if (function_exists('ocp_mark_as_escaped')) {
         ocp_mark_as_escaped($result);
@@ -871,7 +872,7 @@ function get_webservice_result($error_message)
  * @param  mixed                        The error message (string or tempcode)
  * @param  boolean                      Whether to return
  */
-function _fatal_exit($text,$return = false)
+function _fatal_exit($text, $return = false)
 {
     if (is_object($text)) {
         $text = $text->evaluate();
@@ -884,7 +885,7 @@ function _fatal_exit($text,$return = false)
     if (!headers_sent()) {
         require_code('firephp');
         if (function_exists('fb')) {
-            fb('Error: ' . (is_object($text)?$text->evaluate():$text));
+            fb('Error: ' . (is_object($text) ? $text->evaluate() : $text));
         }
     }
 
@@ -892,8 +893,8 @@ function _fatal_exit($text,$return = false)
     if ($WANT_TEXT_ERRORS) {
         header('Content-Type: text/plain');
         set_http_status_code('500');
-        @ini_set('ocproducts.xss_detect','0');
-        exit(is_object($text)?strip_html($text->evaluate()):$text);
+        @ini_set('ocproducts.xss_detect', '0');
+        exit(is_object($text) ? strip_html($text->evaluate()) : $text);
     }
 
     if (running_script('occle')) {
@@ -906,10 +907,10 @@ function _fatal_exit($text,$return = false)
         $output = '<' . '?xml version="1.0" encoding="' . get_charset() . '" ?' . '>
 <response>
     <result>
-        <command>' . xmlentities(post_param('command','')) . '</command>
+        <command>' . xmlentities(post_param('command', '')) . '</command>
         <stdcommand></stdcommand>
-        <stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . ((get_param_integer('keep_fatalistic',0) == 1)?static_evaluate_tempcode(get_html_trace()):'') . '</div></stdhtml>
-        <stdout>' . xmlentities(is_object($text)?strip_html($text->evaluate()):$text) . '</stdout>
+        <stdhtml><div xmlns="http://www.w3.org/1999/xhtml">' . ((get_param_integer('keep_fatalistic', 0) == 1) ? static_evaluate_tempcode(get_html_trace()) : '') . '</div></stdhtml>
+        <stdout>' . xmlentities(is_object($text) ? strip_html($text->evaluate()) : $text) . '</stdout>
         <stderr>' . xmlentities(do_lang('EVAL_ERROR')) . '</stderr>
         <stdnotifications><div xmlns="http://www.w3.org/1999/xhtml"></div></stdnotifications>
     </result>
@@ -928,7 +929,7 @@ function _fatal_exit($text,$return = false)
         header('Content-Disposition: inline');
     }
 
-    if ((array_key_exists('MSN_DB',$GLOBALS)) && (!is_null($GLOBALS['MSN_DB']))) {
+    if ((array_key_exists('MSN_DB', $GLOBALS)) && (!is_null($GLOBALS['MSN_DB']))) {
         $GLOBALS['FORUM_DB'] = $GLOBALS['MSN_DB'];
         $GLOBALS['MSN_DB'] = null;
     }
@@ -951,38 +952,38 @@ function _fatal_exit($text,$return = false)
     // To break any looping of errors
     global $EXITING;
     $EXITING++;
-    if (($EXITING>1) || (running_script('upgrader')) || (!class_exists('ocp_tempcode'))) {
+    if (($EXITING > 1) || (running_script('upgrader')) || (!class_exists('ocp_tempcode'))) {
         if (($EXITING == 2) && (function_exists('may_see_stack_dumps')) && (may_see_stack_dumps()) && ($GLOBALS['HAS_SET_ERROR_HANDLER'])) {
-            die_html_trace(is_object($text)?$text->evaluate():escape_html($text));
+            die_html_trace(is_object($text) ? $text->evaluate() : escape_html($text));
         } else { // Failed even in die_html_trace
-            critical_error('EMERGENCY',is_object($text)?$text->evaluate():escape_html($text));
+            critical_error('EMERGENCY', is_object($text) ? $text->evaluate() : escape_html($text));
         }
     }
 
     if (may_see_stack_dumps()) {
         $trace = get_html_trace();
     } else {
-        $trace = paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_NOTIFICATION'),'yrthrty4ttewdf');
+        $trace = paragraph(do_lang_tempcode('STACK_TRACE_DENIED_ERROR_NOTIFICATION'), 'yrthrty4ttewdf');
     }
 
     $title = get_screen_title('ERROR_OCCURRED');
 
-    if (get_param_integer('keep_fatalistic',0) == 0) {
-        $php_error_label = (is_object($text)?$text->evaluate():$text) . ' @ ' . get_self_url_easy();
+    if (get_param_integer('keep_fatalistic', 0) == 0) {
+        $php_error_label = (is_object($text) ? $text->evaluate() : $text) . ' @ ' . get_self_url_easy();
         if ((function_exists('syslog')) && (GOOGLE_APPENGINE)) {
-            syslog(LOG_ERR,$php_error_label);
+            syslog(LOG_ERR, $php_error_label);
         }
-        @error_log('ocPortal: ' . $php_error_label,0);
+        @error_log('ocPortal: ' . $php_error_label, 0);
     }
 
-    $error_tpl = do_template('FATAL_SCREEN',array('_GUID' => '9fdc6d093bdb685a0eda6bb56988a8c5','TITLE' => $title,'WEBSERVICE_RESULT' => get_webservice_result($text),'MESSAGE' => $text,'TRACE' => $trace));
-    $echo = globalise($error_tpl,null,'',true);
-    $echo->evaluate_echo(null,true);
+    $error_tpl = do_template('FATAL_SCREEN', array('_GUID' => '9fdc6d093bdb685a0eda6bb56988a8c5', 'TITLE' => $title, 'WEBSERVICE_RESULT' => get_webservice_result($text), 'MESSAGE' => $text, 'TRACE' => $trace));
+    $echo = globalise($error_tpl, null, '', true);
+    $echo->evaluate_echo(null, true);
 
-    if (get_param_integer('keep_fatalistic',0) == 0) {
+    if (get_param_integer('keep_fatalistic', 0) == 0) {
         $trace = get_html_trace();
-        $error_tpl = do_template('FATAL_SCREEN',array('_GUID' => '1cb286dd9fc75950c2cd41ca9607e0cf','TITLE' => $title,'WEBSERVICE_RESULT' => get_webservice_result($text),'MESSAGE' => $text,'TRACE' => $trace));
-        relay_error_notification((is_object($text)?$text->evaluate():$text) . '[html]' . $error_tpl->evaluate() . '[/html]');
+        $error_tpl = do_template('FATAL_SCREEN', array('_GUID' => '1cb286dd9fc75950c2cd41ca9607e0cf', 'TITLE' => $title, 'WEBSERVICE_RESULT' => get_webservice_result($text), 'MESSAGE' => $text, 'TRACE' => $trace));
+        relay_error_notification((is_object($text) ? $text->evaluate() : $text) . '[html]' . $error_tpl->evaluate() . '[/html]');
     }
 
     if (!$return) {
@@ -997,17 +998,17 @@ function _fatal_exit($text,$return = false)
  * @param  boolean                      Also send to ocProducts
  * @param  ID_TEXT                      The notification type
  */
-function relay_error_notification($text,$ocproducts = true,$notification_type = 'error_occurred')
+function relay_error_notification($text, $ocproducts = true, $notification_type = 'error_occurred')
 {
     // Make sure we don't send too many error emails
-    if ((function_exists('get_value')) && ($GLOBALS['BOOTSTRAPPING'] == 0) && (array_key_exists('SITE_DB',$GLOBALS)) && (!is_null($GLOBALS['SITE_DB']))) {
-        $num = intval(get_value('num_error_mails_' . date('Y-m-d')))+1;
+    if ((function_exists('get_value')) && ($GLOBALS['BOOTSTRAPPING'] == 0) && (array_key_exists('SITE_DB', $GLOBALS)) && (!is_null($GLOBALS['SITE_DB']))) {
+        $num = intval(get_value('num_error_mails_' . date('Y-m-d'))) + 1;
         if ($num == 51) {
             return;
         } // We've sent too many error mails today
         $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'values WHERE the_name LIKE \'' . db_encode_like('num\_error\_mails\_%') . '\'');
         persistent_cache_delete('VALUES');
-        set_value('num_error_mails_' . date('Y-m-d'),strval($num));
+        set_value('num_error_mails_' . date('Y-m-d'), strval($num));
     }
 
     if (!function_exists('require_lang')) {
@@ -1017,62 +1018,62 @@ function relay_error_notification($text,$ocproducts = true,$notification_type = 
     require_code('urls');
     require_code('tempcode');
 
-    $error_url = static_evaluate_tempcode(build_url(array('page' => '_SELF'),'_SELF',null,true,false,true));
+    $error_url = static_evaluate_tempcode(build_url(array('page' => '_SELF'), '_SELF', null, true, false, true));
 
     require_code('notifications');
     require_code('comcode');
-    $mail = do_lang('ERROR_MAIL',comcode_escape($error_url),$text,null,get_site_default_lang());
-    dispatch_notification($notification_type,null,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),null,null,get_site_default_lang()),$mail,null,A_FROM_SYSTEM_PRIVILEGED);
+    $mail = do_lang('ERROR_MAIL', comcode_escape($error_url), $text, null, get_site_default_lang());
+    dispatch_notification($notification_type, null, do_lang('ERROR_OCCURRED_SUBJECT', get_page_name(), null, null, get_site_default_lang()), $mail, null, A_FROM_SYSTEM_PRIVILEGED);
     if (
         ($ocproducts) &&
         (get_option('send_error_emails_ocproducts') == '1') &&
         (!running_script('cron_bridge')) &&
-        (strpos($text,'_custom/') === false) &&
-        (strpos($text,'data/occle.php') === false) &&
-        (strpos($text,'/mini') === false) &&
-        (strpos($text,'A transaction for the wrong IPN e-mail went through') === false) &&
-        (strpos($text,'XCache var cache was not initialized properly') === false) &&
-        (strpos($text,'has been disabled for security reasons') === false) &&
-        (strpos($text,'max_questions')/*mysql limit*/ === false) &&
-        (strpos($text,'Error at offset') === false) &&
-        (strpos($text,'Unable to allocate memory for pool') === false) &&
-        (strpos($text,'Out of memory') === false) &&
-        (strpos($text,'Can\'t open file') === false) &&
-        (strpos($text,'Disk is full writing') === false) &&
-        (strpos($text,'Disk quota exceeded') === false) &&
-        (strpos($text,'from storage engine') === false) &&
-        (strpos($text,'Lost connection to MySQL server') === false) &&
-        (strpos($text,'Unable to save result set') === false) &&
-        (strpos($text,'.MYI') === false) &&
-        (strpos($text,'.MYD') === false) &&
-        (strpos($text,'MySQL server has gone away') === false) &&
-        (strpos($text,'Incorrect key file') === false) &&
-        (strpos($text,'Too many connections') === false) &&
-        (strpos($text,'Incorrect string value') === false) &&
-        (strpos($text,'Can\'t create/write to file') === false) &&  // MySQL
-        (strpos($text,'Error writing file') === false) && // E.g. cannot PHP create a temporary file
-        (strpos($text,'Illegal mix of collations') === false) &&
-        (strpos($text,'marked as crashed and should be repaired') === false) &&
-        (strpos($text,'connect to') === false) &&
-        (strpos($text,'Access denied for') === false) &&
-        (strpos($text,'Unknown database') === false) &&
-        (strpos($text,'headers already sent') === false) &&
-        (preg_match('#Maximum execution time of \d+ seconds#',$text) == 0) &&
-        (preg_match('#Out of memory \(allocated (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)\d{6}\)#',$text) == 0) &&
-        (strpos($text,'is marked as crashed and last') === false) &&
-        (strpos($text,'failed to open stream: Permission denied') === false) &&
-        ((strpos($text,'Maximum execution time') === false) || ((strpos($text,'/js_') === false) && (strpos($text,'/caches_filesystem.php') === false) && (strpos($text,'/files2.php') === false))) &&
-        ((strpos($text,'doesn\'t exist') === false) || ((strpos($text,'import') === false))) &&
-        ((strpos($text,'No such file or directory') === false) || ((strpos($text,'admin_setupwizard') === false))) &&
-        (strpos($text,'File(/tmp/) is not within the allowed path') === false)
+        (strpos($text, '_custom/') === false) &&
+        (strpos($text, 'data/occle.php') === false) &&
+        (strpos($text, '/mini') === false) &&
+        (strpos($text, 'A transaction for the wrong IPN e-mail went through') === false) &&
+        (strpos($text, 'XCache var cache was not initialized properly') === false) &&
+        (strpos($text, 'has been disabled for security reasons') === false) &&
+        (strpos($text, 'max_questions')/*mysql limit*/ === false) &&
+        (strpos($text, 'Error at offset') === false) &&
+        (strpos($text, 'Unable to allocate memory for pool') === false) &&
+        (strpos($text, 'Out of memory') === false) &&
+        (strpos($text, 'Can\'t open file') === false) &&
+        (strpos($text, 'Disk is full writing') === false) &&
+        (strpos($text, 'Disk quota exceeded') === false) &&
+        (strpos($text, 'from storage engine') === false) &&
+        (strpos($text, 'Lost connection to MySQL server') === false) &&
+        (strpos($text, 'Unable to save result set') === false) &&
+        (strpos($text, '.MYI') === false) &&
+        (strpos($text, '.MYD') === false) &&
+        (strpos($text, 'MySQL server has gone away') === false) &&
+        (strpos($text, 'Incorrect key file') === false) &&
+        (strpos($text, 'Too many connections') === false) &&
+        (strpos($text, 'Incorrect string value') === false) &&
+        (strpos($text, 'Can\'t create/write to file') === false) &&  // MySQL
+        (strpos($text, 'Error writing file') === false) && // E.g. cannot PHP create a temporary file
+        (strpos($text, 'Illegal mix of collations') === false) &&
+        (strpos($text, 'marked as crashed and should be repaired') === false) &&
+        (strpos($text, 'connect to') === false) &&
+        (strpos($text, 'Access denied for') === false) &&
+        (strpos($text, 'Unknown database') === false) &&
+        (strpos($text, 'headers already sent') === false) &&
+        (preg_match('#Maximum execution time of \d+ seconds#', $text) == 0) &&
+        (preg_match('#Out of memory \(allocated (1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24)\d{6}\)#', $text) == 0) &&
+        (strpos($text, 'is marked as crashed and last') === false) &&
+        (strpos($text, 'failed to open stream: Permission denied') === false) &&
+        ((strpos($text, 'Maximum execution time') === false) || ((strpos($text, '/js_') === false) && (strpos($text, '/caches_filesystem.php') === false) && (strpos($text, '/files2.php') === false))) &&
+        ((strpos($text, 'doesn\'t exist') === false) || ((strpos($text, 'import') === false))) &&
+        ((strpos($text, 'No such file or directory') === false) || ((strpos($text, 'admin_setupwizard') === false))) &&
+        (strpos($text, 'File(/tmp/) is not within the allowed path') === false)
     ) {
         require_code('mail');
-        mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),null,null,get_site_default_lang()) . ' ' . ocp_version_pretty(),$mail,array('errors_final' . strval(ocp_version()) . '@ocportal.com'),'','','',3,null,true,null,true);
+        mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT', get_page_name(), null, null, get_site_default_lang()) . ' ' . ocp_version_pretty(), $mail, array('errors_final' . strval(ocp_version()) . '@ocportal.com'), '', '', '', 3, null, true, null, true);
     }
     if (($ocproducts) && (!is_null(get_value('agency_email_address')))) {
         require_code('mail');
         $agency_email_address = get_value('agency_email_address');
-        mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),null,null,get_site_default_lang()) . ' ' . ocp_version_pretty(),$mail,array($agency_email_address),'','','',3,null,true,null,true);
+        mail_wrap(do_lang('ERROR_OCCURRED_SUBJECT', get_page_name(), null, null, get_site_default_lang()) . ' ' . ocp_version_pretty(), $mail, array($agency_email_address), '', '', '', 3, null, true, null, true);
     }
 }
 
@@ -1102,7 +1103,7 @@ function may_see_stack_dumps()
         return true;
     }
 
-    return (get_domain() == 'localhost') || (has_privilege(get_member(),'see_stack_dump'));
+    return (get_domain() == 'localhost') || (has_privilege(get_member(), 'see_stack_dump'));
 }
 
 /**
@@ -1115,7 +1116,7 @@ function die_html_trace($message)
     $_trace = debug_backtrace();
     $trace = '<div class="box guid_{_GUID}"><div class="box_inner"><h2>Stack trace&hellip;</h2>';
     foreach ($_trace as $i => $stage) {
-        if ($i>20) {
+        if ($i > 20) {
             break;
         }
 
@@ -1124,11 +1125,11 @@ function die_html_trace($message)
             $_value = put_value_in_stack_trace($value);
 
             global $SITE_INFO;
-            if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password'])>4)) {
-                $_value = str_replace($SITE_INFO['db_site_password'],'(password removed)',$_value);
+            if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password']) > 4)) {
+                $_value = str_replace($SITE_INFO['db_site_password'], '(password removed)', $_value);
             }
-            if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4)) {
-                $_value = str_replace($SITE_INFO['db_forums_password'],'(password removed)',$_value);
+            if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password']) > 4)) {
+                $_value = str_replace($SITE_INFO['db_forums_password'], '(password removed)', $_value);
             }
 
             $traces .= ucfirst($key) . ' -> ' . escape_html($_value) . '<br />' . "\n";
@@ -1141,7 +1142,7 @@ function die_html_trace($message)
         ocp_mark_as_escaped($trace);
     }
 
-    critical_error('EMERGENCY',$message . $trace);
+    critical_error('EMERGENCY', $message . $trace);
 }
 
 /**
@@ -1153,10 +1154,10 @@ function die_html_trace($message)
 function put_value_in_stack_trace($value)
 {
     try {
-        if ((is_null($value)) || (is_array($value) && (strlen(serialize($value))>MAX_STACK_TRACE_VALUE_LENGTH))) {
+        if ((is_null($value)) || (is_array($value) && (strlen(serialize($value)) > MAX_STACK_TRACE_VALUE_LENGTH))) {
             $_value = gettype($value);
-        } elseif (is_object($value) && (is_a($value,'ocp_tempcode'))) {
-            if (($value->codename == 'GLOBAL_HTML_WRAP') || (strlen(serialize($value))>1000)) { // NB: We can't do an eval on GLOBAL_HTML_WRAP because it may be output streaming, incomplete
+        } elseif (is_object($value) && (is_a($value, 'ocp_tempcode'))) {
+            if (($value->codename == 'GLOBAL_HTML_WRAP') || (strlen(serialize($value)) > 1000)) { // NB: We can't do an eval on GLOBAL_HTML_WRAP because it may be output streaming, incomplete
                 $_value = 'Tempcode -> ...';
             } else {
                 $_value = $value->evaluate();
@@ -1175,7 +1176,7 @@ function put_value_in_stack_trace($value)
         } elseif (is_integer($value)) {
             $_value = integer_format($value);
         } elseif (is_bool($value)) {
-            $_value = $value?'true':'false';
+            $_value = $value ? 'true' : 'false';
         } else {
             $_value = strval($value);
         }
@@ -1203,14 +1204,14 @@ function get_html_trace()
         $__value = mixed();
         foreach ($stage as $key => $__value) {
             if ($key == 'file') {
-                $file = str_replace('\'','',$__value);
+                $file = str_replace('\'', '', $__value);
             } elseif ($key == 'line') {
                 $line = strval($__value);
             }
             if ($key == 'args') {
                 $_value = new ocp_tempcode();
                 foreach ($__value as $param) {
-                    if (!((is_array($param)) && (array_key_exists('GLOBALS',$param)))) { // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
+                    if (!((is_array($param)) && (array_key_exists('GLOBALS', $param)))) { // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
                         $_value->attach(paragraph(put_value_in_stack_trace($param)));
                     }
                 }
@@ -1219,20 +1220,20 @@ function get_html_trace()
             }
 
             global $SITE_INFO;
-            if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password'])>4)) {
-                $_value = str_replace($SITE_INFO['db_site_password'],'(password removed)',$_value);
+            if ((isset($SITE_INFO['db_site_password'])) && (strlen($SITE_INFO['db_site_password']) > 4)) {
+                $_value = str_replace($SITE_INFO['db_site_password'], '(password removed)', $_value);
             }
-            if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password'])>4)) {
-                $_value = str_replace($SITE_INFO['db_forums_password'],'(password removed)',$_value);
+            if ((isset($SITE_INFO['db_forums_password'])) && (strlen($SITE_INFO['db_forums_password']) > 4)) {
+                $_value = str_replace($SITE_INFO['db_forums_password'], '(password removed)', $_value);
             }
 
-            $traces->attach(do_template('STACK_TRACE_LINE',array('_GUID' => '40752b5212f56534ebe7970baa638e5a','LINE' => $line,'FILE' => $file,'KEY' => ucfirst($key),'VALUE' => $_value)));
+            $traces->attach(do_template('STACK_TRACE_LINE', array('_GUID' => '40752b5212f56534ebe7970baa638e5a', 'LINE' => $line, 'FILE' => $file, 'KEY' => ucfirst($key), 'VALUE' => $_value)));
         }
-        $trace->attach(do_template('STACK_TRACE_WRAP',array('_GUID' => 'beb78896baefd0f623c1c480840dace1','TRACES' => $traces)));
+        $trace->attach(do_template('STACK_TRACE_WRAP', array('_GUID' => 'beb78896baefd0f623c1c480840dace1', 'TRACES' => $traces)));
     }
     $GLOBALS['SUPPRESS_ERROR_DEATH'] = false;
 
-    return do_template('STACK_TRACE_HYPER_WRAP',array('_GUID' => '9620695fb8c3e411a6a4926432cea64f','POST' => (count($_POST)<200)?$_POST:array(),'CONTENT' => $trace));
+    return do_template('STACK_TRACE_HYPER_WRAP', array('_GUID' => '9620695fb8c3e411a6a4926432cea64f', 'POST' => (count($_POST) < 200) ? $_POST : array(), 'CONTENT' => $trace));
 }
 
 /**
@@ -1243,17 +1244,17 @@ function get_html_trace()
  * @param  boolean                      Whether to only consider text matches, not match-key matches
  * @return ?tempcode                    The message (NULL: no change)
  */
-function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_text_match = false)
+function _look_for_match_key_message($natural_text, $only_if_zone = false, $only_text_match = false)
 {
     if (!isset($GLOBALS['SITE_DB'])) {
-        return NULL;
+        return null;
     }
-    $match_keys = $GLOBALS['SITE_DB']->query_select('match_key_messages',array('*'));
-    sort_maps_by__strlen($match_keys,'k_match_key');
+    $match_keys = $GLOBALS['SITE_DB']->query_select('match_key_messages', array('*'));
+    sort_maps_by__strlen($match_keys, 'k_match_key');
     $match_keys = array_reverse($match_keys);
     foreach ($match_keys as $match_key) {
         if ($only_if_zone) {
-            if ((substr($match_key['k_match_key'],-6) != ':_WILD') && (substr($match_key['k_match_key'],-2) != ':*')) {
+            if ((substr($match_key['k_match_key'], -6) != ':_WILD') && (substr($match_key['k_match_key'], -2) != ':*')) {
                 continue;
             }
         }
@@ -1261,8 +1262,8 @@ function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_t
         $pass = false;
 
         $matches = array();
-        if (preg_match('#^((.*) )?"(.*)"$#',$match_key['k_match_key'],$matches) != 0) {
-            if (strpos($natural_text,$matches[3]) !== false) {
+        if (preg_match('#^((.*) )?"(.*)"$#', $match_key['k_match_key'], $matches) != 0) {
+            if (strpos($natural_text, $matches[3]) !== false) {
                 if ($matches[1] == '') {
                     $pass = true;
                 } else {
@@ -1279,23 +1280,23 @@ function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_t
 
         if ($pass) {
             $message_raw = get_translated_text($match_key['k_message']);
-            $message = get_translated_tempcode('match_key_messages',$match_key,'k_message');
+            $message = get_translated_tempcode('match_key_messages', $match_key, 'k_message');
 
             // Maybe it is actually a redirect
-            if ((strpos($message_raw,"\n") === false) && (strpos($message_raw,' ') === false)) {
-                if (preg_match('#^https?://#',$message_raw) != 0) { // Looks like a URL
+            if ((strpos($message_raw, "\n") === false) && (strpos($message_raw, ' ') === false)) {
+                if (preg_match('#^https?://#', $message_raw) != 0) { // Looks like a URL
                     $url = $message_raw;
                     require_code('site2');
-                    assign_refresh($url,0.0);
+                    assign_refresh($url, 0.0);
                     $message = do_lang_tempcode('_REDIRECTING');
-                } elseif (preg_match('#^\w*:\w*#',$message_raw) != 0) { // Looks like a page-link
-                    list($zone,$map,$hash) = page_link_decode($message_raw);
+                } elseif (preg_match('#^\w*:\w*#', $message_raw) != 0) { // Looks like a page-link
+                    list($zone, $map, $hash) = page_link_decode($message_raw);
                     if ((isset($map['error_message'])) && ($map['error_message'] == '')) {
                         $map['error_message'] = $natural_text;
                     }
-                    $url = static_evaluate_tempcode(build_url($map,$zone,array(),false,false,false,$hash));
+                    $url = static_evaluate_tempcode(build_url($map, $zone, array(), false, false, false, $hash));
                     require_code('site2');
-                    assign_refresh($url,0.0);
+                    assign_refresh($url, 0.0);
                     $message = do_lang_tempcode('_REDIRECTING');
                 }
             }
@@ -1303,7 +1304,7 @@ function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_t
             return $message;
         }
     }
-    return NULL;
+    return null;
 }
 
 /**
@@ -1313,77 +1314,77 @@ function _look_for_match_key_message($natural_text,$only_if_zone = false,$only_t
  * @param  string                       The parameter given to the error message
  * @param  boolean                      Force the user to login (even if perhaps they are logged in already)
  */
-function _access_denied($class,$param,$force_login)
+function _access_denied($class, $param, $force_login)
 {
     set_http_status_code('401'); // Stop spiders ever storing the URL that caused this
 
     require_lang('permissions');
     require_lang('ocf_config');
 
-    if (strpos($class,' ') !== false) {
+    if (strpos($class, ' ') !== false) {
         $message = make_string_tempcode($class);
     } else {
         if ($class == 'PRIVILEGE') {
             $param = do_lang('PRIVILEGE_' . $param);
         }
-        $message = do_lang_tempcode('ACCESS_DENIED__' . $class,escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())),escape_html($param));
+        $message = do_lang_tempcode('ACCESS_DENIED__' . $class, escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member())), escape_html($param));
     }
 
-    $_message = _look_for_match_key_message($message->evaluate(),strpos($class,'ZONE') !== false);
+    $_message = _look_for_match_key_message($message->evaluate(), strpos($class, 'ZONE') !== false);
     if (!is_null($_message)) {
         $message = $_message;
     }
 
     // Run hooks, if any exist
-    $hooks = find_all_hooks('systems','upon_access_denied');
+    $hooks = find_all_hooks('systems', 'upon_access_denied');
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/upon_access_denied/' . filter_naughty($hook));
-        $ob = object_factory('Hook_upon_access_denied_' . filter_naughty($hook),true);
+        $ob = object_factory('Hook_upon_access_denied_' . filter_naughty($hook), true);
         if (is_null($ob)) {
             continue;
         }
-        $ob->run($class,$param,$force_login);
+        $ob->run($class, $param, $force_login);
     }
 
     require_code('site');
-    log_stats('/access_denied',0);
+    log_stats('/access_denied', 0);
 
-    if (($GLOBALS['IS_ACTUALLY_ADMIN']) && (get_param_integer('keep_fatalistic',0) == 1)) {
+    if (($GLOBALS['IS_ACTUALLY_ADMIN']) && (get_param_integer('keep_fatalistic', 0) == 1)) {
         fatal_exit($message);
     }
 
     if (((is_guest()) && ((running_script('attachment')) || (running_script('dload')) || (running_script('index')))) || ($force_login)) {// Show login screen if appropriate
-    // We do want to supply a nice login screen for attachment/dload scripts because they are sometimes externally linked to (e.g. in emails or hotlinks)
-    // Otherwise we want flat access denied due to a flat request/response model
-    // NB: Also see similar running_script lines in globalise function
-        if (get_param_integer('save_and_stay',0) == 1) {
-            $middle = inform_screen(get_screen_title('ERROR_OCCURRED'),protect_from_escaping('
+        // We do want to supply a nice login screen for attachment/dload scripts because they are sometimes externally linked to (e.g. in emails or hotlinks)
+        // Otherwise we want flat access denied due to a flat request/response model
+        // NB: Also see similar running_script lines in globalise function
+        if (get_param_integer('save_and_stay', 0) == 1) {
+            $middle = inform_screen(get_screen_title('ERROR_OCCURRED'), protect_from_escaping('
                     <script type="text/javascript">// <![CDATA[
                             window.fauxmodal_alert(\'' . addslashes(strip_html($message->evaluate())) . '\');
                     //]]></script>
             '));
 
-            $echo = globalise($middle,null,'',true);
-            $echo->evaluate_echo(null,true);
+            $echo = globalise($middle, null, '', true);
+            $echo->evaluate_echo(null, true);
             exit();
         }
 
         @ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
 
-        $redirect = get_self_url(true,true,array('page' => get_param('page',''))); // We have to pass in 'page' because an access-denied situation tells get_page_name() (which get_self_url() relies on) that we are on page ''.
+        $redirect = get_self_url(true, true, array('page' => get_param('page', ''))); // We have to pass in 'page' because an access-denied situation tells get_page_name() (which get_self_url() relies on) that we are on page ''.
         $_GET['redirect'] = $redirect;
         $_GET['page'] = 'login';
         $_GET['type'] = 'misc';
         global $PAGE_NAME_CACHE;
         $PAGE_NAME_CACHE = 'login';
 
-        $middle = load_module_page(_get_module_path('','login'),'login');
+        $middle = load_module_page(_get_module_path('', 'login'), 'login');
         require_code('site');
         if (get_value('no_tech_login_messages') !== '1') {
-            attach_message($message,'warn');
+            attach_message($message, 'warn');
         }
-        $echo = globalise($middle,null,'',true);
-        $echo->evaluate_echo(null,true);
+        $echo = globalise($middle, null, '', true);
+        $echo->evaluate_echo(null, true);
         exit();
     }
 

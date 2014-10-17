@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
-
 class Hook_config_minutes_between_sends
 {
     /**

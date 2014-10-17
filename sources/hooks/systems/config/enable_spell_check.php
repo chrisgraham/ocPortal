@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_enable_spell_check
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_enable_spell_check
      */
     public function get_default()
     {
-        return function_exists('pspell_check')?'0':null;
+        return function_exists('pspell_check') ? '0' : null;
     }
 }

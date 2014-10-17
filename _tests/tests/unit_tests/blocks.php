@@ -28,11 +28,11 @@ class blocks_test_set extends ocp_test_case
         require_code('zones2');
         $blocks = find_all_blocks();
         foreach ($blocks as $block => $type) {
-            if (strpos($type,'_custom') !== false) {
+            if (strpos($type, '_custom') !== false) {
                 continue;
             }
 
-            $test = do_block($block,array());
+            $test = do_block($block, array());
             $this->assertTrue(is_object($test));
         }
     }

@@ -50,10 +50,10 @@ class Module_admin_occle
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('OCCLE','menu/adminzone/tools/occle'),
+            '!' => array('OCCLE', 'menu/adminzone/tools/occle'),
         );
     }
 
@@ -63,15 +63,15 @@ class Module_admin_occle
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+            $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
             foreach (array_keys($usergroups) as $id) {
-                $GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name' => 'admin_occle','zone_name' => 'adminzone','group_id' => $id)); // OcCLE very dangerous
+                $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => 'admin_occle', 'zone_name' => 'adminzone', 'group_id' => $id)); // OcCLE very dangerous
             }
 
-            $GLOBALS['SITE_DB']->create_table('occlechat',array(
+            $GLOBALS['SITE_DB']->create_table('occlechat', array(
                 'id' => '*AUTO',
                 'c_message' => 'LONG_TEXT',
                 'c_url' => 'URLPATH',
@@ -100,7 +100,7 @@ class Module_admin_occle
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('occle');
 
@@ -109,7 +109,7 @@ class Module_admin_occle
 
         $this->title = get_screen_title('OCCLE');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -138,7 +138,7 @@ class Module_admin_occle
             warn_exit(do_lang_tempcode('SHARED_INSTALL_PROHIBIT'));
         }
 
-        $command = post_param('occle_command','');
+        $command = post_param('occle_command', '');
         if ($command != '') {
             //We've had a normal form submission
             $temp = new virtual_bash($command);
@@ -147,14 +147,14 @@ class Module_admin_occle
             $commands = new ocp_tempcode();
         }
 
-        $content = do_template('OCCLE_MAIN',array(
+        $content = do_template('OCCLE_MAIN', array(
             '_GUID' => '05c1e7efacc3839babfe58fe624caa61',
-            'SUBMIT_URL' => build_url(array('page' => '_SELF'),'_SELF'),
-            'PROMPT' => do_lang_tempcode('COMMAND_PROMPT',escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
+            'SUBMIT_URL' => build_url(array('page' => '_SELF'), '_SELF'),
+            'PROMPT' => do_lang_tempcode('COMMAND_PROMPT', escape_html($GLOBALS['FORUM_DRIVER']->get_username(get_member()))),
             'COMMANDS' => $commands,
         ));
 
-        return do_template('OCCLE_MAIN_SCREEN',array(
+        return do_template('OCCLE_MAIN_SCREEN', array(
             '_GUID' => 'd71ef9fa2cdaf419fee64cf3d7555225',
             'TITLE' => $this->title,
             'CONTENT' => $content,

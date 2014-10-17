@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_config_quiz_show_stats_count_total_open
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_quiz_show_stats_count_total_open
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

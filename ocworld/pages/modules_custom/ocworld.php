@@ -53,14 +53,14 @@ class Module_ocworld
         $GLOBALS['SITE_DB']->drop_table_if_exists('w_travelhistory');
 
         require_code('files');
-        deldir_contents(get_custom_file_base() . '/uploads/ocworld',true);
+        deldir_contents(get_custom_file_base() . '/uploads/ocworld', true);
 
         require_code('ocworld');
 
         if (addon_installed('pointstore')) { // If pointstore not removed yet
             $prices = get_ocworld_prices_default();
             foreach (array_keys($prices) as $name) {
-                $GLOBALS['SITE_DB']->query_delete('prices',array('name' => $name),'',1);
+                $GLOBALS['SITE_DB']->query_delete('prices', array('name' => $name), '', 1);
             }
         }
 
@@ -73,24 +73,24 @@ class Module_ocworld
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
-        if ((is_null($upgrade_from)) || ($upgrade_from<3)) {
-            add_privilege('OCWORLD','administer_ocworld');
+        if ((is_null($upgrade_from)) || ($upgrade_from < 3)) {
+            add_privilege('OCWORLD', 'administer_ocworld');
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<3)) {
-            $GLOBALS['SITE_DB']->alter_table_field('w_attempts','datetime','TIME','a_datetime');
-            $GLOBALS['SITE_DB']->alter_table_field('w_items','count','INTEGER','i_count');
-            $GLOBALS['SITE_DB']->alter_table_field('w_messages','message','SHORT_TEXT','m_message');
-            $GLOBALS['SITE_DB']->alter_table_field('w_messages','datetime','TIME','m_datetime');
-            $GLOBALS['SITE_DB']->alter_table_field('w_portals','text','ID_TEXT','p_text');
-            $GLOBALS['SITE_DB']->alter_table_field('w_rooms','text','LONG_TEXT','r_text');
-            $GLOBALS['SITE_DB']->alter_table_field('w_realms','private','BINARY','r_private');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 3)) {
+            $GLOBALS['SITE_DB']->alter_table_field('w_attempts', 'datetime', 'TIME', 'a_datetime');
+            $GLOBALS['SITE_DB']->alter_table_field('w_items', 'count', 'INTEGER', 'i_count');
+            $GLOBALS['SITE_DB']->alter_table_field('w_messages', 'message', 'SHORT_TEXT', 'm_message');
+            $GLOBALS['SITE_DB']->alter_table_field('w_messages', 'datetime', 'TIME', 'm_datetime');
+            $GLOBALS['SITE_DB']->alter_table_field('w_portals', 'text', 'ID_TEXT', 'p_text');
+            $GLOBALS['SITE_DB']->alter_table_field('w_rooms', 'text', 'LONG_TEXT', 'r_text');
+            $GLOBALS['SITE_DB']->alter_table_field('w_realms', 'private', 'BINARY', 'r_private');
         }
 
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('w_attempts',array(
+            $GLOBALS['SITE_DB']->create_table('w_attempts', array(
                 'id' => '*AUTO',
                 'a_datetime' => 'TIME',
                 'attempt' => 'SHORT_TEXT',
@@ -99,13 +99,13 @@ class Module_ocworld
                 'realm' => 'INTEGER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_inventory',array(
+            $GLOBALS['SITE_DB']->create_table('w_inventory', array(
                 'item_name' => '*SHORT_TEXT',
                 'item_count' => 'INTEGER',
                 'item_owner' => '*MEMBER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_itemdef',array(
+            $GLOBALS['SITE_DB']->create_table('w_itemdef', array(
                 'name' => '*ID_TEXT',
                 'bribable' => 'BINARY',
                 'healthy' => 'BINARY',
@@ -116,7 +116,7 @@ class Module_ocworld
                 'description' => 'SHORT_TEXT',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_items',array(
+            $GLOBALS['SITE_DB']->create_table('w_items', array(
                 'name' => '*ID_TEXT',
                 'location_realm' => '*INTEGER',
                 'location_x' => '*INTEGER',
@@ -127,7 +127,7 @@ class Module_ocworld
                 'copy_owner' => '*MEMBER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_members',array(
+            $GLOBALS['SITE_DB']->create_table('w_members', array(
                 'id' => '*INTEGER', // NOT MEMBER because it can be negative for a troll
                 'location_realm' => 'INTEGER',
                 'location_x' => 'INTEGER',
@@ -138,7 +138,7 @@ class Module_ocworld
                 'lastactive' => 'TIME',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_messages',array(
+            $GLOBALS['SITE_DB']->create_table('w_messages', array(
                 'location_realm' => '*INTEGER',
                 'location_x' => '*INTEGER',
                 'location_y' => '*INTEGER',
@@ -148,7 +148,7 @@ class Module_ocworld
                 'destination' => 'MEMBER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_portals',array(
+            $GLOBALS['SITE_DB']->create_table('w_portals', array(
                 'name' => 'ID_TEXT',
                 'p_text' => 'ID_TEXT',
                 'start_location_realm' => '*INTEGER',
@@ -160,7 +160,7 @@ class Module_ocworld
                 'owner' => '?MEMBER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_rooms',array(
+            $GLOBALS['SITE_DB']->create_table('w_rooms', array(
                 'name' => 'ID_TEXT',
                 'location_realm' => '*INTEGER',
                 'location_x' => '*INTEGER',
@@ -179,14 +179,14 @@ class Module_ocworld
                 'allow_portal' => 'BINARY',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_travelhistory',array(
+            $GLOBALS['SITE_DB']->create_table('w_travelhistory', array(
                 'member_id' => '*MEMBER',
                 'x' => '*INTEGER',
                 'y' => '*INTEGER',
                 'realm' => '*INTEGER',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('w_realms',array(
+            $GLOBALS['SITE_DB']->create_table('w_realms', array(
                 'id' => '*INTEGER',
                 'name' => 'SHORT_TEXT',
                 'troll_name' => 'SHORT_TEXT',
@@ -252,17 +252,17 @@ class Module_ocworld
                 'a28' => 'SHORT_TEXT',
                 'a29' => 'SHORT_TEXT',
                 'a30' => 'SHORT_TEXT',
-            ),true);
+            ), true);
 
             require_code('ocworld');
 
             $prices = get_ocworld_prices_default();
             foreach ($prices as $name => $price) {
-                $GLOBALS['SITE_DB']->query_insert('prices',array('name' => $name,'price' => $price));
+                $GLOBALS['SITE_DB']->query_insert('prices', array('name' => $name, 'price' => $price));
             }
 
             require_code('ocworld_action');
-            add_realm_wrap(null,do_lang('W_DEFAULT_REALM'),do_lang('W_DEFAULT_TROLL'),do_lang('W_DEFAULT_JAIL'),do_lang('W_DEFAULT_IN_JAIL'),'',do_lang('W_DEFAULT_JAIL_HOUSE'),do_lang('W_DEFAULT_IN_JAIL_HOUSE'),'',do_lang('W_DEFAULT_LOBBY'),do_lang('W_DEFAULT_LOBBY_TEXT'),'',array(),0,false);
+            add_realm_wrap(null, do_lang('W_DEFAULT_REALM'), do_lang('W_DEFAULT_TROLL'), do_lang('W_DEFAULT_JAIL'), do_lang('W_DEFAULT_IN_JAIL'), '', do_lang('W_DEFAULT_JAIL_HOUSE'), do_lang('W_DEFAULT_IN_JAIL_HOUSE'), '', do_lang('W_DEFAULT_LOBBY'), do_lang('W_DEFAULT_LOBBY_TEXT'), '', array(), 0, false);
         }
     }
 
@@ -275,10 +275,10 @@ class Module_ocworld
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('OCWORLD','menu/ocworld'),
+            'misc' => array('OCWORLD', 'menu/ocworld'),
         );
     }
 
@@ -293,7 +293,7 @@ class Module_ocworld
     {
         i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_PATH_INJECTION);
 
-        $type = get_param('type','room');
+        $type = get_param('type', 'room');
 
         require_lang('ocworld');
 
@@ -345,7 +345,7 @@ class Module_ocworld
             $this->title = get_screen_title('W_EDIT_PORTAL_TITLE');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -359,19 +359,19 @@ class Module_ocworld
         require_code('ocworld_screens');
 
         // Decide what functions to execute for this command
-        $type = either_param('type','room');
-        $param = either_param('param','');
-        $dest_member_id = either_param_integer('member',-1);
+        $type = either_param('type', 'room');
+        $param = either_param('param', '');
+        $dest_member_id = either_param_integer('member', -1);
         $member_id = get_member();
         if (is_guest($member_id)) {
-            ocw_refresh_with_message(do_lang_tempcode('W_NOT_LOGGED_IN'),'warn');
+            ocw_refresh_with_message(do_lang_tempcode('W_NOT_LOGGED_IN'), 'warn');
             return new ocp_tempcode();
         }
-        $item = either_param('item','');
+        $item = either_param('item', '');
 
         // Create the member if they aren't already in the system
-        $member_rows = $GLOBALS['SITE_DB']->query_select('w_members',array('*'),array('id' => $member_id),'',1);
-        if (!array_key_exists(0,$member_rows)) {
+        $member_rows = $GLOBALS['SITE_DB']->query_select('w_members', array('*'), array('id' => $member_id), '', 1);
+        if (!array_key_exists(0, $member_rows)) {
             $member_rows[0] = array(
                 'id' => $member_id,
                 'location_realm' => 0,
@@ -382,24 +382,24 @@ class Module_ocworld
                 'trolled' => 0,
                 'lastactive' => time(),
             );
-            $GLOBALS['SITE_DB']->query_insert('w_members',$member_rows[0]);
+            $GLOBALS['SITE_DB']->query_insert('w_members', $member_rows[0]);
         }
         $member_row = $member_rows[0];
 
         // Check for banning
         if ($member_row['banned'] == 1) {
-            ocw_refresh_with_message(do_lang_tempcode('W_YOU_BANNED'),'warn');
+            ocw_refresh_with_message(do_lang_tempcode('W_YOU_BANNED'), 'warn');
         }
 
         // Check for death
-        if ($member_row['health']<1) {
+        if ($member_row['health'] < 1) {
             take_items($member_id);
-            $GLOBALS['SITE_DB']->query_update('w_members',array('location_realm' => 0,'location_x' => 0,'location_y' => 0,'banned' => 0,'health' => 10),array('id' => $member_id),'',1);
-            ocw_refresh_with_message(do_lang_tempcode('W_YOU_DIED'),'warn');
+            $GLOBALS['SITE_DB']->query_update('w_members', array('location_realm' => 0, 'location_x' => 0, 'location_y' => 0, 'banned' => 0, 'health' => 10), array('id' => $member_id), '', 1);
+            ocw_refresh_with_message(do_lang_tempcode('W_YOU_DIED'), 'warn');
         }
 
         // Mark as active
-        $GLOBALS['SITE_DB']->query_update('w_members',array('lastactive' => time()),array('id' => $member_id),'',1);
+        $GLOBALS['SITE_DB']->query_update('w_members', array('lastactive' => time()), array('id' => $member_id), '', 1);
 
         destick($member_id);
 
@@ -412,77 +412,78 @@ class Module_ocworld
             $trolled = $member_row['trolled'];
             $q = array();
             $a = array();
-            while (($trolled & (255 << ($i*8))) != 0) {
-                $q_num = ($trolled >> ($i*8)) & 255;
-                $q[$i+1] = $GLOBALS['SITE_DB']->query_select_value('w_realms','q' . strval($q_num),array('id' => $realm));
-                $a[$i+1] = $GLOBALS['SITE_DB']->query_select_value('w_realms','a' . strval($q_num),array('id' => $realm));
+            while (($trolled & (255 << ($i * 8))) != 0) {
+                $q_num = ($trolled >> ($i * 8)) & 255;
+                $q[$i + 1] = $GLOBALS['SITE_DB']->query_select_value('w_realms', 'q' . strval($q_num), array('id' => $realm));
+                $a[$i + 1] = $GLOBALS['SITE_DB']->query_select_value('w_realms', 'a' . strval($q_num), array('id' => $realm));
                 $i++;
             }
             $num_questions = $i;
 
             // Are we marking or answering?
-            if (post_param('a1','!!') != '!!') { // Marking
+            if (post_param('a1', '!!') != '!!') { // Marking
                 // Mark them
                 $pass = 0;
-                for ($i = 1;$i <= $num_questions;$i++) {
+                for ($i = 1; $i <= $num_questions; $i++) {
                     $given = strtolower(post_param('a' . strval($i)));
                     $stored = strtolower($a[$i]);
                     if ($given == $stored) {
                         $pass++;
-                    } elseif (strstr(':' . $stored . ':',':' . $given . ':') !== false) {
+                    } elseif (strstr(':' . $stored . ':', ':' . $given . ':') !== false) {
                         $pass++;
                     }
                 }
 
                 // Regardless they have had their chance: no more questions
-                $GLOBALS['SITE_DB']->query_update('w_members',array('trolled' => 0),array('id' => $member_id),'',1);
+                $GLOBALS['SITE_DB']->query_update('w_members', array('trolled' => 0), array('id' => $member_id), '', 1);
 
                 if ($pass == 0) {
-                    $pen_id = mt_rand(0,2);
+                    $pen_id = mt_rand(0, 2);
                     if ($pen_id == 0) {
-                        $joke = mt_rand(1,10);
+                        $joke = mt_rand(1, 10);
                         $penalty = do_lang_tempcode('W_JOKE_' . strval($joke));
 
                         hurt($member_id);
                     }
                     if ($pen_id == 1) {
                         $penalty = do_lang('W_PENALTY_STOLEN');
-                        steal($member_id,-$realm-1);
+                        steal($member_id, -$realm - 1);
                     }
                     if ($pen_id == 2) {
                         $penalty = do_lang('W_PENALTY_SENT_LOBBY');
-                        basic_enter_room($member_id,$realm,0,0);
+                        basic_enter_room($member_id, $realm, 0, 0);
                     }
 
-                    ocw_refresh_with_message(do_lang_tempcode('W_TROLL_YOU',escape_html($penalty)),'warn');
+                    ocw_refresh_with_message(do_lang_tempcode('W_TROLL_YOU', escape_html($penalty)), 'warn');
                 } else {
-                    ocw_refresh_with_message(do_lang_tempcode('W_TROLL_THANKYOU',integer_format($pass)));
+                    ocw_refresh_with_message(do_lang_tempcode('W_TROLL_THANKYOU', integer_format($pass)));
                 }
             } else { // Answer question screen
-                $troll_name = $GLOBALS['SITE_DB']->query_select_value('w_realms','troll_name',array('id' => $realm));
-                $this->title = get_screen_title('W_TROLL_Q',true,array(escape_html($troll_name)));
+                $troll_name = $GLOBALS['SITE_DB']->query_select_value('w_realms', 'troll_name', array('id' => $realm));
+                $this->title = get_screen_title('W_TROLL_Q', true, array(escape_html($troll_name)));
                 $questions = new ocp_tempcode();
-                for ($i = 1;$i <= $num_questions;$i++) {
-                    $questions->attach(do_template('W_TROLL_QUESTION',array('_GUID' => 'b09eb44e4264a9dca5bdf651ca9a48d4','Q' => $q[$i],'I' => strval($i))));
+                for ($i = 1; $i <= $num_questions; $i++) {
+                    $questions->attach(do_template('W_TROLL_QUESTION', array('_GUID' => 'b09eb44e4264a9dca5bdf651ca9a48d4', 'Q' => $q[$i], 'I' => strval($i))));
                 }
-                return do_template('W_TROLL',array('_GUID' => 'e108ccaebc5b1adfa9db6b5b23e93602','TITLE' => $this->title,'TROLL' => $troll_name,'QUESTIONS' => $questions));
+                return do_template('W_TROLL', array('_GUID' => 'e108ccaebc5b1adfa9db6b5b23e93602', 'TITLE' => $this->title, 'TROLL' => $troll_name, 'QUESTIONS' => $questions));
             }
         }
 
         // There is a chance the troll on this realm will pick this 'turn' to move
-        if (mt_rand(0,6) == 1) {
+        if (mt_rand(0, 6) == 1) {
             $realm = $member_row['location_realm'];
-            $troll_id = -$realm-1;
-            $troll_loc = get_loc_details($troll_id,true);
+            $troll_id = -$realm - 1;
+            $troll_loc = get_loc_details($troll_id, true);
             if (!is_null($troll_loc)) {
-                list(,$troll_x,$troll_y) = $troll_loc;
+                list(, $troll_x, $troll_y) = $troll_loc;
                 $dx = -1;
                 $dy = -1;
                 do {
-                    $dx = mt_rand(-1,1);
-                    $dy = mt_rand(-1,1);
-                } while (!room_exists($troll_x+$dx,$troll_y+$dy,$realm));
-                $GLOBALS['SITE_DB']->query_update('w_members',array('location_x' => ($troll_x+$dx),'location_y' => ($troll_y+$dy)),array('id' => $troll_id),'',1);
+                    $dx = mt_rand(-1, 1);
+                    $dy = mt_rand(-1, 1);
+                }
+                while (!room_exists($troll_x + $dx, $troll_y + $dy, $realm));
+                $GLOBALS['SITE_DB']->query_update('w_members', array('location_x' => ($troll_x + $dx), 'location_y' => ($troll_y + $dy)), array('id' => $troll_id), '', 1);
             }
         }
 
@@ -490,36 +491,36 @@ class Module_ocworld
 
         // What command are we being asked to do?
         if ($type == 'confirm') {
-            $url = build_url(array('page' => 'ocworld'),'_SELF');
-            $type2 = either_param('btype','');
-            $item = either_param('item','');
-            $member = either_param_integer('member',-1);
-            $param = either_param('param','');
+            $url = build_url(array('page' => 'ocworld'), '_SELF');
+            $type2 = either_param('btype', '');
+            $item = either_param('item', '');
+            $member = either_param_integer('member', -1);
+            $param = either_param('param', '');
 
-            return do_template('W_CONFIRM_SCREEN',array('_GUID' => '365870cb4c6cb4282ff6c7a11f4f8a5b','TITLE' => $this->title,'URL' => $url,'COMMAND' => $type2,'ITEM' => $item,'MEMBER' => strval($member),'PARAM' => $param));
+            return do_template('W_CONFIRM_SCREEN', array('_GUID' => '365870cb4c6cb4282ff6c7a11f4f8a5b', 'TITLE' => $this->title, 'URL' => $url, 'COMMAND' => $type2, 'ITEM' => $item, 'MEMBER' => strval($member), 'PARAM' => $param));
         }
 
         if ($type == 'reallocate') {
-            if (!has_privilege(get_member(),'administer_ocworld')) {
-                ocw_refresh_with_message(do_lang_tempcode('W_ONLY_STAFF_REALLOC'),'warn');
+            if (!has_privilege(get_member(), 'administer_ocworld')) {
+                ocw_refresh_with_message(do_lang_tempcode('W_ONLY_STAFF_REALLOC'), 'warn');
             }
 
             $out = new ocp_tempcode();
 
-            $rows = $GLOBALS['SITE_DB']->query_select('items',array('*'),array('copy_owner' => NULL));
+            $rows = $GLOBALS['SITE_DB']->query_select('items', array('*'), array('copy_owner' => null));
             foreach ($rows as $myrow) {
-                $owner = $GLOBALS['SITE_DB']->query_select_value('w_itemdef','owner',array('name' => $myrow['name']));
+                $owner = $GLOBALS['SITE_DB']->query_select_value('w_itemdef', 'owner', array('name' => $myrow['name']));
                 if (!is_null($owner)) {
-                    $GLOBALS['SITE_DB']->query_update('w_items',array('copy_owner' => $owner),array('name' => $myrow['name'],'copy_owner' => NULL));
-                    $out->attach(paragraph(do_lang_tempcode('W_REALLOCATING',escape_html($myrow['name']),'tfgdfgd4rf')));
+                    $GLOBALS['SITE_DB']->query_update('w_items', array('copy_owner' => $owner), array('name' => $myrow['name'], 'copy_owner' => null));
+                    $out->attach(paragraph(do_lang_tempcode('W_REALLOCATING', escape_html($myrow['name']), 'tfgdfgd4rf')));
                 }
             }
 
-            return do_template('W_REALLOCATE',array('_GUID' => '8fa4b9205310d6bc2fc28348a52898d5','TITLE' => $this->title,'OUT' => $out));
+            return do_template('W_REALLOCATE', array('_GUID' => '8fa4b9205310d6bc2fc28348a52898d5', 'TITLE' => $this->title, 'OUT' => $out));
         }
 
         if ($type == 'portal') {
-            portal($member_id,intval($param));
+            portal($member_id, intval($param));
         }
 
         if ($type == 'realms') {
@@ -528,28 +529,28 @@ class Module_ocworld
         }
 
         if ($type == 'up') {
-            $tpl = try_to_enter_room($member_id,0,-1,'');
+            $tpl = try_to_enter_room($member_id, 0, -1, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
             ocw_refresh_with_message(new ocp_tempcode());
         }
         if ($type == 'down') {
-            $tpl = try_to_enter_room($member_id,0,1,'');
+            $tpl = try_to_enter_room($member_id, 0, 1, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
             ocw_refresh_with_message(new ocp_tempcode());
         }
         if ($type == 'right') {
-            $tpl = try_to_enter_room($member_id,1,0,'');
+            $tpl = try_to_enter_room($member_id, 1, 0, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
             ocw_refresh_with_message(new ocp_tempcode());
         }
         if ($type == 'left') {
-            $tpl = try_to_enter_room($member_id,-1,0,'');
+            $tpl = try_to_enter_room($member_id, -1, 0, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
@@ -557,34 +558,34 @@ class Module_ocworld
         }
 
         if ($type == 'answered') {
-            $tpl = try_to_enter_room($member_id,post_param_integer('dx'),post_param_integer('dy'),$param);
+            $tpl = try_to_enter_room($member_id, post_param_integer('dx'), post_param_integer('dy'), $param);
             if (!is_null($tpl)) {
                 return $tpl;
             }
         }
 
         if ($type == 'drop') {
-            drop_wrap($member_id,$item);
+            drop_wrap($member_id, $item);
         }
 
         if ($type == 'give') {
-            give($member_id,$dest_member_id,$item);
+            give($member_id, $dest_member_id, $item);
         }
 
         if ($type == 'pickpocket') {
-            pickpocket($member_id,$dest_member_id);
+            pickpocket($member_id, $dest_member_id);
         }
 
         if ($type == 'use') {
-            useitem($member_id,$item);
+            useitem($member_id, $item);
         }
 
         if ($type == 'take') {
-            take($member_id,$item,$dest_member_id);
+            take($member_id, $item, $dest_member_id);
         }
 
         if ($type == 'buy') {
-            buy($member_id,$item,$dest_member_id);
+            buy($member_id, $item, $dest_member_id);
         }
 
         if ($type == 'inventory') {
@@ -593,22 +594,22 @@ class Module_ocworld
         }
 
         if ($type == 'findperson') {
-            findperson(($param == '')?strval($dest_member_id):$param);
+            findperson(($param == '') ? strval($dest_member_id) : $param);
         }
 
         if ($type == 'message') {
-            message($member_id,post_param('post'),post_param_integer('tmember'));
+            message($member_id, post_param('post'), post_param_integer('tmember'));
         }
 
         if ($type == 'emergency') {
-            basic_enter_room($member_id,0,0,0);
+            basic_enter_room($member_id, 0, 0, 0);
         }
 
         if ($type == 'delete-message-by-person') {
-            if ((!has_privilege($member_id,'administer_ocworld')) && ($member_id != $dest_member_id)) {
-                ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR',$GLOBALS['FORUM_DRIVER']->get_username(get_member())),'warn');
+            if ((!has_privilege($member_id, 'administer_ocworld')) && ($member_id != $dest_member_id)) {
+                ocw_refresh_with_message(do_lang_tempcode('ACCESS_DENIED__I_ERROR', $GLOBALS['FORUM_DRIVER']->get_username(get_member())), 'warn');
             }
-            delete_message($member_id,$dest_member_id,addslashes($param));
+            delete_message($member_id, $dest_member_id, addslashes($param));
         }
 
         // Management...
@@ -616,9 +617,9 @@ class Module_ocworld
         if ($type == 'additem') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
             if ($name == '') {
-                $tpl = do_template('W_ITEM_SCREEN',array(
+                $tpl = do_template('W_ITEM_SCREEN', array(
                     '_GUID' => '0246f7037a360996bdfb4f1dcf96bcfc',
                     'PRICE' => integer_format(get_price('mud_item')),
                     'TEXT' => paragraph(do_lang_tempcode('W_ADD_ITEM_TEXT')),
@@ -635,14 +636,14 @@ class Module_ocworld
                 return $tpl;
             }
 
-            $urls = get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            add_item_wrap($member_id,$name,post_param_integer('cost',0),post_param_integer('not_infinite',0),post_param_integer('bribable',0),post_param_integer('healthy',0),$urls[0],post_param_integer('max_per_player',-1),post_param_integer('replicateable',0),post_param('description'));
+            $urls = get_url('url', 'pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            add_item_wrap($member_id, $name, post_param_integer('cost', 0), post_param_integer('not_infinite', 0), post_param_integer('bribable', 0), post_param_integer('healthy', 0), $urls[0], post_param_integer('max_per_player', -1), post_param_integer('replicateable', 0), post_param('description'));
         }
 
         if ($type == 'additemcopy') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
             if ($name == '') {
                 $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'w_itemdef WHERE replicateable=1 OR owner=' . strval(get_member()) . ' ORDER BY name');
                 $items = '';
@@ -650,14 +651,14 @@ class Module_ocworld
                     $items .= "<option value=\"" . escape_html($myrow['name']) . "\">" . escape_html($myrow['name']) . "</option>";
                 }
                 if ($items == '') {
-                    ocw_refresh_with_message(do_lang_tempcode('W_NO_ITEMS_YET'),'warn');
+                    ocw_refresh_with_message(do_lang_tempcode('W_NO_ITEMS_YET'), 'warn');
                 }
 
                 if ($GLOBALS['XSS_DETECT']) {
                     ocp_mark_as_escaped($items);
                 }
 
-                $tpl = do_template('W_ITEMCOPY_SCREEN',array(
+                $tpl = do_template('W_ITEMCOPY_SCREEN', array(
                     '_GUID' => '15799930bca51eafdee3c0a8e197866a',
                     'PRICE' => integer_format(get_price('mud_item_copy')),
                     'TEXT' => paragraph(do_lang_tempcode('W_ADD_ITEM_COPY_TEXT')),
@@ -669,17 +670,17 @@ class Module_ocworld
                 ));
                 return $tpl;
             }
-            add_item_wrap_copy($member_id,$name,post_param_integer('cost'),post_param_integer('not_infinite',0));
+            add_item_wrap_copy($member_id, $name, post_param_integer('cost'), post_param_integer('not_infinite', 0));
         }
 
         if ($type == 'addroom') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                list($realm,$x,$y) = get_loc_details($member_id);
-                $tpl = do_template('W_ROOM_SCREEN',array(
+                list($realm, $x, $y) = get_loc_details($member_id);
+                $tpl = do_template('W_ROOM_SCREEN', array(
                     '_GUID' => '5357a6cf8648c952cf29c2b7234cfa6c',
                     'PRICE' => integer_format(get_price('mud_room')),
                     'TEXT' => paragraph(do_lang_tempcode('W_ADD_ROOM_TEXT')),
@@ -700,30 +701,30 @@ class Module_ocworld
                 ));
                 return $tpl;
             }
-            $urls = get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            add_room_wrap($member_id,post_param_integer('position'),$name,post_param('text'),post_param('password_question'),post_param('password_answer'),post_param('password_fail_message'),post_param('required_item'),post_param_integer('locked_up',0),post_param_integer('locked_down',0),post_param_integer('locked_right',0),post_param_integer('locked_left',0),$urls[0],post_param_integer('allow_portal',0));
+            $urls = get_url('url', 'pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            add_room_wrap($member_id, post_param_integer('position'), $name, post_param('text'), post_param('password_question'), post_param('password_answer'), post_param('password_fail_message'), post_param('required_item'), post_param_integer('locked_up', 0), post_param_integer('locked_down', 0), post_param_integer('locked_right', 0), post_param_integer('locked_left', 0), $urls[0], post_param_integer('allow_portal', 0));
         }
 
         if ($type == 'addrealm') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                $fortnights = (time()-$GLOBALS['FORUM_DRIVER']->get_member_join_timestamp(get_member()))/(60*60*24*7*2);
-                $made = $GLOBALS['SITE_DB']->query_select_value('w_realms','COUNT(*)',array('owner' => get_member()));
-                $left = intval(round($fortnights-$made));
+                $fortnights = (time() - $GLOBALS['FORUM_DRIVER']->get_member_join_timestamp(get_member())) / (60 * 60 * 24 * 7 * 2);
+                $made = $GLOBALS['SITE_DB']->query_select_value('w_realms', 'COUNT(*)', array('owner' => get_member()));
+                $left = intval(round($fortnights - $made));
 
                 $_qa = new ocp_tempcode();
-                for ($i = 1;$i <= 30;$i++) {
-                    $_qa->attach(do_template('W_REALM_SCREEN_QUESTION',array('_GUID' => '5fa7725f11b0df7e58ff83f2f1751515','I' => strval($i),'Q' => '','A' => '')));
+                for ($i = 1; $i <= 30; $i++) {
+                    $_qa->attach(do_template('W_REALM_SCREEN_QUESTION', array('_GUID' => '5fa7725f11b0df7e58ff83f2f1751515', 'I' => strval($i), 'Q' => '', 'A' => '')));
                 }
 
-                $tpl = do_template('W_REALM_SCREEN',array(
+                $tpl = do_template('W_REALM_SCREEN', array(
                     '_GUID' => '7ae26fe1766aed02233e1be84772759b',
                     'PRICE' => integer_format(get_price('mud_realm')),
                     'TEXT' => paragraph(do_lang_tempcode('W_ADD_REALM_TEXT',
-                    integer_format($left))),
+                        integer_format($left))),
                     'TITLE' => $this->title,
                     'PAGE_TYPE' => 'addrealm',
                     'QA' => $_qa,
@@ -736,25 +737,25 @@ class Module_ocworld
 
             $i = 1;
             $qa = array();
-            while (strlen(post_param('question' . strval($i),''))>0) {
+            while (strlen(post_param('question' . strval($i), '')) > 0) {
                 $qa[$i] = array();
                 $qa[$i]['q'] = post_param('question' . strval($i));
                 $qa[$i]['a'] = post_param('answer' . strval($i));
                 $i++;
             }
-            $urls1 = get_url('jail_pic_url','jail_pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            $urls2 = get_url('jail_house_pic_url','jail_house_pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            $urls3 = get_url('lobby_pic_url','lobby_pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            add_realm_wrap($member_id,$name,post_param('troll_name'),post_param('jail_name'),post_param('jail_text'),$urls1[0],post_param('jail_house_name'),post_param('jail_house_text'),$urls2[0],post_param('lobby_name'),post_param('lobby_text'),$urls3[0],$qa,post_param_integer('private',0));
+            $urls1 = get_url('jail_pic_url', 'jail_pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            $urls2 = get_url('jail_house_pic_url', 'jail_house_pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            $urls3 = get_url('lobby_pic_url', 'lobby_pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            add_realm_wrap($member_id, $name, post_param('troll_name'), post_param('jail_name'), post_param('jail_text'), $urls1[0], post_param('jail_house_name'), post_param('jail_house_text'), $urls2[0], post_param('lobby_name'), post_param('lobby_text'), $urls3[0], $qa, post_param_integer('private', 0));
         }
 
         if ($type == 'addportal') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                $tpl = do_template('W_PORTAL_SCREEN',array(
+                $tpl = do_template('W_PORTAL_SCREEN', array(
                     '_GUID' => '69e74a964f69721d0381a920c4a25ce5',
                     'PRICE' => integer_format(get_price('mud_portal')),
                     'TEXT' => paragraph(do_lang_tempcode('W_ADD_PORTAL_TEXT')),
@@ -769,7 +770,7 @@ class Module_ocworld
                 return $tpl;
             }
 
-            add_portal_wrap($member_id,$name,post_param('text'),post_param_integer('end_location_realm',-1),post_param_integer('end_location_x',-1),post_param_integer('end_location_y',-1));
+            add_portal_wrap($member_id, $name, post_param('text'), post_param_integer('end_location_realm', -1), post_param_integer('end_location_x', -1), post_param_integer('end_location_y', -1));
         }
 
         if ($type == 'deleteitem') {
@@ -793,22 +794,22 @@ class Module_ocworld
         if ($type == 'deleteportal') {
             require_code('ocworld_action');
 
-            delete_portal_wrap($member_id,intval($param));
+            delete_portal_wrap($member_id, intval($param));
         }
 
         // Admin commands...
 
-        if (has_privilege($member_id,'administer_ocworld')) {
+        if (has_privilege($member_id, 'administer_ocworld')) {
             if ($type == 'mergeitems') {
-                merge_items($item,either_param('item2'));
+                merge_items($item, either_param('item2'));
             }
             if ($type == 'teleport-person') {
-                $ast = strpos($param,':');
-                $b = strpos($param,':',$ast+1);
-                $realm = substr($param,0,$ast);
-                $x = intval(substr($param,$ast+1,$b-$ast-1));
-                $y = intval(substr($param,$b+1));
-                basic_enter_room($dest_member_id,$realm,$x,$y);
+                $ast = strpos($param, ':');
+                $b = strpos($param, ':', $ast + 1);
+                $realm = substr($param, 0, $ast);
+                $x = intval(substr($param, $ast + 1, $b - $ast - 1));
+                $y = intval(substr($param, $b + 1));
+                basic_enter_room($dest_member_id, $realm, $x, $y);
             }
             if ($type == 'imprison-person') {
                 imprison($dest_member_id);
@@ -826,23 +827,23 @@ class Module_ocworld
                 unban_member($dest_member_id);
             }
             if ($type == 'take-from-person') {
-                steal($member_id,$dest_member_id);
+                steal($member_id, $dest_member_id);
             }
         }
 
         if ($type == 'edititem') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                $rows = $GLOBALS['SITE_DB']->query_select('w_itemdef',array('*'),array('name' => either_param('item')),'',1);
-                if (!array_key_exists(0,$rows)) {
-                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
+                $rows = $GLOBALS['SITE_DB']->query_select('w_itemdef', array('*'), array('name' => either_param('item')), '', 1);
+                if (!array_key_exists(0, $rows)) {
+                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'), 'warn');
                 }
                 $row = $rows[0];
 
-                $tpl = do_template('W_ITEM_SCREEN',array(
+                $tpl = do_template('W_ITEM_SCREEN', array(
                     '_GUID' => '1f581864bd2f0cbe05742e03ab6c2a53',
                     'TITLE' => $this->title,
                     'PAGE_TYPE' => 'edititem',
@@ -851,30 +852,30 @@ class Module_ocworld
                     'BRIBABLE' => strval($row['bribable']),
                     'HEALTHY' => strval($row['healthy']),
                     'PICTURE_URL' => $row['picture_url'],
-                    'OWNER' => is_null($row['owner'])?'':strval($row['owner']),
+                    'OWNER' => is_null($row['owner']) ? '' : strval($row['owner']),
                     'MAX_PER_PLAYER' => strval($row['max_per_player']),
                     'REPLICATEABLE' => strval($row['replicateable']),
                 ));
                 return $tpl;
             }
 
-            $urls = get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            edit_item_wrap($member_id,$item,$name,post_param_integer('bribable',0),post_param_integer('healthy',0),$urls[0],grab_new_owner('new_owner'),post_param_integer('max_per_player',-1),post_param_integer('replicateable',0),post_param('description'));
+            $urls = get_url('url', 'pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            edit_item_wrap($member_id, $item, $name, post_param_integer('bribable', 0), post_param_integer('healthy', 0), $urls[0], grab_new_owner('new_owner'), post_param_integer('max_per_player', -1), post_param_integer('replicateable', 0), post_param('description'));
         }
 
         if ($type == 'edititemcopy') {
             require_code('ocworld_action');
 
-            $cost = post_param_integer('cost',-1);
+            $cost = post_param_integer('cost', -1);
 
             if ($cost == -1) {
                 $member = get_param_integer('member');
-                list($realm,$x,$y) = get_loc_details($member_id);
+                list($realm, $x, $y) = get_loc_details($member_id);
 
-                $cost = $GLOBALS['SITE_DB']->query_select_value('w_items','cost',array('copy_owner' => $member,'location_x' => $x,'location_y' => $y,'location_realm' => $realm,'name' => get_param('item')));
-                $not_infinite = $GLOBALS['SITE_DB']->query_select_value('w_items','not_infinite',array('copy_owner' => $member,'location_x' => $x,'location_y' => $y,'location_realm' => $realm,'name' => get_param('item')));
+                $cost = $GLOBALS['SITE_DB']->query_select_value('w_items', 'cost', array('copy_owner' => $member, 'location_x' => $x, 'location_y' => $y, 'location_realm' => $realm, 'name' => get_param('item')));
+                $not_infinite = $GLOBALS['SITE_DB']->query_select_value('w_items', 'not_infinite', array('copy_owner' => $member, 'location_x' => $x, 'location_y' => $y, 'location_realm' => $realm, 'name' => get_param('item')));
 
-                $tpl = do_template('W_ITEMCOPY_SCREEN',array(
+                $tpl = do_template('W_ITEMCOPY_SCREEN', array(
                     '_GUID' => 'a8d28f6516408dba96a8b57ddcd7cee6',
                     'TITLE' => $this->title,
                     'PAGE_TYPE' => 'edititemcopy',
@@ -889,24 +890,24 @@ class Module_ocworld
                 return $tpl;
             }
 
-            edit_item_wrap_copy($member_id,$item,$cost,post_param_integer('not_infinite',0),post_param_integer('new_x'),post_param_integer('new_y'),post_param_integer('new_realm'),grab_new_owner('new_owner'));
+            edit_item_wrap_copy($member_id, $item, $cost, post_param_integer('not_infinite', 0), post_param_integer('new_x'), post_param_integer('new_y'), post_param_integer('new_realm'), grab_new_owner('new_owner'));
         }
 
         if ($type == 'editroom') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                list($location_realm,$x,$y) = get_loc_details($member_id);
+                list($location_realm, $x, $y) = get_loc_details($member_id);
 
-                $rows = $GLOBALS['SITE_DB']->query_select('w_rooms',array('*'),array('location_x' => $x,'location_y' => $y,'location_realm' => $location_realm),'',1);
-                if (!array_key_exists(0,$rows)) {
-                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
+                $rows = $GLOBALS['SITE_DB']->query_select('w_rooms', array('*'), array('location_x' => $x, 'location_y' => $y, 'location_realm' => $location_realm), '', 1);
+                if (!array_key_exists(0, $rows)) {
+                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'), 'warn');
                 }
                 $row = $rows[0];
 
-                $tpl = do_template('W_ROOM_SCREEN',array(
+                $tpl = do_template('W_ROOM_SCREEN', array(
                     '_GUID' => 'a4c5f8ae962cdbaa304135cf07c583a0',
                     'TITLE' => $this->title,
                     'PAGE_TYPE' => 'editroom',
@@ -925,39 +926,39 @@ class Module_ocworld
                     'LOCKED_RIGHT' => strval($row['locked_right']),
                     'ALLOW_PORTAL' => strval($row['allow_portal']),
                     'PICTURE_URL' => $row['picture_url'],
-                    'OWNER' => is_null($row['owner'])?'':strval($row['owner']),
+                    'OWNER' => is_null($row['owner']) ? '' : strval($row['owner']),
                 ));
                 return $tpl;
             }
 
-            $urls = get_url('url','pic','uploads/ocworld',0,OCP_UPLOAD_IMAGE);
-            edit_room_wrap($member_id,$name,post_param('text'),post_param('password_question'),post_param('password_answer'),post_param('password_fail_message'),post_param('required_item'),post_param_integer('locked_up',0),post_param_integer('locked_down',0),post_param_integer('locked_right',0),post_param_integer('locked_left',0),$urls[0],post_param_integer('allow_portal',0),grab_new_owner('new_owner'),post_param_integer('new_x'),post_param_integer('new_y'),post_param_integer('new_realm'));
+            $urls = get_url('url', 'pic', 'uploads/ocworld', 0, OCP_UPLOAD_IMAGE);
+            edit_room_wrap($member_id, $name, post_param('text'), post_param('password_question'), post_param('password_answer'), post_param('password_fail_message'), post_param('required_item'), post_param_integer('locked_up', 0), post_param_integer('locked_down', 0), post_param_integer('locked_right', 0), post_param_integer('locked_left', 0), $urls[0], post_param_integer('allow_portal', 0), grab_new_owner('new_owner'), post_param_integer('new_x'), post_param_integer('new_y'), post_param_integer('new_realm'));
         }
 
         if ($type == 'editrealm') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                list($realm,,) = get_loc_details($member_id);
+                list($realm, ,) = get_loc_details($member_id);
 
-                $rows = $GLOBALS['SITE_DB']->query_select('w_realms',array('*'),array('id' => $realm),'',1);
-                if (!array_key_exists(0,$rows)) {
-                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
+                $rows = $GLOBALS['SITE_DB']->query_select('w_realms', array('*'), array('id' => $realm), '', 1);
+                if (!array_key_exists(0, $rows)) {
+                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'), 'warn');
                 }
                 $row = $rows[0];
 
                 $qatc = new ocp_tempcode();
-                for ($i = 1;$i <= 30;$i++) {
-                    $qatc->attach(do_template('W_REALM_SCREEN_QUESTION',array('_GUID' => '0510427a3895969dede2bd13db7d46a6','I' => strval($i),'Q' => $row['q' . strval($i)],'A' => $row['a' . strval($i)])));
+                for ($i = 1; $i <= 30; $i++) {
+                    $qatc->attach(do_template('W_REALM_SCREEN_QUESTION', array('_GUID' => '0510427a3895969dede2bd13db7d46a6', 'I' => strval($i), 'Q' => $row['q' . strval($i)], 'A' => $row['a' . strval($i)])));
                 }
 
-                $tpl = do_template('W_REALM_SCREEN',array(
+                $tpl = do_template('W_REALM_SCREEN', array(
                     '_GUID' => 'f2503e0be6e45a296baa8625cafb4d72',
                     'TITLE' => $this->title,
                     'PAGE_TYPE' => 'editrealm',
-                    'OWNER' => is_null($row['owner'])?'':strval($row['owner']),
+                    'OWNER' => is_null($row['owner']) ? '' : strval($row['owner']),
                     'QA' => $qatc,
                     'NAME' => $row['name'],
                     'TROLL_NAME' => $row['troll_name'],
@@ -966,29 +967,29 @@ class Module_ocworld
                 return $tpl;
             }
 
-            for ($i = 1;$i <= 30;$i++) {
+            for ($i = 1; $i <= 30; $i++) {
                 $qa[$i]['q'] = post_param('question' . strval($i));
                 $qa[$i]['a'] = post_param('answer' . strval($i));
             }
-            edit_realm_wrap($member_id,$name,post_param('troll_name'),$qa,post_param_integer('private',0),grab_new_owner('new_owner'));
+            edit_realm_wrap($member_id, $name, post_param('troll_name'), $qa, post_param_integer('private', 0), grab_new_owner('new_owner'));
         }
 
         if ($type == 'editportal') {
             require_code('ocworld_action');
 
-            $name = post_param('name','');
+            $name = post_param('name', '');
 
             if ($name == '') {
-                list($realm,$x,$y) = get_loc_details($member_id);
+                list($realm, $x, $y) = get_loc_details($member_id);
                 $end_realm = get_param_integer('param');
 
-                $rows = $GLOBALS['SITE_DB']->query_select('w_portals',array('*'),array('start_location_x' => $x,'start_location_y' => $y,'start_location_realm' => $realm,'end_location_realm' => $end_realm),'',1);
-                if (!array_key_exists(0,$rows)) {
-                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'),'warn');
+                $rows = $GLOBALS['SITE_DB']->query_select('w_portals', array('*'), array('start_location_x' => $x, 'start_location_y' => $y, 'start_location_realm' => $realm, 'end_location_realm' => $end_realm), '', 1);
+                if (!array_key_exists(0, $rows)) {
+                    ocw_refresh_with_message(do_lang_tempcode('MISSING_RESOURCE'), 'warn');
                 }
                 $row = $rows[0];
 
-                $tpl = do_template('W_PORTAL_SCREEN',array(
+                $tpl = do_template('W_PORTAL_SCREEN', array(
                     '_GUID' => 'cad0e01c1c4c410e67b775c3ff6eeb3a',
                     'TITLE' => $this->title,
                     'PAGE_TYPE' => 'editportal',
@@ -1001,12 +1002,12 @@ class Module_ocworld
                     'END_LOCATION_REALM' => strval($end_realm),
                     'END_LOCATION_X' => strval($row['end_location_x']),
                     'END_LOCATION_Y' => strval($row['end_location_y']),
-                    'OWNER' => is_null($row['owner'])?'':strval($row['owner']),
+                    'OWNER' => is_null($row['owner']) ? '' : strval($row['owner']),
                 ));
                 return $tpl;
             }
 
-            edit_portal_wrap($member_id,intval($param),$name,post_param('text'),post_param_integer('end_location_realm'),post_param_integer('end_location_x'),post_param_integer('end_location_y'),grab_new_owner('new_owner'),post_param_integer('new_x'),post_param_integer('new_y'),post_param_integer('new_realm'));
+            edit_portal_wrap($member_id, intval($param), $name, post_param('text'), post_param_integer('end_location_realm'), post_param_integer('end_location_x'), post_param_integer('end_location_y'), grab_new_owner('new_owner'), post_param_integer('new_x'), post_param_integer('new_y'), post_param_integer('new_realm'));
         }
 
         if ($type == 'room') {

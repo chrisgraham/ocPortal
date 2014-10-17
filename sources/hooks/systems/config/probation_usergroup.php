@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_probation_usergroup
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_probation_usergroup
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:do_lang('PROBATION');
+        return (get_forum_type() != 'ocf') ? null : do_lang('PROBATION');
     }
 }

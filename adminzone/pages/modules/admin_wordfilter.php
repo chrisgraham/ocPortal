@@ -55,24 +55,24 @@ class Module_admin_wordfilter
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('wordfilter',array(
+            $GLOBALS['SITE_DB']->create_table('wordfilter', array(
                 'word' => '*SHORT_TEXT',
                 'w_replacement' => 'SHORT_TEXT',
                 'w_substr' => '*BINARY'
             ));
 
             $naughties = array(
-                'arsehole','asshole','arse','bastard','cock','cocked','cocksucker','crap','cunt','cum',
-                'blowjob','bollocks','bondage','bugger','buggery','dickhead','dildo','faggot','fuck','fucked','fucking',
-                'fucker','gayboy','jackoff','jerk-off','motherfucker','nigger','piss','pissed','puffter','pussy',
-                'queers','retard','shag','shagged',
-                'shat','shit','slut','twat','wank','wanker','whore',
+                'arsehole', 'asshole', 'arse', 'bastard', 'cock', 'cocked', 'cocksucker', 'crap', 'cunt', 'cum',
+                'blowjob', 'bollocks', 'bondage', 'bugger', 'buggery', 'dickhead', 'dildo', 'faggot', 'fuck', 'fucked', 'fucking',
+                'fucker', 'gayboy', 'jackoff', 'jerk-off', 'motherfucker', 'nigger', 'piss', 'pissed', 'puffter', 'pussy',
+                'queers', 'retard', 'shag', 'shagged',
+                'shat', 'shit', 'slut', 'twat', 'wank', 'wanker', 'whore',
             );
             foreach ($naughties as $word) {
-                $GLOBALS['SITE_DB']->query_insert('wordfilter',array('word' => $word,'w_replacement' => '','w_substr' => 0));
+                $GLOBALS['SITE_DB']->query_insert('wordfilter', array('word' => $word, 'w_replacement' => '', 'w_substr' => 0));
             }
         }
     }
@@ -86,10 +86,10 @@ class Module_admin_wordfilter
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('MANAGE_WORDFILTER','menu/adminzone/security/wordfilter'),
+            'misc' => array('MANAGE_WORDFILTER', 'menu/adminzone/security/wordfilter'),
         );
     }
 
@@ -102,7 +102,7 @@ class Module_admin_wordfilter
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('wordfilter');
 
@@ -120,7 +120,7 @@ class Module_admin_wordfilter
             $this->title = get_screen_title('DELETE_WORDFILTER');
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -130,7 +130,7 @@ class Module_admin_wordfilter
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->word_filter_interface();
@@ -154,34 +154,34 @@ class Module_admin_wordfilter
     {
         require_code('form_templates');
         $list = new ocp_tempcode();
-        $words = $GLOBALS['SITE_DB']->query_select('wordfilter',array('*'),null,'ORDER BY word');
+        $words = $GLOBALS['SITE_DB']->query_select('wordfilter', array('*'), null, 'ORDER BY word');
         foreach ($words as $word) {
-            $word_text = (($word['w_substr'] == 1)?'*':'') . $word['word'] . (($word['w_substr'] == 1)?'*':'');
+            $word_text = (($word['w_substr'] == 1) ? '*' : '') . $word['word'] . (($word['w_substr'] == 1) ? '*' : '');
             if ($word['w_replacement'] != '') {
                 $word_text .= ' -> ' . $word['w_replacement'];
             }
-            $list->attach(form_input_list_entry($word['word'],false,$word_text));
+            $list->attach(form_input_list_entry($word['word'], false, $word_text));
         }
         if (!$list->is_empty()) {
-            $delete_url = build_url(array('page' => '_SELF','type' => 'remove'),'_SELF');
+            $delete_url = build_url(array('page' => '_SELF', 'type' => 'remove'), '_SELF');
             $submit_name = do_lang_tempcode('DELETE_WORDFILTER');
-            $fields = form_input_list(do_lang_tempcode('WORD'),'','word',$list);
+            $fields = form_input_list(do_lang_tempcode('WORD'), '', 'word', $list);
 
-            $tpl = do_template('FORM',array('_GUID' => 'a752cea5acab633e1cc0781f0e77e0be','TABINDEX' => strval(get_form_field_tabindex()),'HIDDEN' => '','TEXT' => '','FIELDS' => $fields,'URL' => $delete_url,'SUBMIT_ICON' => 'menu___generic_admin__delete','SUBMIT_NAME' => $submit_name));
+            $tpl = do_template('FORM', array('_GUID' => 'a752cea5acab633e1cc0781f0e77e0be', 'TABINDEX' => strval(get_form_field_tabindex()), 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'URL' => $delete_url, 'SUBMIT_ICON' => 'menu___generic_admin__delete', 'SUBMIT_NAME' => $submit_name));
         } else {
             $tpl = new ocp_tempcode();
         }
 
         // Do a form so people can add
-        $post_url = build_url(array('page' => '_SELF','type' => 'add'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => 'add'), '_SELF');
         $submit_name = do_lang_tempcode('ADD_WORDFILTER');
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_line(do_lang_tempcode('WORD'),do_lang_tempcode('DESCRIPTION_WORD'),'word_2','',true));
-        $fields->attach(form_input_line(do_lang_tempcode('REPLACEMENT'),do_lang_tempcode('DESCRIPTION_REPLACEMENT'),'replacement','',false));
-        $fields->attach(form_input_tick(do_lang_tempcode('WORD_SUBSTR'),do_lang_tempcode('DESCRIPTION_WORD_SUBSTR'),'substr',false));
-        $add_form = do_template('FORM',array('_GUID' => '5b1d45b374e15392b9f5496de8db2e1c','TABINDEX' => strval(get_form_field_tabindex()),'SECONDARY_FORM' => true,'SKIP_REQUIRED' => true,'HIDDEN' => '','TEXT' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__add_one','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+        $fields->attach(form_input_line(do_lang_tempcode('WORD'), do_lang_tempcode('DESCRIPTION_WORD'), 'word_2', '', true));
+        $fields->attach(form_input_line(do_lang_tempcode('REPLACEMENT'), do_lang_tempcode('DESCRIPTION_REPLACEMENT'), 'replacement', '', false));
+        $fields->attach(form_input_tick(do_lang_tempcode('WORD_SUBSTR'), do_lang_tempcode('DESCRIPTION_WORD_SUBSTR'), 'substr', false));
+        $add_form = do_template('FORM', array('_GUID' => '5b1d45b374e15392b9f5496de8db2e1c', 'TABINDEX' => strval(get_form_field_tabindex()), 'SECONDARY_FORM' => true, 'SKIP_REQUIRED' => true, 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'SUBMIT_ICON' => 'menu___generic_admin__add_one', 'SUBMIT_NAME' => $submit_name, 'URL' => $post_url));
 
-        return do_template('WORDFILTER_SCREEN',array('_GUID' => '4b355f5d2cecc0bc26e76a69716cc841','TITLE' => $this->title,'TPL' => $tpl,'ADD_FORM' => $add_form));
+        return do_template('WORDFILTER_SCREEN', array('_GUID' => '4b355f5d2cecc0bc26e76a69716cc841', 'TITLE' => $this->title, 'TPL' => $tpl, 'ADD_FORM' => $add_form));
     }
 
     /**
@@ -192,11 +192,11 @@ class Module_admin_wordfilter
     public function add_word()
     {
         $word = post_param('word_2');
-        $this->_add_word($word,post_param('replacement'),post_param_integer('substr',0));
+        $this->_add_word($word, post_param('replacement'), post_param_integer('substr', 0));
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -206,16 +206,16 @@ class Module_admin_wordfilter
      * @param  SHORT_TEXT               Replacement (blank: block entirely)
      * @param  BINARY                   Whether to perform a substring match
      */
-    public function _add_word($word,$replacement,$substr)
+    public function _add_word($word, $replacement, $substr)
     {
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('wordfilter','word',array('word' => $word));
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('wordfilter', 'word', array('word' => $word));
         if (!is_null($test)) {
-            warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($word)));
+            warn_exit(do_lang_tempcode('ALREADY_EXISTS', escape_html($word)));
         }
 
-        $GLOBALS['SITE_DB']->query_insert('wordfilter',array('word' => $word,'w_replacement' => $replacement,'w_substr' => $substr));
+        $GLOBALS['SITE_DB']->query_insert('wordfilter', array('word' => $word, 'w_replacement' => $replacement, 'w_substr' => $substr));
 
-        log_it('ADD_WORDFILTER',$word);
+        log_it('ADD_WORDFILTER', $word);
     }
 
     /**
@@ -228,8 +228,8 @@ class Module_admin_wordfilter
         $this->_remove_word(post_param('word'));
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 
     /**
@@ -239,8 +239,8 @@ class Module_admin_wordfilter
      */
     public function _remove_word($word)
     {
-        $GLOBALS['SITE_DB']->query_delete('wordfilter',array('word' => $word),'',1);
+        $GLOBALS['SITE_DB']->query_delete('wordfilter', array('word' => $word), '', 1);
 
-        log_it('DELETE_WORDFILTER',$word);
+        log_it('DELETE_WORDFILTER', $word);
     }
 }

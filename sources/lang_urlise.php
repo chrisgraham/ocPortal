@@ -27,16 +27,16 @@
  * @param  boolean                      Whether to use a new window
  * @return tempcode                     The encoded version
  */
-function _urlise_lang($string,$url,$title,$new_window)
+function _urlise_lang($string, $url, $title, $new_window)
 {
-    $a = strpos($string,'<{');
-    $b = strpos($string,'}>');
-    if (($a === false) || ($b === false) || ($b<$a)) {
+    $a = strpos($string, '<{');
+    $b = strpos($string, '}>');
+    if (($a === false) || ($b === false) || ($b < $a)) {
         return make_string_tempcode($string);
     }
-    $section = substr($string,$a+2,$b-$a-2);
-    $prior = substr($string,0,$a);
-    $after = substr($string,$b+2);
+    $section = substr($string, $a + 2, $b - $a - 2);
+    $prior = substr($string, 0, $a);
+    $after = substr($string, $b + 2);
     if ($GLOBALS['XSS_DETECT']) {
         ocp_mark_as_escaped($section);
         ocp_mark_as_escaped($prior);
@@ -55,7 +55,7 @@ function _urlise_lang($string,$url,$title,$new_window)
 
     $out = new ocp_tempcode();
     $out->attach(protect_from_escaping($prior));
-    $out->attach(hyperlink($url,protect_from_escaping($section),$new_window,false,$title));
+    $out->attach(hyperlink($url, protect_from_escaping($section), $new_window, false, $title));
     $out->attach(protect_from_escaping($after));
 
     return $out;

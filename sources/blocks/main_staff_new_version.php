@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Block_main_staff_new_version
 {
     /**
@@ -47,7 +46,7 @@ class Block_main_staff_new_version
     {
         $info = array();
         $info['cache_on'] = 'array()';
-        $info['ttl'] = 60*3;
+        $info['ttl'] = 60 * 3;
         return $info;
     }
 
@@ -69,6 +68,6 @@ class Block_main_staff_new_version
         $updated_addons = find_updated_addons();
         $has_updated_addons = (count($updated_addons) != 0);
 
-        return do_template('BLOCK_MAIN_STAFF_NEW_VERSION',array('_GUID' => '43c7b18d3d44e825247579df23a2ad9c','VERSION' => ocp_version_pretty(),'VERSION_TABLE' => $table,'HAS_UPDATED_ADDONS' => $has_updated_addons));
+        return do_template('BLOCK_MAIN_STAFF_NEW_VERSION', array('_GUID' => '43c7b18d3d44e825247579df23a2ad9c', 'VERSION' => ocp_version_pretty(), 'VERSION_TABLE' => $table, 'HAS_UPDATED_ADDONS' => $has_updated_addons));
     }
 }

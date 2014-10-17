@@ -49,10 +49,10 @@ class Module_admin_content_reviews
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('_CONTENT_NEEDING_REVIEWING','menu/adminzone/audit/content_reviews'),
+            '!' => array('_CONTENT_NEEDING_REVIEWING', 'menu/adminzone/audit/content_reviews'),
         );
     }
 
@@ -72,11 +72,11 @@ class Module_admin_content_reviews
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
-        add_privilege('SUBMISSION','set_content_review_settings',false);
+        add_privilege('SUBMISSION', 'set_content_review_settings', false);
 
-        $GLOBALS['SITE_DB']->create_table('content_reviews',array(
+        $GLOBALS['SITE_DB']->create_table('content_reviews', array(
             'content_type' => '*ID_TEXT',
             'content_id' => '*ID_TEXT',
             'review_freq' => '?INTEGER',
@@ -86,8 +86,8 @@ class Module_admin_content_reviews
             'display_review_status' => 'BINARY',
             'last_reviewed_time' => 'TIME',
         ));
-        $GLOBALS['SITE_DB']->create_index('content_reviews','next_review_time',array('next_review_time','review_notification_happened'));
-        $GLOBALS['SITE_DB']->create_index('content_reviews','needs_review',array('next_review_time','content_type'));
+        $GLOBALS['SITE_DB']->create_index('content_reviews', 'next_review_time', array('next_review_time', 'review_notification_happened'));
+        $GLOBALS['SITE_DB']->create_index('content_reviews', 'needs_review', array('next_review_time', 'content_type'));
     }
 
     public $title;
@@ -99,13 +99,13 @@ class Module_admin_content_reviews
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('content_reviews');
 
         set_helper_panel_text(comcode_lang_string('DOC_CONTENT_REVIEWS'));
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -122,7 +122,7 @@ class Module_admin_content_reviews
         $out = new ocp_tempcode();
         require_code('form_templates');
 
-        $_hooks = find_all_hooks('systems','content_meta_aware');
+        $_hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($_hooks) as $content_type) {
             require_code('content');
             $object = get_content_object($content_type);
@@ -139,28 +139,28 @@ class Module_admin_content_reviews
             }
 
             $content = new ocp_tempcode();
-            $content_ids = collapse_2d_complexity('content_id','next_review_time',$GLOBALS['SITE_DB']->query('SELECT content_id,next_review_time FROM ' . get_table_prefix() . 'content_reviews WHERE ' . db_string_equal_to('content_type',$content_type) . ' AND next_review_time<=' . strval(time()) . ' ORDER BY next_review_time',100));
+            $content_ids = collapse_2d_complexity('content_id', 'next_review_time', $GLOBALS['SITE_DB']->query('SELECT content_id,next_review_time FROM ' . get_table_prefix() . 'content_reviews WHERE ' . db_string_equal_to('content_type', $content_type) . ' AND next_review_time<=' . strval(time()) . ' ORDER BY next_review_time', 100));
             $_content_ids = array();
             foreach ($content_ids as $content_id => $next_review_time) {
-                list($title,) = content_get_details($content_type,$content_id);
+                list($title,) = content_get_details($content_type, $content_id);
                 if (!is_null($title)) {
-                    $title = ($content_type == 'comcode_page')?$content_id:strip_comcode($title);
-                    $title .= ' (' . get_timezoned_date($next_review_time,false) . ')';
+                    $title = ($content_type == 'comcode_page') ? $content_id : strip_comcode($title);
+                    $title .= ' (' . get_timezoned_date($next_review_time, false) . ')';
                     $_content_ids[$content_id] = $title;
                 } else {
-                    $GLOBALS['SITE_DB']->query_delete('content_reviews',array('content_type' => $content_id,'content_id' => $content_id),'',1); // The actual content was deleted, I guess
+                    $GLOBALS['SITE_DB']->query_delete('content_reviews', array('content_type' => $content_id, 'content_id' => $content_id), '', 1); // The actual content was deleted, I guess
                     continue;
                 }
             }
             foreach ($_content_ids as $content_id => $title) {
-                $content->attach(form_input_list_entry($content_id,false,$title));
+                $content->attach(form_input_list_entry($content_id, false, $title));
             }
             if (count($content_ids) == 100) {
-                attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'warn');
+                attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'), 'warn');
             }
 
             if (!$content->is_empty()) {
-                list($zone,$attributes,) = page_link_decode($info['edit_page_link_pattern']);
+                list($zone, $attributes,) = page_link_decode($info['edit_page_link_pattern']);
                 $edit_identifier = 'id';
                 foreach ($attributes as $key => $val) {
                     if ($val == '_WILD') {
@@ -169,16 +169,16 @@ class Module_admin_content_reviews
                         break;
                     }
                 }
-                $post_url = build_url($attributes+array('redirect' => get_self_url(true)),$zone);
-                $fields = form_input_list(do_lang_tempcode('CONTENT'),'',$edit_identifier,$content,null,true);
+                $post_url = build_url($attributes + array('redirect' => get_self_url(true)), $zone);
+                $fields = form_input_list(do_lang_tempcode('CONTENT'), '', $edit_identifier, $content, null, true);
 
                 // Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
-                $content = do_template('FORM',array('_GUID' => '288c2534a75e5af5bc7155594dfef68f','SKIP_REQUIRED' => true,'GET' => true,'HIDDEN' => '','SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => do_lang_tempcode('EDIT'),'FIELDS' => $fields,'URL' => $post_url,'TEXT' => ''));
+                $content = do_template('FORM', array('_GUID' => '288c2534a75e5af5bc7155594dfef68f', 'SKIP_REQUIRED' => true, 'GET' => true, 'HIDDEN' => '', 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => do_lang_tempcode('EDIT'), 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => ''));
 
-                $out->attach(do_template('UNVALIDATED_SECTION',array('_GUID' => '406d4c0a8abd36b9c88645df84692c7d','TITLE' => do_lang_tempcode($info['content_type_label']),'CONTENT' => $content)));
+                $out->attach(do_template('UNVALIDATED_SECTION', array('_GUID' => '406d4c0a8abd36b9c88645df84692c7d', 'TITLE' => do_lang_tempcode($info['content_type_label']), 'CONTENT' => $content)));
             }
         }
 
-        return do_template('UNVALIDATED_SCREEN',array('_GUID' => 'c8574404597d25e3c027766c74d1a008','TITLE' => $_title,'SECTIONS' => $out));
+        return do_template('UNVALIDATED_SCREEN', array('_GUID' => 'c8574404597d25e3c027766c74d1a008', 'TITLE' => $_title, 'SECTIONS' => $out));
     }
 }

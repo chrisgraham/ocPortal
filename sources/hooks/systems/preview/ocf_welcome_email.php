@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    welcome_emails
  */
-
 class Hook_Preview_ocf_welcome_email
 {
     /**
@@ -27,23 +26,23 @@ class Hook_Preview_ocf_welcome_email
      */
     public function applies()
     {
-        $member_id = get_param_integer('id',get_member());
+        $member_id = get_param_integer('id', get_member());
 
-        $applies = (get_param('page','') == 'admin_ocf_welcome_emails');
+        $applies = (get_param('page', '') == 'admin_ocf_welcome_emails');
         if ($applies) {
             require_lang('ocf');
             require_code('mail');
 
             $subject_line = post_param('subject');
-            $message_raw = do_template('NEWSLETTER_DEFAULT_FCOMCODE',array('_GUID' => 'e065391099b1c7273ca1de940a1acb66','CONTENT' => post_param('text'),'LANG' => get_site_default_lang()));
+            $message_raw = do_template('NEWSLETTER_DEFAULT_FCOMCODE', array('_GUID' => 'e065391099b1c7273ca1de940a1acb66', 'CONTENT' => post_param('text'), 'LANG' => get_site_default_lang()));
 
             $to = $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
-            if ($to == '' ) {
+            if ($to == '') {
                 $to = get_option('staff_address');
             }
-            mail_wrap($subject_line,$message_raw->evaluate(get_site_default_lang()),array($to),$GLOBALS['FORUM_DRIVER']->get_username(get_member(),true),'','',3,null,false,get_member(),true);
+            mail_wrap($subject_line, $message_raw->evaluate(get_site_default_lang()), array($to), $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true), '', '', 3, null, false, get_member(), true);
         }
-        return array($applies,null);
+        return array($applies, null);
     }
 
     /**
@@ -54,8 +53,8 @@ class Hook_Preview_ocf_welcome_email
     public function run()
     {
         $preview = new ocp_tempcode();
-        $preview->attach(comcode_to_tempcode(post_param('text'),get_member()));
+        $preview->attach(comcode_to_tempcode(post_param('text'), get_member()));
 
-        return array($preview,null);
+        return array($preview, null);
     }
 }

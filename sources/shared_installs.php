@@ -32,30 +32,30 @@ function current_share_user()
 
     global $SITE_INFO;
     $custom_share_domain = $SITE_INFO['custom_share_domain'];
-    $domain = isset($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:(isset($_ENV['HTTP_HOST'])?$_ENV['HTTP_HOST']:$custom_share_domain);
-    $domain = preg_replace('#:\d+#','',$domain);
+    $domain = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : (isset($_ENV['HTTP_HOST']) ? $_ENV['HTTP_HOST'] : $custom_share_domain);
+    $domain = preg_replace('#:\d+#', '', $domain);
     if ($domain == $custom_share_domain) { // Get from the access path
-        $path = isset($_SERVER['SCRIPT_NAME'])?$_SERVER['SCRIPT_NAME']:(isset($_ENV['SCRIPT_NAME'])?$_ENV['SCRIPT_NAME']:'');
-        if (substr($path,0,strlen($SITE_INFO['custom_share_path'])+1) == '/' . $SITE_INFO['custom_share_path']) {
-            $path = substr($path,strlen($SITE_INFO['custom_share_path'])+1);
+        $path = isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : (isset($_ENV['SCRIPT_NAME']) ? $_ENV['SCRIPT_NAME'] : '');
+        if (substr($path, 0, strlen($SITE_INFO['custom_share_path']) + 1) == '/' . $SITE_INFO['custom_share_path']) {
+            $path = substr($path, strlen($SITE_INFO['custom_share_path']) + 1);
         }
-        $slash = strpos($path,'/');
+        $slash = strpos($path, '/');
         if ($slash !== false) {
-            $path = substr($path,0,$slash);
-            if (array_key_exists('custom_user_' . $path,$SITE_INFO)) {
+            $path = substr($path, 0, $slash);
+            if (array_key_exists('custom_user_' . $path, $SITE_INFO)) {
                 $CURRENT_SHARE_USER = $path;
                 return $CURRENT_SHARE_USER;
             }
         }
     } else {
         // Get from map
-        if (array_key_exists('custom_domain_' . $domain,$SITE_INFO)) {
+        if (array_key_exists('custom_domain_' . $domain, $SITE_INFO)) {
             $CURRENT_SHARE_USER = $SITE_INFO['custom_domain_' . $domain];
             return $CURRENT_SHARE_USER;
         }
         // Get from subdomain
-        $domain = substr($domain,0,-strlen($custom_share_domain)-1);
-        if (array_key_exists('custom_user_' . $domain,$SITE_INFO)) {
+        $domain = substr($domain, 0, -strlen($custom_share_domain) - 1);
+        if (array_key_exists('custom_user_' . $domain, $SITE_INFO)) {
             $CURRENT_SHARE_USER = $domain;
             return $domain;
         }
@@ -63,11 +63,11 @@ function current_share_user()
 
     if ($CURRENT_SHARE_USER == '') {
         $CURRENT_SHARE_USER = null;
-        return NULL;
+        return null;
     }
 
     header('Content-type: text/plain');
-    if (array_key_exists('no_website_redirect',$SITE_INFO)) {
+    if (array_key_exists('no_website_redirect', $SITE_INFO)) {
         header('Location: ' . $SITE_INFO['no_website_redirect']);
     }
     exit('No such web-site on the server, ' . $domain);

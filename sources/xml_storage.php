@@ -25,11 +25,11 @@
  */
 function find_all_xml_tables()
 {
-    $skip = array('comcode_pages'/*complex IDs, and uses filesystem*/,'group_category_access','group_privileges','seo_meta','sessions','ip_country','f_moderator_logs','download_logging','url_title_cache','cached_comcode_pages','stats','import_id_remap','import_parts_done','import_session','cache','cache_on','blocks','modules','addons','addon_dependencies','db_meta','db_meta_indices','adminlogs','autosave','translate','translate_history');
-    $all_tables = $GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table'));
+    $skip = array('comcode_pages'/*complex IDs, and uses filesystem*/, 'group_category_access', 'group_privileges', 'seo_meta', 'sessions', 'ip_country', 'f_moderator_logs', 'download_logging', 'url_title_cache', 'cached_comcode_pages', 'stats', 'import_id_remap', 'import_parts_done', 'import_session', 'cache', 'cache_on', 'blocks', 'modules', 'addons', 'addon_dependencies', 'db_meta', 'db_meta_indices', 'adminlogs', 'autosave', 'translate', 'translate_history');
+    $all_tables = $GLOBALS['SITE_DB']->query_select('db_meta', array('DISTINCT m_table'));
     $tables = array();
     foreach ($all_tables as $table) {
-        if (!in_array($table['m_table'],$skip)) {
+        if (!in_array($table['m_table'], $skip)) {
             $tables[] = $table['m_table'];
         }
     }
@@ -75,10 +75,10 @@ function export_to_xml($tables = null)
  * @param  integer                      The tab depth
  * @return string                       XML out
  */
-function _tab($in,$depth = 1)
+function _tab($in, $depth = 1)
 {
-    $ret = rtrim(preg_replace('#^#',str_repeat("\t",$depth),$in),"\t");
-    $ret = rtrim(preg_replace('#(\n\s*)<#','${1}' . str_repeat("\t",$depth) . '<',$ret),"\t");
+    $ret = rtrim(preg_replace('#^#', str_repeat("\t", $depth), $in), "\t");
+    $ret = rtrim(preg_replace('#(\n\s*)<#', '${1}' . str_repeat("\t", $depth) . '<', $ret), "\t");
     return $ret;
 }
 
@@ -94,7 +94,7 @@ function _export_table_to_xml($table)
     $permissions_type_code = mixed();
     $id_field = mixed();
     $parent_field = mixed();
-    $hooks = find_all_hooks('systems','content_meta_aware');
+    $hooks = find_all_hooks('systems', 'content_meta_aware');
     require_code('content');
     foreach (array_keys($hooks) as $hook) {
         $ob = get_content_object($hook);
@@ -105,7 +105,7 @@ function _export_table_to_xml($table)
         if ($info['table'] == $table) {
             $seo_type_code = $info['seo_type_code'];
             $permissions_type_code = $info['permissions_type_code'];
-            $id_field = is_array($info['id_field'])?$info['id_field'][0]:$info['id_field'];
+            $id_field = is_array($info['id_field']) ? $info['id_field'][0] : $info['id_field'];
             if (($info['id_field_numeric']) && ($info['is_category'])) {
                 $parent_field = $info['parent_category_field'];
             }
@@ -113,20 +113,20 @@ function _export_table_to_xml($table)
     }
 
     $xml_data = '';
-    $db_fields = $GLOBALS['SITE_DB']->query('SELECT m_name,m_type,m_table FROM ' . get_table_prefix() . 'db_meta WHERE ' . db_string_equal_to('m_table',$table) . ' OR ' . db_string_equal_to('m_table','seo_meta') . ' OR ' . db_string_equal_to('m_table','group_category_access') . ' OR ' . db_string_equal_to('m_table','group_privileges'));
+    $db_fields = $GLOBALS['SITE_DB']->query('SELECT m_name,m_type,m_table FROM ' . get_table_prefix() . 'db_meta WHERE ' . db_string_equal_to('m_table', $table) . ' OR ' . db_string_equal_to('m_table', 'seo_meta') . ' OR ' . db_string_equal_to('m_table', 'group_category_access') . ' OR ' . db_string_equal_to('m_table', 'group_privileges'));
     $where = mixed();
     if ($table == 'group_privileges') {
         $where = array('category_name' => '');
     }
     if (is_null($parent_field)) {
-        $rows = $GLOBALS['SITE_DB']->query_select($table,array('*'),$where,'',null,null,false,array());
+        $rows = $GLOBALS['SITE_DB']->query_select($table, array('*'), $where, '', null, null, false, array());
         foreach ($rows as $row) { // Each row
-            $xml_data .= _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field);
+            $xml_data .= _export_xml_row($table, $row, $db_fields, $seo_type_code, $permissions_type_code, $id_field);
         }
     } else {
-        $rows = $GLOBALS['SITE_DB']->query_select($table,array('*'),array($parent_field => NULL),'',null,null,false,array());
+        $rows = $GLOBALS['SITE_DB']->query_select($table, array('*'), array($parent_field => null), '', null, null, false, array());
         foreach ($rows as $row) { // Each row
-            $xml_data .= _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field);
+            $xml_data .= _export_recurse_for_children($table, $row, $db_fields, $seo_type_code, $permissions_type_code, $id_field, $parent_field);
         }
     }
     return $xml_data;
@@ -144,15 +144,15 @@ function _export_table_to_xml($table)
  * @param  ID_TEXT                      Parent ID field name
  * @return string                       Exported data in XML format
  */
-function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field)
+function _export_recurse_for_children($table, $row, $db_fields, $seo_type_code, $permissions_type_code, $id_field, $parent_field)
 {
     $xml_data = '';
-    $xml_data .= _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,false);
-    $rows = $GLOBALS['SITE_DB']->query_select($table,array('*'),array($parent_field => $row[$id_field]),'',null,null,false,array());
+    $xml_data .= _export_xml_row($table, $row, $db_fields, $seo_type_code, $permissions_type_code, $id_field, false);
+    $rows = $GLOBALS['SITE_DB']->query_select($table, array('*'), array($parent_field => $row[$id_field]), '', null, null, false, array());
     foreach ($rows as $row) { // Each row
         $row[$parent_field] = 'PARENT_INSERT_ID';
         $xml_data .= "\n\n";
-        $xml_data .= _tab(_export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$parent_field));
+        $xml_data .= _tab(_export_recurse_for_children($table, $row, $db_fields, $seo_type_code, $permissions_type_code, $id_field, $parent_field));
     }
     $xml_data .= '</' . $table . '>' . "\n\n";
     return $xml_data;
@@ -170,7 +170,7 @@ function _export_recurse_for_children($table,$row,$db_fields,$seo_type_code,$per
  * @param  boolean                      Whether to include the end tag for the row
  * @return string                       Exported data in XML format
  */
-function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type_code,$id_field,$include_end = true)
+function _export_xml_row($table, $row, $db_fields, $seo_type_code, $permissions_type_code, $id_field, $include_end = true)
 {
     $xml_data = '';
 
@@ -185,24 +185,24 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 
         $name = $field['m_name'];
         $value = '';
-        if ((strpos($field['m_type'],'TRANS') !== false) && (multi_lang_content())) { // Translation layer integration.
-            $inner .= get_translated_text_xml($row[$name],$name,$GLOBALS['SITE_DB']);
+        if ((strpos($field['m_type'], 'TRANS') !== false) && (multi_lang_content())) { // Translation layer integration.
+            $inner .= get_translated_text_xml($row[$name], $name, $GLOBALS['SITE_DB']);
 
-            if (strpos($field['m_type'],'*') !== false) { // Special case if lang string forms key. We need to put in an extra attribute so we can bind an existing lang string code if it exists
+            if (strpos($field['m_type'], '*') !== false) { // Special case if lang string forms key. We need to put in an extra attribute so we can bind an existing lang string code if it exists
                 if ($field['m_type'] == '*AUTO') {
                     $auto_key_id = $field['m_name'];
                 }
                 $fields .= ' ' . $name . '="' . xmlentities(strval($row[$name])) . '"';
             }
         } else { // Simple field.
-            if (!array_key_exists($name,$row)) {
+            if (!array_key_exists($name, $row)) {
                 continue;
             } // Shouldn't happen, but corruption could lead to this
             switch (gettype($row[$name])) { // Serialise as string
                 case 'integer':
-                    switch (str_replace('?','',str_replace('*','',$field['m_type']))) {
+                    switch (str_replace('?', '', str_replace('*', '', $field['m_type']))) {
                         case 'TIME':
-                            $value = strftime('%a, %d %b %Y %H:%M:%S %z',$row[$name]);
+                            $value = strftime('%a, %d %b %Y %H:%M:%S %z', $row[$name]);
                             break;
 
                         default:
@@ -222,14 +222,14 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
             }
 
             // Place data
-            if (strpos($field['m_type'],'*') !== false) { // Key
+            if (strpos($field['m_type'], '*') !== false) { // Key
                 if ($field['m_type'] == '*AUTO') {
                     $auto_key_id = $field['m_name'];
                 }
                 $fields .= ' ' . $name . '="' . xmlentities($value) . '"';
             } else { // Other data type
                 $att_tag = '<' . $name;
-                if ((strpos($field['m_type'],'__COMCODE') !== false) && (!multi_lang_content())) {
+                if ((strpos($field['m_type'], '__COMCODE') !== false) && (!multi_lang_content())) {
                     $att_tag .= ' source_user="' . strval($row[$name . '__source_user']) . '"';
                 }
                 $att_tag .= '>' . xmlentities($value) . '</' . $name . '>';
@@ -248,40 +248,40 @@ function _export_xml_row($table,$row,$db_fields,$seo_type_code,$permissions_type
 
     // SEO
     if (!is_null($seo_type_code)) {
-        $rows = $GLOBALS['SITE_DB']->query_select('seo_meta',array('*'),array('meta_for_type' => $seo_type_code,'meta_for_id' => is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]),'',1);
-        if (array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('seo_meta', array('*'), array('meta_for_type' => $seo_type_code, 'meta_for_id' => is_integer($row[$id_field]) ? strval($row[$id_field]) : $row[$id_field]), '', 1);
+        if (array_key_exists(0, $rows)) {
             if (is_integer($rows[0]['meta_for_id'])) {
-                $export_row = array('meta_for_id' => 'LAST_INSERT_ID_' . $table)+$rows[0];
+                $export_row = array('meta_for_id' => 'LAST_INSERT_ID_' . $table) + $rows[0];
             } else {
                 $export_row = $rows[0];
             }
-            $xml_data .= _tab(_export_xml_row('seo_meta',$export_row,$db_fields,null,null,null));
+            $xml_data .= _tab(_export_xml_row('seo_meta', $export_row, $db_fields, null, null, null));
         }
     }
 
     // Permissions
     if (!is_null($permissions_type_code)) {
-        $rows = $GLOBALS['SITE_DB']->query_select('group_category_access',array('*'),array('module_the_name' => $permissions_type_code,'category_name' => is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
+        $rows = $GLOBALS['SITE_DB']->query_select('group_category_access', array('*'), array('module_the_name' => $permissions_type_code, 'category_name' => is_integer($row[$id_field]) ? strval($row[$id_field]) : $row[$id_field]));
         foreach ($rows as $_row) {
-            $xml_data .= _tab(_export_xml_row('group_category_access',array('category_name' => 'LAST_INSERT_ID_' . $table)+$_row,$db_fields,null,null,null));
+            $xml_data .= _tab(_export_xml_row('group_category_access', array('category_name' => 'LAST_INSERT_ID_' . $table) + $_row, $db_fields, null, null, null));
         }
-        $rows = $GLOBALS['SITE_DB']->query_select('group_privileges',array('*'),array('module_the_name' => $permissions_type_code,'category_name' => is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
+        $rows = $GLOBALS['SITE_DB']->query_select('group_privileges', array('*'), array('module_the_name' => $permissions_type_code, 'category_name' => is_integer($row[$id_field]) ? strval($row[$id_field]) : $row[$id_field]));
         foreach ($rows as $_row) {
             if (is_integer($_row['category_name'])) {
-                $export_row = array('category_name' => 'LAST_INSERT_ID_' . $table)+$_row;
+                $export_row = array('category_name' => 'LAST_INSERT_ID_' . $table) + $_row;
             } else {
                 $export_row = $_row;
             }
-            $xml_data .= _tab(_export_xml_row('group_category_access',$export_row,$db_fields,null,null,null));
+            $xml_data .= _tab(_export_xml_row('group_category_access', $export_row, $db_fields, null, null, null));
         }
-        $rows = $GLOBALS['SITE_DB']->query_select('gsp',array('*'),array('module_the_name' => $permissions_type_code,'category_name' => is_integer($row[$id_field])?strval($row[$id_field]):$row[$id_field]));
+        $rows = $GLOBALS['SITE_DB']->query_select('gsp', array('*'), array('module_the_name' => $permissions_type_code, 'category_name' => is_integer($row[$id_field]) ? strval($row[$id_field]) : $row[$id_field]));
         foreach ($rows as $_row) {
             if (is_integer($_row['category_name'])) {
-                $export_row = array('category_name' => 'LAST_INSERT_ID_' . $table)+$_row;
+                $export_row = array('category_name' => 'LAST_INSERT_ID_' . $table) + $_row;
             } else {
                 $export_row = $_row;
             }
-            $xml_data .= _tab(_export_xml_row('gsp',$export_row,$db_fields,null,null,null));
+            $xml_data .= _tab(_export_xml_row('gsp', $export_row, $db_fields, null, null, null));
         }
     }
 
@@ -325,7 +325,7 @@ function make_map_nice($map)
  * @param  boolean                      Synchronise deletes as well as inserts/updates
  * @return array                        List of operations performed
  */
-function import_from_xml($xml_data,$delete_missing_rows = false)
+function import_from_xml($xml_data, $delete_missing_rows = false)
 {
     require_code('xml');
     $parsed = new ocp_simple_xml_reader($xml_data);
@@ -342,21 +342,21 @@ function import_from_xml($xml_data,$delete_missing_rows = false)
 
     require_code('content');
 
-    list($root_tag,$root_attributes,,$this_children) = $parsed->gleamed;
+    list($root_tag, $root_attributes, , $this_children) = $parsed->gleamed;
     if ($root_tag == 'ocportal') {
-        $_all_fields = $GLOBALS['SITE_DB']->query_select('db_meta',array('*'));
+        $_all_fields = $GLOBALS['SITE_DB']->query_select('db_meta', array('*'));
         $all_fields = array();
         foreach ($_all_fields as $f) {
-            if (!array_key_exists($f['m_table'],$all_fields)) {
+            if (!array_key_exists($f['m_table'], $all_fields)) {
                 $all_fields[$f['m_table']] = array();
             }
             $all_fields[$f['m_table']][] = $f;
         }
-        $version = array_key_exists('version',$root_attributes)?floatval($root_attributes['version']):ocp_version_number();
-        $origin = array_key_exists('origin',$root_attributes)?$root_attributes['origin']:get_base_url();
+        $version = array_key_exists('version', $root_attributes) ? floatval($root_attributes['version']) : ocp_version_number();
+        $origin = array_key_exists('origin', $root_attributes) ? $root_attributes['origin'] : get_base_url();
 
         $all_id_fields = array();
-        $hooks = find_all_hooks('systems','content_meta_aware');
+        $hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($hooks) as $hook) {
             require_code('content');
             $ob = get_content_object($hook);
@@ -364,14 +364,14 @@ function import_from_xml($xml_data,$delete_missing_rows = false)
             if (is_null($info)) {
                 continue;
             }
-            $all_id_fields[$info['table']] = is_array($info['id_field'])?$info['id_field'][0]:$info['id_field'];
+            $all_id_fields[$info['table']] = is_array($info['id_field']) ? $info['id_field'][0] : $info['id_field'];
         }
 
         // Table rows
         $all_existing_data = array();
         foreach ($this_children as $table) {
-            $_ops = _import_xml_row($parsed,$all_existing_data,$all_fields,$all_id_fields,$table,$insert_ids,null);
-            $ops = array_merge($ops,$_ops);
+            $_ops = _import_xml_row($parsed, $all_existing_data, $all_fields, $all_id_fields, $table, $insert_ids, null);
+            $ops = array_merge($ops, $_ops);
         }
     }
 
@@ -379,8 +379,8 @@ function import_from_xml($xml_data,$delete_missing_rows = false)
     if ($delete_missing_rows) {
         foreach ($all_existing_data as $table => $es) {
             foreach ($es as $e) {
-                $GLOBALS['SITE_DB']->query_delete($table[0],$e,'',1);
-                $ops[] = array(do_lang('DELETED_FROM_TABLE',$table[0]),do_lang('RECORD_IDENTIFIED_BY',make_map_nice($e)));
+                $GLOBALS['SITE_DB']->query_delete($table[0], $e, '', 1);
+                $ops[] = array(do_lang('DELETED_FROM_TABLE', $table[0]), do_lang('RECORD_IDENTIFIED_BY', make_map_nice($e)));
             }
         }
     }
@@ -400,16 +400,16 @@ function import_from_xml($xml_data,$delete_missing_rows = false)
  * @param  ?AUTO_LINK                   The ID of the auto-inserted parent to this row (NULL: N/A)
  * @return array                        List of operations performed
  */
-function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,$table,&$insert_ids,$last_parent_id = null)
+function _import_xml_row($parsed, &$all_existing_data, $all_fields, $all_id_fields, $table, &$insert_ids, $last_parent_id = null)
 {
     $ops = array();
 
-    if (!array_key_exists($table[0],$all_fields)) {
+    if (!array_key_exists($table[0], $all_fields)) {
         return array();
     } // No such table
 
-    if (!array_key_exists($table[0],$all_existing_data)) {
-        $all_existing_data[$table[0]] = $GLOBALS['SITE_DB']->query_select($table[0],array('*'),null,'',null,null,false,array());
+    if (!array_key_exists($table[0], $all_existing_data)) {
+        $all_existing_data[$table[0]] = $GLOBALS['SITE_DB']->query_select($table[0], array('*'), null, '', null, null, false, array());
     }
 
     $data = array();
@@ -429,9 +429,9 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
 
         $value = mixed();
 
-        switch (str_replace('?','',str_replace('*','',$field['m_type']))) { // Serialise as string
+        switch (str_replace('?', '', str_replace('*', '', $field['m_type']))) { // Serialise as string
             case 'TIME':
-                $value = ($val == '')?null:strtotime($val);
+                $value = ($val == '') ? null : strtotime($val);
                 break;
             case 'GROUP':
             case 'MEMBER':
@@ -440,7 +440,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
             case 'INTEGER':
             case 'AUTO_LINK':
             case 'AUTO':
-                $value = ($val == '')?null:intval($val);
+                $value = ($val == '') ? null : intval($val);
                 break;
             case 'REAL': // float
                 $value = floatval($val);
@@ -451,8 +451,8 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
         }
         if ($value === 'PARENT_INSERT_ID') {
             $value = $last_parent_id;
-        } elseif (substr($value,0,strlen('LAST_INSERT_ID_')) === 'LAST_INSERT_ID_') {
-            $value = isset($insert_ids[substr($value,strlen('LAST_INSERT_ID_'))])?$insert_ids[substr($value,strlen('LAST_INSERT_ID_'))]:null;
+        } elseif (substr($value, 0, strlen('LAST_INSERT_ID_')) === 'LAST_INSERT_ID_') {
+            $value = isset($insert_ids[substr($value, strlen('LAST_INSERT_ID_'))]) ? $insert_ids[substr($value, strlen('LAST_INSERT_ID_'))] : null;
         }
         $data[$key] = $value;
     }
@@ -462,7 +462,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
             continue;
         }
 
-        list($row_tag,$row_attributes,$row_value,$row_children) = $__;
+        list($row_tag, $row_attributes, $row_value, $row_children) = $__;
 
         // Find corresponding field
         foreach ($all_fields[$table[0]] as $field) {
@@ -477,12 +477,12 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
                 $row_value = $parsed->pull_together($row_children);
             }
 
-            if (strpos($field['m_type'],'TRANS') === false) { // Simple field.
+            if (strpos($field['m_type'], 'TRANS') === false) { // Simple field.
                 $value = mixed();
 
-                switch (str_replace('?','',str_replace('*','',$field['m_type']))) { // Serialise as string
+                switch (str_replace('?', '', str_replace('*', '', $field['m_type']))) { // Serialise as string
                     case 'TIME':
-                        $value = ($row_value == '')?null:strtotime($row_value);
+                        $value = ($row_value == '') ? null : strtotime($row_value);
                         break;
                     case 'GROUP':
                     case 'MEMBER':
@@ -491,7 +491,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
                     case 'INTEGER':
                     case 'AUTO_LINK':
                     case 'AUTO':
-                        $value = ($row_value == '')?null:intval($row_value);
+                        $value = ($row_value == '') ? null : intval($row_value);
                         break;
                     case 'REAL': // float
                         $value = floatval($row_value);
@@ -499,15 +499,15 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
                     case 'LONG_TRANS__COMCODE':
                     case 'SHORT_TRANS__COMCODE':
                         $data[$row_tag . '__text_parsed'] = '';
-                        $data[$row_tag . '__source_user'] = isset($row_attributes['source_user'])?$row_attributes['source_user']:$GLOBALS['FORUM_DRIVER']->get_guest_id();
+                        $data[$row_tag . '__source_user'] = isset($row_attributes['source_user']) ? $row_attributes['source_user'] : $GLOBALS['FORUM_DRIVER']->get_guest_id();
                     default:
                         $value = $row_value;
                         break;
                 }
                 if ($value === 'PARENT_INSERT_ID') {
                     $value = $last_parent_id;
-                } elseif ((is_string($value)) && (substr($value,0,strlen('LAST_INSERT_ID_')) === 'LAST_INSERT_ID_')) {
-                    $value = isset($insert_ids[substr($value,strlen('LAST_INSERT_ID_'))])?$insert_ids[substr($value,strlen('LAST_INSERT_ID_'))]:null;
+                } elseif ((is_string($value)) && (substr($value, 0, strlen('LAST_INSERT_ID_')) === 'LAST_INSERT_ID_')) {
+                    $value = isset($insert_ids[substr($value, strlen('LAST_INSERT_ID_'))]) ? $insert_ids[substr($value, strlen('LAST_INSERT_ID_'))] : null;
                 }
                 $data[$row_tag] = $value;
             }
@@ -519,8 +519,8 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
     $update = null;
     $existing_data = null;
     foreach ($all_fields[$table[0]] as $field) {
-        if (strpos($field['m_type'],'*') !== false) {
-            if (!array_key_exists($field['m_name'],$data)) {
+        if (strpos($field['m_type'], '*') !== false) {
+            if (!array_key_exists($field['m_name'], $data)) {
                 $update = false;
                 break;
             }
@@ -551,7 +551,7 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
             continue;
         }
 
-        list($row_tag,$row_attributes,$row_value,$row_children) = $__;
+        list($row_tag, $row_attributes, $row_value, $row_children) = $__;
 
         if ((count($row_children) != 0) && (trim($row_value) == '')) {
             $row_value = $parsed->pull_together($row_children);
@@ -567,60 +567,60 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
             continue;
         } // No such field
 
-        if ((strpos($field['m_type'],'TRANS') !== false) && (multi_lang_content())) { // Translation layer integration.
+        if ((strpos($field['m_type'], 'TRANS') !== false) && (multi_lang_content())) { // Translation layer integration.
             if ($update) { // Update in lang layer
-                $lang_update_map = array('text_original' => $row_value,'text_parsed' => '');
-                if (array_key_exists('source_user',$row_attributes)) {
+                $lang_update_map = array('text_original' => $row_value, 'text_parsed' => '');
+                if (array_key_exists('source_user', $row_attributes)) {
                     $lang_update_map['source_user'] = intval($row_attributes['source_user']);
                 }
-                if (array_key_exists('importance_level',$row_attributes)) {
+                if (array_key_exists('importance_level', $row_attributes)) {
                     $lang_update_map['importance_level'] = intval($row_attributes['importance_level']);
                 }
-                $lang_where_map = array('id' => $existing_data[$row_tag],'language' => array_key_exists('language',$row_attributes)?$row_attributes['language']:get_site_default_lang());
-                $GLOBALS['SITE_DB']->query_update('translate',$lang_update_map,$lang_where_map,'',1);
+                $lang_where_map = array('id' => $existing_data[$row_tag], 'language' => array_key_exists('language', $row_attributes) ? $row_attributes['language'] : get_site_default_lang());
+                $GLOBALS['SITE_DB']->query_update('translate', $lang_update_map, $lang_where_map, '', 1);
                 $data[$row_tag] = $existing_data[$row_tag];
             } else { // Insert in lang layer
                 $insert_map = array(
-                    'source_user' => array_key_exists('source_user',$row_attributes)?intval($row_attributes['source_user']):get_member(),
+                    'source_user' => array_key_exists('source_user', $row_attributes) ? intval($row_attributes['source_user']) : get_member(),
                     'broken' => 0,
-                    'importance_level' => array_key_exists('importance_level',$row_attributes)?intval($row_attributes['importance_level']):2,
+                    'importance_level' => array_key_exists('importance_level', $row_attributes) ? intval($row_attributes['importance_level']) : 2,
                     'text_original' => $row_value,
                     'text_parsed' => '',
-                    'language' => array_key_exists('language',$row_attributes)?$row_attributes['language']:get_site_default_lang(),
+                    'language' => array_key_exists('language', $row_attributes) ? $row_attributes['language'] : get_site_default_lang(),
                 );
-                if (array_key_exists($row_tag,$data)) {
+                if (array_key_exists($row_tag, $data)) {
                     $insert_map['id'] = $data[$row_tag];
-                    $GLOBALS['SITE_DB']->query_insert('translate',$insert_map);
+                    $GLOBALS['SITE_DB']->query_insert('translate', $insert_map);
                 } else {
-                    $data[$row_tag] = $GLOBALS['SITE_DB']->query_insert('translate',$insert_map,true);
+                    $data[$row_tag] = $GLOBALS['SITE_DB']->query_insert('translate', $insert_map, true);
                 }
             }
         }
     }
 
     // Amend DB
-    $id_field = array_key_exists($table[0],$all_id_fields)?$all_id_fields[$table[0]]:null;
+    $id_field = array_key_exists($table[0], $all_id_fields) ? $all_id_fields[$table[0]] : null;
     if ($update) {
-        $GLOBALS['SITE_DB']->query_update($table[0],$data,$key_map,'',1);
+        $GLOBALS['SITE_DB']->query_update($table[0], $data, $key_map, '', 1);
         $data_diff = $data;
         foreach ($existing_data as $key => $val) {
-            if ((array_key_exists($key,$data_diff)) && ($data_diff[$key] == $val)) {
+            if ((array_key_exists($key, $data_diff)) && ($data_diff[$key] == $val)) {
                 unset($data_diff[$key]);
             }
         }
-        $ops[] = array(do_lang('UPDATED_IN_TABLE',$table[0]),do_lang('RECORD_IDENTIFIED_BY',make_map_nice($key_map)),($data_diff == array())?do_lang('NO_CHANGES_MADE'):make_map_nice($data_diff));
+        $ops[] = array(do_lang('UPDATED_IN_TABLE', $table[0]), do_lang('RECORD_IDENTIFIED_BY', make_map_nice($key_map)), ($data_diff == array()) ? do_lang('NO_CHANGES_MADE') : make_map_nice($data_diff));
 
-        $insert_ids[$table[0]] = array_key_exists($id_field,$key_map)?$key_map[$id_field]:null;
+        $insert_ids[$table[0]] = array_key_exists($id_field, $key_map) ? $key_map[$id_field] : null;
     } else {
-        $insert_ids[$table[0]] = $GLOBALS['SITE_DB']->query_insert($table[0],$data,!is_null($id_field) && !array_key_exists($id_field,$data));
-        $ops[] = array(do_lang('INSERTED_TO_TABLE',$table[0]),make_map_nice($data));
+        $insert_ids[$table[0]] = $GLOBALS['SITE_DB']->query_insert($table[0], $data, !is_null($id_field) && !array_key_exists($id_field, $data));
+        $ops[] = array(do_lang('INSERTED_TO_TABLE', $table[0]), make_map_nice($data));
     }
 
     // Special case for CPFs, create indexes
     if ($table[0] == 'f_custom_fields') {
-        $test = $GLOBALS['SITE_DB']->query_select('f_member_custom_fields',array('*'),null,'',1);
-        if (!array_key_exists('field_' . strval($insert_ids[$table[0]]),$test[0])) {
-            $_record = $GLOBALS['SITE_DB']->query_select($table[0],array('*'),array('id' => $insert_ids[$table[0]]));
+        $test = $GLOBALS['SITE_DB']->query_select('f_member_custom_fields', array('*'), null, '', 1);
+        if (!array_key_exists('field_' . strval($insert_ids[$table[0]]), $test[0])) {
+            $_record = $GLOBALS['SITE_DB']->query_select($table[0], array('*'), array('id' => $insert_ids[$table[0]]));
             $record = $_record[0];
 
             $encrypted = $record['cf_encrypted'];
@@ -648,18 +648,18 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
                     break;
                 default:
                     $index = true;
-                    $_type = ($encrypted == 1)?'LONG_TEXT':'SHORT_TEXT';
+                    $_type = ($encrypted == 1) ? 'LONG_TEXT' : 'SHORT_TEXT';
             }
             require_code('database_action');
-            $GLOBALS['SITE_DB']->add_table_field('f_member_custom_fields','field_' . strval($id),$_type); // Default will be made explicit when we insert rows
+            $GLOBALS['SITE_DB']->add_table_field('f_member_custom_fields', 'field_' . strval($id), $_type); // Default will be made explicit when we insert rows
             if ($index) {
-                $indices_count = $GLOBALS['FORUM_DB']->query_select_value('db_meta_indices','COUNT(*)',array('i_table' => 'f_member_custom_fields'));
-                if ($indices_count<60) { // Could be 64 but trying to be careful here...
+                $indices_count = $GLOBALS['FORUM_DB']->query_select_value('db_meta_indices', 'COUNT(*)', array('i_table' => 'f_member_custom_fields'));
+                if ($indices_count < 60) { // Could be 64 but trying to be careful here...
                     if ($_type != 'LONG_TEXT') {
-                        $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','mcf' . strval($id),array('field_' . strval($id)),'mf_member_id');
+                        $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields', 'mcf' . strval($id), array('field_' . strval($id)), 'mf_member_id');
                     }
-                    if (strpos($_type,'_TEXT') !== false) {
-                        $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields','#mcf_ft_' . strval($id),array('field_' . strval($id)),'mf_member_id');
+                    if (strpos($_type, '_TEXT') !== false) {
+                        $GLOBALS['FORUM_DB']->create_index('f_member_custom_fields', '#mcf_ft_' . strval($id), array('field_' . strval($id)), 'mf_member_id');
                     }
                 }
             }
@@ -667,10 +667,10 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
     }
 
     // Handle tree children
-    $this_id = isset($insert_ids[$table[0]])?$insert_ids[$table[0]]:null;
+    $this_id = isset($insert_ids[$table[0]]) ? $insert_ids[$table[0]] : null;
     foreach ($tree_children as $__) {
-        $_ops = _import_xml_row($parsed,$all_existing_data,$all_fields,$all_id_fields,$__,$insert_ids,$this_id);
-        $ops = array_merge($ops,$_ops);
+        $_ops = _import_xml_row($parsed, $all_existing_data, $all_fields, $all_id_fields, $__, $insert_ids, $this_id);
+        $ops = array_merge($ops, $_ops);
     }
 
     return $ops;
@@ -684,10 +684,10 @@ function _import_xml_row($parsed,&$all_existing_data,$all_fields,$all_id_fields,
  * @param  object                       Database connection
  * @return string                       XML (no root tag)
  */
-function get_translated_text_xml($id,$name,$db)
+function get_translated_text_xml($id, $name, $db)
 {
     $inner = '';
-    $translate_rows = $db->query_select('translate',array('*'),array('id' => $id));
+    $translate_rows = $db->query_select('translate', array('*'), array('id' => $id));
     foreach ($translate_rows as $t) {
         $value = xmlentities($t['text_original']);
 
@@ -703,7 +703,7 @@ function get_translated_text_xml($id,$name,$db)
  * @param  string                       XML (with root tag), or just flat text if multi-lang-content is not on
  * @return array                        The language ID save fields
  */
-function insert_lang_xml($field_name,$xml_data)
+function insert_lang_xml($field_name, $xml_data)
 {
     if (!multi_lang_content()) {
         return array(
@@ -717,7 +717,7 @@ function insert_lang_xml($field_name,$xml_data)
         warn_exit($parsed->error);
     }
 
-    list($root_tag,$root_attributes,,$this_children) = $parsed->gleamed;
+    list($root_tag, $root_attributes, , $this_children) = $parsed->gleamed;
 
     $id = mixed();
 
@@ -728,25 +728,25 @@ function insert_lang_xml($field_name,$xml_data)
                 continue;
             }
 
-            list($row_tag,$row_attributes,$row_value,$row_children) = $__;
+            list($row_tag, $row_attributes, $row_value, $row_children) = $__;
 
             if ((count($row_children) != 0) && (trim($row_value) == '')) {
                 $row_value = $parsed->pull_together($row_children);
             }
 
             $insert_map = array(
-                'source_user' => array_key_exists('source_user',$row_attributes)?intval($row_attributes['source_user']):get_member(),
+                'source_user' => array_key_exists('source_user', $row_attributes) ? intval($row_attributes['source_user']) : get_member(),
                 'broken' => 0,
-                'importance_level' => array_key_exists('importance_level',$row_attributes)?intval($row_attributes['importance_level']):2,
+                'importance_level' => array_key_exists('importance_level', $row_attributes) ? intval($row_attributes['importance_level']) : 2,
                 'text_original' => $row_value,
                 'text_parsed' => '',
-                'language' => array_key_exists('language',$row_attributes)?$row_attributes['language']:get_site_default_lang(),
+                'language' => array_key_exists('language', $row_attributes) ? $row_attributes['language'] : get_site_default_lang(),
             );
             if (!is_null($id)) {
                 $insert_map['id'] = $id;
-                $GLOBALS['SITE_DB']->query_insert('translate',$insert_map);
+                $GLOBALS['SITE_DB']->query_insert('translate', $insert_map);
             } else {
-                $id = $GLOBALS['SITE_DB']->query_insert('translate',$insert_map,true);
+                $id = $GLOBALS['SITE_DB']->query_insert('translate', $insert_map, true);
             }
         }
     }

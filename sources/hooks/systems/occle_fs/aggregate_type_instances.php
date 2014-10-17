@@ -32,7 +32,7 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['SITE_DB']->query_select_value('aggregate_type_instances','COUNT(*)');
+        return $GLOBALS['SITE_DB']->query_select_value('aggregate_type_instances', 'COUNT(*)');
     }
 
     /**
@@ -42,9 +42,9 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $_ret = $GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('id'),array('aggregate_label' => $label));
+        $_ret = $GLOBALS['SITE_DB']->query_select('aggregate_type_instances', array('id'), array('aggregate_label' => $label));
         $ret = array();
         foreach ($_ret as $r) {
             $ret[] = strval($r['id']);
@@ -75,22 +75,22 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('aggregate_types');
 
-        $aggregate_type = $this->_default_property_str($properties,'aggregate_type');
+        $aggregate_type = $this->_default_property_str($properties, 'aggregate_type');
         if ($aggregate_type == '') {
             $aggregate_type = 'example';
         }
-        $_other_parameters = $this->_default_property_str($properties,'other_parameters');
-        $other_parameters = ($_other_parameters == '')?array():unserialize($_other_parameters);
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $edit_time = $this->_default_property_int_null($properties,'edit_date');
+        $_other_parameters = $this->_default_property_str($properties, 'other_parameters');
+        $other_parameters = ($_other_parameters == '') ? array() : unserialize($_other_parameters);
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $edit_time = $this->_default_property_int_null($properties, 'edit_date');
 
-        $id = add_aggregate_type_instance($label,$aggregate_type,$other_parameters,$add_time,$edit_time,true,true);
+        $id = add_aggregate_type_instance($label, $aggregate_type, $other_parameters, $add_time, $edit_time, true, true);
         return strval($id);
     }
 
@@ -101,12 +101,12 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('aggregate_type_instances',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('aggregate_type_instances', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
@@ -128,22 +128,22 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('aggregate_types');
 
-        $label = $this->_default_property_str($properties,'label');
-        $aggregate_type = $this->_default_property_str($properties,'aggregate_type');
+        $label = $this->_default_property_str($properties, 'label');
+        $aggregate_type = $this->_default_property_str($properties, 'aggregate_type');
         if ($aggregate_type == '') {
             $aggregate_type = 'example';
         }
-        $_other_parameters = $this->_default_property_str($properties,'other_parameters');
-        $other_parameters = ($_other_parameters == '')?array():unserialize($_other_parameters);
+        $_other_parameters = $this->_default_property_str($properties, 'other_parameters');
+        $other_parameters = ($_other_parameters == '') ? array() : unserialize($_other_parameters);
 
-        edit_aggregate_type_instance(intval($resource_id),$label,$aggregate_type,$other_parameters,true);
+        edit_aggregate_type_instance(intval($resource_id), $label, $aggregate_type, $other_parameters, true);
 
         return $resource_id;
     }
@@ -155,9 +155,9 @@ class Hook_occle_fs_aggregate_type_instances extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('aggregate_types');
         delete_aggregate_type_instance(intval($resource_id));

@@ -28,48 +28,48 @@
  * @param  tempcode                     Second parameter (cropped)
  * @return ?array                       Pair: first parameter as possible link, second parameter as possible link (NULL: could not construct a nice link)
  */
-function actionlog_linkage($type,$a,$b,$_a,$_b)
+function actionlog_linkage($type, $a, $b, $_a, $_b)
 {
-    $type_str = do_lang($type,$a,$b,null,null,false);
+    $type_str = do_lang($type, $a, $b, null, null, false);
     if (is_null($type_str)) {
         $type_str = $type;
     }
 
     // TODO: This will be replaced later with a more thorough system #115 on tracker
-    if (($type == 'EDIT_TEMPLATES') && (strpos($a,',') === false)) {
+    if (($type == 'EDIT_TEMPLATES') && (strpos($a, ',') === false)) {
         if ($b == '') {
             $b = 'default';
         }
-        $tmp_url = build_url(array('page' => 'admin_themes','type' => '_edit_templates','theme' => $b,'f0file' => $a),get_module_zone('admin_themes'));
-        $a = basename($a,'.tpl');
-        $_a = tpl_crop_text_mouse_over($a,14);
-        $_a = hyperlink($tmp_url,$_a,false,false,$type_str);
-        return array($_a,$_b);
+        $tmp_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $b, 'f0file' => $a), get_module_zone('admin_themes'));
+        $a = basename($a, '.tpl');
+        $_a = tpl_crop_text_mouse_over($a, 14);
+        $_a = hyperlink($tmp_url, $_a, false, false, $type_str);
+        return array($_a, $_b);
     }
     if ($type == 'EDIT_CSS') {
         if ($b == '') {
             $b = 'global.css';
         }
-        $tmp_url = build_url(array('page' => 'admin_themes','type' => 'edit_css','theme' => $a,'file' => $b),get_module_zone('admin_themes'));
-        $b = basename($b,'.css');
-        $_b = hyperlink($tmp_url,$_b,false,false,$type_str);
-        return array($_a,$_b);
+        $tmp_url = build_url(array('page' => 'admin_themes', 'type' => 'edit_css', 'theme' => $a, 'file' => $b), get_module_zone('admin_themes'));
+        $b = basename($b, '.css');
+        $_b = hyperlink($tmp_url, $_b, false, false, $type_str);
+        return array($_a, $_b);
     }
     if ($type == 'COMCODE_PAGE_EDIT') {
-        $tmp_url = build_url(array('page' => 'cms_comcode_pages','type' => '_ed','page_link' => $b . ':' . $a),get_module_zone('cms_comcode_pages'));
-        $_a = hyperlink($tmp_url,$_a,false,false,$type_str);
-        return array($_a,$_b);
+        $tmp_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $b . ':' . $a), get_module_zone('cms_comcode_pages'));
+        $_a = hyperlink($tmp_url, $_a, false, false, $type_str);
+        return array($_a, $_b);
     }
     if ($type == 'ADD_CATALOGUE_ENTRY' || $type == 'EDIT_CATALOGUE_ENTRY') {
-        $tmp_url = build_url(array('page' => 'catalogues','type' => 'entry','id' => $a),get_module_zone('catalogues'));
-        $_b = hyperlink($tmp_url,($b == '')?$_a:$_b,false,false,$type_str);
-        return array($_a,$_b);
+        $tmp_url = build_url(array('page' => 'catalogues', 'type' => 'entry', 'id' => $a), get_module_zone('catalogues'));
+        $_b = hyperlink($tmp_url, ($b == '') ? $_a : $_b, false, false, $type_str);
+        return array($_a, $_b);
     }
     if (($type == 'ADD_CATALOGUE_CATEGORY' || $type == 'EDIT_CATALOGUE_CATEGORY') && ($b != '')) {
-        $tmp_url = build_url(array('page' => 'catalogues','type' => 'misc','id' => (!is_numeric($a))?$b:$a),get_module_zone('catalogues'));
-        $_b = hyperlink($tmp_url,$_b,false,false,$type_str);
-        return array($_a,$_b);
+        $tmp_url = build_url(array('page' => 'catalogues', 'type' => 'misc', 'id' => (!is_numeric($a)) ? $b : $a), get_module_zone('catalogues'));
+        $_b = hyperlink($tmp_url, $_b, false, false, $type_str);
+        return array($_a, $_b);
     }
 
-    return NULL; // Could not get a match
+    return null; // Could not get a match
 }

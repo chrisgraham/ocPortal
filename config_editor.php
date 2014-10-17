@@ -14,8 +14,8 @@
  */
 
 // Find ocPortal base directory, and chdir into it
-global $FILE_BASE,$RELATIVE_PATH;
-$FILE_BASE = (strpos(__FILE__,'./') === false)?__FILE__:realpath(__FILE__);
+global $FILE_BASE, $RELATIVE_PATH;
+$FILE_BASE = (strpos(__FILE__, './') === false) ? __FILE__ : realpath(__FILE__);
 $FILE_BASE = dirname($FILE_BASE);
 if (!is_file($FILE_BASE . '/sources/global.php')) {
     $RELATIVE_PATH = basename($FILE_BASE);
@@ -28,7 +28,7 @@ if (!is_file($FILE_BASE . '/sources/global.php')) {
 if (get_magic_quotes_gpc()) {
     foreach ($_POST as $key => $val) {
         if (is_array($val)) {
-            $_POST[$key] = array_map('stripslashes',$val);
+            $_POST[$key] = array_map('stripslashes', $val);
         } else {
             $_POST[$key] = stripslashes($val);
         }
@@ -52,7 +52,7 @@ if (!is_writable($FILE_BASE . '/_config.php')) {
 }
 
 ce_do_header();
-if ((array_key_exists('given_password',$_POST))) {
+if ((array_key_exists('given_password', $_POST))) {
     $given_password = $_POST['given_password'];
     if (co_check_master_password($given_password)) {
         if (count($_POST) == 1) {
@@ -81,7 +81,7 @@ function ce_do_header()
     <link rel="icon" href="http://ocportal.com/favicon.ico" type="image/x-icon" />
     <style>
 ';
-    @print(preg_replace('#/\*\s*\*/\s*#','',str_replace('url(\'\')','none',str_replace('url("")','none',preg_replace('#\{\$[^\}]*\}#','',preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#','$2',file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
+    @print(preg_replace('#/\*\s*\*/\s*#', '', str_replace('url(\'\')', 'none', str_replace('url("")', 'none', preg_replace('#\{\$[^\}]*\}#', '', preg_replace('#\{\$\?,\{\$MOBILE\},([^,]+),([^,]+)\}#', '$2', file_get_contents($GLOBALS['FILE_BASE'] . '/themes/default/css/global.css')))))));
     echo '
         .screen_title { text-decoration: underline; display: block; background: url(\'themes/default/images/icons/48x48/menu/_generic_admin/tool.png\') top left no-repeat; min-height: 42px; padding: 10px 0 0 60px; }
         .button_screen { padding: 0.5em 0.3em !important; }
@@ -107,7 +107,7 @@ function ce_do_footer()
     ';
 
     global $SITE_INFO;
-    if (array_key_exists('base_url',$SITE_INFO)) {
+    if (array_key_exists('base_url', $SITE_INFO)) {
         echo '
             <hr />
             <ul class="actions_list" role="navigation">
@@ -219,7 +219,7 @@ function do_access($given_password)
 
     // Display UI to set all settings
     foreach ($settings as $key => $notes) {
-        $val = array_key_exists($key,$SITE_INFO)?$SITE_INFO[$key]:'';
+        $val = array_key_exists($key, $SITE_INFO) ? $SITE_INFO[$key] : '';
 
         if (is_array($val)) {
             foreach ($val as $val2) {
@@ -229,9 +229,9 @@ function do_access($given_password)
         }
 
         $type = 'text';
-        if (strpos($key,'password') !== false) {
+        if (strpos($key, 'password') !== false) {
             $type = 'password';
-        } elseif (strpos($key,'Whether') !== false) {
+        } elseif (strpos($key, 'Whether') !== false) {
             $type = 'checkbox';
             $checked = ($val == 1);
             $val = '1';
@@ -246,7 +246,7 @@ function do_access($given_password)
                             ' . $_key . '
                     </th>
                     <td>
-                            <input type="' . $type . '" name="' . $_key . '" value="' . $_val . '" ' . (($type == 'checkbox')?($checked?'checked="checked"':''):'size="20"') . ' />
+                            <input type="' . $type . '" name="' . $_key . '" value="' . $_val . '" ' . (($type == 'checkbox') ? ($checked ? 'checked="checked"' : '') : 'size="20"') . ' />
                     </td>
                     <td>
                             ' . $notes . '
@@ -271,7 +271,7 @@ function do_access($given_password)
 
     // Any other settings that we don't actually implicitly recognise need to be relayed
     foreach ($SITE_INFO as $key => $val) {
-        if (!array_key_exists($key,$settings)) {
+        if (!array_key_exists($key, $settings)) {
             if (is_array($val)) {
                 foreach ($val as $val2) {
                     echo '<input type="hidden" name="' . htmlentities($key) . '[]" value="' . htmlentities($val2) . '" />';
@@ -308,7 +308,7 @@ function do_set()
                     $val = $given_password;
                 }
                 if (function_exists('password_hash')) { // PHP5.5+
-                    $val = password_hash($val,PASSWORD_BCRYPT,array('cost' => 12));
+                    $val = password_hash($val, PASSWORD_BCRYPT, array('cost' => 12));
                 } else {
                     $val = '!' . md5($val . 'ocp');
                 }
@@ -327,31 +327,31 @@ function do_set()
     $cookie_domain = $new['cookie_domain'];
     $cookie_path = $new['cookie_path'];
     $url_parts = parse_url($base_url);
-    if (!array_key_exists('host',$url_parts)) {
+    if (!array_key_exists('host', $url_parts)) {
         $url_parts['host'] = 'localhost';
     }
-    if (!array_key_exists('path',$url_parts)) {
+    if (!array_key_exists('path', $url_parts)) {
         $url_parts['path'] = '';
     }
-    if (substr($url_parts['path'],-1) != '/') {
+    if (substr($url_parts['path'], -1) != '/') {
         $url_parts['path'] .= '/';
     }
-    if (substr($cookie_path,-1) == '/') {
-        $cookie_path = substr($cookie_path,0,strlen($cookie_path)-1);
+    if (substr($cookie_path, -1) == '/') {
+        $cookie_path = substr($cookie_path, 0, strlen($cookie_path) - 1);
     }
-    if (($cookie_path != '') && (substr($url_parts['path'],0,strlen($cookie_path)+1) != $cookie_path . '/')) {
+    if (($cookie_path != '') && (substr($url_parts['path'], 0, strlen($cookie_path) + 1) != $cookie_path . '/')) {
         echo '<hr /><p><strong>The cookie path must either be blank or correspond with some or all of the path in the base URL (which is <kbd>' . htmlentities($url_parts['path']) . '</kbd>).</strong></p>';
         return;
     }
     if ($cookie_domain != '') {
-        if (strpos($url_parts['host'],'.') === false) {
+        if (strpos($url_parts['host'], '.') === false) {
             echo '<hr /><p><strong>You are using a non-DNS domain in your base URL, which means you will need to leave your cookie domain blank (otherwise it won\'t work).</strong></p>';
             return;
         }
-        if (substr($cookie_domain,0,1) != '.') {
+        if (substr($cookie_domain, 0, 1) != '.') {
             echo '<hr /><p><strong>The cookie domain must either be blank or start with a dot.</strong></p>';
             return;
-        } elseif (substr($url_parts['host'],1-strlen($cookie_domain)) != substr($cookie_domain,1)) {
+        } elseif (substr($url_parts['host'], 1 - strlen($cookie_domain)) != substr($cookie_domain, 1)) {
             echo '<hr /><p><strong>The cookie domain must either be blank or correspond to some or all of the domain in the base URL (which is <kbd>' . htmlentities($url_parts['host']) . '</kbd>). It must also start with a dot, so a valid example is <kbd>.' . htmlentities($url_parts['host']) . '</kbd>.</strong></p>';
             return;
         }
@@ -360,17 +360,17 @@ function do_set()
     // Delete old cookies, if our settings changed- to stop user getting confused by overrides
     global $SITE_INFO;
     if ((@$new['cookie_domain'] !== @$SITE_INFO['cookie_domain']) || (@$new['cookie_path'] !== @$SITE_INFO['cookie_path'])) {
-        $cookie_path = array_key_exists('cookie_path',$SITE_INFO)?$SITE_INFO['cookie_path']:'/';
+        $cookie_path = array_key_exists('cookie_path', $SITE_INFO) ? $SITE_INFO['cookie_path'] : '/';
         if ($cookie_path == '') {
             $cookie_path = null;
         }
-        $cookie_domain = array_key_exists('cookie_domain',$SITE_INFO)?$SITE_INFO['cookie_domain']:null;
+        $cookie_domain = array_key_exists('cookie_domain', $SITE_INFO) ? $SITE_INFO['cookie_domain'] : null;
         if ($cookie_domain == '') {
             $cookie_domain = null;
         }
 
         foreach (array_keys($_COOKIE) as $cookie) { // Delete all cookies, to clean up the mess - don't try and be smart, it just creates more confusion that it's worth
-            @setcookie($cookie,'',time()-100000,$cookie_path,$cookie_domain);
+            @setcookie($cookie, '', time() - 100000, $cookie_path, $cookie_domain);
         }
 
         echo '<p><strong>You have changed your cookie settings. Your old login cookies have been deleted, and the software will try and delete all cookie variations from your member\'s computers when they log out. However there is a chance you may need to let some members know that they need to delete their old cookies manually.</strong></p>';
@@ -380,33 +380,33 @@ function do_set()
     global $FILE_BASE;
     $config_file = '_config.php';
     $path = $FILE_BASE . '/exports/file_backups/' . $config_file . '.' . strval(time());
-    $copied_ok = @copy($FILE_BASE . '/' . $config_file,$path);
+    $copied_ok = @copy($FILE_BASE . '/' . $config_file, $path);
     if ($copied_ok !== false) {
         co_sync_file($path);
     }
-    $config_file_handle = fopen($FILE_BASE . '/' . $config_file,'wt');
+    $config_file_handle = fopen($FILE_BASE . '/' . $config_file, 'wt');
     if ($config_file_handle === false) {
         exit();
     }
-    @flock($config_file_handle,LOCK_EX);
-    ftruncate($config_file_handle,0);
-    fwrite($config_file_handle,"<" . "?php\n");
+    @flock($config_file_handle, LOCK_EX);
+    ftruncate($config_file_handle, 0);
+    fwrite($config_file_handle, "<" . "?php\n");
     foreach ($new as $key => $val) {
         if (is_array($val)) {
             foreach ($val as $val2) {
-                $_val = str_replace('\\','\\\\',$val2);
-                if (fwrite($config_file_handle,'$SITE_INFO[\'' . $key . '\'][]=\'' . $_val . "';\n") === false) {
+                $_val = str_replace('\\', '\\\\', $val2);
+                if (fwrite($config_file_handle, '$SITE_INFO[\'' . $key . '\'][]=\'' . $_val . "';\n") === false) {
                     echo '<strong>Could not save to file. Out of disk space?<strong>';
                 }
             }
         } else {
-            $_val = str_replace('\\','\\\\',$val);
-            if (fwrite($config_file_handle,'$SITE_INFO[\'' . $key . '\']=\'' . $_val . "';\n") === false) {
+            $_val = str_replace('\\', '\\\\', $val);
+            if (fwrite($config_file_handle, '$SITE_INFO[\'' . $key . '\']=\'' . $_val . "';\n") === false) {
                 echo '<strong>Could not save to file. Out of disk space?<strong>';
             }
         }
     }
-    @flock($config_file_handle,LOCK_UN);
+    @flock($config_file_handle, LOCK_UN);
     fclose($config_file_handle);
     co_sync_file($config_file);
 
@@ -424,8 +424,8 @@ function co_sync_file($filename)
     global $FILE_BASE;
     if (file_exists($FILE_BASE . '/data_custom/sync_script.php')) {
         require_once($FILE_BASE . '/data_custom/sync_script.php');
-        if (substr($filename,0,strlen($FILE_BASE)) == $FILE_BASE) {
-            $filename = substr($filename,strlen($FILE_BASE));
+        if (substr($filename, 0, strlen($FILE_BASE)) == $FILE_BASE) {
+            $filename = substr($filename, strlen($FILE_BASE));
         }
         if (function_exists('master__sync_file')) {
             master__sync_file($filename);
@@ -439,19 +439,19 @@ function co_sync_file($filename)
  * @param  PATH                         File/directory name to move from (may be full or relative path)
  * @param  PATH                         File/directory name to move to (may be full or relative path)
  */
-function co_sync_file_move($old,$new)
+function co_sync_file_move($old, $new)
 {
     global $FILE_BASE;
     if (file_exists($FILE_BASE . '/data_custom/sync_script.php')) {
         require_once($FILE_BASE . '/data_custom/sync_script.php');
-        if (substr($old,0,strlen($FILE_BASE)) == $FILE_BASE) {
-            $old = substr($old,strlen($FILE_BASE));
+        if (substr($old, 0, strlen($FILE_BASE)) == $FILE_BASE) {
+            $old = substr($old, strlen($FILE_BASE));
         }
-        if (substr($new,0,strlen($FILE_BASE)) == $FILE_BASE) {
-            $new = substr($new,strlen($FILE_BASE));
+        if (substr($new, 0, strlen($FILE_BASE)) == $FILE_BASE) {
+            $new = substr($new, strlen($FILE_BASE));
         }
         if (function_exists('master__sync_file_move')) {
-            master__sync_file_move($old,$new);
+            master__sync_file_move($old, $new);
         }
     }
 }
@@ -465,16 +465,16 @@ function co_sync_file_move($old,$new)
 function co_check_master_password($password_given)
 {
     global $SITE_INFO;
-    if (!array_key_exists('master_password',$SITE_INFO)) {
+    if (!array_key_exists('master_password', $SITE_INFO)) {
         exit('No master password defined in _config.php currently so cannot authenticate');
     }
     $actual_password_hashed = $SITE_INFO['master_password'];
-    if ((function_exists('password_verify')) && (strpos($actual_password_hashed,'$') !== false)) {
-        return password_verify($password_given,$actual_password_hashed);
+    if ((function_exists('password_verify')) && (strpos($actual_password_hashed, '$') !== false)) {
+        return password_verify($password_given, $actual_password_hashed);
     }
     $salt = '';
-    if ((substr($actual_password_hashed,0,1) == '!') && (strlen($actual_password_hashed) == 33)) {
-        $actual_password_hashed = substr($actual_password_hashed,1);
+    if ((substr($actual_password_hashed, 0, 1) == '!') && (strlen($actual_password_hashed) == 33)) {
+        $actual_password_hashed = substr($actual_password_hashed, 1);
         $salt = 'ocp';
     }
     return (((strlen($password_given) != 32) && ($actual_password_hashed == $password_given)) || ($actual_password_hashed == md5($password_given . $salt)));

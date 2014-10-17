@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_ocf_topics
 {
     /**
@@ -28,7 +27,7 @@ class Hook_ocf_topics
     public function info()
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         } else {
             ocf_require_all_forum_stuff();
         }
@@ -55,6 +54,6 @@ class Hook_ocf_topics
         }
 
         require_code('tasks');
-        return call_user_func_array__long_task(do_lang('CACHE_TOPICS'),null,'ocf_topics_recache');
+        return call_user_func_array__long_task(do_lang('CACHE_TOPICS'), null, 'ocf_topics_recache');
     }
 }

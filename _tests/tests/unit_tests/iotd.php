@@ -29,16 +29,16 @@ class iotd_test_set extends ocp_test_case
         parent::setUp();
 
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 
         require_code('iotds');
         require_code('iotds2');
 
-        $this->iotd_id = add_iotd('http://google.com','welcome','Google','images/google.jpg',0,0,0,0,'Notes ?',null,null,0,null,0,null);
+        $this->iotd_id = add_iotd('http://google.com', 'welcome', 'Google', 'images/google.jpg', 0, 0, 0, 0, 'Notes ?', null, null, 0, null, 0, null);
 
-        $this->assertTrue('http://google.com' == $GLOBALS['SITE_DB']->query_select_value('iotd','url',array('id' => $this->iotd_id)));
+        $this->assertTrue('http://google.com' == $GLOBALS['SITE_DB']->query_select_value('iotd', 'url', array('id' => $this->iotd_id)));
     }
 
     public function testEditIotd()
@@ -48,13 +48,13 @@ class iotd_test_set extends ocp_test_case
         }
 
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 
-        edit_iotd($this->iotd_id,'Thank you','Caption ?','images/yahoo.jpg','yahoo.com',0,0,0,'Notes');
+        edit_iotd($this->iotd_id, 'Thank you', 'Caption ?', 'images/yahoo.jpg', 'yahoo.com', 0, 0, 0, 'Notes');
 
-        $this->assertTrue('yahoo.com' == $GLOBALS['SITE_DB']->query_select_value('iotd','url',array('id' => $this->iotd_id)));
+        $this->assertTrue('yahoo.com' == $GLOBALS['SITE_DB']->query_select_value('iotd', 'url', array('id' => $this->iotd_id)));
     }
 
     public function tearDown()
@@ -64,7 +64,7 @@ class iotd_test_set extends ocp_test_case
         }
 
         if (in_safe_mode()) {
-            $this->assertTrue(false,'Cannot work in safe mode');
+            $this->assertTrue(false, 'Cannot work in safe mode');
             return;
         }
 

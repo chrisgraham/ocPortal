@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_config_currency
 {
     /**
@@ -59,14 +58,14 @@ class Hook_config_currency
      * @param  tempcode                 The field description
      * @return tempcode                 The inputter
      */
-    public function field_inputter($name,$myrow,$human_name,$explanation)
+    public function field_inputter($name, $myrow, $human_name, $explanation)
     {
         $list = '';
         require_code('currency');
         $currencies = array_keys(get_currency_map());
         foreach ($currencies as $currency) {
-            $list .= static_evaluate_tempcode(form_input_list_entry($currency,$currency == get_option($name)));
+            $list .= static_evaluate_tempcode(form_input_list_entry($currency, $currency == get_option($name)));
         }
-        return form_input_list($human_name,$explanation,$name,make_string_tempcode($list));
+        return form_input_list($human_name, $explanation, $name, make_string_tempcode($list));
     }
 }

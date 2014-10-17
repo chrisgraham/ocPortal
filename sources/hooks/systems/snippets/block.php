@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_block
 {
     /**
@@ -27,8 +26,8 @@ class Hook_block
      */
     public function run()
     {
-        $sup = get_param('block_map_sup','',true);
-        $_map = get_param('block_map',false,true);
+        $sup = get_param('block_map_sup', '', true);
+        $_map = get_param('block_map', false, true);
         if ($sup != '') {
             $_map .= ',' . $sup;
         }
@@ -37,30 +36,30 @@ class Hook_block
 
         $map = block_params_str_to_arr($_map);
 
-        if (!array_key_exists('block',$map)) {
+        if (!array_key_exists('block', $map)) {
             return new ocp_tempcode();
         }
 
         $auth_key = get_param_integer('auth_key');
 
         // Check permissions
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('temp_block_permissions','p_block_constraints',array('p_session_id' => get_session_id(),'id' => $auth_key));
-        if ((is_null($test)) || (!block_signature_check(block_params_str_to_arr($test),$map))) {
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('temp_block_permissions', 'p_block_constraints', array('p_session_id' => get_session_id(), 'id' => $auth_key));
+        if ((is_null($test)) || (!block_signature_check(block_params_str_to_arr($test), $map))) {
             require_lang('permissions');
-            return paragraph(do_lang_tempcode('ACCESS_DENIED__ACCESS_DENIED',escape_html($map['block'])));
+            return paragraph(do_lang_tempcode('ACCESS_DENIED__ACCESS_DENIED', escape_html($map['block'])));
         }
 
         // Cleanup
-        if (mt_rand(0,1000) == 123) {
+        if (mt_rand(0, 1000) == 123) {
             if (!$GLOBALS['SITE_DB']->table_is_locked('temp_block_permissions')) {
-                $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'temp_block_permissions WHERE p_time<' . strval(time()-intval(60.0*60.0*floatval(get_option('session_expiry_time')))));
+                $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'temp_block_permissions WHERE p_time<' . strval(time() - intval(60.0 * 60.0 * floatval(get_option('session_expiry_time')))));
             }
         }
 
         // We need to minimise the dependency stuff that comes out, we don't need any default values
-        push_output_state(false,true);
+        push_output_state(false, true);
 
-        if (get_param_integer('raw',0) == 1) {
+        if (get_param_integer('raw', 0) == 1) {
             $map['raw'] = '1';
         }
 
@@ -68,7 +67,7 @@ class Hook_block
         $out = new ocp_tempcode();
         $out->attach(symbol_tempcode('CSS_TEMPCODE'));
         $out->attach(symbol_tempcode('JS_TEMPCODE'));
-        $out->attach(do_block($map['block'],$map));
+        $out->attach(do_block($map['block'], $map));
         return $out;
     }
 }

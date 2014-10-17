@@ -25,19 +25,19 @@ class news_category_test_set extends ocp_test_case
         parent::setUp();
         require_code('news2');
 
-        $this->news_id = add_news_category('Today','news.gif','Headlines',null,null);
+        $this->news_id = add_news_category('Today', 'news.gif', 'Headlines', null, null);
 
         // Test the forum was actually created
-        $this->assertTrue('Today' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id' => $this->news_id))));
+        $this->assertTrue('Today' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories', 'nc_title', array('id' => $this->news_id))));
     }
 
     public function testEditNewscategory()
     {
         // Test the forum edits
-        edit_news_category($this->news_id,'Politics','world.jpg','Around the world',null);
+        edit_news_category($this->news_id, 'Politics', 'world.jpg', 'Around the world', null);
 
         // Test the forum was actually created
-        $this->assertTrue('Politics' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories','nc_title',array('id' => $this->news_id))));
+        $this->assertTrue('Politics' == get_translated_text($GLOBALS['SITE_DB']->query_select_value('news_categories', 'nc_title', array('id' => $this->news_id))));
     }
 
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_css_compile__text
 {
     /**
@@ -27,7 +26,7 @@ class Hook_css_compile__text
      */
     public function run()
     {
-        if (has_actual_page_access(get_member(),'admin_themes')) {
+        if (has_actual_page_access(get_member(), 'admin_themes')) {
             require_code('tempcode_compiler');
             return template_to_tempcode(post_param('css'));
         }

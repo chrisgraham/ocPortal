@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_Notification_low_disk_space extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_low_disk_space extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_low_disk_space extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['low_disk_space'] = array(do_lang('ERRORS'),do_lang('NOTIFICATION_TYPE_low_disk_space'));
+        $list['low_disk_space'] = array(do_lang('ERRORS'), do_lang('NOTIFICATION_TYPE_low_disk_space'));
         return $list;
     }
 }

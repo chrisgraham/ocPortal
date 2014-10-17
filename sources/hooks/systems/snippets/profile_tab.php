@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_profile_tab
 {
     /**
@@ -36,27 +35,27 @@ class Hook_profile_tab
 
         $keep_get = array();
         foreach (array_keys($_GET) as $key) {
-            if (in_array($key,array('snippet','tab','url','title','member_id','utheme'))) {
+            if (in_array($key, array('snippet', 'tab', 'url', 'title', 'member_id', 'utheme'))) {
                 continue;
             }
-            $keep_get[$key] = get_param($key,null,true);
+            $keep_get[$key] = get_param($key, null, true);
         }
-        set_execution_context(array('page' => 'members','type' => 'view','id' => $member_id_of)+$keep_get);
+        set_execution_context(array('page' => 'members', 'type' => 'view', 'id' => $member_id_of) + $keep_get);
 
         require_code('hooks/systems/profiles_tabs/' . $hook);
         $ob = object_factory('Hook_Profiles_Tabs_' . $hook);
-        if ($ob->is_active($member_id_of,$member_id_viewing)) {
+        if ($ob->is_active($member_id_of, $member_id_viewing)) {
             // We need to minimise the dependency stuff that comes out, we don't need any default values
-            push_output_state(false,true);
+            push_output_state(false, true);
 
             // And, go
-            $ret = $ob->render_tab($member_id_of,$member_id_viewing);
+            $ret = $ob->render_tab($member_id_of, $member_id_viewing);
             $out = new ocp_tempcode();
             $out->attach(symbol_tempcode('CSS_TEMPCODE'));
             $out->attach(symbol_tempcode('JS_TEMPCODE'));
             $out->attach($ret[1]);
             return $out;
         }
-        return do_template('INLINE_WIP_MESSAGE',array('_GUID' => 'aae58043638dac785405a42e9578202b','MESSAGE' => do_lang_tempcode('INTERNAL_ERROR')));
+        return do_template('INLINE_WIP_MESSAGE', array('_GUID' => 'aae58043638dac785405a42e9578202b', 'MESSAGE' => do_lang_tempcode('INTERNAL_ERROR')));
     }
 }

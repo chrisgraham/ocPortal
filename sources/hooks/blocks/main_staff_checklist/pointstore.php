@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_checklist_pointstore
 {
     /**
@@ -35,8 +34,8 @@ class Hook_checklist_pointstore
         require_lang('pointstore');
 
         $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA');
-        $url = build_url(array('page' => 'admin_pointstore'),'adminzone');
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'f9ec73adbee71411a915004d9d052cfd','URL' => '','STATUS' => $status,'TASK' => urlise_lang(do_lang('NAG_POINTSTORE'),$url),'INFO' => ''));
-        return array(array($tpl,null,null,null));
+        $url = build_url(array('page' => 'admin_pointstore'), 'adminzone');
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'f9ec73adbee71411a915004d9d052cfd', 'URL' => '', 'STATUS' => $status, 'TASK' => urlise_lang(do_lang('NAG_POINTSTORE'), $url), 'INFO' => ''));
+        return array(array($tpl, null, null, null));
     }
 }

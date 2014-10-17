@@ -24,10 +24,10 @@
  * @param  ID_TEXT                      The prefix (mailbox name)
  * @param  ID_TEXT                      The suffix (domain name)
  */
-function pointstore_handle_error_taken($prefix,$suffix)
+function pointstore_handle_error_taken($prefix, $suffix)
 {
     // Has this email address been taken?
-    $taken = $GLOBALS['SITE_DB']->query_select_value_if_there('sales','details',array('details' => $prefix,'details2' => '@' . $suffix));
+    $taken = $GLOBALS['SITE_DB']->query_select_value_if_there('sales', 'details', array('details' => $prefix, 'details2' => '@' . $suffix));
     if (!is_null($taken)) {
         warn_exit(do_lang_tempcode('EMAIL_TAKEN'));
     }
@@ -41,17 +41,17 @@ function pointstore_handle_error_taken($prefix,$suffix)
  * @param  integer                      Description
  * @return tempcode                     The tempcode list of available domains
  */
-function get_mail_domains($type,$points_left)
+function get_mail_domains($type, $points_left)
 {
     $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'prices WHERE name LIKE \'' . db_encode_like($type . '%') . '\'');
     $list = new ocp_tempcode();
     foreach ($rows as $row) {
-        $address = substr($row['name'],strlen($type));
+        $address = substr($row['name'], strlen($type));
 
         //If we can't afford the mail, turn the text red
-        $red = ($points_left<$row['price']);
+        $red = ($points_left < $row['price']);
 
-        $list->attach(form_input_list_entry($address,false,'@' . $address . ' ' . do_lang('PRICE_GIVE',integer_format($row['price'])),$red));
+        $list->attach(form_input_list_entry($address, false, '@' . $address . ' ' . do_lang('PRICE_GIVE', integer_format($row['price'])), $red));
     }
     return $list;
 }
@@ -67,7 +67,7 @@ function pointstore_handle_error_already_has($type)
     $userid = get_member();
 
     // If we already own a forwarding account, inform our users.
-    $has_one_already = $GLOBALS['SITE_DB']->query_select_value_if_there('sales','memberid',array('memberid' => $userid,'purchasetype' => $type));
+    $has_one_already = $GLOBALS['SITE_DB']->query_select_value_if_there('sales', 'memberid', array('memberid' => $userid, 'purchasetype' => $type));
     if (!is_null($has_one_already)) {
         warn_exit(do_lang_tempcode('ALREADY_HAVE'));
     }

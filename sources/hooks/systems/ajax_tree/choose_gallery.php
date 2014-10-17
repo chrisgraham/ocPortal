@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_choose_gallery
 {
     /**
@@ -28,27 +27,27 @@ class Hook_choose_gallery
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return string                   XML in the special category,entry format
      */
-    public function run($id,$options,$default = null)
+    public function run($id, $options, $default = null)
     {
         require_code('galleries');
         require_lang('galleries');
 
-        $must_accept_images = array_key_exists('must_accept_images',$options)?$options['must_accept_images']:false;
-        $must_accept_videos = array_key_exists('must_accept_videos',$options)?$options['must_accept_videos']:false;
-        $must_accept_something = array_key_exists('must_accept_something',$options)?$options['must_accept_something']:false;
-        $filter = array_key_exists('filter',$options)?$options['filter']:null;
-        $purity = array_key_exists('purity',$options)?$options['purity']:false;
-        $member_id = array_key_exists('member_id',$options)?$options['member_id']:null;
-        $compound_list = array_key_exists('compound_list',$options)?$options['compound_list']:false;
-        $addable_filter = array_key_exists('addable_filter',$options)?$options['addable_filter']:false;
-        $editable_filter = array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
-        $stripped_id = ($compound_list?preg_replace('#,.*$#','',$id):$id);
-        $tree = get_gallery_tree(is_null($id)?'root':$stripped_id,'',null,true,$filter,false,false,$purity,$compound_list,is_null($id)?0:1,$member_id,$addable_filter,$editable_filter);
+        $must_accept_images = array_key_exists('must_accept_images', $options) ? $options['must_accept_images'] : false;
+        $must_accept_videos = array_key_exists('must_accept_videos', $options) ? $options['must_accept_videos'] : false;
+        $must_accept_something = array_key_exists('must_accept_something', $options) ? $options['must_accept_something'] : false;
+        $filter = array_key_exists('filter', $options) ? $options['filter'] : null;
+        $purity = array_key_exists('purity', $options) ? $options['purity'] : false;
+        $member_id = array_key_exists('member_id', $options) ? $options['member_id'] : null;
+        $compound_list = array_key_exists('compound_list', $options) ? $options['compound_list'] : false;
+        $addable_filter = array_key_exists('addable_filter', $options) ? $options['addable_filter'] : false;
+        $editable_filter = array_key_exists('editable_filter', $options) ? ($options['editable_filter']) : false;
+        $stripped_id = ($compound_list ? preg_replace('#,.*$#', '', $id) : $id);
+        $tree = get_gallery_tree(is_null($id) ? 'root' : $stripped_id, '', null, true, $filter, false, false, $purity, $compound_list, is_null($id) ? 0 : 1, $member_id, $addable_filter, $editable_filter);
 
-        $levels_to_expand = array_key_exists('levels_to_expand',$options)?($options['levels_to_expand']):intval(get_long_value('levels_to_expand__' . substr(get_class($this),5)));
-        $options['levels_to_expand'] = max(0,$levels_to_expand-1);
+        $levels_to_expand = array_key_exists('levels_to_expand', $options) ? ($options['levels_to_expand']) : intval(get_long_value('levels_to_expand__' . substr(get_class($this), 5)));
+        $options['levels_to_expand'] = max(0, $levels_to_expand - 1);
 
-        if (!has_actual_page_access(null,'galleries')) {
+        if (!has_actual_page_access(null, 'galleries')) {
             $tree = array();
         }
 
@@ -60,13 +59,13 @@ class Hook_choose_gallery
 
         $out .= '<options>' . serialize($options) . '</options>';
 
-        for ($i = 0;$i<count($tree);$i++) {
+        for ($i = 0; $i < count($tree); $i++) {
             $t = $tree[$i];
 
-            $_id = $compound_list?$t['compound_list']:$t['id'];
+            $_id = $compound_list ? $t['compound_list'] : $t['id'];
             if ($stripped_id === $t['id']) {
                 // Possible when we look under as a root
-                if (array_key_exists('children',$t)) {
+                if (array_key_exists('children', $t)) {
                     $tree = $t['children'];
                     $i = 0;
                 }
@@ -74,7 +73,7 @@ class Hook_choose_gallery
             }
             $title = $t['title'];
             if (is_object($title)) {
-                $title = @html_entity_decode(strip_tags($title->evaluate()),ENT_QUOTES,get_charset());
+                $title = @html_entity_decode(strip_tags($title->evaluate()), ENT_QUOTES, get_charset());
             }
             $has_children = ($t['child_count'] != 0);
             $selectable =
@@ -84,7 +83,7 @@ class Hook_choose_gallery
                 ((($t['accept_videos'] == 1) && ($t['is_member_synched'] == 0)) || (!$must_accept_videos)) &&
                 ((($t['accept_images'] == 1) && ($t['is_member_synched'] == 0)) || (!$must_accept_images));
 
-            if ((!$has_children) || (strpos($_id,'member_') !== false)) {
+            if ((!$has_children) || (strpos($_id, 'member_') !== false)) {
                 if (($editable_filter) && (!$t['editable'])) {
                     continue;
                 }
@@ -94,9 +93,9 @@ class Hook_choose_gallery
             }
 
             $tag = 'category'; // category
-            $out .= '<' . $tag . ' id="' . xmlentities($_id) . '" title="' . xmlentities($title) . '" has_children="' . ($has_children?'true':'false') . '" selectable="' . ($selectable?'true':'false') . '"></' . $tag . '>';
+            $out .= '<' . $tag . ' id="' . xmlentities($_id) . '" title="' . xmlentities($title) . '" has_children="' . ($has_children ? 'true' : 'false') . '" selectable="' . ($selectable ? 'true' : 'false') . '"></' . $tag . '>';
 
-            if ($levels_to_expand>0) {
+            if ($levels_to_expand > 0) {
                 $out .= '<expand>' . xmlentities($_id) . '</expand>';
             }
         }
@@ -106,7 +105,7 @@ class Hook_choose_gallery
             $cat = $default;
             while ((!is_null($cat)) && ($cat != '')) {
                 $out .= '<expand>' . $cat . '</expand>';
-                $cat = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries','parent_id',array('name' => $cat));
+                $cat = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'parent_id', array('name' => $cat));
             }
         }
 
@@ -122,19 +121,19 @@ class Hook_choose_gallery
      * @param  ?ID_TEXT                 The ID to select by default (NULL: none)
      * @return tempcode                 The nice list
      */
-    public function simple($id,$options,$it = null)
+    public function simple($id, $options, $it = null)
     {
-        $must_accept_images = array_key_exists('must_accept_images',$options)?$options['must_accept_images']:false;
-        $must_accept_videos = array_key_exists('must_accept_videos',$options)?$options['must_accept_videos']:false;
-        $filter = array_key_exists('filter',$options)?$options['filter']:null;
-        $purity = array_key_exists('purity',$options)?$options['purity']:false;
-        $member_id = array_key_exists('member_id',$options)?$options['member_id']:null;
-        $compound_list = array_key_exists('compound_list',$options)?$options['compound_list']:false;
-        $addable_filter = array_key_exists('addable_filter',$options)?$options['addable_filter']:false;
-        $editable_filter = array_key_exists('editable_filter',$options)?($options['editable_filter']):false;
+        $must_accept_images = array_key_exists('must_accept_images', $options) ? $options['must_accept_images'] : false;
+        $must_accept_videos = array_key_exists('must_accept_videos', $options) ? $options['must_accept_videos'] : false;
+        $filter = array_key_exists('filter', $options) ? $options['filter'] : null;
+        $purity = array_key_exists('purity', $options) ? $options['purity'] : false;
+        $member_id = array_key_exists('member_id', $options) ? $options['member_id'] : null;
+        $compound_list = array_key_exists('compound_list', $options) ? $options['compound_list'] : false;
+        $addable_filter = array_key_exists('addable_filter', $options) ? $options['addable_filter'] : false;
+        $editable_filter = array_key_exists('editable_filter', $options) ? ($options['editable_filter']) : false;
 
         require_code('galleries');
 
-        return create_selection_list_gallery_tree($it,$filter,$must_accept_images,$must_accept_videos,$purity,$compound_list,$member_id,$addable_filter,$editable_filter);
+        return create_selection_list_gallery_tree($it, $filter, $must_accept_images, $must_accept_videos, $purity, $compound_list, $member_id, $addable_filter, $editable_filter);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-
 class Hook_sw_banners
 {
     /**
@@ -28,10 +27,10 @@ class Hook_sw_banners
     public function get_current_settings()
     {
         $settings = array();
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name' => 'donate'));
-        $settings['have_default_banners_donation'] = is_null($test)?'0':'1';
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name' => 'advertise_here'));
-        $settings['have_default_banners_advertising'] = is_null($test)?'0':'1';
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'name', array('name' => 'donate'));
+        $settings['have_default_banners_donation'] = is_null($test) ? '0' : '1';
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'name', array('name' => 'advertise_here'));
+        $settings['have_default_banners_advertising'] = is_null($test) ? '0' : '1';
         return $settings;
     }
 
@@ -53,10 +52,10 @@ class Hook_sw_banners
         require_lang('banners');
         $fields = new ocp_tempcode();
         if ($current_settings['have_default_banners_donation'] == '1') {
-            $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'),'have_default_banners_donation',$field_defaults['have_default_banners_donation'] == '1'));
+            $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'), do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'), 'have_default_banners_donation', $field_defaults['have_default_banners_donation'] == '1'));
         }
         if ($current_settings['have_default_banners_advertising'] == '1') {
-            $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_ADVERTISING'),do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_ADVERTISING'),'have_default_banners_advertising',$field_defaults['have_default_banners_advertising'] == '1'));
+            $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_ADVERTISING'), do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_ADVERTISING'), 'have_default_banners_advertising', $field_defaults['have_default_banners_advertising'] == '1'));
         }
         return $fields;
     }
@@ -72,30 +71,30 @@ class Hook_sw_banners
 
         $usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 
-        if (post_param_integer('have_default_banners_donation',0) == 0) {
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name' => 'donate'));
+        if (post_param_integer('have_default_banners_donation', 0) == 0) {
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'name', array('name' => 'donate'));
             if (!is_null($test)) {
                 require_code('banners2');
                 delete_banner('donate');
                 foreach (array_keys($usergroups) as $id) {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name' => 'donate','zone_name' => 'site','group_id' => $id));
+                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => 'donate', 'zone_name' => 'site', 'group_id' => $id));
                 }
 
                 require_code('zones3');
-                delete_ocp_page('site','donate',null,true);
+                delete_ocp_page('site', 'donate', null, true);
             }
         }
-        if (post_param_integer('have_default_banners_advertising',0) == 0) {
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','name',array('name' => 'advertise_here'));
+        if (post_param_integer('have_default_banners_advertising', 0) == 0) {
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'name', array('name' => 'advertise_here'));
             if (!is_null($test)) {
                 require_code('banners2');
                 delete_banner('advertise_here');
                 foreach (array_keys($usergroups) as $id) {
-                    $GLOBALS['SITE_DB']->query_insert('group_page_access',array('page_name' => 'advertise','zone_name' => 'site','group_id' => $id));
+                    $GLOBALS['SITE_DB']->query_insert('group_page_access', array('page_name' => 'advertise', 'zone_name' => 'site', 'group_id' => $id));
                 }
 
                 require_code('zones3');
-                delete_ocp_page('site','advertise',null,true);
+                delete_ocp_page('site', 'advertise', null, true);
             }
         }
     }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_posting_field
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_posting_field
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_posting_field
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -60,14 +59,14 @@ class Hook_fields_posting_field
      * @param  ?object                  Database connection (NULL: main site database)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null,$db = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null, $db = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = 'default';
             }
         }
-        return array('long_trans',$default,'long_trans');
+        return array('long_trans', $default, 'long_trans');
     }
 
     /**
@@ -77,7 +76,7 @@ class Hook_fields_posting_field
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -100,7 +99,7 @@ class Hook_fields_posting_field
      * @param  boolean                  Whether this is the last field in the catalogue
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new,$last = true)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new, $last = true)
     {
         if (is_null($actual_value)) {
             $actual_value = '';
@@ -117,21 +116,21 @@ class Hook_fields_posting_field
 
         $tabindex = get_form_field_tabindex();
 
-        $actual_value = filter_form_field_default($_cf_name,$actual_value);
+        $actual_value = filter_form_field_default($_cf_name, $actual_value);
 
-        list($attachments,$attach_size_field) = get_attachments('field_' . strval($field['id']));
+        list($attachments, $attach_size_field) = get_attachments('field_' . strval($field['id']));
 
         $hidden_fields = new ocp_tempcode();
         $hidden_fields->attach($attach_size_field);
 
-        $help_zone = get_comcode_zone('userguide_comcode',false);
+        $help_zone = get_comcode_zone('userguide_comcode', false);
 
         $emoticon_chooser = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser('field_' . strval($field['id']));
 
         $comcode_editor = get_comcode_editor('field_' . strval($field['id']));
-        $comcode_editor_small = get_comcode_editor('field_' . strval($field['id']),true);
+        $comcode_editor_small = get_comcode_editor('field_' . strval($field['id']), true);
 
-        $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value,'{$,page hint: no_wysiwyg}') === false));
+        $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($actual_value, '{$,page hint: no_wysiwyg}') === false));
 
         $class = '';
         attach_wysiwyg();
@@ -143,12 +142,13 @@ class Hook_fields_posting_field
         $temp = $LAX_COMCODE;
         $LAX_COMCODE = true;
         $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
-        /*We want to always reparse with semi-parse mode if (is_null($default_parsed)) */$default_parsed = comcode_to_tempcode($actual_value,null,false,60,null,null,true);
+        /*We want to always reparse with semi-parse mode if (is_null($default_parsed)) */
+        $default_parsed = comcode_to_tempcode($actual_value, null, false, 60, null, null, true);
         $LAX_COMCODE = $temp;
 
         $attachments_done = true;
 
-        $ret = do_template('POSTING_FIELD',array(
+        $ret = do_template('POSTING_FIELD', array(
             '_GUID' => 'b6c65227a28e0650154393033e005f67',
             'REQUIRED' => ($field['cf_required'] == 1),
             'DESCRIPTION' => $_cf_description,
@@ -159,7 +159,7 @@ class Hook_fields_posting_field
             'COMCODE_EDITOR' => $comcode_editor,
             'COMCODE_EDITOR_SMALL' => $comcode_editor_small,
             'CLASS' => $class,
-            'COMCODE_URL' => is_null($help_zone)?new ocp_tempcode():build_url(array('page' => 'userguide_comcode'),$help_zone),
+            'COMCODE_URL' => is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
             'EMOTICON_CHOOSER' => $emoticon_chooser,
             'POST' => $actual_value,
             'DEFAULT_PARSED' => $default_parsed,
@@ -167,7 +167,7 @@ class Hook_fields_posting_field
         ));
 
         if (!$last) {
-            $ret->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '168edca41bd0c3da936d9154d696163e','TITLE' => do_lang_tempcode('ADDITIONAL_INFO'))));
+            $ret->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '168edca41bd0c3da936d9154d696163e', 'TITLE' => do_lang_tempcode('ADDITIONAL_INFO'))));
         }
 
         return $ret;
@@ -182,10 +182,10 @@ class Hook_fields_posting_field
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
-        return post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        return post_param($tmp_name, $editing ? STRING_MAGIC_NULL : '');
     }
 }

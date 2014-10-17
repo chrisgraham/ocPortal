@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    captcha
  */
-
 class Hook_config_captcha_single_guess
 {
     /**

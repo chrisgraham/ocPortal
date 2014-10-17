@@ -40,7 +40,7 @@ function webdav_script()
     $log_path = get_custom_file_base() . '/data_custom/modules/webdav/tmp/debug.log';
     global $WEBDAV_LOG_FILE;
     if (is_file($log_path)) {
-        $WEBDAV_LOG_FILE = fopen($log_path,'a');
+        $WEBDAV_LOG_FILE = fopen($log_path, 'a');
         $log_message = 'Request... ' . ocp_srv('REQUEST_METHOD') . ': ' . ocp_srv('REQUEST_URI');
         //$log_message.="\n".file_get_contents('php://input'); // Only enable when debugging, as breaks PUT requests (see http://stackoverflow.com/questions/3107624/why-can-php-input-be-read-more-than-once-despite-the-documentation-saying-othe)
         webdav_log($log_message);
@@ -52,7 +52,7 @@ function webdav_script()
     $server = new DAV\Server($root_dir);
 
     $parsed = parse_url(get_base_url());
-    if (substr($parsed['path'],-1) != '/') {
+    if (substr($parsed['path'], -1) != '/') {
         $parsed['path'] .= '/';
     }
     $webdav_root = get_value('webdav_root');
@@ -63,7 +63,7 @@ function webdav_script()
 
     if (!$GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) { // If already admin (e.g. backdoor_ip), no need for access check
         $auth_backend = new webdav_occlefs\Auth();
-        $auth_plugin = new DAV\Auth\Plugin($auth_backend,get_site_name()/*the auth realm*/);
+        $auth_plugin = new DAV\Auth\Plugin($auth_backend, get_site_name()/*the auth realm*/);
         $server->addPlugin($auth_plugin);
     }
 
@@ -92,6 +92,6 @@ function webdav_log($str)
 {
     global $WEBDAV_LOG_FILE;
     if (!is_null($WEBDAV_LOG_FILE)) {
-        fwrite($WEBDAV_LOG_FILE,$str . "\n\n");
+        fwrite($WEBDAV_LOG_FILE, $str . "\n\n");
     }
 }

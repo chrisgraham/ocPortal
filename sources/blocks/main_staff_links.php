@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Block_main_staff_links
 {
     /**
@@ -56,7 +55,7 @@ class Block_main_staff_links
     {
         $info = array();
         $info['cache_on'] = '(count($_POST)>0)?NULL:array()'; // No cache on POST as this is when we save text data
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*5;
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 5;
         return $info;
     }
 
@@ -66,10 +65,10 @@ class Block_main_staff_links
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         if ((is_null($upgrade_from)) || ($upgrade_from < 3)) {
-            $GLOBALS['SITE_DB']->create_table('stafflinks',array(
+            $GLOBALS['SITE_DB']->create_table('stafflinks', array(
                 'id' => '*AUTO',
                 'link' => 'URLPATH',
                 'link_title' => 'SHORT_TEXT',
@@ -78,7 +77,7 @@ class Block_main_staff_links
 
             $default_links = array(
                 'ocPortal.com' => 'http://ocportal.com/',
-                'ocPortal.com (topics with unread posts)' => get_brand_page_url(array('page' => 'vforums','type' => 'unread'),'forum'),
+                'ocPortal.com (topics with unread posts)' => get_brand_page_url(array('page' => 'vforums', 'type' => 'unread'), 'forum'),
                 'ocProducts (web development services)' => 'http://ocproducts.com/',
                 'Launchpad (ocPortal language translations)' => 'https://translations.launchpad.net/ocportal/+translations',
                 'Google Alerts' => 'http://www.google.com/alerts',
@@ -107,7 +106,7 @@ class Block_main_staff_links
                 //'GoDaddy (Domains and SSL certificates)'=>'http://www.godaddy.com/', // A bit overly-specific, plus similar to the above
             );
             foreach ($default_links as $link_title => $url) {
-                $GLOBALS['SITE_DB']->query_insert('stafflinks',array(
+                $GLOBALS['SITE_DB']->query_insert('stafflinks', array(
                     'link' => $url,
                     'link_title' => $link_title,
                     'link_desc' => $link_title,
@@ -134,10 +133,10 @@ class Block_main_staff_links
             foreach ($items as $i) {
                 $q = trim($i);
                 if (!empty($q)) {
-                    $bits = explode('=',$q);
+                    $bits = explode('=', $q);
                     if (count($bits) >= 2) {
                         $last_bit = array_pop($bits);
-                        $bits = array(implode('=',$bits),$last_bit);
+                        $bits = array(implode('=', $bits), $last_bit);
                         $link = $bits[0];
                     } else {
                         $link = $q;
@@ -152,7 +151,7 @@ class Block_main_staff_links
                     } else {
                         $link_desc = $link_title;
                     }
-                    $GLOBALS['SITE_DB']->query_insert('stafflinks',array(
+                    $GLOBALS['SITE_DB']->query_insert('stafflinks', array(
                         'link' => $link,
                         'link_title' => $link_title,
                         'link_desc' => $link_desc,
@@ -163,21 +162,21 @@ class Block_main_staff_links
             decache('main_staff_links');
         }
 
-        $rows = $GLOBALS['SITE_DB']->query_select('stafflinks',array('*'));
+        $rows = $GLOBALS['SITE_DB']->query_select('stafflinks', array('*'));
         $formatted_staff_links = array();
         $unformatted_staff_links = array();
         foreach ($rows as $r) {
             if ($r['link_title'] == '') {
                 $r['link_title'] = $r['link_desc'];
             }
-            if (strlen($r['link_title'])>strlen($r['link_desc'])) {
+            if (strlen($r['link_title']) > strlen($r['link_desc'])) {
                 $r['link_title'] = $r['link_desc'];
             }
 
             $formatted_staff_links[] = array(
                 'URL' => $r['link'],
                 'TITLE' => $r['link_title'],
-                'DESC' => ($r['link_title'] == $r['link_desc'])?'':$r['link_desc'],
+                'DESC' => ($r['link_title'] == $r['link_desc']) ? '' : $r['link_desc'],
             );
             $unformatted_staff_links[] = array('LINKS' => $r['link'] . '=' . $r['link_desc']);
         }
@@ -186,6 +185,6 @@ class Block_main_staff_links
         foreach ($map as $key => $val) {
             $map_comcode .= ' ' . $key . '="' . addslashes($val) . '"';
         }
-        return do_template('BLOCK_MAIN_STAFF_LINKS',array('_GUID' => '555150e7f1626ae0689158b1ecc1d85b','URL' => get_self_url(),'BLOCK_NAME' => 'main_staff_links','MAP' => $map_comcode,'FORMATTED_LINKS' => $formatted_staff_links,'UNFORMATTED_LINKS' => $unformatted_staff_links));
+        return do_template('BLOCK_MAIN_STAFF_LINKS', array('_GUID' => '555150e7f1626ae0689158b1ecc1d85b', 'URL' => get_self_url(), 'BLOCK_NAME' => 'main_staff_links', 'MAP' => $map_comcode, 'FORMATTED_LINKS' => $formatted_staff_links, 'UNFORMATTED_LINKS' => $unformatted_staff_links));
     }
 }

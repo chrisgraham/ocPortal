@@ -15,7 +15,7 @@ if (!function_exists('init__forum__ocf')) {
             return $in;
         }
 
-        $in = str_replace("return \$this->get_member_row_field(\$member,'m_username');","return ocjester_name_filter(\$this->get_member_row_field(\$member,'m_username'));",$in);
+        $in = str_replace("return \$this->get_member_row_field(\$member,'m_username');", "return ocjester_name_filter(\$this->get_member_row_field(\$member,'m_username'));", $in);
 
         $in = str_replace(
             '$avatar = $this->get_member_row_field($member,\'m_avatar_url\');',
@@ -36,15 +36,15 @@ function ocjester_name_filter($in)
 
     require_code('ocfiltering');
 
-    $passes = (count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for'),$GLOBALS['FORUM_DRIVER']->get_usergroup_list()),$GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()))) != 0);
+    $passes = (count(array_intersect(ocfilter_to_idlist_using_memory(get_option('ocjester_name_changes_shown_for'), $GLOBALS['FORUM_DRIVER']->get_usergroup_list()), $GLOBALS['FORUM_DRIVER']->get_members_groups(get_member()))) != 0);
     if (!$passes) {
         return $in;
     }
 
-    $alphabetic = @explode("\n",$option);
+    $alphabetic = @explode("\n", $option);
 
     if (strtoupper($in[0]) != strtolower($in[0])) {
-        return $alphabetic[ord(strtoupper($in[0]))-ord('A')] . ' ' . $in;
+        return $alphabetic[ord(strtoupper($in[0])) - ord('A')] . ' ' . $in;
     }
     return $in;
 }

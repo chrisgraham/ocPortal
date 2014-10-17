@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    backup
  */
-
 class Hook_config_backup_server_hostname
 {
     /**

@@ -17,14 +17,13 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
 {
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
-    *
-    * @param  array                     Symbol parameters
-    * @return string                    Result
+     *
+     * @param  array                     Symbol parameters
+     * @return string                    Result
      */
     public function run($param)
     {
@@ -43,20 +42,20 @@ class Hook_symbol_CATALOGUE_ENTRY_FIELD_VALUE_PLAIN
                 $map = $CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id];
             } else {
                 require_code('catalogues');
-                $entry = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id' => $entry_id),'',1);
+                $entry = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('*'), array('id' => $entry_id), '', 1);
                 if (isset($entry[0])) {
                     $catalogue_name = $entry[0]['c_name'];
-                    $catalogue = load_catalogue_row($catalogue_name,true);
-                    if ($catalogue !== NULL) {
+                    $catalogue = load_catalogue_row($catalogue_name, true);
+                    if ($catalogue !== null) {
                         $tpl_set = $catalogue_name;
-                        $map = get_catalogue_entry_map($entry[0],array('c_display_type' => C_DT_FIELDMAPS)+$catalogue,'PAGE',$tpl_set,null,NULL/*Actually we'll load all so we can cache all,array($field_id)*/);
+                        $map = get_catalogue_entry_map($entry[0], array('c_display_type' => C_DT_FIELDMAPS) + $catalogue, 'PAGE', $tpl_set, null, null/*Actually we'll load all so we can cache all,array($field_id)*/);
 
                         $CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id] = $map;
                     }
                 }
             }
 
-            if ($map !== NULL) {
+            if ($map !== null) {
                 if (isset($map['FIELD_' . strval($field_id) . '_PLAIN'])) {
                     $value = $map['FIELD_' . strval($field_id) . '_PLAIN'];
                 } elseif (isset($map['_FIELD_' . strval($field_id) . '_PLAIN'])) {

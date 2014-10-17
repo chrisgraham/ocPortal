@@ -16,8 +16,8 @@
 // This is the standard zone bootstrap file. Zone: root.
 
 // Find ocPortal base directory, and chdir into it
-global $FILE_BASE,$RELATIVE_PATH;
-$FILE_BASE = (strpos(__FILE__,'./') === false)?__FILE__:realpath(__FILE__);
+global $FILE_BASE, $RELATIVE_PATH;
+$FILE_BASE = (strpos(__FILE__, './') === false) ? __FILE__ : realpath(__FILE__);
 $FILE_BASE = dirname($FILE_BASE);
 $RELATIVE_PATH = '';
 if (getcwd() != $FILE_BASE) {
@@ -26,7 +26,7 @@ if (getcwd() != $FILE_BASE) {
 
 $profile = false;//array_key_exists('tick_profile',$_GET);
 if ($profile) {
-    global $FUNC_WATCH,$MICROTIME;
+    global $FUNC_WATCH, $MICROTIME;
 
     $MICROTIME = microtime(true);
 
@@ -35,7 +35,7 @@ if ($profile) {
      */
     function tick_func()
     {
-        global $FUNC_WATCH,$MICROTIME;
+        global $FUNC_WATCH, $MICROTIME;
         $LAST_MICROTIME = $MICROTIME;
         $MICROTIME = microtime(true);
 
@@ -47,10 +47,10 @@ if ($profile) {
         if (!isset($FUNC_WATCH[$func])) {
             $FUNC_WATCH[$func] = 0;
         }
-        $FUNC_WATCH[$func] += $LAST_MICROTIME-$MICROTIME;
+        $FUNC_WATCH[$func] += $LAST_MICROTIME - $MICROTIME;
     }
-/* register_tick_function('tick_func');
-    declare(ticks=10);*/
+    /* register_tick_function('tick_func');
+        declare(ticks=10);*/
 }
 
 global $FORCE_INVISIBLE_GUEST;

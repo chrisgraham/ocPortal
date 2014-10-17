@@ -17,14 +17,13 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 {
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
-    *
-    * @param  array                     Symbol parameters
-    * @return string                    Result
+     *
+     * @param  array                     Symbol parameters
+     * @return string                    Result
      */
     public function run($param)
     {
@@ -39,26 +38,26 @@ class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
             if (isset($CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id])) {
                 $map = $CATALOGUE_MAPPER_SYMBOL_CACHE[$entry_id];
 
-                if ((array_key_exists(1,$param)) && ($param[1] == '1')) {
+                if ((array_key_exists(1, $param)) && ($param[1] == '1')) {
                     $value = $map['FIELDS']->evaluate();
                 } else {
                     $tpl_set = $map['CATALOGUE'];
-                    $_value = do_template('CATALOGUE_' . $tpl_set . '_FIELDMAP_ENTRY_WRAP',$map+array('ENTRY_SCREEN' => true),null,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+                    $_value = do_template('CATALOGUE_' . $tpl_set . '_FIELDMAP_ENTRY_WRAP', $map + array('ENTRY_SCREEN' => true), null, false, 'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
                     $value = $_value->evaluate();
                 }
             } else {
-                $entry = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id' => $entry_id),'',1);
+                $entry = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('*'), array('id' => $entry_id), '', 1);
                 if (isset($entry[0])) {
                     require_code('catalogues');
                     $catalogue_name = $entry[0]['c_name'];
-                    $catalogue = load_catalogue_row($catalogue_name,true);
-                    if ($catalogue !== NULL) {
+                    $catalogue = load_catalogue_row($catalogue_name, true);
+                    if ($catalogue !== null) {
                         $tpl_set = $catalogue_name;
-                        $map = get_catalogue_entry_map($entry[0],array('c_display_type' => C_DT_FIELDMAPS)+$catalogue,'PAGE',$tpl_set,null);
-                        if ((array_key_exists(1,$param)) && ($param[1] == '1')) {
+                        $map = get_catalogue_entry_map($entry[0], array('c_display_type' => C_DT_FIELDMAPS) + $catalogue, 'PAGE', $tpl_set, null);
+                        if ((array_key_exists(1, $param)) && ($param[1] == '1')) {
                             $value = $map['FIELDS']->evaluate();
                         } else {
-                            $_value = do_template('CATALOGUE_' . $tpl_set . '_FIELDMAP_ENTRY_WRAP',$map+array('GIVE_CONTEXT' => false,'ENTRY_SCREEN' => true),null,false,'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
+                            $_value = do_template('CATALOGUE_' . $tpl_set . '_FIELDMAP_ENTRY_WRAP', $map + array('GIVE_CONTEXT' => false, 'ENTRY_SCREEN' => true), null, false, 'CATALOGUE_DEFAULT_FIELDMAP_ENTRY_WRAP');
                             $value = $_value->evaluate();
                         }
 

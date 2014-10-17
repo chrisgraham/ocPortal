@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    devguide
  */
-
 class Block_main_block_help
 {
     /**
@@ -55,7 +54,7 @@ class Block_main_block_help
         $_blocks = find_all_blocks();
 
         foreach (array_keys($_blocks) as $block) {
-            $description = do_lang('BLOCK_' . $block . '_DESCRIPTION',null,null,null,null,false);
+            $description = do_lang('BLOCK_' . $block . '_DESCRIPTION', null, null, null, null, false);
             if (is_null($description)) {
                 continue;
             }
@@ -67,14 +66,14 @@ class Block_main_block_help
             }
             $parameters = new ocp_tempcode();
             foreach ($_parameters as $parameter) {
-                $_description = do_lang('BLOCK_' . $block . '_PARAM_' . $parameter,null,null,null,null,false);
+                $_description = do_lang('BLOCK_' . $block . '_PARAM_' . $parameter, null, null, null, null, false);
                 if (is_null($_description)) {
                     continue;
                 }
-                $parameters->attach(do_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER',array('_GUID' => 'f23db88061922a68cc2401256cf69ad3','NAME' => $parameter,'DESCRIPTION' => $_description)));
+                $parameters->attach(do_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER', array('_GUID' => 'f23db88061922a68cc2401256cf69ad3', 'NAME' => $parameter, 'DESCRIPTION' => $_description)));
             }
 
-            $blocks->attach(do_template('BLOCK_MAIN_BLOCK_HELP',array('_GUID' => '00652313faa72feac0a07d77e2dddd84','NAME' => $block,'DESCRIPTION' => $description,'USE' => $use,'PARAMETERS' => $parameters)));
+            $blocks->attach(do_template('BLOCK_MAIN_BLOCK_HELP', array('_GUID' => '00652313faa72feac0a07d77e2dddd84', 'NAME' => $block, 'DESCRIPTION' => $description, 'USE' => $use, 'PARAMETERS' => $parameters)));
         }
 
         return $blocks;

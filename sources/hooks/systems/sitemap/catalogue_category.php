@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_sitemap_catalogue_category extends Hook_sitemap_content
 {
     protected $content_type = 'catalogue_category';
@@ -58,13 +57,13 @@ class Hook_sitemap_catalogue_category extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
-        $_ = $this->_create_partial_node_structure($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-        if ($_ === NULL) {
-            return NULL;
+        $_ = $this->_create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+        if ($_ === null) {
+            return null;
         }
-        list($content_id,$row,$partial_struct) = $_;
+        list($content_id, $row, $partial_struct) = $_;
 
         // level 0 = root
         // level 1 = zone
@@ -75,33 +74,33 @@ class Hook_sitemap_catalogue_category extends Hook_sitemap_content
         }
 
         $struct = array(
-            'sitemap_priority' => $sitemap_priority,
-            'sitemap_refreshfreq' => 'weekly',
+                'sitemap_priority' => $sitemap_priority,
+                'sitemap_refreshfreq' => 'weekly',
 
-            'privilege_page' => $this->get_privilege_page($page_link),
-        )+$partial_struct;
+                'privilege_page' => $this->get_privilege_page($page_link),
+            ) + $partial_struct;
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
         // Sometimes page groupings link direct to catalogue categories, so search for an icon
-        $row_x = $this->_load_row_from_page_groupings(null,$zone,'catalogues','misc',$content_id);
+        $row_x = $this->_load_row_from_page_groupings(null, $zone, 'catalogues', 'misc', $content_id);
         if ($row_x != array()) {
             $struct['title'] = null;
             $struct['extra_meta']['image'] = null;
             $struct['extra_meta']['image_2x'] = null;
-            $this->_ameliorate_with_row($struct,$row_x,$meta_gather);
+            $this->_ameliorate_with_row($struct, $row_x, $meta_gather);
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
         // Categories done after node callback, to ensure sensible ordering
-        $children = $this->_get_children_nodes($content_id,$page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
+        $children = $this->_get_children_nodes($content_id, $page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
         $struct['children'] = $children;
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

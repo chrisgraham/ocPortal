@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_validation
  */
-
 class Hook_config_validation_css
 {
     /**

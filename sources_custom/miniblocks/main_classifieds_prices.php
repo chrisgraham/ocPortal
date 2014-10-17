@@ -24,7 +24,7 @@ $catalogue_name = $map['param'];
 
 $show_free = ((isset($map['show_free'])) && ($map['show_free'] == '1'));
 
-$prices = $GLOBALS['SITE_DB']->query_select('classifieds_prices',array('*'),array('c_catalogue_name' => $catalogue_name),'ORDER BY c_price');
+$prices = $GLOBALS['SITE_DB']->query_select('classifieds_prices', array('*'), array('c_catalogue_name' => $catalogue_name), 'ORDER BY c_price');
 
 $data = array();
 foreach ($prices as $price) {
@@ -33,9 +33,9 @@ foreach ($prices as $price) {
     }
 
     $data[] = array(
-        'PRICE' => float_format($price['c_price'],2),
+        'PRICE' => float_format($price['c_price'], 2),
         'LABEL' => get_translated_text($price['c_label']),
     );
 }
 
-echo static_evaluate_tempcode(do_template('CLASSIFIEDS',array('_GUID' => '7216f4a435534cc609344101c8ea3031','DATA' => $data)));
+echo static_evaluate_tempcode(do_template('CLASSIFIEDS', array('_GUID' => '7216f4a435534cc609344101c8ea3031', 'DATA' => $data)));

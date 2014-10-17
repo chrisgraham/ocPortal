@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
-
 class Hook_admin_import_types_stats
 {
     /**

@@ -25,7 +25,7 @@
  * @param  array                        The list of maps
  * @return array                        The collapsed map
  */
-function list_to_map_2($map_value,$list)
+function list_to_map_2($map_value, $list)
 {
     $i = 0;
 
@@ -33,7 +33,7 @@ function list_to_map_2($map_value,$list)
 
     foreach ($list as $map) {
         $key = $map[$map_value];
-        if (!array_key_exists($key,$new_map)) {
+        if (!array_key_exists($key, $new_map)) {
             $new_map[$key] = array();
         }
         $new_map[$key][] = $map;
@@ -41,7 +41,7 @@ function list_to_map_2($map_value,$list)
         $i++;
     }
 
-    if ($i>0) {
+    if ($i > 0) {
         return $new_map;
     }
     return array();
@@ -60,7 +60,7 @@ class Hook_criticise_mysql_fields
     public function info()
     {
         if (get_db_type() != 'mysql') {
-            return NULL;
+            return null;
         }
 
         $info = array();
@@ -82,22 +82,22 @@ class Hook_criticise_mysql_fields
 
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 
-        $db_meta = list_to_map_2('m_table',$GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name','m_type')));
-        $db_meta_indices = list_to_map_2('i_table',$GLOBALS['SITE_DB']->query_select('db_meta_indices',array('i_table','i_name','i_fields')));
+        $db_meta = list_to_map_2('m_table', $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name', 'm_type')));
+        $db_meta_indices = list_to_map_2('i_table', $GLOBALS['SITE_DB']->query_select('db_meta_indices', array('i_table', 'i_name', 'i_fields')));
 
         $sql = '';
 
         $tables = $GLOBALS['SITE_DB']->query('SHOW TABLES');
         foreach ($tables as $_table) {
             $table = array_shift($_table);
-            if (substr($table,0,strlen(get_table_prefix())) != get_table_prefix()) {
+            if (substr($table, 0, strlen(get_table_prefix())) != get_table_prefix()) {
                 continue;
             }
 
-            $indexes = list_to_map_2('Key_name',$GLOBALS['SITE_DB']->query('SHOW INDEXES FROM ' . $table));
+            $indexes = list_to_map_2('Key_name', $GLOBALS['SITE_DB']->query('SHOW INDEXES FROM ' . $table));
             $columns = $GLOBALS['SITE_DB']->query('SHOW COLUMNS FROM ' . $table);
 
-            $table = substr($table,strlen(get_table_prefix()));
+            $table = substr($table, strlen(get_table_prefix()));
             if ($table == 'db_meta') {
                 continue;
             }
@@ -110,7 +110,7 @@ class Hook_criticise_mysql_fields
                     continue;
                 }
                 if ($name == '') {
-                    $name = uniqid('',true);
+                    $name = uniqid('', true);
                 }
                 $fulltext = $_index[0]['Index_type'] == 'FULLTEXT';
                 $fields = '';
@@ -120,7 +120,7 @@ class Hook_criticise_mysql_fields
                     }
                     $fields .= $_field['Column_name'];
                 }
-                if (array_key_exists($table,$db_meta_indices)) {
+                if (array_key_exists($table, $db_meta_indices)) {
                     foreach ($db_meta_indices[$table] as $index) {
                         if ($index['i_fields'] == $fields) {
                             continue 2;
@@ -130,10 +130,10 @@ class Hook_criticise_mysql_fields
                 $sql .= 'INSERT INTO ' . get_table_prefix() . 'db_meta_indices (i_table,i_name,i_fields) VALUES (\'' . db_escape_string($table) . '\',\'' . db_escape_string($name) . '\',\'' . db_escape_string($fields) . '\');' . "\n";
             }
 
-            if (!array_key_exists($table,$db_meta)) {
+            if (!array_key_exists($table, $db_meta)) {
                 $db_table = array();
             } else {
-                $db_table = collapse_2d_complexity('m_name','m_type',$db_meta[$table]);
+                $db_table = collapse_2d_complexity('m_name', 'm_type', $db_meta[$table]);
             }
 
             foreach ($columns as $column) {
@@ -143,7 +143,7 @@ class Hook_criticise_mysql_fields
                 $key = $column['Key'] == 'PRI';
                 $auto = $column['Extra'] == 'auto_increment';
 
-                $type = (strpos($_type,'int') !== false)?'INTEGER':'SHORT_TEXT';
+                $type = (strpos($_type, 'int') !== false) ? 'INTEGER' : 'SHORT_TEXT';
                 switch ($_type) {
                     case 'varchar(5)':
                         //$type='LANGUAGE_NAME';   Ideally, but we cannot assume
@@ -154,7 +154,7 @@ class Hook_criticise_mysql_fields
                         $type = 'ID_TEXT';
                         break;
                     case 'varchar(40)':
-                        if (strpos($field,'ip_address') !== false) {
+                        if (strpos($field, 'ip_address') !== false) {
                             $type = 'IP';
                         } else {
                             $type = 'MINIID_TEXT';
@@ -164,7 +164,7 @@ class Hook_criticise_mysql_fields
                         $type = 'ID_TEXT';
                         break;
                     case 'varchar(255)':
-                        if (strpos($field,'url') !== false) {
+                        if (strpos($field, 'url') !== false) {
                             $type = 'URLPATH';
                         } else {
                             $type = 'SHORT_TEXT';
@@ -177,21 +177,21 @@ class Hook_criticise_mysql_fields
                         $type = 'SHORT_INTEGER';
                         break;
                     case 'int(10) unsigned':
-                        if ((strpos($field,'date') !== false) || (strpos($field,'time') !== false)) {
+                        if ((strpos($field, 'date') !== false) || (strpos($field, 'time') !== false)) {
                             $type = 'TIME';
                         } else {
-                            $type = $auto?'AUTO':'LONG_TRANS'; // Also could be... SHORT_TRANS or UINTEGER... but we can't tell this at all
+                            $type = $auto ? 'AUTO' : 'LONG_TRANS'; // Also could be... SHORT_TRANS or UINTEGER... but we can't tell this at all
                         }
                         break;
                     case 'int(11)':
                         if ($auto) {
                             $type = 'AUTO';
                         } else {
-                            if (strpos($field,'group') !== false) {
+                            if (strpos($field, 'group') !== false) {
                                 $type = 'GROUP';
-                            } elseif ((strpos($field,'user') !== false) || (strpos($field,'member') !== false)) {
+                            } elseif ((strpos($field, 'user') !== false) || (strpos($field, 'member') !== false)) {
                                 $type = 'MEMBER';
-                            } elseif (strpos($field,'_id') !== false) {
+                            } elseif (strpos($field, '_id') !== false) {
                                 $type = 'AUTO_LINK';
                             } else {
                                 $type = 'INTEGER';
@@ -214,7 +214,7 @@ class Hook_criticise_mysql_fields
                     $type = '?' . $type;
                 }
 
-                if (!array_key_exists($field,$db_table)) {
+                if (!array_key_exists($field, $db_table)) {
                     $micro_sql = 'INSERT INTO ' . get_table_prefix() . 'db_meta (m_table,m_name,m_type) VALUES (\'' . db_escape_string($table) . '\',\'' . db_escape_string($field) . '\',\'' . db_escape_string($type) . '\');' . "\n";
                     $sql .= $micro_sql;
                     $GLOBALS['SITE_DB']->query($micro_sql);
@@ -226,6 +226,6 @@ class Hook_criticise_mysql_fields
             return do_lang_tempcode('NO_MYSQL_QUERY_CHANGES_MADE');
         }
 
-        return do_lang_tempcode('MYSQL_QUERY_CHANGES_MADE',escape_html($sql));
+        return do_lang_tempcode('MYSQL_QUERY_CHANGES_MADE', escape_html($sql));
     }
 }

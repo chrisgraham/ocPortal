@@ -32,61 +32,61 @@ function init__tempcode__runtime()
         return;
     }
 
-    define('ENTITY_ESCAPED',1); // HTML entities
-    define('SQ_ESCAPED',2); // Single quotes
-    define('DQ_ESCAPED',3); // Double quotes
-    define('NL_ESCAPED',4); // New lines disappear
-    define('CC_ESCAPED',5); // Comcode
-    define('UL_ESCAPED',6); // URL
-    define('JSHTML_ESCAPED',7); // JavaScript </ -> <\/
-    define('NL2_ESCAPED',8); // New lines go to \n
-    define('ID_ESCAPED',9); // Strings to to usable IDs
-    define('NAUGHTY_ESCAPED',10); // Used as a JavaScript variable name, for example... to prevent code injection
-    define('NULL_ESCAPED',11); // This is useful to mark something that takes strings but does not need escaping (usually because it is escaped further down the line)
-    define('FORCIBLY_ENTITY_ESCAPED',12); // To force a language string to be escaped
-    define('CSS_ESCAPED',13); // To stop CSS injection
-    define('UL2_ESCAPED',14); // rawurlencode
-    define('TEMPCODE_VARIABLE_ESCAPED',15); // Commas become \,
-    define('PURE_STRING',16); // Used to indicating we just put something directly into the output. Works with __toString on PHP5 or normal strings. Does no escaping.
+    define('ENTITY_ESCAPED', 1); // HTML entities
+    define('SQ_ESCAPED', 2); // Single quotes
+    define('DQ_ESCAPED', 3); // Double quotes
+    define('NL_ESCAPED', 4); // New lines disappear
+    define('CC_ESCAPED', 5); // Comcode
+    define('UL_ESCAPED', 6); // URL
+    define('JSHTML_ESCAPED', 7); // JavaScript </ -> <\/
+    define('NL2_ESCAPED', 8); // New lines go to \n
+    define('ID_ESCAPED', 9); // Strings to to usable IDs
+    define('NAUGHTY_ESCAPED', 10); // Used as a JavaScript variable name, for example... to prevent code injection
+    define('NULL_ESCAPED', 11); // This is useful to mark something that takes strings but does not need escaping (usually because it is escaped further down the line)
+    define('FORCIBLY_ENTITY_ESCAPED', 12); // To force a language string to be escaped
+    define('CSS_ESCAPED', 13); // To stop CSS injection
+    define('UL2_ESCAPED', 14); // rawurlencode
+    define('TEMPCODE_VARIABLE_ESCAPED', 15); // Commas become \,
+    define('PURE_STRING', 16); // Used to indicating we just put something directly into the output. Works with __toString on PHP5 or normal strings. Does no escaping.
 
-    define('TC_SYMBOL',0);
-    define('TC_KNOWN',1); // Either tempcode or string
-    define('TC_LANGUAGE_REFERENCE',2);
-    define('TC_PARAMETER',3); // A late parameter for a compiled template
-    define('TC_DIRECTIVE',4);
+    define('TC_SYMBOL', 0);
+    define('TC_KNOWN', 1); // Either tempcode or string
+    define('TC_LANGUAGE_REFERENCE', 2);
+    define('TC_PARAMETER', 3); // A late parameter for a compiled template
+    define('TC_DIRECTIVE', 4);
 
     global $PREPROCESSED_BLOCKS;
-    $PREPROCESSED_BLOCKS = array('BLOCK' => 1,'LOAD_PANEL' => 1,'LOAD_PAGE' => 1);
+    $PREPROCESSED_BLOCKS = array('BLOCK' => 1, 'LOAD_PANEL' => 1, 'LOAD_PAGE' => 1);
 
     global $IS_TEMPLATE_PREVIEW_OP_CACHE;
-    $IS_TEMPLATE_PREVIEW_OP_CACHE = array_key_exists('template_preview_op',$_POST) && ($_POST['template_preview_op'] == 1);
+    $IS_TEMPLATE_PREVIEW_OP_CACHE = array_key_exists('template_preview_op', $_POST) && ($_POST['template_preview_op'] == 1);
 
-    global $TEMPLATE_CACHE,$XHTML_SPIT_OUT,$MEMORY_OVER_SPEED,$REQUEST_BLOCK_NEST_LEVEL;
+    global $TEMPLATE_CACHE, $XHTML_SPIT_OUT, $MEMORY_OVER_SPEED, $REQUEST_BLOCK_NEST_LEVEL;
     $TEMPLATE_CACHE = array();
     $XHTML_SPIT_OUT = null;
     $MEMORY_OVER_SPEED = false;
     $REQUEST_BLOCK_NEST_LEVEL = 0;
 
-    global $RECORD_TEMPLATES_USED,$RECORDED_TEMPLATES_USED,$RECORD_TEMPLATES_TREE,$SCREEN_TEMPLATE_CALLED,$TITLE_CALLED;
+    global $RECORD_TEMPLATES_USED, $RECORDED_TEMPLATES_USED, $RECORD_TEMPLATES_TREE, $SCREEN_TEMPLATE_CALLED, $TITLE_CALLED;
     $RECORD_TEMPLATES_USED = false;
     $RECORDED_TEMPLATES_USED = array();
     $RECORD_TEMPLATES_TREE = false;
     $SCREEN_TEMPLATE_CALLED = null;
     $TITLE_CALLED = false;
 
-    define('SYMBOL_PARSE_NAME',0);
-    define('SYMBOL_PARSE_PARAM',1);
+    define('SYMBOL_PARSE_NAME', 0);
+    define('SYMBOL_PARSE_PARAM', 1);
 
     global $SIMPLE_ESCAPED;
     $SIMPLE_ESCAPED = array(ENTITY_ESCAPED);
 
     global $DIRECTIVES_NEEDING_VARS;
-    $DIRECTIVES_NEEDING_VARS = array('IF_PASSED' => 1,'IF_NON_PASSED' => 1,'IF_PASSED_AND_TRUE' => 1,'IF_NON_PASSED_OR_FALSE' => 1,'IN_ARRAY' => 1,'IMPLODE' => 1,'COUNT' => 1,'IF_ARRAY_EMPTY' => 1,'IF_ARRAY_NON_EMPTY' => 1,'OF' => 1,'INCLUDE' => 1,'LOOP' => 1);
+    $DIRECTIVES_NEEDING_VARS = array('IF_PASSED' => 1, 'IF_NON_PASSED' => 1, 'IF_PASSED_AND_TRUE' => 1, 'IF_NON_PASSED_OR_FALSE' => 1, 'IN_ARRAY' => 1, 'IMPLODE' => 1, 'COUNT' => 1, 'IF_ARRAY_EMPTY' => 1, 'IF_ARRAY_NON_EMPTY' => 1, 'OF' => 1, 'INCLUDE' => 1, 'LOOP' => 1);
 
-    global $PHP_REP_FROM,$PHP_REP_TO,$PHP_REP_TO_TWICE;
-    $PHP_REP_FROM = array('\\',"\n",'$','"');
-    $PHP_REP_TO = array('\\\\','\n','\$','\\"');
-    $PHP_REP_TO_TWICE = array('\\\\\\\\','\\n','\\\\$','\\\\\"');
+    global $PHP_REP_FROM, $PHP_REP_TO, $PHP_REP_TO_TWICE;
+    $PHP_REP_FROM = array('\\', "\n", '$', '"');
+    $PHP_REP_TO = array('\\\\', '\n', '\$', '\\"');
+    $PHP_REP_TO_TWICE = array('\\\\\\\\', '\\n', '\\\\$', '\\\\\"');
 
     require_code('symbols');
     require_code('tempcode_compiler');
@@ -101,7 +101,6 @@ function init__tempcode__runtime()
 function php_addslashes_twice($in)
 {
     return php_addslashes(php_addslashes($in));
-
     /*// This code does not work, provides awfully confusing Tempcode errors...
 
     global $PHP_REP_FROM,$PHP_REP_TO_TWICE;
@@ -130,38 +129,38 @@ function make_string_tempcode($string)
  * @param  string                       The string to apply the escapings to
  * @return string                       Output string (you do not need to collect this, as $value is pass-by-reference -- but this is useful for chaining)
  */
-function apply_tempcode_escaping($escaped,&$value)
+function apply_tempcode_escaping($escaped, &$value)
 {
-    global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
+    global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2;
     foreach ($escaped as $escape) {
         if ($escape == ENTITY_ESCAPED) {
-            $value = str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+            $value = str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $value);
         } elseif ($escape == FORCIBLY_ENTITY_ESCAPED) {
-            $value = str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+            $value = str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $value);
         } elseif ($escape == SQ_ESCAPED) {
-            $value = str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
+            $value = str_replace('&#039;', '\&#039;', str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)));
         } elseif ($escape == DQ_ESCAPED) {
-            $value = str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
+            $value = str_replace('&quot;', '\&quot;', str_replace('"', '\\"', str_replace('\\', '\\\\', $value)));
         } elseif ($escape == NL_ESCAPED) {
-            $value = str_replace("\r",'',str_replace("\n",'',$value));
+            $value = str_replace("\r", '', str_replace("\n", '', $value));
         } elseif ($escape == NL2_ESCAPED) {
-            $value = str_replace("\r",'',str_replace("\n",'\n',$value));
+            $value = str_replace("\r", '', str_replace("\n", '\n', $value));
         } elseif ($escape == CC_ESCAPED) {
-            $value = str_replace('[','\\[',str_replace('\\','\\\\',$value));
+            $value = str_replace('[', '\\[', str_replace('\\', '\\\\', $value));
         } elseif ($escape == UL_ESCAPED) {
             $value = ocp_url_encode($value);
         } elseif ($escape == UL2_ESCAPED) {
             $value = rawurlencode($value);
         } elseif ($escape == JSHTML_ESCAPED) {
-            $value = str_replace(']]>',']]\'+\'>',str_replace('</','<\/',$value));
+            $value = str_replace(']]>', ']]\'+\'>', str_replace('</', '<\/', $value));
         } elseif ($escape == ID_ESCAPED) {
             $value = fix_id($value);
         } elseif ($escape == CSS_ESCAPED) {
-            $value = preg_replace('#[^\w\#\.\-\%]#','_',$value);
+            $value = preg_replace('#[^\w\#\.\-\%]#', '_', $value);
         } elseif ($escape == NAUGHTY_ESCAPED) {
-            $value = filter_naughty_harsh($value,true);
+            $value = filter_naughty_harsh($value, true);
         } elseif ($escape == TEMPCODE_VARIABLE_ESCAPED) {
-            $value = str_replace(',','\,',$value);
+            $value = str_replace(',', '\,', $value);
         }
     }
     if (($GLOBALS['XSS_DETECT']) && ($escaped != array())) {
@@ -178,38 +177,38 @@ function apply_tempcode_escaping($escaped,&$value)
  * @param  string                       The string to apply the escapings to
  * @return string                       Output string
  */
-function apply_tempcode_escaping_inline($escaped,$value)
+function apply_tempcode_escaping_inline($escaped, $value)
 {
-    global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
+    global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2;
     foreach ($escaped as $escape) {
         if ($escape == ENTITY_ESCAPED) {
-            $value = str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+            $value = str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $value);
         } elseif ($escape == FORCIBLY_ENTITY_ESCAPED) {
-            $value = str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$value);
+            $value = str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $value);
         } elseif ($escape == SQ_ESCAPED) {
-            $value = str_replace('&#039;','\&#039;',str_replace('\'','\\\'',str_replace('\\','\\\\',$value)));
+            $value = str_replace('&#039;', '\&#039;', str_replace('\'', '\\\'', str_replace('\\', '\\\\', $value)));
         } elseif ($escape == DQ_ESCAPED) {
-            $value = str_replace('&quot;','\&quot;',str_replace('"','\\"',str_replace('\\','\\\\',$value)));
+            $value = str_replace('&quot;', '\&quot;', str_replace('"', '\\"', str_replace('\\', '\\\\', $value)));
         } elseif ($escape == NL_ESCAPED) {
-            $value = str_replace("\r",'',str_replace("\n",'',$value));
+            $value = str_replace("\r", '', str_replace("\n", '', $value));
         } elseif ($escape == NL2_ESCAPED) {
-            $value = str_replace("\r",'',str_replace("\n",'\n',$value));
+            $value = str_replace("\r", '', str_replace("\n", '\n', $value));
         } elseif ($escape == CC_ESCAPED) {
-            $value = str_replace('[','\\[',str_replace('\\','\\\\',$value));
+            $value = str_replace('[', '\\[', str_replace('\\', '\\\\', $value));
         } elseif ($escape == UL_ESCAPED) {
             $value = ocp_url_encode($value);
         } elseif ($escape == UL2_ESCAPED) {
             $value = rawurlencode($value);
         } elseif ($escape == JSHTML_ESCAPED) {
-            $value = str_replace(']]>',']]\'+\'>',str_replace('</','<\/',$value));
+            $value = str_replace(']]>', ']]\'+\'>', str_replace('</', '<\/', $value));
         } elseif ($escape == ID_ESCAPED) {
             $value = fix_id($value);
         } elseif ($escape == CSS_ESCAPED) {
-            $value = preg_replace('#[^\w\#\.\-\%]#','_',$value);
+            $value = preg_replace('#[^\w\#\.\-\%]#', '_', $value);
         } elseif ($escape == NAUGHTY_ESCAPED) {
-            $value = filter_naughty_harsh($value,true);
+            $value = filter_naughty_harsh($value, true);
         } elseif ($escape == TEMPCODE_VARIABLE_ESCAPED) {
-            $value = str_replace(',','\,',$value);
+            $value = str_replace(',', '\,', $value);
         }
     }
     if (($GLOBALS['XSS_DETECT']) && ($escaped != array())) {
@@ -228,7 +227,7 @@ function apply_tempcode_escaping_inline($escaped,$value)
  * @param  ?mixed                       The third token (replaces {3}). May be an array of [of string], to allow any number of additional args (NULL: none)
  * @return tempcode                     A language tempcode object
  */
-function do_lang_tempcode($symbol,$token1 = null,$token2 = null,$token3 = null)
+function do_lang_tempcode($symbol, $token1 = null, $token2 = null, $token3 = null)
 {
     $parameters = array();
     if (!is_null($token1)) {
@@ -241,11 +240,11 @@ function do_lang_tempcode($symbol,$token1 = null,$token2 = null,$token3 = null)
         if (!is_array($token3)) {
             $parameters[] = $token3;
         } else {
-            $parameters = array_merge($parameters,$token3);
+            $parameters = array_merge($parameters, $token3);
         }
     }
     $_ret = new ocp_tempcode();
-    $_ret->bits = array(array(array(),TC_LANGUAGE_REFERENCE,$symbol,$parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
+    $_ret->bits = array(array(array(), TC_LANGUAGE_REFERENCE, $symbol, $parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
     $_ret->pure_lang = true;
     return $_ret;
 }
@@ -258,13 +257,13 @@ function do_lang_tempcode($symbol,$token1 = null,$token2 = null,$token3 = null)
  * @param  ?array                       Escaping (NULL: none)
  * @return tempcode                     A symbol tempcode object
  */
-function symbol_tempcode($symbol,$parameters = null,$escape = null)
+function symbol_tempcode($symbol, $parameters = null, $escape = null)
 {
     if (is_null($parameters)) {
         $parameters = array();
     }
     $_ret = new ocp_tempcode();
-    $_ret->bits = array(array(is_null($escape)?array():$escape,TC_SYMBOL,$symbol,$parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
+    $_ret->bits = array(array(is_null($escape) ? array() : $escape, TC_SYMBOL, $symbol, $parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
     return $_ret;
 }
 
@@ -276,14 +275,14 @@ function symbol_tempcode($symbol,$parameters = null,$escape = null)
  * @param  ?array                       Directive parameters (NULL: none)
  * @return tempcode                     A directive tempcode object
  */
-function directive_tempcode($directive,$content,$parameters = null)
+function directive_tempcode($directive, $content, $parameters = null)
 {
     if (is_null($parameters)) {
         $parameters = array();
     }
     $parameters[] = $content;
     $_ret = new ocp_tempcode();
-    $_ret->bits = array(array(array(),TC_DIRECTIVE,$directive,$parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
+    $_ret->bits = array(array(array(), TC_DIRECTIVE, $directive, $parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
     return $_ret;
 }
 
@@ -312,11 +311,11 @@ function static_evaluate_tempcode($ob)
  * @param  ID_TEXT                      Theme to use
  * @return tempcode                     The tempcode for this template
  */
-function do_template($codename,$parameters = null,$lang = null,$light_error = false,$fallback = null,$suffix = '.tpl',$type = 'templates',$theme = null)
+function do_template($codename, $parameters = null, $lang = null, $light_error = false, $fallback = null, $suffix = '.tpl', $type = 'templates', $theme = null)
 {
     if ((is_null($lang)) || ($lang == '')) {
         global $USER_LANG_CACHED;
-        $lang = isset($USER_LANG_CACHED)?$USER_LANG_CACHED:(function_exists('user_lang')?user_lang():'EN');
+        $lang = isset($USER_LANG_CACHED) ? $USER_LANG_CACHED : (function_exists('user_lang') ? user_lang() : 'EN');
     }
 
     if ($GLOBALS['SEMI_DEV_MODE']) {
@@ -324,7 +323,7 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
             fatal_exit('Template names should be in upper case, and the files should be stored in upper case.');
         }
 
-        if ((substr($codename,-7) == '_SCREEN') || (substr($codename,-8) == '_OVERLAY') || ($codename == 'POOR_XHTML_WRAPPER')) {
+        if ((substr($codename, -7) == '_SCREEN') || (substr($codename, -8) == '_OVERLAY') || ($codename == 'POOR_XHTML_WRAPPER')) {
             $GLOBALS['SCREEN_TEMPLATE_CALLED'] = $codename;
         }
     }
@@ -333,7 +332,7 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
         $parameters = array();
     }
 
-    global $RECORD_TEMPLATES_USED,$FILE_ARRAY,$PERSISTENT_CACHE,$CACHE_TEMPLATES,$KEEP_MARKERS,$SHOW_EDIT_LINKS,$XHTML_SPIT_OUT,$TEMPLATE_CACHE,$IS_MOBILE_CACHE,$FORUM_DRIVER;
+    global $RECORD_TEMPLATES_USED, $FILE_ARRAY, $PERSISTENT_CACHE, $CACHE_TEMPLATES, $KEEP_MARKERS, $SHOW_EDIT_LINKS, $XHTML_SPIT_OUT, $TEMPLATE_CACHE, $IS_MOBILE_CACHE, $FORUM_DRIVER;
     $special_treatment = ((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
 
     // Is it already loaded?
@@ -344,12 +343,12 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
 
     // Variables we'll need
     if (!isset($theme)) {
-        $theme = ((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER,'get_theme')))?filter_naughty($FORUM_DRIVER->get_theme()):'default';
+        $theme = ((isset($FORUM_DRIVER)) && (is_object($FORUM_DRIVER)) && (method_exists($FORUM_DRIVER, 'get_theme'))) ? filter_naughty($FORUM_DRIVER->get_theme()) : 'default';
     }
-    $_codename = ($IS_MOBILE_CACHE)?$codename . '_mobile':$codename;
+    $_codename = ($IS_MOBILE_CACHE) ? $codename . '_mobile' : $codename;
 
     if (isset($TEMPLATE_CACHE[$theme][$codename][$lang])) {
-        $_data = $TEMPLATE_CACHE[$theme][$codename][$lang]->bind($parameters,$codename);
+        $_data = $TEMPLATE_CACHE[$theme][$codename][$lang]->bind($parameters, $codename);
 
         // Copy and pasted to remove need for an function call
         if ($special_treatment) {
@@ -360,7 +359,7 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
                 $_data = $__data;
             }
             if ($SHOW_EDIT_LINKS) {
-                $edit_url = build_url(array('page' => 'admin_themes','theme' => $FORUM_DRIVER->get_theme(),'template' => $codename),'adminzone');
+                $edit_url = build_url(array('page' => 'admin_themes', 'theme' => $FORUM_DRIVER->get_theme(), 'template' => $codename), 'adminzone');
                 $_data->attach('<br /><a href="' . escape_html($edit_url->evaluate()) . '">' . do_lang('EDIT') . ' ' . $codename . '</a>');
             }
         }
@@ -372,7 +371,7 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
     $data = mixed();
     if ($CACHE_TEMPLATES) {
         if (!is_null($PERSISTENT_CACHE)) {
-            $data = persistent_cache_get(array('TEMPLATE',$theme,$lang,$_codename));
+            $data = persistent_cache_get(array('TEMPLATE', $theme, $lang, $_codename));
             if (!is_null($data)) {
                 $_data = new ocp_tempcode();
                 $_data->from_assembly($data);
@@ -386,10 +385,10 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
             $_data = new ocp_tempcode();
             $tcp_path = get_custom_file_base() . '/themes/' . $theme . '/templates_cached/' . $lang . '/' . $_codename . $suffix . '.tcd';
             if (is_file($tcp_path)) {
-                $tmp = fopen($tcp_path,'rb');
-                @flock($tmp,LOCK_SH);
+                $tmp = fopen($tcp_path, 'rb');
+                @flock($tmp, LOCK_SH);
                 $data = file_get_contents($tcp_path);
-                @flock($tmp,LOCK_UN);
+                @flock($tmp, LOCK_UN);
                 fclose($tmp);
             } else {
                 $data = false;
@@ -409,51 +408,51 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
             $_data = null;
 
             $prefix_default = get_file_base() . '/themes/';
-            $prefix = ($theme == 'default')?$prefix_default:(get_custom_file_base() . '/themes/');
+            $prefix = ($theme == 'default') ? $prefix_default : (get_custom_file_base() . '/themes/');
 
             if (file_exists($prefix . $theme . '/' . $type . '_custom/' . $_codename . $suffix)) {
-                $_data = _do_template($theme,'/' . $type . '_custom/',$_codename,$_codename,$lang,$suffix,$theme);
+                $_data = _do_template($theme, '/' . $type . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif (file_exists($prefix . $theme . '/' . $type . '/' . $_codename . $suffix)) {
-                $_data = _do_template($theme,'/' . $type . '/',$_codename,$_codename,$lang,$suffix,$theme);
+                $_data = _do_template($theme, '/' . $type . '/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) && ($theme != 'default') && (file_exists($prefix_default . $theme . '/' . $type . '_custom/' . $_codename . $suffix))) {
-                $_data = _do_template($theme,'/' . $type . '_custom/',$_codename,$_codename,$lang,$suffix,$theme);
+                $_data = _do_template($theme, '/' . $type . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif ((!is_null($GLOBALS['CURRENT_SHARE_USER'])) && ($theme != 'default') && (file_exists($prefix_default . $theme . '/' . $type . '/' . $_codename . $suffix))) {
-                $_data = _do_template($theme,'/' . $type . '/',$_codename,$_codename,$lang,$suffix,$theme);
+                $_data = _do_template($theme, '/' . $type . '/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif (file_exists($prefix_default . 'default' . '/' . $type . '_custom/' . $_codename . $suffix)) {
-                $_data = _do_template('default','/' . $type . '_custom/',$_codename,$_codename,$lang,$suffix,$theme);
+                $_data = _do_template('default', '/' . $type . '_custom/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif (file_exists($prefix_default . 'default' . '/' . $type . '/' . $_codename . $suffix)) {
-                $_data = _do_template('default','/' . $type . '/',$_codename,$_codename,$lang,$suffix,$theme);
+                $_data = _do_template('default', '/' . $type . '/', $_codename, $_codename, $lang, $suffix, $theme);
             } elseif ($codename != $_codename) {
                 if (file_exists($prefix . $theme . '/' . $type . '_custom/' . $codename . $suffix)) {
-                    $_data = _do_template($theme,'/' . $type . '_custom/',$codename,$_codename,$lang,$suffix,$theme);
+                    $_data = _do_template($theme, '/' . $type . '_custom/', $codename, $_codename, $lang, $suffix, $theme);
                 } elseif (file_exists($prefix . $theme . '/' . $type . '/' . $codename . $suffix)) {
-                    $_data = _do_template($theme,'/' . $type . '/',$codename,$_codename,$lang,$suffix,$theme);
+                    $_data = _do_template($theme, '/' . $type . '/', $codename, $_codename, $lang, $suffix, $theme);
                 } elseif (file_exists($prefix_default . 'default' . '/' . $type . '_custom/' . $codename . $suffix)) {
-                    $_data = _do_template('default','/' . $type . '_custom/',$codename,$_codename,$lang,$suffix,$theme);
+                    $_data = _do_template('default', '/' . $type . '_custom/', $codename, $_codename, $lang, $suffix, $theme);
                 } elseif (file_exists($prefix_default . 'default' . '/' . $type . '/' . $codename . $suffix)) {
-                    $_data = _do_template('default','/' . $type . '/',$codename,$_codename,$lang,$suffix,$theme);
+                    $_data = _do_template('default', '/' . $type . '/', $codename, $_codename, $lang, $suffix, $theme);
                 }
             }
             if (is_null($_data)) {
                 if (is_null($fallback)) {
                     if ($light_error) {
-                        return paragraph(do_lang_tempcode('MISSING_TEMPLATE_FILE',escape_html($codename)));
+                        return paragraph(do_lang_tempcode('MISSING_TEMPLATE_FILE', escape_html($codename)));
                     }
-                    fatal_exit(do_lang_tempcode('MISSING_TEMPLATE_FILE',escape_html($codename)));
+                    fatal_exit(do_lang_tempcode('MISSING_TEMPLATE_FILE', escape_html($codename)));
                 } else {
-                    $result = do_template($fallback,$parameters,$lang);
+                    $result = do_template($fallback, $parameters, $lang);
                     $TEMPLATE_CACHE[$theme][$codename][$lang] = $TEMPLATE_CACHE[$fallback][$lang];
                     return $result;
                 }
             }
         } else {
-            $_data = _do_template('default','/' . $type . '/',$codename,$codename,$lang,$suffix,$theme);
+            $_data = _do_template('default', '/' . $type . '/', $codename, $codename, $lang, $suffix, $theme);
         }
     }
 
     $TEMPLATE_CACHE[$theme][$codename][$lang] = $_data;
 
-    $ret = $_data->bind($parameters,$codename);
+    $ret = $_data->bind($parameters, $codename);
 
     if ($special_treatment) {
         if ($KEEP_MARKERS) {
@@ -464,11 +463,11 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
             $ret = $__data;
         }
         if (($SHOW_EDIT_LINKS) && ($codename != 'PARAM_INFO')) {
-            $param_info = do_template('PARAM_INFO',array('_GUID' => 'fd3a19c3c4f2e54ded5c784c04f2b622','MAP' => $parameters));
+            $param_info = do_template('PARAM_INFO', array('_GUID' => 'fd3a19c3c4f2e54ded5c784c04f2b622', 'MAP' => $parameters));
 
-            $edit_url = build_url(array('page' => 'admin_themes','theme' => $FORUM_DRIVER->get_theme(),'template' => $codename),'adminzone');
+            $edit_url = build_url(array('page' => 'admin_themes', 'theme' => $FORUM_DRIVER->get_theme(), 'template' => $codename), 'adminzone');
             $SHOW_EDIT_LINKS = false;
-            $ret = do_template('TEMPLATE_EDIT_LINK',array('_GUID' => 'f0a439e3384a57e4c9a0e0bc366d7ce9','PARAM_INFO' => $param_info,'CONTENTS' => $ret,'CODENAME' => $codename,'EDIT_URL' => $edit_url));
+            $ret = do_template('TEMPLATE_EDIT_LINK', array('_GUID' => 'f0a439e3384a57e4c9a0e0bc366d7ce9', 'PARAM_INFO' => $param_info, 'CONTENTS' => $ret, 'CODENAME' => $codename, 'EDIT_URL' => $edit_url));
             $SHOW_EDIT_LINKS = true;
         }
     }
@@ -482,47 +481,49 @@ function do_template($codename,$parameters = null,$lang = null,$light_error = fa
  * @param  array                        Symbol details
  * @param  array                        Where we store children stuff
  */
-function handle_symbol_preprocessing($bit,&$children)
+function handle_symbol_preprocessing($bit, &$children)
 {
     switch ($bit[2]) {
         case 'PAGE_LINK':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
 
-            if (array_key_exists(0,$param)) {
+            if (array_key_exists(0, $param)) {
                 if (is_object($param[0])) {
                     $param[0] = $param[0]->evaluate();
                 }
 
-                list(,$url_parts,) = page_link_decode(str_replace("\n",'',$param[0]));
+                list(, $url_parts,) = page_link_decode(str_replace("\n", '', $param[0]));
 
-                if (!array_key_exists('id',$url_parts)) {
+                if (!array_key_exists('id', $url_parts)) {
                     return;
                 }
-                if (!array_key_exists('type',$url_parts)) {
+                if (!array_key_exists('type', $url_parts)) {
                     $url_parts['type'] = 'misc';
                 }
                 if (is_null($url_parts['type'])) {
                     $url_parts['type'] = 'misc';
                 } // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
-                if (!array_key_exists('page',$url_parts)) {
+                if (!array_key_exists('page', $url_parts)) {
                     return;
                 }
                 if (!is_string($url_parts['id'])) {
                     if (is_null($url_parts['id'])) {
-                        $url_parts['id'] = /*get_param('id',*/strval(db_get_first_id())/*)*/;
+                        $url_parts['id'] = /*get_param('id',*/
+                            strval(db_get_first_id())/*)*/
+                        ;
                     }
                 }
 
                 // Does this URL arrangement support monikers?
-                global $CONTENT_OBS,$LOADED_MONIKERS_CACHE;
+                global $CONTENT_OBS, $LOADED_MONIKERS_CACHE;
                 load_moniker_hooks();
                 $found = false;
                 $looking_for = '_SEARCH:' . $url_parts['page'] . ':' . $url_parts['type'] . ':_WILD';
 
-                $ob_info = isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:null;
+                $ob_info = isset($CONTENT_OBS[$looking_for]) ? $CONTENT_OBS[$looking_for] : null;
                 if (!is_null($ob_info)) {
                     if (!isset($LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']])) {
                         $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']] = true;
@@ -532,32 +533,32 @@ function handle_symbol_preprocessing($bit,&$children)
             return;
 
         case 'SET':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
 
-            if (array_key_exists(1,$param)) {
+            if (array_key_exists(1, $param)) {
                 global $TEMPCODE_SETGET;
                 $param_copy = array();
                 foreach ($param as $i => $x) {
                     if ($i != 0) {
-                        $param_copy[] = is_object($x)?$x->evaluate():$x;
+                        $param_copy[] = is_object($x) ? $x->evaluate() : $x;
                     }
                 }
-                $TEMPCODE_SETGET[is_object($param[0])?$param[0]->evaluate():$param[0]] = implode(',',$param_copy);
+                $TEMPCODE_SETGET[is_object($param[0]) ? $param[0]->evaluate() : $param[0]] = implode(',', $param_copy);
             }
             return;
 
         case 'BLOCK':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
 
             global $REQUEST_BLOCK_NEST_LEVEL;
             $REQUEST_BLOCK_NEST_LEVEL++;
-            if ($REQUEST_BLOCK_NEST_LEVEL>40) { // 100 caused xdebug error, but ocPortal will have some overhead in both error handler and other code to get to here. We want xdebug error to not show, but of course to provide the same benefits as that error.
+            if ($REQUEST_BLOCK_NEST_LEVEL > 40) { // 100 caused xdebug error, but ocPortal will have some overhead in both error handler and other code to get to here. We want xdebug error to not show, but of course to provide the same benefits as that error.
                 $REQUEST_BLOCK_NEST_LEVEL = 0;
                 warn_exit(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE'));
             }
@@ -568,32 +569,32 @@ function handle_symbol_preprocessing($bit,&$children)
                 }
             }
 
-            if ((count($param) == 1) && (strpos($param[0],',') !== false)) {
-                $param = preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#',$param[0]);
+            if ((count($param) == 1) && (strpos($param[0], ',') !== false)) {
+                $param = preg_split('#((?<![^\\\\])|(?<!\\\\\\\\)|(?<!^)),#', $param[0]);
             }
 
             //if (strpos(serialize($param),'menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
             global $BLOCKS_CACHE;
-            if (array_key_exists(serialize($param),$BLOCKS_CACHE)) {
+            if (array_key_exists(serialize($param), $BLOCKS_CACHE)) {
                 $REQUEST_BLOCK_NEST_LEVEL--;
                 return;
             }
 
             $block_parms = array();
             foreach ($param as $_param) {
-                $block_parts = explode('=',$_param,2);
+                $block_parts = explode('=', $_param, 2);
                 if (count($block_parts) != 2) {
                     $BLOCKS_CACHE[serialize($param)] = new ocp_tempcode();
                     continue 2;
                 }
-                list($key,$val) = $block_parts;
+                list($key, $val) = $block_parts;
                 $block_parms[$key] = $val;
             }
-            $b_value = do_block($block_parms['block'],$block_parms);
+            $b_value = do_block($block_parms['block'], $block_parms);
 
             if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                $children[] = array(':block: ' . $block_parms['block'],array(array($b_value->codename,$b_value->children,$b_value->fresh)),true);
+                $children[] = array(':block: ' . $block_parms['block'], array(array($b_value->codename, $b_value->children, $b_value->fresh)), true);
             }
             $b_value->handle_symbol_preprocessing();
 
@@ -608,12 +609,12 @@ function handle_symbol_preprocessing($bit,&$children)
                 $GLOBALS['RECORDED_TEMPLATES_USED'][] = $param[0]->evaluate();
             }
             if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                $children[] = array($param[0],array(),false);
+                $children[] = array($param[0], array(), false);
             }
             break;
 
         case 'REQUIRE_JAVASCRIPT':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
@@ -630,7 +631,7 @@ function handle_symbol_preprocessing($bit,&$children)
             return;
 
         case 'REQUIRE_CSS':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
@@ -643,7 +644,7 @@ function handle_symbol_preprocessing($bit,&$children)
             return;
 
         case 'LOAD_PANEL':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
@@ -654,29 +655,29 @@ function handle_symbol_preprocessing($bit,&$children)
             }
 
             global $PANELS_CACHE;
-            if (array_key_exists(serialize($param),$PANELS_CACHE)) {
+            if (array_key_exists(serialize($param), $PANELS_CACHE)) {
                 return;
             }
 
-            if (array_key_exists(0,$param)) {
-                if (substr(get_page_name(),0,6) != 'panel_') {
-                    if (strpos($param[0],':') !== false) {
-                        $param = array_reverse(explode(':',$param[0],2));
+            if (array_key_exists(0, $param)) {
+                if (substr(get_page_name(), 0, 6) != 'panel_') {
+                    if (strpos($param[0], ':') !== false) {
+                        $param = array_reverse(explode(':', $param[0], 2));
                     }
-                    if (substr($param[0],0,6) == 'panel_') {
-                        $param[0] = substr($param[0],6);
+                    if (substr($param[0], 0, 6) == 'panel_') {
+                        $param[0] = substr($param[0], 6);
                     }
 
                     global $ZONE;
                     $wide_high = is_wide_high();
                     $wide = is_wide();
-                    if ((($wide == 0) || (($wide_high == 0) && (($param[0] == 'bottom') || ($param[0] == 'top')))) && ((get_option('site_closed') == '0') || ($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_privilege(get_member(),'access_closed_site')))) {
-                        $tp_value = request_page('panel_' . $param[0],false,array_key_exists(1,$param)?$param[1]:null,null);
+                    if ((($wide == 0) || (($wide_high == 0) && (($param[0] == 'bottom') || ($param[0] == 'top')))) && ((get_option('site_closed') == '0') || ($GLOBALS['IS_ACTUALLY_ADMIN']) || (has_privilege(get_member(), 'access_closed_site')))) {
+                        $tp_value = request_page('panel_' . $param[0], false, array_key_exists(1, $param) ? $param[1] : null, null);
 
                         $sub_children = array();
                         $tp_value->handle_symbol_preprocessing();
                         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                            $children[] = array(':panel: ' . $param[0],$sub_children,isset($tp_value->fresh)?$tp_value->fresh:false);
+                            $children[] = array(':panel: ' . $param[0], $sub_children, isset($tp_value->fresh) ? $tp_value->fresh : false);
                         }
 
                         $value = $tp_value->evaluate();
@@ -696,7 +697,7 @@ function handle_symbol_preprocessing($bit,&$children)
 
         case 'JS_TEMPCODE':
             if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+                if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                     return;
                 }
                 $param = $bit[3];
@@ -706,26 +707,26 @@ function handle_symbol_preprocessing($bit,&$children)
                     }
                 }
 
-                $temp = javascript_tempcode(array_key_exists(0,$param)?$param[0]:null);
+                $temp = javascript_tempcode(array_key_exists(0, $param) ? $param[0] : null);
 
-                $children[] = array(':container',$temp->children,$temp->fresh);
+                $children[] = array(':container', $temp->children, $temp->fresh);
             }
             return;
 
         case 'CSS_TEMPCODE':
             if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+                if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                     return;
                 }
 
                 $temp = css_tempcode();
 
-                $children[] = array(':container',$temp->children,$temp->fresh);
+                $children[] = array(':container', $temp->children, $temp->fresh);
             }
             return;
 
         case 'LOAD_PAGE':
-            if ((!array_key_exists(3,$bit)) || (is_null($bit[3]))) {
+            if ((!array_key_exists(3, $bit)) || (is_null($bit[3]))) {
                 return;
             }
             $param = $bit[3];
@@ -736,19 +737,19 @@ function handle_symbol_preprocessing($bit,&$children)
             }
 
             global $PAGES_CACHE;
-            if (array_key_exists(serialize($param),$PAGES_CACHE)) {
+            if (array_key_exists(serialize($param), $PAGES_CACHE)) {
                 return;
             }
 
-            if (array_key_exists(0,$param)) {
-                if (strpos($param[0],':') !== false) {
-                    $param = array_reverse(explode(':',$param[0],2));
+            if (array_key_exists(0, $param)) {
+                if (strpos($param[0], ':') !== false) {
+                    $param = array_reverse(explode(':', $param[0], 2));
                 }
 
-                $being_included = (!array_key_exists(2,$param)) || ($param[2] == '1');
-                $tp_value = request_page($param[0],false,array_key_exists(1,$param)?$param[1]:null,null,$being_included);
+                $being_included = (!array_key_exists(2, $param)) || ($param[2] == '1');
+                $tp_value = request_page($param[0], false, array_key_exists(1, $param) ? $param[1] : null, null, $being_included);
                 if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-                    $children[] = array(':page: ' . $param[0],$tp_value->children,$tp_value->fresh);
+                    $children[] = array(':page: ' . $param[0], $tp_value->children, $tp_value->fresh);
                 }
             } else {
                 $tp_value = new ocp_tempcode();
@@ -767,6 +768,7 @@ function handle_symbol_preprocessing($bit,&$children)
 
 /**
  * Tempcode (non-compiled implementation).
+ *
  * @package    core
  */
 class ocp_tempcode
@@ -779,7 +781,7 @@ class ocp_tempcode
 
     public $pure_lang = false;
 
-    var $children = null,$fresh = null;
+    var $children = null, $fresh = null;
 
     /**
      * Constructor of tempcode
@@ -806,14 +808,14 @@ class ocp_tempcode
                         case 'PAGE_LINK':
                         case 'LOAD_PAGE':
                         case 'LOAD_PANEL':
-                            $this->bits[] = array(array(),TC_SYMBOL,$seq_part[2]);
+                            $this->bits[] = array(array(), TC_SYMBOL, $seq_part[2]);
                             break;
                     }
                 } elseif ($seq_part[1] == TC_DIRECTIVE) {
                     switch ($seq_part[2]) {
                         case 'INCLUDE':
                         case 'FRACTIONAL_EDITABLE':
-                            $this->bits[] = array(array(),TC_DIRECTIVE,$seq_part[2]);
+                            $this->bits[] = array(array(), TC_DIRECTIVE, $seq_part[2]);
                             break;
                     }
                 }
@@ -833,9 +835,9 @@ class ocp_tempcode
      * @param  integer                  Read position
      * @param  integer                  Length of input string
      */
-    public function parse_from(&$code,&$pos,&$len)
+    public function parse_from(&$code, &$pos, &$len)
     {
-        $temp = template_to_tempcode(substr($code,$pos,$len-$pos),0,false,'');
+        $temp = template_to_tempcode(substr($code, $pos, $len - $pos), 0, false, '');
         $this->bits = $temp->bits;
     }
 
@@ -861,7 +863,7 @@ class ocp_tempcode
                     }
                 }
             }
-            handle_symbol_preprocessing($bit,$this->children);
+            handle_symbol_preprocessing($bit, $this->children);
         }
     }
 
@@ -873,7 +875,7 @@ class ocp_tempcode
      */
     public function parameterless($at)
     {
-        return ((!array_key_exists($at,$this->bits)) || ($this->bits[$at][3] == array()));
+        return ((!array_key_exists($at, $this->bits)) || ($this->bits[$at][3] == array()));
     }
 
     /**
@@ -883,13 +885,13 @@ class ocp_tempcode
      * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
      * @param  ?array                   Extra escaping (NULL: none)
      */
-    public function attach($attach,$avoid_children_merge = false,$escape = null)
+    public function attach($attach, $avoid_children_merge = false, $escape = null)
     {
         if ($attach === '') {
             return;
         }
 
-        $last = count($this->bits)-1;
+        $last = count($this->bits) - 1;
 
         global $SIMPLE_ESCAPED;
 
@@ -900,11 +902,13 @@ class ocp_tempcode
 
             foreach ($attach->bits as $bit) {
                 if ($escape != array()) {
-                    $bit[0] = array_merge($escape,$bit[0]);
+                    $bit[0] = array_merge($escape, $bit[0]);
                 }
 
                 // Can we add into another string at our edge
-                if (($last == -1) || ($bit[1] != TC_KNOWN) || ($this->bits[$last][1] != TC_KNOWN) || (/*Commented out due to bug on Quercus($this->bits[$last][0]!=$bit[0]) && */((((array_merge($bit[0],$this->bits[$last][0])) != $SIMPLE_ESCAPED) && ((array_merge($bit[0],$this->bits[$last][0])) != array())) || (preg_match('#[&<>"\']#',$bit[2]) != 0)))) { // No
+                if (($last == -1) || ($bit[1] != TC_KNOWN) || ($this->bits[$last][1] != TC_KNOWN) || (/*Commented out due to bug on Quercus($this->bits[$last][0]!=$bit[0]) && */
+                    ((((array_merge($bit[0], $this->bits[$last][0])) != $SIMPLE_ESCAPED) && ((array_merge($bit[0], $this->bits[$last][0])) != array())) || (preg_match('#[&<>"\']#', $bit[2]) != 0)))
+                ) { // No
                     $this->bits[] = $bit;
                     $last++;
                 } else { // Yes
@@ -922,15 +926,17 @@ class ocp_tempcode
                 if (!isset($attach->fresh)) {
                     $attach->fresh = false;
                 }
-                $this->children[] = array($attach->codename,isset($attach->children)?$attach->children:array(),isset($attach->fresh)?$attach->fresh:false);
+                $this->children[] = array($attach->codename, isset($attach->children) ? $attach->children : array(), isset($attach->fresh) ? $attach->fresh : false);
             }
         } else { // Consider it a string
             // Can we add into another string at our edge
             if (is_null($escape)) {
                 $escape = array();
             }
-            if (($last == -1) || ($this->bits[$last][1] != TC_KNOWN) || (/*Commented out due to bug on Quercus($this->bits[$last][0]!=$escape) && */(((array_merge($escape,$this->bits[$last][0])) != $SIMPLE_ESCAPED) && ((array_merge($escape,$this->bits[$last][0])) != array()) || (preg_match('#[&<>??"\']#',$attach) != 0)))) { // No
-                $this->bits[] = array($escape,TC_KNOWN,$attach,null);
+            if (($last == -1) || ($this->bits[$last][1] != TC_KNOWN) || (/*Commented out due to bug on Quercus($this->bits[$last][0]!=$escape) && */
+                (((array_merge($escape, $this->bits[$last][0])) != $SIMPLE_ESCAPED) && ((array_merge($escape, $this->bits[$last][0])) != array()) || (preg_match('#[&<>??"\']#', $attach) != 0)))
+            ) { // No
+                $this->bits[] = array($escape, TC_KNOWN, $attach, null);
             } else { // Yes
                 $this->bits[$last][2] .= $attach;
             }
@@ -943,20 +949,20 @@ class ocp_tempcode
      * @param  string                   Named parameter
      * @param  object                   Specific value
      */
-    public function singular_bind($parameter,$value)
+    public function singular_bind($parameter, $value)
     {
         foreach ($this->bits as $i => $bit) {
             if ((isset($bit[3])) && (count($bit[3]) != 0)) { // Has parameters, so we need to decode them
                 foreach ($bit[3] as $j => $param) {
                     if (is_object($param)) {
-                        $param->singular_bind($parameter,$value);
+                        $param->singular_bind($parameter, $value);
                     }
                     $bit[3][$j] = $param;
                 }
             }
 
             if (($bit[1] != TC_KNOWN) && ($bit[2] == $parameter)) {
-                array_splice($this->bits,$i,1,$value->bits);
+                array_splice($this->bits, $i, 1, $value->bits);
                 $cnt = count($value->bits);
                 $i += $cnt;
                 continue;
@@ -980,13 +986,13 @@ class ocp_tempcode
 
         // Decode all language-codes we are allowed to. Escape anything we are told to
         $count = count($this->bits);
-        for ($i = 0;$i<$count;++$i) {
+        for ($i = 0; $i < $count; ++$i) {
             $bit = &$this->bits[$i];
 
             // Decode language codes
             $cant_decode = $bit[1] != TC_LANGUAGE_REFERENCE;
             if (!$cant_decode) {
-                if ((array_key_exists(3,$bit)) && (!is_null($bit[3]))) {
+                if ((array_key_exists(3, $bit)) && (!is_null($bit[3]))) {
                     foreach ($bit[3] as $decode_bit) { // We can't decode anything that has complex parameters
                         if (is_object($decode_bit)) {
                             $cant_decode = true;
@@ -997,14 +1003,14 @@ class ocp_tempcode
 
             if (!$cant_decode) {
                 $bit[1] = TC_KNOWN;
-                $bit[2] = ecv($lang,array(),TC_LANGUAGE_REFERENCE,$bit[2],is_null($bit[3])?array():$bit[3]);
+                $bit[2] = ecv($lang, array(), TC_LANGUAGE_REFERENCE, $bit[2], is_null($bit[3]) ? array() : $bit[3]);
                 $bit[3] = null;
             }
 
             // Escaping
             if ((count($bit[0]) != 0) && ($bit[1] == TC_KNOWN)) {
                 if (count($bit[0]) != 0) {
-                    apply_tempcode_escaping($bit[0],$bit[2]);
+                    apply_tempcode_escaping($bit[0], $bit[2]);
                 }
                 $bit[0] = array();
             }
@@ -1020,7 +1026,7 @@ class ocp_tempcode
      * @param  boolean                  Return error code on failure, rather than exiting
      * @return boolean                  Success status (it can fail, if the compiled cache file is corrupt)
      */
-    public function from_assembly(&$raw_data,$allow_failure = false)
+    public function from_assembly(&$raw_data, $allow_failure = false)
     {
         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
             $this->fresh = false;
@@ -1048,25 +1054,25 @@ class ocp_tempcode
      * @param  boolean                  Whether we are looking under a loop
      * @return tempcode                 The new bound tempcode object
      */
-    public function bind(&$parameters,$codename,$under_loop = false)
+    public function bind(&$parameters, $codename, $under_loop = false)
     {
         //     global $PREPROCESSED_BLOCKS;
 
         foreach ($parameters as $key => $val) {
             if (is_bool($val)) {
-                $parameters[$key] = $val?'1':'0';
+                $parameters[$key] = $val ? '1' : '0';
             }
         }
 
         $out = new ocp_tempcode();
         $out->codename = $codename;
         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
-            $out->children = isset($this->children)?$this->children:array();
+            $out->children = isset($this->children) ? $this->children : array();
             foreach ($parameters as $key => $parameter) {
                 if (is_object($parameter)) {
-                    $out->children[] = array($parameter->codename,isset($parameter->children)?$parameter->children:array(),isset($parameter->fresh)?$parameter->fresh:false);
+                    $out->children[] = array($parameter->codename, isset($parameter->children) ? $parameter->children : array(), isset($parameter->fresh) ? $parameter->fresh : false);
                 } elseif ((is_string($parameter)) && ($key == '_GUID')) {
-                    $out->children[] = array(':guid',array(array(':' . $parameter,array(),true)),true);
+                    $out->children[] = array(':guid', array(array(':' . $parameter, array(), true)), true);
                 }
             }
         }
@@ -1083,7 +1089,7 @@ class ocp_tempcode
                 if ($bit_1 != TC_DIRECTIVE) {
                     foreach ($bit[3] as $i => $param) {
                         if (is_object($param)) {
-                            $bit[3][$i] = $param->bind($parameters,$codename,$under_loop);
+                            $bit[3][$i] = $param->bind($parameters, $codename, $under_loop);
                         }
                     }
                 } else {
@@ -1100,7 +1106,7 @@ class ocp_tempcode
                     } else {
                         foreach ($bit[3] as $i => $param) {
                             if (is_object($param)) {
-                                $bit[3][$i] = $param->bind($send_parameters,$codename,$under_loop || ($bit[2] == 'LOOP') || ($bit[2] == 'IF_PASSED') || ($bit[2] == 'IF_PASSED_AND_TRUE'));
+                                $bit[3][$i] = $param->bind($send_parameters, $codename, $under_loop || ($bit[2] == 'LOOP') || ($bit[2] == 'IF_PASSED') || ($bit[2] == 'IF_PASSED_AND_TRUE'));
                             } // We need to be able to keep the parameters for bubbling down later
 
                             if (($i == 0) && ($bit_2 == 'IF_NON_EMPTY')) { // To save memory
@@ -1125,16 +1131,16 @@ class ocp_tempcode
                 if ($bit_1 == TC_PARAMETER) {
                     $last_param = true;
 
-                    if ((!array_key_exists($bit_2,$parameters)) || (is_null($parameters[$bit_2]))) {
+                    if ((!array_key_exists($bit_2, $parameters)) || (is_null($parameters[$bit_2]))) {
                         if ($bit_2 == '_GUID') {
                             $parameters['_GUID'] = '';
 
                             $trace = debug_backtrace();
-                            $parameters['_GUID'] = array_key_exists(3,$trace)?($trace[3]['function'] . '/' . $trace[2]['function']):(array_key_exists(2,$trace)?$trace[2]['function']:$trace[1]['function']);
+                            $parameters['_GUID'] = array_key_exists(3, $trace) ? ($trace[3]['function'] . '/' . $trace[2]['function']) : (array_key_exists(2, $trace) ? $trace[2]['function'] : $trace[1]['function']);
                         } else {
                             require_code('site');
                             if (!$under_loop) {
-                                attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER',$bit_2,$codename),'warn');
+                                attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER', $bit_2, $codename), 'warn');
                             }
                             continue;
                         }
@@ -1142,9 +1148,9 @@ class ocp_tempcode
 
                     // Do the actual parameter lookup: turns the late parameter into an actual known quantity
                     $param_value = $parameters[$bit_2];
-                    $looked_up = (is_array($param_value))?((count($param_value) == 0)?'':strval(count($param_value))):$param_value;
+                    $looked_up = (is_array($param_value)) ? ((count($param_value) == 0) ? '' : strval(count($param_value))) : $param_value;
 
-                    $out->attach($looked_up,false,$bit[0]);
+                    $out->attach($looked_up, false, $bit[0]);
                     continue;
                 }
 
@@ -1152,14 +1158,14 @@ class ocp_tempcode
 
                 // Handle the pass checking directives
                 if (($bit_2 == 'IF_PASSED') || ($bit_2 == 'IF_NON_PASSED') || ($bit_2 == 'IF_PASSED_AND_TRUE') || ($bit_2 == 'IF_NON_PASSED_OR_FALSE')) {
-                    $out->bits[] = array($bit[0],$bit_1,$bit_2,$bit[3]);
+                    $out->bits[] = array($bit[0], $bit_1, $bit_2, $bit[3]);
                     continue;
                 }
             }
 
             if (($last_param) && ($bit_1 == TC_KNOWN)) { // Try and attach it, because we may save some space
                 $last_param = false;
-                $out->attach($bit[2],false,$bit[0]);
+                $out->attach($bit[2], false, $bit[0]);
                 continue;
             }
 
@@ -1184,11 +1190,11 @@ class ocp_tempcode
             return '';
         }
 
-        global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$RECORD_TEMPLATES_TREE,$SIMPLE_ESCAPED;
+        global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $RECORD_TEMPLATES_TREE, $SIMPLE_ESCAPED;
         $empty_array = array();
 
         $before = @ini_get('ocproducts.xss_detect');
-        @ini_set('ocproducts.xss_detect','0');
+        @ini_set('ocproducts.xss_detect', '0');
 
         foreach ($this->bits as $bit) {
             $bit_0 = $bit[0];
@@ -1197,9 +1203,9 @@ class ocp_tempcode
                 if ($bit_0 == $empty_array) {
                     echo $bit[2];
                 } elseif ($bit_0 == $SIMPLE_ESCAPED) {
-                    echo str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$bit[2]);
+                    echo str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $bit[2]);
                 } else {
-                    apply_tempcode_escaping($bit_0,$bit[2]);
+                    apply_tempcode_escaping($bit_0, $bit[2]);
                     echo $bit[2];
                 }
             } else {
@@ -1217,17 +1223,17 @@ class ocp_tempcode
                                 if (!isset($decode_bit->fresh)) {
                                     $decode_bit->fresh = false;
                                 }
-                                $this->children[] = array($decode_bit->codename,$decode_bit->children,$decode_bit->fresh);
+                                $this->children[] = array($decode_bit->codename, $decode_bit->children, $decode_bit->fresh);
                             }
                             $bit_3[$i] = $decode_bit->evaluate($lang);
                         }
                     }
                 }
-                echo ecv($lang,$bit_0,$bit[1],$bit[2],is_null($bit_3)?array():$bit_3);
+                echo ecv($lang, $bit_0, $bit[1], $bit[2], is_null($bit_3) ? array() : $bit_3);
             }
         }
 
-        @ini_set('ocproducts.xss_detect',$before);
+        @ini_set('ocproducts.xss_detect', $before);
 
         return '';
     }
@@ -1263,7 +1269,7 @@ class ocp_tempcode
                         }
                     }
                 }
-                $out = ecv(function_exists('get_site_default_lang')?get_site_default_lang():'EN',array(),$bit[1],$bit[2],is_null($bit_3)?array():$bit_3);
+                $out = ecv(function_exists('get_site_default_lang') ? get_site_default_lang() : 'EN', array(), $bit[1], $bit[2], is_null($bit_3) ? array() : $bit_3);
                 if ($out != '') {
                     return false;
                 }
@@ -1281,7 +1287,7 @@ class ocp_tempcode
      */
     public function evaluate($lang = null)
     {
-        global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$RECORD_TEMPLATES_TREE,$SIMPLE_ESCAPED,$EVALUATE_LANG,$EVALUATE_ESCAPE;
+        global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $RECORD_TEMPLATES_TREE, $SIMPLE_ESCAPED, $EVALUATE_LANG, $EVALUATE_ESCAPE;
 
         $empty_array = array();
         $out = '';
@@ -1293,9 +1299,9 @@ class ocp_tempcode
                 if ($bit_0 == $empty_array) {
                     $out .= $bit[2];
                 } elseif ($bit_0 == $SIMPLE_ESCAPED) {
-                    $out .= str_replace($HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2,$bit[2]);
+                    $out .= str_replace($HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2, $bit[2]);
                 } else {
-                    apply_tempcode_escaping($bit_0,$bit[2]);
+                    apply_tempcode_escaping($bit_0, $bit[2]);
                     $out .= $bit[2];
                 }
             } else {
@@ -1313,14 +1319,14 @@ class ocp_tempcode
                                 if (!isset($decode_bit->fresh)) {
                                     $decode_bit->fresh = false;
                                 }
-                                $this->children[] = array($decode_bit->codename,$decode_bit->children,$decode_bit->fresh);
+                                $this->children[] = array($decode_bit->codename, $decode_bit->children, $decode_bit->fresh);
                             }
                             $bit_3[$i] = $decode_bit->evaluate($lang);
                         }
                     }
                 }
 
-                $out .= ecv($lang,$bit_0,$bit[1],$bit[2],is_null($bit_3)?array():$bit_3);
+                $out .= ecv($lang, $bit_0, $bit[1], $bit[2], is_null($bit_3) ? array() : $bit_3);
             }
         }
 

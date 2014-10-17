@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_config_points_ADD_QUIZ
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_ADD_QUIZ
      */
     public function get_default()
     {
-        return addon_installed('points')?'0':null;
+        return addon_installed('points') ? '0' : null;
     }
 }

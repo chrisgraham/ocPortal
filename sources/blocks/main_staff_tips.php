@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Block_main_staff_tips
 {
     /**
@@ -52,9 +51,9 @@ class Block_main_staff_tips
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
-        $GLOBALS['SITE_DB']->create_table('staff_tips_dismissed',array(
+        $GLOBALS['SITE_DB']->create_table('staff_tips_dismissed', array(
             't_member' => '*MEMBER',
             't_tip' => '*ID_TEXT'
         ));
@@ -72,34 +71,34 @@ class Block_main_staff_tips
         require_lang('tips');
 
         // Anything to dismiss?
-        $dismiss = get_param('staff_tips_dismiss','');
+        $dismiss = get_param('staff_tips_dismiss', '');
         if ($dismiss != '') {
-            $GLOBALS['SITE_DB']->query_delete('staff_tips_dismissed',array('t_tip' => $dismiss,'t_member' => get_member()),'',1);
-            $GLOBALS['SITE_DB']->query_insert('staff_tips_dismissed',array('t_tip' => $dismiss,'t_member' => get_member()));
+            $GLOBALS['SITE_DB']->query_delete('staff_tips_dismissed', array('t_tip' => $dismiss, 't_member' => get_member()), '', 1);
+            $GLOBALS['SITE_DB']->query_insert('staff_tips_dismissed', array('t_tip' => $dismiss, 't_member' => get_member()));
         }
 
         // What tips have been permanently dismissed by the current member?
-        $read = collapse_1d_complexity('t_tip',$GLOBALS['SITE_DB']->query_select('staff_tips_dismissed',array('t_tip'),array('t_member' => get_member())));
+        $read = collapse_1d_complexity('t_tip', $GLOBALS['SITE_DB']->query_select('staff_tips_dismissed', array('t_tip'), array('t_member' => get_member())));
 
         // Load up tips by searching for the correctly named language files; also choose level
         require_lang('tips');
         $tips = array();
         $level = 0;
-        $letters = array('a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
-        for ($i = 0;$i<5;$i++) {
+        $letters = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z');
+        for ($i = 0; $i < 5; $i++) {
             $tips[$i] = array();
             foreach ($letters as $j) {
                 $tip_id = strval($i) . $j;
-                if (!in_array($tip_id,$read)) {
-                    $lang2 = do_lang('TIP_' . $tip_id,null,null,null,null,false);
+                if (!in_array($tip_id, $read)) {
+                    $lang2 = do_lang('TIP_' . $tip_id, null, null, null, null, false);
                     if (!is_null($lang2)) {
                         $lang = do_lang_tempcode(
                             'TIP_' . $tip_id,
-                            get_brand_page_url(array('page' => 'tickets','type' => 'ticket','ticket_template' => 'general_feedback','cost' => 'free'),'site'),
+                            get_brand_page_url(array('page' => 'tickets', 'type' => 'ticket', 'ticket_template' => 'general_feedback', 'cost' => 'free'), 'site'),
                             brand_name(),
                             array(
-                                get_brand_page_url(array('page' => 'commercial_support'),'site'),
-                                get_brand_page_url(array('page' => ''),'forum')
+                                get_brand_page_url(array('page' => 'commercial_support'), 'site'),
+                                get_brand_page_url(array('page' => ''), 'forum')
                             )
                         );
                         $tips[$i][$tip_id] = $lang;
@@ -107,12 +106,12 @@ class Block_main_staff_tips
                 }
             }
             if (count($tips[$level]) == 0) {
-                $level = $i+1;
+                $level = $i + 1;
             }
         }
 
         // Choose a tip from the level we're on
-        if (!array_key_exists($level,$tips)) {
+        if (!array_key_exists($level, $tips)) {
             $tip = do_lang_tempcode('ALL_TIPS_READ');
             $level = 5;
             $tip_code = '';
@@ -120,13 +119,13 @@ class Block_main_staff_tips
         } else {
             $tip_pool = array_values($tips[$level]);
             $count = count($tip_pool);
-            $choose_id = mt_rand(0,$count-1);
+            $choose_id = mt_rand(0, $count - 1);
             $tip = $tip_pool[$choose_id];
             $tip_keys = array_keys($tips[$level]);
             $tip_code = $tip_keys[$choose_id];
         }
 
-        return do_template('BLOCK_MAIN_STAFF_TIPS',array(
+        return do_template('BLOCK_MAIN_STAFF_TIPS', array(
             '_GUID' => 'c2cffc480b7bd9beef7f78a8ee7b7359',
             'BLOCK_PARAMS' => block_params_arr_to_str($map),
             'TIP' => $tip,

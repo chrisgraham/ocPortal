@@ -43,13 +43,13 @@ abstract class capi_object
         return $this->properties[$property_label];
     }
 
-    public function set($property_label,$value)
+    public function set($property_label, $value)
     {
         $this->properties[$property_label] = $value;
     }
 }
 
-function catalogue_find_options($field,$catalogue_name,$where = '')
+function catalogue_find_options($field, $catalogue_name, $where = '')
 {
     $sx = $catalogue_name . '__' . $field;
     global $CAPI_CATALOGUE_OPTIONS;
@@ -57,8 +57,8 @@ function catalogue_find_options($field,$catalogue_name,$where = '')
         return $CAPI_CATALOGUE_OPTIONS[$sx];
     }
 
-    $cf_id = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $field,'c_name' => $catalogue_name));
-    $rows = $GLOBALS['SITE_DB']->query_select('catalogue_efv_short s JOIN ' . get_table_prefix() . 'catalogue_entries e ON e.id=s.ce_id',array('s.*'),array('c_name' => $catalogue_name,'cf_id' => $cf_id),$where . ' ORDER BY cv_value');
+    $cf_id = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $field, 'c_name' => $catalogue_name));
+    $rows = $GLOBALS['SITE_DB']->query_select('catalogue_efv_short s JOIN ' . get_table_prefix() . 'catalogue_entries e ON e.id=s.ce_id', array('s.*'), array('c_name' => $catalogue_name, 'cf_id' => $cf_id), $where . ' ORDER BY cv_value');
     $out = array();
     foreach ($rows as $row) {
         $out[$row['ce_id']] = $row['cv_value'];
@@ -68,10 +68,10 @@ function catalogue_find_options($field,$catalogue_name,$where = '')
     return $out;
 }
 
-function catalogue_query_select($catalogue_name,$select,$where = null,$filters = '',$max = null,$start = 0)
+function catalogue_query_select($catalogue_name, $select, $where = null, $filters = '', $max = null, $start = 0)
 {
     global $CAPI_CATALOGUE_QUERY_CACHE;
-    $sz = serialize(array($catalogue_name,$select,$where,$filters,$max,$start));
+    $sz = serialize(array($catalogue_name, $select, $where, $filters, $max, $start));
     if (isset($CAPI_CATALOGUE_QUERY_CACHE[$sz])) {
         return $CAPI_CATALOGUE_QUERY_CACHE[$sz];
     }
@@ -84,26 +84,26 @@ function catalogue_query_select($catalogue_name,$select,$where = null,$filters =
             if ($filters != '') {
                 $filters .= ',';
             }
-            $filters .= $key . '=' . (is_string($val)?$val:strval($val));
+            $filters .= $key . '=' . (is_string($val) ? $val : strval($val));
         }
     }
-    list($extra_select,$extra_join,$extra_where) = ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($filters),'catalogue_entry',$catalogue_name);
+    list($extra_select, $extra_join, $extra_where) = ocselect_to_sql($GLOBALS['SITE_DB'], parse_ocselect($filters), 'catalogue_entry', $catalogue_name);
 
-    $query = 'SELECT r.*' . implode(',',$extra_select) . ' FROM ' . get_table_prefix() . 'catalogue_entries r' . implode('',$extra_join) . ' WHERE ' . db_string_equal_to('c_name',$catalogue_name) . $extra_where;
-    $rows = $GLOBALS['SITE_DB']->query($query,$max,$start);
+    $query = 'SELECT r.*' . implode(',', $extra_select) . ' FROM ' . get_table_prefix() . 'catalogue_entries r' . implode('', $extra_join) . ' WHERE ' . db_string_equal_to('c_name', $catalogue_name) . $extra_where;
+    $rows = $GLOBALS['SITE_DB']->query($query, $max, $start);
     $out = array();
     foreach ($rows as $_row) {
-        $values = get_catalogue_entry_field_values($catalogue_name,$_row['id']);
+        $values = get_catalogue_entry_field_values($catalogue_name, $_row['id']);
         $row = array();
         foreach ($values as $_val) {
             $key = get_translated_text($_val['cf_name']);
-            if ((in_array($key,$select)) || (in_array('*',$select))) {
-                $val = isset($_val['effective_value_pure'])?$_val['effective_value_pure']:$_val['effective_value'];
+            if ((in_array($key, $select)) || (in_array('*', $select))) {
+                $val = isset($_val['effective_value_pure']) ? $_val['effective_value_pure'] : $_val['effective_value'];
                 $row[$key] = $val;
             }
         }
         foreach (array('id') as $key) {
-            if ((in_array($key,$select)) || (in_array('*',$select))) {
+            if ((in_array($key, $select)) || (in_array('*', $select))) {
                 $row[$key] = $_row[$key];
             }
         }
@@ -114,7 +114,7 @@ function catalogue_query_select($catalogue_name,$select,$where = null,$filters =
     return $out;
 }
 
-function catalogue_query_select_count($catalogue_name,$where = null,$filters = '')
+function catalogue_query_select_count($catalogue_name, $where = null, $filters = '')
 {
     require_code('catalogues');
 
@@ -124,12 +124,12 @@ function catalogue_query_select_count($catalogue_name,$where = null,$filters = '
             if ($filters != '') {
                 $filters .= ',';
             }
-            $filters .= $key . '=' . (is_string($val)?$val:strval($val));
+            $filters .= $key . '=' . (is_string($val) ? $val : strval($val));
         }
     }
-    list($extra_select,$extra_join,$extra_where) = ocselect_to_sql($GLOBALS['SITE_DB'],parse_ocselect($filters),'catalogue_entry',$catalogue_name);
+    list($extra_select, $extra_join, $extra_where) = ocselect_to_sql($GLOBALS['SITE_DB'], parse_ocselect($filters), 'catalogue_entry', $catalogue_name);
 
-    $query = 'SELECT COUNT(*) FROM ' . get_table_prefix() . 'catalogue_entries r' . implode('',$extra_join) . ' WHERE ' . db_string_equal_to('c_name',$catalogue_name) . $extra_where;
+    $query = 'SELECT COUNT(*) FROM ' . get_table_prefix() . 'catalogue_entries r' . implode('', $extra_join) . ' WHERE ' . db_string_equal_to('c_name', $catalogue_name) . $extra_where;
     return $GLOBALS['SITE_DB']->query_value_if_there($query);
 }
 
@@ -137,12 +137,12 @@ abstract class capi_catalogue_object extends capi_object
 {
     public $field_refs = array();
 
-    public function __construct($entity_id,$missing_ok = false)
+    public function __construct($entity_id, $missing_ok = false)
     {
         global $CAPI_CATALOGUE_OBJECT_CACHE;
         if (!isset($CAPI_CATALOGUE_OBJECT_CACHE[$entity_id])) {
-            $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('*'),array('id' => $entity_id),'',1);
-            if (!array_key_exists(0,$rows)) {
+            $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('*'), array('id' => $entity_id), '', 1);
+            if (!array_key_exists(0, $rows)) {
                 if ($missing_ok) {
                     return;
                 }
@@ -155,30 +155,30 @@ abstract class capi_catalogue_object extends capi_object
             $this->properties = $rows[0];
 
             require_code('catalogues');
-            $values = get_catalogue_entry_field_values($this->catalogue,$entity_id);
+            $values = get_catalogue_entry_field_values($this->catalogue, $entity_id);
             foreach ($values as $_val) {
                 $key = get_translated_text($_val['cf_name']);
-                $val = isset($_val['effective_value_pure'])?$_val['effective_value_pure']:$_val['effective_value'];
+                $val = isset($_val['effective_value_pure']) ? $_val['effective_value_pure'] : $_val['effective_value'];
                 $this->properties[$key] = $val;
 
                 $this->field_refs[$key] = $_val;
             }
 
-            $CAPI_CATALOGUE_OBJECT_CACHE[$entity_id] = array($this->properties,$this->field_refs);
+            $CAPI_CATALOGUE_OBJECT_CACHE[$entity_id] = array($this->properties, $this->field_refs);
         } else {
-            list($this->properties,$this->field_refs) = $CAPI_CATALOGUE_OBJECT_CACHE[$entity_id];
+            list($this->properties, $this->field_refs) = $CAPI_CATALOGUE_OBJECT_CACHE[$entity_id];
         }
 
         parent::__construct($entity_id);
     }
 
-    public function _keyfield_entity_id_convert($id,$field)
+    public function _keyfield_entity_id_convert($id, $field)
     {
-        $cf_id = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $field,'c_name' => $this->catalogue));
-        return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short','ce_id',array('cf_id' => $cf_id,'cv_value' => $id));
+        $cf_id = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $field, 'c_name' => $this->catalogue));
+        return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short', 'ce_id', array('cf_id' => $cf_id, 'cv_value' => $id));
     }
 
-    public function set($property_label,$val)
+    public function set($property_label, $val)
     {
         if (!isset($this->field_refs[$property_label])) {
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
@@ -191,29 +191,29 @@ abstract class capi_catalogue_object extends capi_object
         $field_id = $__val['cf_id'];
 
         $ob = get_fields_hook($type);
-        list(,,$sup_table_name) = $ob->get_field_value_row_bits($__val);
+        list(, , $sup_table_name) = $ob->get_field_value_row_bits($__val);
 
-        if (substr($sup_table_name,-6) == '_trans') {
-            $_val = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $sup_table_name,'cv_value',array('cf_id' => $field_id,'ce_id' => $id));
+        if (substr($sup_table_name, -6) == '_trans') {
+            $_val = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_' . $sup_table_name, 'cv_value', array('cf_id' => $field_id, 'ce_id' => $id));
             if (is_null($_val)) {
-                $_val = insert_lang_comcode('cv_value',$val,3);
+                $_val = insert_lang_comcode('cv_value', $val, 3);
             } else {
-                $_val = lang_remap_comcode('cv_value',$_val,$val);
+                $_val = lang_remap_comcode('cv_value', $_val, $val);
             }
 
-            $GLOBALS['SITE_DB']->query_update('catalogue_efv_' . $sup_table_name,$_val,array('cf_id' => $field_id,'ce_id' => $id),'',1);
+            $GLOBALS['SITE_DB']->query_update('catalogue_efv_' . $sup_table_name, $_val, array('cf_id' => $field_id, 'ce_id' => $id), '', 1);
         } else {
             if ($sup_table_name == 'float') {
-                $smap = array('cv_value' => ((is_null($val)) || ($val == ''))?null:floatval($val));
+                $smap = array('cv_value' => ((is_null($val)) || ($val == '')) ? null : floatval($val));
             } elseif ($sup_table_name == 'integer') {
-                $smap = array('cv_value' => ((is_null($val)) || ($val == ''))?null:intval($val));
+                $smap = array('cv_value' => ((is_null($val)) || ($val == '')) ? null : intval($val));
             } else {
                 $smap = array('cv_value' => $val);
             }
-            $GLOBALS['SITE_DB']->query_update('catalogue_efv_' . $sup_table_name,$smap,array('cf_id' => $field_id,'ce_id' => $id),'',1);
+            $GLOBALS['SITE_DB']->query_update('catalogue_efv_' . $sup_table_name, $smap, array('cf_id' => $field_id, 'ce_id' => $id), '', 1);
         }
 
-        parent::set($property_label,$val);
+        parent::set($property_label, $val);
     }
 }
 
@@ -224,12 +224,12 @@ abstract class capi_database_object extends capi_object
     public function __construct($entity_id)
     {
         global $CAPI_DATABASE_OBJECT_CACHE;
-        $sx = serialize(array($this->table,$entity_id));
+        $sx = serialize(array($this->table, $entity_id));
 
         if (isset($CAPI_DATABASE_OBJECT_CACHE[$sx])) {
             $this->properties = $CAPI_DATABASE_OBJECT_CACHE[$sx];
         } else {
-            $rows = $GLOBALS['SITE_DB']->query_select($this->table,array('*'),array('id' => $entity_id));
+            $rows = $GLOBALS['SITE_DB']->query_select($this->table, array('*'), array('id' => $entity_id));
             if (!isset($rows[0])) {
                 warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
             }
@@ -241,9 +241,9 @@ abstract class capi_database_object extends capi_object
         parent::__construct($entity_id);
     }
 
-    public function set($property_label,$value)
+    public function set($property_label, $value)
     {
-        $GLOBALS['SITE_DB']->query_update($this->table,array($property_label => $value),array('id' => $this->entity_id),'',1);
-        parent::set($property_label,$value);
+        $GLOBALS['SITE_DB']->query_update($this->table, array($property_label => $value), array('id' => $this->entity_id), '', 1);
+        parent::set($property_label, $value);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_attachments_null
 {
     /**
@@ -27,7 +26,7 @@ class Hook_attachments_null
      * @param  object                   The database connection to check on
      * @return boolean                  Whether there is permission
      */
-    public function run($id,$connection)
+    public function run($id, $connection)
     {
         return true;
     }

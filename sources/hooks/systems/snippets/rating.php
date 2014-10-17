@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_rating
 {
     /**
@@ -33,28 +32,28 @@ class Hook_rating
 
         // Has there actually been any rating?
         if ((strtoupper(ocp_srv('REQUEST_METHOD')) == 'POST') || (ocp_srv('HTTP_REFERER') == '')) { // Code branch if this is a post request. Allow rating to not be given (= unrate). Has to check is post request to stop CSRF
-            $rating = either_param_integer('rating',null);
+            $rating = either_param_integer('rating', null);
         } else {
             $rating = post_param_integer('rating'); // Will fail
         }
         $content_type = get_param('content_type');
-        $type = get_param('type','');
+        $type = get_param('type', '');
         $content_id = get_param('id');
 
-        $content_url = get_param('content_url','',true);
-        $content_title = get_param('content_title','',true);
+        $content_url = get_param('content_url', '', true);
+        $content_title = get_param('content_title', '', true);
 
         require_code('feedback');
-        actualise_specific_rating($rating,get_page_name(),get_member(),$content_type,$type,$content_id,$content_url,$content_title);
+        actualise_specific_rating($rating, get_page_name(), get_member(), $content_type, $type, $content_id, $content_url, $content_title);
 
         actualise_give_rating_points();
 
-        $template = get_param('template',null);
+        $template = get_param('template', null);
         if ($template !== '') {
             if (is_null($template)) {
                 $template = 'RATING_BOX';
             }
-            return display_rating($content_url,$content_title,$content_type,$content_id,$template);
+            return display_rating($content_url, $content_title, $content_type, $content_id, $template);
         }
 
         return do_lang_tempcode('THANKYOU_FOR_RATING_SHORT');

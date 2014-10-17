@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-
 class Hook_comments
 {
     /**
@@ -31,24 +30,24 @@ class Hook_comments
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
 
-        $serialized_options = get_param('serialized_options',false,true);
+        $serialized_options = get_param('serialized_options', false, true);
         $hash = get_param('hash');
 
         require_code('crypt');
-        if (ratchet_hash($serialized_options,get_site_salt()) != $hash) {
+        if (ratchet_hash($serialized_options, get_site_salt()) != $hash) {
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
 
         secure_serialized_data($serialized_options);
-        list($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,$reverse,$may_reply,$highlight_by_user,$allow_reviews) = unserialize($serialized_options);
+        list($topic_id, $num_to_show_limit, $allow_comments, $invisible_if_no_comments, $forum, $reverse, $may_reply, $highlight_by_user, $allow_reviews) = unserialize($serialized_options);
 
-        $posts = array_map('intval',explode(',',get_param('ids',false,true)));
+        $posts = array_map('intval', explode(',', get_param('ids', false, true)));
 
-        $_parent_id = get_param('id','');
-        $parent_id = ($_parent_id == '')?mixed():intval($_parent_id);
+        $_parent_id = get_param('id', '');
+        $parent_id = ($_parent_id == '') ? mixed() : intval($_parent_id);
 
         require_code('topics');
         $renderer = new OCP_Topic();
-        return $renderer->render_posts_from_topic($topic_id,$num_to_show_limit,$allow_comments,$invisible_if_no_comments,$forum,null,$reverse,$may_reply,$highlight_by_user,$allow_reviews,$posts,$parent_id);
+        return $renderer->render_posts_from_topic($topic_id, $num_to_show_limit, $allow_comments, $invisible_if_no_comments, $forum, null, $reverse, $may_reply, $highlight_by_user, $allow_reviews, $posts, $parent_id);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_tornevall_api_username
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_tornevall_api_username
      */
     public function get_default()
     {
-        return class_exists('SoapClient')?'':null;
+        return class_exists('SoapClient') ? '' : null;
     }
 }

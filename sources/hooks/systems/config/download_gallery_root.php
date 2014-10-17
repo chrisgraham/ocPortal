@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_config_download_gallery_root
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_download_gallery_root
      */
     public function get_default()
     {
-        return addon_installed('galleries')?'root':null;
+        return addon_installed('galleries') ? 'root' : null;
     }
 }

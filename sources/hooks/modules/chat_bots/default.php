@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_chat_bot_default
 {
     /**
@@ -27,18 +26,18 @@ class Hook_chat_bot_default
      * @param  string                   The command used. This is just the chat message, so you can encode and recognise your own parameter scheme if you like.
      * @return ?string                  Bot reply (NULL: bot does not handle the command)
      */
-    public function handle_commands($room_id,$command)
+    public function handle_commands($room_id, $command)
     {
         switch ($command) {
             case 'help':
                 $out = do_lang('CHAT_HELP_BOTMSG');
-                return do_lang('CHAT_WEBSITE_HELPER_BOT',$out);
+                return do_lang('CHAT_WEBSITE_HELPER_BOT', $out);
 
             case 'users_online':
                 // On the site
                 $count = 0;
                 require_code('users2');
-                $members = get_users_online(true,null,$count);
+                $members = get_users_online(true, null, $count);
                 if (is_null($members)) {
                     return do_lang('TOO_MANY_USERS_ONLINE');
                 }
@@ -66,14 +65,14 @@ class Hook_chat_bot_default
                 }
 
                 // Show our complete result
-                $out = do_lang('CHAT_USERSONLINE_BOTMSG',$site_members,$_room_members);
-                return do_lang('CHAT_WEBSITE_HELPER_BOT',$out);
+                $out = do_lang('CHAT_USERSONLINE_BOTMSG', $site_members, $_room_members);
+                return do_lang('CHAT_WEBSITE_HELPER_BOT', $out);
 
             case 'time':
-                $out = do_lang('CHAT_TIME_BOTMSG',get_timezoned_date(time(),true,true,true,true));
-                return do_lang('CHAT_WEBSITE_HELPER_BOT',$out);
+                $out = do_lang('CHAT_TIME_BOTMSG', get_timezoned_date(time(), true, true, true, true));
+                return do_lang('CHAT_WEBSITE_HELPER_BOT', $out);
         }
 
-        return NULL;
+        return null;
     }
 }

@@ -51,7 +51,7 @@ class Module_admin_themes
         require_code('files');
         $langs = find_all_langs(true);
         foreach (array_keys($langs) as $lang) {
-            deldir_contents(get_custom_file_base() . '/themes/default/templates_cached/' . $lang,true);
+            deldir_contents(get_custom_file_base() . '/themes/default/templates_cached/' . $lang, true);
         }
         //deldir_contents(get_custom_file_base().'/themes/default/images_custom',true);
         //deldir_contents(get_file_base().'/themes',true);
@@ -64,36 +64,36 @@ class Module_admin_themes
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         require_code('themes2');
 
         $themes = find_all_themes(); // Find all images for all themes
 
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('theme_images',array(
+            $GLOBALS['SITE_DB']->create_table('theme_images', array(
                 'id' => '*SHORT_TEXT',
                 'theme' => '*MINIID_TEXT',
                 'path' => 'URLPATH',
                 'lang' => '*LANGUAGE_NAME'
             ));
-            $GLOBALS['SITE_DB']->create_index('theme_images','theme',array('theme','lang'));
+            $GLOBALS['SITE_DB']->create_index('theme_images', 'theme', array('theme', 'lang'));
         }
 
-        if ((is_null($upgrade_from)) || ($upgrade_from<4)) {
-            $GLOBALS['SITE_DB']->query_insert('theme_images',array(
+        if ((is_null($upgrade_from)) || ($upgrade_from < 4)) {
+            $GLOBALS['SITE_DB']->query_insert('theme_images', array(
                 'id' => 'favicon',
                 'theme' => 'default',
                 'path' => 'favicon.ico',
                 'lang' => fallback_lang()
-            ),false,true);
+            ), false, true);
 
-            $GLOBALS['SITE_DB']->query_insert('theme_images',array(
+            $GLOBALS['SITE_DB']->query_insert('theme_images', array(
                 'id' => 'webclipicon',
                 'theme' => 'default',
                 'path' => 'webclipicon.png',
                 'lang' => fallback_lang()
-            ),false,true);
+            ), false, true);
         }
     }
 
@@ -106,17 +106,17 @@ class Module_admin_themes
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         $ret = array(
-            'misc' => array('MANAGE_THEMES','menu/adminzone/style/themes/themes'),
-            'add_theme' => array('ADD_THEME','menu/_generic_admin/add_one'),
-            'tempcode_tester' => array('TEMPCODE_TESTER','menu/_generic_admin/tool'),
+            'misc' => array('MANAGE_THEMES', 'menu/adminzone/style/themes/themes'),
+            'add_theme' => array('ADD_THEME', 'menu/_generic_admin/add_one'),
+            'tempcode_tester' => array('TEMPCODE_TESTER', 'menu/_generic_admin/tool'),
         );
 
         if ($support_crosslinks) {
             if (addon_installed('themewizard')) {
-                $ret['_SEARCH:admin_themewizard:misc'] = array('THEMEWIZARD','menu/adminzone/style/themes/themewizard');
+                $ret['_SEARCH:admin_themewizard:misc'] = array('THEMEWIZARD', 'menu/adminzone/style/themes/themewizard');
             }
         }
 
@@ -135,7 +135,7 @@ class Module_admin_themes
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('themes');
 
@@ -150,7 +150,7 @@ class Module_admin_themes
         }
 
         if ($type == 'choose_css') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE_CSS'));
 
             $this->title = get_screen_title('EDIT_CSS');
@@ -160,26 +160,26 @@ class Module_admin_themes
             set_helper_panel_text(comcode_lang_string('DOC_CSS'));
             set_helper_panel_tutorial('tut_markup');
 
-            $theme = get_param('theme','');
+            $theme = get_param('theme', '');
             if ($theme == '') {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
                 breadcrumb_set_self(do_lang_tempcode('CHOOSE'));
             } else {
-                breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:choose_css:theme=' . $theme,do_lang_tempcode('CHOOSE_CSS'))));
+                breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:choose_css:theme=' . $theme, do_lang_tempcode('CHOOSE_CSS'))));
             }
 
-            $file = filter_naughty(get_param('file','global.css'));
+            $file = filter_naughty(get_param('file', 'global.css'));
 
-            $this->title = get_screen_title('_EDIT_CSS',true,array($file));
+            $this->title = get_screen_title('_EDIT_CSS', true, array($file));
 
             $this->file = $file;
 
-            $file = preg_replace('#\.\d+#','',$file);
+            $file = preg_replace('#\.\d+#', '', $file);
             set_short_title($file);
         }
 
         if ($type == '_edit_css') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_css:theme=' . $theme,do_lang_tempcode('CHOOSE_CSS')),array('_SELF:_SELF:_edit_css:file=' . $file,do_lang_tempcode('EDIT_CSS'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_css:theme=' . $theme, do_lang_tempcode('CHOOSE_CSS')), array('_SELF:_SELF:_edit_css:file=' . $file, do_lang_tempcode('EDIT_CSS'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('EDIT_CSS');
@@ -189,7 +189,7 @@ class Module_admin_themes
             set_helper_panel_text(comcode_lang_string('DOC_TEMPLATES'));
             set_helper_panel_tutorial('tut_markup');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE_TEMPLATES'));
 
             $this->title = get_screen_title('EDIT_TEMPLATES');
@@ -200,7 +200,7 @@ class Module_admin_themes
             set_helper_panel_tutorial('tut_themes');
 
             $theme = get_param('theme');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme=' . $theme,do_lang_tempcode('CHOOSE_TEMPLATES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_templates:theme=' . $theme, do_lang_tempcode('CHOOSE_TEMPLATES'))));
 
             $this->title = get_screen_title('EDIT_TEMPLATES');
         }
@@ -209,11 +209,11 @@ class Module_admin_themes
             $theme = post_param('theme');
             $file = '';
             foreach (array_keys($_REQUEST) as $_i) {
-                if (preg_match('#f(\d+)file#',$_i) != 0) {
+                if (preg_match('#f(\d+)file#', $_i) != 0) {
                     $file = basename($_i);
                 }
             }
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:edit_templates:theme=' . $theme,do_lang_tempcode('CHOOSE_TEMPLATES')),array('_SELF:_SELF:_edit_templates:theme=' . $theme . ':file=' . $file,do_lang_tempcode('EDIT_TEMPLATES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:edit_templates:theme=' . $theme, do_lang_tempcode('CHOOSE_TEMPLATES')), array('_SELF:_SELF:_edit_templates:theme=' . $theme . ':file=' . $file, do_lang_tempcode('EDIT_TEMPLATES'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->theme = $theme;
@@ -222,30 +222,30 @@ class Module_admin_themes
         }
 
         if ($type == 'manage_images') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('CHOOSE_THEME_IMAGE'));
 
             $this->title = get_screen_title('EDIT_THEME_IMAGES');
         }
 
         if ($type == 'edit_image') {
-            $url = get_param('url','');
+            $url = get_param('url', '');
             if ($url != '') {
-                $url = preg_replace('#\.pagespeed\..*$#','',$url); // Support for working around https://developers.google.com/speed/docs/mod_pagespeed/filter-cache-extend
+                $url = preg_replace('#\.pagespeed\..*$#', '', $url); // Support for working around https://developers.google.com/speed/docs/mod_pagespeed/filter-cache-extend
 
-                $theme = get_param('theme',''); // Editing like this happens in the theme the user is using
+                $theme = get_param('theme', ''); // Editing like this happens in the theme the user is using
                 if ($theme == '') {
                     $theme = $GLOBALS['FORUM_DRIVER']->get_theme('');
                 }
-                if (substr($url,0,strlen(get_base_url())) == get_base_url()) {
-                    $url = substr($url,strlen(get_base_url()));
+                if (substr($url, 0, strlen(get_base_url())) == get_base_url()) {
+                    $url = substr($url, strlen(get_base_url()));
                 }
-                $pos = strpos($url,'themes/');
+                $pos = strpos($url, 'themes/');
                 if ($pos === false) {
                     warn_exit(do_lang_tempcode('NOT_THEME_IMAGE'));
                 }
-                $path = substr($url,$pos);
-                $id = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('path' => $path,'theme' => $theme));
+                $path = substr($url, $pos);
+                $id = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images', 'id', array('path' => $path, 'theme' => $theme));
                 if (is_null($id)) {
                     warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
                 }
@@ -256,7 +256,7 @@ class Module_admin_themes
 
             set_short_title($id);
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme=' . $theme,do_lang_tempcode('CHOOSE_THEME_IMAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:manage_images:theme=' . $theme, do_lang_tempcode('CHOOSE_THEME_IMAGE'))));
 
             $this->title = get_screen_title('EDIT_THEME_IMAGE');
 
@@ -267,20 +267,20 @@ class Module_admin_themes
         if ($type == '_edit_image') {
             $theme = post_param('theme');
             $id = post_param('id');
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:manage_images:theme=' . $theme,do_lang_tempcode('CHOOSE_THEME_IMAGE')),array('_SELF:_SELF:edit_theme_image:' . $id,do_lang_tempcode('EDIT_THEME_IMAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:manage_images:theme=' . $theme, do_lang_tempcode('CHOOSE_THEME_IMAGE')), array('_SELF:_SELF:edit_theme_image:' . $id, do_lang_tempcode('EDIT_THEME_IMAGE'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             $this->title = get_screen_title('EDIT_THEME_IMAGE');
         }
 
         if ($type == 'add_image') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('ADD_THEME_IMAGE');
         }
 
         if ($type == '_add_image') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES')),array('_SELF:_SELF:add_image:theme=' . post_param('theme'),do_lang_tempcode('ADD_THEME_IMAGE'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES')), array('_SELF:_SELF:add_image:theme=' . post_param('theme'), do_lang_tempcode('ADD_THEME_IMAGE'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -289,13 +289,13 @@ class Module_admin_themes
         }
 
         if ($type == 'add_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('ADD_THEME');
         }
 
         if ($type == '_add_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
@@ -304,20 +304,20 @@ class Module_admin_themes
         }
 
         if ($type == 'edit_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('EDIT_THEME');
         }
 
         if ($type == '_edit_theme') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
             breadcrumb_set_self(do_lang_tempcode('DONE'));
 
-            if (post_param_integer('delete',0) == 1) {
+            if (post_param_integer('delete', 0) == 1) {
                 $this->title = get_screen_title('DELETE_THEME');
-            } elseif (post_param_integer('copy',0) == 1) {
+            } elseif (post_param_integer('copy', 0) == 1) {
                 $this->title = get_screen_title('COPY_THEME');
             } else {
                 $this->title = get_screen_title('EDIT_THEME');
@@ -325,7 +325,7 @@ class Module_admin_themes
         }
 
         if ($type == 'screen_previews') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
 
             $this->title = get_screen_title('SCREEN_PREVIEWS');
         }
@@ -334,17 +334,17 @@ class Module_admin_themes
             $function = get_param('function');
 
             //get_screen_title('SCREEN_PREVIEW',true,array(escape_html($function))); // Affects breadcrumbs etc
-            get_screen_title($function,false); // Affects breadcrumbs etc
-            breadcrumb_set_parents(array(array('_SELF:_SELF:screen_previews',do_lang_tempcode('SCREEN_PREVIEWS'))));
+            get_screen_title($function, false); // Affects breadcrumbs etc
+            breadcrumb_set_parents(array(array('_SELF:_SELF:screen_previews', do_lang_tempcode('SCREEN_PREVIEWS'))));
         }
 
         if ($type == 'tempcode_tester') {
             $this->title = get_screen_title('TEMPCODE_TESTER');
 
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('MANAGE_THEMES'))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('MANAGE_THEMES'))));
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -364,7 +364,7 @@ class Module_admin_themes
 
         require_javascript('javascript_themeing');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->manage_themes();
@@ -437,11 +437,11 @@ class Module_admin_themes
         $_themes = find_all_themes(true);
 
         // Look through zones
-        $zones = $GLOBALS['SITE_DB']->query_select('zones',array('*'),null,'ORDER BY zone_title',50/*reasonable limit; zone_title is sequential for default zones*/);
+        $zones = $GLOBALS['SITE_DB']->query_select('zones', array('*'), null, 'ORDER BY zone_title', 50/*reasonable limit; zone_title is sequential for default zones*/);
         $free_choices = 0;
         $zone_list_free_choices = new ocp_tempcode();
         foreach ($zones as $zone) {
-            if (!array_key_exists($zone['zone_theme'],$_themes)) {
+            if (!array_key_exists($zone['zone_theme'], $_themes)) {
                 if (!$zone_list_free_choices->is_empty()) {
                     $zone_list_free_choices->attach(do_lang_tempcode('LIST_SEP'));
                 }
@@ -456,36 +456,36 @@ class Module_admin_themes
         // Show all themes
         $site_default_theme = $GLOBALS['FORUM_DRIVER']->_get_theme(true);
         $themes = new ocp_tempcode();
-        $theme_default_reason = do_lang_tempcode('DEFAULT_THEME_BY_DEFAULT',escape_html(get_default_theme_name()));
+        $theme_default_reason = do_lang_tempcode('DEFAULT_THEME_BY_DEFAULT', escape_html(get_default_theme_name()));
         foreach ($_themes as $theme => $details) {
             if (is_integer($theme)) {
                 $theme = strval($theme);
             }
 
             // Get URLs
-            $css_url = build_url(array('page' => '_SELF','type' => 'choose_css','theme' => $theme),'_SELF');
-            $templates_url = build_url(array('page' => '_SELF','type' => 'edit_templates','theme' => $theme),'_SELF');
-            $images_url = build_url(array('page' => '_SELF','type' => 'manage_images','theme' => $theme),'_SELF');
+            $css_url = build_url(array('page' => '_SELF', 'type' => 'choose_css', 'theme' => $theme), '_SELF');
+            $templates_url = build_url(array('page' => '_SELF', 'type' => 'edit_templates', 'theme' => $theme), '_SELF');
+            $images_url = build_url(array('page' => '_SELF', 'type' => 'manage_images', 'theme' => $theme), '_SELF');
             $deletable = ($theme != 'default');
-            $edit_url = build_url(array('page' => '_SELF','type' => 'edit_theme','theme' => $theme),'_SELF');
-            $delete_url = build_url(array('page' => '_SELF','type' => 'delete_theme','theme' => $theme),'_SELF');
-            $screen_preview_url = build_url(array('page' => '_SELF','type' => 'screen_previews','keep_theme' => $theme),'_SELF');
+            $edit_url = build_url(array('page' => '_SELF', 'type' => 'edit_theme', 'theme' => $theme), '_SELF');
+            $delete_url = build_url(array('page' => '_SELF', 'type' => 'delete_theme', 'theme' => $theme), '_SELF');
+            $screen_preview_url = build_url(array('page' => '_SELF', 'type' => 'screen_previews', 'keep_theme' => $theme), '_SELF');
 
             // Theme date
-            $date = filemtime(($theme == 'default')?(get_file_base() . '/themes/default'):(get_custom_file_base() . '/themes/' . $theme));
-            $_date = ($theme == 'default')?do_lang_tempcode('NA_EM'):protect_from_escaping(escape_html(get_timezoned_date($date,false)));
+            $date = filemtime(($theme == 'default') ? (get_file_base() . '/themes/default') : (get_custom_file_base() . '/themes/' . $theme));
+            $_date = ($theme == 'default') ? do_lang_tempcode('NA_EM') : protect_from_escaping(escape_html(get_timezoned_date($date, false)));
 
             // Where the theme is used
             $zone_list = new ocp_tempcode();
             if ($theme == $site_default_theme) {
-                if ((count($zones)<10) && (!is_ocf_satellite_site()) && ($free_choices == 0)) {
+                if ((count($zones) < 10) && (!is_ocf_satellite_site()) && ($free_choices == 0)) {
                     $zone_list->attach($zone_list_free_choices); // Actually will do nothing, as $free_choices==0
                 } else {
                     $zone_list->attach(do_lang_tempcode('THEME_DEFAULT_FOR_SITE'));
                 }
 
                 // Why is this the site-default theme?
-                if ($theme == preg_replace('#[^\w\-\.\d]#','_',get_site_name())) {
+                if ($theme == preg_replace('#[^\w\-\.\d]#', '_', get_site_name())) {
                     $theme_default_reason = do_lang_tempcode('DEFAULT_THEME_BY_SITENAME');
                 } elseif ($theme != 'default') {
                     $theme_default_reason = do_lang_tempcode('DEFAULT_THEME_BY_FORUM');
@@ -504,7 +504,7 @@ class Module_admin_themes
                 }
             }
             if (!$zone_list->is_empty()) {
-                $theme_usage = do_lang_tempcode('THEME_USED_ON',$zone_list);
+                $theme_usage = do_lang_tempcode('THEME_USED_ON', $zone_list);
             } else {
                 $theme_usage = new ocp_tempcode();
             }
@@ -515,7 +515,7 @@ class Module_admin_themes
                 require_code('themewizard');
                 $seed = find_theme_seed($theme);
             }
-            $themes->attach(do_template('THEME_MANAGE',array(
+            $themes->attach(do_template('THEME_MANAGE', array(
                 '_GUID' => 'c65c7f3f87d62ad425c7a104a6018840',
                 'SEED' => $seed,
                 'THEME_USAGE' => $theme_usage,
@@ -535,14 +535,14 @@ class Module_admin_themes
             )));
         }
 
-        $zones = find_all_zones(false,true);
+        $zones = find_all_zones(false, true);
         require_lang('zones');
 
-        if ((count($zones)<10) && (!is_ocf_satellite_site()) && ($free_choices == 0)) {
+        if ((count($zones) < 10) && (!is_ocf_satellite_site()) && ($free_choices == 0)) {
             $theme_default_reason = new ocp_tempcode(); // We don't need to know the reason really; don't over-complicate simple sites
         }
 
-        return do_template('THEME_MANAGE_SCREEN',array('_GUID' => '1dc277f18562976f6a23facec56a98e8','TITLE' => $this->title,'THEMES' => $themes,'THEME_DEFAULT_REASON' => $theme_default_reason,'ZONES' => $zones,'HAS_FREE_CHOICES' => $free_choices != 0));
+        return do_template('THEME_MANAGE_SCREEN', array('_GUID' => '1dc277f18562976f6a23facec56a98e8', 'TITLE' => $this->title, 'THEMES' => $themes, 'THEME_DEFAULT_REASON' => $theme_default_reason, 'ZONES' => $zones, 'HAS_FREE_CHOICES' => $free_choices != 0));
     }
 
     /**
@@ -557,36 +557,36 @@ class Module_admin_themes
      * @param  boolean                  Whether to use this theme on all zones
      * @return tempcode                 The fields
      */
-    public function get_theme_fields($name = '',$title = '',$description = '',$author = null,$mobile_pages = '',$supports_wide = 1,$use_on_all_zones = false)
+    public function get_theme_fields($name = '', $title = '', $description = '', $author = null, $mobile_pages = '', $supports_wide = 1, $use_on_all_zones = false)
     {
         if (is_null($author)) {
-            $author = $GLOBALS['FORUM_DRIVER']->get_username(get_member(),true);
+            $author = $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true);
         }
 
         require_code('form_templates');
         require_code('permissions2');
 
         $fields = new ocp_tempcode();
-        $site_default_theme = preg_replace('#[^\w\-\.\d]#','_',get_site_name());
-        $fields->attach(form_input_line(do_lang_tempcode('TITLE'),do_lang_tempcode('DESCRIPTION_TITLE'),'title',$title,true));
+        $site_default_theme = preg_replace('#[^\w\-\.\d]#', '_', get_site_name());
+        $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         if ($name != 'default') {
-            $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'),do_lang_tempcode(file_exists(get_custom_file_base() . '/themes/' . $site_default_theme)?'DESCRIPTION_CODENAME_THEME':'DESCRIPTION_CODENAME_THEME_HELPER',escape_html($site_default_theme)),'theme',$name,true));
+            $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'), do_lang_tempcode(file_exists(get_custom_file_base() . '/themes/' . $site_default_theme) ? 'DESCRIPTION_CODENAME_THEME' : 'DESCRIPTION_CODENAME_THEME_HELPER', escape_html($site_default_theme)), 'theme', $name, true));
         }
 
-        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('SECTION_HIDDEN' => true,'TITLE' => do_lang_tempcode('ADVANCED'))));
-        $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'),do_lang_tempcode('DESCRIPTION_DESCRIPTION'),'description',$description,false));
-        $fields->attach(form_input_line(do_lang_tempcode('AUTHOR'),do_lang_tempcode('DESCRIPTION_AUTHOR_THEME'),'author',$author,true));
-        $fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_WIDE'),do_lang_tempcode('DESCRIPTION_SUPPORTS_WIDE'),'supports_wide',$supports_wide == 1));
-        $fields->attach(form_input_line(do_lang_tempcode('MOBILE_PAGES'),do_lang_tempcode('DESCRIPTION_MOBILE_PAGES'),'mobile_pages',$mobile_pages,false));
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('ADVANCED'))));
+        $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, false));
+        $fields->attach(form_input_line(do_lang_tempcode('AUTHOR'), do_lang_tempcode('DESCRIPTION_AUTHOR_THEME'), 'author', $author, true));
+        $fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_WIDE'), do_lang_tempcode('DESCRIPTION_SUPPORTS_WIDE'), 'supports_wide', $supports_wide == 1));
+        $fields->attach(form_input_line(do_lang_tempcode('MOBILE_PAGES'), do_lang_tempcode('DESCRIPTION_MOBILE_PAGES'), 'mobile_pages', $mobile_pages, false));
         if ($name != 'default') {
-            $fields->attach(get_category_permissions_for_environment('theme',$name,null,null,($name == '')));
+            $fields->attach(get_category_permissions_for_environment('theme', $name, null, null, ($name == '')));
         }
-        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '805d278a21d59eaa4568c2a77fbb5073','TITLE' => do_lang_tempcode('ACTIONS'))));
-        $fields->attach(form_input_tick(do_lang_tempcode('USE_ON_ZONES'),do_lang_tempcode('DESCRIPTION_USE_ON_ZONES'),'use_on_all',$use_on_all_zones));
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '805d278a21d59eaa4568c2a77fbb5073', 'TITLE' => do_lang_tempcode('ACTIONS'))));
+        $fields->attach(form_input_tick(do_lang_tempcode('USE_ON_ZONES'), do_lang_tempcode('DESCRIPTION_USE_ON_ZONES'), 'use_on_all', $use_on_all_zones));
 
         // Mapping
-        if (method_exists($GLOBALS['FORUM_DRIVER'],'get_skin_list')) {
-            $map = file_exists(get_file_base() . '/themes/map.ini')?better_parse_ini_file(get_file_base() . '/themes/map.ini'):array();
+        if (method_exists($GLOBALS['FORUM_DRIVER'], 'get_skin_list')) {
+            $map = file_exists(get_file_base() . '/themes/map.ini') ? better_parse_ini_file(get_file_base() . '/themes/map.ini') : array();
             $default_selection = array();
             $mapping = new ocp_tempcode();
             $all_skins = $GLOBALS['FORUM_DRIVER']->get_skin_list();
@@ -596,9 +596,9 @@ class Module_admin_themes
                 }
             }
             foreach ($all_skins as $key) {
-                $mapping->attach(form_input_list_entry($key,in_array($key,$default_selection)));
+                $mapping->attach(form_input_list_entry($key, in_array($key, $default_selection)));
             }
-            $fields->attach(form_input_multi_list(do_lang_tempcode('THEME_MAPPING'),do_lang_tempcode('DESCRIPTION_THEME_MAPPING'),'mapping',$mapping));
+            $fields->attach(form_input_multi_list(do_lang_tempcode('THEME_MAPPING'), do_lang_tempcode('DESCRIPTION_THEME_MAPPING'), 'mapping', $mapping));
         }
 
         return $fields;
@@ -611,58 +611,58 @@ class Module_admin_themes
      */
     public function save_theme_changes($theme)
     {
-        if (!file_exists((($theme == 'default')?get_file_base():get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini')) {
+        if (!file_exists((($theme == 'default') ? get_file_base() : get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini')) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
 
-        if (post_param_integer('use_on_all',0) == 1) {
-            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'zones SET zone_theme=\'' . db_escape_string($theme) . '\' WHERE ' . db_string_not_equal_to('zone_name','cms') . ' AND ' . db_string_not_equal_to('zone_name','adminzone'));
+        if (post_param_integer('use_on_all', 0) == 1) {
+            $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'zones SET zone_theme=\'' . db_escape_string($theme) . '\' WHERE ' . db_string_not_equal_to('zone_name', 'cms') . ' AND ' . db_string_not_equal_to('zone_name', 'adminzone'));
 
-            attach_message(do_lang_tempcode('THEME_MADE_LIVE'),'inform');
+            attach_message(do_lang_tempcode('THEME_MADE_LIVE'), 'inform');
         }
         erase_persistent_cache();
 
-        $before = better_parse_ini_file((($theme == 'default')?get_file_base():get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini');
-        $myfile = @fopen((($theme == 'default')?get_file_base():get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini',GOOGLE_APPENGINE?'wb':'at') or intelligent_write_error(get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/theme.ini');
-        @flock($myfile,LOCK_EX);
+        $before = better_parse_ini_file((($theme == 'default') ? get_file_base() : get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini');
+        $myfile = @fopen((($theme == 'default') ? get_file_base() : get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini', GOOGLE_APPENGINE ? 'wb' : 'at') or intelligent_write_error(get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/theme.ini');
+        @flock($myfile, LOCK_EX);
         if (!GOOGLE_APPENGINE) {
-            ftruncate($myfile,0);
+            ftruncate($myfile, 0);
         }
-        if (fwrite($myfile,'title=' . post_param('title') . "\n") == 0) {
+        if (fwrite($myfile, 'title=' . post_param('title') . "\n") == 0) {
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
         }
-        if (fwrite($myfile,'description=' . str_replace("\n",'\n',post_param('description')) . "\n") == 0) {
+        if (fwrite($myfile, 'description=' . str_replace("\n", '\n', post_param('description')) . "\n") == 0) {
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
         }
         foreach ($before as $key => $val) {
             if (($key != 'title') && ($key != 'description') && ($key != 'author') && ($key != 'mobile_pages') && ($key != 'supports_wide')) {
-                fwrite($myfile,$key . '=' . $val . "\n");
+                fwrite($myfile, $key . '=' . $val . "\n");
             }
         }
-        if (fwrite($myfile,'author=' . post_param('author') . "\n") == 0) {
+        if (fwrite($myfile, 'author=' . post_param('author') . "\n") == 0) {
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
         }
-        if (fwrite($myfile,'mobile_pages=' . post_param('mobile_pages') . "\n") == 0) {
+        if (fwrite($myfile, 'mobile_pages=' . post_param('mobile_pages') . "\n") == 0) {
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
         }
-        if (fwrite($myfile,'supports_wide=' . strval(post_param_integer('supports_wide',0)) . "\n") == 0) {
+        if (fwrite($myfile, 'supports_wide=' . strval(post_param_integer('supports_wide', 0)) . "\n") == 0) {
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
         }
-        @flock($myfile,LOCK_UN);
+        @flock($myfile, LOCK_UN);
         fclose($myfile);
-        sync_file((($theme == 'default')?get_file_base():get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini');
+        sync_file((($theme == 'default') ? get_file_base() : get_custom_file_base()) . '/themes/' . filter_naughty($theme) . '/theme.ini');
 
         require_code('permissions2');
-        set_category_permissions_from_environment('theme',$theme);
+        set_category_permissions_from_environment('theme', $theme);
 
-        $map = file_exists(get_file_base() . '/themes/map.ini')?better_parse_ini_file(get_file_base() . '/themes/map.ini'):array();
+        $map = file_exists(get_file_base() . '/themes/map.ini') ? better_parse_ini_file(get_file_base() . '/themes/map.ini') : array();
         $new_map = array();
         foreach ($map as $key => $val) {
             if ($val != $theme) {
                 $new_map[$key] = $val;
             }
         }
-        if (array_key_exists('mapping',$_POST)) {
+        if (array_key_exists('mapping', $_POST)) {
             foreach ($_POST['mapping'] as $val) {
                 if (get_magic_quotes_gpc()) {
                     $val = stripslashes($val);
@@ -670,17 +670,17 @@ class Module_admin_themes
                 $new_map[$val] = $theme;
             }
         }
-        $myfile = @fopen(get_file_base() . '/themes/map.ini',GOOGLE_APPENGINE?'wb':'at') or intelligent_write_error(get_file_base() . '/themes/map.ini');
-        @flock($myfile,LOCK_EX);
+        $myfile = @fopen(get_file_base() . '/themes/map.ini', GOOGLE_APPENGINE ? 'wb' : 'at') or intelligent_write_error(get_file_base() . '/themes/map.ini');
+        @flock($myfile, LOCK_EX);
         if (!GOOGLE_APPENGINE) {
-            ftruncate($myfile,0);
+            ftruncate($myfile, 0);
         }
         foreach ($new_map as $key => $val) {
-            if (fwrite($myfile,$key . '=' . $val . "\n") == 0) {
+            if (fwrite($myfile, $key . '=' . $val . "\n") == 0) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
         }
-        @flock($myfile,LOCK_UN);
+        @flock($myfile, LOCK_UN);
         fclose($myfile);
         sync_file('themes/map.ini');
     }
@@ -694,12 +694,12 @@ class Module_admin_themes
     {
         $fields = $this->get_theme_fields();
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_add_theme'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_add_theme'), '_SELF');
         $submit_name = do_lang_tempcode('ADD_THEME');
 
         if (addon_installed('themewizard')) {
-            $theme_wizard_url = build_url(array('page' => 'admin_themewizard','type' => 'misc'),get_module_zone('admin_themewizard'));
-            $text = do_lang_tempcode('DESCRIPTION_ADD_THEME_MANUAL',escape_html($theme_wizard_url->evaluate()));
+            $theme_wizard_url = build_url(array('page' => 'admin_themewizard', 'type' => 'misc'), get_module_zone('admin_themewizard'));
+            $text = do_lang_tempcode('DESCRIPTION_ADD_THEME_MANUAL', escape_html($theme_wizard_url->evaluate()));
         } else {
             $text = new ocp_tempcode();
         }
@@ -732,7 +732,7 @@ class Module_admin_themes
                     };
         ";
 
-        return do_template('FORM_SCREEN',array('_GUID' => '08b45be04f4035c7595458a719260bd9','HIDDEN' => '','JAVASCRIPT' => $javascript,'TITLE' => $this->title,'URL' => $post_url,'FIELDS' => $fields,'TEXT' => $text,'SUBMIT_ICON' => 'menu___generic_admin__add_one','SUBMIT_NAME' => $submit_name));
+        return do_template('FORM_SCREEN', array('_GUID' => '08b45be04f4035c7595458a719260bd9', 'HIDDEN' => '', 'JAVASCRIPT' => $javascript, 'TITLE' => $this->title, 'URL' => $post_url, 'FIELDS' => $fields, 'TEXT' => $text, 'SUBMIT_ICON' => 'menu___generic_admin__add_one', 'SUBMIT_NAME' => $submit_name));
     }
 
     /**
@@ -745,14 +745,14 @@ class Module_admin_themes
         $theme = post_param('theme');
         require_code('type_validation');
         if (!is_alphanumeric($theme)) {
-            $theme = preg_replace('#[^\w\-\d]#','_',$theme);
+            $theme = preg_replace('#[^\w\-\d]#', '_', $theme);
             //warn_exit(do_lang_tempcode('BAD_CODENAME'));
         }
         actual_add_theme($theme);
 
         $this->save_theme_changes($theme);
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,'','theme',$theme);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, '', 'theme', $theme);
     }
 
     /**
@@ -762,41 +762,41 @@ class Module_admin_themes
      */
     public function edit_theme()
     {
-        $theme = get_param('theme',false,true);
+        $theme = get_param('theme', false, true);
 
-        $ini_file = (($theme == 'default')?get_file_base():get_custom_file_base()) . '/themes/' . $theme . '/theme.ini';
+        $ini_file = (($theme == 'default') ? get_file_base() : get_custom_file_base()) . '/themes/' . $theme . '/theme.ini';
         if (!file_exists($ini_file)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $details = better_parse_ini_file($ini_file);
-        if (!array_key_exists('title',$details)) {
+        if (!array_key_exists('title', $details)) {
             $details['title'] = '?';
         }
-        if (!array_key_exists('description',$details)) {
+        if (!array_key_exists('description', $details)) {
             $details['description'] = '?';
         }
-        if (!array_key_exists('author',$details)) {
+        if (!array_key_exists('author', $details)) {
             $details['author'] = '?';
         }
-        if (!array_key_exists('mobile_pages',$details)) {
+        if (!array_key_exists('mobile_pages', $details)) {
             $details['mobile_pages'] = '';
         }
-        if (!array_key_exists('supports_wide',$details)) {
+        if (!array_key_exists('supports_wide', $details)) {
             $details['supports_wide'] = '1';
         }
-        $fields = $this->get_theme_fields($theme,$details['title'],$details['description'],$details['author'],$details['mobile_pages'],intval($details['supports_wide']),false);
+        $fields = $this->get_theme_fields($theme, $details['title'], $details['description'], $details['author'], $details['mobile_pages'], intval($details['supports_wide']), false);
         if ($theme != 'default') {
-            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '66a48b082356b9e9bfdb1a8107f5e567','TITLE' => do_lang_tempcode('ACTIONS'))));
-            $fields->attach(form_input_tick(do_lang_tempcode('COPY_THEME'),do_lang_tempcode('DESCRIPTION_COPY_THEME',escape_html($theme)),'copy',false));
-            $fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE'),'delete',false));
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '66a48b082356b9e9bfdb1a8107f5e567', 'TITLE' => do_lang_tempcode('ACTIONS'))));
+            $fields->attach(form_input_tick(do_lang_tempcode('COPY_THEME'), do_lang_tempcode('DESCRIPTION_COPY_THEME', escape_html($theme)), 'copy', false));
+            $fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false));
         }
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_edit_theme','old_theme' => $theme),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_edit_theme', 'old_theme' => $theme), '_SELF');
         $submit_name = do_lang_tempcode('EDIT_THEME');
 
         $javascript = 'var themee=document.getElementById(\'theme\'), themet=document.getElementById(\'title\'), copy=document.getElementById(\'copy\'); if (copy) copy.onchange=function() { if (copy.checked && themee.value.indexOf(\'-copy\')==-1) { themee.value+=\'-copy\'; themet.value+=\' copy\'; } };';
 
-        return do_template('FORM_SCREEN',array('_GUID' => '2734c55cd4d7cfa785d307d932ce8af1','JAVASCRIPT' => $javascript,'HIDDEN' => '','TITLE' => $this->title,'TEXT' => '','URL' => $post_url,'FIELDS' => $fields,'SUBMIT_ICON' => 'menu___generic_admin__edit_this','SUBMIT_NAME' => $submit_name));
+        return do_template('FORM_SCREEN', array('_GUID' => '2734c55cd4d7cfa785d307d932ce8af1', 'JAVASCRIPT' => $javascript, 'HIDDEN' => '', 'TITLE' => $this->title, 'TEXT' => '', 'URL' => $post_url, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'menu___generic_admin__edit_this', 'SUBMIT_NAME' => $submit_name));
     }
 
     /**
@@ -806,30 +806,30 @@ class Module_admin_themes
      */
     public function _edit_theme()
     {
-        if (post_param_integer('delete',0) == 1) {
-            $theme = get_param('old_theme',false,true);
+        if (post_param_integer('delete', 0) == 1) {
+            $theme = get_param('old_theme', false, true);
             require_code('themes3');
             actual_delete_theme($theme);
 
             $to = '';
-        } elseif (post_param_integer('copy',0) == 1) {
-            $theme = get_param('old_theme',false,true);
-            $to = post_param('theme',$theme); // Can't rename the default theme, so there's no such field for it
+        } elseif (post_param_integer('copy', 0) == 1) {
+            $theme = get_param('old_theme', false, true);
+            $to = post_param('theme', $theme); // Can't rename the default theme, so there's no such field for it
             if ($theme == $to) {
-                warn_exit(do_lang_tempcode('ALREADY_EXISTS',escape_html($to)));
+                warn_exit(do_lang_tempcode('ALREADY_EXISTS', escape_html($to)));
             }
 
             require_code('themes3');
-            actual_copy_theme($theme,$to);
+            actual_copy_theme($theme, $to);
 
             $this->save_theme_changes($to);
         } else {
-            $theme = get_param('old_theme',false,true);
-            $to = post_param('theme',$theme); // Can't rename the default theme, so there's no such field for it
+            $theme = get_param('old_theme', false, true);
+            $to = post_param('theme', $theme); // Can't rename the default theme, so there's no such field for it
             if ($theme != $to) {
                 require_code('type_validation');
                 if (!is_alphanumeric($to)) {
-                    $to = preg_replace('#[^\w\-\d]#','_',$to);
+                    $to = preg_replace('#[^\w\-\d]#', '_', $to);
                     //warn_exit(do_lang_tempcode('BAD_CODENAME'));
                 }
 
@@ -838,13 +838,13 @@ class Module_admin_themes
                 }
 
                 require_code('themes3');
-                actual_rename_theme($theme,$to);
+                actual_rename_theme($theme, $to);
             }
 
             $this->save_theme_changes($to);
         }
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$to,'','theme',$to);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $to, '', 'theme', $to);
     }
 
     /**
@@ -858,7 +858,7 @@ class Module_admin_themes
      * @param  ID_TEXT                  ID of file that an edit link should load (blank: N/A)
      * @return tempcode                 The UI
      */
-    public function do_next_manager($title,$description,$theme,$lang,$type,$file)
+    public function do_next_manager($title, $description, $theme, $lang, $type, $file)
     {
         if (is_null($lang)) {
             $lang = '';
@@ -867,22 +867,22 @@ class Module_admin_themes
         switch ($type) {
             case 'css':
                 $add_one = null;
-                $edit_this = array('_SELF',array('type' => 'edit_css','file' => str_replace('/css/','/css_custom/',$file),'theme' => $theme),'_SELF');
-                $edit_one = array('_SELF',array('type' => 'choose_css','theme' => $theme),'_SELF');
+                $edit_this = array('_SELF', array('type' => 'edit_css', 'file' => str_replace('/css/', '/css_custom/', $file), 'theme' => $theme), '_SELF');
+                $edit_one = array('_SELF', array('type' => 'choose_css', 'theme' => $theme), '_SELF');
                 $section_title = do_lang_tempcode('CSS');
                 break;
 
             case 'templates':
                 $add_one = null;
-                $edit_this = array('_SELF',array('type' => '_edit_templates','f0file' => file_exists(get_custom_file_base() . '/' . str_replace('/templates/','/templates_custom/',$file))?str_replace('/templates/','/templates_custom/',$file):$file,'theme' => $theme),'_SELF');
-                $edit_one = array('_SELF',array('type' => 'edit_templates','theme' => $theme),'_SELF');
+                $edit_this = array('_SELF', array('type' => '_edit_templates', 'f0file' => file_exists(get_custom_file_base() . '/' . str_replace('/templates/', '/templates_custom/', $file)) ? str_replace('/templates/', '/templates_custom/', $file) : $file, 'theme' => $theme), '_SELF');
+                $edit_one = array('_SELF', array('type' => 'edit_templates', 'theme' => $theme), '_SELF');
                 $section_title = do_lang_tempcode('TEMPLATES');
                 break;
 
             case 'image':
-                $add_one = array('_SELF',array('type' => 'add_image','theme' => $theme,'lang' => $lang),'_SELF');
-                $edit_this = array('_SELF',array('type' => 'edit_image','id' => $file,'theme' => $theme,'lang' => $lang),'_SELF');
-                $edit_one = array('_SELF',array('type' => 'manage_images','theme' => $theme,'lang' => $lang),'_SELF');
+                $add_one = array('_SELF', array('type' => 'add_image', 'theme' => $theme, 'lang' => $lang), '_SELF');
+                $edit_this = array('_SELF', array('type' => 'edit_image', 'id' => $file, 'theme' => $theme, 'lang' => $lang), '_SELF');
+                $edit_one = array('_SELF', array('type' => 'manage_images', 'theme' => $theme, 'lang' => $lang), '_SELF');
                 $section_title = do_lang_tempcode('THEME_IMAGES');
                 break;
 
@@ -895,30 +895,30 @@ class Module_admin_themes
         }
 
         require_code('templates_donext');
-        return do_next_manager($title,$description,
+        return do_next_manager($title, $description,
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
             $add_one, // Add one
             $edit_this, // Edit this
             $edit_one, // Edit one
-            NULL, // View this
-            NULL, // View archive
-            NULL, // Add to category
-            NULL, // Add one category
-            NULL, // Edit one category
-            NULL, // Edit this category
-            NULL, // View this category
+            null, // View this
+            null, // View archive
+            null, // Add to category
+            null, // Add one category
+            null, // Edit one category
+            null, // Edit this category
+            null, // View this category
             /* SPECIALLY TYPED 'LINKS' */
             array(),
             array(),
             array(
-                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'add_theme'),'_SELF'),do_lang_tempcode('ADD_THEME')), // Add one
-                is_null($theme)?null:array('menu/_generic_admin/edit_this',array('_SELF',array('type' => 'edit_theme','theme' => $theme),'_SELF'),do_lang_tempcode('EDIT_THEME')),
-                is_null($theme)?null:array('menu/adminzone/style/themes/css',array('_SELF',array('type' => 'choose_css','theme' => $theme),'_SELF'),do_lang('EDIT_CSS')),
-                is_null($theme)?null:array('menu/adminzone/style/themes/templates',array('_SELF',array('type' => 'edit_templates','theme' => $theme),'_SELF'),do_lang('EDIT_TEMPLATES')),
-                is_null($theme)?null:array('menu/adminzone/style/themes/theme_images',array('_SELF',array('type' => 'manage_images','theme' => $theme,'lang' => $lang),'_SELF'),do_lang('EDIT_THEME_IMAGES')),
-                array('menu/adminzone/style/themes/themes',array('_SELF',array('type' => 'misc'),'_SELF'),do_lang('MANAGE_THEMES'))
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'add_theme'), '_SELF'), do_lang_tempcode('ADD_THEME')), // Add one
+                is_null($theme) ? null : array('menu/_generic_admin/edit_this', array('_SELF', array('type' => 'edit_theme', 'theme' => $theme), '_SELF'), do_lang_tempcode('EDIT_THEME')),
+                is_null($theme) ? null : array('menu/adminzone/style/themes/css', array('_SELF', array('type' => 'choose_css', 'theme' => $theme), '_SELF'), do_lang('EDIT_CSS')),
+                is_null($theme) ? null : array('menu/adminzone/style/themes/templates', array('_SELF', array('type' => 'edit_templates', 'theme' => $theme), '_SELF'), do_lang('EDIT_TEMPLATES')),
+                is_null($theme) ? null : array('menu/adminzone/style/themes/theme_images', array('_SELF', array('type' => 'manage_images', 'theme' => $theme, 'lang' => $lang), '_SELF'), do_lang('EDIT_THEME_IMAGES')),
+                array('menu/adminzone/style/themes/themes', array('_SELF', array('type' => 'misc'), '_SELF'), do_lang('MANAGE_THEMES'))
             ),
             do_lang('MANAGE_THEMES'),
             null,
@@ -933,24 +933,24 @@ class Module_admin_themes
      * @param  boolean                  Whether to also choose a language
      * @return tempcode                 The UI
      */
-    public function choose_theme($title,$lang_too = false)
+    public function choose_theme($title, $lang_too = false)
     {
         $themes = new ocp_tempcode();
         $_themes = find_all_themes();
         require_code('form_templates');
         foreach ($_themes as $theme => $theme_title) {
-            $themes->attach(form_input_list_entry($theme,($theme == $GLOBALS['FORUM_DRIVER']->get_theme()),$theme_title));
+            $themes->attach(form_input_list_entry($theme, ($theme == $GLOBALS['FORUM_DRIVER']->get_theme()), $theme_title));
         }
-        $fields = form_input_list(do_lang_tempcode('THEME'),'','theme',$themes,null,true);
+        $fields = form_input_list(do_lang_tempcode('THEME'), '', 'theme', $themes, null, true);
 
         if ($lang_too) { // We also need the language
             $langs = create_selection_list_langs();
-            $fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'),do_lang_tempcode('DESCRIPTION_LANGUAGE'),'lang',$langs,null,true));
+            $fields->attach(form_input_list(do_lang_tempcode('LANGUAGE'), do_lang_tempcode('DESCRIPTION_LANGUAGE'), 'lang', $langs, null, true));
         }
 
-        $post_url = get_self_url(false,false,null,false,true);
+        $post_url = get_self_url(false, false, null, false, true);
 
-        return do_template('FORM_SCREEN',array('_GUID' => '01030dc8f338138ac36ff4f59c7892fc','GET' => true,'SKIP_VALIDATION' => true,'HIDDEN' => '','SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => do_lang_tempcode('CHOOSE'),'TITLE' => $title,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => ''));
+        return do_template('FORM_SCREEN', array('_GUID' => '01030dc8f338138ac36ff4f59c7892fc', 'GET' => true, 'SKIP_VALIDATION' => true, 'HIDDEN' => '', 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => do_lang_tempcode('CHOOSE'), 'TITLE' => $title, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => ''));
     }
 
     /**
@@ -962,7 +962,7 @@ class Module_admin_themes
     {
         require_code('form_templates');
 
-        $theme = get_param('theme',false,true);
+        $theme = get_param('theme', false, true);
 
         single_field__start();
 
@@ -970,29 +970,29 @@ class Module_admin_themes
         $files = array();
         $_dir = opendir(get_file_base() . '/themes/default/css');
         while (false !== ($file = readdir($_dir))) {
-            if (strtolower(substr($file,-4,4)) == '.css') {
+            if (strtolower(substr($file, -4, 4)) == '.css') {
                 $files[] = $file;
             }
         }
         closedir($_dir);
         $_dir = opendir(get_file_base() . '/themes/default/css_custom');
         while (false !== ($file = readdir($_dir))) {
-            if ((strtolower(substr($file,-4,4)) == '.css') && (!in_array($file,$files))) {
+            if ((strtolower(substr($file, -4, 4)) == '.css') && (!in_array($file, $files))) {
                 $files[] = $file;
             }
         }
         closedir($_dir);
         sort($files);
         foreach ($files as $file) {
-            $css->attach(form_input_list_entry($file,$file == 'global.css'));
+            $css->attach(form_input_list_entry($file, $file == 'global.css'));
         }
-        $fields = form_input_huge_list(do_lang_tempcode('FILE'),'','file',$css,null,true,true,50);
+        $fields = form_input_huge_list(do_lang_tempcode('FILE'), '', 'file', $css, null, true, true, 50);
 
         single_field__end();
 
-        $post_url = build_url(array('page' => '_SELF','type' => 'edit_css','theme' => $theme),'_SELF',array(),false,true);
+        $post_url = build_url(array('page' => '_SELF', 'type' => 'edit_css', 'theme' => $theme), '_SELF', array(), false, true);
 
-        $form = do_template('FORM_SINGLE_FIELD',array(
+        $form = do_template('FORM_SINGLE_FIELD', array(
             '_GUID' => '26dfd6f0d77889f2438c2371e90738ag',
             'GET' => true,
             'NAME' => 'file',
@@ -1006,7 +1006,7 @@ class Module_admin_themes
             'TEXT' => do_lang_tempcode('CSS_CHOOSE_TO_EDIT'),
         ));
 
-        return do_template('PAGINATION_SCREEN',array(
+        return do_template('PAGINATION_SCREEN', array(
             '_GUID' => '16dfd6f0d77889f2438c2371e90738a3',
             'TITLE' => $this->title,
             'CONTENT' => $form,
@@ -1030,7 +1030,7 @@ class Module_admin_themes
                             id : "css"
                             ,syntax: "css"
                             ,start_highlight: true
-                            ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
+                            ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang())) ? strtolower(user_lang()) : 'en') . '"
                             ,allow_resize: true
                             ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
                     });
@@ -1039,14 +1039,14 @@ class Module_admin_themes
 
         require_javascript('javascript_ajax');
 
-        $theme = get_param('theme','');
+        $theme = get_param('theme', '');
         if ($theme == '') {
             return $this->choose_theme($this->title);
         }
 
-        $url = build_url(array('page' => '_SELF','file' => $file,'type' => '_edit_css'),'_SELF');
+        $url = build_url(array('page' => '_SELF', 'file' => $file, 'type' => '_edit_css'), '_SELF');
 
-        if (get_param('restore_from','') != '') {
+        if (get_param('restore_from', '') != '') {
             $file .= '.' . get_param('restore_from');
         }
         $path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/css_custom/' . $file;
@@ -1059,12 +1059,12 @@ class Module_admin_themes
         if (!file_exists($path)) {
             $path = get_file_base() . '/themes/default/css/' . $file;
         }
-        $tmp = fopen($path,'rb');
-        @flock($tmp,LOCK_SH);
+        $tmp = fopen($path, 'rb');
+        @flock($tmp, LOCK_SH);
         $css = unixify_line_format(file_get_contents($path));
-        @flock($tmp,LOCK_UN);
+        @flock($tmp, LOCK_UN);
         fclose($tmp);
-        $file = preg_replace('#\.\d+#','',$file);
+        $file = preg_replace('#\.\d+#', '', $file);
 
         $old_contents = @file_get_contents(get_file_base() . '/themes/default/css/' . $file);
         if ($old_contents === false) {
@@ -1078,38 +1078,39 @@ class Module_admin_themes
 
         $entries = new ocp_tempcode();
 
-        $advanced_mode = get_param_integer('advanced_mode',0);
+        $advanced_mode = get_param_integer('advanced_mode', 0);
         if ($advanced_mode == 1) {
             require_javascript('javascript_theme_colours');
 
             global $CSS_MATCHES;
             $CSS_MATCHES = array();
-            $css = preg_replace_callback('#\#[\da-f][\da-f][\da-f][\da-f][\da-f][\da-f]#i','css_preg',$css);
+            $css = preg_replace_callback('#\#[\da-f][\da-f][\da-f][\da-f][\da-f][\da-f]#i', 'css_preg', $css);
 
             foreach ($CSS_MATCHES as $id => $color) {
-                $pos = strpos($css,'<color-' . $id . '>');
+                $pos = strpos($css, '<color-' . $id . '>');
                 $section_start = $pos;
                 do {
-                    $section_start = strrpos(substr($css,0,$section_start),'{');
-                    if ($section_start === false || $section_start<5) {
+                    $section_start = strrpos(substr($css, 0, $section_start), '{');
+                    if ($section_start === false || $section_start < 5) {
                         break;
                     }
-                } while (($css[$section_start-2] == '*') || ($css[$section_start-1] != ' '));
-                $section_line_start = strrpos(substr($css,0,$section_start),"\n");
-                $line_start = strrpos(substr($css,0,$pos),"\n");
-                $context1 = substr($css,$section_line_start,$section_start-$section_line_start);
-                $context2 = substr($css,$line_start,$pos-$line_start);
+                }
+                while (($css[$section_start - 2] == '*') || ($css[$section_start - 1] != ' '));
+                $section_line_start = strrpos(substr($css, 0, $section_start), "\n");
+                $line_start = strrpos(substr($css, 0, $pos), "\n");
+                $context1 = substr($css, $section_line_start, $section_start - $section_line_start);
+                $context2 = substr($css, $line_start, $pos - $line_start);
                 $context = $context1 . '=>' . trim($context2);
-                $entries->attach(do_template('THEME_COLOUR_CHOOSER',array('_GUID' => 'a42ef9daa06a95f5bb9d715aab1bd887','COLOR' => $color,'NAME' => 'c' . strval($id),'CONTEXT' => trim($context))));
+                $entries->attach(do_template('THEME_COLOUR_CHOOSER', array('_GUID' => 'a42ef9daa06a95f5bb9d715aab1bd887', 'COLOR' => $color, 'NAME' => 'c' . strval($id), 'CONTEXT' => trim($context))));
             }
         }
 
-        $switch_string = ($advanced_mode == 1)?do_lang_tempcode('SWITCH_TO_SIMPLE_MODE'):do_lang_tempcode('SWITCH_TO_ADVANCED_MODE');
-        $switch_icon = ($advanced_mode == 1)?'buttons__simple':'buttons__advanced';
-        $switch_url = build_url(array('page' => '_SELF','type' => 'edit_css','file' => $file,'theme' => $theme,'advanced_mode' => 1-$advanced_mode),'_SELF');
+        $switch_string = ($advanced_mode == 1) ? do_lang_tempcode('SWITCH_TO_SIMPLE_MODE') : do_lang_tempcode('SWITCH_TO_ADVANCED_MODE');
+        $switch_icon = ($advanced_mode == 1) ? 'buttons__simple' : 'buttons__advanced';
+        $switch_url = build_url(array('page' => '_SELF', 'type' => 'edit_css', 'file' => $file, 'theme' => $theme, 'advanced_mode' => 1 - $advanced_mode), '_SELF');
 
         // Revision history
-        $filesarray = $this->get_css_revisions($theme,get_param('file','global.css'));
+        $filesarray = $this->get_css_revisions($theme, get_param('file', 'global.css'));
         rsort($filesarray);
 
         $i = 0;
@@ -1118,7 +1119,7 @@ class Module_admin_themes
         $last_path = $path;
         foreach ($filesarray as $time) {
             // Find who did the revision
-            $editor = $GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','member_id',array('date_and_time' => $time,'the_type' => 'EDIT_CSS','param_a' => $theme));
+            $editor = $GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs', 'member_id', array('date_and_time' => $time, 'the_type' => 'EDIT_CSS', 'param_a' => $theme));
             if (is_null($editor)) {
                 $editor = do_lang('UNKNOWN');
             } else {
@@ -1127,16 +1128,16 @@ class Module_admin_themes
                     $editor = do_lang('UNKNOWN');
                 }
             }
-            $date = is_null($time)?do_lang('UNKNOWN'):get_timezoned_date(intval($time));
+            $date = is_null($time) ? do_lang('UNKNOWN') : get_timezoned_date(intval($time));
             $url2 = get_custom_base_url() . '/themes/' . $theme . '/css_custom/' . $file . '.' . $time;
             $old_file = get_custom_file_base() . '/themes/' . $theme . '/css_custom/' . $file . '.' . $time;
             $size = filesize($old_file);
-            $restore_url = build_url(array('page' => '_SELF','type' => 'edit_css','file' => $file,'theme' => $theme,'restore_from' => $time),'_SELF');
+            $restore_url = build_url(array('page' => '_SELF', 'type' => 'edit_css', 'file' => $file, 'theme' => $theme, 'restore_from' => $time), '_SELF');
             require_code('diff');
             if (function_exists('diff_simple')) {
-                $rendered_diff = diff_simple($old_file,$last_path);
+                $rendered_diff = diff_simple($old_file, $last_path);
                 $last_path = $old_file;
-                $revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID' => 'dba0110692775615152be1da850bc1d4','RENDERED_DIFF' => $rendered_diff,'REFERENCE_POINT_EXACT' => true,'EDITOR' => $editor,'DATE' => $date,'DATE_RAW' => $time,'RESTORE_URL' => $restore_url,'URL' => $url2,'SIZE' => clean_file_size($size))));
+                $revision_history->attach(do_template('REVISION_HISTORY_LINE', array('_GUID' => 'dba0110692775615152be1da850bc1d4', 'RENDERED_DIFF' => $rendered_diff, 'REFERENCE_POINT_EXACT' => true, 'EDITOR' => $editor, 'DATE' => $date, 'DATE_RAW' => $time, 'RESTORE_URL' => $restore_url, 'URL' => $url2, 'SIZE' => clean_file_size($size))));
                 $i++;
             }
 
@@ -1144,16 +1145,16 @@ class Module_admin_themes
                 break;
             }
         }
-        if (($i != 0) && (get_param('restore_from','') == '')) {
-            $revision_history = do_template('REVISION_HISTORY_WRAP',array('_GUID' => '330a153101f131ff63445a694aa149c4','CONTENT' => $revision_history));
+        if (($i != 0) && (get_param('restore_from', '') == '')) {
+            $revision_history = do_template('REVISION_HISTORY_WRAP', array('_GUID' => '330a153101f131ff63445a694aa149c4', 'CONTENT' => $revision_history));
         } elseif ($i != 0) {
             $revision_history = do_template('REVISION_RESTORE');
         }
 
         require_code('form_templates');
-        list($warning_details,$ping_url) = handle_conflict_resolution($file);
+        list($warning_details, $ping_url) = handle_conflict_resolution($file);
 
-        return do_template('THEME_EDIT_CSS_SCREEN',array(
+        return do_template('THEME_EDIT_CSS_SCREEN', array(
             '_GUID' => '3e34b2f44d7a73202f1bb475fd4ac593',
             'PING_URL' => $ping_url,
             'OLD_CONTENTS' => $old_contents,
@@ -1178,19 +1179,19 @@ class Module_admin_themes
      */
     public function _edit_css()
     {
-        $file = filter_naughty(get_param('file','global.css'));
+        $file = filter_naughty(get_param('file', 'global.css'));
 
         $css = post_param('css');
 
         $theme = post_param('theme');
 
         $i = 0;
-        $color = post_param('c' . strval($i),'');
+        $color = post_param('c' . strval($i), '');
         while ($color != '') {
-            $css = str_replace('<color-' . strval($i) . '>','#' . $color,$css);
+            $css = str_replace('<color-' . strval($i) . '>', '#' . $color, $css);
             $i++;
 
-            $color = post_param('c' . strval($i),'');
+            $color = post_param('c' . strval($i), '');
         }
 
         $custom_path = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/css_custom/' . $file;
@@ -1200,43 +1201,43 @@ class Module_admin_themes
         }
         $path_backup = $custom_path . '.' . strval(time());
         if (file_exists($custom_path)) {
-            @copy($custom_path,$path_backup) or intelligent_write_error($custom_path);
+            @copy($custom_path, $path_backup) or intelligent_write_error($custom_path);
             sync_file($path_backup);
         }
         fix_permissions($path_backup);
-        $myfile = @fopen($custom_path,GOOGLE_APPENGINE?'wb':'at');
+        $myfile = @fopen($custom_path, GOOGLE_APPENGINE ? 'wb' : 'at');
         if ($myfile === false) {
             intelligent_write_error($custom_path);
         }
-        @flock($myfile,LOCK_EX);
+        @flock($myfile, LOCK_EX);
         if (!GOOGLE_APPENGINE) {
-            ftruncate($myfile,0);
+            ftruncate($myfile, 0);
         }
-        if (fwrite($myfile,$css)<strlen($css)) {
+        if (fwrite($myfile, $css) < strlen($css)) {
             fclose($myfile);
             unlink($custom_path);
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
         }
-        @flock($myfile,LOCK_UN);
+        @flock($myfile, LOCK_UN);
         fclose($myfile);
         sync_file($custom_path);
 
         // Make base-hash-thingy
         $base_path = get_file_base() . '/themes/default/css/' . $file;
         if (is_file($base_path)) {
-            $myfile = @fopen($custom_path . '.editfrom',GOOGLE_APPENGINE?'wb':'at');
+            $myfile = @fopen($custom_path . '.editfrom', GOOGLE_APPENGINE ? 'wb' : 'at');
             if ($myfile === false) {
                 intelligent_write_error($custom_path);
             }
-            @flock($myfile,LOCK_EX);
+            @flock($myfile, LOCK_EX);
             if (!GOOGLE_APPENGINE) {
-                ftruncate($myfile,0);
+                ftruncate($myfile, 0);
             }
             $hash = file_get_contents($base_path);
-            if (fwrite($myfile,$hash)<strlen($hash)) {
+            if (fwrite($myfile, $hash) < strlen($hash)) {
                 warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
             }
-            @flock($myfile,LOCK_UN);
+            @flock($myfile, LOCK_UN);
             fclose($myfile);
             fix_permissions($custom_path . '.editfrom');
             sync_file($custom_path . '.editfrom');
@@ -1244,17 +1245,17 @@ class Module_admin_themes
 
         erase_cached_templates();
 
-        log_it('EDIT_CSS',$theme,$file);
+        log_it('EDIT_CSS', $theme, $file);
 
-        if (get_param_integer('save_and_stay',0) == 1) {
-            return inform_screen($this->title,protect_from_escaping('
+        if (get_param_integer('save_and_stay', 0) == 1) {
+            return inform_screen($this->title, protect_from_escaping('
                     <script>// <![CDATA[
                             window.fauxmodal_alert(\'' . addslashes(do_lang('SUCCESS')) . '\');
                     //]]></script>
             '));
         }
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,'','css',$file);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, '', 'css', $file);
     }
 
     /**
@@ -1264,7 +1265,7 @@ class Module_admin_themes
      * @param  string                   The file to find revisions of
      * @return array                    A map of the revisions (file=>timestamp)
      */
-    public function get_css_revisions($theme,$find_for)
+    public function get_css_revisions($theme, $find_for)
     {
         $filesarray = array();
         $dir = get_custom_file_base() . '/themes/' . filter_naughty($theme) . '/css_custom';
@@ -1275,8 +1276,8 @@ class Module_admin_themes
 
         // Find all the comcode pages
         while (false !== ($file = readdir($_dir))) {
-            if ((substr($file,0,strlen($find_for)+1) == $find_for . '.') && (substr($file,-9) != '.editfrom')) {
-                $temp = explode('.',$file,3);
+            if ((substr($file, 0, strlen($find_for) + 1) == $find_for . '.') && (substr($file, -9) != '.editfrom')) {
+                $temp = explode('.', $file, 3);
                 $filesarray[$file] = $temp[2];
             }
         }
@@ -1293,20 +1294,20 @@ class Module_admin_themes
      * @param  boolean                  Just for this theme
      * @return array                    A map of the files (for revisions, file=>timestamp, generally, file=>path)
      */
-    public function get_template_files_array($theme,$find_for = '',$this_theme_only = false)
+    public function get_template_files_array($theme, $find_for = '', $this_theme_only = false)
     {
         $out = array();
         if (($theme == 'default') || (!$this_theme_only)) {
             if ($find_for == '') {
-                $out = array_merge($out,$this->_get_template_files_array(get_file_base(),'default/templates',$find_for));
+                $out = array_merge($out, $this->_get_template_files_array(get_file_base(), 'default/templates', $find_for));
             }
-            $out = array_merge($out,$this->_get_template_files_array(get_custom_file_base(),'default/templates_custom',$find_for));
+            $out = array_merge($out, $this->_get_template_files_array(get_custom_file_base(), 'default/templates_custom', $find_for));
         }
         if ($theme != 'default') {
             if ($find_for == '') {
-                $out = array_merge($out,$this->_get_template_files_array(get_custom_file_base(),$theme . '/templates',$find_for));
+                $out = array_merge($out, $this->_get_template_files_array(get_custom_file_base(), $theme . '/templates', $find_for));
             }
-            $out = array_merge($out,$this->_get_template_files_array(get_custom_file_base(),$theme . '/templates_custom',$find_for));
+            $out = array_merge($out, $this->_get_template_files_array(get_custom_file_base(), $theme . '/templates_custom', $find_for));
         }
         ksort($out);
 
@@ -1321,7 +1322,7 @@ class Module_admin_themes
      * @param  string                   The file to find revisions of
      * @return array                    A map of the revisions (file=>timestamp)
      */
-    public function _get_template_files_array($base_dir,$subdir,$find_for)
+    public function _get_template_files_array($base_dir, $subdir, $find_for)
     {
         $_dir = @opendir($base_dir . '/themes/' . $subdir);
         if ($_dir !== false) {
@@ -1329,13 +1330,13 @@ class Module_admin_themes
             $filesarray = array();
             while (false !== ($file = readdir($_dir))) {
                 if ($find_for == '') {
-                    if (strtolower(substr($file,-4,4)) == '.tpl') {
+                    if (strtolower(substr($file, -4, 4)) == '.tpl') {
                         $filesarray[$file] = $subdir . '/' . $file;
                     }
                 } else {
-                    if (((substr($file,0,strlen($find_for)+1) == $find_for . '.') || ($file == $find_for)) && (substr($file,-9) != '.editfrom')) {
-                        $temp = explode('.',$file,3);
-                        if (array_key_exists(2,$temp)) {
+                    if (((substr($file, 0, strlen($find_for) + 1) == $find_for . '.') || ($file == $find_for)) && (substr($file, -9) != '.editfrom')) {
+                        $temp = explode('.', $file, 3);
+                        if (array_key_exists(2, $temp)) {
                             if (is_numeric($temp[2])) {
                                 $filesarray[$file] = intval($temp[2]);
                             }
@@ -1358,14 +1359,14 @@ class Module_admin_themes
     {
         require_javascript('javascript_ajax');
 
-        $theme = get_param('theme','');
+        $theme = get_param('theme', '');
         if ($theme == '') {
             return $this->choose_theme($this->title);
         }
 
         $filesarray = $this->get_template_files_array($theme);
         require_code('form_templates');
-        $temp = form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
+        $temp = form_input_list_entry('', false, do_lang_tempcode('NA_EM'));
         $files = '';
         $files_tmp = '';
         $stub = '';
@@ -1373,17 +1374,18 @@ class Module_admin_themes
             $new_stub = dirname($file);
             if ($stub != $new_stub) {
                 if ($files_tmp != '') {
-                    $temp = form_input_list_group($stub,make_string_tempcode($files_tmp));
+                    $temp = form_input_list_group($stub, make_string_tempcode($files_tmp));
                     $files .= $temp->evaluate(); // XHTMLXHTML
                 }
                 $files_tmp = '';
                 $stub = $new_stub;
             }
-            $_file = substr($file,strrpos($file,'/')+1);
-            $temp = form_input_list_entry($_file,false,/*'- '.*/basename($file));
+            $_file = substr($file, strrpos($file, '/') + 1);
+            $temp = form_input_list_entry($_file, false,/*'- '.*/
+                basename($file));
             $files_tmp .= $temp->evaluate(); // XHTMLXHTML
         }
-        $temp = form_input_list_group($new_stub,make_string_tempcode($files_tmp));
+        $temp = form_input_list_group($new_stub, make_string_tempcode($files_tmp));
         $files .= $temp->evaluate(); // XHTMLXHTML
         $fields = new ocp_tempcode();
 
@@ -1392,16 +1394,16 @@ class Module_admin_themes
         $set_title = do_lang_tempcode('TEMPLATE');
         $field_set = alternate_fields_set__start($set_name);
 
-        $field_set->attach(form_input_multi_list(do_lang_tempcode('EXISTING'),'','f0file',make_string_tempcode($files),null,35));
+        $field_set->attach(form_input_multi_list(do_lang_tempcode('EXISTING'), '', 'f0file', make_string_tempcode($files), null, 35));
 
-        $field_set->attach(form_input_line(do_lang_tempcode('SEARCH'),do_lang_tempcode('DESCRIPTION_TEMPLATES_SEARCH'),'search','',false));
+        $field_set->attach(form_input_line(do_lang_tempcode('SEARCH'), do_lang_tempcode('DESCRIPTION_TEMPLATES_SEARCH'), 'search', '', false));
 
-        $field_set->attach(form_input_codename(do_lang_tempcode('NEW'),do_lang_tempcode('NEW_TEMPLATE'),'f0file2','',false));
+        $field_set->attach(form_input_codename(do_lang_tempcode('NEW'), do_lang_tempcode('NEW_TEMPLATE'), 'f0file2', '', false));
 
-        $fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required,null,true));
+        $fields->attach(alternate_fields_set__end($set_name, $set_title, '', $field_set, $required, null, true));
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_edit_templates','theme' => $theme),'_SELF');
-        $edit_form = do_template('FORM_SINGLE_FIELD',array(
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_edit_templates', 'theme' => $theme), '_SELF');
+        $edit_form = do_template('FORM_SINGLE_FIELD', array(
             '_GUID' => 'b26747b4a29281baf83b31167c63582a',
             'GET' => true,
             'HIDDEN' => '',
@@ -1412,9 +1414,9 @@ class Module_admin_themes
             'SUBMIT_NAME' => do_lang_tempcode('EDIT'),
         ));
 
-        list($warning_details,$ping_url) = handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
+        list($warning_details, $ping_url) = handle_conflict_resolution(''); // Intentionally blank, because only one person should edit any of all templates at any time (because they depend on each other)
 
-        return do_template('TEMPLATE_MANAGE_SCREEN',array('_GUID' => '529cd009f85a84f60b7934b5e969c55b','THEME' => $theme,'PING_URL' => $ping_url,'WARNING_DETAILS' => $warning_details,'TITLE' => $this->title,'EDIT_FORM' => $edit_form));
+        return do_template('TEMPLATE_MANAGE_SCREEN', array('_GUID' => '529cd009f85a84f60b7934b5e969c55b', 'THEME' => $theme, 'PING_URL' => $ping_url, 'WARNING_DETAILS' => $warning_details, 'TITLE' => $this->title, 'EDIT_FORM' => $edit_form));
     }
 
     /**
@@ -1427,28 +1429,28 @@ class Module_admin_themes
         $theme = get_param('theme');
 
         // Searching for something, which will provide links that loop back to the proper version of this page
-        $search = get_param('search','',true);
+        $search = get_param('search', '', true);
         if ($search != '') {
             $filesarray = $this->get_template_files_array($theme);
             $results = new ocp_tempcode();
             foreach ($filesarray as $file) {
-                $full_path = ((strpos($file,'/default/templates/') !== false)?get_file_base():get_custom_file_base()) . '/themes/' . $file;
+                $full_path = ((strpos($file, '/default/templates/') !== false) ? get_file_base() : get_custom_file_base()) . '/themes/' . $file;
                 $contents = file_get_contents($full_path);
-                if ((strpos(strtolower($contents),strtolower($search)) !== false) || (strpos(strtolower($file),strtolower($search)) !== false)) {
-                    $_url = build_url(array('page' => '_SELF','type' => '_edit_templates','theme' => $theme,'f0file' => $file),'_SELF');
-                    $results->attach(do_template('INDEX_SCREEN_ENTRY',array('_GUID' => 'ed744a45728f3d7c1082a3dda893f352','URL' => $_url,'NAME' => $file)));
+                if ((strpos(strtolower($contents), strtolower($search)) !== false) || (strpos(strtolower($file), strtolower($search)) !== false)) {
+                    $_url = build_url(array('page' => '_SELF', 'type' => '_edit_templates', 'theme' => $theme, 'f0file' => $file), '_SELF');
+                    $results->attach(do_template('INDEX_SCREEN_ENTRY', array('_GUID' => 'ed744a45728f3d7c1082a3dda893f352', 'URL' => $_url, 'NAME' => $file)));
                 }
             }
-            return do_template('INDEX_SCREEN',array('_GUID' => '286a7ae3add44f935a9a2018dde3ccaf','TITLE' => $this->title,'PRE' => do_lang_tempcode('_RESULTS'),'POST' => '','CONTENT' => $results));
+            return do_template('INDEX_SCREEN', array('_GUID' => '286a7ae3add44f935a9a2018dde3ccaf', 'TITLE' => $this->title, 'PRE' => do_lang_tempcode('_RESULTS'), 'POST' => '', 'CONTENT' => $results));
         }
 
         require_javascript('javascript_editing');
 
-        $post_url = build_url(array('page' => '_SELF','type' => '__edit_templates'),'_SELF');
-        $preview_url = get_param('preview_url','');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '__edit_templates'), '_SELF');
+        $preview_url = get_param('preview_url', '');
 
         // We support multi-list for getting here, so f0file can be an array, in which case we change that
-        if (array_key_exists('f0file',$_GET)) {
+        if (array_key_exists('f0file', $_GET)) {
             if (is_array($_GET['f0file'])) {
                 foreach ($_GET['f0file'] as $i => $f) {
                     $_GET['f' . strval($i) . 'file'] = $f;
@@ -1471,37 +1473,37 @@ class Module_admin_themes
         $first_id = '';
         foreach (array_keys($_GET) as $_i) {
             $matches = array();
-            if (preg_match('#f(\d+)file#',$_i,$matches) != 0) {
+            if (preg_match('#f(\d+)file#', $_i, $matches) != 0) {
                 $i = $matches[1];
             } else {
                 continue;
             }
 
             // The file we're editing
-            $file = filter_naughty(get_param('f' . $i . 'file',''));
+            $file = filter_naughty(get_param('f' . $i . 'file', ''));
             if ($file == '') {
-                $file = filter_naughty(get_param('f' . $i . 'file2',''));
+                $file = filter_naughty(get_param('f' . $i . 'file2', ''));
             }
             if ($file == '') {
                 continue;
             }
-            if ((substr($file,-4) != '.tpl') && (substr($file,-4) != '.css')) {
+            if ((substr($file, -4) != '.tpl') && (substr($file, -4) != '.css')) {
                 $file .= '.tpl';
             }
 
-            if (get_param('preview_url','') == '') {
-                if ((substr($file,-4) != '.tpl') && (substr($file,-4) != '.css')) {
+            if (get_param('preview_url', '') == '') {
+                if ((substr($file, -4) != '.tpl') && (substr($file, -4) != '.css')) {
                     $file .= '.tpl';
                 }
                 require_code('lorem');
                 $all_previews = find_all_previews__by_template();
-                if (array_key_exists(basename($file),$all_previews)) {
-                    $_preview_url = build_url(array('page' => '_SELF','type' => 'screen_preview','id' => basename($file),'hook' => $all_previews[basename($file)][0],'function' => $all_previews[basename($file)][1],'arg' => '','keep_theme' => $theme,'keep_wide_high' => 1),'_SELF');
+                if (array_key_exists(basename($file), $all_previews)) {
+                    $_preview_url = build_url(array('page' => '_SELF', 'type' => 'screen_preview', 'id' => basename($file), 'hook' => $all_previews[basename($file)][0], 'function' => $all_previews[basename($file)][1], 'arg' => '', 'keep_theme' => $theme, 'keep_wide_high' => 1), '_SELF');
                     $preview_url = $_preview_url->evaluate();
                 }
             }
 
-            if (in_array($file,$files_seen)) {
+            if (in_array($file, $files_seen)) {
                 continue;
             }
             $files_seen[] = $file;
@@ -1510,9 +1512,9 @@ class Module_admin_themes
             }
 
             $syntax = 'html';
-            if (substr($file,-4) == '.css') {
+            if (substr($file, -4) == '.css') {
                 $syntax = 'css';
-            } elseif (substr($file,0,11) == 'JAVASCRIPT_') {
+            } elseif (substr($file, 0, 11) == 'JAVASCRIPT_') {
                 $syntax = 'js';
             }
 
@@ -1523,7 +1525,7 @@ class Module_admin_themes
                                         id : "f' . $i . '_new"
                                         ,syntax: "' . $syntax . '"
                                         ,start_highlight: true
-                                        ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
+                                        ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang())) ? strtolower(user_lang()) : 'en') . '"
                                         ,allow_resize: true
                                         ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
                             });
@@ -1532,9 +1534,9 @@ class Module_admin_themes
             }
 
             // Support searching
-            if (strpos($file,'/') === false) {
+            if (strpos($file, '/') === false) {
                 $codename = $file;
-                if (substr($file,-4) == '.css') {
+                if (substr($file, -4) == '.css') {
                     $file = $theme . '/css_custom/' . $codename;
                     if (!file_exists(get_custom_file_base() . '/themes/' . $file)) {
                         $file = 'default/css_custom/' . $codename;
@@ -1559,7 +1561,7 @@ class Module_admin_themes
             }
 
             // The file we're LOADING from for edit (maybe $file, maybe some old versions being restored)
-            $restore_from = filter_naughty(get_param('restore_from',$file));
+            $restore_from = filter_naughty(get_param('restore_from', $file));
             if (file_exists(get_file_base() . '/themes/' . $restore_from)) {
                 $path = get_file_base() . '/themes/' . $restore_from;
                 $contents = file_get_contents($path);
@@ -1574,14 +1576,14 @@ class Module_admin_themes
             }
 
             // Revision history
-            $filesarray = $this->get_template_files_array($theme,basename($file));
+            $filesarray = $this->get_template_files_array($theme, basename($file));
             rsort($filesarray);
             $j = 0;
             $revision_history = new ocp_tempcode();
             $max = intval(get_option('number_revisions_show'));
             foreach ($filesarray as $time) {
                 // Find who did the revision
-                $editor = $GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs','member_id',array('date_and_time' => $time,'the_type' => 'EDIT_TEMPLATES','param_a' => $file));
+                $editor = $GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs', 'member_id', array('date_and_time' => $time, 'the_type' => 'EDIT_TEMPLATES', 'param_a' => $file));
                 if (is_null($editor)) {
                     $editor = do_lang('UNKNOWN');
                 } else {
@@ -1590,24 +1592,24 @@ class Module_admin_themes
                         $editor = do_lang('UNKNOWN');
                     }
                 }
-                $date = is_null($time)?do_lang('UNKNOWN'):get_timezoned_date($time);
-                $url = get_custom_base_url() . '/themes/' . str_replace('templates/','templates_custom/',$file) . '.' . strval($time);
-                $old_file = get_custom_file_base() . '/themes/' . str_replace('templates/','templates_custom/',$file) . '.' . strval($time);
+                $date = is_null($time) ? do_lang('UNKNOWN') : get_timezoned_date($time);
+                $url = get_custom_base_url() . '/themes/' . str_replace('templates/', 'templates_custom/', $file) . '.' . strval($time);
+                $old_file = get_custom_file_base() . '/themes/' . str_replace('templates/', 'templates_custom/', $file) . '.' . strval($time);
                 if (!file_exists($old_file)) { // Probably restoring the default theme file into our custom theme
-                    $url = get_custom_base_url() . '/themes/' . str_replace('default/',$theme . '/',str_replace('templates/','templates_custom/',$file)) . '.' . strval($time);
-                    $old_file = get_custom_file_base() . '/themes/' . str_replace('default/',$theme . '/',str_replace('templates/','templates_custom/',$file)) . '.' . strval($time);
+                    $url = get_custom_base_url() . '/themes/' . str_replace('default/', $theme . '/', str_replace('templates/', 'templates_custom/', $file)) . '.' . strval($time);
+                    $old_file = get_custom_file_base() . '/themes/' . str_replace('default/', $theme . '/', str_replace('templates/', 'templates_custom/', $file)) . '.' . strval($time);
                 }
                 if (!file_exists($old_file)) { // Maybe have a revision in the default theme rather than the custom theme
-                    $url = get_custom_base_url() . '/themes/' . str_replace($theme . '/','default/',str_replace('templates/','templates_custom/',$file)) . '.' . strval($time);
-                    $old_file = get_custom_file_base() . '/themes/' . str_replace($theme . '/','default/',str_replace('templates/','templates_custom/',$file)) . '.' . strval($time);
+                    $url = get_custom_base_url() . '/themes/' . str_replace($theme . '/', 'default/', str_replace('templates/', 'templates_custom/', $file)) . '.' . strval($time);
+                    $old_file = get_custom_file_base() . '/themes/' . str_replace($theme . '/', 'default/', str_replace('templates/', 'templates_custom/', $file)) . '.' . strval($time);
                 }
                 $size = filesize($old_file);
-                $restore_url = build_url(array('page' => '_SELF','type' => '_edit_templates','theme' => $theme,'f0file' => basename($file),'restore_from' => substr($old_file,strlen(get_custom_file_base() . '/themes/'))),'_SELF');
+                $restore_url = build_url(array('page' => '_SELF', 'type' => '_edit_templates', 'theme' => $theme, 'f0file' => basename($file), 'restore_from' => substr($old_file, strlen(get_custom_file_base() . '/themes/'))), '_SELF');
                 require_code('diff');
                 if (function_exists('diff_simple')) {
-                    $rendered_diff = is_null($last_path)?'':diff_simple($old_file,$last_path);
+                    $rendered_diff = is_null($last_path) ? '' : diff_simple($old_file, $last_path);
                     $last_path = $old_file;
-                    $revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID' => 'f0cb02bfa3692ed431b69b8d9dc0b2f8','RENDERED_DIFF' => $rendered_diff,'REFERENCE_POINT_EXACT' => true,'EDITOR' => $editor,'DATE' => $date,'DATE_RAW' => strval($time),'RESTORE_URL' => $restore_url,'URL' => $url,'SIZE' => clean_file_size($size))));
+                    $revision_history->attach(do_template('REVISION_HISTORY_LINE', array('_GUID' => 'f0cb02bfa3692ed431b69b8d9dc0b2f8', 'RENDERED_DIFF' => $rendered_diff, 'REFERENCE_POINT_EXACT' => true, 'EDITOR' => $editor, 'DATE' => $date, 'DATE_RAW' => strval($time), 'RESTORE_URL' => $restore_url, 'URL' => $url, 'SIZE' => clean_file_size($size))));
                     $j++;
                 }
 
@@ -1615,173 +1617,173 @@ class Module_admin_themes
                     break;
                 }
             }
-            $orig_version = str_replace('/templates_custom/','/templates/',$file);
-            $orig_version = str_replace('/css_custom/','/css/',$orig_version);
+            $orig_version = str_replace('/templates_custom/', '/templates/', $file);
+            $orig_version = str_replace('/css_custom/', '/css/', $orig_version);
             if (!file_exists(get_file_base() . '/themes/' . $orig_version)) {
-                $orig_version = 'default' . substr($orig_version,strpos($orig_version,'/'));
+                $orig_version = 'default' . substr($orig_version, strpos($orig_version, '/'));
             }
-            if (((strpos($file,'/templates_custom/') !== false) || (strpos($file,'/css_custom/') !== false)) && (file_exists(get_file_base() . '/themes/' . $orig_version))) {
-                $restore_url = build_url(array('page' => '_SELF','type' => '_edit_templates','theme' => $theme,'f0file' => basename($file),'restore_from' => $orig_version),'_SELF');
+            if (((strpos($file, '/templates_custom/') !== false) || (strpos($file, '/css_custom/') !== false)) && (file_exists(get_file_base() . '/themes/' . $orig_version))) {
+                $restore_url = build_url(array('page' => '_SELF', 'type' => '_edit_templates', 'theme' => $theme, 'f0file' => basename($file), 'restore_from' => $orig_version), '_SELF');
                 $url = get_base_url() . '/themes/' . $orig_version;
                 $size = filesize(get_custom_file_base() . '/themes/' . $file);
                 require_code('diff');
                 if (function_exists('diff_simple')) {
-                    $rendered_diff = diff_simple(get_file_base() . '/themes/' . $orig_version,$last_path);
-                    $revision_history->attach(do_template('REVISION_HISTORY_LINE',array('_GUID' => '7ba03fe98a20330fc64ad742d2fb74fa','RENDERED_DIFF' => $rendered_diff,'REFERENCE_POINT_EXACT' => true,'RESTORE_URL' => $restore_url,'URL' => $url,'SIZE' => clean_file_size($size))));
+                    $rendered_diff = diff_simple(get_file_base() . '/themes/' . $orig_version, $last_path);
+                    $revision_history->attach(do_template('REVISION_HISTORY_LINE', array('_GUID' => '7ba03fe98a20330fc64ad742d2fb74fa', 'RENDERED_DIFF' => $rendered_diff, 'REFERENCE_POINT_EXACT' => true, 'RESTORE_URL' => $restore_url, 'URL' => $url, 'SIZE' => clean_file_size($size))));
                     $j++;
                 }
             }
-            if (($j != 0) && (get_param('restore_from','') == '')) {
-                $revision_history = do_template('REVISION_HISTORY_WRAP',array('_GUID' => '435e050dd2f38187d757e792ceb2f2f5','CONTENT' => $revision_history));
+            if (($j != 0) && (get_param('restore_from', '') == '')) {
+                $revision_history = do_template('REVISION_HISTORY_WRAP', array('_GUID' => '435e050dd2f38187d757e792ceb2f2f5', 'CONTENT' => $revision_history));
             } elseif ($j != 0) {
                 $revision_history = do_template('REVISION_RESTORE');
             }
 
-            $_file = substr($file,strrpos($file,'/')+1);
-            if (substr($_file,-4) == '.css') {
+            $_file = substr($file, strrpos($file, '/') + 1);
+            if (substr($_file, -4) == '.css') {
                 $_path = get_file_base() . '/themes/default/css/' . $_file;
             } else {
                 $_path = get_file_base() . '/themes/default/templates/' . $_file;
             }
             if (file_exists($_path)) {
-                $tmp = fopen($_path,'rb');
-                @flock($tmp,LOCK_SH);
+                $tmp = fopen($_path, 'rb');
+                @flock($tmp, LOCK_SH);
                 $old_contents = file_get_contents($_path);
-                @flock($tmp,LOCK_UN);
+                @flock($tmp, LOCK_UN);
                 fclose($tmp);
             } else {
                 $old_contents = '';
             }
 
             $matches = array();
-            $cnt = preg_match_all('#\{([\w][\w\_]*)\}#',$old_contents,$matches);
+            $cnt = preg_match_all('#\{([\w][\w\_]*)\}#', $old_contents, $matches);
             $parameters = new ocp_tempcode();
             $p_done = array();
-            for ($j = 0;$j<$cnt;$j++) {
-                if (array_key_exists($matches[1][$j],$p_done)) {
+            for ($j = 0; $j < $cnt; $j++) {
+                if (array_key_exists($matches[1][$j], $p_done)) {
                     continue;
                 }
                 $p_done[$matches[1][$j]] = 1;
-                $parameters->attach(form_input_list_entry($matches[1][$j] . '__0',false,$matches[1][$j]));
+                $parameters->attach(form_input_list_entry($matches[1][$j] . '__0', false, $matches[1][$j]));
             }
-            $parameters = do_template('TEMPLATE_EDIT_SCREEN_DROPDOWN',array('_GUID' => '50f31c49c99b864c1719fb51ed426274','ID' => $i,'PARAMETERS' => $parameters,'NAME' => 'ppparameter','LANG' => do_lang_tempcode('INSERT_PARAMETER')));
+            $parameters = do_template('TEMPLATE_EDIT_SCREEN_DROPDOWN', array('_GUID' => '50f31c49c99b864c1719fb51ed426274', 'ID' => $i, 'PARAMETERS' => $parameters, 'NAME' => 'ppparameter', 'LANG' => do_lang_tempcode('INSERT_PARAMETER')));
 
             $_directives = array(
-                array('BOX','1'),
-                array('WHILE','1'),
-                array('IF_NON_EMPTY','1'),
-                array('IF_EMPTY','1'),
-                array('IF','1'),
-                array('SET','1'),
-                array('LOOP','1'), // To simplify things, we won't throw all options at the user
+                array('BOX', '1'),
+                array('WHILE', '1'),
+                array('IF_NON_EMPTY', '1'),
+                array('IF_EMPTY', '1'),
+                array('IF', '1'),
+                array('SET', '1'),
+                array('LOOP', '1'), // To simplify things, we won't throw all options at the user
             );
-            $directives = $this->generate_from($_directives,'DIRECTIVE',$i);
+            $directives = $this->generate_from($_directives, 'DIRECTIVE', $i);
 
             $_programmatic_symbols = array(
-                array('RAND','0'),
-                array('SET_RAND','0+'),
-                array('CYCLE','1+'),
-                array('INIT','1'),
-                array('SET','2'),
-                array('GET','1'),
-                array('INC','1'),
-                array('DEC','1'),
+                array('RAND', '0'),
+                array('SET_RAND', '0+'),
+                array('CYCLE', '1+'),
+                array('INIT', '1'),
+                array('SET', '2'),
+                array('GET', '1'),
+                array('INC', '1'),
+                array('DEC', '1'),
             );
-            $programmatic_symbols = $this->generate_from($_programmatic_symbols,'PROGRAMMATIC_SYMBOL',$i);
+            $programmatic_symbols = $this->generate_from($_programmatic_symbols, 'PROGRAMMATIC_SYMBOL', $i);
 
             $_abstraction_symbols = array(
-                array('IMG','1'),
-                array('PAGE_LINK','1'),
-                array('MAILTO','0'),
-                array('BLOCK','2'),
-                array('THUMBNAIL','2'),
-                array('LOAD_PAGE','1'),
-                array('LOAD_PANEL','1'),
+                array('IMG', '1'),
+                array('PAGE_LINK', '1'),
+                array('MAILTO', '0'),
+                array('BLOCK', '2'),
+                array('THUMBNAIL', '2'),
+                array('LOAD_PAGE', '1'),
+                array('LOAD_PANEL', '1'),
             );
-            $abstraction_symbols = $this->generate_from($_abstraction_symbols,'ABSTRACTION_SYMBOL',$i);
+            $abstraction_symbols = $this->generate_from($_abstraction_symbols, 'ABSTRACTION_SYMBOL', $i);
 
             $_symbols = array(
-                array('THEME','0'),
-                array('LANG','0'),
-                array('BASE_URL','0'),
-                array('MOBILE','0'),
-                array('SITE_NAME','0'),
-                array('STAFF_ADDRESS','0'),
-                array('MEMBER','0'),
-                array('DATE_AND_TIME','0'),
-                array('DATE','0'),
-                array('TIME','0'),
-                array('USERNAME','0-1'),
-                array('IS_STAFF','0'),
-                array('MATCH_KEY_MATCH','1'),
+                array('THEME', '0'),
+                array('LANG', '0'),
+                array('BASE_URL', '0'),
+                array('MOBILE', '0'),
+                array('SITE_NAME', '0'),
+                array('STAFF_ADDRESS', '0'),
+                array('MEMBER', '0'),
+                array('DATE_AND_TIME', '0'),
+                array('DATE', '0'),
+                array('TIME', '0'),
+                array('USERNAME', '0-1'),
+                array('IS_STAFF', '0'),
+                array('MATCH_KEY_MATCH', '1'),
             );
-            $symbols = $this->generate_from($_symbols,'SYMBOL',$i);
+            $symbols = $this->generate_from($_symbols, 'SYMBOL', $i);
 
             $_arithmetical_symbols = array(
-                array('MAX','2'),
-                array('MIN','2'),
-                array('REM','2'),
-                array('DIV','2'),
-                array('SUBTRACT','2'),
-                array('ADD','2'),
-                array('ROUND','2'),
-                array('MULT','2'),
+                array('MAX', '2'),
+                array('MIN', '2'),
+                array('REM', '2'),
+                array('DIV', '2'),
+                array('SUBTRACT', '2'),
+                array('ADD', '2'),
+                array('ROUND', '2'),
+                array('MULT', '2'),
             );
-            $arithmetical_symbols = $this->generate_from($_arithmetical_symbols,'ARITHMETICAL_SYMBOL',$i);
+            $arithmetical_symbols = $this->generate_from($_arithmetical_symbols, 'ARITHMETICAL_SYMBOL', $i);
 
             $_formatting_symbols = array(
-                array('WCASE','1'),
-                array('LCASE','1'),
-                array('UCASE','1'),
-                array('REPLACE','3'),
-                array('AT','2'),
-                array('SUBSTR','3'),
-                array('LENGTH','1'),
-                array('WORDWRAP','2'),
-                array('TRUNCATE_LEFT','2'),
-                array('TRUNCATE_SPREAD','2'),
+                array('WCASE', '1'),
+                array('LCASE', '1'),
+                array('UCASE', '1'),
+                array('REPLACE', '3'),
+                array('AT', '2'),
+                array('SUBSTR', '3'),
+                array('LENGTH', '1'),
+                array('WORDWRAP', '2'),
+                array('TRUNCATE_LEFT', '2'),
+                array('TRUNCATE_SPREAD', '2'),
             );
-            $formatting_symbols = $this->generate_from($_formatting_symbols,'FORMATTING_SYMBOL',$i);
+            $formatting_symbols = $this->generate_from($_formatting_symbols, 'FORMATTING_SYMBOL', $i);
 
             $_logical_symbols = array(
-                array('NOT','1'),
-                array('OR','2'),
-                array('AND','2'),
-                array('EQ','2'),
-                array('NEQ','2'),
-                array('LT','2'),
-                array('GT','2'),
+                array('NOT', '1'),
+                array('OR', '2'),
+                array('AND', '2'),
+                array('EQ', '2'),
+                array('NEQ', '2'),
+                array('LT', '2'),
+                array('GT', '2'),
             );
-            $logical_symbols = $this->generate_from($_logical_symbols,'LOGICAL_SYMBOL',$i);
+            $logical_symbols = $this->generate_from($_logical_symbols, 'LOGICAL_SYMBOL', $i);
 
-            $guid = get_param('f' . $i . 'guid','?');
+            $guid = get_param('f' . $i . 'guid', '?');
             if ($guid == '?') {
                 $guid = '';
             }
 
             $guids = array();
-            $file_bits = explode('/',$file);
-            $clean_file = str_replace('.tpl','',$file_bits[count($file_bits)-1]);
+            $file_bits = explode('/', $file);
+            $clean_file = str_replace('.tpl', '', $file_bits[count($file_bits) - 1]);
             $_guids = @unserialize(@file_get_contents(get_file_base() . '/data/guids.dat'));
-            if (($_guids !== false) && (array_key_exists($clean_file,$_guids))) {
+            if (($_guids !== false) && (array_key_exists($clean_file, $_guids))) {
                 foreach ($_guids[$clean_file] as $_guid) {
-                    $guids[] = array('FILENAME' => $_guid[0],'LINE' => integer_format($_guid[1]),'THIS_GUID' => $_guid[2]);
+                    $guids[] = array('FILENAME' => $_guid[0], 'LINE' => integer_format($_guid[1]), 'THIS_GUID' => $_guid[2]);
                 }
             }
 
-            $templates[] = array('I' => $i,'FILE' => $file);
+            $templates[] = array('I' => $i, 'FILE' => $file);
 
-            $display = ($count == 0)?'block':'none';
+            $display = ($count == 0) ? 'block' : 'none';
             if ($count == 0) {
                 $first_id = $i;
             }
 
-            $file_save_target = preg_replace('#^default/#',$theme . '/',$file);
+            $file_save_target = preg_replace('#^default/#', $theme . '/', $file);
 
-            $template_editors->attach(do_template('TEMPLATE_EDIT_SCREEN_EDITOR',array(
+            $template_editors->attach(do_template('TEMPLATE_EDIT_SCREEN_EDITOR', array(
                 '_GUID' => '9d3b75215c34c2b4b366118605b4cd59',
                 'PREVIEW_URL' => $preview_url,
-                'CODENAME' => str_replace('.tpl','',$codename),
+                'CODENAME' => str_replace('.tpl', '', $codename),
                 'I' => $i,
                 'DISPLAY' => $display,
                 'GUIDS' => $guids,
@@ -1805,8 +1807,8 @@ class Module_admin_themes
         }
 
         if ($count == 1) {
-            $file_save_target = preg_replace('#^default/#',$theme . '/',$files_seen[0]);
-            $this->title = get_screen_title('_EDIT_TEMPLATE',true,array(escape_html($file_save_target)));
+            $file_save_target = preg_replace('#^default/#', $theme . '/', $files_seen[0]);
+            $this->title = get_screen_title('_EDIT_TEMPLATE', true, array(escape_html($file_save_target)));
 
             set_short_title($files_seen[0]);
         }
@@ -1815,10 +1817,10 @@ class Module_admin_themes
             warn_exit(do_lang_tempcode('NO_TEMPLATES_SELECTED'));
         }
 
-        return do_template('TEMPLATE_EDIT_SCREEN',array(
+        return do_template('TEMPLATE_EDIT_SCREEN', array(
             '_GUID' => 'cbcd6d18c2456f94f72624e1a39a36a5',
             'TITLE' => $this->title,
-            'MULTIPLE' => $count>1,
+            'MULTIPLE' => $count > 1,
             'FIRST_ID' => $first_id,
             'THEME' => $theme,
             'TEMPLATES' => $templates,
@@ -1836,15 +1838,15 @@ class Module_admin_themes
      * @param  string                   The ID of the actual template editor we are working with
      * @return tempcode                 The tempcode
      */
-    public function generate_from($array,$stub,$id)
+    public function generate_from($array, $stub, $id)
     {
         $out = new ocp_tempcode();
         foreach ($array as $x) {
-            list($op,$arity) = $x;
+            list($op, $arity) = $x;
             $lang = do_lang_tempcode($stub . '__' . $op);
-            $out->attach(form_input_list_entry($op . '__' . $arity,false,$lang));
+            $out->attach(form_input_list_entry($op . '__' . $arity, false, $lang));
         }
-        return do_template('TEMPLATE_EDIT_SCREEN_DROPDOWN',array('_GUID' => 'c6d24f278ec874a4b6abff8c359f80ba','ID' => $id,'PARAMETERS' => $out,'NAME' => 'pp' . strtolower($stub),'LANG' => do_lang_tempcode('INSERT_' . $stub)));
+        return do_template('TEMPLATE_EDIT_SCREEN_DROPDOWN', array('_GUID' => 'c6d24f278ec874a4b6abff8c359f80ba', 'ID' => $id, 'PARAMETERS' => $out, 'NAME' => 'pp' . strtolower($stub), 'LANG' => do_lang_tempcode('INSERT_' . $stub)));
     }
 
     /**
@@ -1858,19 +1860,19 @@ class Module_admin_themes
 
         foreach (array_keys($_REQUEST) as $_i) {
             $matches = array();
-            if (preg_match('#f(\d+)file#',$_i,$matches) != 0) {
+            if (preg_match('#f(\d+)file#', $_i, $matches) != 0) {
                 $i = $matches[1];
             } else {
                 continue;
             }
 
-            $_file = substr(str_replace('/default/','/' . $theme . '/','/' . filter_naughty(post_param('f' . $i . 'file',''))),1);
+            $_file = substr(str_replace('/default/', '/' . $theme . '/', '/' . filter_naughty(post_param('f' . $i . 'file', ''))), 1);
             if ($_file == '') {
                 continue;
             }
 
-            $file = str_replace('templates/','templates_custom/',$_file);
-            $file = str_replace('css/','css_custom/',$file);
+            $file = str_replace('templates/', 'templates_custom/', $_file);
+            $file = str_replace('css/', 'css_custom/', $file);
             $fullpath = get_custom_file_base() . '/themes/' . $file;
             if (!file_exists(dirname($fullpath))) {
                 require_code('files2');
@@ -1879,14 +1881,14 @@ class Module_admin_themes
 
             // Make backup
             if ((file_exists($fullpath)) && (get_option('templates_store_revisions') == '1')) {
-                @copy($fullpath,$fullpath . '.' . strval(time())) or intelligent_write_error($fullpath . '.' . strval(time()));
+                @copy($fullpath, $fullpath . '.' . strval(time())) or intelligent_write_error($fullpath . '.' . strval(time()));
                 fix_permissions($fullpath . '.' . strval(time()));
                 sync_file($fullpath . '.' . strval(time()));
             }
 
             // Save
-            $new = post_param('f' . $i . '_new',false,true);
-            $fullpath_orig = preg_replace('#/themes/[^/]*/(.*)(\_custom)?/#U','/themes/default/${1}/',$fullpath);
+            $new = post_param('f' . $i . '_new', false, true);
+            $fullpath_orig = preg_replace('#/themes/[^/]*/(.*)(\_custom)?/#U', '/themes/default/${1}/', $fullpath);
             if ((file_exists($fullpath_orig)) && ($new == file_get_contents($fullpath_orig))) {
                 if (file_exists($fullpath)) {
                     unlink($fullpath);
@@ -1896,49 +1898,49 @@ class Module_admin_themes
                     unlink($fullpath . '.editfrom');
                     sync_file($fullpath . '.editfrom');
                 }
-                $_file = preg_replace('#[^/]*/(.*)(\_custom)?/#U','default/${1}/',$_file);
+                $_file = preg_replace('#[^/]*/(.*)(\_custom)?/#U', 'default/${1}/', $_file);
 
                 $file = $_file;
             } else {
-                $myfile = @fopen($fullpath,GOOGLE_APPENGINE?'wb':'at');
+                $myfile = @fopen($fullpath, GOOGLE_APPENGINE ? 'wb' : 'at');
                 if ($myfile === false) {
                     intelligent_write_error($fullpath);
                 }
-                @flock($myfile,LOCK_EX);
+                @flock($myfile, LOCK_EX);
                 if (!GOOGLE_APPENGINE) {
-                    ftruncate($myfile,0);
+                    ftruncate($myfile, 0);
                 }
-                if (fwrite($myfile,$new)<strlen($new)) {
+                if (fwrite($myfile, $new) < strlen($new)) {
                     fclose($myfile);
                     unlink($fullpath);
                     warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                 }
-                @flock($myfile,LOCK_UN);
+                @flock($myfile, LOCK_UN);
                 fclose($myfile);
                 fix_permissions($fullpath);
                 sync_file($fullpath);
 
                 if (file_exists(get_file_base() . '/themes/' . post_param('f' . $i . 'file'))) {
                     // Make base-hash-thingy
-                    $myfile = @fopen($fullpath . '.editfrom',GOOGLE_APPENGINE?'wb':'at');
+                    $myfile = @fopen($fullpath . '.editfrom', GOOGLE_APPENGINE ? 'wb' : 'at');
                     if ($myfile === false) {
                         intelligent_write_error($fullpath);
                     }
-                    @flock($myfile,LOCK_EX);
+                    @flock($myfile, LOCK_EX);
                     if (!GOOGLE_APPENGINE) {
-                        ftruncate($myfile,0);
+                        ftruncate($myfile, 0);
                     }
                     $hash = file_get_contents(get_file_base() . '/themes/' . post_param('f' . $i . 'file'));
-                    if (fwrite($myfile,$hash)<strlen($hash)) {
+                    if (fwrite($myfile, $hash) < strlen($hash)) {
                         warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
                     }
-                    @flock($myfile,LOCK_UN);
+                    @flock($myfile, LOCK_UN);
                     fclose($myfile);
                     fix_permissions($fullpath . '.editfrom');
                     sync_file($fullpath . '.editfrom');
                 }
             }
-            log_it('EDIT_TEMPLATES',$file,$theme);
+            log_it('EDIT_TEMPLATES', $file, $theme);
         }
 
         // Erase cache
@@ -1946,15 +1948,15 @@ class Module_admin_themes
         erase_cached_templates();
         erase_block_cache();
 
-        if (get_param_integer('save_and_stay',0) == 1) {
-            return inform_screen($this->title,protect_from_escaping('
+        if (get_param_integer('save_and_stay', 0) == 1) {
+            return inform_screen($this->title, protect_from_escaping('
                     <script>// <![CDATA[
                             window.fauxmodal_alert(\'' . addslashes(do_lang('SUCCESS')) . '\');
                     //]]></script>
             '));
         }
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,'','templates',$file);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, '', 'templates', $file);
     }
 
     /**
@@ -1966,14 +1968,14 @@ class Module_admin_themes
      * @param  URLPATH                  The URL to the theme image
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
-    public function get_image_form_fields($theme,$lang,$id = '',$path = '')
+    public function get_image_form_fields($theme, $lang, $id = '', $path = '')
     {
         $fields = new ocp_tempcode();
         $hidden = new ocp_tempcode();
         require_code('form_templates');
-        $hidden->attach(form_input_hidden('theme',$theme));
-        $hidden->attach(form_input_hidden('lang',$lang));
-        $fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_THEME_IMAGE_NAME'),'id',$id,true,null,null,'text','some/path/name'));
+        $hidden->attach(form_input_hidden('theme', $theme));
+        $hidden->attach(form_input_hidden('lang', $lang));
+        $fields->attach(form_input_line(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_THEME_IMAGE_NAME'), 'id', $id, true, null, null, 'text', 'some/path/name'));
 
         /*$list=combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images/',get_file_base().'/themes/'.filter_naughty($theme).'/images/');    Actually we don't want to allow selection from existing -- too weird, creating these cross-links
         $list->attach(combo_get_image_paths($path,get_base_url().'/themes/'.rawurlencode($theme).'/images_custom/',get_file_base().'/themes/'.filter_naughty($theme).'/images_custom/'));
@@ -1982,21 +1984,21 @@ class Module_admin_themes
             $list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images/',get_file_base().'/themes/default/images/'));
             $list->attach(combo_get_image_paths($path,get_base_url().'/themes/default/images_custom/',get_file_base().'/themes/default/images_custom/'));
         }*/
-        handle_max_file_size($hidden,'image');
+        handle_max_file_size($hidden, 'image');
 
         $set_name = 'image';
         $required = true;
         $set_title = do_lang_tempcode('IMAGE');
         $field_set = alternate_fields_set__start($set_name);
 
-        $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'),'','file',false,null,null,true,str_replace(' ','',get_option('valid_images'))));
+        $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'file', false, null, null, true, str_replace(' ', '', get_option('valid_images'))));
         //  $fields->attach(form_input_radio(do_lang_tempcode('CHOOSE'),'',$list));
 
-        $field_set->attach(form_input_url(do_lang_tempcode('URL'),'','path',$path,false));
+        $field_set->attach(form_input_url(do_lang_tempcode('URL'), '', 'path', $path, false));
 
-        $fields->attach(alternate_fields_set__end($set_name,$set_title,'',$field_set,$required));
+        $fields->attach(alternate_fields_set__end($set_name, $set_title, '', $field_set, $required));
 
-        return array($fields,$hidden);
+        return array($fields, $hidden);
     }
 
     /**
@@ -2007,27 +2009,27 @@ class Module_admin_themes
     public function add_image()
     {
         $theme = get_param('theme');
-        $lang = get_param('lang',user_lang());
+        $lang = get_param('lang', user_lang());
         if ($lang == '') {
             $lang = user_lang();
         }
-        list($fields,$hidden) = $this->get_image_form_fields($theme,$lang);
-        $fields->attach(form_input_tick(do_lang_tempcode('USE_ALL_THEMES'),do_lang_tempcode('DESCRIPTION_USE_ALL_THEMES'),'use_all_themes',false));
-        $fields->attach(form_input_tick(do_lang_tempcode('USE_ALL_LANGS'),do_lang_tempcode('DESCRIPTION_USE_ALL_LANGS'),'use_all_langs',true));
+        list($fields, $hidden) = $this->get_image_form_fields($theme, $lang);
+        $fields->attach(form_input_tick(do_lang_tempcode('USE_ALL_THEMES'), do_lang_tempcode('DESCRIPTION_USE_ALL_THEMES'), 'use_all_themes', false));
+        $fields->attach(form_input_tick(do_lang_tempcode('USE_ALL_LANGS'), do_lang_tempcode('DESCRIPTION_USE_ALL_LANGS'), 'use_all_langs', true));
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_add_image','uploading' => 1),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_add_image', 'uploading' => 1), '_SELF');
         $submit_name = do_lang_tempcode('ADD_THEME_IMAGE');
 
         $text = new ocp_tempcode();
         require_code('images');
-        $max = floatval(get_max_image_size())/floatval(1024*1024);
-        if ($max<3.0) {
+        $max = floatval(get_max_image_size()) / floatval(1024 * 1024);
+        if ($max < 3.0) {
             require_code('files2');
             $config_url = get_upload_limit_config_url();
-            $text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
+            $text->attach(paragraph(do_lang_tempcode(is_null($config_url) ? 'MAXIMUM_UPLOAD' : 'MAXIMUM_UPLOAD_STAFF', escape_html(($max > 10.0) ? integer_format(intval($max)) : float_format($max)), escape_html(is_null($config_url) ? '' : $config_url))));
         }
 
-        return do_template('FORM_SCREEN',array('_GUID' => '7b8066b63002cda0a7628ddadddd9962','HIDDEN' => $hidden,'TITLE' => $this->title,'URL' => $post_url,'FIELDS' => $fields,'TEXT' => $text,'SUBMIT_ICON' => 'menu___generic_admin__add_one','SUBMIT_NAME' => $submit_name));
+        return do_template('FORM_SCREEN', array('_GUID' => '7b8066b63002cda0a7628ddadddd9962', 'HIDDEN' => $hidden, 'TITLE' => $this->title, 'URL' => $post_url, 'FIELDS' => $fields, 'TEXT' => $text, 'SUBMIT_ICON' => 'menu___generic_admin__add_one', 'SUBMIT_NAME' => $submit_name));
     }
 
     /**
@@ -2042,12 +2044,12 @@ class Module_admin_themes
         $theme = post_param('theme');
         $lang = post_param('lang');
         $id = post_param('id');
-        $use_all_themes = post_param_integer('use_all_themes',0);
-        $use_all_langs = post_param_integer('use_all_langs',0);
+        $use_all_themes = post_param_integer('use_all_themes', 0);
+        $use_all_langs = post_param_integer('use_all_langs', 0);
 
-        $path = get_url('path','file','themes/' . (($use_all_themes == 1)?'default':$theme) . '/images_custom');
+        $path = get_url('path', 'file', 'themes/' . (($use_all_themes == 1) ? 'default' : $theme) . '/images_custom');
         if ($path[0] == '') {
-            return warn_screen($this->title,do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+            return warn_screen($this->title, do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
         }
 
         $theme_list = array_keys(find_all_themes());
@@ -2056,25 +2058,25 @@ class Module_admin_themes
         if (($use_all_themes == 1) && ($use_all_langs == 1)) {
             foreach ($theme_list as $theme) {
                 foreach (array_keys($lang_list) as $lang) {
-                    actual_add_theme_image($theme,$lang,$id,$path[0],true);
+                    actual_add_theme_image($theme, $lang, $id, $path[0], true);
                 }
             }
         } elseif ($use_all_themes == 1) {
             foreach ($theme_list as $theme) {
-                actual_add_theme_image($theme,$lang,$id,$path[0],true);
+                actual_add_theme_image($theme, $lang, $id, $path[0], true);
             }
         } elseif ($use_all_langs == 1) {
             foreach (array_keys($lang_list) as $lang) {
-                actual_add_theme_image($theme,$lang,$id,$path[0],true);
+                actual_add_theme_image($theme, $lang, $id, $path[0], true);
             }
         } else {
-            actual_add_theme_image($theme,$lang,$id,$path[0]);
+            actual_add_theme_image($theme, $lang, $id, $path[0]);
         }
 
         persistent_cache_delete('THEME_IMAGES');
         erase_cached_templates();
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,$lang,'image',$id);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, $lang, 'image', $id);
     }
 
     /**
@@ -2088,20 +2090,20 @@ class Module_admin_themes
             @set_time_limit(300);
         }
 
-        $lang = choose_language($this->title,true,true);
+        $lang = choose_language($this->title, true, true);
         if (is_object($lang)) {
             return $lang;
         }
 
-        $theme = get_param('theme','');
+        $theme = get_param('theme', '');
         if ($theme == '') {
-            return $this->choose_theme($this->title,true);
+            return $this->choose_theme($this->title, true);
         }
 
         require_code('themes3');
-        regen_theme_images($theme,array($lang => 1));
+        regen_theme_images($theme, array($lang => 1));
         if ($theme != 'default') {
-            regen_theme_images('default',array($lang => 1),$theme);
+            regen_theme_images('default', array($lang => 1), $theme);
         }
 
         require_code('form_templates');
@@ -2110,17 +2112,17 @@ class Module_admin_themes
         $skip = array(
             'icons', // Too many of these to show
         );
-        $ids = get_all_image_ids_type('',true,$GLOBALS['SITE_DB'],$theme,false,true,$skip); // The final 'true' stops new theme images being detected, as we know regen_theme_images did that (and more conservatively - it won't scan images_custom dirs for NEW codes which an unbridled get_all_image_ids_type call would)
+        $ids = get_all_image_ids_type('', true, $GLOBALS['SITE_DB'], $theme, false, true, $skip); // The final 'true' stops new theme images being detected, as we know regen_theme_images did that (and more conservatively - it won't scan images_custom dirs for NEW codes which an unbridled get_all_image_ids_type call would)
 
         single_field__start();
-        $fields = form_input_theme_image(do_lang_tempcode('CODENAME'),'','id',$ids,null,null,null,false,null,$theme,$lang,true,true);
+        $fields = form_input_theme_image(do_lang_tempcode('CODENAME'), '', 'id', $ids, null, null, null, false, null, $theme, $lang, true, true);
         single_field__end();
 
-        $hidden = form_input_hidden('theme',$theme);
+        $hidden = form_input_hidden('theme', $theme);
 
-        $post_url = build_url(array('page' => '_SELF','type' => 'edit_image','lang' => $lang),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => 'edit_image', 'lang' => $lang), '_SELF');
 
-        $edit_form = do_template('FORM_SINGLE_FIELD',array(
+        $edit_form = do_template('FORM_SINGLE_FIELD', array(
             '_GUID' => '48b3218750fcea21e0bf3be31ae58296',
             'HIDDEN' => $hidden,
             'TEXT' => do_lang_tempcode('CHOOSE_EDIT_LIST'),
@@ -2128,12 +2130,12 @@ class Module_admin_themes
             'URL' => $post_url,
             'FIELD' => $fields,
             'SUBMIT_ICON' => 'buttons__proceed',
-            'SUBMIT_NAME' => has_js()?new ocp_tempcode():do_lang_tempcode('EDIT'), // We don't want a button if JS is on because clicking on images takes you through
+            'SUBMIT_NAME' => has_js() ? new ocp_tempcode() : do_lang_tempcode('EDIT'), // We don't want a button if JS is on because clicking on images takes you through
         ));
 
-        $add_url = build_url(array('page' => '_SELF','type' => 'add_image','theme' => $theme,'lang' => $lang),'_SELF');
+        $add_url = build_url(array('page' => '_SELF', 'type' => 'add_image', 'theme' => $theme, 'lang' => $lang), '_SELF');
 
-        return do_template('THEME_IMAGE_MANAGE_SCREEN',array('_GUID' => '4e760b0aa59b1bbb6fcf289c0b93ec46','ADD_URL' => $add_url,'TITLE' => $this->title,'FORM' => $edit_form));
+        return do_template('THEME_IMAGE_MANAGE_SCREEN', array('_GUID' => '4e760b0aa59b1bbb6fcf289c0b93ec46', 'ADD_URL' => $add_url, 'TITLE' => $this->title, 'FORM' => $edit_form));
     }
 
     /**
@@ -2143,7 +2145,7 @@ class Module_admin_themes
      */
     public function edit_image()
     {
-        $lang = choose_language($this->title,true,true);
+        $lang = choose_language($this->title, true, true);
         if (is_object($lang)) {
             return $lang;
         }
@@ -2151,13 +2153,13 @@ class Module_admin_themes
         $id = $this->id;
         $theme = $this->theme;
 
-        $where_map = array('theme' => $theme,'id' => $id);
+        $where_map = array('theme' => $theme, 'id' => $id);
         if ($lang != '') {
             $where_map['lang'] = $lang;
         }
-        $path = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',$where_map);
+        $path = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images', 'path', $where_map);
         if (is_null($path)) {
-            $path = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','path',array('theme' => $theme,'lang' => get_site_default_lang(),'id' => $id));
+            $path = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images', 'path', array('theme' => $theme, 'lang' => get_site_default_lang(), 'id' => $id));
         }
         if (is_null($path)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -2165,10 +2167,10 @@ class Module_admin_themes
 
         set_short_title($id);
 
-        $unmodified = (strpos($path,'themes/default/images/') !== false);
+        $unmodified = (strpos($path, 'themes/default/images/') !== false);
 
         disable_php_memory_limit();
-        $from_file = @file_get_contents(($unmodified?get_file_base():get_custom_file_base()) . '/' . rawurldecode($path));
+        $from_file = @file_get_contents(($unmodified ? get_file_base() : get_custom_file_base()) . '/' . rawurldecode($path));
         $width = do_lang_tempcode('UNKNOWN_EM');
         $height = do_lang_tempcode('UNKNOWN_EM');
         if (($from_file !== false) && (function_exists('imagecreatefromstring'))) {
@@ -2181,28 +2183,28 @@ class Module_admin_themes
             }
         }
 
-        $url = ($unmodified?get_base_url():get_custom_base_url()) . '/' . $path;
-        $text = do_template('THEME_IMAGE_PREVIEW',array('_GUID' => 'c71817851526064e738d5076dcd1bce1','WIDTH' => $width,'HEIGHT' => $height,'URL' => $url,'UNMODIFIED' => $unmodified));
+        $url = ($unmodified ? get_base_url() : get_custom_base_url()) . '/' . $path;
+        $text = do_template('THEME_IMAGE_PREVIEW', array('_GUID' => 'c71817851526064e738d5076dcd1bce1', 'WIDTH' => $width, 'HEIGHT' => $height, 'URL' => $url, 'UNMODIFIED' => $unmodified));
 
-        list($fields,$hidden) = $this->get_image_form_fields($theme,$lang,$id,$path);
-        $hidden->attach(form_input_hidden('old_id',$id));
-        if (strpos($path,'images_custom') !== false) {
-            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '9468297854009243da7b47c9bb3992bb','TITLE' => do_lang_tempcode('ACTIONS'))));
-            $fields->attach(form_input_tick(do_lang_tempcode('DELETE'),do_lang_tempcode('DESCRIPTION_DELETE_THEME_IMAGE'),'delete',false));
+        list($fields, $hidden) = $this->get_image_form_fields($theme, $lang, $id, $path);
+        $hidden->attach(form_input_hidden('old_id', $id));
+        if (strpos($path, 'images_custom') !== false) {
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '9468297854009243da7b47c9bb3992bb', 'TITLE' => do_lang_tempcode('ACTIONS'))));
+            $fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE_THEME_IMAGE'), 'delete', false));
         }
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_edit_image','uploading' => 1),'_SELF',null,false,true);
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_edit_image', 'uploading' => 1), '_SELF', null, false, true);
         $submit_name = do_lang_tempcode('SAVE');
 
         require_code('images');
-        $max = floatval(get_max_image_size())/floatval(1024*1024);
-        if ($max<3.0) {
+        $max = floatval(get_max_image_size()) / floatval(1024 * 1024);
+        if ($max < 3.0) {
             require_code('files2');
             $config_url = get_upload_limit_config_url();
-            $text->attach(paragraph(do_lang_tempcode(is_null($config_url)?'MAXIMUM_UPLOAD':'MAXIMUM_UPLOAD_STAFF',escape_html(($max>10.0)?integer_format(intval($max)):float_format($max)),escape_html(is_null($config_url)?'':$config_url))));
+            $text->attach(paragraph(do_lang_tempcode(is_null($config_url) ? 'MAXIMUM_UPLOAD' : 'MAXIMUM_UPLOAD_STAFF', escape_html(($max > 10.0) ? integer_format(intval($max)) : float_format($max)), escape_html(is_null($config_url) ? '' : $config_url))));
         }
 
-        return do_template('FORM_SCREEN',array('_GUID' => 'b0e178ad1f840a07c4967f3c266c750b','HIDDEN' => $hidden,'TITLE' => $this->title,'URL' => $post_url,'FIELDS' => $fields,'TEXT' => $text,'SUBMIT_ICON' => 'menu___generic_admin__edit_this','SUBMIT_NAME' => $submit_name));
+        return do_template('FORM_SCREEN', array('_GUID' => 'b0e178ad1f840a07c4967f3c266c750b', 'HIDDEN' => $hidden, 'TITLE' => $this->title, 'URL' => $post_url, 'FIELDS' => $fields, 'TEXT' => $text, 'SUBMIT_ICON' => 'menu___generic_admin__edit_this', 'SUBMIT_NAME' => $submit_name));
     }
 
     /**
@@ -2214,7 +2216,7 @@ class Module_admin_themes
     {
         require_code('uploads');
 
-        $lang = choose_language($this->title,true,true);
+        $lang = choose_language($this->title, true, true);
         if (is_object($lang)) {
             return $lang;
         }
@@ -2223,26 +2225,26 @@ class Module_admin_themes
         $id = post_param('id');
         $old_id = post_param('old_id');
 
-        if (post_param_integer('delete',0) == 1) {
+        if (post_param_integer('delete', 0) == 1) {
             require_code('themes3');
-            actual_delete_theme_image($old_id,$theme,$lang);
+            actual_delete_theme_image($old_id, $theme, $lang);
         } else {
-            $path = get_url('path','file','themes/' . $theme . '/images_custom');
+            $path = get_url('path', 'file', 'themes/' . $theme . '/images_custom');
 
-            if ((url_is_local($path[0])) && (!file_exists(((substr($path[0],0,15) == 'themes/default/')?get_file_base():get_custom_file_base()) . '/' . rawurldecode($path[0])))) {
-                warn_screen($this->title,do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+            if ((url_is_local($path[0])) && (!file_exists(((substr($path[0], 0, 15) == 'themes/default/') ? get_file_base() : get_custom_file_base()) . '/' . rawurldecode($path[0])))) {
+                warn_screen($this->title, do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
             }
 
             if ($path[0] == '') {
-                return warn_screen($this->title,do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
+                return warn_screen($this->title, do_lang_tempcode('IMPROPERLY_FILLED_IN_UPLOAD'));
             }
-            actual_edit_theme_image($old_id,$theme,$lang,$id,$path[0]);
+            actual_edit_theme_image($old_id, $theme, $lang, $id, $path[0]);
         }
         persistent_cache_delete('THEME_IMAGES');
 
         erase_cached_templates();
 
-        return $this->do_next_manager($this->title,do_lang_tempcode('SUCCESS'),$theme,$lang,'image',$id);
+        return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), $theme, $lang, 'image', $id);
     }
 
     /**
@@ -2261,7 +2263,7 @@ class Module_admin_themes
         $templates = array();
         $dh = opendir(get_file_base() . '/themes/default/templates');
         while (($f = readdir($dh)) !== false) {
-            if (strtolower(substr($f,-4)) == '.tpl') {
+            if (strtolower(substr($f, -4)) == '.tpl') {
                 $templates[] = $f;
             }
         }
@@ -2282,16 +2284,16 @@ class Module_admin_themes
         $lis_admin = new ocp_tempcode();
         foreach ($templates as $t) {
             // If we have a preview for it
-            if (array_key_exists($t,$all_previews)) {
-                if (!array_key_exists($all_previews[$t][1],$displayed_already)) {
+            if (array_key_exists($t, $all_previews)) {
+                if (!array_key_exists($all_previews[$t][1], $displayed_already)) {
                     $func = $all_previews[$t][1];
 
-                    $preview_url = build_url(array('page' => '_SELF','type' => 'screen_preview','id' => $t,'hook' => $all_previews[$t][0],'function' => $func),'_SELF');
+                    $preview_url = build_url(array('page' => '_SELF', 'type' => 'screen_preview', 'id' => $t, 'hook' => $all_previews[$t][0], 'function' => $func), '_SELF');
 
-                    $template_used = "(" . implode(', ',$all_previews__by_screen[$func]) . ")";
+                    $template_used = "(" . implode(', ', $all_previews__by_screen[$func]) . ")";
 
-                    $tpl_x = do_template('TEMPLATE_LIST',array('_GUID' => '1f27f619db553dfcb8d427e70a736226','URL' => $preview_url,'COLOR' => 'green','TEMPLATE' => preg_replace('#^tpl_preview\_\_#','',$func),'LIST' => $template_used));
-                    if (preg_match('#^tpl_preview\_\_administrative\_\_#',$func) != 0) {
+                    $tpl_x = do_template('TEMPLATE_LIST', array('_GUID' => '1f27f619db553dfcb8d427e70a736226', 'URL' => $preview_url, 'COLOR' => 'green', 'TEMPLATE' => preg_replace('#^tpl_preview\_\_#', '', $func), 'LIST' => $template_used));
+                    if (preg_match('#^tpl_preview\_\_administrative\_\_#', $func) != 0) {
                         $lis_admin->attach($tpl_x);
                     } else {
                         $lis->attach($tpl_x);
@@ -2299,8 +2301,8 @@ class Module_admin_themes
 
                     $displayed_already[$func] = true;
                 }
-            } elseif ((substr($t,0,11) != 'JAVASCRIPT_') && ($t != 'JAVASCRIPT.tpl')) { // Oh dear
-                $tpl_x = do_template('TEMPLATE_LIST',array('_GUID' => '96115a3b168769744b4b69fd2e1e7f6c','URL' => '','COLOR' => 'red','TEMPLATE' => $t,'LIST' => ''));
+            } elseif ((substr($t, 0, 11) != 'JAVASCRIPT_') && ($t != 'JAVASCRIPT.tpl')) { // Oh dear
+                $tpl_x = do_template('TEMPLATE_LIST', array('_GUID' => '96115a3b168769744b4b69fd2e1e7f6c', 'URL' => '', 'COLOR' => 'red', 'TEMPLATE' => $t, 'LIST' => ''));
                 $lis->attach($tpl_x);
             }
         }
@@ -2312,7 +2314,7 @@ class Module_admin_themes
         /* $lis (the main previews) will be displayed in the main INDEX_SCREEN content */
 
         // LISTING ADMIN PREVIEWS
-        $post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID' => '1e847f3c75998f2276765bc0c8ab6b78','LI' => $lis_admin,'TITLE' => do_lang('ADMIN_SCREENS'))));
+        $post->attach(do_template('TEMPLATE_LIST_WRAP', array('_GUID' => '1e847f3c75998f2276765bc0c8ab6b78', 'LI' => $lis_admin, 'TITLE' => do_lang('ADMIN_SCREENS'))));
 
         // LISTING COMCODE FILES
         $com_li = new ocp_tempcode();
@@ -2326,25 +2328,25 @@ class Module_admin_themes
                 }
 
                 $file = $page . '.txt';
-                $url = build_url(array('page' => $page),$zone);
-                $com_li->attach(do_template('TEMPLATE_LIST',array('_GUID' => '9db6fa9333470137ccf9bb752fd9b19e','URL' => $url,'COLOR' => '','TEMPLATE' => $file,'LIST' => '')));
+                $url = build_url(array('page' => $page), $zone);
+                $com_li->attach(do_template('TEMPLATE_LIST', array('_GUID' => '9db6fa9333470137ccf9bb752fd9b19e', 'URL' => $url, 'COLOR' => '', 'TEMPLATE' => $file, 'LIST' => '')));
             }
         }
-        $post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID' => 'adf69728048cbdbc3a0d9a2e2485a234','LI' => $com_li,'TITLE' => do_lang('COMCODE_PAGES'))));
+        $post->attach(do_template('TEMPLATE_LIST_WRAP', array('_GUID' => 'adf69728048cbdbc3a0d9a2e2485a234', 'LI' => $com_li, 'TITLE' => do_lang('COMCODE_PAGES'))));
 
         // LISTING HTML FILES
         $htm_li = new ocp_tempcode();
         foreach ($html_files as $zone => $pages) {
             foreach ($pages as $page => $type) {
                 $file = $page . '.htm';
-                $url = build_url(array('page' => $page),$zone);
+                $url = build_url(array('page' => $page), $zone);
 
-                $htm_li->attach(do_template('TEMPLATE_LIST',array('_GUID' => '16d1c1c5dc5556254f7a3f28a44fdb52','URL' => $url,'COLOR' => '','TEMPLATE' => $file,'LIST' => '')));
+                $htm_li->attach(do_template('TEMPLATE_LIST', array('_GUID' => '16d1c1c5dc5556254f7a3f28a44fdb52', 'URL' => $url, 'COLOR' => '', 'TEMPLATE' => $file, 'LIST' => '')));
             }
         }
-        $post->attach(do_template('TEMPLATE_LIST_WRAP',array('_GUID' => '2220938b443ecdb7d3f2d869665b3a4e','LI' => $htm_li,'TITLE' => do_lang('HTML_PAGES'))));
+        $post->attach(do_template('TEMPLATE_LIST_WRAP', array('_GUID' => '2220938b443ecdb7d3f2d869665b3a4e', 'LI' => $htm_li, 'TITLE' => do_lang('HTML_PAGES'))));
 
-        return do_template('INDEX_SCREEN',array('_GUID' => '6137f107de679580a6aafe36af427cdd','TITLE' => $this->title,'CONTENT' => $lis,'POST' => $post,'PRE' => ''));
+        return do_template('INDEX_SCREEN', array('_GUID' => '6137f107de679580a6aafe36af427cdd', 'TITLE' => $this->title, 'CONTENT' => $lis, 'POST' => $post, 'PRE' => ''));
     }
 
     /**
@@ -2365,7 +2367,7 @@ class Module_admin_themes
         $hook = get_param('hook');
         $function = get_param('function');
 
-        return render_screen_preview($template,$hook,$function);
+        return render_screen_preview($template, $hook, $function);
     }
 
     /**
@@ -2385,13 +2387,13 @@ class Module_admin_themes
                             id : "tempcode"
                             ,syntax: "tempcode"
                             ,start_highlight: true
-                            ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang()))?strtolower(user_lang()):'en') . '"
+                            ,language: "' . (file_exists(get_file_base() . '/data/editarea/langs/' . strtolower(user_lang())) ? strtolower(user_lang()) : 'en') . '"
                             ,allow_resize: true
                             ,toolbar: "search, go_to_line, fullscreen, |, undo, redo, |, select_font,|, reset_highlight, word_wrap"
                     });
                     //]]></script>')); // XHTMLXHTML
         }
 
-        return do_template('TEMPCODE_TESTER_SCREEN',array('_GUID' => 'b7ea146fffc0dfdcefcb8e8e0c0168a4','TITLE' => $this->title));
+        return do_template('TEMPCODE_TESTER_SCREEN', array('_GUID' => 'b7ea146fffc0dfdcefcb8e8e0c0168a4', 'TITLE' => $this->title));
     }
 }

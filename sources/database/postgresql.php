@@ -22,6 +22,7 @@
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_postgresql
@@ -56,12 +57,12 @@ class Database_Static_postgresql
      * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
      * @param  array                    The DB connection to make on
      */
-    public function db_create_index($table_name,$index_name,$_fields,$db)
+    public function db_create_index($table_name, $index_name, $_fields, $db)
     {
         if ($index_name[0] == '#') {
             return;
         }
-        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0,10000)) . ' ON ' . $table_name . '(' . $_fields . ')',$db);
+        $this->db_query('CREATE INDEX index' . $index_name . '_' . strval(mt_rand(0, 10000)) . ' ON ' . $table_name . '(' . $_fields . ')', $db);
     }
 
     /**
@@ -71,10 +72,10 @@ class Database_Static_postgresql
      * @param  array                    A list of fields to put in the new key
      * @param  array                    The DB connection to make on
      */
-    public function db_change_primary_key($table_name,$new_key,$db)
+    public function db_change_primary_key($table_name, $new_key, $db)
     {
-        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
-        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',',$new_key) . ')',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY', $db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',', $new_key) . ')', $db);
     }
 
     /**
@@ -136,7 +137,7 @@ class Database_Static_postgresql
      * @param  array                    A map of field names to ocPortal field types (with *#? encodings)
      * @param  array                    The DB connection to make on
      */
-    public function db_create_table($table_name,$fields,$db)
+    public function db_create_table($table_name, $fields, $db)
     {
         $type_remap = $this->db_get_type_remap();
 
@@ -144,7 +145,7 @@ class Database_Static_postgresql
         $keys = '';
         foreach ($fields as $name => $type) {
             if ($type[0] == '*') { // Is a key
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 if ($keys != '') {
                     $keys .= ', ';
                 }
@@ -152,18 +153,18 @@ class Database_Static_postgresql
             }
 
             if ($type[0] == '?') { // Is perhaps null
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 $perhaps_null = 'NULL';
             } else {
                 $perhaps_null = 'NOT NULL';
             }
 
-            $type = isset($type_remap[$type])?$type_remap[$type]:$type;
+            $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
             $_fields .= '    ' . $name . ' ' . $type;
-            if (substr($name,-13) == '__text_parsed') {
+            if (substr($name, -13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
-            } elseif (substr($name,-13) == '__source_user') {
+            } elseif (substr($name, -13) == '__source_user') {
                 $_fields .= ' DEFAULT ' . strval(db_get_first_id());
             }
             $_fields .= ' ' . $perhaps_null . ',' . "\n";
@@ -173,7 +174,7 @@ class Database_Static_postgresql
           ' . $_fields . '
           PRIMARY KEY (' . $keys . ')
         )';
-        $this->db_query($query,$db,null,null);
+        $this->db_query($query, $db, null, null);
     }
 
     /**
@@ -183,7 +184,7 @@ class Database_Static_postgresql
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_equal_to($attribute,$compare)
+    public function db_string_equal_to($attribute, $compare)
     {
         return $attribute . " LIKE '" . $this->db_escape_string($compare) . "'";
     }
@@ -195,7 +196,7 @@ class Database_Static_postgresql
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_not_equal_to($attribute,$compare)
+    public function db_string_not_equal_to($attribute, $compare)
     {
         return $attribute . "<>'" . $this->db_escape_string($compare) . "'";
     }
@@ -216,9 +217,9 @@ class Database_Static_postgresql
      * @param  ID_TEXT                  The table name
      * @param  array                    The DB connection to delete on
      */
-    public function db_drop_table_if_exists($table,$db)
+    public function db_drop_table_if_exists($table, $db)
     {
-        $this->db_query('DROP TABLE ' . $table,$db,null,null,true);
+        $this->db_query('DROP TABLE ' . $table, $db, null, null, true);
     }
 
     /**
@@ -253,7 +254,7 @@ class Database_Static_postgresql
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (NULL: failed)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
         // Potential cacheing
         if (isset($this->cache_db[$db_name][$db_host])) {
@@ -264,19 +265,19 @@ class Database_Static_postgresql
             $error = 'The postgreSQL PHP extension not installed (anymore?). You need to contact the system administrator of this server.';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error);
+            critical_error('PASSON', $error);
         }
 
-        $db = $persistent?@pg_pconnect('host=' . $db_host . ' dbname=' . $db_name . ' user=' . $db_user . ' password=' . $db_password):@pg_connect('host=' . $db_host . ' dbname=' . $db_name . ' user=' . $db_user . ' password=' . $db_password);
+        $db = $persistent ? @pg_pconnect('host=' . $db_host . ' dbname=' . $db_name . ' user=' . $db_user . ' password=' . $db_password) : @pg_connect('host=' . $db_host . ' dbname=' . $db_name . ' user=' . $db_user . ' password=' . $db_password);
         if ($db === false) {
             $error = 'Could not connect to database-server (' . @pg_last_error() . ')';
             if ($fail_ok) {
                 echo $error;
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
+            critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
         }
 
         if (!$db) {
@@ -319,9 +320,9 @@ class Database_Static_postgresql
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    public function db_query($query, $db, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
-        if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ')) {
+        if ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ')) {
             if ((!is_null($max)) && (!is_null($start))) {
                 $query .= ' LIMIT ' . strval(intval($max)) . ' OFFSET ' . strval(intval($start));
             } elseif (!is_null($max)) {
@@ -331,45 +332,45 @@ class Database_Static_postgresql
             }
         }
 
-        $results = @pg_query($db,$query);
-        if ((($results === false) || ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results === true))) && (!$fail_ok)) {
+        $results = @pg_query($db, $query);
+        if ((($results === false) || ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ') && ($results === true))) && (!$fail_ok)) {
             $err = pg_last_error($db);
             if (function_exists('ocp_mark_as_escaped')) {
                 ocp_mark_as_escaped($err);
             }
             if ((!running_script('upgrader')) && (!get_mass_import_mode())) {
-                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED', null, null, null, null, false))) {
                     fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
                 }
 
-                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+                fatal_exit(do_lang_tempcode('QUERY_FAILED', escape_html($query), ($err)));
             } else {
                 echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
-                return NULL;
+                return null;
             }
         }
 
-        if ((strtoupper(substr($query,0,7)) == 'SELECT ') || (strtoupper(substr($query,0,8)) == '(SELECT ') && ($results !== false) && ($results !== true)) {
+        if ((strtoupper(substr($query, 0, 7)) == 'SELECT ') || (strtoupper(substr($query, 0, 8)) == '(SELECT ') && ($results !== false) && ($results !== true)) {
             return $this->db_get_query_rows($results);
         }
 
         if ($get_insert_id) {
-            if (strtoupper(substr($query,0,7)) == 'UPDATE ') {
-                return NULL;
+            if (strtoupper(substr($query, 0, 7)) == 'UPDATE ') {
+                return null;
             }
 
             // Inefficient :(
-            $pos = strpos($query,'(');
-            $table_name = substr($query,12,$pos-13);
+            $pos = strpos($query, '(');
+            $table_name = substr($query, 12, $pos - 13);
 
-            $r3 = @pg_query($db,'SELECT last_value FROM ' . $table_name . '_id_seq');
+            $r3 = @pg_query($db, 'SELECT last_value FROM ' . $table_name . '_id_seq');
             if ($r3) {
-                $seq_array = pg_fetch_row($r3,0);
+                $seq_array = pg_fetch_row($r3, 0);
                 return intval($seq_array[0]);
             }
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -379,14 +380,14 @@ class Database_Static_postgresql
      * @param  ?integer                 Whether to start reading from (NULL: irrelevant for this forum driver)
      * @return array                    A list of row maps
      */
-    public function db_get_query_rows($results,$start = null)
+    public function db_get_query_rows($results, $start = null)
     {
         $num_fields = pg_num_fields($results);
         $types = array();
         $names = array();
-        for ($x = 1;$x <= $num_fields;$x++) {
-            $types[$x-1] = pg_field_type($results,$x-1);
-            $names[$x-1] = strtolower(pg_field_name($results,$x-1));
+        for ($x = 1; $x <= $num_fields; $x++) {
+            $types[$x - 1] = pg_field_type($results, $x - 1);
+            $names[$x - 1] = strtolower(pg_field_name($results, $x - 1));
         }
 
         $out = array();

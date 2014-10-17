@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
-
 class Hook_config_pt_notifications_as_web
 {
     /**

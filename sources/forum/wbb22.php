@@ -22,6 +22,7 @@ require_code('forum/shared/wbb');
 
 /**
  * Forum Driver.
+ *
  * @package    core_forum_drivers
  */
 class forum_driver_wbb22 extends forum_driver_wbb_shared
@@ -33,7 +34,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function _get_guest_group()
     {
-        $guest_group = $this->connection->query_select_value_if_there('groups','groupid',array('title' => 'Guests'));
+        $guest_group = $this->connection->query_select_value_if_there('groups', 'groupid', array('title' => 'Guests'));
         if (is_null($guest_group)) {
             $guest_group = 5;
         }
@@ -48,7 +49,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function mrow_group($r)
     {
-        return $this->connection->query_select_value('user2groups','groupid',array('userid' => $r['userid']));
+        return $this->connection->query_select_value('user2groups', 'groupid', array('userid' => $r['userid']));
     }
 
     /**
@@ -59,7 +60,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      * @param  integer                  Return primary members after this offset and secondary members after this offset
      * @return ?array                   The array of members (NULL: no members)
      */
-    public function member_group_query($groups,$max = null,$start = 0)
+    public function member_group_query($groups, $max = null, $start = 0)
     {
         $_groups = '';
         foreach ($groups as $group) {
@@ -68,7 +69,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
             }
             $_groups .= 'groupid=' . strval($group);
         }
-        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user2groups g LEFT JOIN ' . $this->connection->get_table_prefix() . 'users u ON g.userid=u.userid WHERE ' . $_groups . ' ORDER BY groupid ASC',$max,$start,false,true);
+        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'user2groups g LEFT JOIN ' . $this->connection->get_table_prefix() . 'users u ON g.userid=u.userid WHERE ' . $_groups . ' ORDER BY groupid ASC', $max, $start, false, true);
     }
 
     /**
@@ -92,8 +93,8 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
         $table = 'styles';
         $codename = 'stylename';
 
-        $rows = $this->connection->query_select($table,array($codename));
-        return collapse_1d_complexity($codename,$rows);
+        $rows = $this->connection->query_select($table, array($codename));
+        return collapse_1d_complexity($codename, $rows);
     }
 
     /**
@@ -110,33 +111,33 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
 
         // Load in remapper
         require_code('files');
-        $map = file_exists(get_file_base() . '/themes/map.ini')?better_parse_ini_file(get_file_base() . '/themes/map.ini'):array();
+        $map = file_exists(get_file_base() . '/themes/map.ini') ? better_parse_ini_file(get_file_base() . '/themes/map.ini') : array();
 
         if (!$skip_member_specific) {
             // Work out
             $member = get_member();
-            if ($member>0) {
-                $skin = $this->get_member_row_field($member,'styleid');
+            if ($member > 0) {
+                $skin = $this->get_member_row_field($member, 'styleid');
             } else {
                 $skin = 0;
             }
-            if ($skin>0) { // User has a custom theme
-                $bb = $this->connection->query_select_value('styles','stylename',array('styleid' => $skin));
-                $def = !is_null($map[$bb])?$map[$bb]:$bb;
+            if ($skin > 0) { // User has a custom theme
+                $bb = $this->connection->query_select_value('styles', 'stylename', array('styleid' => $skin));
+                $def = !is_null($map[$bb]) ? $map[$bb] : $bb;
             }
         }
 
         // Look for a skin according to our site name (we bother with this instead of 'default' because ocPortal itself likes to never choose a theme when forum-theme integration is on: all forum [via map] or all ocPortal seems cleaner, although it is complex)
-        if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
-            $bb = $this->connection->query_select_value_if_there('styles','stylename',array('stylename' => get_site_name()));
+        if ((!(strlen($def) > 0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
+            $bb = $this->connection->query_select_value_if_there('styles', 'stylename', array('stylename' => get_site_name()));
             if (!is_null($bb)) {
-                $def = !is_null($map[$bb])?$map[$bb]:$bb;
+                $def = !is_null($map[$bb]) ? $map[$bb] : $bb;
             }
         }
 
         // Default then!
-        if ((!(strlen($def)>0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
-            $def = array_key_exists('default',$map)?$map['default']:'default';
+        if ((!(strlen($def) > 0)) || (!file_exists(get_custom_file_base() . '/themes/' . $def))) {
+            $def = array_key_exists('default', $map) ? $map['default'] : 'default';
         }
 
         return $def;
@@ -150,10 +151,10 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function _is_staff($member)
     {
-        $rows = $this->connection->query_select('user2groups',array('groupid'),array('userid' => $member));
+        $rows = $this->connection->query_select('user2groups', array('groupid'), array('userid' => $member));
         foreach ($rows as $g) {
             $usergroup = $g['groupid'];
-            if ($this->connection->query_select_value_if_there('groups','securitylevel',array('groupid' => $usergroup)) >= 2) {
+            if ($this->connection->query_select_value_if_there('groups', 'securitylevel', array('groupid' => $usergroup)) >= 2) {
                 return true;
             }
         }
@@ -168,10 +169,10 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function _is_super_admin($member)
     {
-        $rows = $this->connection->query_select('user2groups',array('groupid'),array('userid' => $member));
+        $rows = $this->connection->query_select('user2groups', array('groupid'), array('userid' => $member));
         foreach ($rows as $g) {
             $usergroup = $g['groupid'];
-            if ($this->connection->query_select_value_if_there('groups','securitylevel',array('groupid' => $usergroup)) >= 3) {
+            if ($this->connection->query_select_value_if_there('groups', 'securitylevel', array('groupid' => $usergroup)) >= 3) {
                 return true;
             }
         }
@@ -185,7 +186,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function _get_super_admin_groups()
     {
-        return collapse_1d_complexity('groupid',$this->connection->query('SELECT groupid FROM ' . $this->connection->get_table_prefix() . 'groups WHERE securitylevel>=4'));
+        return collapse_1d_complexity('groupid', $this->connection->query('SELECT groupid FROM ' . $this->connection->get_table_prefix() . 'groups WHERE securitylevel>=4'));
     }
 
     /**
@@ -196,7 +197,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function _get_moderator_groups()
     {
-        return collapse_1d_complexity('groupid',$this->connection->query('groups',array('groupid'),array('securitylevel' => 3)));
+        return collapse_1d_complexity('groupid', $this->connection->query('groups', array('groupid'), array('securitylevel' => 3)));
     }
 
     /**
@@ -206,7 +207,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      */
     public function _get_usergroup_list()
     {
-        return collapse_2d_complexity('groupid','title',$this->connection->query_select('groups',array('groupid','title')));
+        return collapse_2d_complexity('groupid', 'title', $this->connection->query_select('groups', array('groupid', 'title')));
     }
 
     /**
@@ -218,16 +219,16 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
     public function _get_members_groups($member)
     {
         if ($member == $this->get_guest_id()) {
-            return array($this->get_member_row_field($member,'groupid'));
+            return array($this->get_member_row_field($member, 'groupid'));
         }
 
-        $groups = $this->connection->query_select('user2groups',array('groupid'),array('userid' => $member));
+        $groups = $this->connection->query_select('user2groups', array('groupid'), array('userid' => $member));
         $out = array();
         foreach ($groups as $group) {
             $out[] = $group['groupid'];
         }
-        $p = $this->get_member_row_field($member,'groupid');
-        if (!in_array($p,$out)) {
+        $p = $this->get_member_row_field($member, 'groupid');
+        if (!in_array($p, $out)) {
             $out[] = $p;
         }
 

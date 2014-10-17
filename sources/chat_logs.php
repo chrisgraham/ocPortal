@@ -25,35 +25,35 @@ function chat_logs_script()
 {
     // Closed site
     $site_closed = get_option('site_closed');
-    if (($site_closed == '1') && (!has_privilege(get_member(),'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
+    if (($site_closed == '1') && (!has_privilege(get_member(), 'access_closed_site')) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
         header('Content-Type: text/plain');
         @exit(get_option('closed'));
     }
 
     // Check we are allowed here
-    if (!has_actual_page_access(get_member(),'chat')) {
+    if (!has_actual_page_access(get_member(), 'chat')) {
         access_denied('PAGE_ACCESS');
     }
 
     require_lang('chat');
 
-    $room = get_param_integer('room',1);
-    $start = get_param_integer('start',0);
-    $finish = get_param_integer('finish',time());
+    $room = get_param_integer('room', 1);
+    $start = get_param_integer('start', 0);
+    $finish = get_param_integer('finish', time());
 
     $start_date_seed = getdate($start);
     $finish_date_seed = getdate($finish);
 
-    $room_check = $GLOBALS['SITE_DB']->query_select('chat_rooms',array('id','is_im','allow_list','allow_list_groups','disallow_list','disallow_list_groups','room_owner'),array('id' => $room),'',1);
-    if (!array_key_exists(0,$room_check)) {
+    $room_check = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('id', 'is_im', 'allow_list', 'allow_list_groups', 'disallow_list', 'disallow_list_groups', 'room_owner'), array('id' => $room), '', 1);
+    if (!array_key_exists(0, $room_check)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
     check_chatroom_access($room_check[0]);
 
-    $start_date = ($start == 0)?'':strval($start_date_seed['year']) . '-' . strval($start_date_seed['mon']) . '-' . strval($start_date_seed['mday']) . ',' . strval($start_date_seed['hours']) . ':' . strval($start_date_seed['minutes']);
+    $start_date = ($start == 0) ? '' : strval($start_date_seed['year']) . '-' . strval($start_date_seed['mon']) . '-' . strval($start_date_seed['mday']) . ',' . strval($start_date_seed['hours']) . ':' . strval($start_date_seed['minutes']);
     $finish_date = strval($finish_date_seed['year']) . '-' . strval($finish_date_seed['mon']) . '-' . strval($finish_date_seed['mday']) . ',' . strval($finish_date_seed['hours']) . ':' . strval($finish_date_seed['minutes']);
 
-    $messages = chat_get_room_content(intval($room),$room_check,null,false,true,intval($start),intval($finish),null,get_param('zone',get_module_zone('chat')));
+    $messages = chat_get_room_content(intval($room), $room_check, null, false, true, intval($start), intval($finish), null, get_param('zone', get_module_zone('chat')));
 
     if ((is_null($messages)) || (count($messages) == 0)) {
         // There are no messages
@@ -63,7 +63,7 @@ function chat_logs_script()
     // Build the text file
     $message_contents = new ocp_tempcode();
     foreach ($messages as $_message) {
-        $message_contents->attach(do_template('CHAT_MESSAGE',array(
+        $message_contents->attach(do_template('CHAT_MESSAGE', array(
             '_GUID' => 'ff22f181850feaba2a062b7edf71e332',
             'STAFF' => false,
             'OLD_MESSAGES' => true,
@@ -81,9 +81,9 @@ function chat_logs_script()
 
     // Send header
     $room_name = get_chatroom_name($messages[0]['room_id']);
-    $filename = 'chatlog-' . str_replace(' ','',$room_name) . '-' . str_replace(':','-',$start_date) . '-' . str_replace(':','-',$finish_date) . '.html';
+    $filename = 'chatlog-' . str_replace(' ', '', $room_name) . '-' . str_replace(':', '-', $start_date) . '-' . str_replace(':', '-', $finish_date) . '.html';
     header('Content-Type: application/octet-stream' . '; authoritative=true;');
-    if ((strpos($room_name,"\n") !== false) || (strpos($room_name,"\r") !== false)) {
+    if ((strpos($room_name, "\n") !== false) || (strpos($room_name, "\r") !== false)) {
         log_hack_attack_and_exit('HEADER_SPLIT_HACK');
     }
     header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -92,7 +92,7 @@ function chat_logs_script()
         return;
     }
 
-    $message_contents = do_template('BASIC_HTML_WRAP',array('_GUID' => 'ff052ede2357f894a219c27a3ec75642','TITLE' => do_lang('CHAT_LOGS',escape_html(get_site_name()),escape_html($room_name),array(escape_html($start_date),escape_html($finish_date))),'CONTENT' => $message_contents));
+    $message_contents = do_template('BASIC_HTML_WRAP', array('_GUID' => 'ff052ede2357f894a219c27a3ec75642', 'TITLE' => do_lang('CHAT_LOGS', escape_html(get_site_name()), escape_html($room_name), array(escape_html($start_date), escape_html($finish_date))), 'CONTENT' => $message_contents));
 
     echo $message_contents->evaluate();
 }

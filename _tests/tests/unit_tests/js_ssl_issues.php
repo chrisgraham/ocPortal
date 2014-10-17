@@ -29,13 +29,13 @@ class js_ssl_issues_test_set extends ocp_test_case
         $path = get_file_base() . '/themes/default/templates';
         $dh = opendir($path);
         while (($f = readdir($dh)) !== false) {
-            if ((strtolower(substr($f,-4)) == '.tpl') && (substr($f,0,10) == 'JAVASCRIPT')) {
+            if ((strtolower(substr($f, -4)) == '.tpl') && (substr($f, 0, 10) == 'JAVASCRIPT')) {
                 $file = file_get_contents($path . '/' . $f);
 
                 $matches = array();
-                $num_matches = preg_match_all('#\{\$IMG[;\*]+,(\w+)\}(?!.*protocol.*$)(.*)$#m',$file,$matches);
-                for ($i = 0;$i<$num_matches;$i++) {
-                    $this->assertTrue(false,$f . '/' . $matches[1][$i] . ' not prepared for SSL');
+                $num_matches = preg_match_all('#\{\$IMG[;\*]+,(\w+)\}(?!.*protocol.*$)(.*)$#m', $file, $matches);
+                for ($i = 0; $i < $num_matches; $i++) {
+                    $this->assertTrue(false, $f . '/' . $matches[1][$i] . ' not prepared for SSL');
                 }
             }
         }

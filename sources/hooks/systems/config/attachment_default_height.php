@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_config_attachment_default_height
 {
     /**

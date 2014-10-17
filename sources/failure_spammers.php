@@ -33,7 +33,7 @@ This code is not in failure.php due to the dynamic class declaration, triggering
  * @param  string                       The reason for the report (blank: none)
  * @param  boolean                      Whether to throw an ocPortal error, on error. Should not be 'true' for automatic spammer reports, as the spammer should not see the submission process in action!
  */
-function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_error = false)
+function syndicate_spammer_report($ip_addr, $username, $email, $reason, $trigger_error = false)
 {
     $did_something = false;
 
@@ -48,6 +48,7 @@ function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_err
         if (!class_exists('TornUserinfoClass')) {
             /**
              * Tornevall interfacing class (antispam).
+             *
              * @package    core_database_drivers
              */
             class TornUserinfoClass
@@ -78,12 +79,12 @@ function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_err
             $add['mail'] = $email;
         }
 
-        $client = new SoapClient(null,$soapconf);
+        $client = new SoapClient(null, $soapconf);
         $udata = array('userinfo' => $userinfo);
-        $result = $client->submit($udata,array('add' => $add));
+        $result = $client->submit($udata, array('add' => $add));
         if ($trigger_error) {
             if (isset($result['error'])) {
-                attach_message('dnsbl.tornevall.org: ' . $result['error']['message'],'warn');
+                attach_message('dnsbl.tornevall.org: ' . $result['error']['message'], 'warn');
             }
         }
 
@@ -101,17 +102,17 @@ function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_err
         require_code('character_sets');
         $url = 'http://www.stopforumspam.com/add.php?api_key=' . urlencode($stopforumspam_key) . '&ip_addr=' . urlencode($ip_addr);
         if ($username != '') {
-            $url .= '&username=' . urlencode(convert_to_internal_encoding($username,get_charset(),'utf-8'));
+            $url .= '&username=' . urlencode(convert_to_internal_encoding($username, get_charset(), 'utf-8'));
         }
         if ($email != '') {
-            $url .= '&email=' . urlencode(convert_to_internal_encoding($email,get_charset(),'utf-8'));
+            $url .= '&email=' . urlencode(convert_to_internal_encoding($email, get_charset(), 'utf-8'));
         }
         if ($reason != '') {
-            $url .= '&evidence=' . urlencode(convert_to_internal_encoding($reason,get_charset(),'utf-8'));
+            $url .= '&evidence=' . urlencode(convert_to_internal_encoding($reason, get_charset(), 'utf-8'));
         }
-        $result = http_download_file($url,null,$trigger_error);
+        $result = http_download_file($url, null, $trigger_error);
         if (($trigger_error) && ($result != '')) {
-            attach_message($result . ' [ ' . $url . ' ]','warn');
+            attach_message($result . ' [ ' . $url . ' ]', 'warn');
         }
 
         $did_something = true;
@@ -121,6 +122,6 @@ function syndicate_spammer_report($ip_addr,$username,$email,$reason,$trigger_err
 
     // Did we get anything done?
     if (($trigger_error) && (!$did_something)) {
-        attach_message(do_lang('SPAM_REPORT_NO_EMAIL_OR_USERNAME'),'warn');
+        attach_message(do_lang('SPAM_REPORT_NO_EMAIL_OR_USERNAME'), 'warn');
     }
 }

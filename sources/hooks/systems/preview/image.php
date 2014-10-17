@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_Preview_image
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_image
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'cms_galleries') && ((get_param('type') == '_ed') || (get_param('type') == 'ad'));
-        return array($applies,null,false);
+        $applies = (get_param('page', '') == 'cms_galleries') && ((get_param('type') == '_ed') || (get_param('type') == 'ad'));
+        return array($applies, null, false);
     }
 
     /**
@@ -42,10 +41,10 @@ class Hook_Preview_image
 
         $cat = post_param('cat');
 
-        $urls = get_url('url','file','uploads/galleries',0,OCP_UPLOAD_IMAGE,true,'','file2');
+        $urls = get_url('url', 'file', 'uploads/galleries', 0, OCP_UPLOAD_IMAGE, true, '', 'file2');
         if ($urls[0] == '') {
-            if (!is_null(post_param_integer('id',null))) {
-                $rows = $GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url'),array('id' => post_param_integer('id')),'',1);
+            if (!is_null(post_param_integer('id', null))) {
+                $rows = $GLOBALS['SITE_DB']->query_select('images', array('url', 'thumb_url'), array('id' => post_param_integer('id')), '', 1);
                 $urls = $rows[0];
 
                 $url = $urls['url'];
@@ -59,9 +58,9 @@ class Hook_Preview_image
         }
 
         require_code('images');
-        $thumb = do_image_thumb(url_is_local($thumb_url)?(get_custom_base_url() . '/' . $thumb_url):$thumb_url,post_param('description'),true);
-        $preview = hyperlink(url_is_local($url)?(get_custom_base_url() . '/' . $url):$url,$thumb);
+        $thumb = do_image_thumb(url_is_local($thumb_url) ? (get_custom_base_url() . '/' . $thumb_url) : $thumb_url, post_param('description'), true);
+        $preview = hyperlink(url_is_local($url) ? (get_custom_base_url() . '/' . $url) : $url, $thumb);
 
-        return array($preview,null);
+        return array($preview, null);
     }
 }

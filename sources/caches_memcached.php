@@ -22,6 +22,7 @@
 
 /**
  * Cache Driver.
+ *
  * @package    core
  */
 class ocp_memcached extends Memcached
@@ -31,7 +32,7 @@ class ocp_memcached extends Memcached
      */
     public function __construct()
     {
-        $this->addServer('localhost',11211);
+        $this->addServer('localhost', 11211);
         parent::__construct();
     }
 
@@ -60,14 +61,14 @@ class ocp_memcached extends Memcached
      * @param  ?TIME                    Minimum timestamp that entries from the cache may hold (NULL: don't care)
      * @return ?mixed                   The data (NULL: not found / NULL entry)
      */
-    public function get($key,$min_cache_date = null)
+    public function get($key, $min_cache_date = null)
     {
         $data = parent::get($key);
         if ($data === false) {
-            return NULL;
+            return null;
         }
-        if ((!is_null($min_cache_date)) && ($data[0]<$min_cache_date)) {
-            return NULL;
+        if ((!is_null($min_cache_date)) && ($data[0] < $min_cache_date)) {
+            return null;
         }
         return $data[1];
     }
@@ -80,16 +81,16 @@ class ocp_memcached extends Memcached
      * @param  integer                  Various flags (parameter not used)
      * @param  ?integer                 The expiration time in seconds (NULL: no expiry)
      */
-    public function set($key,$data,$flags = 0,$expire_secs = null)
+    public function set($key, $data, $flags = 0, $expire_secs = null)
     {
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
-        if (!array_key_exists($key,$objects_list)) {
+        if (!array_key_exists($key, $objects_list)) {
             $objects_list[$key] = true;
-            parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+            parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
         }
 
-        parent::set($key,array(time(),$data),$expire_secs);
+        parent::set($key, array(time(), $data), $expire_secs);
     }
 
     /**
@@ -102,7 +103,7 @@ class ocp_memcached extends Memcached
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
         unset($objects_list[$key]);
-        parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
         parent::delete($key);
     }
@@ -114,7 +115,7 @@ class ocp_memcached extends Memcached
     {
         // Update list of persistent-objects
         $objects_list = array();
-        parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS',$objects_list);
+        parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
         parent::flush();
     }

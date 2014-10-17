@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Notification_ocf_group_declined extends Hook_Notification
 {
     /**
@@ -29,7 +28,7 @@ class Hook_Notification_ocf_group_declined extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['ocf_group_declined'] = array(do_lang('GROUPS'),do_lang('ocf:NOTIFICATION_TYPE_ocf_group_declined'));
+        $list['ocf_group_declined'] = array(do_lang('GROUPS'), do_lang('ocf:NOTIFICATION_TYPE_ocf_group_declined'));
         return $list;
     }
 
@@ -43,10 +42,10 @@ class Hook_Notification_ocf_group_declined extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'groups',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'groups', $notification_code, $category, $to_member_ids, $start, $max);
 
         return $members;
     }

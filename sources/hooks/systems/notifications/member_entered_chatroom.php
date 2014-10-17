@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_Notification_member_entered_chatroom extends Hook_Notification
 {
     /**
@@ -39,21 +38,21 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
         require_code('chat');
-        $types = $GLOBALS['SITE_DB']->query_select('chat_rooms',array('*'),array('is_im' => 0));
+        $types = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('*'), array('is_im' => 0));
         foreach ($types as $type) {
-            if (check_chatroom_access($type,true)) {
+            if (check_chatroom_access($type, true)) {
                 $page_links[] = array(
                     'id' => $type['id'],
                     'title' => $type['room_name'],
                 );
             }
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -65,7 +64,7 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -79,7 +78,7 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['member_entered_chatroom'] = array(do_lang('ACTIVITY'),do_lang('chat:NOTIFICATION_TYPE_member_entered_chatroom'));
+        $list['member_entered_chatroom'] = array(do_lang('ACTIVITY'), do_lang('chat:NOTIFICATION_TYPE_member_entered_chatroom'));
         return $list;
     }
 
@@ -93,11 +92,11 @@ class Hook_Notification_member_entered_chatroom extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'chat',$notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_category_access($members,'chat',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'chat', $notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_category_access($members, 'chat', $notification_code, $category, $to_member_ids, $start, $max);
 
         return $members;
     }

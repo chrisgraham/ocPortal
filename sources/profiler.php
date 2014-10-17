@@ -75,7 +75,7 @@ function ocp_profile_is_enabled()
         return false;
     }
 
-    global $PROFILING_ALLOWED,$PROFILING_LINUX_FULL;
+    global $PROFILING_ALLOWED, $PROFILING_LINUX_FULL;
     if (!isset($PROFILING_ALLOWED)) {
         $val = get_value('enable_profiler');
         $PROFILING_ALLOWED = ($val == '1' || $val == '2') && (is_writable_wrap(get_custom_file_base() . '/data_custom'));
@@ -103,7 +103,7 @@ function _ocp_profile_start_for($identifier)
 
     $at = array(
         'time_start' => microtime(true),
-        'specifics' => NULL,
+        'specifics' => null,
     );
     $PROFILER_DATA[$identifier][] = $at;
 }
@@ -114,7 +114,7 @@ function _ocp_profile_start_for($identifier)
  * @param  ID_TEXT                      Identifier
  * @param  ?string                      Longer details of what happened (e.g. a specific SQL query that ran) (NULL: none provided)
  */
-function _ocp_profile_end_for($identifier,$specifics = null)
+function _ocp_profile_end_for($identifier, $specifics = null)
 {
     if (!ocp_profile_is_enabled()) {
         return;
@@ -132,12 +132,12 @@ function _ocp_profile_end_for($identifier,$specifics = null)
     $time_start = $at['time_start'];
     $time_end = microtime(true);
     $at = array(
-        'time_end' => $time_end,
-        'time_length' => intval(($time_start-$time_end)*1000),
-        'specifics' => $specifics,
-    )+$at;
+            'time_end' => $time_end,
+            'time_length' => intval(($time_start - $time_end) * 1000),
+            'specifics' => $specifics,
+        ) + $at;
 
-    _ocp_profile_log_line(_ocp_profile_generate_line($identifier,$at,$key+1));
+    _ocp_profile_log_line(_ocp_profile_generate_line($identifier, $at, $key + 1));
 }
 
 /**
@@ -148,11 +148,11 @@ function _ocp_profile_end_for($identifier,$specifics = null)
  * @param  integer                      This will be the nth of this identifier to be logged
  * @return string                       Log line
  */
-function _ocp_profile_generate_line($identifier,$at,$cnt)
+function _ocp_profile_generate_line($identifier, $at, $cnt)
 {
     $line = $identifier;
     $line .= '(x' . strval($cnt) . ')';
-    $line .= str_repeat(' ',max(1,55-strlen($line))) . float_to_raw_string($at['time_length'],4) . 's';
+    $line .= str_repeat(' ', max(1, 55 - strlen($line))) . float_to_raw_string($at['time_length'], 4) . 's';
     if (!is_null($at['specifics'])) {
         $line .= '  ' . $at['specifics'];
     }
@@ -167,7 +167,7 @@ function _ocp_profile_generate_line($identifier,$at,$cnt)
 function _ocp_profile_log_line($line)
 {
     // Open up unique log file (per-request) if not yet done so
-    global $PROFILER_FILEHANDLE,$PROFILER_PATH;
+    global $PROFILER_FILEHANDLE, $PROFILER_PATH;
     if (!isset($PROFILER_FILEHANDLE)) {
         if (!isset($PROFILER_PATH)) {
             $PROFILER_PATH = get_custom_file_base() . '/data_custom/profiling';
@@ -177,11 +177,11 @@ function _ocp_profile_log_line($line)
                 $PROFILER_PATH .= '--member' . strval(get_member());
             }
             $PROFILER_PATH .= '.timestamp' . strval(time());
-            $PROFILER_PATH .= '.rand' . uniqid('',true);
+            $PROFILER_PATH .= '.rand' . uniqid('', true);
             $PROFILER_PATH .= '--in-progress.log';
         }
 
-        $PROFILER_FILEHANDLE = fopen($PROFILER_PATH,'at');
+        $PROFILER_FILEHANDLE = fopen($PROFILER_PATH, 'at');
 
         // Pre-logging
         _ocp_profile_log_line('URL: ' . get_self_url_easy());
@@ -190,7 +190,7 @@ function _ocp_profile_log_line($line)
     }
 
     // Write line
-    fwrite($PROFILER_FILEHANDLE,$line . "\n");
+    fwrite($PROFILER_FILEHANDLE, $line . "\n");
 }
 
 /**
@@ -202,7 +202,7 @@ function _ocp_profiler_script_end()
         return;
     }
 
-    global $PAGE_START_TIME,$PROFILER_PATH,$PROFILER_FILEHANDLE;
+    global $PAGE_START_TIME, $PROFILER_PATH, $PROFILER_FILEHANDLE;
 
     if (!isset($PROFILER_FILEHANDLE)) {
         return;
@@ -227,10 +227,10 @@ function _ocp_profiler_script_end()
         fclose($PROFILER_FILEHANDLE);
 
         // Rename file to make total time clearer, for easier identification of slow requests
-        $scope_time = intval(($PAGE_START_TIME-microtime(true))*1000);
-        $new_path = preg_replace('#--in-progress\.log$#','--' . strval($scope_time) . 's.log',$PROFILER_PATH);
+        $scope_time = intval(($PAGE_START_TIME - microtime(true)) * 1000);
+        $new_path = preg_replace('#--in-progress\.log$#', '--' . strval($scope_time) . 's.log', $PROFILER_PATH);
         fix_permissions($PROFILER_PATH);
-        rename($PROFILER_PATH,$new_path);
+        rename($PROFILER_PATH, $new_path);
     }
 }
 

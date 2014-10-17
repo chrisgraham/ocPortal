@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
-
 class Block_main_awards
 {
     /**
@@ -34,7 +33,7 @@ class Block_main_awards
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param','zone','give_context','include_breadcrumbs','guid');
+        $info['parameters'] = array('param', 'zone', 'give_context', 'include_breadcrumbs', 'guid');
         return $info;
     }
 
@@ -47,7 +46,7 @@ class Block_main_awards
     {
         $info = array();
         $info['cache_on'] = '(count($_POST)!=0 || get_param_integer(\'keep_non_rated\',0)==1)?NULL:array(array_key_exists(\'guid\',$map)?$map[\'guid\']:\'\',(array_key_exists(\'give_context\',$map)?$map[\'give_context\']:\'0\')==\'1\',(array_key_exists(\'include_breadcrumbs\',$map)?$map[\'include_breadcrumbs\']:\'0\')==\'1\',array_key_exists(\'param\',$map)?$map[\'param\']:strval(db_get_first_id()),$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'zone\',$map)?$map[\'zone\']:\'_SEARCH\')';
-        $info['ttl'] = (get_value('no_block_timeout') === '1')?60*60*24*365*5/*5 year timeout*/:60*24; // Intentionally, do randomisation acts as 'of the day'
+        $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60 * 24; // Intentionally, do randomisation acts as 'of the day'
         return $info;
     }
 
@@ -62,15 +61,15 @@ class Block_main_awards
         require_lang('awards');
         require_code('awards');
 
-        $award = (array_key_exists('param',$map)?intval($map['param']):db_get_first_id());
-        $zone = array_key_exists('zone',$map)?$map['zone']:'_SEARCH';
+        $award = (array_key_exists('param', $map) ? intval($map['param']) : db_get_first_id());
+        $zone = array_key_exists('zone', $map) ? $map['zone'] : '_SEARCH';
 
-        $guid = array_key_exists('guid',$map)?$map['guid']:'';
-        $give_context = (array_key_exists('give_context',$map)?$map['give_context']:'0') == '1';
-        $include_breadcrumbs = (array_key_exists('include_breadcrumbs',$map)?$map['include_breadcrumbs']:'0') == '1';
+        $guid = array_key_exists('guid', $map) ? $map['guid'] : '';
+        $give_context = (array_key_exists('give_context', $map) ? $map['give_context'] : '0') == '1';
+        $include_breadcrumbs = (array_key_exists('include_breadcrumbs', $map) ? $map['include_breadcrumbs'] : '0') == '1';
 
-        $_award_type_row = $GLOBALS['SITE_DB']->query_select('award_types',array('*'),array('id' => $award),'',1);
-        if (!array_key_exists(0,$_award_type_row)) {
+        $_award_type_row = $GLOBALS['SITE_DB']->query_select('award_types', array('*'), array('id' => $award), '', 1);
+        if (!array_key_exists(0, $_award_type_row)) {
             return do_lang_tempcode('MISSING_RESOURCE');
         }
         $award_type_row = $_award_type_row[0];
@@ -78,7 +77,7 @@ class Block_main_awards
         $award_description = get_translated_text($award_type_row['a_description']);
 
         if ((!file_exists(get_file_base() . '/sources/hooks/systems/content_meta_aware/' . filter_naughty_harsh($award_type_row['a_content_type']) . '.php')) && (!file_exists(get_file_base() . '/sources_custom/hooks/systems/content_meta_aware/' . filter_naughty_harsh($award_type_row['a_content_type']) . '.php'))) {
-            return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE',$award_type_row['a_content_type']),'','red_alert');
+            return paragraph(do_lang_tempcode('NO_SUCH_CONTENT_TYPE', $award_type_row['a_content_type']), '', 'red_alert');
         }
 
         require_code('content');
@@ -90,19 +89,19 @@ class Block_main_awards
 
         $submit_url = $info['add_url'];
         if (!is_null($submit_url)) {
-            list($submit_url_zone,$submit_url_map,$submit_url_hash) = page_link_decode($submit_url);
-            $submit_url = static_evaluate_tempcode(build_url($submit_url_map,$submit_url_zone,null,false,false,false,$submit_url_hash));
+            list($submit_url_zone, $submit_url_map, $submit_url_hash) = page_link_decode($submit_url);
+            $submit_url = static_evaluate_tempcode(build_url($submit_url_map, $submit_url_zone, null, false, false, false, $submit_url_hash));
         } else {
             $submit_url = '';
         }
-        if (!has_actual_page_access(null,$info['cms_page'],null,null)) {
+        if (!has_actual_page_access(null, $info['cms_page'], null, null)) {
             $submit_url = '';
         }
-        if (!has_category_access(get_member(),'award',strval($award))) {
+        if (!has_category_access(get_member(), 'award', strval($award))) {
             $submit_url = '';
         }
         if ($submit_url != '') {
-            if (strpos($submit_url,'?') === false) {
+            if (strpos($submit_url, '?') === false) {
                 $submit_url .= '?';
             } else {
                 $submit_url .= '&';
@@ -114,28 +113,29 @@ class Block_main_awards
 
         $sup = '';
         do {
-            $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'award_archive WHERE a_type_id=' . strval($award) . ' ' . $sup . ' ORDER BY date_and_time DESC',1,null,false,true);
-            if (!array_key_exists(0,$rows)) {
-                return do_template('BLOCK_NO_ENTRIES',array(
-                    '_GUID' => ($guid != '')?$guid:'f32b50770fd6581c4a2c839a1ed25801',
+            $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'award_archive WHERE a_type_id=' . strval($award) . ' ' . $sup . ' ORDER BY date_and_time DESC', 1, null, false, true);
+            if (!array_key_exists(0, $rows)) {
+                return do_template('BLOCK_NO_ENTRIES', array(
+                    '_GUID' => ($guid != '') ? $guid : 'f32b50770fd6581c4a2c839a1ed25801',
                     'HIGH' => false,
                     'TITLE' => $award_title,
                     'MESSAGE' => do_lang_tempcode('NO_AWARD'),
                     'ADD_NAME' => do_lang_tempcode('ADD'),
-                    'SUBMIT_URL' => str_replace('=!','__ignore=1',$submit_url),
+                    'SUBMIT_URL' => str_replace('=!', '__ignore=1', $submit_url),
                 ));
             }
             $myrow = $rows[0];
 
-            $submit_url = str_replace('!',$myrow['content_id'],$submit_url);
+            $submit_url = str_replace('!', $myrow['content_id'], $submit_url);
 
-            $award_content_row = content_get_row($myrow['content_id'],$info);
+            $award_content_row = content_get_row($myrow['content_id'], $info);
             $sup = ' AND date_and_time<' . strval($myrow['date_and_time']);
-        } while (is_null($award_content_row));
+        }
+        while (is_null($award_content_row));
 
-        $archive_url = build_url(array('page' => 'awards','type' => 'award','id' => $award),get_module_zone('awards'));
+        $archive_url = build_url(array('page' => 'awards', 'type' => 'award', 'id' => $award), get_module_zone('awards'));
 
-        $rendered_content = $object->run($award_content_row,$zone,$give_context,$include_breadcrumbs,null,false,$guid);
+        $rendered_content = $object->run($award_content_row, $zone, $give_context, $include_breadcrumbs, null, false, $guid);
 
         if (($award_type_row['a_hide_awardee'] == 1) || (is_guest($myrow['member_id']))) {
             $awardee = '';
@@ -147,11 +147,11 @@ class Block_main_awards
             if (is_null($awardee_username)) {
                 $awardee_username = do_lang('UNKNOWN');
             }
-            $awardee_profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'],true,true);
+            $awardee_profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($myrow['member_id'], true, true);
         }
 
-        return do_template('BLOCK_MAIN_AWARDS',array(
-            '_GUID' => ($guid != '')?$guid:'99f092e35db0c17f407f40ed55c42cfd',
+        return do_template('BLOCK_MAIN_AWARDS', array(
+            '_GUID' => ($guid != '') ? $guid : '99f092e35db0c17f407f40ed55c42cfd',
             'TITLE' => $award_title,
             'TYPE' => $award_type_row['a_content_type'],
             'DESCRIPTION' => $award_description,

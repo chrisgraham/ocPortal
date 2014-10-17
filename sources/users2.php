@@ -27,7 +27,7 @@
 function member_is_online($member_id)
 {
     $count = 0;
-    $online = get_users_online(false,$member_id,$count);
+    $online = get_users_online(false, $member_id, $count);
     foreach ($online as $m) {
         if ($m['member_id'] == $member_id) {
             return true;
@@ -44,22 +44,22 @@ function member_is_online($member_id)
  * @param  integer                      The total online members, returned by reference
  * @return ?array                       Database rows (NULL: too many)
  */
-function get_users_online($longer_time,$filter,&$count)
+function get_users_online($longer_time, $filter, &$count)
 {
     if (get_value('no_member_tracking') === '1') {
         return array();
     }
 
-    $users_online_time_seconds = intval($longer_time?(60.0*60.0*floatval(get_option('session_expiry_time'))):(60.0*floatval(get_option('users_online_time'))));
-    $cutoff = time()-$users_online_time_seconds;
+    $users_online_time_seconds = intval($longer_time ? (60.0 * 60.0 * floatval(get_option('session_expiry_time'))) : (60.0 * floatval(get_option('users_online_time'))));
+    $cutoff = time() - $users_online_time_seconds;
 
     if (get_option('session_prudence') != '0') {
         // If we have multiple servers this many not be accurate as we probably turned replication off for the sessions table. The site design should be updated to not show this kind of info
         $count = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'sessions WHERE last_activity>' . strval($cutoff)); // Written in by reference
         if (!is_null($filter)) {
-            return $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'sessions WHERE last_activity>' . strval($cutoff) . ' AND member_id=' . strval($filter),1);
+            return $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'sessions WHERE last_activity>' . strval($cutoff) . ' AND member_id=' . strval($filter), 1);
         }
-        return NULL;
+        return null;
     }
     $members = array();
     $guest_id = $GLOBALS['FORUM_DRIVER']->get_guest_id();
@@ -70,18 +70,18 @@ function get_users_online($longer_time,$filter,&$count)
             continue;
         } // Workaround to HipHop PHP weird bug
 
-        if (($row['last_activity']>$cutoff) && ($row['session_invisible'] == 0)) {
+        if (($row['last_activity'] > $cutoff) && ($row['session_invisible'] == 0)) {
             if ($row['member_id'] == $guest_id) {
                 $count++;
                 $members[] = $row;
                 $members_online++;
                 if ($members_online == 200) { // This is silly, don't display any
                     if (!is_null($filter)) {// Unless we are filtering
-                        return $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'sessions WHERE last_activity>' . strval($cutoff) . ' AND member_id=' . strval($filter),1);
+                        return $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'sessions WHERE last_activity>' . strval($cutoff) . ' AND member_id=' . strval($filter), 1);
                     }
-                    return NULL;
+                    return null;
                 }
-            } elseif (!member_blocked(get_member(),$row['member_id'])) {
+            } elseif (!member_blocked(get_member(), $row['member_id'])) {
                 $count++;
                 $members[-$row['member_id']] = $row; // - (minus) is just a hackerish thing to allow it to do a unique, without messing with the above
             }
@@ -97,7 +97,7 @@ function get_users_online($longer_time,$filter,&$count)
  * @param  ?MEMBER                      The member who may be blocking (NULL: current member)
  * @return boolean                      Whether the member is blocked
  */
-function member_blocked($member_id,$member_blocker = null)
+function member_blocked($member_id, $member_blocker = null)
 {
     if (!addon_installed('chat')) {
         return false;
@@ -119,26 +119,26 @@ function member_blocked($member_id,$member_blocker = null)
     if ($member_id == get_member()) {
         global $MEMBERS_BLOCKING_US_CACHE;
         if (is_null($MEMBERS_BLOCKING_US_CACHE)) {
-            $rows = $GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocker'),array('member_blocked' => get_member()),'',null,null,true);
+            $rows = $GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocker'), array('member_blocked' => get_member()), '', null, null, true);
             if (is_null($rows)) {
                 $MEMBERS_BLOCKING_US_CACHE = array();
                 return false;
             }
-            $MEMBERS_BLOCKING_US_CACHE = collapse_1d_complexity('member_blocker',$rows);
+            $MEMBERS_BLOCKING_US_CACHE = collapse_1d_complexity('member_blocker', $rows);
         }
-        return (in_array($member_blocker,$MEMBERS_BLOCKING_US_CACHE));
+        return (in_array($member_blocker, $MEMBERS_BLOCKING_US_CACHE));
     }
 
     global $MEMBERS_BLOCKED_CACHE;
     if (is_null($MEMBERS_BLOCKED_CACHE)) {
-        $rows = $GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker' => get_member()),'',null,null,true);
+        $rows = $GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocked'), array('member_blocker' => get_member()), '', null, null, true);
         if (is_null($rows)) {
             $MEMBERS_BLOCKED_CACHE = array();
             return false;
         }
-        $MEMBERS_BLOCKED_CACHE = collapse_1d_complexity('member_blocked',$rows);
+        $MEMBERS_BLOCKED_CACHE = collapse_1d_complexity('member_blocked', $rows);
     }
-    return (in_array($member_id,$MEMBERS_BLOCKED_CACHE));
+    return (in_array($member_id, $MEMBERS_BLOCKED_CACHE));
 }
 
 /**
@@ -150,9 +150,9 @@ function member_blocked($member_id,$member_blocker = null)
  * @param  boolean                      Whether this has to be done over the forum driver (multi site network)
  * @return ?array                       A map of member-IDs to rows about them (NULL: Too many)
  */
-function get_members_viewing_wrap($page = null,$type = null,$id = null,$forum_layer = false)
+function get_members_viewing_wrap($page = null, $type = null, $id = null, $forum_layer = false)
 {
-    $members = is_null($id)?array():get_members_viewing($page,$type,$id,$forum_layer);
+    $members = is_null($id) ? array() : get_members_viewing($page, $type, $id, $forum_layer);
     $num_guests = 0;
     $num_members = 0;
     if (is_null($members)) {
@@ -169,15 +169,15 @@ function get_members_viewing_wrap($page = null,$type = null,$id = null,$forum_la
                 $num_guests++;
             } else {
                 $num_members++;
-                $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,true);
-                $map = array('FIRST' => $num_members == 1,'PROFILE_URL' => $profile_url,'USERNAME' => $username,'MEMBER_ID' => strval($member_id));
+                $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id, false, true);
+                $map = array('FIRST' => $num_members == 1, 'PROFILE_URL' => $profile_url, 'USERNAME' => $username, 'MEMBER_ID' => strval($member_id));
                 if (isset($at_details['the_title'])) {
-                    if ((has_privilege(get_member(),'show_user_browsing')) || ((in_array($at_details['the_page'],array('topics','topicview'))) && ($at_details['the_id'] == $id))) {
+                    if ((has_privilege(get_member(), 'show_user_browsing')) || ((in_array($at_details['the_page'], array('topics', 'topicview'))) && ($at_details['the_id'] == $id))) {
                         $map['AT'] = escape_html($at_details['the_title']);
                     }
                 }
                 $map['COLOUR'] = get_group_colour(ocf_get_member_primary_group($member_id));
-                $members_viewing->attach(do_template('OCF_USER_MEMBER',$map));
+                $members_viewing->attach(do_template('OCF_USER_MEMBER', $map));
             }
         }
         if ($members_viewing->is_empty()) {
@@ -185,7 +185,7 @@ function get_members_viewing_wrap($page = null,$type = null,$id = null,$forum_la
         }
     }
 
-    return array($num_guests,$num_members,$members_viewing);
+    return array($num_guests, $num_members, $members_viewing);
 }
 
 /**
@@ -197,21 +197,21 @@ function get_members_viewing_wrap($page = null,$type = null,$id = null,$forum_la
  * @param  boolean                      Whether this has to be done over the forum driver (multi site network)
  * @return ?array                       A map of member-IDs to rows about them (NULL: Too many / disabled)
  */
-function get_members_viewing($page = null,$type = null,$id = null,$forum_layer = false)
+function get_members_viewing($page = null, $type = null, $id = null, $forum_layer = false)
 {
     if (get_value('no_member_tracking') === '1') {
-        return NULL;
+        return null;
     }
 
     global $ZONE;
-    if ($page === NULL) {
-        $page = get_param('page',$ZONE['zone_default_page']);
+    if ($page === null) {
+        $page = get_param('page', $ZONE['zone_default_page']);
     }
-    if ($type === NULL) {
-        $type = get_param('type','/');
+    if ($type === null) {
+        $type = get_param('type', '/');
     }
-    if ($id === NULL) {
-        $id = get_param('id','/',true);
+    if ($id === null) {
+        $id = get_param('id', '/', true);
     }
     if ($type == '/') {
         $type = '';
@@ -221,30 +221,30 @@ function get_members_viewing($page = null,$type = null,$id = null,$forum_layer =
     }
 
     // Update the member tracking
-    member_tracking_update($page,$type,$id);
+    member_tracking_update($page, $type, $id);
 
     $map = array();
-    if (($page !== NULL) && ($page != '')) {
+    if (($page !== null) && ($page != '')) {
         $map['mt_page'] = $page;
     }
-    if (($type !== NULL) && ($type != '')) {
+    if (($type !== null) && ($type != '')) {
         $map['mt_type'] = $type;
     }
-    if (($id !== NULL) && ($id != '')) {
+    if (($id !== null) && ($id != '')) {
         $map['mt_id'] = $id;
     }
     $map['session_invisible'] = 0;
-    $db = ($forum_layer?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB']);
-    $results = $db->query_select('member_tracking t LEFT JOIN ' . $db->get_table_prefix() . 'sessions s ON t.mt_member_id=s.member_id',array('*'),$map,'ORDER BY mt_member_id',200);
+    $db = ($forum_layer ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB']);
+    $results = $db->query_select('member_tracking t LEFT JOIN ' . $db->get_table_prefix() . 'sessions s ON t.mt_member_id=s.member_id', array('*'), $map, 'ORDER BY mt_member_id', 200);
     if (count($results) == 200) {
-        return NULL;
+        return null;
     }
 
-    $results = remove_duplicate_rows($results,'mt_member_id');
+    $results = remove_duplicate_rows($results, 'mt_member_id');
 
     $out = array();
     foreach ($results as $row) {
-        if (!member_blocked(get_member(),$row['mt_member_id'])) {
+        if (!member_blocked(get_member(), $row['mt_member_id'])) {
             $out[$row['mt_member_id']] = $row;
         }
     }

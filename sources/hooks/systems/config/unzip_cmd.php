@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_unzip_cmd
 {
     /**
@@ -48,7 +47,7 @@ class Hook_config_unzip_cmd
     public function get_default()
     {
         if (function_exists('zip_open')) {
-            return NULL;
+            return null;
         }
         return '/usr/bin/unzip -o @_SRC_@ -x -d @_DST_@';
     }

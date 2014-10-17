@@ -27,7 +27,7 @@
 function has_leader_board_since($cutoff)
 {
     $test = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'leader_board WHERE date_and_time>' . strval($cutoff));
-    return ($test>0);
+    return ($test > 0);
 }
 
 /**
@@ -39,14 +39,14 @@ function has_leader_board_since($cutoff)
 function calculate_latest_leader_board($retrieve = true)
 {
     // Already has?
-    $cutoff = time()-60*60*24*7;
+    $cutoff = time() - 60 * 60 * 24 * 7;
     if (has_leader_board_since($cutoff)) {
         if (!$retrieve) {
-            return NULL;
+            return null;
         }
 
         $rows = $GLOBALS['SITE_DB']->query('SELECT lb_member,lb_points FROM ' . get_table_prefix() . 'leader_board WHERE date_and_time>' . strval($cutoff));
-        $rows = collapse_2d_complexity('lb_member','lb_points',$rows);
+        $rows = collapse_2d_complexity('lb_member', 'lb_points', $rows);
         arsort($rows);
         return $rows;
     }
@@ -56,7 +56,7 @@ function calculate_latest_leader_board($retrieve = true)
     $limit = intval(get_option('leader_board_size')); // The number to show on the leader-board
     $show_staff = (get_option('leader_board_show_staff') == '1'); // Whether to include staff
 
-    $limit_hack = max(300,$limit); // We'll query more top posters than we'll display, so that we workaround the issue that our initial efficient querying by top post count is not the same as querying by top point count (we'll hope that they align close enough for nobody to notice!)
+    $limit_hack = max(300, $limit); // We'll query more top posters than we'll display, so that we workaround the issue that our initial efficient querying by top post count is not the same as querying by top point count (we'll hope that they align close enough for nobody to notice!)
     $all_members = $GLOBALS['FORUM_DRIVER']->get_top_posters($limit_hack);
     $points = array();
 
@@ -80,20 +80,20 @@ function calculate_latest_leader_board($retrieve = true)
     foreach ($points as $id => $num_points) {
         if ($i == 0) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($id);
-            set_value('site_bestmember',$username);
+            set_value('site_bestmember', $username);
         }
 
         if ($i == $limit) {
             break;
         }
 
-        $GLOBALS['SITE_DB']->query_insert('leader_board',array('lb_member' => $id,'lb_points' => $num_points,'date_and_time' => $time),false,true); // Allow failure due to race conditions
+        $GLOBALS['SITE_DB']->query_insert('leader_board', array('lb_member' => $id, 'lb_points' => $num_points, 'date_and_time' => $time), false, true); // Allow failure due to race conditions
 
         $i++;
     }
 
     if (!$retrieve) {
-        return NULL;
+        return null;
     }
 
     return $points;

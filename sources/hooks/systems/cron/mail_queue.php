@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_cron_mail_queue
 {
     /**
@@ -41,8 +40,8 @@ class Hook_cron_mail_queue
                     $subject = $row['m_subject'];
                     $message = $row['m_message'];
                     $to_email = @unserialize($row['m_to_email']);
-                    $extra_cc_addresses = ($row['m_extra_cc_addresses'] == '')?array():@unserialize($row['m_extra_cc_addresses']);
-                    $extra_bcc_addresses = ($row['m_extra_bcc_addresses'] == '')?array():@unserialize($row['m_extra_bcc_addresses']);
+                    $extra_cc_addresses = ($row['m_extra_cc_addresses'] == '') ? array() : @unserialize($row['m_extra_cc_addresses']);
+                    $extra_bcc_addresses = ($row['m_extra_bcc_addresses'] == '') ? array() : @unserialize($row['m_extra_bcc_addresses']);
                     $to_name = @unserialize($row['m_to_name']);
                     $from_email = $row['m_from_email'];
                     $from_name = $row['m_from_name'];
@@ -52,9 +51,9 @@ class Hook_cron_mail_queue
                         continue;
                     }
 
-                    mail_wrap($subject,$message,$to_email,$to_name,$from_email,$from_name,$row['m_priority'],unserialize($row['m_attachments']),$row['m_no_cc'] == 1,$row['m_as'],$row['m_as_admin'] == 1,$row['m_in_html'] == 1,true,$row['m_template'],false,$extra_cc_addresses,$extra_bcc_addresses,$join_time);
+                    mail_wrap($subject, $message, $to_email, $to_name, $from_email, $from_name, $row['m_priority'], unserialize($row['m_attachments']), $row['m_no_cc'] == 1, $row['m_as'], $row['m_as_admin'] == 1, $row['m_in_html'] == 1, true, $row['m_template'], false, $extra_cc_addresses, $extra_bcc_addresses, $join_time);
 
-                    $GLOBALS['SITE_DB']->query_update('logged_mail_messages',array('m_queued' => 0),array('id' => $row['id']),'',1);
+                    $GLOBALS['SITE_DB']->query_update('logged_mail_messages', array('m_queued' => 0), array('id' => $row['id']), '', 1);
                 }
 
                 decache('main_staff_checklist');

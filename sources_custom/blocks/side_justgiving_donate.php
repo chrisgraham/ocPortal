@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Block_side_justgiving_donate
 {
     /**
@@ -41,7 +40,7 @@ class Block_side_justgiving_donate
     {
         $info = array();
         $info['cache_on'] = 'array(array_key_exists(\'eggid\',$map)?$map[\'eggid\']:0)';
-        $info['ttl'] = 60*5;
+        $info['ttl'] = 60 * 5;
         return $info;
     }
 
@@ -57,12 +56,12 @@ class Block_side_justgiving_donate
 
         require_lang('justgiving_donate');
 
-        if (!array_key_exists('eggid',$map)) {
-            return do_lang_tempcode('NO_PARAMETER_SENT','eggid');
+        if (!array_key_exists('eggid', $map)) {
+            return do_lang_tempcode('NO_PARAMETER_SENT', 'eggid');
         }
 
         $eggid = $map['eggid'];
 
-        return do_template('BLOCK_SIDE_JUSTGIVING_DONATE',array('_GUID' => 'f2fcc049804d8305eb0d8fe2cee81626','TITLE' => do_lang_tempcode('BLOCK_JUSTGIVING_DONATE_TITLE'),'EGGID' => $eggid));
+        return do_template('BLOCK_SIDE_JUSTGIVING_DONATE', array('_GUID' => 'f2fcc049804d8305eb0d8fe2cee81626', 'TITLE' => do_lang_tempcode('BLOCK_JUSTGIVING_DONATE_TITLE'), 'EGGID' => $eggid));
     }
 }

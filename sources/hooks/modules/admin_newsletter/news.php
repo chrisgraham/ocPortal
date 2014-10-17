@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_whats_news_news
 {
     /**
@@ -28,13 +27,13 @@ class Hook_whats_news_news
     public function choose_categories()
     {
         if (!addon_installed('news')) {
-            return NULL;
+            return null;
         }
 
         require_lang('news');
 
         require_code('news');
-        return array(create_selection_list_news_categories(null,false,false,true),do_lang('NEWS'));
+        return array(create_selection_list_news_categories(null, false, false, true), do_lang('NEWS'));
     }
 
     /**
@@ -46,7 +45,7 @@ class Hook_whats_news_news
      * @param  BINARY                   Whether to use full article instead of summary
      * @return array                    Tuple of result details
      */
-    public function run($cutoff_time,$lang,$filter,$in_full = 1)
+    public function run($cutoff_time, $lang, $filter, $in_full = 1)
     {
         if (!addon_installed('news')) {
             return array();
@@ -59,33 +58,33 @@ class Hook_whats_news_news
         $new = new ocp_tempcode();
 
         require_code('ocfiltering');
-        $or_list = ocfilter_to_sqlfragment($filter,'news_category');
-        $or_list_2 = ocfilter_to_sqlfragment($filter,'news_entry_category');
+        $or_list = ocfilter_to_sqlfragment($filter, 'news_category');
+        $or_list_2 = ocfilter_to_sqlfragment($filter, 'news_entry_category');
 
         $privacy_join = '';
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('news','r',$GLOBALS['FORUM_DRIVER']->get_guest_id());
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('news', 'r', $GLOBALS['FORUM_DRIVER']->get_guest_id());
         }
 
-        $rows = $GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM ' . get_table_prefix() . 'news r LEFT JOIN ' . get_table_prefix() . 'news_category_entries ON news_entry=id' . $privacy_join . ' WHERE validated=1 AND date_and_time>' . strval($cutoff_time) . ' AND ((' . $or_list . ') OR (' . $or_list_2 . '))' . $privacy_where . ' ORDER BY date_and_time DESC',$max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT title,news,news_article,id,date_and_time,submitter FROM ' . get_table_prefix() . 'news r LEFT JOIN ' . get_table_prefix() . 'news_category_entries ON news_entry=id' . $privacy_join . ' WHERE validated=1 AND date_and_time>' . strval($cutoff_time) . ' AND ((' . $or_list . ') OR (' . $or_list_2 . '))' . $privacy_where . ' ORDER BY date_and_time DESC', $max);
 
         if (count($rows) == $max) {
             return array();
         }
 
-        $rows = remove_duplicate_rows($rows,'id');
+        $rows = remove_duplicate_rows($rows, 'id');
         foreach ($rows as $row) {
             $id = $row['id'];
-            $_url = build_url(array('page' => 'news','type' => 'view','id' => $row['id']),get_module_zone('news'),null,false,false,true);
+            $_url = build_url(array('page' => 'news', 'type' => 'view', 'id' => $row['id']), get_module_zone('news'), null, false, false, true);
             $url = $_url->evaluate();
-            $name = get_translated_text($row['title'],null,$lang);
-            $description = get_translated_text($row[($in_full == 1)?'news_article':'news'],null,$lang);
+            $name = get_translated_text($row['title'], null, $lang);
+            $description = get_translated_text($row[($in_full == 1) ? 'news_article' : 'news'], null, $lang);
             if ($description == '') {
-                $description = get_translated_text($row[($in_full == 1)?'news':'news_article'],null,$lang);
+                $description = get_translated_text($row[($in_full == 1) ? 'news' : 'news_article'], null, $lang);
             }
-            $member_id = (is_guest($row['submitter']))?null:strval($row['submitter']);
+            $member_id = (is_guest($row['submitter'])) ? null : strval($row['submitter']);
             $thumbnail = $row['news_image'];
             if ($thumbnail != '') {
                 if (url_is_local($thumbnail)) {
@@ -94,9 +93,9 @@ class Hook_whats_news_news
             } else {
                 $thumbnail = mixed();
             }
-            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521','MEMBER_ID' => $member_id,'URL' => $url,'NAME' => $name,'DESCRIPTION' => $description,'THUMBNAIL' => $thumbnail,'CONTENT_TYPE' => 'news','CONTENT_ID' => strval($id))));
+            $new->attach(do_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array('_GUID' => '4eaf5ec00db1f0b89cef5120c2486521', 'MEMBER_ID' => $member_id, 'URL' => $url, 'NAME' => $name, 'DESCRIPTION' => $description, 'THUMBNAIL' => $thumbnail, 'CONTENT_TYPE' => 'news', 'CONTENT_ID' => strval($id))));
         }
 
-        return array($new,do_lang('NEWS','','','',$lang));
+        return array($new, do_lang('NEWS', '', '', '', $lang));
     }
 }

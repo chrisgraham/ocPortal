@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_enable_privacy_tab
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_enable_privacy_tab
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'1';
+        return (get_forum_type() != 'ocf') ? null : '1';
     }
 }

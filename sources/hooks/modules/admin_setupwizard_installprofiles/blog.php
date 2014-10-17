@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_admin_setupwizard_installprofiles_blog
 {
     /**
@@ -41,7 +40,7 @@ class Hook_admin_setupwizard_installprofiles_blog
     public function get_addon_list()
     {
         return array(
-            array('news','newsletter'),
+            array('news', 'newsletter'),
             array());
     }
 
@@ -81,10 +80,8 @@ class Hook_admin_setupwizard_installprofiles_blog
             'YES' => array(
                 'main_news',
             ),
-            'YES_CELL' => array(
-            ),
-            'PANEL_LEFT' => array(
-            ),
+            'YES_CELL' => array(),
+            'PANEL_LEFT' => array(),
             'PANEL_RIGHT' => array(
                 'side_news_categories',
                 'side_news_archive',

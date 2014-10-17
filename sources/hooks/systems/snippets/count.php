@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    counting_blocks
  */
-
 class Hook_count
 {
     /**
@@ -28,7 +27,7 @@ class Hook_count
     public function run()
     {
         $name = get_param('name');
-        update_stat($name,1);
+        update_stat($name, 1);
 
         return new ocp_tempcode();
     }

@@ -12,8 +12,8 @@ function find_blocks_in_page($page)
     if (is_file($page_path)) {
         $page_contents = file_get_contents($page_path);
         $matches = array();
-        $num_matches = preg_match_all('#\[block.*\](.*)\[/block\]#U',$page_contents,$matches);
-        for ($i = 0;$i<$num_matches;$i++) {
+        $num_matches = preg_match_all('#\[block.*\](.*)\[/block\]#U', $page_contents, $matches);
+        for ($i = 0; $i < $num_matches; $i++) {
             $full_tag = $matches[0][$i];
             $block = $matches[1][$i];
             $blocks[$block] = $full_tag;
@@ -100,16 +100,16 @@ $profile .= <<<END
         return array(
 
 END;
-$hooks = find_all_hooks('modules','admin_setupwizard');
+$hooks = find_all_hooks('modules', 'admin_setupwizard');
 foreach (array_keys($hooks) as $hook) {
     $path = get_file_base() . '/sources_custom/modules/systems/admin_setupwizard/' . filter_naughty_harsh($hook) . '.php';
     if (!file_exists($path)) {
         $path = get_file_base() . '/sources/hooks/modules/admin_setupwizard/' . filter_naughty_harsh($hook) . '.php';
     }
-    $_hook_bits = extract_module_functions($path,array('get_current_settings'));
+    $_hook_bits = extract_module_functions($path, array('get_current_settings'));
     if (!is_null($_hook_bits[0])) {
         if (is_array($_hook_bits[0])) {
-            $settings = call_user_func_array($_hook_bits[0][0],$_hook_bits[0][1]);
+            $settings = call_user_func_array($_hook_bits[0][0], $_hook_bits[0][1]);
         } else {
             $settings = @eval($_hook_bits[0]);
         }
@@ -173,10 +173,10 @@ $profile .= <<<END
 
 END;
 require_code('zones2');
-$blocks = array_merge(find_blocks_in_page('start'),find_blocks_in_page('panel_left'),find_blocks_in_page('panel_right'));
+$blocks = array_merge(find_blocks_in_page('start'), find_blocks_in_page('panel_left'), find_blocks_in_page('panel_right'));
 foreach ($blocks as $block => $full_tag) {
     require_code('comcode_compiler');
-    $parameters = parse_single_comcode_tag($full_tag,'block');
+    $parameters = parse_single_comcode_tag($full_tag, 'block');
     $profile .= "\t\t\t\t\"" . php_addslashes($block) . "\"=>array(\n";
     foreach ($parameters as $key => $val) {
         if ($key != '') {
@@ -196,21 +196,21 @@ $profile .= <<<END
     {
 
 END;
-        $config_options = $GLOBALS['SITE_DB']->query_select('config',array('*'));
-        require_code('config2');
-        foreach ($config_options as $option) {
-            $name = $option['c_name'];
-            if (in_array($name,array('site_name','description','site_scope','copyright','staff_address','keywords','google_analytics','fixed_width','site_closed','closed','stats_store_time','show_content_tagging','show_content_tagging_inline','show_screen_actions','collapse_user_zones'))) {
-                continue;
-            } // These are set separately
-            $value = get_option($name);
-            if ($value == get_default_option($name)) {
-                continue;
-            }
-            $_name = php_addslashes($name);
-            $_value = php_addslashes($value);
-            $profile .= "\t\tif (get_option(\"{$_name}\",true)!==NULL) set_option(\"{$_name}\",\"{$_value}\");\n";
-        }
+$config_options = $GLOBALS['SITE_DB']->query_select('config', array('*'));
+require_code('config2');
+foreach ($config_options as $option) {
+    $name = $option['c_name'];
+    if (in_array($name, array('site_name', 'description', 'site_scope', 'copyright', 'staff_address', 'keywords', 'google_analytics', 'fixed_width', 'site_closed', 'closed', 'stats_store_time', 'show_content_tagging', 'show_content_tagging_inline', 'show_screen_actions', 'collapse_user_zones'))) {
+        continue;
+    } // These are set separately
+    $value = get_option($name);
+    if ($value == get_default_option($name)) {
+        continue;
+    }
+    $_name = php_addslashes($name);
+    $_value = php_addslashes($value);
+    $profile .= "\t\tif (get_option(\"{$_name}\",true)!==NULL) set_option(\"{$_name}\",\"{$_value}\");\n";
+}
 $profile .= <<<END
     }
 }
@@ -232,14 +232,14 @@ END;
 
 $filename = 'mycustomprofile.tar';
 header('Content-Type: application/octet-stream' . '; authoritative=true;');
-header('Content-Disposition: attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($filename))) . '"');
+header('Content-Disposition: attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"');
 
 require_code('tar');
 
-$tar = tar_open(null,'wb');
+$tar = tar_open(null, 'wb');
 
-tar_add_file($tar,'sources_custom/hooks/modules/admin_setupwizard_installprofiles/mycustomprofile.php',$profile);
-tar_add_file($tar,'addon.inf',$addoninf);
+tar_add_file($tar, 'sources_custom/hooks/modules/admin_setupwizard_installprofiles/mycustomprofile.php', $profile);
+tar_add_file($tar, 'addon.inf', $addoninf);
 
 tar_close($tar);
 

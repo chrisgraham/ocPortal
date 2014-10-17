@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    external_db_login
  */
-
 class Mx_lost_password extends Module_lost_password
 {
     /**

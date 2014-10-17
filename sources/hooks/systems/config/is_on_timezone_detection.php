@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_is_on_timezone_detection
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_is_on_timezone_detection
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'0';
+        return (get_forum_type() != 'ocf') ? null : '0';
     }
 }

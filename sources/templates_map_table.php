@@ -25,19 +25,19 @@
  * @param  array                        An array of mappings between title and value (each mapping being a field)
  * @return tempcode                     The generated view space
  */
-function map_table($title,$fields)
+function map_table($title, $fields)
 {
     $_fields = new ocp_tempcode();
     foreach ($fields as $key => $val) {
         if (!is_array($val)) {
             $raw = true;
         } else {
-            list($val,$raw) = $val;
+            list($val, $raw) = $val;
         }
-        $_fields->attach(map_table_field(do_lang_tempcode($key),$val,$raw));
+        $_fields->attach(map_table_field(do_lang_tempcode($key), $val, $raw));
     }
 
-    return do_template('MAP_TABLE_SCREEN',array('_GUID' => 'c8c6cbc8e7b5a47a3078fd69feb057a0','TITLE' => $title,'FIELDS' => $_fields));
+    return do_template('MAP_TABLE_SCREEN', array('_GUID' => 'c8c6cbc8e7b5a47a3078fd69feb057a0', 'TITLE' => $title, 'FIELDS' => $_fields));
 }
 
 /**
@@ -49,7 +49,7 @@ function map_table($title,$fields)
  * @param  string                       Field abbreviation (blank: none)
  * @return tempcode                     The generated view space field
  */
-function map_table_field($name,$value,$raw = false,$abbr = '') // Not for use with the above, which takes the fields as a raw map
+function map_table_field($name, $value, $raw = false, $abbr = '') // Not for use with the above, which takes the fields as a raw map
 {
-    return do_template('MAP_TABLE_FIELD' . ($raw?'_RAW':'') . (($abbr != '')?'_ABBR':''),array('ABBR' => $abbr,'NAME' => $name,'VALUE' => $value));
+    return do_template('MAP_TABLE_FIELD' . ($raw ? '_RAW' : '') . (($abbr != '') ? '_ABBR' : ''), array('ABBR' => $abbr, 'NAME' => $name, 'VALUE' => $value));
 }

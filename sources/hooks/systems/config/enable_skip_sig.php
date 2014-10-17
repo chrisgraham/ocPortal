@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-
 class Hook_config_enable_skip_sig
 {
     /**

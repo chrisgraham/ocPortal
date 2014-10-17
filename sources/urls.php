@@ -35,17 +35,17 @@ function init__urls()
     global $URL_REMAPPINGS;
     $URL_REMAPPINGS = null;
 
-    global $CONTENT_OBS,$LOADED_MONIKERS_CACHE;
+    global $CONTENT_OBS, $LOADED_MONIKERS_CACHE;
     $CONTENT_OBS = null;
     $LOADED_MONIKERS_CACHE = persistent_cache_get('LOADED_MONIKERS_CACHE');
-    if ($LOADED_MONIKERS_CACHE === NULL) {
+    if ($LOADED_MONIKERS_CACHE === null) {
         $LOADED_MONIKERS_CACHE = array();
     }
 
     global $SELF_URL_CACHED;
     $SELF_URL_CACHED = null;
 
-    define('SELF_REDIRECT','!--:)defUNLIKELY');
+    define('SELF_REDIRECT', '!--:)defUNLIKELY');
 }
 
 /**
@@ -55,7 +55,7 @@ function init__urls()
  */
 function get_self_url_easy()
 {
-    $protocol = ((ocp_srv('HTTPS') != '') && (ocp_srv('HTTPS') != 'off'))?'https':'http';
+    $protocol = ((ocp_srv('HTTPS') != '') && (ocp_srv('HTTPS') != 'off')) ? 'https' : 'http';
     $self_url = $protocol . '://' . ocp_srv('HTTP_HOST') . ocp_srv('REQUEST_URI');
     return $self_url;
 }
@@ -70,11 +70,11 @@ function get_self_url_easy()
  * @param  boolean                      Whether to avoid mod_rewrite (sometimes essential so we can assume the standard URL parameter addition scheme in templates)
  * @return mixed                        The URL (tempcode or string)
  */
-function get_self_url($evaluate = false,$root_if_posted = false,$extra_params = null,$posted_too = false,$avoid_remap = false)
+function get_self_url($evaluate = false, $root_if_posted = false, $extra_params = null, $posted_too = false, $avoid_remap = false)
 {
     global $SELF_URL_CACHED;
-    $cacheable = ($evaluate) && (!$root_if_posted) && ($extra_params === NULL) && (!$posted_too) && (!$avoid_remap);
-    if (($cacheable) && ($SELF_URL_CACHED !== NULL)) {
+    $cacheable = ($evaluate) && (!$root_if_posted) && ($extra_params === null) && (!$posted_too) && (!$avoid_remap);
+    if (($cacheable) && ($SELF_URL_CACHED !== null)) {
         return $SELF_URL_CACHED;
     }
 
@@ -82,12 +82,12 @@ function get_self_url($evaluate = false,$root_if_posted = false,$extra_params = 
         return get_self_url_easy();
     }
 
-    if ($extra_params === NULL) {
+    if ($extra_params === null) {
         $extra_params = array();
     }
     if ($posted_too) {
         static $mq = null;
-        if ($mq === NULL) {
+        if ($mq === null) {
             $mq = get_magic_quotes_gpc();
         }
         $post_array = array();
@@ -100,7 +100,7 @@ function get_self_url($evaluate = false,$root_if_posted = false,$extra_params = 
             }
             $post_array[$key] = $val;
         }
-        $extra_params = array_merge($post_array,$extra_params);
+        $extra_params = array_merge($post_array, $extra_params);
     }
     $page = '_SELF';
     if (($root_if_posted) && (count($_POST) != 0)) {
@@ -109,14 +109,14 @@ function get_self_url($evaluate = false,$root_if_posted = false,$extra_params = 
     $params = array('page' => $page);
     $skip = array();
     foreach ($extra_params as $key => $val) {
-        if ($val === NULL) {
+        if ($val === null) {
             $skip[$key] = 1;
         } else {
             $params[$key] = $val;
         }
     }
 
-    $url = build_url($params,'_SELF',$skip,true,$avoid_remap);
+    $url = build_url($params, '_SELF', $skip, true, $avoid_remap);
     if ($evaluate) {
         $ret = $url->evaluate();
         if ($cacheable) {
@@ -135,7 +135,7 @@ function get_self_url($evaluate = false,$root_if_posted = false,$extra_params = 
  * @param  ?boolean                     Whether we have to consider mod_rewrite (NULL: don't know, look up)
  * @return URLPATH                      The encoded result
  */
-function ocp_url_encode($url_part,$consider_rewrite = null)
+function ocp_url_encode($url_part, $consider_rewrite = null)
 {
     // Slipstream for 99.99% of data
     $url_part_encoded = urlencode($url_part);
@@ -143,12 +143,12 @@ function ocp_url_encode($url_part,$consider_rewrite = null)
         return $url_part_encoded;
     }
 
-    if ($consider_rewrite === NULL) {
+    if ($consider_rewrite === null) {
         $consider_rewrite = can_try_mod_rewrite();
     }
     if ($consider_rewrite) { // These interfere with mod_rewrite processing because they get pre-decoded and make things ambiguous
         //$url_part=str_replace(':','(colon)',$url_part); We'll ignore theoretical problem here- we won't expect there to be a need for encodings within redirect URL paths (params is fine, handles naturally)
-        $url_part = str_replace(array('/','&','#'),array(':slash:',':amp:',':uhash:'),$url_part); // horrible but mod_rewrite does it so we need to
+        $url_part = str_replace(array('/', '&', '#'), array(':slash:', ':amp:', ':uhash:'), $url_part); // horrible but mod_rewrite does it so we need to
     }
     $url_part = urlencode($url_part);
     return $url_part;
@@ -161,7 +161,7 @@ function ocp_url_encode($url_part,$consider_rewrite = null)
  * @param  ?boolean                     Whether we have to consider mod_rewrite (NULL: don't know, look up)
  * @return URLPATH                      The encoded result
  */
-function ocp_url_encode_mini($url_part,$consider_rewrite = null)
+function ocp_url_encode_mini($url_part, $consider_rewrite = null)
 {
     // Slipstream for 99.99% of data
     $url_part_encoded = urlencode($url_part);
@@ -169,7 +169,7 @@ function ocp_url_encode_mini($url_part,$consider_rewrite = null)
         return $url_part_encoded;
     }
 
-    return str_replace('%3Aslash%3A','/',ocp_url_encode($url_part,$consider_rewrite));
+    return str_replace('%3Aslash%3A', '/', ocp_url_encode($url_part, $consider_rewrite));
 }
 
 /**
@@ -180,8 +180,8 @@ function ocp_url_encode_mini($url_part,$consider_rewrite = null)
  */
 function ocp_url_decode_post_process($url_part)
 {
-    if ((strpos($url_part,':') !== false) && (can_try_mod_rewrite())) {
-        $url_part = str_replace(array(':uhash:',':amp:',':slash:'),array('#','&','/'),$url_part);
+    if ((strpos($url_part, ':') !== false) && (can_try_mod_rewrite())) {
+        $url_part = str_replace(array(':uhash:', ':amp:', ':slash:'), array('#', '&', '/'), $url_part);
         //$url_part=str_replace('(colon)',':',$url_part);
     }
     return $url_part;
@@ -194,18 +194,18 @@ function ocp_url_decode_post_process($url_part)
  * @param  string                       Parameter value
  * @return boolean                      Whether we can skip it
  */
-function skippable_keep($key,$val)
+function skippable_keep($key, $val)
 {
     global $BOT_TYPE_CACHE;
     if ($BOT_TYPE_CACHE === false) {
         get_bot_type();
     }
-    if ($BOT_TYPE_CACHE !== NULL) {
+    if ($BOT_TYPE_CACHE !== null) {
         return true;
     }
 
     static $nkp = null;
-    if ($nkp === NULL) {
+    if ($nkp === null) {
         $nkp = (isset($GLOBALS['SITE_INFO']['no_keep_params'])) && ($GLOBALS['SITE_INFO']['no_keep_params'] == '1');
     }
     if ($nkp) {
@@ -223,10 +223,10 @@ function skippable_keep($key,$val)
  * @param  ID_TEXT                      The page codename
  * @return boolean                      Whether the page is to run across an HTTPS connection
  */
-function is_page_https($zone,$page)
+function is_page_https($zone, $page)
 {
     static $off = null;
-    if ($off === NULL) {
+    if ($off === null) {
         $off = (!addon_installed('ssl')) || (in_safe_mode()) || (!function_exists('persistent_cache_get'));
     }
     if ($off) {
@@ -240,18 +240,18 @@ function is_page_https($zone,$page)
     }
 
     global $HTTPS_PAGES_CACHE;
-    if (($HTTPS_PAGES_CACHE === NULL) && (function_exists('persistent_cache_get'))) {
+    if (($HTTPS_PAGES_CACHE === null) && (function_exists('persistent_cache_get'))) {
         $HTTPS_PAGES_CACHE = persistent_cache_get('HTTPS_PAGES_CACHE');
     }
-    if ($HTTPS_PAGES_CACHE === NULL) {
+    if ($HTTPS_PAGES_CACHE === null) {
         if (isset($GLOBALS['SITE_DB'])) {
-            $results = $GLOBALS['SITE_DB']->query_select('https_pages',array('*'),null,'',null,null,true);
+            $results = $GLOBALS['SITE_DB']->query_select('https_pages', array('*'), null, '', null, null, true);
             $HTTPS_PAGES_CACHE = array();
             foreach ($results as $r) {
                 $HTTPS_PAGES_CACHE[$r['https_page_name']] = 1;
             }
             if (function_exists('persistent_cache_set')) {
-                persistent_cache_set('HTTPS_PAGES_CACHE',$HTTPS_PAGES_CACHE);
+                persistent_cache_set('HTTPS_PAGES_CACHE', $HTTPS_PAGES_CACHE);
             }
         }
     }
@@ -270,7 +270,7 @@ function can_try_mod_rewrite($avoid_remap = false)
         return false;
     }
     $url_scheme = get_option('url_scheme');
-    return (($url_scheme != 'RAW') && ((!array_key_exists('block_mod_rewrite',$GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite'] == '0')) && (!$avoid_remap)); // If we don't have the option on or are not using apache, return
+    return (($url_scheme != 'RAW') && ((!array_key_exists('block_mod_rewrite', $GLOBALS['SITE_INFO'])) || ($GLOBALS['SITE_INFO']['block_mod_rewrite'] == '0')) && (!$avoid_remap)); // If we don't have the option on or are not using apache, return
 }
 
 /**
@@ -286,34 +286,35 @@ function can_try_mod_rewrite($avoid_remap = false)
  * @param  string                       Hash portion of the URL (blank: none). May or may not start '#' - code will put it on if needed
  * @return tempcode                     The URL in tempcode format.
  */
-function build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_remap = false,$skip_keep = false,$hash = '')
+function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avoid_remap = false, $skip_keep = false, $hash = '')
 {
     if (empty($vars['page'])) { // For SEO purposes we need to make sure we get the right URL
         $vars['page'] = get_zone_default_page($zone_name);
-        if ($vars['page'] === NULL) {
+        if ($vars['page'] === null) {
             $vars['page'] = 'start';
         }
     }
 
-    $id = isset($vars['id'])?$vars['id']:null;
+    $id = isset($vars['id']) ? $vars['id'] : null;
 
-    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/($vars['page']);
-    if ((isset($vars['type'])) || (array_key_exists('type',$vars))) {
+    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/
+        ($vars['page']);
+    if ((isset($vars['type'])) || (array_key_exists('type', $vars))) {
         if (is_object($vars['type'])) {
             $page_link .= ':';
             $page_link .= $vars['type']->evaluate();
         } else {
-            $page_link .= ':' . (($vars['type'] === NULL)?'<null>':urlencode($vars['type']));
+            $page_link .= ':' . (($vars['type'] === null) ? '<null>' : urlencode($vars['type']));
         }
         unset($vars['type']);
-        if ((isset($id)) || (array_key_exists('id',$vars))) {
+        if ((isset($id)) || (array_key_exists('id', $vars))) {
             if (is_integer($id)) {
                 $page_link .= ':' . strval($id);
             } elseif (is_object($id)) {
                 $page_link .= ':';
                 $page_link .= $id->evaluate();
             } else {
-                $page_link .= ':' . (($id === NULL)?'<null>':urlencode($id));
+                $page_link .= ':' . (($id === null) ? '<null>' : urlencode($id));
             }
             unset($vars['id']);
         }
@@ -326,7 +327,7 @@ function build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_r
         if (is_integer($val)) {
             $val = strval($val);
         }
-        if ($val === NULL) {
+        if ($val === null) {
             $val = '<null>';
         }
 
@@ -339,12 +340,12 @@ function build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_r
                 $page_link .= ':' . $key . '=';
                 $page_link .= $val->evaluate();
             } else {
-                $page_link .= ':' . $key . '=' . (($val === NULL)?'<null>':urlencode($val));
+                $page_link .= ':' . $key . '=' . (($val === null) ? '<null>' : urlencode($val));
             }
         }
     }
 
-    if (($hash != '') && (substr($hash,0,1) != '#')) {
+    if (($hash != '') && (substr($hash, 0, 1) != '#')) {
         $hash = '#' . $hash;
     }
 
@@ -352,22 +353,22 @@ function build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_r
 
     $arr = array(
         $page_link,
-        $avoid_remap?'1':'0',
-        $skip_keep?'1':'0',
-        $keep_all?'1':'0'
+        $avoid_remap ? '1' : '0',
+        $skip_keep ? '1' : '0',
+        $keep_all ? '1' : '0'
     );
-    if ($skip !== NULL) {
-        $arr[] = implode('|',array_keys($skip));
+    if ($skip !== null) {
+        $arr[] = implode('|', array_keys($skip));
     }
 
-    $ret = symbol_tempcode('PAGE_LINK',$arr);
+    $ret = symbol_tempcode('PAGE_LINK', $arr);
 
     global $SITE_INFO;
     if (
         (isset($SITE_INFO['no_keep_params'])) &&
         ($SITE_INFO['no_keep_params'] == '1') &&
         (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) &&
-        ((is_null($id)) || (strpos($id,'/') !== false))
+        ((is_null($id)) || (strpos($id, '/') !== false))
     ) {
         $ret = make_string_tempcode($ret->evaluate());
     }
@@ -384,7 +385,7 @@ function url_monikers_enabled()
     if (!function_exists('get_option')) {
         return false;
     }
-    if (get_param_integer('keep_simpleurls',0) == 1) {
+    if (get_param_integer('keep_simpleurls', 0) == 1) {
         return false;
     }
     if (get_option('url_monikers_enabled') != '1') {
@@ -406,21 +407,21 @@ function url_monikers_enabled()
  * @param  string                       Hash portion of the URL (blank: none).
  * @return string                       The URL in string format.
  */
-function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_remap = false,$skip_keep = false,$hash = '')
+function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avoid_remap = false, $skip_keep = false, $hash = '')
 {
-    global $HAS_KEEP_IN_URL_CACHE,$USE_REWRITE_PARAMS_CACHE,$BOT_TYPE_CACHE,$WHAT_IS_RUNNING_CACHE,$KNOWN_AJAX;
+    global $HAS_KEEP_IN_URL_CACHE, $USE_REWRITE_PARAMS_CACHE, $BOT_TYPE_CACHE, $WHAT_IS_RUNNING_CACHE, $KNOWN_AJAX;
 
     // Build up our URL base
-    $stub = get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
+    $stub = get_base_url(is_page_https($zone_name, isset($vars['page']) ? $vars['page'] : ''), $zone_name);
     $stub .= '/';
 
     // For bots we explicitly unset skippable injected 'keep_' params because it bloats the crawl-space
-    if (($BOT_TYPE_CACHE !== NULL) && (get_bot_type() !== NULL)) {
+    if (($BOT_TYPE_CACHE !== null) && (get_bot_type() !== null)) {
         foreach ($vars as $key => $val) {
             if ($key == 'redirect') {
                 unset($vars[$key]);
             }
-            if ((substr($key,0,5) == 'keep_') && (skippable_keep($key,$val))) {
+            if ((substr($key, 0, 5) == 'keep_') && (skippable_keep($key, $val))) {
                 unset($vars[$key]);
             }
         }
@@ -428,9 +429,9 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
 
     // Things we need to keep in the url
     $keep_actual = array();
-    if (($HAS_KEEP_IN_URL_CACHE === NULL) || ($HAS_KEEP_IN_URL_CACHE) || ($keep_all)) {
+    if (($HAS_KEEP_IN_URL_CACHE === null) || ($HAS_KEEP_IN_URL_CACHE) || ($keep_all)) {
         static $mc = null;
-        if ($mc === NULL) {
+        if ($mc === null) {
             $mc = get_magic_quotes_gpc();
         }
 
@@ -439,22 +440,22 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
         foreach ($_GET as $key => $val) {
             if (is_array($val)) {
                 if ($keep_all) {
-                    if ((!array_key_exists($key,$vars)) && (!isset($skip[$key]))) {
-                        _handle_array_var_append($key,$val,$vars);
+                    if ((!array_key_exists($key, $vars)) && (!isset($skip[$key]))) {
+                        _handle_array_var_append($key, $val, $vars);
                     }
                 }
                 continue;
             }
 
             $is_keep = false;
-            $appears_keep = (($key[0] == 'k') && (substr($key,0,5) == 'keep_'));
+            $appears_keep = (($key[0] == 'k') && (substr($key, 0, 5) == 'keep_'));
             if ($appears_keep) {
-                if ((!$skip_keep) && (!skippable_keep($key,$val))) {
+                if ((!$skip_keep) && (!skippable_keep($key, $val))) {
                     $is_keep = true;
                 }
                 $HAS_KEEP_IN_URL_CACHE = true;
             }
-            if (((($keep_all) && (!$appears_keep)) || ($is_keep)) && (!array_key_exists($key,$vars)) && (!isset($skip[$key]))) {
+            if (((($keep_all) && (!$appears_keep)) || ($is_keep)) && (!array_key_exists($key, $vars)) && (!isset($skip[$key]))) {
                 if ($mc) {
                     $val = stripslashes($val);
                 }
@@ -475,14 +476,14 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
     }
 
     global $URL_MONIKERS_ENABLED_CACHE;
-    if ($URL_MONIKERS_ENABLED_CACHE === NULL) {
+    if ($URL_MONIKERS_ENABLED_CACHE === null) {
         $URL_MONIKERS_ENABLED_CACHE = url_monikers_enabled();
     }
     if ($URL_MONIKERS_ENABLED_CACHE) {
-        $test = find_id_moniker($vars,$zone_name);
-        if ($test !== NULL) {
-            if (substr($test,0,1) == '/') { // relative to zone root
-                $parts = explode('/',substr($test,1),3);
+        $test = find_id_moniker($vars, $zone_name);
+        if ($test !== null) {
+            if (substr($test, 0, 1) == '/') { // relative to zone root
+                $parts = explode('/', substr($test, 1), 3);
                 $vars['page'] = $parts[0];
                 if (isset($parts[1])) {
                     $vars['type'] = $parts[1];
@@ -495,7 +496,7 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
                     unset($vars['id']);
                 }
             } else { // relative to content module
-                if (array_key_exists('id',$vars)) {
+                if (array_key_exists('id', $vars)) {
                     $vars['id'] = $test;
                 } else {
                     $vars['page'] = $test;
@@ -505,7 +506,7 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
     }
 
     // We either use mod_rewrite, or return a standard parameterisation
-    if (($USE_REWRITE_PARAMS_CACHE === NULL) || ($avoid_remap)) {
+    if (($USE_REWRITE_PARAMS_CACHE === null) || ($avoid_remap)) {
         $use_rewrite_params = can_try_mod_rewrite($avoid_remap);
         if (!$avoid_remap) {
             $USE_REWRITE_PARAMS_CACHE = $use_rewrite_params;
@@ -514,36 +515,36 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
         $use_rewrite_params = $USE_REWRITE_PARAMS_CACHE;
     }
     $test_rewrite = null;
-    $self_page = ((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name() == $zone_name) && (($vars['page'] == '_SELF') || ($vars['page'] == get_param('page',''))))) && ((!isset($vars['type'])) || ($vars['type'] == get_param('type','misc'))) && ($hash != '#_top') && (!$KNOWN_AJAX);
+    $self_page = ((!isset($vars['page'])) || ((function_exists('get_zone_name')) && (get_zone_name() == $zone_name) && (($vars['page'] == '_SELF') || ($vars['page'] == get_param('page', ''))))) && ((!isset($vars['type'])) || ($vars['type'] == get_param('type', 'misc'))) && ($hash != '#_top') && (!$KNOWN_AJAX);
     if ($use_rewrite_params) {
         if ((!$self_page) || ($WHAT_IS_RUNNING_CACHE === 'index')) {
-            $test_rewrite = _url_rewrite_params($zone_name,$vars,count($keep_actual)>0);
+            $test_rewrite = _url_rewrite_params($zone_name, $vars, count($keep_actual) > 0);
         }
     }
-    if ($test_rewrite === NULL) {
-        $url = (($self_page) && ($WHAT_IS_RUNNING_CACHE !== 'index'))?find_script($WHAT_IS_RUNNING_CACHE):($stub . 'index.php');
+    if ($test_rewrite === null) {
+        $url = (($self_page) && ($WHAT_IS_RUNNING_CACHE !== 'index')) ? find_script($WHAT_IS_RUNNING_CACHE) : ($stub . 'index.php');
 
         // Fix sort order
         if (isset($vars['id'])) {
             $_vars = $vars;
             unset($_vars['id']);
-            $vars = array('id' => $vars['id'])+$_vars;
+            $vars = array('id' => $vars['id']) + $_vars;
         }
         if (isset($vars['type'])) {
             $_vars = $vars;
             unset($_vars['type']);
-            $vars = array('type' => $vars['type'])+$_vars;
+            $vars = array('type' => $vars['type']) + $_vars;
         }
         if (isset($vars['page'])) {
             $_vars = $vars;
             unset($_vars['page']);
-            $vars = array('page' => $vars['page'])+$_vars;
+            $vars = array('page' => $vars['page']) + $_vars;
         }
 
         // Build up the URL string
         $symbol = '?';
         foreach ($vars as $key => $val) {
-            if ($val === NULL) {
+            if ($val === null) {
                 continue;
             } // NULL means skip
 
@@ -552,7 +553,7 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
             }
 
             if ($val === SELF_REDIRECT) {
-                $val = get_self_url(true,true);
+                $val = get_self_url(true, true);
             }
 
             if (!is_string($key)) {
@@ -560,7 +561,8 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
             }
 
             // Add in
-            $url .= $symbol . $key . '=' . (is_integer($val)?strval($val):/*ocp_*/urlencode($val/*,false*/));
+            $url .= $symbol . $key . '=' . (is_integer($val) ? strval($val) :/*ocp_*/
+                    urlencode($val/*,false*/));
             $symbol = '&';
         }
     } else {
@@ -578,7 +580,7 @@ function _build_url($vars,$zone_name = '',$skip = null,$keep_all = false,$avoid_
  * @param  array                        Array
  * @param  array                        Flat array to write into
  */
-function _handle_array_var_append($key,$val,&$vars)
+function _handle_array_var_append($key, $val, &$vars)
 {
     $val2 = mixed();
 
@@ -591,7 +593,7 @@ function _handle_array_var_append($key,$val,&$vars)
         }
 
         if (is_array($val2)) {
-            _handle_array_var_append($key . '[' . $key2 . ']',$val2,$vars);
+            _handle_array_var_append($key . '[' . $key2 . ']', $val2, $vars);
         } else {
             $vars[$key . '[' . $key2 . ']'] = $val2;
         }
@@ -606,10 +608,10 @@ function _handle_array_var_append($key,$val,&$vars)
  * @param  boolean                      Force inclusion of the index.php name into a short URL, so something may tack on extra parameters to the result here
  * @return ?URLPATH                     The improved URL (NULL: couldn't do anything)
  */
-function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
+function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
 {
     global $URL_REMAPPINGS;
-    if ($URL_REMAPPINGS === NULL) {
+    if ($URL_REMAPPINGS === null) {
         require_code('url_remappings');
         $URL_REMAPPINGS = get_remappings(get_option('url_scheme'));
         foreach ($URL_REMAPPINGS as $i => $_remapping) {
@@ -618,13 +620,13 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
     }
 
     static $url_scheme = null;
-    if ($url_scheme === NULL) {
+    if ($url_scheme === null) {
         $url_scheme = get_option('url_scheme');
     }
 
     // Find mapping
     foreach ($URL_REMAPPINGS as $_remapping) {
-        list($remapping,$target,$require_full_coverage,$last_key_num) = $_remapping;
+        list($remapping, $target, $require_full_coverage, $last_key_num) = $_remapping;
         $good = true;
 
         $loop_cnt = 0;
@@ -636,7 +638,7 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
                 $vars[$key] = strval($vars[$key]);
             }
 
-            if (!(((isset($vars[$key])) || (($val === NULL) && ($key == 'type') && ((isset($vars['id'])) || (array_key_exists('id',$vars))))) && (($key != 'page') || ($vars[$key] != '') || ($val === '')) && ((!isset($vars[$key]) && !array_key_exists($key,$vars)/*NB this is just so the next clause does not error, we have other checks for non-existence*/) || ($vars[$key] != '') || (!$last)) && (($val === NULL) || ($vars[$key] == $val)))) {
+            if (!(((isset($vars[$key])) || (($val === null) && ($key == 'type') && ((isset($vars['id'])) || (array_key_exists('id', $vars))))) && (($key != 'page') || ($vars[$key] != '') || ($val === '')) && ((!isset($vars[$key]) && !array_key_exists($key, $vars)/*NB this is just so the next clause does not error, we have other checks for non-existence*/) || ($vars[$key] != '') || (!$last)) && (($val === null) || ($vars[$key] == $val)))) {
                 $good = false;
                 break;
             }
@@ -648,12 +650,12 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
                     continue;
                 }
 
-                if ((substr($key,0,5) == 'keep_')  && (!skippable_keep($key,$val))) {
+                if ((substr($key, 0, 5) == 'keep_') && (!skippable_keep($key, $val))) {
                     $good = false;
                 }
             }
             foreach ($vars as $key => $val) {
-                if ((!array_key_exists($key,$remapping)) && ($val !== NULL) && (($key != 'page') || ($vars[$key] != ''))) {
+                if ((!array_key_exists($key, $remapping)) && ($val !== null) && (($key != 'page') || ($vars[$key] != ''))) {
                     $good = false;
                 }
             }
@@ -692,12 +694,12 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
                         $key = strtoupper($key);
                         break;
                 }
-                $makeup = str_replace($key,ocp_url_encode_mini($val,true),$makeup);
+                $makeup = str_replace($key, ocp_url_encode_mini($val, true), $makeup);
             }
             if (!$require_full_coverage) {
                 $extra_vars += $vars;
             }
-            $makeup = str_replace('TYPE','misc',$makeup);
+            $makeup = str_replace('TYPE', 'misc', $makeup);
             if ($makeup == '') {
                 switch ($url_scheme) {
                     case 'HTM':
@@ -713,13 +715,13 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
                 $first = true;
                 $_makeup = '';
                 foreach ($extra_vars as $key => $val) { // Add these in explicitly
-                    if ($val === NULL) {
+                    if ($val === null) {
                         continue;
                     }
                     if ($val === SELF_REDIRECT) {
-                        $val = get_self_url(true,true);
+                        $val = get_self_url(true, true);
                     }
-                    $_makeup .= ($first?'?':'&') . $key . '=' . ocp_url_encode($val,true);
+                    $_makeup .= ($first ? '?' : '&') . $key . '=' . ocp_url_encode($val, true);
                     $first = false;
                 }
                 if ($_makeup != '') {
@@ -734,7 +736,7 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
         }
     }
 
-    return NULL;
+    return null;
 }
 
 /**
@@ -745,10 +747,10 @@ function _url_rewrite_params($zone_name,$vars,$force_index_php = false)
  */
 function url_is_local($url)
 {
-    if (preg_match('#^[^:\{%]*$#',$url) != 0) {
+    if (preg_match('#^[^:\{%]*$#', $url) != 0) {
         return true;
     }
-    return (strpos($url,'://') === false) && (substr($url,0,1) != '{') && (substr($url,0,7) != 'mailto:') && (substr($url,0,5) != 'data:') && (substr($url,0,1) != '%') && (strpos($url,'{$BASE_URL') === false) && (strpos($url,'{$FIND_SCRIPT') === false);
+    return (strpos($url, '://') === false) && (substr($url, 0, 1) != '{') && (substr($url, 0, 7) != 'mailto:') && (substr($url, 0, 5) != 'data:') && (substr($url, 0, 1) != '%') && (strpos($url, '{$BASE_URL') === false) && (strpos($url, '{$FIND_SCRIPT') === false);
 }
 
 /**
@@ -758,35 +760,35 @@ function url_is_local($url)
  * @param  boolean                      Whether to be a bit lax in the check
  * @return boolean                      Whether the value appears to be a URL
  */
-function looks_like_url($value,$lax = false)
+function looks_like_url($value, $lax = false)
 {
     if ($lax) {
-        if (strpos($value,'/') !== false) {
+        if (strpos($value, '/') !== false) {
             return true;
         }
-        $at = substr($value,0,1);
+        $at = substr($value, 0, 1);
         if ($at == '%' || $at == '{') {
             return true;
         }
     }
     return
         (
-            ((strpos($value,'.php') !== false) ||
-            (strpos($value,'.htm') !== false) ||
-            (substr($value,0,1) == '#') ||
-            (substr($value,0,15) == '{$TUTORIAL_URL') ||
-            (substr($value,0,13) == '{$FIND_SCRIPT') ||
-            (substr($value,0,17) == '{$BRAND_BASE_URL') ||
-            (substr($value,0,10) == '{$BASE_URL') ||
-            (substr($value,0,3) == '../') ||
-            (substr(strtolower($value),0,11) == 'javascript:') ||
-            (substr($value,0,4) == 'tel:') ||
-            (substr($value,0,7) == 'mailto:') ||
-            (substr($value,0,7) == 'http://') ||
-            (substr($value,0,8) == 'https://') ||
-            (substr($value,0,7) == 'sftp://') ||
-            (substr($value,0,6) == 'ftp://'))
-        ) && (strpos($value,'<') === false);
+        ((strpos($value, '.php') !== false) ||
+            (strpos($value, '.htm') !== false) ||
+            (substr($value, 0, 1) == '#') ||
+            (substr($value, 0, 15) == '{$TUTORIAL_URL') ||
+            (substr($value, 0, 13) == '{$FIND_SCRIPT') ||
+            (substr($value, 0, 17) == '{$BRAND_BASE_URL') ||
+            (substr($value, 0, 10) == '{$BASE_URL') ||
+            (substr($value, 0, 3) == '../') ||
+            (substr(strtolower($value), 0, 11) == 'javascript:') ||
+            (substr($value, 0, 4) == 'tel:') ||
+            (substr($value, 0, 7) == 'mailto:') ||
+            (substr($value, 0, 7) == 'http://') ||
+            (substr($value, 0, 8) == 'https://') ||
+            (substr($value, 0, 7) == 'sftp://') ||
+            (substr($value, 0, 6) == 'ftp://'))
+        ) && (strpos($value, '<') === false);
 }
 
 /**
@@ -797,10 +799,10 @@ function looks_like_url($value,$lax = false)
  * @param  ?array                       A list of parameters to exclude (NULL: don't exclude any)
  * @return tempcode                     The builtup hidden form fields
  */
-function build_keep_form_fields($page = '',$keep_all = false,$exclude = null)
+function build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
 {
     require_code('urls2');
-    return _build_keep_form_fields($page,$keep_all,$exclude);
+    return _build_keep_form_fields($page, $keep_all, $exclude);
 }
 
 /**
@@ -834,10 +836,10 @@ function url_to_filename($url_full)
  * @param  URLPATH                      The base-URL
  * @return URLPATH                      Fully qualified URL
  */
-function qualify_url($url,$url_base)
+function qualify_url($url, $url_base)
 {
     require_code('urls2');
-    return _qualify_url($url,$url_base);
+    return _qualify_url($url, $url_base);
 }
 
 /**
@@ -848,25 +850,25 @@ function qualify_url($url,$url_base)
  */
 function page_link_decode($page_link)
 {
-    if (strpos($page_link,'#') === false) {
+    if (strpos($page_link, '#') === false) {
         $hash = '';
     } else {
-        $hash_pos = strpos($page_link,'#');
-        $hash = substr($page_link,$hash_pos);
-        $page_link = substr($page_link,0,$hash_pos);
+        $hash_pos = strpos($page_link, '#');
+        $hash = substr($page_link, $hash_pos);
+        $page_link = substr($page_link, 0, $hash_pos);
     }
-    if (strpos($page_link,"\n") === false) {
-        $bits = explode(':',$page_link);
+    if (strpos($page_link, "\n") === false) {
+        $bits = explode(':', $page_link);
     } else { // If there's a line break then we ignore any colons after that line-break. It's to allow complex stuff to be put on the end of the page-link
-        $term_pos = strpos($page_link,"\n");
-        $bits = explode(':',substr($page_link,0,$term_pos));
-        $bits[count($bits)-1] .= substr($page_link,$term_pos);
+        $term_pos = strpos($page_link, "\n");
+        $bits = explode(':', substr($page_link, 0, $term_pos));
+        $bits[count($bits) - 1] .= substr($page_link, $term_pos);
     }
     $zone = $bits[0];
     if ($zone == '_SEARCH') {
         if (isset($bits[1])) {
-            $zone = get_page_zone($bits[1],false);
-            if ($zone === NULL) {
+            $zone = get_page_zone($bits[1], false);
+            if ($zone === null) {
                 $zone = '';
             }
         } else {
@@ -895,19 +897,19 @@ function page_link_decode($page_link)
     $i = 0;
     foreach ($bits as $bit) {
         if (($bit != '') || ($i == 1)) {
-            if (($i == 0) && (strpos($bit,'=') === false)) {
-                $_bit = array('type',$bit);
-            } elseif (($i == 1) && (strpos($bit,'=') === false)) {
-                $_bit = array('id',$bit);
+            if (($i == 0) && (strpos($bit, '=') === false)) {
+                $_bit = array('type', $bit);
+            } elseif (($i == 1) && (strpos($bit, '=') === false)) {
+                $_bit = array('id', $bit);
             } else {
-                $_bit = explode('=',$bit,2);
+                $_bit = explode('=', $bit, 2);
             }
         } else {
-            $_bit = array($bit,'');
+            $_bit = array($bit, '');
         }
         if (isset($_bit[1])) {
             $decoded = urldecode($_bit[1]);
-            if (($decoded != '') && ($decoded[0] == '{') && (strlen($decoded)>2) && (intval($decoded[1])>51)) { // If it is in template format (symbols)
+            if (($decoded != '') && ($decoded[0] == '{') && (strlen($decoded) > 2) && (intval($decoded[1]) > 51)) { // If it is in template format (symbols)
                 require_code('tempcode_compiler');
                 $decoded = template_to_tempcode($decoded);
                 $decoded = $decoded->evaluate();
@@ -922,7 +924,7 @@ function page_link_decode($page_link)
         $i++;
     }
 
-    return array($zone,$attributes,$hash);
+    return array($zone, $attributes, $hash);
 }
 
 /**
@@ -957,10 +959,10 @@ function fixup_protocolless_urls($in)
  * @param  boolean                      Whether to only allow perfect conversions.
  * @return string                       The page-link (blank: could not convert).
  */
-function url_to_page_link($url,$abs_only = false,$perfect_only = true)
+function url_to_page_link($url, $abs_only = false, $perfect_only = true)
 {
     require_code('urls2');
-    return _url_to_page_link($url,$abs_only,$perfect_only);
+    return _url_to_page_link($url, $abs_only, $perfect_only);
 }
 
 /**
@@ -985,11 +987,11 @@ function load_moniker_hooks()
     }
 
     global $CONTENT_OBS;
-    if ($CONTENT_OBS === NULL) {
-        $CONTENT_OBS = function_exists('persistent_cache_get')?persistent_cache_get('CONTENT_OBS'):null;
-        if ($CONTENT_OBS !== NULL) {
+    if ($CONTENT_OBS === null) {
+        $CONTENT_OBS = function_exists('persistent_cache_get') ? persistent_cache_get('CONTENT_OBS') : null;
+        if ($CONTENT_OBS !== null) {
             foreach ($CONTENT_OBS as $ob_info) {
-                if (($ob_info['title_field'] !== NULL) && (strpos($ob_info['title_field'],'CALL:') !== false)) {
+                if (($ob_info['title_field'] !== null) && (strpos($ob_info['title_field'], 'CALL:') !== false)) {
                     require_code('hooks/systems/content_meta_aware/' . $ob_info['_hook']);
                 }
             }
@@ -998,30 +1000,30 @@ function load_moniker_hooks()
         }
 
         $CONTENT_OBS = array();
-        $hooks = find_all_hooks('systems','content_meta_aware');
+        $hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach ($hooks as $hook => $sources_dir) {
             if ($hook == 'banner' || $hook == 'banner_type' || $hook == 'catalogue' || $hook == 'post') {
                 continue;
             } // FUDGEFUDGE: Optimisation, not ideal!
 
-            $info_function = extract_module_functions(get_file_base() . '/' . $sources_dir . '/hooks/systems/content_meta_aware/' . $hook . '.php',array('info'),null,false,'Hook_content_meta_aware_' . $hook);
-            if ($info_function[0] !== NULL) {
-                $ob_info = is_array($info_function[0])?call_user_func_array($info_function[0][0],$info_function[0][1]):eval($info_function[0]);
+            $info_function = extract_module_functions(get_file_base() . '/' . $sources_dir . '/hooks/systems/content_meta_aware/' . $hook . '.php', array('info'), null, false, 'Hook_content_meta_aware_' . $hook);
+            if ($info_function[0] !== null) {
+                $ob_info = is_array($info_function[0]) ? call_user_func_array($info_function[0][0], $info_function[0][1]) : eval($info_function[0]);
 
-                if ($ob_info === NULL) {
+                if ($ob_info === null) {
                     continue;
                 }
                 $ob_info['_hook'] = $hook;
                 $CONTENT_OBS[$ob_info['view_page_link_pattern']] = $ob_info;
 
-                if (($ob_info['title_field'] !== NULL) && (strpos($ob_info['title_field'],'CALL:') !== false)) {
+                if (($ob_info['title_field'] !== null) && (strpos($ob_info['title_field'], 'CALL:') !== false)) {
                     require_code('hooks/systems/content_meta_aware/' . $hook);
                 }
             }
         }
 
         if (function_exists('persistent_cache_set')) {
-            persistent_cache_set('CONTENT_OBS',$CONTENT_OBS);
+            persistent_cache_set('CONTENT_OBS', $CONTENT_OBS);
         }
     }
 }
@@ -1033,38 +1035,38 @@ function load_moniker_hooks()
  * @param  ID_TEXT                      The URL zone name (only used for Comcode Page URL monikers).
  * @return ?string                      The moniker ID (NULL: could not find)
  */
-function find_id_moniker($url_parts,$zone)
+function find_id_moniker($url_parts, $zone)
 {
     if (!isset($url_parts['page'])) {
-        return NULL;
+        return null;
     }
-    if (strpos($url_parts['page'],'[') !== false) {
-        return NULL;
+    if (strpos($url_parts['page'], '[') !== false) {
+        return null;
     } // A regexp in a comparison URL, in breadcrumbs code
     if ($zone == '[\w\_\-]*') {
-        return NULL;
+        return null;
     } // Part of a breadcrumbs regexp
 
     // Does this URL arrangement support monikers?
     global $CONTENT_OBS;
-    if ($CONTENT_OBS === NULL) {
+    if ($CONTENT_OBS === null) {
         load_moniker_hooks();
     }
-    if (!array_key_exists('id',$url_parts)) {
+    if (!array_key_exists('id', $url_parts)) {
         if (is_file(get_file_base() . '/' . $zone . '/pages/modules/' . $url_parts['page'] . '.php')) {// Wasteful of resources
-            return NULL;
+            return null;
         }
         if (($zone == '') && (get_option('collapse_user_zones') == '1')) {
             if (is_file(get_file_base() . '/site/pages/modules/' . $url_parts['page'] . '.php')) {// Wasteful of resources
-                return NULL;
+                return null;
             }
         }
 
         // Moniker may be held the other side of a redirect
         if (!function_exists('_request_page')) {
-            return NULL;
+            return null;
         } // In installer
-        $page_place = _request_page($url_parts['page'],$zone);
+        $page_place = _request_page($url_parts['page'], $zone);
         if ($page_place[0] == 'REDIRECT') {
             $url_parts['page'] = $page_place[1]['r_to_page'];
             $zone = $page_place[1]['r_to_zone'];
@@ -1079,12 +1081,12 @@ function find_id_moniker($url_parts,$zone)
         if (!isset($url_parts['type'])) {
             $url_parts['type'] = 'misc';
         }
-        if ($url_parts['type'] === NULL) {
+        if ($url_parts['type'] === null) {
             $url_parts['type'] = 'misc';
         } // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
 
-        if (array_key_exists('id',$url_parts)) {
-            if ($url_parts['id'] === NULL) {
+        if (array_key_exists('id', $url_parts)) {
+            if ($url_parts['id'] === null) {
                 $url_parts['id'] = strval(db_get_first_id());
             }
         }
@@ -1093,25 +1095,25 @@ function find_id_moniker($url_parts,$zone)
 
         $looking_for = '_SEARCH:' . $url_parts['page'] . ':' . $url_parts['type'] . ':_WILD';
     }
-    $ob_info = isset($CONTENT_OBS[$looking_for])?$CONTENT_OBS[$looking_for]:null;
-    if ($ob_info === NULL) {
-        return NULL;
+    $ob_info = isset($CONTENT_OBS[$looking_for]) ? $CONTENT_OBS[$looking_for] : null;
+    if ($ob_info === null) {
+        return null;
     }
 
     if ($ob_info['id_field_numeric']) {
         if (!is_numeric($effective_id)) {
-            return NULL;
+            return null;
         }
     } else {
-        if (strpos($effective_id,'/') !== false) {
-            return NULL;
+        if (strpos($effective_id, '/') !== false) {
+            return null;
         }
     }
 
     if ($ob_info['support_url_monikers']) {
         $loaded_a_page_one = false;
 
-       // Has to find existing if already there
+        // Has to find existing if already there
         global $LOADED_MONIKERS_CACHE;
         if (isset($LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id])) {
             if (is_bool($LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id])) { // Ok, none pre-loaded yet, so we preload all and replace the boolean values with actual results
@@ -1130,7 +1132,7 @@ function find_id_moniker($url_parts,$zone)
                             if ($or_list != '') {
                                 $or_list .= ' OR ';
                             }
-                            $or_list .= '(' . db_string_equal_to('m_resource_page',$page) . ' AND ' . db_string_equal_to('m_resource_type',$type) . ' AND ' . db_string_equal_to('m_resource_id',$id) . ')';
+                            $or_list .= '(' . db_string_equal_to('m_resource_page', $page) . ' AND ' . db_string_equal_to('m_resource_type', $type) . ' AND ' . db_string_equal_to('m_resource_id', $id) . ')';
 
                             $LOADED_MONIKERS_CACHE[$page][$type][$id] = $id; // Will be replaced with correct value if it is looked up
                         }
@@ -1140,7 +1142,7 @@ function find_id_moniker($url_parts,$zone)
                     $bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
                     $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
                     $query = 'SELECT m_moniker,m_resource_page,m_resource_type,m_resource_id FROM ' . get_table_prefix() . 'url_id_monikers WHERE m_deprecated=0 AND (' . $or_list . ')';
-                    $results = $GLOBALS['SITE_DB']->query($query,null,null,false,true);
+                    $results = $GLOBALS['SITE_DB']->query($query, null, null, false, true);
                     $GLOBALS['NO_DB_SCOPE_CHECK'] = $bak;
                     foreach ($results as $result) {
                         $LOADED_MONIKERS_CACHE[$result['m_resource_type']][$result['m_resource_page']][$result['m_resource_id']] = $result['m_moniker'];
@@ -1170,11 +1172,11 @@ function find_id_moniker($url_parts,$zone)
                 'm_deprecated' => 0,
                 'm_resource_page' => $url_parts['page'],
                 'm_resource_type' => $url_parts['type'],
-                'm_resource_id' => is_integer($effective_id)?strval($effective_id):$effective_id,
+                'm_resource_id' => is_integer($effective_id) ? strval($effective_id) : $effective_id,
             );
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers','m_moniker',$where);
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('url_id_monikers', 'm_moniker', $where);
             $GLOBALS['NO_DB_SCOPE_CHECK'] = $bak;
-            if ($test !== NULL) {
+            if ($test !== null) {
                 $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id] = $test;
             } else {
                 $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id] = false;
@@ -1185,26 +1187,26 @@ function find_id_moniker($url_parts,$zone)
         }
 
         if ($loaded_a_page_one) {
-            persistent_cache_set('LOADED_MONIKERS_CACHE',array('' => $LOADED_MONIKERS_CACHE['']));
+            persistent_cache_set('LOADED_MONIKERS_CACHE', array('' => $LOADED_MONIKERS_CACHE['']));
         }
 
         if (is_string($test)) {
-            return ($test == '')?null:$test;
+            return ($test == '') ? null : $test;
         }
 
         if ($looking_for == '_WILD:_WILD') {
-            return NULL;
+            return null;
         } // We don't generate these automatically
 
         // Otherwise try to generate a new one
         require_code('urls2');
-        $test = autogenerate_new_url_moniker($ob_info,$url_parts,$zone);
-        if ($test === NULL) {
+        $test = autogenerate_new_url_moniker($ob_info, $url_parts, $zone);
+        if ($test === null) {
             $test = '';
         }
         $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$effective_id] = $test;
-        return ($test == '')?null:$test;
+        return ($test == '') ? null : $test;
     }
 
-    return NULL;
+    return null;
 }

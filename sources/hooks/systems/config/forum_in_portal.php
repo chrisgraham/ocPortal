@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_forum_in_portal
 {
     /**
@@ -32,7 +31,7 @@ class Hook_config_forum_in_portal
             'type' => 'tick',
             'category' => 'SITE',
             'group' => 'ADVANCED',
-            'explanation' => (get_forum_type() == 'ocf')?'CONFIG_OPTION_forum_in_portal__ocf':'CONFIG_OPTION_forum_in_portal',
+            'explanation' => (get_forum_type() == 'ocf') ? 'CONFIG_OPTION_forum_in_portal__ocf' : 'CONFIG_OPTION_forum_in_portal',
             'shared_hosting_restricted' => '1',
             'list_options' => '',
 
@@ -47,6 +46,6 @@ class Hook_config_forum_in_portal
      */
     public function get_default()
     {
-        return ((has_no_forum()) || (get_forum_type() == 'ocf'))?null:'0';
+        return ((has_no_forum()) || (get_forum_type() == 'ocf')) ? null : '0';
     }
 }

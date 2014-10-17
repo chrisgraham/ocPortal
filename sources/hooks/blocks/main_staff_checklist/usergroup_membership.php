@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_checklist_usergroup_membership
 {
     /**
@@ -31,19 +30,19 @@ class Hook_checklist_usergroup_membership
             return array();
         }
 
-        $cnt = $GLOBALS['FORUM_DB']->query_select_value('f_group_members','COUNT(*)',array('gm_validated' => 0));
+        $cnt = $GLOBALS['FORUM_DB']->query_select_value('f_group_members', 'COUNT(*)', array('gm_validated' => 0));
 
-        if ($cnt>0) {
-            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array('_GUID' => 'o578142633c6f3d37776e82a869deb91'));
+        if ($cnt > 0) {
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0', array('_GUID' => 'o578142633c6f3d37776e82a869deb91'));
         } else {
-            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1',array('_GUID' => 'p578142633c6f3d37776e82a869deb91'));
+            $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1', array('_GUID' => 'p578142633c6f3d37776e82a869deb91'));
         }
 
-        $url = build_url(array('page' => 'groups','type' => 'misc'),get_module_zone('groups'));
+        $url = build_url(array('page' => 'groups', 'type' => 'misc'), get_module_zone('groups'));
 
         require_lang('ocf');
 
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'cccf866e2ea104ac41685a8756e182f8','URL' => $url,'STATUS' => $status,'TASK' => do_lang_tempcode('USERGROUP_APPLICATIONS'),'INFO' => do_lang_tempcode('NUM_QUEUE',escape_html(integer_format($cnt)))));
-        return array(array($tpl,null,$cnt,null));
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'cccf866e2ea104ac41685a8756e182f8', 'URL' => $url, 'STATUS' => $status, 'TASK' => do_lang_tempcode('USERGROUP_APPLICATIONS'), 'INFO' => do_lang_tempcode('NUM_QUEUE', escape_html(integer_format($cnt)))));
+        return array(array($tpl, null, $cnt, null));
     }
 }

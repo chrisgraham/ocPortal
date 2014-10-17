@@ -91,7 +91,7 @@ class Module_admin_customers
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         require_lang('customers');
 
@@ -102,16 +102,16 @@ class Module_admin_customers
         $cur_id = null;
         $cur_id = get_credits_profile_field_id('ocp_currency');
         if (!is_null($cur_id)) {
-            $GLOBALS['SITE_DB']->query_update('f_custom_fields',array('cf_owner_view' => 1,'cf_owner_set' => 1),array('id' => $cur_id),'',1);
+            $GLOBALS['SITE_DB']->query_update('f_custom_fields', array('cf_owner_view' => 1, 'cf_owner_set' => 1), array('id' => $cur_id), '', 1);
         }
-        ocf_make_custom_field('ocp_support_credits',1,'','',0,1,0,0,'integer');
-        ocf_make_custom_field('ocp_ftp_host',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
-        ocf_make_custom_field('ocp_ftp_path',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
-        ocf_make_custom_field('ocp_ftp_username',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
-        ocf_make_custom_field('ocp_ftp_password',1,do_lang('ENCRYPTED_TO_WEBSITE'),'',0,1,1,1,'short_text');
-        ocf_make_custom_field('ocp_profession',1,'',do_lang('CUSTOMER_PROFESSION_CPF_LIST'),0,1,1,0,'list');
+        ocf_make_custom_field('ocp_support_credits', 1, '', '', 0, 1, 0, 0, 'integer');
+        ocf_make_custom_field('ocp_ftp_host', 1, do_lang('ENCRYPTED_TO_WEBSITE'), '', 0, 1, 1, 1, 'short_text');
+        ocf_make_custom_field('ocp_ftp_path', 1, do_lang('ENCRYPTED_TO_WEBSITE'), '', 0, 1, 1, 1, 'short_text');
+        ocf_make_custom_field('ocp_ftp_username', 1, do_lang('ENCRYPTED_TO_WEBSITE'), '', 0, 1, 1, 1, 'short_text');
+        ocf_make_custom_field('ocp_ftp_password', 1, do_lang('ENCRYPTED_TO_WEBSITE'), '', 0, 1, 1, 1, 'short_text');
+        ocf_make_custom_field('ocp_profession', 1, '', do_lang('CUSTOMER_PROFESSION_CPF_LIST'), 0, 1, 1, 0, 'list');
 
-        $GLOBALS['SITE_DB']->create_table('credit_purchases',array(
+        $GLOBALS['SITE_DB']->create_table('credit_purchases', array(
             'purchase_id' => '*AUTO',
             'member_id' => 'MEMBER',
             'num_credits' => 'INTEGER',
@@ -120,7 +120,7 @@ class Module_admin_customers
             'is_manual' => 'BINARY'
         ));
 
-        $GLOBALS['SITE_DB']->create_table('credit_charge_log',array(
+        $GLOBALS['SITE_DB']->create_table('credit_charge_log', array(
             'id' => '*AUTO',
             'member_id' => 'MEMBER',
             'charging_member_id' => 'MEMBER',
@@ -647,14 +647,14 @@ class Module_admin_customers
         /* Multi-mods */
         require_code('ocf_moderation_action');
 
-        ocf_make_multi_moderation(do_lang('TICKET_MM_TAKE_OWNERSHIP'),do_lang('TICKET_MM_TAKE_OWNERSHIP_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_QUOTE'),do_lang('TICKET_MM_QUOTE_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_PRICE'),do_lang('TICKET_MM_PRICE_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_CLOSE'),do_lang('TICKET_MM_CLOSE_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_CHARGED'),do_lang('TICKET_MM_CHARGED_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_NOT_FOR_FREE'),do_lang('TICKET_MM_NOT_FOR_FREE_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_FREE_WORK'),do_lang('TICKET_MM_FREE_WORK_POST'),null,null,null,null,'*');
-        ocf_make_multi_moderation(do_lang('TICKET_MM_FREE_CREDITS'),do_lang('TICKET_MM_FREE_CREDITS_POST'),null,null,null,null,'*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_TAKE_OWNERSHIP'), do_lang('TICKET_MM_TAKE_OWNERSHIP_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_QUOTE'), do_lang('TICKET_MM_QUOTE_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_PRICE'), do_lang('TICKET_MM_PRICE_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_CLOSE'), do_lang('TICKET_MM_CLOSE_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_CHARGED'), do_lang('TICKET_MM_CHARGED_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_NOT_FOR_FREE'), do_lang('TICKET_MM_NOT_FOR_FREE_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_FREE_WORK'), do_lang('TICKET_MM_FREE_WORK_POST'), null, null, null, null, '*');
+        ocf_make_multi_moderation(do_lang('TICKET_MM_FREE_CREDITS'), do_lang('TICKET_MM_FREE_CREDITS_POST'), null, null, null, null, '*');
     }
 
     /**
@@ -666,10 +666,10 @@ class Module_admin_customers
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('CHARGE_CUSTOMER','menu/_generic_admin/tool'),
+            'misc' => array('CHARGE_CUSTOMER', 'menu/_generic_admin/tool'),
         );
     }
 
@@ -682,13 +682,13 @@ class Module_admin_customers
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('customers');
 
         $this->title = get_screen_title('CHARGE_CUSTOMER');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -698,7 +698,7 @@ class Module_admin_customers
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'charge') {
             return $this->charge();
@@ -722,12 +722,12 @@ class Module_admin_customers
     {
         require_code('form_templates');
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_charge'),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_charge'), '_SELF');
         $submit_name = do_lang_tempcode('CHARGE');
 
-        $username = get_param('username',null);
+        $username = get_param('username', null);
         if (is_null($username)) {
-            $member_id = get_param_integer('member_id',null);
+            $member_id = get_param_integer('member_id', null);
             if (!is_null($member_id)) {
                 $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
             } else {
@@ -738,15 +738,15 @@ class Module_admin_customers
         }
 
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_username(do_lang_tempcode('USERNAME'),'','member_username',$username,true));
-        $fields->attach(form_input_integer(do_lang_tempcode('CREDIT_AMOUNT'),do_lang_tempcode('CREDIT_AMOUNT_DESCRIPTION'),'amount',get_param_integer('amount',3),true));
-        $fields->attach(form_input_tick(do_lang_tempcode('ALLOW_OVERDRAFT'),do_lang_tempcode('DESCRIPTION_ALLOW_OVERDRAFT'),'allow_overdraft',true));
-        $fields->attach(form_input_line(do_lang_tempcode('REASON'),'If for a ticket, you can just paste in the ticket URL.','reason','',true));
+        $fields->attach(form_input_username(do_lang_tempcode('USERNAME'), '', 'member_username', $username, true));
+        $fields->attach(form_input_integer(do_lang_tempcode('CREDIT_AMOUNT'), do_lang_tempcode('CREDIT_AMOUNT_DESCRIPTION'), 'amount', get_param_integer('amount', 3), true));
+        $fields->attach(form_input_tick(do_lang_tempcode('ALLOW_OVERDRAFT'), do_lang_tempcode('DESCRIPTION_ALLOW_OVERDRAFT'), 'allow_overdraft', true));
+        $fields->attach(form_input_line(do_lang_tempcode('REASON'), 'If for a ticket, you can just paste in the ticket URL.', 'reason', '', true));
 
         if (!is_null($member_id)) {
             $cpf_id = get_credits_profile_field_id();
             if (is_null($cpf_id)) {
-                $msg_tpl = warn_screen($this->title,do_lang_tempcode('INVALID_FIELD_ID'));
+                $msg_tpl = warn_screen($this->title, do_lang_tempcode('INVALID_FIELD_ID'));
                 $msg_tpl->evaluate_echo();
                 return;
             }
@@ -757,14 +757,14 @@ class Module_admin_customers
                 $num_credits = intval($_fields['field_' . strval($cpf_id)]);
             }
 
-            $text = do_lang_tempcode('CUSTOMER_CURRENTLY_HAS',escape_html(number_format($num_credits)));
+            $text = do_lang_tempcode('CUSTOMER_CURRENTLY_HAS', escape_html(number_format($num_credits)));
         } else {
             $text = new ocp_tempcode();
         }
 
         require_code('templates_columned_table');
         $rows = new ocp_tempcode();
-        $logs = $GLOBALS['SITE_DB']->query_select('credit_charge_log',array('charging_member_id','num_credits','date_and_time','reason'),array('member_id' => $member_id),'ORDER BY date_and_time DESC',10);
+        $logs = $GLOBALS['SITE_DB']->query_select('credit_charge_log', array('charging_member_id', 'num_credits', 'date_and_time', 'reason'), array('member_id' => $member_id), 'ORDER BY date_and_time DESC', 10);
         foreach ($logs as $log) {
             $charging_username = $GLOBALS['FORUM_DRIVER']->get_username($log['charging_member_id']);
             if (is_null($charging_username)) {
@@ -773,7 +773,7 @@ class Module_admin_customers
             $_num_credits = integer_format($log['num_credits']);
             $date_and_time = get_timezoned_date($log['date_and_time']);
             $reason = $log['reason'];
-            $rows->attach(columned_table_row(array($charging_username,$_num_credits,$date_and_time,$reason),true));
+            $rows->attach(columned_table_row(array($charging_username, $_num_credits, $date_and_time, $reason), true));
         }
         if (!$rows->is_empty()) {
             $_header_row = array(
@@ -783,10 +783,10 @@ class Module_admin_customers
                 do_lang_tempcode('REASON'),
             );
             $header_row = columned_table_header_row($_header_row);
-            $text->attach(do_template('COLUMNED_TABLE',array('HEADER_ROW' => $header_row,'ROWS' => $rows)));
+            $text->attach(do_template('COLUMNED_TABLE', array('HEADER_ROW' => $header_row, 'ROWS' => $rows)));
         }
 
-        return do_template('FORM_SCREEN',array('_GUID' => 'f91185ee725f47ffa652d5fef8d85c0b','TITLE' => $this->title,'HIDDEN' => '','TEXT' => $text,'FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+        return do_template('FORM_SCREEN', array('_GUID' => 'f91185ee725f47ffa652d5fef8d85c0b', 'TITLE' => $this->title, 'HIDDEN' => '', 'TEXT' => $text, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => $submit_name, 'URL' => $post_url));
     }
 
     /**
@@ -802,7 +802,7 @@ class Module_admin_customers
 
         $cpf_id = get_credits_profile_field_id();
         if (is_null($cpf_id)) {
-            $msg_tpl = warn_screen($this->title,do_lang_tempcode('INVALID_FIELD_ID'));
+            $msg_tpl = warn_screen($this->title, do_lang_tempcode('INVALID_FIELD_ID'));
             $msg_tpl->evaluate_echo();
             return;
         }
@@ -812,26 +812,26 @@ class Module_admin_customers
         $fields = ocf_get_custom_field_mappings($member_id);
 
         // Work out new total credits
-        $new_amount = $fields['field_' . strval($cpf_id)]-$amount;
-        if (post_param_integer('allow_overdraft',0) == 0) {
-            if ($new_amount<0) {
+        $new_amount = $fields['field_' . strval($cpf_id)] - $amount;
+        if (post_param_integer('allow_overdraft', 0) == 0) {
+            if ($new_amount < 0) {
                 $new_amount = 0;
-                $amount = $fields['field_' . strval($cpf_id)]-$new_amount;
+                $amount = $fields['field_' . strval($cpf_id)] - $new_amount;
             }
         }
 
-        ocf_set_custom_field($member_id,$cpf_id,$new_amount);
+        ocf_set_custom_field($member_id, $cpf_id, $new_amount);
 
-        $GLOBALS['SITE_DB']->query_insert('credit_charge_log',array(
+        $GLOBALS['SITE_DB']->query_insert('credit_charge_log', array(
             'member_id' => $member_id,
             'charging_member_id' => get_member(),
             'num_credits' => $amount,
             'date_and_time' => time(),
-            'reason' => post_param('reason',''),
+            'reason' => post_param('reason', ''),
         ));
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => '_SELF','type' => 'misc','username' => $username),'_SELF');
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'username' => $username), '_SELF');
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

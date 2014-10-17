@@ -31,10 +31,10 @@ function init__forum__ocf()
     $FLOOD_CONTROL_ONCE = false;
     global $SENT_OUT_VALIDATE_NOTICE;
     $SENT_OUT_VALIDATE_NOTICE = false;
-    global $LAST_POST_ID,$LAST_TOPIC_ID;
+    global $LAST_POST_ID, $LAST_TOPIC_ID;
     $LAST_POST_ID = null;
     $LAST_TOPIC_ID = null;
-    global $TOPIC_IDENTIFIERS_TO_IDS_CACHE,$FORUM_NAMES_TO_IDS_CACHE,$TOPIC_IS_THREADED_CACHE;
+    global $TOPIC_IDENTIFIERS_TO_IDS_CACHE, $FORUM_NAMES_TO_IDS_CACHE, $TOPIC_IS_THREADED_CACHE;
     $TOPIC_IDENTIFIERS_TO_IDS_CACHE = array();
     $FORUM_NAMES_TO_IDS_CACHE = array();
     $TOPIC_IS_THREADED_CACHE = array();
@@ -42,6 +42,7 @@ function init__forum__ocf()
 
 /**
  * Forum Driver.
+ *
  * @package    core_forum_drivers
  */
 class forum_driver_ocf extends forum_driver_base
@@ -52,13 +53,14 @@ class forum_driver_ocf extends forum_driver_base
     public function forum_layer_initialise()
     {
         /** A copy of the forum driver pointing to OCF. This is used during importing as a permanent pointer to OCF, even when FORUM_DRIVER may be pointing temporarily to an instance of the forum being imported.
+         *
          * @global object $OCF_DRIVER
          */
         global $OCF_DRIVER;
         $OCF_DRIVER = mixed();
         $GLOBALS['OCF_DRIVER'] = &$this; // Done like this to workaround that PHP can't put a reference in a global'd variable
 
-        if ((function_exists('ldap_connect')) && (get_option('ldap_is_enabled',true) == '1')) {
+        if ((function_exists('ldap_connect')) && (get_option('ldap_is_enabled', true) == '1')) {
             require_code('ocf_members');
             require_code('ocf_groups');
             require_code('ocf_ldap');
@@ -75,7 +77,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_top_posters($limit)
     {
-        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE id<>' . strval($this->get_guest_id()) . ' ORDER BY m_cache_num_posts DESC',$limit);
+        return $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE id<>' . strval($this->get_guest_id()) . ' ORDER BY m_cache_num_posts DESC', $limit);
     }
 
     /**
@@ -86,7 +88,7 @@ class forum_driver_ocf extends forum_driver_base
     public function get_drivered_table_prefix()
     {
         global $SITE_INFO;
-        return array_key_exists('ocf_table_prefix',$SITE_INFO)?$SITE_INFO['ocf_table_prefix']:get_table_prefix();
+        return array_key_exists('ocf_table_prefix', $SITE_INFO) ? $SITE_INFO['ocf_table_prefix'] : get_table_prefix();
     }
 
     /**
@@ -97,7 +99,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function forum_get_lang($member)
     {
-        return $this->get_member_row_field($member,'m_language');
+        return $this->get_member_row_field($member, 'm_language');
     }
 
     /**
@@ -128,7 +130,7 @@ class forum_driver_ocf extends forum_driver_base
     public function get_guest_id()
     {
         static $ret = null;
-        if ($ret === NULL) {
+        if ($ret === null) {
             $ret = db_get_first_id();
         }
         return $ret;
@@ -141,7 +143,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function _install_delete_custom_field($name)
     {
-        $id = $this->connection->query_select_value_if_there('f_custom_fields','id',array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $name));
+        $id = $this->connection->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $name));
         if (!is_null($id)) {
             require_code('ocf_members_action2');
             ocf_delete_custom_field($id);
@@ -163,10 +165,10 @@ class forum_driver_ocf extends forum_driver_base
      * @param  ?string                  Default field value (NULL: standard for field type)
      * @return boolean                  Whether the custom field was created successfully
      */
-    public function install_create_custom_field($name,$length,$locked = 1,$viewable = 0,$settable = 0,$required = 0,$description = '',$type = 'long_text',$encrypted = 0,$default = null)
+    public function install_create_custom_field($name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0, $description = '', $type = 'long_text', $encrypted = 0, $default = null)
     {
         require_code('ocf_forum_driver_helper_install');
-        return _helper_install_create_custom_field($this,$name,$length,$locked,$viewable,$settable,$required,$description,$type,$encrypted,$default);
+        return _helper_install_create_custom_field($this, $name, $length, $locked, $viewable, $settable, $required, $description, $type, $encrypted, $default);
     }
 
     /**
@@ -233,10 +235,10 @@ class forum_driver_ocf extends forum_driver_base
      * @param  ?MEMBER                  Owner of comment topic (NULL: Guest)
      * @return array                    Topic ID (may be NULL), and whether a hidden post has been made
      */
-    public function make_post_forum_topic($forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url = null,$time = null,$ip = null,$validated = null,$topic_validated = 1,$skip_post_checks = false,$poster_name_if_guest = '',$parent_id = null,$staff_only = false,$no_notify_for__notification_code = null,$no_notify_for__code_category = null,$time_post = null,$spacer_post_member_id = null)
+    public function make_post_forum_topic($forum_name, $topic_identifier, $member_id, $post_title, $post, $content_title, $topic_identifier_encapsulation_prefix, $content_url = null, $time = null, $ip = null, $validated = null, $topic_validated = 1, $skip_post_checks = false, $poster_name_if_guest = '', $parent_id = null, $staff_only = false, $no_notify_for__notification_code = null, $no_notify_for__code_category = null, $time_post = null, $spacer_post_member_id = null)
     {
         require_code('ocf_forum_driver_helper');
-        return _helper_make_post_forum_topic($this,$forum_name,$topic_identifier,$member_id,$post_title,$post,$content_title,$topic_identifier_encapsulation_prefix,$content_url,$time,$ip,$validated,$topic_validated,$skip_post_checks,$poster_name_if_guest,$parent_id,$staff_only,$no_notify_for__notification_code,$no_notify_for__code_category,$time_post,$spacer_post_member_id);
+        return _helper_make_post_forum_topic($this, $forum_name, $topic_identifier, $member_id, $post_title, $post, $content_title, $topic_identifier_encapsulation_prefix, $content_url, $time, $ip, $validated, $topic_validated, $skip_post_checks, $poster_name_if_guest, $parent_id, $staff_only, $no_notify_for__notification_code, $no_notify_for__code_category, $time_post, $spacer_post_member_id);
     }
 
     /**
@@ -261,10 +263,10 @@ class forum_driver_ocf extends forum_driver_base
      * @param  SHORT_TEXT               The topic description filter
      * @return ?array                   The array of topics (NULL: error/none)
      */
-    public function show_forum_topics($name,$limit,$start,&$max_rows,$filter_topic_title = '',$show_first_posts = false,$date_key = 'lasttime',$hot = false,$filter_topic_description = '')
+    public function show_forum_topics($name, $limit, $start, &$max_rows, $filter_topic_title = '', $show_first_posts = false, $date_key = 'lasttime', $hot = false, $filter_topic_description = '')
     {
         require_code('ocf_forum_driver_helper');
-        return _helper_show_forum_topics($this,$name,$limit,$start,$max_rows,$filter_topic_title,$filter_topic_description,$show_first_posts,$date_key,$hot);
+        return _helper_show_forum_topics($this, $name, $limit, $start, $max_rows, $filter_topic_title, $filter_topic_description, $show_first_posts, $date_key, $hot);
     }
 
     /**
@@ -283,10 +285,10 @@ class forum_driver_ocf extends forum_driver_base
      * @set date rating
      * @return mixed                    The array of maps (Each map is: title, message, member, date) (-1 for no such forum, -2 for no such topic)
      */
-    public function get_forum_topic_posts($topic_id,&$count,$max = 100,$start = 0,$mark_read = true,$reverse = false,$light_if_threaded = false,$posts = null,$load_spacer_posts_too = false,$sort = 'date')
+    public function get_forum_topic_posts($topic_id, &$count, $max = 100, $start = 0, $mark_read = true, $reverse = false, $light_if_threaded = false, $posts = null, $load_spacer_posts_too = false, $sort = 'date')
     {
         require_code('ocf_forum_driver_helper');
-        return _helper_get_forum_topic_posts($this,$topic_id,$count,$max,$start,$mark_read,$reverse,$light_if_threaded,$posts,$load_spacer_posts_too,$sort);
+        return _helper_get_forum_topic_posts($this, $topic_id, $count, $max, $start, $mark_read, $reverse, $light_if_threaded, $posts, $load_spacer_posts_too, $sort);
     }
 
     /**
@@ -296,10 +298,10 @@ class forum_driver_ocf extends forum_driver_base
      * @param  array                    List of post IDs
      * @return array                    Extra details
      */
-    public function get_post_remaining_details($topic_id,$post_ids)
+    public function get_post_remaining_details($topic_id, $post_ids)
     {
         require_code('ocf_forum_driver_helper');
-        return _helper_get_post_remaining_details($this,$topic_id,$post_ids);
+        return _helper_get_post_remaining_details($this, $topic_id, $post_ids);
     }
 
     /**
@@ -311,11 +313,11 @@ class forum_driver_ocf extends forum_driver_base
     public function topic_is_threaded($topic_id)
     {
         global $TOPIC_IS_THREADED_CACHE;
-        if (array_key_exists($topic_id,$TOPIC_IS_THREADED_CACHE)) {
+        if (array_key_exists($topic_id, $TOPIC_IS_THREADED_CACHE)) {
             return $TOPIC_IS_THREADED_CACHE[$topic_id] == 1;
         }
 
-        $TOPIC_IS_THREADED_CACHE[$topic_id] = $this->connection->query_select_value_if_there('f_topics t JOIN ' . $this->connection->get_table_prefix() . 'f_forums f ON f.id=t.t_forum_id','f_is_threaded',array('t.id' => $topic_id));
+        $TOPIC_IS_THREADED_CACHE[$topic_id] = $this->connection->query_select_value_if_there('f_topics t JOIN ' . $this->connection->get_table_prefix() . 'f_forums f ON f.id=t.t_forum_id', 'f_is_threaded', array('t.id' => $topic_id));
         return $TOPIC_IS_THREADED_CACHE[$topic_id] == 1;
     }
 
@@ -328,7 +330,7 @@ class forum_driver_ocf extends forum_driver_base
     public function get_emoticon_chooser($field_name = 'post')
     {
         require_code('ocf_forum_driver_helper');
-        return _helper_get_emoticon_chooser($this,$field_name);
+        return _helper_get_emoticon_chooser($this, $field_name);
     }
 
     /**
@@ -337,9 +339,9 @@ class forum_driver_ocf extends forum_driver_base
      * @param  AUTO_LINK                The topic ID
      * @param  boolean                  True: pin it, False: unpin it
      */
-    public function pin_topic($id,$pin = true)
+    public function pin_topic($id, $pin = true)
     {
-        $this->connection->query_update('f_topics',array('t_pinned' => $pin?1:0),array('id' => $id),'',1);
+        $this->connection->query_update('f_topics', array('t_pinned' => $pin ? 1 : 0), array('id' => $id), '', 1);
     }
 
     /**
@@ -361,7 +363,7 @@ class forum_driver_ocf extends forum_driver_base
     public function find_emoticons($member = null)
     {
         require_code('ocf_forum_driver_helper');
-        return _helper_apply_emoticons($this,$member);
+        return _helper_apply_emoticons($this, $member);
     }
 
     /**
@@ -377,7 +379,7 @@ class forum_driver_ocf extends forum_driver_base
         $theme = '';
         if (!$skip_member_specific) {
             if ($member != $this->get_guest_id()) {
-                $theme = $this->get_member_row_field($member,'m_theme');
+                $theme = $this->get_member_row_field($member, 'm_theme');
             }
         }
         if (($theme == '') || ($theme == '-1')) {
@@ -399,7 +401,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  string                   The field name
      * @param  string                   The value
      */
-    public function set_custom_field($member,$field,$value)
+    public function set_custom_field($member, $field, $value)
     {
         // Check member exists
         $username = $this->get_username($member);
@@ -410,20 +412,20 @@ class forum_driver_ocf extends forum_driver_base
         require_code('ocf_members_action');
         require_code('ocf_members_action2');
 
-        $field_bits = $this->connection->query_select('f_custom_fields',array('id','cf_type'),array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $field));
-        if (!array_key_exists(0,$field_bits)) { // Should never happen, but sometimes on upgrades/corruption...
-            $this->install_create_custom_field($field,10);
-            $field_bits = $this->connection->query_select('f_custom_fields',array('id','cf_type'),array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $field));
-            if (!array_key_exists(0,$field_bits)) {
+        $field_bits = $this->connection->query_select('f_custom_fields', array('id', 'cf_type'), array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $field));
+        if (!array_key_exists(0, $field_bits)) { // Should never happen, but sometimes on upgrades/corruption...
+            $this->install_create_custom_field($field, 10);
+            $field_bits = $this->connection->query_select('f_custom_fields', array('id', 'cf_type'), array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $field));
+            if (!array_key_exists(0, $field_bits)) {
                 return;
             } // Possible on an MSN, and there's an inconsistency (e.g. no points addon)
         }
         $field_type = $field_bits[0]['cf_type'];
         $field_id = $field_bits[0]['id'];
         if ($field_type == 'integer') {
-            ocf_set_custom_field($member,$field_id,intval($value));
+            ocf_set_custom_field($member, $field_id, intval($value));
         } else {
-            ocf_set_custom_field($member,$field_id,$value);
+            ocf_set_custom_field($member, $field_id, $value);
         }
     }
 
@@ -438,15 +440,15 @@ class forum_driver_ocf extends forum_driver_base
         // Check member exists
         $username = $this->get_username($member);
         if (is_null($username)) {
-            return NULL;
+            return null;
         }
 
         require_code('ocf_members');
 
-        $info = ocf_get_all_custom_fields_match_member($member,null,null,null,null,null,null,null,1);
+        $info = ocf_get_all_custom_fields_match_member($member, null, null, null, null, null, null, null, 1);
         $out = array();
         foreach ($info as $field => $value) {
-            $out[substr($field,4)] = $value['RAW'];
+            $out[substr($field, 4)] = $value['RAW'];
         }
         return $out;
     }
@@ -464,9 +466,9 @@ class forum_driver_ocf extends forum_driver_base
                 return $row;
             }
         }
-        $rows = $this->connection->query_select('f_members',array('*'),array('m_username' => $name),'',1);
-        if (!array_key_exists(0,$rows)) {
-            return NULL;
+        $rows = $this->connection->query_select('f_members', array('*'), array('m_username' => $name), '', 1);
+        if (!array_key_exists(0, $rows)) {
+            return null;
         }
         return $rows[0];
     }
@@ -534,15 +536,15 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
      * @return mixed                    The URL to the members home
      */
-    public function member_home_url($id,$tempcode_okay = false)
+    public function member_home_url($id, $tempcode_okay = false)
     {
-        $_url = build_url(array('page' => 'members','type' => 'view','id' => $id),get_module_zone('members'),null,false,false,false,'tab__edit');
+        $_url = build_url(array('page' => 'members', 'type' => 'view', 'id' => $id), get_module_zone('members'), null, false, false, false, 'tab__edit');
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -554,28 +556,28 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
      * @return mixed                    The URL to the member profile
      */
-    public function _member_profile_url($id,$tempcode_okay = false)
+    public function _member_profile_url($id, $tempcode_okay = false)
     {
         if (get_option('username_profile_links') == '1') {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($id);
-            $map = array('page' => 'members','type' => 'view','id' => is_null($username)?strval($id):$username);
+            $map = array('page' => 'members', 'type' => 'view', 'id' => is_null($username) ? strval($id) : $username);
             if (get_page_name() == 'members') {
                 $map += propagate_ocselect();
             }
-            $_url = build_url($map,get_module_zone('members'),null,false,false,!$tempcode_okay);
+            $_url = build_url($map, get_module_zone('members'), null, false, false, !$tempcode_okay);
         } else {
-            $map = array('page' => 'members','type' => 'view','id' => $id);
+            $map = array('page' => 'members', 'type' => 'view', 'id' => $id);
             if (get_page_name() == 'members') {
                 $map += propagate_ocselect();
             }
-            $_url = build_url($map,get_module_zone('members'),null,false,false,!$tempcode_okay);
+            $_url = build_url($map, get_module_zone('members'), null, false, false, !$tempcode_okay);
         }
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -591,15 +593,15 @@ class forum_driver_ocf extends forum_driver_base
         if (count($_POST) != 0) {
             $page = '';
         }
-        $_redirect_url = build_url(array('page' => $page),'_SELF',array('keep_session' => 1,'redirect' => 1),true);
+        $_redirect_url = build_url(array('page' => $page), '_SELF', array('keep_session' => 1, 'redirect' => 1), true);
         $redirect_url = $_redirect_url->evaluate();
 
-        $redirect_url = get_param('redirect_passon',get_param('redirect',$redirect_url));
+        $redirect_url = get_param('redirect_passon', get_param('redirect', $redirect_url));
 
-        $_url = build_url(array('page' => 'join','redirect' => (get_page_name() == 'recommend')?null:$redirect_url),get_module_zone('join'));
+        $_url = build_url(array('page' => 'join', 'redirect' => (get_page_name() == 'recommend') ? null : $redirect_url), get_module_zone('join'));
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -612,13 +614,13 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function _users_online_url($tempcode_okay = false)
     {
-        $_url = build_url(array('page' => 'users_online'),get_module_zone('users_online'));
+        $_url = build_url(array('page' => 'users_online'), get_module_zone('users_online'));
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -630,15 +632,15 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the private/personal message page
      */
-    public function _member_pm_url($id,$tempcode_okay = false)
+    public function _member_pm_url($id, $tempcode_okay = false)
     {
-        $_url = build_url(array('page' => 'topics','type' => 'new_pt','id' => $id),get_module_zone('topics'),null,false,false,true);
+        $_url = build_url(array('page' => 'topics', 'type' => 'new_pt', 'id' => $id), get_module_zone('topics'), null, false, false, true);
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -650,19 +652,19 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the specified forum
      */
-    public function _forum_url($id,$tempcode_okay = false)
+    public function _forum_url($id, $tempcode_okay = false)
     {
         $view_map = array('page' => 'forumview');
         if ($id != db_get_first_id()) {
             $view_map['id'] = $id;
         }
-        $_url = build_url($view_map,get_module_zone('forumview'),null,false,false,!$tempcode_okay);
+        $_url = build_url($view_map, get_module_zone('forumview'), null, false, false, !$tempcode_okay);
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -676,16 +678,16 @@ class forum_driver_ocf extends forum_driver_base
     public function forum_id_from_name($forum_name)
     {
         global $FORUM_NAMES_TO_IDS_CACHE;
-        if (array_key_exists($forum_name,$FORUM_NAMES_TO_IDS_CACHE)) {
+        if (array_key_exists($forum_name, $FORUM_NAMES_TO_IDS_CACHE)) {
             return $FORUM_NAMES_TO_IDS_CACHE[$forum_name];
         }
 
         if (is_numeric($forum_name)) {
             $result = intval($forum_name);
         } else {
-            $_result = $this->connection->query_select('f_forums',array('id','f_is_threaded'),array('f_name' => $forum_name),'',1);
+            $_result = $this->connection->query_select('f_forums', array('id', 'f_is_threaded'), array('f_name' => $forum_name), '', 1);
             $result = mixed();
-            if (array_key_exists(0,$_result)) {
+            if (array_key_exists(0, $_result)) {
                 $result = $_result[0]['id'];
             }
         }
@@ -701,21 +703,21 @@ class forum_driver_ocf extends forum_driver_base
      * @param  SHORT_TEXT               The topic identifier
      * @return ?integer                 The topic ID (NULL: not found)
      */
-    public function find_topic_id_for_topic_identifier($forum,$topic_identifier)
+    public function find_topic_id_for_topic_identifier($forum, $topic_identifier)
     {
-        $key = serialize(array($forum,$topic_identifier));
+        $key = serialize(array($forum, $topic_identifier));
 
         global $TOPIC_IDENTIFIERS_TO_IDS_CACHE;
-        if (array_key_exists($key,$TOPIC_IDENTIFIERS_TO_IDS_CACHE)) {
+        if (array_key_exists($key, $TOPIC_IDENTIFIERS_TO_IDS_CACHE)) {
             return $TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key];
         }
         if (is_numeric($forum)) {
             $result = intval($forum);
         } else {
-            $result = $this->connection->query_select_value_if_there('f_forums','id',array('f_name' => $forum));
+            $result = $this->connection->query_select_value_if_there('f_forums', 'id', array('f_name' => $forum));
             if ($forum == get_option('comments_forum_name')) { // Fix performance for next time
                 require_code('config2');
-                set_option('comments_forum_name',strval($result));
+                set_option('comments_forum_name', strval($result));
             }
         }
 
@@ -725,15 +727,15 @@ class forum_driver_ocf extends forum_driver_base
             $forum_id = $this->forum_id_from_name($forum);
         }
         if (is_null($forum_id)) {
-            return NULL;
+            return null;
         }
 
-        $query = 'SELECT t.id,f_is_threaded FROM ' . $this->connection->get_table_prefix() . 'f_topics t JOIN ' . $this->connection->get_table_prefix() . 'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id=' . strval($forum_id) . ' AND (' . db_string_equal_to('t_description',$topic_identifier) . ' OR t_description LIKE \'%: #' . db_encode_like($topic_identifier) . '\'';
+        $query = 'SELECT t.id,f_is_threaded FROM ' . $this->connection->get_table_prefix() . 'f_topics t JOIN ' . $this->connection->get_table_prefix() . 'f_forums f ON f.id=t.t_forum_id WHERE t_forum_id=' . strval($forum_id) . ' AND (' . db_string_equal_to('t_description', $topic_identifier) . ' OR t_description LIKE \'%: #' . db_encode_like($topic_identifier) . '\'';
         $query .= ' OR t_cache_first_title LIKE \'% (#' . db_encode_like($topic_identifier) . ')\''; // LEGACY
         $query .= ')';
 
-        $_result = $this->connection->query($query,1,null,false,true);
-        if (array_key_exists(0,$_result)) {
+        $_result = $this->connection->query($query, 1, null, false, true);
+        if (array_key_exists(0, $_result)) {
             $TOPIC_IDENTIFIERS_TO_IDS_CACHE[$key] = $_result[0]['id'];
             global $TOPIC_IS_THREADED_CACHE;
             $TOPIC_IS_THREADED_CACHE[$_result[0]['id']] = $_result[0]['f_is_threaded'];
@@ -751,20 +753,20 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the topic
      */
-    public function topic_url($id,$forum = '',$tempcode_okay = false)
+    public function topic_url($id, $forum = '', $tempcode_okay = false)
     {
         if (is_null($id)) {
             return '';
         } // Should not happen, but if it does, this is how we should handle it.
 
         unset($forum);
-        $_url = build_url(array('page' => 'topicview','id' => $id),get_module_zone('topicview'),null,false,false,!$tempcode_okay);
+        $_url = build_url(array('page' => 'topicview', 'id' => $id), get_module_zone('topicview'), null, false, false, !$tempcode_okay);
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -777,7 +779,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the post
      */
-    public function post_url($id,$forum,$tempcode_okay = false)
+    public function post_url($id, $forum, $tempcode_okay = false)
     {
         if (is_null($id)) {
             return '';
@@ -785,14 +787,14 @@ class forum_driver_ocf extends forum_driver_base
 
         unset($forum);
 
-        $_url = build_url(array('page' => 'topicview','type' => 'findpost','id' => $id),get_module_zone('topicview'),null,false,false,!$tempcode_okay);
+        $_url = build_url(array('page' => 'topicview', 'type' => 'findpost', 'id' => $id), get_module_zone('topicview'), null, false, false, !$tempcode_okay);
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
             return $_url;
         }
         $url = $_url->evaluate();
         $url .= '#post_' . strval($id);
         if (get_option('forum_in_portal') == '0') {
-            $url = str_replace(get_base_url(),get_forum_base_url(),$url);
+            $url = str_replace(get_base_url(), get_forum_base_url(), $url);
         }
         return $url;
     }
@@ -805,7 +807,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  integer                  Return primary members after this offset and secondary members after this offset
      * @return ?array                   The map of members, member ID to details (NULL: no members)
      */
-    public function member_group_query($groups,$max = null,$start = 0)
+    public function member_group_query($groups, $max = null, $start = 0)
     {
         $_groups = '';
         foreach ($groups as $group) {
@@ -817,7 +819,7 @@ class forum_driver_ocf extends forum_driver_base
         if ($_groups == '') {
             return array();
         }
-        $a = $this->connection->query('SELECT u.* FROM ' . $this->connection->get_table_prefix() . 'f_group_members g JOIN ' . $this->connection->get_table_prefix() . 'f_members u ON u.id=g.gm_member_id WHERE (' . $_groups . ') AND gm_validated=1 ORDER BY g.gm_group_id ASC',$max,$start,false,true);
+        $a = $this->connection->query('SELECT u.* FROM ' . $this->connection->get_table_prefix() . 'f_group_members g JOIN ' . $this->connection->get_table_prefix() . 'f_members u ON u.id=g.gm_member_id WHERE (' . $_groups . ') AND gm_validated=1 ORDER BY g.gm_group_id ASC', $max, $start, false, true);
         $_groups = '';
         foreach ($groups as $group) {
             if ($_groups != '') {
@@ -825,27 +827,27 @@ class forum_driver_ocf extends forum_driver_base
             }
             $_groups .= 'm_primary_group=' . strval($group);
         }
-        $b = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE ' . $_groups . ' ORDER BY m_primary_group ASC',$max,$start,false,true);
+        $b = $this->connection->query('SELECT * FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE ' . $_groups . ' ORDER BY m_primary_group ASC', $max, $start, false, true);
         $out = array();
         foreach ($a as $x) {
-            if (!array_key_exists($x['id'],$out)) {
+            if (!array_key_exists($x['id'], $out)) {
                 $out[$x['id']] = $x;
             }
         }
         foreach ($b as $x) {
-            if (!array_key_exists($x['id'],$out)) {
+            if (!array_key_exists($x['id'], $out)) {
                 $out[$x['id']] = $x;
             }
         }
 
         // Now implicit usergroup hooks
-        $hooks = find_all_hooks('systems','ocf_implicit_usergroups');
+        $hooks = find_all_hooks('systems', 'ocf_implicit_usergroups');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/ocf_implicit_usergroups/' . $hook);
             $ob = object_factory('Hook_implicit_usergroups_' . $hook);
             $group_ids = $ob->get_bound_group_ids();
             foreach ($group_ids as $group_id) {
-                if (in_array($group_id,$groups)) {
+                if (in_array($group_id, $groups)) {
                     $c = $ob->get_member_list($group_id);
                     if (!is_null($c)) {
                         foreach ($c as $member_id => $x) {
@@ -869,7 +871,7 @@ class forum_driver_ocf extends forum_driver_base
     {
         $tempid = $this->connection->query_value_if_there('SELECT id FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE id<' . strval($member) . ' AND id>0 ORDER BY id DESC');
         if ($tempid == $this->get_guest_id()) {
-            return NULL;
+            return null;
         }
         return $tempid;
     }
@@ -895,14 +897,14 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function probe_ip($ip)
     {
-        if (strpos($ip,'*') !== false) {
-            $a = $this->connection->query('SELECT DISTINCT id FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE m_ip_address LIKE \'' . db_encode_like(str_replace('*','%',$ip)) . '\'');
-            $b = $this->connection->query('SELECT DISTINCT p_poster AS id FROM ' . $this->connection->get_table_prefix() . 'f_posts WHERE p_ip_address LIKE \'' . db_encode_like(str_replace('*','%',$ip)) . '\'');
+        if (strpos($ip, '*') !== false) {
+            $a = $this->connection->query('SELECT DISTINCT id FROM ' . $this->connection->get_table_prefix() . 'f_members WHERE m_ip_address LIKE \'' . db_encode_like(str_replace('*', '%', $ip)) . '\'');
+            $b = $this->connection->query('SELECT DISTINCT p_poster AS id FROM ' . $this->connection->get_table_prefix() . 'f_posts WHERE p_ip_address LIKE \'' . db_encode_like(str_replace('*', '%', $ip)) . '\'');
         } else {
-            $a = $this->connection->query_select('f_members',array('DISTINCT id'),array('m_ip_address' => $ip));
-            $b = $this->connection->query_select('f_posts',array('DISTINCT p_poster AS id'),array('p_ip_address' => $ip));
+            $a = $this->connection->query_select('f_members', array('DISTINCT id'), array('m_ip_address' => $ip));
+            $b = $this->connection->query_select('f_posts', array('DISTINCT p_poster AS id'), array('p_ip_address' => $ip));
         }
-        return array_merge($a,$b);
+        return array_merge($a, $b);
     }
 
     /**
@@ -917,7 +919,7 @@ class forum_driver_ocf extends forum_driver_base
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
         }
-        return $this->get_member_row_field($member,'m_username');
+        return $this->get_member_row_field($member, 'm_username');
     }
 
     /**
@@ -941,19 +943,19 @@ class forum_driver_ocf extends forum_driver_base
                 $username = $generator;
 
                 $matches = array();
-                $num_matches = preg_match_all('#\{(\d+)\}#',$generator,$matches);
-                for ($i = 0;$i<$num_matches;$i++) {
+                $num_matches = preg_match_all('#\{(\d+)\}#', $generator, $matches);
+                for ($i = 0; $i < $num_matches; $i++) {
                     $field_key = 'field_' . $matches[1][$i];
                     if (isset($fields[$field_key])) {
                         $cpf_value = $fields[$field_key];
                         if (!is_string($cpf_value)) {
                             $cpf_value = strval($cpf_value);
                         }
-                        $username = str_replace($matches[0][$i],$cpf_value,$username);
+                        $username = str_replace($matches[0][$i], $cpf_value, $username);
                     }
                 }
 
-                $username = preg_replace('# +#',' ',trim($username)); // Strip and double (or triple, etc) blanks, and leading/trailing blanks
+                $username = preg_replace('# +#', ' ', trim($username)); // Strip and double (or triple, etc) blanks, and leading/trailing blanks
 
                 if ($username == '') {
                     $username = $username_bak;
@@ -972,7 +974,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function _get_member_email_address($member)
     {
-        return $this->get_member_row_field($member,'m_email_address');
+        return $this->get_member_row_field($member, 'm_email_address');
     }
 
     /**
@@ -990,23 +992,23 @@ class forum_driver_ocf extends forum_driver_base
         $privacy_ok = true;
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            $privacy_ok = has_privacy_access('_photo',strval($member));
+            $privacy_ok = has_privacy_access('_photo', strval($member));
         }
 
-        if ((!addon_installed('ocf_member_photos')) || (!has_privilege(get_member(),'view_member_photos')) || (!$privacy_ok)) {
+        if ((!addon_installed('ocf_member_photos')) || (!has_privilege(get_member(), 'view_member_photos')) || (!$privacy_ok)) {
             if (!addon_installed('ocf_member_avatars')) {
                 return '';
             }
             return $this->get_member_avatar_url($member);
         }
 
-        $pic = $this->get_member_row_field($member,'m_photo_thumb_url');
+        $pic = $this->get_member_row_field($member, 'm_photo_thumb_url');
 
         if ($pic == '') {
-            $photo_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_photo_url');
+            $photo_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member, 'm_photo_url');
             if ($photo_url != '') {
                 require_code('images');
-                $pic = ensure_thumbnail($photo_url,$pic,(strpos($photo_url,'uploads/photos') !== false)?'photos':'ocf_photos','f_members',$member,'m_photo_thumb_url');
+                $pic = ensure_thumbnail($photo_url, $pic, (strpos($photo_url, 'uploads/photos') !== false) ? 'photos' : 'ocf_photos', 'f_members', $member, 'm_photo_thumb_url');
             }
         }
 
@@ -1041,13 +1043,13 @@ class forum_driver_ocf extends forum_driver_base
             return $this->get_member_photo_url($member);
         }*/
 
-        $avatar = $this->get_member_row_field($member,'m_avatar_url');
+        $avatar = $this->get_member_row_field($member, 'm_avatar_url');
         if (is_null($avatar)) {
             $avatar = '';
         } else {
             $base_url = get_base_url();
-            if (substr($avatar,0,strlen($base_url)+1) == $base_url . '/') { // So we can do an is_file check
-                $avatar = substr($avatar,strlen($base_url)+1);
+            if (substr($avatar, 0, strlen($base_url) + 1) == $base_url . '/') { // So we can do an is_file check
+                $avatar = substr($avatar, strlen($base_url) + 1);
             }
 
             if ((url_is_local($avatar)) && ($avatar != '')) {
@@ -1073,7 +1075,7 @@ class forum_driver_ocf extends forum_driver_base
         if (get_option('allow_email_disable') == '0') {
             return true;
         }
-        return $this->get_member_row_field($member,'m_allow_emails');
+        return $this->get_member_row_field($member, 'm_allow_emails');
     }
 
     /**
@@ -1084,7 +1086,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_member_join_timestamp($member)
     {
-        return $this->get_member_row_field($member,'m_join_time');
+        return $this->get_member_row_field($member, 'm_join_time');
     }
 
     /**
@@ -1095,7 +1097,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether to limit to friends of the current member, if possible
      * @return ?array                   The array of matched members (NULL: none found)
      */
-    public function get_matching_members($pattern,$limit = null,$friends = false)
+    public function get_matching_members($pattern, $limit = null, $friends = false)
     {
         if (!addon_installed('chat')) {
             $friends = false;
@@ -1117,9 +1119,9 @@ class forum_driver_ocf extends forum_driver_base
         }
         $sql .= ' WHERE ' . $like . 'id<>' . strval($this->get_guest_id());
         $sql .= ' ORDER BY m_last_submit_time DESC';
-        $rows = $this->connection->query($sql,$limit);
+        $rows = $this->connection->query($sql, $limit);
 
-        sort_maps_by($rows,'m_username');
+        sort_maps_by($rows, 'm_username');
 
         return $rows;
     }
@@ -1132,7 +1134,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_post_count($member)
     {
-        return $this->get_member_row_field($member,'m_cache_num_posts');
+        return $this->get_member_row_field($member, 'm_cache_num_posts');
     }
 
     /**
@@ -1143,7 +1145,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_topic_count($member)
     {
-        return $this->connection->query_select_value('f_topics','COUNT(*)',array('t_cache_first_member_id' => $member));
+        return $this->connection->query_select_value('f_topics', 'COUNT(*)', array('t_cache_first_member_id' => $member));
     }
 
     /**
@@ -1154,7 +1156,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function is_banned($member)
     {
-        return $this->get_member_row_field($member,'m_is_perm_banned') == 1;
+        return $this->get_member_row_field($member, 'm_is_perm_banned') == 1;
     }
 
     /**
@@ -1169,7 +1171,7 @@ class forum_driver_ocf extends forum_driver_base
             return false;
         }
         $users_groups = $this->get_members_groups($member);
-        return ((ocf_get_best_group_property($users_groups,'is_super_moderator') == 1) || (ocf_get_best_group_property($users_groups,'is_super_admin') == 1));
+        return ((ocf_get_best_group_property($users_groups, 'is_super_moderator') == 1) || (ocf_get_best_group_property($users_groups, 'is_super_admin') == 1));
     }
 
     /**
@@ -1184,7 +1186,7 @@ class forum_driver_ocf extends forum_driver_base
             return false;
         }
         $users_groups = $this->get_members_groups($member);
-        return ocf_get_best_group_property($users_groups,'is_super_admin') == 1;
+        return ocf_get_best_group_property($users_groups, 'is_super_admin') == 1;
     }
 
     /**
@@ -1194,7 +1196,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_num_users_forums()
     {
-        return NULL; // Same as site
+        return null; // Same as site
     }
 
     /**
@@ -1204,12 +1206,12 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_members()
     {
-        $value = intval(get_value_newer_than('ocf_member_count',time()-60*60*3));
+        $value = intval(get_value_newer_than('ocf_member_count', time() - 60 * 60 * 3));
 
         if ($value == 0) {
-            $value = $this->connection->query_select_value('f_members','COUNT(*)')-1;
+            $value = $this->connection->query_select_value('f_members', 'COUNT(*)') - 1;
             if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-                set_value('ocf_member_count',strval($value));
+                set_value('ocf_member_count', strval($value));
             }
         }
 
@@ -1223,12 +1225,12 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_topics()
     {
-        $value = intval(get_value_newer_than('ocf_topic_count',time()-60*60*3));
+        $value = intval(get_value_newer_than('ocf_topic_count', time() - 60 * 60 * 3));
 
         if ($value == 0) {
-            $value = $this->connection->query_select_value('f_topics','COUNT(*)');
+            $value = $this->connection->query_select_value('f_topics', 'COUNT(*)');
             if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-                set_value('ocf_topic_count',strval($value));
+                set_value('ocf_topic_count', strval($value));
             }
         }
 
@@ -1242,12 +1244,12 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_num_forum_posts()
     {
-        $value = intval(get_value_newer_than('ocf_post_count',time()-60*60*3));
+        $value = intval(get_value_newer_than('ocf_post_count', time() - 60 * 60 * 3));
 
         if ($value == 0) {
-            $value = $this->connection->query_select_value('f_posts','COUNT(*)');
+            $value = $this->connection->query_select_value('f_posts', 'COUNT(*)');
             if (!$GLOBALS['SITE_DB']->table_is_locked('values')) {
-                set_value('ocf_post_count',strval($value));
+                set_value('ocf_post_count', strval($value));
             }
         }
 
@@ -1261,7 +1263,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function _get_num_new_forum_posts()
     {
-        return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'f_posts WHERE p_time>' . strval(time()-60*60*24));
+        return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'f_posts WHERE p_time>' . strval(time() - 60 * 60 * 24));
     }
 
     /**
@@ -1277,12 +1279,12 @@ class forum_driver_ocf extends forum_driver_base
                 return $id;
             }
         }
-        $row = $this->connection->query_select('f_members',array('*'),array('m_username' => $name),'',1);
-        if (!array_key_exists(0,$row)) {
+        $row = $this->connection->query_select('f_members', array('*'), array('m_username' => $name), '', 1);
+        if (!array_key_exists(0, $row)) {
             if ((is_numeric($name)) && (!is_null($this->get_username(intval($name))))) {
                 return intval($name);
             }
-            return NULL;
+            return null;
         }
         $id = $row[0]['id'];
         $this->MEMBER_ROWS_CACHED[$id] = $row[0];
@@ -1302,9 +1304,9 @@ class forum_driver_ocf extends forum_driver_base
                 return $id;
             }
         }
-        $row = $this->connection->query_select('f_members',array('*'),array('m_email_address' => $email_address),'',1);
-        if (!array_key_exists(0,$row)) {
-            return NULL;
+        $row = $this->connection->query_select('f_members', array('*'), array('m_email_address' => $email_address), '', 1);
+        if (!array_key_exists(0, $row)) {
+            return null;
         }
         $id = $row[0]['id'];
         $this->MEMBER_ROWS_CACHED[$id] = $row[0];
@@ -1318,7 +1320,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function _get_super_admin_groups()
     {
-        return collapse_1d_complexity('id',$this->connection->query_select('f_groups',array('id'),array('g_is_super_admin' => 1)));
+        return collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_admin' => 1)));
     }
 
     /**
@@ -1329,7 +1331,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function _get_moderator_groups()
     {
-        return collapse_1d_complexity('id',$this->connection->query_select('f_groups',array('id'),array('g_is_super_moderator' => 1)));
+        return collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_moderator' => 1)));
     }
 
     /**
@@ -1343,13 +1345,13 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether to completely skip hidden usergroups
      * @return array                    The usergroup list, a map of usergroup ID to usergroup name
      */
-    public function _get_usergroup_list($hide_hidden = false,$only_permissive = false,$force_show_all = false,$force_find = null,$for_member = null,$skip_hidden = false)
+    public function _get_usergroup_list($hide_hidden = false, $only_permissive = false, $force_show_all = false, $force_find = null, $for_member = null, $skip_hidden = false)
     {
-        if (($hide_hidden) && (has_privilege(get_member(),'see_hidden_groups'))) {
+        if (($hide_hidden) && (has_privilege(get_member(), 'see_hidden_groups'))) {
             $hide_hidden = false;
         }
 
-        $where = $only_permissive?' WHERE g_is_private_club=0':'';
+        $where = $only_permissive ? ' WHERE g_is_private_club=0' : '';
 
         $select = 'g.id,g_name,g.g_hidden';
         $sup = ' ORDER BY g_order,g.id';
@@ -1360,26 +1362,26 @@ class forum_driver_ocf extends forum_driver_base
         if (isset($cnt_cache[$where])) {
             $count = $cnt_cache[$where];
         } else {
-            $count = persistent_cache_get('GROUPS_COUNT' . ($only_permissive?'_PO':''));
-            if ($count === NULL) {
+            $count = persistent_cache_get('GROUPS_COUNT' . ($only_permissive ? '_PO' : ''));
+            if ($count === null) {
                 $groups_count_sql = 'SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'f_groups g' . $where;
-                $count = $this->connection->query_value_if_there($groups_count_sql,false,true);
+                $count = $this->connection->query_value_if_there($groups_count_sql, false, true);
                 $cnt_cache[$where] = $count;
-                persistent_cache_set('GROUPS_COUNT' . ($only_permissive?'_PO':''),$cnt_cache[$where]);
+                persistent_cache_set('GROUPS_COUNT' . ($only_permissive ? '_PO' : ''), $cnt_cache[$where]);
             } else {
                 $cnt_cache[$where] = $count;
             }
         }
-        $too_many = ($count>100) && ((!$force_show_all) || ($count>4000));
+        $too_many = ($count > 100) && ((!$force_show_all) || ($count > 4000));
         if ($too_many) {
-            if ($for_member === NULL) {
+            if ($for_member === null) {
                 $for_member = get_member();
             }
             $where = ' WHERE g_is_private_club=0';
-            if ($force_find === NULL) {
+            if ($force_find === null) {
                 $force_find = array();
             }
-            $force_find = array_merge($force_find,$this->_get_members_groups($for_member));
+            $force_find = array_merge($force_find, $this->_get_members_groups($for_member));
             foreach ($force_find as $gid) {
                 $where .= ' OR g.id=' . strval($gid);
             }
@@ -1391,16 +1393,16 @@ class forum_driver_ocf extends forum_driver_base
         static $rows_cache = array();
         $rows = mixed();
         if (!$too_many) {
-            $rows = persistent_cache_get('GROUPS' . ($only_permissive?'_PO':''));
+            $rows = persistent_cache_get('GROUPS' . ($only_permissive ? '_PO' : ''));
         }
-        if ($rows === NULL) {
+        if ($rows === null) {
             if (isset($rows_cache[$where])) {
                 $rows = $rows_cache[$where];
             } else {
-                $rows = $this->connection->query($query,null,null,false,true,array('g_name' => 'SHORT_TRANS'));
+                $rows = $this->connection->query($query, null, null, false, true, array('g_name' => 'SHORT_TRANS'));
                 $rows_cache[$where] = $rows;
                 if (!$too_many) {
-                    persistent_cache_set('GROUPS' . ($only_permissive?'_PO':''),$rows);
+                    persistent_cache_set('GROUPS' . ($only_permissive ? '_PO' : ''), $rows);
                 }
             }
         }
@@ -1409,13 +1411,13 @@ class forum_driver_ocf extends forum_driver_base
         }
         $out = array();
         foreach ($rows as $row) {
-            $name = get_translated_text($row['g_name'],$GLOBALS['FORUM_DB']);
+            $name = get_translated_text($row['g_name'], $GLOBALS['FORUM_DB']);
 
             if (($hide_hidden) && ($row['g_hidden'] == 1)) {
                 if ($skip_hidden) {
                     continue;
                 }
-                $out[$row['id']] = do_lang('SECRET_GROUP',strval($row['id']));
+                $out[$row['id']] = do_lang('SECRET_GROUP', strval($row['id']));
             } else {
                 $out[$row['id']] = $name;
             }
@@ -1431,10 +1433,10 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether to take probation into account
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member,$skip_secret = false,$handle_probation = true)
+    public function _get_members_groups($member, $skip_secret = false, $handle_probation = true)
     {
         require_code('ocf_groups');
-        return array_keys(ocf_get_members_groups($member,$skip_secret,$handle_probation));
+        return array_keys(ocf_get_members_groups($member, $skip_secret, $handle_probation));
     }
 
     /**
@@ -1444,19 +1446,19 @@ class forum_driver_ocf extends forum_driver_base
      * @param  ?SHORT_TEXT              The username (NULL: lookup)
      * @param  string                   The password
      */
-    public function forum_create_cookie($id,$name,$password)
+    public function forum_create_cookie($id, $name, $password)
     {
         // User
-        ocp_setcookie(get_member_cookie(),strval($id));
+        ocp_setcookie(get_member_cookie(), strval($id));
         $_COOKIE[get_member_cookie()] = strval($id);
 
         // Password
-        $password_hashed_salted = $this->get_member_row_field($id,'m_pass_hash_salted');
-        $password_compat_scheme = $this->get_member_row_field($id,'m_password_compat_scheme');
+        $password_hashed_salted = $this->get_member_row_field($id, 'm_pass_hash_salted');
+        $password_compat_scheme = $this->get_member_row_field($id, 'm_password_compat_scheme');
         if ($password_compat_scheme == 'plain') {
             $password_hashed_salted = md5($password_hashed_salted);
         } // can't do direct representation for this, would be a plain text cookie; so in forum_authorise_login we expect it to be md5'd and compare thusly (as per non-cookie call to that function)
-        ocp_setcookie(get_pass_cookie(),$password_hashed_salted);
+        ocp_setcookie(get_pass_cookie(), $password_hashed_salted);
         $_COOKIE[get_pass_cookie()] = $password_hashed_salted;
     }
 
@@ -1467,13 +1469,13 @@ class forum_driver_ocf extends forum_driver_base
      * @param  SHORT_TEXT               The username
      * @return string                   The hashed data
      */
-    public function forum_md5($password,$username)
+    public function forum_md5($password, $username)
     {
         require_code('ocf_members');
 
         $member_id = $this->get_member_from_username($username);
         if (((is_null($GLOBALS['LDAP_CONNECTION'])) || (!ocf_is_on_ldap($username))) && (is_null($member_id))) {
-            $member_id = $this->connection->query_select_value_if_there('f_members','id',array('m_email_address' => $username));
+            $member_id = $this->connection->query_select_value_if_there('f_members', 'id', array('m_email_address' => $username));
             if (is_null($member_id)) {
                 return '!'; // Invalid user logging in
             }
@@ -1498,10 +1500,10 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether this is a cookie login, determines how the hashed password is treated for the value passed in
      * @return array                    A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
      */
-    public function forum_authorise_login($username,$userid,$password_hashed,$password_raw,$cookie_login = false)
+    public function forum_authorise_login($username, $userid, $password_hashed, $password_raw, $cookie_login = false)
     {
         require_code('ocf_forum_driver_helper_auth');
-        return _forum_authorise_login($this,$username,$userid,$password_hashed,$password_raw,$cookie_login);
+        return _forum_authorise_login($this, $username, $userid, $password_hashed, $password_raw, $cookie_login);
     }
 
     /**
@@ -1524,9 +1526,9 @@ class forum_driver_ocf extends forum_driver_base
         // Set last visit time session cookie if it doesn't exist
         if ((!isset($_COOKIE['last_visit'])) && ($GLOBALS['FORUM_DRIVER']->get_guest_id() != $id)) {
             require_code('users_active_actions');
-            $lvt = $this->get_member_row_field($id,'m_last_visit_time');
+            $lvt = $this->get_member_row_field($id, 'm_last_visit_time');
             if (function_exists('ocp_setcookie')) {// May be trying to check in safe mode when doing above require_code, so recurse
-                ocp_setcookie('last_visit',is_null($lvt)?strval(time()):strval($lvt),true);
+                ocp_setcookie('last_visit', is_null($lvt) ? strval(time()) : strval($lvt), true);
             }
             $new_visit = true;
         } else {
@@ -1534,24 +1536,24 @@ class forum_driver_ocf extends forum_driver_base
         }
 
         // Do some flood control
-        $submitting = ((count($_POST)>0) && (get_param('type',null) !== 'ed') && (get_param('type',null) !== 'ec') && (!running_script('preview')));
+        $submitting = ((count($_POST) > 0) && (get_param('type', null) !== 'ed') && (get_param('type', null) !== 'ec') && (!running_script('preview')));
         if (get_value('no_flood_control') !== '1') {
-            $restrict = $submitting?'flood_control_submit_secs':'flood_control_access_secs';
-            $restrict_setting = $submitting?'m_last_submit_time':'m_last_visit_time';
+            $restrict = $submitting ? 'flood_control_submit_secs' : 'flood_control_access_secs';
+            $restrict_setting = $submitting ? 'm_last_submit_time' : 'm_last_visit_time';
             require_code('ocf_groups');
-            $restrict_answer = ocf_get_best_group_property($this->get_members_groups($id),$restrict);
-            if ((!$submitting) && (array_key_exists('redirect',$_GET))) {
+            $restrict_answer = ocf_get_best_group_property($this->get_members_groups($id), $restrict);
+            if ((!$submitting) && (array_key_exists('redirect', $_GET))) {
                 $restrict_answer = 0;
             }
-            if ($restrict_answer<0) {
+            if ($restrict_answer < 0) {
                 $restrict_answer = 0;
             }
-            $last = $this->get_member_row_field($id,$restrict_setting);
-            if ($last>time()) {
-                $last = time()-$restrict_answer;
+            $last = $this->get_member_row_field($id, $restrict_setting);
+            if ($last > time()) {
+                $last = time() - $restrict_answer;
             } // Weird clock problem
-            $wait_time = $restrict_answer-time()+$last;
-            if (($wait_time>0) && (addon_installed('stats'))) {
+            $wait_time = $restrict_answer - time() + $last;
+            if (($wait_time > 0) && (addon_installed('stats'))) {
                 // Don't do flood control in every situation
                 if (get_page_name() == 'join') {
                     return;
@@ -1559,28 +1561,28 @@ class forum_driver_ocf extends forum_driver_base
                 if ((!running_script('index')) && (!running_script('iframe'))) {
                     return;
                 } // Not when probably running some AJAX script
-                $captcha = post_param('captcha','');
+                $captcha = post_param('captcha', '');
                 if ($captcha != '') { // Don't consider a CAPTCHA submitting, it'll drive people nuts to get flood control right after a CAPTCHA
                     require_code('captcha');
-                    if (check_captcha($captcha,false)) {
+                    if (check_captcha($captcha, false)) {
                         return;
                     }
                 }
 
                 require_code('site');
-                log_stats('/flood',0);
+                log_stats('/flood', 0);
 
                 $time_threshold = 30;
                 $count_threshold = 50;
-                $query = 'SELECT COUNT(*) FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE date_and_time>' . strval(time()-$time_threshold) . ' AND date_and_time<' . strval(time()) . ' AND ' . db_string_equal_to('ip',get_ip_address());
+                $query = 'SELECT COUNT(*) FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE date_and_time>' . strval(time() - $time_threshold) . ' AND date_and_time<' . strval(time()) . ' AND ' . db_string_equal_to('ip', get_ip_address());
                 $count = $GLOBALS['SITE_DB']->query_value_if_there($query);
                 if (($count >= $count_threshold) && (addon_installed('securitylogging'))) {
                     $ip = get_ip_address();
                     require_code('failure');
-                    add_ip_ban($ip,do_lang('SPAM_REPORT_SITE_FLOODING'));
+                    add_ip_ban($ip, do_lang('SPAM_REPORT_SITE_FLOODING'));
                     require_code('notifications');
-                    dispatch_notification('auto_ban',null,do_lang('AUTO_BAN_SUBJECT',$ip,null,null,get_site_default_lang()),do_lang('AUTO_BAN_DOS_MESSAGE',$ip,integer_format($count_threshold),integer_format($time_threshold),get_site_default_lang()),null,A_FROM_SYSTEM_PRIVILEGED);
-                    syndicate_spammer_report($ip,is_guest()?'':$GLOBALS['FORUM_DRIVER']->get_username(get_member()),$GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()),do_lang('SPAM_REPORT_SITE_FLOODING'));
+                    dispatch_notification('auto_ban', null, do_lang('AUTO_BAN_SUBJECT', $ip, null, null, get_site_default_lang()), do_lang('AUTO_BAN_DOS_MESSAGE', $ip, integer_format($count_threshold), integer_format($time_threshold), get_site_default_lang()), null, A_FROM_SYSTEM_PRIVILEGED);
+                    syndicate_spammer_report($ip, is_guest() ? '' : $GLOBALS['FORUM_DRIVER']->get_username(get_member()), $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), do_lang('SPAM_REPORT_SITE_FLOODING'));
                 }
                 if (!function_exists('require_lang')) {
                     require_code('lang');
@@ -1590,15 +1592,15 @@ class forum_driver_ocf extends forum_driver_base
                 }
                 require_lang('ocf');
 
-                warn_exit(do_lang_tempcode('FLOOD_CONTROL_RESTRICT',integer_format($wait_time)));
+                warn_exit(do_lang_tempcode('FLOOD_CONTROL_RESTRICT', integer_format($wait_time)));
             }
         } else {
             $restrict_answer = 0;
             $wait_time = 0;
         }
 
-        $seconds_since_last_visit = time()-$this->get_member_row_field($id,'m_last_visit_time');
-        if ($seconds_since_last_visit<0) {
+        $seconds_since_last_visit = time() - $this->get_member_row_field($id, 'm_last_visit_time');
+        if ($seconds_since_last_visit < 0) {
             $seconds_since_last_visit = 0;
         } // can happen if system clock changes
         if ($restrict_answer != 0) {
@@ -1607,11 +1609,11 @@ class forum_driver_ocf extends forum_driver_base
                     global $SESSION_CACHE;
                     $num_guests = 0;
                     foreach ($SESSION_CACHE as $c) {
-                        if (!array_key_exists('member_id',$c)) {
+                        if (!array_key_exists('member_id', $c)) {
                             continue;
                         } // Workaround to HipHop PHP weird bug
 
-                        if (($c['last_activity']>time()-60*4) && (is_guest($c['member_id']))) {
+                        if (($c['last_activity'] > time() - 60 * 4) && (is_guest($c['member_id']))) {
                             $num_guests++;
                         }
                     }
@@ -1621,11 +1623,11 @@ class forum_driver_ocf extends forum_driver_base
                 }
             }
         }
-        if (($restrict_answer != 0) || ($seconds_since_last_visit>180) || ($new_visit)) {
+        if (($restrict_answer != 0) || ($seconds_since_last_visit > 180) || ($new_visit)) {
             $_min_lastvisit_frequency = get_value('min_lastvisit_frequency');
-            $min_lastvisit_frequency = is_null($_min_lastvisit_frequency)?0:intval($_min_lastvisit_frequency);
-            if (($submitting) || ((!$submitting) && ($seconds_since_last_visit>$wait_time/*don't want a flood control message to itself bump the last-visit time*/) && ($seconds_since_last_visit>$min_lastvisit_frequency))) {
-                $old_ip = $this->get_member_row_field($id,'m_ip_address');
+            $min_lastvisit_frequency = is_null($_min_lastvisit_frequency) ? 0 : intval($_min_lastvisit_frequency);
+            if (($submitting) || ((!$submitting) && ($seconds_since_last_visit > $wait_time/*don't want a flood control message to itself bump the last-visit time*/) && ($seconds_since_last_visit > $min_lastvisit_frequency))) {
+                $old_ip = $this->get_member_row_field($id, 'm_ip_address');
 
                 $change_map = array('m_last_visit_time' => time());
                 if (get_ip_address() != $old_ip) {
@@ -1639,7 +1641,7 @@ class forum_driver_ocf extends forum_driver_base
                 if (get_page_name() != 'lost_password') {
                     if (get_db_type() != 'xml') {
                         if (!$GLOBALS['SITE_DB']->table_is_locked('f_members')) {
-                            $this->connection->query_update('f_members',$change_map,array('id' => $id),'',1,null,false,true);
+                            $this->connection->query_update('f_members', $change_map, array('id' => $id), '', 1, null, false, true);
                         }
                     }
                 }
@@ -1655,7 +1657,7 @@ class forum_driver_ocf extends forum_driver_base
      */
     public function get_member_ip($id)
     {
-        return $this->get_member_row_field($id,'m_ip_address');
+        return $this->get_member_row_field($id, 'm_ip_address');
     }
 
     /**
@@ -1670,10 +1672,10 @@ class forum_driver_ocf extends forum_driver_base
             return $this->MEMBER_ROWS_CACHED[$member];
         }
 
-        $rows = $this->connection->query_select('f_members',array('*'),array('id' => $member),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $this->connection->query_select('f_members', array('*'), array('id' => $member), '', 1);
+        if (!array_key_exists(0, $rows)) {
             $this->MEMBER_ROWS_CACHED[$member] = null;
-            return NULL;
+            return null;
         }
         $this->MEMBER_ROWS_CACHED[$member] = $rows[0];
         return $this->MEMBER_ROWS_CACHED[$member];
@@ -1686,9 +1688,9 @@ class forum_driver_ocf extends forum_driver_base
      * @param  string                   The field identifier
      * @return mixed                    The field
      */
-    public function get_member_row_field($member,$field)
+    public function get_member_row_field($member, $field)
     {
         $row = $this->get_member_row($member);
-        return ($row === NULL)?null:$row[$field];
+        return ($row === null) ? null : $row[$field];
     }
 }

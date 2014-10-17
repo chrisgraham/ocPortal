@@ -31,7 +31,7 @@
  * @param  boolean                      Whether this is a cookie login, determines how the hashed password is treated for the value passed in
  * @return array                        A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set
  */
-function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$password_raw,$cookie_login = false)
+function _forum_authorise_login($this_ref, $username, $userid, $password_hashed, $password_raw, $cookie_login = false)
 {
     require_code('ocf_forum_driver_helper_auth');
 
@@ -54,12 +54,12 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 
     $skip_auth = false;
 
-    if ($userid === NULL) {
-        $rows = $this_ref->connection->query_select('f_members',array('*'),array('m_username' => $username),'',1);
-        if ((!array_key_exists(0,$rows)) && (get_option('one_per_email_address') == '1')) {
-            $rows = $this_ref->connection->query_select('f_members',array('*'),array('m_email_address' => $username),'ORDER BY id ASC',1);
+    if ($userid === null) {
+        $rows = $this_ref->connection->query_select('f_members', array('*'), array('m_username' => $username), '', 1);
+        if ((!array_key_exists(0, $rows)) && (get_option('one_per_email_address') == '1')) {
+            $rows = $this_ref->connection->query_select('f_members', array('*'), array('m_email_address' => $username), 'ORDER BY id ASC', 1);
         }
-        if (array_key_exists(0,$rows)) {
+        if (array_key_exists(0, $rows)) {
             $this_ref->MEMBER_ROWS_CACHED[$rows[0]['id']] = $rows[0];
             $userid = $rows[0]['id'];
         }
@@ -69,15 +69,15 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
 
     // LDAP to the rescue if we couldn't get a row
     global $LDAP_CONNECTION;
-    if ((!array_key_exists(0,$rows)) && ($LDAP_CONNECTION !== NULL) && ($userid === NULL)) {
+    if ((!array_key_exists(0, $rows)) && ($LDAP_CONNECTION !== null) && ($userid === null)) {
         // See if LDAP has it -- if so, we can add
         $test = ocf_is_on_ldap($username);
         if (!$test) {
-            $out['error'] = is_null($username)?do_lang_tempcode('MEMBER_NO_EXISTS'):do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
+            $out['error'] = is_null($username) ? do_lang_tempcode('MEMBER_NO_EXISTS') : do_lang_tempcode('_MEMBER_NO_EXIST', escape_html($username));
             return $out;
         }
 
-        $test_auth = ocf_ldap_authorise_login($username,$password_raw);
+        $test_auth = ocf_ldap_authorise_login($username, $password_raw);
         if ($test_auth['m_pass_hash_salted'] == '!!!') {
             $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');
             return $out;
@@ -86,36 +86,36 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
         if ($test) {
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
-            $completion_form_submitted = (trim(post_param('email_address','')) != '');
+            $completion_form_submitted = (trim(post_param('email_address', '')) != '');
             if ((!$completion_form_submitted) && (get_option('finish_profile') == '1')) { // UI
                 @ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
-                $middle = ocf_member_external_linker_ask($username,'ldap',ocf_ldap_guess_email($username));
-                $tpl = globalise($middle,null,'',true);
+                $middle = ocf_member_external_linker_ask($username, 'ldap', ocf_ldap_guess_email($username));
+                $tpl = globalise($middle, null, '', true);
                 $tpl->evaluate_echo();
                 exit();
             } else {
-                $userid = ocf_member_external_linker($username,uniqid('',true),'ldap');
+                $userid = ocf_member_external_linker($username, uniqid('', true), 'ldap');
                 $row = $this_ref->get_member_row($userid);
             }
         }
     }
 
-    if ((!array_key_exists(0,$rows)) || ($rows[0] === NULL)) { // All hands to lifeboats
+    if ((!array_key_exists(0, $rows)) || ($rows[0] === null)) { // All hands to lifeboats
         // Run hooks for other interactive login possibilities, if any exist
-        $hooks = find_all_hooks('systems','login_providers_direct_auth');
+        $hooks = find_all_hooks('systems', 'login_providers_direct_auth');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/login_providers_direct_auth/' . filter_naughty($hook));
-            $ob = object_factory('Hook_login_providers_direct_auth_' . filter_naughty($hook),true);
+            $ob = object_factory('Hook_login_providers_direct_auth_' . filter_naughty($hook), true);
             if (is_null($ob)) {
                 continue;
             }
-            $try_login = $ob->try_login($username,$userid,$password_hashed,$password_raw,$cookie_login);
+            $try_login = $ob->try_login($username, $userid, $password_hashed, $password_raw, $cookie_login);
             if (!is_null($try_login)) {
                 return $try_login;
             }
         }
 
-        $out['error'] = is_null($username)?do_lang_tempcode('MEMBER_NO_EXIST'):do_lang_tempcode('_MEMBER_NO_EXIST',escape_html($username));
+        $out['error'] = is_null($username) ? do_lang_tempcode('MEMBER_NO_EXIST') : do_lang_tempcode('_MEMBER_NO_EXIST', escape_html($username));
         return $out;
     }
     $row = $rows[0];
@@ -131,7 +131,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
             return $out;
         } No longer appropriate with new authentication mode - instead we just have to give an invalid password message  */
 
-        $row = array_merge($row,ocf_ldap_authorise_login($username,$password_hashed));
+        $row = array_merge($row, ocf_ldap_authorise_login($username, $password_hashed));
     }
 
     if (addon_installed('unvalidated')) {
@@ -165,7 +165,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
                     }
                 } else {
                     require_code('crypt');
-                    if (!ratchet_hash_verify($password_raw,$row['m_pass_salt'],$row['m_pass_hash_salted'])) {
+                    if (!ratchet_hash_verify($password_raw, $row['m_pass_salt'], $row['m_pass_hash_salted'])) {
                         $out['error'] = do_lang_tempcode('MEMBER_BAD_PASSWORD');
                         return $out;
                     }
@@ -203,7 +203,7 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
                 }
                 require_code('hooks/systems/ocf_auth/' . $password_compatibility_scheme);
                 $ob = object_factory('Hook_ocf_auth_' . $password_compatibility_scheme);
-                $error = $ob->auth($username,$userid,$password_hashed,$password_raw,$cookie_login,$row);
+                $error = $ob->auth($username, $userid, $password_hashed, $password_raw, $cookie_login, $row);
                 if (!is_null($error)) {
                     $out['error'] = $error;
                     return $out;
@@ -213,27 +213,27 @@ function _forum_authorise_login($this_ref,$username,$userid,$password_hashed,$pa
     }
 
     // Ok, authorised basically, but we need to see if this is a valid login IP
-    if ((ocf_get_best_group_property($this_ref->get_members_groups($row['id']),'enquire_on_new_ips') == 1)) { // High security usergroup membership
+    if ((ocf_get_best_group_property($this_ref->get_members_groups($row['id']), 'enquire_on_new_ips') == 1)) { // High security usergroup membership
         global $SENT_OUT_VALIDATE_NOTICE;
         $ip = get_ip_address(3);
-        $test2 = $this_ref->connection->query_select_value_if_there('f_member_known_login_ips','i_val_code',array('i_member_id' => $row['id'],'i_ip' => $ip));
-        if (((is_null($test2)) || ($test2 != '')) && (!compare_ip_address($ip,$row['m_ip_address']))) {
+        $test2 = $this_ref->connection->query_select_value_if_there('f_member_known_login_ips', 'i_val_code', array('i_member_id' => $row['id'], 'i_ip' => $ip));
+        if (((is_null($test2)) || ($test2 != '')) && (!compare_ip_address($ip, $row['m_ip_address']))) {
             if (!$SENT_OUT_VALIDATE_NOTICE) {
                 if (!is_null($test2)) { // Tidy up
-                    $this_ref->connection->query_delete('f_member_known_login_ips',array('i_member_id' => $row['id'],'i_ip' => $ip),'',1);
+                    $this_ref->connection->query_delete('f_member_known_login_ips', array('i_member_id' => $row['id'], 'i_ip' => $ip), '', 1);
                 }
 
-                $code = !is_null($test2)?$test2:uniqid('',true);
-                $this_ref->connection->query_insert('f_member_known_login_ips',array('i_val_code' => $code,'i_member_id' => $row['id'],'i_ip' => $ip));
+                $code = !is_null($test2) ? $test2 : uniqid('', true);
+                $this_ref->connection->query_insert('f_member_known_login_ips', array('i_val_code' => $code, 'i_member_id' => $row['id'], 'i_ip' => $ip));
                 $url = find_script('validateip') . '?code=' . $code;
                 $url_simple = find_script('validateip');
-                $mail = do_lang('IP_VERIFY_MAIL',comcode_escape($url),comcode_escape(get_ip_address()),array($url_simple,$code),get_lang($row['id']));
+                $mail = do_lang('IP_VERIFY_MAIL', comcode_escape($url), comcode_escape(get_ip_address()), array($url_simple, $code), get_lang($row['id']));
                 $email_address = $row['m_email_address'];
                 if ($email_address == '') {
                     $email_address = get_option('staff_address');
                 }
                 if ((running_script('index')) || (running_script('iframe'))) {
-                    mail_wrap(do_lang('IP_VERIFY_MAIL_SUBJECT',null,null,null,get_lang($row['id'])),$mail,array($email_address),$row['m_username'],'','',1,null,false,null,false,false,false,'MAIL',false,null,null,$row['m_join_time']);
+                    mail_wrap(do_lang('IP_VERIFY_MAIL_SUBJECT', null, null, null, get_lang($row['id'])), $mail, array($email_address), $row['m_username'], '', '', 1, null, false, null, false, false, false, 'MAIL', false, null, null, $row['m_join_time']);
                 }
 
                 $SENT_OUT_VALIDATE_NOTICE = true;

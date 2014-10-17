@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    actionlog
  */
-
 class Hook_Notification_actionlog extends Hook_Notification__Staff
 {
     /**
@@ -39,18 +38,18 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
         require_all_lang();
 
-        $types = $GLOBALS['SITE_DB']->query_select('adminlogs',array('DISTINCT the_type'));
+        $types = $GLOBALS['SITE_DB']->query_select('adminlogs', array('DISTINCT the_type'));
         if (get_forum_type() == 'ocf') {
-            $types = array_merge($types,$GLOBALS['FORUM_DB']->query_select('f_moderator_logs',array('DISTINCT l_the_type AS the_type')));
+            $types = array_merge($types, $GLOBALS['FORUM_DB']->query_select('f_moderator_logs', array('DISTINCT l_the_type AS the_type')));
         }
         foreach ($types as $type) {
-            $lang = do_lang($type['the_type'],null,null,null,null,false);
+            $lang = do_lang($type['the_type'], null, null, null, null, false);
             if (is_null($lang)) {
                 continue;
             }
@@ -59,7 +58,7 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
                 'title' => $lang,
             );
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -71,7 +70,7 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -85,7 +84,7 @@ class Hook_Notification_actionlog extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['actionlog'] = array(do_lang('STAFF'),do_lang('actionlog:NOTIFICATION_TYPE_actionlog'));
+        $list['actionlog'] = array(do_lang('STAFF'), do_lang('actionlog:NOTIFICATION_TYPE_actionlog'));
         return $list;
     }
 }

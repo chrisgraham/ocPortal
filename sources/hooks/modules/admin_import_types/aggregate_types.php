@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    aggregate_types
  */
-
 class Hook_admin_import_types_aggregate_types
 {
     /**

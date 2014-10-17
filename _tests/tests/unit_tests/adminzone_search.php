@@ -24,7 +24,7 @@ class adminzone_search_test_set extends ocp_test_case
         $ob = new Module_admin();
         $_GET['type'] = 'search';
         $_GET['content'] = 'test';
-        if (method_exists($ob,'pre_run')) {
+        if (method_exists($ob, 'pre_run')) {
             $ob->pre_run();
         }
         $ob->run();

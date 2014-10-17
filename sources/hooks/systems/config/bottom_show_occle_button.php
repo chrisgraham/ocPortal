@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_config_bottom_show_occle_button
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_bottom_show_occle_button
      */
     public function get_default()
     {
-        return (get_file_base() != get_custom_file_base())?'0':'1';
+        return (get_file_base() != get_custom_file_base()) ? '0' : '1';
     }
 }

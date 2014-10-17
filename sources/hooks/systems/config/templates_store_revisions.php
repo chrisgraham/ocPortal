@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_themeing
  */
-
 class Hook_config_templates_store_revisions
 {
     /**

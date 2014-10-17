@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    collaboration_zone
  */
-
 class Hook_admin_themewizard_collaboration_zone
 {
     /**
@@ -27,6 +26,6 @@ class Hook_admin_themewizard_collaboration_zone
      */
     public function run()
     {
-        return array(array('logo/collaboration-logo'),array());
+        return array(array('logo/collaboration-logo'), array());
     }
 }

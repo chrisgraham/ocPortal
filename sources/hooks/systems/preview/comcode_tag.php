@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_Preview_comcode_tag
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_comcode_tag
      */
     public function applies()
     {
-        $applies = !is_null(post_param('tag_contents',null)) || !is_null(post_param('tag_contents__a',null)) || !is_null(post_param('tag_contents__b',null)) || !is_null(post_param('tag_contents_0',null));
-        return array($applies,null,false);
+        $applies = !is_null(post_param('tag_contents', null)) || !is_null(post_param('tag_contents__a', null)) || !is_null(post_param('tag_contents__b', null)) || !is_null(post_param('tag_contents_0', null));
+        return array($applies, null, false);
     }
 
     /**
@@ -43,6 +42,6 @@ class Hook_Preview_comcode_tag
         $comcode = _get_preview_environment_comcode(post_param('tag'));
         $temp_tpl = comcode_to_tempcode($comcode);
 
-        return array($temp_tpl,null);
+        return array($temp_tpl, null);
     }
 }

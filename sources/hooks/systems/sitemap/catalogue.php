@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_sitemap_catalogue extends Hook_sitemap_content
 {
     protected $content_type = 'catalogue';
@@ -36,7 +35,7 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
     public function handles_page_link($page_link)
     {
         $matches = array();
-        if (preg_match('#^([^:]*):([^:]*)#',$page_link,$matches) != 0) {
+        if (preg_match('#^([^:]*):([^:]*)#', $page_link, $matches) != 0) {
             $zone = $matches[1];
             $page = $matches[2];
 
@@ -44,11 +43,11 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
             $cma_ob = get_content_object($this->content_type);
             $cma_info = $cma_ob->info();
             require_code('site');
-            if (($cma_info['module'] == $page) && ($zone != '_SEARCH') && (_request_page($page,$zone) !== false)) { // Ensure the given page matches the content type, and it really does exist in the given zone
+            if (($cma_info['module'] == $page) && ($zone != '_SEARCH') && (_request_page($page, $zone) !== false)) { // Ensure the given page matches the content type, and it really does exist in the given zone
                 if ($matches[0] == $page_link) {
                     return SITEMAP_NODE_HANDLED_VIRTUALLY;
                 } // No type/ID specified
-                if (preg_match('#^([^:]*):([^:]*):(index|atoz)(:|$)#',$page_link,$matches) != 0) {
+                if (preg_match('#^([^:]*):([^:]*):(index|atoz)(:|$)#', $page_link, $matches) != 0) {
                     return SITEMAP_NODE_HANDLED;
                 }
             }
@@ -86,11 +85,11 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   List of node structures (NULL: working via callback).
      */
-    public function get_virtual_nodes($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$return_anyway = false)
+    public function get_virtual_nodes($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $return_anyway = false)
     {
-        $nodes = ($callback === NULL || $return_anyway)?array():mixed();
+        $nodes = ($callback === null || $return_anyway) ? array() : mixed();
 
-        if (($valid_node_types !== NULL) && (!in_array($this->content_type,$valid_node_types))) {
+        if (($valid_node_types !== null) && (!in_array($this->content_type, $valid_node_types))) {
             return $nodes;
         }
 
@@ -98,34 +97,35 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
             return $nodes;
         }
 
-        $page = $this->_make_zone_concrete($zone,$page_link);
+        $page = $this->_make_zone_concrete($zone, $page_link);
 
-        if ($child_cutoff !== NULL) {
-            $count = $GLOBALS['SITE_DB']->query_select_value('catalogues','COUNT(*)');
-            if ($count>$child_cutoff) {
+        if ($child_cutoff !== null) {
+            $count = $GLOBALS['SITE_DB']->query_select_value('catalogues', 'COUNT(*)');
+            if ($count > $child_cutoff) {
                 return $nodes;
             }
         }
 
         $start = 0;
         do {
-            $rows = $GLOBALS['SITE_DB']->query_select('catalogues',array('*'),null,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+            $rows = $GLOBALS['SITE_DB']->query_select('catalogues', array('*'), null, '', SITEMAP_MAX_ROWS_PER_LOOP, $start);
             foreach ($rows as $row) {
-                if (substr($row['c_name'],0,1) != '_') {
+                if (substr($row['c_name'], 0, 1) != '_') {
                     // Index
                     $child_page_link = $zone . ':' . $page . ':index:' . $row['c_name'];
-                    $node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-                    if (($callback === NULL || $return_anyway) && ($node !== NULL)) {
+                    $node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+                    if (($callback === null || $return_anyway) && ($node !== null)) {
                         $nodes[] = $node;
                     }
                 }
             }
 
             $start += SITEMAP_MAX_ROWS_PER_LOOP;
-        } while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
+        }
+        while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
 
         if (is_array($nodes)) {
-            sort_maps_by($nodes,'title');
+            sort_maps_by($nodes, 'title');
         }
 
         return $nodes;
@@ -150,73 +150,73 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
-        $page_link_fudged = preg_replace('#:catalogue_name=#',':',$page_link);
-        $_ = $this->_create_partial_node_structure($page_link_fudged,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-        if ($_ === NULL) {
-            return NULL;
+        $page_link_fudged = preg_replace('#:catalogue_name=#', ':', $page_link);
+        $_ = $this->_create_partial_node_structure($page_link_fudged, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+        if ($_ === null) {
+            return null;
         }
-        list($content_id,$row,$partial_struct) = $_;
+        list($content_id, $row, $partial_struct) = $_;
 
         $matches = array();
-        preg_match('#^([^:]*):([^:]*)#',$page_link,$matches);
+        preg_match('#^([^:]*):([^:]*)#', $page_link, $matches);
         $page = $matches[2];
 
-        $this->_make_zone_concrete($zone,$page_link);
+        $this->_make_zone_concrete($zone, $page_link);
 
         $struct = array(
-            'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
-            'sitemap_refreshfreq' => 'weekly',
+                'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
+                'sitemap_refreshfreq' => 'weekly',
 
-            'privilege_page' => $this->get_privilege_page($page_link),
-        )+$partial_struct;
+                'privilege_page' => $this->get_privilege_page($page_link),
+            ) + $partial_struct;
 
-        if (strpos($page_link,':index:') !== false) {
+        if (strpos($page_link, ':index:') !== false) {
             $struct['extra_meta']['description'] = null;
 
             if (($meta_gather & SITEMAP_GATHER_IMAGE) != 0) {
-                $test = find_theme_image('icons/24x24/menu/rich_content/catalogues/' . $content_id,true);
+                $test = find_theme_image('icons/24x24/menu/rich_content/catalogues/' . $content_id, true);
                 if ($test != '') {
                     $struct['extra_meta']['image'] = $test;
                 }
-                $test = find_theme_image('icons/48x48/menu/rich_content/catalogues/' . $content_id,true);
+                $test = find_theme_image('icons/48x48/menu/rich_content/catalogues/' . $content_id, true);
                 if ($test != '') {
                     $struct['extra_meta']['image_2x'] = $test;
                 }
             }
 
-            if (($max_recurse_depth === NULL) || ($recurse_level<$max_recurse_depth)) {
+            if (($max_recurse_depth === null) || ($recurse_level < $max_recurse_depth)) {
                 $children = array();
 
                 // A-to-Z
                 $child_page_link = $zone . ':' . $page . ':atoz:catalogue_name=' . $content_id;
-                $child_node = $this->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$row);
-                if ($child_node !== NULL) {
+                $child_node = $this->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row);
+                if ($child_node !== null) {
                     $children[] = $child_node;
                 }
 
                 // Categories
-                $count = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories','COUNT(*)',array('c_name' => $content_id));
-                $lots = ($count>3000) || ($child_cutoff !== NULL) && ($count>$child_cutoff);
+                $count = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'COUNT(*)', array('c_name' => $content_id));
+                $lots = ($count > 3000) || ($child_cutoff !== null) && ($count > $child_cutoff);
                 if (!$lots) {
                     $child_hook_ob = $this->_get_sitemap_object('catalogue_category');
 
                     $children_entries = array();
                     $start = 0;
                     do {
-                        $where = array('c_name' => $content_id,'cc_parent_id' => NULL);
-                        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories',array('*'),$where,'',SITEMAP_MAX_ROWS_PER_LOOP,$start);
+                        $where = array('c_name' => $content_id, 'cc_parent_id' => null);
+                        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('*'), $where, '', SITEMAP_MAX_ROWS_PER_LOOP, $start);
                         foreach ($rows as $child_row) {
                             $child_page_link = $zone . ':' . $page . ':misc:' . strval($child_row['id']);
-                            $child_node = $child_hook_ob->get_node($child_page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,$child_row);
-                            if ($child_node !== NULL) {
+                            $child_node = $child_hook_ob->get_node($child_page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $child_row);
+                            if ($child_node !== null) {
                                 if (($meta_gather & SITEMAP_GATHER_IMAGE) != 0) {
-                                    $test = find_theme_image('icons/24x24/menu/_generic_admin/view_this_category',true);
+                                    $test = find_theme_image('icons/24x24/menu/_generic_admin/view_this_category', true);
                                     if ($test != '') {
                                         $child_node['extra_meta']['image'] = $test;
                                     }
-                                    $test = find_theme_image('icons/48x48/menu/_generic_admin/view_this_category',true);
+                                    $test = find_theme_image('icons/48x48/menu/_generic_admin/view_this_category', true);
                                     if ($test != '') {
                                         $child_node['extra_meta']['image_2x'] = $test;
                                     }
@@ -226,16 +226,17 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
                             }
                         }
                         $start += SITEMAP_MAX_ROWS_PER_LOOP;
-                    } while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
+                    }
+                    while (count($rows) == SITEMAP_MAX_ROWS_PER_LOOP);
 
-                    sort_maps_by($children_entries,'title');
+                    sort_maps_by($children_entries, 'title');
 
-                    $children = array_merge($children,$children_entries);
+                    $children = array_merge($children, $children_entries);
                 }
 
                 $struct['children'] = $children;
             }
-        } elseif (strpos($page_link,':atoz:') !== false) {
+        } elseif (strpos($page_link, ':atoz:') !== false) {
             $struct['page_link'] = $page_link;
 
             $struct['extra_meta']['description'] = null;
@@ -243,11 +244,11 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
             $struct['title'] = do_lang_tempcode('catalogues:ATOZ');
 
             if (($meta_gather & SITEMAP_GATHER_IMAGE) != 0) {
-                $test = find_theme_image('icons/24x24/menu/rich_content/atoz',true);
+                $test = find_theme_image('icons/24x24/menu/rich_content/atoz', true);
                 if ($test != '') {
                     $struct['extra_meta']['image'] = $test;
                 }
-                $test = find_theme_image('icons/48x48/menu/rich_content/atoz',true);
+                $test = find_theme_image('icons/48x48/menu/rich_content/atoz', true);
                 if ($test != '') {
                     $struct['extra_meta']['image_2x'] = $test;
                 }
@@ -257,13 +258,13 @@ class Hook_sitemap_catalogue extends Hook_sitemap_content
         }
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

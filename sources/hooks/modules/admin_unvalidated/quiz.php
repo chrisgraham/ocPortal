@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_unvalidated_quiz
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_quiz
     public function info()
     {
         if (!module_installed('quiz')) {
-            return NULL;
+            return null;
         }
 
         require_lang('quiz');

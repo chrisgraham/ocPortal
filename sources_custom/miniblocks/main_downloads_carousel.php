@@ -15,21 +15,21 @@ require_css('carousels');
 
 $subdownloads = new ocp_tempcode();
 require_code('ocfiltering');
-$filter_where = ocfilter_to_sqlfragment(strval($id) . '*','id','download_categories','parent_id','category_id','id');
-$all_rows = $GLOBALS['SITE_DB']->query('SELECT d.* FROM ' . get_table_prefix() . 'download_downloads d WHERE ' . $filter_where,20,null,false,true,array('name' => 'SHORT_TRANS','description' => 'LONG_TRANS__COMCODE'));
+$filter_where = ocfilter_to_sqlfragment(strval($id) . '*', 'id', 'download_categories', 'parent_id', 'category_id', 'id');
+$all_rows = $GLOBALS['SITE_DB']->query('SELECT d.* FROM ' . get_table_prefix() . 'download_downloads d WHERE ' . $filter_where, 20, null, false, true, array('name' => 'SHORT_TRANS', 'description' => 'LONG_TRANS__COMCODE'));
 shuffle($all_rows);
 foreach ($all_rows as $d_row) {
-    $d_url = build_url(array('page' => 'downloads','type' => 'entry','id' => $d_row['id']),get_module_zone('downloads'));
+    $d_url = build_url(array('page' => 'downloads', 'type' => 'entry', 'id' => $d_row['id']), get_module_zone('downloads'));
     if (addon_installed('galleries')) {
-        $i_rows = $GLOBALS['SITE_DB']->query_select('images',array('url','thumb_url','id'),array('cat' => 'download_' . strval($d_row['id'])),'',1,$d_row['default_pic']-1);
-        if (array_key_exists(0,$i_rows)) {
-            $thumb_url = ensure_thumbnail($i_rows[0]['url'],$i_rows[0]['thumb_url'],'galleries','images',$i_rows[0]['id']);
-            $subdownloads->attach(hyperlink($d_url,do_image_thumb($thumb_url,render_download_box($d_row,false,false/*breadcrumbs?*/,'_SEARCH',null,false/*context?*/))));
+        $i_rows = $GLOBALS['SITE_DB']->query_select('images', array('url', 'thumb_url', 'id'), array('cat' => 'download_' . strval($d_row['id'])), '', 1, $d_row['default_pic'] - 1);
+        if (array_key_exists(0, $i_rows)) {
+            $thumb_url = ensure_thumbnail($i_rows[0]['url'], $i_rows[0]['thumb_url'], 'galleries', 'images', $i_rows[0]['id']);
+            $subdownloads->attach(hyperlink($d_url, do_image_thumb($thumb_url, render_download_box($d_row, false, false/*breadcrumbs?*/, '_SEARCH', null, false/*context?*/))));
         }
     }
 }
 
-$carousel_id = strval(mt_rand(0,mt_getrandmax()));
+$carousel_id = strval(mt_rand(0, mt_getrandmax()));
 
 $content = '
     <div id="carousel_' . $carousel_id . '" class="carousel" style="display: none">
@@ -51,5 +51,5 @@ $content = '
     //]]></script>
 ';
 
-$tpl = put_in_standard_box(make_string_tempcode($content),do_lang('RANDOM_20_DOWNLOADS'));
+$tpl = put_in_standard_box(make_string_tempcode($content), do_lang('RANDOM_20_DOWNLOADS'));
 $tpl->evaluate_echo();

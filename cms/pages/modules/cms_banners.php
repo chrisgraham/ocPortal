@@ -49,11 +49,11 @@ class Module_cms_banners extends standard_crud_module
      * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
      */
-    public function pre_run($top_level = true,$type = null)
+    public function pre_run($top_level = true, $type = null)
     {
-        $this->cat_crud_module = class_exists('Mx_cms_banners_cat')?new Mx_cms_banners_cat():new Module_cms_banners_cat();
+        $this->cat_crud_module = class_exists('Mx_cms_banners_cat') ? new Mx_cms_banners_cat() : new Module_cms_banners_cat();
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('banners');
 
@@ -61,14 +61,14 @@ class Module_cms_banners extends standard_crud_module
 
         set_helper_panel_tutorial('tut_banners');
 
-        if ((has_privilege(get_member(),'banner_free')) && (get_option('admin_banners') == '0')) {
-            attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'),'inform',true);
+        if ((has_privilege(get_member(), 'banner_free')) && (get_option('admin_banners') == '0')) {
+            attach_message(do_lang_tempcode('PERMISSION_BANNER_SKIP'), 'inform', true);
         }
 
         if ($type == 'misc') {
-            if (has_actual_page_access(get_member(),'admin_banners')) {
-                $also_url = build_url(array('page' => 'admin_banners'),get_module_zone('admin_banners'));
-                attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN',escape_html($also_url->evaluate())),'inform',true);
+            if (has_actual_page_access(get_member(), 'admin_banners')) {
+                $also_url = build_url(array('page' => 'admin_banners'), get_module_zone('admin_banners'));
+                attach_message(do_lang_tempcode('menus:ALSO_SEE_ADMIN', escape_html($also_url->evaluate())), 'inform', true);
             }
         }
 
@@ -165,11 +165,11 @@ class Module_cms_banners extends standard_crud_module
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('MANAGE_BANNERS','menu/cms/banners'),
-        )+parent::get_entry_points();
+            'misc' => array('MANAGE_BANNERS', 'menu/cms/banners'),
+        ) + parent::get_entry_points();
     }
 
     /**
@@ -180,7 +180,7 @@ class Module_cms_banners extends standard_crud_module
     public function get_privilege_overrides()
     {
         require_lang('banners');
-        return array('submit_cat_highrange_content' => array(0,'ADD_BANNER_TYPE'),'edit_cat_highrange_content' => array(0,'EDIT_BANNER_TYPE'),'delete_cat_highrange_content' => array(0,'DELETE_BANNER_TYPE'),'submit_midrange_content' => array(0,'ADD_BANNER'),'bypass_validation_midrange_content' => array(0,'BYPASS_VALIDATION_BANNER'),'edit_own_midrange_content' => array(0,'EDIT_OWN_BANNER'),'edit_midrange_content' => array(0,'EDIT_BANNER'),'delete_own_midrange_content' => array(0,'DELETE_OWN_BANNER'),'delete_midrange_content' => array(0,'DELETE_BANNER'));
+        return array('submit_cat_highrange_content' => array(0, 'ADD_BANNER_TYPE'), 'edit_cat_highrange_content' => array(0, 'EDIT_BANNER_TYPE'), 'delete_cat_highrange_content' => array(0, 'DELETE_BANNER_TYPE'), 'submit_midrange_content' => array(0, 'ADD_BANNER'), 'bypass_validation_midrange_content' => array(0, 'BYPASS_VALIDATION_BANNER'), 'edit_own_midrange_content' => array(0, 'EDIT_OWN_BANNER'), 'edit_midrange_content' => array(0, 'EDIT_BANNER'), 'delete_own_midrange_content' => array(0, 'DELETE_OWN_BANNER'), 'delete_midrange_content' => array(0, 'DELETE_BANNER'));
     }
 
     /**
@@ -191,12 +191,12 @@ class Module_cms_banners extends standard_crud_module
     public function misc()
     {
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('MANAGE_BANNERS'),comcode_lang_string('DOC_BANNERS'),
+        return do_next_manager(get_screen_title('MANAGE_BANNERS'), comcode_lang_string('DOC_BANNERS'),
             array(
-                has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('menu/_generic_admin/add_one_category',array('_SELF',array('type' => 'ac'),'_SELF'),do_lang('ADD_BANNER_TYPE')):null,
-                has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('menu/_generic_admin/edit_one_category',array('_SELF',array('type' => 'ec'),'_SELF'),do_lang('EDIT_BANNER_TYPE')):null,
-                has_privilege(get_member(),'submit_midrange_content','cms_banners')?array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_BANNER')):null,
-                has_privilege(get_member(),'edit_own_midrange_content','cms_banners')?array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_BANNER')):null,
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('menu/_generic_admin/add_one_category', array('_SELF', array('type' => 'ac'), '_SELF'), do_lang('ADD_BANNER_TYPE')) : null,
+                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('menu/_generic_admin/edit_one_category', array('_SELF', array('type' => 'ec'), '_SELF'), do_lang('EDIT_BANNER_TYPE')) : null,
+                has_privilege(get_member(), 'submit_midrange_content', 'cms_banners') ? array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_BANNER')) : null,
+                has_privilege(get_member(), 'edit_own_midrange_content', 'cms_banners') ? array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_BANNER')) : null,
             ),
             do_lang('MANAGE_BANNERS')
         );
@@ -212,11 +212,11 @@ class Module_cms_banners extends standard_crud_module
     {
         require_code('templates_results_table');
 
-        $current_ordering = get_param('sort','b_type ASC');
-        if (strpos($current_ordering,' ') === false) {
+        $current_ordering = get_param('sort', 'b_type ASC');
+        if (strpos($current_ordering, ' ') === false) {
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
-        list($sortable,$sort_order) = explode(' ',$current_ordering,2);
+        list($sortable, $sort_order) = explode(' ', $current_ordering, 2);
         if ($current_ordering == 'b_type ASC') {
             $current_ordering = 'b_type ASC,name ASC';
         }
@@ -232,12 +232,12 @@ class Module_cms_banners extends standard_crud_module
         if (addon_installed('unvalidated')) {
             $sortables['validated'] = do_lang_tempcode('VALIDATED');
         }
-        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
 
-        $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_banners')?null:get_member();
-        list($rows,$max_rows) = $this->get_entry_rows(false,$current_ordering,is_null($only_owned)?null:array('submitter' => $only_owned));
+        $only_owned = has_privilege(get_member(), 'edit_midrange_content', 'cms_banners') ? null : get_member();
+        list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering, is_null($only_owned) ? null : array('submitter' => $only_owned));
 
         $has_expiry_dates = false; // Save space by default
         foreach ($rows as $row) {
@@ -261,13 +261,13 @@ class Module_cms_banners extends standard_crud_module
             $hr[] = do_lang_tempcode('VALIDATED');
         }
         $hr[] = do_lang_tempcode('ACTIONS');
-        $header_row = results_field_title($hr,$sortables,'sort',$sortable . ' ' . $sort_order);
+        $header_row = results_field_title($hr, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
         $fields = new ocp_tempcode();
 
         require_code('form_templates');
         foreach ($rows as $row) {
-            $edit_link = build_url($url_map+array('id' => $row['name']),'_SELF');
+            $edit_link = build_url($url_map + array('id' => $row['name']), '_SELF');
 
             $deployment_agreement = new ocp_tempcode();
             switch ($row['the_type']) {
@@ -283,25 +283,25 @@ class Module_cms_banners extends standard_crud_module
             }
 
             $fr = array(
-                hyperlink(build_url(array('page' => 'banners','type' => 'view','source' => $row['name']),get_module_zone('banners')),escape_html($row['name'])),
-                ($row['b_type'] == '')?do_lang('GENERAL'):$row['b_type'],
+                hyperlink(build_url(array('page' => 'banners', 'type' => 'view', 'source' => $row['name']), get_module_zone('banners')), escape_html($row['name'])),
+                ($row['b_type'] == '') ? do_lang('GENERAL') : $row['b_type'],
                 $deployment_agreement,
                 //integer_format($row['campaign_remaining']),
                 strval($row['importance_modulus']),
             );
             if ($has_expiry_dates) {
-                $fr[] = is_null($row['expiry_date'])?protect_from_escaping(do_lang_tempcode('NA_EM')):make_string_tempcode(get_timezoned_date($row['expiry_date']));
+                $fr[] = is_null($row['expiry_date']) ? protect_from_escaping(do_lang_tempcode('NA_EM')) : make_string_tempcode(get_timezoned_date($row['expiry_date']));
             }
-            $fr[] = get_timezoned_date($row['add_date'],false);
+            $fr[] = get_timezoned_date($row['add_date'], false);
             if (addon_installed('unvalidated')) {
-                $fr[] = ($row['validated'] == 1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
+                $fr[] = ($row['validated'] == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO');
             }
-            $fr[] = protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,$row['name']));
+            $fr[] = protect_from_escaping(hyperlink($edit_link, do_lang_tempcode('EDIT'), false, true, $row['name']));
 
-            $fields->attach(results_entry($fr),true);
+            $fields->attach(results_entry($fr), true);
         }
 
-        return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+        return array(results_table(do_lang($this->menu_label), get_param_integer('start', 0), 'start', either_param_integer('max', 20), 'max', $max_rows, $header_row, $fields, $sortables, $sortable, $sort_order), false);
     }
 
     /**
@@ -311,8 +311,8 @@ class Module_cms_banners extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $only_owned = has_privilege(get_member(),'edit_midrange_content','cms_banners')?null:get_member();
-        return create_selection_list_banners(null,$only_owned);
+        $only_owned = has_privilege(get_member(), 'edit_midrange_content', 'cms_banners') ? null : get_member();
+        return create_selection_list_banners(null, $only_owned);
     }
 
     /**
@@ -337,32 +337,32 @@ class Module_cms_banners extends standard_crud_module
      * @param  SHORT_TEXT               The title text for the banner (only used for text banners, and functions as the 'trigger text' if the banner type is shown inline)
      * @return array                    Bits
      */
-    public function get_form_fields($name = '',$image_url = '',$site_url = '',$caption = '',$direct_code = '',$notes = '',$importancemodulus = 3,$campaignremaining = 50,$the_type = 0,$expiry_date = null,$submitter = null,$validated = 1,$b_type = '',$title_text = '')
+    public function get_form_fields($name = '', $image_url = '', $site_url = '', $caption = '', $direct_code = '', $notes = '', $importancemodulus = 3, $campaignremaining = 50, $the_type = 0, $expiry_date = null, $submitter = null, $validated = 1, $b_type = '', $title_text = '')
     {
         if ($b_type == '') {
-            $b_type = get_param('b_type','');
+            $b_type = get_param('b_type', '');
         }
 
-        list($fields,$_javascript) = get_banner_form_fields(false,$name,$image_url,$site_url,$caption,$direct_code,$notes,$importancemodulus,$campaignremaining,$the_type,$expiry_date,$submitter,$validated,$b_type,$title_text);
+        list($fields, $_javascript) = get_banner_form_fields(false, $name, $image_url, $site_url, $caption, $direct_code, $notes, $importancemodulus, $campaignremaining, $the_type, $expiry_date, $submitter, $validated, $b_type, $title_text);
         $this->javascript .= $_javascript;
 
-        $fields->attach(meta_data_get_fields('banner',$name));
+        $fields->attach(meta_data_get_fields('banner', $name));
 
         if (addon_installed('content_reviews')) {
-            $fields->attach(content_review_get_fields('banner',$name));
+            $fields->attach(content_review_get_fields('banner', $name));
         }
 
         // Permissions
         if (get_option('use_banner_permissions') == '1') {
-            $fields->attach($this->get_permission_fields($name,null,($name == '')));
+            $fields->attach($this->get_permission_fields($name, null, ($name == '')));
         }
 
-        $edit_text = ($name == '')?new ocp_tempcode():do_template('BANNER_PREVIEW',array('_GUID' => 'b7c58bc13ff317870b6823716fd36f0c','PREVIEW' => show_banner($name,$title_text,comcode_to_tempcode($caption,$submitter),$direct_code,$image_url,'',$site_url,$b_type,is_null($submitter)?get_member():$submitter)));
+        $edit_text = ($name == '') ? new ocp_tempcode() : do_template('BANNER_PREVIEW', array('_GUID' => 'b7c58bc13ff317870b6823716fd36f0c', 'PREVIEW' => show_banner($name, $title_text, comcode_to_tempcode($caption, $submitter), $direct_code, $image_url, '', $site_url, $b_type, is_null($submitter) ? get_member() : $submitter)));
 
         $hidden = new ocp_tempcode();
-        handle_max_file_size($hidden,'image');
+        handle_max_file_size($hidden, 'image');
 
-        return array($fields,$hidden,null,$edit_text);
+        return array($fields, $hidden, null, $edit_text);
     }
 
     /**
@@ -373,11 +373,11 @@ class Module_cms_banners extends standard_crud_module
      */
     public function get_submitter($id)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('banners',array('submitter','add_date'),array('name' => $id),'',1);
-        if (!array_key_exists(0,$rows)) {
-            return array(null,null);
+        $rows = $GLOBALS['SITE_DB']->query_select('banners', array('submitter', 'add_date'), array('name' => $id), '', 1);
+        if (!array_key_exists(0, $rows)) {
+            return array(null, null);
         }
-        return array($rows[0]['submitter'],$rows[0]['add_date']);
+        return array($rows[0]['submitter'], $rows[0]['add_date']);
     }
 
     /**
@@ -388,13 +388,13 @@ class Module_cms_banners extends standard_crud_module
      */
     public function fill_in_edit_form($id)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('banners',array('*'),array('name' => $id),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('banners', array('*'), array('name' => $id), '', 1);
+        if (!array_key_exists(0, $rows)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $myrow = $rows[0];
 
-        return $this->get_form_fields($id,$myrow['img_url'],$myrow['site_url'],get_translated_text($myrow['caption']),$myrow['b_direct_code'],$myrow['notes'],$myrow['importance_modulus'],$myrow['campaign_remaining'],$myrow['the_type'],$myrow['expiry_date'],$myrow['submitter'],$myrow['validated'],$myrow['b_type'],$myrow['b_title_text']);
+        return $this->get_form_fields($id, $myrow['img_url'], $myrow['site_url'], get_translated_text($myrow['caption']), $myrow['b_direct_code'], $myrow['notes'], $myrow['importance_modulus'], $myrow['campaign_remaining'], $myrow['the_type'], $myrow['expiry_date'], $myrow['submitter'], $myrow['validated'], $myrow['b_type'], $myrow['b_title_text']);
     }
 
     /**
@@ -406,45 +406,45 @@ class Module_cms_banners extends standard_crud_module
     {
         $name = post_param('name');
         $caption = post_param('caption');
-        $direct_code = post_param('direct_code','');
-        $campaignremaining = post_param_integer('campaignremaining',0);
-        $siteurl = fixup_protocolless_urls(post_param('site_url',''));
-        $importancemodulus = post_param_integer('importancemodulus',3);
-        $notes = post_param('notes','');
-        $the_type = post_param_integer('the_type',1);
+        $direct_code = post_param('direct_code', '');
+        $campaignremaining = post_param_integer('campaignremaining', 0);
+        $siteurl = fixup_protocolless_urls(post_param('site_url', ''));
+        $importancemodulus = post_param_integer('importancemodulus', 3);
+        $notes = post_param('notes', '');
+        $the_type = post_param_integer('the_type', 1);
         $expiry_date = get_input_date('expiry_date');
-        $validated = post_param_integer('validated',0);
+        $validated = post_param_integer('validated', 0);
         $b_type = post_param('b_type');
 
-        $title_text = post_param('title_text','');
+        $title_text = post_param('title_text', '');
         $b_type = post_param('b_type');
         $this->donext_type = $b_type;
 
-        list($url,$title_text) = check_banner($title_text,$direct_code,$b_type);
+        list($url, $title_text) = check_banner($title_text, $direct_code, $b_type);
 
-        $meta_data = actual_meta_data_get_fields('banner',null);
+        $meta_data = actual_meta_data_get_fields('banner', null);
 
-        add_banner($name,$url,$title_text,$caption,$direct_code,$campaignremaining,$siteurl,$importancemodulus,$notes,$the_type,$expiry_date,$meta_data['submitter'],$validated,$b_type,$meta_data['add_time'],0,0,0,0,$meta_data['edit_time']);
+        add_banner($name, $url, $title_text, $caption, $direct_code, $campaignremaining, $siteurl, $importancemodulus, $notes, $the_type, $expiry_date, $meta_data['submitter'], $validated, $b_type, $meta_data['add_time'], 0, 0, 0, 0, $meta_data['edit_time']);
 
-        $_banner_type_row = $GLOBALS['SITE_DB']->query_select('banner_types',array('t_image_width','t_image_height'),array('id' => $b_type),'',1);
-        if (array_key_exists(0,$_banner_type_row)) {
+        $_banner_type_row = $GLOBALS['SITE_DB']->query_select('banner_types', array('t_image_width', 't_image_height'), array('id' => $b_type), '', 1);
+        if (array_key_exists(0, $_banner_type_row)) {
             $banner_type_row = $_banner_type_row[0];
         } else {
-            $banner_type_row = array('t_image_width' => 728,'t_image_height' => 90);
+            $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
         }
-        $stats_url = build_url(array('page' => '_SELF','type' => 'view','source' => $name),'_SELF');
-        $banner_code = do_template('BANNER_SHOW_CODE',array('_GUID' => '745d555fcca3a1320123ad3a5a04418b','TYPE' => $b_type,'NAME' => $name,'WIDTH' => strval($banner_type_row['t_image_width']),'HEIGHT' => strval($banner_type_row['t_image_height'])));
-        $tpl = do_template('BANNER_ADDED_SCREEN',array('_GUID' => '897bab3e444f0d3c909e7a95b84d4396','DO_NEXT' => '','TEXT' => '','TITLE' => '','BANNER_CODE' => $banner_code,'STATS_URL' => $stats_url));
+        $stats_url = build_url(array('page' => '_SELF', 'type' => 'view', 'source' => $name), '_SELF');
+        $banner_code = do_template('BANNER_SHOW_CODE', array('_GUID' => '745d555fcca3a1320123ad3a5a04418b', 'TYPE' => $b_type, 'NAME' => $name, 'WIDTH' => strval($banner_type_row['t_image_width']), 'HEIGHT' => strval($banner_type_row['t_image_height'])));
+        $tpl = do_template('BANNER_ADDED_SCREEN', array('_GUID' => '897bab3e444f0d3c909e7a95b84d4396', 'DO_NEXT' => '', 'TEXT' => '', 'TITLE' => '', 'BANNER_CODE' => $banner_code, 'STATS_URL' => $stats_url));
 
         if (get_option('use_banner_permissions') == '1') {
             $this->set_permissions($name);
         }
 
         if (addon_installed('content_reviews')) {
-            content_review_set('banner',$name);
+            content_review_set('banner', $name);
         }
 
-        return array($name,$tpl);
+        return array($name, $tpl);
     }
 
     /**
@@ -454,27 +454,27 @@ class Module_cms_banners extends standard_crud_module
      */
     public function edit_actualisation($id)
     {
-        $orig_submitter = $GLOBALS['SITE_DB']->query_select_value_if_there('banners','submitter',array('name' => $id));
+        $orig_submitter = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'submitter', array('name' => $id));
         if (is_null($orig_submitter)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
 
         $b_type = post_param('b_type');
 
-        $title_text = post_param('title_text','');
-        $direct_code = post_param('direct_code','');
+        $title_text = post_param('title_text', '');
+        $direct_code = post_param('direct_code', '');
         $b_type = post_param('b_type');
         $this->donext_type = $b_type;
 
-        list($url,$title_text) = check_banner($title_text,$direct_code,$b_type);
+        list($url, $title_text) = check_banner($title_text, $direct_code, $b_type);
 
-        $validated = post_param_integer('validated',0);
+        $validated = post_param_integer('validated', 0);
 
         $new_id = post_param('name');
 
-        $meta_data = actual_meta_data_get_fields('banner',$id,null,$new_id);
+        $meta_data = actual_meta_data_get_fields('banner', $id, null, $new_id);
 
-        edit_banner($id,$new_id,$url,$title_text,post_param('caption'),$direct_code,post_param_integer('campaignremaining',0),fixup_protocolless_urls(post_param('site_url')),post_param_integer('importancemodulus'),post_param('notes',''),post_param_integer('the_type',1),get_input_date('expiry_date'),$meta_data['submitter'],$validated,$b_type,$meta_data['edit_time'],$meta_data['add_time'],true);
+        edit_banner($id, $new_id, $url, $title_text, post_param('caption'), $direct_code, post_param_integer('campaignremaining', 0), fixup_protocolless_urls(post_param('site_url')), post_param_integer('importancemodulus'), post_param('notes', ''), post_param_integer('the_type', 1), get_input_date('expiry_date'), $meta_data['submitter'], $validated, $b_type, $meta_data['edit_time'], $meta_data['add_time'], true);
 
         $this->new_id = post_param('name');
 
@@ -483,7 +483,7 @@ class Module_cms_banners extends standard_crud_module
         }
 
         if (addon_installed('content_reviews')) {
-            content_review_set('banner',$this->id,$id);
+            content_review_set('banner', $this->id, $id);
         }
     }
 
@@ -508,9 +508,9 @@ class Module_cms_banners extends standard_crud_module
      * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
      * @return tempcode                 The UI
      */
-    public function do_next_manager($title,$description,$id)
+    public function do_next_manager($title, $description, $id)
     {
-        return $this->cat_crud_module->_do_next_manager($title,$description,$id,$this->donext_type);
+        return $this->cat_crud_module->_do_next_manager($title, $description, $id, $this->donext_type);
     }
 }
 
@@ -542,8 +542,8 @@ class Module_cms_banners_cat extends standard_crud_module
     {
         require_code('templates_results_table');
 
-        $current_ordering = get_param('sort','id ASC',true);
-        list($sortable,$sort_order) = array(substr($current_ordering,0,strrpos($current_ordering,' ')),substr($current_ordering,strrpos($current_ordering,' ')+1));
+        $current_ordering = get_param('sort', 'id ASC', true);
+        list($sortable, $sort_order) = array(substr($current_ordering, 0, strrpos($current_ordering, ' ')), substr($current_ordering, strrpos($current_ordering, ' ') + 1));
         $sortables = array(
             'id' => do_lang_tempcode('CODENAME'),
             't_is_textual' => do_lang_tempcode('BANNER_IS_TEXTUAL'),
@@ -555,7 +555,7 @@ class Module_cms_banners_cat extends standard_crud_module
         if (db_has_subqueries($GLOBALS['SITE_DB']->connection_read)) {
             $sortables['(SELECT COUNT(*) FROM ' . get_table_prefix() . 'banners WHERE b_type=r.id)'] = do_lang_tempcode('COUNT_TOTAL');
         }
-        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
 
@@ -568,22 +568,22 @@ class Module_cms_banners_cat extends standard_crud_module
             do_lang_tempcode('COMCODE_INLINE'),
             do_lang_tempcode('COUNT_TOTAL'),
             do_lang_tempcode('ACTIONS'),
-        ),$sortables,'sort',$sortable . ' ' . $sort_order);
+        ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
         $fields = new ocp_tempcode();
 
         require_code('form_templates');
         require_code('files');
-        list($rows,$max_rows) = $this->get_entry_rows(false,$current_ordering);
+        list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
         foreach ($rows as $row) {
-            $edit_link = build_url($url_map+array('id' => $row['id']),'_SELF');
+            $edit_link = build_url($url_map + array('id' => $row['id']), '_SELF');
 
-            $total = integer_format($GLOBALS['SITE_DB']->query_select_value('banners','COUNT(*)',array('b_type' => $row['id'])));
+            $total = integer_format($GLOBALS['SITE_DB']->query_select_value('banners', 'COUNT(*)', array('b_type' => $row['id'])));
 
-            $fields->attach(results_entry(array(($row['id'] == '')?do_lang('GENERAL'):$row['id'],($row['t_is_textual'] == 1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),integer_format($row['t_image_width']),integer_format($row['t_image_height']),clean_file_size($row['t_max_file_size']*1024),($row['t_comcode_inline'] == 1)?do_lang_tempcode('YES'):do_lang_tempcode('NO'),$total,protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,'#' . $row['id'])))),true);
+            $fields->attach(results_entry(array(($row['id'] == '') ? do_lang('GENERAL') : $row['id'], ($row['t_is_textual'] == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO'), integer_format($row['t_image_width']), integer_format($row['t_image_height']), clean_file_size($row['t_max_file_size'] * 1024), ($row['t_comcode_inline'] == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO'), $total, protect_from_escaping(hyperlink($edit_link, do_lang_tempcode('EDIT'), false, true, '#' . $row['id'])))), true);
         }
 
-        return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',get_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+        return array(results_table(do_lang($this->menu_label), get_param_integer('start', 0), 'start', get_param_integer('max', 20), 'max', $max_rows, $header_row, $fields, $sortables, $sortable, $sort_order), false);
     }
 
     /**
@@ -597,28 +597,28 @@ class Module_cms_banners_cat extends standard_crud_module
      * @param  BINARY                   Whether the banner will be automatically shown via Comcode hot-text (this can only happen if banners of the title are given title-text)
      * @return array                    A pair: the tempcode for the visible fields, and the tempcode for the hidden fields
      */
-    public function get_form_fields($id = '',$is_textual = 0,$image_width = 160,$image_height = 600,$max_file_size = 250,$comcode_inline = 0)
+    public function get_form_fields($id = '', $is_textual = 0, $image_width = 160, $image_height = 600, $max_file_size = 250, $comcode_inline = 0)
     {
         $fields = new ocp_tempcode();
         $hidden = new ocp_tempcode();
 
-        $fields->attach(form_input_line(do_lang_tempcode('CODENAME'),do_lang_tempcode('DESCRIPTION_BANNER_TYPE'),'new_id',$id,false));
+        $fields->attach(form_input_line(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_BANNER_TYPE'), 'new_id', $id, false));
         if ($id != '') {
-            $hidden->attach(form_input_hidden('is_textual',strval($is_textual)));
+            $hidden->attach(form_input_hidden('is_textual', strval($is_textual)));
         } else {
-            $fields->attach(form_input_tick(do_lang_tempcode('BANNER_IS_TEXTUAL'),do_lang_tempcode('DESCRIPTION_BANNER_IS_TEXTUAL'),'is_textual',$is_textual == 1));
+            $fields->attach(form_input_tick(do_lang_tempcode('BANNER_IS_TEXTUAL'), do_lang_tempcode('DESCRIPTION_BANNER_IS_TEXTUAL'), 'is_textual', $is_textual == 1));
         }
-        $fields->attach(form_input_dimensions(do_lang_tempcode('DIMENSIONS'),do_lang_tempcode('DESCRIPTION_BANNER_DIMENSIONS'),'image_width','image_height',$image_width,$image_height,true));
-        $fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'),do_lang_tempcode('DESCRIPTION_BANNER_FILE_SIZE'),'max_file_size',$max_file_size,true));
-        $fields->attach(form_input_tick(do_lang_tempcode('COMCODE_INLINE'),do_lang_tempcode('DESCRIPTION_COMCODE_INLINE'),'comcode_inline',$comcode_inline == 1));
+        $fields->attach(form_input_dimensions(do_lang_tempcode('DIMENSIONS'), do_lang_tempcode('DESCRIPTION_BANNER_DIMENSIONS'), 'image_width', 'image_height', $image_width, $image_height, true));
+        $fields->attach(form_input_integer(do_lang_tempcode('_FILE_SIZE'), do_lang_tempcode('DESCRIPTION_BANNER_FILE_SIZE'), 'max_file_size', $max_file_size, true));
+        $fields->attach(form_input_tick(do_lang_tempcode('COMCODE_INLINE'), do_lang_tempcode('DESCRIPTION_COMCODE_INLINE'), 'comcode_inline', $comcode_inline == 1));
 
-        $fields->attach(meta_data_get_fields('banner_type',($id == '')?null:$id));
+        $fields->attach(meta_data_get_fields('banner_type', ($id == '') ? null : $id));
 
         if (addon_installed('content_reviews')) {
-            $fields->attach(content_review_get_fields('banner_type',$id));
+            $fields->attach(content_review_get_fields('banner_type', $id));
         }
 
-        return array($fields,$hidden);
+        return array($fields, $hidden);
     }
 
     /**
@@ -629,15 +629,15 @@ class Module_cms_banners_cat extends standard_crud_module
      */
     public function fill_in_edit_form($id)
     {
-        $m = $GLOBALS['SITE_DB']->query_select('banner_types',array('*'),array('id' => $id),'',1);
-        if (!array_key_exists(0,$m)) {
+        $m = $GLOBALS['SITE_DB']->query_select('banner_types', array('*'), array('id' => $id), '', 1);
+        if (!array_key_exists(0, $m)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $r = $m[0];
 
-        list($fields,$hidden) = $this->get_form_fields($id,$r['t_is_textual'],$r['t_image_width'],$r['t_image_height'],$r['t_max_file_size'],$r['t_comcode_inline']);
+        list($fields, $hidden) = $this->get_form_fields($id, $r['t_is_textual'], $r['t_image_width'], $r['t_image_height'], $r['t_max_file_size'], $r['t_comcode_inline']);
 
-        return array($fields,$hidden);
+        return array($fields, $hidden);
     }
 
     /**
@@ -648,21 +648,21 @@ class Module_cms_banners_cat extends standard_crud_module
     public function add_actualisation()
     {
         $id = post_param('new_id');
-        $is_textual = post_param_integer('is_textual',0);
+        $is_textual = post_param_integer('is_textual', 0);
         $image_width = post_param_integer('image_width');
         $image_height = post_param_integer('image_height');
         $max_file_size = post_param_integer('max_file_size');
-        $comcode_inline = post_param_integer('comcode_inline',0);
+        $comcode_inline = post_param_integer('comcode_inline', 0);
 
-        $meta_data = actual_meta_data_get_fields('banner_type',null);
+        $meta_data = actual_meta_data_get_fields('banner_type', null);
 
-        add_banner_type($id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
+        add_banner_type($id, $is_textual, $image_width, $image_height, $max_file_size, $comcode_inline);
 
         if (addon_installed('content_reviews')) {
-            content_review_set('banner_type',$id);
+            content_review_set('banner_type', $id);
         }
 
-        return array($id,do_lang_tempcode('ADD_BANNER_TEMPLATING'));
+        return array($id, do_lang_tempcode('ADD_BANNER_TEMPLATING'));
     }
 
     /**
@@ -673,22 +673,22 @@ class Module_cms_banners_cat extends standard_crud_module
      */
     public function edit_actualisation($id)
     {
-        $is_textual = post_param_integer('is_textual',0);
+        $is_textual = post_param_integer('is_textual', 0);
         $image_width = post_param_integer('image_width');
         $image_height = post_param_integer('image_height');
         $max_file_size = post_param_integer('max_file_size');
-        $comcode_inline = post_param_integer('comcode_inline',0);
+        $comcode_inline = post_param_integer('comcode_inline', 0);
 
         $new_id = post_param('new_id');
 
-        $meta_data = actual_meta_data_get_fields('banner_type',$id,null,$new_id);
+        $meta_data = actual_meta_data_get_fields('banner_type', $id, null, $new_id);
 
-        edit_banner_type($id,$new_id,$is_textual,$image_width,$image_height,$max_file_size,$comcode_inline);
+        edit_banner_type($id, $new_id, $is_textual, $image_width, $image_height, $max_file_size, $comcode_inline);
 
         $this->new_id = post_param('new_id');
 
         if (addon_installed('content_reviews')) {
-            content_review_set('banner_type',$this->new_id,$id);
+            content_review_set('banner_type', $this->new_id, $id);
         }
 
         return do_lang_tempcode('ADD_BANNER_TEMPLATING');
@@ -712,9 +712,9 @@ class Module_cms_banners_cat extends standard_crud_module
      * @param  ?AUTO_LINK               The ID of whatever was just handled (NULL: N/A)
      * @return tempcode                 The UI
      */
-    public function do_next_manager($title,$description,$id)
+    public function do_next_manager($title, $description, $id)
     {
-        return $this->_do_next_manager($title,$description,null,$id);
+        return $this->_do_next_manager($title, $description, null, $id);
     }
 
     /**
@@ -726,26 +726,26 @@ class Module_cms_banners_cat extends standard_crud_module
      * @param  ID_TEXT                  The type ID we were working in (NULL: N/A)
      * @return tempcode                 The UI
      */
-    public function _do_next_manager($title,$description,$id,$type)
+    public function _do_next_manager($title, $description, $id, $type)
     {
         require_code('templates_donext');
 
         if ((is_null($id)) && (is_null($type))) {
-            return do_next_manager($title,$description,
+            return do_next_manager($title, $description,
                 null,
                 null,
                 /* TYPED-ORDERED LIST OF 'LINKS'    */
-                array('_SELF',array('type' => 'ad'),'_SELF',do_lang_tempcode('ADD_BANNER')), // Add one
-                NULL, // Edit this
-                has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type' => 'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):null, // Edit one
-                NULL, // View this
-                NULL, // View archive
-                NULL, // Add to category
-                has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type' => 'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):null, // Add one category
-                has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type' => 'ec'),'_SELF',do_lang_tempcode('EDIT_BANNER_TYPE')):null, // Edit one category
-                NULL, // Edit this category
-                NULL, // View this category
-                NULL,
+                array('_SELF', array('type' => 'ad'), '_SELF', do_lang_tempcode('ADD_BANNER')), // Add one
+                null, // Edit this
+                has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ed'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
+                null, // View this
+                null, // View archive
+                null, // Add to category
+                has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ac'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
+                has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ec'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category
+                null, // Edit this category
+                null, // View this category
+                null,
                 null,
                 null,
                 null,
@@ -755,21 +755,22 @@ class Module_cms_banners_cat extends standard_crud_module
             );
         }
 
-        return do_next_manager($title,$description,
+        return do_next_manager($title, $description,
             null,
             null,
             /* TYPED-ORDERED LIST OF 'LINKS'  */
-            array('_SELF',array('type' => 'ad','b_type' => $type),'_SELF',do_lang_tempcode('ADD_BANNER')), // Add one
-            (is_null($id) || (!has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')))?null:array('_SELF',array('type' => '_ed','id' => $id),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER')), // Edit this
-            has_privilege(get_member(),'edit_own_lowrange_content','cms_banners')?array('_SELF',array('type' => 'ed'),'_SELF',do_lang_tempcode('EDIT_BANNER')):null, // Edit one
-            ((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/get_option('simplified_donext') == '1'))?null:array('banners',array('type' => 'view','source' => $id),get_module_zone('banners')), // View this
-            array('admin_banners',array('type' => 'misc'),get_module_zone('admin_banners')), // View archive
-            NULL, // Add to category
-            has_privilege(get_member(),'submit_cat_highrange_content','cms_banners')?array('_SELF',array('type' => 'ac'),'_SELF',do_lang_tempcode('ADD_BANNER_TYPE')):null, // Add one category
-            has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type' => 'ec'),'_SELF',do_lang_tempcode('EDIT_BANNER_TYPE')):null, // Edit one category
-            has_privilege(get_member(),'edit_cat_highrange_content','cms_banners')?array('_SELF',array('type' => '_ec','id' => $type),'_SELF',do_lang_tempcode('EDIT_THIS_BANNER_TYPE')):null, // Edit this category
-            NULL, // View this category
-            NULL,
+            array('_SELF', array('type' => 'ad', 'b_type' => $type), '_SELF', do_lang_tempcode('ADD_BANNER')), // Add one
+            (is_null($id) || (!has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners'))) ? null : array('_SELF', array('type' => '_ed', 'id' => $id), '_SELF', do_lang_tempcode('EDIT_THIS_BANNER')), // Edit this
+            has_privilege(get_member(), 'edit_own_lowrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ed'), '_SELF', do_lang_tempcode('EDIT_BANNER')) : null, // Edit one
+            ((is_null($id)) || (/*Don't go direct to view if simplified do-next on as too unnatural*/
+                    get_option('simplified_donext') == '1')) ? null : array('banners', array('type' => 'view', 'source' => $id), get_module_zone('banners')), // View this
+            array('admin_banners', array('type' => 'misc'), get_module_zone('admin_banners')), // View archive
+            null, // Add to category
+            has_privilege(get_member(), 'submit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ac'), '_SELF', do_lang_tempcode('ADD_BANNER_TYPE')) : null, // Add one category
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => 'ec'), '_SELF', do_lang_tempcode('EDIT_BANNER_TYPE')) : null, // Edit one category
+            has_privilege(get_member(), 'edit_cat_highrange_content', 'cms_banners') ? array('_SELF', array('type' => '_ec', 'id' => $type), '_SELF', do_lang_tempcode('EDIT_THIS_BANNER_TYPE')) : null, // Edit this category
+            null, // View this category
+            null,
             null,
             null,
             null,

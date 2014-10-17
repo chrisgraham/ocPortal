@@ -20,6 +20,7 @@
 
 /**
  * Base class for MySQL database drivers.
+ *
  * @package    core_database_drivers
  */
 class Database_super_mysql
@@ -62,18 +63,18 @@ class Database_super_mysql
      * @param  string                   Part of the SQL query: a comma-separated list of fields to use on the index
      * @param  array                    The DB connection to make on
      */
-    public function db_create_index($table_name,$index_name,$_fields,$db)
+    public function db_create_index($table_name, $index_name, $_fields, $db)
     {
         if ($index_name[0] == '#') {
             if ($this->using_innodb()) {
                 return;
             }
-            $index_name = substr($index_name,1);
+            $index_name = substr($index_name, 1);
             $type = 'FULLTEXT';
         } else {
             $type = 'INDEX';
         }
-        $this->db_query('ALTER TABLE ' . $table_name . ' ADD ' . $type . ' ' . $index_name . ' (' . $_fields . ')',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD ' . $type . ' ' . $index_name . ' (' . $_fields . ')', $db);
     }
 
     /**
@@ -83,10 +84,10 @@ class Database_super_mysql
      * @param  array                    A list of fields to put in the new key
      * @param  array                    The DB connection to make on
      */
-    public function db_change_primary_key($table_name,$new_key,$db)
+    public function db_change_primary_key($table_name, $new_key, $db)
     {
-        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY',$db);
-        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',',$new_key) . ')',$db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' DROP PRIMARY KEY', $db);
+        $this->db_query('ALTER TABLE ' . $table_name . ' ADD PRIMARY KEY (' . implode(',', $new_key) . ')', $db);
     }
 
     /**
@@ -96,10 +97,10 @@ class Database_super_mysql
      * @param  boolean                  Whether to do a boolean full text search
      * @return string                   Part of a WHERE clause for doing full-text search
      */
-    public function db_full_text_assemble($content,$boolean)
+    public function db_full_text_assemble($content, $boolean)
     {
         if (!$boolean) {
-            $content = str_replace('"','',$content);
+            $content = str_replace('"', '', $content);
             if ((strtoupper($content) == $content) && (!is_numeric($content))) {
                 return 'MATCH (?) AGAINST (_latin1\'' . $this->db_escape_string($content) . '\' COLLATE latin1_general_cs)';
             }
@@ -171,7 +172,7 @@ class Database_super_mysql
      * @param  array                    The DB connection to make on
      * @param  ID_TEXT                  The table name with no table prefix
      */
-    public function db_create_table($table_name,$fields,$db,$raw_table_name)
+    public function db_create_table($table_name, $fields, $db, $raw_table_name)
     {
         $type_remap = $this->db_get_type_remap();
 
@@ -179,7 +180,7 @@ class Database_super_mysql
         $keys = '';
         foreach ($fields as $name => $type) {
             if ($type[0] == '*') { // Is a key
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 if ($keys != '') {
                     $keys .= ', ';
                 }
@@ -187,25 +188,25 @@ class Database_super_mysql
             }
 
             if ($type[0] == '?') { // Is perhaps null
-                $type = substr($type,1);
+                $type = substr($type, 1);
                 $perhaps_null = 'NULL';
             } else {
                 $perhaps_null = 'NOT NULL';
             }
 
-            $type = isset($type_remap[$type])?$type_remap[$type]:$type;
+            $type = isset($type_remap[$type]) ? $type_remap[$type] : $type;
 
             $_fields .= '    ' . $name . ' ' . $type;
-            if (substr($name,-13) == '__text_parsed') {
+            if (substr($name, -13) == '__text_parsed') {
                 $_fields .= ' DEFAULT \'\'';
-            } elseif (substr($name,-13) == '__source_user') {
+            } elseif (substr($name, -13) == '__source_user') {
                 $_fields .= ' DEFAULT ' . strval(db_get_first_id());
             }
             $_fields .= ' ' . $perhaps_null . ',' . "\n";
         }
 
         $innodb = $this->using_innodb();
-        $table_type = ($innodb?'INNODB':'MyISAM');
+        $table_type = ($innodb ? 'INNODB' : 'MyISAM');
         $type_key = 'engine';
         if ($raw_table_name == 'sessions') {
             $table_type = 'HEAP';
@@ -218,7 +219,7 @@ class Database_super_mysql
         $query .= ' CHARACTER SET=utf8';
 
         $query .= ' ' . $type_key . '=' . $table_type . ';';
-        $this->db_query($query,$db,null,null);
+        $this->db_query($query, $db, null, null);
     }
 
     /**
@@ -228,7 +229,7 @@ class Database_super_mysql
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_equal_to($attribute,$compare)
+    public function db_string_equal_to($attribute, $compare)
     {
         return $attribute . "='" . db_escape_string($compare) . "'";
     }
@@ -240,7 +241,7 @@ class Database_super_mysql
      * @param  string                   The comparison
      * @return string                   The SQL
      */
-    public function db_string_not_equal_to($attribute,$compare)
+    public function db_string_not_equal_to($attribute, $compare)
     {
         return $attribute . "<>'" . db_escape_string($compare) . "'";
     }
@@ -272,9 +273,9 @@ class Database_super_mysql
      * @param  ID_TEXT                  The table name
      * @param  array                    The DB connection to delete on
      */
-    public function db_drop_table_if_exists($table,$db)
+    public function db_drop_table_if_exists($table, $db)
     {
-        $this->db_query('DROP TABLE IF EXISTS ' . $table,$db);
+        $this->db_query('DROP TABLE IF EXISTS ' . $table, $db);
     }
 
     /**
@@ -295,7 +296,7 @@ class Database_super_mysql
      */
     public function db_encode_like($pattern)
     {
-        $ret = preg_replace('#([^\\\\])\\\\\\\\_#','${1}\_',$this->db_escape_string($pattern));
+        $ret = preg_replace('#([^\\\\])\\\\\\\\_#', '${1}\_', $this->db_escape_string($pattern));
         return $ret;
     }
 

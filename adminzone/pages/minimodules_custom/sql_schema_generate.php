@@ -17,7 +17,7 @@ $filename = 'ocportal-erd.sql';
 
 if (!isset($_GET['testing'])) {
     header('Content-Type: application/octet-stream' . '; authoritative=true;');
-    header('Content-Disposition: attachment; filename="' . str_replace("\r",'',str_replace("\n",'',addslashes($filename))) . '"');
+    header('Content-Disposition: attachment; filename="' . str_replace("\r", '', str_replace("\n", '', addslashes($filename))) . '"');
 } else {
     header('Content-type: text/plain');
 }
@@ -28,7 +28,7 @@ $relation_map = get_relation_map();
 
 $tables = get_all_tables();
 
-echo get_innodb_table_sql($tables,$tables);
+echo get_innodb_table_sql($tables, $tables);
 
 $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
 exit();

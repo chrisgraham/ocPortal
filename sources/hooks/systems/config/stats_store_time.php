@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
-
 class Hook_config_stats_store_time
 {
     /**

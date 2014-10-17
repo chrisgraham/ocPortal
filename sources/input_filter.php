@@ -33,13 +33,13 @@ function init__input_filter()
  * @param  string                       The name of the parameter
  * @param  string                       The value retrieved
  */
-function check_input_field($name,$val)
+function check_input_field($name, $val)
 {
-    if ((preg_match('#^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#i',$val) != 0) && ($name != 'value')/*Don't want autosave triggering this*/) {
-        log_hack_attack_and_exit('SCRIPT_URL_HACK_2',$val);
+    if ((preg_match('#^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#i', $val) != 0) && ($name != 'value')/*Don't want autosave triggering this*/) {
+        log_hack_attack_and_exit('SCRIPT_URL_HACK_2', $val);
     }
-    if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val,'[url=http://') !== false) || (strpos($val,'[link') !== false)) && (strpos($val,'<a ') !== false)) { // Combination of non-ocPortal-supporting bbcode and HTML, almost certainly a bot trying too hard to get link through
-        log_hack_attack_and_exit('LAME_SPAM_HACK',$val);
+    if (((!function_exists('is_guest')) || (is_guest())) && ((strpos($val, '[url=http://') !== false) || (strpos($val, '[link') !== false)) && (strpos($val, '<a ') !== false)) { // Combination of non-ocPortal-supporting bbcode and HTML, almost certainly a bot trying too hard to get link through
+        log_hack_attack_and_exit('LAME_SPAM_HACK', $val);
     }
 }
 
@@ -50,16 +50,16 @@ function check_input_field($name,$val)
  * @param  string                       The value retrieved
  * @return string                       The filtered value
  */
-function check_posted_field($name,$val)
+function check_posted_field($name, $val)
 {
-    check_input_field($name,$val);
+    check_input_field($name, $val);
 
-    $true_referer = (substr(ocp_srv('HTTP_REFERER'),0,7) == 'http://') || (substr(ocp_srv('HTTP_REFERER'),0,8) == 'https://');
-    $canonical_referer = preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',ocp_srv('HTTP_REFERER')))));
-    $canonical_baseurl = preg_replace('#^(\w+://[^/]+/).*$#','${1}',str_replace(':80','',str_replace('https://','http://',str_replace('www.','',get_base_url()))));
+    $true_referer = (substr(ocp_srv('HTTP_REFERER'), 0, 7) == 'http://') || (substr(ocp_srv('HTTP_REFERER'), 0, 8) == 'https://');
+    $canonical_referer = preg_replace('#^(\w+://[^/]+/).*$#', '${1}', str_replace(':80', '', str_replace('https://', 'http://', str_replace('www.', '', ocp_srv('HTTP_REFERER')))));
+    $canonical_baseurl = preg_replace('#^(\w+://[^/]+/).*$#', '${1}', str_replace(':80', '', str_replace('https://', 'http://', str_replace('www.', '', get_base_url()))));
 
-    if (($true_referer) && (substr(strtolower($canonical_referer),0,strlen($canonical_baseurl)) != strtolower($canonical_baseurl)) && (!is_guest())) {
-        if (!in_array($name,array('login_username','password','remember','login_invisible'))) {
+    if (($true_referer) && (substr(strtolower($canonical_referer), 0, strlen($canonical_baseurl)) != strtolower($canonical_baseurl)) && (!is_guest())) {
+        if (!in_array($name, array('login_username', 'password', 'remember', 'login_invisible'))) {
             $allowed_partners = get_allowed_partner_sites();
 
             $found = false;
@@ -68,19 +68,19 @@ function check_posted_field($name,$val)
                     continue;
                 }
 
-                if (strpos(ocp_srv('HTTP_REFERER'),'://' . trim($partner) . '/') !== false && strpos(ocp_srv('HTTP_REFERER'),'://' . trim($partner) . ':') !== false) {
+                if (strpos(ocp_srv('HTTP_REFERER'), '://' . trim($partner) . '/') !== false && strpos(ocp_srv('HTTP_REFERER'), '://' . trim($partner) . ':') !== false) {
                     $found = true;
                     break;
                 }
             }
             if (!$found) {
                 $_POST = array(); // To stop loops
-                log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK',ocp_srv('HTTP_REFERER'),$name);
+                log_hack_attack_and_exit('EVIL_POSTED_FORM_HACK', ocp_srv('HTTP_REFERER'), $name);
             }
         }
     }
 
-    $val = filter_form_field_default($name,$val);
+    $val = filter_form_field_default($name, $val);
 
     return $val;
 }
@@ -92,9 +92,9 @@ function check_posted_field($name,$val)
  */
 function get_allowed_partner_sites()
 {
-    $allowed_partners = (trim(get_option('allowed_post_submitters')) == '')?array():explode("\n",trim(get_option('allowed_post_submitters')));
+    $allowed_partners = (trim(get_option('allowed_post_submitters')) == '') ? array() : explode("\n", trim(get_option('allowed_post_submitters')));
     foreach ($GLOBALS['SITE_INFO'] as $key => $_val) {
-        if (substr($key,0,strlen('ZONE_MAPPING_')) == 'ZONE_MAPPING_') {
+        if (substr($key, 0, strlen('ZONE_MAPPING_')) == 'ZONE_MAPPING_') {
             $allowed_partners[] = $_val[0];
         }
     }
@@ -108,117 +108,117 @@ function get_allowed_partner_sites()
  * @param  ?string                      The current value of the parameter (NULL: none)
  * @return string                       The filtered value of the parameter
  */
-function filter_form_field_default($name,$val)
+function filter_form_field_default($name, $val)
 {
     // Read in a default parameter from the GET environment, if this feature is enabled.
     global $URL_DEFAULT_PARAMETERS_ENABLED;
     if ($URL_DEFAULT_PARAMETERS_ENABLED) {
         inform_non_canonical_parameter($name);
 
-        $_val = get_param($name,null,true);
-        if ($_val !== NULL) {
+        $_val = get_param($name, null, true);
+        if ($_val !== null) {
             $val = $_val;
         }
     }
 
     global $FIELD_RESTRICTIONS;
-    if ($FIELD_RESTRICTIONS === NULL) {
+    if ($FIELD_RESTRICTIONS === null) {
         $restrictions = load_field_restrictions();
     } else {
         $restrictions = $FIELD_RESTRICTIONS;
     }
 
     foreach ($restrictions as $_r => $_restrictions) {
-        $_r_exp = explode(',',$_r);
+        $_r_exp = explode(',', $_r);
         foreach ($_r_exp as $__r) {
-            if ((trim($__r) == '') || (simulated_wildcard_match($name,trim($__r),true))) {
+            if ((trim($__r) == '') || (simulated_wildcard_match($name, trim($__r), true))) {
                 foreach ($_restrictions as $bits) {
-                    list($restriction,$attributes) = $bits;
+                    list($restriction, $attributes) = $bits;
 
-                    if ((isset($attributes['error'])) && (substr($attributes['error'],0,1) == '!')) {
-                        $attributes['error'] = do_lang(substr($attributes['error'],1));
+                    if ((isset($attributes['error'])) && (substr($attributes['error'], 0, 1) == '!')) {
+                        $attributes['error'] = do_lang(substr($attributes['error'], 1));
                     }
 
                     switch (strtolower($restriction)) {
                         case 'minlength':
-                            if (strlen($val)<intval($attributes['embed'])) {
-                                warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_TOO_SHORT',escape_html($name),strval(intval($attributes['embed']))));
+                            if (strlen($val) < intval($attributes['embed'])) {
+                                warn_exit(array_key_exists('error', $attributes) ? make_string_tempcode($attributes['error']) : do_lang_tempcode('FXML_FIELD_TOO_SHORT', escape_html($name), strval(intval($attributes['embed']))));
                             }
                             break;
                         case 'maxlength':
-                            if (strlen($val)>intval($attributes['embed'])) {
-                                warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_TOO_LONG',escape_html($name),strval(intval($attributes['embed']))));
+                            if (strlen($val) > intval($attributes['embed'])) {
+                                warn_exit(array_key_exists('error', $attributes) ? make_string_tempcode($attributes['error']) : do_lang_tempcode('FXML_FIELD_TOO_LONG', escape_html($name), strval(intval($attributes['embed']))));
                             }
                             break;
                         case 'shun':
-                            if (simulated_wildcard_match(strtolower($val),strtolower($attributes['embed']),true)) {
-                                warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_SHUNNED',escape_html($name)));
+                            if (simulated_wildcard_match(strtolower($val), strtolower($attributes['embed']), true)) {
+                                warn_exit(array_key_exists('error', $attributes) ? make_string_tempcode($attributes['error']) : do_lang_tempcode('FXML_FIELD_SHUNNED', escape_html($name)));
                             }
                             break;
                         case 'pattern':
-                            if (preg_match('#' . str_replace('#','\#',$attributes['embed']) . '#',$val) == 0) {
-                                warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_PATTERN_FAIL',escape_html($name),escape_html($attributes['embed'])));
+                            if (preg_match('#' . str_replace('#', '\#', $attributes['embed']) . '#', $val) == 0) {
+                                warn_exit(array_key_exists('error', $attributes) ? make_string_tempcode($attributes['error']) : do_lang_tempcode('FXML_FIELD_PATTERN_FAIL', escape_html($name), escape_html($attributes['embed'])));
                             }
                             break;
                         case 'possibilityset':
-                            $values = explode(',',$attributes['embed']);
+                            $values = explode(',', $attributes['embed']);
                             $found = false;
                             foreach ($values as $value) {
-                                if (($val == trim($value)) || ($val == $value) || (simulated_wildcard_match($val,$value,true))) {
+                                if (($val == trim($value)) || ($val == $value) || (simulated_wildcard_match($val, $value, true))) {
                                     $found = true;
                                 }
                             }
-                            $secretive = (array_key_exists('secretive',$attributes) && ($attributes['secretive'] == '1'));
+                            $secretive = (array_key_exists('secretive', $attributes) && ($attributes['secretive'] == '1'));
                             if (!$found) {
-                                warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode($secretive?'FXML_FIELD_NOT_IN_SET_SECRETIVE':'FXML_FIELD_NOT_IN_SET',escape_html($name),escape_html($attributes['embed'])));
+                                warn_exit(array_key_exists('error', $attributes) ? make_string_tempcode($attributes['error']) : do_lang_tempcode($secretive ? 'FXML_FIELD_NOT_IN_SET_SECRETIVE' : 'FXML_FIELD_NOT_IN_SET', escape_html($name), escape_html($attributes['embed'])));
                             }
                             break;
                         case 'disallowedsubstring':
-                            if (simulated_wildcard_match(strtolower($val),strtolower($attributes['embed']))) {
-                                warn_exit(array_key_exists('error',$attributes)?make_string_tempcode($attributes['error']):do_lang_tempcode('FXML_FIELD_SHUNNED_SUBSTRING',escape_html($name),escape_html($attributes['embed'])));
+                            if (simulated_wildcard_match(strtolower($val), strtolower($attributes['embed']))) {
+                                warn_exit(array_key_exists('error', $attributes) ? make_string_tempcode($attributes['error']) : do_lang_tempcode('FXML_FIELD_SHUNNED_SUBSTRING', escape_html($name), escape_html($attributes['embed'])));
                             }
                             break;
                         case 'disallowedword':
                             if (addon_installed('wordfilter')) {
                                 global $WORDS_TO_FILTER_CACHE;
                                 $temp_remember = $WORDS_TO_FILTER_CACHE;
-                                $WORDS_TO_FILTER_CACHE = array($attributes['embed'] => array('word' => $attributes['embed'],'w_replacement' => '','w_substr' => 0));
+                                $WORDS_TO_FILTER_CACHE = array($attributes['embed'] => array('word' => $attributes['embed'], 'w_replacement' => '', 'w_substr' => 0));
                                 require_code('word_filter');
-                                check_word_filter($val,$name,false,true,false);
+                                check_word_filter($val, $name, false, true, false);
                                 $WORDS_TO_FILTER_CACHE = $temp_remember;
                             } else {
-                                if (strpos($val,$attributes['embed']) !== false) {
-                                    warn_exit_wordfilter($name,do_lang_tempcode('WORD_FILTER_YOU',escape_html($attributes['embed'])));
+                                if (strpos($val, $attributes['embed']) !== false) {
+                                    warn_exit_wordfilter($name, do_lang_tempcode('WORD_FILTER_YOU', escape_html($attributes['embed'])));
                                 } // In soviet Russia, words filter you
                             }
                             break;
                         case 'replace':
-                            if (!array_key_exists('from',$attributes)) {
+                            if (!array_key_exists('from', $attributes)) {
                                 $val = $attributes['embed'];
                             } else {
-                                $val = str_replace($attributes['from'],$attributes['embed'],$val);
+                                $val = str_replace($attributes['from'], $attributes['embed'], $val);
                             }
                             break;
                         case 'removeshout':
-                            $val = preg_replace_callback('#[^a-z]*[A-Z]{4}[^a-z]*#','deshout_callback',$val);
+                            $val = preg_replace_callback('#[^a-z]*[A-Z]{4}[^a-z]*#', 'deshout_callback', $val);
                             break;
                         case 'sentencecase':
                             if (strlen($val) != 0) {
                                 $val = strtolower($val);
                                 $val[0] = strtoupper($val); // assumes no leading whitespace
-                                $val = preg_replace_callback('#[\.\!\?]\s+[a-z]#m','make_sentence_case_callback',$val);
+                                $val = preg_replace_callback('#[\.\!\?]\s+[a-z]#m', 'make_sentence_case_callback', $val);
                             }
                             break;
                         case 'titlecase':
                             $val = ucwords(strtolower($val));
                             break;
                         case 'prepend':
-                            if (substr($val,0,strlen($attributes['embed'])) != $attributes['embed']) {
+                            if (substr($val, 0, strlen($attributes['embed'])) != $attributes['embed']) {
                                 $val = $attributes['embed'] . $val;
                             }
                             break;
                         case 'append':
-                            if (substr($val,-strlen($attributes['embed'])) != $attributes['embed']) {
+                            if (substr($val, -strlen($attributes['embed'])) != $attributes['embed']) {
                                 $val .= $attributes['embed'];
                             }
                             break;
@@ -260,10 +260,10 @@ function deshout_callback($matches)
  * @param  ?string                      The page type scoped for (NULL: current type)
  * @return array                        List of fields, each of which is a map (restriction => attributes)
  */
-function load_field_restrictions($this_page = null,$this_type = null)
+function load_field_restrictions($this_page = null, $this_type = null)
 {
     global $FIELD_RESTRICTIONS;
-    if ($FIELD_RESTRICTIONS === NULL) {
+    if ($FIELD_RESTRICTIONS === null) {
         $FIELD_RESTRICTIONS = array();
         if (function_exists('xml_parser_create')) {
             $temp = new field_restriction_loader();
@@ -271,7 +271,7 @@ function load_field_restrictions($this_page = null,$this_type = null)
                 $this_page = get_page_name();
             }
             if (is_null($this_type)) {
-                $this_type = get_param('type',array_key_exists('type',$_POST)?$_POST['type']:'misc');
+                $this_type = get_param('type', array_key_exists('type', $_POST) ? $_POST['type'] : 'misc');
             }
             $temp->this_page = $this_page;
             $temp->this_type = $this_type;
@@ -284,13 +284,14 @@ function load_field_restrictions($this_page = null,$this_type = null)
 
 /**
  * Field restriction loader.
+ *
  * @package    core
  */
 class field_restriction_loader
 {
     // Used during parsing
-    var $tag_stack,$attribute_stack,$text_so_far;
-    var $this_page,$this_type;
+    var $tag_stack, $attribute_stack, $text_so_far;
+    var $this_page, $this_type;
     public $levels_from_filtered;
     public $field_qualification_stack;
 
@@ -319,18 +320,18 @@ class field_restriction_loader
         if ($xml_parser === false) {
             return; // PHP5 default build on windows comes with this function disabled, so we need to be able to escape on error
         }
-        xml_set_object($xml_parser,$this);
-        @xml_parser_set_option($xml_parser,XML_OPTION_TARGET_ENCODING,get_charset());
-        xml_set_element_handler($xml_parser,'startElement','endElement');
-        xml_set_character_data_handler($xml_parser,'startText');
+        xml_set_object($xml_parser, $this);
+        @xml_parser_set_option($xml_parser, XML_OPTION_TARGET_ENCODING, get_charset());
+        xml_set_element_handler($xml_parser, 'startElement', 'endElement');
+        xml_set_character_data_handler($xml_parser, 'startText');
 
         // Run the parser
         $data = file_get_contents(get_custom_file_base() . '/data_custom/fields.xml');
         if (trim($data) == '') {
             return;
         }
-        if (@xml_parse($xml_parser,$data,true) == 0) {
-            attach_message('fields.xml: ' . xml_error_string(xml_get_error_code($xml_parser)),'warn');
+        if (@xml_parse($xml_parser, $data, true) == 0) {
+            attach_message('fields.xml: ' . xml_error_string(xml_get_error_code($xml_parser)), 'warn');
             return;
         }
         @xml_parser_free($xml_parser);
@@ -343,46 +344,46 @@ class field_restriction_loader
      * @param  string                   The name of the element found
      * @param  array                    Array of attributes of the element
      */
-    public function startElement($parser,$tag,$_attributes)
+    public function startElement($parser, $tag, $_attributes)
     {
-        array_push($this->tag_stack,$tag);
+        array_push($this->tag_stack, $tag);
         $attributes = array();
         foreach ($_attributes as $key => $val) {
             $attributes[strtolower($key)] = $val;
         }
-        array_push($this->attribute_stack,$attributes);
+        array_push($this->attribute_stack, $attributes);
 
         switch (strtolower($tag)) {
             case 'qualify':
                 if ($this->levels_from_filtered == 0) {
                     $applies = true;
                     if ($applies) {
-                        if (array_key_exists('pages',$attributes)) {
+                        if (array_key_exists('pages', $attributes)) {
                             $applies = false;
-                            $pages = explode(',',$attributes['pages']);
+                            $pages = explode(',', $attributes['pages']);
                             foreach ($pages as $page) {
-                                if (simulated_wildcard_match($this->this_page,trim($page),true)) {
+                                if (simulated_wildcard_match($this->this_page, trim($page), true)) {
                                     $applies = true;
                                 }
                             }
                         }
                     }
                     if ($applies) {
-                        if (array_key_exists('types',$attributes)) {
+                        if (array_key_exists('types', $attributes)) {
                             $applies = false;
-                            $types = explode(',',$attributes['types']);
+                            $types = explode(',', $attributes['types']);
                             foreach ($types as $type) {
-                                if (simulated_wildcard_match($this->this_type,trim($type),true)) {
+                                if (simulated_wildcard_match($this->this_type, trim($type), true)) {
                                     $applies = true;
                                 }
                             }
                         }
                     }
 
-                    if (!array_key_exists('fields',$attributes)) {
+                    if (!array_key_exists('fields', $attributes)) {
                         $attributes['fields'] = '*';
                     }
-                    array_push($this->field_qualification_stack,$attributes['fields']);
+                    array_push($this->field_qualification_stack, $attributes['fields']);
                     if (!$applies) {
                         $this->levels_from_filtered = 1;
                     }
@@ -393,25 +394,25 @@ class field_restriction_loader
             case 'filter':
                 if ($this->levels_from_filtered == 0) {
                     $applies = true;
-                    if ((array_key_exists('notstaff',$attributes)) && ($attributes['notstaff'] == '1') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) {
+                    if ((array_key_exists('notstaff', $attributes)) && ($attributes['notstaff'] == '1') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member()))) {
                         $applies = false;
                     }
                     if ($applies) {
-                        if (array_key_exists('groups',$attributes)) {
+                        if (array_key_exists('groups', $attributes)) {
                             $applies = false;
                             $members_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());
-                            $groups = explode(',',$attributes['groups']);
+                            $groups = explode(',', $attributes['groups']);
                             foreach ($groups as $group) {
-                                if (in_array(intval(trim($group)),$members_groups)) {
+                                if (in_array(intval(trim($group)), $members_groups)) {
                                     $applies = true;
                                 }
                             }
                         }
                     }
                     if ($applies) {
-                        if (array_key_exists('members',$attributes)) {
+                        if (array_key_exists('members', $attributes)) {
                             $applies = false;
-                            $members = explode(',',$attributes['members']);
+                            $members = explode(',', $attributes['members']);
                             foreach ($members as $member) {
                                 if (intval(trim($member)) == get_member()) {
                                     $applies = true;
@@ -443,7 +444,7 @@ class field_restriction_loader
      */
     public function endElement($parser)
     {
-        $text = str_replace('\n',"\n",$this->text_so_far);
+        $text = str_replace('\n', "\n", $this->text_so_far);
         $tag = array_pop($this->tag_stack);
         $attributes = array_pop($this->attribute_stack);
 
@@ -457,10 +458,10 @@ class field_restriction_loader
                 if ($this->levels_from_filtered == 0) {
                     global $FIELD_RESTRICTIONS;
                     $qualifier = array_peek($this->field_qualification_stack);
-                    if (!array_key_exists($qualifier,$FIELD_RESTRICTIONS)) {
+                    if (!array_key_exists($qualifier, $FIELD_RESTRICTIONS)) {
                         $FIELD_RESTRICTIONS[$qualifier] = array();
                     }
-                    $FIELD_RESTRICTIONS[$qualifier][] = array($tag,array_merge(array('embed' => $text),$attributes));
+                    $FIELD_RESTRICTIONS[$qualifier][] = array($tag, array_merge(array('embed' => $text), $attributes));
                 }
                 break;
         }
@@ -476,7 +477,7 @@ class field_restriction_loader
      * @param  object                   The parser object (same as 'this')
      * @param  string                   The text
      */
-    public function startText($parser,$data)
+    public function startText($parser, $data)
     {
         $this->text_so_far .= $data;
     }

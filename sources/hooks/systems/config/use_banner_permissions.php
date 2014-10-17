@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-
 class Hook_config_use_banner_permissions
 {
     /**

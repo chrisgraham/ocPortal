@@ -9,7 +9,7 @@
 
 function get_all_tables()
 {
-    $_tables = $GLOBALS['SITE_DB']->query_select('db_meta',array('*'));
+    $_tables = $GLOBALS['SITE_DB']->query_select('db_meta', array('*'));
     $all_tables = array();
     foreach ($_tables as $t) {
         if (!isset($all_tables[$t['m_table']])) {
@@ -24,7 +24,7 @@ function get_all_tables()
     return $all_tables;
 }
 
-function get_innodb_table_sql($tables,$all_tables)
+function get_innodb_table_sql($tables, $all_tables)
 {
     $out = '';
 
@@ -33,7 +33,7 @@ function get_innodb_table_sql($tables,$all_tables)
 
     $i = 0;
     $table_prefix = get_table_prefix();
-    for ($loop_it = 0;$loop_it<count($tables);$loop_it++) {
+    for ($loop_it = 0; $loop_it < count($tables); $loop_it++) {
         $tables_keys = array_keys($tables);
         $tables_values = array_values($tables);
 
@@ -46,30 +46,30 @@ function get_innodb_table_sql($tables,$all_tables)
         $keys = array();
         $type_remap = get_innodb_data_types();
         foreach ($fields as $field => $type) {
-            $_type = $type_remap[str_replace(array('*','?'),array('',''),$type)];
-            $nullness = (strpos($type,'*') !== false)?'NULL':'NOT NULL';
+            $_type = $type_remap[str_replace(array('*', '?'), array('', ''), $type)];
+            $nullness = (strpos($type, '*') !== false) ? 'NULL' : 'NOT NULL';
             $out .= "         {$field} {$_type} {$nullness},\n";
-            if (strpos($type,'*') !== false) {
+            if (strpos($type, '*') !== false) {
                 $keys[] = $field;
             }
-            if ((strpos($type,'AUTO_LINK') !== false) || (array_key_exists($table . '.' . $field,$relation_map))) {
+            if ((strpos($type, 'AUTO_LINK') !== false) || (array_key_exists($table . '.' . $field, $relation_map))) {
                 $relations[$table . '.' . $field] = $relation_map[$table . '.' . $field];
             }
-            if (strpos($type,'MEMBER') !== false) {
+            if (strpos($type, 'MEMBER') !== false) {
                 $relations[$table . '.' . $field] = 'f_members.id';
             }
-            if (strpos($type,'GROUP') !== false) {
+            if (strpos($type, 'GROUP') !== false) {
                 $relations[$table . '.' . $field] = 'f_groups.id';
             }
-            if (strpos($type,'TRANS') !== false) {
+            if (strpos($type, 'TRANS') !== false) {
                 $relations[$table . '.' . $field] = 'translate.id';
             }
-            if ((strpos($field,'author') !== false) && ($type == 'ID_TEXT') && ($table != 'authors') && ($field != 'block_author') && ($field != 'module_author')) {
+            if ((strpos($field, 'author') !== false) && ($type == 'ID_TEXT') && ($table != 'authors') && ($field != 'block_author') && ($field != 'module_author')) {
                 $relations[$table . '.' . $field] = 'authors.author';
             }
 
             if (isset($relations[$table . '.' . $field])) {
-                $mapped_table = preg_replace('#\..*$#','',$relations[$table . '.' . $field]);
+                $mapped_table = preg_replace('#\..*$#', '', $relations[$table . '.' . $field]);
                 if (!isset($tables[$mapped_table])) {
                     $tables[$mapped_table] = $all_tables[$mapped_table];
                 }
@@ -89,12 +89,12 @@ function get_innodb_table_sql($tables,$all_tables)
     }
 
     foreach ($relations as $from => $to) {
-        $from_table = preg_replace('#\..*$#','',$from);
-        $to_table = preg_replace('#\..*$#','',$to);
-        $from_field = preg_replace('#^.*\.#','',$from);
-        $to_field = preg_replace('#^.*\.#','',$to);
-        $source_id = strval(array_search($from_table,array_keys($tables)));
-        $target_id = strval(array_search($to_table,array_keys($tables)));
+        $from_table = preg_replace('#\..*$#', '', $from);
+        $to_table = preg_replace('#\..*$#', '', $to);
+        $from_field = preg_replace('#^.*\.#', '', $from);
+        $to_field = preg_replace('#^.*\.#', '', $to);
+        $source_id = strval(array_search($from_table, array_keys($tables)));
+        $target_id = strval(array_search($to_table, array_keys($tables)));
         $out .= "
         CREATE INDEX `{$from}` ON {$table_prefix}{$from_table}({$from_field});
         ALTER TABLE {$table_prefix}{$from_table} ADD FOREIGN KEY `{$from}` ({$from_field}) REFERENCES {$table_prefix}{$to_table} ({$to_field});\n";
@@ -135,10 +135,10 @@ function get_innodb_data_types()
 
 function get_tables_by_addon()
 {
-    $tables = collapse_1d_complexity('m_table',$GLOBALS['SITE_DB']->query_select('db_meta',array('DISTINCT m_table')));
-    $tables = array_combine($tables,array_fill(0,count($tables),'1'));
+    $tables = collapse_1d_complexity('m_table', $GLOBALS['SITE_DB']->query_select('db_meta', array('DISTINCT m_table')));
+    $tables = array_combine($tables, array_fill(0, count($tables), '1'));
 
-    $hooks = find_all_hooks('systems','addon_registry');
+    $hooks = find_all_hooks('systems', 'addon_registry');
     $tables_by = array();
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/addon_registry/' . filter_naughty($hook));
@@ -146,14 +146,14 @@ function get_tables_by_addon()
         $files = $object->get_file_list();
         $addon_name = $hook;//.' - '.$object->get_description();
         foreach ($files as $file) {
-            if ((strpos($file,'blocks/') !== false) || (strpos($file,'pages/modules') !== false)) {
+            if ((strpos($file, 'blocks/') !== false) || (strpos($file, 'pages/modules') !== false)) {
                 $file_contents = file_get_contents(get_file_base() . '/' . $file);
 
                 $matches = array();
-                $num_matches = preg_match_all("#create\_table\('([^']+)'#",$file_contents,$matches);
-                for ($i = 0;$i<$num_matches;$i++) {
+                $num_matches = preg_match_all("#create\_table\('([^']+)'#", $file_contents, $matches);
+                for ($i = 0; $i < $num_matches; $i++) {
                     $table_name = $matches[1][$i];
-                    if (strpos($file_contents,"/*\$GLOBALS['SITE_DB']->create_table('" . $table_name . "'") === false) {
+                    if (strpos($file_contents, "/*\$GLOBALS['SITE_DB']->create_table('" . $table_name . "'") === false) {
                         if ($table_name == 'group_page_access') {
                             $addon_name = 'core';
                         }
@@ -173,7 +173,7 @@ function get_tables_by_addon()
     }
 
     foreach (array_keys($tables) as $table) {
-        if (substr($table,0,2) == 'f_') {
+        if (substr($table, 0, 2) == 'f_') {
             $tables_by['core_ocf'][] = $table;
         } else {
             $tables_by['core'][] = $table;
@@ -413,43 +413,43 @@ function get_code_to_fix_foreign_keys() // Temporary code to help fixup AUTO/AUT
 {
     $out = '';
 
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => '*AUTO'));
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => '*AUTO'));
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
         $out .= "ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL AUTO_INCREMENT;\n";
     }
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => 'SHORT_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => 'SHORT_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
         $out .= "ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
     }
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => 'LONG_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => 'LONG_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
         $out .= "ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
     }
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => 'SHORT_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => 'SHORT_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
         $out .= "ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
     }
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => 'LONG_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => 'LONG_TRANS__COMCODE'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
         $out .= "ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
     }
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => '*SHORT_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => '*SHORT_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
         $out .= "ALTER TABLE `{$table}` CHANGE `{$id}` `{$id}` INT( 11 ) NOT NULL;\n";
     }
-    $temp = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_table','m_name'),array('m_type' => '*LONG_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
+    $temp = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_table', 'm_name'), array('m_type' => '*LONG_TRANS'));  //Temp code to help fixup AUTO/AUTO_LINK key consistency
     foreach ($temp as $t) {
         $table = get_table_prefix() . $t['m_table'];
         $id = $t['m_name'];
@@ -457,7 +457,6 @@ function get_code_to_fix_foreign_keys() // Temporary code to help fixup AUTO/AUT
     }
 
     return $out;
-
     /*
 
     The following do not work without fiddling, mostly due to allowed NULL's, so some manual changes need doing too.

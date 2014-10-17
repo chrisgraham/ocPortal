@@ -24,6 +24,7 @@ require_code('database/shared/mysql');
 
 /**
  * Database Driver.
+ *
  * @package    core_database_drivers
  */
 class Database_Static_mysql extends Database_super_mysql
@@ -43,72 +44,72 @@ class Database_Static_mysql extends Database_super_mysql
      * @param  boolean                  Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @return ?array                   A database connection (note for mySQL, it's actually a pair, containing the database name too: because we need to select the name before each query on the connection) (NULL: failed)
      */
-    public function db_get_connection($persistent,$db_name,$db_host,$db_user,$db_password,$fail_ok = false)
+    public function db_get_connection($persistent, $db_name, $db_host, $db_user, $db_password, $fail_ok = false)
     {
         // Potential cacheing
-        $x = serialize(array($db_name,$db_host));
-        if (array_key_exists($x,$this->cache_db)) {
+        $x = serialize(array($db_name, $db_host));
+        if (array_key_exists($x, $this->cache_db)) {
             if ($this->last_select_db != $db_name) {
-                mysql_select_db($db_name,$x);
+                mysql_select_db($db_name, $x);
                 $this->last_select_db = $db_name;
             }
 
-            return array($x,$db_name);
+            return array($x, $db_name);
         }
 
         if (!function_exists('mysql_connect')) {
             $error = 'The mySQL PHP extension not installed (anymore?). You need to contact the system administrator of this server, or use a different mySQL database driver (drivers can be chosen by editing _config.php).';
             if ($fail_ok) {
                 echo $error . "\n";
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error);
+            critical_error('PASSON', $error);
         }
 
-        $db = $persistent?@mysql_pconnect($db_host,$db_user,$db_password):@mysql_connect($db_host,$db_user,$db_password,true);
+        $db = $persistent ? @mysql_pconnect($db_host, $db_user, $db_password) : @mysql_connect($db_host, $db_user, $db_password, true);
         if ($db === false) {
             $error = 'Could not connect to database-server (' . mysql_error() . ', ' . (@strval($php_errormsg)) . ')';
             if ($fail_ok) {
                 echo $error . "\n";
-                return NULL;
+                return null;
             }
-            critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
+            critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_DB_ERROR'));
         }
-        if (!mysql_select_db($db_name,$db)) {
+        if (!mysql_select_db($db_name, $db)) {
             if ($db_user == 'root') {
-                @mysql_query('CREATE DATABASE IF NOT EXISTS ' . $db_name,$db);
+                @mysql_query('CREATE DATABASE IF NOT EXISTS ' . $db_name, $db);
             }
 
-            if (!mysql_select_db($db_name,$db)) {
+            if (!mysql_select_db($db_name, $db)) {
                 $error = 'Could not connect to database (' . mysql_error() . ')';
                 if ($fail_ok) {
                     echo $error . "\n";
-                    return NULL;
+                    return null;
                 }
-                critical_error('PASSON',$error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
+                critical_error('PASSON', $error); //warn_exit(do_lang_tempcode('CONNECT_ERROR'));
             }
         }
         $this->last_select_db = $db_name;
 
         global $SITE_INFO;
-        if (!array_key_exists('database_charset',$SITE_INFO)) {
-            $SITE_INFO['database_charset'] = (strtolower(get_charset()) == 'utf-8')?'utf8':'latin1';
+        if (!array_key_exists('database_charset', $SITE_INFO)) {
+            $SITE_INFO['database_charset'] = (strtolower(get_charset()) == 'utf-8') ? 'utf8' : 'latin1';
         }
         if (function_exists('mysql_set_charset')) {
-            mysql_set_charset($SITE_INFO['database_charset'],$db);
+            mysql_set_charset($SITE_INFO['database_charset'], $db);
         } else {
-            @mysql_query('SET NAMES "' . addslashes($SITE_INFO['database_charset']) . '"',$db);
+            @mysql_query('SET NAMES "' . addslashes($SITE_INFO['database_charset']) . '"', $db);
         }
-        @mysql_query('SET WAIT_TIMEOUT=28800',$db);
-        @mysql_query('SET SQL_BIG_SELECTS=1',$db);
+        @mysql_query('SET WAIT_TIMEOUT=28800', $db);
+        @mysql_query('SET SQL_BIG_SELECTS=1', $db);
         if ((get_forum_type() == 'ocf') && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) {
-            @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'',$db);
+            @mysql_query('SET sql_mode=\'STRICT_ALL_TABLES\'', $db);
         } else {
-            @mysql_query('SET sql_mode=\'MYSQL40\'',$db);
+            @mysql_query('SET sql_mode=\'MYSQL40\'', $db);
         }
         // NB: Can add ,ONLY_FULL_GROUP_BY for testing on what other DBs will do, but can_arbitrary_groupby() would need to be made to return false
 
-        return array($db,$db_name);
+        return array($db, $db_name);
     }
 
     /**
@@ -167,11 +168,11 @@ class Database_Static_mysql extends Database_super_mysql
     public function db_escape_string($string)
     {
         static $mres = null;
-        if ($mres === NULL) {
+        if ($mres === null) {
             $mres = function_exists('mysql_real_escape_string');
         }
         if (($mres) && (isset($GLOBALS['SITE_DB']->connection_read[0])) && ($GLOBALS['SITE_DB']->connection_read[0] !== false)) {
-            return mysql_real_escape_string($string,$GLOBALS['SITE_DB']->connection_read[0]);
+            return mysql_real_escape_string($string, $GLOBALS['SITE_DB']->connection_read[0]);
         }
         if (!function_exists('mysql_escape_string')) {
             return addslashes($string);
@@ -190,52 +191,52 @@ class Database_Static_mysql extends Database_super_mysql
      * @param  boolean                  Whether to get the autoincrement ID created for an insert query
      * @return ?mixed                   The results (NULL: no results), or the insert ID
      */
-    public function db_query($query,$db_parts,$max = null,$start = null,$fail_ok = false,$get_insert_id = false)
+    public function db_query($query, $db_parts, $max = null, $start = null, $fail_ok = false, $get_insert_id = false)
     {
-        list($db,$db_name) = $db_parts;
+        list($db, $db_name) = $db_parts;
 
         if (isset($query[500000])) { // Let's hope we can fail on this, because it's a huge query. We can only allow it if mySQL can.
-            $test_result = $this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'',$db_parts,null,null,true);
+            $test_result = $this->db_query('SHOW VARIABLES LIKE \'max_allowed_packet\'', $db_parts, null, null, true);
 
             if (!is_array($test_result)) {
-                return NULL;
+                return null;
             }
-            if (intval($test_result[0]['Value'])<intval(strlen($query)*1.2)) {
+            if (intval($test_result[0]['Value']) < intval(strlen($query) * 1.2)) {
                 /*@mysql_query('SET session max_allowed_packet='.strval(intval(strlen($query)*1.3)),$db); Does not work well, as MySQL server has gone away error will likely just happen instead */
 
                 if ($get_insert_id) {
-                    fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG',escape_html($query)));
+                    fatal_exit(do_lang_tempcode('QUERY_FAILED_TOO_BIG', escape_html($query)));
                 }
-                return NULL;
+                return null;
             }
         }
 
         if ($this->last_select_db != $db_name) {
-            mysql_select_db($db_name,$db);
+            mysql_select_db($db_name, $db);
             $this->last_select_db = $db_name;
         }
 
-        if (($max !== NULL) && ($start !== NULL)) {
+        if (($max !== null) && ($start !== null)) {
             $query .= ' LIMIT ' . strval($start) . ',' . strval($max);
-        } elseif ($max !== NULL) {
+        } elseif ($max !== null) {
             $query .= ' LIMIT ' . strval($max);
-        } elseif ($start !== NULL) {
+        } elseif ($start !== null) {
             $query .= ' LIMIT ' . strval($start) . ',30000000';
         }
 
-        $results = @mysql_query($query,$db);
-        if (($results === false) && ((!$fail_ok) || (strpos(mysql_error($db),'is marked as crashed and should be repaired') !== false))) {
+        $results = @mysql_query($query, $db);
+        if (($results === false) && ((!$fail_ok) || (strpos(mysql_error($db), 'is marked as crashed and should be repaired') !== false))) {
             $err = mysql_error($db);
 
             if ((function_exists('mysql_ping')) && ($err == 'MySQL server has gone away') && (!$this->reconnected_once)) {
                 $this->reconnected_once = true;
                 if ((!mysql_ping($db)) && (isset($GLOBALS['SITE_DB'])) && ($db_parts[1] == $GLOBALS['SITE_DB']->connection_write[1])) {
                     $this->cache_db = array();
-                    $db_parts = $this->db_get_connection(get_use_persistent(),get_db_site(),get_db_site_host(),get_db_site_user(),get_db_site_password());
+                    $db_parts = $this->db_get_connection(get_use_persistent(), get_db_site(), get_db_site_host(), get_db_site_user(), get_db_site_password());
                     $GLOBALS['SITE_DB']->connection_write = $db_parts;
                     $GLOBALS['SITE_DB']->connection_read = $db_parts;
                 }
-                $ret = $this->db_query($query,$db_parts,NULL/*already encoded*/,NULL/*already encoded*/,$fail_ok,$get_insert_id);
+                $ret = $this->db_query($query, $db_parts, null/*already encoded*/, null/*already encoded*/, $fail_ok, $get_insert_id);
                 $this->reconnected_once = false;
                 return $ret;
             }
@@ -243,24 +244,24 @@ class Database_Static_mysql extends Database_super_mysql
             if (function_exists('ocp_mark_as_escaped')) {
                 ocp_mark_as_escaped($err);
             }
-            if ((!running_script('upgrader')) && (!get_mass_import_mode()) && (strpos($err,'Duplicate entry') === false)) {
+            if ((!running_script('upgrader')) && (!get_mass_import_mode()) && (strpos($err, 'Duplicate entry') === false)) {
                 $matches = array();
-                if (preg_match('#/(\w+)\' is marked as crashed and should be repaired#U',$err,$matches) != 0) {
-                    $this->db_query('REPAIR TABLE ' . $matches[1],$db_parts);
+                if (preg_match('#/(\w+)\' is marked as crashed and should be repaired#U', $err, $matches) != 0) {
+                    $this->db_query('REPAIR TABLE ' . $matches[1], $db_parts);
                 }
 
-                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED',null,null,null,null,false))) {
+                if (!function_exists('do_lang') || is_null(do_lang('QUERY_FAILED', null, null, null, null, false))) {
                     fatal_exit(htmlentities('Query failed: ' . $query . ' : ' . $err));
                 }
-                fatal_exit(do_lang_tempcode('QUERY_FAILED',escape_html($query),($err)));
+                fatal_exit(do_lang_tempcode('QUERY_FAILED', escape_html($query), ($err)));
             } else {
                 echo htmlentities('Database query failed: ' . $query . ' [') . ($err) . htmlentities(']' . '<br />' . "\n");
-                return NULL;
+                return null;
             }
         }
 
         $query = ltrim($query);
-        $sub = substr($query,0,4);
+        $sub = substr($query, 0, 4);
         if (($results !== true) && (($sub == '(SEL') || ($sub == 'SELE') || ($sub == 'sele') || ($sub == 'EXPL') || ($sub == 'DESC') || ($sub == 'SHOW')) && ($results !== false)) {
             return $this->db_get_query_rows($results);
         }
@@ -271,14 +272,14 @@ class Database_Static_mysql extends Database_super_mysql
             }
             $ins = mysql_insert_id($db);
             if ($ins === 0) {
-                $table = substr($query,12,strpos($query,' ',12)-12);
-                $rows = $this->db_query('SELECT MAX(id) AS x FROM ' . $table,$db_parts,1,0,false,false);
+                $table = substr($query, 12, strpos($query, ' ', 12) - 12);
+                $rows = $this->db_query('SELECT MAX(id) AS x FROM ' . $table, $db_parts, 1, 0, false, false);
                 return $rows[0]['x'];
             }
             return $ins;
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -298,9 +299,9 @@ class Database_Static_mysql extends Database_super_mysql
         $num_fields = mysql_num_fields($results);
         $names = array();
         $types = array();
-        for ($x = 0;$x<$num_fields;$x++) {
-            $names[$x] = mysql_field_name($results,$x);
-            $types[$x] = mysql_field_type($results,$x);
+        for ($x = 0; $x < $num_fields; $x++) {
+            $names[$x] = mysql_field_name($results, $x);
+            $types[$x] = mysql_field_type($results, $x);
         }
 
         $out = array();
@@ -313,7 +314,7 @@ class Database_Static_mysql extends Database_super_mysql
 
                 switch ($type) {
                     case 'int':
-                        if (($v === NULL) || ($v === '')) { // Roadsend returns empty string instead of NULL
+                        if (($v === null) || ($v === '')) { // Roadsend returns empty string instead of NULL
                             $newrow[$name] = null;
                         } else {
                             if ((!isset($v[1])) && (ord($v[0]) <= 1)) {
@@ -326,7 +327,7 @@ class Database_Static_mysql extends Database_super_mysql
                         break;
 
                     case 'real':
-                        $newrow[$name] = is_string($v)?floatval($v):$v;
+                        $newrow[$name] = is_string($v) ? floatval($v) : $v;
                         break;
 
                     case 'unknown':
@@ -348,7 +349,8 @@ class Database_Static_mysql extends Database_super_mysql
             }
 
             $out[] = $newrow;
-        } while (false !== ($row = mysql_fetch_row($results)));
+        }
+        while (false !== ($row = mysql_fetch_row($results)));
 
         mysql_free_result($results);
         return $out;

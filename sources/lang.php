@@ -28,13 +28,15 @@ function init__lang()
     global $COMCODE_LANG_STRING_CACHE;
     $COMCODE_LANG_STRING_CACHE = array();
 
-    global $LANG_LOADED,$LANG_LOADED_LANG,$LANG_REQUESTED_LANG,$LANGS_REQUESTED;
+    global $LANG_LOADED, $LANG_LOADED_LANG, $LANG_REQUESTED_LANG, $LANGS_REQUESTED;
     // Tracks what has already been require'd, although loading may have been deferred.
     /** What language packs ^ files have been requested.
+     *
      * @global boolean $LANG_REQUESTED_LANG
      */
     $LANG_REQUESTED_LANG = array();
     /** What language files have been requested.
+     *
      * @global boolean $LANGS_REQUESTED
      */
     $LANGS_REQUESTED = array();
@@ -48,8 +50,8 @@ function init__lang()
     global $LANGS_MAP_CACHE;
     $LANGS_MAP_CACHE = null;
 
-    global $USER_LANG_CACHED,$USER_LANG_EARLY_CACHED,$USER_LANG_LOOP,$REQUIRE_LANG_LOOP;
-    global $RECORD_LANG_STRINGS,$RECORDED_LANG_STRINGS,$RECORD_LANG_STRINGS_CONTENT,$RECORDED_LANG_STRINGS_CONTENT;
+    global $USER_LANG_CACHED, $USER_LANG_EARLY_CACHED, $USER_LANG_LOOP, $REQUIRE_LANG_LOOP;
+    global $RECORD_LANG_STRINGS, $RECORDED_LANG_STRINGS, $RECORD_LANG_STRINGS_CONTENT, $RECORDED_LANG_STRINGS_CONTENT;
     $RECORD_LANG_STRINGS = false;
     $RECORDED_LANG_STRINGS = array();
     $RECORD_LANG_STRINGS_CONTENT = false;
@@ -62,18 +64,18 @@ function init__lang()
     $REQUIRED_ALL_LANG = array();
 
     // Lazy loading code: learning algorithm to cache strings against different pages without loading all, unless we get a cache miss in the page's pool
-    global $PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED,$PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED;
+    global $PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED, $PAGE_CACHE_LAZY_LOAD, $PAGE_CACHE_LANGS_REQUESTED;
     $PAGE_CACHE_FILE = mixed();
     $PAGE_CACHE_LANG_LOADED = array();
     $PAGE_CACHE_LAZY_LOAD = false;
     $PAGE_CACHE_LANGS_REQUESTED = array();
-    if (((function_exists('get_option')) && (get_option('is_on_lang_cache') == '1') && ((!array_key_exists('page',$_GET)) || ((is_string($_GET['page'])) && (strpos($_GET['page'],'..') === false))))) {
+    if (((function_exists('get_option')) && (get_option('is_on_lang_cache') == '1') && ((!array_key_exists('page', $_GET)) || ((is_string($_GET['page'])) && (strpos($_GET['page'], '..') === false))))) {
         if (running_script('index')) {
             $key = 'page__' . get_zone_name() . '__' . get_page_name();
         } else {
             $key = 'script__' . md5(serialize(ocp_srv('SCRIPT_NAME')));
         }
-        $cache_path = get_custom_file_base() . '/caches/lang/' . user_lang() . '/' . filter_naughty($key,true) . '.lcd';
+        $cache_path = get_custom_file_base() . '/caches/lang/' . user_lang() . '/' . filter_naughty($key, true) . '.lcd';
         if (!is_null($GLOBALS['PERSISTENT_CACHE'])) {
             $PAGE_CACHE_LANG_LOADED = persistent_cache_get($cache_path);
             if (is_array($PAGE_CACHE_LANG_LOADED)) {
@@ -102,9 +104,9 @@ function init__lang()
     $SEARCH__CONTENT_BITS = null;
 
     if (strtolower(get_charset()) == 'utf-8') {
-        global $HTML_ESCAPE_1_STRREP,$HTML_ESCAPE_2;
-        $HTML_ESCAPE_1_STRREP = array('&'/*,'ì','î'*/,'"','\'','<','>'/*,'£'*/);
-        $HTML_ESCAPE_2 = array('&amp;'/*,'&quot;','&quot;'*/,'&quot;','&#039;','&lt;','&gt;'/*,'&pound;'*/);
+        global $HTML_ESCAPE_1_STRREP, $HTML_ESCAPE_2;
+        $HTML_ESCAPE_1_STRREP = array('&'/*,'ì','î'*/, '"', '\'', '<', '>'/*,'£'*/);
+        $HTML_ESCAPE_2 = array('&amp;'/*,'&quot;','&quot;'*/, '&quot;', '&#039;', '&lt;', '&gt;'/*,'&pound;'*/);
     }
 }
 
@@ -123,9 +125,9 @@ function init__lang()
  * @param  boolean                      Whether to cause ocPortal to exit if the lookup does not succeed
  * @return ?mixed                       The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
  */
-function do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang = null,$require_result = true)
+function do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
 {
-    return _do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
+    return _do_lang($codename, $token1, $token2, $token3, $lang, $require_result);
 }
 
 /**
@@ -133,20 +135,20 @@ function do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang = 
  */
 function open_page_cache_file()
 {
-    if ($GLOBALS['PERSISTENT_CACHE'] === NULL) {
-        global $PAGE_CACHE_FILE,$PAGE_CACHE_LAZY_LOAD;
-        if ($PAGE_CACHE_FILE === NULL) {
+    if ($GLOBALS['PERSISTENT_CACHE'] === null) {
+        global $PAGE_CACHE_FILE, $PAGE_CACHE_LAZY_LOAD;
+        if ($PAGE_CACHE_FILE === null) {
             return;
         }
         if (!is_string($PAGE_CACHE_FILE)) {
             return;
         }
         $cache_path = $PAGE_CACHE_FILE;
-        $PAGE_CACHE_FILE = @fopen($cache_path,GOOGLE_APPENGINE?'wb':'at');
+        $PAGE_CACHE_FILE = @fopen($cache_path, GOOGLE_APPENGINE ? 'wb' : 'at');
         if ($PAGE_CACHE_FILE !== false) {
             if (ftell($PAGE_CACHE_FILE) == 0) {
                 require_code('files');
-                fix_permissions($cache_path,0666);
+                fix_permissions($cache_path, 0666);
             }
         } else {
             $PAGE_CACHE_FILE = null;
@@ -173,10 +175,10 @@ function fallback_lang()
 function user_lang()
 {
     global $USER_LANG_CACHED;
-    if ($USER_LANG_CACHED !== NULL) {
+    if ($USER_LANG_CACHED !== null) {
         return $USER_LANG_CACHED;
     }
-    global $MEMBER_CACHED,$USER_LANG_LOOP,$IN_MINIKERNEL_VERSION;
+    global $MEMBER_CACHED, $USER_LANG_LOOP, $IN_MINIKERNEL_VERSION;
 
     if ($IN_MINIKERNEL_VERSION) {
         return get_site_default_lang();
@@ -187,24 +189,24 @@ function user_lang()
 
     // In URL?
     $lang = '';
-    $special_page_type = get_param('special_page_type','');
-    if ($special_page_type != '' && substr($special_page_type,0,5) == 'lang_') {
-        if (substr($special_page_type,0,13) == 'lang_content_') {
-            $lang = substr($special_page_type,13);
+    $special_page_type = get_param('special_page_type', '');
+    if ($special_page_type != '' && substr($special_page_type, 0, 5) == 'lang_') {
+        if (substr($special_page_type, 0, 13) == 'lang_content_') {
+            $lang = substr($special_page_type, 13);
         } else {
-            $lang = substr($special_page_type,5);
+            $lang = substr($special_page_type, 5);
         }
     }
     if ($lang == '') {
-        $lang = either_param('lang',get_param('keep_lang',''));
+        $lang = either_param('lang', get_param('keep_lang', ''));
         if ($lang != '') {
             $lang = filter_naughty($lang);
         }
     }
 
-    if ((!function_exists('get_member')) || ($USER_LANG_LOOP == 1) || ($MEMBER_CACHED === NULL)) {
+    if ((!function_exists('get_member')) || ($USER_LANG_LOOP == 1) || ($MEMBER_CACHED === null)) {
         global $USER_LANG_EARLY_CACHED;
-        if ($USER_LANG_EARLY_CACHED !== NULL) {
+        if ($USER_LANG_EARLY_CACHED !== null) {
             return $USER_LANG_EARLY_CACHED;
         }
 
@@ -212,10 +214,10 @@ function user_lang()
             return $lang;
         }
 
-        if ((array_key_exists('GET_OPTION_LOOP',$GLOBALS)) && ($GLOBALS['GET_OPTION_LOOP'] == 0) && (function_exists('get_option')) && (get_option('detect_lang_browser') == '1')) {
+        if ((array_key_exists('GET_OPTION_LOOP', $GLOBALS)) && ($GLOBALS['GET_OPTION_LOOP'] == 0) && (function_exists('get_option')) && (get_option('detect_lang_browser') == '1')) {
             // In browser?
             $lang = get_lang_browser();
-            if ($lang !== NULL) {
+            if ($lang !== null) {
                 $USER_LANG_EARLY_CACHED = $lang;
                 return $lang;
             }
@@ -233,16 +235,16 @@ function user_lang()
     } else {
         if (((get_forum_type() == 'ocf') || (get_option('detect_lang_forum') == '1') || (get_option('detect_lang_browser') == '1')) && ((!$GLOBALS['DEV_MODE']) || (get_site_default_lang() != 'Gibb'))) {
             // In forum?
-            if (($USER_LANG_CACHED === NULL) && (get_option('detect_lang_forum') == '1')) {
+            if (($USER_LANG_CACHED === null) && (get_option('detect_lang_forum') == '1')) {
                 $USER_LANG_CACHED = get_lang_member(get_member());
             }
-            if (($USER_LANG_CACHED === NULL) && (get_option('detect_lang_browser') == '1')) {
+            if (($USER_LANG_CACHED === null) && (get_option('detect_lang_browser') == '1')) {
                 $USER_LANG_CACHED = get_lang_browser();
             }
         }
     }
 
-    if ($USER_LANG_CACHED === NULL) {
+    if ($USER_LANG_CACHED === null) {
         $USER_LANG_CACHED = get_site_default_lang();
     }
     $USER_LANG_LOOP = 0;
@@ -258,18 +260,18 @@ function get_lang_browser()
 {
     // In browser?
     $http_lang = ocp_srv('HTTP_ACCEPT_LANGUAGE');
-    if (strlen($http_lang)>0) {
-        $http_langs = explode(',',$http_lang);
+    if (strlen($http_lang) > 0) {
+        $http_langs = explode(',', $http_lang);
         foreach ($http_langs as $lang) {
             // Clean up
             $lang = strtoupper(trim($lang));
-            $pos = strpos($lang,';');
+            $pos = strpos($lang, ';');
             if ($pos !== false) {
-                $lang = substr($lang,0,$pos);
+                $lang = substr($lang, 0, $pos);
             }
-            $pos = strpos($lang,'-');
+            $pos = strpos($lang, '-');
             if ($pos !== false) {
-                $lang = substr($lang,0,$pos);
+                $lang = substr($lang, 0, $pos);
             }
 
             if (does_lang_exist($lang)) {
@@ -278,7 +280,7 @@ function get_lang_browser()
         }
     }
 
-    return NULL;
+    return null;
 }
 
 /**
@@ -318,13 +320,13 @@ function get_site_default_lang()
 {
     // Site default then
     global $SITE_INFO;
-    if (!array_key_exists('default_lang',$SITE_INFO)) { // We must be installing
+    if (!array_key_exists('default_lang', $SITE_INFO)) { // We must be installing
         global $IN_MINIKERNEL_VERSION;
         if ($IN_MINIKERNEL_VERSION) {
-            if (array_key_exists('lang',$_POST)) {
+            if (array_key_exists('lang', $_POST)) {
                 return $_POST['lang'];
             }
-            if (array_key_exists('lang',$_GET)) {
+            if (array_key_exists('lang', $_GET)) {
                 return $_GET['lang'];
             }
         }
@@ -353,7 +355,7 @@ function get_lang_member($member)
                 $map_file_b = $map_file_a;
             }
             $map = better_parse_ini_file($map_file_b);
-            if (!array_key_exists($lang,$map)) {
+            if (!array_key_exists($lang, $map)) {
                 //fatal_exit('The specified language ('.$lang.') is missing. The language needs installing/creating in ocPortal, or the language map file needs updating (to map this language to a known ocPortal one), or both.');
                 $_lang = null; // Instead of the above, let's just fallback to default! So people's weird forum integration doesn't make ocPortal die
             } else {
@@ -368,7 +370,7 @@ function get_lang_member($member)
         }
     }
 
-    return NULL;
+    return null;
 }
 
 /**
@@ -380,13 +382,13 @@ function get_lang_member($member)
  */
 function get_lang($member = null)
 {
-    if ($member !== NULL) {
+    if ($member !== null) {
         if ($member == get_member()) {
             return user_lang();
         }
 
         $lang = get_lang_member($member);
-        if ($lang !== NULL) {
+        if ($lang !== null) {
             return $lang;
         }
     }
@@ -404,13 +406,13 @@ function get_lang($member = null)
  * @set    lang_custom custom
  * @param  boolean                      Whether to just return if there was a loading error
  */
-function require_lang($codename,$lang = null,$type = null,$ignore_errors = false) // $type is for efficiency only - to avoid needing to doubly-search when requiring all
+function require_lang($codename, $lang = null, $type = null, $ignore_errors = false) // $type is for efficiency only - to avoid needing to doubly-search when requiring all
 {
     // So we can keep track of what code loads what langs
-    global $LANGS_REQUESTED,$LANG_REQUESTED_LANG,$REQUIRE_LANG_LOOP,$PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_LOADED_LANG,$LANGUAGE_STRINGS_CACHE;
+    global $LANGS_REQUESTED, $LANG_REQUESTED_LANG, $REQUIRE_LANG_LOOP, $PAGE_CACHE_LAZY_LOAD, $PAGE_CACHE_LANGS_REQUESTED, $LANG_LOADED_LANG, $LANGUAGE_STRINGS_CACHE;
     $LANGS_REQUESTED[$codename] = 1;
 
-    if ($lang === NULL) {
+    if ($lang === null) {
         $lang = user_lang();
     }
 
@@ -421,7 +423,7 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
 
     $cfb = get_custom_file_base();
     $fb = get_file_base();
-    if (strpos($codename,'..') !== false) {
+    if (strpos($codename, '..') !== false) {
         $codename = filter_naughty($codename);
     }
 
@@ -457,28 +459,31 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
                 }
             }
         }
-        if ((!$support_smart_decaching) || ((is_file($cache_path)) && (is_file($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default)))) {
-            if ($lang === NULL) {
+        if ((!$support_smart_decaching) || ((is_file($cache_path)) && (is_file($lang_file)) && (@/*race conditions*/
+                    filemtime($cache_path) > filemtime($lang_file)) && (@/*race conditions*/
+                    filemtime($cache_path) > filemtime($lang_file_default)))
+        ) {
+            if ($lang === null) {
                 $lang = user_lang();
             }
-            $PAGE_CACHE_LANGS_REQUESTED[] = array($codename,$lang);
+            $PAGE_CACHE_LANGS_REQUESTED[] = array($codename, $lang);
             return;
         } else { // Invalidate it, as our .lcd cache was dirty
             global $PAGE_CACHE_FILE;
             open_page_cache_file();
             $LANGUAGE_STRINGS_CACHE = array();
             @rewind($PAGE_CACHE_FILE);
-            @flock($PAGE_CACHE_FILE,LOCK_EX);
-            @ftruncate($PAGE_CACHE_FILE,0);
-            @flock($PAGE_CACHE_FILE,LOCK_UN);
+            @flock($PAGE_CACHE_FILE, LOCK_EX);
+            @ftruncate($PAGE_CACHE_FILE, 0);
+            @flock($PAGE_CACHE_FILE, LOCK_UN);
             $PAGE_CACHE_LAZY_LOAD = false;
             $LANG_LOADED_LANG = array();
-            $PAGE_CACHE_LANGS_REQUESTED[] = array($codename,$lang);
+            $PAGE_CACHE_LANGS_REQUESTED[] = array($codename, $lang);
 
             foreach ($PAGE_CACHE_LANGS_REQUESTED as $request) {
-                list($that_codename,$that_lang) = $request;
+                list($that_codename, $that_lang) = $request;
                 unset($LANG_REQUESTED_LANG[$that_lang][$that_codename]);
-                require_lang($that_codename,$that_lang,null,$ignore_errors);
+                require_lang($that_codename, $that_lang, null, $ignore_errors);
             }
         }
     }
@@ -504,7 +509,7 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
     $cache_path = $cfb . '/caches/lang/' . $lang . '/' . $codename . '.lcd';
 
     // Try language cache
-    if ($GLOBALS['PERSISTENT_CACHE'] !== NULL) {
+    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
         $desire_cache = true;
         global $SITE_INFO;
         $support_smart_decaching = (!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1');
@@ -516,16 +521,16 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
                     $lang_file = $fb . '/lang/' . $lang . '/' . $codename . '-' . strtolower($lang) . '.po';
                 }
             }
-            $pcache = persistent_cache_get(array('LANG',$lang,$codename),is_file($lang_file)?filemtime($lang_file):null);
+            $pcache = persistent_cache_get(array('LANG', $lang, $codename), is_file($lang_file) ? filemtime($lang_file) : null);
         } else {
-            $pcache = persistent_cache_get(array('LANG',$lang,$codename));
+            $pcache = persistent_cache_get(array('LANG', $lang, $codename));
         }
         if (is_array($pcache)) {
             $LANGUAGE_STRINGS_CACHE[$lang] += $pcache;
             $done = true;
         }
     } else {
-        $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache',0) == 1) || (get_param_integer('cache',0) == 1)) && (get_param_integer('keep_cache',null) !== 0) && (get_param_integer('cache',null) !== 0);
+        $desire_cache = (function_exists('get_option')) && ((get_option('is_on_lang_cache') == '1') || (get_param_integer('keep_cache', 0) == 1) || (get_param_integer('cache', 0) == 1)) && (get_param_integer('keep_cache', null) !== 0) && (get_param_integer('cache', null) !== 0);
         if ($desire_cache) {
             $cache_path = $cfb . '/caches/lang/' . $lang . '/' . $codename . '.lcd';
             $lang_file_default = $fb . '/lang/' . $lang . '/' . $codename . '.ini';
@@ -547,7 +552,10 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
                 $lang_file_default = $lang_file;
             }
 
-            if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/filemtime($cache_path)>filemtime($lang_file)) && (@/*race conditions*/filemtime($cache_path)>filemtime($lang_file_default))))) {
+            if ((is_file($cache_path)) && ((!is_file($lang_file)) || ((@/*race conditions*/
+                            filemtime($cache_path) > filemtime($lang_file)) && (@/*race conditions*/
+                            filemtime($cache_path) > filemtime($lang_file_default))))
+            ) {
                 $tmp = @file_get_contents($cache_path);
                 if ($tmp != '') {
                     $unserialized = @unserialize($tmp);
@@ -561,7 +569,7 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
     }
     if (!$done) {
         require_code('lang_compile');
-        $bad = $bad || require_lang_compile($codename,$lang,$type,$cache_path,$ignore_errors);
+        $bad = $bad || require_lang_compile($codename, $lang, $type, $cache_path, $ignore_errors);
 
         // Must have been dirty cache, so we need to kill compiled templates too (as lang is compiled into them)
         if (($desire_cache) && (is_file($cache_path)) && (filemtime($cache_path) == time()/*Was successfully rebuilt, no perm error*/)) {
@@ -591,14 +599,14 @@ function require_lang($codename,$lang = null,$type = null,$ignore_errors = false
  * @param ?LANGUAGE_NAME   The language to include files from (NULL: use current users language).
  * @param boolean          Only load it up if it is specifically defined for our language.
  */
-function require_all_lang($lang = null,$only_if_for_lang = false)
+function require_all_lang($lang = null, $only_if_for_lang = false)
 {
     global $SITE_INFO;
     $support_smart_decaching = (!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching'] != '1');
 
     if (is_null($lang)) {
         global $REQUIRED_ALL_LANG;
-        if (array_key_exists($lang,$REQUIRED_ALL_LANG)) {
+        if (array_key_exists($lang, $REQUIRED_ALL_LANG)) {
             if ($support_smart_decaching) {
                 unset($GLOBALS['SITE_INFO']['disable_smart_decaching']);
             }
@@ -617,7 +625,7 @@ function require_all_lang($lang = null,$only_if_for_lang = false)
 
     foreach (array_keys($lang_files) as $file) {
         if ((!$only_if_for_lang) || (is_file(get_custom_file_base() . '/lang_custom/' . $lang . '/' . $file . '.ini')) || (is_file(get_custom_file_base() . '/lang/' . $lang . '/' . $file . '.ini')) || (is_file(get_custom_file_base() . '/lang_custom/' . $lang . '/' . $file . '.po')) || (is_file(get_custom_file_base() . '/lang_custom/' . $lang . '/' . $file . '-' . strtolower($lang) . '.po'))) {
-            require_lang($file,$lang,null,true);
+            require_lang($file, $lang, null, true);
         }
     }
 
@@ -635,15 +643,15 @@ function require_all_lang($lang = null,$only_if_for_lang = false)
  * @param  integer                      The level of importance this language string holds
  * @return array                        The language ID save fields
  */
-function lang_code_to_default_content($field_name,$code,$comcode = false,$level = 2)
+function lang_code_to_default_content($field_name, $code, $comcode = false, $level = 2)
 {
-    $insert_map = insert_lang($field_name,do_lang($code),$level,null,$comcode);
+    $insert_map = insert_lang($field_name, do_lang($code), $level, null, $comcode);
     if (multi_lang_content()) {
         $langs = find_all_langs();
         foreach ($langs as $lang => $lang_type) {
             if ($lang != user_lang()) {
                 if (is_file(get_file_base() . '/' . $lang_type . '/' . $lang . '/critical_error.ini')) {// Make sure it's a reasonable looking pack, not just a stub (Google Translate addon can be made to go nuts otherwise)
-                    insert_lang($field_name,do_lang($code,'','','',$lang),$level,null,true,$insert_map[$field_name],$lang);
+                    insert_lang($field_name, do_lang($code, '', '', '', $lang), $level, null, true, $insert_map[$field_name], $lang);
                 }
             }
         }
@@ -658,16 +666,16 @@ function lang_code_to_default_content($field_name,$code,$comcode = false,$level 
  */
 function require_all_open_lang_files($lang = null)
 {
-    global $PAGE_CACHE_LAZY_LOAD,$LANG_REQUESTED_LANG,$LANGS_REQUESTED;
+    global $PAGE_CACHE_LAZY_LOAD, $LANG_REQUESTED_LANG, $LANGS_REQUESTED;
     $PAGE_CACHE_LAZY_LOAD = false;
     $LANG_REQUESTED_LANG = array(); // So require_lang will do a re-load
     $langs_requested_copy = $LANGS_REQUESTED;
     foreach (array_keys($langs_requested_copy) as $toload) {
-        require_lang($toload,$lang,null,true);
+        require_lang($toload, $lang, null, true);
     }
     // Block cacheing might have hidden that we loaded these
-    require_lang('global',$lang,null,true);
-    require_lang('critical_error',$lang,null,true);
+    require_lang('global', $lang, null, true);
+    require_lang('critical_error', $lang, null, true);
 }
 
 /**
@@ -679,10 +687,10 @@ function require_all_open_lang_files($lang = null)
  * @param  boolean                      Whether to use a new window
  * @return tempcode                     The encoded version
  */
-function urlise_lang($string,$url,$title = '',$new_window = false)
+function urlise_lang($string, $url, $title = '', $new_window = false)
 {
     require_code('lang_urlise');
-    return _urlise_lang($string,$url,$title,$new_window);
+    return _urlise_lang($string, $url, $title, $new_window);
 }
 
 /**
@@ -693,7 +701,7 @@ function urlise_lang($string,$url,$title = '',$new_window = false)
  */
 function protect_from_escaping($in)
 {
-    return do_lang_tempcode('dont_escape_trick',$in);
+    return do_lang_tempcode('dont_escape_trick', $in);
 }
 
 /**
@@ -707,33 +715,33 @@ function protect_from_escaping($in)
  * @param  boolean                      Whether to cause ocPortal to exit if the lookup does not succeed
  * @return ?mixed                       The human-readable content (NULL: not found). String normally. Tempcode if tempcode parameters.
  */
-function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang = null,$require_result = true)
+function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $lang = null, $require_result = true)
 {
-    global $LANGUAGE_STRINGS_CACHE,$USER_LANG_CACHED,$RECORD_LANG_STRINGS,$XSS_DETECT,$PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED;
+    global $LANGUAGE_STRINGS_CACHE, $USER_LANG_CACHED, $RECORD_LANG_STRINGS, $XSS_DETECT, $PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED;
 
-    if ($lang === NULL) {
-        $lang = ($USER_LANG_CACHED === NULL)?user_lang():$USER_LANG_CACHED;
+    if ($lang === null) {
+        $lang = ($USER_LANG_CACHED === null) ? user_lang() : $USER_LANG_CACHED;
     }// else // This else assumes we initially load all language files in the users language. Reasonable. EDIT: Actually, no it is not - the user_lang() initially is not accurate until ocPortal gets past a certain startup position
     {
         if ($GLOBALS['SEMI_DEV_MODE']) { // Special syntax for easily inlining language strings while coding
-            $pos = strpos($codename,'=');
+            $pos = strpos($codename, '=');
             if ($pos !== false) {
                 require_code('lang2');
-                inline_language_editing($codename,$lang);
+                inline_language_editing($codename, $lang);
             }
         }
 
         $there = isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
 
         if (!$there) {
-            $pos = strpos($codename,':');
+            $pos = strpos($codename, ':');
             if ($pos !== false) {
-                $lang_file = substr($codename,0,$pos);
-                $codename = substr($codename,$pos+1);
+                $lang_file = substr($codename, 0, $pos);
+                $codename = substr($codename, $pos + 1);
 
                 $there = isset($LANGUAGE_STRINGS_CACHE[$lang][$codename]);
                 if (!$there) {
-                    require_lang($lang_file,null,null,!$require_result);
+                    require_lang($lang_file, null, null, !$require_result);
                 }
             }
 
@@ -745,28 +753,28 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
             $RECORDED_LANG_STRINGS[$codename] = 1;
         }
 
-        if ((!$there) && ((!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename,$LANGUAGE_STRINGS_CACHE[$lang])))) {
-            global $PAGE_CACHE_LAZY_LOAD,$PAGE_CACHE_LANGS_REQUESTED,$LANG_REQUESTED_LANG;
+        if ((!$there) && ((!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename, $LANGUAGE_STRINGS_CACHE[$lang])))) {
+            global $PAGE_CACHE_LAZY_LOAD, $PAGE_CACHE_LANGS_REQUESTED, $LANG_REQUESTED_LANG;
 
             if ($PAGE_CACHE_LAZY_LOAD) {
                 $PAGE_CACHE_LAZY_LOAD = false; // We can't be lazy any more, but we will keep growing our pool so hopefully CAN be lazy the next time
                 foreach ($PAGE_CACHE_LANGS_REQUESTED as $request) {
-                    list($that_codename,$that_lang) = $request;
+                    list($that_codename, $that_lang) = $request;
                     unset($LANG_REQUESTED_LANG[$that_lang][$that_codename]);
-                    require_lang($that_codename,$that_lang,null,true);
+                    require_lang($that_codename, $that_lang, null, true);
                 }
-                $ret = _do_lang($codename,$token1,$token2,$token3,$lang,$require_result);
-                if ($ret === NULL) {
+                $ret = _do_lang($codename, $token1, $token2, $token3, $lang, $require_result);
+                if ($ret === null) {
                     $PAGE_CACHE_LANG_LOADED[$lang][$codename] = null;
-                    if ($GLOBALS['PERSISTENT_CACHE'] !== NULL) {
-                        persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+                    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
+                        persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
                     } else {
                         open_page_cache_file();
                         @rewind($PAGE_CACHE_FILE);
-                        @flock($PAGE_CACHE_FILE,LOCK_EX);
-                        @ftruncate($PAGE_CACHE_FILE,0);
-                        @fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
-                        @flock($PAGE_CACHE_FILE,LOCK_UN);
+                        @flock($PAGE_CACHE_FILE, LOCK_EX);
+                        @ftruncate($PAGE_CACHE_FILE, 0);
+                        @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
+                        @flock($PAGE_CACHE_FILE, LOCK_UN);
                     }
                 }
                 return $ret;
@@ -780,22 +788,22 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
         return 'xxx';
     } // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
 
-    if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && (($require_result) || (!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename,$LANGUAGE_STRINGS_CACHE[$lang])))) {
+    if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && (($require_result) || (!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename, $LANGUAGE_STRINGS_CACHE[$lang])))) {
         if ($lang != fallback_lang()) {
-            $ret = do_lang($codename,$token1,$token2,$token3,fallback_lang(),$require_result);
+            $ret = do_lang($codename, $token1, $token2, $token3, fallback_lang(), $require_result);
 
-            if ($PAGE_CACHE_FILE !== NULL) {
+            if ($PAGE_CACHE_FILE !== null) {
                 if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && (isset($PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]))) {
                     $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $PAGE_CACHE_LANG_LOADED[fallback_lang()][$codename]; // Will have been cached into fallback_lang() from the nested do_lang call, we need to copy it into our cache bucket for this language
-                    if ($GLOBALS['PERSISTENT_CACHE'] !== NULL) {
-                        persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+                    if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
+                        persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
                     } else {
                         open_page_cache_file();
                         @rewind($PAGE_CACHE_FILE);
-                        @flock($PAGE_CACHE_FILE,LOCK_EX);
-                        @ftruncate($PAGE_CACHE_FILE,0);
-                        @fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
-                        @flock($PAGE_CACHE_FILE,LOCK_UN);
+                        @flock($PAGE_CACHE_FILE, LOCK_EX);
+                        @ftruncate($PAGE_CACHE_FILE, 0);
+                        @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
+                        @flock($PAGE_CACHE_FILE, LOCK_UN);
                     }
                 }
             }
@@ -803,10 +811,10 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
             return $ret;
         } else {
             if ($require_result) {
-                global $USER_LANG_LOOP,$REQUIRE_LANG_LOOP;
+                global $USER_LANG_LOOP, $REQUIRE_LANG_LOOP;
                 //print_r(debug_backtrace());
                 if ($USER_LANG_LOOP == 1) {
-                    critical_error('RELAY','Missing language code: ' . escape_html($codename) . '. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/' . fallback_lang() . '/*.ini) for ocPortal on this website have been corrupted.');
+                    critical_error('RELAY', 'Missing language code: ' . escape_html($codename) . '. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/' . fallback_lang() . '/*.ini) for ocPortal on this website have been corrupted.');
                 }
                 if ($REQUIRE_LANG_LOOP >= 2) {
                     return '';
@@ -815,44 +823,44 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
                 erase_cached_language();
 
                 require_code('site');
-                attach_message(do_lang_tempcode('MISSING_LANG_ENTRY',escape_html($codename)),'warn');
+                attach_message(do_lang_tempcode('MISSING_LANG_ENTRY', escape_html($codename)), 'warn');
                 return '';
             } else {
-                return NULL;
+                return null;
             }
         }
     }
 
-    if ($PAGE_CACHE_FILE !== NULL) {
-        if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename,$PAGE_CACHE_LANG_LOADED[$lang])))) {
+    if ($PAGE_CACHE_FILE !== null) {
+        if ((!isset($PAGE_CACHE_LANG_LOADED[$lang][$codename])) && ((!isset($PAGE_CACHE_LANG_LOADED[$lang])) || (!array_key_exists($codename, $PAGE_CACHE_LANG_LOADED[$lang])))) {
             $PAGE_CACHE_LANG_LOADED[$lang][$codename] = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
-            if ($GLOBALS['PERSISTENT_CACHE'] !== NULL) {
-                persistent_cache_set($PAGE_CACHE_FILE,$PAGE_CACHE_LANG_LOADED);
+            if ($GLOBALS['PERSISTENT_CACHE'] !== null) {
+                persistent_cache_set($PAGE_CACHE_FILE, $PAGE_CACHE_LANG_LOADED);
             } else {
                 open_page_cache_file();
                 @rewind($PAGE_CACHE_FILE);
-                @flock($PAGE_CACHE_FILE,LOCK_EX);
-                @ftruncate($PAGE_CACHE_FILE,0);
-                @fwrite($PAGE_CACHE_FILE,serialize($PAGE_CACHE_LANG_LOADED));
-                @flock($PAGE_CACHE_FILE,LOCK_UN);
+                @flock($PAGE_CACHE_FILE, LOCK_EX);
+                @ftruncate($PAGE_CACHE_FILE, 0);
+                @fwrite($PAGE_CACHE_FILE, serialize($PAGE_CACHE_LANG_LOADED));
+                @flock($PAGE_CACHE_FILE, LOCK_UN);
             }
         }
     }
 
     // Put in parameters
-    static $non_plural_non_vowel = array('1','b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z','{'/*for no-op param usage*/);
+    static $non_plural_non_vowel = array('1', 'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z', '{'/*for no-op param usage*/);
     $looked_up = $LANGUAGE_STRINGS_CACHE[$lang][$codename];
-    if ($looked_up === NULL) {
-        return NULL; // Learning cache pool has told us this string definitely does not exist
+    if ($looked_up === null) {
+        return null; // Learning cache pool has told us this string definitely does not exist
     }
-    $out = str_replace('\n',"\n",$looked_up);
-    $plural_or_vowel_check = strpos($out,'|') !== false;
+    $out = str_replace('\n', "\n", $looked_up);
+    $plural_or_vowel_check = strpos($out, '|') !== false;
     if ($XSS_DETECT) {
         ocp_mark_as_escaped($out);
     }
-    if ($token1 !== NULL) {
-        if (((is_object($token1)) && ($token2 === NULL)) || (($token2 !== NULL) && (is_object($token2)))) { // Tempcode only supported in first two
-            $bits = preg_split('#\{\d[^\}]*\}#',$out,2,PREG_SPLIT_OFFSET_CAPTURE);
+    if ($token1 !== null) {
+        if (((is_object($token1)) && ($token2 === null)) || (($token2 !== null) && (is_object($token2)))) { // Tempcode only supported in first two
+            $bits = preg_split('#\{\d[^\}]*\}#', $out, 2, PREG_SPLIT_OFFSET_CAPTURE);
 
             $ret = new ocp_tempcode();
             foreach ($bits as $bit) {
@@ -863,43 +871,43 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
                 $at = $bit[1];
 
                 if ($at != 0) {
-                    if ($out[$at-2] == '1') {
+                    if ($out[$at - 2] == '1') {
                         $ret->attach($token1);
-                    } elseif ($out[$at-2] == '2') {
+                    } elseif ($out[$at - 2] == '2') {
                         $ret->attach($token2);
-                    } elseif (($plural_or_vowel_check) && (substr($out[$at-2],0,2) == '1|')) {
-                        $exploded = explode('|',$out[$at-2]);
+                    } elseif (($plural_or_vowel_check) && (substr($out[$at - 2], 0, 2) == '1|')) {
+                        $exploded = explode('|', $out[$at - 2]);
                         $_token = $token1->evaluate();
-                        $_token_denum = str_replace(',','',$_token);
-                        $ret->attach((in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
-                    } elseif (($plural_or_vowel_check) && (substr($out[$at-2],0,2) == '2|')) {
-                        $exploded = explode('|',$out[$at-2]);
+                        $_token_denum = str_replace(',', '', $_token);
+                        $ret->attach((in_array(is_numeric($_token_denum) ? $_token_denum : ocp_mb_strtolower(ocp_mb_substr($_token, 0, 1)), $non_plural_non_vowel)) ? $exploded[1] : $exploded[2]);
+                    } elseif (($plural_or_vowel_check) && (substr($out[$at - 2], 0, 2) == '2|')) {
+                        $exploded = explode('|', $out[$at - 2]);
                         $_token = $token2->evaluate();
-                        $_token_denum = str_replace(',','',$_token);
-                        $ret->attach((in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($_token,0,1)),$non_plural_non_vowel))?$exploded[1]:$exploded[2]);
+                        $_token_denum = str_replace(',', '', $_token);
+                        $ret->attach((in_array(is_numeric($_token_denum) ? $_token_denum : ocp_mb_strtolower(ocp_mb_substr($_token, 0, 1)), $non_plural_non_vowel)) ? $exploded[1] : $exploded[2]);
                     }
                 }
                 $ret->attach($bit[0]);
             }
 
             return $ret;
-        } elseif ($token1 !== NULL) {
+        } elseif ($token1 !== null) {
             $kg = !has_solemnly_declared(I_UNDERSTAND_XSS);
             if ($kg) {
                 kid_gloves_html_escaping_singular($token1);
             }
 
-            $out = str_replace('{1}',$token1,$out);
+            $out = str_replace('{1}', $token1, $out);
             if ($plural_or_vowel_check) {
-                $_token_denum = str_replace(',','',$token1);
-                $out = preg_replace('#\{1\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token1,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
+                $_token_denum = str_replace(',', '', $token1);
+                $out = preg_replace('#\{1\|(.*)\|(.*)\}#U', (in_array(is_numeric($_token_denum) ? $_token_denum : ocp_mb_strtolower(ocp_mb_substr($token1, 0, 1)), $non_plural_non_vowel)) ? '\\1' : '\\2', $out);
             }
             if (($XSS_DETECT) && (ocp_is_escaped($token1))) {
                 ocp_mark_as_escaped($out);
             }
         }
 
-        if ($token2 !== NULL) {
+        if ($token2 !== null) {
             if ($kg) {
                 kid_gloves_html_escaping_singular($token2);
             }
@@ -907,16 +915,16 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
             if ($XSS_DETECT) {
                 $escaped = ocp_is_escaped($out);
             }
-            $out = str_replace('{2}',$token2,$out);
+            $out = str_replace('{2}', $token2, $out);
             if ($plural_or_vowel_check) {
-                $_token_denum = str_replace(',','',$token2);
-                $out = preg_replace('#\{2\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token2,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
+                $_token_denum = str_replace(',', '', $token2);
+                $out = preg_replace('#\{2\|(.*)\|(.*)\}#U', (in_array(is_numeric($_token_denum) ? $_token_denum : ocp_mb_strtolower(ocp_mb_substr($token2, 0, 1)), $non_plural_non_vowel)) ? '\\1' : '\\2', $out);
             }
             if (($XSS_DETECT) && (ocp_is_escaped($token2)) && ($escaped)) {
                 ocp_mark_as_escaped($out);
             }
 
-            if ($token3 !== NULL) {
+            if ($token3 !== null) {
                 $i = 3;
                 if (!is_array($token3)) {
                     $token3 = array($token3);
@@ -929,10 +937,10 @@ function _do_lang($codename,$token1 = null,$token2 = null,$token3 = null,$lang =
                     if ($XSS_DETECT) {
                         $escaped = ocp_is_escaped($out);
                     }
-                    $out = str_replace('{' . strval($i) . '}',$token,$out);
+                    $out = str_replace('{' . strval($i) . '}', $token, $out);
                     if ($plural_or_vowel_check) {
-                        $_token_denum = str_replace(',','',$token);
-                        $out = preg_replace('#\{' . strval($i) . '\|(.*)\|(.*)\}#U',(in_array(is_numeric($_token_denum)?$_token_denum:ocp_mb_strtolower(ocp_mb_substr($token,0,1)),$non_plural_non_vowel))?'\\1':'\\2',$out);
+                        $_token_denum = str_replace(',', '', $token);
+                        $out = preg_replace('#\{' . strval($i) . '\|(.*)\|(.*)\}#U', (in_array(is_numeric($_token_denum) ? $_token_denum : ocp_mb_strtolower(ocp_mb_substr($token, 0, 1)), $non_plural_non_vowel)) ? '\\1' : '\\2', $out);
                     }
                     if (($XSS_DETECT) && (ocp_is_escaped($token)) && ($escaped)) {
                         ocp_mark_as_escaped($out);
@@ -964,10 +972,10 @@ function find_all_langs($even_empty_langs = false)
  * @param  boolean                      Whether to show languages that have no language details currently defined for them
  * @return tempcode                     The language selector
  */
-function create_selection_list_langs($select_lang = null,$show_unset = false)
+function create_selection_list_langs($select_lang = null, $show_unset = false)
 {
     require_code('lang3');
-    return _create_selection_list_langs($select_lang,$show_unset);
+    return _create_selection_list_langs($select_lang, $show_unset);
 }
 
 // =======
@@ -989,13 +997,13 @@ function create_selection_list_langs($select_lang = null,$show_unset = false)
  * @param  boolean                      Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields
  */
-function insert_lang_comcode($field_name,$text,$level,$connection = null,$insert_as_admin = false,$pass_id = null,$wrap_pos = 60,$preparse_mode = true,$save_as_volatile = false)
+function insert_lang_comcode($field_name, $text, $level, $connection = null, $insert_as_admin = false, $pass_id = null, $wrap_pos = 60, $preparse_mode = true, $save_as_volatile = false)
 {
     if (is_null($connection)) {
         $connection = $GLOBALS['SITE_DB'];
     }
 
-    return insert_lang($field_name,$text,$level,$connection,true,null,null,$insert_as_admin,$pass_id,null,$wrap_pos,$preparse_mode,$save_as_volatile);
+    return insert_lang($field_name, $text, $level, $connection, true, null, null, $insert_as_admin, $pass_id, null, $wrap_pos, $preparse_mode, $save_as_volatile);
 }
 
 /**
@@ -1017,10 +1025,10 @@ function insert_lang_comcode($field_name,$text,$level,$connection = null,$insert
  * @param  boolean                      Whether we are saving as a 'volatile' file extension (used in the XML DB driver, to mark things as being non-syndicated to subversion)
  * @return array                        The language ID save fields
  */
-function insert_lang($field_name,$text,$level,$connection = null,$comcode = false,$id = null,$lang = null,$insert_as_admin = false,$pass_id = null,$text_parsed = null,$wrap_pos = 60,$preparse_mode = true,$save_as_volatile = false)
+function insert_lang($field_name, $text, $level, $connection = null, $comcode = false, $id = null, $lang = null, $insert_as_admin = false, $pass_id = null, $text_parsed = null, $wrap_pos = 60, $preparse_mode = true, $save_as_volatile = false)
 {
     require_code('lang3');
-    return _insert_lang($field_name,$text,$level,$connection,$comcode,$id,$lang,$insert_as_admin,$pass_id,$text_parsed,$wrap_pos,$preparse_mode,$save_as_volatile);
+    return _insert_lang($field_name, $text, $level, $connection, $comcode, $id, $lang, $insert_as_admin, $pass_id, $text_parsed, $wrap_pos, $preparse_mode, $save_as_volatile);
 }
 
 /**
@@ -1035,9 +1043,9 @@ function insert_lang($field_name,$text,$level,$connection = null,$comcode = fals
  * @param  boolean                      Whether to generate Comcode as arbitrary admin
  * @return array                        The language ID save fields
  */
-function lang_remap_comcode($field_name,$id,$text,$connection = null,$pass_id = null,$source_user = null,$as_admin = false)
+function lang_remap_comcode($field_name, $id, $text, $connection = null, $pass_id = null, $source_user = null, $as_admin = false)
 {
-    return lang_remap($field_name,$id,$text,$connection,true,$pass_id,$source_user,$as_admin);
+    return lang_remap($field_name, $id, $text, $connection, true, $pass_id, $source_user, $as_admin);
 }
 
 /**
@@ -1054,10 +1062,10 @@ function lang_remap_comcode($field_name,$id,$text,$connection = null,$pass_id = 
  * @param  boolean                      Whether to backup the language string before changing it
  * @return array                        The language ID save fields
  */
-function lang_remap($field_name,$id,$text,$connection = null,$comcode = false,$pass_id = null,$source_user = null,$as_admin = false,$backup_string = false)
+function lang_remap($field_name, $id, $text, $connection = null, $comcode = false, $pass_id = null, $source_user = null, $as_admin = false, $backup_string = false)
 {
     require_code('lang3');
-    return _lang_remap($field_name,$id,$text,$connection,$comcode,$pass_id,$source_user,$as_admin,$backup_string);
+    return _lang_remap($field_name, $id, $text, $connection, $comcode, $pass_id, $source_user, $as_admin, $backup_string);
 }
 
 /**
@@ -1066,7 +1074,7 @@ function lang_remap($field_name,$id,$text,$connection = null,$comcode = false,$p
  * @param  integer                      The ID
  * @param  ?object                      The database connection to use (NULL: standard site connection)
  */
-function delete_lang($id,$connection = null)
+function delete_lang($id, $connection = null)
 {
     if (!multi_lang_content()) {
         return;
@@ -1075,7 +1083,7 @@ function delete_lang($id,$connection = null)
     if (is_null($connection)) {
         $connection = $GLOBALS['SITE_DB'];
     }
-    $connection->query_delete('translate',array('id' => $id));
+    $connection->query_delete('translate', array('id' => $id));
 }
 
 /**
@@ -1091,13 +1099,13 @@ function delete_lang($id,$connection = null)
  * @param  boolean                      Whether to remove from the Tempcode cache when we're done, for performance reasons (normally don't bother with this, but some code knows it won't be needed again -- esp Comcode cache layer -- and saves RAM by removing it)
  * @return ?tempcode                    The parsed Comcode (NULL: the text couldn't be looked up)
  */
-function get_translated_tempcode($table,$row,$field_name,$connection = null,$lang = null,$force = false,$as_admin = false,$clear_away_from_cache = false)
+function get_translated_tempcode($table, $row, $field_name, $connection = null, $lang = null, $force = false, $as_admin = false, $clear_away_from_cache = false)
 {
-    if ($connection === NULL) {
+    if ($connection === null) {
         $connection = $GLOBALS['SITE_DB'];
     }
 
-    if ($lang === NULL) {
+    if ($lang === null) {
         $lang = user_lang();
     }
 
@@ -1105,7 +1113,7 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
         $entry = $row[$field_name];
 
         if ($entry == 0) {
-            return paragraph(do_lang_tempcode('FAILED_ENTRY'),'rtgtedgrgd');
+            return paragraph(do_lang_tempcode('FAILED_ENTRY'), 'rtgtedgrgd');
         }
 
         global $RECORD_LANG_STRINGS_CONTENT;
@@ -1136,9 +1144,9 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
 
         global $SEARCH__CONTENT_BITS;
 
-        if ($SEARCH__CONTENT_BITS !== NULL) { // Doing a search so we need to reparse, with highlighting on
-            $_result = $connection->query_select('translate',array('text_original','source_user'),array('id' => $entry,'language' => $lang),'',1);
-            if (array_key_exists(0,$_result)) {
+        if ($SEARCH__CONTENT_BITS !== null) { // Doing a search so we need to reparse, with highlighting on
+            $_result = $connection->query_select('translate', array('text_original', 'source_user'), array('id' => $entry, 'language' => $lang), '', 1);
+            if (array_key_exists(0, $_result)) {
                 global $LAX_COMCODE;
                 $temp = $LAX_COMCODE;
                 $LAX_COMCODE = true;
@@ -1149,14 +1157,14 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
                     $result['text_original'] = force_clean_comcode($result['text_original']); // Highlighting only works with pure Comcode
                 }
 
-                $ret = comcode_to_tempcode($result['text_original'],$result['source_user'],$as_admin,60,null,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+                $ret = comcode_to_tempcode($result['text_original'], $result['source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
                 $LAX_COMCODE = $temp;
                 return $ret;
             }
         }
 
-        $_result = $connection->query_select('translate',array('text_parsed','text_original'),array('id' => $entry,'language' => $lang),'',1);
-        $result = isset($_result[0])?$_result[0]['text_parsed']:null;
+        $_result = $connection->query_select('translate', array('text_parsed', 'text_original'), array('id' => $entry, 'language' => $lang), '', 1);
+        $result = isset($_result[0]) ? $_result[0]['text_parsed'] : null;
         if (isset($_result[0])) {
             if ($lang == user_lang()) {
                 $connection->text_lookup_original_cache[$entry] = $_result[0]['text_original'];
@@ -1164,7 +1172,7 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
         }
     } else {
         global $SEARCH__CONTENT_BITS;
-        if ($SEARCH__CONTENT_BITS !== NULL) { // Doing a search so we need to reparse, with highlighting on
+        if ($SEARCH__CONTENT_BITS !== null) { // Doing a search so we need to reparse, with highlighting on
             global $LAX_COMCODE;
             $temp = $LAX_COMCODE;
             $LAX_COMCODE = true;
@@ -1174,7 +1182,7 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
                 $row[$field_name] = force_clean_comcode($row[$field_name]); // Highlighting only works with pure Comcode
             }
 
-            $ret = comcode_to_tempcode($row[$field_name],$row[$field_name . '__source_user'],$as_admin,60,null,$connection,false,false,false,false,false,$SEARCH__CONTENT_BITS);
+            $ret = comcode_to_tempcode($row[$field_name], $row[$field_name . '__source_user'], $as_admin, 60, null, $connection, false, false, false, false, false, $SEARCH__CONTENT_BITS);
             $LAX_COMCODE = $temp;
             return $ret;
         }
@@ -1182,15 +1190,15 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
         $result = $row[$field_name . '__text_parsed'];
     }
 
-    if (($result === NULL) || ($result == '') || (is_browser_decacheing())) { // Not cached
+    if (($result === null) || ($result == '') || (is_browser_decacheing())) { // Not cached
         require_code('lang3');
-        return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
+        return parse_translated_text($table, $row, $field_name, $connection, $lang, $force, $as_admin);
     }
 
     $parsed = new ocp_tempcode();
-    if (!$parsed->from_assembly($result,true)) { // Corrupted
+    if (!$parsed->from_assembly($result, true)) { // Corrupted
         require_code('lang3');
-        return parse_translated_text($table,$row,$field_name,$connection,$lang,$force,$as_admin);
+        return parse_translated_text($table, $row, $field_name, $connection, $lang, $force, $as_admin);
     }
 
     if (multi_lang_content()) {
@@ -1211,7 +1219,7 @@ function get_translated_tempcode($table,$row,$field_name,$connection = null,$lan
  * @param  boolean                      Whether to force it to the specified language
  * @return ?string                      The human-readable version (NULL: could not look up when $force was on)
  */
-function get_translated_text($entry,$connection = null,$lang = null,$force = false)
+function get_translated_text($entry, $connection = null, $lang = null, $force = false)
 {
     if (!multi_lang_content()) {
         return $entry;
@@ -1221,11 +1229,11 @@ function get_translated_text($entry,$connection = null,$lang = null,$force = fal
         return do_lang('FAILED_ENTRY');
     }
 
-    if ($entry === NULL) {
+    if ($entry === null) {
         fatal_exit(do_lang_tempcode('NULL_LANG_STRING'));
     }
 
-    if ($connection === NULL) {
+    if ($connection === null) {
         $connection = $GLOBALS['SITE_DB'];
     }
 
@@ -1235,7 +1243,7 @@ function get_translated_text($entry,$connection = null,$lang = null,$force = fal
         $RECORDED_LANG_STRINGS_CONTENT[$entry] = ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write);
     }
 
-    if ($lang === NULL) {
+    if ($lang === null) {
         $lang = user_lang();
     }
 
@@ -1246,29 +1254,29 @@ function get_translated_text($entry,$connection = null,$lang = null,$force = fal
     if ($lang == 'xxx') {
         return '!!!';
     } // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
-    $result = $connection->query_select('translate',array('text_original','text_parsed'),array('id' => $entry,'language' => $lang),'',1);
+    $result = $connection->query_select('translate', array('text_original', 'text_parsed'), array('id' => $entry, 'language' => $lang), '', 1);
     if (!isset($result[0])) {
         if ($force) {
-            return NULL;
+            return null;
         }
 
-        $result = $connection->query_select('translate',array('*'),array('id' => $entry),'',1);
+        $result = $connection->query_select('translate', array('*'), array('id' => $entry), '', 1);
         if (!isset($result[0])) {
-            $result = $connection->query_select('translate',array('*'),array('id' => $entry),'',1);
+            $result = $connection->query_select('translate', array('*'), array('id' => $entry), '', 1);
         }
         if (isset($result[0])) {
-            $connection->query_insert('translate',array('broken' => 1,'language' => $lang)+$result[0]);
+            $connection->query_insert('translate', array('broken' => 1, 'language' => $lang) + $result[0]);
         }
     }
     if (!isset($result[0])) {
-        $member_id = function_exists('get_member')?get_member():$GLOBALS['FORUM_DRIVER']->get_guest_id();
-        $connection->query_insert('translate',array('id' => $entry,'source_user' => $member_id,'broken' => 0,'importance_level' => 3,'text_original' => '','text_parsed' => '','language' => $lang));
-        $msg = do_lang('LANGUAGE_CORRUPTION',strval($entry));
+        $member_id = function_exists('get_member') ? get_member() : $GLOBALS['FORUM_DRIVER']->get_guest_id();
+        $connection->query_insert('translate', array('id' => $entry, 'source_user' => $member_id, 'broken' => 0, 'importance_level' => 3, 'text_original' => '', 'text_parsed' => '', 'language' => $lang));
+        $msg = do_lang('LANGUAGE_CORRUPTION', strval($entry));
         if ($GLOBALS['DEV_MODE']) {
             fatal_exit($msg);
         }
         require_code('site');
-        attach_message(make_string_tempcode($msg),'warn');
+        attach_message(make_string_tempcode($msg), 'warn');
         return '';
     }
     if ($lang == user_lang()) {
@@ -1299,10 +1307,10 @@ function comcode_lang_string($lang_code)
  * @param  boolean                      Whether to add an 'all' entry to the list
  * @return mixed                        The UI (tempcode) or the language to use (string/LANGUAGE_NAME)
  */
-function choose_language($title,$tip = false,$allow_all_selection = false)
+function choose_language($title, $tip = false, $allow_all_selection = false)
 {
     require_code('lang3');
-    return _choose_language($title,$tip,$allow_all_selection);
+    return _choose_language($title, $tip, $allow_all_selection);
 }
 
 /**
@@ -1314,11 +1322,11 @@ function choose_language($title,$tip = false,$allow_all_selection = false)
 function get_ordinal_suffix($index)
 {
     // Based on http://stackoverflow.com/questions/3109978/php-display-number-with-ordinal-suffix
-    $ends = array('th','st','nd','rd','th','th','th','th','th','th');
-    if (($index%100) >= 11 && ($index%100) <= 13) {
+    $ends = array('th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th');
+    if (($index % 100) >= 11 && ($index % 100) <= 13) {
         $abbreviation = 'th';
     } else {
-        $abbreviation = $ends[$index%10];
+        $abbreviation = $ends[$index % 10];
     }
     return $abbreviation;
 }

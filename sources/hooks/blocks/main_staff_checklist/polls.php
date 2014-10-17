@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_checklist_polls
 {
     /**
@@ -37,28 +36,28 @@ class Hook_checklist_polls
 
         require_lang('polls');
 
-        $date = $GLOBALS['SITE_DB']->query_select_value_if_there('poll','date_and_time',array('is_current' => 1));
+        $date = $GLOBALS['SITE_DB']->query_select_value_if_there('poll', 'date_and_time', array('is_current' => 1));
 
         $limit_hours = intval(get_option('poll_update_time'));
 
         $seconds_ago = mixed();
         if (!is_null($date)) {
-            $status = ($seconds_ago>$limit_hours*60*60)?0:1;
+            $status = ($seconds_ago > $limit_hours * 60 * 60) ? 0 : 1;
         } else {
             $status = 0;
         }
 
-        $_status = ($status == 0)?do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0'):do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
+        $_status = ($status == 0) ? do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0') : do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1');
 
         require_code('config2');
         $config_url = config_option_url('poll_update_time');
 
-        $url = build_url(array('page' => 'cms_polls','type' => 'ed'),get_module_zone('cms_polls'));
+        $url = build_url(array('page' => 'cms_polls', 'type' => 'ed'), get_module_zone('cms_polls'));
         $num_queue = $this->get_num_poll_queue();
-        list($info,$seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago,$limit_hours);
-        $info->attach(do_lang_tempcode('NUM_QUEUE',integer_format($num_queue)));
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => '5d709aa8a09bbf3e46aefa7fe7e02660','CONFIG_URL' => $config_url,'URL' => $url,'STATUS' => $_status,'TASK' => do_lang_tempcode('PRIVILEGE_choose_poll'),'INFO' => $info));
-        return array(array($tpl,$seconds_due_in,null,'poll_update_time'));
+        list($info, $seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago, $limit_hours);
+        $info->attach(do_lang_tempcode('NUM_QUEUE', integer_format($num_queue)));
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => '5d709aa8a09bbf3e46aefa7fe7e02660', 'CONFIG_URL' => $config_url, 'URL' => $url, 'STATUS' => $_status, 'TASK' => do_lang_tempcode('PRIVILEGE_choose_poll'), 'INFO' => $info));
+        return array(array($tpl, $seconds_due_in, null, 'poll_update_time'));
     }
 
     /**

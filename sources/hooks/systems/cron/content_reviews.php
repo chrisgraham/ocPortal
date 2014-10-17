@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    content_reviews
  */
-
 class Hook_cron_content_reviews
 {
     /**
@@ -36,7 +35,7 @@ class Hook_cron_content_reviews
             $content_id = $pending_content_review['content_id'];
 
             // Mark as handled
-            $GLOBALS['SITE_DB']->query_update('content_reviews',array('review_notification_happened' => 1),array('content_type' => $content_type,'content_id' => $content_id),'',1);
+            $GLOBALS['SITE_DB']->query_update('content_reviews', array('review_notification_happened' => 1), array('content_type' => $content_type, 'content_id' => $content_id), '', 1);
 
             require_code('content');
 
@@ -45,9 +44,9 @@ class Hook_cron_content_reviews
             $auto_action = $pending_content_review['auto_action'];
 
             // Get title / check not deleted, cleanup if is
-            list($title,$submitter) = content_get_details($content_type,$content_id);
+            list($title, $submitter) = content_get_details($content_type, $content_id);
             if (is_null($title)) {
-                $GLOBALS['SITE_DB']->query_delete('content_reviews',array('content_type' => $content_id,'content_id' => $content_id),'',1); // The actual content was deleted, I guess
+                $GLOBALS['SITE_DB']->query_delete('content_reviews', array('content_type' => $content_id, 'content_id' => $content_id), '', 1); // The actual content was deleted, I guess
                 continue;
             }
 
@@ -62,26 +61,26 @@ class Hook_cron_content_reviews
             } // Weird :S
             $info = $object->info();
             $auto_action_str = do_lang('CONTENT_REVIEW_AUTO_ACTION_' . $auto_action);
-            list($zone,$attributes,) = page_link_decode($info['edit_page_link_pattern']);
+            list($zone, $attributes,) = page_link_decode($info['edit_page_link_pattern']);
             foreach ($attributes as $key => $val) {
                 if ($val == '_WILD') {
                     $attributes[$key] = $content_id;
                 }
             }
-            $edit_url = build_url($attributes+array('validated' => 1),$zone,null,false,false,true);
+            $edit_url = build_url($attributes + array('validated' => 1), $zone, null, false, false, true);
             require_code('notifications');
-            $subject = do_lang('NOTIFICATION_SUBJECT_CONTENT_REVIEWS' . (($auto_action == 'delete')?'_delete':''),$title,$auto_action_str);
-            $message = do_lang('NOTIFICATION_BODY_CONTENT_REVIEWS' . (($auto_action == 'delete')?'_delete':''),$title,$auto_action_str,$edit_url->evaluate());
-            dispatch_notification('content_reviews',$content_type,$subject,$message,null,null,4,false);
+            $subject = do_lang('NOTIFICATION_SUBJECT_CONTENT_REVIEWS' . (($auto_action == 'delete') ? '_delete' : ''), $title, $auto_action_str);
+            $message = do_lang('NOTIFICATION_BODY_CONTENT_REVIEWS' . (($auto_action == 'delete') ? '_delete' : ''), $title, $auto_action_str, $edit_url->evaluate());
+            dispatch_notification('content_reviews', $content_type, $subject, $message, null, null, 4, false);
             if (!is_null($submitter)) {
-                dispatch_notification('content_reviews__own',$content_type,$subject,$message,array($submitter),null,4,false);
+                dispatch_notification('content_reviews__own', $content_type, $subject, $message, array($submitter), null, 4, false);
             }
 
             // Do auto-action
             switch ($auto_action) {
                 case 'unvalidate':
                     if (!is_null($info['validated_field'])) {
-                        $info['connection']->query_update($info['table'],array($info['validated_field'] => 0),get_content_where_for_str_id($content_id,$info),'',1);
+                        $info['connection']->query_update($info['table'], array($info['validated_field'] => 0), get_content_where_for_str_id($content_id, $info), '', 1);
                     }
                     break;
 
@@ -89,9 +88,9 @@ class Hook_cron_content_reviews
                     require_code('resource_fs');
                     $object_fs = get_resource_occlefs_object($content_type);
                     if (!is_null($object_fs)) {
-                        $filename = $object_fs->convert_id_to_filename($content_type,$content_id);
+                        $filename = $object_fs->convert_id_to_filename($content_type, $content_id);
                         if (!is_null($filename)) {
-                            $object_fs->resource_delete($content_type,$filename);
+                            $object_fs->resource_delete($content_type, $filename);
                         }
                     }
                     break;

@@ -23,12 +23,13 @@
  */
 function init__occle_fs()
 {
-    define('OCCLEFS_FILE',0);
-    define('OCCLEFS_DIR',1);
+    define('OCCLEFS_FILE', 0);
+    define('OCCLEFS_DIR', 1);
 }
 
 /**
  * Virtual filesystems.
+ *
  * @package    occle
  */
 class occle_fs
@@ -66,9 +67,9 @@ class occle_fs
         */
 
         // Build up the filesystem structure
-        $occlefs_hooks = find_all_hooks('systems','occle_fs');
+        $occlefs_hooks = find_all_hooks('systems', 'occle_fs');
         $this->occle_fs = array();
-        $cma_hooks = find_all_hooks('systems','content_meta_aware')+find_all_hooks('systems','resource_meta_aware');
+        $cma_hooks = find_all_hooks('systems', 'content_meta_aware') + find_all_hooks('systems', 'resource_meta_aware');
         require_code('content');
         $var = array();
         foreach (array_keys($cma_hooks) as $hook) { // Find 'var' hooks, for content
@@ -98,7 +99,7 @@ class occle_fs
     public function _start_pwd()
     {
         // Fetch the pwd from a cookie, or generate a new one
-        if (array_key_exists('occle_dir',$_COOKIE)) {
+        if (array_key_exists('occle_dir', $_COOKIE)) {
             if (get_magic_quotes_gpc()) {
                 $_COOKIE['occle_dir'] = stripslashes($_COOKIE['occle_dir']);
             }
@@ -106,7 +107,7 @@ class occle_fs
         } else {
             $default_dir = array();
             require_code('users_active_actions');
-            ocp_setcookie('occle_dir',$this->_pwd_to_string($default_dir));
+            ocp_setcookie('occle_dir', $this->_pwd_to_string($default_dir));
             return $default_dir;
         }
     }
@@ -118,34 +119,34 @@ class occle_fs
      * @param  boolean                  Whether to use full paths
      * @return ~array                   Directory contents (false: failure)
      */
-    public function _get_current_dir_contents($dir = null,$full_paths = false)
+    public function _get_current_dir_contents($dir = null, $full_paths = false)
     {
         if (is_null($dir)) {
             $dir = $this->pwd;
         }
 
-        if (strpos(implode('/',$dir),'*') !== false) { // Handle wildcards
+        if (strpos(implode('/', $dir), '*') !== false) { // Handle wildcards
             $end_bit = array_pop($dir); // Remove last element
-            $dir_remaining = implode('/',$dir);
+            $dir_remaining = implode('/', $dir);
             if ($dir_remaining == '') {
                 $dir_remaining = '/';
             }
 
             $ret = array();
-            if (strpos($dir_remaining,'*') !== false) { // Showing everything underneath any outcome of the wildcards of directories paths
-                $before = $this->_get_current_dir_contents($dir,true);
+            if (strpos($dir_remaining, '*') !== false) { // Showing everything underneath any outcome of the wildcards of directories paths
+                $before = $this->_get_current_dir_contents($dir, true);
                 foreach ($before as $entry) {
-                    $_ret = $this->_get_current_dir_contents(array_merge(explode('/',$entry[0]),array($end_bit)),$full_paths);
+                    $_ret = $this->_get_current_dir_contents(array_merge(explode('/', $entry[0]), array($end_bit)), $full_paths);
                     if ($_ret !== false) {
-                        $ret = array_merge($ret,$_ret);
+                        $ret = array_merge($ret, $_ret);
                     }
                 }
             } else { // Filtering everything under a directory by a wildcard
-                $before = $this->_get_current_dir_contents($dir,$full_paths);
+                $before = $this->_get_current_dir_contents($dir, $full_paths);
 
                 foreach ($before as $entry) {
-                    if (simulated_wildcard_match($entry[0],$end_bit,true)) {
-                        $entry[0] = preg_replace('#^.*/#','',$entry[0]);
+                    if (simulated_wildcard_match($entry[0], $end_bit, true)) {
+                        $entry[0] = preg_replace('#^.*/#', '', $entry[0]);
                         $ret[] = $entry;
                     }
                 }
@@ -156,17 +157,17 @@ class occle_fs
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $current_dir = $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$dir);
+        $current_dir = $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $dir);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            $current_dir = $object->listing($meta_dir,$meta_root_node,$this);
+            $current_dir = $object->listing($meta_dir, $meta_root_node, $this);
 
             if ($full_paths) {
                 foreach ($current_dir as $i => $d) {
-                    $current_dir[$i][0] = implode('/',$dir) . '/' . $d[0];
+                    $current_dir[$i][0] = implode('/', $dir) . '/' . $d[0];
                 }
             }
         }
@@ -186,13 +187,13 @@ class occle_fs
             return array();
         }
         $absolute = ($pwd[0] == '/');
-        $_pwd = explode('/',$pwd);
+        $_pwd = explode('/', $pwd);
         if ($absolute) {
             $target_directory = array();
         } else {
             $target_directory = $this->pwd;
         }
-        return $this->_merge_pwds($target_directory,$_pwd);
+        return $this->_merge_pwds($target_directory, $_pwd);
     }
 
     /**
@@ -202,7 +203,7 @@ class occle_fs
      * @param  array                    Non-absolute path
      * @return array                    Merged path
      */
-    public function _merge_pwds($pwd1,$pwd2)
+    public function _merge_pwds($pwd1, $pwd2)
     {
         // Merge two array-form pwds, assuming the former is absolute and the latter isn't
         $target_directory = $pwd1;
@@ -246,8 +247,8 @@ class occle_fs
     public function _get_filename($filename)
     {
         // Make sure no directories are included with the filename
-        $parts = explode('/',$filename);
-        return $parts[count($parts)-1];
+        $parts = explode('/', $filename);
+        return $parts[count($parts) - 1];
     }
 
     /**
@@ -314,7 +315,7 @@ class occle_fs
      * @param  ?array                   Directory (NULL: current directory is used)
      * @return ~array                   Current directory contents (false: error)
      */
-    public function _discern_meta_dir(&$meta_dir,&$meta_root_node,&$meta_root_node_type,$target_dir = null)
+    public function _discern_meta_dir(&$meta_dir, &$meta_root_node, &$meta_root_node_type, $target_dir = null)
     {
         // Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
         $inspected_dir = $this->_convert_meta_dir_to_detailed_dir($this->occle_fs); // Start at the root
@@ -328,7 +329,7 @@ class occle_fs
         foreach ($target_dir as $section_no => $section) { // For each component in our path
             unset($meta_dir[$section_no]); // Okay so we're still not under the meta-dir, so actually this $section_no is not a part of the meta-dir
 
-            if (!array_key_exists($section,$inspected_dir)) {
+            if (!array_key_exists($section, $inspected_dir)) {
                 return false; // Cannot find the directory
             }
 
@@ -381,10 +382,10 @@ class occle_fs
         foreach ($entries as $entry) {
             $out[] = array(
                 'FILENAME' => $entry[0],
-                'FILESIZE' => is_null($entry[2])?'':clean_file_size($entry[2]),
-                '_FILESIZE' => is_null($entry[2])?'':strval($entry[2]),
-                'MTIME' => is_null($entry[3])?'':date('Y-m-d H:i',$entry[3]),
-                '_MTIME' => is_null($entry[3])?'':strval($entry[3]),
+                'FILESIZE' => is_null($entry[2]) ? '' : clean_file_size($entry[2]),
+                '_FILESIZE' => is_null($entry[2]) ? '' : strval($entry[2]),
+                'MTIME' => is_null($entry[3]) ? '' : date('Y-m-d H:i', $entry[3]),
+                '_MTIME' => is_null($entry[3]) ? '' : strval($entry[3]),
             );
         }
         return $out;
@@ -417,7 +418,7 @@ class occle_fs
         // Return an array list of all the directories and files in the pwd
         $current_dir_contents = $this->_get_current_dir_contents($dir);
         if ($current_dir_contents === false) {
-            return array(array(),array());
+            return array(array(), array());
         }
 
         $directories = array();
@@ -437,7 +438,7 @@ class occle_fs
         asort($directories);
         asort($files);
 
-        return array($directories,$files);
+        return array($directories, $files);
     }
 
     /**
@@ -451,7 +452,7 @@ class occle_fs
      * @param  ?array                   Directory (NULL: current directory is used)
      * @return array                    The search results
      */
-    public function search($pattern,$regexp = false,$recursive = false,$files = true,$directories = false,$dir = null)
+    public function search($pattern, $regexp = false, $recursive = false, $files = true, $directories = false, $dir = null)
     {
         // Search!
         $current_dir_contents = $this->listing($dir);
@@ -467,7 +468,7 @@ class occle_fs
 
         foreach ($current_dir_contents[0/*directories*/] as $directory) {
             if ($directories) {
-                if (($regexp) && (preg_match($pattern,$directory[0]))) {
+                if (($regexp) && (preg_match($pattern, $directory[0]))) {
                     $output_directories[] = $dir_string . $directory[0] . '/';
                 } elseif ((!$regexp) && ($pattern == $directory[0])) {
                     $output_directories[] = $dir_string . $directory[0] . '/';
@@ -476,15 +477,15 @@ class occle_fs
             if ($recursive) {
                 $temp_dir = $dir;
                 $temp_dir[] = $directory[0];
-                $temp = $this->search($pattern,$regexp,$recursive,$files,$directories,$temp_dir);
-                $output_directories = array_merge($output_directories,$temp[0]);
-                $output_files = array_merge($output_files,$temp[1]);
+                $temp = $this->search($pattern, $regexp, $recursive, $files, $directories, $temp_dir);
+                $output_directories = array_merge($output_directories, $temp[0]);
+                $output_files = array_merge($output_files, $temp[1]);
             }
         }
 
         if ($files) {
             foreach ($current_dir_contents[1/*files*/] as $file) {
-                if (($regexp) && (preg_match($pattern,$file[0]))) {
+                if (($regexp) && (preg_match($pattern, $file[0]))) {
                     $output_files[] = $dir_string . $file[0];
                 } elseif ((!$regexp) && ($pattern == $file[0])) {
                     $output_files[] = $dir_string . $file[0];
@@ -496,7 +497,7 @@ class occle_fs
         asort($output_directories);
         asort($output_files);
 
-        return array($output_directories,$output_files);
+        return array($output_directories, $output_files);
     }
 
     /**
@@ -511,7 +512,7 @@ class occle_fs
         if ($this->_is_dir($target_directory)) {
             $this->pwd = $target_directory;
             require_code('users_active_actions');
-            ocp_setcookie('occle_dir',$this->_pwd_to_string($target_directory));
+            ocp_setcookie('occle_dir', $this->_pwd_to_string($target_directory));
 
             return true;
         } else {
@@ -531,13 +532,13 @@ class occle_fs
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$directory);
+        $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $directory);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            return $object->make_directory($meta_dir,$meta_root_node,$directory_name,$this);
+            return $object->make_directory($meta_dir, $meta_root_node, $directory_name, $this);
         } else {
             return false;
         }
@@ -551,26 +552,26 @@ class occle_fs
      */
     public function remove_directory($directory)
     {
-        $directory_name = $directory[count($directory)-1];
+        $directory_name = $directory[count($directory) - 1];
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$directory);
+        $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $directory);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            $listing = $object->listing($meta_dir,$meta_root_node,$directory,$this);
+            $listing = $object->listing($meta_dir, $meta_root_node, $directory, $this);
 
             // Remove contents
             foreach ($listing as $value) {
                 switch ($value[1]) {
                     case OCCLEFS_FILE:
-                        $object->remove_file($directory,$meta_root_node,$value[0],$this);
+                        $object->remove_file($directory, $meta_root_node, $value[0], $this);
                         break;
                     case OCCLEFS_DIR:
-                        $this->remove_directory(array_merge($directory,array($value[0]))); // Recurse
+                        $this->remove_directory(array_merge($directory, array($value[0]))); // Recurse
                         break;
                 }
             }
@@ -578,7 +579,7 @@ class occle_fs
             array_pop($meta_dir);
 
             // Remove directory itself
-            return $object->remove_directory($meta_dir,$meta_root_node,$directory_name,$this);
+            return $object->remove_directory($meta_dir, $meta_root_node, $directory_name, $this);
         } else {
             return false;
         }
@@ -591,12 +592,12 @@ class occle_fs
      * @param  array                    The destination path
      * @return boolean                  Success?
      */
-    public function copy_directory($to_copy,$destination)
+    public function copy_directory($to_copy, $destination)
     {
         $directory_contents = $this->_get_current_dir_contents($to_copy);
         $success = true;
 
-        $dir_name = $to_copy[count($to_copy)-1];
+        $dir_name = $to_copy[count($to_copy) - 1];
         $_destination = $destination;
         $_destination[] = $dir_name;
 
@@ -611,10 +612,10 @@ class occle_fs
 
             if ($entry[1] == OCCLEFS_DIR) {
                 $_to_copy_path[] = $entry[0];
-                $success = ($success)?$this->copy_directory($_to_copy_path,$_destination):false;
+                $success = ($success) ? $this->copy_directory($_to_copy_path, $_destination) : false;
             } elseif ($entry[1] == OCCLEFS_FILE) {
                 $_to_copy_path[] = $entry[0];
-                $success = ($success)?$this->copy_file($_to_copy_path,$_destination):false;
+                $success = ($success) ? $this->copy_file($_to_copy_path, $_destination) : false;
             }
         }
 
@@ -628,30 +629,30 @@ class occle_fs
      * @param  array                    The destination path
      * @return boolean                  Success?
      */
-    public function move_directory($to_move,$destination)
+    public function move_directory($to_move, $destination)
     {
         $to_move_meta_dir = array();
         $to_move_meta_root_node = '';
         $to_move_meta_root_node_type = '';
-        $this->_discern_meta_dir($to_move_meta_dir,$to_move_meta_root_node,$to_move_meta_root_node_type,$to_move);
+        $this->_discern_meta_dir($to_move_meta_dir, $to_move_meta_root_node, $to_move_meta_root_node_type, $to_move);
         require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($to_move_meta_root_node_type));
         $to_move_object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($to_move_meta_root_node_type));
 
         $destination_meta_dir = array();
         $destination_meta_root_node = '';
         $destination_meta_root_node_type = '';
-        $this->_discern_meta_dir($destination_meta_dir,$destination_meta_root_node,$destination_meta_root_node_type,$destination);
+        $this->_discern_meta_dir($destination_meta_dir, $destination_meta_root_node, $destination_meta_root_node_type, $destination);
         require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($destination_meta_root_node_type));
         $destination_object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($destination_meta_root_node_type));
 
         if ($destination_meta_root_node == $to_move_meta_root_node_type) {
-            if (method_exists($to_move_object,'folder_save')) { // Resource-fs wants a better renaming technique
+            if (method_exists($to_move_object, 'folder_save')) { // Resource-fs wants a better renaming technique
                 $new_label = array_pop($destination_meta_dir);
-                return $to_move_object->folder_save(array_pop($to_move_meta_dir),implode('/',$destination_meta_dir),array('label' => $new_label));
+                return $to_move_object->folder_save(array_pop($to_move_meta_dir), implode('/', $destination_meta_dir), array('label' => $new_label));
             }
         }
 
-        $success = $this->copy_directory($to_move,$destination);
+        $success = $this->copy_directory($to_move, $destination);
         if ($success) {
             return $this->remove_directory($to_move);
         } else {
@@ -666,11 +667,11 @@ class occle_fs
      * @param  array                    The destination path
      * @return boolean                  Success?
      */
-    public function copy_file($to_copy,$destination)
+    public function copy_file($to_copy, $destination)
     {
         $contents = $this->read_file($to_copy);
-        $destination[] = $to_copy[count($to_copy)-1];
-        return $this->write_file($destination,$contents) !== false;
+        $destination[] = $to_copy[count($to_copy) - 1];
+        return $this->write_file($destination, $contents) !== false;
     }
 
     /**
@@ -680,30 +681,30 @@ class occle_fs
      * @param  array                    The destination path
      * @return boolean                  Success?
      */
-    public function move_file($to_move,$destination)
+    public function move_file($to_move, $destination)
     {
         $to_move_meta_dir = array();
         $to_move_meta_root_node = '';
         $to_move_meta_root_node_type = '';
-        $this->_discern_meta_dir($to_move_meta_dir,$to_move_meta_root_node,$to_move_meta_root_node_type,$to_move);
+        $this->_discern_meta_dir($to_move_meta_dir, $to_move_meta_root_node, $to_move_meta_root_node_type, $to_move);
         require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($to_move_meta_root_node_type));
         $to_move_object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($to_move_meta_root_node_type));
 
         $destination_meta_dir = array();
         $destination_meta_root_node = '';
         $destination_meta_root_node_type = '';
-        $this->_discern_meta_dir($destination_meta_dir,$destination_meta_root_node,$destination_meta_root_node_type,$destination);
+        $this->_discern_meta_dir($destination_meta_dir, $destination_meta_root_node, $destination_meta_root_node_type, $destination);
         require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($destination_meta_root_node_type));
         $destination_object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($destination_meta_root_node_type));
 
         if ($destination_meta_root_node == $to_move_meta_root_node_type) {
-            if (method_exists($to_move_object,'file_save')) { // Resource-fs wants a better renaming technique
-                $new_label = basename(array_pop($destination_meta_dir),'.' . RESOURCEFS_DEFAULT_EXTENSION);
-                return $to_move_object->file_save(array_pop($to_move_meta_dir),implode('/',$destination_meta_dir),array('label' => $new_label));
+            if (method_exists($to_move_object, 'file_save')) { // Resource-fs wants a better renaming technique
+                $new_label = basename(array_pop($destination_meta_dir), '.' . RESOURCEFS_DEFAULT_EXTENSION);
+                return $to_move_object->file_save(array_pop($to_move_meta_dir), implode('/', $destination_meta_dir), array('label' => $new_label));
             }
         }
 
-        $success = $this->copy_file($to_move,$destination);
+        $success = $this->copy_file($to_move, $destination);
         if ($success) {
             return $this->remove_file($to_move);
         }
@@ -722,13 +723,13 @@ class occle_fs
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$to_remove);
+        $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $to_remove);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            return $object->remove_file($meta_dir,$meta_root_node,$filename,$this);
+            return $object->remove_file($meta_dir, $meta_root_node, $filename, $this);
         } else {
             return false;
         }
@@ -746,13 +747,13 @@ class occle_fs
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$to_read);
+        $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $to_read);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            return $object->read_file($meta_dir,$meta_root_node,$filename,$this);
+            return $object->read_file($meta_dir, $meta_root_node, $filename, $this);
         } else {
             return false;
         }
@@ -765,19 +766,19 @@ class occle_fs
      * @param  string                   The contents to write
      * @return boolean                  Success?
      */
-    public function write_file($to_write,$contents)
+    public function write_file($to_write, $contents)
     {
         $filename = array_pop($to_write);
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$to_write);
+        $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $to_write);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            return $object->write_file($meta_dir,$meta_root_node,$filename,$contents,$this) !== false;
+            return $object->write_file($meta_dir, $meta_root_node, $filename, $contents, $this) !== false;
         } else {
             return false;
         }
@@ -790,20 +791,20 @@ class occle_fs
      * @param  string                   The contents to append
      * @return boolean                  Success?
      */
-    public function append_file($to_append,$contents)
+    public function append_file($to_append, $contents)
     {
         $filename = array_pop($to_append);
         $meta_dir = array();
         $meta_root_node = '';
         $meta_root_node_type = '';
-        $this->_discern_meta_dir($meta_dir,$meta_root_node,$meta_root_node_type,$to_append);
+        $this->_discern_meta_dir($meta_dir, $meta_root_node, $meta_root_node_type, $to_append);
 
         if (!is_null($meta_root_node)) {
             // We're underneath a meta root node (a directory which is generated dynamically)
             require_code('hooks/systems/occle_fs/' . filter_naughty_harsh($meta_root_node_type));
             $object = object_factory('Hook_occle_fs_' . filter_naughty_harsh($meta_root_node_type));
-            $old_contents = $object->read_file($meta_dir,$meta_root_node,$filename,$this);
-            return $object->write_file($meta_dir,$meta_root_node,$filename,$old_contents . $contents,$this);
+            $old_contents = $object->read_file($meta_dir, $meta_root_node, $filename, $this);
+            return $object->write_file($meta_dir, $meta_root_node, $filename, $old_contents . $contents, $this);
         } else {
             return false;
         }

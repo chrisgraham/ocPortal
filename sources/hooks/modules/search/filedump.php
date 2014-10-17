@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_search_filedump
 {
     /**
@@ -29,18 +28,18 @@ class Hook_search_filedump
     public function info($check_permissions = true)
     {
         if (!module_installed('filedump')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'filedump')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'filedump')) {
+                return null;
             }
         }
 
         require_code('files2');
         if (count(get_directory_contents(get_custom_file_base() . '/uploads/filedump')) == 0) {
-            return NULL;
+            return null;
         }
 
         require_lang('filedump');
@@ -72,7 +71,7 @@ class Hook_search_filedump
      */
     public function ajax_tree()
     {
-        return array('choose_filedump_file',array('compound_list' => false,'folder' => true));
+        return array('choose_filedump_file', array('compound_list' => false, 'folder' => true));
     }
 
     /**
@@ -98,7 +97,7 @@ class Hook_search_filedump
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         require_lang('zones');
 
@@ -113,7 +112,7 @@ class Hook_search_filedump
             $search_under = '';
         }
 
-        $files = get_directory_contents(get_custom_file_base() . '/uploads/filedump/' . (($search_under == '')?'':($search_under . '/')));
+        $files = get_directory_contents(get_custom_file_base() . '/uploads/filedump/' . (($search_under == '') ? '' : ($search_under . '/')));
         $_rows = $GLOBALS['SITE_DB']->query_select('filedump');
         $rows = array();
         foreach ($_rows as $row) {
@@ -127,21 +126,21 @@ class Hook_search_filedump
             }
 
             $path = get_custom_file_base() . '/uploads/filedump/' . $_path;
-            if (filemtime($path)<$cutoff) {
+            if (filemtime($path) < $cutoff) {
                 continue;
             }
-            if (in_memory_search_match(array('content' => $content,'conjunctive_operator' => $boolean_operator),$path)) {
-                $caption = array_key_exists($_path,$rows)?$rows[$_path]:$_path;
-                $dirs = explode('/',dirname($_path));
+            if (in_memory_search_match(array('content' => $content, 'conjunctive_operator' => $boolean_operator), $path)) {
+                $caption = array_key_exists($_path, $rows) ? $rows[$_path] : $_path;
+                $dirs = explode('/', dirname($_path));
 
                 $pre = '';
                 $file_breadcrumbs = new ocp_tempcode();
-                $breadcrumbs_url = build_url(array('page' => 'filedump','place' => $pre . '/'),get_module_zone('filedump'));
-                $file_breadcrumbs->attach(hyperlink($breadcrumbs_url,do_lang('ROOT')));
+                $breadcrumbs_url = build_url(array('page' => 'filedump', 'place' => $pre . '/'), get_module_zone('filedump'));
+                $file_breadcrumbs->attach(hyperlink($breadcrumbs_url, do_lang('ROOT')));
                 foreach ($dirs as $dir) {
-                    $file_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR',array('_GUID' => '7ee62e230d53344a7d9667dc59be21c4')));
-                    $breadcrumbs_url = build_url(array('page' => 'filedump','place' => $pre . $dir . '/'),get_module_zone('filedump'));
-                    $file_breadcrumbs->attach(hyperlink($breadcrumbs_url,$dir));
+                    $file_breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR', array('_GUID' => '7ee62e230d53344a7d9667dc59be21c4')));
+                    $breadcrumbs_url = build_url(array('page' => 'filedump', 'place' => $pre . $dir . '/'), get_module_zone('filedump'));
+                    $file_breadcrumbs->attach(hyperlink($breadcrumbs_url, $dir));
 
                     $pre .= $dir . '/';
                 }
@@ -150,12 +149,12 @@ class Hook_search_filedump
 
                 require_code('images');
                 if (!is_image($url)) {
-                    $tpl = paragraph(hyperlink($url,escape_html($caption),true),'dfdsfu09wl;f');
+                    $tpl = paragraph(hyperlink($url, escape_html($caption), true), 'dfdsfu09wl;f');
                     if (!$file_breadcrumbs->is_empty()) {
-                        $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN',$file_breadcrumbs)));
+                        $tpl->attach(paragraph(do_lang_tempcode('LOCATED_IN', $file_breadcrumbs)));
                     }
 
-                    $out[$i]['template'] = do_template('SIMPLE_PREVIEW_BOX',array(
+                    $out[$i]['template'] = do_template('SIMPLE_PREVIEW_BOX', array(
                         '_GUID' => '51bc0cf751f4ccbd0b7f1a247b092368',
                         'ID' => $_path,
                         'TITLE' => basename($_path),
@@ -166,9 +165,9 @@ class Hook_search_filedump
                         @set_time_limit(5);
                     }
 
-                    $tpl = do_image_thumb($url,$caption,true,false,null,null,true);
+                    $tpl = do_image_thumb($url, $caption, true, false, null, null, true);
 
-                    $out[$i]['template'] = do_template('SIMPLE_PREVIEW_BOX',array(
+                    $out[$i]['template'] = do_template('SIMPLE_PREVIEW_BOX', array(
                         '_GUID' => '61bc0cf751f4ccbd0b7f1a247b092368',
                         'TITLE' => basename($_path),
                         'SUMMARY' => $tpl,

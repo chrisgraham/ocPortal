@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_forum_show_personal_stats_topics
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_forum_show_personal_stats_topics
      */
     public function get_default()
     {
-        return ((has_no_forum()) || (get_forum_type() != 'ocf'))?null:'1';
+        return ((has_no_forum()) || (get_forum_type() != 'ocf')) ? null : '1';
     }
 }

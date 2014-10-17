@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_validation
  */
-
 class Hook_config_validation_javascript
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_validation_javascript
      */
     public function get_default()
     {
-        return NULL; // Way too slow, and unlikely to be accurate with quickly-evolving JS standards
+        return null; // Way too slow, and unlikely to be accurate with quickly-evolving JS standards
     }
 }

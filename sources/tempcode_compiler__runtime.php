@@ -24,8 +24,8 @@
 function init__tempcode_compiler__runtime()
 {
     if (!defined('SYMBOL_PARSE_NAME')) {
-        define('SYMBOL_PARSE_NAME',0);
-        define('SYMBOL_PARSE_PARAM',1);
+        define('SYMBOL_PARSE_NAME', 0);
+        define('SYMBOL_PARSE_PARAM', 1);
     }
 }
 
@@ -40,21 +40,22 @@ function init__tempcode_compiler__runtime()
  * @param  ?ID_TEXT                     The language it is for (NULL: current language)
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode_static(/*&*/$text,$symbol_pos = 0,$inside_directive = false,$codename = '',$theme = null,$lang = null)
+function template_to_tempcode_static(/*&*/
+    $text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null)
 {
     if (is_null($theme)) {
-        $theme = is_null($GLOBALS['FORUM_DRIVER'])?'default':$GLOBALS['FORUM_DRIVER']->get_theme();
+        $theme = is_null($GLOBALS['FORUM_DRIVER']) ? 'default' : $GLOBALS['FORUM_DRIVER']->get_theme();
     }
 
     $out = new ocp_tempcode();
     $continuation = '';
     $symbol_len = strlen($text);
     while (true) {
-        $jump_to = strpos($text,'{',$symbol_pos);
-        $jump_to_b = strpos($text,'\\',$symbol_pos);
-        if (($jump_to_b !== false) && (($jump_to === false) || ($jump_to_b<$jump_to))) {
-            $continuation .= substr($text,$symbol_pos,$jump_to_b-$symbol_pos);
-            $symbol_pos = $jump_to_b+1;
+        $jump_to = strpos($text, '{', $symbol_pos);
+        $jump_to_b = strpos($text, '\\', $symbol_pos);
+        if (($jump_to_b !== false) && (($jump_to === false) || ($jump_to_b < $jump_to))) {
+            $continuation .= substr($text, $symbol_pos, $jump_to_b - $symbol_pos);
+            $symbol_pos = $jump_to_b + 1;
             $nn = @$text[$symbol_pos];
 
             if (($nn == '{') || ($nn == '}') || ($nn == ',')) {
@@ -66,43 +67,43 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos = 0,$inside_directiv
         }
 
         if ($jump_to === false) {
-            $continuation .= substr($text,$symbol_pos);
+            $continuation .= substr($text, $symbol_pos);
             break;
         } else { // We're opening a variable if we meet a { followed by [\dA-Z\$\+\!\_]
-            $continuation .= substr($text,$symbol_pos,$jump_to-$symbol_pos);
+            $continuation .= substr($text, $symbol_pos, $jump_to - $symbol_pos);
 
-            $symbol_pos = $jump_to+1;
+            $symbol_pos = $jump_to + 1;
 
-            $nn_pre = ($symbol_pos >= 2)?$text[$symbol_pos-2]:'';
+            $nn_pre = ($symbol_pos >= 2) ? $text[$symbol_pos - 2] : '';
             $nn = @$text[$symbol_pos];
-            if ((preg_match('#[\dA-Z\$\+\!\_]#',$nn) != 0) && ($nn_pre !== '\\')) {
+            if ((preg_match('#[\dA-Z\$\+\!\_]#', $nn) != 0) && ($nn_pre !== '\\')) {
                 if ($continuation != '') {
                     $out->attach($continuation);
                 }
                 $continuation = '';
-                $ret = read_single_uncompiled_variable($text,$symbol_pos,$symbol_len,$theme);
+                $ret = read_single_uncompiled_variable($text, $symbol_pos, $symbol_len, $theme);
                 if ($ret[1] == TC_DIRECTIVE) {
                     if ($ret[2] == 'START') {
-                        $temp = template_to_tempcode_static($text,$symbol_pos,true);
+                        $temp = template_to_tempcode_static($text, $symbol_pos, true);
                         if (is_array($temp)) {
-                            list($_out,$symbol_pos) = $temp;
-                            if ($ret[3] === NULL) { // Error, but don't die
+                            list($_out, $symbol_pos) = $temp;
+                            if ($ret[3] === null) { // Error, but don't die
                                 $ret[3][] = $_out; // The inside of the directive becomes the final parameter
-                                $out->bits[] = array($ret[0],TC_DIRECTIVE,'',$ret[3]);
+                                $out->bits[] = array($ret[0], TC_DIRECTIVE, '', $ret[3]);
                             } else {
                                 $name = array_shift($ret[3]);
                                 $ret[3][] = $_out; // The inside of the directive becomes the final parameter
                                 $directive_type = $name->evaluate();
-                                $out->bits[] = array($ret[0],TC_DIRECTIVE,$directive_type,$ret[3]);
+                                $out->bits[] = array($ret[0], TC_DIRECTIVE, $directive_type, $ret[3]);
                             }
                         }
                     } elseif ($ret[2] == 'END') {
                         if ($inside_directive) {
-                            return array($out,$symbol_pos);
+                            return array($out, $symbol_pos);
                         }
                         if (!$GLOBALS['LAX_COMCODE']) {
                             require_code('site');
-                            attach_message(make_string_tempcode(do_lang('UNMATCHED_DIRECTIVE') . ' just before... ' . substr($text,$symbol_pos,100) . ' [' . $codename . ']'),'warn');
+                            attach_message(make_string_tempcode(do_lang('UNMATCHED_DIRECTIVE') . ' just before... ' . substr($text, $symbol_pos, 100) . ' [' . $codename . ']'), 'warn');
                         }
                     } else {
                         $out->bits[] = $ret;
@@ -132,7 +133,7 @@ function template_to_tempcode_static(/*&*/$text,$symbol_pos = 0,$inside_directiv
  * @param  ?ID_TEXT                     The theme it is for (NULL: current theme)
  * @return array                        The tempcode variable array that our variable gets represented of
  */
-function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme = null)
+function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $theme = null)
 {
     if (is_null($theme)) {
         $theme = $GLOBALS['FORUM_DRIVER']->get_theme();
@@ -153,7 +154,8 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
         {
             preg_match('#[^\\\\\{\}\,\+\!\'\$:%\*;\#~\.\^|\&/@=`]*#m',$text,$matches,0,$symbol_pos); // Guarded by $quicker, as only works on newer PHP versions
             $next=$matches[0];
-        } else */$next = '';
+        } else */
+        $next = '';
         if ($next != '') {
             $symbol_pos += strlen($next);
         } else {
@@ -169,7 +171,7 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
                             $param[] = '0';
                             $param[] = $theme;
                         }
-                        $ret = array($escaped,$type,$name,$param);
+                        $ret = array($escaped, $type, $name, $param);
                         return $ret;
 
                     case ',':
@@ -184,14 +186,14 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
 
                     case '{':
                         if (!$dirty_param) {
-                            $param_string = $param[$params-1];
+                            $param_string = $param[$params - 1];
                             $t = new ocp_tempcode(); // For some very odd reason, PHP 4.3 doesn't allow you to do $param[$params-1]=new ocp_tempcode(); $param[$params-1]->attach($param_string); (causes memory corruption apparently)
                             $t->attach($param_string);
-                            $param[$params-1] = $t;
+                            $param[$params - 1] = $t;
                             $dirty_param = true;
                         }
-                        $ret = read_single_uncompiled_variable($text,$symbol_pos,$symbol_len,$theme);
-                        $param[$params-1]->bits[] = $ret;
+                        $ret = read_single_uncompiled_variable($text, $symbol_pos, $symbol_len, $theme);
+                        $param[$params - 1]->bits[] = $ret;
                         break;
 
                     case '\\':
@@ -201,9 +203,9 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
                         }
                     default:
                         if (!$dirty_param) {
-                            $param[$params-1] .= $next;
+                            $param[$params - 1] .= $next;
                         } else {
-                            $param[$params-1]->attach($next);
+                            $param[$params - 1]->attach($next);
                         }
                 }
                 break;
@@ -227,7 +229,7 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
                 }
                 switch ($next) {
                     case '}':
-                        $ret = array($escaped,$type,$name,null);
+                        $ret = array($escaped, $type, $name, null);
                         return $ret;
 
                     case ',':
@@ -298,7 +300,7 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
                         break;
 
                     case '@':
-                        if (in_array($text[$symbol_pos],array(':','&','/','^',';','~','#','}',','))) {
+                        if (in_array($text[$symbol_pos], array(':', '&', '/', '^', ';', '~', '#', '}', ','))) {
                             $escaped[] = CC_ESCAPED;
                             break;
                         }
@@ -312,16 +314,17 @@ function read_single_uncompiled_variable($text,&$symbol_pos,$symbol_len,$theme =
         if ($symbol_pos >= $symbol_len) {
             if (!$GLOBALS['LAX_COMCODE']) {
                 require_code('site');
-                attach_message(do_lang_tempcode('UNCLOSED_SYMBOL'),'warn');
+                attach_message(do_lang_tempcode('UNCLOSED_SYMBOL'), 'warn');
             }
-            return array(array(),TC_KNOWN,'',null);
+            return array(array(), TC_KNOWN, '', null);
         }
     }
-    return array(array(),TC_KNOWN,'',null);
+    return array(array(), TC_KNOWN, '', null);
 }
 
 /**
  * Static implementation of Tempcode.
+ *
  * @package    core_rich_media
  */
 class ocp_tempcode_static
@@ -348,7 +351,7 @@ class ocp_tempcode_static
      */
     public function parameterless($at)
     {
-        return ((!array_key_exists(3,$this->bits[$at])) || (count($this->bits[$at][3]) == 0));
+        return ((!array_key_exists(3, $this->bits[$at])) || (count($this->bits[$at][3]) == 0));
     }
 
     /**
@@ -358,9 +361,9 @@ class ocp_tempcode_static
      * @param  integer                  Read position
      * @param  integer                  Length of input string
      */
-    public function parse_from(&$code,&$pos,&$len)
+    public function parse_from(&$code, &$pos, &$len)
     {
-        $this->bits = array(read_single_uncompiled_variable($code,$pos,$len));
+        $this->bits = array(read_single_uncompiled_variable($code, $pos, $len));
     }
 
     /**
@@ -369,9 +372,9 @@ class ocp_tempcode_static
      * @param  integer                  Offset to directive
      * @param  tempcode                 New embedment
      */
-    public function set_directive_embedment($at,$set)
+    public function set_directive_embedment($at, $set)
     {
-        $this->bits[$at][3][count($this->bits[$at][3])-1] = $set;
+        $this->bits[$at][3][count($this->bits[$at][3]) - 1] = $set;
     }
 
     /**
@@ -392,13 +395,13 @@ class ocp_tempcode_static
      * @param  ?array                   Extra escaping (NULL: none)
      * @param  boolean                  If we've already merged the children from what we're attaching into the child tree (at bind stage)
      */
-    public function attach($attach,$escape = null,$avoid_children_merge = false)
+    public function attach($attach, $escape = null, $avoid_children_merge = false)
     {
         if ($attach === '') {
             return;
         }
 
-        $last = count($this->bits)-1;
+        $last = count($this->bits) - 1;
 
         if (is_object($attach)) { // Consider it another piece of tempcode
             if (is_null($escape)) {
@@ -408,11 +411,11 @@ class ocp_tempcode_static
 
             foreach ($attach->bits as $bit) {
                 if ($escape != array()) {
-                    $bit[0] = array_merge($escape,$bit[0]);
+                    $bit[0] = array_merge($escape, $bit[0]);
                 }
 
                 // Can we add into another string at our edge
-                if (($last == -1) || ($bit[1] != TC_KNOWN) || ($this->bits[$last][1] != TC_KNOWN) || (($this->bits[$last][0] != $bit[0]) && (((array_merge($bit[0],$this->bits[$last][0])) != $simple_escaped) || (preg_match('#[&<>"\']#',$bit[2]) != 0)))) { // No
+                if (($last == -1) || ($bit[1] != TC_KNOWN) || ($this->bits[$last][1] != TC_KNOWN) || (($this->bits[$last][0] != $bit[0]) && (((array_merge($bit[0], $this->bits[$last][0])) != $simple_escaped) || (preg_match('#[&<>"\']#', $bit[2]) != 0)))) { // No
                     $this->bits[] = $bit;
                     $last++;
                 } else { // Yes
@@ -424,8 +427,8 @@ class ocp_tempcode_static
             if (is_null($escape)) {
                 $escape = array();
             }
-            if (($last == -1) || ($this->bits[$last][1] != TC_KNOWN) || (($this->bits[$last][0] != $escape) && (((array_merge($escape,$this->bits[$last][0])) != array(ENTITY_ESCAPED)) || (preg_match('#[&<>:��"\']#',$attach) != 0)))) { // No
-                $this->bits[] = array($escape,TC_KNOWN,$attach,null);
+            if (($last == -1) || ($this->bits[$last][1] != TC_KNOWN) || (($this->bits[$last][0] != $escape) && (((array_merge($escape, $this->bits[$last][0])) != array(ENTITY_ESCAPED)) || (preg_match('#[&<>:��"\']#', $attach) != 0)))) { // No
+                $this->bits[] = array($escape, TC_KNOWN, $attach, null);
             } else { // Yes
                 $this->bits[$last][2] .= $attach;
             }
@@ -449,7 +452,7 @@ class ocp_tempcode_static
      * @param  mixed                    Whether to escape the tempcode object (children may be recursively escaped regardless if those children/parents are marked to be)
      * @return string                   The evaluated thing. Voila, it's all over!
      */
-    public function evaluate($lang = null,$_escape = false)
+    public function evaluate($lang = null, $_escape = false)
     {
         $empty_array = array();
         $out = '';
@@ -457,11 +460,11 @@ class ocp_tempcode_static
         foreach ($this->bits as $bit) {
             $bit_0 = $bit[0];
             if ($_escape !== false) {
-                array_unshift($bit_0,$_escape);
+                array_unshift($bit_0, $_escape);
             }
 
             if ($bit[1] == TC_KNOWN) { // Just pick up the string
-                apply_tempcode_escaping($bit_0,$bit[2]);
+                apply_tempcode_escaping($bit_0, $bit[2]);
                 $out .= $bit[2];
             } else {
                 $bit_3 = $bit[3];
@@ -473,7 +476,7 @@ class ocp_tempcode_static
                     }
                 }
 
-                $out .= ecv($lang,$bit_0,$bit[1],$bit[2],is_null($bit_3)?array():$bit_3);
+                $out .= ecv($lang, $bit_0, $bit[1], $bit[2], is_null($bit_3) ? array() : $bit_3);
             }
         }
 
@@ -493,77 +496,77 @@ class ocp_tempcode_static
  * @param  ?ID_TEXT                     The theme to cache in (NULL: main theme)
  * @return tempcode                     The compiled tempcode
  */
-function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_orig = null)
+function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $theme_orig = null)
 {
     if (is_null($theme_orig)) {
         $theme_orig = $theme;
     }
 
-    $base_dir = ((($theme == 'default') && (($suffix != '.css') || (strpos($path,'/css_custom') === false)))?get_file_base():get_custom_file_base()) . '/themes/';
+    $base_dir = ((($theme == 'default') && (($suffix != '.css') || (strpos($path, '/css_custom') === false))) ? get_file_base() : get_custom_file_base()) . '/themes/';
 
-    global $CACHE_TEMPLATES,$FILE_ARRAY,$IS_TEMPLATE_PREVIEW_OP_CACHE,$PERSISTENT_CACHE;
+    global $CACHE_TEMPLATES, $FILE_ARRAY, $IS_TEMPLATE_PREVIEW_OP_CACHE, $PERSISTENT_CACHE;
 
     if (isset($FILE_ARRAY)) {
         $html = unixify_line_format(file_array_get('themes/' . $theme . $path . $codename . $suffix));
     } else {
         $_path = $base_dir . filter_naughty($theme . $path . $codename) . $suffix;
-        $tmp = fopen($_path,'rb');
-        @flock($tmp,LOCK_SH);
+        $tmp = fopen($_path, 'rb');
+        @flock($tmp, LOCK_SH);
         $html = unixify_line_format(file_get_contents($_path));
-        @flock($tmp,LOCK_UN);
+        @flock($tmp, LOCK_UN);
         fclose($tmp);
     }
 
-    if (strpos($html,'{$,Parser hint: pure}') !== false) {
-        return make_string_tempcode(preg_replace('#\{\$,.*\}#U','/*no minify*/',$html));
+    if (strpos($html, '{$,Parser hint: pure}') !== false) {
+        return make_string_tempcode(preg_replace('#\{\$,.*\}#U', '/*no minify*/', $html));
     }
 
-    if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html,'.innerHTML') !== false) && (strpos($html,'Parser hint: .innerHTML okay') === false)) {
+    if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($html, '.innerHTML') !== false) && (strpos($html, 'Parser hint: .innerHTML okay') === false)) {
         require_code('site');
-        attach_message('Do not use the .innerHTML property in your JavaScript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.','warn');
+        attach_message('Do not use the .innerHTML property in your JavaScript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.', 'warn');
     }
 
     // Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues
-    if ((substr($html,-1,1) == "\n") && (substr_count($html,"\n") == 1)) {
-        $html = substr($html,0,strlen($html)-1);
+    if ((substr($html, -1, 1) == "\n") && (substr_count($html, "\n") == 1)) {
+        $html = substr($html, 0, strlen($html) - 1);
     }
 
     if ($IS_TEMPLATE_PREVIEW_OP_CACHE) {
-        $test = post_param($codename,null);
+        $test = post_param($codename, null);
         if (!is_null($test)) {
             $html = post_param($test . '_new');
         }
     }
 
-    $result = template_to_tempcode($html,0,false,$codename,$theme,$lang);
+    $result = template_to_tempcode($html, 0, false, $codename, $theme, $lang);
     if (($CACHE_TEMPLATES) && (($suffix == '.tpl') || ($codename == 'no_cache'))) {
         if (!is_null($PERSISTENT_CACHE)) {
-            persistent_cache_set(array('TEMPLATE',$theme,$lang,$_codename),$result->to_assembly(),strpos($path,'default/templates/') !== false);
+            persistent_cache_set(array('TEMPLATE', $theme, $lang, $_codename), $result->to_assembly(), strpos($path, 'default/templates/') !== false);
         } else {
             $path2 = get_custom_file_base() . '/themes/' . $theme_orig . '/templates_cached/' . filter_naughty($lang);
             $_path2 = $path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd';
-            $myfile = @fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
+            $myfile = @fopen($_path2, GOOGLE_APPENGINE ? 'wb' : 'ab');
             if ($myfile === false) {
-                if (@mkdir($path2,0777,true)) {
+                if (@mkdir($path2, 0777, true)) {
                     require_code('files');
-                    fix_permissions($path2,0777);
+                    fix_permissions($path2, 0777);
                 } else {
                     if (file_exists($path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd')) {
-                        warn_exit(do_lang_tempcode('WRITE_ERROR',$path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd'));
+                        warn_exit(do_lang_tempcode('WRITE_ERROR', $path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd'));
                     } else {
-                        warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE',$path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd'));
+                        warn_exit(do_lang_tempcode('WRITE_ERROR_CREATE', $path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd'));
                     }
                 }
 
-                $myfile = @fopen($_path2,GOOGLE_APPENGINE?'wb':'ab');
+                $myfile = @fopen($_path2, GOOGLE_APPENGINE ? 'wb' : 'ab');
             }
 
-            @flock($myfile,LOCK_EX);
+            @flock($myfile, LOCK_EX);
             if (!GOOGLE_APPENGINE) {
-                ftruncate($myfile,0);
+                ftruncate($myfile, 0);
             }
-            fwrite($myfile,$result->to_assembly($lang));
-            @flock($myfile,LOCK_UN);
+            fwrite($myfile, $result->to_assembly($lang));
+            @flock($myfile, LOCK_UN);
             fclose($myfile);
             fix_permissions($path2 . '/' . filter_naughty($_codename) . $suffix . '.tcd');
         }
@@ -584,7 +587,9 @@ function _do_template($theme,$path,$codename,$_codename,$lang,$suffix,$theme_ori
  * @param  boolean                      Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode(/*&*/$text,$symbol_pos = 0,$inside_directive = false,$codename = '',$theme = null,$lang = null,$tolerate_errors = false)
+function template_to_tempcode(/*&*/
+    $text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
 {
-    return template_to_tempcode_static(/*&*/$text,$symbol_pos,$inside_directive,$codename,$theme,$lang);
+    return template_to_tempcode_static(/*&*/
+        $text, $symbol_pos, $inside_directive, $codename, $theme, $lang);
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_attachments_calendar
 {
     /**
@@ -27,27 +26,27 @@ class Hook_attachments_calendar
      * @param  object                   The database connection to check on
      * @return boolean                  Whether there is permission
      */
-    public function run($id,$connection)
+    public function run($id, $connection)
     {
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            if (!has_privacy_access('event',$id)) {
+            if (!has_privacy_access('event', $id)) {
                 return false;
             }
         }
 
-        $info = $connection->query_select('calendar_events',array('e_submitter','e_type'),array('id' => intval($id)),'',1);
-        if (!array_key_exists(0,$info)) {
+        $info = $connection->query_select('calendar_events', array('e_submitter', 'e_type'), array('id' => intval($id)), '', 1);
+        if (!array_key_exists(0, $info)) {
             return false;
         }
 
-        if (!has_category_access(get_member(),'calendar',strval($info[0]['e_type']))) {
+        if (!has_category_access(get_member(), 'calendar', strval($info[0]['e_type']))) {
             return false;
         }
 
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            if (!has_privacy_access('event',strval($id))) {
+            if (!has_privacy_access('event', strval($id))) {
                 return false;
             }
         }

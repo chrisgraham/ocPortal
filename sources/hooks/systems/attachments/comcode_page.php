@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_attachments_comcode_page
 {
     /**
@@ -27,16 +26,16 @@ class Hook_attachments_comcode_page
      * @param  object                   The database connection to check on
      * @return boolean                  Whether there is permission
      */
-    public function run($id,$connection)
+    public function run($id, $connection)
     {
         if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {
             return false;
         }
 
-        $parts = explode(':',$id);
+        $parts = explode(':', $id);
         if (count($parts) != 2) {
             return false;
         }
-        return (has_actual_page_access(get_member(),$parts[1],$parts[0]));
+        return (has_actual_page_access(get_member(), $parts[1], $parts[0]));
     }
 }

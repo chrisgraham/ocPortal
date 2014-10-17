@@ -25,15 +25,15 @@
  */
 function get_num_wiki_pages()
 {
-    $value = get_value_newer_than('num_wiki_pages',time()-60*60*24);
+    $value = get_value_newer_than('num_wiki_pages', time() - 60 * 60 * 24);
 
     if (is_null($value)) {
-        $_value = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages','COUNT(*)');
-        if (!($_value>0)) {
+        $_value = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages', 'COUNT(*)');
+        if (!($_value > 0)) {
             $_value = 0;
         }
         $value = strval($_value);
-        set_value('num_wiki_pages',$value);
+        set_value('num_wiki_pages', $value);
     }
 
     return intval($value);
@@ -46,15 +46,15 @@ function get_num_wiki_pages()
  */
 function get_num_wiki_posts()
 {
-    $value = get_value_newer_than('num_wiki_posts',time()-60*60*24);
+    $value = get_value_newer_than('num_wiki_posts', time() - 60 * 60 * 24);
 
     if (is_null($value)) {
-        $_value = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_posts','COUNT(*)');
-        if (!($_value>0)) {
+        $_value = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_posts', 'COUNT(*)');
+        if (!($_value > 0)) {
             $_value = 0;
         }
         $value = strval($_value);
-        set_value('num_wiki_posts',$value);
+        set_value('num_wiki_posts', $value);
     }
 
     return intval($value);

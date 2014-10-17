@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-
 class Hook_unvalidated_banners
 {
     /**
@@ -28,7 +27,7 @@ class Hook_unvalidated_banners
     public function info()
     {
         if (!module_installed('banners')) {
-            return NULL;
+            return null;
         }
 
         require_lang('banners');

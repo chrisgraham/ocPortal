@@ -45,9 +45,9 @@ class installer_test_set extends ocp_test_case
 
     public function testDoesNotFullycrash()
     {
-        $test = http_download_file(get_base_url() . '/install.php',null,false);
+        $test = http_download_file(get_base_url() . '/install.php', null, false);
         $this->assertTrue($GLOBALS['HTTP_MESSAGE'] == '200');
-        $this->assertTrue(strpos($test,'type="submit"') !== false); // Has start button: meaning something worked
+        $this->assertTrue(strpos($test, 'type="submit"') !== false); // Has start button: meaning something worked
     }
 
     public function testFullInstall()
@@ -57,13 +57,13 @@ class installer_test_set extends ocp_test_case
         // Cleanup old install
         $tables = $GLOBALS['SITE_DB']->query('SHOW TABLES FROM test');
         foreach ($tables as $table) {
-            if (substr($table['Tables_in_test'],0,14) == 'ocp_unit_test_') {
+            if (substr($table['Tables_in_test'], 0, 14) == 'ocp_unit_test_') {
                 $GLOBALS['SITE_DB']->query('DROP TABLE test.' . $table['Tables_in_test']);
             }
         }
 
-        for ($i = 0;$i<2;$i++) { // 1st trial is clean DB, 2nd trial is dirty DB
-            rename(get_file_base() . '/_config.php',get_file_base() . '/_config.php.bak');
+        for ($i = 0; $i < 2; $i++) { // 1st trial is clean DB, 2nd trial is dirty DB
+            rename(get_file_base() . '/_config.php', get_file_base() . '/_config.php.bak');
 
             $settings = array(
                 'default_lang' => 'EN',
@@ -99,10 +99,8 @@ class installer_test_set extends ocp_test_case
 
             $stages = array(
                 array(
-                    array(
-                    ),
-                    array(
-                    ),
+                    array(),
+                    array(),
                 ),
 
                 array(
@@ -191,12 +189,13 @@ class installer_test_set extends ocp_test_case
             );
 
             foreach ($stages as $stage) {
-                list($get,$post) = $stage;
+                list($get, $post) = $stage;
                 $url = get_base_url() . '/install.php?';
                 foreach ($get as $key => $val) {
                     $url .= '&' . urlencode($key) . '=' . urlencode($val);
                 }
-                /*echo */http_download_file($url,null,true,false,'ocPortal',$post);
+                /*echo */
+                http_download_file($url, null, true, false, 'ocPortal', $post);
                 $this->assertTrue($GLOBALS['HTTP_MESSAGE'] == '200');
                 if ($GLOBALS['HTTP_MESSAGE'] != '200') {
                     break;
@@ -204,7 +203,7 @@ class installer_test_set extends ocp_test_case
             }
 
             unlink(get_file_base() . '/_config.php');
-            rename(get_file_base() . '/_config.php.bak',get_file_base() . '/_config.php');
+            rename(get_file_base() . '/_config.php.bak', get_file_base() . '/_config.php');
 
             if ($GLOBALS['HTTP_MESSAGE'] != '200') {
                 break;

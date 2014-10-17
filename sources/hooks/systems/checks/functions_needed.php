@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_check_functions_needed
 {
     /**
@@ -105,12 +104,12 @@ class Hook_check_functions_needed
             is_nan is_finite is_infinite ob_flush array_chunk array_fill array_change_key_case
             exif_read_data var_export
 END;
-        foreach (preg_split('#\s+#',$needed_functions) as $function) {
+        foreach (preg_split('#\s+#', $needed_functions) as $function) {
             if (trim($function) == '') {
                 continue;
             }
-            if (@preg_match('#(\s|,|^)' . preg_quote($function,'#') . '(\s|$|,)#',strtolower(@ini_get('disable_functions') . ',' . ini_get('suhosin.executor.func.blacklist') . ',' . ini_get('suhosin.executor.include.blacklist') . ',' . ini_get('suhosin.executor.eval.blacklist'))) != 0) {
-                $warning[] = do_lang_tempcode('DISABLED_FUNCTION',escape_html($function));
+            if (@preg_match('#(\s|,|^)' . preg_quote($function, '#') . '(\s|$|,)#', strtolower(@ini_get('disable_functions') . ',' . ini_get('suhosin.executor.func.blacklist') . ',' . ini_get('suhosin.executor.include.blacklist') . ',' . ini_get('suhosin.executor.eval.blacklist'))) != 0) {
+                $warning[] = do_lang_tempcode('DISABLED_FUNCTION', escape_html($function));
             }
         }
 

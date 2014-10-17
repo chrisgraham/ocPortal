@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    msn
  */
-
 class Hook_notes_msn
 {
     /**
@@ -27,7 +26,7 @@ class Hook_notes_msn
      */
     public function run($file)
     {
-        if ((strpos($file,'/netlink') !== false) || ($file == 'netlink')) {
+        if ((strpos($file, '/netlink') !== false) || ($file == 'netlink')) {
             decache('side_network');
         }
     }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_call_home
 {
     /**
@@ -48,7 +47,7 @@ class Hook_config_call_home
     public function get_default()
     {
         $test = get_long_value('call_home');
-        if ($test !== NULL) {
+        if ($test !== null) {
             return strval(intval($test));
         }
         return '1';

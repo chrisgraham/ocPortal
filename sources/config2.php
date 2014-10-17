@@ -65,15 +65,17 @@ function _multi_lang()
     }
 
     foreach ($_langs as $lang => $dir) {
-        if (/*optimisation*/is_file((($dir == 'lang_custom')?get_custom_file_base():get_file_base()) . '/' . $dir . '/' . $lang . '/global.ini')) {
+        if (/*optimisation*/
+        is_file((($dir == 'lang_custom') ? get_custom_file_base() : get_file_base()) . '/' . $dir . '/' . $lang . '/global.ini')
+        ) {
             $MULTI_LANG_CACHE = true;
             break;
         }
 
-        $_dir2 = @opendir((($dir == 'lang_custom')?get_custom_file_base():get_file_base()) . '/' . $dir . '/' . $lang);
+        $_dir2 = @opendir((($dir == 'lang_custom') ? get_custom_file_base() : get_file_base()) . '/' . $dir . '/' . $lang);
         if ($_dir2 !== false) {
             while (false !== ($file2 = readdir($_dir2))) {
-                if ((substr($file2,-4) == '.ini') || (substr($file2,-3) == '.po')) {
+                if ((substr($file2, -4) == '.ini') || (substr($file2, -3) == '.po')) {
                     $MULTI_LANG_CACHE = true;
                     break;
                 }
@@ -110,7 +112,7 @@ function get_default_option($name)
  * @param  LONG_TEXT                    The value
  * @param  BINARY                       Whether this was a human-set value
  */
-function set_option($name,$value,$will_be_formally_set = 1)
+function set_option($name, $value, $will_be_formally_set = 1)
 {
     global $CONFIG_OPTIONS_CACHE;
 
@@ -119,7 +121,7 @@ function set_option($name,$value,$will_be_formally_set = 1)
         $ob = object_factory('Hook_config_' . $name);
         $option = $ob->get_details();
 
-        $needs_dereference = ($option['type'] == 'transtext' || $option['type'] == 'transline' || $option['type'] == 'comcodetext' || $option['type'] == 'comcodeline')?1:0;
+        $needs_dereference = ($option['type'] == 'transtext' || $option['type'] == 'transline' || $option['type'] == 'comcodetext' || $option['type'] == 'comcodeline') ? 1 : 0;
 
         $map = array(
             'c_name' => $name,
@@ -128,9 +130,9 @@ function set_option($name,$value,$will_be_formally_set = 1)
             'c_needs_dereference' => $needs_dereference,
         );
         if ($needs_dereference == 1) {
-            $map = insert_lang('c_value_trans',$value,1)+$map;
+            $map = insert_lang('c_value_trans', $value, 1) + $map;
         } else {
-            $map['c_value_trans'] = multi_lang_content()?null:'';
+            $map['c_value_trans'] = multi_lang_content() ? null : '';
         }
 
         $CONFIG_OPTIONS_CACHE[$name] = $map;
@@ -139,7 +141,7 @@ function set_option($name,$value,$will_be_formally_set = 1)
             return;
         } // Don't save in the installer
 
-        $GLOBALS['SITE_DB']->query_insert('config',$map);
+        $GLOBALS['SITE_DB']->query_insert('config', $map);
     } else {
         $needs_dereference = $CONFIG_OPTIONS_CACHE[$name]['c_needs_dereference'];
     }
@@ -147,16 +149,16 @@ function set_option($name,$value,$will_be_formally_set = 1)
     if ($needs_dereference == 1) { // Translated
         $current_value = $CONFIG_OPTIONS_CACHE[$name]['c_value_trans'];
         $map = array('c_set' => $will_be_formally_set);
-        if ($current_value === NULL) {
-            $map += insert_lang('c_value_trans',$value,1);
+        if ($current_value === null) {
+            $map += insert_lang('c_value_trans', $value, 1);
         } else {
-            $map += lang_remap('c_value_trans',$current_value,$value);
+            $map += lang_remap('c_value_trans', $current_value, $value);
         }
-        $GLOBALS['SITE_DB']->query_update('config',$map,array('c_name' => $name),'',1);
+        $GLOBALS['SITE_DB']->query_update('config', $map, array('c_name' => $name), '', 1);
 
-        $CONFIG_OPTIONS_CACHE[$name] = $map+$CONFIG_OPTIONS_CACHE[$name];
+        $CONFIG_OPTIONS_CACHE[$name] = $map + $CONFIG_OPTIONS_CACHE[$name];
     } else { // Not translated
-        $GLOBALS['SITE_DB']->query_update('config',array('c_value' => $value,'c_set' => $will_be_formally_set),array('c_name' => $name),'',1);
+        $GLOBALS['SITE_DB']->query_update('config', array('c_value' => $value, 'c_set' => $will_be_formally_set), array('c_name' => $name), '', 1);
 
         $CONFIG_OPTIONS_CACHE[$name]['c_value'] = $value;
     }
@@ -168,7 +170,7 @@ function set_option($name,$value,$will_be_formally_set = 1)
     // Log it
     if ((function_exists('log_it')) && ($will_be_formally_set == 1)) {
         require_lang('config');
-        log_it('CONFIGURATION',$name,$value);
+        log_it('CONFIGURATION', $name, $value);
     }
 
     // Update persistent cache
@@ -184,16 +186,16 @@ function set_option($name,$value,$will_be_formally_set = 1)
  * @param  SHORT_TEXT                   The name value
  * @param  ID_TEXT                      The type
  */
-function config_update_value_ref($old_setting,$setting,$type)
+function config_update_value_ref($old_setting, $setting, $type)
 {
-    $hooks = find_all_hooks('systems','config');
+    $hooks = find_all_hooks('systems', 'config');
     $all_options = array();
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/config/' . filter_naughty($hook));
         $ob = object_factory('Hook_config_' . $hook);
         $option = $ob->get_details();
         if (($option['type'] == $type) && (get_option($hook) == $old_setting)) {
-            $GLOBALS['FORUM_DB']->query_update('config',array('c_value' => $setting),array('c_name' => $hook),'',1);
+            $GLOBALS['FORUM_DB']->query_update('config', array('c_value' => $setting), array('c_name' => $hook), '', 1);
         }
     }
 }
@@ -206,16 +208,16 @@ function config_update_value_ref($old_setting,$setting,$type)
  */
 function config_option_url($name)
 {
-    $value = get_option($name,true);
+    $value = get_option($name, true);
     if (is_null($value)) {
-        return NULL;
+        return null;
     }
 
     require_code('hooks/systems/config/' . filter_naughty($name));
     $ob = object_factory('Hook_config_' . $name);
     $option = $ob->get_details();
 
-    $_config_url = build_url(array('page' => 'admin_config','type' => 'category','id' => $option['category']),get_module_zone('admin_config'));
+    $_config_url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => $option['category']), get_module_zone('admin_config'));
     $config_url = $_config_url->evaluate();
     $config_url .= '#group_' . $option['group'];
 
@@ -229,13 +231,13 @@ function config_option_url($name)
  */
 function delete_config_option($name)
 {
-    $rows = $GLOBALS['SITE_DB']->query_select('config',array('*'),array('c_name' => $name),'',1);
-    if (array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select('config', array('*'), array('c_name' => $name), '', 1);
+    if (array_key_exists(0, $rows)) {
         $myrow = $rows[0];
         if (($myrow['c_needs_dereference'] == 1) && (is_numeric($myrow['c_value']))) {
             delete_lang($myrow['c_value_trans']);
         }
-        $GLOBALS['SITE_DB']->query_delete('config',array('c_name' => $name),'',1);
+        $GLOBALS['SITE_DB']->query_delete('config', array('c_name' => $name), '', 1);
         /*global $CONFIG_OPTIONS_CACHE;  Don't do this, it will cause problems in some parts of the code
         unset($CONFIG_OPTIONS_CACHE[$name]);*/
     }
@@ -250,9 +252,9 @@ function delete_config_option($name)
  * @param  ID_TEXT                      The old name
  * @param  ID_TEXT                      The new name
  */
-function rename_config_option($old,$new)
+function rename_config_option($old, $new)
 {
-    $GLOBALS['SITE_DB']->query_update('config',array('c_name' => $new),array('c_name' => $old),'',1);
+    $GLOBALS['SITE_DB']->query_update('config', array('c_name' => $new), array('c_name' => $old), '', 1);
     if (function_exists('persistent_cache_delete')) {
         persistent_cache_delete('OPTIONS');
     }

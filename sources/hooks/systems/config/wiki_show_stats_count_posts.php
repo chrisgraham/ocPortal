@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_config_wiki_show_stats_count_posts
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_wiki_show_stats_count_posts
      */
     public function get_default()
     {
-        return addon_installed('stats_block')?'0':null;
+        return addon_installed('stats_block') ? '0' : null;
     }
 }

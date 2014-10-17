@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_sitemap_entry_point extends Hook_sitemap_base
 {
     /**
@@ -28,36 +27,44 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
      */
     public function handles_page_link($page_link)
     {
-        if (preg_match('#^cms:cms_catalogues:add_catalogue:#',$page_link)) {
+        if (preg_match('#^cms:cms_catalogues:add_catalogue:#', $page_link)) {
             return SITEMAP_NODE_HANDLED;
         }
 
         $matches = array();
-        if (preg_match('#^([^:]*):([^:]*):([^:]*)$#',$page_link,$matches) != 0) {
+        if (preg_match('#^([^:]*):([^:]*):([^:]*)$#', $page_link, $matches) != 0) {
             $zone = $matches[1];
             $page = $matches[2];
             $type = $matches[3];
 
-            $details = $this->_request_page_details($page,$zone);
+            $details = $this->_request_page_details($page, $zone);
 
             if ($details !== false) {
                 $path = end($details);
-                if (is_file(get_file_base() . '/' . str_replace('/modules_custom/','/modules/',$path))) {
-                    $path = str_replace('/modules_custom/','/modules/',$path);
+                if (is_file(get_file_base() . '/' . str_replace('/modules_custom/', '/modules/', $path))) {
+                    $path = str_replace('/modules_custom/', '/modules/', $path);
                 }
 
                 if ($details[0] == 'MODULES' || $details[0] == 'MODULES_CUSTOM') {
-                    $functions = extract_module_functions(get_file_base() . '/' . $path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+                    $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points'), array(/*$check_perms=*/
+                            true,/*$member_id=*/
+                            null,/*$support_crosslinks=*/
+                            true,/*$be_deferential=*/
+                            true));
                     if (!is_null($functions[0])) {
-                        if (is_file(get_file_base() . '/' . str_replace('/modules_custom/','/modules/',$path))) {
-                            $path = str_replace('/modules_custom/','/modules/',$path);
-                            $functions = extract_module_functions(get_file_base() . '/' . $path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/true));
+                        if (is_file(get_file_base() . '/' . str_replace('/modules_custom/', '/modules/', $path))) {
+                            $path = str_replace('/modules_custom/', '/modules/', $path);
+                            $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points', 'get_wrapper_icon'), array(/*$check_perms=*/
+                                    true,/*$member_id=*/
+                                    null,/*$support_crosslinks=*/
+                                    true,/*$be_deferential=*/
+                                    true));
                         }
                     }
                     if (!is_null($functions[0])) {
-                        $entry_points = is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
+                        $entry_points = is_array($functions[0]) ? call_user_func_array($functions[0][0], $functions[0][1]) : eval($functions[0]);
 
-                        if ($entry_points !== NULL) {
+                        if ($entry_points !== null) {
                             if (isset($entry_points['misc'])) {
                                 unset($entry_points['misc']);
                             } else {
@@ -94,10 +101,10 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
      * @param  boolean                  Whether to return the structure even if there was a callback. Do not pass this setting through via recursion due to memory concerns, it is used only to gather information to detect and prevent parent/child duplication of default entry points.
      * @return ?array                   Node structure (NULL: working via callback / error).
      */
-    public function get_node($page_link,$callback = null,$valid_node_types = null,$child_cutoff = null,$max_recurse_depth = null,$recurse_level = 0,$require_permission_support = false,$zone = '_SEARCH',$use_page_groupings = false,$consider_secondary_categories = false,$consider_validation = false,$meta_gather = 0,$row = null,$return_anyway = false)
+    public function get_node($page_link, $callback = null, $valid_node_types = null, $child_cutoff = null, $max_recurse_depth = null, $recurse_level = 0, $require_permission_support = false, $zone = '_SEARCH', $use_page_groupings = false, $consider_secondary_categories = false, $consider_validation = false, $meta_gather = 0, $row = null, $return_anyway = false)
     {
         $matches = array();
-        preg_match('#^([^:]*):([^:]*)(:([^:]*)(:.*|$))?#',$page_link,$matches);
+        preg_match('#^([^:]*):([^:]*)(:([^:]*)(:.*|$))?#', $page_link, $matches);
         $page = $matches[2];
         if (!isset($matches[3])) {
             $matches[3] = '';
@@ -114,33 +121,41 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
         }
         $id = mixed();
         if ($matches[5] != '') {
-            $_id = substr($matches[5],1);
-            if (strpos($_id,'=') === false) {
+            $_id = substr($matches[5], 1);
+            if (strpos($_id, '=') === false) {
                 $id = $_id;
             }
         }
 
         $orig_page_link = $page_link;
-        $this->_make_zone_concrete($zone,$page_link);
+        $this->_make_zone_concrete($zone, $page_link);
 
-        $details = $this->_request_page_details($page,$zone);
+        $details = $this->_request_page_details($page, $zone);
 
         $path = end($details);
 
         if (($type == 'add_catalogue') && ($matches[5] != '') && ($matches[5][1] == '_')) {
             require_code('fields');
-            $entry_points = manage_custom_fields_entry_points(substr($matches[5],2));
+            $entry_points = manage_custom_fields_entry_points(substr($matches[5], 2));
             $entry_point = $entry_points[$orig_page_link];
         } else {
-            $functions = extract_module_functions(get_file_base() . '/' . $path,array('get_entry_points'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/false));
+            $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points'), array(/*$check_perms=*/
+                    true,/*$member_id=*/
+                    null,/*$support_crosslinks=*/
+                    true,/*$be_deferential=*/
+                    false));
             if (is_null($functions[0])) {
-                if (is_file(get_file_base() . '/' . str_replace('/modules_custom/','/modules/',$path))) {
-                    $path = str_replace('/modules_custom/','/modules/',$path);
-                    $functions = extract_module_functions(get_file_base() . '/' . $path,array('get_entry_points','get_wrapper_icon'),array(/*$check_perms=*/true,/*$member_id=*/NULL,/*$support_crosslinks=*/true,/*$be_deferential=*/false));
+                if (is_file(get_file_base() . '/' . str_replace('/modules_custom/', '/modules/', $path))) {
+                    $path = str_replace('/modules_custom/', '/modules/', $path);
+                    $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points', 'get_wrapper_icon'), array(/*$check_perms=*/
+                            true,/*$member_id=*/
+                            null,/*$support_crosslinks=*/
+                            true,/*$be_deferential=*/
+                            false));
                 }
             }
 
-            $entry_points = is_array($functions[0])?call_user_func_array($functions[0][0],$functions[0][1]):eval($functions[0]);
+            $entry_points = is_array($functions[0]) ? call_user_func_array($functions[0][0], $functions[0][1]) : eval($functions[0]);
 
             if ((($matches[5] == '') || ($page == 'cms_catalogues' && $matches[5] != ''/*masquerades as direct content types but fulfilled as normal entry points*/)) && (isset($entry_points[$type]))) {
                 $entry_point = $entry_points[$type];
@@ -150,18 +165,18 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
                 if (isset($entry_points[$orig_page_link])) {
                     $entry_point = $entry_points[$orig_page_link];
                 } else {
-                    $entry_point = array(null,null);
+                    $entry_point = array(null, null);
 
                     // Not actually an entry-point, so maybe something else handles it directly?
                     // Technically this would be better code to have in page_grouping.php, but we don't want to do a scan for entry-points that are easy to find.
-                    $hooks = find_all_hooks('systems','sitemap');
+                    $hooks = find_all_hooks('systems', 'sitemap');
                     foreach (array_keys($hooks) as $_hook) {
                         require_code('hooks/systems/sitemap/' . $_hook);
                         $ob = object_factory('Hook_sitemap_' . $_hook);
                         if ($ob->is_active()) {
                             $is_handled = $ob->handles_page_link($page_link);
                             if ($is_handled == SITEMAP_NODE_HANDLED) {
-                                return $ob->get_node($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,null,$return_anyway);
+                                return $ob->get_node($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, null, $return_anyway);
                             }
                         }
                     }
@@ -177,7 +192,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
         } elseif (is_object($_title)) {
             $title = $_title;
         } else {
-            $title = (preg_match('#^[A-Z\_]+$#',$_title) == 0)?make_string_tempcode($_title):do_lang_tempcode($_title);
+            $title = (preg_match('#^[A-Z\_]+$#', $_title) == 0) ? make_string_tempcode($_title) : do_lang_tempcode($_title);
         }
 
         $struct = array(
@@ -187,21 +202,21 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
             'modifiers' => array(),
             'only_on_page' => '',
             'page_link' => $page_link,
-            'url' => NULL,
+            'url' => null,
             'extra_meta' => array(
-                'description' => NULL,
-                'image' => ($icon === NULL)?null:find_theme_image('icons/24x24/' . $icon),
-                'image_2x' => ($icon === NULL)?null:find_theme_image('icons/48x48/' . $icon),
-                'add_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0)?filectime(get_file_base() . '/' . $path):null,
-                'edit_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0)?filemtime(get_file_base() . '/' . $path):null,
-                'submitter' => NULL,
-                'views' => NULL,
-                'rating' => NULL,
-                'meta_keywords' => NULL,
-                'meta_description' => NULL,
-                'categories' => NULL,
-                'validated' => NULL,
-                'db_row' => NULL,
+                'description' => null,
+                'image' => ($icon === null) ? null : find_theme_image('icons/24x24/' . $icon),
+                'image_2x' => ($icon === null) ? null : find_theme_image('icons/48x48/' . $icon),
+                'add_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0) ? filectime(get_file_base() . '/' . $path) : null,
+                'edit_date' => (($meta_gather & SITEMAP_GATHER_TIMES) != 0) ? filemtime(get_file_base() . '/' . $path) : null,
+                'submitter' => null,
+                'views' => null,
+                'rating' => null,
+                'meta_keywords' => null,
+                'meta_description' => null,
+                'categories' => null,
+                'validated' => null,
+                'db_row' => null,
             ),
             'permissions' => array(
                 array(
@@ -216,34 +231,34 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
                     'is_owned_at_this_level' => false,
                 ),
             ),
-            'children' => NULL,
+            'children' => null,
             'has_possible_children' => false,
 
             // These are likely to be changed in individual hooks
             'sitemap_priority' => SITEMAP_IMPORTANCE_MEDIUM,
             'sitemap_refreshfreq' => 'monthly',
 
-            'privilege_page' => NULL,
+            'privilege_page' => null,
         );
 
-        $row_x = $this->_load_row_from_page_groupings(null,$zone,$page,$type,$id);
+        $row_x = $this->_load_row_from_page_groupings(null, $zone, $page, $type, $id);
         if ($row_x != array()) {
-            if ($_title !== NULL) {
+            if ($_title !== null) {
                 $row_x[0] = null;
             } // We have a better title
-            if ($icon !== NULL) {
+            if ($icon !== null) {
                 $row_x[1] = null;
             } // We have a better icon
-            $this->_ameliorate_with_row($struct,$row_x,$meta_gather);
+            $this->_ameliorate_with_row($struct, $row_x, $meta_gather);
         }
 
         if (!$this->_check_node_permissions($struct)) {
-            return NULL;
+            return null;
         }
 
         // Look for virtual nodes to put under this
         if ($type != 'misc') {
-            $hooks = find_all_hooks('systems','sitemap');
+            $hooks = find_all_hooks('systems', 'sitemap');
             foreach (array_keys($hooks) as $_hook) {
                 require_code('hooks/systems/sitemap/' . $_hook);
                 $ob = object_factory('Hook_sitemap_' . $_hook);
@@ -252,15 +267,15 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
                     if ($is_handled == SITEMAP_NODE_HANDLED_VIRTUALLY) {
                         $struct['has_possible_children'] = true;
 
-                        if (($max_recurse_depth === NULL) || ($recurse_level<$max_recurse_depth)) {
+                        if (($max_recurse_depth === null) || ($recurse_level < $max_recurse_depth)) {
                             $children = array();
 
-                            $virtual_child_nodes = $ob->get_virtual_nodes($page_link,$callback,$valid_node_types,$child_cutoff,$max_recurse_depth,$recurse_level+1,$require_permission_support,$zone,$use_page_groupings,$consider_secondary_categories,$consider_validation,$meta_gather,true);
+                            $virtual_child_nodes = $ob->get_virtual_nodes($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level + 1, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, true);
                             if (is_null($virtual_child_nodes)) {
                                 $virtual_child_nodes = array();
                             }
                             foreach ($virtual_child_nodes as $child_node) {
-                                if ($callback === NULL) {
+                                if ($callback === null) {
                                     $children[$child_node['page_link']] = $child_node;
                                 }
                             }
@@ -272,10 +287,10 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
             }
         }
 
-        if ($callback !== NULL) {
-            call_user_func($callback,$struct);
+        if ($callback !== null) {
+            call_user_func($callback, $struct);
         }
 
-        return ($callback === NULL || $return_anyway)?$struct:null;
+        return ($callback === null || $return_anyway) ? $struct : null;
     }
 }

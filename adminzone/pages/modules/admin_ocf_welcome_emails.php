@@ -66,12 +66,12 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('f_welcome_emails',array(
+            $GLOBALS['SITE_DB']->create_table('f_welcome_emails', array(
                 'id' => '*AUTO',
                 'w_name' => 'SHORT_TEXT',
                 'w_subject' => 'SHORT_TRANS',
@@ -83,10 +83,10 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
             ));
         }
 
-        if ((!is_null($upgrade_from)) && ($upgrade_from<4)) {
-            $GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_usergroup','?AUTO_LINK',null);
-            $GLOBALS['SITE_DB']->add_table_field('f_welcome_emails','w_usergroup_type','ID_TEXT','');
-            $GLOBALS['SITE_DB']->alter_table_field('f_welcome_emails','w_newsletter','?AUTO_LINK');
+        if ((!is_null($upgrade_from)) && ($upgrade_from < 4)) {
+            $GLOBALS['SITE_DB']->add_table_field('f_welcome_emails', 'w_usergroup', '?AUTO_LINK', null);
+            $GLOBALS['SITE_DB']->add_table_field('f_welcome_emails', 'w_usergroup_type', 'ID_TEXT', '');
+            $GLOBALS['SITE_DB']->alter_table_field('f_welcome_emails', 'w_newsletter', '?AUTO_LINK');
         }
 
         $GLOBALS['NO_DB_SCOPE_CHECK'] = false;
@@ -101,19 +101,19 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         if ($be_deferential) {
-            return NULL;
+            return null;
         }
 
         return array(
-            'misc' => array('WELCOME_EMAILS','menu/adminzone/setup/welcome_emails'),
-        )+parent::get_entry_points();
+            'misc' => array('WELCOME_EMAILS', 'menu/adminzone/setup/welcome_emails'),
+        ) + parent::get_entry_points();
     }
 
     public $title;
@@ -125,9 +125,9 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      * @param  ?ID_TEXT                 The screen type to consider for meta-data purposes (NULL: read from environment).
      * @return ?tempcode                Tempcode indicating some kind of exceptional output (NULL: none).
      */
-    public function pre_run($top_level = true,$type = null)
+    public function pre_run($top_level = true, $type = null)
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('ocf_welcome_emails');
         require_css('ocf_admin');
@@ -135,7 +135,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
         set_helper_panel_tutorial('tut_members');
         set_helper_panel_text(comcode_lang_string('DOC_WELCOME_EMAIL_PREVIEW'));
 
-        breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc',do_lang_tempcode('MEMBERS'))));
+        breadcrumb_set_parents(array(array('_SEARCH:admin_ocf_members:misc', do_lang_tempcode('MEMBERS'))));
 
         return parent::pre_run($top_level);
     }
@@ -191,14 +191,14 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
     public function misc()
     {
         if (!cron_installed()) {
-            attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK',escape_html(get_tutorial_url('tut_configuration'))),'warn');
+            attach_message(do_lang_tempcode('CRON_NEEDED_TO_WORK', escape_html(get_tutorial_url('tut_configuration'))), 'warn');
         }
 
         require_code('templates_donext');
-        return do_next_manager(get_screen_title('WELCOME_EMAILS'),comcode_lang_string('DOC_WELCOME_EMAILS'),
+        return do_next_manager(get_screen_title('WELCOME_EMAILS'), comcode_lang_string('DOC_WELCOME_EMAILS'),
             array(
-                array('menu/_generic_admin/add_one',array('_SELF',array('type' => 'ad'),'_SELF'),do_lang('ADD_WELCOME_EMAIL')),
-                array('menu/_generic_admin/edit_one',array('_SELF',array('type' => 'ed'),'_SELF'),do_lang('EDIT_WELCOME_EMAIL')),
+                array('menu/_generic_admin/add_one', array('_SELF', array('type' => 'ad'), '_SELF'), do_lang('ADD_WELCOME_EMAIL')),
+                array('menu/_generic_admin/edit_one', array('_SELF', array('type' => 'ed'), '_SELF'), do_lang('EDIT_WELCOME_EMAIL')),
             ),
             do_lang('WELCOME_EMAILS')
         );
@@ -217,47 +217,47 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      * @set primary secondary ""
      * @return array                    A pair: The input fields, Hidden fields
      */
-    public function get_form_fields($name = '',$subject = '',$text = '',$send_time = 0,$newsletter = null,$usergroup = null,$usergroup_type = '')
+    public function get_form_fields($name = '', $subject = '', $text = '', $send_time = 0, $newsletter = null, $usergroup = null, $usergroup_type = '')
     {
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_line(do_lang_tempcode('NAME'),do_lang_tempcode('DESCRIPTION_NAME_REFERENCE'),'name',$name,true));
-        $fields->attach(form_input_line(do_lang_tempcode('SUBJECT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_SUBJECT'),'subject',$subject,true));
-        $fields->attach(form_input_huge_comcode(do_lang_tempcode('TEXT'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_TEXT'),'text',$text,true));
-        $fields->attach(form_input_integer(do_lang_tempcode('SEND_TIME'),do_lang_tempcode('DESCRIPTION_SEND_TIME'),'send_time',$send_time,true));
+        $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME_REFERENCE'), 'name', $name, true));
+        $fields->attach(form_input_line(do_lang_tempcode('SUBJECT'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_SUBJECT'), 'subject', $subject, true));
+        $fields->attach(form_input_huge_comcode(do_lang_tempcode('TEXT'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_TEXT'), 'text', $text, true));
+        $fields->attach(form_input_integer(do_lang_tempcode('SEND_TIME'), do_lang_tempcode('DESCRIPTION_SEND_TIME'), 'send_time', $send_time, true));
 
-        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '3c9bf61e762eb8715a7fdde214b7eac2','SECTION_HIDDEN' => false,
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '3c9bf61e762eb8715a7fdde214b7eac2', 'SECTION_HIDDEN' => false,
             'TITLE' => do_lang_tempcode('SCOPE'),
         )));
 
         if (addon_installed('newsletter')) {
             require_lang('newsletter');
             $newsletters = new ocp_tempcode();
-            $rows = $GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+            $rows = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
             if (get_forum_type() == 'ocf') {
-                $newsletters->attach(form_input_list_entry('',is_null($newsletter),do_lang_tempcode('WELCOME_EMAIL_MEMBERS')));
+                $newsletters->attach(form_input_list_entry('', is_null($newsletter), do_lang_tempcode('WELCOME_EMAIL_MEMBERS')));
             }
             foreach ($rows as $_newsletter) {
-                $newsletters->attach(form_input_list_entry(strval($_newsletter['id']),$_newsletter['id'] === $newsletter,get_translated_text($_newsletter['title'])));
+                $newsletters->attach(form_input_list_entry(strval($_newsletter['id']), $_newsletter['id'] === $newsletter, get_translated_text($_newsletter['title'])));
             }
             if (!$newsletters->is_empty()) {
-                $fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_NEWSLETTER'),'newsletter',$newsletters,null,false,false));
+                $fields->attach(form_input_list(do_lang_tempcode('NEWSLETTER'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_NEWSLETTER'), 'newsletter', $newsletters, null, false, false));
             }
         }
         if (get_forum_type() == 'ocf') {
             require_code('ocf_groups');
             $usergroups = new ocp_tempcode();
-            $usergroups->attach(form_input_list_entry('',$usergroup === NULL,do_lang_tempcode('NA_EM')));
+            $usergroups->attach(form_input_list_entry('', $usergroup === null, do_lang_tempcode('NA_EM')));
             $usergroups->attach(ocf_create_selection_list_usergroups($usergroup));
-            $fields->attach(form_input_list(do_lang_tempcode('GROUP'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP',escape_html(get_site_name())),'usergroup',$usergroups,null,false,false));
+            $fields->attach(form_input_list(do_lang_tempcode('GROUP'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP', escape_html(get_site_name())), 'usergroup', $usergroups, null, false, false));
 
             $radios = new ocp_tempcode();
-            $radios->attach(form_input_radio_entry('usergroup_type','',true,do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_BOTH')));
-            $radios->attach(form_input_radio_entry('usergroup_type','primary',false,do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_PRIMARY')));
-            $radios->attach(form_input_radio_entry('usergroup_type','secondary',false,do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_SECONDARY')));
-            $fields->attach(form_input_radio(do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE'),do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP_TYPE'),'usergroup_type',$radios,false));
+            $radios->attach(form_input_radio_entry('usergroup_type', '', true, do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_BOTH')));
+            $radios->attach(form_input_radio_entry('usergroup_type', 'primary', false, do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_PRIMARY')));
+            $radios->attach(form_input_radio_entry('usergroup_type', 'secondary', false, do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_SECONDARY')));
+            $fields->attach(form_input_radio(do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP_TYPE'), 'usergroup_type', $radios, false));
         }
 
-        return array($fields,new ocp_tempcode());
+        return array($fields, new ocp_tempcode());
     }
 
     /**
@@ -270,17 +270,17 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
     {
         require_code('templates_results_table');
 
-        $current_ordering = get_param('sort','w_name ASC');
-        if (strpos($current_ordering,' ') === false) {
+        $current_ordering = get_param('sort', 'w_name ASC');
+        if (strpos($current_ordering, ' ') === false) {
             warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
         }
-        list($sortable,$sort_order) = explode(' ',$current_ordering,2);
+        list($sortable, $sort_order) = explode(' ', $current_ordering, 2);
         $sortables = array(
             'w_name' => do_lang_tempcode('NAME'),
             'w_subject' => do_lang_tempcode('SUBJECT'),
             'w_send_time' => do_lang_tempcode('SEND_TIME'),
         );
-        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable,$sortables))) {
+        if (((strtoupper($sort_order) != 'ASC') && (strtoupper($sort_order) != 'DESC')) || (!array_key_exists($sortable, $sortables))) {
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
 
@@ -289,19 +289,19 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
             do_lang_tempcode('SUBJECT'),
             do_lang_tempcode('SEND_TIME'),
             do_lang_tempcode('ACTIONS'),
-        ),$sortables,'sort',$sortable . ' ' . $sort_order);
+        ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
         $fields = new ocp_tempcode();
 
         require_code('form_templates');
-        list($rows,$max_rows) = $this->get_entry_rows(false,$current_ordering);
+        list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
         foreach ($rows as $row) {
-            $edit_link = build_url($url_map+array('id' => $row['id']),'_SELF');
+            $edit_link = build_url($url_map + array('id' => $row['id']), '_SELF');
 
-            $fields->attach(results_entry(array($row['w_name'],get_translated_text($row['w_subject']),do_lang_tempcode('HOURS',escape_html(strval($row['w_send_time']))),protect_from_escaping(hyperlink($edit_link,do_lang_tempcode('EDIT'),false,true,do_lang('EDIT') . ' #' . strval($row['id']))))),true);
+            $fields->attach(results_entry(array($row['w_name'], get_translated_text($row['w_subject']), do_lang_tempcode('HOURS', escape_html(strval($row['w_send_time']))), protect_from_escaping(hyperlink($edit_link, do_lang_tempcode('EDIT'), false, true, do_lang('EDIT') . ' #' . strval($row['id']))))), true);
         }
 
-        return array(results_table(do_lang($this->menu_label),get_param_integer('start',0),'start',either_param_integer('max',20),'max',$max_rows,$header_row,$fields,$sortables,$sortable,$sort_order),false);
+        return array(results_table(do_lang($this->menu_label), get_param_integer('start', 0), 'start', either_param_integer('max', 20), 'max', $max_rows, $header_row, $fields, $sortables, $sortable, $sort_order), false);
     }
 
     /**
@@ -311,10 +311,10 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $_m = $GLOBALS['SITE_DB']->query_select('f_welcome_emails',array('*'));
+        $_m = $GLOBALS['SITE_DB']->query_select('f_welcome_emails', array('*'));
         $entries = new ocp_tempcode();
         foreach ($_m as $m) {
-            $entries->attach(form_input_list_entry(strval($m['id']),false,$m['w_name']));
+            $entries->attach(form_input_list_entry(strval($m['id']), false, $m['w_name']));
         }
 
         return $entries;
@@ -328,13 +328,13 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      */
     public function fill_in_edit_form($id)
     {
-        $m = $GLOBALS['SITE_DB']->query_select('f_welcome_emails',array('*'),array('id' => intval($id)),'',1);
-        if (!array_key_exists(0,$m)) {
+        $m = $GLOBALS['SITE_DB']->query_select('f_welcome_emails', array('*'), array('id' => intval($id)), '', 1);
+        if (!array_key_exists(0, $m)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         $r = $m[0];
 
-        return $this->get_form_fields($r['w_name'],get_translated_text($r['w_subject']),get_translated_text($r['w_text']),$r['w_send_time'],$r['w_newsletter'],$r['w_usergroup'],$r['w_usergroup_type']);
+        return $this->get_form_fields($r['w_name'], get_translated_text($r['w_subject']), get_translated_text($r['w_text']), $r['w_send_time'], $r['w_newsletter'], $r['w_usergroup'], $r['w_usergroup_type']);
     }
 
     /**
@@ -348,10 +348,10 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
         $subject = post_param('subject');
         $text = post_param('text');
         $send_time = post_param_integer('send_time');
-        $newsletter = post_param_integer('newsletter',null);
-        $usergroup = post_param_integer('usergroup',null);
-        $usergroup_type = post_param('usergroup_type','');
-        $id = ocf_make_welcome_email($name,$subject,$text,$send_time,$newsletter,$usergroup,$usergroup_type);
+        $newsletter = post_param_integer('newsletter', null);
+        $usergroup = post_param_integer('usergroup', null);
+        $usergroup_type = post_param('usergroup_type', '');
+        $id = ocf_make_welcome_email($name, $subject, $text, $send_time, $newsletter, $usergroup, $usergroup_type);
         return strval($id);
     }
 
@@ -366,10 +366,10 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
         $subject = post_param('subject');
         $text = post_param('text');
         $send_time = post_param_integer('send_time');
-        $newsletter = post_param_integer('newsletter',null);
-        $usergroup = post_param_integer('usergroup',null);
-        $usergroup_type = post_param('usergroup_type','');
-        ocf_edit_welcome_email(intval($id),$name,$subject,$text,$send_time,$newsletter,$usergroup,$usergroup_type);
+        $newsletter = post_param_integer('newsletter', null);
+        $usergroup = post_param_integer('usergroup', null);
+        $usergroup_type = post_param('usergroup_type', '');
+        ocf_edit_welcome_email(intval($id), $name, $subject, $text, $send_time, $newsletter, $usergroup, $usergroup_type);
     }
 
     /**

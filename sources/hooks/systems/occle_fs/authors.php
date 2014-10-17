@@ -32,7 +32,7 @@ class Hook_occle_fs_authors extends resource_fs_base
      */
     public function get_resources_count($resource_type)
     {
-        return $GLOBALS['SITE_DB']->query_select_value('authors','COUNT(*)');
+        return $GLOBALS['SITE_DB']->query_select_value('authors', 'COUNT(*)');
     }
 
     /**
@@ -42,10 +42,10 @@ class Hook_occle_fs_authors extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
-        $ret = $GLOBALS['SITE_DB']->query_select('authors',array('author'),array('author' => $label));
-        return collapse_1d_complexity('author',$ret);
+        $ret = $GLOBALS['SITE_DB']->query_select('authors', array('author'), array('author' => $label));
+        return collapse_1d_complexity('author', $ret);
     }
 
     /**
@@ -73,7 +73,7 @@ class Hook_occle_fs_authors extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',$row['author']) . ' AND  (' . db_string_equal_to('the_type','DEFINE_AUTHOR') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', $row['author']) . ' AND  (' . db_string_equal_to('the_type', 'DEFINE_AUTHOR') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -85,20 +85,20 @@ class Hook_occle_fs_authors extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('authors');
 
-        $url = $this->_default_property_str($properties,'url');
-        $member_id = $this->_default_property_int_null($properties,'member_id');
-        $description = $this->_default_property_str($properties,'description');
-        $skills = $this->_default_property_str($properties,'skills');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $url = $this->_default_property_str($properties, 'url');
+        $member_id = $this->_default_property_int_null($properties, 'member_id');
+        $description = $this->_default_property_str($properties, 'description');
+        $skills = $this->_default_property_str($properties, 'skills');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
-        add_author($label,$url,$member_id,$description,$skills,$meta_keywords,$meta_description);
+        add_author($label, $url, $member_id, $description, $skills, $meta_keywords, $meta_description);
 
         return $label;
     }
@@ -110,17 +110,17 @@ class Hook_occle_fs_authors extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('authors',array('*'),array('author' => $resource_id),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), array('author' => $resource_id), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
-        list($meta_keywords,$meta_description) = seo_meta_get_for('authors',$row['author']);
+        list($meta_keywords, $meta_description) = seo_meta_get_for('authors', $row['author']);
 
         return array(
             'label' => $row['author'],
@@ -141,26 +141,26 @@ class Hook_occle_fs_authors extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         require_code('authors');
 
-        $label = $this->_default_property_str($properties,'label');
-        $url = $this->_default_property_str($properties,'url');
-        $member_id = $this->_default_property_int_null($properties,'member_id');
-        $description = $this->_default_property_str($properties,'description');
-        $skills = $this->_default_property_str($properties,'skills');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $label = $this->_default_property_str($properties, 'label');
+        $url = $this->_default_property_str($properties, 'url');
+        $member_id = $this->_default_property_int_null($properties, 'member_id');
+        $description = $this->_default_property_str($properties, 'description');
+        $skills = $this->_default_property_str($properties, 'skills');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
         // Author editing works via re-adding
         if ($label != $resource_id) {
             delete_author($resource_id);
         } // Delete old one if we renamed
-        add_author($label,$url,$member_id,$description,$skills,$meta_keywords,$meta_description);
+        add_author($label, $url, $member_id, $description, $skills, $meta_keywords, $meta_description);
 
         return $resource_id;
     }
@@ -172,9 +172,9 @@ class Hook_occle_fs_authors extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('authors');
         delete_author($resource_id);

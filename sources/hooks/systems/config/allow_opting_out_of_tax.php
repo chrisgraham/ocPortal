@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
-
 class Hook_config_allow_opting_out_of_tax
 {
     /**

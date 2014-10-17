@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_admin_themewizard_wiki
 {
     /**
@@ -27,6 +26,6 @@ class Hook_admin_themewizard_wiki
      */
     public function run()
     {
-        return array(array(),array('page/edit_tree',));
+        return array(array(), array('page/edit_tree',));
     }
 }

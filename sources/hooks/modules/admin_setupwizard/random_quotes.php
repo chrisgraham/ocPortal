@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    random_quotes
  */
-
 class Hook_sw_random_quotes
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_random_quotes
             return array();
         }
 
-        return array(array('main_quotes' => array('YES','NO')),array());
+        return array(array('main_quotes' => array('YES', 'NO')), array());
     }
 }

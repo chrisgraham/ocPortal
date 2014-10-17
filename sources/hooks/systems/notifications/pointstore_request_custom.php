@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_Notification_pointstore_request_custom extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_pointstore_request_custom extends Hook_Notification__Sta
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -51,18 +50,18 @@ class Hook_Notification_pointstore_request_custom extends Hook_Notification__Sta
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
-        $types = $GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title'));
+        $types = $GLOBALS['SITE_DB']->query_select('pstore_customs', array('id', 'c_title'));
         foreach ($types as $type) {
             $page_links[] = array(
                 'id' => $type['id'],
                 'title' => get_translated_text($type['c_title']),
             );
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return $page_links;
     }
@@ -76,7 +75,7 @@ class Hook_Notification_pointstore_request_custom extends Hook_Notification__Sta
     public function list_handled_codes()
     {
         $list = array();
-        $list['pointstore_request_custom'] = array(do_lang('POINTSTORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_custom'));
+        $list['pointstore_request_custom'] = array(do_lang('POINTSTORE'), do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_custom'));
         return $list;
     }
 }

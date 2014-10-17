@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_sw_leader_board
 {
     /**
@@ -31,6 +30,6 @@ class Hook_sw_leader_board
             return array();
         }
 
-        return array(array('main_leader_board' => array('NO','YES')),array());
+        return array(array('main_leader_board' => array('NO', 'YES')), array());
     }
 }

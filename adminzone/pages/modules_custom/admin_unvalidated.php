@@ -44,10 +44,10 @@ class Module_admin_unvalidated
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            '!' => array('UNVALIDATED_RESOURCES','menu/adminzone/audit/unvalidated'),
+            '!' => array('UNVALIDATED_RESOURCES', 'menu/adminzone/audit/unvalidated'),
         );
     }
 
@@ -60,7 +60,7 @@ class Module_admin_unvalidated
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('unvalidated');
 
@@ -68,7 +68,7 @@ class Module_admin_unvalidated
 
         set_helper_panel_tutorial('tut_censor');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -81,10 +81,10 @@ class Module_admin_unvalidated
         $out = new ocp_tempcode();
         require_code('form_templates');
 
-        $_hooks = find_all_hooks('modules','admin_unvalidated');
+        $_hooks = find_all_hooks('modules', 'admin_unvalidated');
         foreach (array_keys($_hooks) as $hook) {
             require_code('hooks/modules/admin_unvalidated/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_unvalidated_' . filter_naughty_harsh($hook),true);
+            $object = object_factory('Hook_unvalidated_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }
@@ -93,11 +93,11 @@ class Module_admin_unvalidated
                 continue;
             }
 
-            $identifier_select = is_array($info['db_identifier'])?implode(',',$info['db_identifier']):$info['db_identifier'];
-            $db = array_key_exists('db',$info)?$info['db']:$GLOBALS['SITE_DB'];
-            $rows = $db->query_select($info['db_table'],array($identifier_select . (array_key_exists('db_title',$info)?(',' . $info['db_title']):'')),array($info['db_validated'] => 0),'',100);
+            $identifier_select = is_array($info['db_identifier']) ? implode(',', $info['db_identifier']) : $info['db_identifier'];
+            $db = array_key_exists('db', $info) ? $info['db'] : $GLOBALS['SITE_DB'];
+            $rows = $db->query_select($info['db_table'], array($identifier_select . (array_key_exists('db_title', $info) ? (',' . $info['db_title']) : '')), array($info['db_validated'] => 0), '', 100);
             if (count($rows) == 100) {
-                attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'),'warn');
+                attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'), 'warn');
             }
             $content = new ocp_tempcode();
             foreach ($rows as $row) {
@@ -112,37 +112,37 @@ class Module_admin_unvalidated
                 } else {
                     $id = $row[$info['db_identifier']];
                 }
-                if (array_key_exists('db_title',$info)) {
+                if (array_key_exists('db_title', $info)) {
                     $_title = $row[$info['db_title']];
                     if ($info['db_title_dereference']) {
-                        $_title = get_translated_text($_title,$db);
+                        $_title = get_translated_text($_title, $db);
                     } // May actually be comcode (can't be certain), but in which case it will be shown as source
                 } else {
-                    $_title = '#' . (is_integer($id)?strval($id):$id);
+                    $_title = '#' . (is_integer($id) ? strval($id) : $id);
                 }
                 if ($_title == '') {
                     $_title = '#' . strval($id);
                 }
-                $content->attach(form_input_list_entry(is_integer($id)?strval($id):$id,false,strip_comcode($_title)));
+                $content->attach(form_input_list_entry(is_integer($id) ? strval($id) : $id, false, strip_comcode($_title)));
             }
 
             if (!$content->is_empty()) {
-                if (array_key_exists('uses_workflow',$info) && $info['uses_workflow']) {
+                if (array_key_exists('uses_workflow', $info) && $info['uses_workflow']) {
                     // Content that uses a workflow is validated via its view screen
-                    $post_url = build_url(array('page' => $info['view_module'],'type' => $info['view_type'],'validated' => 1/*,'redirect'=>get_self_url(true)*/),get_module_zone($info['view_module']),null,false,true);
+                    $post_url = build_url(array('page' => $info['view_module'], 'type' => $info['view_type'], 'validated' => 1/*,'redirect'=>get_self_url(true)*/), get_module_zone($info['view_module']), null, false, true);
                 } else {
                     // Content which isn't in a workflow is validated via its edit screen
-                    $post_url = build_url(array('page' => $info['edit_module'],'type' => $info['edit_type'],'validated' => 1/*,'redirect'=>get_self_url(true)*/),get_module_zone($info['edit_module']),null,false,true);
+                    $post_url = build_url(array('page' => $info['edit_module'], 'type' => $info['edit_type'], 'validated' => 1/*,'redirect'=>get_self_url(true)*/), get_module_zone($info['edit_module']), null, false, true);
                 }
-                $fields = form_input_list(do_lang_tempcode('CONTENT'),'',$info['edit_identifier'],$content,null,true);
+                $fields = form_input_list(do_lang_tempcode('CONTENT'), '', $info['edit_identifier'], $content, null, true);
 
                 // Could debate whether to include "'TARGET'=>'_blank',". However it does redirect back, so it's a nice linear process like this. If it was new window it could be more efficient, but also would confuse people with a lot of new windows opening and not closing.
-                $content = do_template('FORM',array('_GUID' => '0abb28f6b8543396c90c8c4395b7e7d4','SKIP_REQUIRED' => true,'GET' => true,'HIDDEN' => '','SUBMIT_ICON' => 'menu___generic_admin__edit_this','SUBMIT_NAME' => do_lang_tempcode('EDIT'),'FIELDS' => $fields,'URL' => $post_url,'TEXT' => ''));
+                $content = do_template('FORM', array('_GUID' => '0abb28f6b8543396c90c8c4395b7e7d4', 'SKIP_REQUIRED' => true, 'GET' => true, 'HIDDEN' => '', 'SUBMIT_ICON' => 'menu___generic_admin__edit_this', 'SUBMIT_NAME' => do_lang_tempcode('EDIT'), 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => ''));
             }
 
-            $out->attach(do_template('UNVALIDATED_SECTION',array('_GUID' => '044f99ca3c101f90b35fc4b64977b1c7','TITLE' => $info['title'],'CONTENT' => $content)));
+            $out->attach(do_template('UNVALIDATED_SECTION', array('_GUID' => '044f99ca3c101f90b35fc4b64977b1c7', 'TITLE' => $info['title'], 'CONTENT' => $content)));
         }
 
-        return do_template('UNVALIDATED_SCREEN',array('_GUID' => 'fd41829ff0848f23d1f428a840eeb72a','TITLE' => $this->title,'TEXT' => do_lang_tempcode('UNVALIDATED_PAGE_TEXT'),'SECTIONS' => $out));
+        return do_template('UNVALIDATED_SCREEN', array('_GUID' => 'fd41829ff0848f23d1f428a840eeb72a', 'TITLE' => $this->title, 'TEXT' => do_lang_tempcode('UNVALIDATED_PAGE_TEXT'), 'SECTIONS' => $out));
     }
 }

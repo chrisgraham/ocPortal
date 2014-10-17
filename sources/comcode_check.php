@@ -27,7 +27,7 @@
  * @param  ?object                      The database connection to use (NULL: standard site connection)
  * @param  boolean                      Whether there might be new attachments. If there are, we will check as lax- as attachments are always preserved by forcing lax parsing.
  */
-function check_comcode($comcode,$source_member = null,$as_admin = false,$connection = null,$attachment_possibility = false)
+function check_comcode($comcode, $source_member = null, $as_admin = false, $connection = null, $attachment_possibility = false)
 {
     if (running_script('stress_test_loader')) {
         return;
@@ -38,14 +38,14 @@ function check_comcode($comcode,$source_member = null,$as_admin = false,$connect
     if ($attachment_possibility) {
         $has_one = false;
         foreach ($_POST as $key => $value) {
-            if (preg_match('#^hidFileID\_#i',$key) != 0) {
+            if (preg_match('#^hidFileID\_#i', $key) != 0) {
                 require_code('uploads');
                 $has_one = is_plupload();
             }
         }
         foreach ($_FILES as $key => $file) {
             $matches = array();
-            if ((is_uploaded_file($file['tmp_name'])) && (preg_match('#file(\d)#',$key,$matches) != 0)) {
+            if ((is_uploaded_file($file['tmp_name'])) && (preg_match('#file(\d)#', $key, $matches) != 0)) {
                 $has_one = true;
             }
         }
@@ -53,6 +53,6 @@ function check_comcode($comcode,$source_member = null,$as_admin = false,$connect
             $LAX_COMCODE = true;
         } // We don't want a simple syntax error to cause us to lose our attachments
     }
-    comcode_to_tempcode($comcode,$source_member,$as_admin,60,null,$connection,false,false,false,false,true);
+    comcode_to_tempcode($comcode, $source_member, $as_admin, 60, null, $connection, false, false, false, false, true);
     $LAX_COMCODE = $temp;
 }

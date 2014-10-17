@@ -26,7 +26,7 @@ TODO: Support if JS disabled, possibly remove jQuery dependency
  * @param  array                        A list of member IDs
  * @return array                        A pair: SQL WHERE clause to use on the activities table, a boolean indicating whether it is worth querying
  */
-function get_activity_querying_sql($viewer_member,$mode,$member_ids)
+function get_activity_querying_sql($viewer_member, $mode, $member_ids)
 {
     $proceed_selection = true; // There are some cases in which even glancing at the database is a waste of precious time.
 
@@ -42,12 +42,12 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
     if (addon_installed('chat')) {
         if (!$is_guest) { // If not a guest, get all blocks
             // Grabbing who you're blocked-by
-            $_blocked_by = $GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocker'),array('member_blocked' => $viewer_member));
-            $blocked_by = implode(',',collapse_1d_complexity('member_blocker',$_blocked_by));
+            $_blocked_by = $GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocker'), array('member_blocked' => $viewer_member));
+            $blocked_by = implode(',', collapse_1d_complexity('member_blocker', $_blocked_by));
 
             // Grabbing who you've blocked
-            $_blocking = $GLOBALS['SITE_DB']->query_select('chat_blocking',array('member_blocked'),array('member_blocker' => $viewer_member));
-            $blocking = implode(',',collapse_1d_complexity('member_blocked',$_blocking));
+            $_blocking = $GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocked'), array('member_blocker' => $viewer_member));
+            $blocking = implode(',', collapse_1d_complexity('member_blocked', $_blocking));
         }
     }
 
@@ -83,7 +83,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
                             $friends_check_where .= ' AND member_likes NOT IN (' . $blocked_by . ')';
                         }
 
-                        $view_private = !is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM ' . get_table_prefix() . 'chat_friends WHERE ' . $friends_check_where,false,true));
+                        $view_private = !is_null($GLOBALS['SITE_DB']->query_value_if_there('SELECT member_likes FROM ' . get_table_prefix() . 'chat_friends WHERE ' . $friends_check_where, false, true));
                     } else {
                         $view_private = false;
                     }
@@ -95,7 +95,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
 
                 $where_clause .= $_where_clause;
             }
-          break;
+            break;
 
         case 'friends':
             $where_clause = '';
@@ -111,7 +111,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
                 $tables_and_joins .= strval($viewer_member);
 
                 $lm_ids = '';
-                if (strlen($blocking)>0) { // Also setting who gets discarded from outgoing like selection
+                if (strlen($blocking) > 0) { // Also setting who gets discarded from outgoing like selection
                     if ($lm_ids != '') {
                         $lm_ids .= ',';
                     }
@@ -126,7 +126,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
                 if ($lm_ids != '') {
                     $_where_clause .= ' AND member_liked NOT IN (' . $lm_ids . ')';
                 }
-                $like_outgoing = $GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),null,' WHERE ' . $_where_clause);
+                $like_outgoing = $GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), null, ' WHERE ' . $_where_clause);
                 $lo_ids = '';
                 foreach ($like_outgoing as $l_o) {
                     if ($lo_ids != '') {
@@ -166,7 +166,7 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
                     $friends_check_where .= ' AND member_likes NOT IN (' . $blocked_by . ')';
                 }
 
-                $view_private = $GLOBALS['SITE_DB']->query_select('chat_friends',array('member_likes'),null,' WHERE ' . $friends_check_where . ';');
+                $view_private = $GLOBALS['SITE_DB']->query_select('chat_friends', array('member_likes'), null, ' WHERE ' . $friends_check_where . ';');
                 $view_private[] = array('member_likes' => $viewer_member);
                 foreach ($view_private as $v_p) {
                     if ($vp != '') {
@@ -185,10 +185,10 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
             if ($blocking != '') {
                 $where_clause .= ' AND a_member_id NOT IN (' . $blocking . ')';
             }
-          break;
+            break;
     }
 
-    return array($proceed_selection,$where_clause);
+    return array($proceed_selection, $where_clause);
 }
 
 /**
@@ -198,20 +198,20 @@ function get_activity_querying_sql($viewer_member,$mode,$member_ids)
  * @param  boolean                      Whether the rendered activity will be shown in a live ocPortal (as opposed to being e-mailed, for example)
  * @return array                        Rendered activity
  */
-function render_activity($row,$use_inside_ocp = true)
+function render_activity($row, $use_inside_ocp = true)
 {
     $guest_id = $GLOBALS['FORUM_DRIVER']->get_guest_id();
 
     // Details of member
     $member_id = $row['a_member_id'];
     $member_avatar = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
-    $member_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id,false,$use_inside_ocp);
+    $member_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id, false, $use_inside_ocp);
 
     $datetime = $row['a_time'];
 
     $message = new ocp_tempcode();
 
-    $test = do_lang($row['a_language_string_code'],'{1}','{2}','{3}',null,false);
+    $test = do_lang($row['a_language_string_code'], '{1}', '{2}', '{3}', null, false);
     if (is_null($test)) {
         $test = do_lang('UNKNOWN');
     }
@@ -219,25 +219,25 @@ function render_activity($row,$use_inside_ocp = true)
     // Convert our parameters and links to Tempcode
     $label = array();
     $link = array();
-    for ($i = 1;$i <= 3;$i++) {
-        $label[$i] = comcode_to_tempcode($row['a_label_' . strval($i)],$guest_id,false,null);
-        $link[$i] = ($row['a_page_link_' . strval($i)] == '')?new ocp_tempcode():page_link_to_tempcode($row['a_page_link_' . strval($i)],!$use_inside_ocp);
-        if (($row['a_page_link_' . strval($i)] != '') && (strpos($test,'{' . strval($i+3) . '}') === false)) {
-            $label[$i] = hyperlink($link[$i],$label[$i]->evaluate());
+    for ($i = 1; $i <= 3; $i++) {
+        $label[$i] = comcode_to_tempcode($row['a_label_' . strval($i)], $guest_id, false, null);
+        $link[$i] = ($row['a_page_link_' . strval($i)] == '') ? new ocp_tempcode() : page_link_to_tempcode($row['a_page_link_' . strval($i)], !$use_inside_ocp);
+        if (($row['a_page_link_' . strval($i)] != '') && (strpos($test, '{' . strval($i + 3) . '}') === false)) {
+            $label[$i] = hyperlink($link[$i], $label[$i]->evaluate());
         }
     }
 
     // Render primary language string
     $extra_lang_string_params = array(
         $label[3],
-        symbol_tempcode('ESCAPE',array($link[1])),
-        symbol_tempcode('ESCAPE',array($link[2])),
-        symbol_tempcode('ESCAPE',array($link[3]))
+        symbol_tempcode('ESCAPE', array($link[1])),
+        symbol_tempcode('ESCAPE', array($link[2])),
+        symbol_tempcode('ESCAPE', array($link[3]))
     );
     if (!is_null($row['a_also_involving'])) {
-        $_username = $GLOBALS['FORUM_DRIVER']->get_username($row['a_also_involving'],true);
-        $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($row['a_also_involving'],false,$use_inside_ocp);
-        $hyperlink = hyperlink($url,$_username,false,true);
+        $_username = $GLOBALS['FORUM_DRIVER']->get_username($row['a_also_involving'], true);
+        $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($row['a_also_involving'], false, $use_inside_ocp);
+        $hyperlink = hyperlink($url, $_username, false, true);
 
         $extra_lang_string_params[] = $hyperlink;
     } else {
@@ -250,8 +250,8 @@ function render_activity($row,$use_inside_ocp = true)
     ));
 
     // Lang string may not use all params, so add extras on if were unused
-    for ($i = 1;$i <= 3;$i++) {
-        if ((strpos($row['a_language_string_code'],'_UNTYPED') === false) && (strpos($test,'{1}') === false) && (strpos($test,'{2}') === false) && (strpos($test,'{3}') === false) && ($row['a_label_' . strval($i)] != '')) {
+    for ($i = 1; $i <= 3; $i++) {
+        if ((strpos($row['a_language_string_code'], '_UNTYPED') === false) && (strpos($test, '{1}') === false) && (strpos($test, '{2}') === false) && (strpos($test, '{3}') === false) && ($row['a_label_' . strval($i)] != '')) {
             if (!$message->is_empty()) {
                 $message->attach(': ');
             }
@@ -260,7 +260,7 @@ function render_activity($row,$use_inside_ocp = true)
         }
     }
 
-    return array($message,$member_avatar,$datetime,$member_url,$row['a_language_string_code'],$row['a_is_public'] == 1);
+    return array($message, $member_avatar, $datetime, $member_url, $row['a_language_string_code'], $row['a_is_public'] == 1);
 }
 
 /**
@@ -270,9 +270,9 @@ function render_activity($row,$use_inside_ocp = true)
  * @param  boolean                      Whether the link is for putting out externally to the site (so no keep_* parameters)
  * @return array                        tempcode url
  */
-function page_link_to_tempcode($page_link,$external = false)
+function page_link_to_tempcode($page_link, $external = false)
 {
-    list($zone,$map,$hash) = page_link_decode($page_link);
+    list($zone, $map, $hash) = page_link_decode($page_link);
 
-    return build_url($map,$zone,array(),false,false,$external,$hash);
+    return build_url($map, $zone, array(), false, false, $external, $hash);
 }

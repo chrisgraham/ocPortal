@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_search_downloads
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_downloads
     public function info($check_permissions = true)
     {
         if (!module_installed('downloads')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'downloads')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'downloads')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)') == 0) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('download_downloads', 'COUNT(*)') == 0) {
+            return null;
         }
 
         require_lang('downloads');
@@ -73,7 +72,7 @@ class Hook_search_downloads
      */
     public function ajax_tree()
     {
-        return array('choose_download_category',array('compound_list' => true));
+        return array('choose_download_category', array('compound_list' => true));
     }
 
     /**
@@ -99,7 +98,7 @@ class Hook_search_downloads
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         $remapped_orderer = '';
         switch ($sort) {
@@ -126,7 +125,7 @@ class Hook_search_downloads
         require_css('downloads');
 
         // Calculate our where clause (search)
-        $sq = build_search_submitter_clauses('submitter',$author_id,$author,'author');
+        $sq = build_search_submitter_clauses('submitter', $author_id, $author, 'author');
         if (is_null($sq)) {
             return array();
         } else {
@@ -137,7 +136,7 @@ class Hook_search_downloads
             $where_clause .= 'add_date>' . strval(intval($cutoff));
         }
 
-        if ((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated'))) {
+        if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
             $where_clause .= ' AND ';
             $where_clause .= 'validated=1';
         }
@@ -145,20 +144,20 @@ class Hook_search_downloads
         $privacy_join = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('download','r');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('download', 'r');
             $where_clause .= $privacy_where;
         }
 
         // Calculate and perform query
-        $rows = get_search_rows('downloads_download','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'download_downloads r' . $privacy_join,array('r.name' => 'SHORT_TRANS','r.description' => 'LONG_TRANS__COMCODE','r.comments' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',array('r.original_filename','r.download_data_mash'),'downloads','category_id');
+        $rows = get_search_rows('downloads_download', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'download_downloads r' . $privacy_join, array('r.name' => 'SHORT_TRANS', 'r.description' => 'LONG_TRANS__COMCODE', 'r.comments' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*', array('r.original_filename', 'r.download_data_mash'), 'downloads', 'category_id');
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }
@@ -175,24 +174,24 @@ class Hook_search_downloads
     public function render($row)
     {
         global $SEARCH__CONTENT_BITS;
-        $highlight_bits = is_null($SEARCH__CONTENT_BITS)?array():$SEARCH__CONTENT_BITS;
+        $highlight_bits = is_null($SEARCH__CONTENT_BITS) ? array() : $SEARCH__CONTENT_BITS;
 
-        if (array_key_exists(0,$highlight_bits)) {
-            $pos = strpos($row['download_data_mash'],$highlight_bits[0])-1000;
+        if (array_key_exists(0, $highlight_bits)) {
+            $pos = strpos($row['download_data_mash'], $highlight_bits[0]) - 1000;
         } else {
             $pos = 0;
         }
-        $mash_portion = substr($row['download_data_mash'],$pos,10000);
-        $_text_summary = trim(preg_replace('#\s+#',' ',$mash_portion));
+        $mash_portion = substr($row['download_data_mash'], $pos, 10000);
+        $_text_summary = trim(preg_replace('#\s+#', ' ', $mash_portion));
         if ($_text_summary === false) {
             $_text_summary = '';
         }
         global $LAX_COMCODE;
         $LAX_COMCODE = true;
-        $text_summary_h = comcode_to_tempcode($_text_summary,null,false,60,null,null,false,false,false,false,false,$highlight_bits);
+        $text_summary_h = comcode_to_tempcode($_text_summary, null, false, 60, null, null, false, false, false, false, false, $highlight_bits);
         $LAX_COMCODE = false;
-        $text_summary = generate_text_summary($text_summary_h->evaluate(),$highlight_bits);
+        $text_summary = generate_text_summary($text_summary_h->evaluate(), $highlight_bits);
 
-        return render_download_box($row,true,true,null,$text_summary);
+        return render_download_box($row, true, true, null, $text_summary);
     }
 }

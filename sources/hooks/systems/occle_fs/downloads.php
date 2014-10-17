@@ -35,10 +35,10 @@ class Hook_occle_fs_downloads extends resource_fs_base
     {
         switch ($resource_type) {
             case 'download':
-                return $GLOBALS['SITE_DB']->query_select_value('download_downloads','COUNT(*)');
+                return $GLOBALS['SITE_DB']->query_select_value('download_downloads', 'COUNT(*)');
 
             case 'download_category':
-                return $GLOBALS['SITE_DB']->query_select_value('download_categories','COUNT(*)');
+                return $GLOBALS['SITE_DB']->query_select_value('download_categories', 'COUNT(*)');
         }
         return 0;
     }
@@ -50,11 +50,11 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  LONG_TEXT                The resource label
      * @return array                    A list of resource IDs
      */
-    public function find_resource_by_label($resource_type,$label)
+    public function find_resource_by_label($resource_type, $label)
     {
         switch ($resource_type) {
             case 'download':
-                $_ret = $GLOBALS['SITE_DB']->query_select('download_downloads',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('name') => $label));
+                $_ret = $GLOBALS['SITE_DB']->query_select('download_downloads', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('name') => $label));
                 $ret = array();
                 foreach ($_ret as $r) {
                     $ret[] = strval($r['id']);
@@ -62,7 +62,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
                 return $ret;
 
             case 'download_category':
-                $_ret = $GLOBALS['SITE_DB']->query_select('download_categories',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('category') => $label));
+                $_ret = $GLOBALS['SITE_DB']->query_select('download_categories', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('category') => $label));
                 $ret = array();
                 foreach ($_ret as $r) {
                     $ret[] = strval($r['id']);
@@ -97,7 +97,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
      */
     public function _get_folder_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_DOWNLOAD_CATEGORY') . ' OR ' . db_string_equal_to('the_type','EDIT_DOWNLOAD_CATEGORY') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_DOWNLOAD_CATEGORY') . ' OR ' . db_string_equal_to('the_type', 'EDIT_DOWNLOAD_CATEGORY') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -109,25 +109,25 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error)
      */
-    public function folder_add($filename,$path,$properties)
+    public function folder_add($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
         if (is_null($category)) {
             $category = strval(db_get_first_id());
         }/*return false;*/ // Can't create more than one root
 
-        list($properties,$label) = $this->_folder_magic_filter($filename,$path,$properties);
+        list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
         require_code('downloads2');
 
         $parent_id = $this->_integer_category($category);
-        $description = $this->_default_property_str($properties,'description');
-        $notes = $this->_default_property_str($properties,'notes');
-        $rep_image = $this->_default_property_str($properties,'rep_image');
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
-        $id = add_download_category($label,$parent_id,$description,$notes,$rep_image,null,$add_time,$meta_keywords,$meta_description);
+        $description = $this->_default_property_str($properties, 'description');
+        $notes = $this->_default_property_str($properties, 'notes');
+        $rep_image = $this->_default_property_str($properties, 'rep_image');
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
+        $id = add_download_category($label, $parent_id, $description, $notes, $rep_image, null, $add_time, $meta_keywords, $meta_description);
         return strval($id);
     }
 
@@ -138,17 +138,17 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function folder_load($filename,$path)
+    public function folder_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('download_categories',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('download_categories', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
-        list($meta_keywords,$meta_description) = seo_meta_get_for('downloads_category',strval($row['id']));
+        list($meta_keywords, $meta_description) = seo_meta_get_for('downloads_category', strval($row['id']));
 
         return array(
             'label' => $row['category'],
@@ -169,23 +169,23 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function folder_edit($filename,$path,$properties)
+    public function folder_edit($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('downloads2');
 
-        $label = $this->_default_property_str($properties,'label');
+        $label = $this->_default_property_str($properties, 'label');
         $parent_id = $this->_integer_category($category);
-        $description = $this->_default_property_str($properties,'description');
-        $notes = $this->_default_property_str($properties,'notes');
-        $rep_image = $this->_default_property_str($properties,'rep_image');
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
+        $description = $this->_default_property_str($properties, 'description');
+        $notes = $this->_default_property_str($properties, 'notes');
+        $rep_image = $this->_default_property_str($properties, 'rep_image');
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
 
-        edit_download_category(intval($resource_id),$label,$parent_id,$description,$notes,$rep_image,$meta_keywords,$meta_description,$add_time);
+        edit_download_category(intval($resource_id), $label, $parent_id, $description, $notes, $rep_image, $meta_keywords, $meta_description, $add_time);
 
         return $resource_id;
     }
@@ -197,9 +197,9 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function folder_delete($filename,$path)
+    public function folder_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->folder_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->folder_convert_filename_to_id($filename);
 
         require_code('downloads2');
         delete_download_category(intval($resource_id));
@@ -249,7 +249,7 @@ class Hook_occle_fs_downloads extends resource_fs_base
      */
     public function _get_file_edit_date($row)
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a',strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type','ADD_DOWNLOAD') . ' OR ' . db_string_equal_to('the_type','EDIT_DOWNLOAD') . ')';
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_DOWNLOAD') . ' OR ' . db_string_equal_to('the_type', 'EDIT_DOWNLOAD') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -261,10 +261,10 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_add($filename,$path,$properties)
+    public function file_add($filename, $path, $properties)
     {
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,$label) = $this->_file_magic_filter($filename,$path,$properties);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -273,42 +273,42 @@ class Hook_occle_fs_downloads extends resource_fs_base
         require_code('downloads2');
 
         $category_id = $this->_integer_category($category);
-        $url = $this->_default_property_str($properties,'url');
-        $description = $this->_default_property_str($properties,'description');
-        $author = $this->_default_property_str($properties,'author');
-        $additional_details = $this->_default_property_str($properties,'additional_details');
-        $out_mode_id = $this->_default_property_int_null($properties,'out_mode_id');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $url = $this->_default_property_str($properties, 'url');
+        $description = $this->_default_property_str($properties, 'description');
+        $author = $this->_default_property_str($properties, 'author');
+        $additional_details = $this->_default_property_str($properties, 'additional_details');
+        $out_mode_id = $this->_default_property_int_null($properties, 'out_mode_id');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','download_downloads',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','download_downloads',1);
-        $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','download_downloads',1);
-        $notes = $this->_default_property_str($properties,'notes');
-        $original_filename = $this->_default_property_str($properties,'original_filename');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'download_downloads', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'download_downloads', 1);
+        $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'download_downloads', 1);
+        $notes = $this->_default_property_str($properties, 'notes');
+        $original_filename = $this->_default_property_str($properties, 'original_filename');
         if ($original_filename == '') {
             $original_filename = $label;
         }
-        $file_size = $this->_default_property_int($properties,'file_size');
+        $file_size = $this->_default_property_int($properties, 'file_size');
         if (($file_size == 0) && ($url != '') && (url_is_local($url)) && (file_exists(get_custom_file_base() . '/' . rawurldecode($url)))) {
             $file_size = filesize(get_custom_file_base() . '/' . rawurldecode($url));
         }
-        $cost = $this->_default_property_int($properties,'cost');
-        $submitter_gets_points = $this->_default_property_int($properties,'submitter_gets_points');
-        $licence = $this->_default_property_int_null($properties,'licence'); // TODO, #1160 on tracker
-        $add_date = $this->_default_property_int_null($properties,'add_date');
-        $num_downloads = $this->_default_property_int($properties,'num_downloads');
-        $views = $this->_default_property_int($properties,'views');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $edit_date = $this->_default_property_int_null($properties,'edit_date');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
-        $default_pic = $this->_default_property_int($properties,'default_pic');
+        $cost = $this->_default_property_int($properties, 'cost');
+        $submitter_gets_points = $this->_default_property_int($properties, 'submitter_gets_points');
+        $licence = $this->_default_property_int_null($properties, 'licence'); // TODO, #1160 on tracker
+        $add_date = $this->_default_property_int_null($properties, 'add_date');
+        $num_downloads = $this->_default_property_int($properties, 'num_downloads');
+        $views = $this->_default_property_int($properties, 'views');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $edit_date = $this->_default_property_int_null($properties, 'edit_date');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
+        $default_pic = $this->_default_property_int($properties, 'default_pic');
         if ($default_pic == 0) {
             $default_pic = 1;
         }
-        $id = add_download($category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$add_date,$num_downloads,$views,$submitter,$edit_date,null,$meta_keywords,$meta_description,$default_pic);
+        $id = add_download($category_id, $label, $url, $description, $author, $additional_details, $out_mode_id, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $original_filename, $file_size, $cost, $submitter_gets_points, $licence, $add_date, $num_downloads, $views, $submitter, $edit_date, null, $meta_keywords, $meta_description, $default_pic);
         return strval($id);
     }
 
@@ -319,17 +319,17 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable). It may be a wildcarded path, as the path is used for content-type identification only. Filenames are globally unique across a hook; you can calculate the path using ->search.
      * @return ~array                   Details of the resource (false: error)
      */
-    public function file_load($filename,$path)
+    public function file_load($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
-        $rows = $GLOBALS['SITE_DB']->query_select('download_downloads',array('*'),array('id' => intval($resource_id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('download_downloads', array('*'), array('id' => intval($resource_id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         $row = $rows[0];
 
-        list($meta_keywords,$meta_description) = seo_meta_get_for('downloads_download',strval($row['id']));
+        list($meta_keywords, $meta_description) = seo_meta_get_for('downloads_download', strval($row['id']));
 
         return array(
             'label' => $row['name'],
@@ -366,11 +366,11 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~ID_TEXT                 The resource ID (false: error, could not create via these properties / here)
      */
-    public function file_edit($filename,$path,$properties)
+    public function file_edit($filename, $path, $properties)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
-        list($category_resource_type,$category) = $this->folder_convert_filename_to_id($path);
-        list($properties,) = $this->_file_magic_filter($filename,$path,$properties);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
+        list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path);
+        list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
             return false;
@@ -378,45 +378,45 @@ class Hook_occle_fs_downloads extends resource_fs_base
 
         require_code('downloads2');
 
-        $label = $this->_default_property_str($properties,'label');
+        $label = $this->_default_property_str($properties, 'label');
         $category_id = $this->_integer_category($category);
-        $url = $this->_default_property_str($properties,'url');
-        $description = $this->_default_property_str($properties,'description');
-        $author = $this->_default_property_str($properties,'author');
-        $additional_details = $this->_default_property_str($properties,'additional_details');
-        $out_mode_id = $this->_default_property_int_null($properties,'out_mode_id');
-        $validated = $this->_default_property_int_null($properties,'validated');
+        $url = $this->_default_property_str($properties, 'url');
+        $description = $this->_default_property_str($properties, 'description');
+        $author = $this->_default_property_str($properties, 'author');
+        $additional_details = $this->_default_property_str($properties, 'additional_details');
+        $out_mode_id = $this->_default_property_int_null($properties, 'out_mode_id');
+        $validated = $this->_default_property_int_null($properties, 'validated');
         if (is_null($validated)) {
             $validated = 1;
         }
-        $allow_rating = $this->_default_property_int_modeavg($properties,'allow_rating','download_downloads',1);
-        $allow_comments = $this->_default_property_int_modeavg($properties,'allow_comments','download_downloads',1);
-        $allow_trackbacks = $this->_default_property_int_modeavg($properties,'allow_trackbacks','download_downloads',1);
-        $notes = $this->_default_property_str($properties,'notes');
-        $original_filename = $this->_default_property_str($properties,'original_filename');
+        $allow_rating = $this->_default_property_int_modeavg($properties, 'allow_rating', 'download_downloads', 1);
+        $allow_comments = $this->_default_property_int_modeavg($properties, 'allow_comments', 'download_downloads', 1);
+        $allow_trackbacks = $this->_default_property_int_modeavg($properties, 'allow_trackbacks', 'download_downloads', 1);
+        $notes = $this->_default_property_str($properties, 'notes');
+        $original_filename = $this->_default_property_str($properties, 'original_filename');
         if ($original_filename == '') {
             $original_filename = $label;
         }
-        $file_size = $this->_default_property_int($properties,'file_size');
+        $file_size = $this->_default_property_int($properties, 'file_size');
         if (($file_size == 0) && ($url != '') && (url_is_local($url)) && (file_exists(get_custom_file_base() . '/' . rawurldecode($url)))) {
             $file_size = filesize(get_custom_file_base() . '/' . rawurldecode($url));
         }
-        $cost = $this->_default_property_int($properties,'cost');
-        $submitter_gets_points = $this->_default_property_int($properties,'submitter_gets_points');
-        $licence = $this->_default_property_int_null($properties,'licence'); // TODO, #1160 on tracker
-        $add_time = $this->_default_property_int_null($properties,'add_date');
-        $num_downloads = $this->_default_property_int($properties,'num_downloads');
-        $views = $this->_default_property_int($properties,'views');
-        $submitter = $this->_default_property_int_null($properties,'submitter');
-        $edit_time = $this->_default_property_int_null($properties,'edit_date');
-        $meta_keywords = $this->_default_property_str($properties,'meta_keywords');
-        $meta_description = $this->_default_property_str($properties,'meta_description');
-        $default_pic = $this->_default_property_int($properties,'default_pic');
+        $cost = $this->_default_property_int($properties, 'cost');
+        $submitter_gets_points = $this->_default_property_int($properties, 'submitter_gets_points');
+        $licence = $this->_default_property_int_null($properties, 'licence'); // TODO, #1160 on tracker
+        $add_time = $this->_default_property_int_null($properties, 'add_date');
+        $num_downloads = $this->_default_property_int($properties, 'num_downloads');
+        $views = $this->_default_property_int($properties, 'views');
+        $submitter = $this->_default_property_int_null($properties, 'submitter');
+        $edit_time = $this->_default_property_int_null($properties, 'edit_date');
+        $meta_keywords = $this->_default_property_str($properties, 'meta_keywords');
+        $meta_description = $this->_default_property_str($properties, 'meta_description');
+        $default_pic = $this->_default_property_int($properties, 'default_pic');
         if ($default_pic == 0) {
             $default_pic = 1;
         }
 
-        edit_download(intval($resource_id),$category_id,$label,$url,$description,$author,$additional_details,$out_mode_id,$default_pic,$validated,$allow_rating,$allow_comments,$allow_trackbacks,$notes,$original_filename,$file_size,$cost,$submitter_gets_points,$licence,$meta_keywords,$meta_description,$edit_time,$add_time,$views,$submitter,$num_downloads,true);
+        edit_download(intval($resource_id), $category_id, $label, $url, $description, $author, $additional_details, $out_mode_id, $default_pic, $validated, $allow_rating, $allow_comments, $allow_trackbacks, $notes, $original_filename, $file_size, $cost, $submitter_gets_points, $licence, $meta_keywords, $meta_description, $edit_time, $add_time, $views, $submitter, $num_downloads, true);
 
         return $resource_id;
     }
@@ -428,9 +428,9 @@ class Hook_occle_fs_downloads extends resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @return boolean                  Success status
      */
-    public function file_delete($filename,$path)
+    public function file_delete($filename, $path)
     {
-        list($resource_type,$resource_id) = $this->file_convert_filename_to_id($filename);
+        list($resource_type, $resource_id) = $this->file_convert_filename_to_id($filename);
 
         require_code('downloads2');
         delete_download(intval($resource_id));

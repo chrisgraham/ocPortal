@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_show_avatar
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_show_avatar
      */
     public function get_default()
     {
-        return (has_no_forum() || ((get_forum_type() == 'ocf') && (!addon_installed('ocf_member_avatars'))))?null:'0';
+        return (has_no_forum() || ((get_forum_type() == 'ocf') && (!addon_installed('ocf_member_avatars')))) ? null : '0';
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
-
 class Hook_config_forum_show_stats_count_members
 {
     /**

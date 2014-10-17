@@ -49,10 +49,10 @@ class Module_staff
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('STAFF','menu/site_meta/staff'),
+            'misc' => array('STAFF', 'menu/site_meta/staff'),
         );
     }
 
@@ -72,11 +72,11 @@ class Module_staff
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
-        $GLOBALS['FORUM_DRIVER']->install_create_custom_field('sites',100,1,0,0,0,'','short_text');
-        $GLOBALS['FORUM_DRIVER']->install_create_custom_field('role',100,1,0,1,0,'','short_text');
-        $GLOBALS['FORUM_DRIVER']->install_create_custom_field('fullname',100,1,0,1,0,'','short_text');
+        $GLOBALS['FORUM_DRIVER']->install_create_custom_field('sites', 100, 1, 0, 0, 0, '', 'short_text');
+        $GLOBALS['FORUM_DRIVER']->install_create_custom_field('role', 100, 1, 0, 1, 0, '', 'short_text');
+        $GLOBALS['FORUM_DRIVER']->install_create_custom_field('fullname', 100, 1, 0, 1, 0, '', 'short_text');
     }
 
     public $title;
@@ -88,22 +88,22 @@ class Module_staff
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('staff');
 
         if ($type == 'misc') {
-            $this->title = get_screen_title('STAFF_TITLE',true,array(escape_html(get_site_name())));
+            $this->title = get_screen_title('STAFF_TITLE', true, array(escape_html(get_site_name())));
         }
 
         if ($type == 'view') {
-            breadcrumb_set_parents(array(array('_SELF:_SELF:misc',do_lang_tempcode('STAFF_TITLE',escape_html(get_site_name())))));
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('STAFF_TITLE', escape_html(get_site_name())))));
 
             $username = get_param('id');
-            $this->title = get_screen_title('_STAFF',true,array(escape_html($username)));
+            $this->title = get_screen_title('_STAFF', true, array(escape_html($username)));
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -113,7 +113,7 @@ class Module_staff
      */
     public function run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->do_all_staff();
@@ -132,8 +132,8 @@ class Module_staff
      */
     public function do_all_staff()
     {
-        $admin_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(),$GLOBALS['FORUM_DRIVER']->get_moderator_groups());
-        $rows = $GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups,400);
+        $admin_groups = array_merge($GLOBALS['FORUM_DRIVER']->get_super_admin_groups(), $GLOBALS['FORUM_DRIVER']->get_moderator_groups());
+        $rows = $GLOBALS['FORUM_DRIVER']->member_group_query($admin_groups, 400);
         if (count($rows) >= 400) {
             warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
         }
@@ -145,7 +145,7 @@ class Module_staff
             $rows[$i]['username'] = $username;
         }
 
-        sort_maps_by($rows,'username');
+        sort_maps_by($rows, 'username');
 
         $content = new ocp_tempcode();
         foreach ($rows as $row_staff) {
@@ -156,8 +156,8 @@ class Module_staff
             }
 
             $username = $row_staff['username'];
-            $url = build_url(array('page' => '_SELF','id' => $username,'type' => 'view'),'_SELF');
-            $role = get_ocp_cpf('role',$id);
+            $url = build_url(array('page' => '_SELF', 'id' => $username, 'type' => 'view'), '_SELF');
+            $role = get_ocp_cpf('role', $id);
             if (is_null($role)) {
                 $description = ''; // Null should not happen, but sometimes things corrupt
             } else {
@@ -165,18 +165,18 @@ class Module_staff
                 $description = apply_emoticons($role);
             }
 
-            $content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY',array('_GUID' => '2650660652a01ce39e6085615436f370','TITLE' => do_lang_tempcode('STAFF'),'URL' => $url,'NAME' => $username,'DESCRIPTION' => $description)));
+            $content->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => '2650660652a01ce39e6085615436f370', 'TITLE' => do_lang_tempcode('STAFF'), 'URL' => $url, 'NAME' => $username, 'DESCRIPTION' => $description)));
         }
 
         $message = get_option('staff_text');
-        if (has_actual_page_access(get_member(),'admin_config')) {
+        if (has_actual_page_access(get_member(), 'admin_config')) {
             if ($message != '') {
                 $message .= ' [semihtml]<span class="associated_link"><a href="{$PAGE_LINK*,_SEARCH:admin_config:category:SECURITY#group_STAFF}">' . do_lang('EDIT') . '</a></span>[/semihtml]';
             } // XHTMLXHTML: This (and similar things in other modules) should be done through a template really
         }
-        $post = comcode_to_tempcode($message,null,true);
+        $post = comcode_to_tempcode($message, null, true);
 
-        return do_template('INDEX_SCREEN_FANCIER_SCREEN',array('_GUID' => '3fb63955b3e1cb1cb4fda2e56b428d08','CONTENT' => $content,'TITLE' => $this->title,'POST' => $post,'PRE' => $pre));
+        return do_template('INDEX_SCREEN_FANCIER_SCREEN', array('_GUID' => '3fb63955b3e1cb1cb4fda2e56b428d08', 'CONTENT' => $content, 'TITLE' => $this->title, 'POST' => $post, 'PRE' => $pre));
     }
 
     /**
@@ -196,13 +196,13 @@ class Module_staff
         }
         $id = $GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
 
-        $_real_name = get_ocp_cpf('fullname',$id);
+        $_real_name = get_ocp_cpf('fullname', $id);
         if ($_real_name == '') {
             $real_name = do_lang_tempcode('_UNKNOWN'); // Null should not happen, but sometimes things corrupt
         } else {
             $real_name = protect_from_escaping(escape_html($_real_name));
         }
-        $_role = get_ocp_cpf('role',$id);
+        $_role = get_ocp_cpf('role', $id);
         if ($_role == '') {
             $role = do_lang_tempcode('_UNKNOWN'); // Null should not happen, but sometimes things corrupt
         } else {
@@ -211,10 +211,10 @@ class Module_staff
         }
         $email_address = obfuscate_email_address($GLOBALS['FORUM_DRIVER']->mrow_email($row_staff));
         $username = $GLOBALS['FORUM_DRIVER']->mrow_username($row_staff);
-        $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($id,false,true);
+        $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($id, false, true);
 
-        $all_link = build_url(array('page' => '_SELF','type' => 'misc'),'_SELF');
+        $all_link = build_url(array('page' => '_SELF', 'type' => 'misc'), '_SELF');
 
-        return do_template('STAFF_SCREEN',array('_GUID' => 'fd149466f16722fcbcef0fba5685a895','TITLE' => $this->title,'REAL_NAME' => $real_name,'ROLE' => $role,'ADDRESS' => $email_address,'USERNAME' => $username,'MEMBER_ID' => strval($id),'PROFILE_URL' => $profile_url,'ALL_STAFF_URL' => $all_link));
+        return do_template('STAFF_SCREEN', array('_GUID' => 'fd149466f16722fcbcef0fba5685a895', 'TITLE' => $this->title, 'REAL_NAME' => $real_name, 'ROLE' => $role, 'ADDRESS' => $email_address, 'USERNAME' => $username, 'MEMBER_ID' => strval($id), 'PROFILE_URL' => $profile_url, 'ALL_STAFF_URL' => $all_link));
     }
 }

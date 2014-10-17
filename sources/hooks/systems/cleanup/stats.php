@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
-
 class Hook_stats
 {
     /**
@@ -28,7 +27,7 @@ class Hook_stats
     public function info()
     {
         if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
-            return NULL;
+            return null;
         }
 
         $info = array();
@@ -50,9 +49,9 @@ class Hook_stats
             return new ocp_tempcode();
         }
 
-        $hooks = find_all_hooks('systems','disposable_values');
+        $hooks = find_all_hooks('systems', 'disposable_values');
         foreach (array_keys($hooks) as $hook) {
-            $GLOBALS['SITE_DB']->query_delete('values',array('the_name' => $hook),'',1);
+            $GLOBALS['SITE_DB']->query_delete('values', array('the_name' => $hook), '', 1);
         }
         persistent_cache_delete('VALUES');
 

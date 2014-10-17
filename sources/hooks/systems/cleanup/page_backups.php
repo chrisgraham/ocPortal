@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_page_backups
 {
     /**
@@ -28,7 +27,7 @@ class Hook_page_backups
     public function info()
     {
         if (!is_suexec_like()) {
-            return NULL;
+            return null;
         }
 
         $info = array();
@@ -51,7 +50,7 @@ class Hook_page_backups
         // Zones: Comcode pages
         $start = 0;
         do {
-            $zones = find_all_zones(false,false,false,$start,50);
+            $zones = find_all_zones(false, false, false, $start, 50);
             foreach ($zones as $zone) {
                 foreach ($langs as $lang) {
                     $path = get_custom_file_base() . '/' . filter_naughty($zone) . '/pages/comcode_custom/' . filter_naughty($lang);
@@ -59,7 +58,8 @@ class Hook_page_backups
                 }
             }
             $start += 50;
-        } while (count($zones) != 0);
+        }
+        while (count($zones) != 0);
 
         // Themes: Templates and CSS files
         $themes = find_all_themes();
@@ -84,13 +84,13 @@ class Hook_page_backups
         $dh = @opendir($path);
         if ($dh !== false) {
             if (!file_exists($path . '/_old_backups')) {
-                mkdir($path . '/_old_backups',0777);
-                fix_permissions($path . '/_old_backups',0777);
+                mkdir($path . '/_old_backups', 0777);
+                fix_permissions($path . '/_old_backups', 0777);
             }
 
             while (($f = readdir($dh)) !== false) {
                 if (is_numeric(get_file_extension($f))) {
-                    rename($path . '/' . $f,$path . '/_old_backups/' . $f);
+                    rename($path . '/' . $f, $path . '/_old_backups/' . $f);
                 }
             }
             closedir($dh);

@@ -49,10 +49,10 @@ class Module_admin_notifications
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('NOTIFICATIONS_LOCKDOWN','menu/adminzone/setup/notifications'),
+            'misc' => array('NOTIFICATIONS_LOCKDOWN', 'menu/adminzone/setup/notifications'),
         );
     }
 
@@ -70,9 +70,9 @@ class Module_admin_notifications
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
-        $GLOBALS['SITE_DB']->create_table('notification_lockdown',array(
+        $GLOBALS['SITE_DB']->create_table('notification_lockdown', array(
             'l_notification_code' => '*ID_TEXT',
             'l_setting' => 'INTEGER',
         ));
@@ -87,13 +87,13 @@ class Module_admin_notifications
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('notifications');
 
         $this->title = get_screen_title('NOTIFICATIONS_LOCKDOWN');
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -113,16 +113,16 @@ class Module_admin_notifications
             A__CHOICE => '_CHOICE',
             A__STATISTICAL => '_STATISTICAL',
         );
-        $_notification_types = $_notification_types+_get_available_notification_types();
+        $_notification_types = $_notification_types + _get_available_notification_types();
 
-        $lockdown = collapse_2d_complexity('l_notification_code','l_setting',$GLOBALS['SITE_DB']->query_select('notification_lockdown',array('*')));
+        $lockdown = collapse_2d_complexity('l_notification_code', 'l_setting', $GLOBALS['SITE_DB']->query_select('notification_lockdown', array('*')));
 
         $current_setting = mixed();
 
         $notification_sections = array();
-        $hooks = find_all_hooks('systems','notifications');
+        $hooks = find_all_hooks('systems', 'notifications');
         foreach (array_keys($hooks) as $hook) {
-            if ((substr($hook,0,4) == 'ocf_') && (get_forum_type() != 'ocf')) {
+            if ((substr($hook, 0, 4) == 'ocf_') && (get_forum_type() != 'ocf')) {
                 continue;
             }
             require_code('hooks/systems/notifications/' . $hook);
@@ -131,12 +131,12 @@ class Module_admin_notifications
             foreach ($_notification_codes as $notification_code => $notification_details) {
                 $allowed_setting = $ob->allowed_settings($notification_code);
 
-                $current_setting = array_key_exists($notification_code,$lockdown)?$lockdown[$notification_code]:null;
+                $current_setting = array_key_exists($notification_code, $lockdown) ? $lockdown[$notification_code] : null;
 
                 $notification_types = array();
                 $save_query = false;
                 foreach ($_notification_types as $possible => $ntype) {
-                    $save_query = ($save_query) || (post_param_integer('notification_' . $notification_code . '_' . $ntype,0) == 1);
+                    $save_query = ($save_query) || (post_param_integer('notification_' . $notification_code . '_' . $ntype, 0) == 1);
                 }
                 foreach ($_notification_types as $possible => $ntype) {
                     $available = ($possible == A__CHOICE) || ($possible == A__STATISTICAL) || (($possible & $allowed_setting) != 0);
@@ -159,7 +159,7 @@ class Module_admin_notifications
                         }
                     }
 
-                    $_checked = post_param_integer('notification_' . $notification_code . '_' . $ntype,((strtoupper(ocp_srv('REQUEST_METHOD')) != 'POST') && $checked)?1:0);
+                    $_checked = post_param_integer('notification_' . $notification_code . '_' . $ntype, ((strtoupper(ocp_srv('REQUEST_METHOD')) != 'POST') && $checked) ? 1 : 0);
 
                     $notification_types[] = array(
                         'NTYPE' => $ntype,
@@ -182,7 +182,7 @@ class Module_admin_notifications
                     'NOTIFICATION_LABEL' => $notification_details[1],
                     'NOTIFICATION_TYPES' => $notification_types,
                     'SUPPORTS_CATEGORIES' => false,
-                    'PRIVILEGED' => !$ob->member_could_potentially_enable($ntype,$GLOBALS['FORUM_DRIVER']->get_guest_id()),
+                    'PRIVILEGED' => !$ob->member_could_potentially_enable($ntype, $GLOBALS['FORUM_DRIVER']->get_guest_id()),
                 );
             }
         }
@@ -196,14 +196,14 @@ class Module_admin_notifications
                     $new_setting = A_NA;
                     foreach ($notification_code['NOTIFICATION_TYPES'] as $notification_type) {
                         $ntype = $notification_type['NTYPE'];
-                        if (post_param_integer('notification_' . $notification_code['NOTIFICATION_CODE'] . '_' . $ntype,0) == 1) {
+                        if (post_param_integer('notification_' . $notification_code['NOTIFICATION_CODE'] . '_' . $ntype, 0) == 1) {
                             $new_setting = $new_setting | intval($notification_type['RAW']);
                         }
                     }
 
                     if ($new_setting != A__CHOICE) {
-                        $GLOBALS['SITE_DB']->query_insert('notification_lockdown',array(
-                            'l_notification_code' => substr($notification_code['NOTIFICATION_CODE'],0,80),
+                        $GLOBALS['SITE_DB']->query_insert('notification_lockdown', array(
+                            'l_notification_code' => substr($notification_code['NOTIFICATION_CODE'], 0, 80),
                             'l_setting' => $new_setting,
                         ));
                     }
@@ -218,7 +218,7 @@ class Module_admin_notifications
         // Sort labels
         ksort($notification_sections);
         foreach (array_keys($notification_sections) as $i) {
-            sort_maps_by($notification_sections[$i]['NOTIFICATION_CODES'],'NOTIFICATION_LABEL');
+            sort_maps_by($notification_sections[$i]['NOTIFICATION_CODES'], 'NOTIFICATION_LABEL');
         }
 
         $css_path = get_custom_file_base() . '/themes/' . $GLOBALS['FORUM_DRIVER']->get_theme() . '/templates_cached/' . user_lang() . '/global.css';
@@ -226,7 +226,7 @@ class Module_admin_notifications
         if (file_exists($css_path)) {
             $tmp_file = file_get_contents($css_path);
             $matches = array();
-            if (preg_match('#(\s|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU',$tmp_file,$matches) != 0) {
+            if (preg_match('#(\s|\})th[\s,][^\}]*(\s|\{)background-color:\s*\#([\dA-Fa-f]*);color:\s*\#([\dA-Fa-f]*);#sU', $tmp_file, $matches) != 0) {
                 $color = $matches[3] . '&fgcolor=' . $matches[4];
             }
         }
@@ -240,9 +240,9 @@ class Module_admin_notifications
             );
         }
 
-        $interface = do_template('NOTIFICATIONS_MANAGE',array('_GUID' => '55dc192d339b570b060d61039c43b96d','SHOW_PRIVILEGES' => true,'COLOR' => $color,'NOTIFICATION_TYPES_TITLES' => $notification_types_titles,'NOTIFICATION_SECTIONS' => $notification_sections));
+        $interface = do_template('NOTIFICATIONS_MANAGE', array('_GUID' => '55dc192d339b570b060d61039c43b96d', 'SHOW_PRIVILEGES' => true, 'COLOR' => $color, 'NOTIFICATION_TYPES_TITLES' => $notification_types_titles, 'NOTIFICATION_SECTIONS' => $notification_sections));
 
-        return do_template('NOTIFICATIONS_MANAGE_SCREEN',array(
+        return do_template('NOTIFICATIONS_MANAGE_SCREEN', array(
             '_GUID' => '4f6af291a40c519377879555e24c2c81',
             'TITLE' => $this->title,
             'INTERFACE' => $interface,

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_date
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_date
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_date
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return exact_match_sql($row,$i);
+        return exact_match_sql($row, $i);
     }
 
     // ===================
@@ -59,14 +58,14 @@ class Hook_fields_date
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
-                $default = date('Y-m-d H:i:s',utctime_to_usertime());
+                $default = date('Y-m-d H:i:s', utctime_to_usertime());
             }
         }
-        return array('short_unescaped',$default,'short');
+        return array('short_unescaped', $default, 'short');
     }
 
     /**
@@ -76,39 +75,39 @@ class Hook_fields_date
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
         }
 
         if ($ev != '') {
-            if (strpos(strtolower($ev),'now') !== false) {
+            if (strpos(strtolower($ev), 'now') !== false) {
                 $time = time();
             } else {
                 // Y-m-d H:i:s
-                $bits = explode(' ',$ev,2);
-                $date_bits = explode((strpos($bits[0],'-') !== false)?'-':'/',$bits[0],3);
-                if (!array_key_exists(1,$date_bits)) {
+                $bits = explode(' ', $ev, 2);
+                $date_bits = explode((strpos($bits[0], '-') !== false) ? '-' : '/', $bits[0], 3);
+                if (!array_key_exists(1, $date_bits)) {
                     $date_bits[1] = date('m');
                 }
-                if (!array_key_exists(2,$date_bits)) {
+                if (!array_key_exists(2, $date_bits)) {
                     $date_bits[2] = date('Y');
                 }
-                if (!array_key_exists(1,$bits)) {
+                if (!array_key_exists(1, $bits)) {
                     $bits[1] = '00:00:00';
                 }
-                $time_bits = explode(':',$bits[1],3);
-                if (!array_key_exists(1,$time_bits)) {
+                $time_bits = explode(':', $bits[1], 3);
+                if (!array_key_exists(1, $time_bits)) {
                     $time_bits[1] = '00';
                 }
-                if (!array_key_exists(2,$time_bits)) {
+                if (!array_key_exists(2, $time_bits)) {
                     $time_bits[2] = '00';
                 }
-                $time = mktime(intval($time_bits[0]),intval($time_bits[1]),intval($time_bits[2]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
+                $time = mktime(intval($time_bits[0]), intval($time_bits[1]), intval($time_bits[2]), intval($date_bits[1]), intval($date_bits[2]), intval($date_bits[0]));
                 $time = utctime_to_usertime($time);
             }
-            $ev = get_timezoned_date($time,true,false,true,true);
+            $ev = get_timezoned_date($time, true, false, true, true);
         }
         return escape_html($ev);
     }
@@ -127,36 +126,36 @@ class Hook_fields_date
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         $time = mixed();
 
         if ((is_null($actual_value)) || ($actual_value == '')) {
             $time = null;
-        } elseif (strpos(strtolower($actual_value),'now') !== false) {
+        } elseif (strpos(strtolower($actual_value), 'now') !== false) {
             $time = time();
         } else {
             // Y-m-d H:i:s
-            $bits = explode(' ',$actual_value,2);
-            $date_bits = explode((strpos($bits[0],'-') !== false)?'-':'/',$bits[0],3);
-            if (!array_key_exists(1,$date_bits)) {
+            $bits = explode(' ', $actual_value, 2);
+            $date_bits = explode((strpos($bits[0], '-') !== false) ? '-' : '/', $bits[0], 3);
+            if (!array_key_exists(1, $date_bits)) {
                 $date_bits[1] = date('m');
             }
-            if (!array_key_exists(2,$date_bits)) {
+            if (!array_key_exists(2, $date_bits)) {
                 $date_bits[2] = date('Y');
             }
-            if (!array_key_exists(1,$bits)) {
+            if (!array_key_exists(1, $bits)) {
                 $bits[1] = '0';
             }
-            $time_bits = explode(':',$bits[1],3);
-            if (!array_key_exists(1,$time_bits)) {
+            $time_bits = explode(':', $bits[1], 3);
+            if (!array_key_exists(1, $time_bits)) {
                 $time_bits[1] = '00';
             }
-            if (!array_key_exists(2,$time_bits)) {
+            if (!array_key_exists(2, $time_bits)) {
                 $time_bits[2] = '00';
             }
 
-            $time = array(intval($time_bits[1]),intval($time_bits[0]),intval($date_bits[1]),intval($date_bits[2]),intval($date_bits[0]));
+            $time = array(intval($time_bits[1]), intval($time_bits[0]), intval($date_bits[1]), intval($date_bits[2]), intval($date_bits[0]));
         }
         /*
         $min_year=1902; // 1902 is based on signed integer limit
@@ -166,7 +165,7 @@ class Hook_fields_date
         */
         $min_year = null;
         $years_to_show = null;
-        return form_input_date($_cf_name,$_cf_description,'field_' . strval($field['id']),$field['cf_required'] == 1,($field['cf_required'] == 0) && ($actual_value == ''),true,$time,$years_to_show,$min_year);
+        return form_input_date($_cf_name, $_cf_description, 'field_' . strval($field['id']), $field['cf_required'] == 1, ($field['cf_required'] == 0) && ($actual_value == ''), true, $time, $years_to_show, $min_year);
     }
 
     /**
@@ -178,23 +177,23 @@ class Hook_fields_date
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $stub = 'field_' . strval($id);
 
         require_code('temporal2');
-        list($year,$month,$day,$hour,$minute) = get_input_date_components($stub);
+        list($year, $month, $day, $hour, $minute) = get_input_date_components($stub);
         if (is_null($year)) {
-            return $editing?STRING_MAGIC_NULL:'';
+            return $editing ? STRING_MAGIC_NULL : '';
         }
         if (is_null($month)) {
-            return $editing?STRING_MAGIC_NULL:'';
+            return $editing ? STRING_MAGIC_NULL : '';
         }
         if (is_null($day)) {
-            return $editing?STRING_MAGIC_NULL:'';
+            return $editing ? STRING_MAGIC_NULL : '';
         }
 
-        return str_pad(strval($year),4,'0',STR_PAD_LEFT) . '-' . str_pad(strval($month),2,'0',STR_PAD_LEFT) . '-' . str_pad(strval($day),2,'0',STR_PAD_LEFT) . ' ' . strval($hour) . ':' . strval($minute);
+        return str_pad(strval($year), 4, '0', STR_PAD_LEFT) . '-' . str_pad(strval($month), 2, '0', STR_PAD_LEFT) . '-' . str_pad(strval($day), 2, '0', STR_PAD_LEFT) . ' ' . strval($hour) . ':' . strval($minute);
     }
 }

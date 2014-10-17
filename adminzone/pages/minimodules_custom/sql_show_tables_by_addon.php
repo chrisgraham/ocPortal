@@ -25,17 +25,17 @@ foreach ($tables_by as $t => $ts) {
             echo ' &ndash; <span style="color: green">' . $table_descriptions[$table] . '</span>';
         }
         echo '<ul>';
-        $fields = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_type'),array('m_table' => $table));
+        $fields = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_type'), array('m_table' => $table));
         foreach ($fields as $field) {
-            $type = str_replace('?','',str_replace('*','',$field['m_type']));
+            $type = str_replace('?', '', str_replace('*', '', $field['m_type']));
             $extra = '';
             if (isset($relation_map[$table . '.' . $field['m_name']])) {
                 $extra .= ' ( &rarr; <strong>' . escape_html($relation_map[$table . '.' . $field['m_name']]) . '</strong>)';
             }
-            if (strpos($field['m_type'],'*') !== false) {
+            if (strpos($field['m_type'], '*') !== false) {
                 $extra .= ' (<u>Key field</u>)';
             }
-            if (strpos($field['m_type'],'?') !== false) {
+            if (strpos($field['m_type'], '?') !== false) {
                 $extra .= ' (<em>May be NULL</em>)';
             }
             echo '<li><strong>' . escape_html($type) . '</strong> ' . escape_html($field['m_name']) . $extra . '</li>';

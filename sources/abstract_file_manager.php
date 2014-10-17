@@ -41,45 +41,47 @@ function init__abstract_file_manager()
 function force_have_afm_details()
 {
     if (is_suexec_like()) {
-        set_value('uses_ftp','0');
+        set_value('uses_ftp', '0');
         return; // No need for FTP
     }
 
     if (get_file_base() != get_custom_file_base()) { // Shared installs are assumed to have the necessary AFM permissions where needed
-        set_value('uses_ftp','0');
+        set_value('uses_ftp', '0');
         return;
     }
 
     if ((!function_exists('ftp_ssl_connect')) && (!function_exists('ftp_connect'))) {
-        set_value('uses_ftp','0');
+        set_value('uses_ftp', '0');
         return;
     }
 
-    $got_ftp_details = post_param_integer('got_ftp_details',0);
+    $got_ftp_details = post_param_integer('got_ftp_details', 0);
     $ftp_password = get_value('ftp_password');
     if (is_null($ftp_password)) {
         $ftp_password = '';
     }
     //$uses_ftp=get_value('uses_ftp');    We can't use this because there's no reliable way to trust this is always going to be right (permissions change/differ, and we can't accurately run a test and trust the result going forward for everything)
-    if (/*($uses_ftp==='0') || */(strlen($ftp_password)>0)) { // Permanently stored
+    if (/*($uses_ftp==='0') || */
+    (strlen($ftp_password) > 0)
+    ) { // Permanently stored
         return;
     }
     if ($got_ftp_details == 0) { // Get FTP details
         get_afm_form();
     } else {
         // Store them as values
-        $uses_ftp = post_param_integer('uses_ftp',0);
-        set_value('uses_ftp',strval($uses_ftp));
+        $uses_ftp = post_param_integer('uses_ftp', 0);
+        set_value('uses_ftp', strval($uses_ftp));
         if ($uses_ftp == 1) {
-            set_value('ftp_username',post_param('ftp_username'));
+            set_value('ftp_username', post_param('ftp_username'));
             $ftp_directory = post_param('ftp_directory');
-            if (substr($ftp_directory,0,1) != '/') {
+            if (substr($ftp_directory, 0, 1) != '/') {
                 $ftp_directory = '/' . $ftp_directory;
             }
-            set_value('ftp_directory',$ftp_directory);
-            set_value('ftp_domain',post_param('ftp_domain'));
-            if (post_param_integer('remember_password',0) == 1) {
-                set_value('ftp_password',post_param('ftp_password'));
+            set_value('ftp_directory', $ftp_directory);
+            set_value('ftp_domain', post_param('ftp_domain'));
+            if (post_param_integer('remember_password', 0) == 1) {
+                set_value('ftp_password', post_param('ftp_password'));
             }
         }
     }
@@ -97,14 +99,14 @@ function get_afm_form()
     $post_url = get_self_url(true);
     $submit_name = do_lang_tempcode('PROCEED');
     $hidden = build_keep_post_fields();
-    $hidden->attach(form_input_hidden('got_ftp_details','1'));
-    if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) == '1') {
-        $hidden->attach(form_input_hidden('uses_ftp','1'));
+    $hidden->attach(form_input_hidden('got_ftp_details', '1'));
+    if (str_replace(array('on', 'true', 'yes'), array('1', '1', '1'), strtolower(ini_get('safe_mode'))) == '1') {
+        $hidden->attach(form_input_hidden('uses_ftp', '1'));
     }
     $javascript = "var ftp_ticker=function() { var uses_ftp=document.getElementById('uses_ftp'); if (!uses_ftp) return; var form=uses_ftp.form; form.elements['ftp_domain'].disabled=!uses_ftp.checked; form.elements['ftp_directory'].disabled=!uses_ftp.checked; form.elements['ftp_username'].disabled=!uses_ftp.checked; form.elements['ftp_password'].disabled=!uses_ftp.checked; form.elements['remember_password'].disabled=!uses_ftp.checked; }; ftp_ticker(); document.getElementById('uses_ftp').onclick=ftp_ticker;";
 
-    $middle = do_template('FORM_SCREEN',array('_GUID' => 'c47a31fca47a7b22eeef3a6269cc2407','JAVASCRIPT' => $javascript,'SKIP_VALIDATION' => true,'HIDDEN' => $hidden,'SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => $submit_name,'TITLE' => $title,'FIELDS' => $fields,'URL' => $post_url,'TEXT' => paragraph(do_lang_tempcode('TEXT_ABSTRACT_FILE_MANAGEMENT'))));
-    $echo = globalise($middle,null,'',true);
+    $middle = do_template('FORM_SCREEN', array('_GUID' => 'c47a31fca47a7b22eeef3a6269cc2407', 'JAVASCRIPT' => $javascript, 'SKIP_VALIDATION' => true, 'HIDDEN' => $hidden, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => $submit_name, 'TITLE' => $title, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => paragraph(do_lang_tempcode('TEXT_ABSTRACT_FILE_MANAGEMENT'))));
+    $echo = globalise($middle, null, '', true);
     $echo->evaluate_echo();
     exit();
 }
@@ -122,7 +124,7 @@ function get_afm_form_fields()
     $ftp_username = get_value('ftp_username');
     $ftp_directory = get_value('ftp_directory');
     $ftp_domain = get_value('ftp_domain');
-    $_uses_ftp = running_script('upgrader')?'0':get_value('uses_ftp');
+    $_uses_ftp = running_script('upgrader') ? '0' : get_value('uses_ftp');
     if (is_null($_uses_ftp)) {
         $uses_ftp = !is_writable_wrap(get_file_base() . '/adminzone/index.php');
     } else {
@@ -131,7 +133,7 @@ function get_afm_form_fields()
 
     // Domain
     if (is_null($ftp_domain)) {
-        if (array_key_exists('ftp_domain',$GLOBALS['SITE_INFO'])) {
+        if (array_key_exists('ftp_domain', $GLOBALS['SITE_INFO'])) {
             $ftp_domain = $GLOBALS['SITE_INFO']['ftp_domain'];
         } else {
             $ftp_domain = get_domain();
@@ -140,10 +142,10 @@ function get_afm_form_fields()
 
     // Username
     if (is_null($ftp_username)) {
-        if (array_key_exists('ftp_username',$GLOBALS['SITE_INFO'])) {
+        if (array_key_exists('ftp_username', $GLOBALS['SITE_INFO'])) {
             $ftp_username = $GLOBALS['SITE_INFO']['ftp_username'];
         } else {
-            if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'),'posix_getpwuid') === false)) {
+            if ((function_exists('posix_getpwuid')) && (strpos(@ini_get('disable_functions'), 'posix_getpwuid') === false)) {
                 $u_info = posix_getpwuid(fileowner(get_file_base() . '/index.php'));
                 if ($u_info !== false) {
                     $ftp_username = $u_info['name'];
@@ -161,46 +163,46 @@ function get_afm_form_fields()
 
     // Directory
     if (is_null($ftp_directory)) {
-        if (array_key_exists('ftp_directory',$GLOBALS['SITE_INFO'])) {
+        if (array_key_exists('ftp_directory', $GLOBALS['SITE_INFO'])) {
             $ftp_directory = $GLOBALS['SITE_INFO']['ftp_directory'];
         } else {
-            $pos = strpos(ocp_srv('SCRIPT_NAME'),'adminzone/index.php');
+            $pos = strpos(ocp_srv('SCRIPT_NAME'), 'adminzone/index.php');
             if (($pos === false) && (get_zone_name() != '')) {
-                $pos = strpos(ocp_srv('SCRIPT_NAME'),get_zone_name() . '/index.php');
+                $pos = strpos(ocp_srv('SCRIPT_NAME'), get_zone_name() . '/index.php');
             }
             if ($pos === false) {
-                $pos = strpos(ocp_srv('SCRIPT_NAME'),'data/');
+                $pos = strpos(ocp_srv('SCRIPT_NAME'), 'data/');
             }
             if ($pos === false) {
-                $pos = strpos(ocp_srv('SCRIPT_NAME'),'data_custom/');
+                $pos = strpos(ocp_srv('SCRIPT_NAME'), 'data_custom/');
             }
             if ($pos === false) {
-                $pos = strpos(ocp_srv('SCRIPT_NAME'),'cms/index.php');
+                $pos = strpos(ocp_srv('SCRIPT_NAME'), 'cms/index.php');
             }
             if ($pos === false) {
-                $pos = strpos(ocp_srv('SCRIPT_NAME'),'site/index.php');
+                $pos = strpos(ocp_srv('SCRIPT_NAME'), 'site/index.php');
             }
             $dr = ocp_srv('DOCUMENT_ROOT');
-            if (strpos($dr,'/') !== false) {
-                $dr_parts = explode('/',$dr);
+            if (strpos($dr, '/') !== false) {
+                $dr_parts = explode('/', $dr);
             } else {
-                $dr_parts = explode('\\',$dr);
+                $dr_parts = explode('\\', $dr);
             }
-            $webdir_stub = $dr_parts[count($dr_parts)-1];
-            $ftp_directory = '/' . $webdir_stub . substr(ocp_srv('SCRIPT_NAME'),0,$pos);
+            $webdir_stub = $dr_parts[count($dr_parts) - 1];
+            $ftp_directory = '/' . $webdir_stub . substr(ocp_srv('SCRIPT_NAME'), 0, $pos);
         }
     }
 
-    $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '671ec3d1ffd376766450b36d718f1c60','TITLE' => do_lang_tempcode('SETTINGS'))));
-    if (str_replace(array('on','true','yes'),array('1','1','1'),strtolower(ini_get('safe_mode'))) != '1') {
-        $fields->attach(form_input_tick(do_lang_tempcode('NEED_FTP'),do_lang_tempcode('DESCRIPTION_NEED_FTP'),'uses_ftp',$uses_ftp));
+    $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '671ec3d1ffd376766450b36d718f1c60', 'TITLE' => do_lang_tempcode('SETTINGS'))));
+    if (str_replace(array('on', 'true', 'yes'), array('1', '1', '1'), strtolower(ini_get('safe_mode'))) != '1') {
+        $fields->attach(form_input_tick(do_lang_tempcode('NEED_FTP'), do_lang_tempcode('DESCRIPTION_NEED_FTP'), 'uses_ftp', $uses_ftp));
     }
-    $fields->attach(form_input_line(do_lang_tempcode('FTP_DOMAIN'),'','ftp_domain',$ftp_domain,false));
-    $fields->attach(form_input_line(do_lang_tempcode('FTP_DIRECTORY'),do_lang_tempcode('FTP_FOLDER'),'ftp_directory',$ftp_directory,false));
-    $fields->attach(form_input_line(do_lang_tempcode('FTP_USERNAME'),'','ftp_username',$ftp_username,false));
-    $fields->attach(form_input_password(do_lang_tempcode('FTP_PASSWORD'),'','ftp_password',false));
-    $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => '7b2ed7bd1b2869a02e3b3bf40b3f99cd','TITLE' => do_lang_tempcode('ACTIONS'))));
-    $fields->attach(form_input_tick(do_lang_tempcode('REMEMBER_PASSWORD'),do_lang_tempcode('DESCRIPTION_REMEMBER_PASSWORD'),'remember_password',false));
+    $fields->attach(form_input_line(do_lang_tempcode('FTP_DOMAIN'), '', 'ftp_domain', $ftp_domain, false));
+    $fields->attach(form_input_line(do_lang_tempcode('FTP_DIRECTORY'), do_lang_tempcode('FTP_FOLDER'), 'ftp_directory', $ftp_directory, false));
+    $fields->attach(form_input_line(do_lang_tempcode('FTP_USERNAME'), '', 'ftp_username', $ftp_username, false));
+    $fields->attach(form_input_password(do_lang_tempcode('FTP_PASSWORD'), '', 'ftp_password', false));
+    $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '7b2ed7bd1b2869a02e3b3bf40b3f99cd', 'TITLE' => do_lang_tempcode('ACTIONS'))));
+    $fields->attach(form_input_tick(do_lang_tempcode('REMEMBER_PASSWORD'), do_lang_tempcode('DESCRIPTION_REMEMBER_PASSWORD'), 'remember_password', false));
 
     return $fields;
 }
@@ -218,100 +220,99 @@ function _ftp_info($light_fail = false)
         return $AFM_FTP_CONN;
     }
 
-    if (((get_value('uses_ftp') == '1') && (!running_script('upgrader'))) || (post_param_integer('uses_ftp',0) == 1)) {
+    if (((get_value('uses_ftp') == '1') && (!running_script('upgrader'))) || (post_param_integer('uses_ftp', 0) == 1)) {
         require_lang('installer');
 
         $conn = false;
-        $domain = post_param('ftp_domain',get_value('ftp_domain'));
+        $domain = post_param('ftp_domain', get_value('ftp_domain'));
         $port = 21;
-        if (strpos($domain,':') !== false) {
-            list($domain,$_port) = explode(':',$domain,2);
+        if (strpos($domain, ':') !== false) {
+            list($domain, $_port) = explode(':', $domain, 2);
             $port = intval($_port);
         }
         if (function_exists('ftp_ssl_connect')) {
-            $conn = @ftp_ssl_connect($domain,$port);
+            $conn = @ftp_ssl_connect($domain, $port);
         }
         $ssl = ($conn !== false);
 
-        $username = post_param('ftp_username',get_value('ftp_username'));
-        $password = post_param('ftp_password',get_value('ftp_password'));
+        $username = post_param('ftp_username', get_value('ftp_username'));
+        $password = post_param('ftp_password', get_value('ftp_password'));
 
-        if (($ssl) && (!@ftp_login($conn,$username,$password))) {
+        if (($ssl) && (!@ftp_login($conn, $username, $password))) {
             $conn = false;
             $ssl = false;
         }
         if (($conn === false) && (function_exists('ftp_connect'))) {
-            $conn = @ftp_connect($domain,$port);
+            $conn = @ftp_connect($domain, $port);
         }
         if ($conn === false) {
-            set_value('ftp_password','');
+            set_value('ftp_password', '');
             if ($light_fail) {
                 $temp = do_lang_tempcode('NO_FTP_CONNECT');
                 echo '<strong>';
                 $temp->evaluate_echo();
                 echo '</strong>';
-                return NULL;
+                return null;
             } else {
-                set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
-                attach_message(do_lang_tempcode('NO_FTP_CONNECT'),'warn');
+                set_value('ftp_password', ''); // Wipe out password, because we need the user to see FTP login screen again
+                attach_message(do_lang_tempcode('NO_FTP_CONNECT'), 'warn');
                 get_afm_form();
             }
         }
 
-        $username = post_param('ftp_username',get_value('ftp_username'));
-        $password = post_param('ftp_password',get_value('ftp_password'));
+        $username = post_param('ftp_username', get_value('ftp_username'));
+        $password = post_param('ftp_password', get_value('ftp_password'));
 
-        if ((!$ssl) && (@ftp_login($conn,$username,$password) === false)) {
-            set_value('ftp_password','');
+        if ((!$ssl) && (@ftp_login($conn, $username, $password) === false)) {
+            set_value('ftp_password', '');
             if ($light_fail) {
-                $temp = do_lang_tempcode('NO_FTP_LOGIN',@strval($php_errormsg));
+                $temp = do_lang_tempcode('NO_FTP_LOGIN', @strval($php_errormsg));
                 $temp->evaluate_echo();
-                return NULL;
+                return null;
             } else {
-                set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
-                attach_message(do_lang_tempcode('NO_FTP_LOGIN',@strval($php_errormsg)),'warn');
+                set_value('ftp_password', ''); // Wipe out password, because we need the user to see FTP login screen again
+                attach_message(do_lang_tempcode('NO_FTP_LOGIN', @strval($php_errormsg)), 'warn');
                 get_afm_form();
             }
         }
 
-        $ftp_folder = post_param('ftp_folder',get_value('ftp_directory'));
-        if (substr($ftp_folder,-1) != '/') {
+        $ftp_folder = post_param('ftp_folder', get_value('ftp_directory'));
+        if (substr($ftp_folder, -1) != '/') {
             $ftp_folder .= '/';
         }
-        if (@ftp_chdir($conn,$ftp_folder) === false) {
-            set_value('ftp_password','');
+        if (@ftp_chdir($conn, $ftp_folder) === false) {
+            set_value('ftp_password', '');
             if ($light_fail) {
-                $temp = do_lang_tempcode('NO_FTP_DIR',@strval($php_errormsg),'1');
+                $temp = do_lang_tempcode('NO_FTP_DIR', @strval($php_errormsg), '1');
                 $temp->evaluate_echo();
-                return NULL;
+                return null;
             } else {
-                set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
-                attach_message(do_lang_tempcode('NO_FTP_DIR',@strval($php_errormsg),'1'),'warn');
+                set_value('ftp_password', ''); // Wipe out password, because we need the user to see FTP login screen again
+                attach_message(do_lang_tempcode('NO_FTP_DIR', @strval($php_errormsg), '1'), 'warn');
                 get_afm_form();
             }
         }
-        $files = @ftp_nlist($conn,'.');
+        $files = @ftp_nlist($conn, '.');
         if ($files === false) { // :(. Weird bug on some systems
             $files = array();
-            if (@ftp_rename($conn,'_config.php','_config.php')) {
+            if (@ftp_rename($conn, '_config.php', '_config.php')) {
                 $files = array('_config.php');
             }
         }
-        if (!in_array('_config.php',$files)) {
-            set_value('ftp_password','');
+        if (!in_array('_config.php', $files)) {
+            set_value('ftp_password', '');
             if ($light_fail) {
-                $temp = do_lang_tempcode('NO_FTP_DIR',@strval($php_errormsg),'2');
+                $temp = do_lang_tempcode('NO_FTP_DIR', @strval($php_errormsg), '2');
                 $temp->evaluate_echo();
-                return NULL;
+                return null;
             } else {
-                set_value('ftp_password',''); // Wipe out password, because we need the user to see FTP login screen again
-                attach_message(do_lang_tempcode('NO_FTP_DIR',@strval($php_errormsg),'2'),'warn');
+                set_value('ftp_password', ''); // Wipe out password, because we need the user to see FTP login screen again
+                attach_message(do_lang_tempcode('NO_FTP_DIR', @strval($php_errormsg), '2'), 'warn');
                 get_afm_form();
             }
         }
 
-        $AFM_FTP_CONN = $conn;
-        ;
+        $AFM_FTP_CONN = $conn;;
         return $AFM_FTP_CONN;
     }
 
@@ -334,7 +335,7 @@ function _translate_dir_access($world_access)
         return 0777;
     } // We want the FTP user to be able to delete.. otherwise it gets awkward for them
 
-    return $world_access?0777:0755;
+    return $world_access ? 0777 : 0755;
 }
 
 /**
@@ -344,7 +345,7 @@ function _translate_dir_access($world_access)
  * @param  ID_TEXT                      The file type (blank: don't care).
  * @return integer                      The absolute permission.
  */
-function _translate_file_access($world_access,$file_type = '')
+function _translate_file_access($world_access, $file_type = '')
 {
     $mask = 0;
 
@@ -369,7 +370,7 @@ function _translate_file_access($world_access,$file_type = '')
         return 0666 | $mask;
     } // We want the FTP user to be able to delete.. otherwise it gets awkward for them
 
-    return ($world_access?0666:0644) | $mask;
+    return ($world_access ? 0666 : 0644) | $mask;
 }
 
 /**
@@ -380,7 +381,7 @@ function _translate_file_access($world_access,$file_type = '')
  */
 function _access_string($access_int)
 {
-    return sprintf('%o',$access_int);
+    return sprintf('%o', $access_int);
 }
 
 /**
@@ -391,9 +392,9 @@ function _access_string($access_int)
  */
 function _rescope_path($path)
 {
-    if (post_param('uses_ftp',running_script('upgrader')?'0':get_value('uses_ftp')) == '1') {
-        $ftp_folder = post_param('ftp_folder',get_value('ftp_directory'));
-        if (substr($ftp_folder,-1) != '/') {
+    if (post_param('uses_ftp', running_script('upgrader') ? '0' : get_value('uses_ftp')) == '1') {
+        $ftp_folder = post_param('ftp_folder', get_value('ftp_directory'));
+        if (substr($ftp_folder, -1) != '/') {
             $ftp_folder .= '/';
         }
         return $ftp_folder . $path;
@@ -407,16 +408,16 @@ function _rescope_path($path)
  * @param  PATH                         The path of the file/directory we are setting permissions of.
  * @param  boolean                      Whether world access is required.
  */
-function afm_set_perms($basic_path,$world_access)
+function afm_set_perms($basic_path, $world_access)
 {
-    $access = is_dir(get_file_base() . '/' . $basic_path)?_translate_dir_access($world_access):_translate_file_access($world_access);
+    $access = is_dir(get_file_base() . '/' . $basic_path) ? _translate_dir_access($world_access) : _translate_file_access($world_access);
     $path = _rescope_path($basic_path);
 
     $conn = _ftp_info();
     if ($conn !== false) {
-        @ftp_chmod($conn,$access,$path);
+        @ftp_chmod($conn, $access, $path);
     } else {
-        @chmod($path,$access);
+        @chmod($path, $access);
     }
 }
 
@@ -427,42 +428,42 @@ function afm_set_perms($basic_path,$world_access)
  * @param  boolean                      Whether world access is required.
  * @param  boolean                      Whether we should recursively make any directories that are missing in the given path, until we can make the final directory.
  */
-function afm_make_directory($basic_path,$world_access,$recursive = false)
+function afm_make_directory($basic_path, $world_access, $recursive = false)
 {
     $access = _translate_dir_access($world_access);
     $path = _rescope_path($basic_path);
 
     if ($recursive) {
-        $parts = explode('/',$basic_path);
-        unset($parts[count($parts)-1]);
+        $parts = explode('/', $basic_path);
+        unset($parts[count($parts) - 1]);
     }
 
     $conn = _ftp_info();
     if ($conn !== false) {
         if ($recursive) {
-            $build_up = post_param('ftp_folder',get_value('ftp_directory'));
+            $build_up = post_param('ftp_folder', get_value('ftp_directory'));
             foreach ($parts as $part) {
                 $build_up .= '/' . $part;
-                @ftp_mkdir($conn,$build_up);
-                @ftp_chmod($conn,$access,$build_up);
+                @ftp_mkdir($conn, $build_up);
+                @ftp_chmod($conn, $access, $build_up);
             }
         }
         if (!file_exists(get_custom_file_base() . '/' . $basic_path)) {
-            $success = @ftp_mkdir($conn,$path);
+            $success = @ftp_mkdir($conn, $path);
             if (!is_string($success)) {
                 warn_exit(protect_from_escaping(@strval($php_errormsg)));
             }
         }
-        @ftp_chmod($conn,$access,$path);
+        @ftp_chmod($conn, $access, $path);
 
         clearstatcache();
 
         sync_file(get_custom_file_base() . '/' . $basic_path);
     } else {
         if (!file_exists(get_custom_file_base() . '/' . $basic_path)) {
-            @mkdir($path,$access,$recursive) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($path),escape_html(dirname($path))));
+            @mkdir($path, $access, $recursive) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY', escape_html($path), escape_html(dirname($path))));
         } else {
-            @chmod($path,$access);
+            @chmod($path, $access);
         }
 
         sync_file($path);
@@ -476,19 +477,19 @@ function afm_make_directory($basic_path,$world_access,$recursive = false)
  * @param  PATH                         The directory where we are searching under.
  * @return array                        An array of directories found under this recursive level.
  */
-function _get_dir_tree($base,$at = '')
+function _get_dir_tree($base, $at = '')
 {
-    $out = array(array('dir',$at));
+    $out = array(array('dir', $at));
     $stub = get_custom_file_base() . '/' . $base . '/' . $at;
     $dh = @opendir($stub);
     if ($dh !== false) {
         while (($file = readdir($dh)) !== false) {
             if (($file != '.') && ($file != '..')) {
-                $stub2 = $stub . (($at != '')?'/':'') . $file;
+                $stub2 = $stub . (($at != '') ? '/' : '') . $file;
                 if (is_dir($stub2)) {
-                    $out = array_merge($out,_get_dir_tree($base,$at . (($at != '')?'/':'') . $file));
+                    $out = array_merge($out, _get_dir_tree($base, $at . (($at != '') ? '/' : '') . $file));
                 } else {
-                    $out[] = array('file',$at . (($at != '')?'/':'') . $file);
+                    $out[] = array('file', $at . (($at != '') ? '/' : '') . $file);
                 }
             }
         }
@@ -505,14 +506,14 @@ function _get_dir_tree($base,$at = '')
  * @param  PATH                         The path to and of the directory we are deleting.
  * @param  boolean                      Whether we should recursively delete any child files and directories.
  */
-function afm_delete_directory($basic_path,$recursive = false)
+function afm_delete_directory($basic_path, $recursive = false)
 {
-    $paths = $recursive?array_reverse(_get_dir_tree($basic_path)):array(array('dir',''));
+    $paths = $recursive ? array_reverse(_get_dir_tree($basic_path)) : array(array('dir', ''));
 
     $conn = _ftp_info();
 
     foreach ($paths as $bits) {
-        list($type,$path) = $bits;
+        list($type, $path) = $bits;
 
         if ($type == 'file') {
             afm_delete_file($basic_path . '/' . $path);
@@ -520,13 +521,13 @@ function afm_delete_directory($basic_path,$recursive = false)
             $path = _rescope_path($basic_path . '/' . $path);
 
             if ($conn !== false) {
-                ftp_rmdir($conn,$path);
+                ftp_rmdir($conn, $path);
 
                 clearstatcache();
 
                 sync_file(get_custom_file_base() . '/' . $basic_path);
             } else {
-                @rmdir($path) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY',escape_html($path)));
+                @rmdir($path) or warn_exit(do_lang_tempcode('WRITE_ERROR_DIRECTORY', escape_html($path)));
 
                 sync_file($path);
             }
@@ -541,23 +542,23 @@ function afm_delete_directory($basic_path,$recursive = false)
  * @param  string                       The desired file contents.
  * @param  boolean                      Whether world access is required.
  */
-function afm_make_file($basic_path,$contents,$world_access)
+function afm_make_file($basic_path, $contents, $world_access)
 {
     $path = _rescope_path($basic_path);
-    $access = _translate_file_access($world_access,get_file_extension($basic_path));
+    $access = _translate_file_access($world_access, get_file_extension($basic_path));
 
     $conn = _ftp_info();
     if ($conn !== false) {
         $path2 = ocp_tempnam('ocpafm');
 
-        $h = fopen($path2,'wb');
-        if (fwrite($h,$contents)<strlen($contents)) {
-            warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE_TMP',escape_html($path2)));
+        $h = fopen($path2, 'wb');
+        if (fwrite($h, $contents) < strlen($contents)) {
+            warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE_TMP', escape_html($path2)));
         }
         fclose($h);
 
-        $h = fopen($path2,'rb');
-        $success = @ftp_fput($conn,$path,$h,FTP_BINARY);
+        $h = fopen($path2, 'rb');
+        $success = @ftp_fput($conn, $path, $h, FTP_BINARY);
         if (!$success) {
             if (running_script('upgrader')) {
                 echo @strval($php_errormsg);
@@ -569,21 +570,21 @@ function afm_make_file($basic_path,$contents,$world_access)
 
         @unlink($path2);
 
-        @ftp_chmod($conn,$access,$path);
+        @ftp_chmod($conn, $access, $path);
 
         clearstatcache();
 
         sync_file(get_custom_file_base() . '/' . $basic_path);
     } else {
-        $h = @fopen($path,'wb');
+        $h = @fopen($path, 'wb');
         if ($h === false) {
             intelligent_write_error($path);
         }
-        if (fwrite($h,$contents)<strlen($contents)) {
+        if (fwrite($h, $contents) < strlen($contents)) {
             warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE_TMP'));
         }
         fclose($h);
-        @chmod($path,$access);
+        @chmod($path, $access);
         fix_permissions($path);
 
         sync_file($path);
@@ -608,14 +609,14 @@ function afm_read_file($path)
  * @param  PATH                         The target path.
  * @param  boolean                      Whether world access is required for the copy.
  */
-function afm_copy($old_path,$new_path,$world_access)
+function afm_copy($old_path, $new_path, $world_access)
 {
     $a = get_custom_file_base() . '/' . $old_path;
     if (!file_exists($a)) {
         $a = get_file_base() . '/' . $old_path;
     }
     $contents = file_get_contents($a);
-    afm_make_file($new_path,$contents,$world_access);
+    afm_make_file($new_path, $contents, $world_access);
 }
 
 /**
@@ -624,10 +625,10 @@ function afm_copy($old_path,$new_path,$world_access)
  * @param  PATH                         The path to the file we are moving from.
  * @param  PATH                         The target path.
  */
-function afm_move($basic_old_path,$basic_new_path)
+function afm_move($basic_old_path, $basic_new_path)
 {
     if (is_dir(get_custom_file_base() . '/' . $basic_new_path)) {
-        $basic_new_path .= substr($basic_old_path,strrpos($basic_old_path,'/'));
+        $basic_new_path .= substr($basic_old_path, strrpos($basic_old_path, '/'));
     } // If we are moving to a path, add on the filename to that path
 
     $old_path = _rescope_path($basic_old_path);
@@ -635,7 +636,7 @@ function afm_move($basic_old_path,$basic_new_path)
 
     $conn = _ftp_info();
     if ($conn !== false) {
-        $success = @ftp_rename($conn,$old_path,$new_path);
+        $success = @ftp_rename($conn, $old_path, $new_path);
         if (!$success) {
             if (running_script('upgrader')) {
                 echo @strval($php_errormsg);
@@ -646,11 +647,11 @@ function afm_move($basic_old_path,$basic_new_path)
 
         clearstatcache();
 
-        sync_file_move(get_custom_file_base() . '/' . $basic_old_path,get_custom_file_base() . '/' . $basic_new_path);
+        sync_file_move(get_custom_file_base() . '/' . $basic_old_path, get_custom_file_base() . '/' . $basic_new_path);
     } else {
-        @rename($old_path,$new_path) or intelligent_write_error($old_path);
+        @rename($old_path, $new_path) or intelligent_write_error($old_path);
 
-        sync_file_move($old_path,$new_path);
+        sync_file_move($old_path, $new_path);
     }
 }
 
@@ -665,7 +666,7 @@ function afm_delete_file($basic_path)
 
     $conn = _ftp_info();
     if ($conn !== false) {
-        $success = @ftp_delete($conn,$path);
+        $success = @ftp_delete($conn, $path);
         if (!$success) {
             if (running_script('upgrader')) {
                 echo @strval($php_errormsg);

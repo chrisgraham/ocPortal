@@ -44,10 +44,10 @@ class Module_admin_referrals
      * @param  boolean                  Whether to avoid any entry-point (or even return NULL to disable the page in the Sitemap) if we know another module, or page_group, is going to link to that entry-point. Note that "!" and "misc" entry points are automatically merged with container page nodes (likely called by page-groupings) as appropriate.
      * @return ?array                   A map of entry points (screen-name=>language-code/string or screen-name=>[language-code/string, icon-theme-image]) (NULL: disabled).
      */
-    public function get_entry_points($check_perms = true,$member_id = null,$support_crosslinks = true,$be_deferential = false)
+    public function get_entry_points($check_perms = true, $member_id = null, $support_crosslinks = true, $be_deferential = false)
     {
         return array(
-            'misc' => array('REFERRALS','menu/referrals'),
+            'misc' => array('REFERRALS', 'menu/referrals'),
         );
     }
 
@@ -63,7 +63,7 @@ class Module_admin_referrals
      */
     public function pre_run()
     {
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         require_lang('referrals');
 
@@ -73,17 +73,17 @@ class Module_admin_referrals
 
         if ($type == 'adjust' || $type == '_adjust') {
             $scheme = get_param('scheme');
-            $ini_file = parse_ini_file(get_custom_file_base() . '/text_custom/referrals.txt',true);
+            $ini_file = parse_ini_file(get_custom_file_base() . '/text_custom/referrals.txt', true);
             $scheme_title = $ini_file[$scheme]['title'];
 
-            $this->title = get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS',true,array(escape_html($scheme_title)));
+            $this->title = get_screen_title('MANUALLY_ADJUST_SCHEME_SETTINGS', true, array(escape_html($scheme_title)));
 
             $this->scheme = $scheme;
             $this->ini_file = $ini_file;
             $this->scheme_title = $scheme_title;
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -95,7 +95,7 @@ class Module_admin_referrals
     {
         require_code('referrals');
 
-        $type = get_param('type','misc');
+        $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
             return $this->misc();
@@ -142,23 +142,23 @@ class Module_admin_referrals
 
         require_code('form_templates');
 
-        $post_url = build_url(array('page' => '_SELF','type' => '_adjust','scheme' => $scheme,'member_id' => $member_id),'_SELF');
+        $post_url = build_url(array('page' => '_SELF', 'type' => '_adjust', 'scheme' => $scheme, 'member_id' => $member_id), '_SELF');
         $submit_name = do_lang_tempcode('SAVE');
 
-        list($num_total_qualified_by_referrer) = get_referral_scheme_stats_for($member_id,$scheme);
+        list($num_total_qualified_by_referrer) = get_referral_scheme_stats_for($member_id, $scheme);
 
         $referrals_count = $num_total_qualified_by_referrer;
-        $is_qualified = $GLOBALS['SITE_DB']->query_select_value_if_there('referrer_override','o_is_qualified',array('o_referrer' => $member_id,'o_scheme_name' => $scheme));
+        $is_qualified = $GLOBALS['SITE_DB']->query_select_value_if_there('referrer_override', 'o_is_qualified', array('o_referrer' => $member_id, 'o_scheme_name' => $scheme));
 
         $fields = new ocp_tempcode();
-        $fields->attach(form_input_integer(do_lang_tempcode('QUALIFIED_REFERRALS_COUNT'),'','referrals_count',$referrals_count,true));
+        $fields->attach(form_input_integer(do_lang_tempcode('QUALIFIED_REFERRALS_COUNT'), '', 'referrals_count', $referrals_count, true));
         $is_qualified_list = new ocp_tempcode();
-        $is_qualified_list->attach(form_input_list_entry('',$is_qualified === NULL,do_lang_tempcode('IS_QUALIFIED_DETECT')));
-        $is_qualified_list->attach(form_input_list_entry('1',$is_qualified === 1,do_lang_tempcode('YES')));
-        $is_qualified_list->attach(form_input_list_entry('0',$is_qualified === 0,do_lang_tempcode('NO')));
-        $fields->attach(form_input_list(do_lang_tempcode('IS_QUALIFIED'),'','is_qualified',$is_qualified_list,null,false,false));
+        $is_qualified_list->attach(form_input_list_entry('', $is_qualified === null, do_lang_tempcode('IS_QUALIFIED_DETECT')));
+        $is_qualified_list->attach(form_input_list_entry('1', $is_qualified === 1, do_lang_tempcode('YES')));
+        $is_qualified_list->attach(form_input_list_entry('0', $is_qualified === 0, do_lang_tempcode('NO')));
+        $fields->attach(form_input_list(do_lang_tempcode('IS_QUALIFIED'), '', 'is_qualified', $is_qualified_list, null, false, false));
 
-        return do_template('FORM_SCREEN',array('_GUID' => '7e28b416287fb891c2cd7029795e49f0','TITLE' => $this->title,'HIDDEN' => '','TEXT' => '','FIELDS' => $fields,'SUBMIT_ICON' => 'buttons__save','SUBMIT_NAME' => $submit_name,'URL' => $post_url));
+        return do_template('FORM_SCREEN', array('_GUID' => '7e28b416287fb891c2cd7029795e49f0', 'TITLE' => $this->title, 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'SUBMIT_ICON' => 'buttons__save', 'SUBMIT_NAME' => $submit_name, 'URL' => $post_url));
     }
 
     /**
@@ -174,28 +174,28 @@ class Module_admin_referrals
 
         $member_id = get_param_integer('member_id');
 
-        list($old_referrals_count) = get_referral_scheme_stats_for($member_id,$scheme);
-        list($num_total_qualified_by_referrer) = get_referral_scheme_stats_for($member_id,$scheme,true);
+        list($old_referrals_count) = get_referral_scheme_stats_for($member_id, $scheme);
+        list($num_total_qualified_by_referrer) = get_referral_scheme_stats_for($member_id, $scheme, true);
         $referrals_count = post_param_integer('referrals_count');
-        $referrals_dif = $referrals_count-$num_total_qualified_by_referrer;
-        $is_qualified = post_param_integer('is_qualified',null);
+        $referrals_dif = $referrals_count - $num_total_qualified_by_referrer;
+        $is_qualified = post_param_integer('is_qualified', null);
 
         // Save
-        $GLOBALS['SITE_DB']->query_delete('referrer_override',array(
+        $GLOBALS['SITE_DB']->query_delete('referrer_override', array(
             'o_referrer' => $member_id,
             'o_scheme_name' => $scheme,
         ));
-        $GLOBALS['SITE_DB']->query_insert('referrer_override',array(
+        $GLOBALS['SITE_DB']->query_insert('referrer_override', array(
             'o_referrer' => $member_id,
             'o_scheme_name' => $scheme,
             'o_referrals_dif' => $referrals_dif,
             'o_is_qualified' => $is_qualified,
         ));
 
-        log_it('_MANUALLY_ADJUST_SCHEME_SETTINGS',$scheme,strval($referrals_count-$old_referrals_count));
+        log_it('_MANUALLY_ADJUST_SCHEME_SETTINGS', $scheme, strval($referrals_count - $old_referrals_count));
 
         // Show it worked / Refresh
-        $url = build_url(array('page' => 'members','type' => 'view','id' => $member_id),get_module_zone('members'));
-        return redirect_screen($this->title,$url,do_lang_tempcode('SUCCESS'));
+        $url = build_url(array('page' => 'members', 'type' => 'view', 'id' => $member_id), get_module_zone('members'));
+        return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
     }
 }

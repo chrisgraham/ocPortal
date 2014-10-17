@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_task_find_broken_urls
 {
     /**
@@ -36,7 +35,7 @@ class Hook_task_find_broken_urls
 
         $checked_already = array();
 
-        $skip_hooks = find_all_hooks('systems','non_active_urls');
+        $skip_hooks = find_all_hooks('systems', 'non_active_urls');
 
         $dbs_bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
@@ -52,14 +51,14 @@ class Hook_task_find_broken_urls
             if ($urlpath['m_table'] == 'theme_images') {
                 continue;
             }
-            if (array_key_exists($urlpath['m_table'],$skip_hooks)) {
+            if (array_key_exists($urlpath['m_table'], $skip_hooks)) {
                 continue;
             }
 
-            $ofs = $GLOBALS['SITE_DB']->query_select($urlpath['m_table'],array('*'));
+            $ofs = $GLOBALS['SITE_DB']->query_select($urlpath['m_table'], array('*'));
             foreach ($ofs as $of) {
                 $url = $of[$urlpath['m_name']];
-                $this->check_url($url,$urlpath['m_table'],$urlpath['m_name'],array_key_exists('id',$of)?strval($of['id']):(array_key_exists('name',$of)?$of['name']:do_lang('UNKNOWN')),$checked_already,$found_404,$found);
+                $this->check_url($url, $urlpath['m_table'], $urlpath['m_name'], array_key_exists('id', $of) ? strval($of['id']) : (array_key_exists('name', $of) ? $of['name'] : do_lang('UNKNOWN')), $checked_already, $found_404, $found);
             }
         }
         $possible_comcode_fields = $GLOBALS['SITE_DB']->query('SELECT m_name,m_table FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'db_meta WHERE m_type LIKE \'' . db_encode_like('%LONG_TRANS%') . '\'');
@@ -74,15 +73,15 @@ class Hook_task_find_broken_urls
                 continue;
             }
 
-            $ofs = $GLOBALS['SITE_DB']->query_select($field['m_table'] . ' x',array('x.' . $field['m_name'],'t.source_user'));
+            $ofs = $GLOBALS['SITE_DB']->query_select($field['m_table'] . ' x', array('x.' . $field['m_name'], 't.source_user'));
             foreach ($ofs as $of) {
                 $comcode = get_translated_text($of[$field['m_name']]);
 
-                comcode_to_tempcode($comcode,$of['source_user']);
+                comcode_to_tempcode($comcode, $of['source_user']);
 
-                if ((array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS))) {
+                if ((array_key_exists('COMCODE_BROKEN_URLS', $GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS))) {
                     foreach ($COMCODE_BROKEN_URLS as $i => $_url) {
-                        list($url,$spot) = $_url;
+                        list($url, $spot) = $_url;
                         if (is_null($spot)) {
                             if (multi_lang_content()) {
                                 $_url[$i][1] = 'translate#' . strval($i) . ' (text_original)';
@@ -96,7 +95,7 @@ class Hook_task_find_broken_urls
         }
         $LAX_COMCODE = $temp;
         if (addon_installed('catalogues')) {
-            $catalogue_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields',array('id'),array('cf_type' => 'url'));
+            $catalogue_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('id'), array('cf_type' => 'url'));
             $or_list = '';
             foreach ($catalogue_fields as $field) {
                 if ($or_list != '') {
@@ -105,10 +104,10 @@ class Hook_task_find_broken_urls
                 $or_list .= 'cf_id=' . strval($field['id']);
             }
             if ($or_list != '') {
-                $values = $GLOBALS['SITE_DB']->query('SELECT id,cv_value,ce_id FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_efv_short WHERE ' . $or_list,null,null,false,true);
+                $values = $GLOBALS['SITE_DB']->query('SELECT id,cv_value,ce_id FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_efv_short WHERE ' . $or_list, null, null, false, true);
                 foreach ($values as $value) {
                     $url = $value['cv_value'];
-                    $this->check_url($url,'catalogue_efv_short','cv_value',strval($value['ce_id']),$checked_already,$found_404,$found);
+                    $this->check_url($url, 'catalogue_efv_short', 'cv_value', strval($value['ce_id']), $checked_already, $found_404, $found);
                 }
             }
         }
@@ -117,15 +116,15 @@ class Hook_task_find_broken_urls
         $temp = $LAX_COMCODE;
         $LAX_COMCODE = true;
         foreach ($zones as $zone) {
-            $pages = find_all_pages($zone,'comcode_custom/' . get_site_default_lang(),'txt',true)+find_all_pages($zone,'comcode/' . get_site_default_lang(),'txt',true);
+            $pages = find_all_pages($zone, 'comcode_custom/' . get_site_default_lang(), 'txt', true) + find_all_pages($zone, 'comcode/' . get_site_default_lang(), 'txt', true);
             foreach ($pages as $page => $type) {
-                $file_path = zone_black_magic_filterer(((strpos($type,'_custom') !== false)?get_custom_file_base():get_file_base()) . '/' . $zone . '/pages/' . $type . '/' . $page);
+                $file_path = zone_black_magic_filterer(((strpos($type, '_custom') !== false) ? get_custom_file_base() : get_file_base()) . '/' . $zone . '/pages/' . $type . '/' . $page);
                 $comcode = file_get_contents($file_path);
-                comcode_to_tempcode($comcode,null,true);
+                comcode_to_tempcode($comcode, null, true);
 
-                if ((array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS))) {
+                if ((array_key_exists('COMCODE_BROKEN_URLS', $GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS))) {
                     foreach ($COMCODE_BROKEN_URLS as $i => $_url) {
-                        list($url,$spot) = $_url;
+                        list($url, $spot) = $_url;
                         if (is_null($spot)) {
                             $_url[$i][1] = $zone . ':' . $page;
                         }
@@ -134,24 +133,24 @@ class Hook_task_find_broken_urls
             }
         }
         $lax_comcode = $temp;
-        if ((array_key_exists('COMCODE_BROKEN_URLS',$GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS))) {
+        if ((array_key_exists('COMCODE_BROKEN_URLS', $GLOBALS)) && (!is_null($COMCODE_BROKEN_URLS))) {
             foreach ($COMCODE_BROKEN_URLS as $_url) {
-                list($url,$spot) = $_url;
+                list($url, $spot) = $_url;
 
-                if (!array_key_exists($url,$checked_already)) {
-                    $found_404[] = array('URL' => $url,'SPOT' => $spot);
+                if (!array_key_exists($url, $checked_already)) {
+                    $found_404[] = array('URL' => $url, 'SPOT' => $spot);
                 }
             }
         }
 
         $GLOBALS['NO_DB_SCOPE_CHECK'] = $dbs_bak;
 
-        $ret = do_template('BROKEN_URLS',array(
+        $ret = do_template('BROKEN_URLS', array(
             '_GUID' => '7b60d02e1b95f8d9053fb0a49f45d892',
             'FOUND' => $found,
             'FOUND_404' => $found_404,
         ));
-        return array('text/html',$ret);
+        return array('text/html', $ret);
     }
 
     /**
@@ -166,12 +165,12 @@ class Hook_task_find_broken_urls
      * @param  array                    Place to put file-not-found errors
      * @param  string                   A textual identifier to where the content can be seen
      */
-    public function check_url($url,$table,$field,$id,&$checked_already,&$found_404,&$found,$spot = '')
+    public function check_url($url, $table, $field, $id, &$checked_already, &$found_404, &$found, $spot = '')
     {
         if (trim($url) == '') {
             return;
         }
-        if (array_key_exists($url,$checked_already)) {
+        if (array_key_exists($url, $checked_already)) {
             return;
         }
 
@@ -179,22 +178,22 @@ class Hook_task_find_broken_urls
             $spot = $table . '#' . $id . ' (' . $field . ')';
         }
 
-        if (((substr($url,0,8) == 'uploads/') || (substr($url,0,7) == 'themes/')) && (strpos($url,'?') === false)) {
+        if (((substr($url, 0, 8) == 'uploads/') || (substr($url, 0, 7) == 'themes/')) && (strpos($url, '?') === false)) {
             if ((!file_exists(rawurldecode($url))) && ($field != 'm_avatar_url')) {
-                $found[] = array('URL' => $url,'TABLE' => $table,'FIELD' => $field,'ID' => $id);
+                $found[] = array('URL' => $url, 'TABLE' => $table, 'FIELD' => $field, 'ID' => $id);
             }
         } elseif ($url != '') {
             if (url_is_local($url)) {
-                if (($url[0] == '/') && (strpos(get_base_url(),'/') !== false)) {
-                    $url = substr(get_base_url(),0,strpos(get_base_url(),'/')) . '/' . $url;
+                if (($url[0] == '/') && (strpos(get_base_url(), '/') !== false)) {
+                    $url = substr(get_base_url(), 0, strpos(get_base_url(), '/')) . '/' . $url;
                 } else {
                     $url = get_base_url() . '/' . $url;
                 }
             }
 
-            $test = http_download_file($url,0,false);
-            if ((is_null($test)) && (in_array($GLOBALS['HTTP_MESSAGE'],array('404','could not connect to host')))) {
-                $found_404[] = array('URL' => $url,'SPOT' => $spot);
+            $test = http_download_file($url, 0, false);
+            if ((is_null($test)) && (in_array($GLOBALS['HTTP_MESSAGE'], array('404', 'could not connect to host')))) {
+                $found_404[] = array('URL' => $url, 'SPOT' => $spot);
             }
         }
 

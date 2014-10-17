@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_config_points_wiki
 {
     /**
@@ -47,6 +46,6 @@ class Hook_config_points_wiki
      */
     public function get_default()
     {
-        return addon_installed('points')?'10':null;
+        return addon_installed('points') ? '10' : null;
     }
 }

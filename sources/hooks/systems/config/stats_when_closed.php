@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_config_stats_when_closed
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_stats_when_closed
      */
     public function get_default()
     {
-        return $GLOBALS['DEV_MODE']?'0':'1';
+        return $GLOBALS['DEV_MODE'] ? '0' : '1';
     }
 }

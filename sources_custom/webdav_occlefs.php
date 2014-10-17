@@ -13,8 +13,7 @@
  * @package    webdav
  */
 
-namespace webdav_occlefs
-{
+namespace webdav_occlefs {
     /**
      * Base node-class
      *
@@ -56,10 +55,11 @@ namespace webdav_occlefs
         /**
          * Returns the name of the node
          *
-         * @return string                        */
+         * @return string
+         */
         public function getName()
         {
-            list(,$name) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            list(, $name) = \Sabre\DAV\URLUtil::splitPath($this->path);
             return $name;
         }
 
@@ -67,11 +67,12 @@ namespace webdav_occlefs
          * Renames the node
          *
          * @param string $name The new name
-         * @return void                          */
+         * @return void
+         */
         public function setName($name)
         {
             list($parentPath,) = \Sabre\DAV\URLUtil::splitPath($this->path);
-            list(,$newName) = \Sabre\DAV\URLUtil::splitPath($name);
+            list(, $newName) = \Sabre\DAV\URLUtil::splitPath($name);
 
             $parsedOldPath = $this->occlefs->_pwd_to_array($this->path);
 
@@ -80,10 +81,10 @@ namespace webdav_occlefs
 
             if ($this->occlefs->_is_file($parsedOldPath)) {
                 // File
-                $test = $this->occlefs->move_file($parsedOldPath,$parsedNewPath);
+                $test = $this->occlefs->move_file($parsedOldPath, $parsedNewPath);
             } elseif ($this->occlefs->_is_dir($parsedOldPath)) {
                 // Directory
-                $test = $this->occlefs->move_directory($parsedOldPath,$parsedNewPath);
+                $test = $this->occlefs->move_directory($parsedOldPath, $parsedNewPath);
             } else {
                 throw new \Sabre\DAV\Exception\NotFound('Error renaming/moving ' . $name);
             }
@@ -100,19 +101,20 @@ namespace webdav_occlefs
         /**
          * Returns the last modification time, as a unix timestamp
          *
-         * @return int                           */
+         * @return int
+         */
         public function getLastModified()
         {
             if ($this->path == '') {
-                return NULL;
+                return null;
             }
 
-            list($currentPath,$currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            list($currentPath, $currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
             $parsedCurrentPath = $this->occlefs->_pwd_to_array($currentPath);
 
             $listing = $this->_listingWrap($parsedCurrentPath);
-            foreach ($listing[0]+$listing[1] as $l) {
-                list($filename,$filetype,$filesize,$filetime) = $l;
+            foreach ($listing[0] + $listing[1] as $l) {
+                list($filename, $filetype, $filesize, $filetime) = $l;
                 if ($filename == $currentName) {
                     return $filetime;
                 }
@@ -120,14 +122,15 @@ namespace webdav_occlefs
 
             throw new \Sabre\DAV\Exception\NotFound('Could not find ' . $this->path);
 
-            return NULL;
+            return null;
         }
 
         /**
          * Returns the last modification time, as a unix timestamp
          *
          * @param array $parsedPath Directory listing
-         * @return array                         */
+         * @return array
+         */
         public function _listingWrap($parsedPath)
         {
             $sz = serialize($parsedPath);
@@ -151,10 +154,11 @@ namespace webdav_occlefs
         /**
          * Creates a new file in the directory
          *
-         * @param string $name Name of the file
+         * @param string          $name Name of the file
          * @param resource|string $data Initial payload
-         * @return null|string                   */
-        public function createFile($name,$data = null)
+         * @return null|string
+         */
+        public function createFile($name, $data = null)
         {
             $newPath = $this->path . '/' . $name;
 
@@ -165,7 +169,7 @@ namespace webdav_occlefs
                 fpassthru($data);
                 $data = ob_get_clean();
             }
-            $test = $this->occlefs->write_file($parsedNewPath,is_null($data)?'':$data);
+            $test = $this->occlefs->write_file($parsedNewPath, is_null($data) ? '' : $data);
 
             if ($test === false) {
                 throw new \Sabre\DAV\Exception\Forbidden('Could not create ' . $name);
@@ -178,7 +182,8 @@ namespace webdav_occlefs
          * Creates a new subdirectory
          *
          * @param string $name
-         * @return void                          */
+         * @return void
+         */
         public function createDirectory($name)
         {
             $newPath = $this->path . '/' . $name;
@@ -201,7 +206,8 @@ namespace webdav_occlefs
          * exist.
          *
          * @param string $name
-         * @return \Sabre\DAV\INode              */
+         * @return \Sabre\DAV\INode
+         */
         public function getChild($name)
         {
             $path = $this->path . '/' . $name;
@@ -224,21 +230,22 @@ namespace webdav_occlefs
         /**
          * Returns an array with all the child nodes
          *
-         * @return \Sabre\DAV\INode[]            */
+         * @return \Sabre\DAV\INode[]
+         */
         public function getChildren()
         {
             $listing = $this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
 
             $nodes = array();
             foreach ($listing[0] as $l) {
-                list($filename,$filetype,$filesize,$filetime) = $l;
+                list($filename, $filetype, $filesize, $filetime) = $l;
 
                 $_path = $this->path . '/' . $filename;
 
                 $nodes[] = new Directory($_path);
             }
             foreach ($listing[1] as $l) {
-                list($filename,$filetype,$filesize,$filetime) = $l;
+                list($filename, $filetype, $filesize, $filetime) = $l;
 
                 $_path = $this->path . '/' . $filename;
 
@@ -252,14 +259,15 @@ namespace webdav_occlefs
          * Checks if a child exists.
          *
          * @param string $name
-         * @return bool                          */
+         * @return bool
+         */
         public function childExists($name)
         {
             $listing = $this->_listingWrap($this->occlefs->_pwd_to_array($this->path));
 
             $nodes = array();
-            foreach ($listing[0]+$listing[1] as $l) {
-                list($filename,$filetype,$filesize,$filetime) = $l;
+            foreach ($listing[0] + $listing[1] as $l) {
+                list($filename, $filetype, $filesize, $filetime) = $l;
 
                 if ($filename == $name) {
                     return true;
@@ -272,7 +280,8 @@ namespace webdav_occlefs
         /**
          * Deletes all files in this directory, and then itself
          *
-         * @return void                          */
+         * @return void
+         */
         public function delete()
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -300,7 +309,8 @@ namespace webdav_occlefs
          * Updates the data
          *
          * @param resource $data
-         * @return void                          */
+         * @return void
+         */
         public function put($data)
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -311,7 +321,7 @@ namespace webdav_occlefs
                 $data = ob_get_clean();
             }
 
-            $test = $this->occlefs->write_file($parsedPath,is_null($data)?'':$data);
+            $test = $this->occlefs->write_file($parsedPath, is_null($data) ? '' : $data);
 
             if ($test === false) {
                 throw new \Sabre\DAV\Exception\Forbidden('Could not save ' . $this->path);
@@ -321,7 +331,8 @@ namespace webdav_occlefs
         /**
          * Returns the data
          *
-         * @return string                        */
+         * @return string
+         */
         public function get()
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -338,7 +349,8 @@ namespace webdav_occlefs
         /**
          * Delete the current file
          *
-         * @return void                          */
+         * @return void
+         */
         public function delete()
         {
             $parsedPath = $this->occlefs->_pwd_to_array($this->path);
@@ -355,15 +367,16 @@ namespace webdav_occlefs
         /**
          * Returns the size of the node, in bytes
          *
-         * @return int                           */
+         * @return int
+         */
         public function getSize()
         {
-            list($currentPath,$currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
+            list($currentPath, $currentName) = \Sabre\DAV\URLUtil::splitPath($this->path);
             $parsedCurrentPath = $this->occlefs->_pwd_to_array($currentPath);
 
             $listing = $this->_listingWrap($parsedCurrentPath);
             foreach ($listing[1] as $l) {
-                list($filename,$filetype,$filesize,$filetime) = $l;
+                list($filename, $filetype, $filesize, $filetime) = $l;
                 if ($filename == $currentName) {
                     if (is_null($filesize)) {
                         $filesize = strlen($this->get());
@@ -374,7 +387,7 @@ namespace webdav_occlefs
 
             throw new \Sabre\DAV\Exception\NotFound('Could not find ' . $this->path);
 
-            return NULL;
+            return null;
         }
 
         /**
@@ -385,7 +398,8 @@ namespace webdav_occlefs
          *
          * Return null if the ETag can not effectively be determined
          *
-         * @return mixed                         */
+         * @return mixed
+         */
         public function getETag()
         {
             return null;
@@ -396,7 +410,8 @@ namespace webdav_occlefs
          *
          * If null is returned, we'll assume application/octet-stream
          *
-         * @return mixed                         */
+         * @return mixed
+         */
         public function getContentType()
         {
             return null;
@@ -413,15 +428,16 @@ namespace webdav_occlefs
          *
          * @param string $username
          * @param string $password
-         * @return bool                          */
-        public function validateUserPass($username,$password)
+         * @return bool
+         */
+        public function validateUserPass($username, $password)
         {
-            $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);
-            $result = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,null,$password_hashed,$password);
+            $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password, $username);
+            $result = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username, null, $password_hashed, $password);
             if (is_null($result['id'])) { // Failure, try blank password (as some clients don't let us input a blank password, so the real password could be blank)
                 $password = '';
-                $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password,$username);
-                $result = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username,null,$password_hashed,$password);
+                $password_hashed = $GLOBALS['FORUM_DRIVER']->forum_md5($password, $username);
+                $result = $GLOBALS['FORUM_DRIVER']->forum_authorise_login($username, null, $password_hashed, $password);
             }
             if (!is_null($result['id'])) {
                 return $GLOBALS['FORUM_DRIVER']->is_super_admin($result['id']);

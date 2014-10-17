@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_trackback_catalogues
 {
     /**
@@ -28,8 +27,8 @@ class Hook_trackback_catalogues
      */
     public function run($id)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries',array('allow_trackbacks'),array('id' => intval($id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries', array('allow_trackbacks'), array('id' => intval($id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         return $rows[0]['allow_trackbacks'] == 1;

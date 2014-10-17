@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
-
 class Hook_task_dispatch_notification
 {
     /**
@@ -33,6 +32,6 @@ class Hook_task_dispatch_notification
 
         $dispatcher->dispatch();
 
-        return NULL;
+        return null;
     }
 }

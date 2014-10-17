@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
-
 class Hook_exists_tag
 {
     /**
@@ -29,11 +28,11 @@ class Hook_exists_tag
     {
         $val = get_param('name');
 
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode','tag_tag',array('tag_tag' => $val));
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('custom_comcode', 'tag_tag', array('tag_tag' => $val));
         if (is_null($test)) {
             return new ocp_tempcode();
         }
 
-        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS',escape_html($val))));
+        return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($val))));
     }
 }

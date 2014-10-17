@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_rss_catalogues
 {
     /**
@@ -31,26 +30,26 @@ class Hook_rss_catalogues
      * @param  integer                  The maximum number of entries to return, ordering by date
      * @return ?array                   A pair: The main syndication section, and a title (NULL: error)
      */
-    public function run($_filters,$cutoff,$prefix,$date_string,$max)
+    public function run($_filters, $cutoff, $prefix, $date_string, $max)
     {
         if (!addon_installed('catalogues')) {
-            return NULL;
+            return null;
         }
 
-        if (!has_actual_page_access(get_member(),'catalogues')) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'catalogues')) {
+            return null;
         }
 
-        $filters_1 = ocfilter_to_sqlfragment($_filters,'id','catalogue_categories','cc_parent_id','id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
-        $filters = ocfilter_to_sqlfragment($_filters,'cc_id','catalogue_categories','cc_parent_id','cc_id','id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+        $filters_1 = ocfilter_to_sqlfragment($_filters, 'id', 'catalogue_categories', 'cc_parent_id', 'id', 'id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
+        $filters = ocfilter_to_sqlfragment($_filters, 'cc_id', 'catalogue_categories', 'cc_parent_id', 'cc_id', 'id'); // Note that the parameters are fiddled here so that category-set and record-set are the same, yet SQL is returned to deal in an entirely different record-set (entries' record-set)
 
         require_code('catalogues');
 
-        $_categories = $GLOBALS['SITE_DB']->query('SELECT id,c_name,cc_title FROM ' . get_table_prefix() . 'catalogue_categories WHERE ' . $filters_1,300,null,false,true);
+        $_categories = $GLOBALS['SITE_DB']->query('SELECT id,c_name,cc_title FROM ' . get_table_prefix() . 'catalogue_categories WHERE ' . $filters_1, 300, null, false, true);
         foreach ($_categories as $i => $_category) {
             $_categories[$i]['_title'] = get_translated_text($_category['cc_title']);
         }
-        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_entries WHERE ce_add_date>' . strval(time()-$cutoff) . (((!has_privilege(get_member(),'see_unvalidated')) && (addon_installed('unvalidated')))?' AND ce_validated=1 ':'') . ' AND ' . $filters . ' ORDER BY ce_add_date DESC',$max,null,false,true);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'catalogue_entries WHERE ce_add_date>' . strval(time() - $cutoff) . (((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) ? ' AND ce_validated=1 ' : '') . ' AND ' . $filters . ' ORDER BY ce_add_date DESC', $max, null, false, true);
         $categories = array();
         foreach ($_categories as $category) {
             $categories[$category['id']] = $category;
@@ -60,7 +59,7 @@ class Hook_rss_catalogues
         $privacy_where = '';
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            list($privacy_join,$privacy_where) = get_privacy_where_clause('catalogue_entry','e');
+            list($privacy_join, $privacy_where) = get_privacy_where_clause('catalogue_entry', 'e');
         }
 
         $query = 'SELECT c.* FROM ' . get_table_prefix() . 'catalogues c';
@@ -76,17 +75,17 @@ class Hook_rss_catalogues
 
         $content = new ocp_tempcode();
         foreach ($rows as $row) {
-            if ((count($_categories) == 300) && (!array_key_exists($row['cc_id'],$categories))) {
-                $val = $GLOBALS['SITE_DB']->query_value_if_there('SELECT cc_title FROM ' . get_table_prefix() . 'catalogue_categories WHERE id=' . strval($row['cc_id']) . ' AND (' . $filters_1 . ')',false,true);
+            if ((count($_categories) == 300) && (!array_key_exists($row['cc_id'], $categories))) {
+                $val = $GLOBALS['SITE_DB']->query_value_if_there('SELECT cc_title FROM ' . get_table_prefix() . 'catalogue_categories WHERE id=' . strval($row['cc_id']) . ' AND (' . $filters_1 . ')', false, true);
                 if (!is_null($val)) {
                     $categories[$row['cc_id']] = get_translated_text($val);
                 }
             }
-            if (!array_key_exists($row['cc_id'],$categories)) {
+            if (!array_key_exists($row['cc_id'], $categories)) {
                 continue;
             } // The catalogue was filtered out, thus category not known
             $_category = $categories[$row['cc_id']];
-            if ((has_category_access(get_member(),'catalogues_catalogue',$_category['c_name'])) && ((get_value('disable_cat_cat_perms') === '1') || (has_category_access(get_member(),'catalogues_category',strval($row['cc_id']))))) {
+            if ((has_category_access(get_member(), 'catalogues_catalogue', $_category['c_name'])) && ((get_value('disable_cat_cat_perms') === '1') || (has_category_access(get_member(), 'catalogues_category', strval($row['cc_id']))))) {
                 if (!isset($catalogues[$_category['c_name']])) {
                     continue;
                 }
@@ -97,15 +96,15 @@ class Hook_rss_catalogues
                     $author = '';
                 }
 
-                $news_date = date($date_string,$row['ce_add_date']);
-                $edit_date = is_null($row['ce_edit_date'])?'':date($date_string,$row['ce_edit_date']);
+                $news_date = date($date_string, $row['ce_add_date']);
+                $edit_date = is_null($row['ce_edit_date']) ? '' : date($date_string, $row['ce_edit_date']);
 
                 $tpl_set = $_category['c_name'];
-                $map = get_catalogue_entry_map($row,$catalogues[$_category['c_name']],'PAGE',$tpl_set,db_get_first_id());
+                $map = get_catalogue_entry_map($row, $catalogues[$_category['c_name']], 'PAGE', $tpl_set, db_get_first_id());
                 $_title = $map['FIELD_0'];
-                $news_title = xmlentities(is_object($_title)?$_title->evaluate():escape_html($_title));
-                if (array_key_exists('FIELD_1',$map)) {
-                    $summary = xmlentities(is_object($map['FIELD_1'])?$map['FIELD_1']->evaluate():escape_html($map['FIELD_1']));
+                $news_title = xmlentities(is_object($_title) ? $_title->evaluate() : escape_html($_title));
+                if (array_key_exists('FIELD_1', $map)) {
+                    $summary = xmlentities(is_object($map['FIELD_1']) ? $map['FIELD_1']->evaluate() : escape_html($map['FIELD_1']));
                 } else {
                     $summary = '';
                 }
@@ -114,19 +113,19 @@ class Hook_rss_catalogues
                 $category = $_category['_title'];
                 $category_raw = strval($row['cc_id']);
 
-                $view_url = build_url(array('page' => 'catalogues','type' => 'entry','id' => $row['id']),get_module_zone('catalogues'),null,false,false,true);
+                $view_url = build_url(array('page' => 'catalogues', 'type' => 'entry', 'id' => $row['id']), get_module_zone('catalogues'), null, false, false, true);
 
                 if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
-                    $if_comments = do_template('RSS_ENTRY_COMMENTS',array('_GUID' => 'ee850d0e7f50b21f2dbe17cc49494baa','COMMENT_URL' => $view_url,'ID' => strval($row['id'])));
+                    $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'ee850d0e7f50b21f2dbe17cc49494baa', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
                 } else {
                     $if_comments = new ocp_tempcode();
                 }
 
-                $content->attach(do_template($prefix . 'ENTRY',array('VIEW_URL' => $view_url,'SUMMARY' => $summary,'EDIT_DATE' => $edit_date,'IF_COMMENTS' => $if_comments,'TITLE' => $news_title,'CATEGORY_RAW' => $category_raw,'CATEGORY' => $category,'AUTHOR' => $author,'ID' => $id,'NEWS' => $news,'DATE' => $news_date)));
+                $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
             }
         }
 
         require_lang('catalogues');
-        return array($content,do_lang('CATALOGUE_ENTRIES'));
+        return array($content, do_lang('CATALOGUE_ENTRIES'));
     }
 }

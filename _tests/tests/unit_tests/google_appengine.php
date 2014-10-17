@@ -22,21 +22,21 @@ class google_appengine_test_set extends ocp_test_case
     {
         require_code('files');
         require_code('files2');
-        $files = get_directory_contents(get_file_base(),'',true);
+        $files = get_directory_contents(get_file_base(), '', true);
         foreach ($files as $file) {
-            if ((substr($file,-4) == '.php') && (!should_ignore_file($file,IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS))) {
+            if ((substr($file, -4) == '.php') && (!should_ignore_file($file, IGNORE_BUNDLED_VOLATILE | IGNORE_NONBUNDLED_SCATTERED | IGNORE_CUSTOM_DIR_CONTENTS))) {
                 $contents = file_get_contents(get_file_base() . '/' . $file);
 
-                if (preg_match('#preg_(replace|replace_callback|match|match_all|grep|split)\(\'(.)[^\']*(?<!\\\\)\\2[^\']*e#',$contents) != 0) {
-                    $this->assertTrue(false,'regexp /e not allowed (in ' . $file . ')');
+                if (preg_match('#preg_(replace|replace_callback|match|match_all|grep|split)\(\'(.)[^\']*(?<!\\\\)\\2[^\']*e#', $contents) != 0) {
+                    $this->assertTrue(false, 'regexp /e not allowed (in ' . $file . ')');
                 }
 
-                if ((strpos($contents,'\'PHP_SELF\'') !== false) && (basename($file) != 'minikernel.php') && (basename($file) != 'global.php') && (basename($file) != 'global2.php') && (basename($file) != 'phpstub.php') && (basename($file) != 'lost_password.php')) {
-                    $this->assertTrue(false,'PHP_SELF does not work stably across platforms (in ' . $file . ')');
+                if ((strpos($contents, '\'PHP_SELF\'') !== false) && (basename($file) != 'minikernel.php') && (basename($file) != 'global.php') && (basename($file) != 'global2.php') && (basename($file) != 'phpstub.php') && (basename($file) != 'lost_password.php')) {
+                    $this->assertTrue(false, 'PHP_SELF does not work stably across platforms (in ' . $file . ')');
                 }
 
-                if ((strpos($contents,'\'SCRIPT_FILENAME\'') !== false) && (basename($file) != 'minikernel.php') && (basename($file) != 'global.php') && (basename($file) != 'global2.php') && (basename($file) != 'phpstub.php')) {
-                    $this->assertTrue(false,'SCRIPT_FILENAME does not work stably across platforms (in ' . $file . ')');
+                if ((strpos($contents, '\'SCRIPT_FILENAME\'') !== false) && (basename($file) != 'minikernel.php') && (basename($file) != 'global.php') && (basename($file) != 'global2.php') && (basename($file) != 'phpstub.php')) {
+                    $this->assertTrue(false, 'SCRIPT_FILENAME does not work stably across platforms (in ' . $file . ')');
                 }
             }
         }
@@ -48,13 +48,13 @@ class google_appengine_test_set extends ocp_test_case
         $tpl_counts = array();
         $file_counts = array();
         $directory_counts = array();
-        $hooks = find_all_hooks('systems','addon_registry');
+        $hooks = find_all_hooks('systems', 'addon_registry');
         foreach ($hooks as $hook => $place) {
             if ($place == 'sources_custom') {
                 continue;
             }
 
-            if (in_array($hook,array(
+            if (in_array($hook, array(
                 'installer',
                 'devguide',
                 'backup',
@@ -76,7 +76,7 @@ class google_appengine_test_set extends ocp_test_case
 
             $tpl_count = 0;
             foreach ($files as $file) {
-                if (substr($file,-4) == '.tpl') {
+                if (substr($file, -4) == '.tpl') {
                     $tpl_count++;
                 }
 
@@ -87,7 +87,7 @@ class google_appengine_test_set extends ocp_test_case
 
                 $path = get_file_base() . '/' . $file;
                 if (is_file($path)) {
-                    $this->assertTrue(filesize($path) <= 32*1024*1024,'32MB is the maximum file size: ' . $file . ' is ' . integer_format(filesize($path)));
+                    $this->assertTrue(filesize($path) <= 32 * 1024 * 1024, '32MB is the maximum file size: ' . $file . ' is ' . integer_format(filesize($path)));
                 }
             }
             $tpl_counts[$hook] = $tpl_count;
@@ -105,7 +105,7 @@ class google_appengine_test_set extends ocp_test_case
             if ($dir == 'themes/default/templates') {
                 continue;
             }
-            $this->assertTrue($count <= 1000,'Must be less than 1000 files in any directory (except templates, which is checked separately): ' . $dir);
+            $this->assertTrue($count <= 1000, 'Must be less than 1000 files in any directory (except templates, which is checked separately): ' . $dir);
         }
 
         // The user is advised they must take one big away and two small (or another big)
@@ -132,16 +132,16 @@ class google_appengine_test_set extends ocp_test_case
                 foreach ($set_small as $small2) {
                     foreach ($set_small as $small3) {
                         foreach ($set_small as $small4) {
-                            if (count(array_unique(array($small1,$small2,$small3,$small4)))<4) {
+                            if (count(array_unique(array($small1, $small2, $small3, $small4))) < 4) {
                                 continue;
                             }
 
-                            $custom_tpl_total = $tpl_total-$tpl_counts[$big]-$tpl_counts[$small1]-$tpl_counts[$small2]-$tpl_counts[$small3]-$tpl_counts[$small4];
-                            $custom_file_total = $file_total-$file_counts[$big]-$file_counts[$small1]-$file_counts[$small2]-$file_counts[$small3]-$file_counts[$small4];
+                            $custom_tpl_total = $tpl_total - $tpl_counts[$big] - $tpl_counts[$small1] - $tpl_counts[$small2] - $tpl_counts[$small3] - $tpl_counts[$small4];
+                            $custom_file_total = $file_total - $file_counts[$big] - $file_counts[$small1] - $file_counts[$small2] - $file_counts[$small3] - $file_counts[$small4];
 
-                            $this->assertTrue($custom_tpl_total <= 1000,'Must be less than 1000 templates for given addon advice (removing unsupported and also ' . $big . '&' . $small1 . '&' . $small2 . '&' . $small3 . '&' . $small4 . ') [' . strval($custom_tpl_total) . ']');
+                            $this->assertTrue($custom_tpl_total <= 1000, 'Must be less than 1000 templates for given addon advice (removing unsupported and also ' . $big . '&' . $small1 . '&' . $small2 . '&' . $small3 . '&' . $small4 . ') [' . strval($custom_tpl_total) . ']');
 
-                            $this->assertTrue($custom_file_total <= 10000,'Must be less than 10000 files for given addon advice (removing unsupported and also ' . $big . '&' . $small1 . '&' . $small2 . '&' . $small3 . '&' . $small4 . ') [' . strval($custom_file_total) . ']');
+                            $this->assertTrue($custom_file_total <= 10000, 'Must be less than 10000 files for given addon advice (removing unsupported and also ' . $big . '&' . $small1 . '&' . $small2 . '&' . $small3 . '&' . $small4 . ') [' . strval($custom_file_total) . ']');
                         }
                     }
                 }

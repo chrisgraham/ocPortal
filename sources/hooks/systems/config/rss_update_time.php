@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
-
 class Hook_config_rss_update_time
 {
     /**

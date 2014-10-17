@@ -40,8 +40,8 @@ function optimise_tempcode(&$ob)
     // Merge seq_part groups (they were only put in separately to make attach super-fast)
     if (isset($ob->seq_parts[0])) {
         $cnt = count($ob->seq_parts);
-        for ($i = 1;$i<$cnt;$i++) {
-            $ob->seq_parts[0] = array_merge($ob->seq_parts[0],$ob->seq_parts[$i]);
+        for ($i = 1; $i < $cnt; $i++) {
+            $ob->seq_parts[0] = array_merge($ob->seq_parts[0], $ob->seq_parts[$i]);
         }
         $ob->seq_parts = array($ob->seq_parts[0]);
     }
@@ -56,7 +56,7 @@ function optimise_tempcode(&$ob)
             if (isset($seq_part[1]['vars'])) {
                 return;
             }
-            if (strpos($code,"'vars'=>") !== false) {
+            if (strpos($code, "'vars'=>") !== false) {
                 return;
             }
 
@@ -66,7 +66,7 @@ function optimise_tempcode(&$ob)
                         $key = strval($key);
                     }
 
-                    if (strpos($code,'\$bound_' . $key) !== false) {
+                    if (strpos($code, '\$bound_' . $key) !== false) {
                         $found[$key] = true;
                     }
                 }

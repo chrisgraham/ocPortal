@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    weather
  */
-
 class Block_side_weather
 {
     /**
@@ -30,7 +29,7 @@ class Block_side_weather
         $info['version'] = 6;
         $info['update_require_upgrade'] = 1;
         $info['locked'] = false;
-        $info['parameters'] = array('param','unit','max_days');
+        $info['parameters'] = array('param', 'unit', 'max_days');
         return $info;
     }
 
@@ -48,9 +47,9 @@ class Block_side_weather
      * @param  ?integer                 What version we're upgrading from (NULL: new install)
      * @param  ?integer                 What hack version we're upgrading from (NULL: new-install/not-upgrading-from-a-hacked-version)
      */
-    public function install($upgrade_from = null,$upgrade_from_hack = null)
+    public function install($upgrade_from = null, $upgrade_from_hack = null)
     {
-        $GLOBALS['SITE_DB']->create_table('cached_weather_codes',array(
+        $GLOBALS['SITE_DB']->create_table('cached_weather_codes', array(
             'id' => '*AUTO',
             'w_string' => 'SHORT_TEXT',
             'w_code' => 'INTEGER',
@@ -83,9 +82,9 @@ class Block_side_weather
         require_code('rss');
         require_lang('weather');
 
-        $max_days = isset($map['max_days'])?intval($map['max_days']):2;
+        $max_days = isset($map['max_days']) ? intval($map['max_days']) : 2;
 
-        if (array_key_exists('param',$map)) {
+        if (array_key_exists('param', $map)) {
             $loc_code = $map['param'];
         } // need to pass loc ID ex :INXX0087
         else {
@@ -93,17 +92,17 @@ class Block_side_weather
         } // if not found setting a default location for weather
 
         if (!is_numeric($loc_code)) {
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_weather_codes','w_code',array('w_string' => $loc_code));
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_weather_codes', 'w_code', array('w_string' => $loc_code));
             if (is_null($test)) {
                 $matches = array();
 
                 require_code('files');
 
-                if (preg_match('#^\-?\d+(\.\d+)?,\-?\d+(\.\d+)?$#',$loc_code) != 0) {
+                if (preg_match('#^\-?\d+(\.\d+)?,\-?\d+(\.\d+)?$#', $loc_code) != 0) {
                     $url = 'http://query.yahooapis.com/v1/public/yql?q=' . urlencode('select * from geo.placefinder where text="' . $loc_code . '"') . '&format=json&diagnostics=true&callback=cbfunc';
                     $result = http_download_file($url);
 
-                    if (preg_match('#"woeid":\s*"(\d+)"#',$result,$matches) != 0) {
+                    if (preg_match('#"woeid":\s*"(\d+)"#', $result, $matches) != 0) {
                         $loc_code = $matches[1];
                     } else {
                         return new ocp_tempcode();
@@ -111,9 +110,9 @@ class Block_side_weather
                 } else {
                     $result = http_download_file('http://uk.weather.yahoo.com/search/weather?p=' . urlencode($loc_code));
 
-                    if (preg_match('#<a href=\'/redirwoei/(\d+)\'>#',$result,$matches) != 0) {
+                    if (preg_match('#<a href=\'/redirwoei/(\d+)\'>#', $result, $matches) != 0) {
                         $loc_code = $matches[1];
-                    } elseif (preg_match('#-(\d+)/#',$GLOBALS['HTTP_DOWNLOAD_URL'],$matches) != 0) {
+                    } elseif (preg_match('#-(\d+)/#', $GLOBALS['HTTP_DOWNLOAD_URL'], $matches) != 0) {
                         $loc_code = $matches[1];
                     } else {
                         return new ocp_tempcode();
@@ -121,7 +120,7 @@ class Block_side_weather
                 }
 
                 if (is_numeric($loc_code)) {
-                    $GLOBALS['SITE_DB']->query_insert('cached_weather_codes',array(
+                    $GLOBALS['SITE_DB']->query_insert('cached_weather_codes', array(
                         'w_string' => $map['param'],
                         'w_code' => intval($loc_code),
                     ));
@@ -131,7 +130,7 @@ class Block_side_weather
             }
         }
 
-        $temperature_unit = (array_key_exists('unit',$map) && ($map['unit'] != ''))?$map['unit']:'c';
+        $temperature_unit = (array_key_exists('unit', $map) && ($map['unit'] != '')) ? $map['unit'] : 'c';
 
         if (is_numeric($loc_code)) {
             $rss_url = 'http://weather.yahooapis.com/forecastrss?w=' . urlencode($loc_code) . '&u=' . urlencode($temperature_unit);
@@ -143,13 +142,13 @@ class Block_side_weather
         if (!is_null($rss->error)) {
             $GLOBALS['DO_NOT_CACHE_THIS'] = true;
             require_code('failure');
-            relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED','',$rss->error),false,'error_occurred_weather');
+            relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED', '', $rss->error), false, 'error_occurred_weather');
             if (cron_installed()) {
                 if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
                     return new ocp_tempcode();
                 }
             }
-            return do_template('INLINE_WIP_MESSAGE',array('_GUID' => '046c437a5c3799838155b5c5fbe3be26','MESSAGE' => htmlentities($rss->error)));
+            return do_template('INLINE_WIP_MESSAGE', array('_GUID' => '046c437a5c3799838155b5c5fbe3be26', 'MESSAGE' => htmlentities($rss->error)));
         }
 
         if (!isset($rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'])) {
@@ -176,15 +175,15 @@ class Block_side_weather
         $content = $item['news'];
         $matches = array();
         $image = '';
-        if (preg_match('/<img src="(.*)"\/?' . '>/Usm',$item['news'],$matches) != 0) {
+        if (preg_match('/<img src="(.*)"\/?' . '>/Usm', $item['news'], $matches) != 0) {
             $image = $matches[1];
         }
         $cur_conditions = '';
-        if (preg_match('/Current Conditions:<\/b><br \/>(.*)<BR \/>/Uism',$item['news'],$matches) != 0) {
+        if (preg_match('/Current Conditions:<\/b><br \/>(.*)<BR \/>/Uism', $item['news'], $matches) != 0) {
             $cur_conditions = $matches[1];
         }
         $forecast = '';
-        if (preg_match('/Forecast:<\/b><BR \/>(.*)<br \/>/ism',$item['news'],$matches) != 0) {
+        if (preg_match('/Forecast:<\/b><BR \/>(.*)<br \/>/ism', $item['news'], $matches) != 0) {
             $forecast = $matches[1];
         }
 
@@ -208,7 +207,7 @@ class Block_side_weather
             );
         }
 
-        return do_template('BLOCK_SIDE_WEATHER',array(
+        return do_template('BLOCK_SIDE_WEATHER', array(
             '_GUID' => '8b46b3437fbe05e587b11dd3347fa195',
             'TITLE' => $title,
             'LOC_CODE' => $loc_code,

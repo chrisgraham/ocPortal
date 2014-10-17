@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_checklist_wiki
 {
     /**
@@ -35,8 +34,8 @@ class Hook_checklist_wiki
 
         // Wiki+ moderation
         $status = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA');
-        $url = build_url(array('page' => 'wiki'),get_module_zone('wiki'));
-        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array('_GUID' => 'f32f27f6f9aa77bea277e2f5d4deb6e7','URL' => '','STATUS' => $status,'TASK' => urlise_lang(do_lang('NAG_WIKI'),$url),'INFO' => ''));
-        return array(array($tpl,null,null,null));
+        $url = build_url(array('page' => 'wiki'), get_module_zone('wiki'));
+        $tpl = do_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array('_GUID' => 'f32f27f6f9aa77bea277e2f5d4deb6e7', 'URL' => '', 'STATUS' => $status, 'TASK' => urlise_lang(do_lang('NAG_WIKI'), $url), 'INFO' => ''));
+        return array(array($tpl, null, null, null));
     }
 }

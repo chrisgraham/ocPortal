@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_Preview_quiz
 {
     /**
@@ -27,8 +26,8 @@ class Hook_Preview_quiz
      */
     public function applies()
     {
-        $applies = (get_param('page','') == 'cms_quiz') && ((get_param('type') == '_ed') || (get_param('type') == 'ad'));
-        return array($applies,null,false);
+        $applies = (get_param('page', '') == 'cms_quiz') && ((get_param('type') == '_ed') || (get_param('type') == 'ad'));
+        return array($applies, null, false);
     }
 
     /**
@@ -48,7 +47,7 @@ class Hook_Preview_quiz
         // Do a basic parse (just enough to render the quiz)
 
         $text = post_param('text');
-        $_qs = explode("\n\n",$text);
+        $_qs = explode("\n\n", $text);
         $qs = array();
         foreach ($_qs as $q) {
             $q = trim($q);
@@ -58,17 +57,17 @@ class Hook_Preview_quiz
         }
 
         foreach ($qs as $i => $q) {
-            $_as = explode("\n",$q);
+            $_as = explode("\n", $q);
 
             $as = array();
             foreach ($_as as $a) {
                 if ($a != '') {
-                    if (substr($a,0,1) == ':') { // Is an explanation
+                    if (substr($a, 0, 1) == ':') { // Is an explanation
                         if (count($as) != 0) {
-                            $as[count($as)-1][1] = trim($as[count($as)-1][1] . "\n" . trim(substr($a,1)));
+                            $as[count($as) - 1][1] = trim($as[count($as) - 1][1] . "\n" . trim(substr($a, 1)));
                         }
                     } else {
-                        $as[] = array($a,'');
+                        $as[] = array($a, '');
                     }
                 }
             }
@@ -80,12 +79,12 @@ class Hook_Preview_quiz
             $_q = array_shift($as);
             $question = $_q[0];
             $question_extra_text = $_q[1];
-            list($question,$type,$required,$marked,$question_extra_text) = parse_quiz_question_line($question,$as,$question_extra_text);
+            list($question, $type, $required, $marked, $question_extra_text) = parse_quiz_question_line($question, $as, $question_extra_text);
 
             // Now we add the answers
             $answers = array();
             foreach ($as as $x => $a) {
-                $a[0] = str_replace(' [*]','',$a[0]);
+                $a[0] = str_replace(' [*]', '', $a[0]);
 
                 $answers[] = array(
                     'id' => $x,
@@ -106,6 +105,6 @@ class Hook_Preview_quiz
 
         $preview = render_quiz($questions);
 
-        return array(do_template('FORM',array('_GUID' => '671da928305bee72d7508beb7687d6df','SUBMIT_ICON' => 'buttons__proceed','SUBMIT_NAME' => '','TEXT' => '','URL' => '','HIDDEN' => '','FIELDS' => $preview)),null);
+        return array(do_template('FORM', array('_GUID' => '671da928305bee72d7508beb7687d6df', 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => '', 'TEXT' => '', 'URL' => '', 'HIDDEN' => '', 'FIELDS' => $preview)), null);
     }
 }

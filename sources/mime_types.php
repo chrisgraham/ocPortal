@@ -25,7 +25,7 @@
  * @param  boolean                      Whether there are admin privileges, to render dangerous media types (client-side risk only)
  * @return string                       The MIME type
  */
-function get_mime_type($extension,$as_admin)
+function get_mime_type($extension, $as_admin)
 {
     $extension = strtolower($extension);
 
@@ -40,8 +40,8 @@ function get_mime_type($extension,$as_admin)
         'pdf' => 'application/pdf',
         'rtf' => 'text/richtext',
         'ps' => 'application/postscript',
-        'html' => $as_admin?'text/html':'application/octet-stream',
-        'htm' => $as_admin?'text/html':'application/octet-stream',
+        'html' => $as_admin ? 'text/html' : 'application/octet-stream',
+        'htm' => $as_admin ? 'text/html' : 'application/octet-stream',
 
         // Open office
         'odt' => 'application/vnd.oasis.opendocument.text',
@@ -56,17 +56,17 @@ function get_mime_type($extension,$as_admin)
         'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 
         // XML
-        'xml' => $as_admin?'text/xml':'application/octet-stream',
-        'rss' => $as_admin?'application/rss+xml':'application/octet-stream',
-        'atom' => $as_admin?'application/atom+xml':'application/octet-stream',
+        'xml' => $as_admin ? 'text/xml' : 'application/octet-stream',
+        'rss' => $as_admin ? 'application/rss+xml' : 'application/octet-stream',
+        'atom' => $as_admin ? 'application/atom+xml' : 'application/octet-stream',
 
         // Presentations/Animations/3D
         'ppt' => 'application/powerpoint',
         'pptx' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
-        'svg' => $as_admin?'image/svg+xml':'application/octet-stream',
+        'svg' => $as_admin ? 'image/svg+xml' : 'application/octet-stream',
         'wrl' => 'model/vrml',
         'vrml' => 'model/vrml',
-        'swf' => $as_admin?'application/x-shockwave-flash':'application/octet-stream',
+        'swf' => $as_admin ? 'application/x-shockwave-flash' : 'application/octet-stream',
 
         // Images
         'png' => 'image/png',
@@ -130,7 +130,7 @@ function get_mime_type($extension,$as_admin)
         $mime_types['flv'] = 'video/x-flv';
     }
 
-    if (array_key_exists($extension,$mime_types)) {
+    if (array_key_exists($extension, $mime_types)) {
         return $mime_types[$extension];
     }
 

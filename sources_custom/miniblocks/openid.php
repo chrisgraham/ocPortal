@@ -6,7 +6,7 @@ require_css('openid');
 require_javascript('javascript_jquery');
 require_javascript('javascript_openid');
 
-$url = build_url(array('page' => ''),'');
+$url = build_url(array('page' => ''), '');
 echo '
     <script>// <![CDATA[
     add_event_listener_abstract(window,\'load\',function() {

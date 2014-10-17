@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    printer_friendly_block
  */
-
 class Block_side_printer_friendly
 {
     /**
@@ -46,7 +45,7 @@ class Block_side_printer_friendly
      */
     public function run($map)
     {
-        $url = get_self_url(true,false,array('wide_print' => 1));
-        return do_template('BLOCK_SIDE_PRINTER_FRIENDLY',array('_GUID' => 'db1d2db67f07a3d6bd130f4cef4c5e9d','URL' => $url));
+        $url = get_self_url(true, false, array('wide_print' => 1));
+        return do_template('BLOCK_SIDE_PRINTER_FRIENDLY', array('_GUID' => 'db1d2db67f07a3d6bd130f4cef4c5e9d', 'URL' => $url));
     }
 }

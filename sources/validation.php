@@ -36,16 +36,16 @@ We continue to prohibit much of what was deprecated in XHTML but brought back in
 function init__validation()
 {
     // These are old doctypes we'll recognise for gracefulness, but we don't accept them as valid
-    define('DOCTYPE_HTML','<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
-    define('DOCTYPE_HTML_STRICT','<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
-    define('DOCTYPE_XHTML','<!DOCTYPE html>');
-    define('DOCTYPE_XHTML_STRICT','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
-    define('DOCTYPE_XHTML_11','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
+    define('DOCTYPE_HTML', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">');
+    define('DOCTYPE_HTML_STRICT', '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">');
+    define('DOCTYPE_XHTML', '<!DOCTYPE html>');
+    define('DOCTYPE_XHTML_STRICT', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">');
+    define('DOCTYPE_XHTML_11', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">');
 
     // (X)HTML5, the future
-    define('DOCTYPE_XHTML5','<!DOCTYPE html>');
+    define('DOCTYPE_XHTML5', '<!DOCTYPE html>');
 
-    global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL;
+    global $XHTML_VALIDATOR_OFF, $WELL_FORMED_ONLY, $VALIDATION_JAVASCRIPT, $VALIDATION_CSS, $VALIDATION_WCAG, $VALIDATION_COMPAT, $VALIDATION_EXT_FILES, $VALIDATION_MANUAL;
     $VALIDATION_JAVASCRIPT = true;
     $VALIDATION_CSS = true;
     $VALIDATION_WCAG = true;
@@ -62,56 +62,56 @@ function init__validation()
     global $NO_XHTML_LINK_FOLLOW;
     $NO_XHTML_LINK_FOLLOW = 0;
 
-    global $CSS_TAG_RANGES,$CSS_VALUE_RANGES;
+    global $CSS_TAG_RANGES, $CSS_VALUE_RANGES;
     $CSS_TAG_RANGES = array();
     $CSS_VALUE_RANGES = array();
 
     global $ENTITIES;
     $ENTITIES = array(
-    'quot' => 1, 'amp' => 1, 'lt' => 1, 'gt' => 1, 'nbsp' => 1, 'iexcl' => 1, 'cent' => 1,
-    'pound' => 1, 'curren' => 1, 'yen' => 1, 'brvbar' => 1, 'sect' => 1, 'uml' => 1,
-    'copy' => 1, 'ordf' => 1, 'laquo' => 1, 'not' => 1, 'shy' => 1, 'reg' => 1, 'macr' => 1,
-    'deg' => 1, 'plusmn' => 1, 'sup2' => 1, 'sup3' => 1, 'acute' => 1, 'micro' => 1,
-    'para' => 1, 'middot' => 1, 'cedil' => 1, 'sup1' => 1, 'ordm' => 1, 'raquo' => 1,
-    'frac14' => 1, 'frac12' => 1, 'frac34' => 1, 'iquest' => 1,
-    'Agrave' => 1, 'Aacute' => 1, 'Acirc' => 1, 'Atilde' => 1, 'Auml' => 1, 'Aring' => 1,
-    'AElig' => 1, 'Ccedil' => 1, 'Egrave' => 1, 'Eacute' => 1,
-    'Ecirc' => 1, 'Euml' => 1, 'Igrave' => 1, 'Iacute' => 1, 'Icirc' => 1, 'Iuml' => 1,
-    'ETH' => 1, 'Ntilde' => 1, 'Ograve' => 1, 'Oacute' => 1, 'Ocirc' => 1,
-    'Otilde' => 1, 'Ouml' => 1, 'times' => 1, 'Oslash' => 1, 'Ugrave' => 1, 'Uacute' => 1,
-    'Ucirc' => 1, 'Uuml' => 1, 'Yacute' => 1, 'THORN' => 1,
-    'szlig' => 1, 'agrave' => 1, 'aacute' => 1, 'acirc' => 1, 'atilde' => 1, 'auml' => 1,
-    'aring' => 1, 'aelig' => 1, 'ccedil' => 1, 'egrave' => 1,
-    'eacute' => 1, 'ecirc' => 1, 'euml' => 1, 'igrave' => 1, 'iacute' => 1, 'icirc' => 1,
-    'iuml' => 1, 'eth' => 1, 'ntilde' => 1, 'ograve' => 1, 'oacute' => 1,
-    'ocirc' => 1, 'otilde' => 1, 'ouml' => 1, 'divide' => 1, 'oslash' => 1, 'ugrave' => 1,
-    'uacute' => 1, 'ucirc' => 1, 'uuml' => 1, 'yacute' => 1,
-    'thorn' => 1, 'yuml' => 1, 'fnof' => 1, 'Alpha' => 1, 'Beta' => 1, 'Gamma' => 1,
-    'Delta' => 1, 'Epsilon' => 1, 'Zeta' => 1, 'Eta' => 1, 'Theta' => 1, 'Iota' => 1,
-    'Kappa' => 1, 'Lambda' => 1, 'Mu' => 1, 'Nu' => 1, 'Xi' => 1, 'Omicron' => 1, 'Pi' => 1,
-    'Rho' => 1, 'Sigma' => 1, 'Tau' => 1, 'Upsilon' => 1, 'Phi' => 1, 'Chi' => 1,
-    'Psi' => 1, 'Omega' => 1, 'alpha' => 1, 'beta' => 1, 'gamma' => 1, 'delta' => 1,
-    'epsilon' => 1, 'zeta' => 1, 'eta' => 1, 'theta' => 1, 'iota' => 1, 'kappa' => 1,
-    'lambda' => 1, 'mu' => 1, 'nu' => 1, 'xi' => 1, 'omicron' => 1, 'pi' => 1, 'rho' => 1,
-    'sigmaf' => 1, 'sigma' => 1, 'tau' => 1, 'upsilon' => 1, 'phi' => 1, 'chi' => 1,
-    'psi' => 1, 'omega' => 1, 'thetasym' => 1, 'upsih' => 1, 'piv' => 1, 'bull' => 1,
-    'hellip' => 1, 'prime' => 1, 'Prime' => 1, 'oline' => 1, 'frasl' => 1,
-    'weierp' => 1, 'image' => 1, 'real' => 1, 'trade' => 1, 'alefsym' => 1, 'larr' => 1,
-    'uarr' => 1, 'rarr' => 1, 'darr' => 1, 'harr' => 1, 'crarr' => 1,
-    'lArr' => 1, 'uArr' => 1, 'rArr' => 1, 'dArr' => 1, 'hArr' => 1, 'forall' => 1,
-    'part' => 1, 'exist' => 1, 'empty' => 1, 'nabla' => 1, 'isin' => 1, 'notin' => 1,
-    'ni' => 1, 'prod' => 1, 'sum' => 1, 'minus' => 1, 'lowast' => 1, 'radic' => 1, 'prop' => 1,
-    'infin' => 1, 'ang' => 1, 'and' => 1, 'or' => 1, 'cap' => 1, 'cup' => 1, 'int' => 1,
-    'there4' => 1, 'sim' => 1, 'cong' => 1, 'asymp' => 1, 'ne' => 1, 'equiv' => 1, 'le' => 1,
-    'ge' => 1, 'sub' => 1, 'sup' => 1, 'nsub' => 1, 'sube' => 1, 'supe' => 1,
-    'oplus' => 1, 'otimes' => 1, 'perp' => 1, 'sdot' => 1, 'lceil' => 1, 'rceil' => 1,
-    'lfloor' => 1, 'rfloor' => 1, 'lang' => 1, 'rang' => 1, 'loz' => 1,
-    'spades' => 1, 'clubs' => 1, 'hearts' => 1, 'diams' => 1, 'OElig' => 1, 'oelig' => 1,
-    'Scaron' => 1, 'scaron' => 1, 'Yuml' => 1, 'circ' => 1, 'tidle' => 1,
-    'ensp' => 1, 'emsp' => 1, 'thinsp' => 1, 'zwnj' => 1, 'zwj' => 1, 'lrm' => 1, 'rlm' => 1,
-    'ndash' => 1, 'mdash' => 1, 'lsquo' => 1, 'rsquo' => 1, 'sbquo' => 1,
-    'ldquo' => 1, 'rdquo' => 1, 'bdquo' => 1, 'dagger' => 1, 'Dagger' => 1, 'permil' => 1,
-    'lsaquo' => 1, 'rsaquo' => 1, 'euro' => 1);
+        'quot' => 1, 'amp' => 1, 'lt' => 1, 'gt' => 1, 'nbsp' => 1, 'iexcl' => 1, 'cent' => 1,
+        'pound' => 1, 'curren' => 1, 'yen' => 1, 'brvbar' => 1, 'sect' => 1, 'uml' => 1,
+        'copy' => 1, 'ordf' => 1, 'laquo' => 1, 'not' => 1, 'shy' => 1, 'reg' => 1, 'macr' => 1,
+        'deg' => 1, 'plusmn' => 1, 'sup2' => 1, 'sup3' => 1, 'acute' => 1, 'micro' => 1,
+        'para' => 1, 'middot' => 1, 'cedil' => 1, 'sup1' => 1, 'ordm' => 1, 'raquo' => 1,
+        'frac14' => 1, 'frac12' => 1, 'frac34' => 1, 'iquest' => 1,
+        'Agrave' => 1, 'Aacute' => 1, 'Acirc' => 1, 'Atilde' => 1, 'Auml' => 1, 'Aring' => 1,
+        'AElig' => 1, 'Ccedil' => 1, 'Egrave' => 1, 'Eacute' => 1,
+        'Ecirc' => 1, 'Euml' => 1, 'Igrave' => 1, 'Iacute' => 1, 'Icirc' => 1, 'Iuml' => 1,
+        'ETH' => 1, 'Ntilde' => 1, 'Ograve' => 1, 'Oacute' => 1, 'Ocirc' => 1,
+        'Otilde' => 1, 'Ouml' => 1, 'times' => 1, 'Oslash' => 1, 'Ugrave' => 1, 'Uacute' => 1,
+        'Ucirc' => 1, 'Uuml' => 1, 'Yacute' => 1, 'THORN' => 1,
+        'szlig' => 1, 'agrave' => 1, 'aacute' => 1, 'acirc' => 1, 'atilde' => 1, 'auml' => 1,
+        'aring' => 1, 'aelig' => 1, 'ccedil' => 1, 'egrave' => 1,
+        'eacute' => 1, 'ecirc' => 1, 'euml' => 1, 'igrave' => 1, 'iacute' => 1, 'icirc' => 1,
+        'iuml' => 1, 'eth' => 1, 'ntilde' => 1, 'ograve' => 1, 'oacute' => 1,
+        'ocirc' => 1, 'otilde' => 1, 'ouml' => 1, 'divide' => 1, 'oslash' => 1, 'ugrave' => 1,
+        'uacute' => 1, 'ucirc' => 1, 'uuml' => 1, 'yacute' => 1,
+        'thorn' => 1, 'yuml' => 1, 'fnof' => 1, 'Alpha' => 1, 'Beta' => 1, 'Gamma' => 1,
+        'Delta' => 1, 'Epsilon' => 1, 'Zeta' => 1, 'Eta' => 1, 'Theta' => 1, 'Iota' => 1,
+        'Kappa' => 1, 'Lambda' => 1, 'Mu' => 1, 'Nu' => 1, 'Xi' => 1, 'Omicron' => 1, 'Pi' => 1,
+        'Rho' => 1, 'Sigma' => 1, 'Tau' => 1, 'Upsilon' => 1, 'Phi' => 1, 'Chi' => 1,
+        'Psi' => 1, 'Omega' => 1, 'alpha' => 1, 'beta' => 1, 'gamma' => 1, 'delta' => 1,
+        'epsilon' => 1, 'zeta' => 1, 'eta' => 1, 'theta' => 1, 'iota' => 1, 'kappa' => 1,
+        'lambda' => 1, 'mu' => 1, 'nu' => 1, 'xi' => 1, 'omicron' => 1, 'pi' => 1, 'rho' => 1,
+        'sigmaf' => 1, 'sigma' => 1, 'tau' => 1, 'upsilon' => 1, 'phi' => 1, 'chi' => 1,
+        'psi' => 1, 'omega' => 1, 'thetasym' => 1, 'upsih' => 1, 'piv' => 1, 'bull' => 1,
+        'hellip' => 1, 'prime' => 1, 'Prime' => 1, 'oline' => 1, 'frasl' => 1,
+        'weierp' => 1, 'image' => 1, 'real' => 1, 'trade' => 1, 'alefsym' => 1, 'larr' => 1,
+        'uarr' => 1, 'rarr' => 1, 'darr' => 1, 'harr' => 1, 'crarr' => 1,
+        'lArr' => 1, 'uArr' => 1, 'rArr' => 1, 'dArr' => 1, 'hArr' => 1, 'forall' => 1,
+        'part' => 1, 'exist' => 1, 'empty' => 1, 'nabla' => 1, 'isin' => 1, 'notin' => 1,
+        'ni' => 1, 'prod' => 1, 'sum' => 1, 'minus' => 1, 'lowast' => 1, 'radic' => 1, 'prop' => 1,
+        'infin' => 1, 'ang' => 1, 'and' => 1, 'or' => 1, 'cap' => 1, 'cup' => 1, 'int' => 1,
+        'there4' => 1, 'sim' => 1, 'cong' => 1, 'asymp' => 1, 'ne' => 1, 'equiv' => 1, 'le' => 1,
+        'ge' => 1, 'sub' => 1, 'sup' => 1, 'nsub' => 1, 'sube' => 1, 'supe' => 1,
+        'oplus' => 1, 'otimes' => 1, 'perp' => 1, 'sdot' => 1, 'lceil' => 1, 'rceil' => 1,
+        'lfloor' => 1, 'rfloor' => 1, 'lang' => 1, 'rang' => 1, 'loz' => 1,
+        'spades' => 1, 'clubs' => 1, 'hearts' => 1, 'diams' => 1, 'OElig' => 1, 'oelig' => 1,
+        'Scaron' => 1, 'scaron' => 1, 'Yuml' => 1, 'circ' => 1, 'tidle' => 1,
+        'ensp' => 1, 'emsp' => 1, 'thinsp' => 1, 'zwnj' => 1, 'zwj' => 1, 'lrm' => 1, 'rlm' => 1,
+        'ndash' => 1, 'mdash' => 1, 'lsquo' => 1, 'rsquo' => 1, 'sbquo' => 1,
+        'ldquo' => 1, 'rdquo' => 1, 'bdquo' => 1, 'dagger' => 1, 'Dagger' => 1, 'permil' => 1,
+        'lsaquo' => 1, 'rsaquo' => 1, 'euro' => 1);
 
     $strict_form_accessibility = false; // Form fields may not be empty with this strict rule
 
@@ -153,36 +153,36 @@ function init__validation()
     global $PROHIBITIONS;
     $PROHIBITIONS = array(
         'a' => array('a'),
-        'button' => array('input','select','textarea','label','button','form','fieldset','iframe'),
-        'p' => array('p','table','div','form','h1','h2','h3','h4','h5','h6','blockquote','pre','hr'),
+        'button' => array('input', 'select', 'textarea', 'label', 'button', 'form', 'fieldset', 'iframe'),
+        'p' => array('p', 'table', 'div', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'pre', 'hr'),
         'form' => array('form'),
-        'th' => array('h1','h2','h3','h4','h5','h6'),
+        'th' => array('h1', 'h2', 'h3', 'h4', 'h5', 'h6'),
         'em' => array('em'),
         'abbr' => array('abbr'),
         'strong' => array('strong'),
-        'label' => array('label','div'));
+        'label' => array('label', 'div'));
 
     // Only B's can be under A
     global $ONLY_CHILDREN;
     $ONLY_CHILDREN = array(
-        'ruby' => array('rbc','rtc','rp'),
-        'tr' => array('td','th'),
+        'ruby' => array('rbc', 'rtc', 'rp'),
+        'tr' => array('td', 'th'),
         'thead' => array('tr'),
         'tbody' => array('tr'),
         'tfoot' => array('tr'),
-        'table' => array('tbody','thead','tfoot','colgroup','col','caption'),
+        'table' => array('tbody', 'thead', 'tfoot', 'colgroup', 'col', 'caption'),
         'colgroup' => array('col'),
-        'select' => array('option','optgroup'),
-        'legend' => array('ins','del'),
+        'select' => array('option', 'optgroup'),
+        'legend' => array('ins', 'del'),
         //'map'=>array('area'), Apparently no such rule (see w3.org)
-        'html' => array('head','body'),
+        'html' => array('head', 'body'),
         'embed' => array('noembed'),
         'applet' => array('param'),
-        'head' => array('meta','base','basefont','script','link','noscript','map','title','style'),
+        'head' => array('meta', 'base', 'basefont', 'script', 'link', 'noscript', 'map', 'title', 'style'),
         'ul' => array('li'),
         'ol' => array('li'),
         'menu' => array('li'),
-        'dl' => array('li','dt','dd'),
+        'dl' => array('li', 'dt', 'dd'),
         'dir' => array('li'),
         'hr' => array(),
         'img' => array(),
@@ -219,27 +219,27 @@ function init__validation()
         'base' => array('head'),
         'body' => array('html'),
         'head' => array('html'),
-        'param' => array('script','object'),
-        'link' => array('head','link'),
-        'li' => array('ul','ol','dd','menu','dt','dl','dir'),
+        'param' => array('script', 'object'),
+        'link' => array('head', 'link'),
+        'li' => array('ul', 'ol', 'dd', 'menu', 'dt', 'dl', 'dir'),
         'style' => array('head'),
         'tbody' => array('table'),
         'tfoot' => array('table'),
         'thead' => array('table'),
         'th' => array('tr'),
         'td' => array('tr'),
-        'tr' => array('table','thead','tbody','tfoot'),
+        'tr' => array('table', 'thead', 'tbody', 'tfoot'),
         'title' => array('head'),
         'caption' => array('table'),
-        'col' => array('colgroup','table'),
+        'col' => array('colgroup', 'table'),
         'colgroup' => array('table'),
-        'option' => array('select','optgroup','datalist'),
+        'option' => array('select', 'optgroup', 'datalist'),
         'noembed' => array('embed'),
     );
     $ONLY_PARENT += array(
         'figcaption' => array('figure'),
         'summary' => array('details'),
-        'track' => array('audio','video'),
+        'track' => array('audio', 'video'),
     );
 
     global $REQUIRE_ANCESTER;
@@ -272,21 +272,21 @@ function init__validation()
         'menu' => 1,
     );
 
-    define('IN_XML_TAG',-3);
-    define('IN_DTD_TAG',-2);
-    define('NO_MANS_LAND',-1);
-    define('IN_COMMENT',0);
-    define('IN_TAG_NAME',1);
-    define('STARTING_TAG',2);
-    define('IN_TAG_BETWEEN_ATTRIBUTES',3);
-    define('IN_TAG_ATTRIBUTE_NAME',4);
-    define('IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT',5);
-    define('IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT',7);
-    define('IN_TAG_ATTRIBUTE_VALUE_BIG_QUOTES',10);
-    define('IN_TAG_ATTRIBUTE_VALUE_NO_QUOTES',12);
-    define('IN_TAG_EMBEDDED_COMMENT',9);
-    define('IN_TAG_ATTRIBUTE_VALUE_LITTLE_QUOTES',8);
-    define('IN_CDATA',11);
+    define('IN_XML_TAG', -3);
+    define('IN_DTD_TAG', -2);
+    define('NO_MANS_LAND', -1);
+    define('IN_COMMENT', 0);
+    define('IN_TAG_NAME', 1);
+    define('STARTING_TAG', 2);
+    define('IN_TAG_BETWEEN_ATTRIBUTES', 3);
+    define('IN_TAG_ATTRIBUTE_NAME', 4);
+    define('IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT', 5);
+    define('IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT', 7);
+    define('IN_TAG_ATTRIBUTE_VALUE_BIG_QUOTES', 10);
+    define('IN_TAG_ATTRIBUTE_VALUE_NO_QUOTES', 12);
+    define('IN_TAG_EMBEDDED_COMMENT', 9);
+    define('IN_TAG_ATTRIBUTE_VALUE_LITTLE_QUOTES', 8);
+    define('IN_CDATA', 11);
 }
 
 /**
@@ -303,7 +303,7 @@ function init__validation()
  * @param  boolean                      Bring up messages about manual checks
  * @return ?map                         Error information (NULL: no error)
  */
-function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$validation_javascript = true,$validation_css = true,$validation_wcag = true,$validation_compat = true,$validation_ext_files = true,$validation_manual = false)
+function check_xhtml($out, $well_formed_only = false, $is_fragment = false, $validation_javascript = true, $validation_css = true, $validation_wcag = true, $validation_compat = true, $validation_ext_files = true, $validation_manual = false)
 {
     if (function_exists('set_time_limit')) {
         @set_time_limit(0);
@@ -313,7 +313,7 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
         disable_php_memory_limit();
     }
 
-    global $XHTML_VALIDATOR_OFF,$WELL_FORMED_ONLY,$VALIDATION_JAVASCRIPT,$VALIDATION_CSS,$VALIDATION_WCAG,$VALIDATION_COMPAT,$VALIDATION_EXT_FILES,$VALIDATION_MANUAL,$UNDER_XMLNS;
+    global $XHTML_VALIDATOR_OFF, $WELL_FORMED_ONLY, $VALIDATION_JAVASCRIPT, $VALIDATION_CSS, $VALIDATION_WCAG, $VALIDATION_COMPAT, $VALIDATION_EXT_FILES, $VALIDATION_MANUAL, $UNDER_XMLNS;
     if (function_exists('mixed')) {
         $XHTML_VALIDATOR_OFF = mixed();
     }
@@ -336,13 +336,13 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
 
     $content_start_stack = array();
 
-    global $BLOCK_CONSTRAIN,$XML_CONSTRAIN,$LAST_TAG_ATTRIBUTES,$FOUND_DOCTYPE,$FOUND_DESCRIPTION,$FOUND_KEYWORDS,$FOUND_CONTENTTYPE,$THE_DOCTYPE,$TAGS_DEPRECATE_ALLOW,$URL_BASE,$PARENT_TAG,$TABS_SEEN,$KEYS_SEEN,$ANCHORS_SEEN,$ATT_STACK,$TAG_STACK,$POS,$LINENO,$LINESTART,$OUT,$T_POS,$PROHIBITIONS,$ONLY_PARENT,$ONLY_CHILDREN,$REQUIRE_ANCESTER,$LEN,$ANCESTER_BLOCK,$ANCESTER_INLINE,$POSSIBLY_EMPTY_TAGS,$MUST_SELFCLOSE_TAGS,$FOR_LABEL_IDS,$FOR_LABEL_IDS_2,$INPUT_TAG_IDS;
-    global $TAG_RANGES,$VALUE_RANGES,$LAST_A_TAG,$A_LINKS,$XHTML_FORM_ENCODING;
-    global $AREA_LINKS,$LAST_HEADING,$CRAWLED_URLS,$HYPERLINK_URLS,$EMBED_URLS,$THE_LANGUAGE,$PSPELL_LINK;
-    global $TAGS_BLOCK,$TAGS_INLINE,$TAGS_NORMAL,$TAGS_BLOCK_DEPRECATED,$TAGS_INLINE_DEPRECATED,$TAGS_NORMAL_DEPRECATED;
+    global $BLOCK_CONSTRAIN, $XML_CONSTRAIN, $LAST_TAG_ATTRIBUTES, $FOUND_DOCTYPE, $FOUND_DESCRIPTION, $FOUND_KEYWORDS, $FOUND_CONTENTTYPE, $THE_DOCTYPE, $TAGS_DEPRECATE_ALLOW, $URL_BASE, $PARENT_TAG, $TABS_SEEN, $KEYS_SEEN, $ANCHORS_SEEN, $ATT_STACK, $TAG_STACK, $POS, $LINENO, $LINESTART, $OUT, $T_POS, $PROHIBITIONS, $ONLY_PARENT, $ONLY_CHILDREN, $REQUIRE_ANCESTER, $LEN, $ANCESTER_BLOCK, $ANCESTER_INLINE, $POSSIBLY_EMPTY_TAGS, $MUST_SELFCLOSE_TAGS, $FOR_LABEL_IDS, $FOR_LABEL_IDS_2, $INPUT_TAG_IDS;
+    global $TAG_RANGES, $VALUE_RANGES, $LAST_A_TAG, $A_LINKS, $XHTML_FORM_ENCODING;
+    global $AREA_LINKS, $LAST_HEADING, $CRAWLED_URLS, $HYPERLINK_URLS, $EMBED_URLS, $THE_LANGUAGE, $PSPELL_LINK;
+    global $TAGS_BLOCK, $TAGS_INLINE, $TAGS_NORMAL, $TAGS_BLOCK_DEPRECATED, $TAGS_INLINE_DEPRECATED, $TAGS_NORMAL_DEPRECATED;
     $PSPELL_LINK = null;
     $THE_LANGUAGE = 'en';
-    $THE_DOCTYPE = $is_fragment?DOCTYPE_XHTML:DOCTYPE_HTML;
+    $THE_DOCTYPE = $is_fragment ? DOCTYPE_XHTML : DOCTYPE_HTML;
     $TAGS_DEPRECATE_ALLOW = true;
     $XML_CONSTRAIN = $is_fragment;
     $BLOCK_CONSTRAIN = false;
@@ -379,9 +379,9 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
     $LEN = strlen($OUT);
     $level_ranges = array();
     $stack_size = 0;
-    $to_find = array('html' => 1,'head' => 1,'title' => 1/*,'meta'=>1*/);
+    $to_find = array('html' => 1, 'head' => 1, 'title' => 1/*,'meta'=>1*/);
     $only_one_of_stack = array();
-    $only_one_of_template = array('title' => 1,'head' => 1,'body' => 1,'base' => 1,'thead' => 1,'tfoot' => 1);
+    $only_one_of_template = array('title' => 1, 'head' => 1, 'body' => 1, 'base' => 1, 'thead' => 1, 'tfoot' => 1);
     $only_one_of = $only_one_of_template;
     $A_LINKS = array();
     $previous = '';
@@ -400,10 +400,10 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
         while ((is_array($token)) && (count($token) != 0)) { // Some kind of error in our token
             if (is_null($XHTML_VALIDATOR_OFF)) {
                 foreach ($token[1] as $error) {
-                    $errors[] = _xhtml_error($error[0],array_key_exists(1,$error)?$error[1]:'',array_key_exists(2,$error)?$error[2]:'',array_key_exists(3,$error)?$error[3]:'',array_key_exists('raw',$error)?$error['raw']:false,array_key_exists('pos',$error)?$error['pos']:0);
+                    $errors[] = _xhtml_error($error[0], array_key_exists(1, $error) ? $error[1] : '', array_key_exists(2, $error) ? $error[2] : '', array_key_exists(3, $error) ? $error[3] : '', array_key_exists('raw', $error) ? $error['raw'] : false, array_key_exists('pos', $error) ? $error['pos'] : 0);
                 }
                 if (is_null($token[0])) {
-                    return array('level_ranges' => $level_ranges,'tag_ranges' => $TAG_RANGES,'value_ranges' => $VALUE_RANGES,'errors' => $errors);
+                    return array('level_ranges' => $level_ranges, 'tag_ranges' => $TAG_RANGES, 'value_ranges' => $VALUE_RANGES, 'errors' => $errors);
                 }
             }
             $token = $token[0];
@@ -412,7 +412,7 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
         $basis_token = _get_tag_basis($token);
 
         // Open, close, or monitonic?
-        $term = strpos($token,'/');
+        $term = strpos($token, '/');
         if (!is_null($XHTML_VALIDATOR_OFF)) {
             if ($term === false) {
                 $XHTML_VALIDATOR_OFF++;
@@ -428,13 +428,13 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
         if ($term !== 1) {
             if (isset($only_one_of[$basis_token])) {
                 if ($only_one_of[$basis_token] == 0) {
-                    $errors[] = _xhtml_error('XHTML_ONLY_ONE_ALLOWED',$basis_token);
+                    $errors[] = _xhtml_error('XHTML_ONLY_ONE_ALLOWED', $basis_token);
                 }
                 $only_one_of[$basis_token]--;
             }
 
             //echo 'Push $basis_token<br />';
-            $level_ranges[] = array($stack_size,$T_POS,$POS);
+            $level_ranges[] = array($stack_size, $T_POS, $POS);
             if (isset($to_find[$basis_token])) {
                 unset($to_find[$basis_token]);
             }
@@ -445,34 +445,34 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
                 }
                 if ($stack_size != 0) {
                     if (isset($ONLY_CHILDREN[$PARENT_TAG])) {
-                        if (!in_array($basis_token,$ONLY_CHILDREN[$PARENT_TAG])) {
-                            $errors[] = _xhtml_error('XHTML_BAD_CHILD',$basis_token,$PARENT_TAG);
+                        if (!in_array($basis_token, $ONLY_CHILDREN[$PARENT_TAG])) {
+                            $errors[] = _xhtml_error('XHTML_BAD_CHILD', $basis_token, $PARENT_TAG);
                         }
                     }
 
                     foreach ($TAG_STACK as $parent_tag) {
                         if (isset($PROHIBITIONS[$parent_tag])) {
                             $prohibitions = $PROHIBITIONS[$parent_tag];
-                            if (in_array($basis_token,$prohibitions)) {
-                                $errors[] = _xhtml_error('XHTML_PROHIBITION',$basis_token,$parent_tag);
+                            if (in_array($basis_token, $prohibitions)) {
+                                $errors[] = _xhtml_error('XHTML_PROHIBITION', $basis_token, $parent_tag);
                             }
                         }
                     }
                 }
 
                 if ((isset($REQUIRE_ANCESTER[$basis_token])) && (!$is_fragment)) {
-                    if (!in_array($REQUIRE_ANCESTER[$basis_token],$TAG_STACK)) {
-                        $errors[] = _xhtml_error('XHTML_MISSING_ANCESTER',$basis_token,$REQUIRE_ANCESTER[$basis_token]);
+                    if (!in_array($REQUIRE_ANCESTER[$basis_token], $TAG_STACK)) {
+                        $errors[] = _xhtml_error('XHTML_MISSING_ANCESTER', $basis_token, $REQUIRE_ANCESTER[$basis_token]);
                     }
                 }
                 if (isset($ONLY_PARENT[$basis_token])) {
                     if ($stack_size == 0) {
                         if (!$is_fragment) {
-                            $errors[] = _xhtml_error('XHTML_BAD_PARENT',$basis_token,'/');
+                            $errors[] = _xhtml_error('XHTML_BAD_PARENT', $basis_token, '/');
                         }
                     } else {
-                        if (!in_array($PARENT_TAG,$ONLY_PARENT[$basis_token])) {
-                            $errors[] = _xhtml_error('XHTML_BAD_PARENT',$basis_token,$PARENT_TAG);
+                        if (!in_array($PARENT_TAG, $ONLY_PARENT[$basis_token])) {
+                            $errors[] = _xhtml_error('XHTML_BAD_PARENT', $basis_token, $PARENT_TAG);
                         }
                     }
                 }
@@ -481,21 +481,21 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
             // In order to ease validation, we tolerate these in the parser (but of course, mark as errors)
             if ((is_null($XHTML_VALIDATOR_OFF)) && (!$WELL_FORMED_ONLY) && ($term === false) && (isset($MUST_SELFCLOSE_TAGS[$basis_token]))) {
                 if ($XML_CONSTRAIN) {
-                    $errors[] = _xhtml_error('XHTML_NONEMPTY_TAG',$basis_token);
+                    $errors[] = _xhtml_error('XHTML_NONEMPTY_TAG', $basis_token);
                 }
             } else {
                 if ($term === false) {
                     $PARENT_TAG = $basis_token;
-                    array_push($TAG_STACK,$basis_token);
-                    array_push($ATT_STACK,$LAST_TAG_ATTRIBUTES);
-                    array_push($content_start_stack,$POS);
-                    array_push($only_one_of_stack,$only_one_of);
+                    array_push($TAG_STACK, $basis_token);
+                    array_push($ATT_STACK, $LAST_TAG_ATTRIBUTES);
+                    array_push($content_start_stack, $POS);
+                    array_push($only_one_of_stack, $only_one_of);
                     $only_one_of = $only_one_of_template;
                     ++$stack_size;
                 } else {
                     if ((is_null($XHTML_VALIDATOR_OFF)) && (!$WELL_FORMED_ONLY) && ((!$XML_CONSTRAIN) || (!isset($MUST_SELFCLOSE_TAGS[$basis_token]))) && (is_null($XHTML_VALIDATOR_OFF))) { // A tags must not self close even when only an anchor. Makes a weird underlined line effect in firefox
                         if (!$bad_root) {
-                            $errors[] = _xhtml_error('XHTML_CEMPTY_TAG',$basis_token);
+                            $errors[] = _xhtml_error('XHTML_CEMPTY_TAG', $basis_token);
                         }
                     }
                 }
@@ -504,21 +504,21 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
             // HTML allows implicit closing. We will flag errors when we have to do it. See 1-2-3 note
             do {
                 // For case 3 (see note below)
-                if (!in_array($basis_token,$TAG_STACK)) {
+                if (!in_array($basis_token, $TAG_STACK)) {
                     if ((is_null($XHTML_VALIDATOR_OFF)) && ($XML_CONSTRAIN)) {
-                        $errors[] = _xhtml_error('XML_NO_CLOSE_MATCH',$basis_token,$previous);
+                        $errors[] = _xhtml_error('XML_NO_CLOSE_MATCH', $basis_token, $previous);
                     }
                     break;
                 }
 
                 $previous = array_pop($TAG_STACK);
-                $PARENT_TAG = ($TAG_STACK == array())?'':$TAG_STACK[count($TAG_STACK)-1];
+                $PARENT_TAG = ($TAG_STACK == array()) ? '' : $TAG_STACK[count($TAG_STACK) - 1];
                 $start_pos = array_pop($content_start_stack);
                 array_pop($ATT_STACK);
                 $only_one_of = array_pop($only_one_of_stack);
                 if (is_null($previous)) {
                     if ((is_null($XHTML_VALIDATOR_OFF)) && ($XML_CONSTRAIN)) {
-                        $errors[] = _xhtml_error('XML_MORE_CLOSE_THAN_OPEN',$basis_token);
+                        $errors[] = _xhtml_error('XML_MORE_CLOSE_THAN_OPEN', $basis_token);
                     }
                     break;
                 }
@@ -529,42 +529,43 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
                     // 2) Implicit closing. We close everything implicitly until we find the matching tag. E.g. <i><b></i>
                     // 3) Closing something that was never open. This is tricky - we can't survive it if it was opened somewhere as a parent, as we'd end up closing a whole load of tags by rule (2) - but if it's a lone closing, we can skip it. Good e.g. <b></i></b>. Bad e.g. <div><p></div></p></div>
                     if ((is_null($XHTML_VALIDATOR_OFF)) && ($XML_CONSTRAIN)) {
-                        $errors[] = _xhtml_error('XML_NO_CLOSE_MATCH',$basis_token,$previous);
+                        $errors[] = _xhtml_error('XML_NO_CLOSE_MATCH', $basis_token, $previous);
                     }
                 }
 
                 if ((!$WELL_FORMED_ONLY) && (is_null($XHTML_VALIDATOR_OFF))) {
                     if ((isset($MUST_SELFCLOSE_TAGS[$previous])) && ($XML_CONSTRAIN)) {
-                        $errors[] = _xhtml_error('XHTML_NONEMPTY_TAG',$previous);
+                        $errors[] = _xhtml_error('XHTML_NONEMPTY_TAG', $previous);
                     }
 
-                    if ((!isset($MUST_SELFCLOSE_TAGS[$previous])) && (!isset($POSSIBLY_EMPTY_TAGS[$previous])) && (trim(substr($OUT,$start_pos,$T_POS-$start_pos)) == '')) {
+                    if ((!isset($MUST_SELFCLOSE_TAGS[$previous])) && (!isset($POSSIBLY_EMPTY_TAGS[$previous])) && (trim(substr($OUT, $start_pos, $T_POS - $start_pos)) == '')) {
                         if ((isset($TAGS_BLOCK[$previous])) || (isset($TAGS_INLINE[$previous])) || (isset($TAGS_NORMAL[$previous])) || (isset($TAGS_BLOCK_DEPRECATED[$previous])) || (isset($TAGS_INLINE_DEPRECATED[$previous])) || (isset($TAGS_NORMAL_DEPRECATED[$previous]))) {
-                            $errors[] = _xhtml_error('XHTML_EMPTY_TAG',$previous);
+                            $errors[] = _xhtml_error('XHTML_EMPTY_TAG', $previous);
                         }
                     }
                 }
                 $stack_size--;
-                $level_ranges[] = array($stack_size,$T_POS,$POS);
+                $level_ranges[] = array($stack_size, $T_POS, $POS);
                 //echo 'Popped $previous<br />';
 
                 if ((is_null($XHTML_VALIDATOR_OFF)) && (!$WELL_FORMED_ONLY) && (is_null($XHTML_VALIDATOR_OFF))) {
                     if ($previous == 'script') {
-                        $tag_contents = substr($OUT,$start_pos,$T_POS-$start_pos);
-                        $c_section = strpos($tag_contents,']]>');
-                        if ((trim($tag_contents) != '') && (strpos($tag_contents,'//-->') === false) && (strpos($tag_contents,'// -->') === false) && ($c_section === false)) {
-                            $errors[] = _xhtml_error('XHTML_SCRIPT_COMMENTING',$previous);
-                        } elseif (($c_section === false) && ((strpos($tag_contents,'<!--') !== false))) {
+                        $tag_contents = substr($OUT, $start_pos, $T_POS - $start_pos);
+                        $c_section = strpos($tag_contents, ']]>');
+                        if ((trim($tag_contents) != '') && (strpos($tag_contents, '//-->') === false) && (strpos($tag_contents, '// -->') === false) && ($c_section === false)) {
+                            $errors[] = _xhtml_error('XHTML_SCRIPT_COMMENTING', $previous);
+                        } elseif (($c_section === false) && ((strpos($tag_contents, '<!--') !== false))) {
                             if ($XML_CONSTRAIN) {
                                 $errors[] = _xhtml_error('XHTML_CDATA');
                             }
                         }
-                        if (strpos($tag_contents,'</') !== false) {
+                        if (strpos($tag_contents, '</') !== false) {
                             $errors[] = _xhtml_error('XML_JS_TAG_ESCAPE');
                         }
                     }
                 }
-            } while ($basis_token != $previous);
+            }
+            while ($basis_token != $previous);
         }
 
         $token = _get_next_tag();
@@ -573,15 +574,15 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
     // Check we have everything closed
     if ($stack_size != 0) {
         if ($XML_CONSTRAIN) {
-            $errors[] = _xhtml_error('XML_NO_CLOSE',array_pop($TAG_STACK));
+            $errors[] = _xhtml_error('XML_NO_CLOSE', array_pop($TAG_STACK));
         }
-        return array('level_ranges' => $level_ranges,'tag_ranges' => $TAG_RANGES,'value_ranges' => $VALUE_RANGES,'errors' => $errors);
+        return array('level_ranges' => $level_ranges, 'tag_ranges' => $TAG_RANGES, 'value_ranges' => $VALUE_RANGES, 'errors' => $errors);
     }
 
     if (!$well_formed_only) { // if ((is_null($XHTML_VALIDATOR_OFF)) || (!$well_formed_only)) // validator-off check needed because it's possible a non-validateable portion foobars up possibility of interpreting the rest of the document such that checking ends early
         if (!$is_fragment) {
             foreach (array_keys($to_find) as $tag) {
-                $errors[] = _xhtml_error('XHTML_MISSING_TAG',$tag);
+                $errors[] = _xhtml_error('XHTML_MISSING_TAG', $tag);
             }
 
             if ((!$FOUND_DOCTYPE) && (!$GLOBALS['MAIL_MODE'])) {
@@ -600,15 +601,15 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
         if (!$is_fragment) {
             // Check that all area-links have a corresponding hyperlink
             foreach (array_keys($AREA_LINKS) as $id) {
-                if (!in_array($id,$HYPERLINK_URLS)) {
-                    $errors[] = _xhtml_error('WCAG_AREA_EQUIV',$id);
+                if (!in_array($id, $HYPERLINK_URLS)) {
+                    $errors[] = _xhtml_error('WCAG_AREA_EQUIV', $id);
                 }
             }
 
             // Check that all labels apply to real input tags
             foreach (array_keys($FOR_LABEL_IDS_2) as $id) {
                 if (!isset($INPUT_TAG_IDS[$id])) {
-                    $errors[] = _xhtml_error('XHTML_ID_UNBOUND',$id);
+                    $errors[] = _xhtml_error('XHTML_ID_UNBOUND', $id);
                 }
             }
         }
@@ -618,34 +619,34 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
     if ((function_exists('pspell_new')) && (isset($GLOBALS['SPELLING']))) {
         $stripped = $OUT;
         $matches = array();
-        $num_matches = preg_match_all('#\<style.*\</style\>#Umis',$stripped,$matches);
-        for ($i = 0;$i<$num_matches;$i++) {
-            $stripped = str_replace($matches[0][$i],str_repeat(' ',strlen($matches[0][$i])),$stripped);
+        $num_matches = preg_match_all('#\<style.*\</style\>#Umis', $stripped, $matches);
+        for ($i = 0; $i < $num_matches; $i++) {
+            $stripped = str_replace($matches[0][$i], str_repeat(' ', strlen($matches[0][$i])), $stripped);
         }
-        $num_matches = preg_match_all('#\<script.*\</script\>#Umis',$stripped,$matches);
-        for ($i = 0;$i<$num_matches;$i++) {
-            $stripped = str_replace($matches[0][$i],str_repeat(' ',strlen($matches[0][$i])),$stripped);
+        $num_matches = preg_match_all('#\<script.*\</script\>#Umis', $stripped, $matches);
+        for ($i = 0; $i < $num_matches; $i++) {
+            $stripped = str_replace($matches[0][$i], str_repeat(' ', strlen($matches[0][$i])), $stripped);
         }
-        $stripped = @html_entity_decode(strip_tags($stripped),ENT_QUOTES,get_charset());
+        $stripped = @html_entity_decode(strip_tags($stripped), ENT_QUOTES, get_charset());
         require_code('validation2');
         $new_errors = validate_spelling($stripped);
         $misspellings = array();
-        global $POS,$LINENO,$LINESTART;
+        global $POS, $LINENO, $LINESTART;
         foreach ($new_errors as $error) {
-            if (array_key_exists($error[1],$misspellings)) {
+            if (array_key_exists($error[1], $misspellings)) {
                 continue;
             }
             $misspellings[$error[1]] = 1;
-            $POS = strpos($OUT,$error[1]);
-            $LINESTART = strrpos(substr($OUT,0,$POS),"\n");
-            $LINENO = substr_count(substr($OUT,0,$LINESTART),"\n")+1;
-            $errors[] = _xhtml_error($error[0],$error[1]);
+            $POS = strpos($OUT, $error[1]);
+            $LINESTART = strrpos(substr($OUT, 0, $POS), "\n");
+            $LINENO = substr_count(substr($OUT, 0, $LINESTART), "\n") + 1;
+            $errors[] = _xhtml_error($error[0], $error[1]);
         }
     }
 
     unset($OUT);
 
-    return array('level_ranges' => $level_ranges,'tag_ranges' => $TAG_RANGES,'value_ranges' => $VALUE_RANGES,'errors' => $errors);
+    return array('level_ranges' => $level_ranges, 'tag_ranges' => $TAG_RANGES, 'value_ranges' => $VALUE_RANGES, 'errors' => $errors);
 }
 
 /**
@@ -659,22 +660,22 @@ function check_xhtml($out,$well_formed_only = false,$is_fragment = false,$valida
  * @param  integer                      Offset position
  * @return map                          A map of the error information
  */
-function _xhtml_error($error,$param_a = '',$param_b = '',$param_c = '',$raw = false,$rel_pos = 0)
+function _xhtml_error($error, $param_a = '', $param_b = '', $param_c = '', $raw = false, $rel_pos = 0)
 {
-    global $POS,$OUT,$LINENO,$LINESTART;
-    $lineno = ($rel_pos == 0)?0:substr_count(substr($OUT,$POS,$rel_pos),"\n");
+    global $POS, $OUT, $LINENO, $LINESTART;
+    $lineno = ($rel_pos == 0) ? 0 : substr_count(substr($OUT, $POS, $rel_pos), "\n");
     $out = array();
-    $out['line'] = $LINENO+1+$lineno;
+    $out['line'] = $LINENO + 1 + $lineno;
     if ($rel_pos == 0) {
-        $out['pos'] = $POS-$LINESTART;
+        $out['pos'] = $POS - $LINESTART;
     } else {
-        $out['pos'] = $POS+$rel_pos-strrpos(substr($OUT,0,$POS+$rel_pos),"\n");
+        $out['pos'] = $POS + $rel_pos - strrpos(substr($OUT, 0, $POS + $rel_pos), "\n");
     }
-    $out['global_pos'] = $POS+$rel_pos;
+    $out['global_pos'] = $POS + $rel_pos;
     if (function_exists('do_lang')) {
-        $out['error'] = $raw?$error:do_lang($error,htmlentities($param_a),htmlentities($param_b),htmlentities($param_c));
+        $out['error'] = $raw ? $error : do_lang($error, htmlentities($param_a), htmlentities($param_b), htmlentities($param_c));
     } else {
-        $out['error'] = $raw?$error:($error . ': ' . htmlentities($param_a) . ', ' . htmlentities($param_b) . ', ' . htmlentities($param_c));
+        $out['error'] = $raw ? $error : ($error . ': ' . htmlentities($param_a) . ', ' . htmlentities($param_b) . ', ' . htmlentities($param_c));
     }
 
     return $out;
@@ -688,7 +689,7 @@ function _xhtml_error($error,$param_a = '',$param_b = '',$param_c = '',$raw = fa
  */
 function is_hex($string)
 {
-    return preg_match('#^[\da-f]+$#i',$string) != 0;
+    return preg_match('#^[\da-f]+$#i', $string) != 0;
 }
 
 
@@ -702,20 +703,20 @@ function is_hex($string)
  */
 function test_entity($offset = 0)
 {
-    global $OUT,$POS,$ENTITIES;
+    global $OUT, $POS, $ENTITIES;
 
-    $lump = substr($OUT,$POS+$offset,8);
+    $lump = substr($OUT, $POS + $offset, 8);
 
     $errors = array();
 
-    $pos = strpos($lump,';');
+    $pos = strpos($lump, ';');
     //if ($pos!==0) // "&; sequence" is possible. It's in IPB's posts and to do with emoticon meta tagging
     {
         if ($pos === false) {
             $errors[] = array('XHTML_BAD_ENTITY');
         } else {
-            $lump = substr($lump,0,$pos);
-            if (!(($lump[0] == '#') && ((is_numeric(substr($lump,1))) || (($lump[1] == 'x') && (is_hex(substr($lump,2))))))) { // It's ok if this is a numeric code, so no need to check further
+            $lump = substr($lump, 0, $pos);
+            if (!(($lump[0] == '#') && ((is_numeric(substr($lump, 1))) || (($lump[1] == 'x') && (is_hex(substr($lump, 2))))))) { // It's ok if this is a numeric code, so no need to check further
                 // Check against list
                 if (!isset($ENTITIES[$lump])) {
                     $errors[] = array('XHTML_BAD_ENTITY');
@@ -725,7 +726,7 @@ function test_entity($offset = 0)
     }
 
     if (!isset($errors[0])) {
-        return NULL;
+        return null;
     }
     return $errors;
 }
@@ -742,35 +743,35 @@ function fix_entities($in)
 
     $out = '';
 
-    if ((strpos($in,'&') === false) && (strpos($in,'<') === false)) {
+    if ((strpos($in, '&') === false) && (strpos($in, '<') === false)) {
         return $in;
     }
 
     $len = strlen($in);
     $cdata = false;
-    for ($i = 0;$i<$len;$i++) {
+    for ($i = 0; $i < $len; $i++) {
         $char = $in[$i];
 
         $out .= $char;
 
-        if (($char == '<') && (substr($in,$i,9) == '<![CDATA[')) {
+        if (($char == '<') && (substr($in, $i, 9) == '<![CDATA[')) {
             $cdata = true;
         }
 
         if ($cdata) {
-            if (($char == '/') && (substr($in,$i,5) == '//]]>')) {
+            if (($char == '/') && (substr($in, $i, 5) == '//]]>')) {
                 $cdata = false;
             }
         } else {
             if ($char == '&') {
-                $lump = substr($in,$i+1,8);
-                $pos = strpos($lump,';');
+                $lump = substr($in, $i + 1, 8);
+                $pos = strpos($lump, ';');
 
                 if ($pos === false) {
                     $out .= 'amp;';
                 } else {
-                    $lump = substr($lump,0,$pos);
-                    if (!(($lump[0] == '#') && ((is_numeric(substr($lump,1))) || (($lump[1] == 'x') && (is_hex(substr($lump,2))))))) {
+                    $lump = substr($lump, 0, $pos);
+                    if (!(($lump[0] == '#') && ((is_numeric(substr($lump, 1))) || (($lump[1] == 'x') && (is_hex(substr($lump, 2))))))) {
                         if (!isset($ENTITIES[$lump])) {
                             $out .= 'amp;';
                         }
@@ -792,8 +793,8 @@ function _get_next_tag()
 {
     //   echo '<p>!</p>';
 
-    global $PARENT_TAG,$POS,$LINENO,$LINESTART,$OUT,$T_POS,$ENTITIES,$LEN,$ANCESTER_BLOCK,$TAG_STACK,$XHTML_VALIDATOR_OFF,$TEXT_NO_BLOCK,$INBETWEEN_TEXT;
-    global $TAG_RANGES,$VALUE_RANGES;
+    global $PARENT_TAG, $POS, $LINENO, $LINESTART, $OUT, $T_POS, $ENTITIES, $LEN, $ANCESTER_BLOCK, $TAG_STACK, $XHTML_VALIDATOR_OFF, $TEXT_NO_BLOCK, $INBETWEEN_TEXT;
+    global $TAG_RANGES, $VALUE_RANGES;
 
     $status = NO_MANS_LAND;
 
@@ -809,11 +810,11 @@ function _get_next_tag()
     $errors = array();
 
     $special_chars = null;
-    if ($special_chars === NULL) {
-        $special_chars = array('=' => 1,'"' => 1,'&' => 1,'/' => 1,'<' => 1,'>' => 1,' ' => 1,"\n" => 1,"\r" => 1);
+    if ($special_chars === null) {
+        $special_chars = array('=' => 1, '"' => 1, '&' => 1, '/' => 1, '<' => 1, '>' => 1, ' ' => 1, "\n" => 1, "\r" => 1);
     }
 
-    while ($POS<$LEN) {
+    while ($POS < $LEN) {
         $next = $OUT[$POS];
         $POS++;
 
@@ -827,7 +828,7 @@ function _get_next_tag()
         if (($next == '&') && ($status != IN_CDATA) && ($status != IN_COMMENT) && (is_null($XHTML_VALIDATOR_OFF))) {
             $test = test_entity();
             if (!is_null($test)) {
-                $errors = array_merge($errors,$test);
+                $errors = array_merge($errors, $test);
             }
         }
 
@@ -835,14 +836,14 @@ function _get_next_tag()
         switch ($status) {
             case NO_MANS_LAND:
                 $in_no_mans_land = '';
-                $continue = ($next != '<') && ($next != '&') && ($POS<$LEN-1);
+                $continue = ($next != '<') && ($next != '&') && ($POS < $LEN - 1);
                 if ($next != '<') {
                     $INBETWEEN_TEXT .= $next;
                 }
                 while ($continue) {
                     $next = $OUT[$POS];
                     $POS++;
-                    $continue = ($next != '<') && ($next != '&') && ($POS<$LEN-1);
+                    $continue = ($next != '<') && ($next != '&') && ($POS < $LEN - 1);
                     if ($continue) {
                         $in_no_mans_land .= $next;
                     }
@@ -857,29 +858,29 @@ function _get_next_tag()
                 if (($next == '&') && (is_null($XHTML_VALIDATOR_OFF))) {
                     $test = test_entity();
                     if (!is_null($test)) {
-                        $errors = array_merge($errors,$test);
+                        $errors = array_merge($errors, $test);
                     }
                 }
 
                 // Can't have loose text in form/body/etc
                 // 'x' is there for when called externally, checking on an x that has replaced, for example, a directive tag (which isn't actual text - so can't trip the error)
                 if (($in_no_mans_land != 'x') && (trim($in_no_mans_land) != '') && (isset($TEXT_NO_BLOCK[$PARENT_TAG])) && ($GLOBALS['BLOCK_CONSTRAIN'])) {
-                    $errors[] = array('XHTML_TEXT_NO_BLOCK',$PARENT_TAG);
+                    $errors[] = array('XHTML_TEXT_NO_BLOCK', $PARENT_TAG);
                 }
 
-                if (($next == '<') && (isset($OUT[$POS+2])) && ($OUT[$POS] == '!')) {
-                    if (($OUT[$POS+1] == '-') && ($OUT[$POS+2] == '-')) {
+                if (($next == '<') && (isset($OUT[$POS + 2])) && ($OUT[$POS] == '!')) {
+                    if (($OUT[$POS + 1] == '-') && ($OUT[$POS + 2] == '-')) {
                         $status = IN_COMMENT;
                         $INBETWEEN_TEXT .= '<!--';
                         $POS += 3;
-                    } elseif (substr($OUT,$POS-1,9) == '<![CDATA[') {
+                    } elseif (substr($OUT, $POS - 1, 9) == '<![CDATA[') {
                         $status = IN_CDATA;
                         $POS += 8;
                         $INBETWEEN_TEXT .= '<![CDATA[';
                     } else {
                         $status = IN_DTD_TAG;
                     }
-                } elseif (($next == '<') && (isset($OUT[$POS])) && ($OUT[$POS] == '?') && ($POS<10)) {
+                } elseif (($next == '<') && (isset($OUT[$POS])) && ($OUT[$POS] == '?') && ($POS < 10)) {
                     if (!isset($GLOBALS['MAIL_MODE'])) {
                         $GLOBALS['MAIL_MODE'] = false;
                     }
@@ -888,17 +889,17 @@ function _get_next_tag()
                     }
                     $status = IN_XML_TAG;
                 } elseif ($next == '<') {
-                    $T_POS = $POS-1;
+                    $T_POS = $POS - 1;
                     $status = STARTING_TAG;
                 } else {
                     if ($next == '>') {
                         $errors[] = array('XML_TAG_CLOSE_ANOMALY');
-                        return array(null,$errors);
+                        return array(null, $errors);
                     }
                 }
                 break;
             case IN_TAG_NAME:
-                $more_to_come = (!isset($special_chars[$next])) && ($POS<$LEN);
+                $more_to_come = (!isset($special_chars[$next])) && ($POS < $LEN);
                 while ($more_to_come) {
                     $current_tag .= $next;
                     $next = $OUT[$POS];
@@ -907,21 +908,21 @@ function _get_next_tag()
                         $LINENO++;
                         $LINESTART = $POS;
                     }
-                    $more_to_come = (!isset($special_chars[$next])) && ($POS<$LEN);
+                    $more_to_come = (!isset($special_chars[$next])) && ($POS < $LEN);
                 }
                 if (($next == ' ') || ($next == "\n") || ($next == "\r")) {
-                    $TAG_RANGES[] = array($T_POS+1,$POS-1,$current_tag);
+                    $TAG_RANGES[] = array($T_POS + 1, $POS - 1, $current_tag);
                     $status = IN_TAG_BETWEEN_ATTRIBUTES;
                 } elseif ($next == '<') {
-                    $errors[] = array('XML_TAG_OPEN_ANOMALY','1');
-                    return array(null,$errors);
+                    $errors[] = array('XML_TAG_OPEN_ANOMALY', '1');
+                    return array(null, $errors);
                 } elseif ($next == '>') {
-                    if ($OUT[$POS-2] == '/') {
-                        $TAG_RANGES[] = array($T_POS+1,$POS-1,$current_tag);
-                        return _check_tag($current_tag,array(),true,$close,$errors);
+                    if ($OUT[$POS - 2] == '/') {
+                        $TAG_RANGES[] = array($T_POS + 1, $POS - 1, $current_tag);
+                        return _check_tag($current_tag, array(), true, $close, $errors);
                     } else {
-                        $TAG_RANGES[] = array($T_POS+1,$POS-1,$current_tag);
-                        return _check_tag($current_tag,array(),false,$close,$errors);
+                        $TAG_RANGES[] = array($T_POS + 1, $POS - 1, $current_tag);
+                        return _check_tag($current_tag, array(), false, $close, $errors);
                     }
                 } elseif ($next != '/') {
                     $current_tag .= $next;
@@ -931,11 +932,11 @@ function _get_next_tag()
                 if ($next == '/') {
                     $close = true;
                 } elseif ($next == '<') {
-                    $errors[] = array('XML_TAG_OPEN_ANOMALY','2');
+                    $errors[] = array('XML_TAG_OPEN_ANOMALY', '2');
                     $POS--;
                     $status = NO_MANS_LAND;
                 } elseif ($next == '>') {
-                    $errors[] = array('XML_TAG_CLOSE_ANOMALY','3');
+                    $errors[] = array('XML_TAG_CLOSE_ANOMALY', '3');
                     $status = NO_MANS_LAND;
                 } else {
                     $current_tag .= $next;
@@ -945,24 +946,24 @@ function _get_next_tag()
             case IN_TAG_BETWEEN_ATTRIBUTES:
                 if (($next == '/') && (isset($OUT[$POS])) && ($OUT[$POS] == '>')) {
                     ++$POS;
-                    return _check_tag($current_tag,$attribute_map,true,$close,$errors);
+                    return _check_tag($current_tag, $attribute_map, true, $close, $errors);
                 } elseif ($next == '>') {
-                    return _check_tag($current_tag,$attribute_map,false,$close,$errors);
-                } elseif (($next == '<') && (isset($OUT[$POS+3])) && ($OUT[$POS] == '!') && ($OUT[$POS+1] == '-') && ($OUT[$POS+2] == '-')) {
+                    return _check_tag($current_tag, $attribute_map, false, $close, $errors);
+                } elseif (($next == '<') && (isset($OUT[$POS + 3])) && ($OUT[$POS] == '!') && ($OUT[$POS + 1] == '-') && ($OUT[$POS + 2] == '-')) {
                     $status = IN_TAG_EMBEDDED_COMMENT;
-                    if ($OUT[$POS+3] == '-') {
+                    if ($OUT[$POS + 3] == '-') {
                         $errors[] = array('XHTML_WRONG_COMMENTING');
                     }
                 } elseif ($next == '<') {
-                    $errors[] = array('XML_TAG_OPEN_ANOMALY','4');
-                    return array(null,$errors);
+                    $errors[] = array('XML_TAG_OPEN_ANOMALY', '4');
+                    return array(null, $errors);
                 } elseif (($next != ' ') && ($next != "\t") && ($next != '/') && ($next != "\n") && ($next != "\r")) {
                     $status = IN_TAG_ATTRIBUTE_NAME;
                     $current_attribute_name .= $next;
                 }
                 break;
             case IN_TAG_ATTRIBUTE_NAME:
-                $more_to_come = (!isset($special_chars[$next])) && ($POS<$LEN);
+                $more_to_come = (!isset($special_chars[$next])) && ($POS < $LEN);
                 while ($more_to_come) {
                     $current_attribute_name .= $next;
                     $next = $OUT[$POS];
@@ -971,20 +972,20 @@ function _get_next_tag()
                         $LINENO++;
                         $LINESTART = $POS;
                     }
-                    $more_to_come = (!isset($special_chars[$next])) && ($POS<$LEN);
+                    $more_to_come = (!isset($special_chars[$next])) && ($POS < $LEN);
                 }
 
                 if ($next == '=') {
                     if (function_exists('require_code')) {
                         require_code('type_validation');
                     }
-                    if ((preg_match('#^\w+$#',$current_attribute_name) == 0/*optimisation*/) && (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name)))) {
-                        $errors[] = array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
+                    if ((preg_match('#^\w+$#', $current_attribute_name) == 0/*optimisation*/) && (!is_alphanumeric(preg_replace('#^([^:]+):#', '${1}', $current_attribute_name)))) {
+                        $errors[] = array('XML_TAG_BAD_ATTRIBUTE', $current_attribute_name);
                         $current_attribute_name = 'wrong' . strval($POS);
                     }
                     $status = IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT;
                 } elseif ($next == '<') {
-                    $errors[] = array('XML_TAG_OPEN_ANOMALY','5');
+                    $errors[] = array('XML_TAG_OPEN_ANOMALY', '5');
                     //return array(NULL,$errors);
                     // We have to assume we shouldn't REALLY have found a tag
                     $POS--;
@@ -994,8 +995,8 @@ function _get_next_tag()
                     if (function_exists('require_code')) {
                         require_code('type_validation');
                     }
-                    if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name))) {
-                        $errors[] = array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
+                    if (!is_alphanumeric(preg_replace('#^([^:]+):#', '${1}', $current_attribute_name))) {
+                        $errors[] = array('XML_TAG_BAD_ATTRIBUTE', $current_attribute_name);
                         $current_attribute_name = 'wrong' . strval($POS);
                     }
 
@@ -1006,20 +1007,20 @@ function _get_next_tag()
                     //return array(NULL,$errors);
 
                     if (isset($attribute_map[$current_attribute_name])) {
-                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
+                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES', $current_tag);
                     }
                     $attribute_map[$current_attribute_name] = $current_attribute_name;
                     $current_attribute_name = '';
-                    $VALUE_RANGES[] = array($POS-1,$POS-1);
-                    return _check_tag($current_tag,$attribute_map,false,$close,$errors);
+                    $VALUE_RANGES[] = array($POS - 1, $POS - 1);
+                    return _check_tag($current_tag, $attribute_map, false, $close, $errors);
                 } elseif (($next != ' ') && ($next != "\t") && ($next != "\n") && ($next != "\r")) {
                     $current_attribute_name .= $next;
                 } else {
                     if (function_exists('require_code')) {
                         require_code('type_validation');
                     }
-                    if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name))) {
-                        $errors[] = array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);
+                    if (!is_alphanumeric(preg_replace('#^([^:]+):#', '${1}', $current_attribute_name))) {
+                        $errors[] = array('XML_TAG_BAD_ATTRIBUTE', $current_attribute_name);
                         $current_attribute_name = 'wrong' . strval($POS);
                     }
                     $status = IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_LEFT;
@@ -1036,11 +1037,11 @@ function _get_next_tag()
 
                     $status = IN_TAG_BETWEEN_ATTRIBUTES;
                     if (isset($attribute_map[$current_attribute_name])) {
-                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
+                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES', $current_tag);
                     }
                     $attribute_map[$current_attribute_name] = $current_attribute_name;
                     $current_attribute_name = $next;
-                    $VALUE_RANGES[] = array($POS-1,$POS-1);
+                    $VALUE_RANGES[] = array($POS - 1, $POS - 1);
                 }
                 break;
             case IN_TAG_BETWEEN_ATTRIBUTE_NAME_VALUE_RIGHT:
@@ -1052,7 +1053,7 @@ function _get_next_tag()
                     $status = IN_TAG_ATTRIBUTE_VALUE_LITTLE_QUOTES;
                 } elseif (($next != ' ') && ($next != "\t") && ($next != "\n") && ($next != "\r")) {
                     if ($next == '<') {
-                        $errors[] = array('XML_TAG_OPEN_ANOMALY','6');
+                        $errors[] = array('XML_TAG_OPEN_ANOMALY', '6');
                     } elseif ($next == '>') {
                         $errors[] = array('XML_TAG_CLOSE_ANOMALY');
                     }
@@ -1068,32 +1069,32 @@ function _get_next_tag()
             case IN_TAG_ATTRIBUTE_VALUE_NO_QUOTES:
                 if ($next == '>') {
                     if (isset($attribute_map[$current_attribute_name])) {
-                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
+                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES', $current_tag);
                     }
                     $attribute_map[$current_attribute_name] = $current_attribute_value;
                     $current_attribute_value = '';
                     $current_attribute_name = '';
-                    $VALUE_RANGES[] = array($v_pos,$POS-1);
-                    return _check_tag($current_tag,$attribute_map,false,$close,$errors);
+                    $VALUE_RANGES[] = array($v_pos, $POS - 1);
+                    return _check_tag($current_tag, $attribute_map, false, $close, $errors);
                 } elseif (($next == ' ') || ($next == "\t") || ($next == "\n") || ($next == "\r")) {
                     $status = IN_TAG_BETWEEN_ATTRIBUTES;
                     if (isset($attribute_map[$current_attribute_name])) {
-                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
+                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES', $current_tag);
                     }
                     $attribute_map[$current_attribute_name] = $current_attribute_value;
                     $current_attribute_value = '';
                     $current_attribute_name = '';
-                    $VALUE_RANGES[] = array($v_pos,$POS-1);
+                    $VALUE_RANGES[] = array($v_pos, $POS - 1);
                 } else {
                     if ($next == '<') {
-                        $errors[] = array('XML_TAG_OPEN_ANOMALY','7');
+                        $errors[] = array('XML_TAG_OPEN_ANOMALY', '7');
                     }
 
                     $current_attribute_value .= $next;
                 }
                 break;
             case IN_TAG_ATTRIBUTE_VALUE_BIG_QUOTES:
-                $more_to_come = (!isset($special_chars[$next])) && ($POS<$LEN);
+                $more_to_come = (!isset($special_chars[$next])) && ($POS < $LEN);
                 while ($more_to_come) {
                     $current_attribute_value .= $next;
                     $next = $OUT[$POS];
@@ -1102,27 +1103,27 @@ function _get_next_tag()
                         $LINENO++;
                         $LINESTART = $POS;
                     }
-                    $more_to_come = (!isset($special_chars[$next])) && ($POS<$LEN);
+                    $more_to_come = (!isset($special_chars[$next])) && ($POS < $LEN);
                 }
-                if (($next == '&') && ($XHTML_VALIDATOR_OFF === NULL)) {
+                if (($next == '&') && ($XHTML_VALIDATOR_OFF === null)) {
                     $test = test_entity();
-                    if ($test !== NULL) {
-                        $errors = array_merge($errors,$test);
+                    if ($test !== null) {
+                        $errors = array_merge($errors, $test);
                     }
                 }
 
                 if ($next == '"') {
                     $status = IN_TAG_BETWEEN_ATTRIBUTES;
                     if (isset($attribute_map[$current_attribute_name])) {
-                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES',$current_tag);
+                        $errors[] = array('XML_TAG_DUPLICATED_ATTRIBUTES', $current_tag);
                     }
                     $attribute_map[$current_attribute_name] = $current_attribute_value;
                     $current_attribute_value = '';
                     $current_attribute_name = '';
-                    $VALUE_RANGES[] = array($v_pos,$POS-1);
+                    $VALUE_RANGES[] = array($v_pos, $POS - 1);
                 } else {
                     if ($next == '<') {
-                        $errors[] = array('XML_TAG_OPEN_ANOMALY','7');
+                        $errors[] = array('XML_TAG_OPEN_ANOMALY', '7');
                     } elseif ($next == '>') {
                         $errors[] = array('XML_TAG_CLOSE_ANOMALY');
                     }
@@ -1136,10 +1137,10 @@ function _get_next_tag()
                     $attribute_map[$current_attribute_name] = $current_attribute_value;
                     $current_attribute_value = '';
                     $current_attribute_name = '';
-                    $VALUE_RANGES[] = array($v_pos,$POS-1);
+                    $VALUE_RANGES[] = array($v_pos, $POS - 1);
                 } else {
                     if ($next == '<') {
-                        $errors[] = array('XML_TAG_OPEN_ANOMALY','7');
+                        $errors[] = array('XML_TAG_OPEN_ANOMALY', '7');
                     } elseif ($next == '>') {
                         $errors[] = array('XML_TAG_CLOSE_ANOMALY');
                     }
@@ -1148,20 +1149,20 @@ function _get_next_tag()
                 }
                 break;
             case IN_XML_TAG:
-                if (($OUT[$POS-2] == '?') && ($next == '>')) {
+                if (($OUT[$POS - 2] == '?') && ($next == '>')) {
                     $status = NO_MANS_LAND;
                 }
                 break;
             case IN_DTD_TAG: // This is a parser-directive, but we only use them for doctypes
                 $doc_type .= $next;
                 if ($next == '>') {
-                    if (substr($doc_type,0,8) == '!DOCTYPE') {
-                        global $THE_DOCTYPE,$TAGS_DEPRECATE_ALLOW,$FOUND_DOCTYPE,$XML_CONSTRAIN,$BLOCK_CONSTRAIN;
+                    if (substr($doc_type, 0, 8) == '!DOCTYPE') {
+                        global $THE_DOCTYPE, $TAGS_DEPRECATE_ALLOW, $FOUND_DOCTYPE, $XML_CONSTRAIN, $BLOCK_CONSTRAIN;
 
                         $FOUND_DOCTYPE = true;
                         $valid_doctypes = array(DOCTYPE_XHTML5);
-                        $doc_type = preg_replace('#//EN"\s+"#','//EN" "',$doc_type);
-                        if (!in_array('<' . $doc_type,$valid_doctypes)) {
+                        $doc_type = preg_replace('#//EN"\s+"#', '//EN" "', $doc_type);
+                        if (!in_array('<' . $doc_type, $valid_doctypes)) {
                             $errors[] = array('XHTML_DOCTYPE');
                         } else {
                             $THE_DOCTYPE = '<' . $doc_type;
@@ -1175,21 +1176,21 @@ function _get_next_tag()
                 break;
             case IN_CDATA:
                 $INBETWEEN_TEXT .= $next;
-                if (($next == '>') && ($OUT[$POS-2] == ']') && ($OUT[$POS-3] == ']')) {
+                if (($next == '>') && ($OUT[$POS - 2] == ']') && ($OUT[$POS - 3] == ']')) {
                     $status = NO_MANS_LAND;
                 }
                 break;
             case IN_COMMENT:
                 $INBETWEEN_TEXT .= $next;
-                if (($next == '>') && ($OUT[$POS-2] == '-') && ($OUT[$POS-3] == '-')) {
-                    if ($OUT[$POS-4] == '-') {
+                if (($next == '>') && ($OUT[$POS - 2] == '-') && ($OUT[$POS - 3] == '-')) {
+                    if ($OUT[$POS - 4] == '-') {
                         $errors[] = array('XHTML_WRONG_COMMENTING');
                     }
                     $status = NO_MANS_LAND;
                 }
                 break;
             case IN_TAG_EMBEDDED_COMMENT:
-                if (($next == '>') && ($OUT[$POS-2] == '-') && ($OUT[$POS-3] == '-')) {
+                if (($next == '>') && ($OUT[$POS - 2] == '-') && ($OUT[$POS - 3] == '-')) {
                     $status = IN_TAG_BETWEEN_ATTRIBUTES;
                 }
                 break;
@@ -1197,9 +1198,9 @@ function _get_next_tag()
     }
     if ($status != NO_MANS_LAND) {
         $errors[] = array('XML_BROKEN_END');
-        return array(null,$errors);
+        return array(null, $errors);
     }
-    return NULL;
+    return null;
 }
 
 /**
@@ -1212,14 +1213,14 @@ function _get_next_tag()
  * @param  list                         Errors detected so far. We will add to these and return
  * @return mixed                        String for tag basis form, or array of error information
  */
-function _check_tag($tag,$attributes,$self_close,$close,$errors)
+function _check_tag($tag, $attributes, $self_close, $close, $errors)
 {
-    global $XML_CONSTRAIN,$LAST_TAG_ATTRIBUTES,$WELL_FORMED_ONLY,$XHTML_VALIDATOR_OFF,$MUST_SELFCLOSE_TAGS;
+    global $XML_CONSTRAIN, $LAST_TAG_ATTRIBUTES, $WELL_FORMED_ONLY, $XHTML_VALIDATOR_OFF, $MUST_SELFCLOSE_TAGS;
 
     $ltag = strtolower($tag);
     if ($ltag != $tag) {
         if ($XML_CONSTRAIN) {
-            $errors[] = array('XHTML_CASE_TAG',$tag);
+            $errors[] = array('XHTML_CASE_TAG', $tag);
         }
         $tag = $ltag;
     }
@@ -1231,18 +1232,18 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
         $self_close = true; // Will be flagged later
     }
 
-    if (((isset($attributes['class'])) && (strpos($attributes['class'],'xhtml_validator_off') !== false)) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'],'xhtml') === false))) {
+    if (((isset($attributes['class'])) && (strpos($attributes['class'], 'xhtml_validator_off') !== false)) || ((isset($attributes['xmlns'])) && (strpos($attributes['xmlns'], 'xhtml') === false))) {
         $XHTML_VALIDATOR_OFF = 0;
     }
 
     if (!$WELL_FORMED_ONLY) {
-        $errors = __check_tag($tag,$attributes,$self_close,$close,$errors);
+        $errors = __check_tag($tag, $attributes, $self_close, $close, $errors);
     }
 
-    if ($XHTML_VALIDATOR_OFF>0) {
+    if ($XHTML_VALIDATOR_OFF > 0) {
         $errors = array();
     }
-    return array('<' . ($close?'/':'') . $tag . ($actual_self_close?'/':'') . '>',$errors);
+    return array('<' . ($close ? '/' : '') . $tag . ($actual_self_close ? '/' : '') . '>', $errors);
 }
 
 /**
@@ -1253,7 +1254,7 @@ function _check_tag($tag,$attributes,$self_close,$close,$errors)
  */
 function _get_tag_basis($full)
 {
-    $full = preg_replace('#[/ <>]#','',$full);
+    $full = preg_replace('#[/ <>]#', '', $full);
 
     return $full;
 }

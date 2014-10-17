@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_Notification_ip_address_sharing extends Hook_Notification__Staff
 {
     /**
@@ -47,7 +46,7 @@ class Hook_Notification_ip_address_sharing extends Hook_Notification__Staff
         }
 
         $list = array();
-        $list['ip_address_sharing'] = array(do_lang('MEMBERS'),do_lang('ecommerce:NOTIFICATION_TYPE_ip_address_sharing'));
+        $list['ip_address_sharing'] = array(do_lang('MEMBERS'), do_lang('ecommerce:NOTIFICATION_TYPE_ip_address_sharing'));
         return $list;
     }
 }

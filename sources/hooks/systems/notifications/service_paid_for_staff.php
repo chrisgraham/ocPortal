@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-
 class Hook_Notification_service_paid_for_staff extends Hook_Notification__Staff
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Notification_service_paid_for_staff extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -41,7 +40,7 @@ class Hook_Notification_service_paid_for_staff extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['service_paid_for_staff'] = array(do_lang('ecommerce:ECOMMERCE'),do_lang('ecommerce:NOTIFICATION_TYPE_service_paid_for_staff'));
+        $list['service_paid_for_staff'] = array(do_lang('ecommerce:ECOMMERCE'), do_lang('ecommerce:NOTIFICATION_TYPE_service_paid_for_staff'));
         return $list;
     }
 }

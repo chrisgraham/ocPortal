@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_search_wiki_pages
 {
     /**
@@ -29,17 +28,17 @@ class Hook_search_wiki_pages
     public function info($check_permissions = true)
     {
         if (!module_installed('wiki')) {
-            return NULL;
+            return null;
         }
 
         if ($check_permissions) {
-            if (!has_actual_page_access(get_member(),'wiki')) {
-                return NULL;
+            if (!has_actual_page_access(get_member(), 'wiki')) {
+                return null;
             }
         }
 
-        if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages','COUNT(*)') <= 1) {
-            return NULL;
+        if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'COUNT(*)') <= 1) {
+            return null;
         }
 
         require_lang('wiki');
@@ -86,7 +85,7 @@ class Hook_search_wiki_pages
      * @param  boolean                  Whether it is a boolean search
      * @return array                    List of maps (template, orderer)
      */
-    public function run($content,$only_search_meta,$direction,$max,$start,$only_titles,$content_where,$author,$author_id,$cutoff,$sort,$limit_to,$boolean_operator,$where_clause,$search_under,$boolean_search)
+    public function run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $limit_to, $boolean_operator, $where_clause, $search_under, $boolean_search)
     {
         $remapped_orderer = '';
         switch ($sort) {
@@ -112,15 +111,15 @@ class Hook_search_wiki_pages
         }
 
         // Calculate and perform query
-        $rows = get_search_rows('wiki_page','id',$content,$boolean_search,$boolean_operator,$only_search_meta,$direction,$max,$start,$only_titles,'wiki_pages r',array('r.title' => 'SHORT_TRANS','r.description' => 'LONG_TRANS__COMCODE'),$where_clause,$content_where,$remapped_orderer,'r.*',null,'wiki_page','id');
+        $rows = get_search_rows('wiki_page', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, 'wiki_pages r', array('r.title' => 'SHORT_TRANS', 'r.description' => 'LONG_TRANS__COMCODE'), $where_clause, $content_where, $remapped_orderer, 'r.*', null, 'wiki_page', 'id');
 
         $out = array();
         foreach ($rows as $i => $row) {
             $out[$i]['data'] = $row;
             unset($rows[$i]);
-            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer,$row))) {
+            if (($remapped_orderer != '') && (array_key_exists($remapped_orderer, $row))) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
-            } elseif (strpos($remapped_orderer,'_rating:') !== false) {
+            } elseif (strpos($remapped_orderer, '_rating:') !== false) {
                 $out[$i]['orderer'] = $row[$remapped_orderer];
             }
         }

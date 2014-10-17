@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_fields_codename
 {
     // ==============
@@ -32,7 +31,7 @@ class Hook_fields_codename
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -42,9 +41,9 @@ class Hook_fields_codename
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return NULL;
+        return null;
     }
 
     // ===================
@@ -59,14 +58,14 @@ class Hook_fields_codename
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = 'default';
             }
         }
-        return array('short_text',$default,'short');
+        return array('short_text', $default, 'short');
     }
 
     /**
@@ -76,7 +75,7 @@ class Hook_fields_codename
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         if (is_object($ev)) {
             return $ev;
@@ -98,12 +97,12 @@ class Hook_fields_codename
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if (is_null($actual_value)) {
             $actual_value = '';
         } // Plug anomaly due to unusual corruption
-        return form_input_codename($_cf_name,$_cf_description,'field_' . strval($field['id']),$actual_value,$field['cf_required'] == 1);
+        return form_input_codename($_cf_name, $_cf_description, 'field_' . strval($field['id']), $actual_value, $field['cf_required'] == 1);
     }
 
     /**
@@ -115,20 +114,20 @@ class Hook_fields_codename
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         $id = $field['id'];
         $tmp_name = 'field_' . strval($id);
 
         require_code('type_validation');
-        $value = post_param($tmp_name,$editing?STRING_MAGIC_NULL:'');
+        $value = post_param($tmp_name, $editing ? STRING_MAGIC_NULL : '');
         if (($value != '') && ($value != STRING_MAGIC_NULL)) {
-            if ((strpos($value,'://') === false) && (substr($value,0,4) == 'www.')) {
+            if ((strpos($value, '://') === false) && (substr($value, 0, 4) == 'www.')) {
                 $value = 'http://' . $value;
             }
 
-            if (!is_alphanumeric($value,true)) {
-                if (strpos($value,'://') !== false) { // strip out from URL, if full URL was entered
+            if (!is_alphanumeric($value, true)) {
+                if (strpos($value, '://') !== false) { // strip out from URL, if full URL was entered
                     $value = basename($value);
                     $_POST[$tmp_name] = $value; // Copy back, so fractional editing knows
                 } else {

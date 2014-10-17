@@ -18,7 +18,7 @@
 /* To be called by make_release.php - not directly linked from menus */
 
 restrictify();
-$groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false,true);
+$groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
 require_code('ocportalcom');
 
 // Version info / plan
@@ -27,7 +27,7 @@ $version_dotted = get_param('version');
 require_code('version2');
 $version_pretty = get_version_pretty__from_dotted(get_version_dotted__from_anything($version_dotted));
 
-$is_substantial = (substr($version_dotted,-2) == '.0') || (strpos($version_dotted,'beta1') !== false) || (strpos($version_dotted,'RC1') !== false);
+$is_substantial = (substr($version_dotted, -2) == '.0') || (strpos($version_dotted, 'beta1') !== false) || (strpos($version_dotted, 'RC1') !== false);
 
 $is_old_tree = get_param_integer('is_old_tree') == 1;
 
@@ -40,12 +40,12 @@ if (!$is_bleeding_edge) {
     $bleeding2 = 'bleeding-edge, ';
 }
 
-$changes = post_param('changes','',true);
+$changes = post_param('changes', '', true);
 
-$descrip = get_param('descrip','',true);
+$descrip = get_param('descrip', '', true);
 
-$needed = get_param('needed','',true);
-$justification = get_param('justification','',true);
+$needed = get_param('needed', '', true);
+$justification = get_param('justification', '', true);
 
 $urls = array();
 
@@ -56,7 +56,7 @@ if (!$is_bleeding_edge) {
     require_code('catalogues2');
 
     $bug_category_id = get_bug_category_id($version_dotted);
-    $urls['Bugs'] = static_evaluate_tempcode(build_url(array('page' => 'catalogues','type' => 'category','id' => $bug_category_id),get_module_zone('catalogues'),null,false,false,true));
+    $urls['Bugs'] = static_evaluate_tempcode(build_url(array('page' => 'catalogues', 'type' => 'category', 'id' => $bug_category_id), get_module_zone('catalogues'), null, false, false, true));
 } else {
     $bug_category_id = null;
 }
@@ -64,44 +64,44 @@ if (!$is_bleeding_edge) {
 // Add downloads (assume uploaded already)
 
 require_code('downloads2');
-$releases_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id' => db_get_first_id(),$GLOBALS['SITE_DB']->translate_field_ref('category') => 'Releases'));
+$releases_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'id', array('parent_id' => db_get_first_id(), $GLOBALS['SITE_DB']->translate_field_ref('category') => 'Releases'));
 if (is_null($releases_category_id)) {
-    $releases_category_id = add_download_category('Releases',db_get_first_id(),'','');
+    $releases_category_id = add_download_category('Releases', db_get_first_id(), '', '');
     foreach (array_keys($groups) as $group_id) {
-        $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($releases_category_id),'group_id' => $group_id));
+        $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'downloads', 'category_name' => strval($releases_category_id), 'group_id' => $group_id));
     }
 }
 
-$release_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id' => $releases_category_id,$GLOBALS['SITE_DB']->translate_field_ref('category') => 'Version ' . strval(intval($version_dotted))));
+$release_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'id', array('parent_id' => $releases_category_id, $GLOBALS['SITE_DB']->translate_field_ref('category') => 'Version ' . strval(intval($version_dotted))));
 if (is_null($release_category_id)) {
-    $release_category_id = add_download_category('Version ' . strval(intval($version_dotted)),$releases_category_id,'','');
+    $release_category_id = add_download_category('Version ' . strval(intval($version_dotted)), $releases_category_id, '', '');
     foreach (array_keys($groups) as $group_id) {
-        $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($release_category_id),'group_id' => $group_id));
+        $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'downloads', 'category_name' => strval($release_category_id), 'group_id' => $group_id));
     }
 }
 
-$installatron_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id' => $releases_category_id,$GLOBALS['SITE_DB']->translate_field_ref('category') => 'Installatron integration'));
+$installatron_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'id', array('parent_id' => $releases_category_id, $GLOBALS['SITE_DB']->translate_field_ref('category') => 'Installatron integration'));
 if (is_null($installatron_category_id)) {
-    $installatron_category_id = add_download_category('Installatron integration',$releases_category_id,'','');
+    $installatron_category_id = add_download_category('Installatron integration', $releases_category_id, '', '');
     foreach (array_keys($groups) as $group_id) {
-        $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($installatron_category_id),'group_id' => $group_id));
+        $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'downloads', 'category_name' => strval($installatron_category_id), 'group_id' => $group_id));
     }
 }
 
-$microsoft_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','id',array('parent_id' => $releases_category_id,$GLOBALS['SITE_DB']->translate_field_ref('category') => 'Microsoft integration'));
+$microsoft_category_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'id', array('parent_id' => $releases_category_id, $GLOBALS['SITE_DB']->translate_field_ref('category') => 'Microsoft integration'));
 if (is_null($microsoft_category_id)) {
-    $microsoft_category_id = add_download_category('Microsoft integration',$releases_category_id,'','');
+    $microsoft_category_id = add_download_category('Microsoft integration', $releases_category_id, '', '');
     foreach (array_keys($groups) as $group_id) {
-        $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'downloads','category_name' => strval($microsoft_category_id),'group_id' => $group_id));
+        $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'downloads', 'category_name' => strval($microsoft_category_id), 'group_id' => $group_id));
     }
 }
 
 $all_downloads_to_add = array(
     array(
         'name' => "ocPortal Version {$version_pretty}{$bleeding1}",
-        'description' => "This is version {$version_pretty}." . (is_null($bug_category_id)?"":"\n\nAny [url=\"critical bug fixes\" title=\"{!LINK_NEW_WINDOW}\"]http://ocportal.com/site/catalogues/category/" . strval($bug_category_id) . ".htm[/url] for this version are organised on the ocPortal website."),
+        'description' => "This is version {$version_pretty}." . (is_null($bug_category_id) ? "" : "\n\nAny [url=\"critical bug fixes\" title=\"{!LINK_NEW_WINDOW}\"]http://ocportal.com/site/catalogues/category/" . strval($bug_category_id) . ".htm[/url] for this version are organised on the ocPortal website."),
         'filename' => 'ocportal_quick_installer-' . $version_dotted . '.zip',
-        'comments' => ($is_bleeding_edge || $is_old_tree)?'':'This is the latest version.',
+        'comments' => ($is_bleeding_edge || $is_old_tree) ? '' : 'This is the latest version.',
         'category_id' => $release_category_id,
         'internal_name' => 'Quick installer',
     ),
@@ -158,29 +158,29 @@ foreach ($all_downloads_to_add as $i => $d) {
     $comments = $d['comments'];
     $category_id = $d['category_id'];
 
-    $download_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','id',array('category_id' => $category_id,$GLOBALS['SITE_DB']->translate_field_ref('name') => $name));
+    $download_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'id', array('category_id' => $category_id, $GLOBALS['SITE_DB']->translate_field_ref('name') => $name));
     if (is_null($download_id)) {
-        $download_id = add_download($category_id,$name,$url,$description,'ocProducts',$comments,null,1,0,0,0,'',$original_filename,$file_size,0,0);
+        $download_id = add_download($category_id, $name, $url, $description, 'ocProducts', $comments, null, 1, 0, 0, 0, '', $original_filename, $file_size, 0, 0);
     } else {
-        edit_download($download_id,$category_id,$name,$url,$description,'ocProducts',$comments,null,0,1,0,0,0,'',$original_filename,$file_size,0,0,null,'','');
+        edit_download($download_id, $category_id, $name, $url, $description, 'ocProducts', $comments, null, 0, 1, 0, 0, 0, '', $original_filename, $file_size, 0, 0, null, '', '');
     }
 
     $d['download_id'] = $download_id;
     $all_downloads_to_add[$i] = $d;
 
-    $urls[$d['internal_name']] = static_evaluate_tempcode(build_url(array('page' => 'downloads','type' => 'entry','id' => $download_id),get_module_zone('downloads'),null,false,false,true));
+    $urls[$d['internal_name']] = static_evaluate_tempcode(build_url(array('page' => 'downloads', 'type' => 'entry', 'id' => $download_id), get_module_zone('downloads'), null, false, false, true));
     $urls[$d['internal_name'] . ' (direct download)'] = find_script('dload') . '?id=' . strval($download_id);
 }
 
 // Edit past download
 
 if ((!$is_bleeding_edge) && (!$is_old_tree) && (isset($all_downloads_to_add[0]['download_id']))) {
-    $last_version_str = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','comments',array($GLOBALS['SITE_DB']->translate_field_ref('comments') => 'This is the latest version.'),' AND d.id<>' . strval($all_downloads_to_add[0]['download_id']));
+    $last_version_str = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'comments', array($GLOBALS['SITE_DB']->translate_field_ref('comments') => 'This is the latest version.'), ' AND d.id<>' . strval($all_downloads_to_add[0]['download_id']));
     if (!is_null($last_version_str)) {
-        $last_version_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','id',array($GLOBALS['SITE_DB']->translate_field_ref('comments') => 'This is the latest version.'),' AND d.id<>' . strval($all_downloads_to_add[0]['download_id']));
+        $last_version_id = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('comments') => 'This is the latest version.'), ' AND d.id<>' . strval($all_downloads_to_add[0]['download_id']));
         if ($last_version_id != $all_downloads_to_add[0]['download_id']) {
             $description = "A new version, {$version_pretty} is available. Upgrading to {$version_pretty} is considered {$needed} by ocProducts{$justification}. There may have been other upgrades since {$version_pretty} - see [url=\"the ocProducts news archive\" target=\"_blank\"]http://ocportal.com/site/news.htm[/url].";
-            $GLOBALS['SITE_DB']->query_update('downloads',lang_remap_comcode($last_version_str,'description',$description),array('id' => $last_version_id),'',1);
+            $GLOBALS['SITE_DB']->query_update('downloads', lang_remap_comcode($last_version_str, 'description', $description), array('id' => $last_version_id), '', 1);
         }
     }
 }
@@ -219,21 +219,21 @@ To upgrade follow the steps in your website's [tt]http://mybaseurl/upgrader.php[
 
 {$changes}";
 
-$news_category = $GLOBALS['SITE_DB']->query_select_value_if_there('news_categories','id',array($GLOBALS['SITE_DB']->translate_field_ref('nc_title') => 'New releases'));
+$news_category = $GLOBALS['SITE_DB']->query_select_value_if_there('news_categories', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('nc_title') => 'New releases'));
 if (is_null($news_category)) {
-    $news_category = add_news_category('New releases','newscats/general','');
+    $news_category = add_news_category('New releases', 'newscats/general', '');
     foreach (array_keys($groups) as $group_id) {
-        $GLOBALS['SITE_DB']->query_insert('group_category_access',array('module_the_name' => 'news','category_name' => strval($news_category),'group_id' => $group_id));
+        $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'news', 'category_name' => strval($news_category), 'group_id' => $group_id));
     }
 }
 
-$news_id = $GLOBALS['SITE_DB']->query_select_value_if_there('news','id',array('news_category' => $news_category,$GLOBALS['SITE_DB']->translate_field_ref('title') => $news_title));
+$news_id = $GLOBALS['SITE_DB']->query_select_value_if_there('news', 'id', array('news_category' => $news_category, $GLOBALS['SITE_DB']->translate_field_ref('title') => $news_title));
 if (is_null($news_id)) {
-    $news_id = add_news($news_title,$summary,'ocProducts',1,0,1,0,'',$article,$news_category);
+    $news_id = add_news($news_title, $summary, 'ocProducts', 1, 0, 1, 0, '', $article, $news_category);
 } else {
-    edit_news($news_id,$news_title,$summary,'ocProducts',1,0,1,0,'',$article,$news_category,null,'','','');
+    edit_news($news_id, $news_title, $summary, 'ocProducts', 1, 0, 1, 0, '', $article, $news_category, null, '', '', '');
 }
-$urls['News: ' . $news_title] = static_evaluate_tempcode(build_url(array('page' => 'news','type' => 'view','id' => $news_id),get_module_zone('news'),null,false,false,true));
+$urls['News: ' . $news_title] = static_evaluate_tempcode(build_url(array('page' => 'news', 'type' => 'view', 'id' => $news_id), get_module_zone('news'), null, false, false, true));
 
 // DONE!
 

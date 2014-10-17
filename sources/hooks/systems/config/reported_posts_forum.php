@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_reported_posts
  */
-
 class Hook_config_reported_posts_forum
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_reported_posts_forum
      */
     public function get_default()
     {
-        return do_lang('ocf_config:REPORTED_POSTS_FORUM','','','',get_site_default_lang());
+        return do_lang('ocf_config:REPORTED_POSTS_FORUM', '', '', '', get_site_default_lang());
     }
 }

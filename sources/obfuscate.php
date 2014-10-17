@@ -36,12 +36,12 @@ function mailto_obfuscated()
  */
 function obfuscate_entities($val)
 {
-    if (strpos($val,'&') !== false) {
+    if (strpos($val, '&') !== false) {
         return $val;
     } // Prevent double encoding
 
     $out = '';
-    for ($i = 0;$i<strlen($val);$i++) {
+    for ($i = 0; $i < strlen($val); $i++) {
         $char = $val[$i];
         if ($char == '<') {
             $_char = '&lt;';
@@ -49,10 +49,10 @@ function obfuscate_entities($val)
             $_char = '&gt;';
         } elseif ($char == '&') {
             $_char = '&amp;';
-        } elseif ($i%2 == 0) {
-            $_char = '&#' . sprintf('%d',ord($char)) . ';';
+        } elseif ($i % 2 == 0) {
+            $_char = '&#' . sprintf('%d', ord($char)) . ';';
         } else {
-            $_char = '&#x' . sprintf('%x',ord($char)) . ';';
+            $_char = '&#x' . sprintf('%x', ord($char)) . ';';
         }
 
         $out .= $_char;

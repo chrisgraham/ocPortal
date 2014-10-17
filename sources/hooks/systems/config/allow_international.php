@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_config_allow_international
 {
     /**
@@ -48,6 +47,6 @@ class Hook_config_allow_international
      */
     public function get_default()
     {
-        return (get_forum_type() != 'ocf')?null:'1';
+        return (get_forum_type() != 'ocf') ? null : '1';
     }
 }

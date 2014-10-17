@@ -36,8 +36,8 @@ function menu_management_script()
     $to_menu = get_param('menu');
     $changes = array('i_menu' => $to_menu);
 
-    $rows = $GLOBALS['SITE_DB']->query_select('menu_items',array('*'),array('id' => $id),'',1);
-    if (array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select('menu_items', array('*'), array('id' => $id), '', 1);
+    if (array_key_exists(0, $rows)) {
         $row = $rows[0];
     } else {
         $row = null;
@@ -45,14 +45,14 @@ function menu_management_script()
 
     $test = false;
 
-    foreach (array_keys($test?$_GET:$_POST) as $key) {
-        $val = $test?get_param($key):post_param($key);
-        $key = preg_replace('#\_\d+$#','',$key);
+    foreach (array_keys($test ? $_GET : $_POST) as $key) {
+        $val = $test ? get_param($key) : post_param($key);
+        $key = preg_replace('#\_\d+$#', '', $key);
         if (($key == 'caption') || ($key == 'caption_long')) {
             if (is_null($row)) {
-                $changes += insert_lang('i_' . $key,$val,2);
+                $changes += insert_lang('i_' . $key, $val, 2);
             } else {
-                $changes += lang_remap('i_' . $key,$row['i_' . $key],$val);
+                $changes += lang_remap('i_' . $key, $row['i_' . $key], $val);
             }
         } elseif (($key == 'url') || ($key == 'theme_img_code')) {
             $changes['i_' . $key] = $val;
@@ -60,17 +60,17 @@ function menu_management_script()
             $changes['i_page_only'] = $val;
         }
     }
-    $changes['i_order'] = post_param_integer('order_' . strval($id),0);
-    $changes['i_new_window'] = post_param_integer('new_window_' . strval($id),0);
-    $changes['i_check_permissions'] = post_param_integer('check_perms_' . strval($id),0);
-    $changes['i_include_sitemap'] = post_param_integer('include_sitemap_' . strval($id),0);
+    $changes['i_order'] = post_param_integer('order_' . strval($id), 0);
+    $changes['i_new_window'] = post_param_integer('new_window_' . strval($id), 0);
+    $changes['i_check_permissions'] = post_param_integer('check_perms_' . strval($id), 0);
+    $changes['i_include_sitemap'] = post_param_integer('include_sitemap_' . strval($id), 0);
     $changes['i_expanded'] = 0;
     $changes['i_parent'] = null;
 
     if (is_null($row)) {
-        $GLOBALS['SITE_DB']->query_insert('menu_items',$changes);
+        $GLOBALS['SITE_DB']->query_insert('menu_items', $changes);
     } else {
-        $GLOBALS['SITE_DB']->query_update('menu_items',$changes,array('id' => $id),'',1);
+        $GLOBALS['SITE_DB']->query_update('menu_items', $changes, array('id' => $id), '', 1);
     }
 }
 
@@ -91,23 +91,23 @@ function menu_management_script()
  * @param  ?integer                     Order to use (NULL: automatic, after the ones that have it specified).
  * @return AUTO_LINK                    The ID of the newly added menu item.
  */
-function add_menu_item_simple($menu,$parent,$caption,$url = '',$expanded = 0,$check_permissions = 0,$dereference_caption = true,$caption_long = '',$new_window = 0,$theme_image_code = '',$include_sitemap = 0,$order = null)
+function add_menu_item_simple($menu, $parent, $caption, $url = '', $expanded = 0, $check_permissions = 0, $dereference_caption = true, $caption_long = '', $new_window = 0, $theme_image_code = '', $include_sitemap = 0, $order = null)
 {
     global $ADD_MENU_COUNTER;
 
-    $id = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','id',array('i_url' => $url,'i_menu' => $menu));
+    $id = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items', 'id', array('i_url' => $url, 'i_menu' => $menu));
     if (!is_null($id)) {
         return $id;
     } // Already exists
     if (is_string($parent)) {
-        $parent = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items','i_parent',array('i_url' => $parent));
+        $parent = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items', 'i_parent', array('i_url' => $parent));
     }
 
-    $_caption = (strpos($caption,':') === false)?do_lang($caption,null,null,null,null,false):null;
+    $_caption = (strpos($caption, ':') === false) ? do_lang($caption, null, null, null, null, false) : null;
     if (is_null($_caption)) {
         $_caption = $caption;
     }
-    $id = add_menu_item($menu,$ADD_MENU_COUNTER,$parent,$dereference_caption?$_caption:$caption,$url,$check_permissions,'',$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap);
+    $id = add_menu_item($menu, $ADD_MENU_COUNTER, $parent, $dereference_caption ? $_caption : $caption, $url, $check_permissions, '', $expanded, $new_window, $caption_long, $theme_image_code, $include_sitemap);
 
     $ADD_MENU_COUNTER++;
 
@@ -121,11 +121,11 @@ function add_menu_item_simple($menu,$parent,$caption,$url = '',$expanded = 0,$ch
  */
 function delete_menu_item_simple($url)
 {
-    $GLOBALS['SITE_DB']->query_delete('menu_items',array('i_url' => $url));
+    $GLOBALS['SITE_DB']->query_delete('menu_items', array('i_url' => $url));
 
-    $_id = $GLOBALS['SITE_DB']->query_select('menu_items',array('id'),array($GLOBALS['SITE_DB']->translate_field_ref('i_caption') => $url));
+    $_id = $GLOBALS['SITE_DB']->query_select('menu_items', array('id'), array($GLOBALS['SITE_DB']->translate_field_ref('i_caption') => $url));
     foreach ($_id as $id) {
-        $GLOBALS['SITE_DB']->query_delete('menu_items',array('i_caption' => $id['id']));
+        $GLOBALS['SITE_DB']->query_delete('menu_items', array('i_caption' => $id['id']));
     }
 }
 
@@ -146,7 +146,7 @@ function delete_menu_item_simple($url)
  * @param  SHORT_INTEGER                An INCLUDE_SITEMAP_* constant
  * @return AUTO_LINK                    The ID of the newly added menu item.
  */
-function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code = '',$include_sitemap = 0)
+function add_menu_item($menu, $order, $parent, $caption, $url, $check_permissions, $page_only, $expanded, $new_window, $caption_long, $theme_image_code = '', $include_sitemap = 0)
 {
     $map = array(
         'i_menu' => $menu,
@@ -160,15 +160,15 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
         'i_new_window' => $new_window,
         'i_theme_img_code' => $theme_image_code,
     );
-    $map += insert_lang_comcode('i_caption',$caption,1);
-    $map += insert_lang_comcode('i_caption_long',$caption_long,1);
-    $id = $GLOBALS['SITE_DB']->query_insert('menu_items',$map,true);
+    $map += insert_lang_comcode('i_caption', $caption, 1);
+    $map += insert_lang_comcode('i_caption_long', $caption_long, 1);
+    $id = $GLOBALS['SITE_DB']->query_insert('menu_items', $map, true);
 
-    log_it('ADD_MENU_ITEM',strval($id),$caption);
+    log_it('ADD_MENU_ITEM', strval($id), $caption);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('menu_item',strval($id),null,null,true);
+        generate_resourcefs_moniker('menu_item', strval($id), null, null, true);
     }
 
     return $id;
@@ -191,10 +191,10 @@ function add_menu_item($menu,$order,$parent,$caption,$url,$check_permissions,$pa
  * @param  ID_TEXT                      The theme image code.
  * @param  SHORT_INTEGER                An INCLUDE_SITEMAP_* constant
  */
-function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permissions,$page_only,$expanded,$new_window,$caption_long,$theme_image_code,$include_sitemap)
+function edit_menu_item($id, $menu, $order, $parent, $caption, $url, $check_permissions, $page_only, $expanded, $new_window, $caption_long, $theme_image_code, $include_sitemap)
 {
-    $_caption = $GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption',array('id' => $id));
-    $_caption_long = $GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption_long',array('id' => $id));
+    $_caption = $GLOBALS['SITE_DB']->query_select_value('menu_items', 'i_caption', array('id' => $id));
+    $_caption_long = $GLOBALS['SITE_DB']->query_select_value('menu_items', 'i_caption_long', array('id' => $id));
 
     $map = array(
         'i_menu' => $menu,
@@ -207,15 +207,15 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
         'i_new_window' => $new_window,
         'i_include_sitemap' => $include_sitemap,
     );
-    $map += lang_remap_comcode('i_caption',$_caption,$caption);
-    $map += lang_remap_comcode('i_caption_long',$_caption_long,$caption_long);
-    $GLOBALS['SITE_DB']->query_update('menu_items',$map,array('id' => $id),'',1);
+    $map += lang_remap_comcode('i_caption', $_caption, $caption);
+    $map += lang_remap_comcode('i_caption_long', $_caption_long, $caption_long);
+    $GLOBALS['SITE_DB']->query_update('menu_items', $map, array('id' => $id), '', 1);
 
-    log_it('EDIT_MENU_ITEM',strval($id),$caption);
+    log_it('EDIT_MENU_ITEM', strval($id), $caption);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        generate_resourcefs_moniker('menu_item',strval($id));
+        generate_resourcefs_moniker('menu_item', strval($id));
     }
 }
 
@@ -226,18 +226,18 @@ function edit_menu_item($id,$menu,$order,$parent,$caption,$url,$check_permission
  */
 function delete_menu_item($id)
 {
-    $_caption = $GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption',array('id' => $id));
-    $_caption_long = $GLOBALS['SITE_DB']->query_select_value('menu_items','i_caption_long',array('id' => $id));
-    $GLOBALS['SITE_DB']->query_delete('menu_items',array('id' => $id),'',1);
+    $_caption = $GLOBALS['SITE_DB']->query_select_value('menu_items', 'i_caption', array('id' => $id));
+    $_caption_long = $GLOBALS['SITE_DB']->query_select_value('menu_items', 'i_caption_long', array('id' => $id));
+    $GLOBALS['SITE_DB']->query_delete('menu_items', array('id' => $id), '', 1);
     $caption = get_translated_text($_caption);
     delete_lang($_caption);
     delete_lang($_caption_long);
 
-    log_it('DELETE_MENU_ITEM',strval($id),$caption);
+    log_it('DELETE_MENU_ITEM', strval($id), $caption);
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        expunge_resourcefs_moniker('menu_item',strval($id));
+        expunge_resourcefs_moniker('menu_item', strval($id));
     }
 }
 
@@ -249,21 +249,21 @@ function delete_menu_item($id)
 function delete_menu($menu_id)
 {
     // Get language codes currently used
-    $old_menu_bits = list_to_map('id',$GLOBALS['SITE_DB']->query_select('menu_items',array('id','i_caption','i_caption_long'),array('i_menu' => $menu_id)));
+    $old_menu_bits = list_to_map('id', $GLOBALS['SITE_DB']->query_select('menu_items', array('id', 'i_caption', 'i_caption_long'), array('i_menu' => $menu_id)));
 
     // Erase old stuff
     foreach ($old_menu_bits as $menu_item_id => $lang_code) {
-        $GLOBALS['SITE_DB']->query_delete('menu_items',array('id' => $menu_item_id));
+        $GLOBALS['SITE_DB']->query_delete('menu_items', array('id' => $menu_item_id));
         delete_lang($lang_code['i_caption']);
         delete_lang($lang_code['i_caption_long']);
     }
 
     decache('menu');
-    persistent_cache_delete(array('MENU',$menu_id));
+    persistent_cache_delete(array('MENU', $menu_id));
 
     if ((addon_installed('occle')) && (!running_script('install'))) {
         require_code('resource_fs');
-        expunge_resourcefs_moniker('menu',$menu_id);
+        expunge_resourcefs_moniker('menu', $menu_id);
     }
 }
 
@@ -273,13 +273,13 @@ function delete_menu($menu_id)
  * @param  ID_TEXT                      The ID of the menu to save into.
  * @param  SHORT_TEXT                   Sitemap details.
  */
-function copy_from_sitemap_to_new_menu($target_menu,$source)
+function copy_from_sitemap_to_new_menu($target_menu, $source)
 {
     require_code('comcode_from_html');
     require_code('menus');
     $root = _build_sitemap_menu($source);
     $order = 0;
-    _copy_from_sitemap_to_new_menu($target_menu,$root,$order);
+    _copy_from_sitemap_to_new_menu($target_menu, $root, $order);
 }
 
 /**
@@ -290,16 +290,16 @@ function copy_from_sitemap_to_new_menu($target_menu,$source)
  * @param  integer                      Sequence order to save with.
  * @param  ?AUTO_LINK                   Menu parent ID (NULL: root).
  */
-function _copy_from_sitemap_to_new_menu($target_menu,$node,&$order,$parent = null)
+function _copy_from_sitemap_to_new_menu($target_menu, $node, &$order, $parent = null)
 {
     if (isset($node['children'])) {
         foreach ($node['children'] as $child) {
             $theme_image_code = mixed();
             if (!is_null($child['extra_meta']['image'])) {
                 $_theme_image_code = $child['extra_meta']['image'];
-                if (substr($_theme_image_code,0,strlen(get_custom_base_url() . '/')) == get_custom_base_url() . '/') {
-                    $_theme_image_code = substr($_theme_image_code,strlen(get_custom_base_url() . '/'));
-                    $theme_image_code = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images','id',array('path' => $_theme_image_code));
+                if (substr($_theme_image_code, 0, strlen(get_custom_base_url() . '/')) == get_custom_base_url() . '/') {
+                    $_theme_image_code = substr($_theme_image_code, strlen(get_custom_base_url() . '/'));
+                    $theme_image_code = $GLOBALS['SITE_DB']->query_select_value_if_there('theme_images', 'id', array('path' => $_theme_image_code));
                 }
             }
 
@@ -307,20 +307,20 @@ function _copy_from_sitemap_to_new_menu($target_menu,$node,&$order,$parent = nul
                 $target_menu,
                 $order,
                 $parent,
-                semihtml_to_comcode($child['title']->evaluate(),true),
-                is_null($child['page_link'])?'':$child['page_link'],
+                semihtml_to_comcode($child['title']->evaluate(), true),
+                is_null($child['page_link']) ? '' : $child['page_link'],
                 1,
                 '',
                 1,
                 0,
-                is_null($child['extra_meta']['description'])?'':semihtml_to_comcode($child['extra_meta']['description']->evaluate(),true),
-                is_null($theme_image_code)?'':$theme_image_code,
+                is_null($child['extra_meta']['description']) ? '' : semihtml_to_comcode($child['extra_meta']['description']->evaluate(), true),
+                is_null($theme_image_code) ? '' : $theme_image_code,
                 0
             );
 
             $order++;
 
-            _copy_from_sitemap_to_new_menu($target_menu,$child,$order,$branch_id);
+            _copy_from_sitemap_to_new_menu($target_menu, $child, $order, $branch_id);
         }
     }
 }
