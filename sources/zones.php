@@ -138,6 +138,11 @@ function i_solemnly_declare($declarations)
  */
 function _solemnly_enter()
 {
+    if (in_safe_mode()) {
+        // No custom code actually running
+        return;
+    }
+
     global $DECLARATIONS_STACK, $DECLARATIONS_STATE_DEFAULT, $DECLARATIONS_STATE;
     $new_state = array();
     foreach (array_keys($DECLARATIONS_STATE_DEFAULT) as $property) {
@@ -154,6 +159,11 @@ function _solemnly_enter()
  */
 function _solemnly_leave(&$out = null)
 {
+    if (in_safe_mode()) {
+        // No custom code actually running
+        return;
+    }
+
     if ((!has_solemnly_declared(I_UNDERSTAND_XSS)) && ($out !== null)) {
         foreach (array_merge(array_values($_POST), array_values($_GET)) as $before) {
             $after = $before;
