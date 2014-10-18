@@ -40,34 +40,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
             $ticket_type_name = get_translated_text($_ticket_type_name);
             $d->attach(div(escape_html($ticket_type_name)));
 
-            if (!in_array('closed', $topic['modifiers'])) {
-                if (has_privilege($topic['last_member_id'], 'view_others_tickets')) {
-                    $d->attach(div('Last reply was by staff'));
-                } else {
-                    $timestamp_to_answer_by = mixed();
-                    switch ($ticket_type_name) {
-                        // Very rough. Ignores weekends (okay, as means over-delivering) and in-day times (will be tracking more carefully for v. high priority tickets)
-                        case 'Budget priority':
-                            $timestamp_to_answer_by = strtotime('+7 days', $topic['last_time']);
-                            break;
-                        case 'Normal priority':
-                            $timestamp_to_answer_by = strtotime('+3 days', $topic['last_time']);
-                            break;
-                        case 'Day priority':
-                            $timestamp_to_answer_by = $topic['last_time'];
-                            break;
-                        case 'High priority':
-                            $timestamp_to_answer_by = $topic['last_time'];
-                            break;
-                        case 'Emergencies':
-                            $timestamp_to_answer_by = $topic['last_time'];
-                            break;
-                    }
-                    if (!is_null($timestamp_to_answer_by)) {
-                        $d->attach(div('Estimated date to answer on: ' . date('D jS M', $timestamp_to_answer_by)));
-                    }
-                }
-            }
+            $d->attach(get_ocportal_support_timings(!in_array('closed', $topic['modifiers']), $topic['last_member_id'], $ticket_type_name, $topic['last_time']));
 
             $ret->singular_bind('DESCRIPTION', protect_from_escaping($d));
         }

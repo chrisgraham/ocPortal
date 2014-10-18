@@ -59,7 +59,7 @@ Staff will see all open support tickets when they visit the support ticket page,
    </tr>
    <tr>
       <td>ASSIGNING</td>
-      <td>If more than one member of staff are viewing the same support ticket then a notification will be shown</td>
+      <td>If more than one member of staff are viewing the same support ticket then a notification will be shown; also all staff monitoring the ticket are considered assigned to it</td>
    </tr>
    <tr>
       <td>NOTIFICATIONS</td>
@@ -67,7 +67,7 @@ Staff will see all open support tickets when they visit the support ticket page,
    </tr>
    <tr>
       <td>COORDINATION</td>
-      <td>A topic-like reply feature is provided</td>
+      <td>A topic-like reply feature is provided. There's a staff-only reply feature</td>
    </tr>
    <tr>
       <td>RESOLUTION</td>

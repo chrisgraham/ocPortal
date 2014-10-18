@@ -1,5 +1,7 @@
 {TITLE}
 
+{$SET,ticket_merge_into,{ID}}
+
 {+START,INCLUDE,HANDLE_CONFLICT_RESOLUTION}{+END}
 {+START,IF_PASSED,WARNING_DETAILS}
 	{WARNING_DETAILS}
@@ -144,6 +146,37 @@
 	{+END}
 </div>
 
+<h2>{!ASSIGNED_TO}</h2>
+
+{+START,IF_NON_EMPTY,{ASSIGNED}}
+	{!_ASSIGNED_TO}
+	<ul>
+		{+START,LOOP,ASSIGNED}
+			<li>
+				{_loop_var*}
+				{+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
+					<form action="{$PAGE_LINK*,_SEARCH:tickets:unassign:ticket_id={ID}:member_id={_loop_key}}" method="post" class="inline">
+						<input class="button_micro menu___generic_admin__delete" type="submit" value="{!REMOVE}" />
+					</form>
+				{+END}
+			</li>
+		{+END}
+	</ul>
+{+END}
+
+{+START,IF_EMPTY,{ASSIGNED}}
+	<p><em>{!UNASSIGNED}</em></p>
+{+END}
+
+{+START,IF,{$HAS_PRIVILEGE,ticket_assigned_staff}}
+	<form action="{$PAGE_LINK*,_SEARCH:tickets:assign:ticket_id={ID}}" method="post">
+		{$REQUIRE_JAVASCRIPT,javascript_people_lists}
+
+		<input {+START,IF,{$MOBILE}}autocorrect="off" {+END}autocomplete="off" maxlength="255" onfocus="if (this.value=='') update_ajax_member_list(this,null,true,event);" onkeyup="update_ajax_member_list(this,null,false,event);" class="input_username" type="text" id="username" name="username" value="{$USERNAME*}" />
+		<input class="button_micro buttons__proceed" type="submit" value="{!ASSIGN_TO}" />
+	</form>
+{+END}
+
 <h2>{!OTHER_TICKETS_BY_MEMBER,{$DISPLAYED_USERNAME*,{USERNAME}}}</h2>
 
 {+START,IF_EMPTY,{OTHER_TICKETS}}
@@ -169,6 +202,12 @@
 				</th>
 				<th>
 					{!DATE}
+				</th>
+				<th>
+					{!ASSIGNED_TO}
+				</th>
+				<th>
+					{!ACTIONS}
 				</th>
 			</tr>
 		</thead>
@@ -196,3 +235,5 @@
 		</dl>
 	{+END}
 {+END}
+
+{$SET,ticket_merge_into,}

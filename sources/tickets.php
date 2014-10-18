@@ -19,6 +19,23 @@
  */
 
 /**
+  * Build a list of ticket types.
+  *
+  * @param  ID_TEXT                      Ticket ID
+  * @return array                        Map of assigned members (member ID to display name)
+  */
+function find_ticket_assigned_to($ticket_id)
+{
+    $assigned = array();
+    $where = array('l_notification_code' => 'ticket_assigned_staff', 'l_code_category' => $ticket_id);
+    $_assigned = $GLOBALS['SITE_DB']->query_select('notifications_enabled', array('l_member_id'), $where, 'ORDER BY id DESC', 200/*reasonable limit*/);
+    foreach ($_assigned as $__assigned) {
+        $assigned[$__assigned['l_member_id']] = $GLOBALS['FORUM_DRIVER']->get_username($__assigned['l_member_id'], true);
+    }
+    return $assigned;
+}
+
+/**
  * Build a list of ticket types.
  *
  * @param  ?AUTO_LINK                   The current selected ticket type (NULL: none)

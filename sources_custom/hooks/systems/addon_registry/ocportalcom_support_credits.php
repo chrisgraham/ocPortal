@@ -154,6 +154,7 @@ class Hook_addon_registry_ocportalcom_support_credits
             'sources_custom/hooks/systems/config/support_emergency_priority.php',
             'sources_custom/hooks/systems/config/support_high_priority.php',
             'sources_custom/hooks/systems/config/support_normal_priority.php',
+            'sources_custom/tickets.php',
             'sources_custom/points.php',
             'sources_custom/points3.php',
             'tracker/.gitignore',

@@ -195,6 +195,24 @@ class Module_tickets
             $GLOBALS['OUTPUT_STREAMING'] = false; // Too complex to do a pre_run for this properly
         }
 
+        if ($type == 'merge' || $type == '_merge') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('from'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+
+            $this->title = get_screen_title('MERGE_SUPPORT_TICKETS');
+        }
+
+        if ($type == 'assign') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('ticket_id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+
+            $this->title = get_screen_title('TICKET_ASSIGN');
+        }
+
+        if ($type == 'unassign') {
+            breadcrumb_set_parents(array(array('_SELF:_SELF:misc', do_lang_tempcode('SUPPORT_TICKETS')), array('_SELF:_SELF:ticket:' . get_param('ticket_id'), do_lang_tempcode('VIEW_SUPPORT_TICKET'))));
+
+            $this->title = get_screen_title('TICKET_UNASSIGN');
+        }
+
         return null;
     }
 
@@ -233,6 +251,18 @@ class Module_tickets
         }
         if ($type == '_set_ticket_extra_access') {
             return $this->_set_ticket_extra_access();
+        }
+        if ($type == 'merge') {
+            return $this->merge();
+        }
+        if ($type == '_merge') {
+            return $this->_merge();
+        }
+        if ($type == 'assign') {
+            return $this->assign();
+        }
+        if ($type == 'unassign') {
+            return $this->unassign();
         }
 
         return new ocp_tempcode();
@@ -347,12 +377,22 @@ class Module_tickets
             $ticket_type_name = get_translated_text($ticket_type_details['ticket_type_name']);
         }
 
+        $assigned = find_ticket_assigned_to($ticket_id);
+
+        if (function_exists('get_ocportal_support_timings')) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
+            $extra_details = get_ocportal_support_timings($topic['closed'] == 0, $last_poster_id, $ticket_type_name, $topic['lasttime']);
+        } else {
+            $extra_details = new ocp_tempcode();
+        }
+
         $tpl = do_template('SUPPORT_TICKET_LINK', array(
             '_GUID' => '4a39a6b5a7d56ead2d9c20b8a7a71398',
             'NUM_POSTS' => integer_format($topic['num'] - 1),
             'CLOSED' => strval($topic['closed']),
             'URL' => $url,
+            'ID' => $ticket_id,
             'TITLE' => $title,
+            'EXTRA_DETAILS' => $extra_details,
             'TICKET_TYPE_NAME' => $ticket_type_name,
             'TICKET_TYPE_ID' => is_null($ticket_type_id) ? '' : strval($ticket_type_id),
             'FIRST_DATE' => $first_date,
@@ -365,6 +405,7 @@ class Module_tickets
             'LAST_POSTER_PROFILE_URL' => $last_poster_profile_url,
             'LAST_POSTER' => $last_poster,
             'LAST_POSTER_ID' => strval($last_poster_id),
+            'ASSIGNED' => $assigned,
         ));
 
         return array($tpl, $ticket_type_id, $ticket_type_name);
@@ -645,10 +686,13 @@ class Module_tickets
                 }
             }
 
+            $assigned = find_ticket_assigned_to($id);
+
             // Render ticket screen
             $post_url = build_url(array('page' => '_SELF', 'id' => $id, 'type' => 'post', 'redirect' => get_param('redirect', null), 'start_comments' => get_param('start_comments', null), 'max_comments' => get_param('max_comments', null)), '_SELF');
             $tpl = do_template('SUPPORT_TICKET_SCREEN', array(
                 '_GUID' => 'd21a9d161008c6c44fe7309a14be2c5b',
+                'ID' => is_null($id) ? '': $id,
                 'SERIALIZED_OPTIONS' => $serialized_options,
                 'HASH' => $hash,
                 'TOGGLE_TICKET_CLOSED_URL' => $toggle_ticket_closed_url,
@@ -674,6 +718,7 @@ class Module_tickets
                 'PAGINATION' => $pagination,
                 'TYPE_ACTIVITY_OVERVIEW' => $type_activity_overview,
                 'SET_TICKET_EXTRA_ACCESS_URL' => $set_ticket_extra_access_url,
+                'ASSIGNED' => $assigned,
             ));
 
             require_code('templates_internalise_screen');
@@ -780,21 +825,14 @@ class Module_tickets
         }
         ticket_add_post(get_member(), $id, $ticket_type_id, $_title, $post, $home_url, $staff_only);
 
+        // Auto-monitor
+        if (has_privilege(get_member(), 'support_operator')) {
+            require_code('notifications');
+            enable_notifications('ticket_assigned_staff', $id);
+        }
+
         // Find true ticket title
-        $_forum = 1;
-        $_topic_id = 1;
-        $_ticket_type_id = 1; // These will be returned by reference
-        $posts = get_ticket_posts($id, $_forum, $_topic_id, $_ticket_type_id);
-        if (!is_array($posts)) {
-            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
-        }
-        $__title = $_title;
-        foreach ($posts as $ticket_post) {
-            $__title = $ticket_post['title'];
-            if ($__title != '') {
-                break;
-            }
-        }
+        list($__title, $_topic_id) = get_ticket_details($id);
 
         // Send email
         if (!$staff_only) {
@@ -949,5 +987,229 @@ class Module_tickets
             $url = build_url(array('page' => '_SELF'), '_SELF');
         }
         return redirect_screen($this->title, $url, do_lang_tempcode('SUCCESS'));
+    }
+
+    /**
+     * UI for merging one ticket into another.
+     *
+     * @return tempcode                 The UI
+     */
+    public function merge()
+    {
+        if (!has_privilege(get_member(), 'support_operator')) {
+            access_denied('I_ERROR');
+        }
+
+        require_code('tickets2');
+
+        $from = get_param('from');
+        $to = get_param('to');
+
+        list($from_title) = get_ticket_details($from);
+        list($to_title) = get_ticket_details($to);
+
+        require_code('templates_confirm_screen');
+        $preview = do_lang_tempcode('CONFIRM_MERGE_TICKETS', escape_html($from_title), escape_html($to_title));
+        $action_url = build_url(array('page' => '_SELF', 'type' => '_merge', 'from' => $from, 'to' => $to), '_SELF');
+        return confirm_screen($this->title, $preview, $action_url);
+    }
+
+    /**
+     * Actualiser for merging one ticket into another.
+     *
+     * @return tempcode                 The UI
+     */
+    public function _merge()
+    {
+        if (!has_privilege(get_member(), 'support_operator')) {
+            access_denied('I_ERROR');
+        }
+
+        $from = get_param('from');
+        $to = get_param('to');
+
+        list($from_title, $from_topic_id) = get_ticket_details($from);
+        list($to_title) = get_ticket_details($to);
+ 
+        // Add into new ticket
+        $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $to, 'redirect' => null), '_SELF', null, false, true, true);
+        $home_url = $_home_url->evaluate();
+        $forum = 1;
+        $topic_id = 1;
+        $_ticket_type_id = 1; // These will be returned by reference
+        $_comments_all = get_ticket_posts($from, $forum, $topic_id, $_ticket_type_id);
+        if (count($_comments_all)==0) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+        foreach ($_comments_all as $comment) {
+            ticket_add_post($comment['member'], $to, $_ticket_type_id, $comment['title'], $comment['message_comcode'], $home_url, isset($comment['staff_only']) && $comment['staff_only'], $comment['date']);
+        }
+
+        // Notification to support operator
+        $subject = do_lang(
+            'TICKETS_MERGED_INTO_SUBJECT',
+            $from_title,
+            $to_title,
+            array(
+                $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true),
+                $GLOBALS['FORUM_DRIVER']->get_username(get_member())
+            ),
+            get_site_default_lang()
+        );
+        $message = do_lang(
+            'TICKETS_MERGED_INTO_BODY',
+            comcode_escape($from_title),
+            comcode_escape($to_title),
+            array(
+                comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member(), true)),
+                $home_url,
+                comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member()))
+            ),
+            get_site_default_lang()
+        );
+        dispatch_notification(
+            'ticket_assigned_staff',
+            $to,
+            $subject,
+            $message
+        );
+
+        // Add move notification post into from (old) ticket
+        $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $from, 'redirect' => null), '_SELF', null, false, true, true);
+        $home_url = $_home_url->evaluate();
+        $merge_title = do_lang('TICKETS_MERGED_TITLE');
+        $merge_post = do_lang('TICKETS_MERGED_POST', $to_title);
+        ticket_add_post(get_member(), $from, $_ticket_type_id, $merge_title, $merge_post, $home_url, false);
+        $email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($_comments_all[0]['member']);
+        send_ticket_email($from, $merge_title, $merge_post, $home_url, $email, $_ticket_type_id, get_member());
+
+        // Closed old ticket
+        if (get_forum_type()=='ocf') {
+            $GLOBALS['FORUM_DB']->query_update('f_topics', array('t_is_open' => 0), array('id' => $from_topic_id), '', 1);
+        }
+
+        // Redirect
+        require_code('templates_redirect_screen');
+        $redirect_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $to), '_SELF');
+        return redirect_screen($this->title, $redirect_url, do_lang_tempcode('SUCCESS'));
+    }
+
+    /**
+     * Assign a ticket.
+     *
+     * @return tempcode                 The UI
+     */
+    public function assign()
+    {
+        if (!has_privilege(get_member(), 'support_operator')) {
+            access_denied('I_ERROR');
+        }
+
+        $ticket_id = get_param('ticket_id');
+
+        list($ticket_title) = get_ticket_details($ticket_id);
+
+        $username = post_param('username');
+        $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
+        if (is_null($member_id)) {
+            warn_exit(do_lang_tempcode('_MEMBER_NO_EXIST', escape_html($username)));
+        }
+        if (!has_privilege($member_id, 'support_operator')) {
+            warn_exit(do_lang_tempcode('NOT_A_SUPPORT_OPERATOR', escape_html($username)));
+        }
+
+        require_code('notifications');
+        enable_notifications('ticket_assigned_staff', $ticket_id, $member_id);
+
+        // Notification to support operator that they are assigned
+        $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $ticket_id, 'redirect' => null), '_SELF', null, false, true, true);
+        $home_url = $_home_url->evaluate();
+        $subject = do_lang(
+            'TICKET_ASSIGNED_SUBJECT',
+            $ticket_title,
+            $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true),
+            array(
+                $GLOBALS['FORUM_DRIVER']->get_username(get_member())
+            ),
+            get_site_default_lang()
+        );
+        $message = do_lang(
+            'TICKET_ASSIGNED_BODY',
+            comcode_escape($ticket_title),
+            comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member(), true)),
+            array(
+                $home_url,
+                $GLOBALS['FORUM_DRIVER']->get_username(get_member())
+            ),
+            get_site_default_lang()
+        );
+        dispatch_notification(
+            'ticket_assigned_staff',
+            $ticket_id,
+            $subject,
+            $message,
+            array($member_id)
+        );
+
+        // Redirect
+        require_code('templates_redirect_screen');
+        $redirect_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $ticket_id), '_SELF');
+        return redirect_screen($this->title, $redirect_url, do_lang_tempcode('SUCCESS'));
+    }
+
+    /**
+     * Unassign a ticket.
+     *
+     * @return tempcode                 The UI
+     */
+    public function unassign()
+    {
+        if (!has_privilege(get_member(), 'support_operator')) {
+            access_denied('I_ERROR');
+        }
+
+        $ticket_id = get_param('ticket_id');
+
+        list($ticket_title) = get_ticket_details($ticket_id);
+
+        $member_id = get_param_integer('member_id');
+
+        require_code('notifications');
+        disable_notifications('ticket_assigned_staff', $ticket_id, $member_id);
+
+        // Notification to support operator that they are assigned
+        $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $ticket_id, 'redirect' => null), '_SELF', null, false, true, true);
+        $home_url = $_home_url->evaluate();
+        $subject = do_lang(
+            'TICKET_UNASSIGNED_SUBJECT',
+            $ticket_title,
+            $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true),
+            array(
+                $GLOBALS['FORUM_DRIVER']->get_username(get_member())
+            ),
+            get_site_default_lang()
+        );
+        $message = do_lang(
+            'TICKET_UNASSIGNED_BODY',
+            comcode_escape($ticket_title),
+            comcode_escape($GLOBALS['FORUM_DRIVER']->get_username(get_member(), true)),
+            array(
+                $home_url,
+                $GLOBALS['FORUM_DRIVER']->get_username(get_member())
+            ),
+            get_site_default_lang()
+        );
+        dispatch_notification(
+            'ticket_assigned_staff',
+            $ticket_id,
+            $subject,
+            $message,
+            array($member_id)
+        );
+
+        // Redirect
+        require_code('templates_redirect_screen');
+        $redirect_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $ticket_id), '_SELF');
+        return redirect_screen($this->title, $redirect_url, do_lang_tempcode('SUCCESS'));
     }
 }

@@ -501,6 +501,7 @@ function _helper_get_forum_topic_posts($this_ref, $topic_id, &$count, $max, $sta
                     $temp['username'] = $myrow['p_poster_name_if_guest'];
                 }
                 $temp['date'] = $myrow['p_time'];
+                $temp['staff_only'] = ($myrow['p_intended_solely_for'] !== null);
             }
 
             $out[] = $temp;

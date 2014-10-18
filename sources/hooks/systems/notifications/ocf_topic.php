@@ -85,6 +85,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
             if (count($types2) == $max_topic_rows) {
                 $types2 = array();
             } // Too many to consider
+
             foreach ($types2 as $type) {
                 if (is_numeric($type['l_code_category'])) {
                     $title = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_topics', 't_cache_first_title', array('id' => intval($type['l_code_category'])));

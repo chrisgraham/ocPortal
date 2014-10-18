@@ -43,6 +43,9 @@
 					<th>
 						{!LAST_POST}
 					</th>
+					<th>
+						{!ASSIGNED_TO}
+					</th>
 				</tr>
 			</thead>
 			<tbody>

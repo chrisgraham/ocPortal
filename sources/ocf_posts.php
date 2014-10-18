@@ -95,6 +95,7 @@ function ocf_may_edit_post_by($resource_owner, $forum_id, $member_id = null, $to
     }
 
     if ($topic_is_closed === true) {
+        require_code('ocf_forums');
         if (!ocf_may_moderate_forum($forum_id, $member_id)) {
             return false;
         }

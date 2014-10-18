@@ -129,6 +129,7 @@ class Hook_addon_registry_tickets
             'sources/hooks/systems/notifications/ticket_reply.php',
             'sources/hooks/systems/notifications/ticket_new_staff.php',
             'sources/hooks/systems/notifications/ticket_reply_staff.php',
+            'sources/hooks/systems/notifications/ticket_assigned_staff.php',
             'sources/tickets_email_integration.php',
             'sources/hooks/systems/cron/tickets_email_integration.php',
             'sources/hooks/systems/config/ticket_mail_on.php',
@@ -175,6 +176,7 @@ class Hook_addon_registry_tickets
                 'CLOSED' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_phrase(),
+                'EXTRA_DETAILS' => '',
                 'TICKET_TYPE' => lorem_phrase(),
                 'TICKET_TYPE_ID' => placeholder_id(),
                 'FIRST_DATE' => placeholder_date(),
@@ -185,6 +187,8 @@ class Hook_addon_registry_tickets
                 'LAST_DATE_RAW' => placeholder_date_raw(),
                 'LAST_POSTER_PROFILE_URL' => placeholder_url(),
                 'LAST_POSTER' => lorem_phrase(),
+                'ID' => placeholder_id(),
+                'ASSIGNED' => array(),
             )));
         }
 
@@ -245,6 +249,7 @@ class Hook_addon_registry_tickets
                 'CLOSED' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_phrase(),
+                'EXTRA_DETAILS' => '',
                 'TICKET_TYPE' => lorem_phrase(),
                 'TICKET_TYPE_ID' => placeholder_id(),
                 'DATE' => placeholder_date(),
@@ -252,11 +257,14 @@ class Hook_addon_registry_tickets
                 'PROFILE_URL' => placeholder_url(),
                 'LAST_POSTER' => lorem_phrase(),
                 'UNCLOSED' => lorem_word(),
+                'ID' => placeholder_id(),
+                'ASSIGNED' => array(),
             )));
         }
 
         return array(
             lorem_globalise(do_lorem_template('SUPPORT_TICKET_SCREEN',array(
+                'ID' => placeholder_id(),
                 'TOGGLE_TICKET_CLOSED_URL' => placeholder_url(),
                 'CLOSED' => lorem_phrase(),
                 'USERNAME' => lorem_word(),
@@ -284,6 +292,7 @@ class Hook_addon_registry_tickets
                     ),
                 ),
                 'SET_TICKET_EXTRA_ACCESS_URL' => placeholder_url(),
+                'ASSIGNED' => array(),
             )),null,'',true)
         );
     }

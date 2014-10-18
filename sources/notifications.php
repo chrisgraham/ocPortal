@@ -1024,9 +1024,10 @@ class Hook_Notification
      * @param  ?array                   List of member IDs we are restricting to (NULL: no restriction). This effectively works as a intersection set operator against those who have enabled.
      * @param  integer                  Start position (for pagination)
      * @param  integer                  Maximum (for pagination)
+     * @param  boolean                  Whether to find members who are subscribed regardless of notification code
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
+    public function _all_members_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max, $catch_all_too = true)
     {
         global $NO_DB_SCOPE_CHECK;
         $bak = $NO_DB_SCOPE_CHECK;
@@ -1035,7 +1036,11 @@ class Hook_Notification
         $initial_setting = $this->get_initial_setting($only_if_enabled_on__notification_code, $only_if_enabled_on__category);
         $has_by_default = ($initial_setting != A_NA);
 
-        $clause_1 = db_string_equal_to('l_notification_code', substr($only_if_enabled_on__notification_code, 0, 80));
+        if ($catch_all_too) {
+            $clause_1 = db_string_equal_to('l_notification_code', substr($only_if_enabled_on__notification_code, 0, 80));
+        } else {
+            $clause_1 = '1=0';
+        }
         $clause_2 = is_null($only_if_enabled_on__category) ? db_string_equal_to('l_code_category', '') : ('(' . db_string_equal_to('l_code_category', '') . ' OR ' . db_string_equal_to('l_code_category', $only_if_enabled_on__category) . ')');
 
         $clause_3 = '1=1';

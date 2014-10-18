@@ -19,6 +19,33 @@
  */
 
 /**
+ * Get ticket details.
+ *
+ * @param  string                       The ticket ID
+ * @return ?array                       A tuple: The ticket title, the topic ID, the ticket type ID, the ticket owner (NULL: not found)
+ */
+function get_ticket_details($ticket_id, $hard_error = true)
+{
+    $forum = 1;
+    $topic_id = 1;
+    $_ticket_type_id = 1; // These will be returned by reference
+    $_comments = get_ticket_posts($ticket_id, $forum, $topic_id, $_ticket_type_id, 0, 1);
+    if ((!is_array($_comments)) || (!array_key_exists(0, $_comments))) {
+        if ($hard_error) {
+            warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
+        }
+
+        return NULL;
+    }
+    $ticket_title = $_comments[0]['title'];
+
+    $_temp = explode('_', $ticket_id);
+    $uid = intval($_temp[0]);
+
+    return array($ticket_title, $topic_id, $forum, $uid);
+}
+
+/**
  * Add a ticket type.
  *
  * @param  SHORT_TEXT                   The ticket type name
@@ -313,9 +340,10 @@ function delete_ticket_by_topic_id($topic_id)
  * @param  LONG_TEXT                    The post title
  * @param  LONG_TEXT                    The post content in Comcode format
  * @param  string                       The home URL
+ * @param  ?TIME                        The post time (NULL: use current time)
  * @param  boolean                      Whether the reply is staff only (invisible to ticket owner, only on OCF)
  */
-function ticket_add_post($member, $ticket_id, $ticket_type_id, $title, $post, $ticket_url, $staff_only = false)
+function ticket_add_post($member, $ticket_id, $ticket_type_id, $title, $post, $ticket_url, $staff_only = false, $time_post = null)
 {
     // Get the forum ID first
     $fid = $GLOBALS['SITE_DB']->query_select_value_if_there('tickets', 'forum_id', array('ticket_id' => $ticket_id));
@@ -339,7 +367,10 @@ function ticket_add_post($member, $ticket_id, $ticket_type_id, $title, $post, $t
         false,
         '',
         null,
-        $staff_only
+        $staff_only,
+        null,
+        null,
+        $time_post
     );
     $topic_id = $GLOBALS['LAST_TOPIC_ID'];
     $is_new = $GLOBALS['LAST_TOPIC_IS_NEW'];
@@ -438,7 +469,13 @@ function send_ticket_email($ticket_id, $title, $post, $ticket_url, $uid_email, $
                     $uid_lang
                 );
 
-                dispatch_notification('ticket_reply', is_null($ticket_type_id) ? '' : strval($ticket_type_id), $subject, $message, array($uid));
+                dispatch_notification(
+                    'ticket_reply',
+                    is_null($ticket_type_id) ? '' : strval($ticket_type_id),
+                    $subject,
+                    $message,
+                    array($uid)
+                );
             }
         }
     } else {
@@ -469,9 +506,14 @@ function send_ticket_email($ticket_id, $title, $post, $ticket_url, $uid_email, $
             get_site_default_lang()
         );
 
-        dispatch_notification($new_ticket ? 'ticket_new_staff' : 'ticket_reply_staff', strval($ticket_type_id), $subject, $message);
+        dispatch_notification(
+            $new_ticket ? 'ticket_new_staff' : 'ticket_reply_staff',
+            strval($ticket_type_id),
+            $subject,
+            $message
+        );
 
-        // Tell member that their message was received
+        // ALSO: Tell member that their message was received
         if ($uid_email != '') {
             if ((get_option('ticket_mail_on') == '1') && (cron_installed()) && (function_exists('imap_open')) && ($new_ticket) && ($auto_created)) {
                 require_code('tickets_email_integration');
@@ -481,6 +523,37 @@ function send_ticket_email($ticket_id, $title, $post, $ticket_url, $uid_email, $
                 mail_wrap(do_lang('YOUR_MESSAGE_WAS_SENT_SUBJECT', $title), do_lang('YOUR_MESSAGE_WAS_SENT_BODY', $post), array($uid_email), null, '', '', 3, null, false, $new_poster);
             }
         }
+    }
+
+    // Notification to any staff monitoring, in general
+
+    if (!$new_ticket) {
+        $subject = do_lang(
+            'TICKET_ACTIVITY_SUBJECT',
+            $title,
+            $GLOBALS['FORUM_DRIVER']->get_username($new_poster, true),
+            $GLOBALS['FORUM_DRIVER']->get_username($new_poster),
+            get_site_default_lang()
+        );
+
+        $message = do_lang(
+            'TICKET_ACTIVITY_BODY',
+            comcode_escape($title),
+            comcode_escape($ticket_url),
+            array(
+                $post,
+                comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($new_poster, true)),
+                comcode_escape($GLOBALS['FORUM_DRIVER']->get_username($new_poster))
+            ),
+            get_site_default_lang()
+        );
+
+        dispatch_notification(
+            'ticket_assigned_staff',
+            $ticket_id,
+            $subject,
+            $message
+        );
     }
 }
 

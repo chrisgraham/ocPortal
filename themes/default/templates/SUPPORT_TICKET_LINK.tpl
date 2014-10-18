@@ -9,6 +9,11 @@
 		{+START,IF,{$MOBILE}}
 			<p><span class="field_name">{!COUNT_POSTS}:</span> {NUM_POSTS*}</p>
 		{+END}
+
+		{+START,IF_NON_EMPTY,{EXTRA_DETAILS}}
+			<br />
+			{EXTRA_DETAILS}
+		{+END}
 	</td>
 
 	<td class="ticket_type">
@@ -40,5 +45,27 @@
 			({!BY_SIMPLE_LOWER,{LAST_POSTER*}})
 		{+END}
 	</td>
+
+	<td>
+		{+START,IF_NON_EMPTY,{ASSIGNED}}
+			<ul class="horizontal_meta_details">
+				{+START,LOOP,ASSIGNED}
+					<li>{_loop_var*}</li>
+				{+END}
+			</ul>
+		{+END}
+
+		{+START,IF_EMPTY,{ASSIGNED}}
+			<em>{!UNASSIGNED}</em>
+		{+END}
+	</td>
+
+	{+START,IF_NON_EMPTY,{$GET,ticket_merge_into}}{+START,IF,{$HAS_PRIVILEGE,support_operator}}
+		<td>
+			<form action="{$PAGE_LINK*,_SEARCH:tickets:merge:from={$GET,ticket_merge_into}:to={ID}}" method="post">
+				<input class="button_screen_item menu___generic_admin__merge" type="submit" title="{!MERGE_SUPPORT_TICKETS}" value="{!MERGE}" />
+			</form>
+		</td>
+	{+END}{+END}
 </tr>
 
