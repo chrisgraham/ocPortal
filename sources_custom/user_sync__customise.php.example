@@ -48,70 +48,39 @@ function get_user_sync_env()
         ),
         */
 
-        'pass_hash_salted' => array(
-        ),
-        'email_address' => array(
-        ),
-        'groups' => array(
-        ),
-        'dob_day' => array(
-        ),
-        'dob_month' => array(
-        ),
-        'dob_year' => array(
-        ),
-        'timezone_offset' => array(
-        ),
-        'primary_group' => array(
-        ),
-        'validated' => array(
-        ),
-        'is_perm_banned' => array(
-        ),
-        'reveal_age' => array(
-        ),
-        'photo_url' => array(
-        ),
-        'language' => array(
-        ),
-        'allow_emails' => array(
-        ),
-        'allow_emails_from_staff' => array(
-        ),
+        'pass_hash_salted' => array(),
+        'email_address' => array(),
+        'groups' => array(),
+        'dob_day' => array(),
+        'dob_month' => array(),
+        'dob_year' => array(),
+        'timezone_offset' => array(),
+        'primary_group' => array(),
+        'validated' => array(),
+        'is_perm_banned' => array(),
+        'reveal_age' => array(),
+        'photo_url' => array(),
+        'language' => array(),
+        'allow_emails' => array(),
+        'allow_emails_from_staff' => array(),
 
         // CPFs...
-        'fullname' => array(
-        ),
-        'firstname' => array(
-        ),
-        'lastname' => array(
-        ),
-        'country' => array(
-        ),
-        'state' => array(
-        ),
-        'city' => array(
-        ),
-        'building_name_or_number' => array(
-        ),
-        'post_code' => array(
-        ),
-        'mobile_phone_number' => array(
-        ),
-        'payment_type' => array(
-        ),
-        'payment_cardholder_name' => array(
-        ),
-        'payment_card_number' => array(
-        ),
-        'payment_card_start_date' => array(
-        ),
-        'payment_card_expiry_date' => array(
-        ),
-        'payment_card_issue_number' => array(
-        ),
-        'payment_card_cv2' => array(
-        ),
+        'fullname' => array(),
+        'firstname' => array(),
+        'lastname' => array(),
+        'country' => array(),
+        'state' => array(),
+        'city' => array(),
+        'building_name_or_number' => array(),
+        'post_code' => array(),
+        'mobile_phone_number' => array(),
+        'payment_type' => array(),
+        'payment_cardholder_name' => array(),
+        'payment_card_number' => array(),
+        'payment_card_start_date' => array(),
+        'payment_card_expiry_date' => array(),
+        'payment_card_issue_number' => array(),
+        'payment_card_cv2' => array(),
     );
 
     $default_password = null; // NULL means random password
@@ -138,10 +107,10 @@ function get_user_sync_env()
     );
 }
 
-function get_user_sync__begin($dbh,$since)
+function get_user_sync__begin($dbh, $since)
 {
 }
 
-function get_user_sync__finish($dbh,$since)
+function get_user_sync__finish($dbh, $since)
 {
 }

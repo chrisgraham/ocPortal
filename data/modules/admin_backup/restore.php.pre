@@ -17,19 +17,19 @@ $IN_MINIKERNEL_VERSION = true;
 
 // Find ocPortal base directory, and chdir into it
 global $FILE_BASE;
-$FILE_BASE = (strpos(__FILE__,'./') === false)?__FILE__:realpath(__FILE__);
-if (substr($FILE_BASE,-4) == '.php') {
-    $a = strrpos($FILE_BASE,'/');
-    $b = strrpos($FILE_BASE,'\\');
+$FILE_BASE = (strpos(__FILE__, './') === false) ? __FILE__ : realpath(__FILE__);
+if (substr($FILE_BASE, -4) == '.php') {
+    $a = strrpos($FILE_BASE, '/');
+    $b = strrpos($FILE_BASE, '\\');
     $FILE_BASE = dirname($FILE_BASE);
 }
 @chdir($FILE_BASE);
 
 error_reporting(E_ALL);
 
-@ini_set('display_errors','1');
-assert_options(ASSERT_ACTIVE,0);
-@ini_set('assert.active','0');
+@ini_set('display_errors', '1');
+assert_options(ASSERT_ACTIVE, 0);
+@ini_set('assert.active', '0');
 
 global $REQUIRED_BEFORE;
 $REQUIRED_BEFORE = array();
@@ -46,19 +46,19 @@ $GLOBALS['SEMI_DEV_MODE'] = true;
 @ob_end_clean(); // Reset to have no output buffering by default (we'll use it internally, taking complete control)
 
 // Are we in a special version of PHP?
-define('HHVM',strpos(PHP_VERSION,'hiphop') !== false);
-define('GOOGLE_APPENGINE',isset($_SERVER['APPLICATION_ID']));
+define('HHVM', strpos(PHP_VERSION, 'hiphop') !== false);
+define('GOOGLE_APPENGINE', isset($_SERVER['APPLICATION_ID']));
 
 $shl = @ini_get('suhosin.memory_limit');
 if (($shl === false) || ($shl == '') || ($shl == '0')) {
-    @ini_set('memory_limit','-1');
+    @ini_set('memory_limit', '-1');
 } else {
-    @ini_set('memory_limit',$shl);
+    @ini_set('memory_limit', $shl);
 }
 
 // Requirements check
 $phpv = PHP_VERSION;
-if ((substr($phpv,0,2) == '3.') || (substr($phpv,0,2) == '4.') || (substr($phpv,0,4) == '5.0.')) {
+if ((substr($phpv, 0, 2) == '3.') || (substr($phpv, 0, 2) == '4.') || (substr($phpv, 0, 4) == '5.0.')) {
     exit(do_lang('PHP_OLD'));
 }
 
@@ -84,8 +84,8 @@ require_code('database_action');
 handle_self_referencing_embedment();
 
 // Set up some globals
-global $INSTALL_LANG,$VERSION,$CHMOD_ARRAY;
-$INSTALL_LANG = (isset($_GET['default_lang']))?$_GET['default_lang']:'en';
+global $INSTALL_LANG, $VERSION, $CHMOD_ARRAY;
+$INSTALL_LANG = (isset($_GET['default_lang'])) ? $_GET['default_lang'] : 'en';
 
 // Languages we can use
 require_lang('global');
@@ -94,34 +94,33 @@ require_lang('installer');
 require_lang('version');
 
 
-
 // Now we actually read into the data file and execute the commented out reinstallation code. This is necessary for re-entrant code, and because we can't load it all through the PHP parser at once!
 
 $time_start = time();
 
-$myfile = fopen(dirname(__FILE__) . '/restore_data.php','rb');
+$myfile = fopen(dirname(__FILE__) . '/restore_data.php', 'rb');
 $i = 0;
-$offset = get_param_integer('start_offset',0);
+$offset = get_param_integer('start_offset', 0);
 if ($offset != 0) {
-    fseek($myfile,$offset);
+    fseek($myfile, $offset);
     $found_start = true;
 } else {
     $found_start = false;
 }
 $sql_buildup = '';
 $start_line = 0;
-while (($line = fgets($myfile,10000000)) !== false) {
+while (($line = fgets($myfile, 10000000)) !== false) {
     if (!$found_start) {
         if (trim($line) == '//COMMANDS BEGIN') {
             $found_start = true;
             $start_line = $i;
         }
     } else {
-        if (substr($line,0,2) != '//') {
+        if (substr($line, 0, 2) != '//') {
             break;
         } // Done
 
-        $line = substr($line,2);
+        $line = substr($line, 2);
 
         $is_new_command = false;
         $valid_cmd_starts = array(
@@ -132,7 +131,7 @@ while (($line = fgets($myfile,10000000)) !== false) {
             '$GLOBALS[\'SITE_DB\']->create_index(\'',
         );
         foreach ($valid_cmd_starts as $valid_cmd_start) {
-            $is_new_command = $is_new_command || (substr(ltrim($line),0,strlen($valid_cmd_start)) == $valid_cmd_start);
+            $is_new_command = $is_new_command || (substr(ltrim($line), 0, strlen($valid_cmd_start)) == $valid_cmd_start);
         }
         if (($is_new_command) && ($sql_buildup != '')) {
             $success = @eval($sql_buildup); // NB: Query errors are echo'd out as DB API knows restoration script is running
@@ -142,8 +141,8 @@ while (($line = fgets($myfile,10000000)) !== false) {
             }
             $sql_buildup = '';
         }
-        if ((time() >= $time_start+20) && ($sql_buildup == '')) {
-            $refresh_url = 'restore.php?start=' . strval($i+$start_line+get_param_integer('start',0)) . '&start_offset=' . strval(ftell($myfile));
+        if ((time() >= $time_start + 20) && ($sql_buildup == '')) {
+            $refresh_url = 'restore.php?start=' . strval($i + $start_line + get_param_integer('start', 0)) . '&start_offset=' . strval(ftell($myfile));
             echo '<meta http-equiv="refresh" content="0;url=' . $refresh_url . '" /> Please wait, continuing.';
             //header('Location: '.$refresh_url);   Can result in "This web page has a redirect loop" error
             exit();
@@ -166,14 +165,13 @@ if ($sql_buildup != '') {
 }
 
 
-
-
-{!!DB!!}
+{
+    !!DB!!}
 
 
 require_code('tempcode_compiler');
-$css_nocache = _do_template('default','/css/','no_cache','no_cache','EN','.css');
-$tpl = do_template('RESTORE_HTML_WRAP',array('_GUID' => '8e3b9d894d8ef06b5057fb654f7db59b','CSS_NOCACHE' => $css_nocache,'MESSAGE' => do_lang('SUCCESS')));
+$css_nocache = _do_template('default', '/css/', 'no_cache', 'no_cache', 'EN', '.css');
+$tpl = do_template('RESTORE_HTML_WRAP', array('_GUID' => '8e3b9d894d8ef06b5057fb654f7db59b', 'CSS_NOCACHE' => $css_nocache, 'MESSAGE' => do_lang('SUCCESS')));
 echo $tpl->evaluate();
 
 /**
@@ -185,26 +183,26 @@ echo $tpl->evaluate();
  */
 function require_code($codename)
 {
-    global $FILE_ARRAY,$REQUIRED_BEFORE;
-    if (array_key_exists($codename,$REQUIRED_BEFORE)) {
+    global $FILE_ARRAY, $REQUIRED_BEFORE;
+    if (array_key_exists($codename, $REQUIRED_BEFORE)) {
         return;
     }
     $REQUIRED_BEFORE[$codename] = 1;
     if (@is_array($FILE_ARRAY)) {
         $file = file_array_get('sources/' . $codename . '.php');
-        $file = str_replace('<?php','',$file);
-        $file = str_replace('','',$file);
+        $file = str_replace('<?php', '', $file);
+        $file = str_replace('', '', $file);
         eval($file);
-        @call_user_func('init__' . str_replace('/','__',$codename));
+        @call_user_func('init__' . str_replace('/', '__', $codename));
     } else {
         global $FILE_BASE;
 
-        $path = $FILE_BASE . ((strpos($codename,'.php') === false)?('/sources/' . $codename . '.php'):'/' . str_replace('_custom','',$codename));
+        $path = $FILE_BASE . ((strpos($codename, '.php') === false) ? ('/sources/' . $codename . '.php') : '/' . str_replace('_custom', '', $codename));
         if (!file_exists($path)) {
-            $path = $FILE_BASE . ((strpos($codename,'.php') === false)?('/sources_custom/' . $codename . '.php'):'/' . str_replace('_custom','',$codename));
+            $path = $FILE_BASE . ((strpos($codename, '.php') === false) ? ('/sources_custom/' . $codename . '.php') : '/' . str_replace('_custom', '', $codename));
         }
         require_once($path);
-        @call_user_func('init__' . str_replace('/','__',$codename));
+        @call_user_func('init__' . str_replace('/', '__', $codename));
     }
 }
 
@@ -225,7 +223,7 @@ function object_factory($class)
 function handle_self_referencing_embedment()
 {
     // If this is self-referring to CSS or logo
-    if (array_key_exists('type',$_GET)) {
+    if (array_key_exists('type', $_GET)) {
         $type = $_GET['type'];
 
         if ($type == 'logo') {
