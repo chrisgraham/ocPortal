@@ -206,9 +206,11 @@
 				<th>
 					{!ASSIGNED_TO}
 				</th>
-				<th>
-					{!ACTIONS}
-				</th>
+				{+START,IF,{$HAS_PRIVILEGE,support_operator}}
+					<th>
+						{!ACTIONS}
+					</th>
+				{+END}
 			</tr>
 		</thead>
 		<tbody>

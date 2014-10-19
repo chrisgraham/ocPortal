@@ -1081,7 +1081,7 @@ class Module_tickets
         $merge_post = do_lang('TICKETS_MERGED_POST', $to_title);
         ticket_add_post(get_member(), $from, $_ticket_type_id, $merge_title, $merge_post, $home_url, false);
         $email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($_comments_all[0]['member']);
-        send_ticket_email($from, $merge_title, $merge_post, $home_url, $email, $_ticket_type_id, get_member());
+        send_ticket_email($from, $merge_title, $merge_post, $home_url, $email, null, get_member());
 
         // Closed old ticket
         if (get_forum_type()=='ocf') {
@@ -1175,8 +1175,7 @@ class Module_tickets
         $member_id = get_param_integer('member_id');
 
         require_code('notifications');
-        disable_notifications('ticket_assigned_staff', $ticket_id, $member_id);
-
+ 
         // Notification to support operator that they are assigned
         $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $ticket_id, 'redirect' => null), '_SELF', null, false, true, true);
         $home_url = $_home_url->evaluate();
@@ -1199,6 +1198,7 @@ class Module_tickets
             ),
             get_site_default_lang()
         );
+        $_GET['keep_debug_notifications'] = '1'; // HACKHACK: Force it to go out BEFORE we run disable_notifications
         dispatch_notification(
             'ticket_assigned_staff',
             $ticket_id,
@@ -1206,6 +1206,9 @@ class Module_tickets
             $message,
             array($member_id)
         );
+        unset($_GET['keep_debug_notifications']);
+
+        disable_notifications('ticket_assigned_staff', $ticket_id, $member_id);
 
         // Redirect
         require_code('templates_redirect_screen');
