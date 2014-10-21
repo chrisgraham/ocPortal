@@ -28,6 +28,77 @@ function init__menus2()
 }
 
 /**
+ * Export a menu structure to a CSV file.
+ *
+ * @param  ?PATH			            The path to the CSV file (NULL: uploads/website_specific/ocp_menu_items.csv).
+ */
+function export_menu_csv($file_path=NULL)
+{
+	if (is_null($file_path)) {
+		$file_path = get_custom_file_base() . '/uploads/website_specific/ocp_menu_items.csv';
+	}
+
+	if (!multi_lang_content())
+	{
+		$sql = 'SELECT i_menu, i_order, i_parent, i_url, i_check_permissions, i_expanded, i_new_window, i_page_only, i_theme_img_code, i_caption, i_caption_long FROM ocp_menu_items m';
+	} else {
+		$sql = 'SELECT i_menu, i_order, i_parent, i_url, i_check_permissions, i_expanded, i_new_window, i_page_only, i_theme_img_code, t1.text_original AS i_caption, t2.text_original AS i_caption_long FROM ocp_menu_items m JOIN ocp_translate t1 ON t1.id=m.i_caption JOIN ocp_translate t2 ON t2.id=m.i_caption_long';
+	}
+
+	$data = $GLOBALS['SITE_DB']->query($sql, NULL, NULL, false, true);
+
+	require_code('files2');
+	$csv = make_csv($data, 'data.csv', false, false);
+	file_put_contents($file_path, $csv);
+	fix_permissions($file_path);
+	sync_file($file_path);
+}
+
+/**
+* Import a CSV menu structure, after ERASING whole current menu structure.
+* This function is intended for programmers, writing upgrade scripts for a custom site (dev>staging>live).
+* Assumes CSV was generated with export_menu_csv.
+ *
+ * @param  ?PATH			            The path to the CSV file (NULL: uploads/website_specific/ocp_menu_items.csv).
+ */
+function import_menu_csv($file_path = NULL)
+{
+	$old_menu_items = $GLOBALS['SITE_DB']->query_select('menu_items', array('i_caption', 'i_caption_long'));
+	foreach ($old_menu_items as $old_menu_item) {
+		delete_lang($old_menu_item['i_caption']);
+		delete_lang($old_menu_item['i_caption_long']);
+	}
+	$GLOBALS['SITE_DB']->query_delete('menu_items');
+
+	if (is_null($file_path)) {
+		$file_path = get_custom_file_base() . '/uploads/website_specific/ocp_menu_items.csv';
+	}
+	$myfile = fopen($file_path, 'rt');
+	while (($record = fgetcsv($myfile, 8192)) !== false) {
+		if (!isset($record[9])) continue;
+		if (!isset($record[10])) $records[10] = '';
+		if ($record[0] == 'i_menu') continue;
+
+		$menu = $record[0];
+		$order = intval($record[1]);
+		$parent = ($record[2] == '' || $record[2] == 'NULL') ? NULL : intval($record[2]);
+		$caption = $record[9];
+		$url = $record[3];
+		$check_permissions = intval($record[4]);
+		$page_only = $record[7];
+		$expanded = intval($record[5]);
+		$new_window = intval($record[6]);
+		$caption_long = $record[10];
+		$theme_image_code = $record[8];
+
+		add_menu_item($menu, $order, $parent, $caption, $url, $check_permissions, $page_only, $expanded, $new_window, $caption_long, $theme_image_code);
+	}
+	fclose($myfile);
+
+	decache('side_stored_menu');
+}
+
+/**
  * Move a menu branch.
  */
 function menu_management_script()
