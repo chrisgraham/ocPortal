@@ -108,8 +108,8 @@ while (($r = fgetcsv($csvfile, 1024000)) !== false) {
             $GLOBALS['SITE_DB']->query_insert('group_category_access', array('module_the_name' => 'news', 'category_name' => strval($id), 'group_id' => $group_id));
         }
     }
-    $author = $r[2];
-    $title = $r[3];
+    $author = trim($r[2]);
+    $title = trim($r[3]);
     $time = ($r[4] == '') ? time() : strtotime($r[4]);
     $r[5] = trim($r[5]);
     $r[5] = preg_replace('#.*<body[^<>]*>\s*#si', '', $r[5]);

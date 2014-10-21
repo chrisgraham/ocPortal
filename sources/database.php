@@ -1149,8 +1149,8 @@ class database_driver
         if ($QUERY_LOG) {
             $before = microtime(true);
         }
-        $sub = substr($query, 0, 7);
-        if ($sub == 'SELECT ' || $sub == 'select ' || $sub == '(SELECT' || $sub == '(select') {
+        $sub = substr($query, 0, 6); // NB: We don't get 7, because it's time-consuming to check for space/tab/new-lines after 'SELECT', so we'll make the correct assumption SELECT is not a stem of any other keyword
+        if ($sub == 'SELECT' || $sub == 'select' || $sub == '(SELEC' || $sub == '(selec') {
             $connection = &$this->connection_read;
         } else {
             $connection = &$this->connection_write;

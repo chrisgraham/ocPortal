@@ -825,7 +825,7 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
     }
 
     if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($codename, 'JAVASCRIPT_') !== false) && (strpos($html, '.innerHTML') !== false) && (!running_script('install')) && (strpos($html, 'Parser hint: .innerHTML okay') === false)) {
-        attach_message('Do not use the .innerHTML property in your JavaScript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.', 'warn');
+        attach_message($codename.': Do not use the .innerHTML property in your JavaScript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.', 'warn');
     }
 
     // Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues

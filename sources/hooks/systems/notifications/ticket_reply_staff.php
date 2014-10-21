@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-class Hook_Notification_ticket_reply_staff extends Hook_Notification__Staff
+class Hook_Notification_ticket_reply_staff extends Hook_Notification
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).
@@ -42,5 +42,66 @@ class Hook_Notification_ticket_reply_staff extends Hook_Notification__Staff
         $list = array();
         $list['ticket_reply_staff'] = array(do_lang('notifications:MESSAGES'), do_lang('tickets:NOTIFICATION_TYPE_ticket_reply_staff'));
         return $list;
+    }
+
+    /**
+     * Get a list of members who have enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
+     *
+     * @param  ID_TEXT                  Notification code
+     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  ?array                   List of member IDs we are restricting to (NULL: no restriction). This effectively works as a intersection set operator against those who have enabled.
+     * @param  integer                  Start position (for pagination)
+     * @param  integer                  Maximum (for pagination)
+     * @return array                    A pair: Map of members to their notification setting, and whether there may be more
+     */
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
+    {
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max, false);
+        $members = $this->_all_members_who_have_enabled_with_privilege($members, 'support_operator', $notification_code, $category, $to_member_ids, $start, $max);
+
+         return $members;
+    }
+
+    /**
+     * Find whether a member could enable this notification (i.e. have permission to).
+     *
+     * @param  ID_TEXT                  Notification code
+     * @param  MEMBER                   Member to check against
+     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @return boolean                  Whether they could
+     */
+    public function member_could_potentially_enable($notification_code, $member_id, $category = null)
+    {
+        return $this->_is_staff(null, null, $member_id);
+    }
+
+    /**
+     * Find whether a member has enabled this notification (i.e. have permission to AND have chosen to or are defaulted to).
+     * (Separate implementation to list_members_who_have_enabled, for performance reasons.)
+     *
+     * @param  ID_TEXT                  Notification code
+     * @param  MEMBER                   Member to check against
+     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @return boolean                  Whether they are
+     */
+    public function member_has_enabled($notification_code, $member_id, $category = null)
+    {
+        return $this->_is_staff($notification_code, $category, $member_id);
+    }
+
+    /**
+     * Find whether someone has permission to view staff notifications and possibly if they actually are.
+     *
+     * @param  ?ID_TEXT                 Notification code (NULL: don't check if they are)
+     * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
+     * @param  MEMBER                   Member to check against
+     * @return boolean                  Whether they do
+     */
+    public function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
+    {
+        $test = is_null($only_if_enabled_on__notification_code) ? true : notifications_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id);
+
+        require_code('permissions');
+        return (($test) && (has_privilege($member_id, 'support_operator')));
     }
 }

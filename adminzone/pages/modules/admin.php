@@ -182,7 +182,7 @@ class Module_admin
             array('theme', 'skin', 'style'),
             array('uninstall', 'disable', 'remove'),
             array('pruning', 'prune', 'lurkers'),
-            array('filedump', 'library'),
+            array('filedump', 'library', 'file manager'),
             array('word-filter', 'wordfilter', 'swear', 'curse'),
             array('colour', 'color', 'css', 'font', 'background'),
             array('dob', 'date of birth'),
@@ -190,8 +190,7 @@ class Module_admin
             array('ban', 'suspend', 'suspension', 'probation', 'warn', 'punish', 'punitive'),
             array('crash', 'warn', 'error', 'fatal', 'falt'),
             array('staff', 'moderator', 'admin', 'administrator', 'operator', 'webmaster'),
-            array('open', 'closed', 'live', 'activate', 'activation',/*'enable',*/
-                'turn'),
+            array('open', 'closed', 'live', 'activate', 'activation',/*'enable',*/ 'turn'),
             array('import', 'convert', 'migrate', 'upload'),
             array('occle', 'console', 'command prompt', 'command line', 'cle'),
             array('export', 'download'),

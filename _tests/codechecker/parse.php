@@ -284,6 +284,8 @@ function _parse_command_actual($no_term_needed = false)
                 if ($command[0] == 'CALL_DIRECT') {
                     $command[0] = 'CALL_METHOD';
                     $command[1] = array('VARIABLE', 'this', array('DEREFERENCE', array('VARIABLE', $command[1], array(), $command[4]), array(), $command[4]), $command[4]);
+                } else {
+                   $expression = array('REFERENCE', $expression, $GLOBALS['I']);
                 }
             } else {
                 pparse__parser_expect('BRACKET_OPEN');
@@ -776,9 +778,11 @@ function _parse_class_contents($class_modifiers = null, $is_interface = false)
                                 break;
                             case 'variable':
                             case 'VAR':
-                                // Invalid
-                                log_warning('Abstract keyword applied to member variable');
-                                break;
+                                if ($next == 'ABSTRACT') {
+                                    // Invalid
+                                    log_warning('Abstract keyword applied to member variable');
+                                    break;
+                                }
                             default:
                                 // Invalid
                                 log_warning('Visibility keywords are only valid for functions and member variables, not ' . pparse__parser_peek());

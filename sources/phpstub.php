@@ -5059,6 +5059,17 @@ function fscanf($handle, $format)
 }
 
 /**
+ * Gets information about a file.
+ *
+ * @param  PATH                         File.
+ * @return array                        Map of status information.
+ */
+function stat($path)
+{
+    return array();
+}
+
+/**
  * Gets information about a file using an open file pointer.
  *
  * @param  resource                     File handle.
