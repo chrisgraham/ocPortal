@@ -98,7 +98,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  ID_TEXT                  Resource type (may be file or folder)
      * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
      */
-    public function _has_parent_child_relationship($above, $under)
+    protected function _has_parent_child_relationship($above, $under)
     {
         if (is_null($above)) {
             $above = '';
@@ -151,7 +151,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  ID_TEXT                  Parent category (blank: root / not applicable)
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_folder_properties($category)
+    protected function _enumerate_folder_properties($category)
     {
         if (substr($category, 0, 10) != 'CATALOGUE-') { // Category
             return array(
@@ -187,7 +187,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  array                    Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
      */
-    public function _get_folder_edit_date($row)
+    protected function _get_folder_edit_date($row)
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', $row['c_name']) . ' AND  (' . db_string_equal_to('the_type', 'ADD_CATALOGUE') . ' OR ' . db_string_equal_to('the_type', 'EDIT_CATALOGUE') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
@@ -242,7 +242,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
-    public function __folder_read_in_properties_catalogue($path, $properties)
+    protected function __folder_read_in_properties_catalogue($path, $properties)
     {
         $description = $this->_default_property_str($properties, 'description');
         $display_type = $this->_default_property_int($properties, 'display_type');
@@ -264,7 +264,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return ~array                   Properties (false: error)
      */
-    public function __folder_read_in_properties_category($path, $properties)
+    protected function __folder_read_in_properties_category($path, $properties)
     {
         if (strpos($path, '/') === false) {
             list($category_resource_type, $category) = $this->folder_convert_filename_to_id($path, 'catalogue');
@@ -557,7 +557,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  ID_TEXT                  Parent category (blank: root / not applicable)
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_file_properties($category)
+    protected function _enumerate_file_properties($category)
     {
         $props = array();
 
@@ -623,7 +623,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  array                    Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
      */
-    public function _get_file_edit_date($row)
+    protected function _get_file_edit_date($row)
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_CATALOGUE_CATEGORY') . ' OR ' . db_string_equal_to('the_type', 'EDIT_CATALOGUE_CATEGORY') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
@@ -635,7 +635,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  array                    The catalogue fields
      * @return integer                  The key index
      */
-    public function _find_unique_key_num($fields)
+    protected function _find_unique_key_num($fields)
     {
         foreach ($fields as $i => $f) {
             if ($f['cf_type'] == 'codename') {
@@ -654,7 +654,7 @@ class Hook_occle_fs_catalogues extends resource_fs_base
      * @param  SHORT_TEXT               Label
      * @return array                    Properties
      */
-    public function __file_read_in_properties($path, $properties, $category, $label)
+    protected function __file_read_in_properties($path, $properties, $category, $label)
     {
         $category_id = $this->_integer_category($category);
 

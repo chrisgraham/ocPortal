@@ -52,37 +52,37 @@ class Module_admin_customers
 
         // MANTIS TABLE DELETION
 
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bugnote_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bugnote_text_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_file_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_history_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_monitor_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_relationship_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_revision_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_tag_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_bug_text_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_category_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_config_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_custom_field_project_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_custom_field_string_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_custom_field_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_email_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_filters_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_news_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_plugin_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_project_file_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_project_hierarchy_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_project_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_project_user_list_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_project_version_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_sponsorship_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_tag_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_tokens_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_user_pref_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_user_print_pref_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_user_profile_table`");
-        $GLOBALS['SITE_DB']->_query("DROP TABLE IF EXISTS `mantis_user_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bugnote_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bugnote_text_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_file_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_history_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_monitor_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_relationship_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_revision_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_tag_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_bug_text_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_category_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_config_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_custom_field_project_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_custom_field_string_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_custom_field_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_email_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_filters_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_news_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_plugin_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_project_file_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_project_hierarchy_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_project_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_project_user_list_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_project_version_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_sponsorship_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_tag_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_tokens_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_user_pref_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_user_print_pref_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_user_profile_table`");
+        $GLOBALS['SITE_DB']->query("DROP TABLE IF EXISTS `mantis_user_table`");
     }
 
     /**
@@ -130,7 +130,7 @@ class Module_admin_customers
         ));
 
         if (get_db_type() != 'xml') {
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bugnote_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bugnote_table` (
                                         `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                                         `bug_id` int(10) unsigned NOT NULL DEFAULT '0',
                                         `reporter_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -147,14 +147,14 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bugnote_text_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bugnote_text_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `note` longtext NOT NULL,
                             PRIMARY KEY (`id`)
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_file_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_file_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `bug_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `title` varchar(250) NOT NULL DEFAULT '',
@@ -173,7 +173,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_history_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_history_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `bug_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -188,14 +188,14 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_monitor_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_monitor_table` (
                             `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `bug_id` int(10) unsigned NOT NULL DEFAULT '0',
                             PRIMARY KEY (`user_id`,`bug_id`)
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_relationship_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_relationship_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `source_bug_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `destination_bug_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -206,7 +206,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_revision_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_revision_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `bug_id` int(10) unsigned NOT NULL,
                             `bugnote_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -220,7 +220,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `reporter_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -258,7 +258,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_tag_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_tag_table` (
                               `bug_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `tag_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -268,7 +268,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_bug_text_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_bug_text_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `description` longtext NOT NULL,
                             `steps_to_reproduce` longtext NOT NULL,
@@ -277,7 +277,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_category_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_category_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `user_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -288,9 +288,9 @@ class Module_admin_customers
                     ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2"
             );
 
-            $GLOBALS['SITE_DB']->_query("INSERT INTO `mantis_category_table` (`id`, `project_id`, `user_id`, `name`, `status`) VALUES (1, 0, 0, 'General', 0)");
+            $GLOBALS['SITE_DB']->query("INSERT INTO `mantis_category_table` (`id`, `project_id`, `user_id`, `name`, `status`) VALUES (1, 0, 0, 'General', 0)");
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_config_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_config_table` (
                               `config_id` varchar(64) NOT NULL,
                               `project_id` int(11) NOT NULL DEFAULT '0',
                               `user_id` int(11) NOT NULL DEFAULT '0',
@@ -301,9 +301,9 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("INSERT INTO `mantis_config_table` (`config_id`, `project_id`, `user_id`, `access_reqd`, `type`, `value`) VALUES ('database_version', 0, 0, 90, 1, '182')");
+            $GLOBALS['SITE_DB']->query("INSERT INTO `mantis_config_table` (`config_id`, `project_id`, `user_id`, `access_reqd`, `type`, `value`) VALUES ('database_version', 0, 0, 90, 1, '182')");
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_custom_field_project_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_custom_field_project_table` (
                             `field_id` int(11) NOT NULL DEFAULT '0',
                             `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `sequence` smallint(6) NOT NULL DEFAULT '0',
@@ -311,10 +311,10 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("INSERT INTO `mantis_custom_field_project_table` (`field_id`, `project_id`, `sequence`) VALUES (1, 1, 0)");
+            $GLOBALS['SITE_DB']->query("INSERT INTO `mantis_custom_field_project_table` (`field_id`, `project_id`, `sequence`) VALUES (1, 1, 0)");
 
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_custom_field_string_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_custom_field_string_table` (
                               `field_id` int(11) NOT NULL DEFAULT '0',
                               `bug_id` int(11) NOT NULL DEFAULT '0',
                               `value` varchar(255) NOT NULL DEFAULT '',
@@ -323,7 +323,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_custom_field_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_custom_field_table` (
                               `id` int(11) NOT NULL AUTO_INCREMENT,
                               `name` varchar(64) NOT NULL DEFAULT '',
                               `type` smallint(6) NOT NULL DEFAULT '0',
@@ -348,7 +348,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=2"
             );
 
-            $GLOBALS['SITE_DB']->_query("INSERT INTO `mantis_custom_field_table` (
+            $GLOBALS['SITE_DB']->query("INSERT INTO `mantis_custom_field_table` (
                             `id`,
                             `name`,
                             `type`,
@@ -391,7 +391,7 @@ class Module_admin_customers
                     )"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_email_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_email_table` (
                               `email_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `email` varchar(64) NOT NULL DEFAULT '',
                               `subject` varchar(250) NOT NULL DEFAULT '',
@@ -402,7 +402,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_filters_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_filters_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `user_id` int(11) NOT NULL DEFAULT '0',
                             `project_id` int(11) NOT NULL DEFAULT '0',
@@ -413,7 +413,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_news_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_news_table` (
                             `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                             `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                             `poster_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -427,7 +427,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_plugin_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_plugin_table` (
                               `basename` varchar(40) NOT NULL,
                               `enabled` tinyint(4) NOT NULL DEFAULT '0',
                               `protected` tinyint(4) NOT NULL DEFAULT '0',
@@ -436,9 +436,9 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("INSERT INTO `mantis_plugin_table` (`basename`, `enabled`, `protected`, `priority`) VALUES ('MantisCoreFormatting', 1, 0, 3)");
+            $GLOBALS['SITE_DB']->query("INSERT INTO `mantis_plugin_table` (`basename`, `enabled`, `protected`, `priority`) VALUES ('MantisCoreFormatting', 1, 0, 3)");
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_project_file_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_project_file_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `title` varchar(250) NOT NULL DEFAULT '',
@@ -455,7 +455,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_project_hierarchy_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_project_hierarchy_table` (
                             `child_id` int(10) unsigned NOT NULL,
                             `parent_id` int(10) unsigned NOT NULL,
                             `inherit_parent` int(10) unsigned NOT NULL DEFAULT '0',
@@ -464,7 +464,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_project_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_project_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `name` varchar(128) NOT NULL DEFAULT '',
                               `status` smallint(6) NOT NULL DEFAULT '10',
@@ -481,7 +481,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=2"
             );
 
-            $GLOBALS['SITE_DB']->_query("INSERT INTO `mantis_project_table` (
+            $GLOBALS['SITE_DB']->query("INSERT INTO `mantis_project_table` (
                             `id`,
                             `name`,
                             `status`,
@@ -506,7 +506,7 @@ class Module_admin_customers
                     )"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_project_user_list_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_project_user_list_table` (
                               `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `access_level` smallint(6) NOT NULL DEFAULT '10',
@@ -515,7 +515,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_project_version_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_project_version_table` (
                               `id` int(11) NOT NULL AUTO_INCREMENT,
                               `project_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `version` varchar(64) NOT NULL DEFAULT '',
@@ -528,7 +528,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_sponsorship_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_sponsorship_table` (
                               `id` int(11) NOT NULL AUTO_INCREMENT,
                               `bug_id` int(11) NOT NULL DEFAULT '0',
                               `user_id` int(11) NOT NULL DEFAULT '0',
@@ -544,7 +544,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_tag_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_tag_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `name` varchar(100) NOT NULL DEFAULT '',
@@ -556,7 +556,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_tokens_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_tokens_table` (
                               `id` int(11) NOT NULL AUTO_INCREMENT,
                               `owner` int(11) NOT NULL,
                               `type` int(11) NOT NULL,
@@ -568,7 +568,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_user_pref_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_user_pref_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `project_id` int(10) unsigned NOT NULL DEFAULT '0',
@@ -602,14 +602,14 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_user_print_pref_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_user_print_pref_table` (
                               `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `print_pref` varchar(64) NOT NULL,
                               PRIMARY KEY (`user_id`)
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_user_profile_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_user_profile_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `user_id` int(10) unsigned NOT NULL DEFAULT '0',
                               `platform` varchar(32) NOT NULL DEFAULT '',
@@ -620,7 +620,7 @@ class Module_admin_customers
                     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1"
             );
 
-            $GLOBALS['SITE_DB']->_query("CREATE TABLE IF NOT EXISTS `mantis_user_table` (
+            $GLOBALS['SITE_DB']->query("CREATE TABLE IF NOT EXISTS `mantis_user_table` (
                               `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
                               `username` varchar(32) NOT NULL DEFAULT '',
                               `realname` varchar(64) NOT NULL DEFAULT '',

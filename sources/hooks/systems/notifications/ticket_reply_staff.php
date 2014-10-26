@@ -97,7 +97,7 @@ class Hook_Notification_ticket_reply_staff extends Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
+    protected function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
         $test = is_null($only_if_enabled_on__notification_code) ? true : notifications_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id);
 

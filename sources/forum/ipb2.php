@@ -60,7 +60,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -670,7 +670,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         $group = $this->get_member_row_field($member, 'mgroup');
         $secondary = array($group);
@@ -805,7 +805,7 @@ class forum_driver_ipb2 extends forum_driver_ipb_shared
      * @param  string                   The password
      * @return boolean                  Whether authentication succeeded
      */
-    public function _auth_hashed($id, $password)
+    protected function _auth_hashed($id, $password)
     {
         $rows = $this->connection->query_select('members_converge', array('converge_pass_hash', 'converge_pass_salt'), array('converge_id' => $id), '', 1);
         if (!array_key_exists(0, $rows)) {

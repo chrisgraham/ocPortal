@@ -88,7 +88,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      *
      * @return boolean                  Whether it is
      */
-    public function _is_active()
+    protected function _is_active()
     {
         return (get_forum_type() == 'ocf') && (!is_ocf_satellite_site());
     }
@@ -100,7 +100,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      * @param  ID_TEXT                  Resource type (may be file or folder)
      * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
      */
-    public function _has_parent_child_relationship($above, $under)
+    protected function _has_parent_child_relationship($above, $under)
     {
         if (is_null($above)) {
             $above = '';
@@ -154,7 +154,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      * @param  ID_TEXT                  Parent category (blank: root / not applicable)
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_folder_properties($category)
+    protected function _enumerate_folder_properties($category)
     {
         if (substr($category, 0, 6) == 'FORUM-') {
             return array(
@@ -194,7 +194,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      * @param  ID_TEXT                  Parent category (blank: root / not applicable)
      * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
      */
-    public function _get_folder_edit_date($row, $category)
+    protected function _get_folder_edit_date($row, $category)
     {
         if (substr($category, 0, 6) == 'FORUM-') {
             $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', strval($row['id'])) . ' AND  (' . db_string_equal_to('the_type', 'ADD_FORUM') . ' OR ' . db_string_equal_to('the_type', 'EDIT_FORUM') . ')';
@@ -253,7 +253,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
-    public function __folder_read_in_properties_forum($path, $properties)
+    protected function __folder_read_in_properties_forum($path, $properties)
     {
         $description = $this->_default_property_str($properties, 'description');
         $forum_grouping_id = $this->_default_property_int_null($properties, 'forum_grouping_id');
@@ -289,7 +289,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      * @param  array                    Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      * @return array                    Properties
      */
-    public function __folder_read_in_properties_topic($path, $properties)
+    protected function __folder_read_in_properties_topic($path, $properties)
     {
         //$description=$this->_default_property_str($properties,'description');
         $emoticon = $this->_default_property_str($properties, 'emoticon');
@@ -558,7 +558,7 @@ class Hook_occle_fs_forums extends resource_fs_base
      *
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_file_properties()
+    protected function _enumerate_file_properties()
     {
         return array(
             'post' => 'LONG_TRANS',

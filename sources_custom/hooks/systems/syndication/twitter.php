@@ -104,7 +104,7 @@ class Hook_Syndication_twitter
         return false;
     }
 
-    public function _send($token,$secret,$row)
+    protected function _send($token,$secret,$row)
     {
         require_lang('twitter');
         require_code('twitter');

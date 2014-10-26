@@ -32,7 +32,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      *
      * @return GROUP                    The guest usergroup
      */
-    public function _get_guest_group()
+    protected function _get_guest_group()
     {
         $guest_group = $this->connection->query_select_value_if_there('groups', 'groupid', array('title' => 'Guests'));
         if (is_null($guest_group)) {
@@ -149,7 +149,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $rows = $this->connection->query_select('user2groups', array('groupid'), array('userid' => $member));
         foreach ($rows as $g) {
@@ -167,7 +167,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $rows = $this->connection->query_select('user2groups', array('groupid'), array('userid' => $member));
         foreach ($rows as $g) {
@@ -184,7 +184,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      *
      * @return array                    The admin usergroup IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         return collapse_1d_complexity('groupid', $this->connection->query('SELECT groupid FROM ' . $this->connection->get_table_prefix() . 'groups WHERE securitylevel>=4'));
     }
@@ -195,7 +195,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      *
      * @return array                    The moderator usergroup IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         return collapse_1d_complexity('groupid', $this->connection->query('groups', array('groupid'), array('securitylevel' => 3)));
     }
@@ -205,7 +205,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      *
      * @return array                    The usergroup list
      */
-    public function _get_usergroup_list()
+    protected function _get_usergroup_list()
     {
         return collapse_2d_complexity('groupid', 'title', $this->connection->query_select('groups', array('groupid', 'title')));
     }
@@ -216,7 +216,7 @@ class forum_driver_wbb22 extends forum_driver_wbb_shared
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         if ($member == $this->get_guest_id()) {
             return array($this->get_member_row_field($member, 'groupid'));

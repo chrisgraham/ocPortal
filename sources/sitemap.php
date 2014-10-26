@@ -312,7 +312,7 @@ abstract class Hook_sitemap_base
      * @param  ID_TEXT                  The zone the page is being loaded in
      * @return ~array                   A list of details (false: page not found)
      */
-    public function _request_page_details($page, $zone)
+    protected function _request_page_details($page, $zone)
     {
         require_code('site');
         $details = _request_page($page, $zone);
@@ -746,7 +746,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
      * @param  ID_TEXT                  The page-link.
      * @return ID_TEXT                  The ID.
      */
-    public function _get_page_link_id($page_link)
+    protected function _get_page_link_id($page_link)
     {
         $matches = array();
         preg_match('#^([^:]*):([^:]*):([^:]*):([^:]*)#', $page_link, $matches);
@@ -798,7 +798,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
      * @param  ?array                   Database row (NULL: lookup).
      * @return ?array                   A tuple: content ID, row, partial node structure (NULL: filtered).
      */
-    public function _create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row)
+    protected function _create_partial_node_structure($page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row)
     {
         if (($valid_node_types !== null) && (!in_array($this->content_type, $valid_node_types))) {
             return null;
@@ -1001,7 +1001,7 @@ abstract class Hook_sitemap_content extends Hook_sitemap_base
      * @param  ?string                  Order by for categories (NULL: alphabetical title).
      * @return ?array                   Child nodes (NULL: not retrieved yet).
      */
-    public function _get_children_nodes($content_id, $page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row, $extra_where_entries = '', $explicit_order_by_entries = null, $explicit_order_by_subcategories = null)
+    protected function _get_children_nodes($content_id, $page_link, $callback, $valid_node_types, $child_cutoff, $max_recurse_depth, $recurse_level, $require_permission_support, $zone, $use_page_groupings, $consider_secondary_categories, $consider_validation, $meta_gather, $row, $extra_where_entries = '', $explicit_order_by_entries = null, $explicit_order_by_subcategories = null)
     {
         if ((!is_null($max_recurse_depth)) && ($recurse_level >= $max_recurse_depth)) {
             return null;

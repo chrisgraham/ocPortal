@@ -357,7 +357,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the member profile
      */
-    public function _member_profile_url($id)
+    protected function _member_profile_url($id)
     {
         return get_forum_base_url() . '/view_user.php?id=' . strval($id);
     }
@@ -367,7 +367,7 @@ class forum_driver_wowbb extends forum_driver_base
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         return get_forum_base_url() . '/login.php?register=1';
     }
@@ -377,7 +377,7 @@ class forum_driver_wowbb extends forum_driver_base
      *
      * @return URLPATH                  The URL to the members-online page
      */
-    public function _users_online_url()
+    protected function _users_online_url()
     {
         return get_forum_base_url() . '/index.php?show=recent';
     }
@@ -388,7 +388,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
-    public function _member_pm_url($id)
+    protected function _member_pm_url($id)
     {
         return get_forum_base_url() . '/pm.php?new_message=1';
     }
@@ -399,7 +399,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  integer                  The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
-    public function _forum_url($id)
+    protected function _forum_url($id)
     {
         return get_forum_base_url() . '/view_forum.php?id=' . strval($id);
     }
@@ -750,7 +750,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         return $this->get_member_row_field($member, 'user_name');
     }
@@ -761,7 +761,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return SHORT_TEXT               The e-mail address
      */
-    public function _get_member_email_address($member)
+    protected function _get_member_email_address($member)
     {
         return $this->get_member_row_field($member, 'user_email');
     }
@@ -952,7 +952,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $usergroup = $this->get_member_row_field($member, 'user_group_id');
         if ((is_null($usergroup)) || ($usergroup == 0)) {
@@ -967,7 +967,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $usergroup = $this->get_member_row_field($member, 'user_group_id');
         if ((is_null($usergroup)) || ($usergroup == 0)) {
@@ -1021,7 +1021,7 @@ class forum_driver_wowbb extends forum_driver_base
      *
      * @return integer                  The number of posts
      */
-    public function _get_num_new_forum_posts()
+    protected function _get_num_new_forum_posts()
     {
         return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'posts WHERE post_date_time>\'' . $this->_timestamp_to_date(time() - 60 * 60 * 24) . '\'');
     }
@@ -1042,7 +1042,7 @@ class forum_driver_wowbb extends forum_driver_base
      *
      * @return array                    The admin usergroup IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         $groups = $this->connection->query_select('user_groups', array('user_group_id'), array('admin_rights' => 3));
         return collapse_1d_complexity('user_group_id', $groups);
@@ -1054,7 +1054,7 @@ class forum_driver_wowbb extends forum_driver_base
      *
      * @return array                    The moderator usergroup IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         $groups = $this->connection->query_select('user_groups', array('user_group_id'), array('super_moderator_rights' => 3));
         return collapse_1d_complexity('user_group_id', $groups);
@@ -1065,7 +1065,7 @@ class forum_driver_wowbb extends forum_driver_base
      *
      * @return array                    The usergroup list
      */
-    public function _get_usergroup_list()
+    protected function _get_usergroup_list()
     {
         $groups = $this->connection->query_select('user_groups', array('user_group_id', 'user_group_title'));
         return collapse_2d_complexity('user_group_id', 'user_group_title', $groups);
@@ -1077,7 +1077,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         if ($member == $this->get_guest_id()) {
             return array(1);
@@ -1208,7 +1208,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  string                   The wowbb date
      * @return TIME                     The timestamp
      */
-    public function _date_to_timestamp($date)
+    protected function _date_to_timestamp($date)
     {
         //2004-12-28 08:52:05
         $sections = explode(' ', $date);
@@ -1224,7 +1224,7 @@ class forum_driver_wowbb extends forum_driver_base
      * @param  TIME                     The timestamp
      * @return string                   The wowbb date
      */
-    public function _timestamp_to_date($timestamp)
+    protected function _timestamp_to_date($timestamp)
     {
         return date('Y-m-d H:i:s', $timestamp);
     }

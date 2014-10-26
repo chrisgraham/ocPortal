@@ -308,7 +308,7 @@ class Hook_occle_fs_database
      * @param  string                   Key-value map ("key:value,key2:value2")
      * @return ~array                   WHERE map array (false: if an invalid key was referenced)
      */
-    public function _do_where($table_name, $keys)
+    protected function _do_where($table_name, $keys)
     {
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 

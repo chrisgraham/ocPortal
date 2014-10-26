@@ -35,7 +35,7 @@ class Hook_worldpay
      *
      * @return string                   The answer.
      */
-    public function _get_username()
+    protected function _get_username()
     {
         return ecommerce_test_mode() ? get_option('ipn_test') : get_option('ipn');
     }
@@ -45,7 +45,7 @@ class Hook_worldpay
      *
      * @return URLPATH                  The remote form URL.
      */
-    public function _get_remote_form_url()
+    protected function _get_remote_form_url()
     {
         return 'https://' . (ecommerce_test_mode() ? 'select-test' : 'select') . '.worldpay.com/wcc/purchase';
     }

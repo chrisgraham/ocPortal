@@ -119,7 +119,7 @@ class OCP_Topic
                 attach_message(do_lang_tempcode('MISSING_FORUM', escape_html($forum_name)), 'warn');
             }
         } else {
-            $this->_inject_posts_for_scoring_algorithm($preloaded_comments);
+            $this->inject_posts_for_scoring_algorithm($preloaded_comments);
         }
 
         if (!$this->error) {
@@ -300,7 +300,7 @@ class OCP_Topic
      * @return ID_TEXT                  Sort order
      * @set relevance rating newest oldest
      */
-    public function _get_sort_order($reverse)
+    protected function _get_sort_order($reverse)
     {
         static $sort = null;
 
@@ -377,7 +377,7 @@ class OCP_Topic
             if ($posts === -2) {
                 $posts = array();
             }
-            $this->_inject_posts_for_scoring_algorithm($posts);
+            $this->inject_posts_for_scoring_algorithm($posts);
 
             return true;
         }
@@ -391,7 +391,7 @@ class OCP_Topic
      *
      * @param  array                    Review titles
      */
-    public function _inject_posts_for_scoring_algorithm($posts)
+    public function inject_posts_for_scoring_algorithm($posts)
     {
         $all_posts_ordered = array();
         foreach ($posts as $post) {
@@ -540,7 +540,7 @@ class OCP_Topic
      * @param  array                    Posts to choose from, in preference order
      * @return array                    Chosen posts
      */
-    public function _decide_what_to_render($num_to_show_limit, &$queue)
+    protected function _decide_what_to_render($num_to_show_limit, &$queue)
     {
         $posts = array();
         while ((count($posts) < $num_to_show_limit) && (count($queue) != 0)) {
@@ -587,7 +587,7 @@ class OCP_Topic
      * @param  array                    Posts to choose from (the queue)
      * @param  array                    Posts picked out (passed by reference)
      */
-    public function _grab_at_and_above_and_remove($post_id, &$queue, &$posts)
+    protected function _grab_at_and_above_and_remove($post_id, &$queue, &$posts)
     {
         if ((!isset($posts[$post_id])) && (isset($queue['post_' . strval($post_id)]))) {
             $grabbed = $queue['post_' . strval($post_id)];
@@ -614,7 +614,7 @@ class OCP_Topic
      * @param  array                    Posts to choose from
      * @return array                    Relevant posts
      */
-    public function _grab_at_and_underneath($parent_post_id, $posts_in)
+    protected function _grab_at_and_underneath($parent_post_id, $posts_in)
     {
         $posts_out = array();
 
@@ -644,7 +644,7 @@ class OCP_Topic
      * @param  array                    Posts to load
      * @return array                    Upgraded posts
      */
-    public function _grab_full_post_details($posts)
+    protected function _grab_full_post_details($posts)
     {
         $id_list = array();
         foreach ($posts as $p) {
@@ -671,7 +671,7 @@ class OCP_Topic
      * @param  integer                  Current depth in recursion
      * @return array                    Array structure of rendered posts
      */
-    public function _arrange_posts_in_tree($post_id, &$posts, $queue, $max_thread_depth, $depth = 0)
+    protected function _arrange_posts_in_tree($post_id, &$posts, $queue, $max_thread_depth, $depth = 0)
     {
         $rendered = array();
         $non_rendered = array();
@@ -724,7 +724,7 @@ class OCP_Topic
      * @param  integer                  The recursion depth
      * @return tempcode                 Rendered tree structure
      */
-    public function _render_post_tree($num_to_show_limit, $tree, $may_reply, $highlight_by_member, $all_individual_review_ratings, $forum_id, $topic_info, $depth = 0)
+    protected function _render_post_tree($num_to_show_limit, $tree, $may_reply, $highlight_by_member, $all_individual_review_ratings, $forum_id, $topic_info, $depth = 0)
     {
         list($rendered,) = $tree;
         $sequence = new ocp_tempcode();

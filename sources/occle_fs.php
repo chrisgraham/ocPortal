@@ -96,7 +96,7 @@ class occle_fs
      *
      * @return array                    Current directory
      */
-    public function _start_pwd()
+    protected function _start_pwd()
     {
         // Fetch the pwd from a cookie, or generate a new one
         if (array_key_exists('occle_dir', $_COOKIE)) {
@@ -119,7 +119,7 @@ class occle_fs
      * @param  boolean                  Whether to use full paths
      * @return ~array                   Directory contents (false: failure)
      */
-    public function _get_current_dir_contents($dir = null, $full_paths = false)
+    protected function _get_current_dir_contents($dir = null, $full_paths = false)
     {
         if (is_null($dir)) {
             $dir = $this->pwd;
@@ -180,7 +180,7 @@ class occle_fs
      * @param  string                   Path
      * @return array                    Array-form path
      */
-    public function _pwd_to_array($pwd)
+    protected function _pwd_to_array($pwd)
     {
         // Convert a string-form pwd to an array-form pwd, and sanitise it
         if ($pwd == '') {
@@ -203,7 +203,7 @@ class occle_fs
      * @param  array                    Non-absolute path
      * @return array                    Merged path
      */
-    public function _merge_pwds($pwd1, $pwd2)
+    protected function _merge_pwds($pwd1, $pwd2)
     {
         // Merge two array-form pwds, assuming the former is absolute and the latter isn't
         $target_directory = $pwd1;
@@ -223,7 +223,7 @@ class occle_fs
      * @param  ?array                   Path (NULL: use $this->pwd)
      * @return string                   String-form path
      */
-    public function _pwd_to_string($pwd = null)
+    protected function _pwd_to_string($pwd = null)
     {
         if (is_null($pwd)) {
             $pwd = $this->pwd;
@@ -244,7 +244,7 @@ class occle_fs
      * @param  string                   Path
      * @return string                   Filename
      */
-    public function _get_filename($filename)
+    protected function _get_filename($filename)
     {
         // Make sure no directories are included with the filename
         $parts = explode('/', $filename);
@@ -257,7 +257,7 @@ class occle_fs
      * @param  ?array                   Path to check (NULL: current dir is used)
      * @return boolean                  Directory?
      */
-    public function _is_dir($dir = null)
+    protected function _is_dir($dir = null)
     {
         if (is_null($dir)) {
             $dir = $this->pwd;
@@ -288,7 +288,7 @@ class occle_fs
      * @param  array                    Path (with filename) to use
      * @return boolean                  Directory?
      */
-    public function _is_file($dir)
+    protected function _is_file($dir)
     {
         $filename = array_pop($dir);
 
@@ -315,7 +315,7 @@ class occle_fs
      * @param  ?array                   Directory (NULL: current directory is used)
      * @return ~array                   Current directory contents (false: error)
      */
-    public function _discern_meta_dir(&$meta_dir, &$meta_root_node, &$meta_root_node_type, $target_dir = null)
+    protected function _discern_meta_dir(&$meta_dir, &$meta_root_node, &$meta_root_node_type, $target_dir = null)
     {
         // Get the details of the current meta dir (re: object creation) and where the pwd is in relation to it
         $inspected_dir = $this->_convert_meta_dir_to_detailed_dir($this->occle_fs); // Start at the root
@@ -354,7 +354,7 @@ class occle_fs
      * @param  array                    Simple list of directories under here
      * @return array                    Full detailed directory contents
      */
-    public function _convert_meta_dir_to_detailed_dir($_inspected_dir)
+    protected function _convert_meta_dir_to_detailed_dir($_inspected_dir)
     {
         $inspected_dir = array();
         foreach ($_inspected_dir as $dir_name => $contents) {

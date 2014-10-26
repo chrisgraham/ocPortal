@@ -471,7 +471,7 @@ function _parse_command_actual($no_term_needed = false)
             $next_2 = pparse__parser_peek();
             switch ($next_2) {
                 case 'COMMAND_TERMINATE':
-                    $command = array('RETURN', array('SOLO', array('LITERAL', array('NULL')), $GLOBALS['I']), $GLOBALS['I']);
+                    $command = array('RETURN', array('SOLO', array('LITERAL', array('null')), $GLOBALS['I']), $GLOBALS['I']);
                     break;
 
                 default:
@@ -691,13 +691,19 @@ function _parse_class_contents($class_modifiers = null, $is_interface = false)
                     log_warning('Everything in an interface is inherently abstract. Do not use the abstract keyword.');
                 }
                 if ((pparse__parser_peek_dist(1) == 'FUNCTION') || (pparse__parser_peek_dist(1) == 'STATIC') || (pparse__parser_peek_dist(1) == 'ABSTRACT')) {
+                    if (pparse__parser_peek_dist(1) == 'ABSTRACT') {
+                        log_warning('Abstract keyword must appear first: ' . implode(', ', $modifiers) . ', abstract');
+                    }
+
                     // Variables fall through to VAR, function's don't
                     pparse__parser_next();        // VAR does this in its do-while loop
                     break;
                 }
 
-            case 'CONST':
             case 'VAR':
+                log_warning('Don\'t use the var keyword anymore, it is deprecated.');
+
+            case 'CONST':
                 do {
                     pparse__parser_next();
                     $identifier = pparse__parser_peek(true);
@@ -719,7 +725,7 @@ function _parse_class_contents($class_modifiers = null, $is_interface = false)
                         }
                         $class['vars'][] = array($identifier[1], $literal);
                     } else {
-                        $class['vars'][] = array($identifier[1], array('SOLO', array('LITERAL', array('NULL')), $GLOBALS['I']));
+                        $class['vars'][] = array($identifier[1], array('SOLO', array('LITERAL', array('null')), $GLOBALS['I']));
                     }
 
                     $next_2 = pparse__parser_peek();
@@ -731,6 +737,10 @@ function _parse_class_contents($class_modifiers = null, $is_interface = false)
                 break;
 
             case 'FUNCTION':
+                if (!in_array('private', $modifiers) && !in_array('protected', $modifiers) && !in_array('public', $modifiers)) {
+                    log_warning('You must specify function visibility (e.g. public)');
+                }
+
                 if ($is_interface && in_array('private', $modifiers)) {
                     log_warning('All methods in an interface must be public or protected');
                 }
@@ -763,6 +773,9 @@ function _parse_class_contents($class_modifiers = null, $is_interface = false)
                         log_warning('Abstract keyword found in a non-abstract class.');
                     }
                 } else {
+                    if (count($modifiers) == 0) {
+                        log_warning('Static keyword must not appear before visibility');
+                    }
                     $modifiers[] = 'static';
                 }
                 pparse__parser_next();        // Consume the abstract keyword
@@ -869,6 +882,7 @@ function _parse_function_dec($function_modifiers = null)
     } else {
         $function['code'] = _parse_command();
     }
+    $function['modifiers'] = $function_modifiers;
 
     return $function;
 }
@@ -951,7 +965,7 @@ function _parse_expression_inner()
     // Choice{"BOOLEAN_NOT expression | SUBTRACT expression | literal | variable | variable "BRACKET_OPEN" comma_parameters "BRACKET_CLOSE" | "IDENTIFIER" | "IDENTIFIER" "BRACKET_OPEN" comma_parameters "BRACKET_CLOSE" | "NEW" "IDENTIFIER" "BRACKET_OPEN" comma_expressions "BRACKET_CLOSE" | "NEW" "IDENTIFIER" | "CLONE" expression | "ARRAY" "BRACKET_OPEN" create_array "BRACKET_CLOSE" | "BRACKET_OPEN" expression "BRACKET_CLOSE" | "BRACKET_OPEN" assignment "BRACKET_CLOSE"}
 
     $next = pparse__parser_peek();
-    if (in_array($next, array('integer_literal', 'float_literal', 'string_literal', 'true', 'false', 'NULL'))) { // little trick
+    if (in_array($next, array('integer_literal', 'float_literal', 'string_literal', 'true', 'false', 'null'))) { // little trick
         $next = '*literal';
     }
     $suppress_error = ($next == 'SUPPRESS_ERROR');
@@ -1266,9 +1280,9 @@ function _parse_literal()
             $literal = array('BOOLEAN', false, $GLOBALS['I']);
             break;
 
-        case 'NULL':
+        case 'null':
             pparse__parser_next();
-            $literal = array('NULL', $GLOBALS['I']);
+            $literal = array('null', $GLOBALS['I']);
             break;
 
         case 'IDENTIFIER':
@@ -1457,7 +1471,7 @@ function _parse_parameter()
                     // Variable with type hint and default value. This can only be
                     // NULL
                     pparse__parser_next();        // Consume the EQUAL
-                    if (pparse__parser_peek() == 'NULL') {
+                    if (pparse__parser_peek() == 'null') {
                         // If the default value is NULL, the hint is extended to allow
                         // NULL
                         pparse__parser_next();        // Consume the NULL
@@ -1483,7 +1497,7 @@ function _parse_parameter()
                 // Variable with type hint and default value. This can only be
                 // NULL
                 pparse__parser_next();        // Consume the EQUAL
-                if (pparse__parser_peek() == 'NULL') {
+                if (pparse__parser_peek() == 'null') {
                     // If the default value is NULL, the hint is extended to allow
                     // NULL
                     pparse__parser_next();        // Consume the NULL

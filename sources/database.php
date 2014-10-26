@@ -683,7 +683,7 @@ class database_driver
      * @param  string                   Additional stuff to tack onto the query
      * @return string                   SQL query
      */
-    public function _get_where_expand($table, $select_map = null, $where_map = null, $end = '')
+    protected function _get_where_expand($table, $select_map = null, $where_map = null, $end = '')
     {
         global $DEV_MODE;
 
@@ -769,7 +769,7 @@ class database_driver
      * @param  array                    The list of maps
      * @return mixed                    The first value of the first row in the list
      */
-    public function _query_select_value($values)
+    protected function _query_select_value($values)
     {
         if (!array_key_exists(0, $values)) {
             return null;
@@ -886,7 +886,7 @@ class database_driver
      * @param  string                   Something to tack onto the end of the SQL query
      * @param  ?array                   Extra language fields to join in for cache-prefilling. You only need to send this if you are doing a JOIN and carefully craft your query so table field names won't conflict (NULL: none)
      */
-    public function _automatic_lang_fields(&$table, &$full_table, &$select, &$where_map, &$end, &$lang_fields)
+    protected function _automatic_lang_fields(&$table, &$full_table, &$select, &$where_map, &$end, &$lang_fields)
     {
         // Optimisation for entirely automatic translate table linkage (only done on non-joins, as this removes a whole lot of potential complexities -- if people are doing joins they go a little further to do this manually anyway; also we make sure we're operating on our site's table prefix so we don't collect meta info for the wrong table set)
         if ($lang_fields === null) {

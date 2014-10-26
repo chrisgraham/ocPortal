@@ -173,7 +173,7 @@ class Hook_Notification_ocf_topic extends Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_member($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
+    protected function _is_member($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
         if (is_null($only_if_enabled_on__notification_code)) {
             return true;

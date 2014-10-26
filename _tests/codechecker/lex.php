@@ -126,7 +126,7 @@ $PTOKENS['THROW'] = 'throw';
 // Simple types
 $PTOKENS['true'] = 'true';
 $PTOKENS['false'] = 'false';
-$PTOKENS['NULL'] = 'null';
+$PTOKENS['null'] = 'null';
 // None matches go to be 'IDENTIFIER'
 // Also detected are: integer_literal, float_literal, string_literal, variable, comment
 
@@ -423,18 +423,31 @@ function lex($text = null)
                         }
                     }
 
-                    /*$terse_style=!isset($GLOBALS['NON_TERSE']); IDEA Maybe put back, but should be optional
-                            if ($terse_style)
-                            {
-                                        if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('COMMA','IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER','OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
-                            } else
-                            {
-                                        if (($i_current>0) && ($TEXT[$i_current-1]==' ') && (in_array($token_found,array('OBJECT_OPERATOR')))) log_warning('Superfluous spacing (for '.$token_found.') against coding standards',$i,true);
-                                        if (($i_current>0) && (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r")) && (in_array($token_found,array('COMMA')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
-                                        if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('IS_EQUAL','IS_GREATER','IS_SMALLER','IS_GREATER_OR_EQUAL','IS_SMALLER_OR_EQUAL','IS_IDENTICAL','IS_NOT_EQUAL','IS_NOT_IDENTICAL','CONCAT_EQUAL','DIV_EQUAL','MINUS_EQUAL','MUL_EQUAL','PLUS_EQUAL','BOR_EQUAL','EQUAL','COMMA','BW_XOR','BW_OR','SL','SR','CONC','ADD','SUBTRACT','MULTIPLY','DIVIDE','REMAINDER')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);
+                    $terse_style=!isset($GLOBALS['NON_TERSE']);
+                    if ($terse_style) {
+                        if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('COMMA', 'IS_EQUAL', 'IS_GREATER', 'IS_SMALLER', 'IS_GREATER_OR_EQUAL', 'IS_SMALLER_OR_EQUAL', 'IS_IDENTICAL', 'IS_NOT_EQUAL', 'IS_NOT_IDENTICAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL', 'EQUAL', 'COMMA', 'BW_XOR', 'BW_OR', 'SL', 'SR', 'CONC', 'ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'REMAINDER', 'OBJECT_OPERATOR')))) {
+                            log_warning('Superfluous spacing (for '.$token_found.') against coding standards', $i, true);
+                        }
+                    } else
+                    {
+                        if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('OBJECT_OPERATOR')))) {
+                            log_warning('Superfluous spacing (for '.$token_found.') against coding standards', $i, true);
+                        }
+                        if (($i_current > 0) && (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r")) && (in_array($token_found, array('COMMA', 'COMMAND_TERMINATE')))) {
+                            log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards', $i, true);
+                        }
+                        if (($i_current > 0) && (($TEXT[$i_current -1 ] != ' ') || (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r"))) && (in_array($token_found, array('IS_EQUAL', 'IS_GREATER', 'IS_SMALLER', 'IS_GREATER_OR_EQUAL', 'IS_SMALLER_OR_EQUAL', 'IS_IDENTICAL', 'IS_NOT_EQUAL', 'IS_NOT_IDENTICAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL', 'EQUAL', 'BW_XOR', 'BW_OR', 'SL', 'SR', 'CONC', 'ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'REMAINDER')))) {
+                            if ($token_found != 'SUBTRACT' || $TEXT[$i_current -1 ] != ' ' /* As could be minus sign */) {
+                                log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards', $i, true);
                             }
-                            if (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r") && (in_array($token_found,array('IF','ELSEIF','FOREACH','FOR','WHILE','DO')))) log_warning('Missing following spacing (for '.$token_found.') against coding standards',$i,true);
-                            if (($i_current>0) && (($TEXT[$i_current-1]!=' ') || (($TEXT[$i]!=' ') && ($TEXT[$i]!="\n") && ($TEXT[$i]!="\r"))) && (in_array($token_found,array('BOOLEAN_AND','BOOLEAN_XOR','BOOLEAN_OR','BOOLEAN_OR_2')))) log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards',$i,true);*/
+                        }
+                    }
+                    if (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r") && (in_array($token_found, array('IF', 'ELSEIF', 'FOREACH', 'FOR', 'WHILE', 'DO')))) {
+                        log_warning('Missing following spacing (for '.$token_found.') against coding standards', $i, true);
+                    }
+                    if (($i_current > 0) && (($TEXT[$i_current-1] != ' ') || (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r"))) && (in_array($token_found, array('BOOLEAN_AND', 'BOOLEAN_XOR', 'BOOLEAN_OR', 'BOOLEAN_OR_2')))) {
+                        log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards', $i, true);
+                    }
 
                     $tokens[] = array($token_found, $i);
                 } else {
@@ -792,6 +805,8 @@ function lex($text = null)
                 break;
         }
     }
+
+    if (substr($TEXT, $len - 2) != "\n\n") log_warning('Files are supposed to end with a blank line according to PSR-2', $i, true);
 
     return $tokens;
 }

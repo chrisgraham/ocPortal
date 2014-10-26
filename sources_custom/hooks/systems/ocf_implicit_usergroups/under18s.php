@@ -24,7 +24,7 @@ class Hook_implicit_usergroups_under18s
         return array(10); // Probation on standard install; customise as required
     }
 
-    public function _where()
+    protected function _where()
     {
         $eago = intval(date('Y'))-18;
         return 'm_dob_year>' . strval($eago) . ' OR m_dob_year=' . strval($eago) . ' AND (m_dob_month>' . date('m') . ' OR m_dob_month=' . date('m') . ' AND m_dob_day>=' . date('d') . ')';

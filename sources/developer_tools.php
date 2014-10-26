@@ -83,7 +83,7 @@ function semi_dev_mode_startup()
         register_shutdown_function('dev_mode_aftertests');
     }
 
-    if ((ocp_srv('SCRIPT_NAME') != '') && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_NAME'), 'data_custom') === false)) {
+    if ((ocp_srv('SCRIPT_NAME') != '') && (empty($GLOBALS['EXTERNAL_CALL'])) && ($DEV_MODE) && (strpos(ocp_srv('SCRIPT_NAME'), 'data_custom') === false)) {
         if (@strlen(file_get_contents(ocp_srv('SCRIPT_NAME'))) > 4500) {
             fatal_exit('Entry scripts (front controllers) should not be shoved full of code.');
         }

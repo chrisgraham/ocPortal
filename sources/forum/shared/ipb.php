@@ -270,7 +270,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the member profile
      */
-    public function _member_profile_url($id)
+    protected function _member_profile_url($id)
     {
         return get_forum_base_url() . '/index.php?showuser=' . strval($id);
     }
@@ -280,7 +280,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         return get_forum_base_url() . '/index.php?act=Reg&CODE=00';
     }
@@ -290,7 +290,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      *
      * @return URLPATH                  The URL to the members-online page
      */
-    public function _users_online_url()
+    protected function _users_online_url()
     {
         return get_forum_base_url() . '/index.php?act=Online&CODE=listall';
     }
@@ -301,7 +301,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
-    public function _member_pm_url($id)
+    protected function _member_pm_url($id)
     {
         return get_forum_base_url() . '/index.php?act=Msg&CODE=04&MID=' . strval($id);
     }
@@ -312,7 +312,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      * @param  integer                  The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
-    public function _forum_url($id)
+    protected function _forum_url($id)
     {
         return get_forum_base_url() . '/index.php?showforum=' . strval($id);
     }
@@ -441,7 +441,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return SHORT_TEXT               The e-mail address
      */
-    public function _get_member_email_address($member)
+    protected function _get_member_email_address($member)
     {
         return $this->ipb_unescape($this->get_member_row_field($member, 'email'));
     }
@@ -543,7 +543,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $usergroup = $this->get_member_row_field($member, 'mgroup');
         if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups', 'g_is_supmod', array('g_id' => $usergroup)) == 1)) {
@@ -558,7 +558,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $usergroup = $this->get_member_row_field($member, 'mgroup');
         if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups', 'g_access_cp', array('g_id' => $usergroup)) == 1)) {
@@ -582,7 +582,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      *
      * @return integer                  The number of posts
      */
-    public function _get_num_new_forum_posts()
+    protected function _get_num_new_forum_posts()
     {
         return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'posts WHERE post_date>' . strval(time() - 60 * 60 * 24));
     }
@@ -592,7 +592,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      *
      * @return array                    The admin usergroup IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         return collapse_1d_complexity('g_id', $this->connection->query_select('groups', array('g_id'), array('g_access_cp' => 1)));
     }
@@ -603,7 +603,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      *
      * @return array                    The moderator usergroup IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         return collapse_1d_complexity('g_id', $this->connection->query_select('groups', array('g_id'), array('g_access_cp' => 0, 'g_is_supmod' => 1)));
     }
@@ -613,7 +613,7 @@ class forum_driver_ipb_shared extends forum_driver_base
      *
      * @return array                    The usergroup list
      */
-    public function _get_usergroup_list()
+    protected function _get_usergroup_list()
     {
         $results = $this->connection->query_select('groups', array('g_id', 'g_title'));
         $out = array();

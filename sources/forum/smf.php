@@ -354,7 +354,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the member profile
      */
-    public function _member_profile_url($id)
+    protected function _member_profile_url($id)
     {
         return get_forum_base_url() . '/index.php?action=profile&u=' . strval($id);
     }
@@ -364,7 +364,7 @@ class forum_driver_smf extends forum_driver_base
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         return get_forum_base_url() . '/index.php?action=register';
     }
@@ -374,7 +374,7 @@ class forum_driver_smf extends forum_driver_base
      *
      * @return URLPATH                  The URL to the members-online page
      */
-    public function _users_online_url()
+    protected function _users_online_url()
     {
         return get_forum_base_url() . '/index.php?action=who';
     }
@@ -385,7 +385,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
-    public function _member_pm_url($id)
+    protected function _member_pm_url($id)
     {
         return get_forum_base_url() . '/index.php?action=pm&sa=send&u=' . strval($id);
     }
@@ -396,7 +396,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  integer                  The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
-    public function _forum_url($id)
+    protected function _forum_url($id)
     {
         return get_forum_base_url() . '/index.php?board=' . strval($id);
     }
@@ -718,7 +718,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -744,7 +744,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return SHORT_TEXT               The e-mail address
      */
-    public function _get_member_email_address($member)
+    protected function _get_member_email_address($member)
     {
         return $this->get_member_row_field($member, 'emailAddress');
     }
@@ -927,7 +927,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $usergroups = $this->get_members_groups($member);
         return ((in_array(1, $usergroups)) || (in_array(2, $usergroups)));
@@ -939,7 +939,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $usergroups = $this->get_members_groups($member);
         return (in_array(1, $usergroups));
@@ -990,7 +990,7 @@ class forum_driver_smf extends forum_driver_base
      *
      * @return integer                  The number of posts
      */
-    public function _get_num_new_forum_posts()
+    protected function _get_num_new_forum_posts()
     {
         return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'messages WHERE posterTime>' . strval(time() - 60 * 60 * 24));
     }
@@ -1011,7 +1011,7 @@ class forum_driver_smf extends forum_driver_base
      *
      * @return array                    The admin usergroup IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         return array(1);
     }
@@ -1022,7 +1022,7 @@ class forum_driver_smf extends forum_driver_base
      *
      * @return array                    The moderator usergroup IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         return array(2);
     }
@@ -1032,7 +1032,7 @@ class forum_driver_smf extends forum_driver_base
      *
      * @return array                    The usergroup list
      */
-    public function _get_usergroup_list()
+    protected function _get_usergroup_list()
     {
         return array(0 => do_lang('GUESTS')) + collapse_2d_complexity('ID_GROUP', 'groupName', $this->connection->query_select('membergroups', array('ID_GROUP', 'groupName')));
     }
@@ -1043,7 +1043,7 @@ class forum_driver_smf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         if ($member == $this->get_guest_id()) {
             return array(0);

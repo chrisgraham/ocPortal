@@ -2296,12 +2296,12 @@ END;
                 $schedule = get_input_date('schedule');
 
                 if ((!is_null($schedule)) && (addon_installed('calendar'))) {
-                    $_intended_solely_for = is_null($intended_solely_for) ? 'NULL' : strval($intended_solely_for);
-                    $_postdetailser_name_if_guest = is_null($poster_name_if_guest) ? 'NULL' : ('\'' . addslashes($poster_name_if_guest) . '\'');
+                    $_intended_solely_for = is_null($intended_solely_for) ? 'null' : strval($intended_solely_for);
+                    $_postdetailser_name_if_guest = is_null($poster_name_if_guest) ? 'null' : ('\'' . addslashes($poster_name_if_guest) . '\'');
                     $_first_post = $first_post ? 'true' : 'false';
-                    $__title = is_null($title) ? 'NULL' : ('\'' . str_replace("\n", '\'."\n".\'', addslashes($title)) . '\'');
-                    $_postdetails = is_null($post) ? 'NULL' : ('\'' . str_replace("\n", '\'."\n".\'', addslashes($post)) . '\'');
-                    $_new_title = is_null($new_title) ? 'NULL' : ('\'' . str_replace("\n", '\'."\n".\'', addslashes($new_title)) . '\'');
+                    $__title = is_null($title) ? 'null' : ('\'' . str_replace("\n", '\'."\n".\'', addslashes($title)) . '\'');
+                    $_postdetails = is_null($post) ? 'null' : ('\'' . str_replace("\n", '\'."\n".\'', addslashes($post)) . '\'');
+                    $_new_title = is_null($new_title) ? 'null' : ('\'' . str_replace("\n", '\'."\n".\'', addslashes($new_title)) . '\'');
 
                     $schedule_code = <<<END
 :require_code('ocf_topics_action2'); require_code('ocf_topics_action'); ocf_edit_topic($topic_id,NULL,NULL,$validated,$open,$pinned,$sunk,$cascading,'',$_new_title); if (($to!=$forum_id) && (!is_null($to))) ocf_move_topics($forum_id,$to,array($topic_id)); \$post_id=ocf_make_post($topic_id,$__title,$_postdetails,$skip_sig,$_first_post,$validated,$is_emphasised,$_postdetailser_name_if_guest,NULL,NULL,NULL,$_intended_solely_for,NULL,NULL,false,true,NULL,true,$topic_title,$sunk,NULL,$anonymous==1); if (addon_installed('awards')) { require_code('awards'); handle_award_setting('post',strval(\$post_id)); }

@@ -96,7 +96,7 @@ class resource_fs_test_set extends ocp_test_case
         }
     }
 
-    public function _recursive_listing($ob, $meta_dir, $meta_root_node, $occle_fs)
+    protected function _recursive_listing($ob, $meta_dir, $meta_root_node, $occle_fs)
     {
         $listing = $ob->listing($meta_dir, $meta_root_node, $occle_fs);
         foreach ($listing as $f) {

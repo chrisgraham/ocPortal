@@ -60,7 +60,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -748,7 +748,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         return get_forum_base_url() . '/index.php?app=core&module=global&section=register';
     }
@@ -769,7 +769,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      *
      * @return URLPATH                  The URL to the members-online page
      */
-    public function _users_online_url()
+    protected function _users_online_url()
     {
         return get_forum_base_url() . '/index.php?app=members&module=online&sort_order=desc';
     }
@@ -780,7 +780,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
-    public function _member_pm_url($id)
+    protected function _member_pm_url($id)
     {
         return get_forum_base_url() . '/index.php?app=members&module=messaging&section=send&do=form&fromMemberID=' . strval($id);
     }
@@ -822,7 +822,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         $group = $this->get_member_row_field($member, 'member_group_id');
         $secondary = array($group);
@@ -859,7 +859,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $usergroup = $this->get_member_row_field($member, 'member_group_id');
         if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups', 'g_is_supmod', array('g_id' => $usergroup)) == 1)) {
@@ -874,7 +874,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $usergroup = $this->get_member_row_field($member, 'member_group_id');
         if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('groups', 'g_access_cp', array('g_id' => $usergroup)) == 1)) {
@@ -1018,7 +1018,7 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
      * @param  string                   The password
      * @return boolean                  Whether authentication succeeded
      */
-    public function _auth_hashed($id, $password)
+    protected function _auth_hashed($id, $password)
     {
         $rows = $this->connection->query_select('members', array('members_pass_hash', 'members_pass_salt'), array('member_id' => $id), '', 1);
         if (!array_key_exists(0, $rows)) {

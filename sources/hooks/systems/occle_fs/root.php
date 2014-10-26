@@ -190,7 +190,7 @@ class Hook_occle_fs_root
      * @param  boolean                  Whether to rewrite to be the alternative override directory
      * @return string                   Customised path
      */
-    public function _customise_directory($directory, $change_to_override = true)
+    protected function _customise_directory($directory, $change_to_override = true)
     {
         $dir_replacements = array('sources', 'comcode', 'html', 'minimodules', 'modules', 'data', 'lang', 'text', 'images', 'templates');
 

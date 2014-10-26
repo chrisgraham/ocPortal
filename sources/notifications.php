@@ -803,7 +803,7 @@ class Hook_Notification
      * @param  boolean                  Whether to list anything monitored by any member (useful if you are calling this because you can't naturally enumerate what can be monitored)
      * @return array                    Tree structure
      */
-    public function _create_category_tree($notification_code, $id, $for_any_member = false)
+    protected function _create_category_tree($notification_code, $id, $for_any_member = false)
     {
         $page_links = array();
 
@@ -903,7 +903,7 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_privilege($to_filter, $privilege, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
+    protected function _all_members_who_have_enabled_with_privilege($to_filter, $privilege, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
         list($_members, $possibly_has_more) = $to_filter;
         $members = array();
@@ -928,7 +928,7 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_zone_access($to_filter, $zone, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
+    protected function _all_members_who_have_enabled_with_zone_access($to_filter, $zone, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
         list($_members, $possibly_has_more) = $to_filter;
         $members = array();
@@ -952,7 +952,7 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_page_access($to_filter, $page, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
+    protected function _all_members_who_have_enabled_with_page_access($to_filter, $page, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
         list($_members, $possibly_has_more) = $to_filter;
         $members = array();
@@ -976,7 +976,7 @@ class Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled_with_category_access($to_filter, $category, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
+    protected function _all_members_who_have_enabled_with_category_access($to_filter, $category, $only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
         list($_members, $possibly_has_more) = $to_filter;
         $members = array();
@@ -1027,7 +1027,7 @@ class Hook_Notification
      * @param  boolean                  Whether to find members who are subscribed regardless of notification code
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_members_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max, $catch_all_too = true)
+    protected function _all_members_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max, $catch_all_too = true)
     {
         global $NO_DB_SCOPE_CHECK;
         $bak = $NO_DB_SCOPE_CHECK;
@@ -1098,7 +1098,7 @@ class Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_member($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
+    protected function _is_member($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
         if (is_null($only_if_enabled_on__notification_code)) {
             return true;
@@ -1181,7 +1181,7 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function _all_staff_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
+    protected function _all_staff_who_have_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $to_member_ids, $start, $max)
     {
         $initial_setting = $this->get_initial_setting($only_if_enabled_on__notification_code, $only_if_enabled_on__category);
 
@@ -1219,7 +1219,7 @@ class Hook_Notification__Staff extends Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
+    protected function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
         $test = is_null($only_if_enabled_on__notification_code) ? true : notifications_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id);
 

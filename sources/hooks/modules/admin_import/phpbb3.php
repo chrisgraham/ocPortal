@@ -312,7 +312,7 @@ class Hook_phpbb3
      * @param  GROUP                    Group it applies to
      * @param  BINARY                   Setting
      */
-    public function _import_permg($db, $table_prefix, $option_id, $group_id, $auth_setting)
+    protected function _import_permg($db, $table_prefix, $option_id, $group_id, $auth_setting)
     {
         $_pp = $db->query('SELECT * FROM ' . $table_prefix . 'acl_options WHERE is_global=1 AND founder_only=0 AND auth_option_id=' . strval($option_id), 1);
         if (!array_key_exists(0, $_pp)) {
@@ -555,7 +555,7 @@ class Hook_phpbb3
      * @param  string                   The phpBB IP address
      * @return IP                       The normal IP address
      */
-    public function _un_phpbb_ip($ip)
+    protected function _un_phpbb_ip($ip)
     {
         if (strlen($ip) < 8) {
             return '127.0.0.1';
@@ -649,7 +649,7 @@ class Hook_phpbb3
      * @param  integer                  Key for the 'parent' (which may be for cat or may be for real parent)
      * @return array                    A pair: the category ID, the forum ID
      */
-    public function _find_parent_forum_and_category($rows, $parent_forum)
+    protected function _find_parent_forum_and_category($rows, $parent_forum)
     {
         $cat_id = null;
         $parent_id = null;
@@ -691,7 +691,7 @@ class Hook_phpbb3
      * @param  AUTO_LINK                Forum it applies to
      * @param  BINARY                   Setting
      */
-    public function _import_perm($db, $table_prefix, $option_id, $group_id, $forum_id, $auth_setting)
+    protected function _import_perm($db, $table_prefix, $option_id, $group_id, $forum_id, $auth_setting)
     {
         $_pp = $db->query('SELECT * FROM ' . $table_prefix . 'acl_options WHERE is_local=1 AND founder_only=0 AND auth_option_id=' . strval($option_id), 1);
         if (!array_key_exists(0, $_pp)) {
@@ -718,7 +718,7 @@ class Hook_phpbb3
      * @param  string                   Old perm
      * @return ?string                  New perm (NULL: could not convert)
      */
-    public function _translate_permission($perm)
+    protected function _translate_permission($perm)
     {
         $x = null;
 
@@ -877,7 +877,7 @@ class Hook_phpbb3
      * @param  array                    The match
      * @return  string        The substitution string
      */
-    public function _fix_links_callback_topic($m)
+    protected function _fix_links_callback_topic($m)
     {
         return 'index.php?page=topicview&id=' . strval(import_id_remap_get('topic', strval($m[2]), true));
     }
@@ -888,7 +888,7 @@ class Hook_phpbb3
      * @param  array                    The match
      * @return  string        The substitution string
      */
-    public function _fix_links_callback_forum($m)
+    protected function _fix_links_callback_forum($m)
     {
         return 'index.php?page=forumview&id=' . strval(import_id_remap_get('forum', strval($m[2]), true));
     }
@@ -899,7 +899,7 @@ class Hook_phpbb3
      * @param  array                    The match
      * @return  string        The substitution string
      */
-    public function _fix_links_callback_member($m)
+    protected function _fix_links_callback_member($m)
     {
         return 'index.php?page=members&type=view&id=' . strval(import_id_remap_get('member', strval($m[2]), true));
     }

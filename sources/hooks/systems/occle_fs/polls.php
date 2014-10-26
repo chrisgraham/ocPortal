@@ -57,7 +57,7 @@ class Hook_occle_fs_polls extends resource_fs_base
      *
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_file_properties()
+    protected function _enumerate_file_properties()
     {
         return array(
             'answer1' => 'SHORT_TRANS',

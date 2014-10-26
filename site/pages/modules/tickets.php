@@ -512,7 +512,7 @@ class Module_tickets
                 require_code('topics');
                 $renderer = new OCP_Topic();
                 $renderer->set_rendering_context('tickets');
-                $renderer->_inject_posts_for_scoring_algorithm($_comments);
+                $renderer->inject_posts_for_scoring_algorithm($_comments);
                 $renderer->topic_id = $topic_id;
 
                 $topic_info = mixed();

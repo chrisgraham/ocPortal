@@ -371,7 +371,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the member profile
      */
-    public function _member_profile_url($id)
+    protected function _member_profile_url($id)
     {
         return get_forum_base_url() . '/member.php?action=profile&uid=' . strval($id);
     }
@@ -381,7 +381,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         return get_forum_base_url() . '/member.php?action=register';
     }
@@ -391,7 +391,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return URLPATH                  The URL to the members-online page
      */
-    public function _users_online_url()
+    protected function _users_online_url()
     {
         return get_forum_base_url() . '/online.php';
     }
@@ -402,7 +402,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
-    public function _member_pm_url($id)
+    protected function _member_pm_url($id)
     {
         return get_forum_base_url() . '/private.php?action=send&uid=' . strval($id);
     }
@@ -413,7 +413,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  integer                  The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
-    public function _forum_url($id)
+    protected function _forum_url($id)
     {
         return get_forum_base_url() . '/forumdisplay.php?fid=' . strval($id);
     }
@@ -435,7 +435,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  IP                       The normal IP address
      * @return string                   The phpBB IP address
      */
-    public function _phpbb_ip($ip)
+    protected function _phpbb_ip($ip)
     {
         $ip_apart = explode('.', $ip);
         $_ip = dechex($ip_apart[0]) . dechex($ip_apart[1]) . dechex($ip_apart[2]) . dechex($ip_apart[3]);
@@ -448,7 +448,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  string                   The phpBB IP address
      * @return IP                       The normal IP address
      */
-    public function _un_phpbb_ip($ip)
+    protected function _un_phpbb_ip($ip)
     {
         $_ip = strval(hexdec($ip[0] . $ip[1])) . '.' . strval(hexdec($ip[2] . $ip[3])) . '.' . strval(hexdec($ip[4] . $ip[5])) . '.' . strval(hexdec($ip[6] . $ip[7]));
         return $_ip;
@@ -813,7 +813,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -827,7 +827,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return SHORT_TEXT               The e-mail address
      */
-    public function _get_member_email_address($member)
+    protected function _get_member_email_address($member)
     {
         return $this->get_member_row_field($member, 'email');
     }
@@ -1023,7 +1023,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $user_level = $this->get_member_row_field($member, 'usergroup');
         if (in_array($user_level, array(3, 4, 6))) {
@@ -1039,7 +1039,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $user_level = $this->get_member_row_field($member, 'usergroup');
         if ($user_level == 4) {
@@ -1053,7 +1053,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return boolean                  Whether to disable the staff filter
      */
-    public function _disable_staff_filter()
+    protected function _disable_staff_filter()
     {
         return true;
     }
@@ -1103,7 +1103,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return integer                  The number of posts
      */
-    public function _get_num_new_forum_posts()
+    protected function _get_num_new_forum_posts()
     {
         return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'posts WHERE dateline>' . strval(time() - 60 * 60 * 24));
     }
@@ -1124,7 +1124,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return array                    The admin group IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         $admin_group = $this->connection->query_select_value_if_there('usergroups', 'gid', array('title' => 'Administrators'), 'ORDER BY gid DESC');
         if (is_null($admin_group)) {
@@ -1139,7 +1139,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return array                    The moderator group IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         $moderator_group = $this->connection->query('SELECT gid FROM ' . $this->connection->get_table_prefix() . 'usergroups WHERE title LIKE \'' . db_encode_like('%Moderator%') . '\'');
 
@@ -1162,7 +1162,7 @@ class forum_driver_mybb extends forum_driver_base
      *
      * @return array                    The usergroup list
      */
-    public function _get_usergroup_list()
+    protected function _get_usergroup_list()
     {
         $results = $this->connection->query('SELECT gid,title FROM ' . $this->connection->get_table_prefix() . 'usergroups');
         $mod_results = array();
@@ -1179,7 +1179,7 @@ class forum_driver_mybb extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         if ($member == $this->get_guest_id()) {
             return array(-1);

@@ -14,7 +14,7 @@
 
 class Hook_implicit_usergroups_usergroup_field_match
 {
-    public function _get_structure()
+    protected function _get_structure()
     {
         if (!function_exists('get_translated_text')) {
             return array();

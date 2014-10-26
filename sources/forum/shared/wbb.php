@@ -338,7 +338,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the member profile
      */
-    public function _member_profile_url($id)
+    protected function _member_profile_url($id)
     {
         return get_forum_base_url() . '/profile.php?userid=' . strval($id);
     }
@@ -348,7 +348,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         return get_forum_base_url() . '/register.php';
     }
@@ -358,7 +358,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      *
      * @return URLPATH                  The URL to the members-online page
      */
-    public function _users_online_url()
+    protected function _users_online_url()
     {
         return get_forum_base_url() . '/wiw.php';
     }
@@ -369,7 +369,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return URLPATH                  The URL to the private/personal message page
      */
-    public function _member_pm_url($id)
+    protected function _member_pm_url($id)
     {
         return get_forum_base_url() . '/pms.php?action=newpm&userid=' . strval($id);
     }
@@ -380,7 +380,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      * @param  integer                  The forum ID
      * @return URLPATH                  The URL to the specified forum
      */
-    public function _forum_url($id)
+    protected function _forum_url($id)
     {
         return get_forum_base_url() . '/board.php?boardid=' . strval($id);
     }
@@ -658,7 +658,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -672,7 +672,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return SHORT_TEXT               The e-mail address
      */
-    public function _get_member_email_address($member)
+    protected function _get_member_email_address($member)
     {
         return $this->get_member_row_field($member, 'email');
     }
@@ -822,7 +822,7 @@ class forum_driver_wbb_shared extends forum_driver_base
      *
      * @return integer                  The number of posts
      */
-    public function _get_num_new_forum_posts()
+    protected function _get_num_new_forum_posts()
     {
         return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'posts WHERE posttime>' . strval(time() - 60 * 60 * 24));
     }

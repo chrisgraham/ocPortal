@@ -137,7 +137,7 @@ class video_syndication_youtube
         return $videos;
     }
 
-    public function _process_remote_video($p)
+    protected function _process_remote_video($p)
     {
         $_remote_id = $p->xpath('//media:group/yt:videoid');
         $remote_id = @strval($_remote_id[0]);
@@ -262,7 +262,7 @@ class video_syndication_youtube
         return $this->_process_remote_video($parsed);
     }
 
-    public function _url_to_file_path($url)
+    protected function _url_to_file_path($url)
     {
         $is_temp_file = false;
 
@@ -368,7 +368,7 @@ class video_syndication_youtube
         return true;
     }
 
-    public function _generate_video_xml($video,$is_initial)
+    protected function _generate_video_xml($video,$is_initial)
     {
         // Match to a category using remote list
         $remote_list_xml = http_download_file('http://gdata.youtube.com/schemas/2007/categories.cat');
@@ -413,7 +413,7 @@ class video_syndication_youtube
         return trim($xml);
     }
 
-    public function _connect()
+    protected function _connect()
     {
         require_code('oauth');
 
@@ -438,7 +438,7 @@ class video_syndication_youtube
         return !is_null($this->_access_token);
     }
 
-    public function _http($url,$params,$http_verb = 'GET',$xml = null,$timeout = 6.0,$extra_headers = null,$file_to_upload = null,$content_type = 'application/atom+xml')
+    protected function _http($url,$params,$http_verb = 'GET',$xml = null,$timeout = 6.0,$extra_headers = null,$file_to_upload = null,$content_type = 'application/atom+xml')
     {
         $youtube_developer_key = get_option('youtube_developer_key');
 

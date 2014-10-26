@@ -512,7 +512,7 @@ class Hook_html_site
      * @param  PATH                     The base directory we are importing from
      * @return string                   Filtered HTML
      */
-    public function _html_filter($file_contents, $fix_html, $base_url, $files, $file_base)
+    protected function _html_filter($file_contents, $fix_html, $base_url, $files, $file_base)
     {
         // If selected, clean up all the HTML
         if ($fix_html == 1) {
