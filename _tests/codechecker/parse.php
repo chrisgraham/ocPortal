@@ -141,7 +141,7 @@ function _parse_php()
     return $program;
 }
 
-function _parse_command()
+function _parse_command($needs_brace = false)
 {
     // Choice{"CURLY_OPEN" command* "CURLY_CLOSE" | command_actual "COMMAND_TERMINATE"*}
 
@@ -166,6 +166,10 @@ function _parse_command()
             break;
 
         default:
+            if ($needs_brace) {
+                parser_warning('PSR-2 asks us to use braces for all control structures');
+            }
+
             $new_command = _parse_command_actual();
 
             // This is now a bit weird. Not all commands end with a COMMAND_TERMINATE, and those are actually for the commands to know they're finished (and the ones requiring would have complained if they were missing). Therefore we now just skip any semicolons. There can be more than one, it's valid, albeit crazy.
@@ -328,7 +332,7 @@ function _parse_command_actual($no_term_needed = false)
             pparse__parser_expect('BRACKET_OPEN');
             $expression = _parse_expression();
             pparse__parser_expect('BRACKET_CLOSE');
-            $command = _parse_command();
+            $command = _parse_command(true);
 
             $next_2 = pparse__parser_peek();
             if (($next_2 == 'ELSE') || ($next_2 == 'ELSEIF')) {
@@ -375,7 +379,7 @@ function _parse_command_actual($no_term_needed = false)
                 $_foreach = $variable;
             }
             pparse__parser_expect('BRACKET_CLOSE');
-            $loop_command = _parse_command();
+            $loop_command = _parse_command(true);
             if ($after_variable == 'DOUBLE_ARROW') {
                 $command = array('FOREACH_map', $expression, $_foreach[0], $_foreach[1], $loop_command, $c_pos);
             } else {
@@ -398,14 +402,14 @@ function _parse_command_actual($no_term_needed = false)
             pparse__parser_expect('COMMAND_TERMINATE');
             $control_command = _parse_command_actual(true);
             pparse__parser_expect('BRACKET_CLOSE');
-            $loop_command = _parse_command();
+            $loop_command = _parse_command(true);
             $command = array('FOR', $init_command, $control_expression, $control_command, $loop_command, $c_pos);
             break;
 
         case 'DO':
             pparse__parser_next();
             $c_pos = $GLOBALS['I'];
-            $loop_command = _parse_command();
+            $loop_command = _parse_command(true);
             pparse__parser_expect('WHILE');
             pparse__parser_expect('BRACKET_OPEN');
             $control_expression = _parse_expression();
@@ -419,7 +423,7 @@ function _parse_command_actual($no_term_needed = false)
             pparse__parser_expect('BRACKET_OPEN');
             $control_expression = _parse_expression();
             pparse__parser_expect('BRACKET_CLOSE');
-            $loop_command = _parse_command();
+            $loop_command = _parse_command(true);
             $command = array('WHILE', $control_expression, $loop_command, $c_pos);
             break;
 
@@ -429,7 +433,7 @@ function _parse_command_actual($no_term_needed = false)
             if (pparse__parser_peek() != 'CURLY_OPEN') {
                 parser_error('Expected code block after "try".');
             }
-            $try = _parse_command();
+            $try = _parse_command(true);
             $exception = null;
             $catches = array();
             do {
@@ -448,7 +452,7 @@ function _parse_command_actual($no_term_needed = false)
                             parser_error('Expected code block after "catch".');
                         }
                     case 'CURLY_OPEN':
-                        $catch = _parse_command();
+                        $catch = _parse_command(true);
                         $catches[] = array('CATCH', $exception, $catch, $catch_position);
                         break;
                     default:
@@ -590,7 +594,7 @@ function _parse_if_rest()
     switch ($next) {
         case 'ELSE':
             pparse__parser_next();
-            $command = _parse_command();
+            $command = _parse_command(true);
             $if_rest = $command;
             break;
 
@@ -600,7 +604,7 @@ function _parse_if_rest()
             pparse__parser_expect('BRACKET_OPEN');
             $expression = _parse_expression();
             pparse__parser_expect('BRACKET_CLOSE');
-            $command = _parse_command();
+            $command = _parse_command(true);
             $next_2 = pparse__parser_peek();
             if (($next_2 == 'ELSE') || ($next_2 == 'ELSEIF')) {
                 $_if_rest = _parse_if_rest();
@@ -701,7 +705,9 @@ function _parse_class_contents($class_modifiers = null, $is_interface = false)
                 }
 
             case 'VAR':
-                log_warning('Don\'t use the var keyword anymore, it is deprecated.');
+                if ($next == 'VAR') {
+                    log_warning('Don\'t use the var keyword anymore, it is deprecated.');
+                }
 
             case 'CONST':
                 do {

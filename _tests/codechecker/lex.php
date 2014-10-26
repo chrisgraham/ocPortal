@@ -483,10 +483,15 @@ function lex($text = null)
                             $tokens[] = array('integer_literal', intval($token_found), $i);
                         }
                     } else {
+                        if ($token_found == 'NULL' || $token_found == 'TRUE' || $token_found == 'FALSE') {
+                            log_warning('Use lower-case for null/false/true', $i, true);
+                        }
+
                         if ($token_found == '') {
                             log_warning('Bad token found', $i, true);
                             break 2;
                         }
+
                         $tokens[] = array('IDENTIFIER', $token_found, $i);
                     }
                 }

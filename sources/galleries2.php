@@ -1196,8 +1196,7 @@ function watermark_gallery_image($gallery, $file_path, $filename)
  * @param  BINARY                       Whether a right hand side corner is being watermarked
  * @param  BINARY                       Whether a bottom edge corner is being watermarked
  */
-function _watermark_corner(/*&*/
-    $source, $watermark_url, $x, $y)
+function _watermark_corner(/*&*/$source, $watermark_url, $x, $y)
 {
     if ($watermark_url != '') {
         $watermark = @imagecreatefromstring(file_get_contents(rawurldecode($watermark_url)));

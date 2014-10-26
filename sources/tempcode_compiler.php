@@ -825,7 +825,7 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
     }
 
     if (($GLOBALS['SEMI_DEV_MODE']) && (strpos($codename, 'JAVASCRIPT_') !== false) && (strpos($html, '.innerHTML') !== false) && (!running_script('install')) && (strpos($html, 'Parser hint: .innerHTML okay') === false)) {
-        attach_message($codename.': Do not use the .innerHTML property in your JavaScript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.', 'warn');
+        attach_message($codename . ': Do not use the .innerHTML property in your JavaScript because it will not work in true XHTML (when the browsers real XML parser is in action). Use ocPortal\'s global set_inner_html/get_inner_html functions.', 'warn');
     }
 
     // Strip off trailing final lines from single lines templates. Editors often put these in, and it causes annoying "visible space" issues
@@ -904,8 +904,7 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
  * @param  boolean                      Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode(/*&*/
-    $text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
+function template_to_tempcode(/*&*/$text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
 {
     if (is_null($theme)) {
         $theme = isset($GLOBALS['FORUM_DRIVER']) ? $GLOBALS['FORUM_DRIVER']->get_theme() : 'default';
