@@ -128,7 +128,7 @@ class Hook_Notification_ticket_assigned_staff extends Hook_Notification
         $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max, false);
         $members = $this->_all_members_who_have_enabled_with_privilege($members, 'support_operator', $notification_code, $category, $to_member_ids, $start, $max);
 
-        unset($members[get_member()]); // Don't e-mail originator of the notification
+        unset($members[0][get_member()]); // Don't e-mail originator of the notification
 
         return $members;
     }
@@ -172,7 +172,7 @@ class Hook_Notification_ticket_assigned_staff extends Hook_Notification
      * @param  MEMBER                   Member to check against
      * @return boolean                  Whether they do
      */
-    public function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
+    protected function _is_staff($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id)
     {
         $test = is_null($only_if_enabled_on__notification_code) ? true : notifications_enabled($only_if_enabled_on__notification_code, $only_if_enabled_on__category, $member_id);
 

@@ -1793,7 +1793,11 @@ function ecv2_HAS_PAGE_ACCESS($lang, $escaped, $param)
 {
     $value = '';
 
-    if ((isset($param[0])) && (isset($param[1])) && (function_exists('has_page_access'))) {
+    if ((isset($param[0])) && (function_exists('has_page_access'))) {
+    	if (!isset($param[1])) {
+    	    $param[1] = '_SEARCH';
+        }
+
         $value = has_page_access(((!is_null($param)) && (isset($param[2]))) ? intval($param[2]) : get_member(), $param[0], $param[1], ((!is_null($param)) && (isset($param[3]))) ? ($param[3] == '1') : false) ? '1' : '0';
     }
 

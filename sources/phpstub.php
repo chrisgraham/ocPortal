@@ -4311,8 +4311,7 @@ function shuffle($array)
  * @param  ?float                       Returns the percentage of similarity (NULL: do not get).
  * @return integer                      The number of matching characters.
  */
-function similar_text($first, $second,/*&*/
-                      $percent = null)
+function similar_text($first, $second,/*&*/$percent = null)
 {
     return 0;
 }
@@ -5054,6 +5053,17 @@ function filetype($file)
  * @return array                        Data.
  */
 function fscanf($handle, $format)
+{
+    return array();
+}
+
+/**
+ * Gets information about a file.
+ *
+ * @param  PATH                         File.
+ * @return array                        Map of status information.
+ */
+function stat($path)
 {
     return array();
 }

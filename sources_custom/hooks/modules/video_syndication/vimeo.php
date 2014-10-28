@@ -154,7 +154,7 @@ class video_syndication_vimeo
         return $videos;
     }
 
-    public function _process_remote_video($p)
+    protected function _process_remote_video($p)
     {
         $detected_video = mixed();
 
@@ -266,7 +266,7 @@ class video_syndication_vimeo
         return $video;
     }
 
-    public function _url_to_file_path($url)
+    protected function _url_to_file_path($url)
     {
         $is_temp_file = false;
 

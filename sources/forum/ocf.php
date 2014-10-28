@@ -141,7 +141,7 @@ class forum_driver_ocf extends forum_driver_base
      *
      * @param  string                   The name of the new custom field
      */
-    public function _install_delete_custom_field($name)
+    protected function _install_delete_custom_field($name)
     {
         $id = $this->connection->query_select_value_if_there('f_custom_fields', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $name));
         if (!is_null($id)) {
@@ -556,7 +556,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient, and allows keep_* parameters to propagate which you almost certainly want!)
      * @return mixed                    The URL to the member profile
      */
-    public function _member_profile_url($id, $tempcode_okay = false)
+    protected function _member_profile_url($id, $tempcode_okay = false)
     {
         if (get_option('username_profile_links') == '1') {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($id);
@@ -587,7 +587,7 @@ class forum_driver_ocf extends forum_driver_base
      *
      * @return URLPATH                  The URL to the registration page
      */
-    public function _join_url()
+    protected function _join_url()
     {
         $page = '_SELF';
         if (count($_POST) != 0) {
@@ -612,7 +612,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the members-online page
      */
-    public function _users_online_url($tempcode_okay = false)
+    protected function _users_online_url($tempcode_okay = false)
     {
         $_url = build_url(array('page' => 'users_online'), get_module_zone('users_online'));
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
@@ -632,7 +632,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the private/personal message page
      */
-    public function _member_pm_url($id, $tempcode_okay = false)
+    protected function _member_pm_url($id, $tempcode_okay = false)
     {
         $_url = build_url(array('page' => 'topics', 'type' => 'new_pt', 'id' => $id), get_module_zone('topics'), null, false, false, true);
         if (($tempcode_okay) && (get_base_url() == get_forum_base_url())) {
@@ -652,7 +652,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether it is okay to return the result using Tempcode (more efficient)
      * @return mixed                    The URL to the specified forum
      */
-    public function _forum_url($id, $tempcode_okay = false)
+    protected function _forum_url($id, $tempcode_okay = false)
     {
         $view_map = array('page' => 'forumview');
         if ($id != db_get_first_id()) {
@@ -914,7 +914,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -972,7 +972,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return SHORT_TEXT               The e-mail address
      */
-    public function _get_member_email_address($member)
+    protected function _get_member_email_address($member)
     {
         return $this->get_member_row_field($member, 'm_email_address');
     }
@@ -1165,7 +1165,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         if ($member == $this->get_guest_id()) {
             return false;
@@ -1180,7 +1180,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         if ($member == $this->get_guest_id()) {
             return false;
@@ -1261,7 +1261,7 @@ class forum_driver_ocf extends forum_driver_base
      *
      * @return integer                  The number of posts
      */
-    public function _get_num_new_forum_posts()
+    protected function _get_num_new_forum_posts()
     {
         return $this->connection->query_value_if_there('SELECT COUNT(*) FROM ' . $this->connection->get_table_prefix() . 'f_posts WHERE p_time>' . strval(time() - 60 * 60 * 24));
     }
@@ -1318,7 +1318,7 @@ class forum_driver_ocf extends forum_driver_base
      *
      * @return array                    The admin usergroup IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         return collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_admin' => 1)));
     }
@@ -1329,7 +1329,7 @@ class forum_driver_ocf extends forum_driver_base
      *
      * @return array                    The moderator usergroup IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         return collapse_1d_complexity('id', $this->connection->query_select('f_groups', array('id'), array('g_is_super_moderator' => 1)));
     }
@@ -1345,7 +1345,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether to completely skip hidden usergroups
      * @return array                    The usergroup list, a map of usergroup ID to usergroup name
      */
-    public function _get_usergroup_list($hide_hidden = false, $only_permissive = false, $force_show_all = false, $force_find = null, $for_member = null, $skip_hidden = false)
+    protected function _get_usergroup_list($hide_hidden = false, $only_permissive = false, $force_show_all = false, $force_find = null, $for_member = null, $skip_hidden = false)
     {
         if (($hide_hidden) && (has_privilege(get_member(), 'see_hidden_groups'))) {
             $hide_hidden = false;
@@ -1433,7 +1433,7 @@ class forum_driver_ocf extends forum_driver_base
      * @param  boolean                  Whether to take probation into account
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member, $skip_secret = false, $handle_probation = true)
+    protected function _get_members_groups($member, $skip_secret = false, $handle_probation = true)
     {
         require_code('ocf_groups');
         return array_keys(ocf_get_members_groups($member, $skip_secret, $handle_probation));

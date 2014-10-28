@@ -24,7 +24,7 @@ class Hook_secpay
      *
      * @return string                   The answer.
      */
-    public function _get_username()
+    protected function _get_username()
     {
         return ecommerce_test_mode() ? get_option('ipn_test') : get_option('ipn');
     }
@@ -34,7 +34,7 @@ class Hook_secpay
      *
      * @return URLPATH                  The remote form URL.
      */
-    public function _get_remote_form_url()
+    protected function _get_remote_form_url()
     {
         return 'https://secure.worldpay.com/wcc/purchase';
     }
@@ -100,7 +100,7 @@ class Hook_secpay
      * @set    d w m y
      * @return array                    A tuple: the period in secpay units, the date of the first repeat.
      */
-    public function _translate_subscription_details($length, $length_units)
+    protected function _translate_subscription_details($length, $length_units)
     {
         switch ($length_units) {
             case 'd':

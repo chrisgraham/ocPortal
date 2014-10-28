@@ -693,7 +693,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   The schema map (NULL: not found)
      */
-    public function _read_schema($db, $table_name, $fail_ok = false)
+    protected function _read_schema($db, $table_name, $fail_ok = false)
     {
         global $SCHEMA_CACHE;
         if (array_key_exists($table_name, $SCHEMA_CACHE)) {
@@ -770,7 +770,7 @@ class Database_Static_xml
      * @param  array                    The data
      * @param  string                   Query that was executed
      */
-    public function _type_check($schema, $record, $query)
+    protected function _type_check($schema, $record, $query)
     {
         foreach ($record as $key => $val) {
             $schema_type = preg_replace('#[^\w]#', '', $schema[$key]);
@@ -835,7 +835,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
      * @return ?array                   The collected records (NULL: error)
      */
-    public function _read_all_records($db, $table_name, $table_as, $schema, $where_expr, $fail_ok, $query, $include_unused_fields = false)
+    protected function _read_all_records($db, $table_name, $table_as, $schema, $where_expr, $fail_ok, $query, $include_unused_fields = false)
     {
         $records = array();
         $key_fragments = ''; // We can do a filename substring search to stop us having to parse ALL
@@ -1030,7 +1030,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to do a not-full-accurate search
      * @return array                    AND map
      */
-    public function _turn_where_expr_to_map($where_expr, $table_as, $schema = null, $not_full_accuracy = false)
+    protected function _turn_where_expr_to_map($where_expr, $table_as, $schema = null, $not_full_accuracy = false)
     {
         if ($where_expr[0] == 'BRACKETED') {
             return $this->_turn_where_expr_to_map($where_expr[1], $table_as, $schema, $not_full_accuracy);
@@ -1101,7 +1101,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to include fields that are present in the actual records but not in our schema
      * @return ?array                   The record map (NULL: does not contain requested substrings)
      */
-    public function _read_record($path, $schema = null, $must_contain_strings = null, $include_unused_fields = false)
+    protected function _read_record($path, $schema = null, $must_contain_strings = null, $include_unused_fields = false)
     {
         if (file_exists($path . '.mine')) {
             $path .= '.mine';
@@ -1237,7 +1237,7 @@ class Database_Static_xml
      * @param  array                    The list of record maps
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      */
-    public function _write_records($db, $table_name, $records, $fail_ok = false)
+    protected function _write_records($db, $table_name, $records, $fail_ok = false)
     {
         foreach ($records as $guid => $record) {
             if (!is_string($guid)) {
@@ -1257,7 +1257,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      */
-    public function _write_record($db, $table_name, $guid, $record, $fail_ok = false, $save_as_volatile = false)
+    protected function _write_record($db, $table_name, $guid, $record, $fail_ok = false, $save_as_volatile = false)
     {
         $suffix = $save_as_volatile ? '.xml-volatile' : '.xml';
 
@@ -1343,7 +1343,7 @@ class Database_Static_xml
      * @param  PATH                     The file path
      * @param  array                    Database connection
      */
-    public function _delete_record($path, $db)
+    protected function _delete_record($path, $db)
     {
         /* This generally is a bad idea. Things can get deleted then re-made, and we don't even need it. This command works better:
         svn status | grep '\!.*\.xml' | awk '{print $2;}' | xargs svn rm
@@ -1393,7 +1393,7 @@ class Database_Static_xml
      * @param  ?string                  The GUID representing what we have now (so we don't think we're conflicting with ourself) (NULL: not yet added)
      * @return boolean                  Whether there was a conflict
      */
-    public function _key_conflict_check($db, $table_name, $schema, $record, $query, $fail_ok, $existing_identity = null)
+    protected function _key_conflict_check($db, $table_name, $schema, $record, $query, $fail_ok, $existing_identity = null)
     {
         $where = '';
         foreach ($schema as $key => $type) {
@@ -1442,7 +1442,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_drop($tokens, $query, $db, $fail_ok)
+    protected function _do_query_drop($tokens, $query, $db, $fail_ok)
     {
         $at = 0;
         if (!$this->_parsing_expects($at, $tokens, 'DROP', $query)) {
@@ -1485,7 +1485,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_alter($tokens, $query, $db, $fail_ok)
+    protected function _do_query_alter($tokens, $query, $db, $fail_ok)
     {
         global $SCHEMA_CACHE;
 
@@ -1632,7 +1632,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_create($tokens, $query, $db, $fail_ok)
+    protected function _do_query_create($tokens, $query, $db, $fail_ok)
     {
         $at = 0;
         if (!$this->_parsing_expects($at, $tokens, 'CREATE', $query)) {
@@ -1726,7 +1726,7 @@ class Database_Static_xml
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The insert ID (NULL: not requested / error)
      */
-    public function _do_query_insert($tokens, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
+    protected function _do_query_insert($tokens, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
     {
         $_inserts = $this->_do_query_insert__parse($tokens, $query, $db, $fail_ok);
         if (is_null($_inserts)) {
@@ -1745,7 +1745,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   A pair: the table, and the rows to insert (NULL: error)
      */
-    public function _do_query_insert__parse($tokens, $query, $db, $fail_ok)
+    protected function _do_query_insert__parse($tokens, $query, $db, $fail_ok)
     {
         // Parse
         $at = 0;
@@ -1826,7 +1826,7 @@ class Database_Static_xml
      * @param  boolean                  Whether we are saving as a 'volatile' file extension
      * @return ?mixed                   The insert ID (NULL: not requested / error)
      */
-    public function _do_query_insert__execute($inserts, $table_name, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
+    protected function _do_query_insert__execute($inserts, $table_name, $query, $db, $fail_ok, $get_insert_id, &$random_key, $save_as_volatile = false)
     {
         global $TABLE_BASES;
 
@@ -1891,7 +1891,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   The expression (NULL: error)
      */
-    public function _parsing_read_expression(&$at, $tokens, $query, $db, $look_for_connectives = true, $look_for_any_connectives = true, $fail_ok = false)
+    protected function _parsing_read_expression(&$at, $tokens, $query, $db, $look_for_connectives = true, $look_for_any_connectives = true, $fail_ok = false)
     {
         $token = $this->_parsing_read($at, $tokens, $query);
         $expr = array();
@@ -2128,7 +2128,7 @@ class Database_Static_xml
      * @param  string                   Query that was executed
      * @return ?mixed                   The result (NULL: error/NULL)
      */
-    public function _execute_expression($expr, $bindings, $query)
+    protected function _execute_expression($expr, $bindings, $query)
     {
         switch ($expr[0]) {
             case 'BRACKETED':
@@ -2244,7 +2244,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_update($tokens, $query, $db, $max, $start, $fail_ok)
+    protected function _do_query_update($tokens, $query, $db, $max, $start, $fail_ok)
     {
         // Parse
         $at = 0;
@@ -2339,7 +2339,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_delete($tokens, $query, $db, $max, $start, $fail_ok)
+    protected function _do_query_delete($tokens, $query, $db, $max, $start, $fail_ok)
     {
         // Parse
         $at = 0;
@@ -2411,7 +2411,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not do the check to make sure we've parsed everything
      * @return ?mixed                   The results (NULL: no results)
      */
-    public function _do_query_select($tokens, $query, $db, $max, $start, $fail_ok, &$at, $do_end_check = true)
+    protected function _do_query_select($tokens, $query, $db, $max, $start, $fail_ok, &$at, $do_end_check = true)
     {
         // Parse
         if (!$this->_parsing_expects($at, $tokens, 'SELECT', $query)) {
@@ -2947,7 +2947,7 @@ class Database_Static_xml
      * @param  string                   Query that was executed
      * @return array                    The result row based on the set
      */
-    public function _function_set_scoping($set, $select, $rep, $query)
+    protected function _function_set_scoping($set, $select, $rep, $query)
     {
         foreach ($select as $s) {
             if ((array_key_exists(1, $s)) && ($s[0] != '*')) {
@@ -3046,7 +3046,7 @@ class Database_Static_xml
      * @param  integer                  How many closing brackets we expect
      * @return ?array                   Join condition (NULL: no join here)
      */
-    public function _read_join(&$at, $tokens, $query, $db, $fail_ok, &$closing_brackets_needed)
+    protected function _read_join(&$at, $tokens, $query, $db, $fail_ok, &$closing_brackets_needed)
     {
         $token = $this->_parsing_read($at, $tokens, $query, true);
 
@@ -3133,7 +3133,7 @@ class Database_Static_xml
      * @param  string                   The renaming of our table, so we can recognise it in the join condition
      * @return array                    Altered join condition
      */
-    public function _setify_join_condition_for_optimisation($join_condition, $schema, $records, $joined_as)
+    protected function _setify_join_condition_for_optimisation($join_condition, $schema, $records, $joined_as)
     {
         if ($join_condition[0] == 'AND') {
             $join_condition_a = $this->_setify_join_condition_for_optimisation($join_condition[1], $schema, $records, $joined_as);
@@ -3173,7 +3173,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return ?array                   A pair: an array of results, an array of the schema for what has been joined (NULL: error)
      */
-    public function _execute_join($db, $joined_as_prior, $join, $query, $records, $schema, $where_expr, $fail_ok = false)
+    protected function _execute_join($db, $joined_as_prior, $join, $query, $records, $schema, $where_expr, $fail_ok = false)
     {
         $joined_as = $join[2];
 
@@ -3304,7 +3304,7 @@ class Database_Static_xml
      * @param  boolean                  Whether it can return NULL if we're out of output (otherwise fails)
      * @return ?string                  Token read (NULL: error, read too far)
      */
-    public function _parsing_read(&$at, $tokens, $query, $fail_ok = false)
+    protected function _parsing_read(&$at, $tokens, $query, $fail_ok = false)
     {
         $at++;
 
@@ -3328,7 +3328,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return boolean                  Success status
      */
-    public function _parsing_expects(&$at, $tokens, $token, $query, $fail_ok = false)
+    protected function _parsing_expects(&$at, $tokens, $token, $query, $fail_ok = false)
     {
         $next = $this->_parsing_read($at, $tokens, $query, $fail_ok);
         if ($next != $token) {
@@ -3347,7 +3347,7 @@ class Database_Static_xml
      * @param  boolean                  Whether to not output an error on some kind of run-time failure (parse errors and clear programming errors are always fatal)
      * @return boolean                  Success status
      */
-    public function _parsing_check_ended($at, $tokens, $query, $fail_ok = false)
+    protected function _parsing_check_ended($at, $tokens, $query, $fail_ok = false)
     {
         do {
             $token = $this->_parsing_read($at, $tokens, $query, true);
@@ -3368,7 +3368,7 @@ class Database_Static_xml
      * @param  ?string                  Error message (NULL: none)
      * @return ?mixed                   Always returns null (NULL: error)
      */
-    public function _bad_query($query, $fail_ok = false, $error = null)
+    protected function _bad_query($query, $fail_ok = false, $error = null)
     {
         if (!$fail_ok) {
             $msg = 'Failed on query: ' . $query;
@@ -3387,7 +3387,7 @@ class Database_Static_xml
      * @param  ?array                   The record (NULL: don't have/use)
      * @return string                   The GUID
      */
-    public function _guid($schema = null, $record = null)
+    protected function _guid($schema = null, $record = null)
     {
         if ((!is_null($schema)) && (!is_null($record))) {
             $guid = '';
@@ -3445,7 +3445,7 @@ class Database_Static_xml
      * @param  string                   Value to escape (original value)
      * @return string                   Escaped value
      */
-    public function _escape_name($in)
+    protected function _escape_name($in)
     {
         return str_replace(array('=', ':', ',', '/', '|'), array('!equals!', '!colon!', '!comma!', '!slash!', '!pipe!'), $in);
     }
@@ -3456,7 +3456,7 @@ class Database_Static_xml
      * @param  string                   Escaped value
      * @return string                   Original value
      */
-    public function _unescape_name($in)
+    protected function _unescape_name($in)
     {
         return str_replace(array('!equals!', '!colon!', '!comma!', '!slash!', '!pipe!'), array('=', ':', ',', '/', '|'), $in);
     }

@@ -131,7 +131,7 @@ namespace webdav_occlefs {
          * @param array $parsedPath Directory listing
          * @return array
          */
-        public function _listingWrap($parsedPath)
+        protected function _listingWrap($parsedPath)
         {
             $sz = serialize($parsedPath);
             if (isset($GLOBALS['OCCLEFS_LISTING_CACHE'][$sz])) {

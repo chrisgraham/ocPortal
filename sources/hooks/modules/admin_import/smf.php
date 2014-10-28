@@ -553,7 +553,7 @@ class Hook_smf
      * @param  string                   The phpBB IP address
      * @return IP                       The normal IP address
      */
-    public function _un_phpbb_ip($ip)
+    protected function _un_phpbb_ip($ip)
     {
         if (strlen($ip) < 8) {
             return '127.0.0.1';
@@ -758,7 +758,7 @@ class Hook_smf
      * @param  array                    The match
      * @return  string        The substitution string
      */
-    public function _fix_links_callback_topic($m)
+    protected function _fix_links_callback_topic($m)
     {
         return 'index.php?topic=' . strval(import_id_remap_get('topic', strval($m[2]), true));
     }
@@ -769,7 +769,7 @@ class Hook_smf
      * @param  array                    The match
      * @return  string        The substitution string
      */
-    public function _fix_links_callback_forum($m)
+    protected function _fix_links_callback_forum($m)
     {
         return 'index.php?board=' . strval(import_id_remap_get('forum', strval($m[2]), true));
     }
@@ -780,7 +780,7 @@ class Hook_smf
      * @param  array                    The match
      * @return string                   The substitution string
      */
-    public function _fix_links_callback_member($m)
+    protected function _fix_links_callback_member($m)
     {
         return 'index.php?action=profile;u=' . strval(import_id_remap_get('member', strval($m[2]), true));
     }

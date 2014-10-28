@@ -33,19 +33,14 @@
 			<h2>{!FEATURES}</h2>
 		</div>
 
-		<div class="float_surrounder">
-			{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}}}
-				<div id="panel_left" class="global_side_panel{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,right}}} panel_solo{+END}" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
+		{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,left}{$LOAD_PANEL,right}}}
+			<div class="float_surrounder">
+				<div class="global_side_panel panel_solo" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 					{$LOAD_PANEL,panel_left}
-				</div>
-			{+END}
-
-			{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,right}}}
-				<div id="panel_right" class="global_side_panel{+START,IF_EMPTY,{$TRIM,{$LOAD_PANEL,left}}} panel_solo{+END}" role="complementary" itemscope="itemscope" itemtype="http://schema.org/WPSideBar">
 					{$LOAD_PANEL,panel_right}
 				</div>
-			{+END}
-		</div>
+			</div>
+		{+END}
 	{+END}
 
 	{+START,IF_NON_EMPTY,{$TRIM,{$LOAD_PANEL,bottom}}}

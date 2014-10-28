@@ -158,7 +158,7 @@ class Hook_task_download_member_csv
      * @param  array                    List of subscription types
      * @return array                    The row
      */
-    public function _get_csv_member_record($member_cpfs, $m, $groups, $headings, $cpfs, $member_groups, $subscription_types)
+    protected function _get_csv_member_record($member_cpfs, $m, $groups, $headings, $cpfs, $member_groups, $subscription_types)
     {
         $at = mixed();
         $out = array();

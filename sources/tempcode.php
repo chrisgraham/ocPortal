@@ -1420,7 +1420,7 @@ class ocp_tempcode
      *
      * @param  boolean                  Whether this is the top-level call
      */
-    public function _mark_all_as_escaped($top_level = true)
+    protected function _mark_all_as_escaped($top_level = true)
     {
         static $done = array();
 

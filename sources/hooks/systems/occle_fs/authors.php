@@ -53,7 +53,7 @@ class Hook_occle_fs_authors extends resource_fs_base
      *
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_file_properties()
+    protected function _enumerate_file_properties()
     {
         return array(
             'url' => 'URLPATH',
@@ -71,7 +71,7 @@ class Hook_occle_fs_authors extends resource_fs_base
      * @param  array                    Resource row (not full, but does contain the ID)
      * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
      */
-    public function _get_file_edit_date($row)
+    protected function _get_file_edit_date($row)
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('param_a', $row['author']) . ' AND  (' . db_string_equal_to('the_type', 'DEFINE_AUTHOR') . ')';
         return $GLOBALS['SITE_DB']->query_value_if_there($query);

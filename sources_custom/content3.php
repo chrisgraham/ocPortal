@@ -172,7 +172,7 @@ abstract class capi_catalogue_object extends capi_object
         parent::__construct($entity_id);
     }
 
-    public function _keyfield_entity_id_convert($id, $field)
+    protected function _keyfield_entity_id_convert($id, $field)
     {
         $cf_id = $GLOBALS['SITE_DB']->query_select_value('catalogue_fields', 'id', array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => $field, 'c_name' => $this->catalogue));
         return $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_efv_short', 'ce_id', array('cf_id' => $cf_id, 'cv_value' => $id));

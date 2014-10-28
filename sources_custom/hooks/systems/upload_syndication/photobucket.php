@@ -30,7 +30,7 @@ class Hook_upload_syndication_photobucket
         return UPLOAD_PRECEDENCE_HIGH;
     }
 
-    public function _get_api()
+    protected function _get_api()
     {
         if (is_null($this->_api)) {
             @ini_set('ocproducts.type_strictness','0');
@@ -47,7 +47,7 @@ class Hook_upload_syndication_photobucket
         return $this->_login();
     }
 
-    public function _login()
+    protected function _login()
     {
         $req_key = get_long_value('photobucket_oauth_key__' . strval(get_member()));
         if ($req_key === NULL) {
@@ -86,7 +86,7 @@ class Hook_upload_syndication_photobucket
     }
 
     // Get access token from request token.
-    public function _get_access_token_then_login($api,$req_key)
+    protected function _get_access_token_then_login($api,$req_key)
     {
         $api->reset(true,true,true,true);
 

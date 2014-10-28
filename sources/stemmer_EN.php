@@ -390,7 +390,7 @@ class Stemmer_EN
     {
         $c = self::$regex_consonant;
 
-        return preg_match("#$c{2}$#", $str, $matches) AND $matches[0]{0} == $matches[0]{1};
+        return preg_match("#$c{2}$#", $str, $matches) AND $matches[0][0] == $matches[0][1];
     }
 
 

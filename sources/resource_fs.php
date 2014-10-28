@@ -543,7 +543,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The resource type
      * @return object                   The object
      */
-    public function _get_cma_info($resource_type)
+    protected function _get_cma_info($resource_type)
     {
         if (!array_key_exists($resource_type, $this->_cma_object)) {
             require_code('content');
@@ -585,7 +585,7 @@ class resource_fs_base
      *
      * @return boolean                  Whether it is
      */
-    public function _is_active()
+    protected function _is_active()
     {
         return true;
     }
@@ -619,7 +619,7 @@ class resource_fs_base
      * @param  ID_TEXT                  Resource type (may be file or folder)
      * @return ?array                   A map: The parent referencing field, the table it is in, and the ID field of that table (NULL: cannot be under)
      */
-    public function _has_parent_child_relationship($above, $under)
+    protected function _has_parent_child_relationship($above, $under)
     {
         $sub_info = $this->_get_cma_info($under);
 
@@ -761,7 +761,7 @@ class resource_fs_base
      * @param  array                    Properties
      * @return array                    A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      */
-    public function _file_magic_filter($filename, $path, $properties)
+    protected function _file_magic_filter($filename, $path, $properties)
     {
         $label = basename($filename, '.' . RESOURCEFS_DEFAULT_EXTENSION); // Default implementation is simply to assume the stub of the filename (or may be a raw label already, with no file type) is the resource label
         if (array_key_exists('label', $properties)) {
@@ -778,7 +778,7 @@ class resource_fs_base
      * @param  array                    Properties
      * @return array                    A pair: the resource label, Properties (may be empty, properties given are open to interpretation by the hook but generally correspond to database fields)
      */
-    public function _folder_magic_filter($filename, $path, $properties)
+    protected function _folder_magic_filter($filename, $path, $properties)
     {
         return array($properties, $filename); // Default implementation is simply to assume the filename is the resource label, and leave properties alone
     }
@@ -861,7 +861,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The property
      * @return ?string                  The value (NULL: NULL value)
      */
-    public function _default_property_str($properties, $property)
+    protected function _default_property_str($properties, $property)
     {
         $ret = array_key_exists($property, $properties) ? $properties[$property] : '';
         if (is_integer($ret)) {
@@ -877,7 +877,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The property
      * @return ?string                  The value (NULL: NULL value)
      */
-    public function _default_property_str_null($properties, $property)
+    protected function _default_property_str_null($properties, $property)
     {
         $ret = array_key_exists($property, $properties) ? $properties[$property] : null;
         if (is_integer($ret)) {
@@ -893,7 +893,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The property
      * @return ?integer                 The value (NULL: NULL value)
      */
-    public function _default_property_int($properties, $property)
+    protected function _default_property_int($properties, $property)
     {
         if (!array_key_exists($property, $properties)) {
             return 0;
@@ -913,7 +913,7 @@ class resource_fs_base
      * @param  ?ID_TEXT                 The category value (blank: root) (NULL: root)
      * @return ?integer                 The category (NULL: root)
      */
-    public function _integer_category($category)
+    protected function _integer_category($category)
     {
         if (is_null($category)) {
             return null;
@@ -928,7 +928,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The property
      * @return ?integer                 The value (NULL: NULL value)
      */
-    public function _default_property_int_null($properties, $property)
+    protected function _default_property_int_null($properties, $property)
     {
         if (!array_key_exists($property, $properties)) {
             return null;
@@ -952,7 +952,7 @@ class resource_fs_base
      * @param  ?ID_TEXT                 The database property (NULL: same as $property)
      * @return integer                  The value
      */
-    public function _default_property_int_modeavg($properties, $property, $table, $default, $db_property = null)
+    protected function _default_property_int_modeavg($properties, $property, $table, $default, $db_property = null)
     {
         if (is_null($db_property)) {
             $db_property = $property;
@@ -988,7 +988,7 @@ class resource_fs_base
      * @param  LONG_TEXT                The label
      * @return ID_TEXT                  The name
      */
-    public function _create_name_from_label($label)
+    protected function _create_name_from_label($label)
     {
         $name = strtolower($label);
         $name = preg_replace('#[^\w\d\.\-]#', '_', $name);
@@ -1009,7 +1009,7 @@ class resource_fs_base
      * @param  string                   The path (blank: root / not applicable)
      * @param  array                    Properties
      */
-    public function _log_if_save_matchup($resource_type, $resource_id, $path, $properties)
+    protected function _log_if_save_matchup($resource_type, $resource_id, $path, $properties)
     {
         if ($resource_type === null) {
             return;
@@ -1614,7 +1614,7 @@ class resource_fs_base
      * @param  ID_TEXT                  Resource filename (assumed to be of a folder type)
      * @return ?array                   A mapping from privilege to minimum preset level required for privilege activation (NULL: unworkable)
      */
-    public function _compute_privilege_preset_scheme($filename)
+    protected function _compute_privilege_preset_scheme($filename)
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
@@ -1851,7 +1851,7 @@ class resource_fs_base
      * @param  object                   Database connection to look up from
      * @return array                    A map of language to the text in that language
      */
-    public function _get_translated_text($lang_id, $db)
+    protected function _get_translated_text($lang_id, $db)
     {
         $strings = $db->query_select('translate', array('language', 'text_original'), array('id' => $lang_id));
         return collapse_2d_complexity('language', 'text_original', $strings);
@@ -2023,7 +2023,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The resource type
      * @return array                    Details of properties
      */
-    public function _custom_fields_enumerate_properties($type)
+    protected function _custom_fields_enumerate_properties($type)
     {
         static $cache = array();
         if (array_key_exists($type, $cache)) {
@@ -2083,7 +2083,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The content ID
      * @return array                    Loaded properties
      */
-    public function _custom_fields_load($type, $id)
+    protected function _custom_fields_load($type, $id)
     {
         require_code('fields');
         if (!has_tied_catalogue($type)) {
@@ -2124,7 +2124,7 @@ class resource_fs_base
      * @param  ID_TEXT                  The content ID
      * @param  array                    Properties to save
      */
-    public function _custom_fields_save($type, $id, $properties)
+    protected function _custom_fields_save($type, $id, $properties)
     {
         require_code('fields');
         if (!has_tied_catalogue($type)) {

@@ -77,7 +77,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
      *
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_folder_properties()
+    protected function _enumerate_folder_properties()
     {
         return array(
             'description' => 'LONG_TRANS',
@@ -245,7 +245,7 @@ class Hook_occle_fs_wiki extends resource_fs_base
      *
      * @return array                    The properties available for the resource type
      */
-    public function _enumerate_file_properties()
+    protected function _enumerate_file_properties()
     {
         return array(
             'validated' => 'BINARY',

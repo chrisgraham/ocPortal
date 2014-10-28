@@ -332,7 +332,7 @@ class virtual_bash
     /**
      * Extract the command name from the input.
      */
-    public function _extract_command()
+    protected function _extract_command()
     {
         if ($this->current_input == '') {
             $this->parsed_input[SECTION_COMMAND] = '';
@@ -383,7 +383,7 @@ class virtual_bash
     /**
      * Extract options (switches) from the input.
      */
-    public function _extract_options()
+    protected function _extract_options()
     {
         // Add each option to the options array...an option *should* be prefixed with a dash ('-'), and can *optionally* have a value, shown through the use of equals ('=') - this can be a quoted value
         if (!defined('OUT_OPTION')) {
@@ -525,7 +525,7 @@ class virtual_bash
     /**
      * Extract parameters from the input.
      */
-    public function _extract_parameters()
+    protected function _extract_parameters()
     {
         // Add each parameter to the parameters array...a parameter *should not* have spaces unless it's a quoted value
         if (!defined('OUT_PARAMETER')) {
@@ -641,7 +641,7 @@ class virtual_bash
     /**
      * Extract extra tokens from the input.
      */
-    public function _extract_extras()
+    protected function _extract_extras()
     {
         // Add the extra instructions to the extras array
         if (!defined('OUT_EXTRA')) {
@@ -779,7 +779,7 @@ class virtual_bash
      *
      * @return boolean                  Redirection instruction?
      */
-    public function _check_is_redirection()
+    protected function _check_is_redirection()
     {
         // Take the current block (delimited by spaces (' ')), and check to see if it's a valid redirect instruction
         $start_pos = $this->parse_runtime['parse_position'];
@@ -1031,7 +1031,7 @@ class virtual_bash
      * @param  array                    Stream 2
      * @return array                    Combined streams
      */
-    public function _combine_streams($stream1, $stream2)
+    protected function _combine_streams($stream1, $stream2)
     {
         // Combine two streams, taking account of arrays, tempcode and other stuff
         $stream_identifiers = array(STREAM_STDCOMMAND, STREAM_STDHTML, STREAM_STDOUT, STREAM_STDERR);
@@ -1080,7 +1080,7 @@ class virtual_bash
      * @param  array                    Array to display
      * @return tempcode                 Tempcode for array
      */
-    public function _array_to_html($array)
+    protected function _array_to_html($array)
     {
         // Convert an array to an HTML format
         $output = new ocp_tempcode();
@@ -1101,7 +1101,7 @@ class virtual_bash
      * @param  integer                  Global indentation
      * @return string                   Text representation of array
      */
-    public function _array_to_text($array, $indentation = 0)
+    protected function _array_to_text($array, $indentation = 0)
     {
         // Convert an array to a text format
         $output = $this->_do_indentation($indentation) . 'array(';
@@ -1122,7 +1122,7 @@ class virtual_bash
      * @param  integer                  Number of tabs to return
      * @return string                   Tabs
      */
-    public function _do_indentation($indentation)
+    protected function _do_indentation($indentation)
     {
         // Return some tabs
         $output = '';
@@ -1135,7 +1135,7 @@ class virtual_bash
     /**
      * Handle a PHP command by executing it, dealing with variables from the class.
      */
-    public function _handle_php_command()
+    protected function _handle_php_command()
     {
         // NOTE: Variables throughout this function use the $occle_ prefix to avoid conflicts with any created through executing PHP commands from the CL
         if (is_null($GLOBALS['CURRENT_SHARE_USER'])) {
@@ -1253,7 +1253,7 @@ class virtual_bash
      * @param  ?string                  Directory (NULL: OcCLE module data dir)
      * @return ~string                  Path or failure (false: failure)
      */
-    public function _find_script_file($script_name, $dir = null)
+    protected function _find_script_file($script_name, $dir = null)
     {
         require_code('files');
 

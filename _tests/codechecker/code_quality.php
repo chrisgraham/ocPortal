@@ -766,11 +766,12 @@ function check_function($function)
     // Return stuff
     if (isset($func)) {
         $ret = (isset($func['return']));
+
         // Check a return is given if the function returns and the opposite
-        if (($ret) && ($func['return']['type'] != 'mixed') && (!isset($LOCAL_VARIABLES['__return']))) {
+        if (($ret) && ($func['return']['type'] != 'mixed') && (!in_array('abstract', $function['modifiers'])) && (!isset($LOCAL_VARIABLES['__return']))) {
             log_warning('Function \'' . $function['name'] . '\' is missing a return statement.', $function['offset']);
         }
-        if ((!$ret) && (isset($LOCAL_VARIABLES['__return'])) && (array_unique($LOCAL_VARIABLES['__return']['types']) != array('NULL'))) {
+        if ((!$ret) && (isset($LOCAL_VARIABLES['__return'])) && (array_unique($LOCAL_VARIABLES['__return']['types']) != array('null'))) {
             log_warning('Function \'' . $function['name'] . '\' has a return with a value, and the function doesn\'t return a value.', $LOCAL_VARIABLES['__return']['first_mention']);
         }
 
@@ -835,8 +836,8 @@ function check_variable_list($LOCAL_VARIABLES, $offset = -1)
         if (array_keys($observed_types) != array('array', 'resource')) {
             if (
                 (count($observed_types) > 3) ||
-                ((count($observed_types) > 1) && (!isset($observed_types['boolean-false'])) && (!isset($observed_types['NULL']))) ||
-                ((count($observed_types) > 2) && ((!isset($observed_types['boolean-false'])) || (!isset($observed_types['NULL'])))
+                ((count($observed_types) > 1) && (!isset($observed_types['boolean-false'])) && (!isset($observed_types['null']))) ||
+                ((count($observed_types) > 2) && ((!isset($observed_types['boolean-false'])) || (!isset($observed_types['null'])))
                 )
             ) {
                 if (($name != '_') && ($name != '__return') && (!$v['mixed_tag'])) {
@@ -1312,7 +1313,7 @@ function check_call($c, $c_pos, $class = null, $function_guard = '')
         // Look for file-creators, and give notice that chmoding might be required to allow it to be deleted via FTP
         if (in_array('creates-file', $potential['flags'])) {
             if (isset($GLOBALS['CHECKS'])) {
-                if (($function == 'fopen') && (in_array(@$c[2][1][1][1]{0}, array('w', 'a')))) {
+                if (($function == 'fopen') && (in_array(@$c[2][1][1][1][0], array('w', 'a')))) {
                     log_warning('Call to \'' . $function . '\' that may create a file/folder. Check that the code chmods it so that FTP can delete it.', $c_pos);
                 }
             }
@@ -1629,7 +1630,7 @@ function check_expression($e, $assignment = false, $equate_false = false, $funct
         }
         $type_a = check_expression($e[2][0], false, false, $function_guard);
         $type_b = check_expression($e[2][1], false, false, $function_guard);
-        if (($type_a != 'NULL') && ($type_b != 'NULL')) {
+        if (($type_a != 'null') && ($type_b != 'null')) {
             $passes = ensure_type(array($type_a, 'mixed'/*imperfect, but useful for performance*/), $type_b, $c_pos, 'Type symettry error in unary operator');
             if ($passes) {
                 infer_expression_type_to_variable_type($type_a, $e[2][1]);
@@ -1711,7 +1712,7 @@ function check_expression($e, $assignment = false, $equate_false = false, $funct
             if (in_array($e[0], array('IS_IDENTICAL', 'IS_NOT_IDENTICAL'))) {
                 if (($e[2][1][0] == 'BOOLEAN') && (!$e[2][1][1])) {
                     $GLOBALS['LOCAL_VARIABLES'][$x[1][1][1]]['conditioned_false'] = true;
-                } elseif ($e[2][1][0] == 'NULL') {
+                } elseif ($e[2][1][0] == 'null') {
                     $GLOBALS['LOCAL_VARIABLES'][$x[1][1][1]]['conditioned_null'] = true;
                 }
             }
@@ -1723,7 +1724,7 @@ function check_expression($e, $assignment = false, $equate_false = false, $funct
             log_warning('It\'s redundant to equate to truths', $c_pos);
         }
         if (strpos($e[0], 'IDENTICAL') === false) {
-            if ($type_b == 'NULL') {
+            if ($type_b == 'null') {
                 log_warning('Comparing to NULL is considered bad', $c_pos);
             }
             $passes = ensure_type(array($type_a), $type_b, $c_pos, 'Comparators must have type symmetric operands (' . $type_a . ' vs ' . $type_b . ')');
@@ -1931,14 +1932,14 @@ function get_variable_type($variable)
         return 'mixed';
     } // There is a problem, but it will be identified elsewhere.
 
-    $temp = array_unique(array_values(array_diff($LOCAL_VARIABLES[$identifier]['types'], array('NULL'))));
+    $temp = array_unique(array_values(array_diff($LOCAL_VARIABLES[$identifier]['types'], array('null'))));
     if ($temp == array('boolean-false', 'boolean')) {
         return 'boolean';
     }
     if (count($temp) != 0) {
         return is_array($temp[0]) ? $temp[0][0] : $temp[0];
     } // We'll assume the first set type is the actual type
-    return 'NULL';
+    return 'null';
 }
 
 function check_literal($literal)
@@ -1963,8 +1964,8 @@ function check_literal($literal)
         }
         return 'boolean';
     }
-    if ($literal[0] == 'NULL') {
-        return 'NULL';
+    if ($literal[0] == 'null') {
+        return 'null';
     }
     return 'mixed';
 }
@@ -2055,11 +2056,11 @@ function ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null, $ex
         if (($type == 'mixed') || ($type == '?mixed') || ($type == '~mixed') || ($type == 'resource') || ($type == '?resource') || ($type == '~resource')) {
             return true;
         } // Anything works!
-        if ($type{0} == '?') {
+        if ($type[0] == '?') {
             $type = substr($type, 1);
-            $allowed_types['NULL'] = 1;
+            $allowed_types['null'] = 1;
         }
-        if ($type{0} == '~') {
+        if ($type[0] == '~') {
             $type = substr($type, 1);
             $allowed_types['boolean-false'] = 1;
         }
@@ -2085,11 +2086,11 @@ function ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null, $ex
     }
 
     // Special cases for our actual type
-    if ($actual_type{0} == '?') {
-        //     if (isset($allowed_types['NULL'])) return true;    We can afford not to give this liberty due to is_null
+    if ($actual_type[0] == '?') {
+        //     if (isset($allowed_types['null'])) return true;    We can afford not to give this liberty due to is_null
         $actual_type = substr($actual_type, 1);
     }
-    if ($actual_type{0} == '~') {
+    if ($actual_type[0] == '~') {
         if (isset($allowed_types['boolean-false'])) {
             return true;
         }

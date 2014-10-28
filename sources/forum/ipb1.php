@@ -69,7 +69,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return ?SHORT_TEXT              The member name (NULL: member deleted)
      */
-    public function _get_username($member)
+    protected function _get_username($member)
     {
         if ($member == $this->get_guest_id()) {
             return do_lang('GUEST');
@@ -515,7 +515,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
      * @param  string                   The name of the statistic
      * @return mixed                    The value of the statistic
      */
-    public function _get_stat($stat)
+    protected function _get_stat($stat)
     {
         global $IPB_STATS_CACHE;
         if (!is_null($IPB_STATS_CACHE)) {
@@ -564,7 +564,7 @@ class forum_driver_ipb1 extends forum_driver_ipb_shared
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         $group = $this->get_member_row_field($member, 'mgroup');
         return array($group);

@@ -190,7 +190,7 @@ class Hook_Syndication_facebook
         return false;
     }
 
-    public function _send($token,$row,$post_to_uid = 'me',$member_id = null,$silent_warn = false)
+    protected function _send($token,$row,$post_to_uid = 'me',$member_id = null,$silent_warn = false)
     {
         require_lang('facebook');
         require_code('facebook_connect');

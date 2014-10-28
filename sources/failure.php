@@ -1180,7 +1180,7 @@ function put_value_in_stack_trace($value)
         } else {
             $_value = strval($value);
         }
-    } catch (Exception $e) { // Can happen for SimpleXMLElement
+    } catch (Exception $e) { // Can happen for SimpleXMLElement or PDO
         $_value = '...';
     }
     return $_value;

@@ -1830,7 +1830,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      */
-    public function _import_ticket_extra_access($db, $table_prefix)
+    protected function _import_ticket_extra_access($db, $table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'ticket_extra_access', null, null, true);
         if (is_null($rows)) {
@@ -1854,7 +1854,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      */
-    public function _import_ticket_known_emailers($db, $table_prefix)
+    protected function _import_ticket_known_emailers($db, $table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'ticket_known_emailers', null, null, true);
         if (is_null($rows)) {
@@ -2841,7 +2841,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      */
-    public function _import_f_member_cpf_perms($db, $table_prefix)
+    protected function _import_f_member_cpf_perms($db, $table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'f_member_cpf_perms', null, null, true);
         if (is_null($rows)) {
@@ -3391,7 +3391,7 @@ class Hook_ocp_merge
      * @param  ID_TEXT                  The old ID
      * @param  ID_TEXT                  The new ID
      */
-    public function _import_content_privacy($db, $content_type, $old_id, $id_new)
+    protected function _import_content_privacy($db, $content_type, $old_id, $id_new)
     {
         if (addon_installed('content_privacy')) {
             $rows = $db->query_select('content_privacy', array('*'), array('content_type' => $content_type, 'content_id' => $old_id), '', 1);
@@ -3504,7 +3504,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      */
-    public function _import_pstore_customs($db, $table_prefix)
+    protected function _import_pstore_customs($db, $table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'pstore_customs', null, null, true);
         if (is_null($rows)) {
@@ -3526,7 +3526,7 @@ class Hook_ocp_merge
      * @param  object                   The DB connection to import from
      * @param  string                   The table prefix the target prefix is using
      */
-    public function _import_pstore_permissions($db, $table_prefix)
+    protected function _import_pstore_permissions($db, $table_prefix)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'pstore_permissions', null, null, true);
         if (is_null($rows)) {
@@ -3615,7 +3615,7 @@ class Hook_ocp_merge
      * @param  ID_TEXT                  The rating type.
      * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
      */
-    public function _import_review_supplement($db, $table_prefix, $rating_type, $import_type)
+    protected function _import_review_supplement($db, $table_prefix, $rating_type, $import_type)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'review_supplement WHERE ' . db_string_equal_to('r_rating_type', $rating_type));
         if (is_null($rows)) {
@@ -3651,7 +3651,7 @@ class Hook_ocp_merge
      * @param  ID_TEXT                  The content type.
      * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
      */
-    public function _import_content_reviews($db, $table_prefix, $content_type, $import_type)
+    protected function _import_content_reviews($db, $table_prefix, $content_type, $import_type)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'content_reviews WHERE ' . db_string_equal_to('content_type', $content_type));
         if (is_null($rows)) {
@@ -3678,7 +3678,7 @@ class Hook_ocp_merge
      * @param  ID_TEXT                  The content type.
      * @param  ?ID_TEXT                 The import type to get remapping from (NULL: no remapping).
      */
-    public function _import_catalogue_entry_linkage($db, $table_prefix, $content_type, $import_type)
+    protected function _import_catalogue_entry_linkage($db, $table_prefix, $content_type, $import_type)
     {
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'catalogue_entry_linkage WHERE ' . db_string_equal_to('content_type', $content_type));
         if (is_null($rows)) {
@@ -3707,7 +3707,7 @@ class Hook_ocp_merge
      *
      * @param  array                    Rows with potential fields to fix
      */
-    public function _fix_comcode_ownership(&$rows)
+    protected function _fix_comcode_ownership(&$rows)
     {
         foreach ($rows as &$row) {
             foreach ($row as $field => $value) {

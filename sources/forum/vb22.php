@@ -146,7 +146,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is staff
      */
-    public function _is_staff($member)
+    protected function _is_staff($member)
     {
         $usergroup = $this->get_member_row_field($member, 'usergroupid');
         if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup', 'ismoderator', array('usergroupid' => $usergroup)) == 1)) {
@@ -161,7 +161,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      * @param  MEMBER                   The member ID
      * @return boolean                  Whether the member is a super admin
      */
-    public function _is_super_admin($member)
+    protected function _is_super_admin($member)
     {
         $usergroup = $this->get_member_row_field($member, 'usergroupid');
         if ((!is_null($usergroup)) && ($this->connection->query_select_value_if_there('usergroup', 'cancontrolpanel', array('usergroupid' => $usergroup)) == 1)) {
@@ -175,7 +175,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      *
      * @return array                    The admin usergroup IDs
      */
-    public function _get_super_admin_groups()
+    protected function _get_super_admin_groups()
     {
         return collapse_1d_complexity('usergroupid', $this->connection->query_select('usergroup', array('usergroupid'), array('cancontrolpanel' => 1)));
     }
@@ -186,7 +186,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      *
      * @return array                    The moderator usergroup IDs
      */
-    public function _get_moderator_groups()
+    protected function _get_moderator_groups()
     {
         return collapse_1d_complexity('usergroupid', $this->connection->query_select('usergroup', array('usergroupid'), array('cancontrolpanel' => 0, 'ismoderator' => 1)));
     }
@@ -196,7 +196,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      *
      * @return array                    The usergroup list
      */
-    public function _get_usergroup_list()
+    protected function _get_usergroup_list()
     {
         return collapse_2d_complexity('usergroupid', 'title', $this->connection->query_select('usergroup', array('usergroupid', 'title')));
     }
@@ -207,7 +207,7 @@ class forum_driver_vb22 extends forum_driver_vb_shared
      * @param  MEMBER                   The member ID
      * @return array                    The array of forum usergroups
      */
-    public function _get_members_groups($member)
+    protected function _get_members_groups($member)
     {
         if ($member == $this->get_guest_id()) {
             return array(1);

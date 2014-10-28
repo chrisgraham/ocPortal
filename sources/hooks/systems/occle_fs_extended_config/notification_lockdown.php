@@ -25,7 +25,7 @@ class Hook_occle_fs_extended_config__notification_lockdown
      *
      * @return ?TIME                    The edit date or add date, whichever is higher (NULL: could not find one)
      */
-    public function _get_edit_date()
+    protected function _get_edit_date()
     {
         $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','NOTIFICATIONS_LOCKDOWN');
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
