@@ -1234,8 +1234,6 @@ function doSubmit(e,ob,recurse) {
 		smooth_scroll(find_pos_y(txtFileName,true));
 	} else // Has uploaded
 	{
-		window.just_checking_requirements=false;
-
 		window.form_submitting=btnSubmit.form; // For IE
 
 		if (typeof ob.originalClickHandler=='undefined')
@@ -1405,6 +1403,8 @@ function uploadComplete(file, ob) {
 
 		if ((typeof ob.submitting!='undefined') && (ob.submitting))
 		{
+			window.just_checking_requirements=false;
+
 			window.form_submitting=btnSubmit.form; // For IE
 			if (typeof ob.originalClickHandler!='undefined')
 			{
