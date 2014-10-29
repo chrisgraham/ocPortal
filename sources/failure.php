@@ -893,7 +893,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 
 	require_code('notifications');
 	require_code('comcode');
-	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());
+	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),str_replace(array('[html','[/html'),array('&#91;html','&#91;/html'),$text),NULL,get_site_default_lang());
 	dispatch_notification($notification_type,NULL,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	if (
 		($ocproducts) && 

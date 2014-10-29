@@ -826,6 +826,15 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 
 	if (($zone=='site') && (get_option('collapse_user_zones')=='1')) $zone=''; // Might have been explicitly said in Tempcode, for example
 
+	global $REQUEST_PAGE_NEST_LEVEL;
+	$REQUEST_PAGE_NEST_LEVEL++;
+	if ($REQUEST_PAGE_NEST_LEVEL>20)
+	{
+		$REQUEST_PAGE_NEST_LEVEL=0;
+		attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE',$codename),'warn');
+		return new ocp_tempcode();
+	}
+
 	$details=persistent_cache_get(array('PAGE_INFO',$codename,$required,$zone));
 	if (($details===NULL) || ($details===false))
 	{
@@ -833,13 +842,6 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 		persistent_cache_set(array('PAGE_INFO',$codename,$required,$zone),$details);
 	}
 
-	global $REQUEST_PAGE_NEST_LEVEL;
-	$REQUEST_PAGE_NEST_LEVEL++;
-	if ($REQUEST_PAGE_NEST_LEVEL>50)
-	{
-		$REQUEST_PAGE_NEST_LEVEL=0;
-		warn_exit(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE'));
-	}
 //if (rand(0,10)==1) @exit('!'.$zone.':'.$codename.'!'.$REQUEST_PAGE_NEST_LEVEL.chr(10));
 	// Run hooks, if any exist
 	$hooks=find_all_hooks('systems','upon_page_load');
