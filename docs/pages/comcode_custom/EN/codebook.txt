@@ -7,8 +7,6 @@ This guide is not a substitute for learning PHP, HTML, CSS, or other languages. 
  - [page="docs:tut_hardcore_1"]Making an addon (part 1)[/page]
  - [page="docs:tut_hardcore_2"]Making an addon (part 2)[/page]
  - [page="docs:tut_hardcore_3"]Making an addon (part 3)[/page]
- - [url="Example addon (league standings)"]http://ocportal.com/docs/league_standings__example_addon.zip[/url]
- - [url="Example addon (property)"]http://ocportal.com/docs/custom_modules_example__pty.zip[/url]
 and an introduction to the ocPortal framework:
  - [page="docs:tut_framework"]The ocPortal programming framework[/page]
 and information about integrating third-party code:
