@@ -273,7 +273,7 @@ function ocf_make_post($topic_id, $title, $post, $skip_sig = 0, $is_starter = fa
     if ($support_attachments) {
         require_code('attachments2');
         ocp_profile_start_for('ocf_make_post:insert_lang_comcode_attachments');
-        $map = insert_lang_comcode_attachments('p_post', 4, $post, 'ocf_post', strval($post_id), $GLOBALS['FORUM_DB']) + $map;
+        $map = insert_lang_comcode_attachments('p_post', 4, $post, 'ocf_post', strval($post_id), $GLOBALS['FORUM_DB'], false, $poster) + $map;
         $GLOBALS['FORUM_DB']->query_update('f_posts', $map, array('id' => $post_id), '', 1);
         ocp_profile_end_for('ocf_make_post:insert_lang_comcode_attachments');
     }
