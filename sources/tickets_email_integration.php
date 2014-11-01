@@ -128,6 +128,7 @@ function ticket_incoming_scan()
 
     require_lang('tickets');
     require_code('tickets2');
+    require_code('mail2');
 
     $server = get_option('ticket_mail_server');
     $port = get_option('ticket_mail_server_port');
@@ -136,12 +137,7 @@ function ticket_incoming_scan()
     $username = get_option('ticket_mail_username');
     $password = get_option('ticket_mail_password');
 
-    $ssl = (substr($type, -1) == 's');
-    if ($ssl) {
-        $type = substr($type, 0, strlen($type) - 1);
-    }
-    $ref = '{' . $server . ':' . $port . '/' . $type . ($ssl ? '/ssl/novalidate-cert' : '') . '}';
-
+    $ref = _imap_server_spec($server, $port, $type);
     $resource = @imap_open($ref . 'INBOX', $username, $password, CL_EXPUNGE);
     if ($resource !== false) {
         $list = imap_search($resource, (get_param_integer('test', 0) == 1 && $GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) ? '' : 'UNSEEN');

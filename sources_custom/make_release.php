@@ -419,6 +419,9 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
     if ($pretend_dir == '') {
         $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . '_config.php'] = '';
     }
+    if ($pretend_dir == 'data_custom/') {
+        $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . 'execute_temp.php'] = file_get_contents(get_file_base() . '/execute_temp.php.bundle');
+    }
 
     // Go over files in the directory
     $full_dir = get_file_base() . '/' . $dir;
@@ -458,9 +461,9 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = '';
             } elseif ($pretend_dir . $file == 'data_custom/errorlog.php') {
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = "<?php return; ?" . ">\n";
-            } // So that code can't be executed
-            elseif ($pretend_dir . $file == 'data_custom/execute_temp.php') {
-                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('#function execute_temp\(\)\n\n\{\n.*\}\n\n#s', "function execute_temp()\n\n{\n}\n\n#", file_get_contents(get_file_base() . '/' . $dir . $file));
+            }
+            elseif ($pretend_dir . $file == 'data_custom/execute_temp.php') { // So that code can't be executed
+                continue; // We'll add this back in later
             }
             // NB: 'data_custom/breadcrumbs.xml' and 'data_custom/fields.xml' are also volatile for users, but in git we're not allowed to mess with these without commit/release intent.
 

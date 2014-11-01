@@ -12,8 +12,6 @@
 
 */
 
-/*EXTRA FUNCTIONS: imap\_.+*/
-
 /**
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
@@ -481,10 +479,10 @@ class Module_admin_newsletter extends standard_crud_module
 
         url_default_parameters__enable();
 
-        $fields->attach(form_input_line(do_lang_tempcode('HOST'), new ocp_tempcode(), 'server', 'localhost', true));
-        $fields->attach(form_input_line(do_lang_tempcode('USERNAME'), new ocp_tempcode(), 'username', '', true));
-        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), new ocp_tempcode(), 'password', true));
-        $fields->attach(form_input_integer(do_lang_tempcode('PORT'), new ocp_tempcode(), 'port', 143, true));
+        $fields->attach(form_input_line(do_lang_tempcode('HOST'), new ocp_tempcode(), 'server', get_option('imap_host'), true));
+        $fields->attach(form_input_line(do_lang_tempcode('USERNAME'), new ocp_tempcode(), 'username', get_option('imap_username'), true));
+        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), new ocp_tempcode(), 'password', true, get_option('imap_password')));
+        $fields->attach(form_input_integer(do_lang_tempcode('PORT'), new ocp_tempcode(), 'port', intval(get_option('imap_port')), true));
 
         url_default_parameters__disable();
 
@@ -502,36 +500,24 @@ class Module_admin_newsletter extends standard_crud_module
      */
     public function bounce_filter_b()
     {
-        if (!function_exists('imap_open')) {
-            warn_exit(do_lang_tempcode('IMAP_NEEDED'));
-        }
+        require_code('mail2');
+
+        require_code('form_templates');
 
         $username = post_param('username');
         $password = post_param('password');
         $server = post_param('server');
         $port = post_param_integer('port');
 
-        if (strpos($server, 'pop') !== false) {
-            $server_special_details = ($server == 'pop.gmail.com') ? '/pop3/ssl' : '/pop3';
-            $server_spec = '{' . $server . ':' . strval($port) . '' . $server_special_details . '}';
-        } else {
-            $server_special_details = ($server == 'imap.gmail.com' || $port == 993) ? '/ssl/novalidate-cert' : '/novalidate-cert';
-            $server_spec = '{' . $server . ':' . strval($port) . '/imap/readonly' . $server_special_details . '}';
-        }
-        $mbox = @imap_open($server_spec . 'INBOX', $username, $password);
-        if ($mbox === false) {
-            warn_exit(do_lang_tempcode('IMAP_ERROR', imap_last_error()));
-        }
-        $_folders = imap_list($mbox, $server_spec, '*');
-
-        $fields = new ocp_tempcode();
-        require_code('form_templates');
+        $_folders = find_mail_folders($server, $port, $username, $password);
 
         $folders = new ocp_tempcode();
-        foreach ($_folders as $folder) {
-            $label = preg_replace('#@.*$#', '', preg_replace('#\{[^{}]+\}#', '', $folder));
-            $folders->attach(form_input_list_entry($folder, strpos(strtolower($folder), 'bounce') !== false, $label));
+        foreach ($_folders as $folder => $label) {
+            $selected = ((get_option('imap_folder') != '') && (get_option('imap_folder') == $folder)) || ((get_option('imap_folder') == '') && (strpos(strtolower($folder), 'bounce') !== false));
+            $folders->attach(form_input_list_entry($folder, $selected, $label));
         }
+
+        $fields = new ocp_tempcode();
         $fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'), new ocp_tempcode(), 'box', $folders));
 
         $submit_name = do_lang_tempcode('PROCEED');
@@ -548,7 +534,9 @@ class Module_admin_newsletter extends standard_crud_module
      */
     public function bounce_filter_c()
     {
-        disable_php_memory_limit(); // In case of a huge number
+        require_code('mail2');
+
+        require_code('form_templates');
 
         $username = post_param('username');
         $password = post_param('password');
@@ -556,13 +544,10 @@ class Module_admin_newsletter extends standard_crud_module
         $port = post_param_integer('port');
         $box = post_param('box');
 
-        $mbox = @imap_open($box, $username, $password);
-        if ($mbox === false) {
-            warn_exit(do_lang_tempcode('IMAP_ERROR', imap_last_error()));
-        }
+        $out = _find_mail_bounces($server, $port, $box, $username, $password, false);
+        $num = count($out);
 
         $fields = '';//new ocp_tempcode();
-        require_code('form_templates');
 
         $all_subscribers = array();
         $all_subscribers += collapse_2d_complexity('email', 'id', $GLOBALS['SITE_DB']->query_select('newsletter', array('email', 'id')));
@@ -570,36 +555,20 @@ class Module_admin_newsletter extends standard_crud_module
             $all_subscribers += collapse_2d_complexity('m_email_address', 'id', $GLOBALS['FORUM_DB']->query_select('f_members', array('m_email_address', 'id'), array('m_allow_emails_from_staff' => 1)));
         }
 
-        $headers = imap_search($mbox, 'UNDELETED');
-        if ($headers === false) {
-            $headers = array();
-        }
-        $num = 0;
-        foreach ($headers as $val) {
-            $msg = imap_body($mbox, $val);
-            $matches = array();
-            $num_matches = preg_match_all("#(?<!(Message-ID|Content-ID): )<([^\"\n<>@]+@[^\n<>@]+)>#", $msg, $matches);
-            if ($num_matches != 0) {
-                $overview = imap_headerinfo($mbox, $val);
-                $body = imap_body($mbox, $val);
-                $checked = (strpos($body, 'X-Failed-Recipients') !== false) || (strpos($body, '5.1.1') !== false) || (strpos($body, '5.1.6') !== false) || (strpos($body, '5.7.1') !== false);
+        $i = 0;
+        foreach ($out as $email => $_details) {
+            list($subject, $is_bounce) = $_details;
 
-                for ($i = 0; $i < $num_matches; $i++) {
-                    $m = $matches[2][$i];
-                    $m = str_replace('@localhost.localdomain', '', $m);
-                    if (($m != get_option('staff_address')) && (array_key_exists($m, $all_subscribers))) {
-                        $tick = form_input_tick($m, $overview->subject . '.', 'email_' . strval($num), $checked, null, $m);
-                        $fields .= $tick->evaluate(); // HTMLHTML
-                        //$fields->attach($tick);
-                        $num++;
-                        unset($all_subscribers[$m]); // So as to make the list no longer than needed; each subscriber only considered once
-                    }
-                }
+            if (array_key_exists($email, $all_subscribers)) {
+                $tick = form_input_tick($email, $subject . '.', 'email_' . strval($num), $is_bounce, null, $email);
+                $fields .= $tick->evaluate(); // HTMLHTML
+                //$fields->attach($tick);
+
+                $i++;
             }
         }
-        imap_close($mbox);
 
-        if ($num == 0) {
+        if ($fields == '') {
             inform_exit(do_lang_tempcode('NO_ENTRIES'));
         }
 
@@ -1363,8 +1332,7 @@ class Module_admin_newsletter extends standard_crud_module
             $c3 = $this->_count_level($newsletter['id'], 3, $lang);
             $c2 = $this->_count_level($newsletter['id'], 2, $lang);
             $c1 = $this->_count_level($newsletter['id'], 1, $lang);
-            //if ($c1!=0)  Actually, this just confuses people if we don't show it
-            {
+            //if ($c1!=0) {  Actually, this just confuses people if we don't show it
                 $newsletter_title = get_translated_text($newsletter['title']);
                 $newsletter_description = get_translated_text($newsletter['description']);
 
@@ -1380,7 +1348,7 @@ class Module_admin_newsletter extends standard_crud_module
 
                     $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR', escape_html($newsletter_title)), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL', escape_html($newsletter_description)), strval($newsletter['id']), $l));
                 }
-            }
+            //}
         }
         if (get_forum_type() == 'ocf') {
             $c5 = $this->_count_level(-1, 5, $lang);

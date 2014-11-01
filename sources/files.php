@@ -288,6 +288,9 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
         'hphp.files.list' => '',
         'hphp' => '',
 
+        // Files only for the build process
+        'execute_temp.php.bundle' => 'data_custom',
+
         // LEGACY: Old files
         'info.php' => '', // Pre-v10 equivalent to _config.php
         'persistant_cache' => '', // Old misspelling

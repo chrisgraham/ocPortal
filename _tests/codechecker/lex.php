@@ -433,11 +433,11 @@ function lex($text = null)
                         if (($i_current > 0) && ($TEXT[$i_current - 1] == ' ') && (in_array($token_found, array('OBJECT_OPERATOR')))) {
                             log_warning('Superfluous spacing (for '.$token_found.') against coding standards', $i, true);
                         }
-                        if (($i_current > 0) && (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r")) && (in_array($token_found, array('COMMA', 'COMMAND_TERMINATE')))) {
+                        if (($i_current > 0) && (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "/") && ($TEXT[$i] != "\r")) && (in_array($token_found, array('COMMA', 'COMMAND_TERMINATE')))) {
                             log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards', $i, true);
                         }
                         if (($i_current > 0) && (($TEXT[$i_current -1 ] != ' ') || (($TEXT[$i] != ' ') && ($TEXT[$i] != "\n") && ($TEXT[$i] != "\r"))) && (in_array($token_found, array('IS_EQUAL', 'IS_GREATER', 'IS_SMALLER', 'IS_GREATER_OR_EQUAL', 'IS_SMALLER_OR_EQUAL', 'IS_IDENTICAL', 'IS_NOT_EQUAL', 'IS_NOT_IDENTICAL', 'CONCAT_EQUAL', 'DIV_EQUAL', 'MINUS_EQUAL', 'MUL_EQUAL', 'PLUS_EQUAL', 'BOR_EQUAL', 'EQUAL', 'BW_XOR', 'BW_OR', 'SL', 'SR', 'CONC', 'ADD', 'SUBTRACT', 'MULTIPLY', 'DIVIDE', 'REMAINDER')))) {
-                            if ($token_found != 'SUBTRACT' || $TEXT[$i_current -1 ] != ' ' /* As could be minus sign */) {
+                            if ($token_found != 'SUBTRACT' || is_alphanumeric($TEXT[$i_current - 1 ]) /* As could be minus sign */) {
                                 log_warning('Missing surrounding spacing (for '.$token_found.') against coding standards', $i, true);
                             }
                         }
