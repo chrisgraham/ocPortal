@@ -3,16 +3,7 @@
 [surround="spaced_list"]
 The Code Book contains documentation to teach experienced developers how to program for ocPortal.
 
-This guide is not a substitute for learning PHP, HTML, CSS, or other languages. Some introductory material for learning web development is available in our [page="docs:"]main set of tutorials[/page]. There is an excellent PHP book available for free online. In addition to this Code Book, we also have some tutorials with worked examples of making addons:
- - [page="docs:tut_hardcore_1"]Making an addon (part 1)[/page]
- - [page="docs:tut_hardcore_2"]Making an addon (part 2)[/page]
- - [page="docs:tut_hardcore_3"]Making an addon (part 3)[/page]
- - [url="Example addon (league standings)"]{$BRAND_BASE_URL}/docs/league_standings__example_addon.zip[/url]
- - [url="Example addon (property)"]{$BRAND_BASE_URL}/docs/custom_modules_example__pty.zip[/url]
-and an introduction to the ocPortal framework:
- - [page="docs:tut_framework"]The ocPortal programming framework[/page]
-and information about integrating third-party code:
- - [page="docs:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page]
+This guide is not a substitute for learning PHP, HTML, CSS, or other languages. Some introductory material for learning web development is available in our [page="docs:"]main set of tutorials[/page]. There is an excellent PHP book available for free online.
 
 To learn ocPortal's API, see the phpdoc comments in the source files. The source files are logically named, so it should be relatively easy to get a handle on it all. Alternatively, view the [url="auto-generated documentation"]{$BRAND_BASE_URL}/docs/api/[/url].
 
@@ -20,7 +11,7 @@ To learn ocPortal's API, see the phpdoc comments in the source files. The source
 
 [title="2"]Technology overview[/title]
 
-[title="3"]ocPortal structure[/title]
+[title="3"]ocPortal file structure[/title]
 
 ocPortal's file system is basically split up into:
 [list]
@@ -35,21 +26,50 @@ ocPortal's file system is basically split up into:
 [*]'lang' which contains language strings.
 [/list]
 
+
 When you make modifications to any of ocPortal's default files, There is no need to overwrite the existing files, because ocPortal comes with a file-based override/inheritance system. This allows files to be overridden with replacements whilst leaving the old files intact for reference. This is done by saving your modified files in the [tt]*_custom[/tt] directories. i.e. if we need to make modifications in [tt]site/pages/modules/polls.php[/tt], then we need to save our modified version as [tt]site/pages/modules_custom/polls.php[/tt]) .
 
+[title="3"]ocPortal structure[/title]
 ocPortal is written to the '[url="front controller"]http://en.wikipedia.org/wiki/Front_controller[/url]' and MVC '[url="design patterns"]http://en.wikipedia.org/wiki/Model-view-controller[/url]':
  - Model/API: Most of the scripts from the 'sources' directory represent the model/API.
  - View: The templates (see 'themes/default/templates' directory) represent the 'view'. Comcode pages could also be considered part of the view (though they are also content).
  - Controller: The entry scripts (e.g. the [tt]index.php[/tt] files, or files like [tt]site/dload.php[/tt]) represent the 'front controllers'. The modules (i.e. scripts from the '*/pages/modules' directories) and blocks (i.e. scripts from the 'sources/[mini]blocks' directory) represent the controllers. [tt]sources/site.php[/tt] and the initialisation functions in [tt]sources/global.php[/tt] and [tt]sources/global2.php[/tt] bind the entry scripts to the modules and control final output.
 
-Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.
+[media width="150" description="MVC structure for SITE-ZONE" float="left"]data_custom/images/docs/mvc_site.png[/media]
+[media width="150" description="MVC structure for ADMIN-ZONE" float="right"]data_custom/images/docs/mvc_admin.png[/media]
 
-Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
 
+- Dynamic pages (modules) are written in PHP and can output a set of different 'screens'. Screens are constructed out of templates (nested in a tree structure), with the PHP code specifying a certain kind of template structure, calling up templates with appropriate parameters to match the data being displayed.
+
+- Static pages are simpler. Static pages may be easily developed and edited by regular ocPortal webmasters. To create a static page, you can just add a Comcode page and either write it in Comcode (for more info see the [page="userguide_comcode"]Comcode tutorial[/page]), or just put your HTML between Comcode '[tt][html][/tt]' tags.
+[/list]
+[title="3"]ocPortal template briefing[/title]
 Page output is displayed  by wrapping the primary page output within  the GLOBAL template, prefixed with the HEADER template, and followed by the FOOTER template. The GLOBAL template references panels, and if those panels exist, they will also be included. Typically zones will include a 'panel_left' and a 'panel_right', so any pages within said zone will be surrounded by these panels.
 
-[title="3"]ocPortal terms[/title]
+[title="3"]ocPortal framework (in-depth)[/title]
+An introduction to the ocPortal framework:
+ - [page="docs:tut_framework"]The ocPortal programming framework[/page]
 
+[title="2"]Back-end (more about 'models' and 'sub-controllers')[/title]
+
+&raquo; See [page="_SEARCH:codebook_1"]Back-end document (a)[/page].
+&raquo; See [page="_SEARCH:codebook_1b"]Back-end document (b)[/page].
+
+[title="2"]Front-end (more about 'views')[/title]
+
+&raquo; See [page="_SEARCH:codebook_2"]Front-end document[/page].
+
+[title="2"]ocPortal addons[/title]
+ In addition to this Code Book, we also have some tutorials with worked examples of making addons:
+ - [page="docs:tut_hardcore_1"]Making an addon (part 1)[/page]
+ - [page="docs:tut_hardcore_2"]Making an addon (part 2)[/page]
+ - [page="docs:tut_hardcore_3"]Making an addon (part 3)[/page]
+ - [url="Example addon (league standings)"]{$BRAND_BASE_URL}/docs/league_standings__example_addon.zip[/url]
+ - [url="Example addon (property)"]{$BRAND_BASE_URL}/docs/custom_modules_example__pty.zip[/url]
+and information about integrating third-party code:
+ - [page="docs:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page]
+
+[title="2"]ocPortal terms[/title]
 Here is a glossary of some of the terms that are used to describe ocPortal concepts:
  - Addon, A defined set of ocPortal files that work together towards a common purpose. Many addons come with ocPortal, and even the 'core' of the system is considered to consist of non-optional addons.
  - CRUD module, (Create/Edit/Delete module) a module that inherits from the CRUD base class, in order to abstract away standard content management interfaces, speeding implementation and improving consistency. Most content management modules are CRUD module. The CRUD module base class is very rich and provides a lot of optional functionality that CRUD modules can choose to inherit.
@@ -100,7 +120,7 @@ At the time of writing, 'resource' is often used loosely, and 'category' and 'en
 
 There are many other terms in ocPortal that belong to certain addons (such as 'Download' or 'Wiki+'), but these won't be explained here.
 
-[title="3"]Feature architecting standards, and implementation notes[/title]
+[title="2"]Feature architecting standards, and implementation notes[/title]
 
 ocPortal contains many "cross-cutting" features that are often present in different areas of the system. These need to be individually implemented/referenced all throughout the code. These features are:
  - CRUD/CMS functionality (this will be provided to you when you write your CMS module to inherit from the standard CRUD module code. Most ocPortal CMS modules are CRUD module)
@@ -154,15 +174,6 @@ Jobs reacted typically. â€œI want it to be as beautiful as possible, even if itâ
 You may as a programmer be used to working with a lower level of quality. Don't be pulled down by the standards of programmers around you. Be better than them and set an example. Be really proud of the beauty of your own code, and make sure you can be really proud of the code of others on the same project -- know that by writing beautiful code you are a true artisan programmer, not just a code hacker. It shouldn't really be possible to quickly say "this code was written by Bob, you can see his style in the way it is laid out", the project should feel as one cohesive beautiful thing.
 
 You may or many not agree with the particular current coding standards within ocPortal. Programmers never agree on these things. However, the mature thing to do is to adapt to whatever the agreed standard is, and if you think it should change, make a case, rather than just ignoring pre-existing standards. ocPortal coding standards are certainly subject to review, but at any point in time should be met absolutely.
-
-[title="2"]Back-end[/title]
-
-&raquo; See [page="_SEARCH:codebook_1"]Back-end document (a)[/page].
-&raquo; See [page="_SEARCH:codebook_1b"]Back-end document (b)[/page].
-
-[title="2"]Front-end[/title]
-
-&raquo; See [page="_SEARCH:codebook_2"]Front-end document[/page].
 
 [title="2"]Troubleshooting[/title]
 
