@@ -19,6 +19,33 @@
  */
 
 /**
+ * API function for if password resets have just been turned on but you want some more time before it kicks in.
+ */
+function bump_password_times_forward()
+{
+    $start = 0;
+    do {
+        $members = $GLOBALS['FORUM_DB']->query_select('f_members', array('id', 'm_pass_hash_salted', 'm_salt'), null, '', 500, $start);
+        foreach ($members as $member) {
+            $GLOBALS['FORUM_DB']->query_delete('f_password_history', array(
+                'p_member_id' => $member['id'],
+                'p_hash_salted' => $member['m_pass_hash_salted'],
+                'p_salt' => $member['m_pass_salt'],
+            ), '', 1);
+            $GLOBALS['FORUM_DB']->query_insert('f_password_history', array(
+                'p_member_id' => $member['id'],
+                'p_hash_salted' => $member['m_pass_hash_salted'],
+                'p_salt' => $member['m_pass_salt'],
+                'p_time' => time(),
+            ));
+        }
+
+        $start += 500;
+    }
+    while (count($members) > 0);
+}
+
+/**
  * Find if a member's account has expired, due to inactivity.
  *
  * @param  MEMBER                       The member this is for
@@ -52,6 +79,9 @@ function member_password_too_old($member_id)
         $last_time = $GLOBALS['FORUM_DB']->query_select_value('f_password_history', 'MAX(p_time)', array(
             'p_member_id' => $member_id,
         ));
+        if (is_null($last_time)) {
+            $last_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id, 'm_join_time');
+        }
         if ($last_time < time() - 60 * 60 * 24 * $change_days) {
             return true;
         }

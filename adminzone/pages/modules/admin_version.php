@@ -687,10 +687,13 @@ class Module_admin_version
             $GLOBALS['FORUM_DRIVER']->install_create_custom_field('smart_topic_notification', 20, 1, 0, 1, 0, '', 'tick');
 
             $GLOBALS['SITE_DB']->create_table('email_bounces', array(
-                'b_email_address' => '*EMAIL_ADDRESS',
-                'b_time' => '*TIME',
+                'id' => '*AUTO',
+                'b_email_address' => 'SHORT_TEXT',
+                'b_time' => 'TIME',
                 'b_subject' => 'SHORT_TEXT',
+                'b_body' => 'LONG_TEXT',
             ));
+            $GLOBALS['SITE_DB']->create_index('email_bounces', 'b_email_address', array('b_email_address'));
             $GLOBALS['SITE_DB']->create_index('email_bounces', 'b_time', array('b_time'));
 
             $GLOBALS['SITE_DB']->create_table('content_privacy', array(

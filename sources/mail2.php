@@ -130,6 +130,10 @@ function can_email_member($member_id, $server = null, $port = null, $folder = nu
  */
 function is_mail_bounced($email, $server = null, $port = null, $folder = null, $username = null, $password = null)
 {
+    if ($email == '') {
+        return null;
+    }
+
     if (is_null($server)) {
         $server = get_option('imap_server');
         $port = intval(get_option('imap_port'));
@@ -142,10 +146,10 @@ function is_mail_bounced($email, $server = null, $port = null, $folder = null, $
         return false; // Not configured, so cannot proceed
     }
 
-    $update_since = $GLOBALS['SITE_DB']->query_select_value('email_bounces', 'MAX(b_time)');
+    $update_since = $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'MAX(b_time)');
     update_bounce_storage($server, $port, $folder, $username, $password, $update_since);
 
-    return $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'b_time', array('b_email_address' => $email));
+    return $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'MAX(b_time)', array('b_email_address' => $email));
 }
 
 /**
@@ -156,21 +160,29 @@ function is_mail_bounced($email, $server = null, $port = null, $folder = null, $
  * @param  string                       The IMAP inbox identifier.
  * @param  string                       The IMAP username.
  * @param  string                       The IMAP password.
- * @param  ?TIME                        Only find bounces since this date (NULL: no limit). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
+ * @param  ?TIME                        Only find bounces since this date (NULL: 8 weeks ago). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
  */
-function update_bounce_storage($server, $port, $folder, $username, $password, $since)
+function update_bounce_storage($server, $port, $folder, $username, $password, $since = null)
 {
+    if (is_null($since)) {
+        $since = time() - 60 * 60 * 24 * 7 * 8;
+    }
+
     $bounces = _find_mail_bounces($server, $port, $folder, $username, $password, true, $since);
     foreach ($bounces as $email => $_details) {
-        list($subject, $is_bounce, $time) = $_details;
+        list($subject, $is_bounce, $time, $body) = $_details;
 
         $GLOBALS['SITE_DB']->query_delete('email_bounces', array(
             'b_email_address' => $email,
+            'b_time' => $time,
+            'b_subject' => $subject,
+            'b_body' => $body,
         ), '', 1);
         $GLOBALS['SITE_DB']->query_insert('email_bounces', array(
             'b_email_address' => $email,
             'b_time' => $time,
             'b_subject' => $subject,
+            'b_body' => $body,
         ));
     }
 }
@@ -183,15 +195,15 @@ function update_bounce_storage($server, $port, $folder, $username, $password, $s
  * @param  string                       The IMAP inbox identifier.
  * @param  string                       The IMAP username.
  * @param  string                       The IMAP password.
- * @param  ?TIME                        Only find bounces since this date (NULL: no limit). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
+ * @param  ?TIME                        Only find bounces since this date (NULL: 8 weeks ago). This is approximate, we will actually look from a bit further back to compensate for possible timezone differences.
  * @return array                        Bounces (a map between email address and details of the bounce).
  */
 function find_mail_bounces($server, $port, $folder, $username, $password, $since = null)
 {
-    $update_since = $GLOBALS['SITE_DB']->query_select_value('email_bounces', 'MAX(b_time)');
     if (is_null($since)) {
-        $since = 0;
+        $since = time() - 60 * 60 * 24 * 7 * 8;
     }
+    $update_since = $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'MAX(b_time)');
     if (is_null($update_since)) {
         $update_since = 0;
     }
@@ -202,10 +214,10 @@ function find_mail_bounces($server, $port, $folder, $username, $password, $since
 
     update_bounce_storage($server, $port, $folder, $username, $password, $_since);
 
-    $_ret = $GLOBALS['SITE_DB']->query_select('email_bounces', array('*'));
+    $_ret = $GLOBALS['SITE_DB']->query_select('email_bounces', array('b_email_address', 'b_subject', 'b_time', 'b_body'), null, 'ORDER BY b_time');
     $ret = array();
     foreach ($_ret as $r) {
-        $ret[] = array($r['b_subject'], true, $r['b_time']);
+        $ret[$r['b_email_address']] = array($r['b_subject'], true, $r['b_time'], $r['b_body']);
     }
     return $ret;
 }
@@ -250,60 +262,59 @@ function _find_mail_bounces($server, $port, $folder, $username, $password, $boun
     sort($messages); // Date order, approximately
     $num = 0;
     foreach ($messages as $val) {
-        $msg = imap_body($mbox, $val);
-        $matches = array();
-        $num_matches = preg_match_all("#(?<!(Message-ID|Content-ID): )<([^\"\n<>@]+@[^\n<>@]+)>#", $msg, $matches);
-        if ($num_matches != 0) {
-            $overview = imap_headerinfo($mbox, $val);
-            $body = imap_body($mbox, $val);
+        $body = imap_body($mbox, $val);
+        $header = imap_fetchheader($mbox, $val);
 
-            $is_bounce = 
-                // Proper failure header
-                (strpos($body, 'X-Failed-Recipients') !== false)
+        $is_bounce = 
+            // Proper failure header
+            (strpos($header, 'X-Failed-Recipients') !== false)
 
-                // Failure message coming from our end
-                || (strpos($body, 'Delivery to the following recipient failed permanently') !== false)
+            // Failure message coming from our end
+            || (strpos($body, 'Delivery to the following recipient failed permanently') !== false)
 
-                // SMTP error codes (http://www.greenend.org.uk/rjk/tech/smtpreplies.html)
-                || (preg_match('#421 .* Service not available#', $body) != 0)
-                || (strpos($body, '450 Requested mail action not taken') !== false)
-                || (strpos($body, '451 Requested action aborted') !== false)
-                || (strpos($body, '452 Requested action not taken') !== false)
-                || (preg_match('#521 .* does not accept mail#', $body) != 0)
-                || (strpos($body, '530 Access denied') !== false)
-                || (strpos($body, '550 Requested action not taken') !== false)
-                || (strpos($body, '551 User not local') !== false)
-                || (strpos($body, '552 Requested mail action aborted') !== false)
-                || (strpos($body, '553 Requested action not taken') !== false)
-                || (strpos($body, '554 Transaction failed') !== false)
+            // SMTP error codes (http://www.greenend.org.uk/rjk/tech/smtpreplies.html)
+            || (preg_match('#421 .* Service not available#', $body) != 0)
+            || (strpos($body, '450 Requested mail action not taken') !== false)
+            || (strpos($body, '451 Requested action aborted') !== false)
+            || (strpos($body, '452 Requested action not taken') !== false)
+            || (preg_match('#521 .* does not accept mail#', $body) != 0)
+            || (strpos($body, '530 Access denied') !== false)
+            || (strpos($body, '550 Requested action not taken') !== false)
+            || (strpos($body, '551 User not local') !== false)
+            || (strpos($body, '552 Requested mail action aborted') !== false)
+            || (strpos($body, '553 Requested action not taken') !== false)
+            || (strpos($body, '554 Transaction failed') !== false)
 
-                // Enhanced Mail System Status Codes (http://tools.ietf.org/html/rfc3463 / http://www.iana.org/assignments/smtp-enhanced-status-codes/smtp-enhanced-status-codes.xhtml)
-                || (preg_match('#\s(4|5)\.\d+\.\d+\s#', $body) != 0);
+            // Enhanced Mail System Status Codes (http://tools.ietf.org/html/rfc3463 / http://www.iana.org/assignments/smtp-enhanced-status-codes/smtp-enhanced-status-codes.xhtml)
+            || (preg_match('#\s(4|5)\.\d+\.\d+\s#', $body) != 0);
 
 
-            if (strpos($body, 'X-Failed-Recipients') !== false) { // Best way
+        if ($is_bounce || !$bounces_only) {
+            if (strpos($header, 'X-Failed-Recipients') !== false) { // Best way
+                $overview = imap_headerinfo($mbox, $val);
+
                 $matches2 = array();
-                preg_match('#X-Failed-Recipients:\s*([^\"\n<>@]+@[^\n<>@]+)#', $body, $matches2);
-
-                $email = $matches2[1];
-                $email = str_replace('@localhost.localdomain', '', $email);
-                if (($email != get_option('staff_address')) && (is_valid_email_address($email))) {
-                    if ((!isset($out[$email])) || (!$out[$email][1])) {
-                        if ($is_bounce || !$bounces_only) {
-                            $out[$email] = array($overview->subject, $is_bounce, strtotime($overview->date));
-                        }
-                    }
+                preg_match('#X-Failed-Recipients:\s*([^\"\n<>@]+@[^\n<>@]+)#', $header, $matches2);
+                $email = str_replace('@localhost.localdomain', '', $matches2[1]);
+                if (($email != get_option('staff_address')) && ($email != get_option('website_email')) && (is_valid_email_address($email)) && ((!isset($out[$email])) || (!$out[$email][1]))) {
+                    $out[$email] = array($overview->subject, $is_bounce, strtotime($overview->date), $body);
                 }
             } else {
+                $overview = imap_headerinfo($mbox, $val);
+
+                $matches = array();
+
+                // Find e-mail addresses in body
+                // (message/content IDs look similar, avoid those, also avoid routine headers)
+                $_body = preg_replace('#"[^"]*" #', '', $body); // Strip out quoted name before e-mail address, to put email address right after header so that our backreference assertions work
+                $_body = preg_replace('#: .* <([^"\n<>@]+@[^\n<>@]+)>#', ': <$1>', $_body); // Also strip unquoted names
+                $num_matches = preg_match_all('#(?<!(Message-ID): )(?<!(Content-ID): )(?<!(Return-Path): )(?<!(From): )(?<!(Reply-To): )(?<!(X-Sender): )(?<!(X-Google-Original-From): )<([^"\n<>@]+@[^\n<>@]+)>#i', $_body, $matches);
+
                 for ($i = 0; $i < $num_matches; $i++) {
-                    $email = $matches[2][$i];
-                    $email = str_replace('@localhost.localdomain', '', $email);
-                    if (($email != get_option('staff_address')) && (is_valid_email_address($email))) {
-                        if ((!isset($out[$email])) || (!$out[$email][1])) {
-                            if ($is_bounce || !$bounces_only) {
-                                $out[$email] = array($overview->subject, $is_bounce, strtotime($overview->date));
-                            }
-                        }
+                    $email = str_replace('@localhost.localdomain', '', $matches[8][$i]);
+
+                    if (($email != get_option('staff_address')) && ($email != get_option('website_email')) && (is_valid_email_address($email)) && ((!isset($out[$email])) || (!$out[$email][1]))) {
+                        $out[$email] = array($overview->subject, $is_bounce, strtotime($overview->date), $body);
                     }
                 }
             }
