@@ -295,8 +295,6 @@ function init__global2()
 			exit();
 		}
 	}
-	srand(make_seed());
-	mt_srand(make_seed());
 	if (($MICRO_BOOTUP==0) && ($MICRO_AJAX_BOOTUP==0)) // Fast cacheing for bots
 	{
 		if ((running_script('index')) && (count($_POST)==0))
