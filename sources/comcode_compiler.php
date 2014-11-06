@@ -778,7 +778,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
                             // Escaping of comcode tag starts lookahead
                             if (($next == '\\') && (!$in_code_tag)) { // We are changing \[ to [ with the side-effect of blocking a tag start. To get \[ literal, we need the symbols \\[... and add extra \-pairs as needed. We are only dealing with \ and [ (update: and now {) here, it's not a further extended means of escaping.
-                                if (($pos != $len) && (($comcode[$pos] == '"') || (substr($comcode, $pos - 1, 6) == '&quot;'))) {
+                                if (($pos != $len) && (($comcode[$pos] == '"') || ($comcode[$pos - 1] == '&') && (substr($comcode, $pos - 1, 6) == '&quot;'))) {
                                     if ($semiparse_mode) {
                                         $continuation .= '\\';
                                     }
@@ -814,8 +814,10 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                 }
                             }
 
+                            $not_white_space = (trim($next) != '');
+
                             if (!$differented) {
-                                if ((($textual_area) || ($in_semihtml)) && (trim($next) != '') && (!$wml)) {
+                                if ((($textual_area) || ($in_semihtml)) && ($not_white_space) && (!$wml)) {
                                     // Emoticon lookahead
                                     foreach ($smilies as $smiley => $imgcode) {
                                         if ($in_semihtml) {
@@ -838,7 +840,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                     }
                                 }
                             }
-                            if ((trim($next) != '') && (!$in_code_tag) && (!$differented)) {
+                            if (($not_white_space) && (!$in_code_tag) && (!$differented)) {
                                 // Wiki pages
                                 if (($pos < $len) && ($next == '[') && ($pos + 1 < $len) && ($comcode[$pos] == '[') && (!$semiparse_mode) && (addon_installed('wiki'))) {
                                     $matches = array();
@@ -922,10 +924,10 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 if ((get_forum_type() == 'ocf') && ($username_info)) {
                                                     require_lang('ocf');
                                                     require_code('ocf_members2');
-                                                    $details = render_member_box($this_member_id);
+                                                    //$details = render_member_box($this_member_id);
                                                     $comcode_member_link = do_template('COMCODE_MEMBER_LINK', array(
                                                         '_GUID' => 'd8f4f4ac70bd52b3ef9ee74ae9c5e085',
-                                                        'DETAILS' => $details,
+                                                        //'DETAILS' => $details,    Slow for large amounts of Comcode, let it be via AJAX (or Tempcode symbol if still wanted)
                                                         'MEMBER_ID' => strval($this_member_id),
                                                         'USERNAME' => $username,
                                                         'MEMBER_URL' => $member_url,
@@ -1134,7 +1136,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                 $b_all = true; // leave true - for test purposes only
                                 if ((!$semiparse_mode) && (addon_installed('banners')) && (($b_all) || (!has_privilege($source_member, 'banner_free')))) {
                                     // Pick up correctly, including permission filtering
-                                    if (is_null($ADVERTISING_BANNERS_CACHE)) {
+                                    if ($ADVERTISING_BANNERS_CACHE === null) {
                                         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'banners b LEFT JOIN ' . get_table_prefix() . 'banner_types t ON b.b_type=t.id WHERE t_comcode_inline=1 AND ' . db_string_not_equal_to('b_title_text', ''), null, null, true);
                                         if (!is_null($rows)) {
                                             // Filter out what we don't have permission for
@@ -1166,7 +1168,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                     }
 
                                     // Apply
-                                    if (!is_null($ADVERTISING_BANNERS_CACHE)) {
+                                    if ($ADVERTISING_BANNERS_CACHE !== null) {
                                         foreach ($ADVERTISING_BANNERS_CACHE as $ad_trigger => $ad_bits) {
                                             if (strtolower($next) == strtolower($ad_trigger[0])) { // optimisation
                                                 if (strtolower(substr($comcode, $pos - 1, strlen($ad_trigger))) == strtolower($ad_trigger)) {
@@ -1217,7 +1219,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                 $b = strrpos($until_now, '>');
                                 $in_html_tag = ($a !== false) && (($b === false) || ($a > $b));
                             }
-                            if ((($textual_area) || ($tag_stack[count($tag_stack) - 1][6]) && ($in_semihtml)) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && (trim($next) != '') && (!$differented) && ($next == 'h') && ((substr($comcode, $pos - 1, strlen('http://')) == 'http://') || (substr($comcode, $pos - 1, strlen('https://')) == 'https://') || (substr($comcode, $pos - 1, strlen('ftp://')) == 'ftp://'))) {
+                            if ((($textual_area) || ($tag_stack[count($tag_stack) - 1][6]) && ($in_semihtml)) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && ($not_white_space) && (!$differented) && ($next == 'h') && ((substr($comcode, $pos - 1, strlen('http://')) == 'http://') || (substr($comcode, $pos - 1, strlen('https://')) == 'https://') || (substr($comcode, $pos - 1, strlen('ftp://')) == 'ftp://'))) {
                                 // Find the full link portion in the upcoming Comcode
                                 $link_end_pos = strlen($comcode);
                                 foreach (array(' ', "\n", '[', ')', '"', '>', '<', ".\n", ', ', '. ', "'",) as $link_terminator_str) {
@@ -1655,7 +1657,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
                     $status = CCP_IN_TAG_BETWEEN_ATTRIBUTES;
                     $pos--;
-                } elseif (($next == '"') || (($in_semihtml) && (substr($comcode, $pos - 1, 6) == '&quot;'))) {
+                } elseif (($next == '"') || (($in_semihtml) && ($comcode[$pos - 1] == '&') && (substr($comcode, $pos - 1, 6) == '&quot;'))) {
                     if ($next != '"') {
                         $pos += 5;
                         if ($mindless_mode) {
@@ -1697,7 +1699,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                     $tag_raw .= ($next);
                 }
 
-                if (($next == '"') || (($in_semihtml) && (substr($comcode, $pos - 1, 6) == '&quot;'))) {
+                if (($next == '"') || (($in_semihtml) && ($comcode[$pos - 1] == '&') && (substr($comcode, $pos - 1, 6) == '&quot;'))) {
                     if ($next != '"') {
                         $pos += 5;
                         if ($mindless_mode) {
@@ -1717,7 +1719,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                             }
                             $current_attribute_value .= '"';
                             ++$pos;
-                        } elseif (substr($comcode, $pos - 1, 6) == '&quot;') {
+                        } elseif (($comcode[$pos - 1] == '&') && (substr($comcode, $pos - 1, 6) == '&quot;')) {
                             if ($mindless_mode) {
                                 $tag_raw .= '&quot;';
                             }

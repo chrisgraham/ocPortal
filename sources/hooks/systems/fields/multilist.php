@@ -91,13 +91,16 @@ class Hook_fields_multilist
             return $ev;
         }
         $all = array();
-        $exploded = ($ev == '') ? array() : explode("\n", $ev);
+        $exploded = ($ev == '') ? array() : array_flip(explode("\n", $ev));
         foreach (explode('|', $field['cf_default']) as $option) {
-            if (in_array($option, $exploded)) {
+            if (isset($exploded[$option])) {
+                if (trim($option,' -') == '') {
+                    continue;
+                }
                 $all[] = array('OPTION' => $option, 'HAS' => true);
             }
         }
-        if (!array_key_exists('c_name', $field)) {
+        if (!isset($field['c_name'])) {
             $field['c_name'] = 'other';
         }
 
@@ -127,7 +130,7 @@ class Hook_fields_multilist
             $_list->attach(form_input_list_entry('', true, do_lang_tempcode('NA_EM')));
         }
         foreach ($list as $l) {
-            $_list->attach(form_input_list_entry($l, in_array($l, $exploded)));
+            $_list->attach(form_input_list_entry($l, isset($exploded[$l])));
         }
         return form_input_multi_list($_cf_name, $_cf_description, 'field_' . strval($field['id']), $_list, null, 5, $field['cf_required'] == 1);
     }

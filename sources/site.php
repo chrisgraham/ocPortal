@@ -1382,7 +1382,7 @@ function _request_page__redirects($codename, $zone, $wildcard_mode = false)
     if ($REDIRECT_CACHE === null) {
         load_redirect_cache();
     }
-    if (array_key_exists($zone, $REDIRECT_CACHE)) {
+    if (isset($REDIRECT_CACHE[$zone])) {
         if (isset($REDIRECT_CACHE[$zone][$codename])) {
             $redirect = array($REDIRECT_CACHE[$zone][$codename]);
         } elseif (($wildcard_mode) && (isset($REDIRECT_CACHE['*'][$codename]))) {
@@ -1399,7 +1399,7 @@ function _request_page__redirects($codename, $zone, $wildcard_mode = false)
         $query .= ' ORDER BY r_from_zone DESC'; // The ordering ensures '*' comes last, as we want to deprioritise this
         $redirect = $GLOBALS['SITE_DB']->query($query, 1, null, false, true);
     }
-    if (array_key_exists(0, $redirect)) {
+    if (isset($redirect[0])) {
         return array('REDIRECT', $redirect[0]);
     }
     return false;
@@ -1510,7 +1510,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
         }
         if ($pcache === null) {
             $comcode_page = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages a JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'comcode_pages b ON (a.the_page=b.the_page AND a.the_zone=b.the_zone)', array('*'), array('a.the_page' => $codename, 'a.the_zone' => $zone, 'the_theme' => $theme), '', 1, null, false, array('string_index' => 'LONG_TRANS__COMCODE', 'cc_page_title' => '?SHORT_TRANS'));
-            if (array_key_exists(0, $comcode_page)) {
+            if (isset($comcode_page[0])) {
                 if ($support_smart_decaching) {
                     $mtime = filemtime($file_base . '/' . $string);
                     if ($mtime > time()) {
@@ -1550,7 +1550,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                 $raw_comcode = get_translated_text($comcode_page[0]['string_index']);
             } else {
                 $comcode_page = $GLOBALS['SITE_DB']->query_select('comcode_pages', array('*'), array('the_page' => $codename, 'the_zone' => $zone), '', 1);
-                if (array_key_exists(0, $comcode_page)) {
+                if (isset($comcode_page[0])) {
                     $comcode_page_row = $comcode_page[0];
                 }
 
@@ -1643,7 +1643,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
         'IS_PANEL' => $is_panel,
         'BEING_INCLUDED' => $being_included,
         'SUBMITTER' => strval($comcode_page_row['p_submitter']),
-        'TAGS' => get_loaded_tags('comcode_pages'),
+        'TAGS' => (get_option('show_content_tagging') == '0') ? /*optimisation, can be intensive with many page includes*/new ocp_tempcode() : get_loaded_tags('comcode_pages'),
         'WARNING_DETAILS' => $warning_details,
         'EDIT_DATE_RAW' => ($comcode_page_row['p_edit_date'] === null) ? '' : strval($comcode_page_row['p_edit_date']),
         'SHOW_AS_EDIT' => $comcode_page_row['p_show_as_edit'] == 1,

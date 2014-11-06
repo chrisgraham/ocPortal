@@ -102,7 +102,7 @@ function member_blocked($member_id, $member_blocker = null)
     if (!addon_installed('chat')) {
         return false;
     }
-    if (is_null($member_blocker)) {
+    if ($member_blocker === null) {
         $member_blocker = get_member();
     }
 

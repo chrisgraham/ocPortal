@@ -1963,6 +1963,7 @@ class Hook_addon_registry_core
         foreach (placeholder_array() as $value) {
             $queries->attach(do_lorem_template('QUERY_LOG',array(
                 'TIME' => placeholder_number(),
+                'ROWS' => placeholder_number(),
                 'TEXT' => lorem_sentence(),
             )));
         }

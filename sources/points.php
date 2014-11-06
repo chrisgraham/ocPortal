@@ -58,7 +58,7 @@ function total_points($member, $timestamp = null)
     global $TOTAL_POINTS_CACHE;
 
     if (is_null($timestamp)) {
-        if (array_key_exists($member, $TOTAL_POINTS_CACHE)) {
+        if (isset($TOTAL_POINTS_CACHE[$member])) {
             return $TOTAL_POINTS_CACHE[$member];
         }
     }
@@ -66,16 +66,16 @@ function total_points($member, $timestamp = null)
     $_points_gained = point_info($member);
 
     $points_joining = intval(get_option('points_joining'));
-    $points_gained_chat = array_key_exists('points_gained_chat', $_points_gained) ? $_points_gained['points_gained_chat'] : 0;
+    $points_gained_chat = isset($_points_gained['points_gained_chat']) ? $_points_gained['points_gained_chat'] : 0;
     $points_chat = intval(get_option('points_chat', true));
-    $points_gained_wiki = array_key_exists('points_gained_wiki', $_points_gained) ? $_points_gained['points_gained_wiki'] : 0;
+    $points_gained_wiki = isset($_points_gained['points_gained_wiki']) ? $_points_gained['points_gained_wiki'] : 0;
     $points_wiki = intval(get_option('points_wiki', true));
     $points_gained_posting = $GLOBALS['FORUM_DRIVER']->get_post_count($member);
     $points_posting = intval(get_option('points_posting'));
-    $points_gained_given = array_key_exists('points_gained_given', $_points_gained) ? $_points_gained['points_gained_given'] : 0;
-    $points_gained_rating = array_key_exists('points_gained_rating', $_points_gained) ? $_points_gained['points_gained_rating'] : 0;
+    $points_gained_given = isset($_points_gained['points_gained_given']) ? $_points_gained['points_gained_given'] : 0;
+    $points_gained_rating = isset($_points_gained['points_gained_rating']) ? $_points_gained['points_gained_rating'] : 0;
     $points_rating = intval(get_option('points_rating'));
-    $points_gained_voting = array_key_exists('points_gained_voting', $_points_gained) ? $_points_gained['points_gained_voting'] : 0;
+    $points_gained_voting = isset($_points_gained['points_gained_voting']) ? $_points_gained['points_gained_voting'] : 0;
     $points_voting = intval(get_option('points_voting'));
     $points_per_day = intval(get_option('points_per_day'));
     $points_gained_auto = intval(floor(floatval(time() - $GLOBALS['FORUM_DRIVER']->get_member_join_timestamp($member)) / floatval(60 * 60 * 24)));
@@ -128,12 +128,12 @@ function total_points($member, $timestamp = null)
 function points_used($member)
 {
     global $POINTS_USED_CACHE;
-    if (array_key_exists($member, $POINTS_USED_CACHE)) {
+    if (isset($POINTS_USED_CACHE[$member])) {
         return $POINTS_USED_CACHE[$member];
     }
 
     $_points = point_info($member);
-    $points = array_key_exists('points_used', $_points) ? $_points['points_used'] : 0;
+    $points = isset($_points['points_used']) ? $_points['points_used'] : 0;
     $POINTS_USED_CACHE[$member] = $points;
 
     return $points;
@@ -166,7 +166,7 @@ function point_info($member)
     require_lang('points');
 
     global $POINT_INFO_CACHE;
-    if (array_key_exists($member, $POINT_INFO_CACHE)) {
+    if (isset($POINT_INFO_CACHE[$member])) {
         return $POINT_INFO_CACHE[$member];
     }
 

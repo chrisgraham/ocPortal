@@ -2125,7 +2125,7 @@ class Hook_addon_registry_core_rich_media
     {
         return array(
             lorem_globalise(do_lorem_template('COMCODE_MEMBER_LINK',array(
-                'DETAILS' => lorem_sentence(),
+                //'DETAILS' => lorem_sentence(),
                 'MEMBER_ID' => placeholder_id(),
                 'USERNAME' => lorem_phrase(),
                 'MEMBER_URL' => placeholder_url(),

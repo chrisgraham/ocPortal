@@ -809,7 +809,13 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
 
         case 'tab':
             $default = (array_key_exists('default', $attributes)) ? $attributes['default'] : '0';
-            $temp_tpl = do_template('COMCODE_TAB_BODY', array('_GUID' => '2d63ed21f8d8b939b8db21b20c147b41', 'DEFAULT' => $default == '1', 'TITLE' => trim($attributes['param']), 'CONTENT' => $embed));
+            $temp_tpl = do_template('COMCODE_TAB_BODY', array(
+                '_GUID' => '2d63ed21f8d8b939b8db21b20c147b41',
+                'DEFAULT' => $default == '1',
+                'TITLE' => trim($attributes['param']),
+                'CONTENT' => $is_page_link ? null : $embed,
+                'PAGE_LINK' => $is_page_link ? $embed : null,
+            ));
             break;
 
         case 'tabs':
@@ -1235,12 +1241,12 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             $width = array_key_exists('width', $attributes) ? comcode_to_tempcode($attributes['width'], $source_member, $as_admin, 60, null, $connection, false, false, false, false, false, $highlight_bits, $on_behalf_of_member) : make_string_tempcode('auto');
             $type = array_key_exists('type', $attributes) ? $attributes['type'] : '';
             $options = array_key_exists('options', $attributes) ? $attributes['options'] : '';
-            $meta = ($comcode_dangerous && array_key_exists('meta', $attributes)) ? $attributes['meta'] : ''; // Insecure, unneeded here
-            $links = ($comcode_dangerous && array_key_exists('links', $attributes)) ? $attributes['links'] : ''; // Insecure, unneeded here
+            $meta = ($comcode_dangerous && isset($attributes['meta'])) ? $attributes['meta'] : ''; // Insecure, unneeded here
+            $links = ($comcode_dangerous && isset($attributes['links'])) ? $attributes['links'] : ''; // Insecure, unneeded here
             $converted_title = comcode_to_tempcode($attributes['param'], $source_member, $as_admin, 60, null, $connection, false, false, false, false, false, $highlight_bits, $on_behalf_of_member);
 
             $temp_tpl = directive_tempcode('BOX', $embed, array($converted_title, make_string_tempcode($type), $width, make_string_tempcode($options), make_string_tempcode($meta), make_string_tempcode($links)));
-            if (array_key_exists('float', $attributes)) {
+            if (isset($attributes['float'])) {
                 $temp_tpl = do_template('FLOATER', array('_GUID' => '54e8fc9ec1e16cfc5c8824e22f1e8745', 'FLOAT' => $attributes['float'], 'CONTENT' => $temp_tpl));
             }
             break;

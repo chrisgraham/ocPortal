@@ -33,7 +33,7 @@ class Block_main_news
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param', 'member_based', 'filter', 'filter_and', 'multiplier', 'fallback_full', 'fallback_archive', 'blogs', 'historic', 'zone', 'title', 'show_in_full', 'no_links', 'attach_to_url_filter', 'render_if_empty', 'ocselect', 'start', 'pagination', 'as_guest');
+        $info['parameters'] = array('param', 'member_based', 'filter', 'filter_and', 'multiplier', 'fallback_full', 'fallback_archive', 'blogs', 'historic', 'zone', 'title', 'show_in_full', 'no_links', 'attach_to_url_filter', 'render_if_empty', 'ocselect', 'start', 'pagination', 'as_guest', 'optimise');
         return $info;
     }
 
@@ -45,7 +45,7 @@ class Block_main_news
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = '((addon_installed(\'content_privacy\')) && (!(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false)))?NULL:(preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)?NULL:array(((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),array_key_exists(\'title\',$map)?escape_html($map[\'title\']):\'(default title)\',array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'show_in_full\',$map)?$map[\'show_in_full\']:\'0\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'historic\',$map)?$map[\'historic\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'multiplier\',$map)?floatval($map[\'multiplier\']):0.5,array_key_exists(\'fallback_full\',$map)?intval($map[\'fallback_full\']):3,array_key_exists(\'fallback_archive\',$map)?intval($map[\'fallback_archive\']):6,array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
+        $info['cache_on'] = '((addon_installed(\'content_privacy\')) && (!(array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false)))?NULL:(array_key_exists(\'optimise\',$map)?$map[\'optimise\']:\'0\',preg_match(\'#<\w+>#\',(array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\'))!=0)?NULL:array(((array_key_exists(\'pagination\',$map)?$map[\'pagination\']:\'0\')==\'1\'),array_key_exists(\'title\',$map)?escape_html($map[\'title\']):\'(default title)\',array_key_exists(\'as_guest\',$map)?($map[\'as_guest\']==\'1\'):false,get_param_integer($block_id.\'_start\',array_key_exists(\'start\',$map)?intval($map[\'start\']):0),array_key_exists(\'ocselect\',$map)?$map[\'ocselect\']:\'\',array_key_exists(\'show_in_full\',$map)?$map[\'show_in_full\']:\'0\',array_key_exists(\'render_if_empty\',$map)?$map[\'render_if_empty\']:\'0\',((array_key_exists(\'attach_to_url_filter\',$map)?$map[\'attach_to_url_filter\']:\'0\')==\'1\'),array_key_exists(\'no_links\',$map)?$map[\'no_links\']:0,array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'blogs\',$map)?$map[\'blogs\']:\'-1\',array_key_exists(\'historic\',$map)?$map[\'historic\']:\'\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'multiplier\',$map)?floatval($map[\'multiplier\']):0.5,array_key_exists(\'fallback_full\',$map)?intval($map[\'fallback_full\']):3,array_key_exists(\'fallback_archive\',$map)?intval($map[\'fallback_archive\']):6,array_key_exists(\'filter\',$map)?$map[\'filter\']:get_param(\'news_filter\',\'\'),array_key_exists(\'zone\',$map)?$map[\'zone\']:get_module_zone(\'news\'),array_key_exists(\'filter_and\',$map)?$map[\'filter_and\']:\'\')';
         $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60;
         return $info;
     }
@@ -74,6 +74,7 @@ class Block_main_news
         $member_based = (isset($map['member_based'])) && ($map['member_based'] == '1');
         $attach_to_url_filter = ((isset($map['attach_to_url_filter']) ? $map['attach_to_url_filter'] : '0') == '1');
         $ocselect = isset($map['ocselect']) ? $map['ocselect'] : '';
+        $optimise=(array_key_exists('optimise',$map)) && ($map['optimise']=='1');
 
         // Pagination
         $block_id = get_block_id($map);
@@ -248,19 +249,37 @@ class Block_main_news
                 $author = $myrow['author'];
 
                 // Text
-                if ($show_in_full) {
-                    $news = get_translated_tempcode('news', $just_news_row, 'news_article');
-                    $truncate = false;
-                    if ($news->is_empty()) {
-                        $news = get_translated_tempcode('news', $just_news_row, 'news');
+                if ($optimise) {
+                    if ($show_in_full) {
+                        $news = get_translated_tempcode__and_simplify('news', $just_news_row, 'news_article');
+                        $truncate = false;
+                        if ($news->is_empty()) {
+                            $news = get_translated_tempcode__and_simplify('news', $just_news_row, 'news');
+                        }
+                    } else {
+                        $news = get_translated_tempcode__and_simplify('news', $just_news_row, 'news');
+                        if ($news->is_empty()) {
+                            $news = get_translated_tempcode__and_simplify('news', $just_news_row, 'news_article');
+                            $truncate = true;
+                        } else {
+                            $truncate = false;
+                        }
                     }
                 } else {
-                    $news = get_translated_tempcode('news', $just_news_row, 'news');
-                    if ($news->is_empty()) {
+                    if ($show_in_full) {
                         $news = get_translated_tempcode('news', $just_news_row, 'news_article');
-                        $truncate = true;
-                    } else {
                         $truncate = false;
+                        if ($news->is_empty()) {
+                            $news = get_translated_tempcode('news', $just_news_row, 'news');
+                        }
+                    } else {
+                        $news = get_translated_tempcode('news', $just_news_row, 'news');
+                        if ($news->is_empty()) {
+                            $news = get_translated_tempcode('news', $just_news_row, 'news_article');
+                            $truncate = true;
+                        } else {
+                            $truncate = false;
+                        }
                     }
                 }
 

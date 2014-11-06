@@ -988,7 +988,7 @@ function do_block($codename, $map = null, $ttl = null)
                         persistent_cache_delete('BLOCK_CACHE_ON_CACHE');
 
                         $out = new ocp_tempcode();
-                        $out->attach($object);
+                        $out->attach(@strval($object));
                         if (!$GLOBALS['OUTPUT_STREAMING']) {
                             restore_output_state(false, true);
                         }
@@ -1068,7 +1068,7 @@ function do_block($codename, $map = null, $ttl = null)
         $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
     } else {
         $out = new ocp_tempcode();
-        $out->attach($object);
+        $out->attach(@strval($object));
         if (!$GLOBALS['OUTPUT_STREAMING']) {
             restore_output_state(false, true);
         }

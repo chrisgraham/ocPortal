@@ -62,7 +62,7 @@ class Block_main_members
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = 'array(
+        $info['cache_on'] = '(strpos(serialize($_GET),\'filter_\')!==false)?NULL:array(
             array_key_exists(\'display_mode\',$map)?$map[\'display_mode\']:\'avatars\',
             array_key_exists(\'must_have_avatar\',$map)?($map[\'must_have_avatar\']==\'1\'):false,
             array_key_exists(\'must_have_photo\',$map)?($map[\'must_have_photo\']==\'1\'):false,
@@ -155,7 +155,7 @@ class Block_main_members
                         if ($ocselect != '') {
                             $ocselect .= ',';
                         }
-                        $ocselect .= $filter_term . '~=<' . $block_id . '_' . $filter_term . '>';
+                        $ocselect .= $filter_term . '~=<' . fix_id($block_id . '_' . $filter_term) . '>';
                     }
                 }
             }
@@ -439,12 +439,12 @@ class Block_main_members
                     $_entry[] = integer_format($row['m_cache_num_posts']);
                 }
 
-                if (get_option('use_joindate') == '1') {
-                    $_entry[] = escape_html(get_timezoned_date($row['m_join_time'], false));
-                }
-
                 if (get_option('use_lastondate') == '1') {
                     $_entry[] = escape_html(get_timezoned_date($row['m_last_visit_time'], false));
+                }
+
+                if (get_option('use_joindate') == '1') {
+                    $_entry[] = escape_html(get_timezoned_date($row['m_join_time'], false));
                 }
 
                 $results_entries->attach(results_entry($_entry));

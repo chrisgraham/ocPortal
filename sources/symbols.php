@@ -382,7 +382,7 @@ function ecv($lang, $escaped, $type, $name, $param)
                         ocp_mark_as_escaped($value);
                     }
                     $i = 1;
-                    while (array_key_exists($i + 1, $param)) {
+                    while (isset($param[$i + 1])) {
                         $checking_in = $param[$i]->evaluate();
                         if (in_array($checking_in, $array)) {
                             $value = $param[count($param) - 2]->evaluate();
@@ -403,7 +403,7 @@ function ecv($lang, $escaped, $type, $name, $param)
                     }
                     $ok = true;
                     $i = 1;
-                    while (array_key_exists($i + 1, $param)) {
+                    while (isset($param[$i + 1])) {
                         $checking_in = $param[$i]->evaluate();
                         if (in_array($checking_in, $array)) {
                             $ok = false;
@@ -666,7 +666,7 @@ function ecv_HAS_ACTUAL_PAGE_ACCESS($lang, $escaped, $param)
     $value = '';
 
     if (isset($param[0])) {
-        $value = has_actual_page_access(((($param !== null)) && (isset($param[2]))) ? intval($param[2]) : get_member(), $param[0], isset($param[1]) ? $param[1] : null) ? '1' : '0';
+        $value = has_actual_page_access(((isset($param[2]))) ? intval($param[2]) : get_member(), $param[0], isset($param[1]) ? $param[1] : null) ? '1' : '0';
     }
 
     if ($GLOBALS['XSS_DETECT']) {
@@ -2070,7 +2070,9 @@ function ecv_BANNER($lang, $escaped, $param)
 
             $b_type = isset($param[0]) ? $param[0] : '';
             if (!$GLOBALS['STATIC_TEMPLATE_TEST_MODE']) { // Normal operation
-                $_value = banners_script(true, '', '', $b_type, '');
+                $width = isset($param[1]) ? intval($param[1]) : NULL;
+                $height = isset($param[1]) ? intval($param[2]) : NULL;
+                $_value = banners_script(true, '', '', $b_type, '', $width, $height);
                 $value = $_value->evaluate();
             } else { // Been told to behave statically
                 $value = 'Banner goes here';
@@ -2224,7 +2226,7 @@ function ecv_MEMBER_PROFILE_URL($lang, $escaped, $param)
  */
 function ecv_USERNAME($lang, $escaped, $param)
 {
-    $member_id = ((($param !== null)) && (isset($param[0]))) ? intval($param[0]) : get_member();
+    $member_id = (isset($param[0])) ? intval($param[0]) : get_member();
     $value = $GLOBALS['FORUM_DRIVER']->get_username($member_id, (isset($param[1])) && ($param[1] == '1'));
     if ($value === null) {
         $value = do_lang('UNKNOWN');

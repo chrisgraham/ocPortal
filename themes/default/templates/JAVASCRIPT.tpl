@@ -70,6 +70,22 @@ function script_load_stuff()
 		new_html__initialise(document.images[i]);
 	}
 
+	// Column height balancing
+	var cols=document.getElementsByClassName('col_balance_height');
+	for (var i=0;i<cols.length;i++)
+	{
+		var max=null;
+		for (var j=0;j<cols.length;j++)
+		{
+			if (cols[i].className==cols[j].className)
+			{
+				var height=find_height(cols[j]);
+				if (max===null || height>max) max=height;
+			}
+			cols[i].style.height=max+'px';
+		}
+	}
+
 	// Mouse/keyboard listening
 	window.mouse_x=0;
 	window.mouse_y=0;

@@ -20,7 +20,7 @@
 
 					{+START,LOOP,{FILTERS_ROW_A}}
 						{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
-							NAME={$FIX_ID,{_loop_key}}
+							NAME={_loop_key}
 							LABEL={_loop_var}
 						{+END}
 					{+END}
@@ -34,7 +34,7 @@
 
 						{+START,LOOP,{FILTERS_ROW_B}}
 							{+START,INCLUDE,OCF_MEMBER_DIRECTORY_SCREEN_FILTER}
-								NAME={$FIX_ID,{_loop_key}}
+								NAME={_loop_key}
 								LABEL={_loop_var}
 							{+END}
 						{+END}

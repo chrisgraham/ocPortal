@@ -1358,7 +1358,7 @@ function match_key_match($match_key, $support_post = false, $current_params = nu
         if (($parts[0] == '_WILD') || ($parts[0] == '_SEARCH')) {
             $parts[0] = $current_zone_name;
         }
-        if ((!array_key_exists(1, $parts)) || ($parts[1] == '_WILD')) {
+        if ((!isset($parts[1])) || ($parts[1] == '_WILD')) {
             $parts[1] = $current_page_name;
         }
         if (($parts[0] == 'site') && (get_option('collapse_user_zones') == '1')) {

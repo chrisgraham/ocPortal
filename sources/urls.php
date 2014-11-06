@@ -295,10 +295,27 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
         }
     }
 
+    global $SITE_INFO;
+    if (
+        (isset($SITE_INFO['no_keep_params'])) &&
+        ($SITE_INFO['no_keep_params'] == '1') &&
+        ((get_option('url_monikers_enabled')=='0') || (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && ((is_null($id)) || (strpos($id, '/') !== false)))
+    ) {
+        if ($vars['page'] == '_SELF') {
+            $vars['page'] = get_page_name();
+        }
+        if ($zone_name == '_SELF') {
+            $zone_name = get_zone_name();
+        }
+        if ($zone_name == '_SEARCH') {
+            $zone_name = get_page_zone($vars['page']);
+        }
+        return make_string_tempcode(_build_url($vars, $zone_name, $skip, $keep_all, $avoid_remap, true, $hash));
+    }
+
     $id = isset($vars['id']) ? $vars['id'] : null;
 
-    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/
-        ($vars['page']);
+    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/($vars['page']);
     if ((isset($vars['type'])) || (array_key_exists('type', $vars))) {
         if (is_object($vars['type'])) {
             $page_link .= ':';
@@ -363,15 +380,6 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
 
     $ret = symbol_tempcode('PAGE_LINK', $arr);
 
-    global $SITE_INFO;
-    if (
-        (isset($SITE_INFO['no_keep_params'])) &&
-        ($SITE_INFO['no_keep_params'] == '1') &&
-        (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) &&
-        ((is_null($id)) || (strpos($id, '/') !== false))
-    ) {
-        $ret = make_string_tempcode($ret->evaluate());
-    }
     return $ret;
 }
 
@@ -747,10 +755,12 @@ function _url_rewrite_params($zone_name, $vars, $force_index_php = false)
  */
 function url_is_local($url)
 {
+    if ($url == '') return true;
     if (preg_match('#^[^:\{%]*$#', $url) != 0) {
         return true;
     }
-    return (strpos($url, '://') === false) && (substr($url, 0, 1) != '{') && (substr($url, 0, 7) != 'mailto:') && (substr($url, 0, 5) != 'data:') && (substr($url, 0, 1) != '%') && (strpos($url, '{$BASE_URL') === false) && (strpos($url, '{$FIND_SCRIPT') === false);
+    $first_char = $url[0];
+    return (strpos($url, '://') === false) && ($first_char != '{') && (substr($url, 0, 7) != 'mailto:') && (substr($url, 0, 5) != 'data:') && ($first_char != '%');
 }
 
 /**

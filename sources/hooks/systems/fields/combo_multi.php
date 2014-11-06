@@ -96,6 +96,9 @@ class Hook_fields_combo_multi
             $all[] = array('OPTION' => $option, 'HAS' => isset($exploded_chosen[$option]));
         }
         foreach (array_keys($exploded_chosen) as $chosen) {
+            if (trim($option,' -') == '') {
+                continue;
+            }
             if (!isset($exploded_inbuilt[$chosen])) {
                 $all[] = array('OPTION' => $chosen, 'HAS' => true, 'IS_OTHER' => true);
             }

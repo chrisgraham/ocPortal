@@ -33,7 +33,7 @@ class Block_main_forum_news
         $info['hack_version'] = null;
         $info['version'] = 2;
         $info['locked'] = false;
-        $info['parameters'] = array('param', 'forum', 'member_based', 'date_key', 'title');
+        $info['parameters'] = array('param', 'forum', 'member_based', 'date_key', 'title', 'optimise');
         return $info;
     }
 
@@ -45,7 +45,7 @@ class Block_main_forum_news
     public function cacheing_environment()
     {
         $info = array();
-        $info['cache_on'] = 'array($GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'forum\',$map)?$map[\'forum\']:\'Announcements\',array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'date_key\',$map)?$map[\'date_key\']:\'firsttime\')';
+        $info['cache_on'] = 'array(array_key_exists(\'optimise\',$map)?$map[\'optimise\']:\'0\',$GLOBALS[\'FORUM_DRIVER\']->get_members_groups(get_member(),false,true),array_key_exists(\'title\',$map)?$map[\'title\']:\'\',array_key_exists(\'member_based\',$map)?$map[\'member_based\']:\'0\',array_key_exists(\'forum\',$map)?$map[\'forum\']:\'Announcements\',array_key_exists(\'param\',$map)?intval($map[\'param\']):14,array_key_exists(\'date_key\',$map)?$map[\'date_key\']:\'firsttime\')';
         $info['ttl'] = (get_value('no_block_timeout') === '1') ? 60 * 60 * 24 * 365 * 5/*5 year timeout*/ : 60;
         return $info;
     }
@@ -68,6 +68,8 @@ class Block_main_forum_news
 
         $num_topics = array_key_exists('param', $map) ? intval($map['param']) : 14;
         $forum_name = array_key_exists('forum', $map) ? $map['forum'] : do_lang('NEWS');
+
+        $optimise=(array_key_exists('optimise',$map)) && ($map['optimise']=='1');
 
         $num_topics = intval($num_topics);
 
@@ -128,7 +130,19 @@ class Block_main_forum_news
             $author_url = (((array_key_exists('member_based', $map)) && ($map['member_based'] == '1')) || (!addon_installed('authors'))) ? new ocp_tempcode() : build_url(array('page' => 'authors', 'type' => 'misc', 'author' => $myrow['firstusername']), get_module_zone('authors'));
             $author = $myrow['firstusername'];
             $news_title = $myrow['title'];
-            $news = is_object($myrow['firstpost']) ? $myrow['firstpost'] : make_string_tempcode(xhtmlise_html($myrow['firstpost']));
+            if (is_object($myrow['firstpost'])) {
+                $news = $myrow['firstpost'];
+                if ($optimise) {
+                    $news=make_string_tempcode($news->evaluate());
+                    if (multi_lang_content()) {
+                        $GLOBALS['SITE_DB']->query_update('translate',array('text_parsed'=>$news->to_assembly()),array('id'=>$myrow['firstpost_language_string'],'language'=>user_lang()),'',1);
+                    } else {
+                        $GLOBALS['SITE_DB']->query_update('f_posts',array('p_post__text_parsed'=>$news->to_assembly()),array('id'=>$myrow['id']),'',1);
+                    }
+                }
+            } else {
+                $news = make_string_tempcode(xhtmlise_html($myrow['firstpost']));
+            }
             if (is_null($news)) {
                 $news = '';
             }

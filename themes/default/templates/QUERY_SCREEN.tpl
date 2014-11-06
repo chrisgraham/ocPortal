@@ -13,6 +13,9 @@
 			<th axis="time">
 				{!EXECUTE_TIME}
 			</th>
+			<th>
+				{!_RESULTS}
+			</th>
 		</tr>
 	</thead>
 

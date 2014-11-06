@@ -66,10 +66,14 @@ class Hook_symbol_CPF_LIST
                     switch ($test[0]['cf_type']) {
                         case 'radiolist':
                         case 'list':
+                        case 'multilist':
                         case 'combo':
                         case 'combo_multi':
                             $bits = explode('|', $test[0]['cf_default']);
                             sort($bits);
+                            if (trim($k, '-') == '' && $value == '') {
+                                continue;
+                            }
                             foreach ($bits as $k) {
                                 if ($value != '') {
                                     $value .= ',';

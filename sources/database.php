@@ -1208,7 +1208,7 @@ class database_driver
         if ($QUERY_LOG) {
             $after = microtime(true);
             $text = (!is_null($max)) ? ($query . ' (' . (is_null($start) ? '0' : strval($start)) . '-' . strval((is_null($start) ? 0 : $start) + $max) . ')') : $query;
-            $out = array('time' => ($after - $before), 'text' => $text);
+            $out = array('time' => ($after - $before), 'text' => $text, 'rows' => is_array($ret) ? count($ret) : NULL);
             $QUERY_LIST[] = $out;
         }
         /*if (microtime_diff($after,$before)>1.0)  Generally one would use MySQL's own slow query log, which will impact ocPortal performance less

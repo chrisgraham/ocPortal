@@ -47,7 +47,10 @@ ocPortal is not designed to "cache everything as it will be displayed" because t
 
 [title="2"]General tips[/title]
 
- - If you are using a particularly visually complex block (e.g. deep pop-out menus) then use the 'quick_cache' block option on it if possible. The defer-loading option is also useful, although it puts a requirement on JavaScript.
+ - If you are using a particularly visually complex block (e.g. deep pop-out menus) then use the 'quick_cache' block option on it if possible.
+ - You can mark out parts of a complex Comcode layout as having "quick_cache" by moving the content into individual Comcode pages then using the [tt]main_include_module[/tt] block to insert it back, with the [tt]quick_cache[/tt] parameter turned on for that block.
+ - The [tt]main_news[/tt] and [tt]main_forum_news[/tt] blocks have an [tt]optimise[/tt] parameter which will simplify down the Comcode of anything displayed such as it will be stored statically. This usually will have no impact, but may increase performance if a lot of Comcode tags were used. It does have an impact if dynamic elements are used within posts, such as Comcode that check's a user's usergroup or displays the current date/time.
+ - The defer-loading option block option is also useful, although it puts a requirement on JavaScript.
  - Avoid making very long Comcode pages if they are just going to be static for all users. Ideally for usability pages should not be very long, but there are cases where you may choose for them to be (e.g. large glossaries). You can put [tt]{$,page hint: no_smart_conversion}[/tt] into a Comcode page to prevent the WYSIWYG editor converting it to Comcode and otherwise use the Comcode 'html' tag to include pure HTML content.
  - If you get a lot of 404 errors, it is best to make a static 404 page instead of using ocPortal's which can be relatively intensive. You activate a custom 404 page by putting a reference to it in the [tt].htaccess[/tt] file (our [tt]recommended.htaccess[/tt] file does this for ocPortal's).
  - If you are optimising your server infrastructure to be able to handle large numbers of users don't forget to change the value of the "Maximum users" config option to something much higher!
@@ -55,6 +58,9 @@ ocPortal is not designed to "cache everything as it will be displayed" because t
  - Even though ocPortal supports various third party forums it is optimised for OCF.
  - Servers may have incorrectly firewalled DNS resolution, in which case the ocPortal "Spammer checking level" setting must be set to "Never" to avoid a 28 second timeout happening on each anti-spammer check.
  - If your website doesn't need to be able to run without a wider Internet connection (i.e. isn't an Intranet), then you could blank out any of the unmodified JavaScript libraries ocPortal includes (e.g. jQuery) and instead include references to a JavaScript CDN via direct includes in the [tt]HTML_HEAD[/tt] template.
+ - Comcode tabs can take a page-link rather than normal Comcode contents, for the tab to open up via AJAX (don't use this on the default tab though, as that won't work).
+ - If you make very heavy use of large and complex tooltips then you may want to consider loading these via AJAX. This will require some fairly advanced coding skills, but it may be worth doing. Look at the [tt]COMCODE_MEMBER[/tt] template for an example of AJAX tooltip code.
+ - Disabling URL monikers can help with performance; however this will also impact SEO if you think your URL paths are key to that.
 
 [title="2"]Persistent cache[/title]
 

@@ -122,7 +122,7 @@ function ocf_get_all_custom_fields_match($groups = null, $public_view = null, $o
 {
     global $CUSTOM_FIELD_CACHE;
     $x = serialize(array($public_view, $owner_view, $owner_set, $required, $show_in_posts, $show_in_post_previews, $special_start));
-    if (array_key_exists($x, $CUSTOM_FIELD_CACHE)) { // ocPortal offers a wide array of features. It's multi dimensional. ocPortal.. entering the 6th dimension. hyper-hyper-time.
+    if (isset($CUSTOM_FIELD_CACHE[$x])) { // ocPortal offers a wide array of features. It's multi dimensional. ocPortal.. entering the 6th dimension. hyper-hyper-time.
         $result = $CUSTOM_FIELD_CACHE[$x];
     } else {
         // Load up filters
@@ -164,14 +164,14 @@ function ocf_get_all_custom_fields_match($groups = null, $public_view = null, $o
         }
 
         global $TABLE_LANG_FIELDS_CACHE;
-        $_result = $GLOBALS['FORUM_DB']->query('SELECT f.* FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_custom_fields f ' . $where . ' ORDER BY cf_order', null, null, false, true, array_key_exists('f_custom_fields', $TABLE_LANG_FIELDS_CACHE) ? $TABLE_LANG_FIELDS_CACHE['f_custom_fields'] : array());
+        $_result = $GLOBALS['FORUM_DB']->query('SELECT f.* FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_custom_fields f ' . $where . ' ORDER BY cf_order', null, null, false, true, isset($TABLE_LANG_FIELDS_CACHE['f_custom_fields']) ? $TABLE_LANG_FIELDS_CACHE['f_custom_fields'] : array());
         $result = array();
         foreach ($_result as $row) {
             $row['trans_name'] = get_translated_text($row['cf_name'], $GLOBALS['FORUM_DB']);
 
             if ((substr($row['trans_name'], 0, 4) == 'ocp_') && ($special_start == 0)) {
                 // See if it gets filtered
-                if (!array_key_exists(substr($row['trans_name'], 4), $to_keep)) {
+                if (!isset($to_keep[substr($row['trans_name'], 4)])) {
                     continue;
                 }
 
@@ -229,7 +229,7 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
     foreach ($fields_to_show as $i => $field_to_show) {
         $member_value = $member_mappings['field_' . strval($field_to_show['id'])];
         if (!is_string($member_value)) {
-            if (is_null($member_value)) {
+            if ($member_value === null) {
                 $member_value = '';
             } elseif (is_float($member_value)) {
                 $member_value = float_to_raw_string($member_value);
@@ -239,9 +239,9 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
         }
 
         // Decrypt the value if appropriate
-        if ((array_key_exists('cf_encrypted', $field_to_show)) && ($field_to_show['cf_encrypted'] == 1)) {
+        if ((isset($field_to_show['cf_encrypted'])) && ($field_to_show['cf_encrypted'] == 1)) {
             require_code('encryption');
-            if ((is_encryption_enabled()) && (!is_null(post_param('decrypt', null)))) {
+            if ((is_encryption_enabled()) && (post_param('decrypt', null) !== null)) {
                 $member_value = decrypt_data($member_value, post_param('decrypt'));
             }
         }
@@ -249,8 +249,8 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
         $ob = get_fields_hook($field_to_show['cf_type']);
         list(, , $storage_type) = $ob->get_field_value_row_bits($field_to_show);
 
-        if (strpos($storage_type, '_trans') !== false) {
-            if ((is_null($member_value)) || ($member_value == '0')) {
+        if ($storage_type=='short_trans' || $storage_type=='long_trans') {
+            if (($member_value === null) || ($member_value == '0')) {
                 $member_value_raw = '';
                 $member_value = ''; // This is meant to be '' for blank, not new ocp_tempcode()
             } else {
@@ -265,12 +265,12 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
         }
 
         // Get custom permissions for the current CPF
-        $cpf_permissions = array_key_exists($field_to_show['id'], $all_cpf_permissions) ? $all_cpf_permissions[$field_to_show['id']] : array();
+        $cpf_permissions = isset($all_cpf_permissions[$field_to_show['id']]) ? $all_cpf_permissions[$field_to_show['id']] : array();
 
         $display_cpf = true;
 
         // If there are custom permissions set and we are not showing to all
-        if ((array_key_exists(0, $cpf_permissions)) && (!is_null($public_view))) {
+        if ((isset($cpf_permissions[0])) && ($public_view !== null)) {
             $display_cpf = false;
 
             // Negative ones
@@ -286,7 +286,7 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
             if (!$display_cpf) { // Guard this, as the code will take some time to run
                 if ($cpf_permissions[0]['friend_view'] == 1) {
                     if (addon_installed('chat')) {
-                        if (!is_null($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends', 'member_liked', array('member_likes' => $member_id, 'member_liked' => get_member())))) {
+                        if ($GLOBALS['SITE_DB']->query_select_value_if_there('chat_friends', 'member_liked', array('member_likes' => $member_id, 'member_liked' => get_member())) === null) {
                             $display_cpf = true;
                         }
                     }
@@ -320,10 +320,10 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
             $rendered_value = $ob->render_field_value($field_to_show, $member_value, $i, null, 'f_members', $member_id, 'id', 'field_' . strval($field_to_show['id']), $member_id);
 
             $editability = mixed(); // If stays as NULL, not editable
-            if (array_key_exists($field_to_show['cf_type'], $editable_with_comcode)) {
+            if (isset($editable_with_comcode[$field_to_show['cf_type']])) {
                 $editability = true;
             } // Editable: Supports Comcode
-            elseif (array_key_exists($field_to_show['cf_type'], $editable_without_comcode)) {
+            elseif (isset($editable_without_comcode[$field_to_show['cf_type']])) {
                 $editability = false;
             } // Editable: Does not support Comcode
 
@@ -376,9 +376,9 @@ function ocf_get_custom_field_mappings($member_id)
     require_code('fields');
 
     global $MEMBER_CACHE_FIELD_MAPPINGS;
-    if (!array_key_exists($member_id, $MEMBER_CACHE_FIELD_MAPPINGS)) {
+    if (!isset($MEMBER_CACHE_FIELD_MAPPINGS[$member_id])) {
         $query = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields', array('*'), array('mf_member_id' => $member_id), '', 1);
-        if (!array_key_exists(0, $query)) { // Repair
+        if (!isset($query[0])) { // Repair
             $value = mixed();
 
             $row = array('mf_member_id' => $member_id);
@@ -393,7 +393,7 @@ function ocf_get_custom_field_mappings($member_id)
                     switch ($storage_type) {
                         case 'short_trans':
                         case 'long_trans':
-                            if (!is_null($value)) {
+                            if ($value !== null) {
                                 $row += insert_lang_comcode('field_' . strval($field['id']), $value, 3, $GLOBALS['FORUM_DB']);
                             } else {
                                 $row['field_' . strval($field['id'])] = null;
@@ -443,7 +443,7 @@ function ocf_get_custom_fields_member($member_id)
 function ocf_get_member_primary_group($member_id)
 {
     global $PRIMARY_GROUP_MEMBERS_CACHE;
-    if (array_key_exists($member_id, $PRIMARY_GROUP_MEMBERS_CACHE)) {
+    if (isset($PRIMARY_GROUP_MEMBERS_CACHE[$member_id])) {
         return $PRIMARY_GROUP_MEMBERS_CACHE[$member_id];
     }
 

@@ -13,6 +13,78 @@ function accordion(e)
 	return toggleable_tray(e);
 }
 
+// ======================
+// main_image_fader block
+// ======================
+
+function initialise_image_fader(data,id)
+{
+	data.fp_animation=document.getElementById('image_fader_'+id);
+	data.fp_animation_fader=document.createElement('img');
+	data.tease_title=document.getElementById('image_fader_title_'+id);
+	data.tease_scrolling_text=document.getElementById('image_fader_scrolling_text_'+id);
+	data.fp_animation_fader.className='img_thumb';
+	data.fp_animation.parentNode.insertBefore(data.fp_animation_fader,data.fp_animation);
+	data.fp_animation.parentNode.style.position='relative';
+	data.fp_animation.parentNode.style.display='block';
+	data.fp_animation_fader.style.position='absolute';
+	data.fp_animation_fader.src='{$IMG;,blank}'.replace(/^http:/,window.location.protocol);
+}
+
+function initialise_image_fader_title(data,v,k)
+{
+	data['title'+k]=v;
+	if (k==0)
+	{
+		if (data.tease_title)
+		{
+			set_inner_html(data.tease_title,data['title'+k]);
+		}
+	}
+}
+
+function initialise_image_fader_html(data,v,k)
+{
+	data['html'+k]=v;
+	if (k==0)
+	{
+		if (data.tease_scrolling_text)
+		{
+			set_inner_html(data.tease_scrolling_text,(data['html'+k]=='')?'{!MEDIA;}':data['html'+k]);
+		}
+	}
+}
+
+function initialise_image_fader_image(data,v,k,mill,total)
+{
+	data['url'+k]=v;
+	new Image().src=data['url'+k]; // precache
+	window.setTimeout(function() {
+	   var func=function() {
+	      data.fp_animation_fader.src=data.fp_animation.src;
+	      set_opacity(data.fp_animation_fader,1.0);
+	      fade_transition(data.fp_animation_fader,0,50,-3);
+	      set_opacity(data.fp_animation,0.0);
+	      fade_transition(data.fp_animation,100,50,3);
+	      data.fp_animation.src=data['url'+k];
+	      window.setTimeout(function() {
+	         data.fp_animation_fader.style.left=((find_width(data.fp_animation_fader.parentNode)-find_width(data.fp_animation_fader))/2)+'px';
+	         data.fp_animation_fader.style.top=((find_height(data.fp_animation_fader.parentNode)-find_height(data.fp_animation_fader))/2)+'px';
+	      },0);
+	      if (data.tease_title)
+	      {
+	         set_inner_html(data.tease_title,data['title'+k]);
+	      }
+	      if (data.tease_scrolling_text)
+	      {
+	         set_inner_html(data.tease_scrolling_text,data['html'+k]);
+	      }
+	   };
+	   if (k!=0) func();
+	   window.setInterval(func,mill*total);
+	},k*mill);
+}
+
 // =======
 // COMCODE
 // =======

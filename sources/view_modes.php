@@ -320,10 +320,15 @@ function special_page_types($special_page_type, &$out,/*&*/$out_evaluated)
         }
         $QUERY_LIST = array_reverse($QUERY_LIST);
         foreach ($QUERY_LIST as $query) {
-            $queries->attach(do_template('QUERY_LOG', array('_GUID' => 'ab88e1e92609136229ad920c30647647', 'TIME' => float_format($query['time'], 3), 'TEXT' => $query['text'])));
+            $queries->attach(do_template('QUERY_LOG', array(
+                '_GUID' => 'ab88e1e92609136229ad920c30647647',
+                'TIME' => float_format($query['time'], 3),
+                'ROWS' => is_null($query['rows']) ? '' : integer_format($query['rows']),
+                'TEXT' => $query['text']
+            )));
             $total_time += $query['time'];
         }
-        $title = get_screen_title("VIEW_PAGE_QUERIES");
+        $title = get_screen_title('VIEW_PAGE_QUERIES');
         $total = count($QUERY_LIST);
         $middle_spt = do_template('QUERY_SCREEN', array('_GUID' => '5f679c8f657b4e4ae94ae2d0ed4843fa', 'TITLE' => $title, 'TOTAL' => integer_format($total), 'TOTAL_TIME' => float_format($total_time, 3), 'QUERIES' => $queries));
     }

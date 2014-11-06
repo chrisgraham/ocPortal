@@ -135,7 +135,7 @@ function is_mail_bounced($email, $server = null, $port = null, $folder = null, $
     }
 
     if (is_null($server)) {
-        $server = get_option('imap_server');
+        $server = get_option('imap_host');
         $port = intval(get_option('imap_port'));
         $folder = get_option('imap_folder');
         $username = get_option('imap_username');
@@ -143,7 +143,7 @@ function is_mail_bounced($email, $server = null, $port = null, $folder = null, $
     }
 
     if ($password == '' || !function_exists('imap_open')) {
-        return false; // Not configured, so cannot proceed
+        return null; // Not configured, so cannot proceed
     }
 
     $update_since = $GLOBALS['SITE_DB']->query_select_value_if_there('email_bounces', 'MAX(b_time)');

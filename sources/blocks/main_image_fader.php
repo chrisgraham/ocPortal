@@ -61,6 +61,7 @@ class Block_main_image_fader
         require_css('galleries');
         require_lang('galleries');
         require_code('galleries');
+        require_javascript('javascript_dyn_comcode');
 
         $cat = empty($map['param']) ? 'root' : $map['param'];
         $mill = array_key_exists('time', $map) ? intval($map['time']) : 8000; // milliseconds between animations

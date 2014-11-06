@@ -106,7 +106,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
             $points = '';
         }
         $primary_group = ocf_get_member_primary_group($poster_details);
-        if (is_null($primary_group)) {
+        if ($primary_group === null) {
             return new ocp_tempcode();
         }
         require_code('ocf_groups');
@@ -149,19 +149,19 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
             $poster_details['ip_address'] = $GLOBALS['OCF_DRIVER']->get_member_row_field($poster_details['poster'], 'm_ip_address');
         }
     } else {
-        $points = array_key_exists('points', $poster_details) ? integer_format($poster_details['points']) : '';
+        $points = isset($poster_details['points']) ? integer_format($poster_details['points']) : '';
     }
 
     $member_id = $poster_details['poster'];
 
-    if (is_null($hooks)) {
+    if ($hooks === null) {
         // Poster detail hooks
         $hooks = find_all_hooks('modules', 'topicview');
         $hook_objects = array();
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/modules/topicview/' . filter_naughty_harsh($hook));
             $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
-            if (is_null($object)) {
+            if ($object === null) {
                 continue;
             }
             $hook_objects[$hook] = $object;
@@ -170,24 +170,24 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
 
     $custom_fields = new ocp_tempcode();
     foreach ($poster_details['custom_fields'] as $name => $value) {
-        if ((!is_null($value)) && ($value !== '')) {
+        if (($value !== null) && ($value !== '')) {
             $custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => ($guid != '') ? $guid : '10b72cd1ec240c315e56bc8a0f3a92a1', 'MEMBER_ID' => strval($member_id), 'NAME' => $name, 'RAW' => $value['RAW'], 'VALUE' => is_object($value['RENDERED']) ? protect_from_escaping($value['RENDERED']) : $value['RENDERED'])));
         }
     }
     $custom_fields_full = new ocp_tempcode();
-    if (array_key_exists('custom_fields_full', $poster_details)) {
+    if (isset($poster_details['custom_fields_full'])) {
         foreach ($poster_details['custom_fields_full'] as $name => $value) {
-            if ((!is_null($value)) && ($value !== '')) {
+            if (($value !== null) && ($value !== '')) {
                 $custom_fields_full->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => ($guid != '') ? $guid : '20b72cd1ec240c315e56bc8a0f3a92a1', 'MEMBER_ID' => strval($member_id), 'NAME' => $name, 'RAW' => $value['RAW'], 'VALUE' => is_object($value['RENDERED']) ? protect_from_escaping($value['RENDERED']) : $value['RENDERED'])));
             }
         }
     }
     $ip_address = null;
-    if (array_key_exists('ip_address', $poster_details)) {
+    if (isset($poster_details['ip_address'])) {
         $ip_address = $poster_details['ip_address'];
     }
     $num_warnings = null;
-    if ((array_key_exists('poster_num_warnings', $poster_details)) && (addon_installed('ocf_warnings'))) {
+    if ((isset($poster_details['poster_num_warnings'])) && (addon_installed('ocf_warnings'))) {
         $num_warnings = integer_format($poster_details['poster_num_warnings']);
     }
     $galleries = null;
@@ -202,7 +202,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
     $dob = null;
     $age = null;
     $day = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_dob_day');
-    if (($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_reveal_age') == 1) && (!is_null($day))) {
+    if (($GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_reveal_age') == 1) && ($day !== null)) {
         $month = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_dob_month');
         $year = $GLOBALS['OCF_DRIVER']->get_member_row_field($member_id, 'm_dob_year');
         if (@strftime('%Y', @mktime(0, 0, 0, 1, 1, 1963)) != '1963') {
@@ -220,7 +220,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
         }
     }
 
-    if (!is_null($extra_fields)) {
+    if ($extra_fields !== null) {
         foreach ($extra_fields as $key => $val) {
             $custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => ($guid != '') ? $guid : '530f049d3b3065df2d1b69270aa93490', 'MEMBER_ID' => strval($member_id), 'NAME' => $key, 'VALUE' => ($val))));
         }
@@ -228,7 +228,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
 
     foreach (array_keys($hooks) as $hook) {
         $hook_result = $hook_objects[$hook]->run($member_id);
-        if (!is_null($hook_result)) {
+        if ($hook_result !== null) {
             $custom_fields->attach($hook_result);
         }
     }
@@ -237,7 +237,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
     $all_usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true, false, false, $_usergroups);
     $usergroups = array();
     foreach ($_usergroups as $u) {
-        if (array_key_exists($u, $all_usergroups)) {
+        if (isset($all_usergroups[$u])) {
             $usergroups[] = $all_usergroups[$u];
         }
     }
@@ -261,7 +261,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
         'NUM_WARNINGS' => $num_warnings,
         'GALLERIES' => $galleries,
         'DATE_OF_BIRTH' => $dob,
-        'AGE' => is_null($age) ? null : integer_format($age),
+        'AGE' => ($age === null) ? null : integer_format($age),
     ));
 }
 

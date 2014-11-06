@@ -105,9 +105,11 @@ function render_banner_type_box($row, $zone = '_SEARCH', $give_context = true, $
  * @param  ?string                      Specific banner to display (NULL: get from URL param) (blank: randomise)
  * @param  ?string                      Banner type to display (NULL: get from URL param)
  * @param  ?string                      The banner advertisor who is actively displaying the banner (calling up this function) and hence is rewarded (NULL: get from URL param) (blank: our own site)
+ * @param  ?integer                     The width (NULL: standard for banner type)
+ * @param  ?integer                     The height (NULL: standard for banner type)
  * @return ?tempcode                    Result (NULL: we weren't asked to return the result)
  */
-function banners_script($ret = false, $type = null, $dest = null, $b_type = null, $source = null)
+function banners_script($ret = false, $type = null, $dest = null, $b_type = null, $source = null, $width = null, $height = null)
 {
     require_code('images');
     require_lang('banners');
@@ -317,7 +319,7 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
         // Display!
         $img = $rows[$i]['img_url'];
         $caption = get_translated_tempcode('banners', $rows[$i], 'caption');
-        $content = show_banner($name, $rows[$i]['b_title_text'], $caption, array_key_exists('b_direct_code', $rows[$i]) ? $rows[$i]['b_direct_code'] : '', $img, $source, $rows[$i]['site_url'], $rows[$i]['b_type'], $rows[$i]['submitter']);
+        $content = show_banner($name, $rows[$i]['b_title_text'], $caption, array_key_exists('b_direct_code', $rows[$i]) ? $rows[$i]['b_direct_code'] : '', $img, $source, $rows[$i]['site_url'], $rows[$i]['b_type'], $rows[$i]['submitter'], $width, $height);
         if ($ret) {
             return $content;
         }
@@ -364,9 +366,11 @@ function create_selection_list_banner_types($it = null)
  * @param  URLPATH                      The URL to the banner's target
  * @param  ID_TEXT                      The banner type
  * @param  MEMBER                       The submitting user
+ * @param  ?integer                     The width (NULL: standard for banner type)
+ * @param  ?integer                     The height (NULL: standard for banner type)
  * @return tempcode                     The rendered banner
  */
-function show_banner($name, $title_text, $caption, $direct_code, $img_url, $source, $url, $b_type, $submitter)
+function show_banner($name, $title_text, $caption, $direct_code, $img_url, $source, $url, $b_type, $submitter, $width = null, $height = null)
 {
     // If this is an image, we <img> it, else we <iframe> it
     require_code('images');
@@ -376,10 +380,14 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
                 $img_url = get_custom_base_url() . '/' . $img_url;
             }
             $_banner_type_row = $GLOBALS['SITE_DB']->query_select('banner_types', array('t_image_width', 't_image_height'), array('id' => $b_type), '', 1);
-            if (array_key_exists(0, $_banner_type_row)) {
-                $banner_type_row = $_banner_type_row[0];
+            if (is_null($width)) {
+                if (array_key_exists(0, $_banner_type_row)) {
+                    $banner_type_row = $_banner_type_row[0];
+                } else {
+                    $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
+                }
             } else {
-                $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
+                $banner_type_row=array('t_image_width'=>$width,'t_image_height'=>$height);
             }
             $content = do_template('BANNER_FLASH', array('_GUID' => '25525a3722715e79a83af4cec53fe072', 'B_TYPE' => $b_type, 'WIDTH' => strval($banner_type_row['t_image_width']), 'HEIGHT' => strval($banner_type_row['t_image_height']), 'SOURCE' => $source, 'DEST' => $name, 'CAPTION' => $caption, 'IMG' => $img_url));
         } elseif (($url != '') || (is_image($img_url))) { // Image; Can't rely on image check, because often they have script-generated URLs
@@ -395,10 +403,14 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
                 $banner_type_row = $banner_type_rows[$b_type];
             } else {
                 $_banner_type_row = $GLOBALS['SITE_DB']->query_select('banner_types', array('t_image_width', 't_image_height'), array('id' => $b_type), '', 1);
-                if (array_key_exists(0, $_banner_type_row)) {
-                    $banner_type_row = $_banner_type_row[0];
+                if (is_null($width)) {
+                    if (array_key_exists(0, $_banner_type_row)) {
+                        $banner_type_row = $_banner_type_row[0];
+                    } else {
+                        $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
+                    }
                 } else {
-                    $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
+                    $banner_type_row=array('t_image_width'=>$width,'t_image_height'=>$height);
                 }
                 $banner_type_rows[$b_type] = $banner_type_row;
             }
@@ -408,10 +420,14 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
                 $img_url = get_custom_base_url() . '/' . $img_url;
             }
             $_banner_type_row = $GLOBALS['SITE_DB']->query_select('banner_types', array('t_image_width', 't_image_height'), array('id' => $b_type), '', 1);
-            if (array_key_exists(0, $_banner_type_row)) {
-                $banner_type_row = $_banner_type_row[0];
+            if (is_null($width)) {
+                if (array_key_exists(0, $_banner_type_row)) {
+                    $banner_type_row = $_banner_type_row[0];
+                } else {
+                    $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
+                }
             } else {
-                $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
+                $banner_type_row=array('t_image_width'=>$width,'t_image_height'=>$height);
             }
             $content = do_template('BANNER_IFRAME', array('_GUID' => 'deeef9834bc308b5d07e025ab9c04c0e', 'B_TYPE' => $b_type, 'IMG' => $img_url, 'WIDTH' => strval($banner_type_row['t_image_width']), 'HEIGHT' => strval($banner_type_row['t_image_height'])));
         }

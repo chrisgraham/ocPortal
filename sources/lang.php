@@ -1087,6 +1087,34 @@ function delete_lang($id, $connection = null)
 }
 
 /**
+ * Wrapper for get_translated_tempcode, which then converts complex Tempcode back to very simple flat Tempcode, as an optimisation.
+ * We won't normally call this as it breaks our architecture, but webmaster may request it if they are okay with it.
+ *
+ * @param  ID_TEXT                      The table name
+ * @param  array                        The table row. Must not have aspects of other tables in it (i.e. joins). Pre-filter using 'db_map_restrict' if required
+ * @param  ID_TEXT                      The field name
+ * @param  ?object                      The database connection to use (NULL: standard site connection)
+ * @param  ?LANGUAGE_NAME               The language (NULL: uses the current language)
+ * @param  boolean                      Whether to force it to the specified language
+ * @param  boolean                      Whether to force as_admin, even if the lang string isn't stored against an admin (designed for Comcode page cacheing)
+ * @param  boolean                      Whether to remove from the Tempcode cache when we're done, for performance reasons (normally don't bother with this, but some code knows it won't be needed again -- esp Comcode cache layer -- and saves RAM by removing it)
+ * @return ?tempcode                    The parsed Comcode (NULL: the text couldn't be looked up)
+ */
+function get_translated_tempcode__and_simplify($table, $row, $field_name, $connection = null, $lang = null, $force = false, $as_admin = false, $clear_away_from_cache = false)
+{
+    if ($connection === null) $connection = $GLOBALS['SITE_DB'];
+    $ret=get_translated_tempcode($table, $row, $field_name, $connection, $lang, $force, $as_admin, $clear_away_from_cache);
+    if (is_null($ret)) return $ret;
+    $ret = make_string_tempcode($ret->evaluate());
+    if (multi_lang_content()) {
+        $connection->query_update('translate', array('text_parsed' => $ret->to_assembly()), array('id' => $entry, 'language' => $lang), '', 1);
+    } else {
+        $connection->query_update($table, array($field_name . '__text_parsed' => $ret->to_assembly()), $row, '', 1);
+    }
+    return $ret;
+}
+
+/**
  * This function is an offshoot of get_translated_text, it instead returns parsed Comcode that is linked to the specified language ID.
  *
  * @param  ID_TEXT                      The table name

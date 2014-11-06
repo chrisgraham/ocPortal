@@ -667,7 +667,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     }
 
     global $IS_TEMPLATE_PREVIEW_OP_CACHE, $RECORD_TEMPLATES_USED, $RECORD_TEMPLATES_TREE, $RECORDED_TEMPLATES_USED, $FILE_ARRAY, $KEEP_MARKERS, $SHOW_EDIT_LINKS, $XHTML_SPIT_OUT, $CACHE_TEMPLATES, $FORUM_DRIVER, $POSSIBLY_IN_SAFE_MODE_CACHE, $USER_THEME_CACHE, $TEMPLATE_DISK_ORIGIN_CACHE, $LOADED_TPL_CACHE;
-    $special_treatment = ((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && (is_null($XHTML_SPIT_OUT)));
+    $special_treatment = ((($KEEP_MARKERS) || ($SHOW_EDIT_LINKS)) && ($XHTML_SPIT_OUT === null));
 
     if ($RECORD_TEMPLATES_USED) {
         $RECORDED_TEMPLATES_USED[] = $codename;
