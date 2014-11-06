@@ -10,13 +10,12 @@ At ocProducts we really want to encourage users of ocPortal to start making addo
  - Made ocPortal Open Source
 However, at the end of the day addon-making is in the hands of users -- whilst we can empower, we cannot write all the actual addons ourselves unless we're paid to do so. Therefore users who need addons need to 'carry the torch', promoting and being active in the ocPortal community. The more everyone puts in, the more everyone gets out -- our users together are stronger than we are.
 
-The 'Making an addon' series of tutorials are highly technical, intended for those who already know PHP programming and the basics of ocPortal's modularity. Fortunately we explain these things in other tutorials (yes, we even teach programming to an extent), and there's a massive amount of PHP educational material on the web.
-
+The 'Making an addon' series of tutorials are highly technical, intended for those who already know PHP programming and the basics of ocPortal's modularity. You can always go to web to search and learn it.
 If you have any questions or want to discuss solutions, we've created forums on our website for each tutorial in this series. [b]Please[/b] ask questions there, even if they seem basic.
 
 [contents]decimal,lower-alpha[/contents]
 
-[title="2"]Files[/title]
+[title="2"]Development Environment/Files[/title]
 
 [media width="150" description="Use an environment you're comfortable in" float="left"]data_custom/images/docs/hardcore_windows.png[/media]
 [media width="150" description="To be able to search through files efficiently is essential" float="right"]data_custom/images/docs/hardcore_search.png[/media]
@@ -27,18 +26,28 @@ Once this is done you'll be able to quickly find things by opening up an explore
 
 ocPortal might seem a bit daunting with its (approximately) 4,000 files, but remember they are just files, and you don't need to understand everything to make changes -- you only need an understanding of the core stuff, and the stuff your changes interact with. If you take backups of a file, you can restore that file to a prior state just by restoring your backup. If you add a file and it breaks things, you can delete it if you really need to.
 
-PHP is a really fantastic language for beginners to develop for because you don't need to worry about compiling your code -- you just make edits and test them directly. Just use the simple Edit-Save-Refresh sequence.
 [media width="150" description="A good editor is essential" float="left"]data_custom/images/docs/hardcore_context.png[/media]
 [media width="150" description="Firefox is probably the best browser to develop in, thanks to the great selection of powerful extensions" float="right"]data_custom/images/docs/hardcore_browser.png[/media]
 
 [title="2"]Making a counter block[/title]
 
-We're going to be making a new ocPortal block that does 'counting down' or 'counting up' to a date/time given as a parameter to that block. I won't be explaining how code works in these addon making tutorials, as it is assumed you already know the basics of PHP -- if you don't, you can always go back and forth between these tutorials and whatever you're learning PHP from. Or if you have natural talent, you might be able to pick it up as you go along.
+We're going to be making a new ocPortal block that does 'counting down' or 'counting up' to a date/time given as a parameter to that block. Knowledge of PHP basics are mandatory.
 
-So, we know what we want to do, but where do we start? Well for this particular example it's fairly obvious because we know that we're making a block, and those are almost always completely self-contained.
+Since we are going to make a block, a quick note about it as blocks are always completely self-contained.
 
-As this is the first example, I'm going to make this as simple as possible. The simplest way to make a block is to make it as a 'miniblock'. Let's call out block 'main_count'. To create the block we need to create the PHP file that contains the code, and this will be [tt]sources_custom/miniblocks/main_count.php[/tt].
-Putting this code in that file should make the block for us...
+Blocks can be of any size depending upon their functionality, their types are as follows
+[list]
+[*]block
+[*]miniblock
+[/list]
+
+Choosing block type depends upon you.
+
+We will create a miniblock here as follows
+
+[tt]Block name:[/tt] main_count (A PHP file that contains the code placed inside [tt]sources_custom/miniblocks/main_count.php[/tt])
+[tt]Usage type:[/tt] Simple (without using template or language file).
+
 [codebox]
 <?php
 
@@ -67,7 +76,6 @@ END;
 ?>
 [/codebox]
 
-This is just an addon, so we don't need to worry about making templates or new language files -- this is just something for our own purposes, so it doesn't have to meet the same quality as the ocPortal code itself does.
 
 Now to use our block, we just need to put some Comcode into the page that we want it on:
 [code]
@@ -81,11 +89,11 @@ Some famous event...
 
 At the end of each of the tutorial in this series I will be releasing some exercises out. If you complete them, or have trouble completing them, post about it in the forum for this tutorial!
 
-[title="3"]Hit counter[/title]
+[title="3"]Exercise-1 > Hit counter[/title]
 
 Make a block that acts as a good old-style hit counter. To do this you'll probably want to use the '[tt]get_value[/tt]' and '[tt]set_value[/tt]' functions. I'm not going to tell you where they are because you can find them yourself by doing a file search for '[tt]function get_value([/tt]' -- once you do, you can view the actual source code for the functions in your text editor.
 
-[title="3"]Post requestor[/title]
+[title="3"]Exercise-2 > Post requestor[/title]
 
 Make a block that detects if the current logged in member has ever posted on the forum. If they have, don't do any output, but if they haven't output a suggestion that they make a post.
 You might go about this in one of two ways:
