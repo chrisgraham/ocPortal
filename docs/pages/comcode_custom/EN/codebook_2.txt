@@ -25,10 +25,6 @@ The following language strings from [tt]global.ini[/tt] and [tt]critical_errors.
  - Table columns/fields, Other: AMOUNT, FROM, TO, REASON, PARAMETER_A, PARAMETER_B
  - Rating, sorting, browsing and results: RATING, SORT, SORT_BY, RESULT, _RESULTS, START, DONE, ROOT, NEXT, PREVIOUS
 
-[title="3"]Web development Coding Standards[/title]
-
-ocProducts maintains a [url="checklist for standards"]{$BRAND_BASE_URL}/docs/standards-checklist.xls[/url]. These standards used to be listed in this Code Book, but there are now too many to clearly explain here, and we needed a document we could morph and use on a routine basis for quick review.
-
 [title="3"]Templates and themes[/title]
 
 Template files are stored in a raw format, and are defined with the standard 'override system' of ocPortal; as well as this, though, a theme only has to define those templates and css files which have been changed from the 'default' theme. Search, parsing, and applying linguistic translation, to templates like this would not be efficient, so ocPortal compiles the templates upon first-use (unless this option is disabled).
@@ -373,3 +369,4 @@ Generally you should rarely use the ocPortal inbuilt theming tools when acting a
 
 The only caveat with theme images is that if ocPortal has already searched for it a theme image in your theme, and only found the default one, you'd need to empty the theme_images table to make it search again. That's safe as long as you only add/edit via filesystem and never from inside ocPortal.
 [/surround]
+
