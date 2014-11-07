@@ -35,7 +35,7 @@ class Hook_symbol_CPF_LIST
                 return $cache[$param[0]];
             }
 
-            if (($param[0] == 'm_primary_group') || ($param[0] == do_lang('GROUP'))) {
+            if (($param[0] == 'm_primary_group|gm_group_id') || ($param[0] == 'm_primary_group') || ($param[0] == 'gm_group_id')) {
                 $map = has_privilege(get_member(), 'see_hidden_groups') ? array() : array('g_hidden' => 0);
                 $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
                 $map_extended = $map;

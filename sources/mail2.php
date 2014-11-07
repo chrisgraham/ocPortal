@@ -280,6 +280,8 @@ function _find_mail_bounces($server, $port, $folder, $username, $password, $boun
             || (preg_match('#521 .* does not accept mail#', $body) != 0)
             || (strpos($body, '530 Access denied') !== false)
             || (strpos($body, '550 Requested action not taken') !== false)
+            || (strpos($body, '550 No such recipient') !== false)
+            || (strpos($body, '550 ') !== false) // Actually allow any 550's
             || (strpos($body, '551 User not local') !== false)
             || (strpos($body, '552 Requested mail action aborted') !== false)
             || (strpos($body, '553 Requested action not taken') !== false)
@@ -308,10 +310,14 @@ function _find_mail_bounces($server, $port, $folder, $username, $password, $boun
                 // (message/content IDs look similar, avoid those, also avoid routine headers)
                 $_body = preg_replace('#"[^"]*" #', '', $body); // Strip out quoted name before e-mail address, to put email address right after header so that our backreference assertions work
                 $_body = preg_replace('#: .* <([^"\n<>@]+@[^\n<>@]+)>#', ': <$1>', $_body); // Also strip unquoted names
-                $num_matches = preg_match_all('#(?<!(Message-ID): )(?<!(Content-ID): )(?<!(Return-Path): )(?<!(From): )(?<!(Reply-To): )(?<!(X-Sender): )(?<!(X-Google-Original-From): )<([^"\n<>@]+@[^\n<>@]+)>#i', $_body, $matches);
+                $_body = preg_replace('#(Message-ID: |Content-ID: |Return-Path: |From: |Reply-To: |X-Sender: |X-Google-Original-From: )<([^"\n<>@]+@[^\n<>@]+)>#', '', $_body); // Also strip unwanted headers
+                $num_matches = preg_match_all('#<([^"\n<>@]+@[^\n<>@]+)>#i', $_body, $matches);
+                if ($num_matches == 0) {
+                    $num_matches = preg_match_all('#([\w\.\-\+]+@[\w\.\-]+)#i', $_body, $matches); // Try less explicit but stricter formed email addresses
+                }
 
                 for ($i = 0; $i < $num_matches; $i++) {
-                    $email = str_replace('@localhost.localdomain', '', $matches[8][$i]);
+                    $email = str_replace('@localhost.localdomain', '', $matches[1][$i]);
 
                     if (($email != get_option('staff_address')) && ($email != get_option('website_email')) && (is_valid_email_address($email)) && ((!isset($out[$email])) || (!$out[$email][1]))) {
                         $out[$email] = array($overview->subject, $is_bounce, strtotime($overview->date), $body);
