@@ -733,7 +733,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
                 require_code('tickets');
                 $ticket_owner = check_ticket_access($ticket_id);
 
-                if (($ticket_owner == get_member()) || (has_privilege(get_member(), 'view_others_tickets'))) {
+                if (($ticket_owner == get_member()) || (has_privilege(get_member(), 'support_operator'))) {
                     $_title = do_lang_tempcode('QUOTE_TO_NEW_TICKET');
                     $_title_full = new ocp_tempcode();
                     $_title_full->attach($_title);

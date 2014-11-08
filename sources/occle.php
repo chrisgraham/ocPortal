@@ -1187,7 +1187,7 @@ class virtual_bash
             }
 
             foreach ($occle_state_code_diff as $occle_code) {
-                if ((file_exists(get_file_base() . '/sources_custom/' . $occle_code . '.php')) || (file_exists(get_file_base() . '/sources/' . $occle_code . '.php'))) {
+                if ((file_exists(get_file_base() . '/sources_custom/' . $occle_code . '.php')) && (!in_safe_mode()) || (file_exists(get_file_base() . '/sources/' . $occle_code . '.php'))) {
                     require_code($occle_code);
                 }
             }

@@ -437,7 +437,7 @@ class Module_tickets
             }
             check_ticket_access($id);
         } else { // New ticket, generate an ID
-            if (has_privilege(get_member(), 'view_others_tickets')) {
+            if (has_privilege(get_member(), 'support_operator')) {
                 $ticket_owner = get_param_integer('post_as', get_member());
             } else {
                 $ticket_owner = get_member();
@@ -688,6 +688,13 @@ class Module_tickets
 
             $assigned = find_ticket_assigned_to($id);
 
+            if (function_exists('get_ocportal_support_timings') && !$new) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
+                $last_poster_id = isset($our_topic['lastmemberid']) ? $our_topic['lastmemberid'] : $GLOBALS['FORUM_DRIVER']->get_member_from_username($our_topic['lastusername']);
+                $extra_details = get_ocportal_support_timings($our_topic['closed'] == 0, $last_poster_id, $ticket_type_name, $our_topic['lasttime'], true);
+            } else {
+                $extra_details = new ocp_tempcode();
+            }
+
             // Render ticket screen
             $post_url = build_url(array('page' => '_SELF', 'id' => $id, 'type' => 'post', 'redirect' => get_param('redirect', null), 'start_comments' => get_param('start_comments', null), 'max_comments' => get_param('max_comments', null)), '_SELF');
             $tpl = do_template('SUPPORT_TICKET_SCREEN', array(
@@ -719,6 +726,7 @@ class Module_tickets
                 'TYPE_ACTIVITY_OVERVIEW' => $type_activity_overview,
                 'SET_TICKET_EXTRA_ACCESS_URL' => $set_ticket_extra_access_url,
                 'ASSIGNED' => $assigned,
+                'EXTRA_DETAILS' => $extra_details,
             ));
 
             require_code('templates_internalise_screen');

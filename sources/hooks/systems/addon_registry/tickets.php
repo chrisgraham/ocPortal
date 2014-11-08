@@ -293,6 +293,7 @@ class Hook_addon_registry_tickets
                 ),
                 'SET_TICKET_EXTRA_ACCESS_URL' => placeholder_url(),
                 'ASSIGNED' => array(),
+                'EXTRA_DETAILS' => lorem_phrase(),
             )),null,'',true)
         );
     }
