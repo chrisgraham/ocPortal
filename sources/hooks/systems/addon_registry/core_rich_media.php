@@ -1224,7 +1224,6 @@ class Hook_addon_registry_core_rich_media
 			lorem_globalise(do_lorem_template('COMCODE_THUMB', array(
 				'CAPTION'=>lorem_phrase(),
 				'ALIGN'=>'top',
-				'PASS_ID'=>placeholder_id(),
 				'URL_THUMB'=>placeholder_image_url(),
 				'URL_FULL'=>placeholder_url()
 			)), NULL, '', true)

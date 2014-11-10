@@ -221,6 +221,7 @@ function try_su_login($member)
 	if (has_specific_permission($member,'assume_any_member'))
 	{
 		$su=$GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
+		if ((is_null($su)) && (is_numeric($ks))) $su=intval($ks);
 
 		if (is_null($su))
 		{

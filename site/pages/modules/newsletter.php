@@ -353,10 +353,10 @@ class Module_newsletter
 		$message=do_lang_tempcode('NEWSLETTER_UPDATE');
 		$old_confirm=$GLOBALS['SITE_DB']->query_value_null_ok('newsletter','code_confirm',array('email'=>$email));
 
-		if (is_null($old_confirm)) // New
+		// New (or as new - replace old unconfirmed records)
+		if ((is_null($old_confirm)) || ($old_confirm!=0))
 		{
-			if ($password=='') $password=get_rand_password();
-
+			// As it is new we need to actually confirm you were setting some subscription settings
 			$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
 			$found_level=false;
 			foreach ($newsletters as $newsletter)
@@ -371,32 +371,41 @@ class Module_newsletter
 				}
 				if ($level!=0) $found_level=true;
 			}
-			if (!$found_level) warn_exit(do_lang_tempcode('NOT_NEWSLETTER_SUBSCRIBER'));
+			if (!$found_level)
+			{
+				// No subscription settings
+				warn_exit(do_lang_tempcode('NOT_NEWSLETTER_SUBSCRIBER'));
+			}
 
-			$code_confirm=mt_rand(1,32000);
+			$code_confirm=is_null($old_confirm)?mt_rand(1,32000):$old_confirm;
+			if ($password=='') $password=get_rand_password();
 			$salt=produce_salt();
-			$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang,'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt)));
-			$this->_send_confirmation($email,$code_confirm,NULL,$forename,$surname);
+			if (is_null($old_confirm))
+			{
+				$GLOBALS['SITE_DB']->query_insert('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang,'email'=>$email,'code_confirm'=>$code_confirm,'pass_salt'=>$salt,'the_password'=>md5($password.$salt)));
+				$this->_send_confirmation($email,$code_confirm,$password,$forename,$surname);
+			} else
+			{
+				$GLOBALS['SITE_DB']->query_update('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname,'join_time'=>time(),'language'=>$lang),array('email'=>$email),'',1);
+				$this->_send_confirmation($email,$code_confirm,NULL,$forename,$surname);
+			}
 			$message=do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email));
 		}
-		elseif ($old_confirm!=0) // Reconfirm
-		{
-			$this->_send_confirmation($email,$old_confirm,NULL,$forename,$surname);
-			return inform_screen($title,do_lang_tempcode('NEWSLETTER_CONFIRM',escape_html($email)));
-		}
 
-		// Okay, existing...
+		// Existing, OR it is new and we are just proceeding to save the subscription settings...
 
 		// Change/make settings
 		$old_password=$GLOBALS['SITE_DB']->query_value('newsletter','the_password',array('email'=>$email));
 		$old_salt=$GLOBALS['SITE_DB']->query_value('newsletter','pass_salt',array('email'=>$email));
-		if ((!has_specific_permission(get_member(),'change_newsletter_subscriptions')) && ($old_password!='') && ($old_password!=md5($password.$old_salt))) // Access denied. People who can change any subscriptions can't get denied.
+		if ((!has_specific_permission(get_member(),'change_newsletter_subscriptions')) && (!is_null($old_confirm)) && ($old_confirm==0) && ($old_password!='') && ($old_password!=md5($password.$old_salt))) // Access denied. People who can change any subscriptions can't get denied.
 		{
+			// Access denied to an existing record that was confirmed
 			$_reset_url=build_url(array('page'=>'_SELF','type'=>'reset','email'=>$email),'_SELF');
 			$reset_url=$_reset_url->evaluate();
 			return warn_screen($title,do_lang_tempcode('NEWSLETTER_PASSWORD_RESET',escape_html($reset_url)));
 		} else
 		{
+			// Access granted, make edit
 			$newsletters=$GLOBALS['SITE_DB']->query_select('newsletters',array('id'));
 			foreach ($newsletters as $newsletter)
 			{
@@ -414,12 +423,16 @@ class Module_newsletter
 				{
 					$GLOBALS['SITE_DB']->query_insert('newsletter_subscribe',array('newsletter_id'=>$newsletter['id'],'email'=>$email,'the_level'=>$level));
 				}
+			}
 
-				// Update name
+			// Update name etc if it's an edit
+			if ((!is_null($old_confirm)) && ($old_confirm==0))
+			{
 				$GLOBALS['SITE_DB']->query_update('newsletter',array('n_forename'=>$forename,'n_surname'=>$surname),array('email'=>$email),'',1);
 			}
 		}
 
+		// Done, show result
 		return inform_screen($title,$message);
 	}
 
@@ -435,7 +448,7 @@ class Module_newsletter
 		$email=trim(get_param('email'));
 		$lang=$GLOBALS['SITE_DB']->query_value('newsletter','language',array('email'=>$email));
 		$salt=$GLOBALS['SITE_DB']->query_value('newsletter','pass_salt',array('email'=>$email));
-		$new_password=produce_salt();
+		$new_password=get_rand_password();
 		$GLOBALS['SITE_DB']->query_update('newsletter',array('the_password'=>md5($new_password.$salt)),array('email'=>$email),'',1);
 
 		$message=do_lang('NEWSLETTER_PASSWORD_CHANGE',comcode_escape(get_ip_address()),comcode_escape($new_password),NULL,$lang);
@@ -480,9 +493,9 @@ class Module_newsletter
 	/**
 	 * Send a newsletter join confirmation.
 	 *
-	 * @param  SHORT_TEXT	The e-mail address
-	 * @param  SHORT_TEXT	The confirmation code
-	 * @param  ?SHORT_TEXT	The newsletter password (NULL: password may not be viewed, because it's been permanently hashed already)
+	 * @param  SHORT_TEXT		The e-mail address
+	 * @param  SHORT_TEXT		The confirmation code
+	 * @param  ?SHORT_TEXT		The newsletter password (NULL: password may not be viewed, because it's been permanently hashed already)
 	 * @param  string				Subscribers forename
 	 * @param  string				Subscribers surname
 	 */

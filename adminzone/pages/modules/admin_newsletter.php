@@ -789,6 +789,9 @@ class Module_admin_newsletter extends standard_aed_module
 
 			$fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'),do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'),'in_full',post_param_integer('in_full',0)==1));
 
+			if (function_exists('set_time_limit')) @set_time_limit(180);
+			disable_php_memory_limit();
+
 			//$_fields=array();
 			$chosen_categories='';
 			foreach (array_keys($_hooks) as $hook)
@@ -805,7 +808,7 @@ class Module_admin_newsletter extends standard_aed_module
 					if (is_object($cats)) $cats=$cats->evaluate($lang);
 					$matches=array();
 					$num_matches=preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#',$cats,$matches);
-					if ($num_matches<500) /*reasonable limit*/
+					if ($num_matches<1500) /*reasonable limit*/
 					{
 						for ($i=0;$i<$num_matches;$i++)
 						{

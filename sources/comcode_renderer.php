@@ -777,7 +777,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=new ocp_tempcode();
 			return $temp_tpl;
 		case 'section':
-			$name=(array_key_exists('param',$attributes))?$attributes['param']:'section'.strval(mt_rand(0,100));
+			$name=(array_key_exists('param',$attributes))?$attributes['param']:('section'.strval(mt_rand(0,100)));
 			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
 			$temp_tpl=do_template('COMCODE_SECTION',array('_GUID'=>'a902962ccdc80046c999d6fed907d105','PASS_ID'=>'x'.$pass_id,'DEFAULT'=>$default=='1','NAME'=>$name,'CONTENT'=>$embed));
 			break;
@@ -786,7 +786,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 			$temp_tpl=do_template('COMCODE_SECTION_CONTROLLER',array('_GUID'=>'133bf24892e9e3ec2a01146d6ec418fe','SECTIONS'=>$sections,'PASS_ID'=>'x'.$pass_id));
 			break;
 		case 'big_tab':
-			$name=(array_key_exists('param',$attributes))?$attributes['param']:'big_tab'.strval(mt_rand(0,100));
+			$name=(array_key_exists('param',$attributes))?$attributes['param']:('big_tab'.strval(mt_rand(0,100)));
 			$default=(array_key_exists('default',$attributes))?$attributes['default']:'0';
 			$temp_tpl=do_template('COMCODE_BIG_TABS_TAB',array('_GUID'=>'f6219b1acd6999acae770da20b95fb99','PASS_ID'=>'x'.$pass_id,'DEFAULT'=>$default=='1','NAME'=>$name,'CONTENT'=>$embed));
 			break;
@@ -1748,7 +1748,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				}
 			}
 			$caption=array_key_exists('caption',$attributes)?$attributes['caption']:'';
-			$temp_tpl=do_template('COMCODE_THUMB',array('_GUID'=>'1b0d25f72ef5f816091269e29c586d60','CAPTION'=>$caption,'ALIGN'=>$align,'PASS_ID'=>(intval($pass_id)<0)?strval(mt_rand(0,10000)):$pass_id,'URL_THUMB'=>$url_thumb,'URL_FULL'=>$url_full));
+			$temp_tpl=do_template('COMCODE_THUMB',array('_GUID'=>'1b0d25f72ef5f816091269e29c586d60','CAPTION'=>$caption,'ALIGN'=>$align,'URL_THUMB'=>$url_thumb,'URL_FULL'=>$url_full));
 
 			if (array_key_exists('float',$attributes)) $temp_tpl=do_template('FLOATER',array('_GUID'=>'cbc56770714a44f56676f43da282cc7a','FLOAT'=>$attributes['float'],'CONTENT'=>$temp_tpl));
 			break;
