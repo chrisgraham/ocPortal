@@ -252,7 +252,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
     if ((!$lax) && (substr($comcode, 0, 10) == '[semihtml]')) {
         $lax = true;
     }
-    $tag_stack = array();
+    $tag_stack = array(); // Contains tuples of our parser state. Does NOT purely represent the most recent tag, it's a combination of the most recent tag and the characteristics of the second most recent tag
     $pos = 0;
     $line_starting = true;
     $just_ended = false;
@@ -1214,12 +1214,13 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
                             // Link lookahead
                             if ($in_semihtml) {
+                                // Make sure not within an HTML tag
                                 $until_now = substr($comcode, 0, $pos - 1);
                                 $a = strrpos($until_now, '<');
                                 $b = strrpos($until_now, '>');
                                 $in_html_tag = ($a !== false) && (($b === false) || ($a > $b));
                             }
-                            if ((($textual_area) || ($tag_stack[count($tag_stack) - 1][6]) && ($in_semihtml)) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && ($not_white_space) && (!$differented) && ($next == 'h') && ((substr($comcode, $pos - 1, strlen('http://')) == 'http://') || (substr($comcode, $pos - 1, strlen('https://')) == 'https://') || (substr($comcode, $pos - 1, strlen('ftp://')) == 'ftp://'))) {
+                            if ((($textual_area) || ($in_semihtml) && ($tag_stack[count($tag_stack) - 1][0] == 'semihtml'/*Only just HTML, so not an unsafe Comcode context*/)) && ((!$in_semihtml) || ((!$in_html_tag))) && (!$in_code_tag) && ($not_white_space) && (!$differented) && ($next == 'h') && ((substr($comcode, $pos - 1, strlen('http://')) == 'http://') || (substr($comcode, $pos - 1, strlen('https://')) == 'https://') || (substr($comcode, $pos - 1, strlen('ftp://')) == 'ftp://'))) {
                                 // Find the full link portion in the upcoming Comcode
                                 $link_end_pos = strlen($comcode);
                                 foreach (array(' ', "\n", '[', ')', '"', '>', '<', ".\n", ', ', '. ', "'",) as $link_terminator_str) {

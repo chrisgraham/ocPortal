@@ -1662,6 +1662,20 @@ function get_ip_address($amount = 4, $ip = null)
 }
 
 /**
+ * Exit with debug data, only for a specific IP address.
+ *
+ * @param  IP                           IP address of tester
+ * @param  mixed                        Data to display
+ */
+function me_debug($ip, $data)
+{
+    if (get_ip_address() == $ip) {
+        @var_dump($data);
+        exit();
+    }
+}
+
+/**
  * Get a string of the users web browser
  *
  * @return string                       The web browser string
