@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-
 class Hook_occle_fs_extended_config__privilege
 {
     /**
@@ -27,7 +26,7 @@ class Hook_occle_fs_extended_config__privilege
      */
     protected function _get_edit_date()
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','PAGE_ACCESS') . ' OR ' . db_string_equal_to('the_type','PRIVILEGES');
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type', 'PAGE_ACCESS') . ' OR ' . db_string_equal_to('the_type', 'PRIVILEGES');
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -40,7 +39,7 @@ class Hook_occle_fs_extended_config__privilege
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         require_code('resource_fs');
 
@@ -52,13 +51,13 @@ class Hook_occle_fs_extended_config__privilege
         );
         $all = array();
         foreach ($tables as $table => $map) {
-            $rows = $GLOBALS['SITE_DB']->query_select($table,array('*'),$map);
+            $rows = $GLOBALS['SITE_DB']->query_select($table, array('*'), $map);
             foreach ($rows as $i => $row) {
-                if (array_key_exists('member_id',$row)) {
-                    $rows[$i]['member_id'] = remap_resource_id_as_portable('member',strval($row['member_id']));
+                if (array_key_exists('member_id', $row)) {
+                    $rows[$i]['member_id'] = remap_resource_id_as_portable('member', strval($row['member_id']));
                 }
-                if (array_key_exists('group_id',$row)) {
-                    $rows[$i]['group_id'] = remap_resource_id_as_portable('group',strval($row['group_id']));
+                if (array_key_exists('group_id', $row)) {
+                    $rows[$i]['group_id'] = remap_resource_id_as_portable('group', strval($row['group_id']));
                 }
             }
             $all[$table] = $rows;
@@ -76,7 +75,7 @@ class Hook_occle_fs_extended_config__privilege
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         $all = @unserialize($contents);
         if ($all === false) {
@@ -86,14 +85,14 @@ class Hook_occle_fs_extended_config__privilege
         foreach ($all as $table => $rows) {
             $GLOBALS['SITE_DB']->query_delete($table);
             foreach ($rows as $row) {
-                if (array_key_exists('member_id',$row)) {
-                    $row['member_id'] = remap_portable_as_resource_id('member',$row['member_id']);
+                if (array_key_exists('member_id', $row)) {
+                    $row['member_id'] = remap_portable_as_resource_id('member', $row['member_id']);
                 }
-                if (array_key_exists('group_id',$row)) {
-                    $row['group_id'] = remap_portable_as_resource_id('group',$row['group_id']);
+                if (array_key_exists('group_id', $row)) {
+                    $row['group_id'] = remap_portable_as_resource_id('group', $row['group_id']);
                 }
 
-                $GLOBALS['SITE_DB']->query_insert($table,$row);
+                $GLOBALS['SITE_DB']->query_insert($table, $row);
             }
         }
         return true;

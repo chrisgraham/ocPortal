@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    aggregate_types
  */
-
 class Hook_page_groupings_aggregate_types
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_aggregate_types
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('aggregate_types')) {
             return array();
         }
 
         return array(
-            array('structure','menu/adminzone/structure/aggregate_types',array('admin_aggregate_types',array('type' => 'misc'),get_module_zone('admin_aggregate_types')),do_lang_tempcode('aggregate_types:AGGREGATE_TYPES'),'aggregate_types:DOC_AGGREGATE_TYPES'),
+            array('structure', 'menu/adminzone/structure/aggregate_types', array('admin_aggregate_types', array('type' => 'misc'), get_module_zone('admin_aggregate_types')), do_lang_tempcode('aggregate_types:AGGREGATE_TYPES'), 'aggregate_types:DOC_AGGREGATE_TYPES'),
         );
     }
 }

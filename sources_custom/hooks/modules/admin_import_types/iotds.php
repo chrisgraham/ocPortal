@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_admin_import_types_iotds
 {
     /**

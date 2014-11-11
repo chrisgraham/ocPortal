@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_page_groupings_community_billboard
 {
     /**
@@ -21,10 +20,10 @@ class Hook_page_groupings_community_billboard
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('audit','menu/adminzone/audit/community_billboard',array('admin_community_billboard',array('type' => 'misc'),get_module_zone('admin_community_billboard')),do_lang_tempcode('community_billboard:COMMUNITY_BILLBOARD'),'community_billboard:DOC_COMMUNITY_BILLBOARD'),
+            array('audit', 'menu/adminzone/audit/community_billboard', array('admin_community_billboard', array('type' => 'misc'), get_module_zone('admin_community_billboard')), do_lang_tempcode('community_billboard:COMMUNITY_BILLBOARD'), 'community_billboard:DOC_COMMUNITY_BILLBOARD'),
         );
     }
 }

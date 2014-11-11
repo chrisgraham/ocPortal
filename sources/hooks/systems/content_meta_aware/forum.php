@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_content_meta_aware_forum
 {
     /**
@@ -29,7 +28,7 @@ class Hook_content_meta_aware_forum
     public function info($zone = null)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         return array(
@@ -55,30 +54,30 @@ class Hook_content_meta_aware_forum
             'title_field' => 'f_name',
             'title_field_dereference' => false,
             'description_field' => 'f_description',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:forumview:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:admin_ocf_forums:_ec:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:forumview:misc:_WILD',
             'add_url' => '',
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('forumview')) . ':forumview',
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('forumview')) . ':forumview',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
-            'add_time_field' => NULL,
-            'edit_time_field' => NULL,
-            'date_field' => NULL,
-            'validated_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
+            'add_time_field' => null,
+            'edit_time_field' => null,
+            'date_field' => null,
+            'validated_field' => null,
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
             'permissions_type_code' => 'forums', // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'ocf_forum',
 
@@ -88,7 +87,7 @@ class Hook_content_meta_aware_forum
             'occle_filesystem_hook' => 'forums',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_FORUM',
         );
@@ -106,10 +105,10 @@ class Hook_content_meta_aware_forum
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('ocf_forums');
 
-        return render_forum_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+        return render_forum_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : intval($root), $guid);
     }
 }

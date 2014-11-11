@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
-
 class Hook_addon_registry_gallery_syndication
 {
     /**
@@ -94,8 +93,7 @@ class Hook_addon_registry_gallery_syndication
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,10 +109,8 @@ class Hook_addon_registry_gallery_syndication
                 'PHP mhash extension',
                 'PHP cURL extension',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

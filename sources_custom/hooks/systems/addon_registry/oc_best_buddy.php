@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_best_buddy
  */
-
 class Hook_addon_registry_oc_best_buddy
 {
     /**
@@ -98,8 +97,7 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -114,10 +112,8 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
                 'OCF',
                 'chat',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
@@ -153,7 +149,7 @@ New users should then be assigned a mentor/buddy who will receive an equal amoun
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('members_mentors',array(
+            $GLOBALS['SITE_DB']->create_table('members_mentors', array(
                 'id' => '*AUTO',
                 'member_id' => '*INTEGER',
                 'mentor_id' => '*INTEGER',

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_exit
 {
     /**
@@ -28,14 +27,14 @@ class Hook_occle_command_exit
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
         require_code('xml');
 
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('exit',array('h'),array()),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('exit', array('h'), array()), '', '');
         } else {
-            return array('if (document.getElementById(\'occle_box\')) load_occle(); else window.location.href=\'' . xmlentities(addslashes(static_evaluate_tempcode(build_url(array('page' => ''),'')))) . '\';','',do_lang('SUCCESS'),'');
+            return array('if (document.getElementById(\'occle_box\')) load_occle(); else window.location.href=\'' . xmlentities(addslashes(static_evaluate_tempcode(build_url(array('page' => ''), '')))) . '\';', '', do_lang('SUCCESS'), '');
         }
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_data_map
  */
-
 class Hook_addon_registry_oc_data_map
 {
     /**
@@ -111,8 +110,7 @@ When you add the block you see various block parameters to be filled in includin
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -126,10 +124,8 @@ When you add the block you see various block parameters to be filled in includin
             'requires' => array(
                 'catalogues',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

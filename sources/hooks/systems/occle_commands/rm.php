@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_rm
 {
     /**
@@ -28,13 +27,13 @@ class Hook_occle_command_rm
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('rm',array('h'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('rm', array('h'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','rm'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'rm'));
             }
 
             $success = true;
@@ -45,7 +44,7 @@ class Hook_occle_command_rm
                 if (!$occle_fs->_is_file($param)) {
                     $success = false;
                     if (($i == 0) && (count($parameters) == 1)) {
-                        return array('','','',do_lang('NOT_A_FILE',strval($i+1)));
+                        return array('', '', '', do_lang('NOT_A_FILE', strval($i + 1)));
                     }
                 }
 
@@ -54,9 +53,9 @@ class Hook_occle_command_rm
         }
 
         if ($success) {
-            return array('','',do_lang('SUCCESS'),'');
+            return array('', '', do_lang('SUCCESS'), '');
         } else {
-            return array('','','',do_lang('INCOMPLETE_ERROR'));
+            return array('', '', '', do_lang('INCOMPLETE_ERROR'));
         }
     }
 }

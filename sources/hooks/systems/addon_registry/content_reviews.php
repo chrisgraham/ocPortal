@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    content_reviews
  */
-
 class Hook_addon_registry_content_reviews
 {
     /**
@@ -70,7 +69,7 @@ class Hook_addon_registry_content_reviews
     public function get_dependencies()
     {
         return array(
-            'requires' => array('unvalidated','occle'),
+            'requires' => array('unvalidated', 'occle'),
             'recommends' => array(),
             'conflicts_with' => array(),
         );
@@ -130,7 +129,7 @@ class Hook_addon_registry_content_reviews
     public function tpl_preview__review_status()
     {
         return array(
-            lorem_globalise(do_lorem_template('REVIEW_STATUS',array(
+            lorem_globalise(do_lorem_template('REVIEW_STATUS', array(
                 'LAST_REVIEWED_TIME' => placeholder_time(),
                 'NEXT_REVIEW_TIME' => placeholder_time(),
                 '_LAST_REVIEWED_TIME' => placeholder_date_raw(),
@@ -138,7 +137,7 @@ class Hook_addon_registry_content_reviews
                 'CONTENT_TYPE' => placeholder_id(),
                 'CONTENT_ID' => placeholder_id(),
                 'DISPLAY' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_language_editing
  */
-
 class Hook_page_groupings_language
 {
     /**
@@ -27,7 +26,7 @@ class Hook_page_groupings_language
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         $has_langs = false;
 
@@ -39,7 +38,7 @@ class Hook_page_groupings_language
             if ($file == fallback_lang()) {
                 continue;
             }
-            if ((!should_ignore_file('lang/' . $file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file) <= 5)) {
+            if ((!should_ignore_file('lang/' . $file, IGNORE_ACCESS_CONTROLLERS)) && (strlen($file) <= 5)) {
                 if (is_dir(get_file_base() . '/lang/' . $file)) {
                     $has_langs = true;
                 }
@@ -53,7 +52,7 @@ class Hook_page_groupings_language
                     if ($file == fallback_lang()) {
                         continue;
                     }
-                    if ((!should_ignore_file('lang_custom/' . $file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file) <= 5)) {
+                    if ((!should_ignore_file('lang_custom/' . $file, IGNORE_ACCESS_CONTROLLERS)) && (strlen($file) <= 5)) {
                         if (is_dir(get_custom_file_base() . '/lang_custom/' . $file)) {
                             $has_langs = true;
                         }
@@ -67,7 +66,7 @@ class Hook_page_groupings_language
                     if ($file == fallback_lang()) {
                         continue;
                     }
-                    if ((!should_ignore_file('lang_custom/' . $file,IGNORE_ACCESS_CONTROLLERS)) && (strlen($file) <= 5)) {
+                    if ((!should_ignore_file('lang_custom/' . $file, IGNORE_ACCESS_CONTROLLERS)) && (strlen($file) <= 5)) {
                         $has_langs = true;
                     }
                 }
@@ -76,9 +75,9 @@ class Hook_page_groupings_language
         }
 
         return array(
-            array('style','menu/adminzone/style/language/language',array('admin_lang',array('type' => 'misc'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CODE'),'lang:DOC_TRANSLATE'),
-            multi_lang()?array('style','menu/adminzone/style/language/language_content',array('admin_lang',array('type' => 'content'),get_module_zone('admin_lang')),do_lang_tempcode('lang:TRANSLATE_CONTENT'),'lang:DOC_TRANSLATE_CONTENT'):null,
-            (!$has_langs)?null:array('style','menu/adminzone/style/language/criticise_language',array('admin_lang',array('type' => 'criticise'),get_module_zone('admin_lang')),do_lang_tempcode('lang:CRITICISE_LANGUAGE_PACK'),'lang:DOC_CRITICISE_LANGUAGE_PACK'),
+            array('style', 'menu/adminzone/style/language/language', array('admin_lang', array('type' => 'misc'), get_module_zone('admin_lang')), do_lang_tempcode('lang:TRANSLATE_CODE'), 'lang:DOC_TRANSLATE'),
+            multi_lang() ? array('style', 'menu/adminzone/style/language/language_content', array('admin_lang', array('type' => 'content'), get_module_zone('admin_lang')), do_lang_tempcode('lang:TRANSLATE_CONTENT'), 'lang:DOC_TRANSLATE_CONTENT') : null,
+            (!$has_langs) ? null : array('style', 'menu/adminzone/style/language/criticise_language', array('admin_lang', array('type' => 'criticise'), get_module_zone('admin_lang')), do_lang_tempcode('lang:CRITICISE_LANGUAGE_PACK'), 'lang:DOC_CRITICISE_LANGUAGE_PACK'),
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_content_meta_aware_member
 {
     /**
@@ -29,7 +28,7 @@ class Hook_content_meta_aware_member
     public function info($zone = null)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         return array(
@@ -41,15 +40,15 @@ class Hook_content_meta_aware_member
             'table' => 'f_members',
             'id_field' => 'id',
             'id_field_numeric' => true,
-            'parent_category_field' => NULL,
+            'parent_category_field' => null,
             'parent_category_field__resource_fs' => 'm_primary_group',
             'parent_category_meta_aware_type' => 'group',
             'is_category' => false,
             'is_entry' => true,
-            'category_type' => NULL, // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'category_type' => null, // For category permissions
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_field' => 'm_primary_group', // For category permissions
             'category_is_string' => false,
 
@@ -62,24 +61,24 @@ class Hook_content_meta_aware_member
             'edit_page_link_pattern' => '_SEARCH:members:view:_WILD',
             'edit_page_link_pattern_post' => '_SEARCH:members:view:_WILD:only_tab=edit:only_subtab=settings',
             'edit_page_link_field' => 'edit_username',
-            'view_category_page_link_pattern' => NULL,
+            'view_category_page_link_pattern' => null,
             'add_url' => '',
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('members')) . ':members',
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('members')) . ':members',
 
             'support_url_monikers' => (get_option('username_profile_links') == '0'),
 
-            'views_field' => NULL,
+            'views_field' => null,
             'submitter_field' => 'id',
             'add_time_field' => 'm_join_time',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'm_join_time',
             'validated_field' => 'm_validated',
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
             'search_hook' => 'ocf_members',
 
@@ -96,7 +95,7 @@ class Hook_content_meta_aware_member
             'actionlog_regexp' => '\w+_MEMBER',
 
             'ocselect' => 'ocf_members2::_members_ocselect',
-            'ocselect_protected_fields' => array('m_pass_hash_salted','m_pass_salt','m_password_change_code'), // These are ones even some staff should never know
+            'ocselect_protected_fields' => array('m_pass_hash_salted', 'm_pass_salt', 'm_password_change_code'), // These are ones even some staff should never know
         );
     }
 
@@ -112,13 +111,13 @@ class Hook_content_meta_aware_member
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('ocf_members');
         require_code('ocf_members2');
 
         $GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED[$row['id']] = $row;
 
-        return render_member_box($row['id'],false,null,null,true,null,$give_context,$guid);
+        return render_member_box($row['id'], false, null, null, true, null, $give_context, $guid);
     }
 }

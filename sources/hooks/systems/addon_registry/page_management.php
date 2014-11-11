@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    page_management
  */
-
 class Hook_addon_registry_page_management
 {
     /**
@@ -143,9 +142,9 @@ class Hook_addon_registry_page_management
         require_javascript('javascript_sitemap_editor');
         require_lang('zones');
         return array(
-            lorem_globalise(do_lorem_template('SITEMAP_EDITOR_SCREEN',array(
+            lorem_globalise(do_lorem_template('SITEMAP_EDITOR_SCREEN', array(
                 'TITLE' => lorem_title(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -161,16 +160,16 @@ class Hook_addon_registry_page_management
         require_lang('validation');
         $content = new ocp_tempcode();
         foreach (placeholder_array() as $val) {
-            $content->attach(do_lorem_template('VALIDATE_CHECK_ERROR',array(
+            $content->attach(do_lorem_template('VALIDATE_CHECK_ERROR', array(
                 'URL' => placeholder_url(),
                 'POINT' => lorem_phrase(),
             )));
         }
         return array(
-            lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN',array(
+            lorem_globalise(do_lorem_template('VALIDATE_CHECK_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'CONTENTS' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    classified_ads
  */
-
 class Hook_addon_registry_classified_ads
 {
     /**
@@ -102,8 +101,7 @@ Fully integrated with catalogues, eCommerce, and OCF member accounts.';
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -119,10 +117,8 @@ Fully integrated with catalogues, eCommerce, and OCF member accounts.';
                 'catalogues',
                 'ecommerce',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

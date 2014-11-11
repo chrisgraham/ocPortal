@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
-
 class Hook_addon_registry_core_cleanup_tools
 {
     /**
@@ -126,7 +125,7 @@ class Hook_addon_registry_core_cleanup_tools
             'sources/hooks/systems/tasks/find_orphaned_lang_strings.php',
             'sources/hooks/systems/tasks/find_orphaned_uploads.php',
             'sources/hooks/systems/cleanup/tags.php',
-            
+
         );
     }
 
@@ -162,17 +161,17 @@ class Hook_addon_registry_core_cleanup_tools
             );
         }
 
-        $message = do_lorem_template('CLEANUP_ORPHANED_UPLOADS',array(
+        $message = do_lorem_template('CLEANUP_ORPHANED_UPLOADS', array(
             'FOUND' => $url,
         ));
-        $message->attach(do_lorem_template('CLEANUP_PAGE_STATS',array(
+        $message->attach(do_lorem_template('CLEANUP_PAGE_STATS', array(
             'STATS_BACKUP_URL' => placeholder_url(),
         )));
         return array(
-            lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN',array(
+            lorem_globalise(do_lorem_template('CLEANUP_COMPLETED_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'MESSAGES' => $message,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

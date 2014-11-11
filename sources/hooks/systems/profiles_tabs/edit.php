@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Profiles_Tabs_edit
 {
     /**
@@ -27,21 +26,21 @@ class Hook_Profiles_Tabs_edit
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
         if (is_guest($member_id_viewing)) {
             return false;
         }
 
-        if (!(($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')))) {
+        if (!(($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing, 'assume_any_member')) || (has_privilege($member_id_viewing, 'member_maintenance')))) {
             return false;
         }
 
-        $hooks = find_all_hooks('systems','profiles_tabs_edit');
+        $hooks = find_all_hooks('systems', 'profiles_tabs_edit');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/profiles_tabs_edit/' . $hook);
             $ob = object_factory('Hook_Profiles_Tabs_Edit_' . $hook);
-            if ($ob->is_active($member_id_of,$member_id_viewing)) {
+            if ($ob->is_active($member_id_of, $member_id_viewing)) {
                 return true;
             }
         }
@@ -57,7 +56,7 @@ class Hook_Profiles_Tabs_edit
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('EDIT_EM');
 
@@ -68,10 +67,10 @@ class Hook_Profiles_Tabs_edit
 
         $order = 200;
 
-        $only_tab = get_param('only_subtab',null);
+        $only_tab = get_param('only_subtab', null);
 
         if (($leave_to_ajax_if_possible) && (strtoupper(ocp_srv('REQUEST_METHOD')) != 'POST')) {
-            return array($title,null,$order,'tabs/settings');
+            return array($title, null, $order, 'tabs/settings');
         }
 
         if (function_exists('set_time_limit')) {
@@ -80,16 +79,16 @@ class Hook_Profiles_Tabs_edit
 
         $tabs = array();
 
-        $hooks = find_all_hooks('systems','profiles_tabs_edit');
+        $hooks = find_all_hooks('systems', 'profiles_tabs_edit');
         if (isset($hooks['settings'])) { // Editing must go first, so changes reflect in the renders of the tabs
-            $hooks = array('settings' => $hooks['settings'])+$hooks;
+            $hooks = array('settings' => $hooks['settings']) + $hooks;
         }
         foreach (array_keys($hooks) as $hook) {
-            if (($only_tab === NULL) || (preg_match('#(^|,)' . preg_quote($hook,'#') . '(,|$)#',$only_tab) != 0)) {
+            if (($only_tab === null) || (preg_match('#(^|,)' . preg_quote($hook, '#') . '(,|$)#', $only_tab) != 0)) {
                 require_code('hooks/systems/profiles_tabs_edit/' . $hook);
                 $ob = object_factory('Hook_Profiles_Tabs_Edit_' . $hook);
-                if ($ob->is_active($member_id_of,$member_id_viewing)) {
-                    $tab = $ob->render_tab($member_id_of,$member_id_viewing,$only_tab !== $hook && $leave_to_ajax_if_possible);
+                if ($ob->is_active($member_id_of, $member_id_viewing)) {
+                    $tab = $ob->render_tab($member_id_of, $member_id_viewing, $only_tab !== $hook && $leave_to_ajax_if_possible);
 
                     if ($only_tab === $hook) {
                         $title = $tab[0];
@@ -101,10 +100,10 @@ class Hook_Profiles_Tabs_edit
         }
 
         if ($leave_to_ajax_if_possible) {
-            return array($title,null,$order,'tabs/settings');
+            return array($title, null, $order, 'tabs/settings');
         }
 
-        sort_maps_by($tabs,4);
+        sort_maps_by($tabs, 4);
         $tabs = array_values($tabs); // Reindex, needed for lastness check
 
         $javascript = '';
@@ -114,8 +113,8 @@ class Hook_Profiles_Tabs_edit
         // Session ID check, if saving
         if ((count($_POST) != 0) && (count($tabs) != 0)) {
             global $SESSION_CONFIRMED_CACHE;
-            if (($SESSION_CONFIRMED_CACHE == 0) && ((post_param('edit_password','') != '') || ($member_id_viewing != $member_id_of))) {
-                access_denied('SESSION','',true);
+            if (($SESSION_CONFIRMED_CACHE == 0) && ((post_param('edit_password', '') != '') || ($member_id_viewing != $member_id_of))) {
+                access_denied('SESSION', '', true);
             }
         }
 
@@ -130,7 +129,7 @@ class Hook_Profiles_Tabs_edit
 
             $tab_last = true;
             foreach ($tabs as $j => $tabj) {
-                if ($j>$i) {
+                if ($j > $i) {
                     if (!is_null($tabj)) {
                         $tab_last = false;
                         break;
@@ -138,7 +137,7 @@ class Hook_Profiles_Tabs_edit
                 }
             }
 
-            $single_field = (array_key_exists(7,$tab)?$tab[7]:false);
+            $single_field = (array_key_exists(7, $tab) ? $tab[7] : false);
 
             if (isset($tab[5])) {
                 $hidden->attach($tab[5]);
@@ -157,9 +156,9 @@ class Hook_Profiles_Tabs_edit
             $tab_first = false;
         }
 
-        $url = build_url(array('page' => '_SELF'),'_SELF',null,true,false,false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
+        $url = build_url(array('page' => '_SELF'), '_SELF', null, true, false, false/*,'tab__edit'  confusing, esp if was not on settings edit tab initially*/);
 
-        $content = do_template('OCF_MEMBER_PROFILE_EDIT',array(
+        $content = do_template('OCF_MEMBER_PROFILE_EDIT', array(
             '_GUID' => '7a3e2cc210583fe4f3097af48b052351',
             'JAVASCRIPT' => $javascript,
             'HIDDEN' => $hidden,
@@ -171,6 +170,6 @@ class Hook_Profiles_Tabs_edit
             'TABS' => $_tabs,
         ));
 
-        return array($title,$content,$order,'tabs/settings');
+        return array($title, $content, $order, 'tabs/settings');
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_Preview_iotd
 {
     /**
@@ -23,8 +22,8 @@ class Hook_Preview_iotd
     public function applies()
     {
         require_code('uploads');
-        $applies = (get_param('page','') == 'cms_iotds') && ((get_param('type') == '_ed') || (get_param('type') == 'ad')) && ((is_plupload()) || (count($_FILES) != 0));
-        return array($applies,null,false);
+        $applies = (get_param('page', '') == 'cms_iotds') && ((get_param('type') == '_ed') || (get_param('type') == 'ad')) && ((is_plupload()) || (count($_FILES) != 0));
+        return array($applies, null, false);
     }
 
     /**
@@ -37,10 +36,10 @@ class Hook_Preview_iotd
         require_code('uploads');
         require_code('images');
 
-        $urls = get_url('','file','uploads/iotds',0,OCP_UPLOAD_IMAGE,true,'','file2');
+        $urls = get_url('', 'file', 'uploads/iotds', 0, OCP_UPLOAD_IMAGE, true, '', 'file2');
         if ($urls[0] == '') {
-            if (!is_null(post_param_integer('id',null))) {
-                $rows = $GLOBALS['SITE_DB']->query_select('iotds',array('url','thumb_url'),array('id' => post_param_integer('id')),'',1);
+            if (!is_null(post_param_integer('id', null))) {
+                $rows = $GLOBALS['SITE_DB']->query_select('iotds', array('url', 'thumb_url'), array('id' => post_param_integer('id')), '', 1);
                 $urls = $rows[0];
 
                 $url = $urls['url'];
@@ -53,16 +52,16 @@ class Hook_Preview_iotd
             $thumb_url = $urls[1];
         }
 
-        $thumb_url = url_is_local($thumb_url)?(get_custom_base_url() . '/' . $thumb_url):$thumb_url;
-        $url = url_is_local($url)?(get_custom_base_url() . '/' . $url):$url;
-        $thumb = do_image_thumb($thumb_url,'');
+        $thumb_url = url_is_local($thumb_url) ? (get_custom_base_url() . '/' . $thumb_url) : $thumb_url;
+        $url = url_is_local($url) ? (get_custom_base_url() . '/' . $url) : $url;
+        $thumb = do_image_thumb($thumb_url, '');
 
         $choose_url = mixed();
         $delete_url = mixed();
         $edit_url = mixed();
 
-        $title = comcode_to_tempcode(post_param('title',''));
-        $caption = comcode_to_tempcode(post_param('caption',''));
+        $title = comcode_to_tempcode(post_param('title', ''));
+        $caption = comcode_to_tempcode(post_param('caption', ''));
         $date = get_timezoned_date(time());
 
         $submitter = get_member();
@@ -70,7 +69,7 @@ class Hook_Preview_iotd
 
         $view_url = mixed();
 
-        $preview = do_template('IOTD_BOX',array(
+        $preview = do_template('IOTD_BOX', array(
             '_GUID' => 'a6479902d2cd7b4119be7159147e0a0b',
             'VIEWS' => '',
             'THUMB' => $thumb,
@@ -90,6 +89,6 @@ class Hook_Preview_iotd
             'GIVE_CONTEXT' => true,
         ));
 
-        return array($preview,null);
+        return array($preview, null);
     }
 }

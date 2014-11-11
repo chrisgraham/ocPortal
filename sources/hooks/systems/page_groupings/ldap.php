@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
-
 class Hook_page_groupings_ldap
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_ldap
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('ldap')) {
             return array();
         }
 
         return array(
-            (get_forum_type() != 'ocf')?null:array('security','menu/adminzone/security/ldap',array('admin_ocf_ldap',array('type' => 'misc'),get_module_zone('admin_ocf_ldap')),do_lang_tempcode('ldap:LDAP'),'ldap:DOC_LDAP'),
+            (get_forum_type() != 'ocf') ? null : array('security', 'menu/adminzone/security/ldap', array('admin_ocf_ldap', array('type' => 'misc'), get_module_zone('admin_ocf_ldap')), do_lang_tempcode('ldap:LDAP'), 'ldap:DOC_LDAP'),
         );
     }
 }

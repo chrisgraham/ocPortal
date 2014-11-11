@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    nested_cpf_csv_lists
  */
-
 class Hook_addon_registry_nested_cpf_csv_lists
 {
     /**
@@ -94,8 +93,7 @@ Set Custom Profile Field list fields to have a default value like [tt]countries.
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -109,10 +107,8 @@ Set Custom Profile Field list fields to have a default value like [tt]countries.
             'requires' => array(
                 'PHP5.2',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

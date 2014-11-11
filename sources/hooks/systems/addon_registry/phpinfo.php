@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    phpinfo
  */
-
 class Hook_addon_registry_phpinfo
 {
     /**

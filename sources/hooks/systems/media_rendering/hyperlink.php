@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 /*
 Notes...
  - Link rendering will not use passed description parameter, etc. This is intentional: the normal flow of rendering through a standardised media template is not used.
@@ -33,7 +32,7 @@ class Hook_media_rendering_hyperlink
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -78,26 +77,26 @@ class Hook_media_rendering_hyperlink
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
-        $_url = is_object($url)?$url->evaluate():$url;
-        $_url_safe = is_object($url_safe)?$url_safe->evaluate():$url_safe;
+        $_url = is_object($url) ? $url->evaluate() : $url;
+        $_url_safe = is_object($url_safe) ? $url_safe->evaluate() : $url_safe;
 
         // Try and find the link title
         require_code('files2');
         $meta_details = get_webpage_meta_details($_url);
 
-        $defined_not_framed = ((array_key_exists('framed',$attributes)) && ($attributes['framed'] == '0'));
+        $defined_not_framed = ((array_key_exists('framed', $attributes)) && ($attributes['framed'] == '0'));
 
         // Render as a nice preview box
         if (!$defined_not_framed) {
-            if ((array_key_exists('mime_type',$attributes)) && ($attributes['mime_type'] != '')) {
+            if ((array_key_exists('mime_type', $attributes)) && ($attributes['mime_type'] != '')) {
                 $mime_type = $attributes['mime_type'];
             } else {
                 $mime_type = $meta_details['t_mime_type'];
             }
             if ($mime_type != 'text/html' && $mime_type != 'application/xhtml+xml') { // A download, i.e. not a webpage. We assume we will never want to force a webpage as a download unless we specify a mime-type. Richer things like PDFs will have been claimed by a better hook
-                return do_template('MEDIA_DOWNLOAD',_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+                return do_template('MEDIA_DOWNLOAD', _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
             }
 
             if (($meta_details['t_description'] != '') || ($meta_details['t_image_url'] != '')) {
@@ -107,16 +106,15 @@ class Hook_media_rendering_hyperlink
                     $meta_title = escape_html($title);
                 }
 
-                return do_template('MEDIA_WEBPAGE_SEMANTIC',array('_GUID' => '59ae26467bbde639a176a213d85370ea','TITLE' => $meta_details['t_title'],
+                return do_template('MEDIA_WEBPAGE_SEMANTIC', array('_GUID' => '59ae26467bbde639a176a213d85370ea', 'TITLE' => $meta_details['t_title'],
                     'META_TITLE' => $meta_title,
-                    'DESCRIPTION' => ((array_key_exists('description',$attributes)) && ($attributes['description'] != ''))?$attributes['description']:$meta_details['t_description'],
-                    'IMAGE_URL' => ((array_key_exists('thumb_url',$attributes)) && ($attributes['thumb_url'] != ''))?$attributes['thumb_url']:$meta_details['t_image_url'],
+                    'DESCRIPTION' => ((array_key_exists('description', $attributes)) && ($attributes['description'] != '')) ? $attributes['description'] : $meta_details['t_description'],
+                    'IMAGE_URL' => ((array_key_exists('thumb_url', $attributes)) && ($attributes['thumb_url'] != '')) ? $attributes['thumb_url'] : $meta_details['t_image_url'],
                     'URL' => $meta_details['t_url'],
-                    'WIDTH' => ((array_key_exists('width',$attributes)) && ($attributes['width'] != ''))?$attributes['width']:get_option('thumb_width'),
-                    'HEIGHT' => ((array_key_exists('height',$attributes)) && ($attributes['height'] != ''))?$attributes['height']:get_option('thumb_width'),
+                    'WIDTH' => ((array_key_exists('width', $attributes)) && ($attributes['width'] != '')) ? $attributes['width'] : get_option('thumb_width'),
+                    'HEIGHT' => ((array_key_exists('height', $attributes)) && ($attributes['height'] != '')) ? $attributes['height'] : get_option('thumb_width'),
                 ));
             }
-
             // Hmm, okay we'll proceed towards a plain link if it's not a download and has no meta data to box
         } // Hmm, we explicitly said we want a plain link
 
@@ -132,9 +130,9 @@ class Hook_media_rendering_hyperlink
         $comcode = '';
 
         // Render as a 'page' link?
-        $page_link = url_to_page_link($_url_safe,true);
+        $page_link = url_to_page_link($_url_safe, true);
         if ($page_link != '') {
-            return _do_tags_comcode('page',array('param' => $page_link),make_string_tempcode(escape_html($link_captions_title)),false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);
+            return _do_tags_comcode('page', array('param' => $page_link), make_string_tempcode(escape_html($link_captions_title)), false, '', 0, $source_member, false, $GLOBALS['SITE_DB'], $comcode, false, false);
         }
 
         // Okay, just render as a URL then
@@ -144,6 +142,6 @@ class Hook_media_rendering_hyperlink
             $url_tempcode = new ocp_tempcode();
             $url_tempcode->attach($url);
         }
-        return _do_tags_comcode('url',array('param' => $link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);
+        return _do_tags_comcode('url', array('param' => $link_captions_title), $url_tempcode, false, '', 0, $source_member, false, $GLOBALS['SITE_DB'], $comcode, false, false);
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_photos
  */
-
 class Hook_addon_registry_ocf_member_photos
 {
     /**
@@ -132,11 +131,11 @@ class Hook_addon_registry_ocf_member_photos
         require_css('ocf');
 
         return array(
-            lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB',array(
+            lorem_globalise(do_lorem_template('OCF_EDIT_PHOTO_TAB', array(
                 'USERNAME' => lorem_word(),
                 'PHOTO' => placeholder_image_url(),
                 'TEXT' => '',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

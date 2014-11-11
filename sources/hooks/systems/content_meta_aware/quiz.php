@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-
 class Hook_content_meta_aware_quiz
 {
     /**
@@ -37,42 +36,42 @@ class Hook_content_meta_aware_quiz
             'table' => 'quizzes',
             'id_field' => 'id',
             'id_field_numeric' => true,
-            'parent_category_field' => NULL,
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_field' => null,
+            'parent_category_meta_aware_type' => null,
             'is_category' => false,
             'is_entry' => true,
             'category_field' => 'q_type', // For category permissions
             'category_type' => 'quiz', // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => true,
 
             'title_field' => 'q_name',
             'title_field_dereference' => true,
             'description_field' => 'q_start_text',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:quiz:do:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_quiz:_ed:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_quiz'))?(get_module_zone('cms_quiz') . ':cms_quiz:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('quiz')) . ':quiz',
+            'view_category_page_link_pattern' => null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high', get_member(), get_ip_address(), 'cms_quiz')) ? (get_module_zone('cms_quiz') . ':cms_quiz:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('quiz')) . ':quiz',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
+            'views_field' => null,
             'submitter_field' => 'q_submitter',
             'add_time_field' => 'q_add_date',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'q_add_date',
             'validated_field' => 'q_validated',
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
             'search_hook' => 'quiz',
 
@@ -84,7 +83,7 @@ class Hook_content_meta_aware_quiz
             'occle_filesystem_hook' => 'quizzes',
             'occle_filesystem__is_folder' => false,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_QUIZ',
         );
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_quiz
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('quiz');
 
-        return render_quiz_box($row,$zone,$give_context,$guid);
+        return render_quiz_box($row, $zone, $give_context, $guid);
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    amazon_affiliates
  */
-
 class Hook_addon_registry_amazon_affiliates
 {
     /**
@@ -97,8 +96,7 @@ This addon allows you to create a banner link to a number of banners from your A
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -109,12 +107,9 @@ This addon allows you to create a banner link to a number of banners from your A
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

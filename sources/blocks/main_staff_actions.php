@@ -112,7 +112,7 @@ class Block_main_staff_actions
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('USERNAME'),/*do_lang_tempcode('IP_ADDRESS'),*/
-                do_lang_tempcode('DATE_TIME'), do_lang_tempcode('ACTION'), do_lang_tempcode('PARAMETER_A'), do_lang_tempcode('PARAMETER_B')), $sortables, 'sa_sort', $sortable . ' ' . $sort_order);
+            do_lang_tempcode('DATE_TIME'), do_lang_tempcode('ACTION'), do_lang_tempcode('PARAMETER_A'), do_lang_tempcode('PARAMETER_B')), $sortables, 'sa_sort', $sortable . ' ' . $sort_order);
 
         $max_rows = $max;//Don't want to encourage pagination (there's a better module they can go to) $GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(*)');
         $rows = $GLOBALS['SITE_DB']->query_select('adminlogs', array('the_type', 'param_a', 'param_b', 'member_id', 'ip', 'date_and_time'), null, 'ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);

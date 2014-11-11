@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    aggregate_types
  */
-
 class Hook_addon_registry_aggregate_types
 {
     /**
@@ -70,7 +69,7 @@ class Hook_addon_registry_aggregate_types
     public function get_dependencies()
     {
         return array(
-            'requires' => array('occle','import'),
+            'requires' => array('occle', 'import'),
             'recommends' => array(),
             'conflicts_with' => array(),
             'previously_in_addon' => array(),

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
-
 class Hook_page_groupings_newsletter
 {
     /**
@@ -27,15 +26,15 @@ class Hook_page_groupings_newsletter
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('newsletter')) {
             return array();
         }
 
         return array(
-            array('tools','menu/site_meta/newsletters',array('admin_newsletter',array('type' => 'misc'),get_module_zone('admin_newsletter')),do_lang_tempcode('newsletter:NEWSLETTER'),'newsletter:DOC_NEWSLETTER'),
-            array('site_meta','menu/site_meta/newsletters',array('newsletter',array(),get_module_zone('newsletter')),do_lang_tempcode('newsletter:NEWSLETTER')),
+            array('tools', 'menu/site_meta/newsletters', array('admin_newsletter', array('type' => 'misc'), get_module_zone('admin_newsletter')), do_lang_tempcode('newsletter:NEWSLETTER'), 'newsletter:DOC_NEWSLETTER'),
+            array('site_meta', 'menu/site_meta/newsletters', array('newsletter', array(), get_module_zone('newsletter')), do_lang_tempcode('newsletter:NEWSLETTER')),
         );
     }
 }

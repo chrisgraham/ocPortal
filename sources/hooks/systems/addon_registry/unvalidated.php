@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
-
 class Hook_addon_registry_unvalidated
 {
     /**
@@ -140,12 +139,12 @@ class Hook_addon_registry_unvalidated
     {
         require_lang('unvalidated');
         return array(
-            lorem_globalise(do_lorem_template('VALIDATION_REQUEST_MAIL',array(
+            lorem_globalise(do_lorem_template('VALIDATION_REQUEST_MAIL', array(
                 'USERNAME' => lorem_word(),
                 'TYPE' => lorem_phrase(),
                 'ID' => placeholder_id(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -158,15 +157,15 @@ class Hook_addon_registry_unvalidated
      */
     public function tpl_preview__administrative__unvalidated_screen()
     {
-        $section = do_lorem_template('UNVALIDATED_SECTION',array(
+        $section = do_lorem_template('UNVALIDATED_SECTION', array(
             'TITLE' => lorem_phrase(),
             'CONTENT' => lorem_phrase(),
         ));
         return array(
-            lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN',array(
+            lorem_globalise(do_lorem_template('UNVALIDATED_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'SECTIONS' => $section,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

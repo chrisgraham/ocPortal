@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    bookmarks
  */
-
 class Hook_addon_registry_bookmarks
 {
     /**
@@ -144,12 +143,12 @@ class Hook_addon_registry_bookmarks
         );
 
         return array(
-            lorem_globalise(do_lorem_template('BOOKMARKS_SCREEN',array(
+            lorem_globalise(do_lorem_template('BOOKMARKS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'FORM_URL' => placeholder_url(),
                 'FORM' => placeholder_form(),
                 'BOOKMARKS' => $bookmarks,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

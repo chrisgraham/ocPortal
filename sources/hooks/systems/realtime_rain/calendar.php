@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_realtime_rain_calendar
 {
     /**
@@ -27,37 +26,37 @@ class Hook_realtime_rain_calendar
      * @param  TIME                     End of time range.
      * @return array                    A list of template parameter sets for rendering a 'drop'.
      */
-    public function run($from,$to)
+    public function run($from, $to)
     {
         $drops = array();
 
-        if (has_actual_page_access(get_member(),'calendar')) {
+        if (has_actual_page_access(get_member(), 'calendar')) {
             require_code('calendar');
 
-            $rows = calendar_matches(get_member(),get_member(),!has_privilege(get_member(),'assume_any_member'),$from,$to); // NOTE: We also show (automatically) any RSS items the user has overlayed onto the calendar
+            $rows = calendar_matches(get_member(), get_member(), !has_privilege(get_member(), 'assume_any_member'), $from, $to); // NOTE: We also show (automatically) any RSS items the user has overlayed onto the calendar
 
             foreach ($rows as $row) {
                 $timestamp = $row[2];
                 $member_id = $row[1]['e_submitter'];
 
-                $drops[] = rain_get_special_icons(null,$timestamp)+array(
-                    'TYPE' => 'calendar',
-                    'FROM_MEMBER_ID' => strval($member_id),
-                    'TO_MEMBER_ID' => NULL,
-                    'TITLE' => rain_truncate_for_title(get_translated_text($row[1]['e_title'])),
-                    'IMAGE' => $row[1]['t_logo'],
-                    'TIMESTAMP' => strval($timestamp),
-                    'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
-                    'TICKER_TEXT' => NULL,
-                    'URL' => build_url(array('page' => 'calendar','type' => 'event','id' => $row[1]['id']),'_SEARCH'),
-                    'IS_POSITIVE' => false,
-                    'IS_NEGATIVE' => false,
+                $drops[] = rain_get_special_icons(null, $timestamp) + array(
+                        'TYPE' => 'calendar',
+                        'FROM_MEMBER_ID' => strval($member_id),
+                        'TO_MEMBER_ID' => null,
+                        'TITLE' => rain_truncate_for_title(get_translated_text($row[1]['e_title'])),
+                        'IMAGE' => $row[1]['t_logo'],
+                        'TIMESTAMP' => strval($timestamp),
+                        'RELATIVE_TIMESTAMP' => strval($timestamp - $from),
+                        'TICKER_TEXT' => null,
+                        'URL' => build_url(array('page' => 'calendar', 'type' => 'event', 'id' => $row[1]['id']), '_SEARCH'),
+                        'IS_POSITIVE' => false,
+                        'IS_NEGATIVE' => false,
 
-                    // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-                    'FROM_ID' => 'member_' . strval($member_id),
-                    'TO_ID' => NULL,
-                    'GROUP_ID' => 'event_' . strval($row[1]['id']),
-                );
+                        // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                        'FROM_ID' => 'member_' . strval($member_id),
+                        'TO_ID' => null,
+                        'GROUP_ID' => 'event_' . strval($row[1]['id']),
+                    );
             }
         }
 

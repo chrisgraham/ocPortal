@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_implicit_usergroups_under18s
 {
     /**
@@ -26,7 +25,7 @@ class Hook_implicit_usergroups_under18s
 
     protected function _where()
     {
-        $eago = intval(date('Y'))-18;
+        $eago = intval(date('Y')) - 18;
         return 'm_dob_year>' . strval($eago) . ' OR m_dob_year=' . strval($eago) . ' AND (m_dob_month>' . date('m') . ' OR m_dob_month=' . date('m') . ' AND m_dob_day>=' . date('d') . ')';
     }
 
@@ -38,7 +37,7 @@ class Hook_implicit_usergroups_under18s
      */
     public function get_member_list($group_id)
     {
-        return list_to_map('id',$GLOBALS['FORUM_DB']->query('SELECT * FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE ' . $this->_where()));
+        return list_to_map('id', $GLOBALS['FORUM_DB']->query('SELECT * FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE ' . $this->_where()));
     }
 
     /**
@@ -59,7 +58,7 @@ class Hook_implicit_usergroups_under18s
      * @param  GROUP                    The group ID to check (if only one group supported by the hook, can be ignored).
      * @return boolean                  Whether they are.
      */
-    public function is_member_within($member_id,$group_id)
+    public function is_member_within($member_id, $group_id)
     {
         return !is_null($GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE (' . $this->_where() . ') AND id=' . strval($member_id)));
     }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_tag_spinner
  */
-
 class Hook_addon_registry_oc_tag_spinner
 {
     /**
@@ -94,8 +93,7 @@ class Hook_addon_registry_oc_tag_spinner
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -109,10 +107,8 @@ class Hook_addon_registry_oc_tag_spinner
             'requires' => array(
                 'search',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

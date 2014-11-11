@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    workflows
  */
-
 class Hook_addon_registry_workflows
 {
     /**
@@ -96,8 +95,7 @@ Note that this addon only affects galleries at the moment, and it requires the \
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,10 +109,8 @@ Note that this addon only affects galleries at the moment, and it requires the \
             'requires' => array(
                 'unvalidated',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

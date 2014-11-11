@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads_followup_email
  */
-
 class Hook_addon_registry_downloads_followup_email
 {
     /**
@@ -98,8 +97,7 @@ Admins can force the follow-up emails and/or private topics and prevent the memb
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -113,10 +111,8 @@ Admins can force the follow-up emails and/or private topics and prevent the memb
             'requires' => array(
                 'downloads',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

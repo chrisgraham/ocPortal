@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    rootkit_detector
  */
-
 class Hook_addon_registry_rootkit_detector
 {
     /**

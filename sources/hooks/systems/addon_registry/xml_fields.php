@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    xml_fields
  */
-
 class Hook_addon_registry_xml_fields
 {
     /**

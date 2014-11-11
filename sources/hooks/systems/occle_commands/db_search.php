@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_db_search
 {
     /**
@@ -28,16 +27,16 @@ class Hook_occle_command_db_search
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('db_search',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('db_search', array('h'), array(true, true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','db_search'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'db_search'));
             }
-            if (!array_key_exists(1,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','2','db_search'));
+            if (!array_key_exists(1, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '2', 'db_search'));
             }
 
             $value = $parameters[0];
@@ -46,22 +45,22 @@ class Hook_occle_command_db_search
 
             $i = 1;
             $fields = array();
-            while (array_key_exists($i,$parameters)) {
+            while (array_key_exists($i, $parameters)) {
                 $type = $parameters[$i];
                 $fields = array_merge(
                     $fields,
-                    $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type' => $type)),
-                    $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type' => '?' . $type)),
-                    $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'),array('m_type' => '*' . $type))
+                    $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_table'), array('m_type' => $type)),
+                    $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_table'), array('m_type' => '?' . $type)),
+                    $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_table'), array('m_type' => '*' . $type))
                 );
                 $i++;
             }
             if (count($fields) == 0) {
-                $fields = $GLOBALS['SITE_DB']->query_select('db_meta',array('m_name','m_table'));
+                $fields = $GLOBALS['SITE_DB']->query_select('db_meta', array('m_name', 'm_table'));
             }
             foreach ($fields as $field) {
-                $db = (substr($field['m_table'],0,2) == 'f_')?$GLOBALS['FORUM_DB']:$GLOBALS['SITE_DB'];
-                $ofs = $db->query_select($field['m_table'],array('*'),array($field['m_name'] => $value));
+                $db = (substr($field['m_table'], 0, 2) == 'f_') ? $GLOBALS['FORUM_DB'] : $GLOBALS['SITE_DB'];
+                $ofs = $db->query_select($field['m_table'], array('*'), array($field['m_name'] => $value));
                 foreach ($ofs as $of) {
                     $out .= '<h2>' . escape_html($field['m_table']) . '</h2>';
 
@@ -81,7 +80,7 @@ class Hook_occle_command_db_search
                 $out = do_lang('NONE');
             }
 
-            return array('',$out,'','');
+            return array('', $out, '', '');
         }
     }
 }

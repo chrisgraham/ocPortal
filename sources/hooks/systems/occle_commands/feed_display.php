@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
-
 class Hook_occle_command_feed_display
 {
     /**
@@ -28,15 +27,15 @@ class Hook_occle_command_feed_display
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
         require_code('obfuscate');
 
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('feed_display',array('h','m'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('feed_display', array('h', 'm'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','feed_display'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'feed_display'));
             }
 
             require_lang('news');
@@ -44,37 +43,37 @@ class Hook_occle_command_feed_display
 
             $rss = new rss($parameters[0]);
             if (!is_null($rss->error)) {
-                return array('','','',$rss->error);
+                return array('', '', '', $rss->error);
             }
 
-            if (!array_key_exists('title',$rss->gleamed_feed)) {
+            if (!array_key_exists('title', $rss->gleamed_feed)) {
                 $rss->gleamed_feed['title'] = do_lang('RSS_STREAM');
             }
-            if (!array_key_exists('copyright',$rss->gleamed_feed)) {
+            if (!array_key_exists('copyright', $rss->gleamed_feed)) {
                 $rss->gleamed_feed['copyright'] = '';
             }
 
             // Reduce what we collected about the feed to a minimum. This is very awkward, as we don't know what's here.
-            if (array_key_exists('author',$rss->gleamed_feed)) {
+            if (array_key_exists('author', $rss->gleamed_feed)) {
                 $__author = null;
                 $_author = $rss->gleamed_feed['author'];
-                if (array_key_exists('url',$rss->gleamed_feed)) {
-                    $__author = hyperlink($rss->gleamed_feed['url'],escape_html($_author),true);
-                } elseif (array_key_exists('author_url',$rss->gleamed_feed)) {
-                    $__author = hyperlink($rss->gleamed_feed['author_url'],escape_html($_author),true);
-                } elseif (array_key_exists('author_email',$rss->gleamed_feed)) {
-                    $__author = hyperlink(mailto_obfuscated() . obfuscate_email_address($rss->gleamed_feed['author_email']),escape_html($_author),true);
+                if (array_key_exists('url', $rss->gleamed_feed)) {
+                    $__author = hyperlink($rss->gleamed_feed['url'], escape_html($_author), true);
+                } elseif (array_key_exists('author_url', $rss->gleamed_feed)) {
+                    $__author = hyperlink($rss->gleamed_feed['author_url'], escape_html($_author), true);
+                } elseif (array_key_exists('author_email', $rss->gleamed_feed)) {
+                    $__author = hyperlink(mailto_obfuscated() . obfuscate_email_address($rss->gleamed_feed['author_email']), escape_html($_author), true);
                 }
                 if (!is_null($__author)) {
                     $_author = $__author->evaluate();
                 }
-                $_author = do_lang('RSS_SOURCE_FROM',$_author);
+                $_author = do_lang('RSS_SOURCE_FROM', $_author);
             } else {
                 $_author = '';
             }
 
             // Now for the actual stream contents
-            $max = (array_key_exists('max',$options))?intval($options['max']):5;
+            $max = (array_key_exists('max', $options)) ? intval($options['max']) : 5;
             $content = new ocp_tempcode();
             require_code('xhtml');
             foreach ($rss->gleamed_items as $i => $item) {
@@ -82,23 +81,23 @@ class Hook_occle_command_feed_display
                     break;
                 }
 
-                if (array_key_exists('guid',$item)) {
+                if (array_key_exists('guid', $item)) {
                     $full_url = $item['guid'];
-                } elseif (array_key_exists('comment_url',$item)) {
+                } elseif (array_key_exists('comment_url', $item)) {
                     $full_url = $item['comment_url'];
-                } elseif (array_key_exists('full_url',$item)) {
+                } elseif (array_key_exists('full_url', $item)) {
                     $full_url = $item['full_url'];
                 } else {
                     $full_url = '';
                 }
 
                 $_title = $item['title'];
-                $date = array_key_exists('clean_add_date',$item)?get_timezoned_date($item['clean_add_date']):array_key_exists('add_date',$item)?$item['add_date']:'';
+                $date = array_key_exists('clean_add_date', $item) ? get_timezoned_date($item['clean_add_date']) : array_key_exists('add_date', $item) ? $item['add_date'] : '';
 
-                $content->attach(do_template('OCCLE_RSS_ITEM',array('_GUID' => 'd6b811d17956ebd82c9911fbda19eeec','FULL_URL' => $full_url,'NEWS_TITLE' => $_title,'DATE' => $date,'SUMMARY' => xhtmlise_html($item['news']))));
+                $content->attach(do_template('OCCLE_RSS_ITEM', array('_GUID' => 'd6b811d17956ebd82c9911fbda19eeec', 'FULL_URL' => $full_url, 'NEWS_TITLE' => $_title, 'DATE' => $date, 'SUMMARY' => xhtmlise_html($item['news']))));
             }
 
-            return array('',do_template('OCCLE_RSS',array('_GUID' => 'c01334f868079f9e0c2dba751550aa40','TITLE' => $rss->gleamed_feed['title'],'CONTENT' => $content)),'','');
+            return array('', do_template('OCCLE_RSS', array('_GUID' => 'c01334f868079f9e0c2dba751550aa40', 'TITLE' => $rss->gleamed_feed['title'], 'CONTENT' => $content)), '', '');
         }
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_abstract_components
  */
-
 class Hook_addon_registry_core_abstract_components
 {
     /**
@@ -153,7 +152,7 @@ class Hook_addon_registry_core_abstract_components
      */
     public function tpl_preview__administrative__show_revision_history()
     {
-        $revision_history = do_lorem_template('REVISION_HISTORY_LINE',array(
+        $revision_history = do_lorem_template('REVISION_HISTORY_LINE', array(
             'RENDERED_DIFF' => lorem_phrase(),
             'EDITOR' => lorem_phrase(),
             'DATE' => placeholder_time(),
@@ -164,9 +163,9 @@ class Hook_addon_registry_core_abstract_components
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP',array(
+            lorem_globalise(do_lorem_template('REVISION_HISTORY_WRAP', array(
                 'CONTENT' => $revision_history,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -180,7 +179,7 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__staff_actions()
     {
         return array(
-            lorem_globalise(do_lorem_template('STAFF_ACTIONS',array(
+            lorem_globalise(do_lorem_template('STAFF_ACTIONS', array(
                 '1_TITLE' => lorem_phrase(),
                 '1_URL' => placeholder_url(),
                 '2_TITLE' => lorem_phrase(),
@@ -189,7 +188,7 @@ class Hook_addon_registry_core_abstract_components
                 '3_URL' => placeholder_url(),
                 '4_TITLE' => lorem_phrase(),
                 '4_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -203,7 +202,7 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__administrative__revision_restore()
     {
         return array(
-            lorem_globalise(do_lorem_template('REVISION_RESTORE',array()),null,'',true)
+            lorem_globalise(do_lorem_template('REVISION_RESTORE', array()), null, '', true)
         );
     }
 
@@ -217,14 +216,14 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__button_screen_item()
     {
         return array(
-            lorem_globalise(do_lorem_template('BUTTON_SCREEN_ITEM',array(
+            lorem_globalise(do_lorem_template('BUTTON_SCREEN_ITEM', array(
                 'REL' => lorem_phrase(),
                 'IMMEDIATE' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_word(),
                 'FULL_TITLE' => lorem_phrase(),
                 'IMG' => 'buttons__edit',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -238,13 +237,13 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__administrative__fractional_edit()
     {
         return array(
-            lorem_globalise(do_lorem_template('FRACTIONAL_EDIT',array(
+            lorem_globalise(do_lorem_template('FRACTIONAL_EDIT', array(
                 'VALUE' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'EDIT_TEXT' => lorem_sentence_html(),
                 'EDIT_PARAM_NAME' => lorem_word_html(),
                 'EXPLICIT_EDITING_LINKS' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -258,10 +257,10 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__crop_text_mouse_over_inline()
     {
         return array(
-            lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE',array(
+            lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER_INLINE', array(
                 'TEXT_SMALL' => lorem_sentence_html(),
                 'TEXT_LARGE' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -275,11 +274,11 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__img_thumb()
     {
         return array(
-            lorem_globalise(do_lorem_template('IMG_THUMB',array(
+            lorem_globalise(do_lorem_template('IMG_THUMB', array(
                 'JS_TOOLTIP' => lorem_phrase(),
                 'CAPTION' => lorem_phrase(),
                 'URL' => placeholder_image_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -293,10 +292,10 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__crop_text_mouse_over()
     {
         return array(
-            lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER',array(
+            lorem_globalise(do_lorem_template('CROP_TEXT_MOUSE_OVER', array(
                 'TEXT_LARGE' => lorem_phrase(),
                 'TEXT_SMALL' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -310,12 +309,12 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__button_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('BUTTON_SCREEN',array(
+            lorem_globalise(do_lorem_template('BUTTON_SCREEN', array(
                 'IMMEDIATE' => true,
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_word(),
                 'IMG' => 'buttons__proceed',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -368,28 +367,28 @@ class Hook_addon_registry_core_abstract_components
 
         $boxes = new ocp_tempcode();
         $box = do_lorem_template('STANDARDBOX_' . $type, array(
-                'CONTENT' => lorem_sentence(),
-                'LINKS' => $links,
-                'META' => $meta,
-                'OPTIONS' => placeholder_array(),
-                'TITLE' => lorem_phrase(),
-                'TOP_LINKS' => placeholder_link(),
-                'WIDTH' => '',
+            'CONTENT' => lorem_sentence(),
+            'LINKS' => $links,
+            'META' => $meta,
+            'OPTIONS' => placeholder_array(),
+            'TITLE' => lorem_phrase(),
+            'TOP_LINKS' => placeholder_link(),
+            'WIDTH' => '',
         ));
         $boxes->attach($box);
         $box = do_lorem_template('STANDARDBOX_' . $type, array(
-                'CONTENT' => lorem_sentence(),
-                'LINKS' => $links,
-                'META' => $meta,
-                'OPTIONS' => placeholder_array(),
-                'TITLE' => '',
-                'TOP_LINKS' => placeholder_link(),
-                'WIDTH' => '',
+            'CONTENT' => lorem_sentence(),
+            'LINKS' => $links,
+            'META' => $meta,
+            'OPTIONS' => placeholder_array(),
+            'TITLE' => '',
+            'TOP_LINKS' => placeholder_link(),
+            'WIDTH' => '',
         ));
         $boxes->attach($box);
 
         return array(
-            lorem_globalise($boxes,null,'',true)
+            lorem_globalise($boxes, null, '', true)
         );
     }
 
@@ -403,7 +402,7 @@ class Hook_addon_registry_core_abstract_components
     public function tpl_preview__administrative__handle_conflict_resolution()
     {
         return array(
-            lorem_globalise(do_lorem_template('HANDLE_CONFLICT_RESOLUTION',array()))
+            lorem_globalise(do_lorem_template('HANDLE_CONFLICT_RESOLUTION', array()))
         );
     }
 }

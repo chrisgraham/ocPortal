@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    comcode_flip_tag
  */
-
 class Hook_addon_registry_comcode_flip_tag
 {
     /**
@@ -98,8 +97,7 @@ The above example creates a flip between text A and text B, taking 400ms. This i
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -113,10 +111,8 @@ The above example creates a flip between text A and text B, taking 400ms. This i
             'requires' => array(
                 'JavaScript enabled',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

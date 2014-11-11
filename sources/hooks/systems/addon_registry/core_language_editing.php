@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_language_editing
  */
-
 class Hook_addon_registry_core_language_editing
 {
     /**
@@ -156,12 +155,12 @@ class Hook_addon_registry_core_language_editing
         $file = new ocp_tempcode();
         $files = '';
         foreach (placeholder_array() as $value) {
-            $crit = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM',array(
+            $crit = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM', array(
                 'CRITICISM' => lorem_sentence(),
             ));
             $file->attach($crit);
         }
-        $file_result = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE',array(
+        $file_result = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_FILE', array(
             'COMPLAINTS' => $file,
             'FILENAME' => do_lang_tempcode('NA_EM'),
         ));
@@ -169,10 +168,10 @@ class Hook_addon_registry_core_language_editing
         $files .= $file_result->evaluate();
 
         return array(
-            lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN',array(
+            lorem_globalise(do_lorem_template('TRANSLATE_LANGUAGE_CRITICISE_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'FILES' => $files,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -188,13 +187,13 @@ class Hook_addon_registry_core_language_editing
         require_lang('lang');
         $lines = new ocp_tempcode();
         foreach (placeholder_array() as $key => $value) {
-            $actions = do_lorem_template('TRANSLATE_ACTION',array(
+            $actions = do_lorem_template('TRANSLATE_ACTION', array(
                 'LANG_FROM' => fallback_lang(),
                 'LANG_TO' => fallback_lang(),
                 'NAME' => 'trans_' . strval($key),
                 'OLD' => $value,
             ));
-            $lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT',array(
+            $lines->attach(do_lorem_template('TRANSLATE_LINE_CONTENT', array(
                 'ID' => strval($key),
                 'NAME' => 'trans_' . strval($key),
                 'OLD' => $value,
@@ -205,7 +204,7 @@ class Hook_addon_registry_core_language_editing
         }
 
         return array(
-            lorem_globalise(do_lorem_template('TRANSLATE_SCREEN_CONTENT_SCREEN',array(
+            lorem_globalise(do_lorem_template('TRANSLATE_SCREEN_CONTENT_SCREEN', array(
                 'LANG_NICE_NAME' => lorem_word(),
                 'LANG_NICE_ORIGINAL_NAME' => lorem_word(),
                 'TOO_MANY' => lorem_phrase(),
@@ -217,7 +216,7 @@ class Hook_addon_registry_core_language_editing
                 'TITLE' => lorem_title(),
                 'URL' => placeholder_url(),
                 'MAX' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -233,7 +232,7 @@ class Hook_addon_registry_core_language_editing
         require_lang('lang');
         $lines = '';
         foreach (placeholder_array() as $i => $value) {
-            $temp = do_lorem_template('TRANSLATE_LINE',array(
+            $temp = do_lorem_template('TRANSLATE_LINE', array(
                 'TRANSLATE_AUTO' => $value,
                 'DESCRIPTION' => lorem_sentence(),
                 'NAME' => lorem_word() . strval($i),
@@ -245,14 +244,14 @@ class Hook_addon_registry_core_language_editing
         }
 
         return array(
-            lorem_globalise(do_lorem_template('TRANSLATE_SCREEN',array(
+            lorem_globalise(do_lorem_template('TRANSLATE_SCREEN', array(
                 'PAGE' => lorem_phrase(),
                 'GOOGLE' => lorem_phrase(),
                 'LANG' => fallback_lang(),
                 'LINES' => $lines,
                 'TITLE' => lorem_title(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

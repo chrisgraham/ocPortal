@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_content_meta_aware_news_category
 {
     /**
@@ -37,45 +36,45 @@ class Hook_content_meta_aware_news_category
             'table' => 'news_categories',
             'id_field' => 'id',
             'id_field_numeric' => true,
-            'parent_category_field' => NULL,
+            'parent_category_field' => null,
             'parent_category_meta_aware_type' => 'news_category',
             'is_category' => true,
             'is_entry' => false,
             'category_type' => 'news', // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
-            'category_field' => NULL, // For category permissions
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
+            'category_field' => null, // For category permissions
             'category_is_string' => false,
 
             'title_field' => 'nc_title',
             'title_field_dereference' => true,
-            'description_field' => NULL,
+            'description_field' => null,
             'thumb_field' => 'nc_img',
             'thumb_field_is_theme_image' => true,
 
             'view_page_link_pattern' => '_SEARCH:news:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_news:_ec:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:news:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_news'))?(get_module_zone('cms_news') . ':cms_news:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('news')) . ':news',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_news')) ? (get_module_zone('cms_news') . ':cms_news:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('news')) . ':news',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
-            'add_time_field' => NULL,
-            'edit_time_field' => NULL,
-            'date_field' => NULL,
-            'validated_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
+            'add_time_field' => null,
+            'edit_time_field' => null,
+            'date_field' => null,
+            'validated_field' => null,
 
             'seo_type_code' => 'news_category',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
             'permissions_type_code' => 'news', // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'news',
 
@@ -85,7 +84,7 @@ class Hook_content_meta_aware_news_category
             'occle_filesystem_hook' => 'news',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_NEWS_CATEGORY',
         );
@@ -103,10 +102,10 @@ class Hook_content_meta_aware_news_category
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('news');
 
-        return render_news_category_box($row,$zone,$give_context,$attach_to_url_filter,null,$guid);
+        return render_news_category_box($row, $zone, $give_context, $attach_to_url_filter, null, $guid);
     }
 }

@@ -92,7 +92,7 @@ class Hook_fields_tick_multi
         $all = array();
         $exploded = ($ev == '') ? array() : array_flip(explode("\n", $ev));
         foreach (explode('|', $field['cf_default']) as $option) {
-            if (trim($option,' -') == '') {
+            if (trim($option, ' -') == '') {
                 continue;
             }
             $all[] = array('OPTION' => $option, 'HAS' => isset($exploded[$option]));

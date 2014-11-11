@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
-
 class Hook_Notification_booking_inform_staff extends Hook_Notification__Staff
 {
     /**
@@ -22,7 +21,7 @@ class Hook_Notification_booking_inform_staff extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -36,7 +35,7 @@ class Hook_Notification_booking_inform_staff extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['booking_inform_staff'] = array(do_lang('booking:BOOKINGS'),do_lang('NOTIFICATION_TYPE_booking_inform_staff'));
+        $list['booking_inform_staff'] = array(do_lang('booking:BOOKINGS'), do_lang('NOTIFICATION_TYPE_booking_inform_staff'));
         return $list;
     }
 }

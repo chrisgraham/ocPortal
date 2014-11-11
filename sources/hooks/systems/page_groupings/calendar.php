@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_page_groupings_calendar
 {
     /**
@@ -27,15 +26,15 @@ class Hook_page_groupings_calendar
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('calendar')) {
             return array();
         }
 
         return array(
-            array('cms','menu/rich_content/calendar',array('cms_calendar',array('type' => 'misc'),get_module_zone('cms_calendar')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('calendar:CALENDAR'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events','COUNT(*)',null,'',true))))),'calendar:DOC_CALENDAR'),
-            array('social','menu/rich_content/calendar',array('calendar',array(),get_module_zone('calendar')),do_lang_tempcode('calendar:CALENDAR')),
+            array('cms', 'menu/rich_content/calendar', array('cms_calendar', array('type' => 'misc'), get_module_zone('cms_calendar')), do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('calendar:CALENDAR'), make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('calendar_events', 'COUNT(*)', null, '', true))))), 'calendar:DOC_CALENDAR'),
+            array('social', 'menu/rich_content/calendar', array('calendar', array(), get_module_zone('calendar')), do_lang_tempcode('calendar:CALENDAR')),
         );
     }
 }

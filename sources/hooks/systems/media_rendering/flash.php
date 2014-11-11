@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_media_rendering_flash
 {
     /**
@@ -28,7 +27,7 @@ class Hook_media_rendering_flash
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -63,7 +62,7 @@ class Hook_media_rendering_flash
      */
     public function recognises_url($url)
     {
-        if (preg_match('#^(rtmp|rtmpe|rtmps|rtmpt)://#',$url) != 0) {
+        if (preg_match('#^(rtmp|rtmpe|rtmps|rtmpt)://#', $url) != 0) {
             return MEDIA_RECOG_PRECEDENCE_HIGH;
         }
         return MEDIA_RECOG_PRECEDENCE_NONE;
@@ -79,8 +78,8 @@ class Hook_media_rendering_flash
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
-        return do_template('MEDIA_FLASH',array('_GUID' => '4ce841bd751ec736d146ab46246974f5','HOOK' => 'flash')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+        return do_template('MEDIA_FLASH', array('_GUID' => '4ce841bd751ec736d146ab46246974f5', 'HOOK' => 'flash') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

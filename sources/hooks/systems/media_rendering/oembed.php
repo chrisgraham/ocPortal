@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 /*
 Notes...
  - The cache_age property is not supported. It would significantly complicate the API and hurt performance, and we don't know a use case for it. The spec says it is optional to support.
@@ -34,7 +33,7 @@ class Hook_media_rendering_oembed
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -54,10 +53,10 @@ class Hook_media_rendering_oembed
      * @param  ?array                   The media signature, so we can go on this on top of the mime-type (NULL: not known)
      * @return integer                  Recognition precedence
      */
-    public function recognises_mime_type($mime_type,$meta_details = null)
+    public function recognises_mime_type($mime_type, $meta_details = null)
     {
         if ($mime_type == 'text/html' || $mime_type == 'application/xhtml+xml') {
-            if ($meta_details !== NULL) {
+            if ($meta_details !== null) {
                 if ((($meta_details['t_json_discovery'] != '') && (function_exists('json_decode'))) || ($meta_details['t_xml_discovery'] != '')) {
                     return MEDIA_RECOG_PRECEDENCE_MEDIUM;
                 }
@@ -74,7 +73,7 @@ class Hook_media_rendering_oembed
      */
     public function recognises_url($url)
     {
-        if ($this->_find_oembed_endpoint($url) !== NULL) {
+        if ($this->_find_oembed_endpoint($url) !== null) {
             return MEDIA_RECOG_PRECEDENCE_MEDIUM;
         }
         return MEDIA_RECOG_PRECEDENCE_NONE;
@@ -88,11 +87,11 @@ class Hook_media_rendering_oembed
      */
     public function get_video_thumbnail($src_url)
     {
-        $data = $this->get_oembed_data_result($src_url,array());
+        $data = $this->get_oembed_data_result($src_url, array());
         if ((!is_null($data)) && (isset($data['thumbnail_url']))) {
             return $data['thumbnail_url'];
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -102,34 +101,34 @@ class Hook_media_rendering_oembed
      * @param  array                    Attributes (e.g. width, height)
      * @return ?array                   Fully parsed/validated oEmbed result (NULL: fail)
      */
-    public function get_oembed_data_result($url,$attributes)
+    public function get_oembed_data_result($url, $attributes)
     {
         $endpoint = $this->_find_oembed_endpoint($url);
-        if ($endpoint === NULL) {
-            return NULL;
+        if ($endpoint === null) {
+            return null;
         }
 
         // Work out the full endpoint URL to call
-        $format_in_path = (strpos($endpoint,'{format}') !== false);
-        $preferred_format = function_exists('json_decode')?'json':'xml';
+        $format_in_path = (strpos($endpoint, '{format}') !== false);
+        $preferred_format = function_exists('json_decode') ? 'json' : 'xml';
         if ($format_in_path) {
-            $endpoint = str_replace('{format}',$preferred_format,$endpoint);
+            $endpoint = str_replace('{format}', $preferred_format, $endpoint);
         }
-        if (strpos($endpoint,'?') === false) {
+        if (strpos($endpoint, '?') === false) {
             $endpoint .= '?url=' . urlencode($url);
         } else {
-            if ((strpos($endpoint,'?url=') === false) && (strpos($endpoint,'&url=') === false)) {
+            if ((strpos($endpoint, '?url=') === false) && (strpos($endpoint, '&url=') === false)) {
                 $endpoint .= '&url=' . urlencode($url);
             }
         }
-        if ((!array_key_exists('width',$attributes)) || ($attributes['width'] != '')) {
-            $endpoint .= '&maxwidth=' . urlencode(array_key_exists('width',$attributes)?$attributes['width']:get_option('oembed_max_size'));
+        if ((!array_key_exists('width', $attributes)) || ($attributes['width'] != '')) {
+            $endpoint .= '&maxwidth=' . urlencode(array_key_exists('width', $attributes) ? $attributes['width'] : get_option('oembed_max_size'));
         }
-        if ((!array_key_exists('height',$attributes)) || ($attributes['height'] != '')) {
-            $endpoint .= '&maxheight=' . urlencode(array_key_exists('height',$attributes)?$attributes['height']:get_option('oembed_max_size'));
+        if ((!array_key_exists('height', $attributes)) || ($attributes['height'] != '')) {
+            $endpoint .= '&maxheight=' . urlencode(array_key_exists('height', $attributes) ? $attributes['height'] : get_option('oembed_max_size'));
         }
         if (!$format_in_path) {
-            if (strpos($endpoint,'&format=') === false) {
+            if (strpos($endpoint, '&format=') === false) {
                 $endpoint .= '&format=' . urlencode($preferred_format);
             }
         }
@@ -137,9 +136,9 @@ class Hook_media_rendering_oembed
         // Call endpoint
         global $HTTP_DOWNLOAD_MIME_TYPE;
         require_code('files');
-        $result = http_download_file($endpoint,null,false);
-        if ($result === NULL) {
-            return NULL;
+        $result = http_download_file($endpoint, null, false);
+        if ($result === null) {
+            return null;
         }
 
         // Handle
@@ -150,11 +149,11 @@ class Hook_media_rendering_oembed
             case 'text/xml+oembed':
                 require_code('xml');
                 $parsed = new ocp_simple_xml_reader($result);
-                list($root_tag,$root_attributes,,$this_children) = $parsed->gleamed;
+                list($root_tag, $root_attributes, , $this_children) = $parsed->gleamed;
                 if ($root_tag == 'oembed') {
                     foreach ($this_children as $child) {
-                        list($key,,$val) = $child;
-                        $data[$key] = convert_to_internal_encoding($val,'utf-8');
+                        list($key, , $val) = $child;
+                        $data[$key] = convert_to_internal_encoding($val, 'utf-8');
                     }
                 }
                 break;
@@ -163,57 +162,57 @@ class Hook_media_rendering_oembed
             case 'text/javascript': // noembed uses this, naughty
                 if (function_exists('json_decode')) {
                     $_data = json_decode($result);
-                    if ($_data === NULL) {
-                        return NULL;
+                    if ($_data === null) {
+                        return null;
                     }
                     $data = array();
                     foreach ($_data as $key => $val) { // It's currently an object, we want an array
                         if (is_null($val)) {
                             continue;
                         }
-                        $data[$key] = is_string($val)?convert_to_internal_encoding($val,'utf-8'):strval($val);
+                        $data[$key] = is_string($val) ? convert_to_internal_encoding($val, 'utf-8') : strval($val);
                     }
                 }
                 break;
             default:
-                return NULL;
+                return null;
         }
 
         // Validation
-        if ((!array_key_exists('type',$data)) && (array_key_exists('thumbnail_url',$data))) { // yfrog being weird
+        if ((!array_key_exists('type', $data)) && (array_key_exists('thumbnail_url', $data))) { // yfrog being weird
             $data['type'] = 'link';
         }
-        if (!array_key_exists('type',$data)) {
-            return NULL; // E.g. an error result, with an "error" value - but we don't show errors as we just fall back instead
+        if (!array_key_exists('type', $data)) {
+            return null; // E.g. an error result, with an "error" value - but we don't show errors as we just fall back instead
         }
-        if ((!array_key_exists('thumbnail_url',$data)) && (array_key_exists('media_url',$data))) {
+        if ((!array_key_exists('thumbnail_url', $data)) && (array_key_exists('media_url', $data))) {
             $data['thumbnail_url'] = $data['media_url']; // noembed uses this, naughty
             unset($data['media_url']);
         }
-        if ((array_key_exists('thumbnail_url',$data)) && (array_key_exists('url',$data)) && (strpos($data['thumbnail_url'],'https://noembed.com/') !== false)) {
+        if ((array_key_exists('thumbnail_url', $data)) && (array_key_exists('url', $data)) && (strpos($data['thumbnail_url'], 'https://noembed.com/') !== false)) {
             $data['url'] = $data['thumbnail_url']; // noembed uses 'url' incorrectly, naughty
         }
         switch ($data['type']) {
             case 'photo':
-                if ((!array_key_exists('url',$data)) || (!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) {
-                    return NULL;
+                if ((!array_key_exists('url', $data)) || (!array_key_exists('width', $data)) || (!array_key_exists('height', $data))) {
+                    return null;
                 }
                 break;
 
             case 'video':
-                if ((!array_key_exists('width',$data)) || (!array_key_exists('height',$data))) {
-                    return NULL;
+                if ((!array_key_exists('width', $data)) || (!array_key_exists('height', $data))) {
+                    return null;
                 }
             case 'rich':
-                if (!array_key_exists('html',$data)) {
-                    return NULL;
+                if (!array_key_exists('html', $data)) {
+                    return null;
                 }
 
                 // Check security
                 $url_details = parse_url($url);
                 $url_details2 = parse_url($endpoint);
-                $whitelist = explode("\n",get_option('oembed_html_whitelist'));
-                if ((!in_array($url_details['host'],$whitelist)) && (!in_array($url_details2['host'],$whitelist)) && (!in_array(preg_replace('#^www\.#','',$url_details['host']),$whitelist))) {
+                $whitelist = explode("\n", get_option('oembed_html_whitelist'));
+                if ((!in_array($url_details['host'], $whitelist)) && (!in_array($url_details2['host'], $whitelist)) && (!in_array(preg_replace('#^www\.#', '', $url_details['host']), $whitelist))) {
                     /*require_code('comcode_compiler');  We could do this but it's not perfect, it still has some level of trust
                             $len=strlen($data['html']);
                             filter_html(false,$GLOBALS['FORUM_DRIVER']->get_guest_id(),0,$len,$data['html'],true,false);*/
@@ -226,7 +225,7 @@ class Hook_media_rendering_oembed
                 break;
 
             default:
-                return NULL;
+                return null;
         }
 
         // See if we can improve things
@@ -234,27 +233,25 @@ class Hook_media_rendering_oembed
             $matches = array();
 
             // Flickr
-            if (preg_match('#^(https?://[^/]+\.staticflickr\.com/.*_)[nm](\.jpg)$#',$data['url'],$matches) != 0) {
+            if (preg_match('#^(https?://[^/]+\.staticflickr\.com/.*_)[nm](\.jpg)$#', $data['url'], $matches) != 0) {
                 unset($data['thumb_url']);
                 $data['url'] = $matches[1] . 'b' . $matches[2];
                 $w = $data['width'];
                 $h = $data['height'];
                 $data['width'] = '1024';
-                $data['height'] = strval(intval(1024.0*floatval($h)/floatval($w)));
-            }
-
-            // Instagram
-            elseif (preg_match('#^(https?://[^/]+\.instagram\.com/.*_)[as](\.jpg)$#',$data['url'],$matches) != 0) {
+                $data['height'] = strval(intval(1024.0 * floatval($h) / floatval($w)));
+            } // Instagram
+            elseif (preg_match('#^(https?://[^/]+\.instagram\.com/.*_)[as](\.jpg)$#', $data['url'], $matches) != 0) {
                 unset($data['thumb_url']);
                 $data['url'] = $matches[1] . 'n' . $matches[2];
                 $w = $data['width'];
                 $h = $data['height'];
                 $data['width'] = '640';
-                $data['height'] = strval(intval(640.0*floatval($h)/floatval($w)));
+                $data['height'] = strval(intval(640.0 * floatval($h) / floatval($w)));
             }
         } elseif ($data['type'] == 'video') {
             // Instagram
-            if ((preg_match('#^(https?://([^/]+\.)?instagram\.com/.*/)$#',$url,$matches) != 0) && ($data['html'] == '')) {
+            if ((preg_match('#^(https?://([^/]+\.)?instagram\.com/.*/)$#', $url, $matches) != 0) && ($data['html'] == '')) {
                 $data['html'] = '<iframe src="' . escape_html($url) . 'embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>';
             }
         }
@@ -272,61 +269,60 @@ class Hook_media_rendering_oembed
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
         if (is_object($url)) {
             $url = $url->evaluate();
         }
 
-        $data = $this->get_oembed_data_result($url,$attributes);
-        if ($data === NULL) {
-            return $this->_fallback_render($url,$attributes,$source_member);
+        $data = $this->get_oembed_data_result($url, $attributes);
+        if ($data === null) {
+            return $this->_fallback_render($url, $attributes, $source_member);
         }
 
         switch ($data['type']) {
             case 'photo':
                 unset($attributes['width']);
                 unset($attributes['height']);
-                $map = array('width' => $data['width'],'height' => $data['height'],'click_url' => $url);
+                $map = array('width' => $data['width'], 'height' => $data['height'], 'click_url' => $url);
                 $url = $data['url']; // NB: This will also have been constrained to the maxwidth/maxheight (at least it is for Flickr)
                 /*if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url']; Cannot control the size, so we'll make our own inside image_websafe
                     if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
                     if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];*/
-                if (array_key_exists('description',$data)) {
+                if (array_key_exists('description', $data)) {
                     $map['description'] = $data['description']; // not official, but embed.ly has it
-                }
-                elseif (array_key_exists('title',$data)) {
+                } elseif (array_key_exists('title', $data)) {
                     $map['description'] = $data['title'];
                 }
                 /*require_code('mime_types');   $url should be the full image not to view the resource, so we don't need to trick the mime type
                     require_code('files');
                     $map['mime_type']=get_mime_type(get_file_extension($map['thumb_url']));*/
                 require_code('media_renderer');
-                return render_media_url($url,$url_safe,$attributes+$map,false,$source_member,MEDIA_TYPE_ALL,'image_websafe');
+                return render_media_url($url, $url_safe, $attributes + $map, false, $source_member, MEDIA_TYPE_ALL, 'image_websafe');
 
             case 'video':
             case 'rich':
-                return do_template('MEDIA_WEBPAGE_OEMBED_' . strtoupper($data['type']),array(
-                    'TITLE' => array_key_exists('title',$data)?$data['title']:'',
+                return do_template('MEDIA_WEBPAGE_OEMBED_' . strtoupper($data['type']), array(
+                    'TITLE' => array_key_exists('title', $data) ? $data['title'] : '',
                     'HTML' => $data['html'],
-                    'WIDTH' => array_key_exists('width',$data)?$data['width']:'',
-                    'HEIGHT' => array_key_exists('height',$data)?$data['height']:'',
+                    'WIDTH' => array_key_exists('width', $data) ? $data['width'] : '',
+                    'HEIGHT' => array_key_exists('height', $data) ? $data['height'] : '',
                     'URL' => $url,
                 ));
 
             case 'link':
-                if (!array_key_exists('thumbnail_url',$data)) {
-                    return $this->_fallback_render($url,$attributes,$source_member,array_key_exists('title',$data)?$data['title']:'');
+                if (!array_key_exists('thumbnail_url', $data)) {
+                    return $this->_fallback_render($url, $attributes, $source_member, array_key_exists('title', $data) ? $data['title'] : '');
                 }
 
                 // embed.ly and Wordpress may show thumbnail details within a "link" type
-                return do_template('MEDIA_WEBPAGE_SEMANTIC',array('_GUID' => '58ab7a83f5671bcfd9587ca8d589441c','TITLE' => array_key_exists('title',$attributes)?$attributes['title']:'', // not official, but embed.ly has it
-                    'META_TITLE' => array_key_exists('title',$data)?$data['title']:'', // not official, but embed.ly has it
-                    'DESCRIPTION' => array_key_exists('description',$data)?$data['description']:'',
+                return do_template('MEDIA_WEBPAGE_SEMANTIC', array('_GUID' => '58ab7a83f5671bcfd9587ca8d589441c', 'TITLE' => array_key_exists('title', $attributes) ? $attributes['title'] : '', // not official, but embed.ly has it
+                    'META_TITLE' => array_key_exists('title', $data) ? $data['title'] : '', // not official, but embed.ly has it
+                    'DESCRIPTION' => array_key_exists('description', $data) ? $data['description'] : '',
                     'IMAGE_URL' => $data['thumbnail_url'],
                     'URL' => $url,
-                    'WIDTH' => ((array_key_exists('thumbnail_width',$attributes)) && ($attributes['thumbnail_width'] != ''))?$attributes['thumbnail_width']:get_option('thumb_width'),
-                    'HEIGHT' => ((array_key_exists('thumbnail_height',$attributes)) && ($attributes['thumbnail_height'] != ''))?$attributes['thumbnail_height']:get_option('thumb_width'),
+                    'WIDTH' => ((array_key_exists('thumbnail_width', $attributes)) && ($attributes['thumbnail_width'] != '')) ? $attributes['thumbnail_width'] : get_option('thumb_width'),
+                    'HEIGHT' => ((array_key_exists('thumbnail_height', $attributes)) && ($attributes['thumbnail_height'] != '')) ? $attributes['thumbnail_height'] : get_option('thumb_width'),
                 ));
         }
 
@@ -343,7 +339,7 @@ class Hook_media_rendering_oembed
      * @param  string                   Text to show the link with
      * @return tempcode                 Rendered version
      */
-    public function _fallback_render($url,$attributes,$source_member,$link_captions_title = '')
+    public function _fallback_render($url, $attributes, $source_member, $link_captions_title = '')
     {
         if ($link_captions_title == '') {
             require_code('files2');
@@ -361,7 +357,7 @@ class Hook_media_rendering_oembed
         $comcode = '';
         $url_tempcode = new ocp_tempcode();
         $url_tempcode->attach($url);
-        return _do_tags_comcode('url',array('param' => $link_captions_title),$url_tempcode,false,'',0,$source_member,false,$GLOBALS['SITE_DB'],$comcode,false,false);
+        return _do_tags_comcode('url', array('param' => $link_captions_title), $url_tempcode, false, '', 0, $source_member, false, $GLOBALS['SITE_DB'], $comcode, false, false);
     }
 
     /**
@@ -374,16 +370,16 @@ class Hook_media_rendering_oembed
     {
         // Hard-coded
         $_oembed_manual_patterns = get_option('oembed_manual_patterns');
-        $oembed_manual_patterns = explode("\n",$_oembed_manual_patterns);
+        $oembed_manual_patterns = explode("\n", $_oembed_manual_patterns);
         foreach ($oembed_manual_patterns as $oembed_manual_pattern) {
-            if (strpos($oembed_manual_pattern,'=') !== false) {
-                if (strpos($oembed_manual_pattern,' = ') !== false) {
-                    list($url_pattern,$endpoint) = explode(' = ',$oembed_manual_pattern,2);
+            if (strpos($oembed_manual_pattern, '=') !== false) {
+                if (strpos($oembed_manual_pattern, ' = ') !== false) {
+                    list($url_pattern, $endpoint) = explode(' = ', $oembed_manual_pattern, 2);
                 } else {
-                    $url_pattern = preg_replace('#(.*)=.*$#','${1}',$oembed_manual_pattern); // Before last =
-                    $endpoint = preg_replace('#^.*=#','',$oembed_manual_pattern); // After last =
+                    $url_pattern = preg_replace('#(.*)=.*$#', '${1}', $oembed_manual_pattern); // Before last =
+                    $endpoint = preg_replace('#^.*=#', '', $oembed_manual_pattern); // After last =
                 }
-                if (@preg_match('#^' . str_replace('#','\#',$url_pattern) . '$#',$url) != 0) {
+                if (@preg_match('#^' . str_replace('#', '\#', $url_pattern) . '$#', $url) != 0) {
                     return $endpoint;
                 }
             }
@@ -402,6 +398,6 @@ class Hook_media_rendering_oembed
             }
         }
 
-        return NULL;
+        return null;
     }
 }

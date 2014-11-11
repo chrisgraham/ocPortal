@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    staff
  */
-
 class Hook_ocf_cpf_filter_staff_filter
 {
     /**

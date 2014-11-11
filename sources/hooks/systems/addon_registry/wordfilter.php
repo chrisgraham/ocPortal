@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wordfilter
  */
-
 class Hook_addon_registry_wordfilter
 {
     /**
@@ -132,11 +131,11 @@ class Hook_addon_registry_wordfilter
     public function tpl_preview__administrative__wordfilter_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('WORDFILTER_SCREEN',array(
+            lorem_globalise(do_lorem_template('WORDFILTER_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'TPL' => lorem_phrase(),
                 'ADD_FORM' => placeholder_form(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

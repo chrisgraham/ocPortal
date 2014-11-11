@@ -12,14 +12,13 @@
  * @copyright  ocProducts Ltd
  * @package    password_censor
  */
-
 class Hook_symbol_DECRYPT
 {
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
-    *
-    * @param  array                     Symbol parameters
-    * @return string                    Result
+     *
+     * @param  array                     Symbol parameters
+     * @return string                    Result
      */
     public function run($param)
     {
@@ -28,7 +27,7 @@ class Hook_symbol_DECRYPT
         if ((isset($param[1])) && ($param[1] != '')) {
             require_code('encryption');
             if (is_encryption_enabled()) {
-                $value = decrypt_data($param[0],$param[1]);
+                $value = decrypt_data($param[0], $param[1]);
             }
         }
 

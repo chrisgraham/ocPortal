@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
-
 class Hook_addon_registry_core_configuration
 {
     /**
@@ -294,7 +293,7 @@ class Hook_addon_registry_core_configuration
         $groups = new ocp_tempcode();
 
         foreach (placeholder_array() as $k => $group) {
-            $group = do_lorem_template('CONFIG_GROUP',array(
+            $group = do_lorem_template('CONFIG_GROUP', array(
                 'GROUP_DESCRIPTION' => lorem_word(),
                 'GROUP_NAME' => $group,
                 'GROUP' => placeholder_fields(),
@@ -304,7 +303,7 @@ class Hook_addon_registry_core_configuration
         }
 
         return array(
-            lorem_globalise(do_lorem_template('CONFIG_CATEGORY_SCREEN',array(
+            lorem_globalise(do_lorem_template('CONFIG_CATEGORY_SCREEN', array(
                 'CATEGORY_DESCRIPTION' => lorem_word_2(),
                 '_GROUPS' => placeholder_array(),
                 'PING_URL' => placeholder_url(),
@@ -314,7 +313,7 @@ class Hook_addon_registry_core_configuration
                 'GROUPS' => $groups,
                 'SUBMIT_ICON' => 'buttons__save',
                 'SUBMIT_NAME' => lorem_word(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -328,11 +327,11 @@ class Hook_addon_registry_core_configuration
     public function tpl_preview__administrative__xml_config_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN',array(
+            lorem_globalise(do_lorem_template('XML_CONFIG_SCREEN', array(
                 'XML' => '<test />',
                 'POST_URL' => placeholder_url(),
                 'TITLE' => lorem_title(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

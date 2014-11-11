@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_closed
 {
     /**
@@ -28,24 +27,24 @@ class Hook_occle_command_closed
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
         require_code('config2');
 
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('closed',array('h','o','c'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('closed', array('h', 'o', 'c'), array(true)), '', '');
         } else {
-            if ((array_key_exists('o',$options)) || (array_key_exists('open',$options))) {
-                set_option('site_closed','0');
+            if ((array_key_exists('o', $options)) || (array_key_exists('open', $options))) {
+                set_option('site_closed', '0');
             }
-            if ((array_key_exists('c',$options)) || (array_key_exists('close',$options))) {
-                if (!array_key_exists(0,$parameters)) {
-                    return array('','','',do_lang('MISSING_PARAM','1','closed'));
+            if ((array_key_exists('c', $options)) || (array_key_exists('close', $options))) {
+                if (!array_key_exists(0, $parameters)) {
+                    return array('', '', '', do_lang('MISSING_PARAM', '1', 'closed'));
                 }
-                set_option('site_closed','1');
-                set_option('closed',$parameters[0]);
+                set_option('site_closed', '1');
+                set_option('closed', $parameters[0]);
             }
-            return array('','',do_lang('SUCCESS'),'');
+            return array('', '', do_lang('SUCCESS'), '');
         }
     }
 }

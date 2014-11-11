@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    bookmarks
  */
-
 class Hook_page_groupings_bookmarks
 {
     /**
@@ -27,10 +26,10 @@ class Hook_page_groupings_bookmarks
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('site_meta','menu/site_meta/bookmarks',array('bookmarks',array('type' => 'misc'),get_module_zone('bookmarks')),do_lang_tempcode('bookmarks:BOOKMARKS')),
+            array('site_meta', 'menu/site_meta/bookmarks', array('bookmarks', array('type' => 'misc'), get_module_zone('bookmarks')), do_lang_tempcode('bookmarks:BOOKMARKS')),
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    backup
  */
-
 class Hook_page_groupings_backup
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_backup
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('backup')) {
             return array();
         }
 
         return array(
-            array('tools','menu/adminzone/tools/bulk_content_actions/backups',array('admin_backup',array('type' => 'misc'),get_module_zone('admin_backup')),do_lang_tempcode('backups:BACKUPS'),'backups:DOC_BACKUPS'),
+            array('tools', 'menu/adminzone/tools/bulk_content_actions/backups', array('admin_backup', array('type' => 'misc'), get_module_zone('admin_backup')), do_lang_tempcode('backups:BACKUPS'), 'backups:DOC_BACKUPS'),
         );
     }
 }

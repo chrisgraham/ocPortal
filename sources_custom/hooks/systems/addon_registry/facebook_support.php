@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    facebook_support
  */
-
 class Hook_addon_registry_facebook_support
 {
     /**
@@ -107,8 +106,7 @@ Please be aware that this addon overrides some common templates to add Facebook 
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -119,12 +117,9 @@ Please be aware that this addon overrides some common templates to add Facebook 
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

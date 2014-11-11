@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    printer_friendly_block
  */
-
 class Hook_addon_registry_printer_friendly_block
 {
     /**
@@ -124,9 +123,9 @@ class Hook_addon_registry_printer_friendly_block
     public function tpl_preview__block_side_printer_friendly()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_PRINTER_FRIENDLY',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_PRINTER_FRIENDLY', array(
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

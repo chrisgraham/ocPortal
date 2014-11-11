@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_thief
  */
-
 class Hook_addon_registry_oc_thief
 {
     /**
@@ -83,7 +82,7 @@ class Hook_addon_registry_oc_thief
     public function get_description()
     {
         return 'Add some random dynamic chaos to your website and has a number of options you can configure such as who you want points to be automatically stolen from.
-        
+
 There are four options:
  - \"Members that are inactive, but have a lot of points\"
  - \"Members that are rich\"
@@ -104,8 +103,7 @@ To configure ocThief go to Admin Zone > Setup > Configuration > Point store opti
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -120,10 +118,8 @@ To configure ocThief go to Admin Zone > Setup > Configuration > Point store opti
                 'Cron',
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

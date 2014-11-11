@@ -301,8 +301,7 @@ class virtual_bash
             // Exit with an error
             if ($this->output[STREAM_STDERR] != '') {
                 $this->output[STREAM_STDERR] = do_lang('PROBLEM_ACCESSING_RESPONSE') . "\n" . $this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for JavaScript
-            }
-            else {
+            } else {
                 $this->output[STREAM_STDERR] = do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
             }
 
@@ -922,8 +921,7 @@ class virtual_bash
                 // It's not a lone command; see if it's a script - check first in the main script dir
                 if (file_exists(get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND], true))) {
                     $script_file = get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); // It's in the main script dir
-                }
-                else {
+                } else {
                     $script_file = $this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND])); // Exhaustive search
                 }
 

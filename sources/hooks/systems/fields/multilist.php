@@ -94,7 +94,7 @@ class Hook_fields_multilist
         $exploded = ($ev == '') ? array() : array_flip(explode("\n", $ev));
         foreach (explode('|', $field['cf_default']) as $option) {
             if (isset($exploded[$option])) {
-                if (trim($option,' -') == '') {
+                if (trim($option, ' -') == '') {
                     continue;
                 }
                 $all[] = array('OPTION' => $option, 'HAS' => true);

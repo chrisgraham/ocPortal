@@ -54,9 +54,9 @@ function export_menu_csv($file_path = null)
 }
 
 /**
-* Import a CSV menu structure, after ERASING whole current menu structure.
-* This function is intended for programmers, writing upgrade scripts for a custom site (dev>staging>live).
-* Assumes CSV was generated with export_menu_csv.
+ * Import a CSV menu structure, after ERASING whole current menu structure.
+ * This function is intended for programmers, writing upgrade scripts for a custom site (dev>staging>live).
+ * Assumes CSV was generated with export_menu_csv.
  *
  * @param  ?PATH                        The path to the CSV file (NULL: uploads/website_specific/ocp_menu_items.csv).
  */

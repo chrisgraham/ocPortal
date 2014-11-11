@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    twitter_feed_integration_block
  */
-
 class Hook_config_twitterfeed_update_time
 {
     /**

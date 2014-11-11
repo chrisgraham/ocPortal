@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_addon_registry_downloads
 {
     /**
@@ -208,10 +207,10 @@ class Hook_addon_registry_downloads
     public function tpl_preview__download_and_images_simple_box()
     {
         return array(
-            lorem_globalise(do_lorem_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX',array(
+            lorem_globalise(do_lorem_template('DOWNLOAD_AND_IMAGES_SIMPLE_BOX', array(
                 'DESCRIPTION' => lorem_paragraph_html(),
                 'IMAGES' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -225,10 +224,10 @@ class Hook_addon_registry_downloads
     public function tpl_preview__download_list_line()
     {
         return array(
-            lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE',array(
+            lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE', array(
                 'BREADCRUMBS' => lorem_word(),
                 'DOWNLOAD' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -242,10 +241,10 @@ class Hook_addon_registry_downloads
     public function tpl_preview__download_list_line_2()
     {
         return array(
-            lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE_2',array(
+            lorem_globalise(do_lorem_template('DOWNLOAD_LIST_LINE_2', array(
                 'BREADCRUMBS' => lorem_phrase(),
                 'FILECOUNT' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -285,7 +284,7 @@ class Hook_addon_registry_downloads
         $downloads->attach($tpl);
 
         return array(
-            lorem_globalise(do_lorem_template('DOWNLOAD_CATEGORY_SCREEN',array(
+            lorem_globalise(do_lorem_template('DOWNLOAD_CATEGORY_SCREEN', array(
                 'TAGS' => lorem_word_html(),
                 'TITLE' => lorem_title(),
                 'SUBMIT_URL' => placeholder_url(),
@@ -296,7 +295,7 @@ class Hook_addon_registry_downloads
                 'DOWNLOADS' => $downloads,
                 'SORTING' => lorem_phrase(),
                 'ID' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -335,18 +334,18 @@ class Hook_addon_registry_downloads
             $tpl = do_lorem_template('DOWNLOAD_BOX', $map);
             $downloads->attach($tpl);
 
-            $data = array('LETTER' => lorem_word(),'DOWNLOADS' => $downloads);
+            $data = array('LETTER' => lorem_word(), 'DOWNLOADS' => $downloads);
             $subcats[] = $data;
         }
 
         return array(
-            lorem_globalise(do_lorem_template('DOWNLOAD_ALL_SCREEN',array(
+            lorem_globalise(do_lorem_template('DOWNLOAD_ALL_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'SUBMIT_URL' => placeholder_url(),
                 'ADD_CAT_URL' => placeholder_url(),
                 'EDIT_CAT_URL' => placeholder_url(),
                 'SUB_CATEGORIES' => $subcats,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -362,7 +361,7 @@ class Hook_addon_registry_downloads
         require_lang('galleries');
         $images_details = new ocp_tempcode();
         foreach (placeholder_array() as $row) {
-            $image = do_lorem_template('DOWNLOAD_SCREEN_IMAGE',array(
+            $image = do_lorem_template('DOWNLOAD_SCREEN_IMAGE', array(
                 'ID' => placeholder_id(),
                 'VIEW_URL' => placeholder_url(),
                 'EDIT_URL' => placeholder_url(),
@@ -370,17 +369,17 @@ class Hook_addon_registry_downloads
                 'DESCRIPTION' => lorem_phrase(),
             ));
 
-            $cell = do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL',array(
+            $cell = do_lorem_template('DOWNLOAD_GALLERY_IMAGE_CELL', array(
                 'CONTENT' => $image,
             ));
 
-            $images_details->attach(do_lorem_template('DOWNLOAD_GALLERY_ROW',array(
+            $images_details->attach(do_lorem_template('DOWNLOAD_GALLERY_ROW', array(
                 'CELLS' => $cell,
             )));
         }
 
         return array(
-            lorem_globalise(do_lorem_template('DOWNLOAD_SCREEN',array(
+            lorem_globalise(do_lorem_template('DOWNLOAD_SCREEN', array(
                 'ORIGINAL_FILENAME' => lorem_phrase(),
                 'TAGS' => lorem_word_html(),
                 'LICENCE' => lorem_phrase(),
@@ -411,7 +410,7 @@ class Hook_addon_registry_downloads
                 'COMMENT_DETAILS' => lorem_sentence_html(),
                 'MAY_DOWNLOAD' => true,
                 'NUM_IMAGES' => '3',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_media_rendering_video_cnn
 {
     /**
@@ -22,7 +21,7 @@ class Hook_media_rendering_video_cnn
     public function get_type_label()
     {
         require_lang('video_cnn');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -54,7 +53,7 @@ class Hook_media_rendering_video_cnn
      */
     public function recognises_url($url)
     {
-        if (preg_match('#^https?://(edition\.|www\.)?cnn\.com/.*/video/(.*)\.html#',$url) != 0) {
+        if (preg_match('#^https?://(edition\.|www\.)?cnn\.com/.*/video/(.*)\.html#', $url) != 0) {
             return MEDIA_RECOG_PRECEDENCE_HIGH;
         }
         return MEDIA_RECOG_PRECEDENCE_NONE;
@@ -69,10 +68,10 @@ class Hook_media_rendering_video_cnn
     public function get_video_thumbnail($src_url)
     {
         $matches = array();
-        if (preg_match('#^https?://(edition\.|www\.)?cnn\.com/.*/video/(.*)\.html#',$src_url,$matches) != 0) {
+        if (preg_match('#^https?://(edition\.|www\.)?cnn\.com/.*/video/(.*)\.html#', $src_url, $matches) != 0) {
             return 'http://i.cdn.turner.com/cnn/video/' . $matches[3] . '.214x122.jpg';
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -85,12 +84,12 @@ class Hook_media_rendering_video_cnn
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
         if (is_object($url)) {
             $url = $url->evaluate();
         }
-        $attributes['remote_id'] = preg_replace('#^https?://(edition\.|www\.)?cnn\.com/.*/video/(.*)\.html#','${2}',$url);
-        return do_template('MEDIA_VIDEO_CNN',array('_GUID' => '9b6a695ff7556a955a17a07fc4b77bf6','HOOK' => 'video_cnn')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+        $attributes['remote_id'] = preg_replace('#^https?://(edition\.|www\.)?cnn\.com/.*/video/(.*)\.html#', '${2}', $url);
+        return do_template('MEDIA_VIDEO_CNN', array('_GUID' => '9b6a695ff7556a955a17a07fc4b77bf6', 'HOOK' => 'video_cnn') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

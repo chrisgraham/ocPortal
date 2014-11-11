@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_jester
  */
-
 class Hook_addon_registry_oc_jester
 {
     /**
@@ -102,8 +101,7 @@ The jokes you can play are:
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -117,10 +115,8 @@ The jokes you can play are:
             'requires' => array(
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

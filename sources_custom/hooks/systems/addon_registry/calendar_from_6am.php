@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar_from_6am
  */
-
 class Hook_addon_registry_calendar_from_6am
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_calendar_from_6am
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,10 +105,8 @@ class Hook_addon_registry_calendar_from_6am
             'requires' => array(
                 'calendar',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

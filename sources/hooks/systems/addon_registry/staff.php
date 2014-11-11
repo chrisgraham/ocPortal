@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    staff
  */
-
 class Hook_addon_registry_staff
 {
     /**
@@ -139,18 +138,18 @@ class Hook_addon_registry_staff
     {
         $available = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $available->attach(do_lorem_template('STAFF_EDIT_WRAPPER',array(
+            $available->attach(do_lorem_template('STAFF_EDIT_WRAPPER', array(
                 'FORM' => placeholder_form(),
                 'USERNAME' => lorem_word(),
             )));
         }
 
         return array(
-            lorem_globalise(do_lorem_template('STAFF_ADMIN_SCREEN',array(
+            lorem_globalise(do_lorem_template('STAFF_ADMIN_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'TEXT' => lorem_sentence_html(),
                 'FORUM_STAFF' => $available,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -164,7 +163,7 @@ class Hook_addon_registry_staff
     public function tpl_preview__staff_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('STAFF_SCREEN',array(
+            lorem_globalise(do_lorem_template('STAFF_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'REAL_NAME' => lorem_phrase(),
                 'ROLE' => lorem_phrase(),
@@ -173,7 +172,7 @@ class Hook_addon_registry_staff
                 'MEMBER_ID' => placeholder_id(),
                 'PROFILE_URL' => placeholder_url(),
                 'ALL_STAFF_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

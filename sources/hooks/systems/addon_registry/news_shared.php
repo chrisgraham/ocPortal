@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news_shared
  */
-
 class Hook_addon_registry_news_shared
 {
     /**
@@ -126,7 +125,7 @@ class Hook_addon_registry_news_shared
     public function tpl_preview__news_piece_summary()
     {
         return array(
-            lorem_globalise(do_lorem_template('NEWS_BOX',array(
+            lorem_globalise(do_lorem_template('NEWS_BOX', array(
                 'BLOG' => lorem_phrase(),
                 'AUTHOR_URL' => placeholder_url(),
                 'TAGS' => '',
@@ -156,7 +155,7 @@ class Hook_addon_registry_news_shared
                 'LASTMEMBERID' => lorem_word(),
                 'DATE_RAW' => lorem_word(),
                 'GIVE_CONTEXT' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

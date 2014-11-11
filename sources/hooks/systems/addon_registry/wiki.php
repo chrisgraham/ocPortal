@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_addon_registry_wiki
 {
     /**
@@ -188,14 +187,14 @@ class Hook_addon_registry_wiki
     public function tpl_preview__administrative__wiki_manage_tree_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('WIKI_MANAGE_TREE_SCREEN',array(
+            lorem_globalise(do_lorem_template('WIKI_MANAGE_TREE_SCREEN', array(
                 'PAGE_TITLE' => lorem_phrase(),
                 'PING_URL' => placeholder_url(),
                 'WARNING_DETAILS' => '',
                 'TITLE' => lorem_title(),
                 'FORM' => placeholder_form(),
                 'WIKI_TREE' => placeholder_options(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -209,11 +208,11 @@ class Hook_addon_registry_wiki
     public function tpl_preview__wiki_list_tree()
     {
         return array(
-            lorem_globalise(do_lorem_template('WIKI_LIST_TREE_LINE',array(
+            lorem_globalise(do_lorem_template('WIKI_LIST_TREE_LINE', array(
                 'BREADCRUMBS' => lorem_phrase(),
                 'TITLE' => lorem_word(),
                 'ID' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -228,7 +227,7 @@ class Hook_addon_registry_wiki
     {
         require_lang('ocf');
         $extra = new ocp_tempcode();
-        $extra = do_lorem_template('BUTTON_SCREEN_ITEM',array(
+        $extra = do_lorem_template('BUTTON_SCREEN_ITEM', array(
             'REL' => 'edit',
             'IMMEDIATE' => false,
             'URL' => placeholder_url(),
@@ -237,7 +236,7 @@ class Hook_addon_registry_wiki
             'IMG' => 'buttons__edit',
         ));
 
-        $extra->attach(do_lorem_template('BUTTON_SCREEN_ITEM',array(
+        $extra->attach(do_lorem_template('BUTTON_SCREEN_ITEM', array(
             'REL' => 'move',
             'IMMEDIATE' => false,
             'URL' => placeholder_url(),
@@ -253,7 +252,7 @@ class Hook_addon_registry_wiki
             'NUM_RATINGS' => placeholder_number(),
             'TYPE' => lorem_word(),
         );
-        $rating_inside = do_lorem_template('WIKI_RATING_FORM',array(
+        $rating_inside = do_lorem_template('WIKI_RATING_FORM', array(
             'LIKES' => true,
             'CONTENT_TYPE' => 'wiki',
             'ID' => placeholder_id(),
@@ -265,14 +264,14 @@ class Hook_addon_registry_wiki
             'ERROR' => '',
         ));
 
-        $rating_details = do_lorem_template('WIKI_RATING',array(
+        $rating_details = do_lorem_template('WIKI_RATING', array(
             'OVERALL_NUM_RATINGS' => placeholder_number(),
             'RATING_FORM' => $rating_inside,
             'ALL_RATING_CRITERIA' => $all_rating_criteria,
             'HAS_RATINGS' => true,
         ));
 
-        $posts = do_lorem_template('WIKI_POST',array(
+        $posts = do_lorem_template('WIKI_POST', array(
             'INCLUDE_EXPANSION' => lorem_phrase(),
             'UNVALIDATED' => do_lang('UNVALIDATED'),
             'STAFF_ACCESS' => lorem_phrase(),
@@ -288,11 +287,11 @@ class Hook_addon_registry_wiki
             'BUTTONS' => $extra,
         ));
 
-        $_child = do_lorem_template('WIKI_SUBCATEGORY_CHILDREN',array(
+        $_child = do_lorem_template('WIKI_SUBCATEGORY_CHILDREN', array(
             'MY_CHILD_POSTS' => lorem_phrase(),
             'MY_CHILD_CHILDREN' => lorem_phrase(),
         ));
-        $child = do_lorem_template('WIKI_SUBCATEGORY_LINK',array(
+        $child = do_lorem_template('WIKI_SUBCATEGORY_LINK', array(
             'URL' => placeholder_url(),
             'CHILD' => $_child,
             'SUP' => lorem_phrase(),
@@ -300,7 +299,7 @@ class Hook_addon_registry_wiki
 
 
         return array(
-            lorem_globalise(do_lorem_template('WIKI_PAGE_SCREEN',array(
+            lorem_globalise(do_lorem_template('WIKI_PAGE_SCREEN', array(
                 'TAGS' => lorem_word_html(),
                 'HIDE_POSTS' => placeholder_id(),
                 'ID' => placeholder_id(),
@@ -313,7 +312,7 @@ class Hook_addon_registry_wiki
                 'POSTS' => $posts,
                 'NUM_POSTS' => placeholder_number(),
                 'BUTTONS' => placeholder_button(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -327,10 +326,10 @@ class Hook_addon_registry_wiki
     public function tpl_preview__wiki_changes_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('WIKI_CHANGES_SCREEN',array(
+            lorem_globalise(do_lorem_template('WIKI_CHANGES_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'RESULTS' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -348,7 +347,7 @@ class Hook_addon_registry_wiki
 
         require_css('forms');
 
-        $posting_form = do_lorem_template('POSTING_FORM',array(
+        $posting_form = do_lorem_template('POSTING_FORM', array(
             'TABINDEX_PF' => placeholder_number(),
             'JAVASCRIPT' => '',
             'PREVIEW' => lorem_phrase(),
@@ -373,13 +372,13 @@ class Hook_addon_registry_wiki
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('WIKI_POSTING_SCREEN',array(
+            lorem_globalise(do_lorem_template('WIKI_POSTING_SCREEN', array(
                 'PING_URL' => '',
                 'WARNING_DETAILS' => '',
                 'TEXT' => lorem_phrase(),
                 'TITLE' => lorem_title(),
                 'POSTING_FORM' => $posting_form,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

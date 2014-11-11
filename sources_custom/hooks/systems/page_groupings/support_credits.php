@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
-
 class Hook_page_groupings_support_credits
 {
     /**
@@ -22,11 +21,11 @@ class Hook_page_groupings_support_credits
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('audit','menu/_generic_admin/tool',array('outstanding_credits',array(),get_page_zone('outstanding_credits')),do_lang_tempcode('customers:UNSPENT_SUPPORT_CREDITS')),
-            array('tools','menu/_generic_admin/tool',array('admin_customers',array(),get_module_zone('admin_customers')),do_lang_tempcode('customers:CHARGE_CUSTOMER')),
+            array('audit', 'menu/_generic_admin/tool', array('outstanding_credits', array(), get_page_zone('outstanding_credits')), do_lang_tempcode('customers:UNSPENT_SUPPORT_CREDITS')),
+            array('tools', 'menu/_generic_admin/tool', array('admin_customers', array(), get_module_zone('admin_customers')), do_lang_tempcode('customers:CHARGE_CUSTOMER')),
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_addon_registry_occle
 {
     /**
@@ -259,12 +258,12 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_main()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_MAIN',array(
+            lorem_globalise(do_lorem_template('OCCLE_MAIN', array(
                 'COMMANDS' => lorem_phrase(),
                 'SUBMIT_URL' => placeholder_url(),
                 'page' => lorem_phrase(),
                 'PROMPT' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -277,17 +276,17 @@ class Hook_addon_registry_occle
      */
     public function tpl_preview__administrative__occle_main_screen()
     {
-        $content = do_lorem_template('OCCLE_MAIN',array(
+        $content = do_lorem_template('OCCLE_MAIN', array(
             'SUBMIT_URL' => placeholder_url(),
             'PROMPT' => lorem_phrase(),
             'COMMANDS' => lorem_phrase(),
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_MAIN_SCREEN',array(
+            lorem_globalise(do_lorem_template('OCCLE_MAIN_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -300,21 +299,21 @@ class Hook_addon_registry_occle
      */
     public function tpl_preview__administrative__occle_command()
     {
-        $notifications = do_lorem_template('OCCLE_NOTIFICATION',array(
+        $notifications = do_lorem_template('OCCLE_NOTIFICATION', array(
             'SECTION' => lorem_phrase(),
             'TYPE' => lorem_phrase(),
             'NOTIFICATION_CONTENT' => lorem_phrase(),
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_COMMAND',array(
+            lorem_globalise(do_lorem_template('OCCLE_COMMAND', array(
                 'NOTIFICATIONS' => $notifications,
                 'METHOD' => lorem_phrase(),
                 'STDOUT' => lorem_phrase(),
                 'STDHTML' => lorem_phrase(),
                 'STDCOMMAND' => lorem_word_2(),
                 'STDERR' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -327,15 +326,15 @@ class Hook_addon_registry_occle
      */
     public function tpl_preview__administrative__occle_array()
     {
-        $elements = do_lorem_template('OCCLE_ARRAY_ELEMENT',array(
+        $elements = do_lorem_template('OCCLE_ARRAY_ELEMENT', array(
             'KEY' => lorem_phrase(),
             'VALUE' => lorem_phrase(),
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_ARRAY',array(
+            lorem_globalise(do_lorem_template('OCCLE_ARRAY', array(
                 'ELEMENTS' => $elements,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -349,11 +348,11 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_help()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_HELP',array(
+            lorem_globalise(do_lorem_template('OCCLE_HELP', array(
                 'INTRODUCTION' => lorem_phrase(),
                 'OPTIONS' => placeholder_array(),
                 'PARAMETERS' => placeholder_array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -367,9 +366,9 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_box()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_BOX',array(
+            lorem_globalise(do_lorem_template('OCCLE_BOX', array(
                 'HTML' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -383,9 +382,9 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_commands()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_COMMANDS',array(
+            lorem_globalise(do_lorem_template('OCCLE_COMMANDS', array(
                 'COMMANDS' => placeholder_array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -398,7 +397,7 @@ class Hook_addon_registry_occle
      */
     public function tpl_preview__administrative__occle_rss()
     {
-        $content = do_lorem_template('OCCLE_RSS_ITEM',array(
+        $content = do_lorem_template('OCCLE_RSS_ITEM', array(
             'FULL_URL' => placeholder_url(),
             'NEWS_TITLE' => lorem_phrase(),
             'DATE' => placeholder_time(),
@@ -406,10 +405,10 @@ class Hook_addon_registry_occle
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_RSS',array(
+            lorem_globalise(do_lorem_template('OCCLE_RSS', array(
                 'TITLE' => lorem_phrase(),
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -423,12 +422,12 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_edit()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_EDIT',array(
+            lorem_globalise(do_lorem_template('OCCLE_EDIT', array(
                 'UNIQ_ID' => placeholder_random(),
                 'FILE' => lorem_phrase(),
                 'SUBMIT_URL' => placeholder_url(),
                 'FILE_CONTENTS' => lorem_sentence(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -446,10 +445,10 @@ class Hook_addon_registry_occle
             $memb[$v] = $k;
         }
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_USERS_ONLINE',array(
+            lorem_globalise(do_lorem_template('OCCLE_USERS_ONLINE', array(
                 'MEMBERS' => $memb,
                 'GUESTS' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -463,9 +462,9 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_find_codes()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_FIND_CODES',array(
+            lorem_globalise(do_lorem_template('OCCLE_FIND_CODES', array(
                 'FILES' => placeholder_array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -479,13 +478,13 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_whois()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_WHOIS',array(
+            lorem_globalise(do_lorem_template('OCCLE_WHOIS', array(
                 'STATS' => lorem_phrase(),
                 'IP_LIST' => placeholder_list_item(),
                 'ID' => placeholder_id(),
                 'IP' => placeholder_ip(),
                 'NAME' => lorem_word(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -503,9 +502,9 @@ class Hook_addon_registry_occle
             $points[$v] = $k;
         }
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_ENTRY_POINTS',array(
+            lorem_globalise(do_lorem_template('OCCLE_ENTRY_POINTS', array(
                 'ENTRY_POINTS' => $points,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -519,11 +518,11 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_ls()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_LS',array(
+            lorem_globalise(do_lorem_template('OCCLE_LS', array(
                 'DIRECTORY' => lorem_phrase(),
                 'DIRECTORIES' => placeholder_array(),
                 'FILES' => placeholder_array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -543,10 +542,10 @@ class Hook_addon_registry_occle
             $rooms[$v] = $k;
         }
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_CHAT_NOTIFICATION',array(
+            lorem_globalise(do_lorem_template('OCCLE_CHAT_NOTIFICATION', array(
                 'MESSAGE_COUNT' => placeholder_number(),
                 'ROOMS' => $rooms,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -560,10 +559,10 @@ class Hook_addon_registry_occle
     public function tpl_preview__administrative__occle_occlechat_notification()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_OCCLECHAT_NOTIFICATION',array(
+            lorem_globalise(do_lorem_template('OCCLE_OCCLECHAT_NOTIFICATION', array(
                 'MESSAGE_COUNT' => placeholder_number(),
                 'MESSAGES' => placeholder_array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -584,9 +583,9 @@ class Hook_addon_registry_occle
             );
         }
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_OCF_NOTIFICATION',array(
+            lorem_globalise(do_lorem_template('OCCLE_OCF_NOTIFICATION', array(
                 'TOPICS' => $topics,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -607,9 +606,9 @@ class Hook_addon_registry_occle
             );
         }
         return array(
-            lorem_globalise(do_lorem_template('OCCLE_PT_NOTIFICATION',array(
+            lorem_globalise(do_lorem_template('OCCLE_PT_NOTIFICATION', array(
                 'TOPICS' => $topics,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

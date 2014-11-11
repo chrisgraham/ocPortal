@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_clubs
  */
-
 class Hook_addon_registry_ocf_clubs
 {
     /**

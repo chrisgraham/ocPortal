@@ -299,7 +299,7 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
     if (
         (isset($SITE_INFO['no_keep_params'])) &&
         ($SITE_INFO['no_keep_params'] == '1') &&
-        ((get_option('url_monikers_enabled')=='0') || (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && ((is_null($id)) || (strpos($id, '/') !== false)))
+        ((get_option('url_monikers_enabled') == '0') || (!is_numeric($id)/*i.e. not going to trigger a URL moniker query*/) && ((is_null($id)) || (strpos($id, '/') !== false)))
     ) {
         if ($vars['page'] == '_SELF') {
             $vars['page'] = get_page_name();
@@ -315,7 +315,8 @@ function build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $avo
 
     $id = isset($vars['id']) ? $vars['id'] : null;
 
-    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/($vars['page']);
+    $page_link = $zone_name . ':' . /*urlencode not needed in reality, performance*/
+        ($vars['page']);
     if ((isset($vars['type'])) || (array_key_exists('type', $vars))) {
         if (is_object($vars['type'])) {
             $page_link .= ':';

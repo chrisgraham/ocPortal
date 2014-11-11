@@ -20,26 +20,26 @@
  * @param  array                        Details of the product.
  * @param  ID_TEXT                      The product codename.
  */
-function handle_custom_purchase($purchase_id,$details,$type_code)
+function handle_custom_purchase($purchase_id, $details, $type_code)
 {
-    $id = intval(substr($type_code,strlen('CUSTOM_')));
+    $id = intval(substr($type_code, strlen('CUSTOM_')));
 
-    $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs',array('id','c_title','c_cost'),array('id' => $id));
-    if (!array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs', array('id', 'c_title', 'c_cost'), array('id' => $id));
+    if (!array_key_exists(0, $rows)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
     $row = $rows[0];
 
     $c_title = get_translated_text($row['c_title']);
 
-    $sale_id = $GLOBALS['SITE_DB']->query_insert('sales',array('date_and_time' => time(),'memberid' => $purchase_id,'purchasetype' => 'PURCHASE_CUSTOM_PRODUCT','details' => $c_title,'details2' => strval($row['id'])),true);
+    $sale_id = $GLOBALS['SITE_DB']->query_insert('sales', array('date_and_time' => time(), 'memberid' => $purchase_id, 'purchasetype' => 'PURCHASE_CUSTOM_PRODUCT', 'details' => $c_title, 'details2' => strval($row['id'])), true);
 
     require_lang('pointstore');
     require_code('notifications');
-    $subject = do_lang('MAIL_REQUEST_CUSTOM',comcode_escape($c_title),null,null,get_site_default_lang());
+    $subject = do_lang('MAIL_REQUEST_CUSTOM', comcode_escape($c_title), null, null, get_site_default_lang());
     $username = $GLOBALS['FORUM_DRIVER']->get_username($purchase_id);
-    $message_raw = do_lang('MAIL_REQUEST_CUSTOM_BODY',comcode_escape($c_title),$username,null,get_site_default_lang());
-    dispatch_notification('pointstore_request_custom','custom' . strval($id) . '_' . strval($sale_id),$subject,$message_raw,null,null,3,true);
+    $message_raw = do_lang('MAIL_REQUEST_CUSTOM_BODY', comcode_escape($c_title), $username, null, get_site_default_lang());
+    dispatch_notification('pointstore_request_custom', 'custom' . strval($id) . '_' . strval($sale_id), $subject, $message_raw, null, null, 3, true);
 
     // Email member
     require_code('mail');
@@ -48,8 +48,8 @@ function handle_custom_purchase($purchase_id,$details,$type_code)
     if ($subject_line != '') {
         $message_raw = get_translated_text($row['cp_mail_body']);
         $email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($purchase_id);
-        $to_name = $GLOBALS['FORUM_DRIVER']->get_username($purchase_id,true);
-        mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,null,false,null,true);
+        $to_name = $GLOBALS['FORUM_DRIVER']->get_username($purchase_id, true);
+        mail_wrap($subject_line, $message_raw, array($email), $to_name, '', '', 3, null, false, null, true);
     }
 }
 
@@ -70,13 +70,13 @@ class Hook_custom
             return array();
         }
 
-        $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs',array('*'),array('c_enabled' => 1));
+        $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs', array('*'), array('c_enabled' => 1));
 
         $products = array();
         foreach ($rows as $row) {
             if ($row['c_cost'] != 0) {
-                $cost = floatval($row['c_cost'])/$ppc;
-                $products['CUSTOM_' . strval($row['id'])] = array(PRODUCT_PURCHASE_WIZARD,float_to_raw_string($cost),'handle_custom_purchase',array(),get_translated_text($row['c_title']));
+                $cost = floatval($row['c_cost']) / $ppc;
+                $products['CUSTOM_' . strval($row['id'])] = array(PRODUCT_PURCHASE_WIZARD, float_to_raw_string($cost), 'handle_custom_purchase', array(), get_translated_text($row['c_title']));
             }
         }
 
@@ -88,16 +88,16 @@ class Hook_custom
      *
      * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
      */
-    public function is_available($type_code,$member)
+    public function is_available($type_code, $member)
     {
         if (is_guest($member)) {
             return ECOMMERCE_PRODUCT_NO_GUESTS;
         }
 
-        $id = intval(substr($type_code,strlen('CUSTOM_')));
+        $id = intval(substr($type_code, strlen('CUSTOM_')));
 
-        $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs',array('*'),array('id' => $id),'',1);
-        if (array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs', array('*'), array('id' => $id), '', 1);
+        if (array_key_exists(0, $rows)) {
             $row = $rows[0];
 
             if ($row['c_enabled'] == 0) {
@@ -106,7 +106,7 @@ class Hook_custom
 
             if ($row['c_one_per_member'] == 1) {
                 // Test to see if it's been bought
-                $test = $GLOBALS['SITE_DB']->query_select_value_if_there('sales','id',array('purchasetype' => 'PURCHASE_CUSTOM_PRODUCT','details2' => strval($rows[0]['id']),'memberid' => $member));
+                $test = $GLOBALS['SITE_DB']->query_select_value_if_there('sales', 'id', array('purchasetype' => 'PURCHASE_CUSTOM_PRODUCT', 'details2' => strval($rows[0]['id']), 'memberid' => $member));
                 if (!is_null($test)) {
                     return ECOMMERCE_PRODUCT_ALREADY_HAS;
                 }
@@ -126,12 +126,12 @@ class Hook_custom
      */
     public function get_message($type_code)
     {
-        $id = intval(substr($type_code,strlen('CUSTOM_')));
+        $id = intval(substr($type_code, strlen('CUSTOM_')));
 
-        $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs',array('*'),array('id' => $id),'',1);
-        if (array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs', array('*'), array('id' => $id), '', 1);
+        if (array_key_exists(0, $rows)) {
             $row = $rows[0];
-            return get_translated_tempcode('pstore_customs',$row,'c_description');
+            return get_translated_tempcode('pstore_customs', $row, 'c_description');
         }
         return new ocp_tempcode();
     }
@@ -143,6 +143,6 @@ class Hook_custom
      */
     public function get_needed_fields()
     {
-        return NULL;
+        return null;
     }
 }

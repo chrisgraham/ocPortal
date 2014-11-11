@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
-
 class Hook_admin_import_types_community_billboard
 {
     /**

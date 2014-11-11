@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    counting_blocks
  */
-
 class Hook_addon_registry_counting_blocks
 {
     /**
@@ -128,14 +127,14 @@ class Hook_addon_registry_counting_blocks
     public function tpl_preview__main_countdown()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNTDOWN',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNTDOWN', array(
                 'LANG' => placeholder_number(),
                 'POSITIVE' => true,
                 'PRECISION' => placeholder_number(),
                 'MILLISECONDS_FOR_PRECISION' => placeholder_number(),
                 'DISTANCE_FOR_PRECISION' => placeholder_number(),
                 'TAILING' => false,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -149,10 +148,10 @@ class Hook_addon_registry_counting_blocks
     public function tpl_preview__main_count()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_COUNT', array(
                 'NAME' => lorem_word(),
                 'VALUE' => placeholder_random(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

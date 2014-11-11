@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-
 class Hook_addon_registry_setupwizard
 {
     /**
@@ -151,11 +150,11 @@ class Hook_addon_registry_setupwizard
     public function tpl_preview__administrative__setupwizard_block_preview()
     {
         return array(
-            lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW',array(
+            lorem_globalise(do_lorem_template('SETUPWIZARD_BLOCK_PREVIEW', array(
                 'LEFT' => lorem_paragraph(),
                 'RIGHT' => lorem_paragraph(),
                 'START' => lorem_paragraph(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -170,7 +169,7 @@ class Hook_addon_registry_setupwizard
     {
         require_lang('config');
 
-        $inner = do_lorem_template('SETUPWIZARD_2',array(
+        $inner = do_lorem_template('SETUPWIZARD_2', array(
             'SKIP_VALIDATION' => true,
             'TITLE' => lorem_title(),
             'URL' => placeholder_url(),
@@ -179,11 +178,11 @@ class Hook_addon_registry_setupwizard
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('SETUPWIZARD_SCREEN',array(
+            lorem_globalise(do_lorem_template('SETUPWIZARD_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'INNER' => $inner,
                 'STEP' => '7',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -198,7 +197,7 @@ class Hook_addon_registry_setupwizard
     {
         require_lang('config');
 
-        $inner = do_lorem_template('SETUPWIZARD_7',array(
+        $inner = do_lorem_template('SETUPWIZARD_7', array(
             'TITLE' => lorem_title(),
             'FORM' => placeholder_form(),
             'BALANCED' => lorem_phrase(),
@@ -207,11 +206,11 @@ class Hook_addon_registry_setupwizard
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('SETUPWIZARD_SCREEN',array(
+            lorem_globalise(do_lorem_template('SETUPWIZARD_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'INNER' => $inner,
                 'STEP' => '7',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

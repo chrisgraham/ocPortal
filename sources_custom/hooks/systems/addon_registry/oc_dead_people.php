@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_dead_people
  */
-
 class Hook_addon_registry_oc_dead_people
 {
     /**
@@ -94,8 +93,7 @@ To configure the diseases go to Admin Zone > Setup > Manage Diseases.';
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -110,10 +108,8 @@ To configure the diseases go to Admin Zone > Setup > Manage Diseases.';
                 'Cron',
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

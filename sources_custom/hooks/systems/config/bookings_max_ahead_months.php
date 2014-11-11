@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
-
 class Hook_config_bookings_max_ahead_months
 {
     /**

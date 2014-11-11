@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_config_points_CHOOSE_IOTD
 {
     /**
@@ -42,6 +41,6 @@ class Hook_config_points_CHOOSE_IOTD
      */
     public function get_default()
     {
-        return addon_installed('points')?'35':null;
+        return addon_installed('points') ? '35' : null;
     }
 }

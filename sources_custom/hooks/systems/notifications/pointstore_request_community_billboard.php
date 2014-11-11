@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
-
 class Hook_Notification_pointstore_request_community_billboard extends Hook_Notification__Staff
 {
     /**
@@ -22,7 +21,7 @@ class Hook_Notification_pointstore_request_community_billboard extends Hook_Noti
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -36,7 +35,7 @@ class Hook_Notification_pointstore_request_community_billboard extends Hook_Noti
     public function list_handled_codes()
     {
         $list = array();
-        $list['pointstore_request_community_billboard'] = array(do_lang('pointstore:POINTSTORE'),do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_community_billboard'));
+        $list['pointstore_request_community_billboard'] = array(do_lang('pointstore:POINTSTORE'), do_lang('pointstore:NOTIFICATION_TYPE_pointstore_request_community_billboard'));
         return $list;
     }
 }

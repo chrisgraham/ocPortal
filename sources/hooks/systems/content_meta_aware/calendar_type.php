@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_content_meta_aware_calendar_type
 {
     /**
@@ -37,45 +36,45 @@ class Hook_content_meta_aware_calendar_type
             'table' => 'calendar_types',
             'id_field' => 'id',
             'id_field_numeric' => true,
-            'parent_category_field' => NULL,
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_field' => null,
+            'parent_category_meta_aware_type' => null,
             'is_category' => true,
             'is_entry' => false,
-            'category_field' => NULL, // For category permissions
-            'category_type' => NULL, // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'category_field' => null, // For category permissions
+            'category_type' => null, // For category permissions
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => false,
 
             'title_field' => 't_title',
             'title_field_dereference' => true,
-            'description_field' => NULL,
+            'description_field' => null,
             'thumb_field' => 't_logo',
             'thumb_field_is_theme_image' => true,
 
             'view_page_link_pattern' => '_SEARCH:calendar:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_calendar:_ec:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:calendar:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_calendar'))?(get_module_zone('cms_calendar') . ':cms_calendar:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('calendar')) . ':calendar',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_calendar')) ? (get_module_zone('cms_calendar') . ':cms_calendar:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('calendar')) . ':calendar',
 
             'support_url_monikers' => false,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
-            'add_time_field' => NULL,
-            'edit_time_field' => NULL,
-            'date_field' => NULL,
-            'validated_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
+            'add_time_field' => null,
+            'edit_time_field' => null,
+            'date_field' => null,
+            'validated_field' => null,
 
             'seo_type_code' => 'calendar_type',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'calendar',
 
@@ -85,7 +84,7 @@ class Hook_content_meta_aware_calendar_type
             'occle_filesystem_hook' => 'calendar',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_CALENDAR_TYPE',
         );
@@ -103,10 +102,10 @@ class Hook_content_meta_aware_calendar_type
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('authors');
 
-        return render_calendar_type_box($row,$zone,$give_context,$guid);
+        return render_calendar_type_box($row, $zone, $give_context, $guid);
     }
 }

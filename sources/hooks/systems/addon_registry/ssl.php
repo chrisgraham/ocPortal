@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ssl
  */
-
 class Hook_addon_registry_ssl
 {
     /**
@@ -134,7 +133,7 @@ class Hook_addon_registry_ssl
         foreach (placeholder_array() as $_k => $v) {
             foreach (placeholder_array() as $k => $v2) {
                 $k++;
-                $content->attach(do_lorem_template('SSL_CONFIGURATION_ENTRY',array(
+                $content->attach(do_lorem_template('SSL_CONFIGURATION_ENTRY', array(
                     'TICKED' => lorem_word(),
                     'PAGE' => $v,
                     'ZONE' => $v2,
@@ -143,11 +142,11 @@ class Hook_addon_registry_ssl
         }
 
         return array(
-            lorem_globalise(do_lorem_template('SSL_CONFIGURATION_SCREEN',array(
+            lorem_globalise(do_lorem_template('SSL_CONFIGURATION_SCREEN', array(
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_title(),
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

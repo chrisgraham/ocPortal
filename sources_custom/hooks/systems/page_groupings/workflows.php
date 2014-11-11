@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    workflows
  */
-
 class Hook_page_groupings_workflows
 {
     /**
@@ -22,10 +21,10 @@ class Hook_page_groupings_workflows
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('setup','menu/workflows',array('admin_workflow',array('type' => 'misc'),get_module_zone('admin_workflow')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('workflows:WORKFLOWS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflows','COUNT(*)'))))),'workflows:DOC_WORKFLOWS'),
+            array('setup', 'menu/workflows', array('admin_workflow', array('type' => 'misc'), get_module_zone('admin_workflow')), do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('workflows:WORKFLOWS'), make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value('workflows', 'COUNT(*)'))))), 'workflows:DOC_WORKFLOWS'),
         );
     }
 }

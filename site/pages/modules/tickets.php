@@ -699,7 +699,7 @@ class Module_tickets
             $post_url = build_url(array('page' => '_SELF', 'id' => $id, 'type' => 'post', 'redirect' => get_param('redirect', null), 'start_comments' => get_param('start_comments', null), 'max_comments' => get_param('max_comments', null)), '_SELF');
             $tpl = do_template('SUPPORT_TICKET_SCREEN', array(
                 '_GUID' => 'd21a9d161008c6c44fe7309a14be2c5b',
-                'ID' => is_null($id) ? '': $id,
+                'ID' => is_null($id) ? '' : $id,
                 'SERIALIZED_OPTIONS' => $serialized_options,
                 'HASH' => $hash,
                 'TOGGLE_TICKET_CLOSED_URL' => $toggle_ticket_closed_url,
@@ -1038,7 +1038,7 @@ class Module_tickets
 
         list($from_title, $from_topic_id) = get_ticket_details($from);
         list($to_title) = get_ticket_details($to);
- 
+
         // Add into new ticket
         $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $to, 'redirect' => null), '_SELF', null, false, true, true);
         $home_url = $_home_url->evaluate();
@@ -1046,7 +1046,7 @@ class Module_tickets
         $topic_id = 1;
         $_ticket_type_id = 1; // These will be returned by reference
         $_comments_all = get_ticket_posts($from, $forum, $topic_id, $_ticket_type_id);
-        if (count($_comments_all)==0) {
+        if (count($_comments_all) == 0) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
         foreach ($_comments_all as $comment) {
@@ -1092,7 +1092,7 @@ class Module_tickets
         send_ticket_email($from, $merge_title, $merge_post, $home_url, $email, null, get_member());
 
         // Closed old ticket
-        if (get_forum_type()=='ocf') {
+        if (get_forum_type() == 'ocf') {
             $GLOBALS['FORUM_DB']->query_update('f_topics', array('t_is_open' => 0), array('id' => $from_topic_id), '', 1);
         }
 
@@ -1183,7 +1183,7 @@ class Module_tickets
         $member_id = get_param_integer('member_id');
 
         require_code('notifications');
- 
+
         // Notification to support operator that they are assigned
         $_home_url = build_url(array('page' => '_SELF', 'type' => 'ticket', 'id' => $ticket_id, 'redirect' => null), '_SELF', null, false, true, true);
         $home_url = $_home_url->evaluate();

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_sw_iotds
 {
     /**
@@ -26,6 +25,6 @@ class Hook_sw_iotds
             return array();
         }
 
-        return array(array('main_iotd' => array('YES_CELL','YES_CELL')),array());
+        return array(array('main_iotd' => array('YES_CELL', 'YES_CELL')), array());
     }
 }

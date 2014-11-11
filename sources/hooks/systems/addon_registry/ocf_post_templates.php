@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_post_templates
  */
-
 class Hook_addon_registry_ocf_post_templates
 {
     /**
@@ -133,7 +132,7 @@ class Hook_addon_registry_ocf_post_templates
 
         $list = new ocp_tempcode();
         foreach (placeholder_array() as $key => $value) {
-            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
                 'DISABLED' => false,
                 'CLASS' => '',
@@ -142,13 +141,13 @@ class Hook_addon_registry_ocf_post_templates
             )));
         }
 
-        $input = do_lorem_template('OCF_POST_TEMPLATE_SELECT',array(
+        $input = do_lorem_template('OCF_POST_TEMPLATE_SELECT', array(
             'TABINDEX' => placeholder_number(),
             'LIST' => $list,
         ));
 
         $fields = new ocp_tempcode();
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'PRETTY_NAME' => lorem_word(),
@@ -160,7 +159,7 @@ class Hook_addon_registry_ocf_post_templates
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM_SCREEN',array(
+            lorem_globalise(do_lorem_template('FORM_SCREEN', array(
                 'SKIP_VALIDATION' => true,
                 'HIDDEN' => '',
                 'TITLE' => lorem_title(),
@@ -169,7 +168,7 @@ class Hook_addon_registry_ocf_post_templates
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_phrase(),
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

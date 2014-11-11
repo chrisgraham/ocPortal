@@ -355,8 +355,7 @@ function _read_php_function_line($_line)
                     $default_raw = $arg_default;
                     if ($arg_default === 'true') {
                         $default = 'boolean-true'; // hack, to stop booleans coming out of arrays as integers
-                    }
-                    elseif ($arg_default === 'false') {
+                    } elseif ($arg_default === 'false') {
                         $default = 'boolean-false';
                     } else {
                         $default = @eval('return ' . $arg_default . ';'); // Could be unprocessable by php.php in standalone mode
@@ -373,8 +372,7 @@ function _read_php_function_line($_line)
                     $default_raw = $arg_default;
                     if ($arg_default === 'true') {
                         $default = 'boolean-true'; // hack, to stop booleans coming out of arrays as integers
-                    }
-                    elseif ($arg_default === 'false') {
+                    } elseif ($arg_default === 'false') {
                         $default = 'boolean-false';
                     } else {
                         $default = @eval('return ' . $arg_default . ';'); // Could be unprocessable by php.php in standalone mode

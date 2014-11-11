@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_contact_member
  */
-
 class Hook_addon_registry_ocf_contact_member
 {
     /**

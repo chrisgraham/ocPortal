@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
-
 class Hook_block_ui_renderers_newsletters
 {
     /**
@@ -30,16 +29,16 @@ class Hook_block_ui_renderers_newsletters
      * @param  tempcode                 Field description
      * @return ?tempcode                Rendered field (NULL: not handled).
      */
-    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
-        if (($parameter == 'param') && (in_array($block,array('main_newsletter_signup')))) { // newsletter list
+        if (($parameter == 'param') && (in_array($block, array('main_newsletter_signup')))) { // newsletter list
             $list = new ocp_tempcode();
-            $rows = $GLOBALS['SITE_DB']->query_select('newsletters',array('id','title'));
+            $rows = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
             foreach ($rows as $newsletter) {
-                $list->attach(form_input_list_entry(strval($newsletter['id']),$has_default && strval($newsletter['id']) == $default,get_translated_text($newsletter['title'])));
+                $list->attach(form_input_list_entry(strval($newsletter['id']), $has_default && strval($newsletter['id']) == $default, get_translated_text($newsletter['title'])));
             }
-            return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false);
+            return form_input_list(titleify($parameter), escape_html($description), $parameter, $list, null, false, false);
         }
-        return NULL;
+        return null;
     }
 }

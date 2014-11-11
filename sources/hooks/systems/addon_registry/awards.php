@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
-
 class Hook_addon_registry_awards
 {
     /**
@@ -143,7 +142,7 @@ class Hook_addon_registry_awards
     public function tpl_preview__block_main_awards()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_AWARDS',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_AWARDS', array(
                 'TITLE' => lorem_word(),
                 'TYPE' => lorem_word(),
                 'DESCRIPTION' => lorem_paragraph_html(),
@@ -155,7 +154,7 @@ class Hook_addon_registry_awards
                 'CONTENT' => lorem_phrase_html(),
                 'SUBMIT_URL' => placeholder_url(),
                 'ARCHIVE_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -169,14 +168,14 @@ class Hook_addon_registry_awards
     public function tpl_preview__awarded_content()
     {
         return array(
-            lorem_globalise(do_lorem_template('AWARDED_CONTENT',array(
+            lorem_globalise(do_lorem_template('AWARDED_CONTENT', array(
                 'AWARDEE_PROFILE_URL' => placeholder_url(),
                 'AWARDEE' => lorem_phrase(),
                 'AWARDEE_USERNAME' => lorem_word(),
                 'RAW_AWARD_DATE' => placeholder_time(),
                 'AWARD_DATE' => placeholder_time(),
                 'CONTENT' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

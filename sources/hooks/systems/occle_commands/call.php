@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_call
 {
     /**
@@ -28,18 +27,18 @@ class Hook_occle_command_call
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('call',array('h'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('call', array('h'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','call'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'call'));
             }
 
             $details = page_link_decode($parameters[0]);
-            $url = build_url($details[1],$details[0]);
-            return array('window.open(unescape("' . urlencode($url->evaluate()) . '"),"occle_window1","");','',do_lang('SUCCESS'),'');
+            $url = build_url($details[1], $details[0]);
+            return array('window.open(unescape("' . urlencode($url->evaluate()) . '"),"occle_window1","");', '', do_lang('SUCCESS'), '');
         }
     }
 }

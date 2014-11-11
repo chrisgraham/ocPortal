@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_addon_registry_filedump
 {
     /**
@@ -165,7 +164,7 @@ class Hook_addon_registry_filedump
         );
 
         return array(
-            lorem_globalise(do_lorem_template('FILEDUMP_SCREEN',array(
+            lorem_globalise(do_lorem_template('FILEDUMP_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'PLACE' => placeholder_id(),
                 'THUMBNAILS' => $thumbnails,
@@ -182,7 +181,7 @@ class Hook_addon_registry_filedump
                 'OTHER_DIRECTORIES' => array(lorem_word()),
                 'FILTERED_DIRECTORIES' => array(lorem_word()),
                 'FILTERED_DIRECTORIES_MISSES' => array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -196,12 +195,12 @@ class Hook_addon_registry_filedump
     public function tpl_preview__filedump_embed_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('FILEDUMP_EMBED_SCREEN',array(
+            lorem_globalise(do_lorem_template('FILEDUMP_EMBED_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'FORM' => placeholder_form(),
                 'IMAGE_SIZES' => array(
                     array(
-                        'LABEL' => do_lang_tempcode('FILEDUMP_IMAGE_URLS_SMALL',escape_html(get_option('thumb_width')),escape_html(get_option('thumb_width'))),
+                        'LABEL' => do_lang_tempcode('FILEDUMP_IMAGE_URLS_SMALL', escape_html(get_option('thumb_width')), escape_html(get_option('thumb_width'))),
                         'SIZE_URL' => placeholder_image_url(),
                         'SIZE_WIDTH' => get_option('thumb_width'),
                         'SIZE_HEIGHT' => get_option('thumb_width'),
@@ -209,7 +208,7 @@ class Hook_addon_registry_filedump
                 ),
                 'URL' => placeholder_image_url(),
                 'EXISTING_COUNT' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

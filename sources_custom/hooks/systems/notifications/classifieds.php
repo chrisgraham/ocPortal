@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
-
 class Hook_Notification_classifieds extends Hook_Notification
 {
     /**
@@ -24,12 +23,12 @@ class Hook_Notification_classifieds extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $catalogues = $GLOBALS['SITE_DB']->query_select('classifieds_prices',array('DISTINCT c_catalogue_name'),null,'',null,null,true);
+        $catalogues = $GLOBALS['SITE_DB']->query_select('classifieds_prices', array('DISTINCT c_catalogue_name'), null, '', null, null, true);
         if (is_null($catalogues)) {
             return array();
         }
         foreach ($catalogues as $catalogue) {
-            $list['classifieds__' . $catalogue['c_catalogue_name']] = array(do_lang('GENERAL'),do_lang('classifieds:NOTIFICATION_TYPE_classifieds'));
+            $list['classifieds__' . $catalogue['c_catalogue_name']] = array(do_lang('GENERAL'), do_lang('classifieds:NOTIFICATION_TYPE_classifieds'));
         }
         return $list;
     }
@@ -44,10 +43,10 @@ class Hook_Notification_classifieds extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'cms_catalogues',$notification_code,$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'cms_catalogues', $notification_code, $category, $to_member_ids, $start, $max);
 
         return $members;
     }

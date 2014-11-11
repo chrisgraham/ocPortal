@@ -22,7 +22,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_comcode_link_handler_media_rendering
 {
     /**
@@ -41,9 +40,9 @@ class Hook_comcode_link_handler_media_rendering
      * @param  ?array                   A list of words to highlight (NULL: none)
      * @return ?tempcode                Handled link (NULL: reject due to inappropriate link pattern)
      */
-    public function bind($url,$comcode_dangerous,$pass_id,$pos,$source_member,$as_admin,$connection,$comcode,$structure_sweep,$semiparse_mode,$highlight_bits)
+    public function bind($url, $comcode_dangerous, $pass_id, $pos, $source_member, $as_admin, $connection, $comcode, $structure_sweep, $semiparse_mode, $highlight_bits)
     {
         require_code('media_renderer');
-        return render_media_url($url,$url,array('context' => 'comcode_link'),$as_admin,$source_member);
+        return render_media_url($url, $url, array('context' => 'comcode_link'), $as_admin, $source_member);
     }
 }

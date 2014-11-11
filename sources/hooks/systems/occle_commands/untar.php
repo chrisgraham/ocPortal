@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_untar
 {
     /**
@@ -28,28 +27,28 @@ class Hook_occle_command_untar
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('untar',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('untar', array('h'), array(true, true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','untar'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'untar'));
             }
 
             $path = $parameters[0];
 
             if (!is_file(get_custom_file_base() . '/' . $path)) {
-                return array('','','',do_lang('MISSING_RESOURCE'));
+                return array('', '', '', do_lang('MISSING_RESOURCE'));
             }
 
             require_code('tar');
 
-            $myfile = tar_open(get_custom_file_base() . '/' . $path,'rb');
-            tar_extract_to_folder($myfile,'');
+            $myfile = tar_open(get_custom_file_base() . '/' . $path, 'rb');
+            tar_extract_to_folder($myfile, '');
             tar_close($myfile);
 
-            return array('','',do_lang('SUCCESS'),'');
+            return array('', '', do_lang('SUCCESS'), '');
         }
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    referrals
  */
-
 class Hook_addon_registry_referrals
 {
     /**
@@ -102,8 +101,7 @@ Allows people to specify who referred them when they join your site or other con
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -114,12 +112,9 @@ Allows people to specify who referred them when they join your site or other con
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
@@ -180,14 +175,14 @@ Allows people to specify who referred them when they join your site or other con
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('referrer_override',array(
+            $GLOBALS['SITE_DB']->create_table('referrer_override', array(
                 'o_referrer' => '*MEMBER',
                 'o_scheme_name' => '*ID_TEXT',
                 'o_referrals_dif' => 'INTEGER',
                 'o_is_qualified' => '?BINARY',
             ));
 
-            $GLOBALS['SITE_DB']->create_table('referees_qualified_for',array(
+            $GLOBALS['SITE_DB']->create_table('referees_qualified_for', array(
                 'id' => '*AUTO',
                 'q_referee' => 'MEMBER',
                 'q_referrer' => 'MEMBER',
@@ -198,14 +193,14 @@ Allows people to specify who referred them when they join your site or other con
             ));
 
             // Populate from current invites
-            $rows = $GLOBALS['FORUM_DB']->query_select('f_invites',array('i_email_address','i_time','i_inviter'),array('i_taken' => 1));
+            $rows = $GLOBALS['FORUM_DB']->query_select('f_invites', array('i_email_address', 'i_time', 'i_inviter'), array('i_taken' => 1));
             foreach ($rows as $row) {
-                $member_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_email_address' => $row['i_email_address']));
+                $member_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'id', array('m_email_address' => $row['i_email_address']));
                 if (!is_null($member_id)) {
-                    $ini_file = parse_ini_file(get_custom_file_base() . '/text_custom/referrals.txt',true);
+                    $ini_file = parse_ini_file(get_custom_file_base() . '/text_custom/referrals.txt', true);
 
                     foreach (array_keys($ini_file) as $scheme_name) {
-                        $GLOBALS['SITE_DB']->query_insert('referees_qualified_for',array(
+                        $GLOBALS['SITE_DB']->query_insert('referees_qualified_for', array(
                             'q_referee' => $member_id,
                             'q_referrer' => $row['i_inviter'],
                             'q_scheme_name' => $scheme_name,

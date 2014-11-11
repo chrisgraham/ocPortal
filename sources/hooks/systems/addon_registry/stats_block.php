@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
-
 class Hook_addon_registry_stats_block
 {
     /**
@@ -149,20 +148,20 @@ class Hook_addon_registry_stats_block
         $full_tpl = new ocp_tempcode();
         $bits = new ocp_tempcode();
         foreach (placeholder_array() as $v) {
-            $bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE',array(
+            $bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE', array(
                 'KEY' => lorem_phrase(),
                 'VALUE' => placeholder_number(),
             )));
         }
-        $full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION',array(
+        $full_tpl->attach(do_lorem_template('BLOCK_SIDE_STATS_SECTION', array(
             'SECTION' => lorem_phrase(),
             'CONTENT' => $bits,
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_STATS', array(
                 'CONTENT' => $full_tpl,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

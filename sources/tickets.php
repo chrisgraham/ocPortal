@@ -19,11 +19,11 @@
  */
 
 /**
-  * Build a list of ticket types.
-  *
-  * @param  ID_TEXT                      Ticket ID
-  * @return array                        Map of assigned members (member ID to display name)
-  */
+ * Build a list of ticket types.
+ *
+ * @param  ID_TEXT                      Ticket ID
+ * @return array                        Map of assigned members (member ID to display name)
+ */
 function find_ticket_assigned_to($ticket_id)
 {
     $assigned = array();

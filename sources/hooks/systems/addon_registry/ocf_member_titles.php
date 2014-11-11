@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_titles
  */
-
 class Hook_addon_registry_ocf_member_titles
 {
     /**

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    myocp
  */
-
 class Hook_cron_site_cleanup
 {
     /**
@@ -26,8 +25,8 @@ class Hook_cron_site_cleanup
 
         // Reset demo
         $last = get_value('last_demo_set_time');
-        if ((is_null($last)) || (intval($last)<time()-60*60*12)) {
-            set_value('last_demo_set_time',strval(time()));
+        if ((is_null($last)) || (intval($last) < time() - 60 * 60 * 12)) {
+            set_value('last_demo_set_time', strval(time()));
 
             global $SITE_INFO;
             if (!isset($SITE_INFO['mysql_root_password'])) {

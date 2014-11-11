@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_graphic_text
  */
-
 class Hook_addon_registry_core_graphic_text
 {
     /**

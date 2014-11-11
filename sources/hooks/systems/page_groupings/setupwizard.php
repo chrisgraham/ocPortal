@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-
 class Hook_page_groupings_setupwizard
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_setupwizard
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('setupwizard')) {
             return array();
         }
 
         return array(
-            array('setup','menu/adminzone/setup/SETUPWIZARD',array('admin_setupwizard',array('type' => 'misc'),get_module_zone('admin_setupwizard')),do_lang_tempcode('config:SETUPWIZARD'),'config:DOC_SETUPWIZARD'),
+            array('setup', 'menu/adminzone/setup/SETUPWIZARD', array('admin_setupwizard', array('type' => 'misc'), get_module_zone('admin_setupwizard')), do_lang_tempcode('config:SETUPWIZARD'), 'config:DOC_SETUPWIZARD'),
         );
     }
 }

@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_page_groupings_ocworld
 {
     /**
@@ -21,15 +20,15 @@ class Hook_page_groupings_ocworld
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         $zone = get_module_zone('ocworld');
-        if ($zone === NULL) {
+        if ($zone === null) {
             return array(); // Zone not installed yet
         }
 
         return array(
-            array('rich_content','menu/ocworld',array('ocworld',array(),$zone),do_lang_tempcode('ocworld:OCWORLD')),
+            array('rich_content', 'menu/ocworld', array('ocworld', array(), $zone), do_lang_tempcode('ocworld:OCWORLD')),
         );
     }
 }

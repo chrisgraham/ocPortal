@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    amazon_wishlist
  */
-
 class Hook_addon_registry_amazon_wishlist
 {
     /**
@@ -107,8 +106,7 @@ Note: Sometimes wishlists may be quite long, you can create a specific wish list
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -122,10 +120,8 @@ Note: Sometimes wishlists may be quite long, you can create a specific wish list
             'requires' => array(
                 'PHP simplexml extension',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

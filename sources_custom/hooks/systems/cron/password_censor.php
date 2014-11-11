@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    password_censor
  */
-
 class Hook_cron_password_censor
 {
     /**
@@ -21,11 +20,11 @@ class Hook_cron_password_censor
     public function run()
     {
         $last = get_value('last_password_censor_time');
-        if ((is_null($last)) || (intval($last)<time()-60*60*12)) {
-            set_value('last_password_censor_time',strval(time()));
+        if ((is_null($last)) || (intval($last) < time() - 60 * 60 * 12)) {
+            set_value('last_password_censor_time', strval(time()));
 
             require_code('password_censor');
-            password_censor(true,false);
+            password_censor(true, false);
         }
     }
 }

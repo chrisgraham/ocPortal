@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    guestbook
  */
-
 class Hook_addon_registry_guestbook
 {
     /**

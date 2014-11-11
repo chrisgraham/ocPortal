@@ -403,8 +403,7 @@ function ocf_read_in_topic($topic_id, $start, $max, $view_poll_results = false, 
         }
         if (($start == 0) && (count($_postdetailss) < $max)) {
             $out['max_rows'] = $max; // We know that they're all on this screen
-        }
-        else {
+        } else {
             $out['max_rows'] = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE ' . $where);
         }
         $posts = array();

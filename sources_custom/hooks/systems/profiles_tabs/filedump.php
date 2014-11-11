@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_Profiles_Tabs_filedump
 {
     /**
@@ -22,9 +21,9 @@ class Hook_Profiles_Tabs_filedump
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
-        return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')));
+        return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing, 'assume_any_member')));
     }
 
     /**
@@ -35,9 +34,9 @@ class Hook_Profiles_Tabs_filedump
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
-        enforce_personal_access($member_id_of,null,null,$member_id_viewing);
+        enforce_personal_access($member_id_of, null, null, $member_id_viewing);
 
         require_lang('filedump');
 
@@ -46,11 +45,11 @@ class Hook_Profiles_Tabs_filedump
         $order = 70;
 
         if ($leave_to_ajax_if_possible) {
-            return array($title,null,$order,'menu/cms/filedump');
+            return array($title, null, $order, 'menu/cms/filedump');
         }
 
-        $content = do_template('OCF_MEMBER_PROFILE_FILEDUMP',array('_GUID' => '87c683590a6e2d435d877cec1c97baba','MEMBER_ID' => strval($member_id_of)));
+        $content = do_template('OCF_MEMBER_PROFILE_FILEDUMP', array('_GUID' => '87c683590a6e2d435d877cec1c97baba', 'MEMBER_ID' => strval($member_id_of)));
 
-        return array($title,$content,$order,'menu/cms/filedump');
+        return array($title, $content, $order, 'menu/cms/filedump');
     }
 }

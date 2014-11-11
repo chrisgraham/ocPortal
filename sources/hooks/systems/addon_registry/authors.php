@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    authors
  */
-
 class Hook_addon_registry_authors
 {
     /**
@@ -150,11 +149,11 @@ class Hook_addon_registry_authors
         require_lang('global');
         require_lang('authors');
         return array(
-            lorem_globalise(do_lorem_template('AUTHOR_MANAGE_SCREEN',array(
+            lorem_globalise(do_lorem_template('AUTHOR_MANAGE_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'DEFINE_FORM' => placeholder_form(),
                 'MERGE_FORM' => placeholder_form(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -171,7 +170,7 @@ class Hook_addon_registry_authors
 
         $news_released = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $tpl = do_lorem_template('NEWS_BRIEF',array(
+            $tpl = do_lorem_template('NEWS_BRIEF', array(
                 'DATE' => placeholder_time(),
                 'URL' => placeholder_url(),
                 'NEWS_TITLE_PLAIN' => lorem_word(),
@@ -186,23 +185,23 @@ class Hook_addon_registry_authors
             $downloads_released->attach(lorem_sentence_html());
         }
 
-        $staff_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array(
+        $staff_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
             'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('DEFINE_AUTHOR'), false)
         ));
 
-        $point_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array(
+        $point_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
             'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_POINTS'))
         ));
 
-        $url_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array(
+        $url_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
             'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_HOMEPAGE'))
         ));
 
-        $search_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array(
+        $search_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
             'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('SEARCH'))
         ));
 
-        $forum_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY',array(
+        $forum_details = do_lorem_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array(
             'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_PROFILE'))
         ));
 
@@ -210,7 +209,7 @@ class Hook_addon_registry_authors
         $description = new ocp_tempcode();
 
         return array(
-            lorem_globalise(do_lorem_template('AUTHOR_SCREEN',array(
+            lorem_globalise(do_lorem_template('AUTHOR_SCREEN', array(
                 'TAGS' => lorem_word_html(),
                 'TITLE' => lorem_title(),
                 'EDIT_URL' => placeholder_url(),
@@ -224,7 +223,7 @@ class Hook_addon_registry_authors
                 'FORUM_DETAILS' => $forum_details,
                 'SKILLS' => $skills,
                 'DESCRIPTION' => $description,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -240,19 +239,19 @@ class Hook_addon_registry_authors
         require_lang('authors');
 
         $out = new ocp_tempcode();
-        $out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_DEFINED',array(
+        $out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_DEFINED', array(
             'AUTHOR' => lorem_phrase(),
             'FIELD_NAME' => lorem_word(),
         )));
-        $out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_UNDEFINED',array(
+        $out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_UNDEFINED', array(
             'AUTHOR' => lorem_phrase(),
             'FIELD_NAME' => lorem_word(),
         )));
 
-        $out = do_lorem_template('AUTHOR_POPUP',array('CONTENT' => $out,'NEXT_URL' => placeholder_url()));
+        $out = do_lorem_template('AUTHOR_POPUP', array('CONTENT' => $out, 'NEXT_URL' => placeholder_url()));
 
         return array(
-            lorem_globalise($out,null,'',true)
+            lorem_globalise($out, null, '', true)
         );
     }
 }

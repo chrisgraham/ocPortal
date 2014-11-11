@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    extended_media_rendering
  */
-
 class Hook_addon_registry_extended_media_rendering
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_extended_media_rendering
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -104,12 +102,9 @@ class Hook_addon_registry_extended_media_rendering
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

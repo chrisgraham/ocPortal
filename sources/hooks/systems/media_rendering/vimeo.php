@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_media_rendering_vimeo
 {
     /**
@@ -28,7 +27,7 @@ class Hook_media_rendering_vimeo
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -60,7 +59,7 @@ class Hook_media_rendering_vimeo
      */
     public function recognises_url($url)
     {
-        if (preg_match('#^https?://vimeo\.com/(\d+)#',$url) != 0) {
+        if (preg_match('#^https?://vimeo\.com/(\d+)#', $url) != 0) {
             return MEDIA_RECOG_PRECEDENCE_HIGH;
         }
         return MEDIA_RECOG_PRECEDENCE_NONE;
@@ -75,9 +74,9 @@ class Hook_media_rendering_vimeo
     public function get_video_thumbnail($src_url)
     {
         $matches = array();
-        if (preg_match('#^https?://vimeo\.com/(\d+)#',$src_url,$matches) != 0) {
+        if (preg_match('#^https?://vimeo\.com/(\d+)#', $src_url, $matches) != 0) {
             $test = get_long_value('vimeo_thumb_for__' . $matches[1]);
-            if ($test !== NULL) {
+            if ($test !== null) {
                 return $test;
             }
 
@@ -86,28 +85,28 @@ class Hook_media_rendering_vimeo
                 require_code('hooks/modules/video_syndication/vimeo');
                 $ob = object_factory('video_syndication_vimeo');
                 if ($ob->is_active()) {
-                    $result = $ob->get_remote_videos(null,$matches[1]);
+                    $result = $ob->get_remote_videos(null, $matches[1]);
                     if (count($result) != 0) {
                         foreach ($result as $r) {
                             return $r['thumb_url'];
                         }
                     }
-                    return NULL;
+                    return null;
                 }
             }
 
             // Lame method (not so reliable)
-            $html = http_download_file($src_url,null,false);
+            $html = http_download_file($src_url, null, false);
             if (is_null($html)) {
-                return NULL;
+                return null;
             }
             $matches2 = array();
-            if (preg_match('#<meta property="og:image" content="([^"]+)"#',$html,$matches2) != 0) {
+            if (preg_match('#<meta property="og:image" content="([^"]+)"#', $html, $matches2) != 0) {
                 //set_long_value('vimeo_thumb_for__'.$matches[1],$matches2[1]);     Actually this only happens occasionally (on add/edit), so not needed. Caching would bung up DB and make editing a pain.
                 return $matches2[1];
             }
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -120,12 +119,12 @@ class Hook_media_rendering_vimeo
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
         if (is_object($url)) {
             $url = $url->evaluate();
         }
-        $attributes['remote_id'] = preg_replace('#^https?://vimeo\.com/(\d+)#','${1}',$url);
-        return do_template('MEDIA_VIMEO',array('_GUID' => '490903ba659a899d70d3a2f5afa7d6cb','HOOK' => 'vimeo')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+        $attributes['remote_id'] = preg_replace('#^https?://vimeo\.com/(\d+)#', '${1}', $url);
+        return do_template('MEDIA_VIMEO', array('_GUID' => '490903ba659a899d70d3a2f5afa7d6cb', 'HOOK' => 'vimeo') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

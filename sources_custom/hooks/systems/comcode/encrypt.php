@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    password_censor
  */
-
 class Hook_comcode_encrypt
 {
     /**

@@ -1596,7 +1596,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
             $edit_url = build_url(array('page' => 'admin_zones', 'type' => '_editor', 'id' => get_zone_name(), 'redirect' => $redirect), get_module_zone('admin_zones'));
         } else {
             $edit_url = build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $zone . ':' . $codename,/*'lang'=>user_lang(),*/
-                    'redirect' => $redirect), get_module_zone('cms_comcode_pages'));
+                'redirect' => $redirect), get_module_zone('cms_comcode_pages'));
         }
     } else {
         $edit_url = new ocp_tempcode();
@@ -1651,7 +1651,8 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
         'IS_PANEL' => $is_panel,
         'BEING_INCLUDED' => $being_included,
         'SUBMITTER' => strval($comcode_page_row['p_submitter']),
-        'TAGS' => (get_option('show_content_tagging') == '0') ? /*optimisation, can be intensive with many page includes*/new ocp_tempcode() : get_loaded_tags('comcode_pages'),
+        'TAGS' => (get_option('show_content_tagging') == '0') ? /*optimisation, can be intensive with many page includes*/
+            new ocp_tempcode() : get_loaded_tags('comcode_pages'),
         'WARNING_DETAILS' => $warning_details,
         'EDIT_DATE_RAW' => ($comcode_page_row['p_edit_date'] === null) ? '' : strval($comcode_page_row['p_edit_date']),
         'SHOW_AS_EDIT' => $comcode_page_row['p_show_as_edit'] == 1,

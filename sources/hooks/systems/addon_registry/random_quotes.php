@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    random_quotes
  */
-
 class Hook_addon_registry_random_quotes
 {
     /**
@@ -133,12 +132,12 @@ class Hook_addon_registry_random_quotes
     public function tpl_preview__block_main_quotes()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_QUOTES',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_QUOTES', array(
                 'EDIT_URL' => placeholder_url(),
                 'FILE' => lorem_phrase(),
                 'CONTENT' => lorem_phrase(),
                 'TITLE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

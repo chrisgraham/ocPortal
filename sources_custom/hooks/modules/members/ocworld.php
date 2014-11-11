@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocworld
  */
-
 class Hook_members_ocworld
 {
     /**
@@ -27,18 +26,18 @@ class Hook_members_ocworld
             return array();
         }
 
-        $zone = get_page_zone('ocworld',false);
+        $zone = get_page_zone('ocworld', false);
         if (is_null($zone)) {
             return array();
         }
-        if (!has_zone_access(get_member(),$zone)) {
+        if (!has_zone_access(get_member(), $zone)) {
             return array();
         }
 
-        $id = $GLOBALS['SITE_DB']->query_select_value_if_there('w_members','id',array('id' => $member_id),'',true);
+        $id = $GLOBALS['SITE_DB']->query_select_value_if_there('w_members', 'id', array('id' => $member_id), '', true);
         if (!is_null($id)) {
             require_lang('ocworld');
-            return array(array('audit',do_lang_tempcode('OCWORLD'),build_url(array('page' => 'ocworld','type' => 'inventory','member' => $member_id),get_page_zone('ocworld')),'menu/ocworld'));
+            return array(array('audit', do_lang_tempcode('OCWORLD'), build_url(array('page' => 'ocworld', 'type' => 'inventory', 'member' => $member_id), get_page_zone('ocworld')), 'menu/ocworld'));
         }
         return array();
     }

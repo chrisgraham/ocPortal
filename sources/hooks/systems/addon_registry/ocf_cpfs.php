@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_cpfs
  */
-
 class Hook_addon_registry_ocf_cpfs
 {
     /**
@@ -134,9 +133,9 @@ class Hook_addon_registry_ocf_cpfs
     public function tpl_preview__ocf_cpf_permissions_tab()
     {
         return array(
-            lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB',array(
+            lorem_globalise(do_lorem_template('OCF_CPF_PERMISSIONS_TAB', array(
                 'FIELDS' => placeholder_fields(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -151,17 +150,17 @@ class Hook_addon_registry_ocf_cpfs
     {
         $lines = new ocp_tempcode();
         foreach (placeholder_array() as $value) {
-            $lines->attach(do_lorem_template('OCF_CPF_STATS_LINE',array(
+            $lines->attach(do_lorem_template('OCF_CPF_STATS_LINE', array(
                 'CNT' => placeholder_number(),
                 'VAL' => lorem_phrase(),
             )));
         }
 
         return array(
-            lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN',array(
+            lorem_globalise(do_lorem_template('OCF_CPF_STATS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'STATS' => $lines,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_content_meta_aware_gallery
 {
     /**
@@ -57,17 +56,17 @@ class Hook_content_meta_aware_gallery
             'view_page_link_pattern' => '_SEARCH:galleries:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_galleries:_ec:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:galleries:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries') . ':cms_galleries:ac:parent_id=!'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('galleries')) . ':galleries',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries')) ? (get_module_zone('cms_galleries') . ':cms_galleries:ac:parent_id=!') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('galleries')) . ':galleries',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
             'add_time_field' => 'add_date',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'add_date',
-            'validated_field' => NULL,
+            'validated_field' => null,
 
             'seo_type_code' => 'gallery',
 
@@ -85,7 +84,7 @@ class Hook_content_meta_aware_gallery
             'occle_filesystem_hook' => 'galleries',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_GALLERY',
         );
@@ -103,10 +102,10 @@ class Hook_content_meta_aware_gallery
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('galleries');
 
-        return render_gallery_box($row,is_null($root)?$root:'root',false,$zone,false,false,$give_context,$include_breadcrumbs,$attach_to_url_filter,$guid);
+        return render_gallery_box($row, is_null($root) ? $root : 'root', false, $zone, false, false, $give_context, $include_breadcrumbs, $attach_to_url_filter, $guid);
     }
 }

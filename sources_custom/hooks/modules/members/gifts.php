@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_members_gifts
 {
     /**
@@ -27,14 +26,14 @@ class Hook_members_gifts
         if (is_guest()) {
             return array();
         }
-        if (!has_actual_page_access(get_member(),'pointstore',get_module_zone('pointstore'))) {
+        if (!has_actual_page_access(get_member(), 'pointstore', get_module_zone('pointstore'))) {
             return array();
         }
         if ($member_id == get_member()) {
             return array();
         }
 
-        return array(array('contact',do_lang_tempcode('GIFT_GIFT'),build_url(array('page' => 'pointstore','type' => 'action','id' => 'ocgifts','username' => $GLOBALS['FORUM_DRIVER']->get_username($member_id)),get_module_zone('pointstore')),'menu/ocgifts'));
+        return array(array('contact', do_lang_tempcode('GIFT_GIFT'), build_url(array('page' => 'pointstore', 'type' => 'action', 'id' => 'ocgifts', 'username' => $GLOBALS['FORUM_DRIVER']->get_username($member_id)), get_module_zone('pointstore')), 'menu/ocgifts'));
     }
 
     /**
@@ -46,25 +45,25 @@ class Hook_members_gifts
     public function get_sections($member_id)
     {
         require_lang('ocgifts');
-        $rows = $GLOBALS['SITE_DB']->query_select('members_gifts',array('*'),array('to_member_id' => $member_id),'',null,0,true);
+        $rows = $GLOBALS['SITE_DB']->query_select('members_gifts', array('*'), array('to_member_id' => $member_id), '', null, 0, true);
         if (is_null($rows)) {
             return array();
         }
 
         $gifts = array();
         foreach ($rows as $gift) {
-            $gift_rows = $GLOBALS['SITE_DB']->query_select('ocgifts',array('*'),array('id' => $gift['gift_id']),'',1);
+            $gift_rows = $GLOBALS['SITE_DB']->query_select('ocgifts', array('*'), array('id' => $gift['gift_id']), '', 1);
 
-            if (array_key_exists(0,$gift_rows)) {
+            if (array_key_exists(0, $gift_rows)) {
                 $gift_row = $gift_rows[0];
 
                 if ($gift['is_anonymous'] == 0) {
-                    $sender_displayname = $GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id'],true);
+                    $sender_displayname = $GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id'], true);
                     $sender_username = $GLOBALS['FORUM_DRIVER']->get_username($gift['from_member_id']);
-                    $sender_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_member_id'],true);
-                    $gift_explanation = do_lang_tempcode('GIFT_EXPLANATION',escape_html($sender_displayname),escape_html($gift_row['name']),array(escape_html($sender_url->evaluate()),escape_html($sender_username)));
+                    $sender_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($gift['from_member_id'], true);
+                    $gift_explanation = do_lang_tempcode('GIFT_EXPLANATION', escape_html($sender_displayname), escape_html($gift_row['name']), array(escape_html($sender_url->evaluate()), escape_html($sender_username)));
                 } else {
-                    $gift_explanation = do_lang_tempcode('GIFT_EXPLANATION_ANONYMOUS',escape_html($gift_row['name']));
+                    $gift_explanation = do_lang_tempcode('GIFT_EXPLANATION_ANONYMOUS', escape_html($gift_row['name']));
                 }
 
                 $image_url = '';
@@ -79,7 +78,7 @@ class Hook_members_gifts
             }
         }
 
-        $gifts_block = do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP',array('_GUID' => 'fd4b5344b3b16cdf129e49bae903cbb2','GIFTS' => $gifts));
+        $gifts_block = do_template('OCF_MEMBER_SCREEN_GIFTS_WRAP', array('_GUID' => 'fd4b5344b3b16cdf129e49bae903cbb2', 'GIFTS' => $gifts));
         $gifts_block->handle_symbol_preprocessing();
         return array($gifts_block);
     }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
-
 class Hook_addon_registry_import
 {
     /**
@@ -167,10 +166,10 @@ class Hook_addon_registry_import
      */
     public function tpl_preview__administrative__import_action_screen()
     {
-        $extra = do_lorem_template('IMPORT_MESSAGE',array(
+        $extra = do_lorem_template('IMPORT_MESSAGE', array(
             'MESSAGE' => lorem_phrase(),
         ));
-        $import_list = do_lorem_template('IMPORT_ACTION_LINE',array(
+        $import_list = do_lorem_template('IMPORT_ACTION_LINE', array(
             'CHECKED' => false,
             'DISABLED' => true,
             'NAME' => lorem_word(),
@@ -179,7 +178,7 @@ class Hook_addon_registry_import
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('IMPORT_ACTION_SCREEN',array(
+            lorem_globalise(do_lorem_template('IMPORT_ACTION_SCREEN', array(
                 'EXTRA' => $extra,
                 'MESSAGE' => lorem_phrase(),
                 'TITLE' => lorem_title(),
@@ -188,7 +187,7 @@ class Hook_addon_registry_import
                 'IMPORTER' => lorem_phrase(),
                 'IMPORT_LIST' => $import_list,
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -202,11 +201,11 @@ class Hook_addon_registry_import
     public function tpl_preview__administrative__xml_storage_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('XML_STORAGE_SCREEN',array(
+            lorem_globalise(do_lorem_template('XML_STORAGE_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'IMPORT_FORM' => placeholder_form(),
                 'EXPORT_FORM' => placeholder_form(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -228,10 +227,10 @@ class Hook_addon_registry_import
             );
         }
         return array(
-            lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN',array(
+            lorem_globalise(do_lorem_template('XML_STORAGE_IMPORT_RESULTS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'OPS' => $ops_nice,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -245,10 +244,10 @@ class Hook_addon_registry_import
     public function tpl_preview__administrative__xml_storage_export_results_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN',array(
+            lorem_globalise(do_lorem_template('XML_STORAGE_EXPORT_RESULTS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'XML' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -262,14 +261,14 @@ class Hook_addon_registry_import
     public function tpl_preview__administrative__import_mkportal_fcomcodepage()
     {
         return array(
-            lorem_globalise(do_lorem_template('IMPORT_MKPORTAL_FCOMCODEPAGE',array(
+            lorem_globalise(do_lorem_template('IMPORT_MKPORTAL_FCOMCODEPAGE', array(
                 'TITLE' => lorem_phrase(),
                 'SUBTITLE' => lorem_phrase(),
                 'PAGE_HEADER' => lorem_phrase(),
                 'TEXT' => lorem_sentence_html(),
                 'PAGE_FOOTER' => lorem_phrase(),
                 'SIGNATURE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -283,14 +282,14 @@ class Hook_addon_registry_import
     public function tpl_preview__administrative__import_phpnuke_fcomcodepage()
     {
         return array(
-            lorem_globalise(do_lorem_template('IMPORT_PHPNUKE_FCOMCODEPAGE',array(
+            lorem_globalise(do_lorem_template('IMPORT_PHPNUKE_FCOMCODEPAGE', array(
                 'TITLE' => lorem_phrase(),
                 'SUBTITLE' => lorem_phrase(),
                 'PAGE_HEADER' => lorem_phrase(),
                 'TEXT' => lorem_sentence_html(),
                 'PAGE_FOOTER' => lorem_phrase(),
                 'SIGNATURE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

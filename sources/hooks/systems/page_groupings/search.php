@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
-
 class Hook_page_groupings_search
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_search
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('search')) {
             return array();
         }
 
         return array(
-            array('site_meta','buttons/search',array('search',array(),get_module_zone('search')),do_lang_tempcode('search:SEARCH')),
+            array('site_meta', 'buttons/search', array('search', array(), get_module_zone('search')), do_lang_tempcode('search:SEARCH')),
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
-
 class Hook_page_groupings_import
 {
     /**
@@ -27,15 +26,15 @@ class Hook_page_groupings_import
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('import')) {
             return array();
         }
 
         return array(
-            array('tools','menu/_generic_admin/import',array('admin_import',array('type' => 'misc'),get_module_zone('admin_import')),do_lang_tempcode('import:IMPORT'),'import:DOC_IMPORT'),
-            array('tools','menu/adminzone/tools/bulk_content_actions/xml_storage',array('admin_xml_storage',array('type' => 'misc'),get_module_zone('admin_xml_storage')),do_lang_tempcode('xml_storage:XML_STORAGE'),'xml_storage:DOC_XML_STORAGE'),
+            array('tools', 'menu/_generic_admin/import', array('admin_import', array('type' => 'misc'), get_module_zone('admin_import')), do_lang_tempcode('import:IMPORT'), 'import:DOC_IMPORT'),
+            array('tools', 'menu/adminzone/tools/bulk_content_actions/xml_storage', array('admin_xml_storage', array('type' => 'misc'), get_module_zone('admin_xml_storage')), do_lang_tempcode('xml_storage:XML_STORAGE'), 'xml_storage:DOC_XML_STORAGE'),
         );
     }
 }

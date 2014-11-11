@@ -1103,7 +1103,7 @@ function delete_lang($id, $connection = null)
 function get_translated_tempcode__and_simplify($table, $row, $field_name, $connection = null, $lang = null, $force = false, $as_admin = false, $clear_away_from_cache = false)
 {
     if ($connection === null) $connection = $GLOBALS['SITE_DB'];
-    $ret=get_translated_tempcode($table, $row, $field_name, $connection, $lang, $force, $as_admin, $clear_away_from_cache);
+    $ret = get_translated_tempcode($table, $row, $field_name, $connection, $lang, $force, $as_admin, $clear_away_from_cache);
     if (is_null($ret)) return $ret;
     $ret = make_string_tempcode($ret->evaluate());
     if (multi_lang_content()) {

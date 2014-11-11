@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_ls
 {
     /**
@@ -28,18 +27,18 @@ class Hook_occle_command_ls
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('ls',array('h'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('ls', array('h'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
+            if (!array_key_exists(0, $parameters)) {
                 $dir = $occle_fs->print_working_directory(true);
             } else {
                 $dir = $occle_fs->_pwd_to_array($parameters[0]);
 
-                if ((!$occle_fs->_is_dir($dir)) && (strpos($parameters[0],'*') === false)) {
-                    return array('','','',do_lang('NOT_A_DIR','1'));
+                if ((!$occle_fs->_is_dir($dir)) && (strpos($parameters[0], '*') === false)) {
+                    return array('', '', '', do_lang('NOT_A_DIR', '1'));
                 }
             }
 
@@ -47,7 +46,7 @@ class Hook_occle_command_ls
 
             return array(
                 '',
-                do_template('OCCLE_LS',array(
+                do_template('OCCLE_LS', array(
                     '_GUID' => '705c3382e34e3d73479521bb8d05902f',
                     'DIRECTORY' => $occle_fs->_pwd_to_string($dir),
                     'DIRECTORIES' => $occle_fs->prepare_dir_contents_for_listing($listing[0]),

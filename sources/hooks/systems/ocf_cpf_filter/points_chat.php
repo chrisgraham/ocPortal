@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_ocf_cpf_filter_points_chat
 {
     /**

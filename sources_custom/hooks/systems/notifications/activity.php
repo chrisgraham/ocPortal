@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-
 class Hook_Notification_activity extends Hook_Notification
 {
     /**
@@ -34,15 +33,15 @@ class Hook_Notification_activity extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         $page_links = array();
 
-        $notification_category = get_param('id',null);
+        $notification_category = get_param('id', null);
         $done_in_url = is_null($notification_category);
 
-        $types = addon_installed('chat')?$GLOBALS['SITE_DB']->query_select('chat_friends',array('member_liked'),array('member_likes' => get_member())):array(); // Only show options for friends to simplify
-        $types2 = $GLOBALS['SITE_DB']->query_select('notifications_enabled',array('l_code_category'),array('l_notification_code' => substr($notification_code,0,80),'l_member_id' => get_member())); // Already monitoring members who may not be friends
+        $types = addon_installed('chat') ? $GLOBALS['SITE_DB']->query_select('chat_friends', array('member_liked'), array('member_likes' => get_member())) : array(); // Only show options for friends to simplify
+        $types2 = $GLOBALS['SITE_DB']->query_select('notifications_enabled', array('l_code_category'), array('l_notification_code' => substr($notification_code, 0, 80), 'l_member_id' => get_member())); // Already monitoring members who may not be friends
         foreach ($types2 as $type) {
             $types[] = array('member_liked' => intval($type['l_code_category']));
         }
@@ -67,7 +66,7 @@ class Hook_Notification_activity extends Hook_Notification
                 'title' => $GLOBALS['FORUM_DRIVER']->get_username(intval($notification_category)),
             );
         }
-        sort_maps_by($page_links,'title');
+        sort_maps_by($page_links, 'title');
 
         return array_values($page_links);
     }
@@ -79,7 +78,7 @@ class Hook_Notification_activity extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -93,7 +92,7 @@ class Hook_Notification_activity extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['activity'] = array(do_lang('ACTIVITY'),do_lang('activities:NOTIFICATION_TYPE_activity'));
+        $list['activity'] = array(do_lang('ACTIVITY'), do_lang('activities:NOTIFICATION_TYPE_activity'));
         return $list;
     }
 }

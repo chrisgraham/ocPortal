@@ -86,8 +86,7 @@ class Block_side_weather
 
         if (array_key_exists('param', $map)) {
             $loc_code = $map['param']; // need to pass loc ID ex :INXX0087
-        }
-        else {
+        } else {
             $loc_code = '34503'; // if not found setting a default location for weather
         }
 

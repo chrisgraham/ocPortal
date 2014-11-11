@@ -58,8 +58,7 @@ function test_password($password, $username = '')
     // Check if length is 16 - 35 chars
     if ($length >= 16 && $length <= 35) {
         $strength += 2; // Check if length greater than 35 chars
-    }
-    elseif ($length > 35) {
+    } elseif ($length > 35) {
         $strength += 3;
     }
 

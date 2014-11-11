@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    google_similar_sites
  */
-
 class Hook_addon_registry_google_similar_sites
 {
     /**
@@ -93,8 +92,7 @@ class Hook_addon_registry_google_similar_sites
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,10 +106,8 @@ class Hook_addon_registry_google_similar_sites
             'requires' => array(
                 'PHP 5.2',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

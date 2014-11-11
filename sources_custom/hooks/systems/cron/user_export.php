@@ -21,8 +21,8 @@ class Hook_cron_user_export
         }
 
         $last = get_value('last_user_export');
-        if ((is_null($last)) || (intval($last)<time()-60*USER_EXPORT_MINUTES)) {
-            set_value('last_user_export',strval(time()));
+        if ((is_null($last)) || (intval($last) < time() - 60 * USER_EXPORT_MINUTES)) {
+            set_value('last_user_export', strval(time()));
 
             do_user_export();
         }

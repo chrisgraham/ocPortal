@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-
 class Hook_page_groupings_filedump
 {
     /**
@@ -27,10 +26,10 @@ class Hook_page_groupings_filedump
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('cms','menu/cms/filedump',array('filedump',array('type' => 'misc'),get_module_zone('filedump')),do_lang_tempcode('filedump:FILEDUMP'),'filedump:DOC_FILEDUMP'),
+            array('cms', 'menu/cms/filedump', array('filedump', array('type' => 'misc'), get_module_zone('filedump')), do_lang_tempcode('filedump:FILEDUMP'), 'filedump:DOC_FILEDUMP'),
         );
     }
 }

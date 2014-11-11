@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    facebook
  */
-
 class Hook_config_facebook_secret_code
 {
     /**

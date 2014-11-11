@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    realtime_rain
  */
-
 class Hook_addon_registry_realtime_rain
 {
     /**
@@ -402,9 +401,9 @@ class Hook_addon_registry_realtime_rain
     {
         require_lang('realtime_rain');
         return array(
-            lorem_globalise(do_lorem_template('REALTIME_RAIN_OVERLAY',array(
+            lorem_globalise(do_lorem_template('REALTIME_RAIN_OVERLAY', array(
                 'MIN_TIME' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -419,7 +418,7 @@ class Hook_addon_registry_realtime_rain
     {
         require_lang('realtime_rain');
         return array(
-            lorem_globalise(do_lorem_template('REALTIME_RAIN_BUBBLE',array(
+            lorem_globalise(do_lorem_template('REALTIME_RAIN_BUBBLE', array(
                 'TITLE' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'IMAGE' => placeholder_image_url(),
@@ -429,7 +428,7 @@ class Hook_addon_registry_realtime_rain
                 'TYPE' => lorem_word(),
                 'IS_POSITIVE' => true,
                 'IS_NEGATIVE' => false,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_avatars
  */
-
 class Hook_addon_registry_ocf_avatars
 {
     /**

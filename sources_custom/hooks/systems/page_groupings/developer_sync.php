@@ -21,11 +21,11 @@ class Hook_page_groupings_developer_sync
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('tools','menu/_generic_admin/tool',array('sql_dump',array(),get_page_zone('sql_dump')),make_string_tempcode('Backup tools: Create SQL dump (MySQL syntax)')),
-            array('tools','menu/_generic_admin/tool',array('tar_dump',array(),get_page_zone('tar_dump')),make_string_tempcode('Backup tools: Create files dump (TAR file)')),
+            array('tools', 'menu/_generic_admin/tool', array('sql_dump', array(), get_page_zone('sql_dump')), make_string_tempcode('Backup tools: Create SQL dump (MySQL syntax)')),
+            array('tools', 'menu/_generic_admin/tool', array('tar_dump', array(), get_page_zone('tar_dump')), make_string_tempcode('Backup tools: Create files dump (TAR file)')),
         );
     }
 }

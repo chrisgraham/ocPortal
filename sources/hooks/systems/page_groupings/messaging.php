@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
-
 class Hook_page_groupings_messaging
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_messaging
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('staff_messaging')) {
             return array();
         }
 
         return array(
-            array('audit','menu/adminzone/audit/messaging',array('admin_messaging',array('type' => 'misc'),get_module_zone('admin_messaging')),do_lang_tempcode('messaging:CONTACT_US_MESSAGING'),'messaging:DOC_MESSAGING'),
+            array('audit', 'menu/adminzone/audit/messaging', array('admin_messaging', array('type' => 'misc'), get_module_zone('admin_messaging')), do_lang_tempcode('messaging:CONTACT_US_MESSAGING'), 'messaging:DOC_MESSAGING'),
         );
     }
 }

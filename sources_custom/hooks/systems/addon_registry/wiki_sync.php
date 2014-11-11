@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki_sync
  */
-
 class Hook_addon_registry_wiki_sync
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_wiki_sync
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,10 +105,8 @@ class Hook_addon_registry_wiki_sync
             'requires' => array(
                 'wiki',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

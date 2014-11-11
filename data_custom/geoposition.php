@@ -116,11 +116,9 @@ if (!is_null($lstring)) {
 
             if (isset($bits['id'])) {
                 echo strval($bits['id']); // Category or Location
-            }
-            elseif (isset($bits['ce_id'])) {
+            } elseif (isset($bits['ce_id'])) {
                 echo strval($bits['ce_id']); // Entry
-            }
-            else {
+            } else {
                 echo strval($bits['id']); // Location
             }
 

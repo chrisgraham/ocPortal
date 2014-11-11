@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-
 class Hook_content_meta_aware_poll
 {
     /**
@@ -37,27 +36,27 @@ class Hook_content_meta_aware_poll
             'table' => 'poll',
             'id_field' => 'id',
             'id_field_numeric' => true,
-            'parent_category_field' => NULL,
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_field' => null,
+            'parent_category_meta_aware_type' => null,
             'is_category' => false,
             'is_entry' => true,
-            'category_field' => NULL, // For category permissions
-            'category_type' => NULL, // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'category_field' => null, // For category permissions
+            'category_type' => null, // For category permissions
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => false,
 
             'title_field' => 'question',
             'title_field_dereference' => true,
-            'description_field' => NULL,
-            'thumb_field' => NULL,
+            'description_field' => null,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:polls:view:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_polls:_ed:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_polls'))?(get_module_zone('cms_polls') . ':cms_polls:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('polls')) . ':polls',
+            'view_category_page_link_pattern' => null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_polls')) ? (get_module_zone('cms_polls') . ':cms_polls:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('polls')) . ':polls',
 
             'support_url_monikers' => true,
 
@@ -66,13 +65,13 @@ class Hook_content_meta_aware_poll
             'add_time_field' => 'add_time',
             'edit_time_field' => 'edit_date',
             'date_field' => 'add_time',
-            'validated_field' => NULL,
+            'validated_field' => null,
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
             'feedback_type_code' => 'polls',
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
             'search_hook' => 'polls',
 
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_poll
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('polls');
 
-        return render_poll_box(true,$row,$zone,false,$give_context,$guid);
+        return render_poll_box(true, $row, $zone, false, $give_context, $guid);
     }
 }

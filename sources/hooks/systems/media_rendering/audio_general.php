@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_media_rendering_audio_general
 {
     /**
@@ -28,7 +27,7 @@ class Hook_media_rendering_audio_general
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -96,16 +95,16 @@ class Hook_media_rendering_audio_general
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
         // Put in defaults
-        if ((!array_key_exists('width',$attributes)) || (!is_numeric($attributes['width']))) {
+        if ((!array_key_exists('width', $attributes)) || (!is_numeric($attributes['width']))) {
             $attributes['width'] = get_option('attachment_default_width');
         }
-        if ((!array_key_exists('height',$attributes)) || (!is_numeric($attributes['height']))) {
+        if ((!array_key_exists('height', $attributes)) || (!is_numeric($attributes['height']))) {
             $attributes['height'] = '30';
         }
 
-        return do_template('MEDIA_VIDEO_GENERAL',array('_GUID' => '2ed16d6e74265c0b51c2415731378827','HOOK' => 'audio_general')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+        return do_template('MEDIA_VIDEO_GENERAL', array('_GUID' => '2ed16d6e74265c0b51c2415731378827', 'HOOK' => 'audio_general') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

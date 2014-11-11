@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    themewizard
  */
-
 class Hook_addon_registry_themewizard
 {
     /**
@@ -174,7 +173,7 @@ class Hook_addon_registry_themewizard
         $content = do_lorem_template('THEMEWIZARD_2_PREVIEW');
 
         return array(
-            lorem_globalise($content,null,'',true)
+            lorem_globalise($content, null, '', true)
         );
     }
 
@@ -190,7 +189,7 @@ class Hook_addon_registry_themewizard
         require_lang('themes');
 
         return array(
-            lorem_globalise(do_lorem_template('THEMEWIZARD_2_SCREEN',array(
+            lorem_globalise(do_lorem_template('THEMEWIZARD_2_SCREEN', array(
                 'SOURCE_THEME' => 'default',
                 'ALGORITHM' => 'equations',
                 'RED' => placeholder_id(),
@@ -203,7 +202,7 @@ class Hook_addon_registry_themewizard
                 'TITLE' => lorem_title(),
                 'CHANGE_URL' => placeholder_url(),
                 'STAGE3_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -218,7 +217,7 @@ class Hook_addon_registry_themewizard
     {
         require_lang('themes');
 
-        $preview = do_lorem_template('LOGOWIZARD_2',array(
+        $preview = do_lorem_template('LOGOWIZARD_2', array(
             'NAME' => lorem_phrase(),
             'LOGO_THEME_IMAGE' => 'logo/default_logos/1',
             'BACKGROUND_THEME_IMAGE' => 'logo/default_backgrounds/1',
@@ -226,13 +225,13 @@ class Hook_addon_registry_themewizard
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('CONFIRM_SCREEN',array(
+            lorem_globalise(do_lorem_template('CONFIRM_SCREEN', array(
                 'URL' => placeholder_url(),
                 'BACK_URL' => placeholder_url(),
                 'PREVIEW' => $preview,
                 'FIELDS' => '',
                 'TITLE' => lorem_title(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

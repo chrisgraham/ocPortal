@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_addon_registry_calendar
 {
     /**
@@ -242,7 +241,7 @@ class Hook_addon_registry_calendar
     public function tpl_preview__calendar_year_view()
     {
         return array(
-            lorem_globalise($this->calendar_main_screen('year'),null,'',true)
+            lorem_globalise($this->calendar_main_screen('year'), null, '', true)
         );
     }
 
@@ -256,7 +255,7 @@ class Hook_addon_registry_calendar
     public function tpl_preview__calendar_month_view()
     {
         return array(
-            lorem_globalise($this->calendar_main_screen('month'),null,'',true)
+            lorem_globalise($this->calendar_main_screen('month'), null, '', true)
         );
     }
 
@@ -270,7 +269,7 @@ class Hook_addon_registry_calendar
     public function tpl_preview__calendar_week_view()
     {
         return array(
-            lorem_globalise($this->calendar_main_screen('week'),null,'',true)
+            lorem_globalise($this->calendar_main_screen('week'), null, '', true)
         );
     }
 
@@ -284,7 +283,7 @@ class Hook_addon_registry_calendar
     public function tpl_preview__calendar_day_view()
     {
         return array(
-            lorem_globalise($this->calendar_main_screen('day'),null,'',true)
+            lorem_globalise($this->calendar_main_screen('day'), null, '', true)
         );
     }
 
@@ -300,9 +299,9 @@ class Hook_addon_registry_calendar
         $_entries = new ocp_tempcode();
         $__entries = new ocp_tempcode();
         $dotw = 0;
-        for ($j = 1;$j <= 31;$j++) {
+        for ($j = 1; $j <= 31; $j++) {
             if ($j == 10) {
-                $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_FREE',array(
+                $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_FREE', array(
                     'CLASS' => lorem_word(),
                     'CURRENT' => lorem_word(),
                     'DAY_URL' => placeholder_url(),
@@ -310,7 +309,7 @@ class Hook_addon_registry_calendar
                     'DAY' => lorem_word_2(),
                 )));
             } else {
-                $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array(
+                $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE', array(
                     'CURRENT' => lorem_word(),
                     'DAY_URL' => placeholder_url(),
                     'DATE' => placeholder_date(),
@@ -327,7 +326,7 @@ class Hook_addon_registry_calendar
             }
 
             if ($dotw == 6) {
-                $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW',array(
+                $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW', array(
                     'ENTRIES' => $__entries,
                 )));
                 $__entries = new ocp_tempcode();
@@ -337,21 +336,21 @@ class Hook_addon_registry_calendar
             }
         }
 
-        for ($j = $dotw;$j<7;$j++) {
+        for ($j = $dotw; $j < 7; $j++) {
             $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_SPACER'));
         }
-        $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW',array(
+        $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW', array(
             'ENTRIES' => $__entries,
         )));
 
         require_lang('dates');
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_CALENDAR',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_CALENDAR', array(
                 'CALENDAR_URL' => placeholder_url(),
                 'ENTRIES' => $_entries,
                 '_MONTH' => lorem_phrase(),
                 'MONTH' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -365,7 +364,7 @@ class Hook_addon_registry_calendar
     public function tpl_preview__block_side_calendar_listing()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_CALENDAR_LISTING',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_CALENDAR_LISTING', array(
                 'DAYS' => placeholder_array(),
                 'EVENTS' => placeholder_array(),
                 'CALENDAR_URL' => placeholder_url(),
@@ -376,7 +375,7 @@ class Hook_addon_registry_calendar
                 'T_TITLE' => lorem_word(),
                 'DESCRIPTION' => lorem_paragraph_html(),
                 'TIME_VCAL' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -390,11 +389,11 @@ class Hook_addon_registry_calendar
     public function tpl_preview__calendar_event_conflict()
     {
         return array(
-            lorem_globalise(do_lorem_template('CALENDAR_EVENT_CONFLICT',array(
+            lorem_globalise(do_lorem_template('CALENDAR_EVENT_CONFLICT', array(
                 'URL' => placeholder_url(),
                 'ID' => placeholder_id(),
                 'TITLE' => lorem_word(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -408,12 +407,12 @@ class Hook_addon_registry_calendar
     public function tpl_preview__calendar_event_box()
     {
         return array(
-            lorem_globalise(do_lorem_template('CALENDAR_EVENT_BOX',array(
+            lorem_globalise(do_lorem_template('CALENDAR_EVENT_BOX', array(
                 'URL' => placeholder_url(),
                 'SUMMARY' => lorem_paragraph_html(),
                 'TITLE' => lorem_phrase(),
                 'GIVE_CONTEXT' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -431,14 +430,14 @@ class Hook_addon_registry_calendar
         switch ($view) {
             case 'day':
                 $hours = new ocp_tempcode();
-                for ($i = 0;$i<24;$i++) {
+                for ($i = 0; $i < 24; $i++) {
                     $_streams = new ocp_tempcode();
                     foreach (placeholder_array(2) as $k => $v) {
-                        $entry = do_lorem_template('CALENDAR_DAY_ENTRY_FREE',array(
+                        $entry = do_lorem_template('CALENDAR_DAY_ENTRY_FREE', array(
                             'CLASS' => lorem_word(),
                             'TEXT' => lorem_phrase(),
                         ));
-                        $_streams->attach(do_lorem_template('CALENDAR_DAY_STREAM_HOUR',array(
+                        $_streams->attach(do_lorem_template('CALENDAR_DAY_STREAM_HOUR', array(
                             'CURRENT' => lorem_word(),
                             'ADD_URL' => placeholder_url(),
                             'PRIORITY' => lorem_phrase(),
@@ -447,7 +446,7 @@ class Hook_addon_registry_calendar
                         )));
                     }
                     foreach (placeholder_array(2) as $v) {
-                        $entries = do_lorem_template('CALENDAR_DAY_ENTRY',array(
+                        $entries = do_lorem_template('CALENDAR_DAY_ENTRY', array(
                             'ID' => placeholder_id(),
                             'URL' => placeholder_url(),
                             'TIME' => placeholder_time(),
@@ -457,7 +456,7 @@ class Hook_addon_registry_calendar
                             'VALIDATED' => true,
                             'RECURRING' => false,
                         ));
-                        $_streams->attach(do_lorem_template('CALENDAR_DAY_STREAM_HOUR',array(
+                        $_streams->attach(do_lorem_template('CALENDAR_DAY_STREAM_HOUR', array(
                             'CURRENT' => lorem_word(),
                             'ADD_URL' => placeholder_url(),
                             'PRIORITY' => lorem_phrase(),
@@ -466,14 +465,14 @@ class Hook_addon_registry_calendar
                         )));
                     }
 
-                    $hours->attach(do_lorem_template('CALENDAR_DAY_HOUR',array(
+                    $hours->attach(do_lorem_template('CALENDAR_DAY_HOUR', array(
                         '_HOUR' => placeholder_number(),
                         'HOUR' => lorem_word(),
                         'STREAMS' => $_streams,
                     )));
                 }
 
-                $main = do_lorem_template('CALENDAR_DAY',array(
+                $main = do_lorem_template('CALENDAR_DAY', array(
                     'HOURS' => $hours,
                     'PERIOD_START' => placeholder_date_raw(),
                     'PERIOD_END' => placeholder_date_raw(),
@@ -482,16 +481,16 @@ class Hook_addon_registry_calendar
 
             case 'week':
                 $hours = new ocp_tempcode();
-                for ($i = 0;$i<24;$i++) {
+                for ($i = 0; $i < 24; $i++) {
                     $days = new ocp_tempcode();
-                    for ($j = 0;$j<7;$j++) {
+                    for ($j = 0; $j < 7; $j++) {
                         if ($i % 2 == 0) {
-                            $entries = do_lorem_template('CALENDAR_WEEK_ENTRY_FREE',array(
+                            $entries = do_lorem_template('CALENDAR_WEEK_ENTRY_FREE', array(
                                 'CLASS' => lorem_word(),
                                 'TEXT' => '',
                             ));
                         } else {
-                            $entries = do_lorem_template('CALENDAR_WEEK_ENTRY',array(
+                            $entries = do_lorem_template('CALENDAR_WEEK_ENTRY', array(
                                 'ID' => placeholder_id(),
                                 'URL' => placeholder_url(),
                                 'TIME' => placeholder_time(),
@@ -502,7 +501,7 @@ class Hook_addon_registry_calendar
                                 'RECURRING' => false,
                             ));
                         }
-                        $days->attach(do_lorem_template('CALENDAR_WEEK_HOUR_DAY',array(
+                        $days->attach(do_lorem_template('CALENDAR_WEEK_HOUR_DAY', array(
                             'CURRENT' => lorem_word(),
                             'ADD_URL' => placeholder_url(),
                             'DOWN' => '1',
@@ -513,14 +512,14 @@ class Hook_addon_registry_calendar
                         )));
                     }
 
-                    $hours->attach(do_lorem_template('CALENDAR_WEEK_HOUR',array(
+                    $hours->attach(do_lorem_template('CALENDAR_WEEK_HOUR', array(
                         '_HOUR' => placeholder_number(),
                         'HOUR' => lorem_word(),
                         'DAYS' => $days,
                     )));
                 }
 
-                $main = do_lorem_template('CALENDAR_WEEK',array(
+                $main = do_lorem_template('CALENDAR_WEEK', array(
                     'MONDAY_DATE' => lorem_word(),
                     'TUESDAY_DATE' => lorem_word(),
                     'WEDNESDAY_DATE' => lorem_word(),
@@ -542,7 +541,7 @@ class Hook_addon_registry_calendar
                 break;
 
             case 'month':
-                $empty_entry = do_lorem_template('CALENDAR_MONTH_ENTRY_FREE',array(
+                $empty_entry = do_lorem_template('CALENDAR_MONTH_ENTRY_FREE', array(
                     'CLASS' => lorem_word(),
                     'TEXT' => '',
                 ));
@@ -551,7 +550,7 @@ class Hook_addon_registry_calendar
                 foreach (placeholder_array() as $k => $v) {
                     $entries = new ocp_tempcode();
                     foreach (placeholder_array() as $_k => $_v) {
-                        $entries->attach(do_lorem_template('CALENDAR_MONTH_ENTRY',array(
+                        $entries->attach(do_lorem_template('CALENDAR_MONTH_ENTRY', array(
                             'ID' => placeholder_id(),
                             'T_TITLE' => lorem_phrase(),
                             'PRIORITY' => lorem_word(),
@@ -564,7 +563,7 @@ class Hook_addon_registry_calendar
                         )));
                     }
 
-                    $days->attach(do_lorem_template('CALENDAR_MONTH_DAY',array(
+                    $days->attach(do_lorem_template('CALENDAR_MONTH_DAY', array(
                         'CURRENT' => false,
                         'DAY_URL' => '',
                         'CLASS' => '',
@@ -575,14 +574,14 @@ class Hook_addon_registry_calendar
 
                 $weeks = new ocp_tempcode();
                 foreach (placeholder_array() as $k => $v) {
-                    $weeks->attach(do_lorem_template('CALENDAR_MONTH_WEEK',array(
+                    $weeks->attach(do_lorem_template('CALENDAR_MONTH_WEEK', array(
                         'WEEK_URL' => placeholder_url(),
                         'WEEK_DATE' => lorem_word(),
                         'DAYS' => $days,
                     )));
                 }
 
-                $main = do_lorem_template('CALENDAR_MONTH',array(
+                $main = do_lorem_template('CALENDAR_MONTH', array(
                     'WEEKS' => $weeks,
                     'PERIOD_START' => placeholder_date_raw(),
                     'PERIOD_END' => placeholder_date_raw(),
@@ -592,9 +591,9 @@ class Hook_addon_registry_calendar
             case 'year':
                 $months = '';
                 $month_rows = new ocp_tempcode();
-                for ($i = 1;$i <= 12;$i++) {
-                    if ((($i-1)%3 == 0) && ($i != 1)) {
-                        $month_rows->attach(do_lorem_template('CALENDAR_YEAR_MONTH_ROW',array(
+                for ($i = 1; $i <= 12; $i++) {
+                    if ((($i - 1) % 3 == 0) && ($i != 1)) {
+                        $month_rows->attach(do_lorem_template('CALENDAR_YEAR_MONTH_ROW', array(
                             'MONTHS' => $months,
                             'MONTH_A_URL' => placeholder_url(),
                             'MONTH_B_URL' => placeholder_url(),
@@ -609,9 +608,9 @@ class Hook_addon_registry_calendar
                     $_entries = new ocp_tempcode();
                     $__entries = new ocp_tempcode();
                     $dotw = 0;
-                    for ($j = 1;$j <= 31;$j++) {
+                    for ($j = 1; $j <= 31; $j++) {
                         if ($j == 10) {
-                            $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_FREE',array(
+                            $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_FREE', array(
                                 'CLASS' => lorem_word(),
                                 'CURRENT' => lorem_word(),
                                 'DAY_URL' => placeholder_url(),
@@ -619,7 +618,7 @@ class Hook_addon_registry_calendar
                                 'DAY' => lorem_word_2(),
                             )));
                         } else {
-                            $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE',array(
+                            $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ACTIVE', array(
                                 'CURRENT' => lorem_word(),
                                 'DAY_URL' => placeholder_url(),
                                 'DATE' => placeholder_date(),
@@ -636,7 +635,7 @@ class Hook_addon_registry_calendar
                         }
 
                         if ($dotw == 6) {
-                            $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW',array(
+                            $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW', array(
                                 'ENTRIES' => $__entries,
                             )));
                             $__entries = new ocp_tempcode();
@@ -646,19 +645,20 @@ class Hook_addon_registry_calendar
                         }
                     }
 
-                    for ($j = $dotw;$j<7;$j++) {
+                    for ($j = $dotw; $j < 7; $j++) {
                         $__entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_SPACER'));
                     }
-                    $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW',array(
+                    $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW', array(
                         'ENTRIES' => $__entries,
                     )));
 
-                    $month = do_lorem_template('CALENDAR_YEAR_MONTH',array(
+                    $month = do_lorem_template('CALENDAR_YEAR_MONTH', array(
                         'ENTRIES' => $_entries,
                     ));
-                    $months .= $month->evaluate() /*XHTMLXHTML*/ ;
+                    $months .= $month->evaluate() /*XHTMLXHTML*/
+                    ;
                 }
-                $month_rows->attach(do_lorem_template('CALENDAR_YEAR_MONTH_ROW',array(
+                $month_rows->attach(do_lorem_template('CALENDAR_YEAR_MONTH_ROW', array(
                     'MONTHS' => $months,
                     'MONTH_A_URL' => placeholder_url(),
                     'MONTH_B_URL' => placeholder_url(),
@@ -668,26 +668,26 @@ class Hook_addon_registry_calendar
                     'MONTH_C' => lorem_word(),
                 )));
 
-                $main = do_lorem_template('CALENDAR_YEAR',array(
+                $main = do_lorem_template('CALENDAR_YEAR', array(
                     'MONTH_ROWS' => $month_rows,
                     'PERIOD_START' => placeholder_date_raw(),
                     'PERIOD_END' => placeholder_date_raw(),
                 ));
                 break;
         }
-        $events1 = do_lorem_template('CALENDAR_EVENT_TYPE',array(
+        $events1 = do_lorem_template('CALENDAR_EVENT_TYPE', array(
             'S' => 'I',
             'INTERESTED' => 'interested',
             'TYPE' => lorem_phrase(),
             'TYPE_ID' => placeholder_id(),
         ));
-        $events2 = do_lorem_template('CALENDAR_EVENT_TYPE',array(
+        $events2 = do_lorem_template('CALENDAR_EVENT_TYPE', array(
             'S' => 'F',
             'INTERESTED' => 'not_interested',
             'TYPE' => lorem_phrase(),
             'TYPE_ID' => placeholder_id(),
         ));
-        return do_lorem_template('CALENDAR_MAIN_SCREEN',array(
+        return do_lorem_template('CALENDAR_MAIN_SCREEN', array(
             'RSS_FORM' => placeholder_form(),
             'DAY_URL' => placeholder_url(),
             'WEEK_URL' => placeholder_url(),
@@ -719,20 +719,20 @@ class Hook_addon_registry_calendar
     {
         $sub = new ocp_tempcode();
         foreach (placeholder_array() as $v) {
-            $sub->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_PERSONAL_SUBSCRIPTION',array(
+            $sub->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_PERSONAL_SUBSCRIPTION', array(
                 'UNSUBSCRIBE_URL' => placeholder_url(),
                 'TIME' => placeholder_time(),
             )));
         }
         $subed = new ocp_tempcode();
         foreach (placeholder_array() as $v) {
-            $subed->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION',array(
+            $subed->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION', array(
                 'MEMBER_ID' => placeholder_id(),
                 'MEMBER_URL' => placeholder_url(),
                 'USERNAME' => lorem_word(),
             )));
         }
-        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array(
+        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
             'JOIN_BITS' => lorem_phrase_html(),
             'USE_CAPTCHA' => false,
             'EMAIL_OPTIONAL' => lorem_word(),
@@ -750,7 +750,7 @@ class Hook_addon_registry_calendar
             'FIRST_POST' => '',
         ));
         return array(
-            lorem_globalise(do_lorem_template('CALENDAR_EVENT_SCREEN',array(
+            lorem_globalise(do_lorem_template('CALENDAR_EVENT_SCREEN', array(
                 'ID' => placeholder_id(),
                 'TAGS' => lorem_word_html(),
                 'WARNING_DETAILS' => '',
@@ -780,7 +780,7 @@ class Hook_addon_registry_calendar
                 'TRACKBACK_DETAILS' => lorem_sentence_html(),
                 'VALIDATED' => true,
                 'COMMENT_DETAILS' => $comment_details,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

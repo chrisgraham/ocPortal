@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    msn
  */
-
 class Hook_addon_registry_msn
 {
     /**
@@ -134,9 +133,9 @@ class Hook_addon_registry_msn
     public function tpl_preview__block_side_network()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_NETWORK', array(
                 'CONTENT' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -156,9 +155,9 @@ class Hook_addon_registry_msn
         }
 
         return array(
-            lorem_globalise(do_lorem_template('NETLINK',array(
+            lorem_globalise(do_lorem_template('NETLINK', array(
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

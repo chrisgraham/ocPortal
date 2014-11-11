@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    browser_detect
  */
-
 class Hook_addon_registry_browser_detect
 {
     /**
@@ -98,8 +97,7 @@ If you would like to show the message as an ocPortal warning (at the top of the 
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -110,12 +108,9 @@ If you would like to show the message as an ocPortal warning (at the top of the 
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

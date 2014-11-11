@@ -1277,8 +1277,7 @@ function check_outdated__handle_overrides($dir, $rela, &$master_data, &$hook_fil
                             } else { // Get hash from non-overridden file (equiv file)
                                 if ($only_if_noncustom) {
                                     $true_hash = null; // Except we can't as we're not looking at the .editfrom and thus can't expect equality
-                                }
-                                else {
+                                } else {
                                     $true_hash = $_true_hash;
                                 }
                             }

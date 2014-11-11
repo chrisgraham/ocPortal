@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_Profiles_Tabs_points
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Profiles_Tabs_points
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
         return true;
     }
@@ -40,7 +39,7 @@ class Hook_Profiles_Tabs_points
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
         require_lang('points');
 
@@ -49,14 +48,14 @@ class Hook_Profiles_Tabs_points
         $order = 40;
 
         if ($leave_to_ajax_if_possible) {
-            return array($title,null,$order,'menu/social/points');
+            return array($title, null, $order, 'menu/social/points');
         }
 
         require_code('points3');
         require_css('points');
 
-        $content = points_profile($member_id_of,$member_id_viewing);
+        $content = points_profile($member_id_of, $member_id_viewing);
 
-        return array($title,$content,$order,'menu/social/points');
+        return array($title, $content, $order, 'menu/social/points');
     }
 }

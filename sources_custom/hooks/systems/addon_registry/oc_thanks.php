@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_thanks
  */
-
 class Hook_addon_registry_oc_thanks
 {
     /**
@@ -97,8 +96,7 @@ and
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -112,10 +110,8 @@ and
             'requires' => array(
                 'JavaScript enabled',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    google_search
  */
-
 class Hook_addon_registry_google_search
 {
     /**
@@ -94,8 +93,7 @@ This addon consists of two blocks: a side block with the google search form and 
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -106,12 +104,9 @@ This addon consists of two blocks: a side block with the google search form and 
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

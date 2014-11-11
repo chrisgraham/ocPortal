@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_whoami
 {
     /**
@@ -28,17 +27,17 @@ class Hook_occle_command_whoami
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('whoami',array('h'),array()),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('whoami', array('h'), array()), '', '');
         } else {
             $member_id = get_member();
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member_id);
             if (is_null($username)) {
                 $username = do_lang('GUEST');
             }
-            return array('','',$username . ' (#' . strval($member_id) . ')','');
+            return array('', '', $username . ' (#' . strval($member_id) . ')', '');
         }
     }
 }

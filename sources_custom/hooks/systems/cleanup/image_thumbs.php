@@ -9,6 +9,6 @@ class Hook_image_thumbs
      */
     public function info()
     {
-        return NULL; // Disabled if thumbnails are controlled manually
+        return null; // Disabled if thumbnails are controlled manually
     }
 }

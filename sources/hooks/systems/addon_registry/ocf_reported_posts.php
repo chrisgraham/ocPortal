@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_reported_posts
  */
-
 class Hook_addon_registry_ocf_reported_posts
 {
     /**
@@ -127,13 +126,13 @@ class Hook_addon_registry_ocf_reported_posts
         require_lang('ocf');
         require_css('ocf');
         return array(
-            lorem_globalise(do_lorem_template('OCF_REPORTED_POST_FCOMCODE',array(
+            lorem_globalise(do_lorem_template('OCF_REPORTED_POST_FCOMCODE', array(
                 'POST_ID' => placeholder_id(),
                 'MEMBER' => lorem_phrase(),
                 'POST' => lorem_phrase(),
                 'POSTER' => lorem_phrase(),
                 'TOPIC_TITLE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

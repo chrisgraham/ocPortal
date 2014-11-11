@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_the_point
  */
-
 class Hook_addon_registry_oc_the_point
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_oc_the_point
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,10 +106,8 @@ class Hook_addon_registry_oc_the_point
                 'banners',
                 'points',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

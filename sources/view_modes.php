@@ -61,7 +61,8 @@ function initialise_special_page_types($special_page_type)
  * @param  tempcode                     The normal script tempcode output
  * @param  string                       The normal script evaluated output
  */
-function special_page_types($special_page_type, &$out,/*&*/$out_evaluated)
+function special_page_types($special_page_type, &$out,/*&*/
+                            $out_evaluated)
 {
     global $RECORDED_TEMPLATES_USED;
 
@@ -223,8 +224,7 @@ function special_page_types($special_page_type, &$out,/*&*/$out_evaluated)
         $hidden = form_input_hidden('redirect', get_self_url(true, true));
         $hidden = form_input_hidden('lang', user_lang());
         $middle_spt = do_template('FORM_SCREEN', array('_GUID' => '0d4dd16b023d0a7960f3eac85f54ddc4', 'SKIP_VALIDATION' => true, 'TITLE' => $title, 'HIDDEN' => $hidden, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => do_lang_tempcode('CONTEXTUAL_EDITING_SCREEN'), 'SUBMIT_ICON' => 'buttons__save', 'SUBMIT_NAME' => do_lang_tempcode('SAVE')));
-    }
-    // Language mode
+    } // Language mode
     elseif (substr($special_page_type, 0, 4) == 'lang') {
         $map_a = get_file_base() . '/lang/langs.ini';
         $map_b = get_custom_file_base() . '/lang_custom/langs.ini';

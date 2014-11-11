@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    external_db_login
  */
-
 class Hook_login_providers_direct_auth_external_db
 {
     /**
@@ -28,17 +27,17 @@ class Hook_login_providers_direct_auth_external_db
      * @param  boolean                  Whether this is a cookie login, determines how the hashed password is treated for the value passed in
      * @return ?array                   A map of 'id' and 'error'. If 'id' is NULL, an error occurred and 'error' is set (NULL: no action by this hook)
      */
-    public function try_login($username,$userid,$password_hashed,$password_raw,$cookie_login = false)
+    public function try_login($username, $userid, $password_hashed, $password_raw, $cookie_login = false)
     {
         require_code('external_db');
 
         if ($cookie_login || $password_raw == '') {
-            return NULL;
+            return null;
         }
 
         $db = external_db();
         if (is_null($db)) {
-            return NULL;
+            return null;
         }
 
         $table = get_long_value('external_db_login__table');
@@ -47,18 +46,18 @@ class Hook_login_providers_direct_auth_external_db
         $email_address_field = get_long_value('external_db_login__email_address_field');
 
         // Handle active login
-        $query = 'SELECT * FROM ' . $table . ' WHERE (' . $db->static_ob->db_string_equal_to($username_field,$username);
+        $query = 'SELECT * FROM ' . $table . ' WHERE (' . $db->static_ob->db_string_equal_to($username_field, $username);
         if (get_option('one_per_email_address') == '1') {
-            $query .= ' OR ' . $db->static_ob->db_string_equal_to($email_address_field,$username);
+            $query .= ' OR ' . $db->static_ob->db_string_equal_to($email_address_field, $username);
         }
         $query .= ')';
-        $query .= ' AND ' . $db->static_ob->db_string_equal_to($password_field,$password_raw);
+        $query .= ' AND ' . $db->static_ob->db_string_equal_to($password_field, $password_raw);
         $records = $db->query($query);
         if (isset($records[0])) {
             // Create new member
             return array('id' => external_db_user_add($records[0]));
         }
 
-        return NULL;
+        return null;
     }
 }

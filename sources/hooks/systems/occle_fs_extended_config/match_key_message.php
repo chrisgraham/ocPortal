@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    match_key_permissions
  */
-
 class Hook_occle_fs_extended_config__match_key_message
 {
     /**
@@ -27,7 +26,7 @@ class Hook_occle_fs_extended_config__match_key_message
      */
     protected function _get_edit_date()
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','PAGE_MATCH_KEY_ACCESS');
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type', 'PAGE_MATCH_KEY_ACCESS');
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -40,14 +39,14 @@ class Hook_occle_fs_extended_config__match_key_message
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
         require_code('xml_storage');
 
-        $rows = $GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message','k_match_key'),null,'ORDER BY id');
+        $rows = $GLOBALS['SITE_DB']->query_select('match_key_messages', array('k_message', 'k_match_key'), null, 'ORDER BY id');
         $rows2 = array();
         foreach ($rows as $row) {
-            $row2 = array('message' => '<lang>' . get_translated_text_xml($row['k_message'],'message',$GLOBALS['SITE_DB']) . '</lang>','match_key' => $row['k_match_key']);
+            $row2 = array('message' => '<lang>' . get_translated_text_xml($row['k_message'], 'message', $GLOBALS['SITE_DB']) . '</lang>', 'match_key' => $row['k_match_key']);
             $rows2[] = $row2;
         }
         return serialize($rows2);
@@ -63,11 +62,11 @@ class Hook_occle_fs_extended_config__match_key_message
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         require_code('xml_storage');
 
-        $rows = $GLOBALS['SITE_DB']->query_select('match_key_messages',array('k_message'));
+        $rows = $GLOBALS['SITE_DB']->query_select('match_key_messages', array('k_message'));
         foreach ($rows as $row) {
             delete_lang($row['k_message']);
         }
@@ -79,8 +78,8 @@ class Hook_occle_fs_extended_config__match_key_message
         }
         foreach ($rows as $row) {
             $row2 = array('k_match_key' => $row['k_match_key']);
-            $row2 += insert_lang_xml('k_message',$row['k_message']);
-            $GLOBALS['SITE_DB']->query_insert('match_key_messages',$row2);
+            $row2 += insert_lang_xml('k_message', $row['k_message']);
+            $GLOBALS['SITE_DB']->query_insert('match_key_messages', $row2);
         }
         return true;
     }

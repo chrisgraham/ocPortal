@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_block_ui_renderers_catalogues
 {
     /**
@@ -30,32 +29,32 @@ class Hook_block_ui_renderers_catalogues
      * @param  tempcode                 Field description
      * @return ?tempcode                Rendered field (NULL: not handled).
      */
-    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
-        if ((($default == '') || (is_numeric($default))) && ($parameter == 'param') && (in_array($block,array('main_cc_embed')))) {
-            $num_categories = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)');
-            $num_categories_top = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories','COUNT(*)',array('cc_parent_id' => NULL));
-            if (($num_categories_top<300) && ((!$has_default) || ($num_categories<300))) { // catalogue category
+        if ((($default == '') || (is_numeric($default))) && ($parameter == 'param') && (in_array($block, array('main_cc_embed')))) {
+            $num_categories = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)');
+            $num_categories_top = $GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)', array('cc_parent_id' => null));
+            if (($num_categories_top < 300) && ((!$has_default) || ($num_categories < 300))) { // catalogue category
                 $list = new ocp_tempcode();
                 $structured_list = new ocp_tempcode();
-                $categories = $GLOBALS['SITE_DB']->query_select('catalogue_categories',array('id','cc_title','c_name'),($num_categories >= 300)?array('cc_parent_id' => NULL):null,'ORDER BY c_name,id');
+                $categories = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title', 'c_name'), ($num_categories >= 300) ? array('cc_parent_id' => null) : null, 'ORDER BY c_name,id');
                 $last_cat = mixed();
                 foreach ($categories as $cat) {
                     if ((is_null($last_cat)) || ($cat['c_name'] != $last_cat)) {
                         if (!$list->is_empty()) {
-                            $structured_list->attach(form_input_list_group($last_cat,$list));
+                            $structured_list->attach(form_input_list_group($last_cat, $list));
                         }
                         $list = new ocp_tempcode();
                         $last_cat = $cat['c_name'];
                     }
-                    $list->attach(form_input_list_entry(strval($cat['id']),$has_default && strval($cat['id']) == $default,get_translated_text($cat['cc_title'])));
+                    $list->attach(form_input_list_entry(strval($cat['id']), $has_default && strval($cat['id']) == $default, get_translated_text($cat['cc_title'])));
                 }
                 if (!$list->is_empty()) {
-                    $structured_list->attach(form_input_list_group($last_cat,$list));
+                    $structured_list->attach(form_input_list_group($last_cat, $list));
                 }
-                return form_input_list(titleify($parameter),escape_html($description),$parameter,$structured_list,null,false,false);
+                return form_input_list(titleify($parameter), escape_html($description), $parameter, $structured_list, null, false, false);
             }
         }
-        return NULL;
+        return null;
     }
 }

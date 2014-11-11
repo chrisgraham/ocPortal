@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_media_rendering_code
 {
     /**
@@ -28,7 +27,7 @@ class Hook_media_rendering_code
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -73,7 +72,7 @@ class Hook_media_rendering_code
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
         if (is_object($url)) {
             $url = $url->evaluate();
@@ -82,20 +81,20 @@ class Hook_media_rendering_code
         if (url_is_local($url)) {
             $url = get_custom_base_url() . '/' . $url;
         }
-        $file_contents = http_download_file($url,1024*1024*20/*reasonable limit*/);
+        $file_contents = http_download_file($url, 1024 * 1024 * 20/*reasonable limit*/);
 
         require_code('files');
         require_code('comcode_renderer');
 
-        if ((array_key_exists('filename',$attributes)) && ($attributes['filename'] != '')) {
+        if ((array_key_exists('filename', $attributes)) && ($attributes['filename'] != '')) {
             $title = escape_html($attributes['filename']);
             $extension = get_file_extension($attributes['filename']);
         } else {
             $extension = get_file_extension(basename($url));
         }
-        list($_embed,$title) = do_code_box($extension,make_string_tempcode($file_contents));
+        list($_embed, $title) = do_code_box($extension, make_string_tempcode($file_contents));
 
-        return do_template('COMCODE_CODE',array(
+        return do_template('COMCODE_CODE', array(
             '_GUID' => 'b76f3383d31ad823f50124d59db6a8c3',
             'STYLE' => '',
             'TYPE' => $extension,

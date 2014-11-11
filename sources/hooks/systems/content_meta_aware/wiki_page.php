@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_content_meta_aware_wiki_page
 {
     /**
@@ -37,7 +36,7 @@ class Hook_content_meta_aware_wiki_page
             'table' => 'wiki_pages',
             'id_field' => 'id',
             'id_field_numeric' => true,
-            'parent_category_field' => NULL,
+            'parent_category_field' => null,
             'parent_category_meta_aware_type' => 'wiki_page',
             'is_category' => true,
             'is_entry' => false,
@@ -51,28 +50,28 @@ class Hook_content_meta_aware_wiki_page
             'title_field' => 'title',
             'title_field_dereference' => true,
             'description_field' => 'description',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:wiki:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_wiki:edit_page:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:wiki:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('cat_low',get_member(),get_ip_address(),'cms_wiki'))?(get_module_zone('cms_wiki') . ':cms_wiki:add_page'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('wiki')) . ':wiki',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('cat_low', get_member(), get_ip_address(), 'cms_wiki')) ? (get_module_zone('cms_wiki') . ':cms_wiki:add_page') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('wiki')) . ':wiki',
 
             'support_url_monikers' => false,
 
             'views_field' => 'wiki_views',
             'submitter_field' => 'submitter',
             'add_time_field' => 'add_date',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'add_date',
-            'validated_field' => NULL,
+            'validated_field' => null,
 
             'seo_type_code' => 'wiki_page',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
             'search_hook' => 'wiki_pages',
 
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_wiki_page
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('wiki');
 
-        return render_wiki_page_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+        return render_wiki_page_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : intval($root), $guid);
     }
 }

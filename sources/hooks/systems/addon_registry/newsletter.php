@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
-
 class Hook_addon_registry_newsletter
 {
     /**
@@ -177,7 +176,7 @@ class Hook_addon_registry_newsletter
     {
         $automatic = array();
         foreach (placeholder_array() as $k => $v) {
-            $tmp = do_lorem_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE',array(
+            $tmp = do_lorem_template('NEWSLETTER_AUTOMATE_SECTION_FCOMCODE', array(
                 'I' => lorem_word(),
                 'TITLE' => lorem_phrase(),
                 'CONTENT' => lorem_sentence(),
@@ -191,9 +190,9 @@ class Hook_addon_registry_newsletter
         }
 
         return array(
-            lorem_globalise(do_lorem_template('NEWSLETTER_AUTOMATED_FCOMCODE',array(
+            lorem_globalise(do_lorem_template('NEWSLETTER_AUTOMATED_FCOMCODE', array(
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -208,7 +207,7 @@ class Hook_addon_registry_newsletter
     {
         $out = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $out->attach(do_lorem_template('NEWSLETTER_SUBSCRIBER',array(
+            $out->attach(do_lorem_template('NEWSLETTER_SUBSCRIBER', array(
                 'EMAIL' => lorem_word(),
                 'FORENAME' => lorem_word(),
                 'SURNAME' => lorem_word(),
@@ -225,12 +224,12 @@ class Hook_addon_registry_newsletter
         );
 
         return array(
-            lorem_globalise(do_lorem_template('NEWSLETTER_SUBSCRIBERS_SCREEN',array(
+            lorem_globalise(do_lorem_template('NEWSLETTER_SUBSCRIBERS_SCREEN', array(
                 'SUBSCRIBERS' => $outs,
                 'PAGINATION' => '',
                 'TITLE' => lorem_title(),
                 'DOMAINS' => placeholder_array(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -244,11 +243,11 @@ class Hook_addon_registry_newsletter
     public function tpl_preview__newsletter_default()
     {
         return array(
-            lorem_globalise(do_lorem_template('NEWSLETTER_DEFAULT_FCOMCODE',array(
+            lorem_globalise(do_lorem_template('NEWSLETTER_DEFAULT_FCOMCODE', array(
                 'CONTENT' => lorem_phrase(),
                 'LANG' => fallback_lang(),
                 'SUBJECT' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -261,20 +260,20 @@ class Hook_addon_registry_newsletter
      */
     public function tpl_preview__administrative__newsletter_confirm_wrap()
     {
-        $preview = do_lorem_template('NEWSLETTER_CONFIRM_WRAP',array(
+        $preview = do_lorem_template('NEWSLETTER_CONFIRM_WRAP', array(
             'TEXT_PREVIEW' => lorem_sentence(),
             'PREVIEW' => lorem_phrase(),
             'SUBJECT' => lorem_phrase(),
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('CONFIRM_SCREEN',array(
+            lorem_globalise(do_lorem_template('CONFIRM_SCREEN', array(
                 'URL' => placeholder_url(),
                 'BACK_URL' => placeholder_url(),
                 'PREVIEW' => $preview,
                 'FIELDS' => new ocp_tempcode(),
                 'TITLE' => lorem_title(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -288,10 +287,10 @@ class Hook_addon_registry_newsletter
     public function tpl_preview__block_main_newsletter_signup_done()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP_DONE', array(
                 'PASSWORD' => lorem_phrase(),
                 'NEWSLETTER_TITLE' => lorem_word(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -306,11 +305,11 @@ class Hook_addon_registry_newsletter
     {
         require_lang('javascript');
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_NEWSLETTER_SIGNUP', array(
                 'URL' => placeholder_url(),
                 'NEWSLETTER_TITLE' => lorem_word(),
                 'NID' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -324,7 +323,7 @@ class Hook_addon_registry_newsletter
     public function tpl_preview__newsletter_new_resource_fcomcode()
     {
         return array(
-            lorem_globalise(do_lorem_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE',array(
+            lorem_globalise(do_lorem_template('NEWSLETTER_NEW_RESOURCE_FCOMCODE', array(
                 'MEMBER_ID' => placeholder_id(),
                 'URL' => placeholder_url(),
                 'NAME' => lorem_word(),
@@ -332,7 +331,7 @@ class Hook_addon_registry_newsletter
                 'THUMBNAIL' => placeholder_image_url(),
                 'CONTENT_TYPE' => lorem_word(),
                 'CONTENT_ID' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -346,10 +345,10 @@ class Hook_addon_registry_newsletter
     public function tpl_preview__periodic_newsletter_remove()
     {
         return array(
-            lorem_globalise(do_lorem_template('PERIODIC_NEWSLETTER_REMOVE',array(
+            lorem_globalise(do_lorem_template('PERIODIC_NEWSLETTER_REMOVE', array(
                 'TITLE' => lorem_title(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_avatars
  */
-
 class Hook_addon_registry_ocf_member_avatars
 {
     /**
@@ -132,17 +131,17 @@ class Hook_addon_registry_ocf_member_avatars
     {
         require_lang('ocf');
         require_css('ocf');
-        $avatar = do_lorem_template('OCF_TOPIC_POST_AVATAR',array(
+        $avatar = do_lorem_template('OCF_TOPIC_POST_AVATAR', array(
             'AVATAR' => placeholder_image_url(),
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('OCF_EDIT_AVATAR_TAB',array(
+            lorem_globalise(do_lorem_template('OCF_EDIT_AVATAR_TAB', array(
                 'USERNAME' => lorem_word(),
                 'AVATAR' => $avatar,
                 'WIDTH' => placeholder_number(),
                 'HEIGHT' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

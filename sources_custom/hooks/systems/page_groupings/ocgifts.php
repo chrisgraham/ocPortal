@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_page_groupings_ocgifts
 {
     /**
@@ -21,10 +20,10 @@ class Hook_page_groupings_ocgifts
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('setup','menu/ocgifts',array('admin_ocgifts',array(),get_page_zone('admin_ocgifts')),do_lang_tempcode('ocgifts:MANAGE_GIFTS'),'ocgifts:DOC_OCGIFTS'),
+            array('setup', 'menu/ocgifts', array('admin_ocgifts', array(), get_page_zone('admin_ocgifts')), do_lang_tempcode('ocgifts:MANAGE_GIFTS'), 'ocgifts:DOC_OCGIFTS'),
         );
     }
 }

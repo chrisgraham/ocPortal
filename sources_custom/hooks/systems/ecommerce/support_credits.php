@@ -20,9 +20,9 @@
  * @param  array                        Details of the product.
  * @param  ID_TEXT                      The product codename.
  */
-function handle_support_credits($purchase_id,$details,$type_code)
+function handle_support_credits($purchase_id, $details, $type_code)
 {
-    $row = $GLOBALS['SITE_DB']->query_select('credit_purchases',array('member_id','num_credits'),array('purchase_validated' => 0,'purchase_id' => intval($purchase_id)),'',1);
+    $row = $GLOBALS['SITE_DB']->query_select('credit_purchases', array('member_id', 'num_credits'), array('purchase_validated' => 0, 'purchase_id' => intval($purchase_id)), '', 1);
     if (count($row) != 1) {
         return;
     }
@@ -41,10 +41,10 @@ function handle_support_credits($purchase_id,$details,$type_code)
     // Increment the number of credits this customer has
     require_code('ocf_members_action2');
     $fields = ocf_get_custom_field_mappings($member_id);
-    ocf_set_custom_field($member_id,$cpf_id,intval($fields['field_' . strval($cpf_id)])+intval($num_credits));
+    ocf_set_custom_field($member_id, $cpf_id, intval($fields['field_' . strval($cpf_id)]) + intval($num_credits));
 
     // Update the row in the credit_purchases table
-    $GLOBALS['SITE_DB']->query_update('credit_purchases',array('purchase_validated' => 1),array('purchase_id' => intval($purchase_id)));
+    $GLOBALS['SITE_DB']->query_update('credit_purchases', array('purchase_validated' => 1), array('purchase_id' => intval($purchase_id)));
 }
 
 /**
@@ -64,14 +64,14 @@ class Hook_support_credits
         }
         require_lang('customers');
         $products = array();
-        $bundles = array(1,2,3,4,5,6,9,20,25,35,50,90,180,550);
+        $bundles = array(1, 2, 3, 4, 5, 6, 9, 20, 25, 35, 50, 90, 180, 550);
         foreach ($bundles as $bundle) {
             $products[strval($bundle) . '_CREDITS'] = array(
                 PRODUCT_PURCHASE_WIZARD,
-                float_to_raw_string($bundle*floatval(get_option('support_credit_value'))),
+                float_to_raw_string($bundle * floatval(get_option('support_credit_value'))),
                 'handle_support_credits',
                 null,
-                do_lang('customers:CUSTOMER_SUPPORT_CREDITS',integer_format($bundle))
+                do_lang('customers:CUSTOMER_SUPPORT_CREDITS', integer_format($bundle))
             );
         }
 
@@ -97,7 +97,7 @@ class Hook_support_credits
     public function get_agreement()
     {
         require_code('textfiles');
-        return read_text_file('support_credits_licence','EN');
+        return read_text_file('support_credits_licence', 'EN');
     }
 
     /**
@@ -108,7 +108,7 @@ class Hook_support_credits
      */
     public function member_for($purchase_id)
     {
-        return $GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases','member_id',array('purchase_id' => intval($purchase_id)));
+        return $GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases', 'member_id', array('purchase_id' => intval($purchase_id)));
     }
 
     /**
@@ -118,15 +118,15 @@ class Hook_support_credits
      */
     public function get_needed_fields()
     {
-        if (!has_actual_page_access(get_member(),'admin_ecommerce',get_module_zone('admin_ecommerce'))) {
-            return NULL;
+        if (!has_actual_page_access(get_member(), 'admin_ecommerce', get_module_zone('admin_ecommerce'))) {
+            return null;
         }
 
         // Check if we've already been passed a member ID and use it to pre-populate the field
-        $member_id = get_param_integer('member_id',null);
-        $username = $GLOBALS['FORUM_DRIVER']->get_username(is_null($member_id)?get_member():$member_id);
+        $member_id = get_param_integer('member_id', null);
+        $username = $GLOBALS['FORUM_DRIVER']->get_username(is_null($member_id) ? get_member() : $member_id);
 
-        return form_input_username(do_lang('USERNAME'),do_lang('USERNAME_CREDITS_FOR'),'member_username',$username,true);
+        return form_input_username(do_lang('USERNAME'), do_lang('USERNAME_CREDITS_FOR'), 'member_username', $username, true);
     }
 
     /**
@@ -137,7 +137,7 @@ class Hook_support_credits
      */
     public function set_needed_fields($type_code)
     {
-        $product_array = explode('_',$type_code,2);
+        $product_array = explode('_', $type_code, 2);
         $num_credits = intval($product_array[0]);
         if ($num_credits == 0) {
             return;
@@ -146,13 +146,13 @@ class Hook_support_credits
         $member_id = get_member();
 
         // Allow admins to specify the member who should receive the credits with the field in get_needed_fields
-        if (has_actual_page_access(get_member(),'admin_ecommerce',get_module_zone('admin_ecommerce'))) {
-            $id = post_param_integer('member_id',null);
+        if (has_actual_page_access(get_member(), 'admin_ecommerce', get_module_zone('admin_ecommerce'))) {
+            $id = post_param_integer('member_id', null);
             if (!is_null($id)) {
                 $manual = 1;
                 $member_id = $id;
             } else {
-                $username = post_param('member_username',null);
+                $username = post_param('member_username', null);
                 if (!is_null($username)) {
                     $manual = 1;
                     $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
@@ -160,7 +160,7 @@ class Hook_support_credits
             }
         }
 
-        return strval($GLOBALS['SITE_DB']->query_insert('credit_purchases',array('member_id' => $member_id,'date_and_time' => time(),'num_credits' => $num_credits,'is_manual' => $manual,'purchase_validated' => 0),true));
+        return strval($GLOBALS['SITE_DB']->query_insert('credit_purchases', array('member_id' => $member_id, 'date_and_time' => time(), 'num_credits' => $num_credits, 'is_manual' => $manual, 'purchase_validated' => 0), true));
     }
 
     /**
@@ -170,8 +170,8 @@ class Hook_support_credits
      * @param  MEMBER                   The member.
      * @return boolean                  Whether it is.
      */
-    public function is_available($type_code,$member)
+    public function is_available($type_code, $member)
     {
-        return ($member != $GLOBALS['FORUM_DRIVER']->get_guest_id())?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_NO_GUESTS;
+        return ($member != $GLOBALS['FORUM_DRIVER']->get_guest_id()) ? ECOMMERCE_PRODUCT_AVAILABLE : ECOMMERCE_PRODUCT_NO_GUESTS;
     }
 }

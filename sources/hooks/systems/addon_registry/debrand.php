@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    debrand
  */
-
 class Hook_addon_registry_debrand
 {
     /**

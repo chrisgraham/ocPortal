@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    xmppchat
  */
-
 class Hook_addon_registry_xmppchat
 {
     /**
@@ -85,7 +84,7 @@ class Hook_addon_registry_xmppchat
     public function get_description()
     {
         return 'Replaces the standard ocPortal chat room with any Jabber chatrooms running on your server.
-        
+
 Usage Instructions:
 1) You will need a dedicated server; we assume it is Linux and Apache.
 2) We assume ocPortal is installed to use MySQL.
@@ -107,8 +106,7 @@ Usage Instructions:
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -123,10 +121,8 @@ Usage Instructions:
                 'Dedicated server running ejabberd',
                 'chat',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

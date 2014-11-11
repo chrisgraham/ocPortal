@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_implicit_usergroups_usergroup_field_match
 {
     protected function _get_structure()
@@ -21,26 +20,26 @@ class Hook_implicit_usergroups_usergroup_field_match
         }
 
         static $out = null;
-        if ($out !== NULL) {
+        if ($out !== null) {
             return $out;
         }
 
         $out = array();
-        $_groups = $GLOBALS['FORUM_DB']->query_select('f_groups',array('id','g_name'),array('g_open_membership' => 1));
+        $_groups = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), array('g_open_membership' => 1));
         $groups = array();
         foreach ($_groups as $g) {
-            $groups[get_translated_text($g['g_name'],$GLOBALS['FORUM_DB'])] = $g['id'];
+            $groups[get_translated_text($g['g_name'], $GLOBALS['FORUM_DB'])] = $g['id'];
         }
 
-        $list_cpfs = $GLOBALS['FORUM_DB']->query_select('f_custom_fields',array('id','cf_default'),array('cf_type' => 'list'));
+        $list_cpfs = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_default'), array('cf_type' => 'list'));
         foreach ($list_cpfs as $c) {
-            $values = explode('|',$c['cf_default']);
+            $values = explode('|', $c['cf_default']);
             foreach ($values as $v) {
                 if (($v != '') && (isset($groups[$v]))) {
                     if (!isset($out[$groups[$v]])) {
                         $out[$groups[$v]] = array();
                     }
-                    $out[$groups[$v]][] = array($c['id'],$v);    // group id => [ {CPF id, CPF value / group name} ]
+                    $out[$groups[$v]][] = array($c['id'], $v);    // group id => [ {CPF id, CPF value / group name} ]
                 }
             }
         }
@@ -72,7 +71,7 @@ class Hook_implicit_usergroups_usergroup_field_match
         $for_group = $structure[$group_id];
         foreach ($for_group as $pairs) {
             $cpf_key = 'field_' . strval($pairs[0]);
-            $_members = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('mf_member_id'),array($cpf_key => $pairs[1]));
+            $_members = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields', array('mf_member_id'), array($cpf_key => $pairs[1]));
             foreach ($_members as $m) {
                 $member_id = $m['mf_member_id'];
                 $out[$member_id] = $GLOBALS['FORUM_DRIVER']->get_member_row($member_id);
@@ -96,13 +95,13 @@ class Hook_implicit_usergroups_usergroup_field_match
         if (count($for_group) == 1) {
             $pairs = $for_group[0];
             $cpf_key = 'field_' . strval($pairs[0]);
-            return $GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields','COUNT(*)',array($cpf_key => $pairs[1]));
+            return $GLOBALS['FORUM_DB']->query_select_value('f_member_custom_fields', 'COUNT(*)', array($cpf_key => $pairs[1]));
         } else { // Much more complex if multiple CPFs are mapped, we need to find all and de-dupe
             $out = array();
 
             foreach ($for_group as $pairs) {
                 $cpf_key = 'field_' . strval($pairs[0]);
-                $_members = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields',array('mf_member_id'),array($cpf_key => $pairs[1]));
+                $_members = $GLOBALS['FORUM_DB']->query_select('f_member_custom_fields', array('mf_member_id'), array($cpf_key => $pairs[1]));
                 foreach ($_members as $m) {
                     $member_id = $m['mf_member_id'];
                     $out[$member_id/*automatic de-dupe*/] = true;
@@ -112,7 +111,7 @@ class Hook_implicit_usergroups_usergroup_field_match
             return count($out);
         }
 
-        return NULL; // Should not get here
+        return null; // Should not get here
     }
 
     /**
@@ -122,7 +121,7 @@ class Hook_implicit_usergroups_usergroup_field_match
      * @param  GROUP                    The group ID to check (if only one group supported by the hook, can be ignored).
      * @return boolean                  Whether they are.
      */
-    public function is_member_within($member_id,$group_id)
+    public function is_member_within($member_id, $group_id)
     {
         static $cache = array(); // So finding if member in each, is quick
 
@@ -135,7 +134,7 @@ class Hook_implicit_usergroups_usergroup_field_match
             if (isset($cache[$member_id][$cpf_key])) {
                 $cpf_value_actual = $cache[$member_id][$cpf_key];
             } else {
-                $cpf_value_actual = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_member_custom_fields',$cpf_key,array('mf_member_id' => $member_id));
+                $cpf_value_actual = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_member_custom_fields', $cpf_key, array('mf_member_id' => $member_id));
                 $cache[$member_id][$cpf_key] = $cpf_value_actual;
             }
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_find_id_via_occlefs_filename
 {
     /**
@@ -28,25 +27,25 @@ class Hook_occle_command_find_id_via_occlefs_filename
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('find_id_via_occlefs_filename',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('find_id_via_occlefs_filename', array('h'), array(true, true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','find_id_via_occlefs_filename'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'find_id_via_occlefs_filename'));
             }
-            if (!array_key_exists(1,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','2','find_id_via_occlefs_filename'));
+            if (!array_key_exists(1, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '2', 'find_id_via_occlefs_filename'));
             }
 
             require_code('resource_fs');
 
-            $result = find_id_via_occlefs_filename($parameters[0],$parameters[1]);
-            if ($result !== NULL) {
-                return array('','',$result,'');
+            $result = find_id_via_occlefs_filename($parameters[0], $parameters[1]);
+            if ($result !== null) {
+                return array('', '', $result, '');
             } else {
-                return array('','','',do_lang('MISSING_RESOURCE'));
+                return array('', '', '', do_lang('MISSING_RESOURCE'));
             }
         }
     }

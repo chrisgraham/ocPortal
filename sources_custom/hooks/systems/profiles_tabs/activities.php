@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-
 class Hook_Profiles_Tabs_activities
 {
     /**
@@ -22,7 +21,7 @@ class Hook_Profiles_Tabs_activities
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
         return true;
     }
@@ -35,7 +34,7 @@ class Hook_Profiles_Tabs_activities
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
         // Need to declare these here as the Tempcode engine can't look as deep, into a loop (I think), as it would need to, to find the block declaring the dependency
         require_lang('activities');
@@ -57,22 +56,22 @@ class Hook_Profiles_Tabs_activities
         // Allow user to link up things for syndication
         $syndications = array();
         if ($member_id_of == $member_id_viewing) {
-            $dests = find_all_hooks('systems','syndication');
+            $dests = find_all_hooks('systems', 'syndication');
             foreach (array_keys($dests) as $hook) {
                 require_code('hooks/systems/syndication/' . $hook);
                 $ob = object_factory('Hook_Syndication_' . $hook);
                 if ($ob->is_available()) {
-                    if (either_param('syndicate_stop__' . $hook,null) !== NULL) {
+                    if (either_param('syndicate_stop__' . $hook, null) !== null) {
                         $ob->auth_unset($member_id_of);
-                    } elseif (either_param('syndicate_start__' . $hook,null) !== NULL) {
-                        $url_map = array('page' => '_SELF','type' => 'view','id' => $member_id_of,'oauth_in_progress' => 1);
+                    } elseif (either_param('syndicate_start__' . $hook, null) !== null) {
+                        $url_map = array('page' => '_SELF', 'type' => 'view', 'id' => $member_id_of, 'oauth_in_progress' => 1);
                         foreach (array_keys($_POST) as $key) {
-                            $url_map[$key] = post_param($key,'');
+                            $url_map[$key] = post_param($key, '');
                         }
                         $url_map['syndicate_start__' . $hook] = 1;
-                        $oauth_url = build_url($url_map,'_SELF',null,false,false,false,'tab__activities');
-                        $ob->auth_set($member_id_of,$oauth_url);
-                    } elseif ((running_script('index')) && (!$leave_to_ajax_if_possible) && ($ob->auth_is_set($member_id_of)) && (either_param('oauth_in_progress',null) === NULL) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
+                        $oauth_url = build_url($url_map, '_SELF', null, false, false, false, 'tab__activities');
+                        $ob->auth_set($member_id_of, $oauth_url);
+                    } elseif ((running_script('index')) && (!$leave_to_ajax_if_possible) && ($ob->auth_is_set($member_id_of)) && (either_param('oauth_in_progress', null) === null) && (!$GLOBALS['IS_ACTUALLY_ADMIN'])) {
                         /* running_script('index') won't work currently due to execution contexts, and it is never non-AJAX, and it's probably not needed anyway
                                         // Do a refresh to make sure the token is updated
                                         $url_map=array('page'=>'_SELF','type'=>'view','id'=>$member_id_of,'oauth_in_progress'=>1);
@@ -84,18 +83,18 @@ class Hook_Profiles_Tabs_activities
                     $syndications[$hook] = array(
                         'SYNDICATION_IS_SET' => $ob->auth_is_set($member_id_of),
                         'SYNDICATION_SERVICE_NAME' => $ob->get_service_name(),
-                        'SYNDICATION_JAVASCRIPT' => method_exists($ob,'syndication_javascript')?$ob->syndication_javascript():''
+                        'SYNDICATION_JAVASCRIPT' => method_exists($ob, 'syndication_javascript') ? $ob->syndication_javascript() : ''
                     );
                 }
             }
         }
 
         if ($leave_to_ajax_if_possible) {
-            return array($title,null,$order,'tabs/member_account/activity');
+            return array($title, null, $order, 'tabs/member_account/activity');
         }
 
-        $content = do_template('OCF_MEMBER_PROFILE_ACTIVITIES',array('_GUID' => '9fe3b8bb9a4975fa19631c43472b4539','MEMBER_ID' => strval($member_id_of),'SYNDICATIONS' => $syndications));
+        $content = do_template('OCF_MEMBER_PROFILE_ACTIVITIES', array('_GUID' => '9fe3b8bb9a4975fa19631c43472b4539', 'MEMBER_ID' => strval($member_id_of), 'SYNDICATIONS' => $syndications));
 
-        return array($title,$content,$order,'tabs/member_account/activity');
+        return array($title, $content, $order, 'tabs/member_account/activity');
     }
 }

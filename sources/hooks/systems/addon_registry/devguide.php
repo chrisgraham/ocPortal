@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    devguide
  */
-
 class Hook_addon_registry_devguide
 {
     /**
@@ -147,29 +146,29 @@ class Hook_addon_registry_devguide
         $full_parameters = new ocp_tempcode();
 
         foreach (placeholder_array() as $value) {
-            $parameters->attach(do_lorem_template('PHP_PARAMETER_LIST',array(
+            $parameters->attach(do_lorem_template('PHP_PARAMETER_LIST', array(
                 'TYPE' => lorem_word(),
                 'NAME' => lorem_word_2(),
             )));
 
-            $bits = do_lorem_template('PHP_PARAMETER_BIT',array(
+            $bits = do_lorem_template('PHP_PARAMETER_BIT', array(
                 'NAME' => lorem_word(),
                 'VALUE' => $value,
             ));
 
-            $full_parameters->attach(do_lorem_template('PHP_PARAMETER',array(
+            $full_parameters->attach(do_lorem_template('PHP_PARAMETER', array(
                 'BITS' => $bits,
             )));
         }
 
         $classes = new ocp_tempcode();
         foreach (placeholder_array() as $k => $value) {
-            $return = do_lorem_template('PHP_PARAMETER_BIT',array(
+            $return = do_lorem_template('PHP_PARAMETER_BIT', array(
                 'NAME' => lorem_word(),
                 'VALUE' => lorem_word(),
             ));
 
-            $function = do_lorem_template('PHP_FUNCTION',array(
+            $function = do_lorem_template('PHP_FUNCTION', array(
                 'FILENAME' => lorem_word(),
                 'CODE' => lorem_paragraph_html(),
                 'RETURN_TYPE' => lorem_word(),
@@ -182,7 +181,7 @@ class Hook_addon_registry_devguide
             ));
 
 
-            $summary = do_lorem_template('PHP_FUNCTION_SUMMARY',array(
+            $summary = do_lorem_template('PHP_FUNCTION_SUMMARY', array(
                 'FILENAME' => lorem_word(),
                 'RETURN_TYPE' => lorem_word(),
                 'CLASS' => lorem_word_2(),
@@ -190,7 +189,7 @@ class Hook_addon_registry_devguide
                 'PARAMETERS' => $parameters,
             ));
 
-            $classes->attach(do_lorem_template('PHP_CLASS',array(
+            $classes->attach(do_lorem_template('PHP_CLASS', array(
                 'CLASS_NAME' => lorem_word() . strval($k),
                 'FUNCTION_SUMMARIES' => $summary,
                 'FUNCTIONS' => $function,
@@ -198,10 +197,10 @@ class Hook_addon_registry_devguide
         }
 
         return array(
-            lorem_globalise(do_lorem_template('PHP_FILE',array(
+            lorem_globalise(do_lorem_template('PHP_FILE', array(
                 'FILENAME' => lorem_word(),
                 'CLASSES' => $classes,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -217,19 +216,19 @@ class Hook_addon_registry_devguide
         $parameters = new ocp_tempcode();
 
         foreach (placeholder_array() as $value) {
-            $parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER',array(
+            $parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER', array(
                 'NAME' => lorem_word(),
                 'DESCRIPTION' => lorem_paragraph(),
             )));
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_BLOCK_HELP',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_BLOCK_HELP', array(
                 'NAME' => lorem_word(),
                 'DESCRIPTION' => lorem_paragraph(),
                 'USE' => lorem_phrase(),
                 'PARAMETERS' => $parameters,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

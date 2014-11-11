@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_Profiles_Tabs_about
 {
     /**
@@ -27,7 +26,7 @@ class Hook_Profiles_Tabs_about
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
         return true;
     }
@@ -40,27 +39,27 @@ class Hook_Profiles_Tabs_about
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('PROFILE');
 
         $order = 10;
 
         if (!$GLOBALS['FORUM_DB']->table_is_locked('f_members')) {
-            $GLOBALS['FORUM_DB']->query('UPDATE ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members SET m_profile_views=m_profile_views+1 WHERE id=' . strval($member_id_of),1);
+            $GLOBALS['FORUM_DB']->query('UPDATE ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members SET m_profile_views=m_profile_views+1 WHERE id=' . strval($member_id_of), 1);
         }
 
         $privacy_ok = true;
         if (addon_installed('content_privacy')) {
             require_code('content_privacy');
-            $privacy_ok = has_privacy_access('_photo',strval($member_id_of),$member_id_viewing);
+            $privacy_ok = has_privacy_access('_photo', strval($member_id_of), $member_id_viewing);
         }
 
-        $photo_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_url');
-        if (($photo_url != '') && (addon_installed('ocf_member_photos')) && (has_privilege($member_id_viewing,'view_member_photos')) && ($privacy_ok)) {
+        $photo_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_photo_url');
+        if (($photo_url != '') && (addon_installed('ocf_member_photos')) && (has_privilege($member_id_viewing, 'view_member_photos')) && ($privacy_ok)) {
             require_code('images');
-            $photo_thumb_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_photo_thumb_url');
-            $photo_thumb_url = ensure_thumbnail($photo_url,$photo_thumb_url,(strpos($photo_url,'uploads/photos') !== false)?'photos':'ocf_photos','f_members',$member_id_of,'m_photo_thumb_url');
+            $photo_thumb_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_photo_thumb_url');
+            $photo_thumb_url = ensure_thumbnail($photo_url, $photo_thumb_url, (strpos($photo_url, 'uploads/photos') !== false) ? 'photos' : 'ocf_photos', 'f_members', $member_id_of, 'm_photo_thumb_url');
             if (url_is_local($photo_url)) {
                 $photo_url = get_complex_base_url($photo_url) . '/' . $photo_url;
             }
@@ -77,90 +76,90 @@ class Hook_Profiles_Tabs_about
 
         // Things staff can do with this user
         $modules = array();
-        if ((has_privilege($member_id_viewing,'warn_members')) && (has_actual_page_access($member_id_viewing,'warnings')) && (addon_installed('ocf_warnings'))) {
+        if ((has_privilege($member_id_viewing, 'warn_members')) && (has_actual_page_access($member_id_viewing, 'warnings')) && (addon_installed('ocf_warnings'))) {
             $redir_url = get_self_url(true);
-            $modules[] = array('audit',do_lang_tempcode('WARN_MEMBER'),build_url(array('page' => 'warnings','type' => 'ad','member_id' => $member_id_of,'redirect' => $redir_url),get_module_zone('warnings')),'links/warning_add');
-            $modules[] = array('audit',do_lang_tempcode('PUNITIVE_HISTORY'),build_url(array('page' => 'warnings','type' => 'history','member_id' => $member_id_of),get_module_zone('warnings')),'tabs/member_account/warnings');
+            $modules[] = array('audit', do_lang_tempcode('WARN_MEMBER'), build_url(array('page' => 'warnings', 'type' => 'ad', 'member_id' => $member_id_of, 'redirect' => $redir_url), get_module_zone('warnings')), 'links/warning_add');
+            $modules[] = array('audit', do_lang_tempcode('PUNITIVE_HISTORY'), build_url(array('page' => 'warnings', 'type' => 'history', 'member_id' => $member_id_of), get_module_zone('warnings')), 'tabs/member_account/warnings');
         }
-        if ((has_privilege($member_id_viewing,'view_content_history')) && (has_actual_page_access($member_id_viewing,'admin_ocf_history'))) {
-            $modules[] = (!addon_installed('ocf_forum'))?null:array('audit',do_lang_tempcode('POST_HISTORY'),build_url(array('page' => 'admin_ocf_history','member_id' => $member_id_of),get_module_zone('admin_ocf_history')),'buttons/history');
+        if ((has_privilege($member_id_viewing, 'view_content_history')) && (has_actual_page_access($member_id_viewing, 'admin_ocf_history'))) {
+            $modules[] = (!addon_installed('ocf_forum')) ? null : array('audit', do_lang_tempcode('POST_HISTORY'), build_url(array('page' => 'admin_ocf_history', 'member_id' => $member_id_of), get_module_zone('admin_ocf_history')), 'buttons/history');
         }
-        if ((addon_installed('securitylogging')) && (has_actual_page_access($member_id_viewing,'admin_lookup'))) {
+        if ((addon_installed('securitylogging')) && (has_actual_page_access($member_id_viewing, 'admin_lookup'))) {
             require_lang('lookup');
-            $modules[] = array('audit',do_lang_tempcode('INVESTIGATE_USER'),build_url(array('page' => 'admin_lookup','param' => $member_id_of),get_module_zone('admin_lookup')),'menu/adminzone/tools/users/investigate_user');
+            $modules[] = array('audit', do_lang_tempcode('INVESTIGATE_USER'), build_url(array('page' => 'admin_lookup', 'param' => $member_id_of), get_module_zone('admin_lookup')), 'menu/adminzone/tools/users/investigate_user');
         }
-        if (has_actual_page_access($member_id_viewing,'admin_security')) {
+        if (has_actual_page_access($member_id_viewing, 'admin_security')) {
             require_lang('security');
-            $modules[] = array('audit',do_lang_tempcode('SECURITY_LOG'),build_url(array('page' => 'admin_security','member_id' => $member_id_of),get_module_zone('admin_security')),'menu/adminzone/audit/security_log');
+            $modules[] = array('audit', do_lang_tempcode('SECURITY_LOG'), build_url(array('page' => 'admin_security', 'member_id' => $member_id_of), get_module_zone('admin_security')), 'menu/adminzone/audit/security_log');
         }
         if (addon_installed('actionlog')) {
-            if (has_actual_page_access($member_id_viewing,'admin_actionlog')) {
+            if (has_actual_page_access($member_id_viewing, 'admin_actionlog')) {
                 require_lang('actionlog');
-                $modules[] = array('audit',do_lang_tempcode('VIEW_ACTIONLOGS'),build_url(array('page' => 'admin_actionlog','type' => 'list','id' => $member_id_of),get_module_zone('admin_actionlog')),'menu/adminzone/audit/actionlog');
+                $modules[] = array('audit', do_lang_tempcode('VIEW_ACTIONLOGS'), build_url(array('page' => 'admin_actionlog', 'type' => 'list', 'id' => $member_id_of), get_module_zone('admin_actionlog')), 'menu/adminzone/audit/actionlog');
             }
         }
-        if ((has_privilege($member_id_viewing,'assume_any_member')) && (get_member() != $member_id_of)) {
-            $modules[] = array('views',do_lang_tempcode('MASQUERADE_AS_MEMBER'),build_url(array('page' => '','keep_su' => $username),''),'menu/site_meta/user_actions/login');
+        if ((has_privilege($member_id_viewing, 'assume_any_member')) && (get_member() != $member_id_of)) {
+            $modules[] = array('views', do_lang_tempcode('MASQUERADE_AS_MEMBER'), build_url(array('page' => '', 'keep_su' => $username), ''), 'menu/site_meta/user_actions/login');
         }
-        if ((has_actual_page_access($member_id_viewing,'search')) && (addon_installed('search'))) {
-            $modules[] = array('content',do_lang_tempcode('SEARCH'),build_url(array('page' => 'search','type' => 'results','author' => $username),get_module_zone('search')),'buttons/search','search');
+        if ((has_actual_page_access($member_id_viewing, 'search')) && (addon_installed('search'))) {
+            $modules[] = array('content', do_lang_tempcode('SEARCH'), build_url(array('page' => 'search', 'type' => 'results', 'author' => $username), get_module_zone('search')), 'buttons/search', 'search');
         }
         if (addon_installed('authors')) {
-            $author = $GLOBALS['SITE_DB']->query_value_if_there('SELECT author FROM ' . get_table_prefix() . 'authors WHERE (member_id=' . strval($member_id_viewing) . ') OR (member_id IS NULL AND ' . db_string_equal_to('author',$username) . ')');
-            if ((has_actual_page_access($member_id_viewing,'authors')) && (!is_null($author))) {
-                $modules[] = array('content',do_lang_tempcode('AUTHOR'),build_url(array('page' => 'authors','type' => 'misc','id' => $author),get_module_zone('authors')),'menu/rich_content/authors','me');
+            $author = $GLOBALS['SITE_DB']->query_value_if_there('SELECT author FROM ' . get_table_prefix() . 'authors WHERE (member_id=' . strval($member_id_viewing) . ') OR (member_id IS NULL AND ' . db_string_equal_to('author', $username) . ')');
+            if ((has_actual_page_access($member_id_viewing, 'authors')) && (!is_null($author))) {
+                $modules[] = array('content', do_lang_tempcode('AUTHOR'), build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $author), get_module_zone('authors')), 'menu/rich_content/authors', 'me');
             }
         }
         require_code('ocf_members2');
-        if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing,'topics')) && (ocf_may_make_private_topic()) && ($member_id_viewing != $member_id_of)) {
-            $modules[] = (!addon_installed('ocf_forum'))?null:array('contact',do_lang_tempcode('ADD_PRIVATE_TOPIC'),build_url(array('page' => 'topics','type' => 'new_pt','id' => $member_id_of),get_module_zone('topics')),'buttons/send','reply');
+        if ((!is_guest()) && (ocf_may_whisper($member_id_of)) && (has_actual_page_access($member_id_viewing, 'topics')) && (ocf_may_make_private_topic()) && ($member_id_viewing != $member_id_of)) {
+            $modules[] = (!addon_installed('ocf_forum')) ? null : array('contact', do_lang_tempcode('ADD_PRIVATE_TOPIC'), build_url(array('page' => 'topics', 'type' => 'new_pt', 'id' => $member_id_of), get_module_zone('topics')), 'buttons/send', 'reply');
         }
         $extra_sections = array();
         $info_details = array();
-        $hooks = find_all_hooks('modules','members');
+        $hooks = find_all_hooks('modules', 'members');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/modules/members/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_members_' . filter_naughty_harsh($hook),true);
+            $object = object_factory('Hook_members_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }
-            if (method_exists($object,'run')) {
+            if (method_exists($object, 'run')) {
                 $hook_result = $object->run($member_id_of);
-                $modules = array_merge($modules,$hook_result);
+                $modules = array_merge($modules, $hook_result);
             }
-            if (method_exists($object,'get_info_details')) {
+            if (method_exists($object, 'get_info_details')) {
                 $hook_result = $object->get_info_details($member_id_of);
-                $info_details = array_merge($info_details,$hook_result);
+                $info_details = array_merge($info_details, $hook_result);
             }
-            if (method_exists($object,'get_sections')) {
+            if (method_exists($object, 'get_sections')) {
                 $hook_result = $object->get_sections($member_id_of);
-                $extra_sections = array_merge($extra_sections,$hook_result);
+                $extra_sections = array_merge($extra_sections, $hook_result);
             }
         }
         if (addon_installed('ocf_contact_member')) {
-            if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_allow_emails') == 1) || (get_option('allow_email_disable') == '0')) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_email_address') != '') && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing,'contact_member')) && ($member_id_viewing != $member_id_of)) {
+            if ((($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_allow_emails') == 1) || (get_option('allow_email_disable') == '0')) && ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_email_address') != '') && (!is_guest($member_id_of)) && (has_actual_page_access($member_id_viewing, 'contact_member')) && ($member_id_viewing != $member_id_of)) {
                 $redirect = get_self_url(true);
-                $modules[] = array('contact',do_lang_tempcode('_EMAIL_MEMBER'),build_url(array('page' => 'contact_member','redirect' => $redirect,'id' => $member_id_of),get_module_zone('contact_member')),'links/contact_member','reply');
+                $modules[] = array('contact', do_lang_tempcode('_EMAIL_MEMBER'), build_url(array('page' => 'contact_member', 'redirect' => $redirect, 'id' => $member_id_of), get_module_zone('contact_member')), 'links/contact_member', 'reply');
             }
         }
         require_lang('menus');
-        $sections = array('contact' => do_lang_tempcode('CONTACT'),'profile' => do_lang_tempcode('EDIT_PROFILE'),'views' => do_lang_tempcode('ACCOUNT'),'audit' => do_lang_tempcode('AUDIT'),'content' => do_lang_tempcode('CONTENT'));
+        $sections = array('contact' => do_lang_tempcode('CONTACT'), 'profile' => do_lang_tempcode('EDIT_PROFILE'), 'views' => do_lang_tempcode('ACCOUNT'), 'audit' => do_lang_tempcode('AUDIT'), 'content' => do_lang_tempcode('CONTENT'));
         $actions = array();
 
-        sort_maps_by($modules,1);
+        sort_maps_by($modules, 1);
         foreach ($sections as $section_code => $section_title) {
             $links = new ocp_tempcode();
 
             foreach ($modules as $mi => $module) {
                 if (count($module) == 4) {
-                    list($_section_code,$lang,$url,$icon) = $module;
+                    list($_section_code, $lang, $url, $icon) = $module;
                     $rel = null;
                 } else {
-                    list($_section_code,$lang,$url,$icon,$rel) = $module;
+                    list($_section_code, $lang, $url, $icon, $rel) = $module;
                 }
 
                 if ($section_code == $_section_code) {
-                    $links->attach(do_template('OCF_MEMBER_ACTION',array(
+                    $links->attach(do_template('OCF_MEMBER_ACTION', array(
                         '_GUID' => '67b2a640a368c6f53f1b1fa10f922fd0',
                         'ID' => strval($member_id_of),
                         'URL' => $url,
@@ -176,7 +175,7 @@ class Hook_Profiles_Tabs_about
         }
 
         // Custom fields
-        $_custom_fields = ocf_get_all_custom_fields_match_member($member_id_of,(($member_id_viewing != $member_id_of) && (!has_privilege($member_id_viewing,'view_any_profile_field')))?1:null,(($member_id_viewing == $member_id_of) && (!has_privilege($member_id_viewing,'view_any_profile_field')))?1:null);
+        $_custom_fields = ocf_get_all_custom_fields_match_member($member_id_of, (($member_id_viewing != $member_id_of) && (!has_privilege($member_id_viewing, 'view_any_profile_field'))) ? 1 : null, (($member_id_viewing == $member_id_of) && (!has_privilege($member_id_viewing, 'view_any_profile_field'))) ? 1 : null);
         $custom_fields = array();
         require_code('encryption');
         $value = mixed();
@@ -206,29 +205,29 @@ class Hook_Profiles_Tabs_about
                     'EDIT_TYPE' => $_value['EDIT_TYPE'],
                 );
                 if ($name == do_lang('KEYWORDS')) {
-                    $GLOBALS['SEO_KEYWORDS'] = is_object($value)?$value->evaluate():$value;
+                    $GLOBALS['SEO_KEYWORDS'] = is_object($value) ? $value->evaluate() : $value;
                 }
                 if ($name == do_lang('DESCRIPTION')) {
-                    $GLOBALS['SEO_DESCRIPTION'] = is_object($value)?$value->evaluate():$value;
+                    $GLOBALS['SEO_DESCRIPTION'] = is_object($value) ? $value->evaluate() : $value;
                 }
             }
 
-            $field_codename = strtoupper(trim(preg_replace('#[^\w]+#','_',$name),'_'));
+            $field_codename = strtoupper(trim(preg_replace('#[^\w]+#', '_', $name), '_'));
             $fields_map['FIELD__' . $field_codename . '__RENDERED'] = $rendered_value;
             $fields_map['FIELD__' . $field_codename . '__RAW'] = $value;
         }
 
         // Birthday
         $dob = '';
-        if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_reveal_age') == 1) {
-            $day = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_dob_day');
-            $month = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_dob_month');
-            $year = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_dob_year');
+        if ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_reveal_age') == 1) {
+            $day = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_dob_day');
+            $month = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_dob_month');
+            $year = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_dob_year');
             if (!is_null($day)) {
-                if (@strftime('%Y',@mktime(0,0,0,1,1,1963)) != '1963') {
-                    $dob = strval($year) . '-' . str_pad(strval($month),2,'0',STR_PAD_LEFT) . '-' . str_pad(strval($day),2,'0',STR_PAD_LEFT);
+                if (@strftime('%Y', @mktime(0, 0, 0, 1, 1, 1963)) != '1963') {
+                    $dob = strval($year) . '-' . str_pad(strval($month), 2, '0', STR_PAD_LEFT) . '-' . str_pad(strval($day), 2, '0', STR_PAD_LEFT);
                 } else {
-                    $dob = get_timezoned_date(mktime(12,0,0,$month,$day,$year),false,true,true);
+                    $dob = get_timezoned_date(mktime(12, 0, 0, $month, $day, $year), false, true, true);
                 }
             }
         }
@@ -238,74 +237,74 @@ class Hook_Profiles_Tabs_about
         $best_yet_forum = 0; // Initialise to integer type
         $best_yet_forum = null;
         $most_active_forum = null;
-        $_best_yet_forum = $GLOBALS['FORUM_DB']->query_select('f_posts',array('COUNT(*) as cnt','p_cache_forum_id'),array('p_poster' => $member_id_of),'GROUP BY p_cache_forum_id ORDER BY COUNT(*) DESC',1); // order by and limit have been added since original code, makes it run a bit faster
-        $_best_yet_forum = collapse_2d_complexity('p_cache_forum_id','cnt',$_best_yet_forum);
+        $_best_yet_forum = $GLOBALS['FORUM_DB']->query_select('f_posts', array('COUNT(*) as cnt', 'p_cache_forum_id'), array('p_poster' => $member_id_of), 'GROUP BY p_cache_forum_id ORDER BY COUNT(*) DESC', 1); // order by and limit have been added since original code, makes it run a bit faster
+        $_best_yet_forum = collapse_2d_complexity('p_cache_forum_id', 'cnt', $_best_yet_forum);
         foreach ($forums as $forum) {
-            if (((array_key_exists($forum['id'],$_best_yet_forum)) && ((is_null($best_yet_forum)) || ($_best_yet_forum[$forum['id']]>$best_yet_forum)))) {
-                $most_active_forum = has_category_access($member_id_viewing,'forums',strval($forum['id']))?protect_from_escaping(escape_html($forum['f_name'])):do_lang_tempcode('PROTECTED_FORUM');
+            if (((array_key_exists($forum['id'], $_best_yet_forum)) && ((is_null($best_yet_forum)) || ($_best_yet_forum[$forum['id']] > $best_yet_forum)))) {
+                $most_active_forum = has_category_access($member_id_viewing, 'forums', strval($forum['id'])) ? protect_from_escaping(escape_html($forum['f_name'])) : do_lang_tempcode('PROTECTED_FORUM');
                 $best_yet_forum = $_best_yet_forum[$forum['id']];
             }
         }
-        $post_count = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_cache_num_posts');
-        $best_post_fraction = ($post_count == 0)?do_lang_tempcode('NA_EM'):make_string_tempcode(integer_format(100*$best_yet_forum/$post_count));
-        $most_active_forum = is_null($best_yet_forum)?new ocp_tempcode():do_lang_tempcode('_MOST_ACTIVE_FORUM',$most_active_forum,make_string_tempcode(integer_format($best_yet_forum)),array($best_post_fraction));
-        $time_for_them_raw = tz_time(time(),get_users_timezone($member_id_of));
-        $time_for_them = get_timezoned_time(time(),true,$member_id_of);
+        $post_count = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_cache_num_posts');
+        $best_post_fraction = ($post_count == 0) ? do_lang_tempcode('NA_EM') : make_string_tempcode(integer_format(100 * $best_yet_forum / $post_count));
+        $most_active_forum = is_null($best_yet_forum) ? new ocp_tempcode() : do_lang_tempcode('_MOST_ACTIVE_FORUM', $most_active_forum, make_string_tempcode(integer_format($best_yet_forum)), array($best_post_fraction));
+        $time_for_them_raw = tz_time(time(), get_users_timezone($member_id_of));
+        $time_for_them = get_timezoned_time(time(), true, $member_id_of);
 
-        $banned = ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_is_perm_banned') == 1)?do_lang_tempcode('YES'):do_lang_tempcode('NO');
+        $banned = ($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_is_perm_banned') == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO');
 
-        $last_submit_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_last_submit_time');
-        $submit_days_ago = intval(floor(floatval(time()-$last_submit_time)/60.0/60.0/24.0));
+        $last_submit_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_last_submit_time');
+        $submit_days_ago = intval(floor(floatval(time() - $last_submit_time) / 60.0 / 60.0 / 24.0));
 
         require_code('ocf_groups');
         $primary_group_id = ocf_get_member_primary_group($member_id_of);
-        $primary_group = ocf_get_group_link($primary_group_id,$member_id_of != $member_id_viewing);
+        $primary_group = ocf_get_group_link($primary_group_id, $member_id_of != $member_id_viewing);
 
-        $signature = get_translated_tempcode('f_members',$GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of),'m_signature',$GLOBALS['FORUM_DB']);
+        $signature = get_translated_tempcode('f_members', $GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of), 'm_signature', $GLOBALS['FORUM_DB']);
 
-        $last_visit_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_last_visit_time');
+        $last_visit_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_last_visit_time');
         require_code('users2');
         if (member_is_online($member_id_of)) {
             $online_now = do_lang_tempcode('YES');
             $_online_now = true;
         } else {
             $_online_now = false;
-            $minutes_ago = intval(floor((floatval(time()-$last_visit_time)/60.0)));
-            $hours_ago = intval(floor((floatval(time()-$last_visit_time)/60.0/60.0)));
-            $days_ago = intval(floor((floatval(time()-$last_visit_time)/60.0/60.0/24.0)));
-            $months_ago = intval(floor((floatval(time()-$last_visit_time)/60.0/60.0/24.0/31.0)));
-            if ($minutes_ago<180) {
-                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_MINUTES',integer_format($minutes_ago));
-            } elseif ($hours_ago<72) {
-                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_HOURS',integer_format($hours_ago));
-            } elseif ($days_ago<93) {
-                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_DAYS',integer_format($days_ago));
+            $minutes_ago = intval(floor((floatval(time() - $last_visit_time) / 60.0)));
+            $hours_ago = intval(floor((floatval(time() - $last_visit_time) / 60.0 / 60.0)));
+            $days_ago = intval(floor((floatval(time() - $last_visit_time) / 60.0 / 60.0 / 24.0)));
+            $months_ago = intval(floor((floatval(time() - $last_visit_time) / 60.0 / 60.0 / 24.0 / 31.0)));
+            if ($minutes_ago < 180) {
+                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_MINUTES', integer_format($minutes_ago));
+            } elseif ($hours_ago < 72) {
+                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_HOURS', integer_format($hours_ago));
+            } elseif ($days_ago < 93) {
+                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_DAYS', integer_format($days_ago));
             } else {
-                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_MONTHS',integer_format($months_ago));
+                $online_now = do_lang_tempcode('_ONLINE_NOW_NO_MONTHS', integer_format($months_ago));
             }
         }
 
-        $join_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_join_time');
-        $days_joined = intval(round((time()-$join_time)/60/60/24));
-        $total_posts = $GLOBALS['FORUM_DB']->query_select_value('f_posts','COUNT(*)');
-        $join_date = ($join_time == 0)?'':get_timezoned_date($join_time,false);
-        $count_posts = do_lang_tempcode('_COUNT_POSTS',integer_format($post_count),float_format(floatval($post_count)/floatval(($days_joined == 0)?1:$days_joined)),array(float_format(floatval(100*$post_count)/floatval(($total_posts == 0)?1:$total_posts))));
+        $join_time = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_join_time');
+        $days_joined = intval(round((time() - $join_time) / 60 / 60 / 24));
+        $total_posts = $GLOBALS['FORUM_DB']->query_select_value('f_posts', 'COUNT(*)');
+        $join_date = ($join_time == 0) ? '' : get_timezoned_date($join_time, false);
+        $count_posts = do_lang_tempcode('_COUNT_POSTS', integer_format($post_count), float_format(floatval($post_count) / floatval(($days_joined == 0) ? 1 : $days_joined)), array(float_format(floatval(100 * $post_count) / floatval(($total_posts == 0) ? 1 : $total_posts))));
 
-        $a = ($avatar_url == '')?0:ocf_get_member_best_group_property($member_id_of,'max_avatar_width');
-        $b = ($photo_thumb_url == '')?0:intval(get_option('thumb_width'));
-        $right_margin = (max($a,$b) == 0)?'auto':(strval(max($a,$b)+6) . 'px');
+        $a = ($avatar_url == '') ? 0 : ocf_get_member_best_group_property($member_id_of, 'max_avatar_width');
+        $b = ($photo_thumb_url == '') ? 0 : intval(get_option('thumb_width'));
+        $right_margin = (max($a, $b) == 0) ? 'auto' : (strval(max($a, $b) + 6) . 'px');
 
-        if (has_privilege($member_id_viewing,'see_ip')) {
-            $ip_address = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_ip_address');
+        if (has_privilege($member_id_viewing, 'see_ip')) {
+            $ip_address = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_ip_address');
         } else {
             $ip_address = '';
         }
 
-        $secondary_groups = ocf_get_members_groups($member_id_of,true);
+        $secondary_groups = ocf_get_members_groups($member_id_of, true);
         unset($secondary_groups[$primary_group_id]);
-        if (count($secondary_groups)>0) {
+        if (count($secondary_groups) > 0) {
             $_secondary_groups = array();
-            $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list($member_id_of != $member_id_viewing,false,false,array_keys($secondary_groups),$member_id_of);
+            $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list($member_id_of != $member_id_viewing, false, false, array_keys($secondary_groups), $member_id_of);
             foreach (array_keys($secondary_groups) as $key) {
                 $_secondary_groups[$key] = $all_groups[$key];
             }
@@ -321,15 +320,15 @@ class Hook_Profiles_Tabs_about
 
         $user_agent = null;
         $operating_system = null;
-        if ((has_privilege($member_id_viewing,'show_user_browsing')) && (addon_installed('stats'))) {
-            $last_stats = $GLOBALS['SITE_DB']->query_select('stats',array('browser','operating_system'),array('member_id' => $member_id_of),'ORDER BY date_and_time DESC',1);
-            if (array_key_exists(0,$last_stats)) {
+        if ((has_privilege($member_id_viewing, 'show_user_browsing')) && (addon_installed('stats'))) {
+            $last_stats = $GLOBALS['SITE_DB']->query_select('stats', array('browser', 'operating_system'), array('member_id' => $member_id_of), 'ORDER BY date_and_time DESC', 1);
+            if (array_key_exists(0, $last_stats)) {
                 $user_agent = $last_stats[0]['browser'];
                 $operating_system = $last_stats[0]['operating_system'];
             }
         }
 
-        $_on_probation = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_on_probation_until');
+        $_on_probation = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_on_probation_until');
         if ((is_null($_on_probation)) || ($_on_probation <= time())) {
             $on_probation = null;
         } else {
@@ -339,84 +338,84 @@ class Hook_Profiles_Tabs_about
         // Look up member's clubs
         $clubs = array();
         if (addon_installed('ocf_clubs')) {
-            $club_ids = $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id_of,true);
-            $club_rows = list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('g_is_private_club' => 1),'',200));
+            $club_ids = $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id_of, true);
+            $club_rows = list_to_map('id', $GLOBALS['FORUM_DB']->query_select('f_groups', array('*'), array('g_is_private_club' => 1), '', 200));
             if (count($club_rows) == 200) {
                 $club_rows = null;
             }
             foreach ($club_ids as $club_id) {
                 if (is_null($club_rows)) {
-                    $club_rows = list_to_map('id',$GLOBALS['FORUM_DB']->query_select('f_groups',array('*'),array('g_is_private_club' => 1,'id' => $club_id),'',200));
-                    if (!array_key_exists($club_id,$club_rows)) {
+                    $club_rows = list_to_map('id', $GLOBALS['FORUM_DB']->query_select('f_groups', array('*'), array('g_is_private_club' => 1, 'id' => $club_id), '', 200));
+                    if (!array_key_exists($club_id, $club_rows)) {
                         continue;
                     }
                     $club_row = $club_rows[$club_id];
                     $club_rows = null;
                 } else {
-                    if (!array_key_exists($club_id,$club_rows)) {
+                    if (!array_key_exists($club_id, $club_rows)) {
                         continue;
                     }
                     $club_row = $club_rows[$club_id];
                 }
 
-                $club_name = get_translated_text($club_row['g_name'],$GLOBALS['FORUM_DB']);
-                $club_forum = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums','id',array($GLOBALS['FORUM_DB']->translate_field_ref('f_description') => do_lang('FORUM_FOR_CLUB',$club_name)));
+                $club_name = get_translated_text($club_row['g_name'], $GLOBALS['FORUM_DB']);
+                $club_forum = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('f_description') => do_lang('FORUM_FOR_CLUB', $club_name)));
 
                 $clubs[] = array(
                     'CLUB_NAME' => $club_name,
                     'CLUB_ID' => strval($club_row['id']),
-                    'CLUB_FORUM' => is_null($club_forum)?'':strval($club_forum),
+                    'CLUB_FORUM' => is_null($club_forum) ? '' : strval($club_forum),
                 );
             }
         }
 
-        $content = do_template('OCF_MEMBER_PROFILE_ABOUT',array(
-            '_GUID' => 'fodfjdsfjsdljfdls',
-            'CLUBS' => $clubs,
-            'RIGHT_MARGIN' => $right_margin,
-            'AVATAR_WIDTH' => strval($a) . 'px',
-            'PHOTO_WIDTH' => strval($b) . 'px',
-            'MOST_ACTIVE_FORUM' => $most_active_forum,
-            'TIME_FOR_THEM' => $time_for_them,
-            'TIME_FOR_THEM_RAW' => strval($time_for_them_raw),
-            'SUBMIT_DAYS_AGO' => integer_format($submit_days_ago),
-            'SUBMIT_TIME_RAW' => strval($last_submit_time),
-            'LAST_VISIT_TIME_RAW' => strval($last_visit_time),
-            'ONLINE_NOW' => $online_now,
-            '_ONLINE_NOW' => $_online_now,
-            'BANNED' => $banned,
-            'USER_AGENT' => $user_agent,
-            'OPERATING_SYSTEM' => $operating_system,
-            'DOB' => $dob,
-            'IP_ADDRESS' => $ip_address,
-            'COUNT_POSTS' => $count_posts,
-            'COUNT_POINTS' => $count_points,
-            'PRIMARY_GROUP' => $primary_group,
-            'PRIMARY_GROUP_ID' => strval($primary_group_id),
-            'PHOTO_URL' => $photo_url,
-            'PHOTO_THUMB_URL' => $photo_thumb_url,
-            'EMAIL_ADDRESS' => $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_email_address'),
-            'AVATAR_URL' => $avatar_url,
-            'SIGNATURE' => $signature,
-            'JOIN_DATE' => $join_date,
-            'JOIN_DATE_RAW' => strval($join_time),
-            'CUSTOM_FIELDS' => $custom_fields,
-            'ACTIONS_contact' => $actions['contact'],
-            'ACTIONS_profile' => $actions['profile'],
-            'ACTIONS_views' => $actions['views'],
-            'ACTIONS_audit' => $actions['audit'],
-            'ACTIONS_content' => $actions['content'],
-            'USERNAME' => $username,
-            'MEMBER_ID' => strval($member_id_of),
-            'SECONDARY_GROUPS' => $secondary_groups,
-            'VIEW_PROFILES' => $member_id_viewing == $member_id_of ||  has_privilege($member_id_viewing,'view_profiles'),
-            'ON_PROBATION' => $on_probation,
-            'EXTRA_INFO_DETAILS' => $info_details,
-            'EXTRA_SECTIONS' => $extra_sections,
-            'VIEWS' => strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_profile_views')),
-            'TOTAL_SESSIONS' => strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_total_sessions')),
-        )+$fields_map);
+        $content = do_template('OCF_MEMBER_PROFILE_ABOUT', array(
+                '_GUID' => 'fodfjdsfjsdljfdls',
+                'CLUBS' => $clubs,
+                'RIGHT_MARGIN' => $right_margin,
+                'AVATAR_WIDTH' => strval($a) . 'px',
+                'PHOTO_WIDTH' => strval($b) . 'px',
+                'MOST_ACTIVE_FORUM' => $most_active_forum,
+                'TIME_FOR_THEM' => $time_for_them,
+                'TIME_FOR_THEM_RAW' => strval($time_for_them_raw),
+                'SUBMIT_DAYS_AGO' => integer_format($submit_days_ago),
+                'SUBMIT_TIME_RAW' => strval($last_submit_time),
+                'LAST_VISIT_TIME_RAW' => strval($last_visit_time),
+                'ONLINE_NOW' => $online_now,
+                '_ONLINE_NOW' => $_online_now,
+                'BANNED' => $banned,
+                'USER_AGENT' => $user_agent,
+                'OPERATING_SYSTEM' => $operating_system,
+                'DOB' => $dob,
+                'IP_ADDRESS' => $ip_address,
+                'COUNT_POSTS' => $count_posts,
+                'COUNT_POINTS' => $count_points,
+                'PRIMARY_GROUP' => $primary_group,
+                'PRIMARY_GROUP_ID' => strval($primary_group_id),
+                'PHOTO_URL' => $photo_url,
+                'PHOTO_THUMB_URL' => $photo_thumb_url,
+                'EMAIL_ADDRESS' => $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_email_address'),
+                'AVATAR_URL' => $avatar_url,
+                'SIGNATURE' => $signature,
+                'JOIN_DATE' => $join_date,
+                'JOIN_DATE_RAW' => strval($join_time),
+                'CUSTOM_FIELDS' => $custom_fields,
+                'ACTIONS_contact' => $actions['contact'],
+                'ACTIONS_profile' => $actions['profile'],
+                'ACTIONS_views' => $actions['views'],
+                'ACTIONS_audit' => $actions['audit'],
+                'ACTIONS_content' => $actions['content'],
+                'USERNAME' => $username,
+                'MEMBER_ID' => strval($member_id_of),
+                'SECONDARY_GROUPS' => $secondary_groups,
+                'VIEW_PROFILES' => $member_id_viewing == $member_id_of || has_privilege($member_id_viewing, 'view_profiles'),
+                'ON_PROBATION' => $on_probation,
+                'EXTRA_INFO_DETAILS' => $info_details,
+                'EXTRA_SECTIONS' => $extra_sections,
+                'VIEWS' => strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_profile_views')),
+                'TOTAL_SESSIONS' => strval($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_total_sessions')),
+            ) + $fields_map);
 
-        return array($title,$content,$order,'tabs/member_account/profile');
+        return array($title, $content, $order, 'tabs/member_account/profile');
     }
 }

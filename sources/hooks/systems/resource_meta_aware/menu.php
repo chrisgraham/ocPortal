@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
-
 class Hook_resource_meta_aware_menu
 {
     /**
@@ -37,52 +36,52 @@ class Hook_resource_meta_aware_menu
             'table' => 'menu_items',
             'id_field' => 'i_menu',
             'id_field_numeric' => false,
-            'parent_category_field' => NULL,
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_field' => null,
+            'parent_category_meta_aware_type' => null,
             'is_category' => true,
             'is_entry' => false,
-            'category_field' => NULL, // For category permissions
-            'category_type' => NULL, // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'category_field' => null, // For category permissions
+            'category_type' => null, // For category permissions
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => true,
 
             'title_field' => 'i_menu',
             'title_field_dereference' => false,
 
-            'view_page_link_pattern' => NULL,
+            'view_page_link_pattern' => null,
             'edit_page_link_pattern' => '_SEARCH:admin_menus:_edit:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(),'admin_menus'))?(get_module_zone('admin_menus') . ':admin_menus:edit'):null,
-            'archive_url' => NULL,
+            'view_category_page_link_pattern' => null,
+            'add_url' => (function_exists('get_member') && has_actual_page_access(get_member(), 'admin_menus')) ? (get_module_zone('admin_menus') . ':admin_menus:edit') : null,
+            'archive_url' => null,
 
             'support_url_monikers' => false,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
-            'add_time_field' => NULL,
-            'edit_time_field' => NULL,
-            'date_field' => NULL,
-            'validated_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
+            'add_time_field' => null,
+            'edit_time_field' => null,
+            'date_field' => null,
+            'validated_field' => null,
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'core_menus',
 
             'cms_page' => 'admin_menus',
-            'module' => NULL,
+            'module' => null,
 
             'occle_filesystem_hook' => 'menus',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_MENU',
         );

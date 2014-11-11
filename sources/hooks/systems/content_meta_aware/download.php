@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_content_meta_aware_download
 {
     /**
@@ -56,8 +55,8 @@ class Hook_content_meta_aware_download
             'view_page_link_pattern' => '_SEARCH:downloads:entry:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_downloads:_ed:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:downloads:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?(get_module_zone('cms_downloads') . ':cms_downloads:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('downloads')) . ':downloads',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_downloads')) ? (get_module_zone('cms_downloads') . ':cms_downloads:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('downloads')) . ':downloads',
 
             'support_url_monikers' => true,
 
@@ -105,10 +104,10 @@ class Hook_content_meta_aware_download
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('downloads');
 
-        return render_download_box($row,true,$include_breadcrumbs,$zone,null,$give_context,is_null($root)?null:intval($root),$guid);
+        return render_download_box($row, true, $include_breadcrumbs, $zone, null, $give_context, is_null($root) ? null : intval($root), $guid);
     }
 }

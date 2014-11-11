@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    securitylogging
  */
-
 class Hook_addon_registry_securitylogging
 {
     /**
@@ -150,14 +149,14 @@ class Hook_addon_registry_securitylogging
         require_lang('submitban');
 
         return array(
-            lorem_globalise(do_lorem_template('IP_BAN_SCREEN',array(
+            lorem_globalise(do_lorem_template('IP_BAN_SCREEN', array(
                 'PING_URL' => placeholder_url(),
                 'WARNING_DETAILS' => '',
                 'TITLE' => lorem_title(),
                 'BANS' => placeholder_ip(),
                 'LOCKED_BANS' => placeholder_ip(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -171,7 +170,7 @@ class Hook_addon_registry_securitylogging
     public function tpl_preview__administrative__hack_attempt_mail()
     {
         return array(
-            lorem_globalise(do_lorem_template('HACK_ATTEMPT_MAIL',array(
+            lorem_globalise(do_lorem_template('HACK_ATTEMPT_MAIL', array(
                 'STACK_TRACE' => lorem_phrase(),
                 'USER_AGENT' => lorem_phrase(),
                 'REFERER' => lorem_phrase(),
@@ -184,7 +183,7 @@ class Hook_addon_registry_securitylogging
                 'TIME' => placeholder_date(),
                 'URL' => placeholder_url(),
                 'POST' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -199,14 +198,14 @@ class Hook_addon_registry_securitylogging
     {
         require_lang('security');
         return array(
-            lorem_globalise(do_lorem_template('SECURITY_SCREEN',array(
+            lorem_globalise(do_lorem_template('SECURITY_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'FAILED_LOGINS' => placeholder_table(),
                 'NUM_FAILED_LOGINS' => placeholder_number(),
                 'ALERTS' => lorem_phrase(),
                 'NUM_ALERTS' => placeholder_number(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -221,7 +220,7 @@ class Hook_addon_registry_securitylogging
     {
         require_lang('security');
         return array(
-            lorem_globalise(do_lorem_template('SECURITY_ALERT_SCREEN',array(
+            lorem_globalise(do_lorem_template('SECURITY_ALERT_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'USER_AGENT' => lorem_phrase(),
                 'REFERER' => lorem_phrase(),
@@ -231,7 +230,7 @@ class Hook_addon_registry_securitylogging
                 'USERNAME' => lorem_word_html(),
                 'POST' => lorem_phrase(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -246,7 +245,7 @@ class Hook_addon_registry_securitylogging
     {
         $inner_ip_list = new ocp_tempcode();
         foreach (placeholder_array() as $value) {
-            $inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY',array(
+            $inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
                 'LOOKUP_URL' => placeholder_url(),
                 'DATE' => placeholder_time(),
                 '_DATE' => placeholder_time(),
@@ -256,7 +255,7 @@ class Hook_addon_registry_securitylogging
             )));
         }
 
-        $group = do_lorem_template('LOOKUP_IP_LIST_GROUP',array(
+        $group = do_lorem_template('LOOKUP_IP_LIST_GROUP', array(
             'BANNED' => do_lang_tempcode('YES'),
             'MASK' => placeholder_ip(),
             'GROUP' => $inner_ip_list,
@@ -264,7 +263,7 @@ class Hook_addon_registry_securitylogging
             'UNIQID' => placeholder_random(),
         ));
         return array(
-            lorem_globalise(do_lorem_template('LOOKUP_SCREEN',array(
+            lorem_globalise(do_lorem_template('LOOKUP_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'ALERTS' => lorem_phrase(),
                 'STATS' => lorem_phrase(),
@@ -280,7 +279,7 @@ class Hook_addon_registry_securitylogging
                 'POINTS_URL' => placeholder_url(),
                 'PROFILE_URL' => placeholder_url(),
                 'ACTIONLOG_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -167,18 +167,18 @@ class Hook_sitemap_page extends Hook_sitemap_base
                 $simplified = (strpos($extra, ':catalogue_name=') !== false);
 
                 $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points', 'get_wrapper_icon'), array(/*$check_perms=*/
-                        true,/*$member_id=*/
-                        null,/*$support_crosslinks=*/
-                        true,/*$be_deferential=*/
-                        true, $simplified));
+                    true,/*$member_id=*/
+                    null,/*$support_crosslinks=*/
+                    true,/*$be_deferential=*/
+                    true, $simplified));
                 if (is_null($functions[0])) {
                     if (is_file(get_file_base() . '/' . str_replace('/modules_custom/', '/modules/', $path))) {
                         $path = str_replace('/modules_custom/', '/modules/', $path);
                         $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points', 'get_wrapper_icon'), array(/*$check_perms=*/
-                                true,/*$member_id=*/
-                                null,/*$support_crosslinks=*/
-                                true,/*$be_deferential=*/
-                                true, $simplified));
+                            true,/*$member_id=*/
+                            null,/*$support_crosslinks=*/
+                            true,/*$be_deferential=*/
+                            true, $simplified));
                     }
                 }
 

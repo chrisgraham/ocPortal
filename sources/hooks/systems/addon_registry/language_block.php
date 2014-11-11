@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    language_block
  */
-
 class Hook_addon_registry_language_block
 {
     /**
@@ -124,9 +123,9 @@ class Hook_addon_registry_language_block
     public function tpl_preview__block_side_language()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_LANGUAGE', array(
                 'LANGS' => placeholder_options(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_upgrader
  */
-
 class Hook_addon_registry_core_upgrader
 {
     /**

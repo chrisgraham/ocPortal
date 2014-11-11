@@ -1338,21 +1338,21 @@ class Module_admin_newsletter extends standard_crud_module
             $c2 = $this->_count_level($newsletter['id'], 2, $lang);
             $c1 = $this->_count_level($newsletter['id'], 1, $lang);
             //if ($c1!=0) {  Actually, this just confuses people if we don't show it
-                $newsletter_title = get_translated_text($newsletter['title']);
-                $newsletter_description = get_translated_text($newsletter['description']);
+            $newsletter_title = get_translated_text($newsletter['title']);
+            $newsletter_description = get_translated_text($newsletter['description']);
 
-                if (($c1 == $c2) && ($c1 == $c3) && ($c1 == $c4)) {
-                    $fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX', escape_html($newsletter_title)), do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL', escape_html(integer_format($c4)), escape_html($newsletter_description)), strval($newsletter['id']), $level >= 1, null, '4'));
-                } else {
-                    $l = new ocp_tempcode();
-                    $l->attach(form_input_list_entry('0', $level == 0, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_0_ALT'), do_lang_tempcode('NUM_READERS', integer_format(0)))));
-                    $l->attach(form_input_list_entry('1', $level == 1, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_1'), do_lang_tempcode('NUM_READERS', integer_format($c1)))));
-                    $l->attach(form_input_list_entry('2', $level == 2, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_2'), do_lang_tempcode('NUM_READERS', integer_format($c2)))));
-                    $l->attach(form_input_list_entry('3', $level == 3, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_3'), do_lang_tempcode('NUM_READERS', integer_format($c3)))));
-                    $l->attach(form_input_list_entry('4', $level == 4, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_4'), do_lang_tempcode('NUM_READERS', integer_format($c4)))));
+            if (($c1 == $c2) && ($c1 == $c3) && ($c1 == $c4)) {
+                $fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX', escape_html($newsletter_title)), do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL', escape_html(integer_format($c4)), escape_html($newsletter_description)), strval($newsletter['id']), $level >= 1, null, '4'));
+            } else {
+                $l = new ocp_tempcode();
+                $l->attach(form_input_list_entry('0', $level == 0, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_0_ALT'), do_lang_tempcode('NUM_READERS', integer_format(0)))));
+                $l->attach(form_input_list_entry('1', $level == 1, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_1'), do_lang_tempcode('NUM_READERS', integer_format($c1)))));
+                $l->attach(form_input_list_entry('2', $level == 2, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_2'), do_lang_tempcode('NUM_READERS', integer_format($c2)))));
+                $l->attach(form_input_list_entry('3', $level == 3, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_3'), do_lang_tempcode('NUM_READERS', integer_format($c3)))));
+                $l->attach(form_input_list_entry('4', $level == 4, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_4'), do_lang_tempcode('NUM_READERS', integer_format($c4)))));
 
-                    $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR', escape_html($newsletter_title)), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL', escape_html($newsletter_description)), strval($newsletter['id']), $l));
-                }
+                $fields->attach(form_input_list(do_lang_tempcode('SUBSCRIPTION_LEVEL_FOR', escape_html($newsletter_title)), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL', escape_html($newsletter_description)), strval($newsletter['id']), $l));
+            }
             //}
         }
         if (get_forum_type() == 'ocf') {

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_whitelist
  */
-
 class Hook_addon_registry_oc_whitelist
 {
     /**
@@ -96,8 +95,7 @@ Alternatively you can also use regular expressions (explained here: http://php.n
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,12 +106,9 @@ Alternatively you can also use regular expressions (explained here: http://php.n
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_trackback_iotds
 {
     /**
@@ -23,8 +22,8 @@ class Hook_trackback_iotds
      */
     public function run($id)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('iotd',array('allow_trackbacks'),array('id' => intval($id)),'',1);
-        if (!array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('iotd', array('allow_trackbacks'), array('id' => intval($id)), '', 1);
+        if (!array_key_exists(0, $rows)) {
             return false;
         }
         return $rows[0]['allow_trackbacks'] == 1;

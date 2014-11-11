@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_cat
 {
     /**
@@ -28,34 +27,34 @@ class Hook_occle_command_cat
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('cat',array('h'),array('l')),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('cat', array('h'), array('l')), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','cat'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'cat'));
             }
 
-            $line_numbers = array_key_exists('l',$options);
+            $line_numbers = array_key_exists('l', $options);
 
             $output = '';
-            for ($i = 0;$i<count($parameters);$i++) {
+            for ($i = 0; $i < count($parameters); $i++) {
                 $parameters[$i] = $occle_fs->_pwd_to_array($parameters[$i]);
                 if (!$occle_fs->_is_file($parameters[$i])) {
-                    return array('','','',do_lang('NOT_A_FILE',integer_format($i+1)));
+                    return array('', '', '', do_lang('NOT_A_FILE', integer_format($i + 1)));
                 }
                 $data = $occle_fs->read_file($parameters[$i]);
-                $lines = explode("\n",$data);
+                $lines = explode("\n", $data);
                 foreach ($lines as $j => $line) {
                     if ($line_numbers) {
-                        $output .= str_pad(strval($j+1),strlen(strval(count($lines)))) . '  ';
+                        $output .= str_pad(strval($j + 1), strlen(strval(count($lines)))) . '  ';
                     }
                     $output .= $line . "\n";
                 }
             }
 
-            return array('','',$output,'');
+            return array('', '', $output, '');
         }
     }
 }

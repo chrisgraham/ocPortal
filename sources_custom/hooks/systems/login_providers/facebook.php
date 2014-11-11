@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    facebook_support
  */
-
 class Hook_login_provider_facebook
 {
     /**
@@ -27,7 +26,7 @@ class Hook_login_provider_facebook
 
         // Facebook connect
         if ((get_forum_type() == 'ocf') && (get_option('facebook_allow_signups') == '1')) {
-            @ini_set('ocproducts.type_strictness','0');
+            @ini_set('ocproducts.type_strictness', '0');
             global $FACEBOOK_CONNECT;
             if (!is_null($FACEBOOK_CONNECT)) {
                 try {
@@ -36,10 +35,10 @@ class Hook_login_provider_facebook
 
                         if (!is_guest($member)) {
                             if (is_file(get_file_base() . '/sources_custom/hooks/systems/syndication/facebook.php')) {
-                                if (post_param_integer('auto_syndicate',0) == 1) {
-                                    set_long_value('facebook_oauth_token' . '__' . strval($member),$FACEBOOK_CONNECT->getAccessToken());
+                                if (post_param_integer('auto_syndicate', 0) == 1) {
+                                    set_long_value('facebook_oauth_token' . '__' . strval($member), $FACEBOOK_CONNECT->getAccessToken());
                                 } else {
-                                    set_long_value('facebook_oauth_token' . '__' . strval($member),'');
+                                    set_long_value('facebook_oauth_token' . '__' . strval($member), '');
                                 }
                             }
                         }
@@ -48,7 +47,7 @@ class Hook_login_provider_facebook
                     // User will know what is wrong already (Facebook wil have said), so don't show on our end
                 }
             }
-            @ini_set('ocproducts.type_strictness','1');
+            @ini_set('ocproducts.type_strictness', '1');
         }
         return $member;
     }

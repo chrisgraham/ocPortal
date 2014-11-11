@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    weather
  */
-
 class Hook_Notification_wiki_failed_git_pull extends Hook_Notification__Staff
 {
     /**
@@ -24,7 +23,7 @@ class Hook_Notification_wiki_failed_git_pull extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['wiki_failed_git_pull'] = array(do_lang('ERRORS'),do_lang('wiki_sync:NOTIFICATION_TYPE_wiki_failed_git_pull'));
+        $list['wiki_failed_git_pull'] = array(do_lang('ERRORS'), do_lang('wiki_sync:NOTIFICATION_TYPE_wiki_failed_git_pull'));
         return $list;
     }
 }

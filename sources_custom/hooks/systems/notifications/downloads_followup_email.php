@@ -10,7 +10,6 @@ This notification hook was created using the downloads notification hook as a te
  * @copyright  None asserted
  * @package    downloads_followup_email
  */
-
 class Hook_Notification_downloads_followup_email extends Hook_Notification
 {
     /**
@@ -32,18 +31,18 @@ class Hook_Notification_downloads_followup_email extends Hook_Notification
      * @param  ?ID_TEXT                 The ID of where we're looking under (NULL: N/A)
      * @return array                    Tree structure
      */
-    public function create_category_tree($notification_code,$id)
+    public function create_category_tree($notification_code, $id)
     {
         require_code('downloads');
 
         if (is_null($id)) {
-            $total = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories','COUNT(*)');
-            if ($total>300) {
-                return parent::create_category_tree($notification_code,$id); // Too many, so just allow removing UI
+            $total = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'COUNT(*)');
+            if ($total > 300) {
+                return parent::create_category_tree($notification_code, $id); // Too many, so just allow removing UI
             }
         }
 
-        $page_links = get_downloads_tree(null,is_null($id)?null:intval($id),null,null,null,is_null($id)?0:1);
+        $page_links = get_downloads_tree(null, is_null($id) ? null : intval($id), null, null, null, is_null($id) ? 0 : 1);
         $filtered = array();
         foreach ($page_links as $p) {
             if (strval($p['id']) !== $id) {
@@ -72,7 +71,7 @@ class Hook_Notification_downloads_followup_email extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_INSTANT_EMAIL;
     }
@@ -87,7 +86,7 @@ class Hook_Notification_downloads_followup_email extends Hook_Notification
     {
         //require_lang('downloads_followup_email');
         $list = array();
-        $list['downloads_followup_email'] = array(do_lang('menus:CONTENT'),do_lang('NOTIFICATION_TYPE_downloads_followup_email'));
+        $list['downloads_followup_email'] = array(do_lang('menus:CONTENT'), do_lang('NOTIFICATION_TYPE_downloads_followup_email'));
         return $list;
     }
 
@@ -101,10 +100,10 @@ class Hook_Notification_downloads_followup_email extends Hook_Notification
      * @param  integer                  Maximum (for pagination)
      * @return array                    A pair: Map of members to their notification setting, and whether there may be more
      */
-    public function list_members_who_have_enabled($notification_code,$category = null,$to_member_ids = null,$start = 0,$max = 300)
+    public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
-        $members = $this->_all_members_who_have_enabled($notification_code,$category,$to_member_ids,$start,$max);
-        $members = $this->_all_members_who_have_enabled_with_page_access($members,'downloads','download',$category,$to_member_ids,$start,$max);
+        $members = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
+        $members = $this->_all_members_who_have_enabled_with_page_access($members, 'downloads', 'download', $category, $to_member_ids, $start, $max);
 
         return $members;
     }

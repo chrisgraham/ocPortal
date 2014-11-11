@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_echo
 {
     /**
@@ -28,16 +27,16 @@ class Hook_occle_command_echo
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('echo',array('h'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('echo', array('h'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','','');
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', '');
             }
 
-            return array('','',$parameters[0],'');
+            return array('', '', $parameters[0], '');
         }
     }
 }

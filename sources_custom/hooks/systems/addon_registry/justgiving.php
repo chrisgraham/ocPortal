@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    justgiving
  */
-
 class Hook_addon_registry_justgiving
 {
     /**
@@ -97,8 +96,7 @@ class Hook_addon_registry_justgiving
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -109,12 +107,9 @@ class Hook_addon_registry_justgiving
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

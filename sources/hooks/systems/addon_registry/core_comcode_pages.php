@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_addon_registry_core_comcode_pages
 {
     /**
@@ -148,7 +147,7 @@ class Hook_addon_registry_core_comcode_pages
     public function tpl_preview__administrative__comcode_page_manage_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN',array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_MANAGE_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'TABLE' => placeholder_table(),
                 'SUBMIT_NAME' => lorem_word(),
@@ -159,7 +158,7 @@ class Hook_addon_registry_core_comcode_pages
                     'LINK_URL' => placeholder_url(),
                     'LINK_TEXT' => lorem_phrase(),
                 )),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -174,10 +173,10 @@ class Hook_addon_registry_core_comcode_pages
     {
         require_lang('zones');
         return array(
-            lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS',array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_EDIT_ACTIONS', array(
                 'EDIT_URL' => placeholder_url(),
                 'CLONE_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -191,7 +190,7 @@ class Hook_addon_registry_core_comcode_pages
     public function tpl_preview__comcode_page_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN',array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_SCREEN', array(
                 'BEING_INCLUDED' => false,
                 'IS_PANEL' => false,
                 'SUBMITTER' => placeholder_id(),
@@ -204,7 +203,7 @@ class Hook_addon_registry_core_comcode_pages
                 'ADD_CHILD_URL' => placeholder_url(),
                 'NAME' => lorem_word(),
                 'NATIVE_ZONE' => lorem_word(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -218,13 +217,13 @@ class Hook_addon_registry_core_comcode_pages
     public function tpl_preview__comcode_page_preview()
     {
         return array(
-            lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX',array(
+            lorem_globalise(do_lorem_template('COMCODE_PAGE_BOX', array(
                 'GIVE_CONTEXT' => true,
                 'PAGE' => lorem_phrase(),
                 'ZONE' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'SUMMARY' => lorem_paragraph_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

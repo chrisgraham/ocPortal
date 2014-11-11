@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    password_censor
  */
-
 class Hook_addon_registry_password_censor
 {
     /**
@@ -95,8 +94,7 @@ This is a scheduler script that regularly censors anything looking like a passwo
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,12 +105,9 @@ This is a scheduler script that regularly censors anything looking like a passwo
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_addon_registry_points
 {
     /**
@@ -192,7 +191,7 @@ class Hook_addon_registry_points
     {
         $out = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $out->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW',array(
+            $out->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW', array(
                 'ID' => placeholder_id(),
                 'POINTS_URL' => placeholder_url(),
                 'PROFILE_URL' => placeholder_url(),
@@ -203,11 +202,11 @@ class Hook_addon_registry_points
         }
 
         return array(
-            lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD',array(
+            lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD', array(
                 'URL' => placeholder_url(),
                 'LIMIT' => placeholder_number(),
                 'ROWS' => $out,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -224,7 +223,7 @@ class Hook_addon_registry_points
         foreach (placeholder_array() as $k => $v) {
             $week_tpl = new ocp_tempcode();
             foreach (placeholder_array() as $_k => $_v) {
-                $week_tpl->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW',array(
+                $week_tpl->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW', array(
                     'ID' => placeholder_id(),
                     'POINTS_URL' => placeholder_url(),
                     'PROFILE_URL' => placeholder_url(),
@@ -233,17 +232,17 @@ class Hook_addon_registry_points
                     'HAS_RANK_IMAGES' => true,
                 )));
             }
-            $out->attach(do_lorem_template('POINTS_LEADER_BOARD_WEEK',array(
+            $out->attach(do_lorem_template('POINTS_LEADER_BOARD_WEEK', array(
                 'WEEK' => placeholder_number(),
                 'ROWS' => $week_tpl,
             )));
         }
 
         return array(
-            lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD_SCREEN',array(
+            lorem_globalise(do_lorem_template('POINTS_LEADER_BOARD_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'WEEKS' => $out,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -258,7 +257,7 @@ class Hook_addon_registry_points
     {
         $results = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $results->attach(do_lorem_template('POINTS_SEARCH_RESULT',array(
+            $results->attach(do_lorem_template('POINTS_SEARCH_RESULT', array(
                 'URL' => placeholder_url(),
                 'ID' => placeholder_id(),
                 'USERNAME' => lorem_word(),
@@ -266,10 +265,10 @@ class Hook_addon_registry_points
         }
 
         return array(
-            lorem_globalise(do_lorem_template('POINTS_SEARCH_SCREEN',array(
+            lorem_globalise(do_lorem_template('POINTS_SEARCH_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'RESULTS' => $results,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -282,28 +281,28 @@ class Hook_addon_registry_points
      */
     public function tpl_preview__points_screen()
     {
-        $chargelog_details = do_lorem_template('POINTS_TRANSACTIONS_WRAP',array(
+        $chargelog_details = do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
             'CONTENT' => placeholder_table(),
             'TITLE' => lorem_phrase(),
         ));
 
-        $from = do_lorem_template('POINTS_TRANSACTIONS_WRAP',array(
+        $from = do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
             'CONTENT' => placeholder_table(),
             'TITLE' => lorem_phrase(),
         ));
 
-        $to = do_lorem_template('POINTS_TRANSACTIONS_WRAP',array(
+        $to = do_lorem_template('POINTS_TRANSACTIONS_WRAP', array(
             'CONTENT' => placeholder_table(),
             'TITLE' => lorem_phrase(),
         ));
 
-        $give_template = do_lorem_template('POINTS_GIVE',array(
+        $give_template = do_lorem_template('POINTS_GIVE', array(
             'GIVE_URL' => placeholder_url(),
             'MEMBER' => lorem_phrase(),
             'VIEWER_GIFT_POINTS_AVAILABLE' => placeholder_number(),
         ));
 
-        $content = do_lorem_template('POINTS_PROFILE',array(
+        $content = do_lorem_template('POINTS_PROFILE', array(
             'MEMBER' => lorem_phrase(),
             'PROFILE_URL' => placeholder_url(),
             'USERNAME' => lorem_word(),
@@ -339,10 +338,10 @@ class Hook_addon_registry_points
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('POINTS_SCREEN',array(
+            lorem_globalise(do_lorem_template('POINTS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_page_groupings_downloads
 {
     /**
@@ -27,15 +26,15 @@ class Hook_page_groupings_downloads
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('downloads')) {
             return array();
         }
 
         return array(
-            array('cms','menu/rich_content/downloads',array('cms_downloads',array('type' => 'misc'),get_module_zone('cms_downloads')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('downloads:SECTION_DOWNLOADS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads','COUNT(*)',null,'',true))))),'downloads:DOC_DOWNLOADS'),
-            array('rich_content','menu/rich_content/downloads',array('downloads',array(),get_module_zone('downloads')),do_lang_tempcode('downloads:SECTION_DOWNLOADS')),
+            array('cms', 'menu/rich_content/downloads', array('cms_downloads', array('type' => 'misc'), get_module_zone('cms_downloads')), do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('downloads:SECTION_DOWNLOADS'), make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'COUNT(*)', null, '', true))))), 'downloads:DOC_DOWNLOADS'),
+            array('rich_content', 'menu/rich_content/downloads', array('downloads', array(), get_module_zone('downloads')), do_lang_tempcode('downloads:SECTION_DOWNLOADS')),
         );
     }
 }

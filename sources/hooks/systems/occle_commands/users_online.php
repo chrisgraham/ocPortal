@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_users_online
 {
     /**
@@ -28,16 +27,16 @@ class Hook_occle_command_users_online
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('users_online',array('h'),array()),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('users_online', array('h'), array()), '', '');
         } else {
             $count = 0;
             require_code('users2');
-            $members = get_users_online(true,null,$count);
+            $members = get_users_online(true, null, $count);
             if (is_null($members)) {
-                return array('','',do_lang('TOO_MANY_USERS_ONLINE'),'');
+                return array('', '', do_lang('TOO_MANY_USERS_ONLINE'), '');
             }
             $out = new ocp_tempcode();
             $guests = 0;
@@ -51,7 +50,7 @@ class Hook_occle_command_users_online
                 }
             }
 
-            return array('',do_template('OCCLE_USERS_ONLINE',array('_GUID' => 'fcf779ef175895d425b706e40fb3252a','MEMBERS' => $valid_members,'GUESTS' => integer_format($guests))),'','');
+            return array('', do_template('OCCLE_USERS_ONLINE', array('_GUID' => 'fcf779ef175895d425b706e40fb3252a', 'MEMBERS' => $valid_members, 'GUESTS' => integer_format($guests))), '', '');
         }
     }
 }

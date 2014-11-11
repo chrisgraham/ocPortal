@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    external_db_login
  */
-
 class Hook_login_provider_external_db
 {
     /**

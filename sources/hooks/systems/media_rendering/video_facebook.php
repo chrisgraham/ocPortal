@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-
 class Hook_media_rendering_video_facebook
 {
     /**
@@ -28,7 +27,7 @@ class Hook_media_rendering_video_facebook
     public function get_type_label()
     {
         require_lang('comcode');
-        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#','',__CLASS__));
+        return do_lang('MEDIA_TYPE_' . preg_replace('#^Hook_media_rendering_#', '', __CLASS__));
     }
 
     /**
@@ -60,13 +59,13 @@ class Hook_media_rendering_video_facebook
      */
     public function recognises_url($url)
     {
-        if (preg_match('#^https?://www\.facebook\.com/video/video\.php\?v=(\w+)#',$url) != 0) {
+        if (preg_match('#^https?://www\.facebook\.com/video/video\.php\?v=(\w+)#', $url) != 0) {
             return MEDIA_RECOG_PRECEDENCE_HIGH;
         }
-        if (preg_match('#^https?://www\.facebook\.com/video\.php\?v=(\w+)#',$url) != 0) {
+        if (preg_match('#^https?://www\.facebook\.com/video\.php\?v=(\w+)#', $url) != 0) {
             return MEDIA_RECOG_PRECEDENCE_HIGH;
         }
-        if (preg_match('#^https?://www\.facebook\.com/photo\.php\?v=(\w+)#',$url) != 0) {
+        if (preg_match('#^https?://www\.facebook\.com/photo\.php\?v=(\w+)#', $url) != 0) {
             return MEDIA_RECOG_PRECEDENCE_HIGH;
         }
         return MEDIA_RECOG_PRECEDENCE_NONE;
@@ -81,13 +80,13 @@ class Hook_media_rendering_video_facebook
     public function get_video_thumbnail($src_url)
     {
         $matches = array();
-        if ((preg_match('#^https?://www\.facebook\.com/video/video\.php\?v=(\w+)#',$src_url,$matches) != 0) || (preg_match('#^https?://www\.facebook\.com/video\.php\?v=(\w+)#',$src_url,$matches) != 0) || (preg_match('#^https?://www\.facebook\.com/photo\.php\?v=(\w+)#',$src_url,$matches) != 0)) {
+        if ((preg_match('#^https?://www\.facebook\.com/video/video\.php\?v=(\w+)#', $src_url, $matches) != 0) || (preg_match('#^https?://www\.facebook\.com/video\.php\?v=(\w+)#', $src_url, $matches) != 0) || (preg_match('#^https?://www\.facebook\.com/photo\.php\?v=(\w+)#', $src_url, $matches) != 0)) {
             $contents = http_download_file($src_url);
-            if (preg_match('#addVariable\("thumb_url", "([^"]*)"\);#',$contents,$matches) != 0) {
-                return rawurldecode(str_replace('\u0025','%',$matches[1]));
+            if (preg_match('#addVariable\("thumb_url", "([^"]*)"\);#', $contents, $matches) != 0) {
+                return rawurldecode(str_replace('\u0025', '%', $matches[1]));
             }
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -100,12 +99,12 @@ class Hook_media_rendering_video_facebook
      * @param  ?MEMBER                  Member to run as (NULL: current member)
      * @return tempcode                 Rendered version
      */
-    public function render($url,$url_safe,$attributes,$as_admin = false,$source_member = null)
+    public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
         if (is_object($url)) {
             $url = $url->evaluate();
         }
-        $attributes['remote_id'] = preg_replace('#^(https?://www\.facebook\.com/photo\.php|https?://www\.facebook\.com/video\.php|https?://www\.facebook\.com/video/video\.php)\?v=(\w+)#','${2}',$url);
-        return do_template('MEDIA_VIDEO_FACEBOOK',array('_GUID' => 'f9ba7e3b94d421791233cf3a34508ed7','HOOK' => 'video_facebook')+_create_media_template_parameters($url,$attributes,$as_admin,$source_member));
+        $attributes['remote_id'] = preg_replace('#^(https?://www\.facebook\.com/photo\.php|https?://www\.facebook\.com/video\.php|https?://www\.facebook\.com/video/video\.php)\?v=(\w+)#', '${2}', $url);
+        return do_template('MEDIA_VIDEO_FACEBOOK', array('_GUID' => 'f9ba7e3b94d421791233cf3a34508ed7', 'HOOK' => 'video_facebook') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    weather
  */
-
 class Hook_Notification_error_occurred_weather extends Hook_Notification__Staff
 {
     /**
@@ -22,7 +21,7 @@ class Hook_Notification_error_occurred_weather extends Hook_Notification__Staff
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_NA;
     }
@@ -36,7 +35,7 @@ class Hook_Notification_error_occurred_weather extends Hook_Notification__Staff
     public function list_handled_codes()
     {
         $list = array();
-        $list['error_occurred_weather'] = array(do_lang('ERRORS'),do_lang('weather:NOTIFICATION_TYPE_error_occurred_weather'));
+        $list['error_occurred_weather'] = array(do_lang('ERRORS'), do_lang('weather:NOTIFICATION_TYPE_error_occurred_weather'));
         return $list;
     }
 }

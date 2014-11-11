@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_phpinfo
 {
     /**
@@ -27,14 +26,14 @@ class Hook_occle_command_phpinfo
      * @param  array                    The parameters with which the command was called
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
-    */
-    public function run($options,$parameters,&$occle_fs)
+     */
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('phpinfo',array('h'),array()),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('phpinfo', array('h'), array()), '', '');
         } else {
             ob_start();
-            if ((function_exists('phpinfo')) && (strpos(@ini_get('disable_functions'),'phpinfo') === false)) {
+            if ((function_exists('phpinfo')) && (strpos(@ini_get('disable_functions'), 'phpinfo') === false)) {
                 phpinfo();
             } else {
                 var_dump(PHP_VERSION);
@@ -54,27 +53,27 @@ class Hook_occle_command_phpinfo
             $out = ob_get_clean();
             require_code('xhtml');
 
-            $out = preg_replace('#<!DOCTYPE[^>]*>#s','',preg_replace('#</body[^>]*>#','',preg_replace('#<body[^>]*>#','',preg_replace('#</html[^>]*>#','',preg_replace('#<html[^>]*>#','',$out)))));
+            $out = preg_replace('#<!DOCTYPE[^>]*>#s', '', preg_replace('#</body[^>]*>#', '', preg_replace('#<body[^>]*>#', '', preg_replace('#</html[^>]*>#', '', preg_replace('#<html[^>]*>#', '', $out)))));
             $matches = array();
-            if (preg_match('#<style[^>]*>#',$out,$matches) != 0) {
-                $offset = strpos($out,$matches[0])+strlen($matches[0]);
-                $end = strpos($out,'</style>',$offset);
+            if (preg_match('#<style[^>]*>#', $out, $matches) != 0) {
+                $offset = strpos($out, $matches[0]) + strlen($matches[0]);
+                $end = strpos($out, '</style>', $offset);
                 if ($end !== false) {
-                    $style = substr($out,$offset-strlen($matches[0]),$end-$offset+strlen('</style>')+strlen($matches[0]));
+                    $style = substr($out, $offset - strlen($matches[0]), $end - $offset + strlen('</style>') + strlen($matches[0]));
                     //attach_to_screen_header($style);      Not relevant due to running in OcCLE
 
-                    $out = substr($out,0,$offset) . substr($out,$end);
+                    $out = substr($out, 0, $offset) . substr($out, $end);
                 }
             }
-            $out = preg_replace('#<head[^>]*>.*</head[^>]*>#s','',$out);
+            $out = preg_replace('#<head[^>]*>.*</head[^>]*>#s', '', $out);
 
-            $out = str_replace(' width="600"',' width="100%"',$out);
-            $out = preg_replace('#([^\s<>"\']{65}&[^;]+;)#','${1}<br />',$out);
-            $out = preg_replace('#([^\s<>"\']{95})#','${1}<br />',$out);
+            $out = str_replace(' width="600"', ' width="100%"', $out);
+            $out = preg_replace('#([^\s<>"\']{65}&[^;]+;)#', '${1}<br />', $out);
+            $out = preg_replace('#([^\s<>"\']{95})#', '${1}<br />', $out);
             $url_parts = parse_url(get_base_url());
-            $out = str_replace('<img border="0" src="/','<img border="0" style="padding-top: 20px" src="http://' . escape_html($url_parts['host']) . '/',$out);
+            $out = str_replace('<img border="0" src="/', '<img border="0" style="padding-top: 20px" src="http://' . escape_html($url_parts['host']) . '/', $out);
 
-            return array('',xhtmlise_html($out,true),'','');
+            return array('', xhtmlise_html($out, true), '', '');
         }
     }
 }

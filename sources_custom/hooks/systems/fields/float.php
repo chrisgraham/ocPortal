@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_fields_float
 {
     // ==============
@@ -26,7 +25,7 @@ class Hook_fields_float
      */
     public function get_search_inputter($row)
     {
-        return NULL;
+        return null;
     }
 
     /**
@@ -36,9 +35,9 @@ class Hook_fields_float
      * @param  integer                  We're processing for the ith row
      * @return ?array                   Tuple of SQL details (array: extra trans fields to search, array: extra plain fields to search, string: an extra table segment for a join, string: the name of the field to use as a title, if this is the title, extra WHERE clause stuff) (NULL: nothing special)
      */
-    public function inputted_to_sql_for_search($row,$i)
+    public function inputted_to_sql_for_search($row, $i)
     {
-        return exact_match_sql($row,$i);
+        return exact_match_sql($row, $i);
     }
 
     // ===================
@@ -53,15 +52,15 @@ class Hook_fields_float
      * @param  ?string                  The given default value as a string (NULL: don't "lock in" a new default value)
      * @return array                    Tuple of details (row-type,default-value-to-use,db row-type)
      */
-    public function get_field_value_row_bits($field,$required = null,$default = null)
+    public function get_field_value_row_bits($field, $required = null, $default = null)
     {
         unset($field);
-        if ($required !== NULL) {
+        if ($required !== null) {
             if (($required) && ($default == '')) {
                 $default = '0';
             }
         }
-        return array('float_unescaped',$default,'float');
+        return array('float_unescaped', $default, 'float');
     }
 
     /**
@@ -71,7 +70,7 @@ class Hook_fields_float
      * @param  mixed                    The raw value
      * @return mixed                    Rendered field (tempcode or string)
      */
-    public function render_field_value($field,$ev)
+    public function render_field_value($field, $ev)
     {
         require_lang('google_map');
         $_cf_name = get_translated_text($field['cf_name']);
@@ -109,7 +108,7 @@ class Hook_fields_float
      * @param  boolean                  Whether this is for a new entry
      * @return ?tempcode                The Tempcode for the input field (NULL: skip the field - it's not input)
      */
-    public function get_field_inputter($_cf_name,$_cf_description,$field,$actual_value,$new)
+    public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         require_lang('google_map');
 
@@ -123,11 +122,11 @@ class Hook_fields_float
             $longitude = '0';
 
             if ((isset($actual_value)) && ($actual_value != '') && ($actual_value != do_lang('NA'))) {
-                $longitude = float_to_raw_string(floatval($actual_value),10);
+                $longitude = float_to_raw_string(floatval($actual_value), 10);
             }
             global $LATITUDE;
             if ((isset($LATITUDE)) && ($LATITUDE != '') && ($LATITUDE != do_lang('NA'))) {
-                $latitude = float_to_raw_string(floatval($LATITUDE),10);
+                $latitude = float_to_raw_string(floatval($LATITUDE), 10);
             }
 
             if ($latitude == '0.0000000000') {
@@ -137,13 +136,13 @@ class Hook_fields_float
                 $longitude = '0';
             }
 
-            $input = do_template('FORM_SCREEN_INPUT_MAP_POSITION',array('_GUID' => '86d69d152d7bfd125e6216c9ac936cfd','REQUIRED' => $required,'NAME' => $name,'LATITUDE' => $latitude,'LONGITUDE' => $longitude));
+            $input = do_template('FORM_SCREEN_INPUT_MAP_POSITION', array('_GUID' => '86d69d152d7bfd125e6216c9ac936cfd', 'REQUIRED' => $required, 'NAME' => $name, 'LATITUDE' => $latitude, 'LONGITUDE' => $longitude));
             $lang_string = 'MAP_POSITION_FIELD_field_' . strval($field['id']);
-            $test = do_lang($lang_string,null,null,null,null,false);
+            $test = do_lang($lang_string, null, null, null, null, false);
             if (is_null($test)) {
                 $lang_string = 'MAP_POSITION_FIELD';
             }
-            return _form_input($name,do_lang_tempcode($lang_string),'',$input,$required,false);
+            return _form_input($name, do_lang_tempcode($lang_string), '', $input, $required, false);
         }
 
         if ($_cf_name == do_lang('LATITUDE_FIELD_NAME')) { // Assumes there is a Longitude field too
@@ -152,7 +151,7 @@ class Hook_fields_float
             return new ocp_tempcode();
         }
 
-        return form_input_float($_cf_name,$_cf_description,'field_' . strval($field['id']),(is_null($actual_value) || ($actual_value === ''))?null:floatval($actual_value),$field['cf_required'] == 1);
+        return form_input_float($_cf_name, $_cf_description, 'field_' . strval($field['id']), (is_null($actual_value) || ($actual_value === '')) ? null : floatval($actual_value), $field['cf_required'] == 1);
     }
 
     /**
@@ -164,7 +163,7 @@ class Hook_fields_float
      * @param  ?array                   Former value of field (NULL: none)
      * @return ?string                  The value (NULL: could not process)
      */
-    public function inputted_to_field_value($editing,$field,$upload_dir = 'uploads/catalogues',$old_value = null)
+    public function inputted_to_field_value($editing, $field, $upload_dir = 'uploads/catalogues', $old_value = null)
     {
         require_lang('google_map');
 
@@ -172,12 +171,12 @@ class Hook_fields_float
         $tmp_name = 'field_' . strval($id);
         $default = STRING_MAGIC_NULL;
         if (get_translated_text($field['cf_name']) == do_lang('LATITUDE_FIELD_NAME')) {
-            $default = post_param('latitude',STRING_MAGIC_NULL);
+            $default = post_param('latitude', STRING_MAGIC_NULL);
         }
         if (get_translated_text($field['cf_name']) == do_lang('LONGITUDE_FIELD_NAME')) {
-            $default = post_param('longitude',STRING_MAGIC_NULL);
+            $default = post_param('longitude', STRING_MAGIC_NULL);
         }
 
-        return post_param($tmp_name,$default);
+        return post_param($tmp_name, $default);
     }
 }

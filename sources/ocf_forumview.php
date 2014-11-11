@@ -856,8 +856,7 @@ function ocf_get_forum_view($forum_id, $forum_info, $start = 0, $max = null)
     }
     if (($start == 0) && (count($topic_rows) < $max)) {
         $max_rows = $max; // We know that they're all on this screen
-    }
-    else {
+    } else {
         $max_rows = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics WHERE ' . $where, false, true);
     }
     $topics = array();

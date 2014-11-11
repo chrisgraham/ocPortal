@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_challenge
  */
-
 class Hook_addon_registry_oc_challenge
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_oc_challenge
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,10 +105,8 @@ class Hook_addon_registry_oc_challenge
             'requires' => array(
                 'quizzes',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

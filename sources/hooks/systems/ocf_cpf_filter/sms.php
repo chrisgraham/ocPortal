@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    sms
  */
-
 class Hook_ocf_cpf_filter_sms
 {
     /**

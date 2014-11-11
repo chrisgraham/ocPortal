@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    tester
  */
-
 class Hook_content_meta_aware_tester
 {
     /**
@@ -33,50 +32,50 @@ class Hook_content_meta_aware_tester
             'id_field' => 'id',
             'id_field_numeric' => true,
             'parent_category_field' => 't_section',
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_meta_aware_type' => null,
             'is_category' => false,
             'is_entry' => true,
-            'category_field' => NULL, // For category permissions
-            'category_type' => NULL, // For category permissions
+            'category_field' => null, // For category permissions
+            'category_type' => null, // For category permissions
             'category_is_string' => false,
 
-            'title_field' => NULL,
+            'title_field' => null,
             'title_field_dereference' => false,
-            'description_field' => NULL,
-            'thumb_field' => NULL,
+            'description_field' => null,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:tester:report:_WILD',
             'edit_page_link_pattern' => '_SEARCH:tester:_ed:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (has_submit_permission('mid',get_member(),get_ip_address(),'tester'))?(get_module_zone('tester') . ':tester:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('tester')) . ':tester',
+            'view_category_page_link_pattern' => null,
+            'add_url' => (has_submit_permission('mid', get_member(), get_ip_address(), 'tester')) ? (get_module_zone('tester') . ':tester:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('tester')) . ':tester',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
+            'views_field' => null,
             'submitter_field' => 't_assigned_to',
-            'add_time_field' => NULL,
-            'edit_time_field' => NULL,
-            'date_field' => NULL,
-            'validated_field' => NULL,
+            'add_time_field' => null,
+            'edit_time_field' => null,
+            'date_field' => null,
+            'validated_field' => null,
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
             'feedback_type_code' => 'bug_report',
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'tester',
 
             'cms_page' => 'cms_chat',
             'module' => 'tester',
 
-            'occle_filesystem_hook' => NULL,
+            'occle_filesystem_hook' => null,
             'occle_filesystem__is_folder' => false,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_TEST',
         );

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-
 class Hook_page_groupings_points
 {
     /**
@@ -27,17 +26,17 @@ class Hook_page_groupings_points
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('points')) {
             return array();
         }
 
         return array(
-            array('audit','menu/adminzone/audit/points_log',array('admin_points',array('type' => 'misc'),get_module_zone('admin_points')),do_lang_tempcode('points:GIFT_TRANSACTIONS'),'points:DOC_POINTS'),
-            array('audit','menu/social/points',array('admin_points',array('type' => 'export'),get_module_zone('admin_points')),do_lang_tempcode('points:EXPORT_POINTS'),'points:DOC_EXPORT_POINTS'),
-            (get_forum_type() == 'ocf' || get_forum_type() == 'none')?null:array('social','menu/social/points',array('points',array(),get_module_zone('points')),do_lang_tempcode('points:VIEW_POINTS')),
-            array('social','menu/social/leader_board',array('leader_board',array(),get_module_zone('leader_board')),do_lang_tempcode('leader_board:POINT_LEADER_BOARD')),
+            array('audit', 'menu/adminzone/audit/points_log', array('admin_points', array('type' => 'misc'), get_module_zone('admin_points')), do_lang_tempcode('points:GIFT_TRANSACTIONS'), 'points:DOC_POINTS'),
+            array('audit', 'menu/social/points', array('admin_points', array('type' => 'export'), get_module_zone('admin_points')), do_lang_tempcode('points:EXPORT_POINTS'), 'points:DOC_EXPORT_POINTS'),
+            (get_forum_type() == 'ocf' || get_forum_type() == 'none') ? null : array('social', 'menu/social/points', array('points', array(), get_module_zone('points')), do_lang_tempcode('points:VIEW_POINTS')),
+            array('social', 'menu/social/leader_board', array('leader_board', array(), get_module_zone('leader_board')), do_lang_tempcode('leader_board:POINT_LEADER_BOARD')),
         );
     }
 }

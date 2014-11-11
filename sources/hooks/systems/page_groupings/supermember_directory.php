@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    supermember_directory
  */
-
 class Hook_page_groupings_supermember_directory
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_supermember_directory
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('supermember_directory')) {
             return array();
         }
 
         return array(
-            array('collaboration','menu/collaboration/supermembers',array('supermembers',array(),get_module_zone('supermembers')),do_lang_tempcode('supermembers:MODULE_TRANS_NAME_supermembers')),
+            array('collaboration', 'menu/collaboration/supermembers', array('supermembers', array(), get_module_zone('supermembers')), do_lang_tempcode('supermembers:MODULE_TRANS_NAME_supermembers')),
         );
     }
 }

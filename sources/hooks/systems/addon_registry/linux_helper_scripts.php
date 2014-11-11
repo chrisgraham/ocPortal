@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    linux_helper_scripts
  */
-
 class Hook_addon_registry_linux_helper_scripts
 {
     /**

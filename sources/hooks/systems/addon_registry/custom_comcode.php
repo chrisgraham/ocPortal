@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
-
 class Hook_addon_registry_custom_comcode
 {
     /**
@@ -149,7 +148,7 @@ class Hook_addon_registry_custom_comcode
     {
         $content = new ocp_tempcode();
         foreach (placeholder_array() as $tag) {
-            $content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW',array(
+            $content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW', array(
                 'TITLE' => lorem_word(),
                 'DESCRIPTION' => lorem_paragraph(),
                 'EXAMPLE' => lorem_word(),
@@ -157,9 +156,9 @@ class Hook_addon_registry_custom_comcode
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_CUSTOM_COMCODE_TAGS', array(
                 'TAGS' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

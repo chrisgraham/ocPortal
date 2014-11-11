@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
-
 class Hook_occle_command_continue_import
 {
     /**
@@ -28,12 +27,12 @@ class Hook_occle_command_continue_import
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
         require_lang('import');
 
-        if ((array_key_exists('h',$options)) || (!array_key_exists(0,$parameters)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('continue_import',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (!array_key_exists(0, $parameters)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('continue_import', array('h'), array(true, true)), '', '');
         } else {
             require_code('import');
 
@@ -42,14 +41,14 @@ class Hook_occle_command_continue_import
             set_mass_import_mode();
 
             $where = mixed();
-            if (array_key_exists(1,$parameters)) {
+            if (array_key_exists(1, $parameters)) {
                 $where = array('imp_session' => $parameters[1]);
             }
-            $session = $GLOBALS['SITE_DB']->query_select('import_session',array('*'),$where,'',2);
-            if (!array_key_exists(0,$session)) {
+            $session = $GLOBALS['SITE_DB']->query_select('import_session', array('*'), $where, '', 2);
+            if (!array_key_exists(0, $session)) {
                 warn_exit(do_lang_tempcode('MISSING_IMPORT_SESSION'));
             }
-            if (array_key_exists(1,$session)) {
+            if (array_key_exists(1, $session)) {
                 warn_exit(do_lang_tempcode('TOO_MANY_IMPORT_SESSIONS'));
             }
 
@@ -68,7 +67,7 @@ class Hook_occle_command_continue_import
             require_code('hooks/modules/admin_import/' . filter_naughty_harsh($importer));
             $object = object_factory('Hook_' . filter_naughty_harsh($importer));
 
-            $import_source = is_null($db_name)?null:new database_driver($db_name,$db_host,$db_user,$db_password,$db_table_prefix);
+            $import_source = is_null($db_name) ? null : new database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
 
             if (get_forum_type() != 'ocf') {
                 require_code('forum/ocf');
@@ -80,13 +79,13 @@ class Hook_occle_command_continue_import
             $info = $object->info();
             $_import_list = $info['import'];
             foreach ($_import_list as $import) {
-                if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('import_parts_done','imp_session',array('imp_id' => $import,'imp_session' => get_session_id())))) {
+                if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('import_parts_done', 'imp_session', array('imp_id' => $import, 'imp_session' => get_session_id())))) {
                     $function_name = 'import_' . $import;
                     ocf_over_local();
-                    $func_output = call_user_func_array(array($object,$function_name),array($import_source,$db_table_prefix,$old_base_dir));
+                    $func_output = call_user_func_array(array($object, $function_name), array($import_source, $db_table_prefix, $old_base_dir));
                     ocf_over_msn();
 
-                    $GLOBALS['SITE_DB']->query_insert('import_parts_done',array('imp_id' => $import,'imp_session' => get_session_id()));
+                    $GLOBALS['SITE_DB']->query_insert('import_parts_done', array('imp_id' => $import, 'imp_session' => get_session_id()));
                 }
             }
 
@@ -95,6 +94,6 @@ class Hook_occle_command_continue_import
             set_database_index_maintenance(true);
         }
 
-        return array('','',do_lang('SUCCESS'),'');
+        return array('', '', do_lang('SUCCESS'), '');
     }
 }

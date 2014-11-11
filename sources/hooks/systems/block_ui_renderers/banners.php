@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-
 class Hook_block_ui_renderers_banners
 {
     /**
@@ -30,13 +29,13 @@ class Hook_block_ui_renderers_banners
      * @param  tempcode                 Field description
      * @return ?tempcode                Rendered field (NULL: not handled).
      */
-    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
-        if (($parameter == 'param') && (in_array($block,array('main_banner_wave','main_topsites')))) { // banner type list
+        if (($parameter == 'param') && (in_array($block, array('main_banner_wave', 'main_topsites')))) { // banner type list
             require_code('banners');
             $list = create_selection_list_banner_types($default);
-            return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false);
+            return form_input_list(titleify($parameter), escape_html($description), $parameter, $list, null, false, false);
         }
-        return NULL;
+        return null;
     }
 }

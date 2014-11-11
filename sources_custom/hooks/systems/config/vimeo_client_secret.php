@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
-
 class Hook_config_vimeo_client_secret
 {
     /**

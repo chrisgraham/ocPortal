@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_browser_bookmarks
  */
-
 class Hook_addon_registry_oc_browser_bookmarks
 {
     /**
@@ -83,7 +82,7 @@ class Hook_addon_registry_oc_browser_bookmarks
     public function get_description()
     {
         return 'Export the site-map as browser bookmarks.
-        
+
 Ever wished it was quicker to navigate around your site? If you\'re anything like us you get tired of having to move the mouse all around screens, and wait for half a dozen page loads, to get where you\'re going. There is an admin menu and sitemap in ocPortal, but that\'s still not as fast as a native desktop interface. Coming to the rescue is this simple addon that will export your whole sitemap to your web browsers bookmarks, so you can easily access anything on it. All you need to do is:
 1) install the addon
 2) call up /adminzone/?page=admin_generate_bookmarks
@@ -99,8 +98,7 @@ Ever wished it was quicker to navigate around your site? If you\'re anything lik
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,12 +109,9 @@ Ever wished it was quicker to navigate around your site? If you\'re anything lik
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

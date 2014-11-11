@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-
 class Hook_realtime_rain_banners
 {
     /**
@@ -27,11 +26,11 @@ class Hook_realtime_rain_banners
      * @param  TIME                     End of time range.
      * @return array                    A list of template parameter sets for rendering a 'drop'.
      */
-    public function run($from,$to)
+    public function run($from, $to)
     {
         $drops = array();
 
-        if (has_actual_page_access(get_member(),'admin_banners')) {
+        if (has_actual_page_access(get_member(), 'admin_banners')) {
             $rows = $GLOBALS['SITE_DB']->query('SELECT b.name,img_url,c_ip_address,c_member_id AS member_id,c_date_and_time AS timestamp FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'banner_clicks c LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'banners b ON b.name=c.c_banner_id WHERE c_date_and_time BETWEEN ' . strval($from) . ' AND ' . strval($to));
 
             require_lang('banners');
@@ -40,7 +39,7 @@ class Hook_realtime_rain_banners
                 $timestamp = $row['timestamp'];
                 $member_id = $row['member_id'];
 
-                $image = is_guest($member_id)?rain_get_country_image($row['c_ip_address']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
+                $image = is_guest($member_id) ? rain_get_country_image($row['c_ip_address']) : $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id);
                 require_code('images');
                 if (is_image($row['img_url'])) {
                     $image = $row['img_url'];
@@ -49,24 +48,24 @@ class Hook_realtime_rain_banners
                     $image = get_custom_base_url() . '/' . $image;
                 }
 
-                $drops[] = rain_get_special_icons($row['c_ip_address'],$timestamp)+array(
-                    'TYPE' => 'banners',
-                    'FROM_MEMBER_ID' => strval($member_id),
-                    'TO_MEMBER_ID' => NULL,
-                    'TITLE' => do_lang('BANNER_CLICKED'),
-                    'IMAGE' => $image,
-                    'TIMESTAMP' => strval($timestamp),
-                    'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
-                    'TICKER_TEXT' => NULL,
-                    'URL' => NULL,
-                    'IS_POSITIVE' => true,
-                    'IS_NEGATIVE' => false,
+                $drops[] = rain_get_special_icons($row['c_ip_address'], $timestamp) + array(
+                        'TYPE' => 'banners',
+                        'FROM_MEMBER_ID' => strval($member_id),
+                        'TO_MEMBER_ID' => null,
+                        'TITLE' => do_lang('BANNER_CLICKED'),
+                        'IMAGE' => $image,
+                        'TIMESTAMP' => strval($timestamp),
+                        'RELATIVE_TIMESTAMP' => strval($timestamp - $from),
+                        'TICKER_TEXT' => null,
+                        'URL' => null,
+                        'IS_POSITIVE' => true,
+                        'IS_NEGATIVE' => false,
 
-                    // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-                    'FROM_ID' => 'member_' . strval($member_id),
-                    'TO_ID' => NULL,
-                    'GROUP_ID' => 'banner_' . $row['name'],
-                );
+                        // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                        'FROM_ID' => 'member_' . strval($member_id),
+                        'TO_ID' => null,
+                        'GROUP_ID' => 'banner_' . $row['name'],
+                    );
             }
         }
 

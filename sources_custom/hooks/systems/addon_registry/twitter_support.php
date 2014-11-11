@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    twitter_support
  */
-
 class Hook_addon_registry_twitter_support
 {
     /**
@@ -101,8 +100,7 @@ Set up is a little tricky, you need to set up an application on Twitter, and aut
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -116,10 +114,8 @@ Set up is a little tricky, you need to set up an application on Twitter, and aut
             'requires' => array(
                 'PHP CuRL extension',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

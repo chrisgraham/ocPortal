@@ -194,8 +194,7 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
             log_hack_attack_and_exit('HEADER_SPLIT_HACK');
         }
         header('Location: ' . $url);
-    }
-    // Being called to display a banner
+    } // Being called to display a banner
     else {
         if ($dest === null) {
             $dest = get_param('dest', '');
@@ -388,7 +387,7 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
                     $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
                 }
             } else {
-                $banner_type_row=array('t_image_width'=>$width,'t_image_height'=>$height);
+                $banner_type_row = array('t_image_width' => $width, 't_image_height' => $height);
             }
             $content = do_template('BANNER_FLASH', array('_GUID' => '25525a3722715e79a83af4cec53fe072', 'B_TYPE' => $b_type, 'WIDTH' => strval($banner_type_row['t_image_width']), 'HEIGHT' => strval($banner_type_row['t_image_height']), 'SOURCE' => $source, 'DEST' => $name, 'CAPTION' => $caption, 'IMG' => $img_url));
         } elseif (($url != '') || (is_image($img_url))) { // Image; Can't rely on image check, because often they have script-generated URLs
@@ -411,7 +410,7 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
                         $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
                     }
                 } else {
-                    $banner_type_row=array('t_image_width'=>$width,'t_image_height'=>$height);
+                    $banner_type_row = array('t_image_width' => $width, 't_image_height' => $height);
                 }
                 $banner_type_rows[$b_type] = $banner_type_row;
             }
@@ -428,7 +427,7 @@ function show_banner($name, $title_text, $caption, $direct_code, $img_url, $sour
                     $banner_type_row = array('t_image_width' => 728, 't_image_height' => 90);
                 }
             } else {
-                $banner_type_row=array('t_image_width'=>$width,'t_image_height'=>$height);
+                $banner_type_row = array('t_image_width' => $width, 't_image_height' => $height);
             }
             $content = do_template('BANNER_IFRAME', array('_GUID' => 'deeef9834bc308b5d07e025ab9c04c0e', 'B_TYPE' => $b_type, 'IMG' => $img_url, 'WIDTH' => strval($banner_type_row['t_image_width']), 'HEIGHT' => strval($banner_type_row['t_image_height'])));
         }

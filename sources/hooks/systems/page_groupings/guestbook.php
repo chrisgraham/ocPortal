@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    guestbook
  */
-
 class Hook_page_groupings_guestbook
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_guestbook
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('guestbook')) {
             return array();
         }
 
         return array(
-            array('social','menu/site_meta/guestbook',array('guestbook',array(),get_comcode_zone('guestbook')),do_lang_tempcode('menus:GUESTBOOK')),
+            array('social', 'menu/site_meta/guestbook', array('guestbook', array(), get_comcode_zone('guestbook')), do_lang_tempcode('menus:GUESTBOOK')),
         );
     }
 }

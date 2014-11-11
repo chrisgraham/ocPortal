@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-
 class Hook_Profiles_Tabs_Edit_signature
 {
     /**
@@ -27,9 +26,9 @@ class Hook_Profiles_Tabs_Edit_signature
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
-        return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'assume_any_member')) || (has_privilege($member_id_viewing,'member_maintenance')));
+        return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing, 'assume_any_member')) || (has_privilege($member_id_viewing, 'member_maintenance')));
     }
 
     /**
@@ -40,35 +39,35 @@ class Hook_Profiles_Tabs_Edit_signature
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return ?array                   A tuple: The tab title, the tab body text (may be blank), the tab fields, extra JavaScript (may be blank) the suggested tab order, hidden fields (optional) (NULL: if $leave_to_ajax_if_possible was set), the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('SIGNATURE');
 
         $order = 40;
 
         // Actualiser
-        $new_signature = post_param('signature',null);
-        if ($new_signature !== NULL) {
+        $new_signature = post_param('signature', null);
+        if ($new_signature !== null) {
             require_code('ocf_members_action');
             require_code('ocf_members_action2');
-            ocf_member_choose_signature($new_signature,$member_id_of);
+            ocf_member_choose_signature($new_signature, $member_id_of);
 
             require_code('autosave');
             clear_ocp_autosave();
 
-            attach_message(do_lang_tempcode('SUCCESS_SAVE'),'inform');
+            attach_message(do_lang_tempcode('SUCCESS_SAVE'), 'inform');
         }
 
         if ($leave_to_ajax_if_possible) {
-            return NULL;
+            return null;
         }
 
         // UI
 
-        $signature = get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of),'m_signature',$GLOBALS['FORUM_DB']);
-        $signature_original = get_translated_text($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of,'m_signature'),$GLOBALS['FORUM_DB']);
+        $signature = get_translated_tempcode($GLOBALS['FORUM_DRIVER']->get_member_row($member_id_of), 'm_signature', $GLOBALS['FORUM_DB']);
+        $signature_original = get_translated_text($GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_signature'), $GLOBALS['FORUM_DB']);
 
-        $size = ocf_get_member_best_group_property($member_id_of,'max_sig_length_comcode');
+        $size = ocf_get_member_best_group_property($member_id_of, 'max_sig_length_comcode');
 
         $javascript = "
             var form=document.getElementById('signature').form;
@@ -105,21 +104,21 @@ class Hook_Profiles_Tabs_Edit_signature
 
         $post_comment = null;
 
-        list($attachments,$attach_size_field) = get_attachments('signature');
+        list($attachments, $attach_size_field) = get_attachments('signature');
 
         $hidden_fields = new ocp_tempcode();
         $hidden_fields->attach($attach_size_field);
 
         $continue_url = get_self_url();
 
-        $help_zone = get_comcode_zone('userguide_comcode',false);
+        $help_zone = get_comcode_zone('userguide_comcode', false);
 
         $emoticon_chooser = $GLOBALS['FORUM_DRIVER']->get_emoticon_chooser();
 
         $comcode_editor = get_comcode_editor();
-        $comcode_editor_small = get_comcode_editor('signature',true);
+        $comcode_editor_small = get_comcode_editor('signature', true);
 
-        $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($signature_original,'{$,page hint: no_wysiwyg}') === false));
+        $w = (has_js()) && (browser_matches('wysiwyg') && (strpos($signature_original, '{$,page hint: no_wysiwyg}') === false));
         $class = '';
         attach_wysiwyg();
         if ($w) {
@@ -130,11 +129,12 @@ class Hook_Profiles_Tabs_Edit_signature
         $temp = $LAX_COMCODE;
         $LAX_COMCODE = true;
         $GLOBALS['COMCODE_PARSE_URLS_CHECKED'] = 100; // Little hack to stop it checking any URLs
-        /*Make sure we reparse with semi-parse mode if (is_null($default_parsed)) */$default_parsed = comcode_to_tempcode($signature_original,null,false,60,null,null,true);
+        /*Make sure we reparse with semi-parse mode if (is_null($default_parsed)) */
+        $default_parsed = comcode_to_tempcode($signature_original, null, false, 60, null, null, true);
         $LAX_COMCODE = $temp;
 
         $fields = new ocp_tempcode();
-        $fields->attach(do_template('POSTING_FIELD',array(
+        $fields->attach(do_template('POSTING_FIELD', array(
             '_GUID' => '0424aff8c7961ed20ac525e7de04c219',
             'PRETTY_NAME' => do_lang_tempcode('SIGNATURE'),
             'DESCRIPTION' => '',
@@ -145,7 +145,7 @@ class Hook_Profiles_Tabs_Edit_signature
             'COMCODE_EDITOR' => $comcode_editor,
             'COMCODE_EDITOR_SMALL' => $comcode_editor_small,
             'CLASS' => $class,
-            'COMCODE_URL' => is_null($help_zone)?new ocp_tempcode():build_url(array('page' => 'userguide_comcode'),$help_zone),
+            'COMCODE_URL' => is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
             'EXTRA' => '',
             'POST_COMMENT' => $post_comment,
             'EMOTICON_CHOOSER' => $emoticon_chooser,
@@ -155,8 +155,8 @@ class Hook_Profiles_Tabs_Edit_signature
             'ATTACHMENTS' => $attachments,
         )));
 
-        $text = do_template('OCF_EDIT_SIGNATURE_TAB',array('_GUID' => 'f5f2eb2552c34840c9cf46886422401e','SIZE' => integer_format($size),'SIGNATURE' => $signature,'TITLE' => $title));
+        $text = do_template('OCF_EDIT_SIGNATURE_TAB', array('_GUID' => 'f5f2eb2552c34840c9cf46886422401e', 'SIZE' => integer_format($size), 'SIGNATURE' => $signature, 'TITLE' => $title));
 
-        return array($title,$fields,$text,$javascript,$order,null,'tabs/member_account/edit/signature');
+        return array($title, $fields, $text, $javascript, $order, null, 'tabs/member_account/edit/signature');
     }
 }

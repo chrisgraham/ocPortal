@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
-
 class Hook_page_groupings_booking
 {
     /**
@@ -22,11 +21,11 @@ class Hook_page_groupings_booking
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('cms','menu/booking',array('cms_booking',array(),get_page_zone('cms_booking')),do_lang_tempcode('booking:BOOKINGS'),'booking:DOC_BOOKING'),
-            array('pages','menu/book',array('booking',array('type' => 'misc'),get_page_zone('booking')),do_lang_tempcode('booking:BOOKINGS')),
+            array('cms', 'menu/booking', array('cms_booking', array(), get_page_zone('cms_booking')), do_lang_tempcode('booking:BOOKINGS'), 'booking:DOC_BOOKING'),
+            array('pages', 'menu/book', array('booking', array('type' => 'misc'), get_page_zone('booking')), do_lang_tempcode('booking:BOOKINGS')),
         );
     }
 }

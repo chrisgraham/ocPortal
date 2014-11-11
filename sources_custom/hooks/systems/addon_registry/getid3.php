@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    getid3
  */
-
 class Hook_addon_registry_getid3
 {
     /**
@@ -95,8 +94,7 @@ class Hook_addon_registry_getid3
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -110,10 +108,8 @@ class Hook_addon_registry_getid3
             'requires' => array(
                 'galleries',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

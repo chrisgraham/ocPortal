@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_ocf_cpf_filter_points_wiki
 {
     /**

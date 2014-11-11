@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ad_success
  */
-
 class Hook_addon_registry_newsletter_no_members
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_newsletter_no_members
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,10 +106,8 @@ class Hook_addon_registry_newsletter_no_members
                 'ocf',
                 'newsletters',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

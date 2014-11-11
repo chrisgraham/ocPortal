@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    workflows
  */
-
 class Hook_unvalidated_videos
 {
     /**
@@ -23,7 +22,7 @@ class Hook_unvalidated_videos
     public function info()
     {
         if (!module_installed('galleries')) {
-            return NULL;
+            return null;
         }
 
         require_lang('galleries');

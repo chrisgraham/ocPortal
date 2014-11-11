@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-
 class Hook_addon_registry_core_adminzone_dashboard
 {
     /**
@@ -192,14 +191,14 @@ class Hook_addon_registry_core_adminzone_dashboard
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_WEBSITE_MONITORING',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_WEBSITE_MONITORING', array(
                 'GRIDDATA' => $data,
                 'URL' => placeholder_url(),
                 'SITEURLS' => $urls,
                 'BLOCK_NAME' => '',
                 'MAP' => '',
                 'BLOCK_PARAMS' => '',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -229,13 +228,13 @@ class Hook_addon_registry_core_adminzone_dashboard
 
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_LINKS',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_LINKS', array(
                 'FORMATTED_LINKS' => $formatted,
                 'UNFORMATTED_LINKS' => $unformatted,
                 'URL' => placeholder_url(),
                 'BLOCK_NAME' => '',
                 'MAP' => '',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -249,14 +248,14 @@ class Hook_addon_registry_core_adminzone_dashboard
     public function tpl_preview__block_main_notes()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_NOTES',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_NOTES', array(
                 'TITLE' => lorem_word(),
                 'SCROLLS' => lorem_phrase(),
                 'CONTENTS' => lorem_phrase(),
                 'URL' => placeholder_url(),
                 'BLOCK_NAME' => '',
                 'MAP' => '',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -273,7 +272,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 
         $info = do_lang_tempcode('DUE_TIME', placeholder_number(), placeholder_number());
 
-        $dates = do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array(
+        $dates = do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array(
             'URL' => placeholder_url(),
             'STATUS' => $_status,
             'CONTACT_US_MESSAGING' => lorem_phrase(),
@@ -282,7 +281,7 @@ class Hook_addon_registry_core_adminzone_dashboard
             'NUM_QUEUE' => placeholder_id(),
         ));
 
-        $status = do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0',array());
+        $status = do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_0', array());
 
         $url = build_url(array(
             'page' => 'admin_orders',
@@ -290,7 +289,7 @@ class Hook_addon_registry_core_adminzone_dashboard
             'filter' => 'undispatched',
         ), get_module_zone('admin_orders'));
 
-        $no_times = do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array(
+        $no_times = do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array(
             'URL' => placeholder_url(),
             'STATUS' => $status,
             'TASK' => lorem_phrase(),
@@ -300,7 +299,7 @@ class Hook_addon_registry_core_adminzone_dashboard
         ));
 
         $todo = new ocp_tempcode();
-        $todo->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array(
+        $todo->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array(
             'URL' => placeholder_url(),
             'STATUS' => do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1'),
             'CONTACT_US_MESSAGING' => lorem_phrase(),
@@ -308,7 +307,7 @@ class Hook_addon_registry_core_adminzone_dashboard
             'INFO' => lorem_phrase(),
             'NUM_QUEUE' => placeholder_id(),
         )));
-        $todo->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM',array(
+        $todo->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array(
             'URL' => placeholder_url(),
             'STATUS' => do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_NA'),
             'CONTACT_US_MESSAGING' => lorem_phrase(),
@@ -319,7 +318,7 @@ class Hook_addon_registry_core_adminzone_dashboard
 
         $custom_task = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $custom_task->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK',array(
+            $custom_task->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK', array(
                 'TASK_DONE' => 'checklist0',
                 'ADD_TIME' => placeholder_time(),
                 'RECUR_INTERVAL' => '',
@@ -329,14 +328,14 @@ class Hook_addon_registry_core_adminzone_dashboard
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST', array(
                 'URL' => placeholder_url(),
                 'NOTES' => lorem_phrase(),
                 'CUSTOM_TASKS' => $custom_task,
                 'DATES' => $dates,
                 'NO_TIMES' => $no_times,
                 'TODO_COUNTS' => $todo,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -351,11 +350,11 @@ class Hook_addon_registry_core_adminzone_dashboard
     {
         require_lang('version');
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_NEW_VERSION',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_NEW_VERSION', array(
                 'VERSION' => lorem_phrase(),
                 'VERSION_TABLE' => placeholder_table(),
                 'HAS_UPDATED_ADDONS' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -369,13 +368,13 @@ class Hook_addon_registry_core_adminzone_dashboard
     public function tpl_preview__administrative__block_main_staff_tips()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_TIPS',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_TIPS', array(
                 'BLOCK_PARAMS' => '',
                 'TIP' => lorem_phrase(),
                 'TIP_CODE' => lorem_phrase(),
                 'LEVEL' => lorem_phrase(),
                 'COUNT' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -389,10 +388,10 @@ class Hook_addon_registry_core_adminzone_dashboard
     public function tpl_preview__administrative__block_main_staff_actions()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_ACTIONS',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_STAFF_ACTIONS', array(
                 'BLOCK_PARAMS' => '',
                 'CONTENT' => lorem_paragraph_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

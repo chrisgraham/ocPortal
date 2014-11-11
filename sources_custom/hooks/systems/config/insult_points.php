@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_banter
  */
-
 class Hook_config_insult_points
 {
     /**

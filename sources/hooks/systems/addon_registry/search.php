@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
-
 class Hook_addon_registry_search
 {
     /**
@@ -172,7 +171,7 @@ class Hook_addon_registry_search
     public function tpl_preview__block_main_search()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_SEARCH', array(
                 'TITLE' => lorem_phrase(),
                 'INPUT_FIELDS' => placeholder_array(),
                 'EXTRA' => placeholder_array(),
@@ -187,7 +186,7 @@ class Hook_addon_registry_search
                 'LIMIT_TO' => placeholder_array(),
                 'URL' => placeholder_url(),
                 'FULL_SEARCH_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -201,7 +200,7 @@ class Hook_addon_registry_search
     public function tpl_preview__block_top_search()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH',array(
+            lorem_globalise(do_lorem_template('BLOCK_TOP_SEARCH', array(
                 'TITLE' => lorem_phrase(),
                 'EXTRA' => placeholder_array(),
                 'SORT' => lorem_phrase(),
@@ -215,7 +214,7 @@ class Hook_addon_registry_search
                 'LIMIT_TO' => placeholder_array(),
                 'URL' => placeholder_url(),
                 'FULL_SEARCH_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -244,10 +243,10 @@ class Hook_addon_registry_search
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_TAG_CLOUD', array(
                 'TITLE' => lorem_phrase(),
                 'TAGS' => $tpl_tags,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -261,7 +260,7 @@ class Hook_addon_registry_search
     public function tpl_preview__tags()
     {
         return array(
-            lorem_globalise(do_lorem_template('TAGS',array(
+            lorem_globalise(do_lorem_template('TAGS', array(
                 'TAGS' => array(
                     array(
                         'LINK_FULLSCOPE' => placeholder_url(),
@@ -273,7 +272,7 @@ class Hook_addon_registry_search
                     )
                 ),
                 'TYPE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -287,9 +286,9 @@ class Hook_addon_registry_search
     public function tpl_preview__opensearch()
     {
         return array(
-            lorem_globalise(do_lorem_template('OPENSEARCH',array(
+            lorem_globalise(do_lorem_template('OPENSEARCH', array(
                 'DESCRIPTION' => lorem_paragraph(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -308,7 +307,7 @@ class Hook_addon_registry_search
 
         $options = new ocp_tempcode();
         foreach (placeholder_array() as $value) {
-            $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION',array(
+            $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION', array(
                 'NAME' => placeholder_random(),
                 'DISPLAY' => lorem_phrase(),
                 'SPECIAL' => lorem_phrase(),
@@ -316,28 +315,28 @@ class Hook_addon_registry_search
             )));
         }
 
-        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST',array(
+        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_LIST', array(
             'NAME' => placeholder_random(),
             'DISPLAY' => lorem_word(),
             'SPECIAL' => placeholder_options(),
             'CHECKED' => false,
         )));
 
-        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT',array(
+        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TEXT', array(
             'NAME' => placeholder_random(),
             'DISPLAY' => lorem_word(),
             'SPECIAL' => lorem_word(),
             'CHECKED' => false,
         )));
 
-        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK',array(
+        $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION_TICK', array(
             'NAME' => placeholder_random(),
             'DISPLAY' => lorem_word(),
             'SPECIAL' => lorem_word(),
             'CHECKED' => false,
         )));
 
-        $specialisation = do_lorem_template('SEARCH_ADVANCED',array(
+        $specialisation = do_lorem_template('SEARCH_ADVANCED', array(
             'AJAX' => lorem_phrase(),
             'OPTIONS' => $options,
             'TREE' => '',
@@ -346,7 +345,7 @@ class Hook_addon_registry_search
 
         $search_domains = new ocp_tempcode();
         foreach (placeholder_array() as $value) {
-            $search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN',array(
+            $search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN', array(
                 'ADVANCED_ONLY' => lorem_phrase(),
                 'CHECKED' => lorem_phrase(),
                 'OPTIONS_URL' => placeholder_url(),
@@ -355,12 +354,12 @@ class Hook_addon_registry_search
             )));
         }
 
-        $specialisation->attach(do_lorem_template('SEARCH_DOMAINS',array(
+        $specialisation->attach(do_lorem_template('SEARCH_DOMAINS', array(
             'SEARCH_DOMAINS' => $search_domains,
         )));
 
         $result = new ocp_tempcode();
-        $result->attach(do_lorem_template('SEARCH_RESULT',array(
+        $result->attach(do_lorem_template('SEARCH_RESULT', array(
             'CONTENT' => lorem_paragraph_html(),
             'TYPE' => placeholder_id(),
             'ID' => placeholder_id(),
@@ -373,13 +372,13 @@ class Hook_addon_registry_search
             );
         }
 
-        $result->attach(do_lorem_template('SEARCH_RESULT_TABLE',array(
+        $result->attach(do_lorem_template('SEARCH_RESULT_TABLE', array(
             'HEADERS' => placeholder_array(),
             'ROWS' => $types_results,
         )));
 
         require_lang('catalogues');
-        $result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES',array(
+        $result->attach(do_lorem_template('SEARCH_RESULT_CATALOGUE_ENTRIES', array(
             'BUILDUP' => lorem_phrase(),
             'NAME' => lorem_word(),
             'TITLE' => lorem_word_2(),
@@ -387,7 +386,7 @@ class Hook_addon_registry_search
 
 
         return array(
-            lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN',array(
+            lorem_globalise(do_lorem_template('SEARCH_FORM_SCREEN', array(
                 'SEARCH_TERM' => lorem_word_2(),
                 'NUM_RESULTS' => placeholder_number(),
                 'CAN_ORDER_BY_RATING' => false,
@@ -401,7 +400,7 @@ class Hook_addon_registry_search
                 'SORT' => 'relevance',
                 'DIRECTION' => 'DESC',
                 'CONTENT' => lorem_phrase(),
-                'RESULTS' => NULL,
+                'RESULTS' => null,
                 'PAGINATION' => '',
                 'HAS_FULLTEXT_SEARCH' => true,
                 'TITLE' => lorem_title(),
@@ -409,7 +408,7 @@ class Hook_addon_registry_search
                 'SPECIALISATION' => $specialisation,
                 'URL' => placeholder_url(),
                 'HAS_TEMPLATE_SEARCH' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

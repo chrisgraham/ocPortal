@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki_sync
  */
-
 class Hook_config_wiki_alt_changes_link_stub
 {
     /**

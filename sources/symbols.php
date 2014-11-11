@@ -99,8 +99,7 @@ function ecv($lang, $escaped, $type, $name, $param)
                 require_code('symbols2');
                 if (function_exists('ecv2_' . $name)) {
                     $value = call_user_func('ecv2_' . $name, $lang, $escaped, $param); // A constant?
-                }
-                elseif (defined($name)) {
+                } elseif (defined($name)) {
                     $value = @strval(constant($name));
                     if (!is_string($value)) {
                         $value = strval($value);
@@ -112,8 +111,7 @@ function ecv($lang, $escaped, $type, $name, $param)
                         }
                         apply_tempcode_escaping($escaped, $value);
                     }
-                }
-                // Error :-(
+                } // Error :-(
                 else {
                     $value = '';
                     if ($GLOBALS['XSS_DETECT']) {
@@ -510,8 +508,7 @@ function ecv($lang, $escaped, $type, $name, $param)
     }
     if ($escaped != array() && $escaped != array(ENTITY_ESCAPED)) {
         apply_tempcode_escaping(array_diff($escaped, array(ENTITY_ESCAPED)), $value); // Escape but without ENTITY_ESCAPED because we don't do that on lang strings
-    }
-    elseif ($GLOBALS['XSS_DETECT']) {
+    } elseif ($GLOBALS['XSS_DETECT']) {
         ocp_mark_as_escaped($value);
     }
     return $value;
@@ -2071,8 +2068,8 @@ function ecv_BANNER($lang, $escaped, $param)
 
             $b_type = isset($param[0]) ? $param[0] : '';
             if (!$GLOBALS['STATIC_TEMPLATE_TEST_MODE']) { // Normal operation
-                $width = isset($param[1]) ? intval($param[1]) : NULL;
-                $height = isset($param[1]) ? intval($param[2]) : NULL;
+                $width = isset($param[1]) ? intval($param[1]) : null;
+                $height = isset($param[1]) ? intval($param[2]) : null;
                 $_value = banners_script(true, '', '', $b_type, '', $width, $height);
                 $value = $_value->evaluate();
             } else { // Been told to behave statically

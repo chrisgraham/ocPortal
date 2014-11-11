@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    google_appengine
  */
-
 class Hook_addon_registry_google_appengine
 {
     /**

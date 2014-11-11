@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-
 class Hook_content_meta_aware_news
 {
     /**
@@ -43,7 +42,7 @@ class Hook_content_meta_aware_news
             'category_field' => 'news_category', // For category permissions
             'category_type' => 'news', // For category permissions
             'parent_spec__table_name' => 'news_categories',
-            'parent_spec__parent_name' => NULL,
+            'parent_spec__parent_name' => null,
             'parent_spec__field_name' => 'id',
             'category_is_string' => false,
 
@@ -56,8 +55,8 @@ class Hook_content_meta_aware_news
             'view_page_link_pattern' => '_SEARCH:news:view:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_news:_ed:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:news:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_news'))?(get_module_zone('cms_news') . ':cms_news:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('news')) . ':news',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_news')) ? (get_module_zone('cms_news') . ':cms_news:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('news')) . ':news',
 
             'support_url_monikers' => true,
 
@@ -105,10 +104,10 @@ class Hook_content_meta_aware_news
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('news');
 
-        return render_news_box($row,$zone,$give_context,false,$guid);
+        return render_news_box($row, $zone, $give_context, false, $guid);
     }
 }

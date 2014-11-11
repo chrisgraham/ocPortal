@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    twitter_feed_integration_block
  */
-
 class Hook_addon_registry_twitter_feed_integration_block
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_twitter_feed_integration_block
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,10 +106,8 @@ class Hook_addon_registry_twitter_feed_integration_block
                 'twitter_support',
                 'PHP CuRL Extension',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

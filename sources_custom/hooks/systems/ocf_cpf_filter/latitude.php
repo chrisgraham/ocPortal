@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-
 class Hook_ocf_cpf_filter_latitude
 {
     /**

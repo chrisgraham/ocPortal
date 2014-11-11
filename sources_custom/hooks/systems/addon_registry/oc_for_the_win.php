@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_for_the_win
  */
-
 class Hook_addon_registry_oc_for_the_win
 {
     /**
@@ -112,8 +111,7 @@ You can add more banners through this section, just make sure they are 120px &ti
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -128,10 +126,8 @@ You can add more banners through this section, just make sure they are 120px &ti
                 'OCF',
                 'banners',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

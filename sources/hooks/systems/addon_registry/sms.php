@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    sms
  */
-
 class Hook_addon_registry_sms
 {
     /**
@@ -130,17 +129,17 @@ class Hook_addon_registry_sms
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('sms_log',array(
+            $GLOBALS['SITE_DB']->create_table('sms_log', array(
                 'id' => '*AUTO',
                 's_member_id' => 'MEMBER',
                 's_time' => 'TIME',
                 's_trigger_ip' => 'IP',
             ));
-            $GLOBALS['SITE_DB']->create_index('sms_log','sms_log_for',array('s_member_id','s_time'));
-            $GLOBALS['SITE_DB']->create_index('sms_log','sms_trigger_ip',array('s_trigger_ip'));
-            add_privilege('GENERAL_SETTINGS','use_sms',false);
-            add_privilege('GENERAL_SETTINGS','sms_higher_limit',false);
-            add_privilege('GENERAL_SETTINGS','sms_higher_trigger_limit',false);
+            $GLOBALS['SITE_DB']->create_index('sms_log', 'sms_log_for', array('s_member_id', 's_time'));
+            $GLOBALS['SITE_DB']->create_index('sms_log', 'sms_trigger_ip', array('s_trigger_ip'));
+            add_privilege('GENERAL_SETTINGS', 'use_sms', false);
+            add_privilege('GENERAL_SETTINGS', 'sms_higher_limit', false);
+            add_privilege('GENERAL_SETTINGS', 'sms_higher_trigger_limit', false);
 
             /*$GLOBALS['SITE_DB']->create_table('confirmed_mobiles',array(    Not currently implemented
                     'm_phone_number'=>'*SHORT_TEXT',

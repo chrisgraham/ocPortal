@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
-
 class Hook_addon_registry_ocportalcom_support_credits
 {
     /**
@@ -94,8 +93,7 @@ class Hook_addon_registry_ocportalcom_support_credits
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -109,10 +107,8 @@ class Hook_addon_registry_ocportalcom_support_credits
             'requires' => array(
                 'tickets',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

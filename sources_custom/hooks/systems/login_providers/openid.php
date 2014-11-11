@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    openid
  */
-
 class Hook_login_provider_openid
 {
     /**
@@ -29,7 +28,7 @@ class Hook_login_provider_openid
             require_code('developer_tools');
 
             if (!isset($_REQUEST['openid_mode'])) {
-                if (array_key_exists('openid_identifier',$_POST)) {
+                if (array_key_exists('openid_identifier', $_POST)) {
                     destrictify();
 
                     $openid = new LightOpenID;
@@ -51,7 +50,7 @@ class Hook_login_provider_openid
 
                 require_code('site');
                 require_code('site2');
-                attach_message('You cancelled your OpenID login, so you are not logged into the site.','inform');
+                attach_message('You cancelled your OpenID login, so you are not logged into the site.', 'inform');
             } else {
                 destrictify();
 
@@ -61,11 +60,11 @@ class Hook_login_provider_openid
                     $attributes = $openid->getAttributes();
 
                     // If member already existed, no action needed - just create a session to existing record
-                    $member = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_password_compat_scheme' => 'openid','m_pass_hash_salted' => $openid->identity));
+                    $member = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'id', array('m_password_compat_scheme' => 'openid', 'm_pass_hash_salted' => $openid->identity));
                     if (!is_null($member)) {
                         require_code('users_inactive_occasionals');
 
-                        create_session($member,1,(isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
+                        create_session($member, 1, (isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
 
                         return $member;
                     }
@@ -79,48 +78,49 @@ class Hook_login_provider_openid
                         require_code('ocf_members_action2');
 
                         $email = '';
-                        if (array_key_exists('contact/email',$attributes)) {
+                        if (array_key_exists('contact/email', $attributes)) {
                             $email = $attributes['contact/email'];
                         }
 
                         $username = $openid->identity; // Yuck, we'll try and build on this
-                        if (array_key_exists('namePerson/friendly',$attributes)) {
+                        if (array_key_exists('namePerson/friendly', $attributes)) {
                             $username = $attributes['namePerson/friendly'];
-                        } elseif (array_key_exists('namePerson',$attributes)) {
+                        } elseif (array_key_exists('namePerson', $attributes)) {
                             $username = $attributes['namePerson'];
                         } elseif ($email != '') {
-                            $username = substr($email,0,strpos($email,'@'));
+                            $username = substr($email, 0, strpos($email, '@'));
                         }
 
                         if ($username != '') {
                             $_username = $username;
                             $i = 1;
                             do {
-                                $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members','id',array('m_username' => $_username));
+                                $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'id', array('m_username' => $_username));
                                 if (!is_null($test)) {
                                     $i++;
                                     $_username = $username . ' (' . strval($i) . ')';
                                 }
-                            } while (!is_null($test));
+                            }
+                            while (!is_null($test));
                             $username = $_username;
                         }
 
                         $dob = '';
-                        if (array_key_exists('birthDate',$attributes)) {
+                        if (array_key_exists('birthDate', $attributes)) {
                             $dob = $attributes['birthDate'];
                         }
                         $dob_day = mixed();
                         $dob_month = mixed();
                         $dob_year = mixed();
                         if ($dob != '') {
-                            $dob_bits = explode('-',$dob);
+                            $dob_bits = explode('-', $dob);
                             $dob_day = intval($dob_bits[2]);
                             $dob_month = intval($dob_bits[1]);
                             $dob_year = intval($dob_bits[0]);
                         }
 
                         $language = mixed();
-                        if (array_key_exists('pref/language',$attributes)) {
+                        if (array_key_exists('pref/language', $attributes)) {
                             if (file_exists(get_file_base() . '/lang_custom/' . $attributes['pref/language'])) {
                                 $language = $attributes['pref/language'];
                             }
@@ -136,30 +136,30 @@ class Hook_login_provider_openid
 
                         // Actually add member
                         require_code('config2');
-                        set_option('maximum_password_length','1000');
-                        $member = ocf_member_external_linker($username,$openid->identity,'openid',false,$email,$dob_day,$dob_month,$dob_year,null,$language);
+                        set_option('maximum_password_length', '1000');
+                        $member = ocf_member_external_linker($username, $openid->identity, 'openid', false, $email, $dob_day, $dob_month, $dob_year, null, $language);
 
                         $avatar = '';
-                        if (array_key_exists('media/image/default',$attributes)) {
+                        if (array_key_exists('media/image/default', $attributes)) {
                             $avatar = $attributes['media/image/default'];
                         }
-                        ocf_member_choose_avatar($avatar,$member);
+                        ocf_member_choose_avatar($avatar, $member);
                     }
 
                     if (!is_null($member)) {
                         require_code('users_inactive_occasionals');
-                        create_session($member,1,(isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
+                        create_session($member, 1, (isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
                     }
                 } else {
                     require_code('site');
                     require_code('site2');
-                    attach_message('An unknown error occurred during OpenID login.','warn');
+                    attach_message('An unknown error occurred during OpenID login.', 'warn');
                 }
             }
         } catch (ErrorException $e) {
             require_code('site');
             require_code('site2');
-            attach_message($e->getMessage(),'warn');
+            attach_message($e->getMessage(), 'warn');
         }
 
         return $member;

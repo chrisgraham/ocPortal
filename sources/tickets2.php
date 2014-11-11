@@ -35,7 +35,7 @@ function get_ticket_details($ticket_id, $hard_error = true)
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
         }
 
-        return NULL;
+        return null;
     }
     $ticket_title = $_comments[0]['title'];
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    actionlog
  */
-
 class Hook_realtime_rain_actionlog
 {
     /**
@@ -27,13 +26,13 @@ class Hook_realtime_rain_actionlog
      * @param  TIME                     End of time range.
      * @return array                    A list of template parameter sets for rendering a 'drop'.
      */
-    public function run($from,$to)
+    public function run($from, $to)
     {
         $drops = array();
 
         $rows = $GLOBALS['SITE_DB']->query('SELECT ip,the_type,member_id,date_and_time AS timestamp FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'adminlogs WHERE date_and_time BETWEEN ' . strval($from) . ' AND ' . strval($to));
 
-        if (has_actual_page_access(get_member(),'admin_actionlog')) {
+        if (has_actual_page_access(get_member(), 'admin_actionlog')) {
             require_all_lang();
 
             foreach ($rows as $row) {
@@ -48,24 +47,24 @@ class Hook_realtime_rain_actionlog
                 $timestamp = $row['timestamp'];
                 $member_id = $row['member_id'];
 
-                $drops[] = rain_get_special_icons($row['ip'],$timestamp)+array(
-                    'TYPE' => 'actionlog',
-                    'FROM_MEMBER_ID' => strval($member_id),
-                    'TO_MEMBER_ID' => NULL,
-                    'TITLE' => do_lang($row['the_type']),
-                    'IMAGE' => is_guest($member_id)?rain_get_country_image($row['ip']):$GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
-                    'TIMESTAMP' => strval($timestamp),
-                    'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
-                    'TICKER_TEXT' => NULL,
-                    'URL' => NULL,
-                    'IS_POSITIVE' => false,
-                    'IS_NEGATIVE' => false,
+                $drops[] = rain_get_special_icons($row['ip'], $timestamp) + array(
+                        'TYPE' => 'actionlog',
+                        'FROM_MEMBER_ID' => strval($member_id),
+                        'TO_MEMBER_ID' => null,
+                        'TITLE' => do_lang($row['the_type']),
+                        'IMAGE' => is_guest($member_id) ? rain_get_country_image($row['ip']) : $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($member_id),
+                        'TIMESTAMP' => strval($timestamp),
+                        'RELATIVE_TIMESTAMP' => strval($timestamp - $from),
+                        'TICKER_TEXT' => null,
+                        'URL' => null,
+                        'IS_POSITIVE' => false,
+                        'IS_NEGATIVE' => false,
 
-                    // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-                    'FROM_ID' => 'member_' . strval($member_id),
-                    'TO_ID' => NULL,
-                    'GROUP_ID' => NULL,
-                );
+                        // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                        'FROM_ID' => 'member_' . strval($member_id),
+                        'TO_ID' => null,
+                        'GROUP_ID' => null,
+                    );
             }
         }
 

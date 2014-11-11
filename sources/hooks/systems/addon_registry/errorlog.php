@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    errorlog
  */
-
 class Hook_addon_registry_errorlog
 {
     /**
@@ -127,11 +126,11 @@ class Hook_addon_registry_errorlog
     public function tpl_preview__administrative__errorlog_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('ERRORLOG_SCREEN',array(
+            lorem_globalise(do_lorem_template('ERRORLOG_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'ERROR' => lorem_phrase(),
                 'PERMISSION' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

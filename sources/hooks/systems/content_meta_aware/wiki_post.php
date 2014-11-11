@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-
 class Hook_content_meta_aware_wiki_post
 {
     /**
@@ -51,13 +50,13 @@ class Hook_content_meta_aware_wiki_post
             'title_field' => 'the_message',
             'title_field_dereference' => true,
             'description_field' => 'the_message',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:wiki:find_post:_WILD',
             'edit_page_link_pattern' => '_SEARCH:wiki:post:post_id=_WILD',
             'view_category_page_link_pattern' => '_SEARCH:wiki:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('low',get_member(),get_ip_address(),'wiki'))?(get_module_zone('wiki') . ':wiki:add_post'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('wiki')) . ':wiki',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('low', get_member(), get_ip_address(), 'wiki')) ? (get_module_zone('wiki') . ':wiki:add_post') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('wiki')) . ':wiki',
 
             'support_url_monikers' => false,
 
@@ -68,11 +67,11 @@ class Hook_content_meta_aware_wiki_post
             'date_field' => 'date_and_time',
             'validated_field' => 'validated',
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
             'search_hook' => 'wiki_posts',
 
@@ -84,7 +83,7 @@ class Hook_content_meta_aware_wiki_post
             'occle_filesystem_hook' => 'wiki',
             'occle_filesystem__is_folder' => false,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_WIKI_POST',
         );
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_wiki_post
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('wiki');
 
-        return render_wiki_post_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+        return render_wiki_post_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : intval($root), $guid);
     }
 }

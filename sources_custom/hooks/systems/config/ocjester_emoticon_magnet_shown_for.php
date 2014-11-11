@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_jester
  */
-
 class Hook_config_ocjester_emoticon_magnet_shown_for
 {
     /**

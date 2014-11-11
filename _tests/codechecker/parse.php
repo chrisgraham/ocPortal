@@ -289,7 +289,7 @@ function _parse_command_actual($no_term_needed = false)
                     $command[0] = 'CALL_METHOD';
                     $command[1] = array('VARIABLE', 'this', array('DEREFERENCE', array('VARIABLE', $command[1], array(), $command[4]), array(), $command[4]), $command[4]);
                 } else {
-                   $expression = array('REFERENCE', $expression, $GLOBALS['I']);
+                    $expression = array('REFERENCE', $expression, $GLOBALS['I']);
                 }
             } else {
                 pparse__parser_expect('BRACKET_OPEN');

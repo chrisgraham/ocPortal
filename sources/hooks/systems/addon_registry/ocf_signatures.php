@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-
 class Hook_addon_registry_ocf_signatures
 {
     /**
@@ -150,7 +149,7 @@ class Hook_addon_registry_ocf_signatures
             'html'
         );
         foreach ($_buttons as $button) {
-            $buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON',array(
+            $buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON', array(
                 'DIVIDER' => true,
                 'FIELD_NAME' => lorem_word(),
                 'TITLE' => lorem_phrase(),
@@ -169,21 +168,21 @@ class Hook_addon_registry_ocf_signatures
         );
 
         foreach ($_micro_buttons as $button) {
-            $micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
+            $micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON', array(
                 'FIELD_NAME' => lorem_word(),
                 'TITLE' => lorem_phrase(),
                 'B' => $button['t'],
             )));
         }
 
-        $comcode_editor = do_lorem_template('COMCODE_EDITOR',array(
+        $comcode_editor = do_lorem_template('COMCODE_EDITOR', array(
             'POSTING_FIELD' => lorem_word(),
             'BUTTONS' => $buttons,
             'MICRO_BUTTONS' => $micro_buttons,
         ));
 
-        $posting_form = do_lorem_template('POSTING_FORM',array(
-            'TABINDEX_PF' => placeholder_number() /*not called TABINDEX due to conflict with FORM_STANDARD_END*/ ,
+        $posting_form = do_lorem_template('POSTING_FORM', array(
+            'TABINDEX_PF' => placeholder_number() /*not called TABINDEX due to conflict with FORM_STANDARD_END*/,
             'JAVASCRIPT' => '',
             'PREVIEW' => true,
             'COMCODE_EDITOR' => $comcode_editor,
@@ -207,10 +206,10 @@ class Hook_addon_registry_ocf_signatures
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('OCF_EDIT_SIGNATURE_TAB',array(
+            lorem_globalise(do_lorem_template('OCF_EDIT_SIGNATURE_TAB', array(
                 'SIZE' => placeholder_filesize(),
                 'SIGNATURE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

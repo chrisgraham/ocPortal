@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_content_meta_aware_catalogue
 {
     /**
@@ -37,44 +36,44 @@ class Hook_content_meta_aware_catalogue
             'table' => 'catalogues',
             'id_field' => 'c_name',
             'id_field_numeric' => false,
-            'parent_category_field' => NULL,
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_field' => null,
+            'parent_category_meta_aware_type' => null,
             'is_category' => true,
             'is_entry' => false,
             'category_field' => 'c_name', // For category permissions
             'category_type' => 'catalogues_catalogue', // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => true,
 
             'title_field' => 'c_title',
             'title_field_dereference' => true,
             'description_field' => 'c_description',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:catalogues:index:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_catalogues:_edit_catalogue:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?(get_module_zone('cms_catalogues') . ':cms_catalogues:add_entry:catalogue_name=!'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('catalogues')) . ':catalogues',
+            'view_category_page_link_pattern' => null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_catalogues')) ? (get_module_zone('cms_catalogues') . ':cms_catalogues:add_entry:catalogue_name=!') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('catalogues')) . ':catalogues',
 
             'support_url_monikers' => false,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
             'add_time_field' => 'c_add_date',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'c_add_date',
-            'validated_field' => NULL,
+            'validated_field' => null,
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'catalogues',
 
@@ -84,7 +83,7 @@ class Hook_content_meta_aware_catalogue
             'occle_filesystem_hook' => 'catalogues',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_CATALOGUE',
         );
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_catalogue
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('catalogues');
 
-        return render_catalogue_box($row,$zone,$give_context,$guid);
+        return render_catalogue_box($row, $zone, $give_context, $guid);
     }
 }

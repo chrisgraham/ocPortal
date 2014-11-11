@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    image_syndication
  */
-
 class Hook_config_photobucket_client_id
 {
     /**

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-
 // activity_feed addon's implementation of activity syndication. Which in turn implements syndication hooks for further syndication (i.e. it's a syndication API built on top of a syndication API, as we don't want to provide lots of implementation code in ocPortal itself when no default use case is shipped).
 
 class Activity_activities
@@ -34,13 +33,13 @@ class Activity_activities
      * @param  ?MEMBER                  Member also 'intimately' involved, such as a content submitter who is a friend (NULL: none)
      * @return ?AUTO_LINK               ID of the row in the activities table (NULL: N/A)
      */
-    public function syndicate_described_activity($a_language_string_code = '',$a_label_1 = '',$a_label_2 = '',$a_label_3 = '',$a_page_link_1 = '',$a_page_link_2 = '',$a_page_link_3 = '',$a_addon = '',$a_is_public = 1,$a_member_id = null,$sitewide_too = false,$also_involving = null)
+    public function syndicate_described_activity($a_language_string_code = '', $a_label_1 = '', $a_label_2 = '', $a_label_3 = '', $a_page_link_1 = '', $a_page_link_2 = '', $a_page_link_3 = '', $a_addon = '', $a_is_public = 1, $a_member_id = null, $sitewide_too = false, $also_involving = null)
     {
         require_code('activities_submission');
 
         ocp_profile_start_for('syndicate_described_activity');
-        $ret = activities_addon_syndicate_described_activity($a_language_string_code,$a_label_1,$a_label_2,$a_label_3,$a_page_link_1,$a_page_link_2,$a_page_link_3,$a_addon,$a_is_public,$a_member_id,$sitewide_too,$also_involving);
-        ocp_profile_end_for('syndicate_described_activity',is_null($ret)?'':('#' . strval($ret)));
+        $ret = activities_addon_syndicate_described_activity($a_language_string_code, $a_label_1, $a_label_2, $a_label_3, $a_page_link_1, $a_page_link_2, $a_page_link_3, $a_addon, $a_is_public, $a_member_id, $sitewide_too, $also_involving);
+        ocp_profile_end_for('syndicate_described_activity', is_null($ret) ? '' : ('#' . strval($ret)));
         return $ret;
     }
 
@@ -51,7 +50,7 @@ class Activity_activities
      */
     public function has_external_site_wide_syndication()
     {
-        $dests = find_all_hooks('systems','syndication');
+        $dests = find_all_hooks('systems', 'syndication');
         foreach (array_keys($dests) as $hook) {
             require_code('hooks/systems/syndication/' . $hook);
             $ob = object_factory('Hook_Syndication_' . $hook);
@@ -71,11 +70,11 @@ class Activity_activities
     {
         $fields = new ocp_tempcode();
         require_code('activities');
-        if ((has_privilege(get_member(),'syndicate_site_activity')) && (has_external_site_wide_syndication())) {
+        if ((has_privilege(get_member(), 'syndicate_site_activity')) && (has_external_site_wide_syndication())) {
             require_lang('activities');
 
-            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER',array('_GUID' => 'ded75eeb85f5bb8a6c1b6da597555750','TITLE' => do_lang_tempcode('SYNDICATION'))));
-            $fields->attach(form_input_tick(do_lang_tempcode('SYNDICATE_THIS'),do_lang_tempcode('DESCRIPTION_SYNDICATE_THIS'),'syndicate_this',true));
+            $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'ded75eeb85f5bb8a6c1b6da597555750', 'TITLE' => do_lang_tempcode('SYNDICATION'))));
+            $fields->attach(form_input_tick(do_lang_tempcode('SYNDICATE_THIS'), do_lang_tempcode('DESCRIPTION_SYNDICATE_THIS'), 'syndicate_this', true));
         }
         return $fields;
     }

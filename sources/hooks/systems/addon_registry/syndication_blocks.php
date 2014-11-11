@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
-
 class Hook_addon_registry_syndication_blocks
 {
     /**
@@ -158,7 +157,7 @@ class Hook_addon_registry_syndication_blocks
     {
         $content = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $content->attach(do_lorem_template('BLOCK_SIDE_RSS_SUMMARY',array(
+            $content->attach(do_lorem_template('BLOCK_SIDE_RSS_SUMMARY', array(
                 'FEED_URL' => placeholder_url(),
                 'FULL_URL' => placeholder_url(),
                 'NEWS_TITLE' => lorem_phrase(),
@@ -169,12 +168,12 @@ class Hook_addon_registry_syndication_blocks
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_SIDE_RSS',array(
+            lorem_globalise(do_lorem_template('BLOCK_SIDE_RSS', array(
                 'FEED_URL' => placeholder_url(),
                 'TITLE' => lorem_phrase(),
                 'CONTENT' => $content,
                 'TICKER' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -191,39 +190,39 @@ class Hook_addon_registry_syndication_blocks
         require_css('news');
         $content = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $news_full = do_lorem_template('BLOCK_MAIN_RSS_FULL',array(
+            $news_full = do_lorem_template('BLOCK_MAIN_RSS_FULL', array(
                 'NEWS_FULL' => lorem_paragraph(),
             ));
 
-            $tails = do_lorem_template('BLOCK_MAIN_RSS_LIST_FIRST',array(
+            $tails = do_lorem_template('BLOCK_MAIN_RSS_LIST_FIRST', array(
                 'X' => lorem_phrase(),
             ));
-            $tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_MIDDLE',array(
+            $tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_MIDDLE', array(
                 'X' => placeholder_url(),
             )));
-            $tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_LAST',array(
+            $tails->attach(do_lorem_template('BLOCK_MAIN_RSS_LIST_LAST', array(
                 'X' => placeholder_url(),
             )));
 
-            $category = do_lorem_template('BLOCK_MAIN_RSS_CATEGORY',array(
+            $category = do_lorem_template('BLOCK_MAIN_RSS_CATEGORY', array(
                 'IMG' => placeholder_image_url(),
                 'CATEGORY' => lorem_phrase(),
             ));
-            $category->attach(do_lorem_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG',array(
+            $category->attach(do_lorem_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG', array(
                 'CATEGORY' => lorem_phrase(),
             )));
 
-            $_title = do_lorem_template('BLOCK_MAIN_RSS_TITLE',array(
+            $_title = do_lorem_template('BLOCK_MAIN_RSS_TITLE', array(
                 'CATEGORY' => lorem_phrase(),
                 'TITLE' => lorem_phrase(),
             ));
-            $__title = do_lorem_template('BLOCK_MAIN_RSS_FROM_TITLE',array(
+            $__title = do_lorem_template('BLOCK_MAIN_RSS_FROM_TITLE', array(
                 'FEED_URL' => placeholder_url(),
                 'NEWS_TITLE' => lorem_phrase(),
                 'DATE' => placeholder_time(),
             ));
 
-            $content->attach(do_lorem_template('BLOCK_MAIN_RSS_SUMMARY',array(
+            $content->attach(do_lorem_template('BLOCK_MAIN_RSS_SUMMARY', array(
                 'FEED_URL' => placeholder_url(),
                 'NEWS_FULL' => $news_full,
                 'DATE' => placeholder_time(),
@@ -238,13 +237,13 @@ class Hook_addon_registry_syndication_blocks
         }
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_RSS',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_RSS', array(
                 'FEED_URL' => placeholder_url(),
                 'TITLE' => lorem_phrase(),
                 'COPYRIGHT' => lorem_phrase(),
                 'AUTHOR' => lorem_phrase(),
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

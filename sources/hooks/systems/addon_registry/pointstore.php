@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_addon_registry_pointstore
 {
     /**
@@ -172,36 +171,36 @@ class Hook_addon_registry_pointstore
 
 
     /**
-    * Get mapping between template names and the method of this class that can render a preview of them
-    *
-    * @return array                     The mapping
-    */
+     * Get mapping between template names and the method of this class that can render a preview of them
+     *
+     * @return array                     The mapping
+     */
     public function tpl_previews()
     {
         return array(
-                'POINTSTORE_LOG_SCREEN.tpl' => 'administrative__pointstore_log_screen',
-                'POINTSTORE_PRICES_FORM_WRAP.tpl' => 'administrative__pointstore_price_screen',
-                'POINTSTORE_PRICE_SCREEN.tpl' => 'administrative__pointstore_price_screen',
-                'POINTSTORE_CONFIRM_SCREEN.tpl' => 'pointstore_confirm_screen',
-                'POINTSTORE_FORWARDER_MAIL.tpl' => 'pointstore_forwarder_mail',
-                'POINTSTORE_POP3_ACTIVATE.tpl' => 'pointstore_pop3_screen',
-                'POINTSTORE_POP3_QUOTA.tpl' => 'pointstore_pop3_screen',
-                'POINTSTORE_POP3_SCREEN.tpl' => 'pointstore_pop3_screen',
-                'POINTSTORE_POP3_MAIL.tpl' => 'pointstore_pop3_mail',
-                'POINTSTORE_QUOTA.tpl' => 'pointstore_quota',
-                'POINTSTORE_QUOTA_MAIL.tpl' => 'pointstore_quota_mail',
-                'POINTSTORE_CUSTOM_ITEM_SCREEN.tpl' => 'pointstore_custom_item_screen',
-                'POINTSTORE_HIGHLIGHT_NAME_SCREEN.tpl' => 'pointstore_highlight_name_screen',
-                'POINTSTORE_ITEM.tpl' => 'pointstore_screen',
-                'POINTSTORE_MFORWARDING_LINK.tpl' => 'pointstore_screen',
-                'POINTSTORE_MPOP3_LINK.tpl' => 'pointstore_screen',
-                'POINTSTORE_MAIL.tpl' => 'pointstore_screen',
-                'POINTSTORE_SCREEN.tpl' => 'pointstore_screen',
-                'POINTSTORE_CUSTOM.tpl' => 'pointstore_custom',
-                'POINTSTORE_GAMBLING.tpl' => 'pointstore_gambling',
-                'POINTSTORE_HIGHLIGHT_NAME.tpl' => 'pointstore_highlight_name',
-                'POINTSTORE_PERMISSION.tpl' => 'pointstore_permission',
-                'POINTSTORE_TOPIC_PIN.tpl' => 'pointstore_topic_pin',
+            'POINTSTORE_LOG_SCREEN.tpl' => 'administrative__pointstore_log_screen',
+            'POINTSTORE_PRICES_FORM_WRAP.tpl' => 'administrative__pointstore_price_screen',
+            'POINTSTORE_PRICE_SCREEN.tpl' => 'administrative__pointstore_price_screen',
+            'POINTSTORE_CONFIRM_SCREEN.tpl' => 'pointstore_confirm_screen',
+            'POINTSTORE_FORWARDER_MAIL.tpl' => 'pointstore_forwarder_mail',
+            'POINTSTORE_POP3_ACTIVATE.tpl' => 'pointstore_pop3_screen',
+            'POINTSTORE_POP3_QUOTA.tpl' => 'pointstore_pop3_screen',
+            'POINTSTORE_POP3_SCREEN.tpl' => 'pointstore_pop3_screen',
+            'POINTSTORE_POP3_MAIL.tpl' => 'pointstore_pop3_mail',
+            'POINTSTORE_QUOTA.tpl' => 'pointstore_quota',
+            'POINTSTORE_QUOTA_MAIL.tpl' => 'pointstore_quota_mail',
+            'POINTSTORE_CUSTOM_ITEM_SCREEN.tpl' => 'pointstore_custom_item_screen',
+            'POINTSTORE_HIGHLIGHT_NAME_SCREEN.tpl' => 'pointstore_highlight_name_screen',
+            'POINTSTORE_ITEM.tpl' => 'pointstore_screen',
+            'POINTSTORE_MFORWARDING_LINK.tpl' => 'pointstore_screen',
+            'POINTSTORE_MPOP3_LINK.tpl' => 'pointstore_screen',
+            'POINTSTORE_MAIL.tpl' => 'pointstore_screen',
+            'POINTSTORE_SCREEN.tpl' => 'pointstore_screen',
+            'POINTSTORE_CUSTOM.tpl' => 'pointstore_custom',
+            'POINTSTORE_GAMBLING.tpl' => 'pointstore_gambling',
+            'POINTSTORE_HIGHLIGHT_NAME.tpl' => 'pointstore_highlight_name',
+            'POINTSTORE_PERMISSION.tpl' => 'pointstore_permission',
+            'POINTSTORE_TOPIC_PIN.tpl' => 'pointstore_topic_pin',
         );
     }
 
@@ -216,30 +215,30 @@ class Hook_addon_registry_pointstore
     {
         $cells = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD',array('VALUE' => lorem_word()),null,false,'RESULTS_TABLE_FIELD'));
+            $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD', array('VALUE' => lorem_word()), null, false, 'RESULTS_TABLE_FIELD'));
         }
-        $header_row = do_lorem_template('RESULTS_TABLE_ENTRY',array('VALUES' => $cells),null,false,'RESULTS_TABLE_ENTRY');
+        $header_row = do_lorem_template('RESULTS_TABLE_ENTRY', array('VALUES' => $cells), null, false, 'RESULTS_TABLE_ENTRY');
 
         $out = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
             $cells = new ocp_tempcode();
             foreach (placeholder_array() as $_k => $_v) {
-                $cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL',array('VALUE' => $_v)));
+                $cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL', array('VALUE' => $_v)));
             }
 
-            $out->attach(do_lorem_template('COLUMNED_TABLE_ROW',array('CELLS' => $cells)));
+            $out->attach(do_lorem_template('COLUMNED_TABLE_ROW', array('CELLS' => $cells)));
         }
 
-        $content = do_lorem_template('COLUMNED_TABLE',array('HEADER_ROW' => $header_row,'ROWS' => $out));
+        $content = do_lorem_template('COLUMNED_TABLE', array('HEADER_ROW' => $header_row, 'ROWS' => $out));
 
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_LOG_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'CONTENT' => $content,
-                    'PAGINATION' => placeholder_pagination(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_LOG_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'CONTENT' => $content,
+                        'PAGINATION' => placeholder_pagination(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -255,23 +254,23 @@ class Hook_addon_registry_pointstore
         //This is for getting the do_ajax_request() javascript function.
         require_javascript('javascript_ajax');
 
-        $warning_details = do_lorem_template('WARNING_BOX',array('WARNING' => lorem_phrase()));
+        $warning_details = do_lorem_template('WARNING_BOX', array('WARNING' => lorem_phrase()));
 
         $add_forms = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $add_forms->attach(do_lorem_template('POINTSTORE_PRICES_FORM_WRAP',array('TITLE' => lorem_phrase(),'FORM' => placeholder_form())));
+            $add_forms->attach(do_lorem_template('POINTSTORE_PRICES_FORM_WRAP', array('TITLE' => lorem_phrase(), 'FORM' => placeholder_form())));
         }
 
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_PRICE_SCREEN',array(
-                    'PING_URL' => placeholder_url(),
-                    'WARNING_DETAILS' => $warning_details,
-                    'TITLE' => lorem_title(),
-                    'EDIT_FORM' => placeholder_form(),
-                    'ADD_FORMS' => $add_forms,
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_PRICE_SCREEN', array(
+                        'PING_URL' => placeholder_url(),
+                        'WARNING_DETAILS' => $warning_details,
+                        'TITLE' => lorem_title(),
+                        'EDIT_FORM' => placeholder_form(),
+                        'ADD_FORMS' => $add_forms,
+                    )
+                ), null, '', true),
         );
     }
 
@@ -286,18 +285,18 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_CONFIRM_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'KEEP' => '',
-                    'ACTION' => lorem_phrase(),
-                    'COST' => lorem_phrase(),
-                    'POINTS_AFTER' => lorem_phrase(),
-                    'PROCEED_URL' => placeholder_url(),
-                    'MESSAGE' => lorem_phrase(),
-                    'CANCEL_URL' => placeholder_url(),
-                    'page' => lorem_phrase(),
-                        )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_CONFIRM_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'KEEP' => '',
+                        'ACTION' => lorem_phrase(),
+                        'COST' => lorem_phrase(),
+                        'POINTS_AFTER' => lorem_phrase(),
+                        'PROCEED_URL' => placeholder_url(),
+                        'MESSAGE' => lorem_phrase(),
+                        'CANCEL_URL' => placeholder_url(),
+                        'page' => lorem_phrase(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -310,10 +309,10 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__pointstore_forwarder_mail()
     {
-        $temp = do_lorem_template('POINTSTORE_FORWARDER_MAIL',array('ENCODED_REASON' => lorem_phrase(),'EMAIL' => lorem_word(),'PREFIX' => lorem_phrase(),'SUFFIX' => lorem_phrase(),'FORW_URL' => placeholder_url(),'SUFFIX_PRICE' => lorem_phrase()));
+        $temp = do_lorem_template('POINTSTORE_FORWARDER_MAIL', array('ENCODED_REASON' => lorem_phrase(), 'EMAIL' => lorem_word(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'FORW_URL' => placeholder_url(), 'SUFFIX_PRICE' => lorem_phrase()));
 
         return array(
-            lorem_globalise($temp,null,'',true)
+            lorem_globalise($temp, null, '', true)
         );
     }
 
@@ -326,19 +325,19 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__pointstore_pop3_screen()
     {
-        $activate = do_lorem_template('POINTSTORE_POP3_ACTIVATE',array('ACTIVATE_URL' => placeholder_url(),'INITIAL_QUOTA' => placeholder_number()));
+        $activate = do_lorem_template('POINTSTORE_POP3_ACTIVATE', array('ACTIVATE_URL' => placeholder_url(), 'INITIAL_QUOTA' => placeholder_number()));
 
-        $quota = do_lorem_template('POINTSTORE_POP3_QUOTA',array('MAX_QUOTA' => placeholder_number(),'QUOTA_URL' => placeholder_url()));
+        $quota = do_lorem_template('POINTSTORE_POP3_QUOTA', array('MAX_QUOTA' => placeholder_number(), 'QUOTA_URL' => placeholder_url()));
 
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_POP3_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'ACTIVATE' => $activate,
-                    'QUOTA' => $quota,
-                    'INITIAL_QUOTA' => placeholder_number(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_POP3_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'ACTIVATE' => $activate,
+                        'QUOTA' => $quota,
+                        'INITIAL_QUOTA' => placeholder_number(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -351,13 +350,13 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__pointstore_pop3_mail()
     {
-        $temp = do_lorem_template('POINTSTORE_POP3_MAIL',array('EMAIL' => lorem_word(),'ENCODED_REASON' => lorem_phrase(),'LOGIN' => lorem_phrase(),'QUOTA' => placeholder_number(),'MAIL_SERVER' => lorem_phrase(),'PASSWORD' => lorem_phrase(),'PREFIX' => lorem_phrase(),'SUFFIX' => lorem_phrase(),'POP3_URL' => placeholder_url(),'SUFFIX_PRICE' => placeholder_number()));
+        $temp = do_lorem_template('POINTSTORE_POP3_MAIL', array('EMAIL' => lorem_word(), 'ENCODED_REASON' => lorem_phrase(), 'LOGIN' => lorem_phrase(), 'QUOTA' => placeholder_number(), 'MAIL_SERVER' => lorem_phrase(), 'PASSWORD' => lorem_phrase(), 'PREFIX' => lorem_phrase(), 'SUFFIX' => lorem_phrase(), 'POP3_URL' => placeholder_url(), 'SUFFIX_PRICE' => placeholder_number()));
 
 //       $out=comcode_to_temcode($temp);
 
         return array(
             lorem_globalise(
-                $temp,null,'',true
+                $temp, null, '', true
             ),
         );
     }
@@ -373,24 +372,24 @@ class Hook_addon_registry_pointstore
     {
         require_css('forms');
 
-        $input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array('TABINDEX' => placeholder_number(),'REQUIRED' => '_required','NAME' => lorem_word(),'DEFAULT' => lorem_word()));
-        $fields = do_lorem_template('FORM_SCREEN_FIELD',array('REQUIRED' => true,'SKIP_LABEL' => false,'NAME' => lorem_word(),'PRETTY_NAME' => lorem_word(),'DESCRIPTION' => lorem_sentence_html(),'DESCRIPTION_SIDE' => '','INPUT' => $input,'COMCODE' => ''));
+        $input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array('TABINDEX' => placeholder_number(), 'REQUIRED' => '_required', 'NAME' => lorem_word(), 'DEFAULT' => lorem_word()));
+        $fields = do_lorem_template('FORM_SCREEN_FIELD', array('REQUIRED' => true, 'SKIP_LABEL' => false, 'NAME' => lorem_word(), 'PRETTY_NAME' => lorem_word(), 'DESCRIPTION' => lorem_sentence_html(), 'DESCRIPTION_SIDE' => '', 'INPUT' => $input, 'COMCODE' => ''));
 
-        $text = do_lorem_template('POINTSTORE_QUOTA',array('POINTS_LEFT' => placeholder_number(),'PRICE' => placeholder_number(),'TOP_AMOUNT' => placeholder_number(),'EMAIL' => lorem_word()));
+        $text = do_lorem_template('POINTSTORE_QUOTA', array('POINTS_LEFT' => placeholder_number(), 'PRICE' => placeholder_number(), 'TOP_AMOUNT' => placeholder_number(), 'EMAIL' => lorem_word()));
 
         return array(
             lorem_globalise(
-                do_lorem_template('FORM_SCREEN',array(
-                    'GET' => true,
-                    'HIDDEN' => '',
-                    'URL' => placeholder_url(),
-                    'TITLE' => lorem_title(),
-                    'FIELDS' => $fields,
-                    'TEXT' => $text,
-                    'SUBMIT_ICON' => 'buttons__proceed',
-                    'SUBMIT_NAME' => lorem_word(),
-                )
-            ),null,'',true),
+                do_lorem_template('FORM_SCREEN', array(
+                        'GET' => true,
+                        'HIDDEN' => '',
+                        'URL' => placeholder_url(),
+                        'TITLE' => lorem_title(),
+                        'FIELDS' => $fields,
+                        'TEXT' => $text,
+                        'SUBMIT_ICON' => 'buttons__proceed',
+                        'SUBMIT_NAME' => lorem_word(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -405,14 +404,14 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_QUOTA_MAIL',array(
-                    'ENCODED_REASON' => lorem_phrase(),
-                    'QUOTA' => placeholder_number(),
-                    'EMAIL' => lorem_word(),
-                    'QUOTA_URL' => placeholder_url(),
-                    'PRICE' => placeholder_number(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_QUOTA_MAIL', array(
+                        'ENCODED_REASON' => lorem_phrase(),
+                        'QUOTA' => placeholder_number(),
+                        'EMAIL' => lorem_word(),
+                        'QUOTA_URL' => placeholder_url(),
+                        'PRICE' => placeholder_number(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -427,14 +426,14 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_CUSTOM_ITEM_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'COST' => placeholder_number(),
-                    'REMAINING' => placeholder_number(),
-                    'NEXT_URL' => placeholder_url(),
-                    'ONE_PER_MEMBER' => true,
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_CUSTOM_ITEM_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'COST' => placeholder_number(),
+                        'REMAINING' => placeholder_number(),
+                        'NEXT_URL' => placeholder_url(),
+                        'ONE_PER_MEMBER' => true,
+                    )
+                ), null, '', true),
         );
     }
 
@@ -449,13 +448,13 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_HIGHLIGHT_NAME_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'COST' => placeholder_number(),
-                    'REMAINING' => placeholder_number(),
-                    'NEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_HIGHLIGHT_NAME_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'COST' => placeholder_number(),
+                        'REMAINING' => placeholder_number(),
+                        'NEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -470,27 +469,27 @@ class Hook_addon_registry_pointstore
     {
         $items = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $item = do_lorem_template('POINTSTORE_ITEM',array('ITEM' => lorem_phrase()));
+            $item = do_lorem_template('POINTSTORE_ITEM', array('ITEM' => lorem_phrase()));
             $items->attach($item);
         }
 
-        $pointstore_mail_pop3_link = do_lorem_template('POINTSTORE_MPOP3_LINK',array('POP3_URL' => placeholder_url()));
+        $pointstore_mail_pop3_link = do_lorem_template('POINTSTORE_MPOP3_LINK', array('POP3_URL' => placeholder_url()));
 
-        $pointstore_mail_forwarding_link = do_lorem_template('POINTSTORE_MFORWARDING_LINK',array('FORWARDING_URL' => placeholder_url()));
+        $pointstore_mail_forwarding_link = do_lorem_template('POINTSTORE_MFORWARDING_LINK', array('FORWARDING_URL' => placeholder_url()));
 
-        $mail_tpl = do_lorem_template('POINTSTORE_MAIL',array('POINTSTORE_MAIL_POP3_LINK' => $pointstore_mail_pop3_link,'POINTSTORE_MAIL_FORWARDING_LINK' => $pointstore_mail_forwarding_link));
+        $mail_tpl = do_lorem_template('POINTSTORE_MAIL', array('POINTSTORE_MAIL_POP3_LINK' => $pointstore_mail_pop3_link, 'POINTSTORE_MAIL_FORWARDING_LINK' => $pointstore_mail_forwarding_link));
 
-        $items->attach(do_lorem_template('POINTSTORE_ITEM',array('ITEM' => $mail_tpl)));
+        $items->attach(do_lorem_template('POINTSTORE_ITEM', array('ITEM' => $mail_tpl)));
 
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'ITEMS' => $items,
-                    'POINTS_LEFT' => placeholder_number(),
-                    'USERNAME' => lorem_phrase(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'ITEMS' => $items,
+                        'POINTS_LEFT' => placeholder_number(),
+                        'USERNAME' => lorem_phrase(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -505,12 +504,12 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_CUSTOM',array(
-                    'TITLE' => lorem_phrase(),
-                    'DESCRIPTION' => lorem_sentence(),
-                    'NEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_CUSTOM', array(
+                        'TITLE' => lorem_phrase(),
+                        'DESCRIPTION' => lorem_sentence(),
+                        'NEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -525,10 +524,10 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_GAMBLING',array(
-                    'NEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_GAMBLING', array(
+                        'NEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -543,10 +542,10 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_HIGHLIGHT_NAME',array(
-                    'NEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_HIGHLIGHT_NAME', array(
+                        'NEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -561,12 +560,12 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_PERMISSION',array(
-                    'TITLE' => lorem_phrase(),
-                    'DESCRIPTION' => lorem_sentence(),
-                    'NEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_PERMISSION', array(
+                        'TITLE' => lorem_phrase(),
+                        'DESCRIPTION' => lorem_sentence(),
+                        'NEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -581,10 +580,10 @@ class Hook_addon_registry_pointstore
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_TOPIC_PIN',array(
-                    'NEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_TOPIC_PIN', array(
+                        'NEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 }

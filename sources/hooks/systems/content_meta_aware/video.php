@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-
 class Hook_content_meta_aware_video
 {
     /**
@@ -57,8 +56,8 @@ class Hook_content_meta_aware_video
             'view_page_link_pattern' => '_SEARCH:galleries:video:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_galleries:_ev:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:galleries:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_galleries'))?(get_module_zone('cms_galleries') . ':cms_galleries:av'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('galleries')) . ':galleries',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries')) ? (get_module_zone('cms_galleries') . ':cms_galleries:av') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('galleries')) . ':galleries',
 
             'support_url_monikers' => true,
 
@@ -105,10 +104,10 @@ class Hook_content_meta_aware_video
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('galleries');
 
-        return render_video_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:$root,$guid);
+        return render_video_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : $root, $guid);
     }
 }

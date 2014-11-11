@@ -461,8 +461,7 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = '';
             } elseif ($pretend_dir . $file == 'data_custom/errorlog.php') {
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = "<?php return; ?" . ">\n";
-            }
-            elseif ($pretend_dir . $file == 'data_custom/execute_temp.php') { // So that code can't be executed
+            } elseif ($pretend_dir . $file == 'data_custom/execute_temp.php') { // So that code can't be executed
                 continue; // We'll add this back in later
             }
             // NB: 'data_custom/breadcrumbs.xml' and 'data_custom/fields.xml' are also volatile for users, but in git we're not allowed to mess with these without commit/release intent.
@@ -470,8 +469,7 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
             // Update time of version in version.php
             elseif ($pretend_dir . $file == 'sources/version.php') {
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('/\d{10}/', strval(time()), file_get_contents(get_file_base() . '/' . $dir . $file), 1); // Copy file as-is
-            }
-            else {
+            } else {
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = file_get_contents(get_file_base() . '/' . $dir . $file);
             }
 

@@ -17,24 +17,23 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_antispam_check
 {
     /**
-    * Run function for OcCLE hooks.
-    *
-    * @param  array                     The options with which the command was called
-    * @param  array                     The parameters with which the command was called
-    * @param  object                    A reference to the OcCLE filesystem object
-    * @return array                     Array of stdcommand, stdhtml, stdout, and stderr responses
-    */
-    public function run($options,$parameters,&$occle_fs)
+     * Run function for OcCLE hooks.
+     *
+     * @param  array                     The options with which the command was called
+     * @param  array                     The parameters with which the command was called
+     * @param  object                    A reference to the OcCLE filesystem object
+     * @return array                     Array of stdcommand, stdhtml, stdout, and stderr responses
+     */
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('antispam_check',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('antispam_check', array('h'), array(true, true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','antispam_check'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'antispam_check'));
             }
 
             require_code('antispam');
@@ -42,15 +41,15 @@ class Hook_occle_command_antispam_check
             $user_ip = $parameters[0];
 
             $ret = '';
-            $rbl_list = explode(',',get_option('spam_block_lists'));
+            $rbl_list = explode(',', get_option('spam_block_lists'));
             $rbl_list[] = 'Stop Forum Spam';
             foreach ($rbl_list as $rbl) {
                 if ($rbl == 'Stop Forum Spam') {
-                    list($_is_potential_blocked,$_confidence_level) = _check_stopforumspam($user_ip);
+                    list($_is_potential_blocked, $_confidence_level) = _check_stopforumspam($user_ip);
                 } else {
-                    list($_is_potential_blocked,$_confidence_level) = check_rbl($rbl,$user_ip);
+                    list($_is_potential_blocked, $_confidence_level) = check_rbl($rbl, $user_ip);
                 }
-                $blocked_by = preg_replace('#(^|\.)\*(\.|$)#','',$rbl);
+                $blocked_by = preg_replace('#(^|\.)\*(\.|$)#', '', $rbl);
                 $ret .= $blocked_by . ': ';
                 switch ($_is_potential_blocked) {
                     case ANTISPAM_RESPONSE_SKIP:
@@ -77,7 +76,7 @@ class Hook_occle_command_antispam_check
                 }
                 if (!is_null($_confidence_level)) {
                     $ret .= ', ';
-                    $ret .= do_lang('ANTISPAM_CONFIDENCE',float_to_raw_string(min(100.0,$_confidence_level*100.0),0));
+                    $ret .= do_lang('ANTISPAM_CONFIDENCE', float_to_raw_string(min(100.0, $_confidence_level * 100.0), 0));
                 } elseif (($_is_potential_blocked == ANTISPAM_RESPONSE_STALE) || ($_is_potential_blocked == ANTISPAM_RESPONSE_ACTIVE) || ($_is_potential_blocked == ANTISPAM_RESPONSE_ACTIVE_UNKNOWN_STALE)) {
                     $ret .= ', ';
                     $ret .= do_lang('ANTISPAM_CONFIDENCE_NA');
@@ -85,7 +84,7 @@ class Hook_occle_command_antispam_check
                 $ret .= "\n";
             }
 
-            return array('','',$ret,'');
+            return array('', '', $ret, '');
         }
     }
 }

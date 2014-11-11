@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    static_export
  */
-
 class Hook_page_groupings_static_export
 {
     /**
@@ -22,11 +21,11 @@ class Hook_page_groupings_static_export
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('tools','menu/_generic_admin/tool',array('static_export',array('keep_theme' => $GLOBALS['FORUM_DRIVER']->get_theme('')),get_page_zone('static_export')),make_string_tempcode('Export static site (tar)')),
-            array('tools','menu/_generic_admin/tool',array('static_export',array('dir' => '1','keep_theme' => $GLOBALS['FORUM_DRIVER']->get_theme('')),get_page_zone('static_export')),make_string_tempcode('Export static site (exports/static, with mtimes)')),
+            array('tools', 'menu/_generic_admin/tool', array('static_export', array('keep_theme' => $GLOBALS['FORUM_DRIVER']->get_theme('')), get_page_zone('static_export')), make_string_tempcode('Export static site (tar)')),
+            array('tools', 'menu/_generic_admin/tool', array('static_export', array('dir' => '1', 'keep_theme' => $GLOBALS['FORUM_DRIVER']->get_theme('')), get_page_zone('static_export')), make_string_tempcode('Export static site (exports/static, with mtimes)')),
         );
     }
 }

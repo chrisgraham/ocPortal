@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    welcome_emails
  */
-
 class Hook_addon_registry_welcome_emails
 {
     /**

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-
 class Hook_content_meta_aware_catalogue_category
 {
     /**
@@ -41,8 +40,8 @@ class Hook_content_meta_aware_catalogue_category
             'parent_category_meta_aware_type' => 'catalogue_category',
             'is_category' => true,
             'is_entry' => false,
-            'category_field' => array('c_name','id'), // For category permissions
-            'category_type' => array('catalogues_catalogue','cc_parent_id'), // For category permissions
+            'category_field' => array('c_name', 'id'), // For category permissions
+            'category_type' => array('catalogues_catalogue', 'cc_parent_id'), // For category permissions
             'parent_spec__table_name' => 'catalogue_categories',
             'parent_spec__parent_name' => 'cc_parent_id',
             'parent_spec__field_name' => 'id',
@@ -56,23 +55,23 @@ class Hook_content_meta_aware_catalogue_category
             'view_page_link_pattern' => '_SEARCH:catalogues:category:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_catalogues:_ec:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:catalogues:category:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_catalogues'))?(get_module_zone('cms_catalogues') . ':cms_catalogues:add_category:catalogue_name=!'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('catalogues')) . ':catalogues',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_catalogues')) ? (get_module_zone('cms_catalogues') . ':cms_catalogues:add_category:catalogue_name=!') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('catalogues')) . ':catalogues',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
             'add_time_field' => 'cc_add_date',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'cc_add_date',
-            'validated_field' => NULL,
+            'validated_field' => null,
 
             'seo_type_code' => 'catalogue_category',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => (get_value('disable_cat_cat_perms') === '1')?null:'catalogues_category', // NULL if has no permissions
+            'permissions_type_code' => (get_value('disable_cat_cat_perms') === '1') ? null : 'catalogues_category', // NULL if has no permissions
 
             'search_hook' => 'catalogue_categories',
 
@@ -84,7 +83,7 @@ class Hook_content_meta_aware_catalogue_category
             'occle_filesystem_hook' => 'catalogues',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_CATALOGUE_CATEGORY',
         );
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_catalogue_category
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('catalogues');
 
-        return render_catalogue_category_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$attach_to_url_filter,$guid);
+        return render_catalogue_category_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : intval($root), $attach_to_url_filter, $guid);
     }
 }

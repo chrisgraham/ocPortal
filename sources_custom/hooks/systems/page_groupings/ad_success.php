@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ad_success
  */
-
 class Hook_page_groupings_ad_success
 {
     /**
@@ -22,10 +21,10 @@ class Hook_page_groupings_ad_success
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('audit','menu/_generic_admin/tool',array('ad_success',array(),get_page_zone('ad_success')),make_string_tempcode('Ad success')),
+            array('audit', 'menu/_generic_admin/tool', array('ad_success', array(), get_page_zone('ad_success')), make_string_tempcode('Ad success')),
         );
     }
 }

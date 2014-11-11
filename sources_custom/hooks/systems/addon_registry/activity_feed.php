@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-
 class Hook_addon_registry_activity_feed
 {
     /**
@@ -108,8 +107,7 @@ The blocks provided are [tt]main_activities[/tt] and the status entry box is cal
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -120,12 +118,9 @@ The blocks provided are [tt]main_activities[/tt] and the status entry box is cal
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

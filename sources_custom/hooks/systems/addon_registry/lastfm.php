@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    lastfm
  */
-
 class Hook_addon_registry_lastfm
 {
     /**
@@ -97,8 +96,7 @@ Period is just the number of the chosen months \"3\", \"6\" or \"12\" and the di
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -109,12 +107,9 @@ Period is just the number of the chosen months \"3\", \"6\" or \"12\" and the di
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

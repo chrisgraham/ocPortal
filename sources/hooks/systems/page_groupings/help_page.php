@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    help_page
  */
-
 class Hook_page_groupings_help_page
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_help_page
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('help_page')) {
             return array();
         }
 
         return array(
-            array('site_meta','menu/pages/help',array('help',array(),get_comcode_zone('help')),do_lang_tempcode('HELP')),
+            array('site_meta', 'menu/pages/help', array('help', array(), get_comcode_zone('help')), do_lang_tempcode('HELP')),
         );
     }
 }

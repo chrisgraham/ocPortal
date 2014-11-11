@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    sortable_tables
  */
-
 class Hook_addon_registry_sortable_tables
 {
     /**
@@ -99,8 +98,7 @@ We will automatically detect what columns can be filtered, how to sort each colu
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,12 +109,9 @@ We will automatically detect what columns can be filtered, how to sort each colu
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

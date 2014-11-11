@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom
  */
-
 class Hook_page_groupings_ocportalcom
 {
     /**
@@ -22,11 +21,11 @@ class Hook_page_groupings_ocportalcom
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('tools','menu/_generic_admin/tool',array('admin_ocpusers',array(),get_module_zone('admin_ocpusers')),make_string_tempcode('ocPortal.com: Table of ocP users')),
-            array('pages','menu/_generic_spare/page',array('sites',array('type' => 'misc'),get_module_zone('sites')),make_string_tempcode('ocPortal.com')),
+            array('tools', 'menu/_generic_admin/tool', array('admin_ocpusers', array(), get_module_zone('admin_ocpusers')), make_string_tempcode('ocPortal.com: Table of ocP users')),
+            array('pages', 'menu/_generic_spare/page', array('sites', array('type' => 'misc'), get_module_zone('sites')), make_string_tempcode('ocPortal.com')),
         );
     }
 }

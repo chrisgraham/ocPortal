@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    geshi
  */
-
 class Hook_addon_registry_geshi
 {
     /**
@@ -96,8 +95,7 @@ class Hook_addon_registry_geshi
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,12 +106,9 @@ class Hook_addon_registry_geshi
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-
 class Hook_content_meta_aware_comcode_page
 {
     /**
@@ -35,33 +34,33 @@ class Hook_content_meta_aware_comcode_page
 
             'connection' => $GLOBALS['SITE_DB'],
             'table' => 'comcode_pages',
-            'id_field' => array('the_page','the_zone'),
+            'id_field' => array('the_page', 'the_zone'),
             'id_field_numeric' => false,
             'parent_category_field' => 'the_zone',
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_meta_aware_type' => null,
             'is_category' => false,
             'is_entry' => true,
-            'category_field' => array('the_zone','the_page'), // For category permissions
+            'category_field' => array('the_zone', 'the_page'), // For category permissions
             'category_type' => '<page>', // For category permissions ("<page>" means use page permissions)
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => true,
 
             'title_field' => 'the_page',
             'title_field_dereference' => false,
-            'description_field' => NULL,
-            'thumb_field' => NULL,
+            'description_field' => null,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_WILD:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_comcode_pages:_ed:page_link=_WILD',
             'view_category_page_link_pattern' => '_WILD:',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high',get_member(),get_ip_address(),'cms_comcode_pages'))?(get_module_zone('cms_comcode_pages') . ':cms_comcode_pages:ed'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_page_zone('sitemap')) . ':sitemap',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('high', get_member(), get_ip_address(), 'cms_comcode_pages')) ? (get_module_zone('cms_comcode_pages') . ':cms_comcode_pages:ed') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_page_zone('sitemap')) . ':sitemap',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
+            'views_field' => null,
             'submitter_field' => 'p_submitter',
             'add_time_field' => 'p_add_date',
             'edit_time_field' => 'p_edit_date',
@@ -70,15 +69,15 @@ class Hook_content_meta_aware_comcode_page
 
             'seo_type_code' => 'comcode_page',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL,
+            'permissions_type_code' => null,
 
             'search_hook' => 'comcode_pages',
 
             'addon_name' => 'core_comcode_pages',
 
-            'module' => NULL,
+            'module' => null,
             'cms_page' => 'cms_comcode_pages',
 
             'occle_filesystem_hook' => 'comcode_pages',
@@ -102,12 +101,12 @@ class Hook_content_meta_aware_comcode_page
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         unset($zone); // Meaningless here
 
         require_code('zones2');
 
-        return render_comcode_page_box($row,$give_context,$include_breadcrumbs,$root,$guid);
+        return render_comcode_page_box($row, $give_context, $include_breadcrumbs, $root, $guid);
     }
 }

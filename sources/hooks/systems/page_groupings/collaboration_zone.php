@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    collaboration_zone
  */
-
 class Hook_page_groupings_collaboration_zone
 {
     /**
@@ -27,7 +26,7 @@ class Hook_page_groupings_collaboration_zone
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('collaboration_zone')) {
             return array();
@@ -38,8 +37,8 @@ class Hook_page_groupings_collaboration_zone
         }
 
         return array(
-            has_zone_access($member_id,'collaboration')?array('','menu/collaboration',array('admin',array('type' => 'collaboration'),'adminzone'),do_lang_tempcode('_COLLABORATION')):null,
-            array('collaboration','menu/collaboration/start',array('about',array(),'collaboration'),do_lang_tempcode('ABOUT')),
+            has_zone_access($member_id, 'collaboration') ? array('', 'menu/collaboration', array('admin', array('type' => 'collaboration'), 'adminzone'), do_lang_tempcode('_COLLABORATION')) : null,
+            array('collaboration', 'menu/collaboration/start', array('about', array(), 'collaboration'), do_lang_tempcode('ABOUT')),
         );
     }
 }

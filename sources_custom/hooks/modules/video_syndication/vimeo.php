@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
-
 class video_syndication_vimeo
 {
     public $_vimeo_ob;
@@ -44,12 +43,12 @@ class video_syndication_vimeo
 
     public function recognises_as_remote($url)
     {
-        $is_embed = (preg_match('#^https?://vimeo\.com/(\d+)#',$url) != 0);
+        $is_embed = (preg_match('#^https?://vimeo\.com/(\d+)#', $url) != 0);
         if ($is_embed) {
             return true;
         }
 
-        $is_other = (preg_match('#^https?://vimeo\.com/#',$url) != 0);
+        $is_other = (preg_match('#^https?://vimeo\.com/#', $url) != 0);
         if ($is_other) {
             return true;
         }
@@ -77,7 +76,7 @@ class video_syndication_vimeo
         return ($vimeo_client_id != '');
     }
 
-    public function get_remote_videos($local_id = null,$transcoding_id = null)
+    public function get_remote_videos($local_id = null, $transcoding_id = null)
     {
         $videos = array();
 
@@ -88,7 +87,7 @@ class video_syndication_vimeo
                 return array(); // Not uploaded yet
             }
 
-            $transcoding_id = preg_replace('#^vimeo_#','',$transcoding_id);
+            $transcoding_id = preg_replace('#^vimeo_#', '', $transcoding_id);
         }
 
         $page = 1;
@@ -96,11 +95,11 @@ class video_syndication_vimeo
             $query_params = array();
 
             if (!is_null($transcoding_id)) {
-                $query_params['video_id'] = preg_replace('#^vimeo_#','',$transcoding_id);
+                $query_params['video_id'] = preg_replace('#^vimeo_#', '', $transcoding_id);
                 $api_method = 'vimeo.videos.getInfo';
 
                 try {
-                    $p = $this->_vimeo_ob->call($api_method,$query_params);
+                    $p = $this->_vimeo_ob->call($api_method, $query_params);
                 } catch (VimeoAPIException $e) {
                     $p = false;
                 }
@@ -111,7 +110,7 @@ class video_syndication_vimeo
                 $detected_video = $this->_process_remote_video($p->video[0]);
                 if (!is_null($detected_video)) {
                     $remote_id = $detected_video['remote_id'];
-                    if ((!array_key_exists($remote_id,$videos)) || (!$videos[$remote_id]['validated'])) { // If new match, or last match was unvalidated (i.e. old version)
+                    if ((!array_key_exists($remote_id, $videos)) || (!$videos[$remote_id]['validated'])) { // If new match, or last match was unvalidated (i.e. old version)
                         $videos[$remote_id] = $detected_video;
                     }
                 }
@@ -125,7 +124,7 @@ class video_syndication_vimeo
                 $api_method = 'vimeo.videos.getUploaded';
 
                 try {
-                    $result = $this->_vimeo_ob->call($api_method,$query_params);
+                    $result = $this->_vimeo_ob->call($api_method, $query_params);
                 } catch (VimeoAPIException $e) {
                     $result = false;
                 }
@@ -142,14 +141,15 @@ class video_syndication_vimeo
                 $detected_video = $this->_process_remote_video($p);
                 if (!is_null($detected_video)) {
                     $remote_id = $detected_video['remote_id'];
-                    if ((!array_key_exists($remote_id,$videos)) || (!$videos[$remote_id]['validated'])) { // If new match, or last match was unvalidated (i.e. old version)
+                    if ((!array_key_exists($remote_id, $videos)) || (!$videos[$remote_id]['validated'])) { // If new match, or last match was unvalidated (i.e. old version)
                         $videos[$remote_id] = $detected_video;
                     }
                 }
             }
 
             $page++;
-        } while ((!is_null($local_id)) && (count($result['entry'])>0));
+        }
+        while ((!is_null($local_id)) && (count($result['entry']) > 0));
 
         return $videos;
     }
@@ -161,7 +161,7 @@ class video_syndication_vimeo
         $remote_id = @strval($p->id);
 
         $add_date = strtotime(@strval($p->upload_date));
-        $edit_date = isset($p->modified_date)?strtotime(@strval($p->modified_date)):$add_date;
+        $edit_date = isset($p->modified_date) ? strtotime(@strval($p->modified_date)) : $add_date;
 
         $allow_rating = null; // Specification of this not supported by Vimeo
         $allow_comments = null; // Specification of this not supported by Vimeo in API
@@ -185,7 +185,7 @@ class video_syndication_vimeo
         if (isset($p->tags)) {
             foreach ($p->tags->tag as $tag) {
                 $matches = array();
-                if (preg_match('#^sync(\d+)$#',@strval($tag->_content),$matches) != 0) {
+                if (preg_match('#^sync(\d+)$#', @strval($tag->_content), $matches) != 0) {
                     $bound_to_local_id = intval($matches[1]);
                 } else {
                     $keywords[] = @strval($tag->_content);
@@ -212,7 +212,7 @@ class video_syndication_vimeo
             return $detected_video; // else we ignore remote videos that aren't bound to local ones
         }
 
-        return NULL;
+        return null;
     }
 
     public function upload_video($video)
@@ -220,9 +220,9 @@ class video_syndication_vimeo
         if (function_exists('set_time_limit')) {
             @set_time_limit(10000);
         }
-        list($file_path,$is_temp_file) = $this->_url_to_file_path($video['url']);
+        list($file_path, $is_temp_file) = $this->_url_to_file_path($video['url']);
         try {
-            $remote_id = $this->_vimeo_ob->upload($file_path,true,2097152);
+            $remote_id = $this->_vimeo_ob->upload($file_path, true, 2097152);
 
             if ($is_temp_file) {
                 @unlink($file_path);
@@ -231,7 +231,7 @@ class video_syndication_vimeo
                 warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
             }
 
-            $this->_vimeo_ob->call('vimeo.videos.setDownloadPrivacy',array('video_id' => $remote_id,'download' => false)); // If we want to allow downloading, we'll handle that locally. Most users won't want downloading.
+            $this->_vimeo_ob->call('vimeo.videos.setDownloadPrivacy', array('video_id' => $remote_id, 'download' => false)); // If we want to allow downloading, we'll handle that locally. Most users won't want downloading.
 
             // Now do settings, which is like doing an immediate edit...
 
@@ -243,23 +243,23 @@ class video_syndication_vimeo
             // We pass whole $video as $changes; unchangable/irrelevant keys will be ignored, due to how change_remote_video is coded.
             $changes = $video;
             unset($changes['url']); // this is correct already of course
-            $this->change_remote_video($video,$changes);
+            $this->change_remote_video($video, $changes);
         } catch (VimeoAPIException $e) {
             require_lang('gallery_syndication_vimeo');
-            $error_msg = do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+            $error_msg = do_lang_tempcode('VIMEO_ERROR', escape_html(strval($e->getCode())), $e->getMessage(), escape_html(get_site_name()));
             require_code('failure');
             relay_error_notification($error_msg->evaluate());
-            attach_message($error_msg,'warn');
-            return NULL;
+            attach_message($error_msg, 'warn');
+            return null;
         }
 
         // Find live details
         $query_params = array();
         $query_params['video_id'] = $remote_id;
         $api_method = 'vimeo.videos.getInfo';
-        $result = $this->_vimeo_ob->call($api_method,$query_params);
+        $result = $this->_vimeo_ob->call($api_method, $query_params);
         if ($result === false) {
-            return NULL;
+            return null;
         }
         $video = $this->_process_remote_video($result->video[0]);
 
@@ -270,49 +270,49 @@ class video_syndication_vimeo
     {
         $is_temp_file = false;
 
-        if (substr($url,0,strlen(get_custom_base_url())) != get_custom_base_url()) {
+        if (substr($url, 0, strlen(get_custom_base_url())) != get_custom_base_url()) {
             $temppath = ocp_tempnam('vimeo_temp_dload');
-            $tempfile = fopen($temppath,'wb');
-            http_download_file($url,1024*1024*1024*5,true,false,'ocPortal',null,null,null,null,null,$tempfile);
+            $tempfile = fopen($temppath, 'wb');
+            http_download_file($url, 1024 * 1024 * 1024 * 5, true, false, 'ocPortal', null, null, null, null, null, $tempfile);
 
             $is_temp_file = true;
 
             $video_path = $temppath;
         } else {
-            $video_path = preg_replace('#^' . preg_quote(get_custom_base_url() . '/') . '#',get_custom_file_base() . '/',$url);
+            $video_path = preg_replace('#^' . preg_quote(get_custom_base_url() . '/') . '#', get_custom_file_base() . '/', $url);
         }
 
-        return array($video_path,$is_temp_file);
+        return array($video_path, $is_temp_file);
     }
 
-    public function change_remote_video($video,$changes)
+    public function change_remote_video($video, $changes)
     {
         foreach (array_keys($changes) as $key) {
             try {
                 switch ($key) {
                     case 'title':
-                        $result = $this->_vimeo_ob->call('vimeo.videos.setTitle',array('video_id' => $video['remote_id'],'title' => $changes['title']));
+                        $result = $this->_vimeo_ob->call('vimeo.videos.setTitle', array('video_id' => $video['remote_id'], 'title' => $changes['title']));
                         break;
 
                     case 'description':
-                        $result = $this->_vimeo_ob->call('vimeo.videos.setDescription',array('video_id' => $video['remote_id'],'description' => $changes['description']));
+                        $result = $this->_vimeo_ob->call('vimeo.videos.setDescription', array('video_id' => $video['remote_id'], 'description' => $changes['description']));
                         break;
 
                     case 'tags':
-                        $result = $this->_vimeo_ob->call('vimeo.videos.clearTags',array('video_id' => $video['remote_id']));
-                        $result = $this->_vimeo_ob->call('vimeo.videos.addTags',array('video_id' => $video['remote_id'],'tags' => 'sync' . strval($video['bound_to_local_id']) . ',' . implode(',',$changes['tags'])));
+                        $result = $this->_vimeo_ob->call('vimeo.videos.clearTags', array('video_id' => $video['remote_id']));
+                        $result = $this->_vimeo_ob->call('vimeo.videos.addTags', array('video_id' => $video['remote_id'], 'tags' => 'sync' . strval($video['bound_to_local_id']) . ',' . implode(',', $changes['tags'])));
                         break;
 
                     case 'validated':
-                        $result = $this->_vimeo_ob->call('vimeo.videos.setPrivacy',array('video_id' => $video['remote_id'],'privacy' => $changes['validated']?'anybody':'nobody'));
+                        $result = $this->_vimeo_ob->call('vimeo.videos.setPrivacy', array('video_id' => $video['remote_id'], 'privacy' => $changes['validated'] ? 'anybody' : 'nobody'));
                         break;
 
                     case 'url':
                         if (function_exists('set_time_limit')) {
                             @set_time_limit(10000);
                         }
-                        list($file_path,$is_temp_file) = $this->_url_to_file_path($changes['url']);
-                        $remote_id = $this->_vimeo_ob->upload($file_path,true,2097152,$video['remote_id']);
+                        list($file_path, $is_temp_file) = $this->_url_to_file_path($changes['url']);
+                        $remote_id = $this->_vimeo_ob->upload($file_path, true, 2097152, $video['remote_id']);
                         if ($is_temp_file) {
                             @unlink($file_path);
                         }
@@ -323,10 +323,10 @@ class video_syndication_vimeo
                 }
             } catch (VimeoAPIException $e) {
                 require_lang('gallery_syndication_vimeo');
-                $error_msg = do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+                $error_msg = do_lang_tempcode('VIMEO_ERROR', escape_html(strval($e->getCode())), $e->getMessage(), escape_html(get_site_name()));
                 require_code('failure');
                 relay_error_notification($error_msg->evaluate());
-                attach_message($error_msg,'warn');
+                attach_message($error_msg, 'warn');
             }
         }
     }
@@ -334,14 +334,14 @@ class video_syndication_vimeo
     public function unbind_remote_video($video)
     {
         try {
-            $this->_vimeo_ob->call('vimeo.videos.clearTags',array('video_id' => $video['remote_id']));
-            $this->_vimeo_ob->call('vimeo.videos.addTags',array('video_id' => $video['remote_id'],'tags' => implode(',',$video['tags'])));
+            $this->_vimeo_ob->call('vimeo.videos.clearTags', array('video_id' => $video['remote_id']));
+            $this->_vimeo_ob->call('vimeo.videos.addTags', array('video_id' => $video['remote_id'], 'tags' => implode(',', $video['tags'])));
         } catch (VimeoAPIException $e) {
             require_lang('gallery_syndication_vimeo');
-            $error_msg = do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+            $error_msg = do_lang_tempcode('VIMEO_ERROR', escape_html(strval($e->getCode())), $e->getMessage(), escape_html(get_site_name()));
             require_code('failure');
             relay_error_notification($error_msg->evaluate());
-            attach_message($error_msg,'warn');
+            attach_message($error_msg, 'warn');
             return false;
         }
         return true;
@@ -350,28 +350,28 @@ class video_syndication_vimeo
     public function delete_remote_video($video)
     {
         try {
-            $this->_vimeo_ob->call('vimeo.videos.delete',array('video_id' => $video['remote_id']));
+            $this->_vimeo_ob->call('vimeo.videos.delete', array('video_id' => $video['remote_id']));
         } catch (VimeoAPIException $e) {
             require_lang('gallery_syndication_vimeo');
-            $error_msg = do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+            $error_msg = do_lang_tempcode('VIMEO_ERROR', escape_html(strval($e->getCode())), $e->getMessage(), escape_html(get_site_name()));
             require_code('failure');
             relay_error_notification($error_msg->evaluate());
-            attach_message($error_msg,'warn');
+            attach_message($error_msg, 'warn');
             return false;
         }
         return true;
     }
 
-    public function leave_comment($video,$comment)
+    public function leave_comment($video, $comment)
     {
         try {
-            $this->_vimeo_ob->call('vimeo.videos.comments.addComment',array('video_id' => $video['remote_id'],'comment_text' => $comment));
+            $this->_vimeo_ob->call('vimeo.videos.comments.addComment', array('video_id' => $video['remote_id'], 'comment_text' => $comment));
         } catch (VimeoAPIException $e) {
             require_lang('gallery_syndication_vimeo');
-            $error_msg = do_lang_tempcode('VIMEO_ERROR',escape_html(strval($e->getCode())),$e->getMessage(),escape_html(get_site_name()));
+            $error_msg = do_lang_tempcode('VIMEO_ERROR', escape_html(strval($e->getCode())), $e->getMessage(), escape_html(get_site_name()));
             require_code('failure');
             relay_error_notification($error_msg->evaluate());
-            attach_message($error_msg,'warn');
+            attach_message($error_msg, 'warn');
             return false;
         }
         return true;

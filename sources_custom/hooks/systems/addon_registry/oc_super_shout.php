@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_super_shout
  */
-
 class Hook_addon_registry_oc_super_shout
 {
     /**
@@ -94,8 +93,7 @@ After installing this addon your shout box will essentially be treated as an emb
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -110,10 +108,8 @@ After installing this addon your shout box will essentially be treated as an emb
                 'JavaScript enabled',
                 'chat',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

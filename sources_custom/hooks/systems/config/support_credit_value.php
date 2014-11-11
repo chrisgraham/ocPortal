@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
-
 class Hook_config_support_credit_value
 {
     /**

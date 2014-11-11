@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
-
 class Hook_symbol_MANTIS_TOTAL
 {
     public function run($param)

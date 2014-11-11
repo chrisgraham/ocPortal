@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocd_stats
  */
-
 class Hook_addon_registry_ocd_stats
 {
     /**
@@ -96,8 +95,7 @@ The new stats include: Google PageRank, Alexa rank, Back links and Speed results
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,10 +109,8 @@ The new stats include: Google PageRank, Alexa rank, Back links and Speed results
             'requires' => array(
                 'stats_block',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

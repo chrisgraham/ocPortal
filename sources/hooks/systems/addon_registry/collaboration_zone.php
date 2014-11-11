@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    collaboration_zone
  */
-
 class Hook_addon_registry_collaboration_zone
 {
     /**

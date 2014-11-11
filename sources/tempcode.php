@@ -378,8 +378,7 @@ function closure_loop($param, $args, $main_function)
                     }
                     if ($key == '' && isset($array[$key])) {
                         $array[] = $val; // Empty keys: which are done to allow "="s in strings by putting in an empty key
-                    }
-                    else {
+                    } else {
                         $array[$key] = $val;
                     }
                 } else {

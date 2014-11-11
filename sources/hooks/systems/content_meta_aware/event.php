@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-
 class Hook_content_meta_aware_event
 {
     /**
@@ -44,20 +43,20 @@ class Hook_content_meta_aware_event
             'category_field' => 'e_type', // For category permissions
             'category_type' => 'calendar', // For category permissions
             'parent_spec__table_name' => 'calendar_types',
-            'parent_spec__parent_name' => NULL,
+            'parent_spec__parent_name' => null,
             'parent_spec__field_name' => 'id',
             'category_is_string' => false,
 
             'title_field' => 'e_title',
             'title_field_dereference' => true,
             'description_field' => 'e_content',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:calendar:view:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_calendar:_ed:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:calendar:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_calendar'))?(get_module_zone('cms_calendar') . ':cms_calendar:ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('calendar')) . ':calendar',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_calendar')) ? (get_module_zone('cms_calendar') . ':cms_calendar:ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('calendar')) . ':calendar',
 
             'support_url_monikers' => true,
 
@@ -72,7 +71,7 @@ class Hook_content_meta_aware_event
 
             'feedback_type_code' => 'events',
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
             'search_hook' => 'calendar',
 
@@ -104,10 +103,10 @@ class Hook_content_meta_aware_event
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('calendar');
 
-        return render_event_box($row,$zone,$give_context,$guid);
+        return render_event_box($row, $zone, $give_context, $guid);
     }
 }

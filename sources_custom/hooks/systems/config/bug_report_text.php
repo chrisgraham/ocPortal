@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    tester
  */
-
 class Hook_config_bug_report_text
 {
     /**

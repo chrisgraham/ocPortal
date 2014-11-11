@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_worrdss
  */
-
 class Hook_addon_registry_oc_worrdss
 {
     /**
@@ -104,8 +103,7 @@ Usage example: [code=\"Comcode\"][block]main_crossword[/block][/code]';
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -119,10 +117,8 @@ Usage example: [code=\"Comcode\"][block]main_crossword[/block][/code]';
             'requires' => array(
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

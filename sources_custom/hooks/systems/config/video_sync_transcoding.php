@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
-
 class Hook_config_video_sync_transcoding
 {
     /**
@@ -43,7 +42,7 @@ class Hook_config_video_sync_transcoding
     public function get_default()
     {
         require_lang('gallery_syndication');
-        return do_lang('SYND_LOCAL',null,null,null,fallback_lang());
+        return do_lang('SYND_LOCAL', null, null, null, fallback_lang());
     }
 
     /**
@@ -55,20 +54,20 @@ class Hook_config_video_sync_transcoding
      * @param  tempcode                 The field description
      * @return tempcode                 The inputter
      */
-    public function field_inputter($name,$myrow,$human_name,$explanation)
+    public function field_inputter($name, $myrow, $human_name, $explanation)
     {
         $list = '';
-        $list .= static_evaluate_tempcode(form_input_list_entry(do_lang('OTHER',null,null,null,fallback_lang())));
+        $list .= static_evaluate_tempcode(form_input_list_entry(do_lang('OTHER', null, null, null, fallback_lang())));
 
-        $hooks = find_all_hooks('modules','video_syndication');
+        $hooks = find_all_hooks('modules', 'video_syndication');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/modules/video_syndication/' . filter_naughty($hook));
             $ob = object_factory('video_syndication_' . filter_naughty($hook));
             $label = $ob->get_service_title();
 
-            $list .= static_evaluate_tempcode(form_input_list_entry($hook,$hook == get_option($name),$label));
+            $list .= static_evaluate_tempcode(form_input_list_entry($hook, $hook == get_option($name), $label));
         }
 
-        return form_input_list($human_name,$explanation,'video_sync_transcoding',make_string_tempcode($list));
+        return form_input_list($human_name, $explanation, 'video_sync_transcoding', make_string_tempcode($list));
     }
 }

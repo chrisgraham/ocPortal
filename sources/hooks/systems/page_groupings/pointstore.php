@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-
 class Hook_page_groupings_pointstore
 {
     /**
@@ -27,16 +26,16 @@ class Hook_page_groupings_pointstore
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('pointstore')) {
             return array();
         }
 
         return array(
-            array('audit','menu/adminzone/audit/pointstore_log',array('admin_pointstore',array('type' => 'misc'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_SALES'),'pointstore:DOC_POINTSTORE'),
-            array('setup','menu/social/pointstore',array('admin_pointstore',array('type' => 'p'),get_module_zone('admin_pointstore')),do_lang_tempcode('pointstore:POINTSTORE_MANAGE_INVENTORY'),'pointstore:DOC_POINTSTORE'),
-            array('social','menu/social/pointstore',array('pointstore',array(),get_module_zone('pointstore')),do_lang_tempcode('pointstore:POINTSTORE')),
+            array('audit', 'menu/adminzone/audit/pointstore_log', array('admin_pointstore', array('type' => 'misc'), get_module_zone('admin_pointstore')), do_lang_tempcode('pointstore:POINTSTORE_MANAGE_SALES'), 'pointstore:DOC_POINTSTORE'),
+            array('setup', 'menu/social/pointstore', array('admin_pointstore', array('type' => 'p'), get_module_zone('admin_pointstore')), do_lang_tempcode('pointstore:POINTSTORE_MANAGE_INVENTORY'), 'pointstore:DOC_POINTSTORE'),
+            array('social', 'menu/social/pointstore', array('pointstore', array(), get_module_zone('pointstore')), do_lang_tempcode('pointstore:POINTSTORE')),
         );
     }
 }

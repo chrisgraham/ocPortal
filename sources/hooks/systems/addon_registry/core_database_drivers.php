@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_database_drivers
  */
-
 class Hook_addon_registry_core_database_drivers
 {
     /**

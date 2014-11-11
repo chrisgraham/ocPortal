@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-
 class Hook_content_meta_aware_banner
 {
     /**
@@ -43,9 +42,9 @@ class Hook_content_meta_aware_banner
             'is_entry' => true,
             'category_field' => 'b_type', // For category permissions
             'category_type' => 'banner_type', // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => true,
 
             'title_field' => 'name',
@@ -55,26 +54,26 @@ class Hook_content_meta_aware_banner
 
             'view_page_link_pattern' => '_SEARCH:banners:view:source=_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_banners:_ed:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_banners'))?(get_module_zone('cms_banners') . ':cms_banners:ad'):null,
-            'archive_url' => NULL,
+            'view_category_page_link_pattern' => null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_banners')) ? (get_module_zone('cms_banners') . ':cms_banners:ad') : null,
+            'archive_url' => null,
 
             'support_url_monikers' => false,
 
-            'views_field' => NULL,
+            'views_field' => null,
             'submitter_field' => 'submitter',
             'add_time_field' => 'add_date',
             'edit_time_field' => 'edit_date',
             'date_field' => 'add_date',
             'validated_field' => 'validated',
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'banners',
 
@@ -84,7 +83,7 @@ class Hook_content_meta_aware_banner
             'occle_filesystem_hook' => 'banners',
             'occle_filesystem__is_folder' => false,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_BANNER',
         );
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_banner
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('banners');
 
-        return render_banner_box($row,$zone,$give_context,$guid);
+        return render_banner_box($row, $zone, $give_context, $guid);
     }
 }

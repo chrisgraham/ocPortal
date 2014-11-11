@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    uninstaller
  */
-
 class Hook_addon_registry_uninstaller
 {
     /**
@@ -122,7 +121,7 @@ class Hook_addon_registry_uninstaller
     public function tpl_preview__administrative__uninstall_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('UNINSTALL_SCREEN',array()),null,'',true)
+            lorem_globalise(do_lorem_template('UNINSTALL_SCREEN', array()), null, '', true)
         );
     }
 }

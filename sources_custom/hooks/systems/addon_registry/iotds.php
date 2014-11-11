@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_addon_registry_iotds
 {
     /**
@@ -105,12 +104,9 @@ class Hook_addon_registry_iotds
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
@@ -195,7 +191,7 @@ class Hook_addon_registry_iotds
      */
     public function tpl_preview__administrative__iotd_admin_choose_screen()
     {
-        $current_iotd = do_lorem_template('IOTD_BOX',array(
+        $current_iotd = do_lorem_template('IOTD_BOX', array(
             'IS_CURRENT' => placeholder_number(),
             'THUMB_URL' => placeholder_image_url(),
             'IMAGE_URL' => placeholder_image_url(),
@@ -218,14 +214,14 @@ class Hook_addon_registry_iotds
         $used_iotd = $current_iotd;
 
         return array(
-            lorem_globalise(do_lorem_template('IOTD_ADMIN_CHOOSE_SCREEN',array(
+            lorem_globalise(do_lorem_template('IOTD_ADMIN_CHOOSE_SCREEN', array(
                 'SHOWING_OLD' => lorem_phrase(),
                 'TITLE' => lorem_title(),
                 'USED_URL' => placeholder_url(),
                 'CURRENT_IOTD' => $current_iotd,
                 'UNUSED_IOTD' => $unused_iotd,
                 'USED_IOTD' => $used_iotd,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -239,7 +235,7 @@ class Hook_addon_registry_iotds
     public function tpl_preview__block_main_iotd()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_IOTD',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_IOTD', array(
                 'SUBMITTER' => placeholder_number(),
                 'THUMB_URL' => placeholder_image_url(),
                 'FULL_URL' => placeholder_image_url(),
@@ -250,7 +246,7 @@ class Hook_addon_registry_iotds
                 'SUBMIT_URL' => placeholder_url(),
                 'ARCHIVE_URL' => placeholder_url(),
                 'ID' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -264,7 +260,7 @@ class Hook_addon_registry_iotds
     public function tpl_preview__iotd_view_screen_iotd()
     {
         $content = new ocp_tempcode();
-        $content->attach(do_lorem_template('IOTD_BOX',array(
+        $content->attach(do_lorem_template('IOTD_BOX', array(
             'SUBMITTER' => placeholder_id(),
             'ID' => placeholder_id(),
             'VIEWS' => placeholder_number(),
@@ -276,10 +272,10 @@ class Hook_addon_registry_iotds
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('PAGINATION_SCREEN',array(
+            lorem_globalise(do_lorem_template('PAGINATION_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'CONTENT' => $content,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -298,7 +294,7 @@ class Hook_addon_registry_iotds
         require_lang('trackbacks');
         $trackbacks = new ocp_tempcode();
         foreach (placeholder_array(1) as $k => $v) {
-            $trackbacks->attach(do_lorem_template('TRACKBACK',array(
+            $trackbacks->attach(do_lorem_template('TRACKBACK', array(
                 'ID' => placeholder_id(),
                 'TIME_RAW' => placeholder_date_raw(),
                 'TIME' => placeholder_date(),
@@ -308,7 +304,7 @@ class Hook_addon_registry_iotds
                 'NAME' => lorem_phrase(),
             )));
         }
-        $trackback_details = do_lorem_template('TRACKBACK_WRAPPER',array(
+        $trackback_details = do_lorem_template('TRACKBACK_WRAPPER', array(
             'TRACKBACKS' => $trackbacks,
             'TRACKBACK_PAGE' => placeholder_id(),
             'TRACKBACK_ID' => placeholder_id(),
@@ -325,7 +321,7 @@ class Hook_addon_registry_iotds
 
         $comments = '';
 
-        $form = do_lorem_template('COMMENTS_POSTING_FORM',array(
+        $form = do_lorem_template('COMMENTS_POSTING_FORM', array(
             'JOIN_BITS' => lorem_phrase_html(),
             'FIRST_POST_URL' => placeholder_url(),
             'FIRST_POST' => lorem_paragraph_html(),
@@ -346,7 +342,7 @@ class Hook_addon_registry_iotds
             'CREATE_TICKET_MAKE_POST' => true,
         ));
 
-        $comment_details = do_lorem_template('COMMENTS_WRAPPER',array(
+        $comment_details = do_lorem_template('COMMENTS_WRAPPER', array(
             'TYPE' => lorem_phrase(),
             'ID' => placeholder_id(),
             'REVIEW_RATING_CRITERIA' => $review_titles,
@@ -357,7 +353,7 @@ class Hook_addon_registry_iotds
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('IOTD_ENTRY_SCREEN',array(
+            lorem_globalise(do_lorem_template('IOTD_ENTRY_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'SUBMITTER' => placeholder_id(),
                 'I_TITLE' => lorem_phrase(),
@@ -374,7 +370,7 @@ class Hook_addon_registry_iotds
                 'COMMENT_DETAILS' => $comment_details,
                 'EDIT_URL' => placeholder_url(),
                 'URL' => placeholder_image_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

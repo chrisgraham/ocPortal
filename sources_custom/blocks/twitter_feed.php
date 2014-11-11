@@ -201,29 +201,21 @@ class Block_twitter_feed
                 //if less then 3 seconds
                 if ($time_ago_timestamp < 3) {
                     $time_ago = 'right now'; // if less then minute
-                }
-                elseif ($time_ago_timestamp < $minute) {
+                } elseif ($time_ago_timestamp < $minute) {
                     $time_ago = strval($time_ago_timestamp) . ' seconds ago'; // if less then 2 minutes
-                }
-                elseif ($time_ago_timestamp < $minute * 2) {
+                } elseif ($time_ago_timestamp < $minute * 2) {
                     $time_ago = 'about 1 minute ago'; // if less then hour
-                }
-                elseif ($time_ago_timestamp < $hour) {
+                } elseif ($time_ago_timestamp < $hour) {
                     $time_ago = strval(intval(floor($time_ago_timestamp / $minute))) . ' minutes ago'; // if less then 2 hours
-                }
-                elseif ($time_ago_timestamp < $hour * 2) {
+                } elseif ($time_ago_timestamp < $hour * 2) {
                     $time_ago = 'about 1 hour ago'; // if less then day
-                }
-                elseif ($time_ago_timestamp < $day) {
+                } elseif ($time_ago_timestamp < $day) {
                     $time_ago = strval(intval(floor($time_ago_timestamp / $hour))) . ' hours ago'; // if more then day, but less then 2 days
-                }
-                elseif ($time_ago_timestamp > $day && $time_ago_timestamp < $day * 2) {
+                } elseif ($time_ago_timestamp > $day && $time_ago_timestamp < $day * 2) {
                     $time_ago = 'yesterday'; // if less then year
-                }
-                elseif ($time_ago_timestamp < $day * 365) {
+                } elseif ($time_ago_timestamp < $day * 365) {
                     $time_ago = strval(intval(floor($time_ago_timestamp / $day))) . ' days ago'; // else more than a year
-                }
-                else {
+                } else {
                     $time_ago = 'over a year ago';
                 }
             }

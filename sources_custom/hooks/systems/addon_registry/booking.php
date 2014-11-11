@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
-
 class Hook_addon_registry_booking
 {
     /**
@@ -94,8 +93,7 @@ You may wish to deny access to the usergroup and member directories when using t
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -106,12 +104,9 @@ You may wish to deny access to the usergroup and member directories when using t
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_directory_sizes
 {
     /**
@@ -28,14 +27,14 @@ class Hook_occle_command_directory_sizes
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('directory_sizes',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('directory_sizes', array('h'), array(true, true)), '', '');
         } else {
             $sizes = array();
             require_code('files2');
-            $dirs = get_directory_contents(get_custom_file_base(),'',false,true,false);
+            $dirs = get_directory_contents(get_custom_file_base(), '', false, true, false);
             foreach ($dirs as $dir) {
                 $sizes[$dir] = get_directory_size(get_custom_file_base() . '/' . $dir);
             }
@@ -46,11 +45,11 @@ class Hook_occle_command_directory_sizes
             $out = '';
             $out .= '<table class="results_table"><thead><tr><th>' . do_lang('NAME') . '</th><th>' . do_lang('SIZE') . '</th></tr></thead>';
             foreach ($sizes as $key => $val) {
-                $out .= '<tr><td>' . escape_html(preg_replace('#^' . preg_quote(get_table_prefix(),'#') . '#','',$key)) . '</td><td>' . escape_html(clean_file_size($val)) . '</td></tr>';
+                $out .= '<tr><td>' . escape_html(preg_replace('#^' . preg_quote(get_table_prefix(), '#') . '#', '', $key)) . '</td><td>' . escape_html(clean_file_size($val)) . '</td></tr>';
             }
             $out .= '</table>';
 
-            return array('',$out,'','');
+            return array('', $out, '', '');
         }
     }
 }

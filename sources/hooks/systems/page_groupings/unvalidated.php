@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
-
 class Hook_page_groupings_unvalidated
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_unvalidated
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('unvalidated')) {
             return array();
         }
 
         return array(
-            array('audit','menu/adminzone/audit/unvalidated',array('admin_unvalidated',array(),get_module_zone('admin_unvalidated')),do_lang_tempcode('unvalidated:UNVALIDATED_RESOURCES'),'DOC_UNVALIDATED'),
+            array('audit', 'menu/adminzone/audit/unvalidated', array('admin_unvalidated', array(), get_module_zone('admin_unvalidated')), do_lang_tempcode('unvalidated:UNVALIDATED_RESOURCES'), 'DOC_UNVALIDATED'),
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    windows_helper_scripts
  */
-
 class Hook_addon_registry_windows_helper_scripts
 {
     /**

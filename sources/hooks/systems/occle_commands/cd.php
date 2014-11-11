@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_cd
 {
     /**
@@ -28,12 +27,12 @@ class Hook_occle_command_cd
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('cd',array('h'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('cd', array('h'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
+            if (!array_key_exists(0, $parameters)) {
                 $pwd = $occle_fs->print_working_directory(true);
                 array_pop($pwd);
                 $parameters[0] = $pwd;
@@ -45,11 +44,11 @@ class Hook_occle_command_cd
             }
 
             if (!$occle_fs->_is_dir($parameters[0])) {
-                return array('','','',do_lang('NOT_A_DIR','1'));
+                return array('', '', '', do_lang('NOT_A_DIR', '1'));
             }
 
             $occle_fs->change_directory($parameters[0]);
-            return array('','',$occle_fs->print_working_directory(),'');
+            return array('', '', $occle_fs->print_working_directory(), '');
         }
     }
 }

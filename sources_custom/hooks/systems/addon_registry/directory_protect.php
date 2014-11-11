@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    directory_protect
  */
-
 class Hook_addon_registry_directory_protect
 {
     /**
@@ -105,8 +104,7 @@ RewriteRule (.*) - [L]
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -117,12 +115,9 @@ RewriteRule (.*) - [L]
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

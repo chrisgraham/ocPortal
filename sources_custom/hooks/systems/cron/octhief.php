@@ -11,7 +11,6 @@
  * @license    http://opensource.org/licenses/cpal_1.0 Common Public Attribution License
  * @copyright  ocProducts Ltd
  */
-
 class Hook_cron_octhief
 {
     /**
@@ -30,22 +29,22 @@ class Hook_cron_octhief
         // ensure it is done once per week
         $time = time();
         $last_time = intval(get_value('last_thieving_time'));
-        if ($last_time>time()-24*60*60*7) {
+        if ($last_time > time() - 24 * 60 * 60 * 7) {
             return;
         }
-        set_value('last_thieving_time',strval($time));
+        set_value('last_thieving_time', strval($time));
 
         $octhief_type = get_option('octhief_type', true);
-        $octhief_type = (isset($octhief_type) && strlen($octhief_type)>0)?$octhief_type:'Members that are inactive, but has lots points';
+        $octhief_type = (isset($octhief_type) && strlen($octhief_type) > 0) ? $octhief_type : 'Members that are inactive, but has lots points';
 
         $_octhief_number = get_option('octhief_number', true);
-        $octhief_number = (isset($_octhief_number) && is_numeric($_octhief_number))?intval($_octhief_number):1;
+        $octhief_number = (isset($_octhief_number) && is_numeric($_octhief_number)) ? intval($_octhief_number) : 1;
 
         $_octhief_points = get_option('octhief_points', true);
-        $octhief_points = (isset($_octhief_points) && is_numeric($_octhief_points))?intval($_octhief_points):10;
+        $octhief_points = (isset($_octhief_points) && is_numeric($_octhief_points)) ? intval($_octhief_points) : 10;
 
         $octhief_group = get_option('octhief_group', true);
-        $octhief_group = (isset($octhief_group) && strlen($octhief_group)>0)?$octhief_group:'Member';
+        $octhief_group = (isset($octhief_group) && strlen($octhief_group) > 0) ? $octhief_group : 'Member';
 
         // start determining the various cases
         if ($octhief_type == "Members that are inactive, but has lots points") {
@@ -54,20 +53,20 @@ class Hook_cron_octhief
             foreach ($all_members as $member) {
                 $id = $GLOBALS['FORUM_DRIVER']->mrow_id($member);
                 $signin_time = $member['m_last_visit_time'];
-                $points[$signin_time] = array('points' => available_points($id),'id' => $id);
+                $points[$signin_time] = array('points' => available_points($id), 'id' => $id);
             }
 
             ksort($points);
 
             //print_r($points);
 
-            $octhief_number = (count($points) > $octhief_number)?$octhief_number:count($points);
+            $octhief_number = (count($points) > $octhief_number) ? $octhief_number : count($points);
             $theft_count = 0;
 
             foreach ($points as $member) {
                 $theft_count++;
 
-                if ($theft_count>$octhief_number) {
+                if ($theft_count > $octhief_number) {
                     break;
                 }
 
@@ -76,34 +75,34 @@ class Hook_cron_octhief
                 require_lang('octhief');
 
                 $total_points = $member['points'];
-                $octhief_points = ($octhief_points<$total_points)?$octhief_points:$total_points;
+                $octhief_points = ($octhief_points < $total_points) ? $octhief_points : $total_points;
 
-                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($member['id']) . ' ORDER BY RAND( ) ',1, null,true);
+                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($member['id']) . ' ORDER BY RAND( ) ', 1, null, true);
 
-                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id']>0)?$give_to_member[0]['id']:0;
+                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id'] > 0) ? $give_to_member[0]['id'] : 0;
 
                 // get THIEF points
-                charge_member($member['id'],$octhief_points,do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
+                charge_member($member['id'], $octhief_points, do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
 
-                if ($give_to_member>0) {
-                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)',$octhief_points,$give_to_member);
+                if ($give_to_member > 0) {
+                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)', $octhief_points, $give_to_member);
 
-                    $thief_displayname = $GLOBALS['FORUM_DRIVER']->get_username($member['id'],true);
-                    $target_displayname = $GLOBALS['FORUM_DRIVER']->get_username($give_to_member,true);
+                    $thief_displayname = $GLOBALS['FORUM_DRIVER']->get_username($member['id'], true);
+                    $target_displayname = $GLOBALS['FORUM_DRIVER']->get_username($give_to_member, true);
                     $thief_username = $GLOBALS['FORUM_DRIVER']->get_username($member['id']);
                     $target_username = $GLOBALS['FORUM_DRIVER']->get_username($give_to_member);
-                    $subject = do_lang('THIEF_PT_TOPIC',strval($octhief_points),$thief_displayname,array($target_displayname,$thief_username,$target_username));
-                    $body = do_lang('THIEF_PT_TOPIC_POST',strval($octhief_points),$thief_displayname,array($target_displayname,$thief_username,$target_username));
+                    $subject = do_lang('THIEF_PT_TOPIC', strval($octhief_points), $thief_displayname, array($target_displayname, $thief_username, $target_username));
+                    $body = do_lang('THIEF_PT_TOPIC_POST', strval($octhief_points), $thief_displayname, array($target_displayname, $thief_username, $target_username));
 
                     require_code('ocf_topic_actions');
                     require_code('ocf_posts_actions');
 
-                    $topic_id = ocf_make_topic(null,$subject,'',1,1,0,0,0,$member['id'],$give_to_member,false,0,null,'');
+                    $topic_id = ocf_make_topic(null, $subject, '', 1, 1, 0, 0, 0, $member['id'], $give_to_member, false, 0, null, '');
 
-                    $post_id = ocf_make_post($topic_id,$subject,$body,0,true,1,0,null,null,null,$give_to_member,null,null,null,false,true,null,true,$subject,0,null,true,true,true);
+                    $post_id = ocf_make_post($topic_id, $subject, $body, 0, true, 1, 0, null, null, null, $give_to_member, null, null, null, false, true, null, true, $subject, 0, null, true, true, true);
 
-                    send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$GLOBALS['FORUM_DRIVER']->mrow_id($member));
-                    send_pt_notification($post_id,$subject,$topic_id,$GLOBALS['FORUM_DRIVER']->mrow_id($member),$give_to_member);
+                    send_pt_notification($post_id, $subject, $topic_id, $give_to_member, $GLOBALS['FORUM_DRIVER']->mrow_id($member));
+                    send_pt_notification($post_id, $subject, $topic_id, $GLOBALS['FORUM_DRIVER']->mrow_id($member), $give_to_member);
                 }
             }
         } elseif ($octhief_type == "Members that are rich") {
@@ -115,13 +114,13 @@ class Hook_cron_octhief
             }
             arsort($points);
 
-            $octhief_number = (count($points) > $octhief_number)?$octhief_number:count($points);
+            $octhief_number = (count($points) > $octhief_number) ? $octhief_number : count($points);
             $theft_count = 0;
 
             foreach ($points as $member_id => $av_points) {
                 $theft_count++;
 
-                if ($theft_count>$octhief_number) {
+                if ($theft_count > $octhief_number) {
                     break;
                 }
 
@@ -130,34 +129,34 @@ class Hook_cron_octhief
                 require_lang('octhief');
 
                 $total_points = $av_points;
-                $octhief_points = ($octhief_points<$total_points)?$octhief_points:$total_points;
+                $octhief_points = ($octhief_points < $total_points) ? $octhief_points : $total_points;
 
-                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($member_id) . ' ORDER BY RAND( ) ',1, null,true);
+                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($member_id) . ' ORDER BY RAND( ) ', 1, null, true);
 
-                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id']>0)?$give_to_member[0]['id']:0;
+                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id'] > 0) ? $give_to_member[0]['id'] : 0;
 
                 // get THIEF points
-                charge_member($member_id,$octhief_points,do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
+                charge_member($member_id, $octhief_points, do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
 
-                if ($give_to_member>0) {
-                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)',$octhief_points,$give_to_member);
+                if ($give_to_member > 0) {
+                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)', $octhief_points, $give_to_member);
 
                     require_code('ocf_topic_action');
                     require_code('ocf_posts_action');
 
-                    $subject = do_lang('THIEF_PT_TOPIC',strval($octhief_points));
-                    $topic_id = ocf_make_topic(null,$subject,'',1,1,0,0,0,$member_id,$give_to_member,false,0,null,'');
+                    $subject = do_lang('THIEF_PT_TOPIC', strval($octhief_points));
+                    $topic_id = ocf_make_topic(null, $subject, '', 1, 1, 0, 0, 0, $member_id, $give_to_member, false, 0, null, '');
 
-                    $post_id = ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,null,null,null,$give_to_member,null,null,null,false,true,null,true,$subject,0,null,true,true,true);
+                    $post_id = ocf_make_post($topic_id, $subject, do_lang('THIEF_PT_TOPIC_POST'), 0, true, 1, 0, null, null, null, $give_to_member, null, null, null, false, true, null, true, $subject, 0, null, true, true, true);
 
-                    send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-                    send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+                    send_pt_notification($post_id, $subject, $topic_id, $give_to_member, $member);
+                    send_pt_notification($post_id, $subject, $topic_id, $member, $give_to_member);
                 }
             }
         } elseif ($octhief_type == "Members that are random") {
-            $random_members = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' ORDER BY RAND( ) ',$octhief_number, null,true);
+            $random_members = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' ORDER BY RAND( ) ', $octhief_number, null, true);
 
-            $octhief_number = (count($random_members) > $octhief_number)?$octhief_number:count($random_members);
+            $octhief_number = (count($random_members) > $octhief_number) ? $octhief_number : count($random_members);
 
             foreach ($random_members as $member) {
                 // start stealing
@@ -165,28 +164,28 @@ class Hook_cron_octhief
                 require_lang('octhief');
 
                 $total_points = available_points($member['id']);
-                $octhief_points = ($octhief_points<$total_points)?$octhief_points:$total_points;
+                $octhief_points = ($octhief_points < $total_points) ? $octhief_points : $total_points;
 
-                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($member['id']) . ' ORDER BY RAND( ) ',1, null,true);
+                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($member['id']) . ' ORDER BY RAND( ) ', 1, null, true);
 
-                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id']>0)?$give_to_member[0]['id']:0;
+                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id'] > 0) ? $give_to_member[0]['id'] : 0;
 
                 // get THIEF points
-                charge_member($member['id'],$octhief_points,do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
+                charge_member($member['id'], $octhief_points, do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
 
                 if ($give_to_member != 0) {
-                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)',$octhief_points,$give_to_member);
+                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)', $octhief_points, $give_to_member);
 
                     require_code('ocf_topic_action');
                     require_code('ocf_posts_action');
 
-                    $subject = do_lang('THIEF_PT_TOPIC',strval($octhief_points));
-                    $topic_id = ocf_make_topic(null,$subject,'',1,1,0,0,0,$member['id'],$give_to_member,false,0,null,'');
+                    $subject = do_lang('THIEF_PT_TOPIC', strval($octhief_points));
+                    $topic_id = ocf_make_topic(null, $subject, '', 1, 1, 0, 0, 0, $member['id'], $give_to_member, false, 0, null, '');
 
-                    $post_id = ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,null,null,null,$give_to_member,null,null,null,false,true,null,true,$subject,0,null,true,true,true);
+                    $post_id = ocf_make_post($topic_id, $subject, do_lang('THIEF_PT_TOPIC_POST'), 0, true, 1, 0, null, null, null, $give_to_member, null, null, null, false, true, null, true, $subject, 0, null, true, true, true);
 
-                    send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$member);
-                    send_pt_notification($post_id,$subject,$topic_id,$member,$give_to_member);
+                    send_pt_notification($post_id, $subject, $topic_id, $give_to_member, $member);
+                    send_pt_notification($post_id, $subject, $topic_id, $member, $give_to_member);
                 }
             }
         } elseif ($octhief_type == "Members that are in a certain usergroup") {
@@ -202,7 +201,7 @@ class Hook_cron_octhief
             require_code('ocf_groups2');
             $members = ocf_get_group_members_raw($group_id);
 
-            $octhief_number = (count($members) > $octhief_number)?$octhief_number:count($members);
+            $octhief_number = (count($members) > $octhief_number) ? $octhief_number : count($members);
 
             $members_to_steal_ids = array_rand($members, $octhief_number);
 
@@ -217,28 +216,28 @@ class Hook_cron_octhief
 
                 //echo $members[$member_rand_key];
                 $total_points = available_points($members[$member_rand_key]);
-                $octhief_points = ($octhief_points<$total_points)?$octhief_points:$total_points;
+                $octhief_points = ($octhief_points < $total_points) ? $octhief_points : $total_points;
 
-                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($members[$member_rand_key]) . ' ORDER BY RAND( ) ',1, null,true);
+                $give_to_member = $GLOBALS['FORUM_DB']->query('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE  id <> ' . strval($GLOBALS['FORUM_DRIVER']->get_guest_id()) . ' AND id <> ' . strval($members[$member_rand_key]) . ' ORDER BY RAND( ) ', 1, null, true);
 
-                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id']>0)?$give_to_member[0]['id']:0;
+                $give_to_member = (isset($give_to_member[0]['id']) && $give_to_member[0]['id'] > 0) ? $give_to_member[0]['id'] : 0;
 
                 // get THIEF points
-                charge_member($members[$member_rand_key],$octhief_points,do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
+                charge_member($members[$member_rand_key], $octhief_points, do_lang('THIEF_GET') . ' ' . strval($octhief_points) . ' point(-s) from you.');
 
                 if ($give_to_member != 0) {
-                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)',$octhief_points,$give_to_member);
+                    system_gift_transfer(do_lang('THIEF_GAVE_YOU') . ' ' . strval($octhief_points) . ' point(-s)', $octhief_points, $give_to_member);
 
                     require_code('ocf_topics_action');
-                    $subject = do_lang('THIEF_PT_TOPIC',strval($octhief_points));
-                    $topic_id = ocf_make_topic(null,$subject,'',1,1,0,0,0,$members[$member_rand_key],$give_to_member,false,0,null,'');
+                    $subject = do_lang('THIEF_PT_TOPIC', strval($octhief_points));
+                    $topic_id = ocf_make_topic(null, $subject, '', 1, 1, 0, 0, 0, $members[$member_rand_key], $give_to_member, false, 0, null, '');
 
                     require_code('ocf_posts_action');
-                    $post_id = ocf_make_post($topic_id,$subject,do_lang('THIEF_PT_TOPIC_POST'),0,true,1,0,null,null,null,$give_to_member,null,null,null,false,true,null,true,$subject,0,null,true,true,true);
+                    $post_id = ocf_make_post($topic_id, $subject, do_lang('THIEF_PT_TOPIC_POST'), 0, true, 1, 0, null, null, null, $give_to_member, null, null, null, false, true, null, true, $subject, 0, null, true, true, true);
 
                     require_code('ocf_topics_action2');
-                    send_pt_notification($post_id,$subject,$topic_id,$give_to_member,$octhief_number);
-                    send_pt_notification($post_id,$subject,$topic_id,$octhief_number,$give_to_member);
+                    send_pt_notification($post_id, $subject, $topic_id, $give_to_member, $octhief_number);
+                    send_pt_notification($post_id, $subject, $topic_id, $octhief_number, $give_to_member);
                 }
             }
         }

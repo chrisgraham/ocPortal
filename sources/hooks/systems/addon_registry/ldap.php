@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
-
 class Hook_addon_registry_ldap
 {
     /**
@@ -147,7 +146,7 @@ class Hook_addon_registry_ldap
         require_lang('ocf');
         $members_delete = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
+            $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
                 'NAME' => lorem_word() . placeholder_random(),
                 'NICE_NAME' => lorem_word(),
             ));
@@ -156,7 +155,7 @@ class Hook_addon_registry_ldap
 
         $groups_delete = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
+            $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
                 'NAME' => lorem_word() . placeholder_random(),
                 'NICE_NAME' => lorem_word(),
             ));
@@ -165,7 +164,7 @@ class Hook_addon_registry_ldap
 
         $groups_add = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY',array(
+            $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
                 'NAME' => lorem_word() . placeholder_random(),
                 'NICE_NAME' => lorem_word(),
             ));
@@ -173,13 +172,13 @@ class Hook_addon_registry_ldap
         }
 
         return array(
-            lorem_globalise(do_lorem_template('OCF_LDAP_SYNC_SCREEN',array(
+            lorem_globalise(do_lorem_template('OCF_LDAP_SYNC_SCREEN', array(
                 'URL' => placeholder_url(),
                 'TITLE' => lorem_title(),
                 'MEMBERS_DELETE' => $members_delete,
                 'GROUPS_DELETE' => $groups_delete,
                 'GROUPS_ADD' => $groups_add,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

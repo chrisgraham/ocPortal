@@ -17,15 +17,14 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_notification_occlechat
 {
     /**
-    * Run function for OcCLE notification hooks.
-    *
-    * @param  ?integer                  The "current" time on which to base queries (NULL: now)
-    * @return ~array                    Array of section, type and message responses (false: nothing)
-    */
+     * Run function for OcCLE notification hooks.
+     *
+     * @param  ?integer                  The "current" time on which to base queries (NULL: now)
+     * @return ~array                    Array of section, type and message responses (false: nothing)
+     */
     public function run($timestamp = null)
     {
         if (is_null($timestamp)) {
@@ -35,14 +34,14 @@ class Hook_occle_notification_occlechat
 
         require_code('comcode_compiler');
 
-        if (count($messages)>0) {
+        if (count($messages) > 0) {
             $_messages = array();
             foreach ($messages as $message) {
                 $_messages[apply_emoticons($message['c_message'])] = $message['c_url'];
             }
             $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'occlechat WHERE c_timestamp>=' . strval($timestamp));
 
-            return array(do_lang('OCCLE'),do_lang('_NEW_OCCLECHAT_MESSAGES'),do_template('OCCLE_OCCLECHAT_NOTIFICATION',array('_GUID' => 'f6a3a17ace63675690319f6a7540c86a','MESSAGE_COUNT' => integer_format(count($messages)),'MESSAGES' => $_messages)));
+            return array(do_lang('OCCLE'), do_lang('_NEW_OCCLECHAT_MESSAGES'), do_template('OCCLE_OCCLECHAT_NOTIFICATION', array('_GUID' => 'f6a3a17ace63675690319f6a7540c86a', 'MESSAGE_COUNT' => integer_format(count($messages)), 'MESSAGES' => $_messages)));
         } else {
             return false;
         }

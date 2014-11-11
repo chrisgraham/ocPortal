@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    testing_platform
  */
-
 class Hook_addon_registry_testing_platform
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_testing_platform
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -106,10 +104,8 @@ class Hook_addon_registry_testing_platform
         return array(
             'requires' => array( // Actually, it's all
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

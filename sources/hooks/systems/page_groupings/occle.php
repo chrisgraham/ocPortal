@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_page_groupings_occle
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_occle
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('occle')) {
             return array();
         }
 
         return array(
-            array('tools','menu/adminzone/tools/occle',array('admin_occle',array('type' => 'misc'),get_module_zone('admin_occle')),do_lang_tempcode('occle:OCCLE'),'DOC_OCCLE'),
+            array('tools', 'menu/adminzone/tools/occle', array('admin_occle', array('type' => 'misc'), get_module_zone('admin_occle')), do_lang_tempcode('occle:OCCLE'), 'DOC_OCCLE'),
         );
     }
 }

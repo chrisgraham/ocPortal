@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportal_release_build
  */
-
 class Hook_page_groupings_make_release
 {
     /**
@@ -22,13 +21,13 @@ class Hook_page_groupings_make_release
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('tools','menu/_generic_admin/tool',array('plug_guid',array(),get_page_zone('plug_guid')),make_string_tempcode('Release tools: Plug in missing GUIDs')),
-            array('tools','menu/_generic_admin/tool',array('make_release',array(),get_page_zone('make_release')),make_string_tempcode('Release tools: Make an ocPortal release')),
-            array('tools','menu/_generic_admin/tool',array('push_bugfix',array(),get_page_zone('push_bugfix')),make_string_tempcode('Release tools: Push an ocPortal bugfix')),
-            array('tools','menu/_generic_admin/tool',array('doc_index_build',array(),get_page_zone('doc_index_build')),make_string_tempcode('Doc tools: Make addon tutorial index')),
+            array('tools', 'menu/_generic_admin/tool', array('plug_guid', array(), get_page_zone('plug_guid')), make_string_tempcode('Release tools: Plug in missing GUIDs')),
+            array('tools', 'menu/_generic_admin/tool', array('make_release', array(), get_page_zone('make_release')), make_string_tempcode('Release tools: Make an ocPortal release')),
+            array('tools', 'menu/_generic_admin/tool', array('push_bugfix', array(), get_page_zone('push_bugfix')), make_string_tempcode('Release tools: Push an ocPortal bugfix')),
+            array('tools', 'menu/_generic_admin/tool', array('doc_index_build', array(), get_page_zone('doc_index_build')), make_string_tempcode('Doc tools: Make addon tutorial index')),
         );
     }
 }

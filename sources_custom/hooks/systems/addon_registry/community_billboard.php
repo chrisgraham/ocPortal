@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
-
 class Hook_addon_registry_community_billboard
 {
     /**
@@ -108,10 +107,8 @@ class Hook_addon_registry_community_billboard
             'requires' => array(
                 'pointstore',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
@@ -183,10 +180,10 @@ class Hook_addon_registry_community_billboard
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_2',array(
-                    'TEXT_URL' => placeholder_url(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_2', array(
+                        'TEXT_URL' => placeholder_url(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -201,13 +198,13 @@ class Hook_addon_registry_community_billboard
     {
         return array(
             lorem_globalise(
-                do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_SCREEN',array(
-                    'TITLE' => lorem_title(),
-                    'TEXT_URL' => placeholder_url(),
-                    'QUEUE' => placeholder_number(),
-                    'COST' => placeholder_number(),
-                )
-            ),null,'',true),
+                do_lorem_template('POINTSTORE_COMMUNITY_BILLBOARD_SCREEN', array(
+                        'TITLE' => lorem_title(),
+                        'TEXT_URL' => placeholder_url(),
+                        'QUEUE' => placeholder_number(),
+                        'COST' => placeholder_number(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -222,7 +219,7 @@ class Hook_addon_registry_community_billboard
     {
         require_css('forms');
 
-        $about_current = do_lorem_template('COMMUNITY_BILLBOARD_DETAILS',array(
+        $about_current = do_lorem_template('COMMUNITY_BILLBOARD_DETAILS', array(
             'USERNAME' => lorem_word_html(),
             'DAYS_ORDERED' => lorem_phrase(),
             'DATE_RAW' => placeholder_time(),
@@ -231,11 +228,11 @@ class Hook_addon_registry_community_billboard
 
         $out = new ocp_tempcode();
         foreach (placeholder_array() as $key => $value) {
-            $text = do_lorem_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE',array(
+            $text = do_lorem_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE', array(
                 'MESSAGE' => $value,
                 'STATUS' => do_lang('NEW')
             ));
-            $out->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+            $out->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
                 'DISABLED' => false,
                 'CLASS' => '',
@@ -244,14 +241,14 @@ class Hook_addon_registry_community_billboard
             )));
         }
 
-        $input = do_lorem_template('FORM_SCREEN_INPUT_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
             'TABINDEX' => '5',
             'REQUIRED' => '_required',
             'NAME' => lorem_word(),
             'CONTENT' => $out,
             'INLINE_LIST' => true,
         ));
-        $fields = do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields = do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'PRETTY_NAME' => lorem_word(),
@@ -263,7 +260,7 @@ class Hook_addon_registry_community_billboard
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM_SCREEN',array(
+            lorem_globalise(do_lorem_template('FORM_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'TEXT' => $about_current,
                 'HIDDEN' => '',
@@ -272,7 +269,7 @@ class Hook_addon_registry_community_billboard
                 'FIELDS' => $fields,
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    breadcrumbs
  */
-
 class Hook_addon_registry_breadcrumbs
 {
     /**

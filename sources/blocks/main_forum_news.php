@@ -69,7 +69,7 @@ class Block_main_forum_news
         $num_topics = array_key_exists('param', $map) ? intval($map['param']) : 14;
         $forum_name = array_key_exists('forum', $map) ? $map['forum'] : do_lang('NEWS');
 
-        $optimise=(array_key_exists('optimise',$map)) && ($map['optimise']=='1');
+        $optimise = (array_key_exists('optimise', $map)) && ($map['optimise'] == '1');
 
         $num_topics = intval($num_topics);
 
@@ -133,11 +133,11 @@ class Block_main_forum_news
             if (is_object($myrow['firstpost'])) {
                 $news = $myrow['firstpost'];
                 if ($optimise) {
-                    $news=make_string_tempcode($news->evaluate());
+                    $news = make_string_tempcode($news->evaluate());
                     if (multi_lang_content()) {
-                        $GLOBALS['SITE_DB']->query_update('translate',array('text_parsed'=>$news->to_assembly()),array('id'=>$myrow['firstpost_language_string'],'language'=>user_lang()),'',1);
+                        $GLOBALS['SITE_DB']->query_update('translate', array('text_parsed' => $news->to_assembly()), array('id' => $myrow['firstpost_language_string'], 'language' => user_lang()), '', 1);
                     } else {
-                        $GLOBALS['SITE_DB']->query_update('f_posts',array('p_post__text_parsed'=>$news->to_assembly()),array('id'=>$myrow['id']),'',1);
+                        $GLOBALS['SITE_DB']->query_update('f_posts', array('p_post__text_parsed' => $news->to_assembly()), array('id' => $myrow['id']), '', 1);
                     }
                 }
             } else {

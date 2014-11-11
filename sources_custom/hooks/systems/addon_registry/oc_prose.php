@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_prose
  */
-
 class Hook_addon_registry_oc_prose
 {
     /**
@@ -97,8 +96,7 @@ Example:
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -112,10 +110,8 @@ Example:
             'requires' => array(
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

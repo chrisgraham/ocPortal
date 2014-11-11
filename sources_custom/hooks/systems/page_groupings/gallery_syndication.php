@@ -21,11 +21,11 @@ class Hook_page_groupings_gallery_syndication
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         $menu_items = array();
 
-        $hooks = find_all_hooks('modules','video_syndication');
+        $hooks = find_all_hooks('modules', 'video_syndication');
 
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/modules/video_syndication/' . filter_naughty($hook));
@@ -36,9 +36,9 @@ class Hook_page_groupings_gallery_syndication
             $menu_items[] = array(
                 'setup',
                 'menu/rich_content/galleries',
-                array($hook . '_oauth',array(),get_page_zone($hook . '_oauth')),
-                do_lang_tempcode('oauth:OAUTH_TITLE',escape_html($service_title)),
-                comcode_to_tempcode(do_lang('oauth:DOC_OAUTH_SETUP',$service_title))
+                array($hook . '_oauth', array(), get_page_zone($hook . '_oauth')),
+                do_lang_tempcode('oauth:OAUTH_TITLE', escape_html($service_title)),
+                comcode_to_tempcode(do_lang('oauth:DOC_OAUTH_SETUP', $service_title))
             );
         }
 

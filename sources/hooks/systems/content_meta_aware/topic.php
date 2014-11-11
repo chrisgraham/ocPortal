@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_content_meta_aware_topic
 {
     /**
@@ -29,7 +28,7 @@ class Hook_content_meta_aware_topic
     public function info($zone = null)
     {
         if (get_forum_type() != 'ocf') {
-            return NULL;
+            return null;
         }
 
         return array(
@@ -66,7 +65,7 @@ class Hook_content_meta_aware_topic
             'edit_page_link_pattern' => '_SEARCH:topics:edit_topic:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:forumview:misc:_WILD',
             'add_url' => '',
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('forumview')) . ':forumview',
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('forumview')) . ':forumview',
 
             'support_url_monikers' => true,
 
@@ -79,7 +78,7 @@ class Hook_content_meta_aware_topic
 
             'seo_type_code' => 'topic',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
             'permissions_type_code' => 'forums', // NULL if has no permissions
 
@@ -111,10 +110,10 @@ class Hook_content_meta_aware_topic
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('ocf_topics');
 
-        return render_topic_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$guid);
+        return render_topic_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : intval($root), $guid);
     }
 }

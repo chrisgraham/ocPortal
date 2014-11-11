@@ -249,7 +249,7 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
         $ob = get_fields_hook($field_to_show['cf_type']);
         list(, , $storage_type) = $ob->get_field_value_row_bits($field_to_show);
 
-        if ($storage_type=='short_trans' || $storage_type=='long_trans') {
+        if ($storage_type == 'short_trans' || $storage_type == 'long_trans') {
             if (($member_value === null) || ($member_value == '0')) {
                 $member_value_raw = '';
                 $member_value = ''; // This is meant to be '' for blank, not new ocp_tempcode()
@@ -322,8 +322,7 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
             $editability = mixed(); // If stays as NULL, not editable
             if (isset($editable_with_comcode[$field_to_show['cf_type']])) {
                 $editability = true; // Editable: Supports Comcode
-            }
-            elseif (isset($editable_without_comcode[$field_to_show['cf_type']])) {
+            } elseif (isset($editable_without_comcode[$field_to_show['cf_type']])) {
                 $editability = false; // Editable: Does not support Comcode
             }
 

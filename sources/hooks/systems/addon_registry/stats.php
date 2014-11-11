@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
-
 class Hook_addon_registry_stats
 {
     /**
@@ -171,7 +170,7 @@ class Hook_addon_registry_stats
      */
     public function tpl_preview__administrative__stats_screen()
     {
-        $graph = do_lorem_template('STATS_GRAPH',array(
+        $graph = do_lorem_template('STATS_GRAPH', array(
             'GRAPH' => placeholder_url(),
             'TITLE' => lorem_phrase(),
             'TEXT' => lorem_sentence(),
@@ -180,11 +179,11 @@ class Hook_addon_registry_stats
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('STATS_SCREEN',array(
+            lorem_globalise(do_lorem_template('STATS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'GRAPH' => $graph,
                 'STATS' => placeholder_table(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -198,12 +197,12 @@ class Hook_addon_registry_stats
     public function tpl_preview__administrative__stats_screen_overview()
     {
         return array(
-            lorem_globalise(do_lorem_template('STATS_OVERVIEW_SCREEN',array(
+            lorem_globalise(do_lorem_template('STATS_OVERVIEW_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'STATS_VIEWS' => placeholder_table(),
                 'GRAPH_VIEWS_MONTHLY' => lorem_phrase(),
                 'STATS_VIEWS_MONTHLY' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -216,7 +215,7 @@ class Hook_addon_registry_stats
      */
     public function tpl_preview__administrative__stats_screen_iscreen()
     {
-        $graph_regionality = do_lorem_template('STATS_GRAPH',array(
+        $graph_regionality = do_lorem_template('STATS_GRAPH', array(
             'GRAPH' => placeholder_url(),
             'TITLE' => lorem_phrase(),
             'TEXT' => lorem_sentence(),
@@ -225,7 +224,7 @@ class Hook_addon_registry_stats
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('STATS_SCREEN_ISCREEN',array(
+            lorem_globalise(do_lorem_template('STATS_SCREEN_ISCREEN', array(
                 'TITLE' => lorem_title(),
                 'GRAPH_REGIONALITY' => $graph_regionality,
                 'STATS_REGIONALITY' => placeholder_table(),
@@ -248,7 +247,7 @@ class Hook_addon_registry_stats
                 'STATS_REFERRER' => lorem_phrase(),
                 'GRAPH_OS' => lorem_phrase(),
                 'STATS_OS' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

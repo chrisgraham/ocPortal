@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_bank
  */
-
 class Hook_addon_registry_oc_bank
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_oc_bank
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -108,10 +106,8 @@ class Hook_addon_registry_oc_bank
                 'Cron',
                 'pointstore',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
@@ -148,7 +144,7 @@ class Hook_addon_registry_oc_bank
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('bank',array(
+            $GLOBALS['SITE_DB']->create_table('bank', array(
                 'id' => '*AUTO',
                 'member_id' => 'MEMBER',
                 'amount' => 'INTEGER',

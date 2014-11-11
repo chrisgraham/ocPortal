@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-
 class Hook_page_groupings_iotds
 {
     /**
@@ -22,11 +21,11 @@ class Hook_page_groupings_iotds
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('cms','menu/rich_content/iotds',array('cms_iotds',array('type' => 'misc'),get_module_zone('cms_iotds')),do_lang_tempcode('ITEMS_HERE',do_lang_tempcode('iotds:IOTDS'),make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('iotd','COUNT(*)',null,'',true))))),'iotds:DOC_IOTDS'),
-            array('rich_content','menu/rich_content/iotds',array('iotds',array(),get_module_zone('iotds')),do_lang_tempcode('iotds:IOTDS')),
+            array('cms', 'menu/rich_content/iotds', array('cms_iotds', array('type' => 'misc'), get_module_zone('cms_iotds')), do_lang_tempcode('ITEMS_HERE', do_lang_tempcode('iotds:IOTDS'), make_string_tempcode(escape_html(integer_format($GLOBALS['SITE_DB']->query_select_value_if_there('iotd', 'COUNT(*)', null, '', true))))), 'iotds:DOC_IOTDS'),
+            array('rich_content', 'menu/rich_content/iotds', array('iotds', array(), get_module_zone('iotds')), do_lang_tempcode('iotds:IOTDS')),
         );
     }
 }

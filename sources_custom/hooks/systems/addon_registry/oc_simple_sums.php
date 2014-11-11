@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_simple_sums
  */
-
 class Hook_addon_registry_oc_simple_sums
 {
     /**
@@ -95,8 +94,7 @@ This is coded as a \"mini block\", and serves as a good example of how you can u
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,12 +105,9 @@ This is coded as a \"mini block\", and serves as a good example of how you can u
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

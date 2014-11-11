@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    supermember_directory
  */
-
 class Hook_addon_registry_supermember_directory
 {
     /**
@@ -134,7 +133,7 @@ class Hook_addon_registry_supermember_directory
         require_lang('authors');
         require_lang('points');
 
-        $groups = do_lorem_template('SUPERMEMBERS_SCREEN_GROUP',array(
+        $groups = do_lorem_template('SUPERMEMBERS_SCREEN_GROUP', array(
             'ENTRIES' => array(
                 array(
                     'USERNAME' => lorem_phrase(),
@@ -150,11 +149,11 @@ class Hook_addon_registry_supermember_directory
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN',array(
+            lorem_globalise(do_lorem_template('SUPERMEMBERS_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'GROUPS' => $groups,
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

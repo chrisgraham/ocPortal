@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-
 class Hook_Profiles_Tabs_pts
 {
     /**
@@ -27,9 +26,9 @@ class Hook_Profiles_Tabs_pts
      * @param  MEMBER                   The ID of the member who is doing the viewing
      * @return boolean                  Whether this hook is active
      */
-    public function is_active($member_id_of,$member_id_viewing)
+    public function is_active($member_id_of, $member_id_viewing)
     {
-        return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing,'view_other_pt')));
+        return (($member_id_of == $member_id_viewing) || (has_privilege($member_id_viewing, 'view_other_pt')));
     }
 
     /**
@@ -40,14 +39,14 @@ class Hook_Profiles_Tabs_pts
      * @param  boolean                  Whether to leave the tab contents NULL, if tis hook supports it, so that AJAX can load it later
      * @return array                    A tuple: The tab title, the tab contents, the suggested tab order, the icon
      */
-    public function render_tab($member_id_of,$member_id_viewing,$leave_to_ajax_if_possible = false)
+    public function render_tab($member_id_of, $member_id_viewing, $leave_to_ajax_if_possible = false)
     {
         $title = do_lang_tempcode('PRIVATE_TOPICS_INBOX');
 
         $order = 80;
 
         if ($leave_to_ajax_if_possible) {
-            return array($title,null,$order,'tool_buttons/inbox2');
+            return array($title, null, $order, 'tool_buttons/inbox2');
         }
 
         require_code('ocf_forumview');
@@ -56,19 +55,19 @@ class Hook_Profiles_Tabs_pts
         require_lang('ocf');
 
         $id = null;
-        $current_filter_cat = get_param('category','');
+        $current_filter_cat = get_param('category', '');
 
-        $root = get_param_integer('keep_forum_root',db_get_first_id());
+        $root = get_param_integer('keep_forum_root', db_get_first_id());
 
-        $max = get_param_integer('forum_max',intval(get_option('private_topics_per_page')));
-        $start = get_param_integer('forum_start',get_param_integer('kfs',0));
+        $max = get_param_integer('forum_max', intval(get_option('private_topics_per_page')));
+        $start = get_param_integer('forum_start', get_param_integer('kfs', 0));
 
         $root = db_get_first_id();
 
-        list($content) = ocf_render_forumview($id,null,$current_filter_cat,$max,$start,$root,$member_id_of,new ocp_tempcode());
+        list($content) = ocf_render_forumview($id, null, $current_filter_cat, $max, $start, $root, $member_id_of, new ocp_tempcode());
 
-        $content = do_template('OCF_MEMBER_PROFILE_PTS',array('_GUID' => '5d0cae3320634a1e4eb345154c853c35','CONTENT' => $content));
+        $content = do_template('OCF_MEMBER_PROFILE_PTS', array('_GUID' => '5d0cae3320634a1e4eb345154c853c35', 'CONTENT' => $content));
 
-        return array($title,$content,$order,'tool_buttons/inbox2');
+        return array($title, $content, $order, 'tool_buttons/inbox2');
     }
 }

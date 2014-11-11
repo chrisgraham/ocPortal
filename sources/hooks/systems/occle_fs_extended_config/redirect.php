@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    redirects_editor
  */
-
 class Hook_occle_fs_extended_config__redirect
 {
     /**
@@ -27,7 +26,7 @@ class Hook_occle_fs_extended_config__redirect
      */
     protected function _get_edit_date()
     {
-        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type','SET_REDIRECTS');
+        $query = 'SELECT MAX(date_and_time) FROM ' . get_table_prefix() . 'adminlogs WHERE ' . db_string_equal_to('the_type', 'SET_REDIRECTS');
         return $GLOBALS['SITE_DB']->query_value_if_there($query);
     }
 
@@ -40,9 +39,9 @@ class Hook_occle_fs_extended_config__redirect
      * @param  object                   A reference to the OcCLE filesystem object
      * @return ~string                  The file contents (false: failure)
      */
-    public function read_file($meta_dir,$meta_root_node,$file_name,&$occle_fs)
+    public function read_file($meta_dir, $meta_root_node, $file_name, &$occle_fs)
     {
-        $rows = $GLOBALS['SITE_DB']->query_select('redirects',array('*'));
+        $rows = $GLOBALS['SITE_DB']->query_select('redirects', array('*'));
         return serialize($rows);
     }
 
@@ -56,7 +55,7 @@ class Hook_occle_fs_extended_config__redirect
      * @param  object                   A reference to the OcCLE filesystem object
      * @return boolean                  Success?
      */
-    public function write_file($meta_dir,$meta_root_node,$file_name,$contents,&$occle_fs)
+    public function write_file($meta_dir, $meta_root_node, $file_name, $contents, &$occle_fs)
     {
         $GLOBALS['SITE_DB']->query_delete('redirects');
         $rows = @unserialize($contents);
@@ -64,7 +63,7 @@ class Hook_occle_fs_extended_config__redirect
             return false;
         }
         foreach ($rows as $row) {
-            $GLOBALS['SITE_DB']->query_insert('redirects',$row);
+            $GLOBALS['SITE_DB']->query_insert('redirects', $row);
         }
         return true;
     }

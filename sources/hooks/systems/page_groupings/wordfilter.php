@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    wordfilter
  */
-
 class Hook_page_groupings_wordfilter
 {
     /**
@@ -27,10 +26,10 @@ class Hook_page_groupings_wordfilter
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('security','menu/adminzone/security/wordfilter',array('admin_wordfilter',array('type' => 'misc'),get_module_zone('admin_wordfilter')),do_lang_tempcode('wordfilter:WORD_FILTER'),'wordfilter:DOC_WORDFILTER'),
+            array('security', 'menu/adminzone/security/wordfilter', array('admin_wordfilter', array('type' => 'misc'), get_module_zone('admin_wordfilter')), do_lang_tempcode('wordfilter:WORD_FILTER'), 'wordfilter:DOC_WORDFILTER'),
         );
     }
 }

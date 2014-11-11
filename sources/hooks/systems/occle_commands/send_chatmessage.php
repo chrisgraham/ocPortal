@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-
 class Hook_occle_command_send_chatmessage
 {
     /**
@@ -28,16 +27,16 @@ class Hook_occle_command_send_chatmessage
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('send_chatmessage',array('h'),array(true,true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('send_chatmessage', array('h'), array(true, true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','send_chatmessage'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'send_chatmessage'));
             }
-            if (!array_key_exists(1,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','2','send_chatmessage'));
+            if (!array_key_exists(1, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '2', 'send_chatmessage'));
             }
 
             require_code('chat');
@@ -46,18 +45,18 @@ class Hook_occle_command_send_chatmessage
                 $chatroom = $parameters[0];
             } elseif ($parameters[0] == 'first-watched') {
                 $_chatroom = get_value('occle_watched_chatroom');
-                $chatroom = is_null($_chatroom)?$GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms','id',null,'ORDER BY id'):intval($_chatroom);
+                $chatroom = is_null($_chatroom) ? $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms', 'id', null, 'ORDER BY id') : intval($_chatroom);
             } else {
                 $chatroom = get_chatroom_id($parameters[0]);
             }
 
             if (is_null($chatroom)) {
-                return array('','','',do_lang('MISSING_RESOURCE'));
+                return array('', '', '', do_lang('MISSING_RESOURCE'));
             }
 
-            chat_post_message($chatroom,$parameters[1],get_option('chat_default_post_font'),get_option('chat_default_post_colour'));
+            chat_post_message($chatroom, $parameters[1], get_option('chat_default_post_font'), get_option('chat_default_post_colour'));
 
-            return array('','',do_lang('SUCCESS'),'');
+            return array('', '', do_lang('SUCCESS'), '');
         }
     }
 }

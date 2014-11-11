@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    tester
  */
-
 class Hook_config_tester_forum_name
 {
     /**
@@ -44,6 +43,6 @@ class Hook_config_tester_forum_name
      */
     public function get_default()
     {
-        return do_lang('tester:DEFAULT_TESTER_FORUM','','','',get_site_default_lang());
+        return do_lang('tester:DEFAULT_TESTER_FORUM', '', '', '', get_site_default_lang());
     }
 }

@@ -12,20 +12,19 @@
  * @copyright  ocProducts Ltd
  * @package    group_points
  */
-
 class Hook_symbol_POINTS_FROM_USERGROUPS
 {
     /**
      * Run function for symbol hooks. Searches for tasks to perform.
-    *
-    * @param  array                     Symbol parameters
-    * @return string                    Result
+     *
+     * @param  array                     Symbol parameters
+     * @return string                    Result
      */
     public function run($param)
     {
         require_code('points');
-        $member = isset($param[0])?intval($param[0]):get_member();
-        $value = strval(total_points($member)-non_overridden__total_points($member));
+        $member = isset($param[0]) ? intval($param[0]) : get_member();
+        $value = strval(total_points($member) - non_overridden__total_points($member));
         return $value;
     }
 }

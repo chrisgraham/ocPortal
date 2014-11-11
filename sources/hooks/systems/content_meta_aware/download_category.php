@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-
 class Hook_content_meta_aware_download_category
 {
     /**
@@ -56,21 +55,21 @@ class Hook_content_meta_aware_download_category
             'view_page_link_pattern' => '_SEARCH:downloads:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_downloads:_ec:_WILD',
             'view_category_page_link_pattern' => '_SEARCH:downloads:misc:_WILD',
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_downloads'))?(get_module_zone('cms_downloads') . ':cms_downloads:ac:parent_id=!'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('downloads')) . ':downloads',
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_downloads')) ? (get_module_zone('cms_downloads') . ':cms_downloads:ac:parent_id=!') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('downloads')) . ':downloads',
 
             'support_url_monikers' => true,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
             'add_time_field' => 'add_date',
-            'edit_time_field' => NULL,
+            'edit_time_field' => null,
             'date_field' => 'add_date',
-            'validated_field' => NULL,
+            'validated_field' => null,
 
             'seo_type_code' => 'downloads_category',
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
             'permissions_type_code' => 'downloads', // NULL if has no permissions
 
@@ -84,7 +83,7 @@ class Hook_content_meta_aware_download_category
             'occle_filesystem_hook' => 'downloads',
             'occle_filesystem__is_folder' => true,
 
-            'rss_hook' => NULL,
+            'rss_hook' => null,
 
             'actionlog_regexp' => '\w+_DOWNLOAD_CATEGORY',
         );
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_download_category
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('downloads');
 
-        return render_download_category_box($row,$zone,$give_context,$include_breadcrumbs,is_null($root)?null:intval($root),$attach_to_url_filter,$guid);
+        return render_download_category_box($row, $zone, $give_context, $include_breadcrumbs, is_null($root) ? null : intval($root), $attach_to_url_filter, $guid);
     }
 }

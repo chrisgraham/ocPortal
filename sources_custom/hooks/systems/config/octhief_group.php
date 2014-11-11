@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_thief
  */
-
 class Hook_config_octhief_group
 {
     /**

@@ -30,7 +30,7 @@ $auth = new JabberAuth();
 chdir(dirname(__FILE__));
 global $SITE_INFO;
 require('../../../_config.php');
-$auth->dbhost = isset($SITE_INFO['db_site_host'])?$SITE_INFO['db_site_host']:'localhost';
+$auth->dbhost = isset($SITE_INFO['db_site_host']) ? $SITE_INFO['db_site_host'] : 'localhost';
 $auth->dbuser = $SITE_INFO['db_site_user'];
 $auth->dbpass = $SITE_INFO['db_site_password'];
 $auth->dbbase = $SITE_INFO['db_site'];
@@ -96,9 +96,9 @@ class JabberAuth
         $len = $length["1"]; // and we now know how long to read.
         if ($len > 0) { // if not, we'll fill logfile ... and disk full is just funny once
             $this->logg("Reading $len bytes ... "); // We notice ...
-            $data = @fgets($this->stdin, $len+1);
+            $data = @fgets($this->stdin, $len + 1);
             // $data=iconv("UTF-8", "ISO-8859-15", $data); // To be tested, not sure if still needed.
-            $this->data = rtrim($data,"\n"); // We set what we got.
+            $this->data = rtrim($data, "\n"); // We set what we got.
             $this->logg("IN: " . $data);
         }
     }
@@ -132,7 +132,7 @@ class JabberAuth
         do {
             $this->readstdin(); // get data
             $length = strlen($this->data); // compute data length
-            if ($length > 0 ) { // for debug mainly ...
+            if ($length > 0) { // for debug mainly ...
                 $this->logg("GO: " . $this->data);
                 $this->logg("data length is : " . $length);
             }
@@ -140,7 +140,8 @@ class JabberAuth
             $this->logg("RE: " . $ret); // this is what WE send.
             $this->out($ret); // send what we reply.
             $this->data = null; // more clean. ...
-        } while (true);
+        }
+        while (true);
     }
 
     public function command()
@@ -150,30 +151,30 @@ class JabberAuth
         // and the others are arguments .. e.g. : user, server, password ...
 
         if ($this->myalive()) { // Check we can play with MySQL
-            if (strlen($data[0]) > 0 ) {
+            if (strlen($data[0]) > 0) {
                 $this->logg("Command was : " . $data[0]);
             }
             switch ($data[0]) {
                 case "isuser": // this is the "isuser" command, used to check for user existance
-                        $this->jabber_user = $data[1];
-                        $parms = $data[1];  // only for logging purpose
-                        $return = $this->checkuser();
+                    $this->jabber_user = $data[1];
+                    $parms = $data[1];  // only for logging purpose
+                    $return = $this->checkuser();
                     break;
 
                 case "auth": // check login, password
-                        $this->jabber_user = $data[1];
-                        $this->jabber_pass = $data[3];
-                        $parms = $data[1] . ":" . $data[2] . ":" . md5($data[3]); // only for logging purpose
-                        $return = $this->checkpass();
+                    $this->jabber_user = $data[1];
+                    $this->jabber_pass = $data[3];
+                    $parms = $data[1] . ":" . $data[2] . ":" . md5($data[3]); // only for logging purpose
+                    $return = $this->checkpass();
                     break;
 
                 case "setpass":
-                        $return = false; // We do not want jabber to be able to change password
+                    $return = false; // We do not want jabber to be able to change password
                     break;
 
                 default:
-                        $this->stop(); // if it's not something known, we have to leave.
-                        // never had a problem with this using ejabberd, but might lead to problem ?
+                    $this->stop(); // if it's not something known, we have to leave.
+                    // never had a problem with this using ejabberd, but might lead to problem ?
                     break;
             }
 
@@ -201,8 +202,8 @@ class JabberAuth
         $result = mysql_query('SELECT * FROM ' . $SITE_INFO['table_prefix'] . 'f_members WHERE m_username=\'' . mysql_real_escape_string($this->jabber_user) . '\'');
         $row = mysql_fetch_assoc($result);
         if (!$row) {
-            if (strpos($this->jabber_user,'.') !== false) {
-                $this->jabber_user = str_replace('.',' ',$this->jabber_user);
+            if (strpos($this->jabber_user, '.') !== false) {
+                $this->jabber_user = str_replace('.', ' ', $this->jabber_user);
                 $result = mysql_query('SELECT * FROM ' . $SITE_INFO['table_prefix'] . 'f_members WHERE m_username=\'' . mysql_real_escape_string($this->jabber_user) . '\'');
                 $row = mysql_fetch_assoc($result);
                 if (!$row) {
@@ -219,7 +220,7 @@ class JabberAuth
         }
         switch ($password_compatibility_scheme) {
             case '': // ocPortal style salted MD5 algorithm
-                return $this->ratchet_hash_verify($this->jabber_pass,$row['m_pass_salt'],$row['m_pass_hash_salted']);
+                return $this->ratchet_hash_verify($this->jabber_pass, $row['m_pass_salt'], $row['m_pass_hash_salted']);
             case 'vb3': // vBulletin (used on ocportal.com a lot, for legacy reasons)
                 return (md5(md5($this->jabber_pass) . $row['m_pass_salt']) == $row['m_pass_hash_salted']);
             case 'plain':
@@ -239,10 +240,10 @@ class JabberAuth
      * @param  SHORT_TEXT               The prior salted&hashed password, which will also include the algorithm/ratcheting level (unless it's old style, in which case we use non-ratcheted md5)
      * @return boolean                  Whether the password if verified
      */
-    public function ratchet_hash_verify($password,$salt,$pass_hash_salted)
+    public function ratchet_hash_verify($password, $salt, $pass_hash_salted)
     {
-        if ((function_exists('password_verify')) && (preg_match('#^\w+$#',$pass_hash_salted) == 0)) {
-            return password_verify($salt . md5($password),$pass_hash_salted);
+        if ((function_exists('password_verify')) && (preg_match('#^\w+$#', $pass_hash_salted) == 0)) {
+            return password_verify($salt . md5($password), $pass_hash_salted);
         }
 
         // Old-style md5'd password
@@ -261,8 +262,8 @@ class JabberAuth
         $result = mysql_query('SELECT * FROM ' . $SITE_INFO['table_prefix'] . 'f_members WHERE m_username=\'' . mysql_real_escape_string($this->jabber_user) . '\'');
         $row = mysql_fetch_assoc($result);
         if (!$row) {
-            if (strpos($this->jabber_user,'.') !== false) {
-                $this->jabber_user = str_replace('.',' ',$this->jabber_user);
+            if (strpos($this->jabber_user, '.') !== false) {
+                $this->jabber_user = str_replace('.', ' ', $this->jabber_user);
                 $result = mysql_query('SELECT * FROM ' . $SITE_INFO['table_prefix'] . 'f_members WHERE m_username=\'' . mysql_real_escape_string($this->jabber_user) . '\'');
                 $row = mysql_fetch_assoc($result);
                 if (!$row) {
@@ -289,7 +290,7 @@ class JabberAuth
 
     public function logg($message) // pretty simple
     {
-        if (@in_array('test',$_SERVER['argv'])) {
+        if (@in_array('test', $_SERVER['argv'])) {
             echo $message . "\n";
         }
     }

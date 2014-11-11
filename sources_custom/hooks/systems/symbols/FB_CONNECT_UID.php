@@ -13,9 +13,9 @@ class Hook_symbol_FB_CONNECT_UID
             require_code('facebook_connect');
             global $FACEBOOK_CONNECT;
             if (!is_null($FACEBOOK_CONNECT)) {
-                @ini_set('ocproducts.type_strictness','0');
+                @ini_set('ocproducts.type_strictness', '0');
                 $value = strval($FACEBOOK_CONNECT->getUser());
-                @ini_set('ocproducts.type_strictness','1');
+                @ini_set('ocproducts.type_strictness', '1');
                 if ($value == '0') {
                     $value = '';
                 }

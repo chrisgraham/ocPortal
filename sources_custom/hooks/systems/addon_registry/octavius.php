@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    octavius
  */
-
 class Hook_addon_registry_octavius
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_octavius
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -110,8 +108,7 @@ class Hook_addon_registry_octavius
             'recommends' => array(
                 'xmpp_chat',
             ),
-            'conflicts_with' => array(
-            )
+            'conflicts_with' => array()
         );
     }
 

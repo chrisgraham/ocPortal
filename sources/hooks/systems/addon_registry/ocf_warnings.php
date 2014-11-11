@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_warnings
  */
-
 class Hook_addon_registry_ocf_warnings
 {
     /**
@@ -135,12 +134,12 @@ class Hook_addon_registry_ocf_warnings
      */
     public function tpl_preview__ocf_member_profile_warnings()
     {
-        $tab_content = do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS',array(
+        $tab_content = do_lorem_template('OCF_MEMBER_PROFILE_WARNINGS', array(
             'MEMBER_ID' => placeholder_id(),
             'WARNINGS' => lorem_phrase(),
         ));
         return array(
-            lorem_globalise($tab_content,null,'',true)
+            lorem_globalise($tab_content, null, '', true)
         );
     }
 
@@ -155,13 +154,13 @@ class Hook_addon_registry_ocf_warnings
     {
         require_css('ocf');
         return array(
-            lorem_globalise(do_lorem_template('OCF_SAVED_WARNING',array(
+            lorem_globalise(do_lorem_template('OCF_SAVED_WARNING', array(
                 'MESSAGE' => lorem_phrase(),
                 'MESSAGE_HTML' => lorem_phrase(),
                 'EXPLANATION' => lorem_phrase(),
                 'TITLE' => lorem_word(),
                 'DELETE_LINK' => placeholder_link(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -177,14 +176,14 @@ class Hook_addon_registry_ocf_warnings
         require_lang('ocf');
         require_css('ocf');
         return array(
-            lorem_globalise(do_lorem_template('OCF_WARNING_HISTORY_SCREEN',array(
+            lorem_globalise(do_lorem_template('OCF_WARNING_HISTORY_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'MEMBER_ID' => placeholder_id(),
                 'EDIT_PROFILE_URL' => placeholder_url(),
                 'VIEW_PROFILE_URL' => placeholder_url(),
                 'ADD_WARNING_URL' => placeholder_url(),
                 'RESULTS_TABLE' => placeholder_table(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

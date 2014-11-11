@@ -576,8 +576,7 @@ class Module_topicview
                 } else {
                     unset($topic_info['may_use_quick_reply']);
                 }
-            }
-            // Maybe we can let them edit their last post instead?
+            } // Maybe we can let them edit their last post instead?
             elseif (((is_null($topic_info['forum_id'])) || (has_privilege(get_member(), 'submit_lowrange_content', 'topics', array('forums', $topic_info['forum_id'])))) && ($topic_info['last_poster'] == get_member()) && (!is_guest()) && (ocf_may_edit_post_by(get_member(), $topic_info['forum_id'], null, $topic_info['is_open'] == 0))) {
                 $map = array('page' => 'topics', 'type' => 'edit_post', 'id' => $topic_info['last_post_id']);
                 $test = get_param_integer('kfs' . strval($topic_info['forum_id']), -1);

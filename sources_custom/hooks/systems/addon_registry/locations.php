@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    locations
  */
-
 class Hook_addon_registry_locations
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_locations
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -104,12 +102,9 @@ class Hook_addon_registry_locations
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
@@ -162,7 +157,7 @@ class Hook_addon_registry_locations
     public function install($upgrade_from = null)
     {
         if (is_null($upgrade_from)) {
-            $GLOBALS['SITE_DB']->create_table('locations',array(
+            $GLOBALS['SITE_DB']->create_table('locations', array(
                 'id' => '*AUTO',
                 'l_place' => 'SHORT_TEXT',
                 'l_type' => 'ID_TEXT',
@@ -176,10 +171,10 @@ class Hook_addon_registry_locations
                 'l_longitude' => '?REAL',
                 //'l_postcode'=>'ID_TEXT',   Actually often many postcodes per location and/or poor alignment
             ));
-            $GLOBALS['SITE_DB']->create_index('locations','l_place',array('l_place'));
-            $GLOBALS['SITE_DB']->create_index('locations','l_country',array('l_country'));
-            $GLOBALS['SITE_DB']->create_index('locations','l_latitude',array('l_latitude'));
-            $GLOBALS['SITE_DB']->create_index('locations','l_longitude',array('l_longitude'));
+            $GLOBALS['SITE_DB']->create_index('locations', 'l_place', array('l_place'));
+            $GLOBALS['SITE_DB']->create_index('locations', 'l_country', array('l_country'));
+            $GLOBALS['SITE_DB']->create_index('locations', 'l_latitude', array('l_latitude'));
+            $GLOBALS['SITE_DB']->create_index('locations', 'l_longitude', array('l_longitude'));
             //$GLOBALS['SITE_DB']->create_index('locations','l_postcode',array('l_postcode'));
         }
     }

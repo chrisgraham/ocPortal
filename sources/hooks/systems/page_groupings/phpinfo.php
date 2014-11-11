@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    phpinfo
  */
-
 class Hook_page_groupings_phpinfo
 {
     /**
@@ -27,14 +26,14 @@ class Hook_page_groupings_phpinfo
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         if (!addon_installed('phpinfo')) {
             return array();
         }
 
         return array(
-            array('tools','menu/adminzone/tools/phpinfo',array('admin_phpinfo',array(),get_module_zone('admin_phpinfo')),do_lang_tempcode('menus:PHPINFO'),'menus:DOC_PHPINFO'),
+            array('tools', 'menu/adminzone/tools/phpinfo', array('admin_phpinfo', array(), get_module_zone('admin_phpinfo')), do_lang_tempcode('menus:PHPINFO'), 'menus:DOC_PHPINFO'),
         );
     }
 }

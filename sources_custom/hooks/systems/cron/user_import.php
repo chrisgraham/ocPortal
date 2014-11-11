@@ -21,8 +21,8 @@ class Hook_cron_user_import
         }
 
         $last = get_value('last_user_import');
-        if ((is_null($last)) || (intval($last)<time()-60*USER_IMPORT_MINUTES)) {
-            set_value('last_user_import',strval(time()));
+        if ((is_null($last)) || (intval($last) < time() - 60 * USER_IMPORT_MINUTES)) {
+            set_value('last_user_import', strval(time()));
 
             do_user_import();
         }

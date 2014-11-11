@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ebay_store
  */
-
 class Hook_addon_registry_ebay_store
 {
     /**
@@ -99,8 +98,7 @@ Parameters are:
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -114,10 +112,8 @@ Parameters are:
             'requires' => array(
                 'recommend',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

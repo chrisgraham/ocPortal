@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_zone_editor
  */
-
 class Hook_addon_registry_core_zone_editor
 {
     /**
@@ -131,7 +130,7 @@ class Hook_addon_registry_core_zone_editor
     public function tpl_preview__administrative__zone_editor_screen()
     {
         require_lang('zones');
-        $comcode_editor = do_lorem_template('COMCODE_EDITOR_BUTTON',array(
+        $comcode_editor = do_lorem_template('COMCODE_EDITOR_BUTTON', array(
             'DIVIDER' => true,
             'FIELD_NAME' => lorem_word(),
             'TITLE' => lorem_word(),
@@ -140,11 +139,11 @@ class Hook_addon_registry_core_zone_editor
 
         $editor = array();
         foreach (array(
-            'panel_left',
-            'panel_middle',
-            'panel_right'
-        ) as $i => $for) {
-            $editor[$for] = do_lorem_template('ZONE_EDITOR_PANEL',array(
+                     'panel_left',
+                     'panel_middle',
+                     'panel_right'
+                 ) as $i => $for) {
+            $editor[$for] = do_lorem_template('ZONE_EDITOR_PANEL', array(
                 'CLASS' => '',
                 'ZONES' => '',
                 'CURRENT_ZONE' => '',
@@ -155,13 +154,13 @@ class Hook_addon_registry_core_zone_editor
                 'IS_PANEL' => true,
                 'TYPE' => lorem_phrase(),
                 'EDIT_URL' => placeholder_url(),
-                'SETTINGS' => NULL,
+                'SETTINGS' => null,
                 'COMCODE_EDITOR' => $comcode_editor,
             ));
         }
 
         return array(
-            lorem_globalise(do_lorem_template('ZONE_EDITOR_SCREEN',array(
+            lorem_globalise(do_lorem_template('ZONE_EDITOR_SCREEN', array(
                 'PING_URL' => placeholder_url(),
                 'WARNING_DETAILS' => '',
                 'TITLE' => lorem_title(),
@@ -171,7 +170,7 @@ class Hook_addon_registry_core_zone_editor
                 'LEFT_EDITOR' => $editor['panel_left'],
                 'RIGHT_EDITOR' => $editor['panel_right'],
                 'MIDDLE_EDITOR' => $editor['panel_middle'],
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

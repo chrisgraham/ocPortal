@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocworld
  */
-
 class Hook_admin_themewizard_ocworld
 {
     /**
@@ -22,6 +21,6 @@ class Hook_admin_themewizard_ocworld
      */
     public function run()
     {
-        return array(array('logo/ocworld-logo',),array());
+        return array(array('logo/ocworld-logo',), array());
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom
  */
-
 class Hook_addon_registry_ocportalcom
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_ocportalcom
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,10 +105,8 @@ class Hook_addon_registry_ocportalcom
             'requires' => array(
                 'downloads',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

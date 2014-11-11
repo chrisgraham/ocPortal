@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
-
 class Hook_realtime_rain_search
 {
     /**
@@ -27,35 +26,35 @@ class Hook_realtime_rain_search
      * @param  TIME                     End of time range.
      * @return array                    A list of template parameter sets for rendering a 'drop'.
      */
-    public function run($from,$to)
+    public function run($from, $to)
     {
         $drops = array();
 
-        if (has_actual_page_access(get_member(),'admin_stats')) {
+        if (has_actual_page_access(get_member(), 'admin_stats')) {
             $rows = $GLOBALS['SITE_DB']->query('SELECT s_primary,s_member_id AS member_id,s_time AS timestamp FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'searches_logged WHERE s_time BETWEEN ' . strval($from) . ' AND ' . strval($to));
 
             foreach ($rows as $row) {
                 $timestamp = $row['timestamp'];
                 $member_id = $row['member_id'];
 
-                $drops[] = rain_get_special_icons(null,$timestamp)+array(
-                    'TYPE' => 'search',
-                    'FROM_MEMBER_ID' => strval($member_id),
-                    'TO_MEMBER_ID' => NULL,
-                    'TITLE' => rain_truncate_for_title($row['s_primary']),
-                    'IMAGE' => find_theme_image('icons/48x48/menu/_generic_admin/site_meta/search'),
-                    'TIMESTAMP' => strval($timestamp),
-                    'RELATIVE_TIMESTAMP' => strval($timestamp-$from),
-                    'TICKER_TEXT' => NULL,
-                    'URL' => build_url(array('page' => 'search','type' => 'results','content' => $row['s_primary']),'_SEARCH'),
-                    'IS_POSITIVE' => false,
-                    'IS_NEGATIVE' => false,
+                $drops[] = rain_get_special_icons(null, $timestamp) + array(
+                        'TYPE' => 'search',
+                        'FROM_MEMBER_ID' => strval($member_id),
+                        'TO_MEMBER_ID' => null,
+                        'TITLE' => rain_truncate_for_title($row['s_primary']),
+                        'IMAGE' => find_theme_image('icons/48x48/menu/_generic_admin/site_meta/search'),
+                        'TIMESTAMP' => strval($timestamp),
+                        'RELATIVE_TIMESTAMP' => strval($timestamp - $from),
+                        'TICKER_TEXT' => null,
+                        'URL' => build_url(array('page' => 'search', 'type' => 'results', 'content' => $row['s_primary']), '_SEARCH'),
+                        'IS_POSITIVE' => false,
+                        'IS_NEGATIVE' => false,
 
-                    // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
-                    'FROM_ID' => 'member_' . strval($member_id),
-                    'TO_ID' => NULL,
-                    'GROUP_ID' => 'search_' . $row['s_primary'],
-                );
+                        // These are for showing connections between drops. They are not discriminated, it's just three slots to give an ID code that may be seen as a commonality with other drops.
+                        'FROM_ID' => 'member_' . strval($member_id),
+                        'TO_ID' => null,
+                        'GROUP_ID' => 'search_' . $row['s_primary'],
+                    );
             }
         }
 

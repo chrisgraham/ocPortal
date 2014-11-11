@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
-
 class Hook_ocf_cpf_filter_customers
 {
     /**

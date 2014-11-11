@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
-
 class Hook_addon_registry_staff_messaging
 {
     /**
@@ -140,7 +139,7 @@ class Hook_addon_registry_staff_messaging
      */
     public function tpl_preview__administrative__messaging_message_screen()
     {
-        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array(
+        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
             'JOIN_BITS' => lorem_phrase_html(),
             'USE_CAPTCHA' => false,
             'EMAIL_OPTIONAL' => lorem_word(),
@@ -159,7 +158,7 @@ class Hook_addon_registry_staff_messaging
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('MESSAGING_MESSAGE_SCREEN',array(
+            lorem_globalise(do_lorem_template('MESSAGING_MESSAGE_SCREEN', array(
                 'TITLE' => lorem_title(),
                 'MESSAGE_TITLE' => lorem_phrase(),
                 'MESSAGE' => lorem_phrase(),
@@ -171,7 +170,7 @@ class Hook_addon_registry_staff_messaging
                 'USERNAME' => lorem_word(),
                 'DATE' => placeholder_time(),
                 'MEMBER_URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -184,7 +183,7 @@ class Hook_addon_registry_staff_messaging
      */
     public function tpl_preview__block_main_contact_us()
     {
-        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array(
+        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
             'JOIN_BITS' => lorem_phrase_html(),
             'USE_CAPTCHA' => false,
             'EMAIL_OPTIONAL' => lorem_word(),
@@ -203,13 +202,13 @@ class Hook_addon_registry_staff_messaging
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_US',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_US', array(
                 'COMMENT_DETAILS' => $comment_details,
                 'MESSAGE' => lorem_phrase(),
                 'NOTIFICATIONS_ENABLED' => lorem_phrase(),
                 'TYPE' => placeholder_id(),
                 'FIRST_POST' => lorem_paragraph_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -223,7 +222,7 @@ class Hook_addon_registry_staff_messaging
     public function tpl_preview__block_main_contact_simple()
     {
         require_lang('ocf');
-        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM',array(
+        $comment_details = do_lorem_template('COMMENTS_POSTING_FORM', array(
             'JOIN_BITS' => lorem_phrase_html(),
             'FIRST_POST_URL' => placeholder_url(),
             'FIRST_POST' => lorem_paragraph_html(),
@@ -242,11 +241,11 @@ class Hook_addon_registry_staff_messaging
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_SIMPLE',array(
+            lorem_globalise(do_lorem_template('BLOCK_MAIN_CONTACT_SIMPLE', array(
                 'EMAIL_OPTIONAL' => lorem_word_html(),
                 'COMMENT_DETAILS' => $comment_details,
                 'MESSAGE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
-
 class Hook_occle_command_rmdir
 {
     /**
@@ -28,33 +27,33 @@ class Hook_occle_command_rmdir
      * @param  object                   A reference to the OcCLE filesystem object
      * @return array                    Array of stdcommand, stdhtml, stdout, and stderr responses
      */
-    public function run($options,$parameters,&$occle_fs)
+    public function run($options, $parameters, &$occle_fs)
     {
-        if ((array_key_exists('h',$options)) || (array_key_exists('help',$options))) {
-            return array('',do_command_help('rmdir',array('h','f'),array(true)),'','');
+        if ((array_key_exists('h', $options)) || (array_key_exists('help', $options))) {
+            return array('', do_command_help('rmdir', array('h', 'f'), array(true)), '', '');
         } else {
-            if (!array_key_exists(0,$parameters)) {
-                return array('','','',do_lang('MISSING_PARAM','1','rmdir'));
+            if (!array_key_exists(0, $parameters)) {
+                return array('', '', '', do_lang('MISSING_PARAM', '1', 'rmdir'));
             } else {
                 $parameters[0] = $occle_fs->_pwd_to_array($parameters[0]);
             }
 
             if (!$occle_fs->_is_dir($parameters[0])) {
-                return array('','','',do_lang('NOT_A_DIR','1'));
+                return array('', '', '', do_lang('NOT_A_DIR', '1'));
             }
 
-            if (!array_key_exists('f',$options)) {
+            if (!array_key_exists('f', $options)) {
                 $listing = $occle_fs->listing($parameters[0]);
                 if ((count($listing[0]) != 0) || (count($listing[1]) != 0)) {
-                    return array('','','',do_lang('NOT_EMPTY_FORCE','1'));
+                    return array('', '', '', do_lang('NOT_EMPTY_FORCE', '1'));
                 }
             }
 
             $success = $occle_fs->remove_directory($parameters[0]);
             if ($success) {
-                return array('','',do_lang('SUCCESS'),'');
+                return array('', '', do_lang('SUCCESS'), '');
             } else {
-                return array('','','',do_lang('INCOMPLETE_ERROR'));
+                return array('', '', '', do_lang('INCOMPLETE_ERROR'));
             }
         }
     }

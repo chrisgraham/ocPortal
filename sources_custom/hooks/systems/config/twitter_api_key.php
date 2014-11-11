@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    twitter_support
  */
-
 class Hook_config_twitter_api_key
 {
     /**

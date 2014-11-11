@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_gift_giver
  */
-
 class Hook_addon_registry_oc_gift_giver
 {
     /**
@@ -102,8 +101,7 @@ When creating new gifts please only use images which are free to use, we suggest
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -118,10 +116,8 @@ When creating new gifts please only use images which are free to use, we suggest
                 'OCF',
                 'pointstore',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -14,7 +14,7 @@ class Hook_symbol_HAS_READ
             return '0'; // Not installed yet
         }
 
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('content_read','r_time',array(
+        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('content_read', 'r_time', array(
             'r_content_type' => $param[0],
             'r_content_id' => $param[1],
             'r_member_id' => get_member()
@@ -28,7 +28,7 @@ class Hook_symbol_HAS_READ
         if (isset($param[3])) {
             $cleanup_days = intval($param[2]);
             $content_time = intval($param[3]);
-            if ($content_time<time()-60*60*24*$cleanup_days) {
+            if ($content_time < time() - 60 * 60 * 24 * $cleanup_days) {
                 return '1'; // Content too old, not tracking, assume read
             }
         }

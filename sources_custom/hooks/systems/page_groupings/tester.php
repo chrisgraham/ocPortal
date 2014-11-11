@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    tester
  */
-
 class Hook_page_groupings_tester
 {
     /**
@@ -22,10 +21,10 @@ class Hook_page_groupings_tester
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null,$extensive_docs = false)
+    public function run($member_id = null, $extensive_docs = false)
     {
         return array(
-            array('rich_content','menu/_generic_admin/tool',array('tester',array('type' => 'go'),get_page_zone('tester')),do_lang_tempcode('tester:TESTER')),
+            array('rich_content', 'menu/_generic_admin/tool', array('tester', array('type' => 'go'), get_page_zone('tester')), do_lang_tempcode('tester:TESTER')),
         );
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocgiftgiver
  */
-
 class Hook_Notification_gift extends Hook_Notification
 {
     /**
@@ -22,7 +21,7 @@ class Hook_Notification_gift extends Hook_Notification
      * @param  ?SHORT_TEXT              The category within the notification code (NULL: none)
      * @return integer                  Initial setting
      */
-    public function get_initial_setting($notification_code,$category = null)
+    public function get_initial_setting($notification_code, $category = null)
     {
         return A_INSTANT_PT;
     }
@@ -36,7 +35,7 @@ class Hook_Notification_gift extends Hook_Notification
     public function list_handled_codes()
     {
         $list = array();
-        $list['gift'] = array(do_lang('ACTIVITY'),do_lang('ocgifts:NOTIFICATION_TYPE_gift'));
+        $list['gift'] = array(do_lang('ACTIVITY'), do_lang('ocgifts:NOTIFICATION_TYPE_gift'));
         return $list;
     }
 }

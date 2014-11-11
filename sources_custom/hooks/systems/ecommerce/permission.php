@@ -20,12 +20,12 @@
  * @param  array                        Details of the product.
  * @param  ID_TEXT                      The product codename.
  */
-function handle_permission_purchase($purchase_id,$details,$type_code)
+function handle_permission_purchase($purchase_id, $details, $type_code)
 {
-    $id = intval(substr($type_code,strlen('PERMISSION_')));
+    $id = intval(substr($type_code, strlen('PERMISSION_')));
 
-    $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions',array('*'),array('id' => $id));
-    if (!array_key_exists(0,$rows)) {
+    $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions', array('*'), array('id' => $id));
+    if (!array_key_exists(0, $rows)) {
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
 
@@ -33,9 +33,9 @@ function handle_permission_purchase($purchase_id,$details,$type_code)
 
     $row = $rows[0];
 
-    $map = get_sales_permission_map($row,$member);
-    $map['active_until'] = is_null($row['p_hours'])?null:(time()+$row['p_hours']*60*60);
-    $GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($row['p_type']),$map);
+    $map = get_sales_permission_map($row, $member);
+    $map['active_until'] = is_null($row['p_hours']) ? null : (time() + $row['p_hours'] * 60 * 60);
+    $GLOBALS['SITE_DB']->query_insert(filter_naughty_harsh($row['p_type']), $map);
 
     // Email member
     require_code('mail');
@@ -43,8 +43,8 @@ function handle_permission_purchase($purchase_id,$details,$type_code)
     if ($subject_line != '') {
         $message_raw = get_translated_text($row['p_mail_body']);
         $email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($member);
-        $to_name = $GLOBALS['FORUM_DRIVER']->get_username($member,true);
-        mail_wrap($subject_line,$message_raw,array($email),$to_name,'','',3,null,false,null,true);
+        $to_name = $GLOBALS['FORUM_DRIVER']->get_username($member, true);
+        mail_wrap($subject_line, $message_raw, array($email), $to_name, '', '', 3, null, false, null, true);
     }
 }
 
@@ -55,7 +55,7 @@ function handle_permission_purchase($purchase_id,$details,$type_code)
  * @param  MEMBER                       Member ID
  * @return array                        Permission map row
  */
-function get_sales_permission_map($row,$member)
+function get_sales_permission_map($row, $member)
 {
     $map = array('member_id' => $member);
     switch ($row['p_type']) {
@@ -98,13 +98,13 @@ class Hook_permission
             return array();
         }
 
-        $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions',array('*'),array('p_enabled' => 1));
+        $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions', array('*'), array('p_enabled' => 1));
 
         $products = array();
         foreach ($rows as $row) {
             if ($row['p_cost'] != 0) {
-                $cost = floatval($row['p_cost'])/$ppc;
-                $products['PERMISSION_' . strval($row['id'])] = array(PRODUCT_PURCHASE_WIZARD,float_to_raw_string($cost),'handle_permission_purchase',array(),get_translated_text($row['p_title']));
+                $cost = floatval($row['p_cost']) / $ppc;
+                $products['PERMISSION_' . strval($row['id'])] = array(PRODUCT_PURCHASE_WIZARD, float_to_raw_string($cost), 'handle_permission_purchase', array(), get_translated_text($row['p_title']));
             }
         }
 
@@ -116,25 +116,25 @@ class Hook_permission
      *
      * @return integer                  The availability code (a ECOMMERCE_PRODUCT_* constant).
      */
-    public function is_available($type_code,$member)
+    public function is_available($type_code, $member)
     {
         if (is_guest($member)) {
             return ECOMMERCE_PRODUCT_NO_GUESTS;
         }
 
-        $id = intval(substr($type_code,strlen('PERMISSION_')));
+        $id = intval(substr($type_code, strlen('PERMISSION_')));
 
-        $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions',array('*'),array('id' => $id),'',1);
-        if (array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions', array('*'), array('id' => $id), '', 1);
+        if (array_key_exists(0, $rows)) {
             $row = $rows[0];
 
             if ($row['p_enabled'] == 0) {
                 return ECOMMERCE_PRODUCT_DISABLED;
             }
 
-            $map = get_sales_permission_map($row,$member);
-            $test = $GLOBALS['SITE_DB']->query_select_value_if_there(filter_naughty_harsh($row['p_type']),'member_id',$map);
-            return is_null($test)?ECOMMERCE_PRODUCT_AVAILABLE:ECOMMERCE_PRODUCT_ALREADY_HAS;
+            $map = get_sales_permission_map($row, $member);
+            $test = $GLOBALS['SITE_DB']->query_select_value_if_there(filter_naughty_harsh($row['p_type']), 'member_id', $map);
+            return is_null($test) ? ECOMMERCE_PRODUCT_AVAILABLE : ECOMMERCE_PRODUCT_ALREADY_HAS;
         }
 
         return ECOMMERCE_PRODUCT_MISSING;
@@ -148,12 +148,12 @@ class Hook_permission
      */
     public function get_message($type_code)
     {
-        $id = intval(substr($type_code,strlen('PERMISSION_')));
+        $id = intval(substr($type_code, strlen('PERMISSION_')));
 
-        $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions',array('*'),array('id' => $id),'',1);
-        if (array_key_exists(0,$rows)) {
+        $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions', array('*'), array('id' => $id), '', 1);
+        if (array_key_exists(0, $rows)) {
             $row = $rows[0];
-            return get_translated_tempcode('pstore_permissions',$row,'p_description');
+            return get_translated_tempcode('pstore_permissions', $row, 'p_description');
         }
         return new ocp_tempcode();
     }
@@ -165,6 +165,6 @@ class Hook_permission
      */
     public function get_needed_fields()
     {
-        return NULL;
+        return null;
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    ocportal_tutorials
  */
-
 class Hook_addon_registry_ocportal_tutorials
 {
     /**
@@ -100,8 +99,7 @@ The documentation is primarily maintained on our website, and this archive is on
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -112,12 +110,9 @@ The documentation is primarily maintained on our website, and this archive is on
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_banter
  */
-
 class Hook_addon_registry_oc_banter
 {
     /**
@@ -96,8 +95,7 @@ The insulted member has to try and make the right reply, if they succeed then th
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -112,10 +110,8 @@ The insulted member has to try and make the right reply, if they succeed then th
                 'Cron',
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

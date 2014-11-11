@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
-
 class Hook_block_ui_renderers_awards
 {
     /**
@@ -30,16 +29,16 @@ class Hook_block_ui_renderers_awards
      * @param  tempcode                 Field description
      * @return ?tempcode                Rendered field (NULL: not handled).
      */
-    public function render_block_ui($block,$parameter,$has_default,$default,$description)
+    public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
         if ($block . ':' . $parameter == 'main_awards:param') { // special case for awards
             $list = new ocp_tempcode();
-            $rows = $GLOBALS['SITE_DB']->query_select('award_types',array('id','a_title'));
+            $rows = $GLOBALS['SITE_DB']->query_select('award_types', array('id', 'a_title'));
             foreach ($rows as $row) {
-                $list->attach(form_input_list_entry(strval($row['id']),$has_default && strval($row['id']) == $default,get_translated_text($row['a_title'])));
+                $list->attach(form_input_list_entry(strval($row['id']), $has_default && strval($row['id']) == $default, get_translated_text($row['a_title'])));
             }
-            return form_input_list(titleify($parameter),escape_html($description),$parameter,$list,null,false,false);
+            return form_input_list(titleify($parameter), escape_html($description), $parameter, $list, null, false, false);
         }
-        return NULL;
+        return null;
     }
 }

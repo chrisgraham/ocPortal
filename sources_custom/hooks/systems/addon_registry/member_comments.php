@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    member_comments
  */
-
 class Hook_addon_registry_member_comments
 {
     /**
@@ -92,8 +91,7 @@ class Hook_addon_registry_member_comments
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -107,10 +105,8 @@ class Hook_addon_registry_member_comments
             'requires' => array(
                 'OCF',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

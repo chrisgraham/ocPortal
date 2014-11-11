@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    oc_world
  */
-
 class Hook_addon_registry_oc_world
 {
     /**
@@ -117,10 +116,8 @@ ocWorld is a full zone addon for ocPortal.';
                 'points',
                 'pointstore',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

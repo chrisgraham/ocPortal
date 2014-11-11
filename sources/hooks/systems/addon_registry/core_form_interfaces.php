@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_form_interfaces
  */
-
 class Hook_addon_registry_core_form_interfaces
 {
     /**
@@ -564,7 +563,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__wysiwyg_settings()
     {
         return array(
-            lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS',array()),null,'',true)
+            lorem_globalise(do_lorem_template('WYSIWYG_SETTINGS', array()), null, '', true)
         );
     }
 
@@ -578,7 +577,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__attachment_ui_defaults()
     {
         return array(
-            lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS',array()),null,'',true)
+            lorem_globalise(do_lorem_template('ATTACHMENT_UI_DEFAULTS', array()), null, '', true)
         );
     }
 
@@ -594,7 +593,7 @@ class Hook_addon_registry_core_form_interfaces
         $fields = new ocp_tempcode();
 
         $name = placeholder_random_id();
-        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_FLOAT', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
@@ -602,8 +601,8 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM_SINGLE_FIELD',array(
-                'GET' => NULL,
+            lorem_globalise(do_lorem_template('FORM_SINGLE_FIELD', array(
+                'GET' => null,
                 'HIDDEN' => '',
                 'TITLE' => lorem_title(),
                 'LABEL' => lorem_phrase(),
@@ -613,7 +612,7 @@ class Hook_addon_registry_core_form_interfaces
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word(),
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -633,14 +632,14 @@ class Hook_addon_registry_core_form_interfaces
         $fields = new ocp_tempcode();
 
         $name = placeholder_random_id();
-        $_input1 = do_lorem_template('FORM_SCREEN_INPUT_LINE',array(
+        $_input1 = do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
             'MAXLENGTH' => placeholder_number(),
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name . '1',
             'DEFAULT' => '',
         ));
-        $input1 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
+        $input1 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM', array(
             'SET_NAME' => $name,
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
@@ -651,13 +650,13 @@ class Hook_addon_registry_core_form_interfaces
             'INPUT' => $_input1,
             'COMCODE' => '',
         ));
-        $_input2 = do_lorem_template('FORM_SCREEN_INPUT_URL',array(
+        $_input2 = do_lorem_template('FORM_SCREEN_INPUT_URL', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name . '2',
             'DEFAULT' => '',
         ));
-        $input2 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM',array(
+        $input2 = do_lorem_template('FORM_SCREEN_FIELDS_SET_ITEM', array(
             'SET_NAME' => $name,
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
@@ -671,13 +670,13 @@ class Hook_addon_registry_core_form_interfaces
         $inputs = new ocp_tempcode();
         $inputs->attach($input1);
         $inputs->attach($input2);
-        $fieldset = do_lorem_template('FORM_SCREEN_FIELDS_SET',array(
+        $fieldset = do_lorem_template('FORM_SCREEN_FIELDS_SET', array(
             'SET_NAME' => $name,
             'PRETTY_NAME' => lorem_word(),
             'FIELDS' => $inputs,
             'REQUIRED' => true,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => $name,
@@ -689,7 +688,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_TEXT',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TEXT', array(
             'RAW' => true,
             'SCROLLS' => '',
             'TABINDEX' => placeholder_number(),
@@ -697,7 +696,7 @@ class Hook_addon_registry_core_form_interfaces
             'NAME' => $name,
             'DEFAULT' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -709,7 +708,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_CODENAME',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_CODENAME', array(
             'MAXLENGTH' => placeholder_number(),
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
@@ -717,7 +716,7 @@ class Hook_addon_registry_core_form_interfaces
             'DEFAULT' => '',
             'EXTRA_CHARS' => array(),
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -729,12 +728,12 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_TICK',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TICK', array(
             'CHECKED' => true,
             'TABINDEX' => placeholder_number(),
             'NAME' => $name,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -745,14 +744,14 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD_SPACER', array(
             'SECTION_HIDDEN' => false,
             'TITLE' => lorem_phrase(),
             'THEME_ALSO_INCLUDE_PAGES' => false,
         )));
         $list = new ocp_tempcode();
         foreach (placeholder_array() as $key => $value) {
-            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
                 'DISABLED' => false,
                 'CLASS' => '',
@@ -760,13 +759,13 @@ class Hook_addon_registry_core_form_interfaces
                 'TEXT' => lorem_phrase(),
             )));
         }
-        $list = do_lorem_template('FORM_SCREEN_INPUT_LIST_GROUP',array(
+        $list = do_lorem_template('FORM_SCREEN_INPUT_LIST_GROUP', array(
             'ENTRIES' => $list,
             'TITLE' => lorem_phrase(),
         ));
         $radios = new ocp_tempcode();
         $name = placeholder_random_id();
-        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
             'DESCRIPTION' => lorem_sentence(),
             'CHECKED' => true,
             'TABINDEX' => placeholder_number(),
@@ -774,7 +773,7 @@ class Hook_addon_registry_core_form_interfaces
             'VALUE' => placeholder_random(),
             'TEXT' => lorem_phrase(),
         )));
-        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
             'DESCRIPTION' => lorem_sentence(),
             'CHECKED' => 'false',
             'TABINDEX' => placeholder_number(),
@@ -782,7 +781,7 @@ class Hook_addon_registry_core_form_interfaces
             'VALUE' => placeholder_random(),
             'TEXT' => lorem_phrase(),
         )));
-        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
             'DESCRIPTION' => lorem_sentence(),
             'CHECKED' => 'false',
             'TABINDEX' => placeholder_number(),
@@ -792,13 +791,13 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_ALL_AND_NOT',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_ALL_AND_NOT', array(
             'TABINDEX' => placeholder_number(),
             'BASE' => $name,
             'RADIOS' => $radios,
             'LIST' => $list,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name . '_list',
@@ -810,7 +809,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_AUTHOR',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_AUTHOR', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
@@ -819,14 +818,14 @@ class Hook_addon_registry_core_form_interfaces
         $_description = new ocp_tempcode();
         $_description->attach(lorem_phrase());
         $_description->attach(do_lorem_template('FORM_DESCRIP_SEP'));
-        $extra = do_lorem_template('HYPERLINK_POPUP_WINDOW',array(
+        $extra = do_lorem_template('HYPERLINK_POPUP_WINDOW', array(
             'URL' => placeholder_url(),
             'TITLE' => lorem_phrase(),
             'CAPTION' => lorem_phrase(),
         ));
         $_description->attach($extra);
 
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -837,7 +836,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_COLOUR',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_COLOUR', array(
             'RAW_FIELD' => false,
             'REQUIRED' => '',
             'PRETTY_NAME' => lorem_word(),
@@ -856,7 +855,7 @@ class Hook_addon_registry_core_form_interfaces
         $start_minute = intval(date('i'));
 
         $name = placeholder_random_id();
-        $time = do_lorem_template('FORM_SCREEN_INPUT_TIME',array(
+        $time = do_lorem_template('FORM_SCREEN_INPUT_TIME', array(
             'REQUIRED' => true,
             'TABINDEX' => placeholder_number(),
             'NAME' => placeholder_random_id(),
@@ -864,7 +863,7 @@ class Hook_addon_registry_core_form_interfaces
             'MINUTE' => placeholder_number(),
             'HOUR' => placeholder_number(),
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => $name,
@@ -875,7 +874,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $input = do_lorem_template('FORM_SCREEN_INPUT_DATE',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_DATE', array(
             'REQUIRED' => true,
             'TABINDEX' => placeholder_number(),
             'NAME' => $name,
@@ -894,7 +893,7 @@ class Hook_addon_registry_core_form_interfaces
             'MAX_DATE_MONTH' => '',
             'MAX_DATE_YEAR' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => $name,
@@ -906,13 +905,13 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_EMAIL',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_EMAIL', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
             'DEFAULT' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -924,13 +923,13 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_FLOAT',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_FLOAT', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
             'DEFAULT' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -941,7 +940,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE', array(
             'RAW' => true,
             'SCROLLS' => '',
             'DESCRIPTION_SIDE' => lorem_sentence(),
@@ -955,12 +954,12 @@ class Hook_addon_registry_core_form_interfaces
             'ROWS' => '20',
         )));
 
-        $_comcode = do_lorem_template('COMCODE_MESSAGE',array(
+        $_comcode = do_lorem_template('COMCODE_MESSAGE', array(
             'NAME' => lorem_word(),
             'W' => '',
             'URL' => placeholder_url(),
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_COMCODE',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_COMCODE', array(
             'SCROLLS' => '',
             'DESCRIPTION_SIDE' => lorem_sentence(),
             'REQUIRED' => 'wysiwyg',
@@ -976,8 +975,8 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM',array(
-                'GET' => NULL,
+            lorem_globalise(do_lorem_template('FORM', array(
+                'GET' => null,
                 'SKIP_VALIDATION' => true,
                 'HIDDEN' => '',
                 'TITLE' => lorem_title(),
@@ -986,7 +985,7 @@ class Hook_addon_registry_core_form_interfaces
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word(),
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1007,7 +1006,7 @@ class Hook_addon_registry_core_form_interfaces
 
         $entries = new ocp_tempcode();
         foreach (placeholder_array() as $val) {
-            $entries->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+            $entries->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => '',
                 'DISABLED' => '',
                 'CLASS' => '',
@@ -1015,7 +1014,7 @@ class Hook_addon_registry_core_form_interfaces
                 'TEXT' => lorem_phrase(),
             )));
         }
-        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_LIST',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE_LIST', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'PRETTY_NAME' => lorem_word(),
@@ -1047,13 +1046,13 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
             'DEFAULT' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1066,7 +1065,7 @@ class Hook_addon_registry_core_form_interfaces
 
         $input = new ocp_tempcode();
         foreach (placeholder_array(1) as $k => $v) {
-            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI',array(
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI', array(
                 'CLASS' => '',
                 'MAXLENGTH' => '10',
                 'PRETTY_NAME' => $v,
@@ -1079,7 +1078,7 @@ class Hook_addon_registry_core_form_interfaces
         }
 
         foreach (placeholder_array(2) as $k => $v) {
-            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI',array(
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_TEXT_MULTI', array(
                 'PRETTY_NAME' => lorem_word(),
                 'TABINDEX' => placeholder_number(),
                 'NAME_STUB' => placeholder_random_id(),
@@ -1089,13 +1088,13 @@ class Hook_addon_registry_core_form_interfaces
             )));
         }
         $name = placeholder_random_id();
-        $hidden = do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2',array(
+        $hidden = do_lorem_template('FORM_SCREEN_INPUT_HIDDEN_2', array(
             'NAME' => $name,
             'VALUE' => lorem_phrase(),
         ));
 
         foreach (placeholder_array() as $key => $value) {
-            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY',array(
+            $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => '',
                 'DISABLED' => '',
                 'CLASS' => '',
@@ -1105,14 +1104,14 @@ class Hook_addon_registry_core_form_interfaces
         }
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_COMBO',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_COMBO', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
             'CONTENT' => $list,
             'DEFAULT' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1124,14 +1123,14 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_LIST', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
             'CONTENT' => $list,
             'INLINE_LIST' => false,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1143,13 +1142,13 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_MULTI_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_MULTI_LIST', array(
             'TABINDEX' => placeholder_number(),
             'SIZE' => '5',
             'NAME' => $name,
             'CONTENT' => $list,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1161,13 +1160,13 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_PASSWORD', array(
             'TABINDEX' => placeholder_number(),
             'REQUIRED' => '',
             'NAME' => $name,
             'VALUE' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1179,7 +1178,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $radios = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+        $radios = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
             'DESCRIPTION' => lorem_phrase(),
             'CHECKED' => true,
             'TABINDEX' => placeholder_number(),
@@ -1187,7 +1186,7 @@ class Hook_addon_registry_core_form_interfaces
             'VALUE' => lorem_word(),
             'TEXT' => lorem_phrase(),
         ));
-        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY',array(
+        $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
             'DESCRIPTION' => lorem_phrase(),
             'CHECKED' => true,
             'TABINDEX' => placeholder_number(),
@@ -1195,12 +1194,12 @@ class Hook_addon_registry_core_form_interfaces
             'VALUE' => lorem_word_2(),
             'TEXT' => lorem_phrase(),
         )));
-        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
             'CONTENT' => $radios,
             'NAME' => $name,
             'REQUIRED' => true,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => '',
@@ -1212,7 +1211,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_TREE_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_TREE_LIST', array(
             'NICE_LABEL' => '',
             'USE_SERVER_ID' => placeholder_id(),
             'TABINDEX' => placeholder_number(),
@@ -1225,7 +1224,7 @@ class Hook_addon_registry_core_form_interfaces
             'DESCRIPTION' => lorem_sentence_html(),
             'MULTI_SELECT' => false,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1237,7 +1236,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD', array(
             'FILTER' => '',
             'EXISTING_URL' => placeholder_url(),
             'IS_IMAGE' => '',
@@ -1247,7 +1246,7 @@ class Hook_addon_registry_core_form_interfaces
             'REQUIRED' => '',
             'NAME' => $name,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1259,7 +1258,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_UPLOAD_MULTI', array(
             'TABINDEX' => placeholder_number(),
             'FILTER' => '',
             'PLUPLOAD' => false,
@@ -1269,7 +1268,7 @@ class Hook_addon_registry_core_form_interfaces
             'NAME_STUB' => lorem_word(),
             'EDIT' => array(),
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => $name,
@@ -1281,14 +1280,14 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_USERNAME',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_USERNAME', array(
             'TABINDEX' => placeholder_number(),
             'NEEDS_MATCH' => true,
             'REQUIRED' => '',
             'NAME' => $name,
             'DEFAULT' => '',
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,
             'NAME' => $name,
@@ -1302,7 +1301,7 @@ class Hook_addon_registry_core_form_interfaces
         $name = placeholder_random_id();
         $input = new ocp_tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI',array(
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI', array(
                 'PRETTY_NAME' => lorem_word(),
                 'TABINDEX' => placeholder_number(),
                 'NEEDS_MATCH' => true,
@@ -1312,7 +1311,7 @@ class Hook_addon_registry_core_form_interfaces
                 'DEFAULT' => '',
             )));
         }
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => placeholder_random_id(),
@@ -1367,7 +1366,7 @@ class Hook_addon_registry_core_form_interfaces
                 );
             }
 
-            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_VARIOUS_TICKS',array(
+            $input->attach(do_lorem_template('FORM_SCREEN_INPUT_VARIOUS_TICKS', array(
                 'SECTION_TITLE' => $_option[2],
                 'EXPANDED' => $_option[1],
                 'SIMPLE_STYLE' => false,
@@ -1376,7 +1375,7 @@ class Hook_addon_registry_core_form_interfaces
                 'OUT' => $out,
             )));
         }
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => $name,
@@ -1387,14 +1386,14 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $hidden->attach(do_lorem_template('FORM_SCREEN_INPUT_HIDDEN',array(
+        $hidden->attach(do_lorem_template('FORM_SCREEN_INPUT_HIDDEN', array(
             'NAME' => lorem_word(),
             'VALUE' => lorem_word(),
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM_SCREEN',array(
-                'GET' => NULL,
+            lorem_globalise(do_lorem_template('FORM_SCREEN', array(
+                'GET' => null,
                 'SKIP_VALIDATION' => true,
                 'HIDDEN' => $hidden,
                 'TITLE' => lorem_title(),
@@ -1403,7 +1402,7 @@ class Hook_addon_registry_core_form_interfaces
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word(),
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1417,12 +1416,12 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__posting_screen()
     {
         return array(
-            lorem_globalise(do_lorem_template('POSTING_SCREEN',array(
+            lorem_globalise(do_lorem_template('POSTING_SCREEN', array(
                 'POSTING_FORM' => placeholder_form(),
                 'HIDDEN' => '',
                 'TITLE' => lorem_title(),
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1436,10 +1435,10 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__form_group()
     {
         return array(
-            lorem_globalise(do_lorem_template('FORM_GROUP',array(
+            lorem_globalise(do_lorem_template('FORM_GROUP', array(
                 'FIELDS' => placeholder_fields(),
                 'HIDDEN' => '',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1453,14 +1452,14 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__form_grouped()
     {
         return array(
-            lorem_globalise(do_lorem_template('FORM_GROUPED',array(
+            lorem_globalise(do_lorem_template('FORM_GROUPED', array(
                 'TEXT' => lorem_sentence_html(),
                 'FIELD_GROUPS' => lorem_phrase(),
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word(),
                 'SUBMIT_BUTTON_CLASS' => lorem_phrase(),
                 'URL' => placeholder_url(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1474,11 +1473,11 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__form_field_set_grouper()
     {
         return array(
-            lorem_globalise(do_lorem_template('FORM_FIELD_SET_GROUPER',array(
+            lorem_globalise(do_lorem_template('FORM_FIELD_SET_GROUPER', array(
                 'NAME' => lorem_word(),
                 'ID' => placeholder_random_id(),
                 'FIELDS' => placeholder_fields(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1492,7 +1491,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__preview_script_spelling()
     {
         return array(
-            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_SPELLING',array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_SPELLING', array(
                 'FIELD' => lorem_phrase(),
                 'MISSPELLINGS' => array(
                     array(
@@ -1504,7 +1503,7 @@ class Hook_addon_registry_core_form_interfaces
                         'CORRECTIONS' => 'cat',
                     )
                 )
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1518,13 +1517,13 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__preview_script_keyword_density()
     {
         return array(
-            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_KEYWORD_DENSITY',array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_KEYWORD_DENSITY', array(
                 'FIELD' => lorem_phrase(),
                 'KEYWORDS' => placeholder_array(),
                 'KEYWORD' => lorem_word(),
                 'DENSITY' => placeholder_id(),
                 'IDEAL_DENSITY' => placeholder_number(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1538,10 +1537,10 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__preview_script_code()
     {
         return array(
-            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_CODE',array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT_CODE', array(
                 'NEW_POST_VALUE_HTML' => lorem_phrase(),
                 'NEW_POST_VALUE' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1559,14 +1558,14 @@ class Hook_addon_registry_core_form_interfaces
         $input = new ocp_tempcode();
         $fields = new ocp_tempcode();
         foreach (placeholder_array(1) as $key => $val) {
-            $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE',array(
+            $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE', array(
                 'CHECKED' => true,
                 'NAME' => 'path',
                 'VALUE' => $val,
                 'URL' => placeholder_image_url(),
                 'PRETTY' => strval($key),
             ));
-            $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+            $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
                 'REQUIRED' => true,
                 'SKIP_LABEL' => false,
                 'NAME' => 'path_' . $val,
@@ -1582,7 +1581,7 @@ class Hook_addon_registry_core_form_interfaces
         foreach (placeholder_array() as $k => $v) {
             $cells = new ocp_tempcode();
             foreach (placeholder_array() as $_k => $_v) {
-                $temp = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY',array(
+                $temp = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array(
                     'CHECKED' => true,
                     'PRETTY' => lorem_phrase(),
                     'NAME' => placeholder_random_id(),
@@ -1592,7 +1591,7 @@ class Hook_addon_registry_core_form_interfaces
                 $cells->attach($temp);
             }
 
-            $input = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY',array(
+            $input = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_CATEGORY', array(
                 'DISPLAY' => 'block',
                 'CATEGORY' => $cells,
                 'FIELD_NAME' => placeholder_id(),
@@ -1602,14 +1601,14 @@ class Hook_addon_registry_core_form_interfaces
         }
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
             'NAME' => $name,
             'CODE' => '',
             'TABINDEX' => placeholder_number(),
             'CONTENT' => $content,
             'REQUIRED' => true,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => '',
@@ -1620,7 +1619,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $fields->attach(do_lorem_template('POSTING_FIELD',array(
+        $fields->attach(do_lorem_template('POSTING_FIELD', array(
             'REQUIRED' => true,
             'DESCRIPTION' => lorem_phrase(),
             'HIDDEN_FIELDS' => '',
@@ -1638,8 +1637,8 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM_SCREEN',array(
-                'GET' => NULL,
+            lorem_globalise(do_lorem_template('FORM_SCREEN', array(
+                'GET' => null,
                 'HIDDEN' => '',
                 'TITLE' => lorem_title(),
                 'URL' => placeholder_url(),
@@ -1647,7 +1646,7 @@ class Hook_addon_registry_core_form_interfaces
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word(),
                 'TEXT' => lorem_sentence_html(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1661,7 +1660,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__wysiwyg_load()
     {
         return array(
-            lorem_globalise(do_lorem_template('WYSIWYG_LOAD',array()),null,'',true)
+            lorem_globalise(do_lorem_template('WYSIWYG_LOAD', array()), null, '', true)
         );
     }
 
@@ -1693,7 +1692,7 @@ class Hook_addon_registry_core_form_interfaces
             'html'
         );
         foreach ($_buttons as $button) {
-            $buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON',array(
+            $buttons->attach(do_lorem_template('COMCODE_EDITOR_BUTTON', array(
                 'DIVIDER' => true,
                 'FIELD_NAME' => lorem_word(),
                 'TITLE' => lorem_phrase(),
@@ -1712,14 +1711,14 @@ class Hook_addon_registry_core_form_interfaces
         );
 
         foreach ($_micro_buttons as $button) {
-            $micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON',array(
+            $micro_buttons->attach(do_lorem_template('COMCODE_EDITOR_MICRO_BUTTON', array(
                 'FIELD_NAME' => lorem_word(),
                 'TITLE' => lorem_phrase(),
                 'B' => $button['t'],
             )));
         }
 
-        $comcode = do_lorem_template('COMCODE_EDITOR',array(
+        $comcode = do_lorem_template('COMCODE_EDITOR', array(
             'POSTING_FIELD' => lorem_word(),
             'BUTTONS' => $buttons,
             'MICRO_BUTTONS' => $micro_buttons,
@@ -1727,7 +1726,7 @@ class Hook_addon_registry_core_form_interfaces
 
 
         return array(
-            lorem_globalise(do_lorem_template('POSTING_FORM',array(
+            lorem_globalise(do_lorem_template('POSTING_FORM', array(
                 'TABINDEX_PF' => placeholder_number(),
                 'JAVASCRIPT' => '',
                 'PREVIEW' => lorem_phrase(),
@@ -1749,7 +1748,7 @@ class Hook_addon_registry_core_form_interfaces
                 'SPECIALISATION' => placeholder_fields(),
                 'SPECIALISATION2' => placeholder_fields(),
                 'REQUIRED' => true,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1763,7 +1762,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__form_descrip_sep()
     {
         return array(
-            lorem_globalise(do_lorem_template('FORM_DESCRIP_SEP',array()),null,'',true)
+            lorem_globalise(do_lorem_template('FORM_DESCRIP_SEP', array()), null, '', true)
         );
     }
 
@@ -1782,7 +1781,7 @@ class Hook_addon_registry_core_form_interfaces
             $overrides = new ocp_tempcode();
             $all_global = true;
             foreach (placeholder_array() as $_k => $_v) {
-                $overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE',array(
+                $overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE', array(
                     'FORCE_PRESETS' => false,
                     'GROUP_NAME' => lorem_phrase(),
                     'VIEW_ACCESS' => '',
@@ -1796,10 +1795,10 @@ class Hook_addon_registry_core_form_interfaces
                 )));
             }
 
-            $permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION',array(
+            $permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION', array(
                 'FORCE_PRESETS' => false,
                 'GROUP_NAME' => lorem_phrase(),
-                'OVERRIDES' => $overrides->evaluate() /*FUDGEFUDGE*/ ,
+                'OVERRIDES' => $overrides->evaluate() /*FUDGEFUDGE*/,
                 'ALL_GLOBAL' => true,
                 'VIEW_ACCESS' => '',
                 'TABINDEX' => placeholder_number(),
@@ -1808,7 +1807,7 @@ class Hook_addon_registry_core_form_interfaces
             )));
         }
 
-        $permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN',array(
+        $permission_rows->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_ADMIN', array(
             'PINTERFACE_VIEW' => lorem_word(),
             'GROUP_ID' => placeholder_random_id(),
             'GROUP_NAME' => lorem_phrase(),
@@ -1816,7 +1815,7 @@ class Hook_addon_registry_core_form_interfaces
             'OVERRIDES' => placeholder_array(),
         )));
 
-        $field = do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX',array(
+        $field = do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX', array(
             'TITLE' => lorem_phrase(),
             'SERVER_ID' => placeholder_id(),
             'COLOR' => lorem_word(),
@@ -1825,13 +1824,13 @@ class Hook_addon_registry_core_form_interfaces
         ));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM_GROUPED',array(
+            lorem_globalise(do_lorem_template('FORM_GROUPED', array(
                 'URL' => '#',
                 'FIELD_GROUPS' => $field,
                 'TEXT' => '',
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word_2(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1849,14 +1848,14 @@ class Hook_addon_registry_core_form_interfaces
         $fields = new ocp_tempcode();
 
         $name = placeholder_random_id();
-        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST',array(
+        $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
             'NAME' => $name,
             'CODE' => '',
             'TABINDEX' => placeholder_number(),
             'CONTENT' => lorem_phrase(),
             'REQUIRED' => true,
         ));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => true,
             'NAME' => '',
@@ -1867,19 +1866,19 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER',array(
+        $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_MATRIX_OUTER', array(
             'INNER' => lorem_word(),
         )));
 
         return array(
-            lorem_globalise(do_lorem_template('FORM',array(
+            lorem_globalise(do_lorem_template('FORM', array(
                 'URL' => '#',
                 'FIELDS' => $fields,
                 'HIDDEN' => '',
                 'TEXT' => '',
                 'SUBMIT_ICON' => 'buttons__proceed',
                 'SUBMIT_NAME' => lorem_word_2(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1893,13 +1892,13 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__preview_script()
     {
         return array(
-            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT',array(
+            lorem_globalise(do_lorem_template('PREVIEW_SCRIPT', array(
                 'OUTPUT' => lorem_phrase(),
                 'HIDDEN' => '',
                 'VALIDATION' => lorem_phrase(),
                 'KEYWORD_DENSITY' => lorem_phrase(),
                 'SPELLING' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1917,7 +1916,7 @@ class Hook_addon_registry_core_form_interfaces
 
         $links = new ocp_tempcode();
         foreach (placeholder_array() as $v) {
-            $links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE',array(
+            $links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE', array(
                 'USAGE' => placeholder_array(),
                 'DESCRIPTION' => lorem_paragraph_html(),
                 'URL' => placeholder_url(),
@@ -1925,11 +1924,11 @@ class Hook_addon_registry_core_form_interfaces
             )));
         }
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_HELPER_BLOCK_GROUP',array(
+            lorem_globalise(do_lorem_template('BLOCK_HELPER_BLOCK_GROUP', array(
                 'IMG' => 'themes/default/images/icons/24x24/menu/_generic_admin/add_one.png',
                 'TITLE' => lorem_phrase(),
                 'LINKS' => $links,
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -1945,11 +1944,11 @@ class Hook_addon_registry_core_form_interfaces
         require_lang('comcode');
         return array(
             lorem_globalise(
-                do_lorem_template('BLOCK_HELPER_START',array(
-                    'TITLE' => lorem_phrase(),
-                    'LINKS' => lorem_paragraph_html(),
-                )
-            ),null,'',true),
+                do_lorem_template('BLOCK_HELPER_START', array(
+                        'TITLE' => lorem_phrase(),
+                        'LINKS' => lorem_paragraph_html(),
+                    )
+                ), null, '', true),
         );
     }
 
@@ -1963,7 +1962,7 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__administrative__block_helper_done()
     {
         return array(
-            lorem_globalise(do_lorem_template('BLOCK_HELPER_DONE',array(
+            lorem_globalise(do_lorem_template('BLOCK_HELPER_DONE', array(
                 'TITLE' => lorem_phrase(),
                 'FIELD_NAME' => placeholder_id(),
                 'BLOCK' => lorem_phrase(),
@@ -1972,7 +1971,7 @@ class Hook_addon_registry_core_form_interfaces
                 'DELETE' => false,
                 'COMCODE' => lorem_phrase(),
                 'COMCODE_SEMIHTML' => lorem_phrase(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

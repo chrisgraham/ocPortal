@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    reported_content
  */
-
 class Hook_addon_registry_reported_content
 {
     /**
@@ -148,8 +147,7 @@ So, you are probably thinking: what does [tt]_SEARCH:report_content:content_type
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -160,12 +158,9 @@ So, you are probably thinking: what does [tt]_SEARCH:report_content:content_type
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

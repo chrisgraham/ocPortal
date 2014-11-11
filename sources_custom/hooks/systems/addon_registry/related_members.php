@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    related_members
  */
-
 class Hook_addon_registry_related_members
 {
     /**
@@ -96,8 +95,7 @@ The particular CPF used is defined by the [tt]RELATED_CPF[/tt] language string (
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,10 +109,8 @@ The particular CPF used is defined by the [tt]RELATED_CPF[/tt] language string (
             'requires' => array(
                 'member_directory_boxes',
             ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

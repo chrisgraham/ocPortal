@@ -33,8 +33,7 @@ function _imap_server_spec($server, $port, $type = null)
 {
     if ($type === 'pop3' || $type === 'pop3s') {
         $is_pop3 = true;
-    }
-    elseif ($type === 'imap' || $type === 'imaps') {
+    } elseif ($type === 'imap' || $type === 'imaps') {
         $is_pop3 = false;
     } else {
         $is_pop3 = (strpos($server, 'pop') !== false || $port == 110 || $port == 995);
@@ -265,7 +264,7 @@ function _find_mail_bounces($server, $port, $folder, $username, $password, $boun
         $body = imap_body($mbox, $val);
         $header = imap_fetchheader($mbox, $val);
 
-        $is_bounce = 
+        $is_bounce =
             // Proper failure header
             (strpos($header, 'X-Failed-Recipients') !== false)
 

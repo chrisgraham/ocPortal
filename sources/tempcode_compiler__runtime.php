@@ -40,7 +40,8 @@ function init__tempcode_compiler__runtime()
  * @param  ?ID_TEXT                     The language it is for (NULL: current language)
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode_static(/*&*/$text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null)
+function template_to_tempcode_static(/*&*/
+    $text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null)
 {
     if (is_null($theme)) {
         $theme = is_null($GLOBALS['FORUM_DRIVER']) ? 'default' : $GLOBALS['FORUM_DRIVER']->get_theme();
@@ -586,7 +587,9 @@ function _do_template($theme, $path, $codename, $_codename, $lang, $suffix, $the
  * @param  boolean                      Whether to tolerate errors
  * @return mixed                        The converted/compiled template as tempcode, OR if a directive, encoded directive information
  */
-function template_to_tempcode(/*&*/$text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
+function template_to_tempcode(/*&*/
+    $text, $symbol_pos = 0, $inside_directive = false, $codename = '', $theme = null, $lang = null, $tolerate_errors = false)
 {
-    return template_to_tempcode_static(/*&*/$text, $symbol_pos, $inside_directive, $codename, $theme, $lang);
+    return template_to_tempcode_static(/*&*/
+        $text, $symbol_pos, $inside_directive, $codename, $theme, $lang);
 }

@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    authors
  */
-
 class Hook_content_meta_aware_author
 {
     /**
@@ -37,44 +36,44 @@ class Hook_content_meta_aware_author
             'table' => 'authors',
             'id_field' => 'author',
             'id_field_numeric' => false,
-            'parent_category_field' => NULL,
-            'parent_category_meta_aware_type' => NULL,
+            'parent_category_field' => null,
+            'parent_category_meta_aware_type' => null,
             'is_category' => false,
             'is_entry' => true,
-            'category_field' => NULL, // For category permissions
-            'category_type' => NULL, // For category permissions
-            'parent_spec__table_name' => NULL,
-            'parent_spec__parent_name' => NULL,
-            'parent_spec__field_name' => NULL,
+            'category_field' => null, // For category permissions
+            'category_type' => null, // For category permissions
+            'parent_spec__table_name' => null,
+            'parent_spec__parent_name' => null,
+            'parent_spec__field_name' => null,
             'category_is_string' => true,
 
             'title_field' => 'author',
             'title_field_dereference' => false,
             'description_field' => 'description',
-            'thumb_field' => NULL,
+            'thumb_field' => null,
 
             'view_page_link_pattern' => '_SEARCH:authors:misc:_WILD',
             'edit_page_link_pattern' => '_SEARCH:cms_authors:_ad:_WILD',
-            'view_category_page_link_pattern' => NULL,
-            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid',get_member(),get_ip_address(),'cms_authors'))?(get_module_zone('cms_authors') . ':cms_authors:_ad'):null,
-            'archive_url' => ((!is_null($zone))?$zone:get_module_zone('authors')) . ':authors',
+            'view_category_page_link_pattern' => null,
+            'add_url' => (function_exists('has_submit_permission') && has_submit_permission('mid', get_member(), get_ip_address(), 'cms_authors')) ? (get_module_zone('cms_authors') . ':cms_authors:_ad') : null,
+            'archive_url' => ((!is_null($zone)) ? $zone : get_module_zone('authors')) . ':authors',
 
             'support_url_monikers' => false,
 
-            'views_field' => NULL,
-            'submitter_field' => NULL,
-            'add_time_field' => NULL,
-            'edit_time_field' => NULL,
-            'date_field' => NULL,
-            'validated_field' => NULL,
+            'views_field' => null,
+            'submitter_field' => null,
+            'add_time_field' => null,
+            'edit_time_field' => null,
+            'date_field' => null,
+            'validated_field' => null,
 
-            'seo_type_code' => NULL,
+            'seo_type_code' => null,
 
-            'feedback_type_code' => NULL,
+            'feedback_type_code' => null,
 
-            'permissions_type_code' => NULL, // NULL if has no permissions
+            'permissions_type_code' => null, // NULL if has no permissions
 
-            'search_hook' => NULL,
+            'search_hook' => null,
 
             'addon_name' => 'authors',
 
@@ -102,10 +101,10 @@ class Hook_content_meta_aware_author
      * @param  ID_TEXT                  Overridden GUID to send to templates (blank: none)
      * @return tempcode                 Results
      */
-    public function run($row,$zone,$give_context = true,$include_breadcrumbs = true,$root = null,$attach_to_url_filter = false,$guid = '')
+    public function run($row, $zone, $give_context = true, $include_breadcrumbs = true, $root = null, $attach_to_url_filter = false, $guid = '')
     {
         require_code('authors');
 
-        return render_author_box($row,$zone,$give_context,$guid);
+        return render_author_box($row, $zone, $give_context, $guid);
     }
 }

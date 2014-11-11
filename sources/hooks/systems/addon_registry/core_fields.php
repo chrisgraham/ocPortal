@@ -17,7 +17,6 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
-
 class Hook_addon_registry_core_fields
 {
     /**
@@ -172,7 +171,7 @@ class Hook_addon_registry_core_fields
     public function tpl_preview__catalogue_multilist()
     {
         return array(
-            lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_MULTILIST',array(
+            lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_MULTILIST', array(
                 'ALL' => array(
                     array(
                         'HAS' => true,
@@ -184,7 +183,7 @@ class Hook_addon_registry_core_fields
                     )
                 ),
                 'FIELD_ID' => placeholder_id(),
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 
@@ -198,11 +197,11 @@ class Hook_addon_registry_core_fields
     public function tpl_preview__catalogue_picture()
     {
         return array(
-            lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE',array(
+            lorem_globalise(do_lorem_template('CATALOGUE_DEFAULT_FIELD_PICTURE', array(
                 'URL' => placeholder_url(),
                 'THUMB_URL' => placeholder_image_url(),
                 'I' => '0',
-            )),null,'',true)
+            )), null, '', true)
         );
     }
 }

@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    unslider
  */
-
 class Hook_addon_registry_unslider
 {
     /**
@@ -105,8 +104,7 @@ If the [tt]delay[/tt] is set to blank or 0, it will disable automatic (timed) tr
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -117,12 +115,9 @@ If the [tt]delay[/tt] is set to blank or 0, it will disable automatic (timed) tr
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 

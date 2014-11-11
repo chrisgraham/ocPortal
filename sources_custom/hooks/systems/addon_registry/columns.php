@@ -12,7 +12,6 @@
  * @copyright  ocProducts Ltd
  * @package    columns
  */
-
 class Hook_addon_registry_columns
 {
     /**
@@ -99,8 +98,7 @@ You need to add this code into your [tt]HTML_HEAD.tpl[/tt]:
      */
     public function get_applicable_tutorials()
     {
-        return array(
-        );
+        return array();
     }
 
     /**
@@ -111,12 +109,9 @@ You need to add this code into your [tt]HTML_HEAD.tpl[/tt]:
     public function get_dependencies()
     {
         return array(
-            'requires' => array(
-            ),
-            'recommends' => array(
-            ),
-            'conflicts_with' => array(
-            )
+            'requires' => array(),
+            'recommends' => array(),
+            'conflicts_with' => array()
         );
     }
 
