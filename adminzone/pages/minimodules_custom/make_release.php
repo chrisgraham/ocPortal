@@ -240,7 +240,7 @@ function phase_2()
 	}
 	echo '
 		<li>
-			<strong>Upload</strong>: Upload all built files to ocPortal.com server (<kbd>uploads/downloads</kbd>)
+			<strong>Upload</strong>: Upload all built files (in <kbd>builds/'.escape_html($version_dotted).'</kbd>) to ocPortal.com server (<kbd>uploads/downloads</kbd>)
 		</li>
 		<li>
 			<strong>Add to ocPortal.com</strong>: Run the <form target="_blank" onclick="window.setTimeout(undo_staff_unload_action,1000);" style="display: inline" action="'.escape_html($push_url).'" method="post"><input type="hidden" name="changes" value="'.escape_html($changes).'" /><input type="submit" value="ocPortal.com setup script" /></form>. Note if you are re-releasing, this will still work &ndash; it will update existing entries appropriately.
