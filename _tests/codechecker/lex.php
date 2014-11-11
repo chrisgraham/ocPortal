@@ -811,7 +811,9 @@ function lex($text = null)
         }
     }
 
-    if (substr($TEXT, $len - 2) != "\n\n") log_warning('Files are supposed to end with a blank line according to PSR-2', $i, true);
+    if (substr($TEXT, $len - 2) != "\n\n") {
+        log_warning('Files are supposed to end with a blank line according to PSR-2', $i, true);
+    }
 
     return $tokens;
 }

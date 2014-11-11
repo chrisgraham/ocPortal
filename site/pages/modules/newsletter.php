@@ -350,8 +350,9 @@ class Module_newsletter
         $password = trim(post_param('password', ''));
         $forename = trim(post_param('forename'));
         $surname = trim(post_param('surname'));
-        if ($password != trim(post_param('password_confirm', '')))
+        if ($password != trim(post_param('password_confirm', ''))) {
             warn_exit(make_string_tempcode(escape_html(do_lang('PASSWORD_MISMATCH'))));
+        }
         $lang = post_param('lang', user_lang());
         if (!is_valid_email_address($email)) {
             return warn_screen($title, do_lang_tempcode('IMPROPERLY_FILLED_IN'));
@@ -370,9 +371,13 @@ class Module_newsletter
                     $level = post_param_integer('level' . strval($newsletter['id']));
                 } else {
                     $level = post_param_integer('level' . strval($newsletter['id']), 0);
-                    if ($level == 1) $level = 4;
+                    if ($level == 1) {
+                        $level = 4;
+                    }
                 }
-                if ($level != 0) $found_level = true;
+                if ($level != 0) {
+                    $found_level = true;
+                }
             }
             if (!$found_level) {
                 // No subscription settings
@@ -380,7 +385,9 @@ class Module_newsletter
             }
 
             $code_confirm = is_null($old_confirm) ? mt_rand(1, 32000) : $old_confirm;
-            if ($password == '') $password = get_rand_password();
+            if ($password == '') {
+                $password = get_rand_password();
+            }
             $salt = produce_salt();
             if (is_null($old_confirm)) {
                 $GLOBALS['SITE_DB']->query_insert('newsletter', array(
@@ -406,8 +413,7 @@ class Module_newsletter
         // Change/make settings
         $old_password = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'the_password', array('email' => $email));
         $old_salt = $GLOBALS['SITE_DB']->query_select_value('newsletter', 'pass_salt', array('email' => $email));
-        if ((!has_privilege(get_member(), 'change_newsletter_subscriptions')) && (!is_null($old_confirm)) && ($old_confirm == 0) && ($old_password != '') && ($old_password != md5($password . $old_salt))) // Access denied. People who can change any subscriptions can't get denied.
-        {
+        if ((!has_privilege(get_member(), 'change_newsletter_subscriptions')) && (!is_null($old_confirm)) && ($old_confirm == 0) && ($old_password != '') && ($old_password != md5($password . $old_salt))) { // Access denied. People who can change any subscriptions can't get denied.
             // Access denied to an existing record that was confirmed
             $_reset_url = build_url(array('page' => '_SELF', 'type' => 'reset', 'email' => $email), '_SELF');
             $reset_url = $_reset_url->evaluate();
@@ -420,12 +426,13 @@ class Module_newsletter
                     $level = post_param_integer('level' . strval($newsletter['id']));
                 } else {
                     $level = post_param_integer('level' . strval($newsletter['id']), 0);
-                    if ($level == 1) $level = 4;
+                    if ($level == 1) {
+                        $level = 4;
+                    }
                 }
                 // First we delete
                 $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe', array('newsletter_id' => $newsletter['id'], 'email' => $email), '', 1);
-                if ($level != 0) // Then we put back if it's not a 0 level
-                {
+                if ($level != 0) { // Then we put back if it's not a 0 level
                     $GLOBALS['SITE_DB']->query_insert('newsletter_subscribe', array('newsletter_id' => $newsletter['id'], 'email' => $email, 'the_level' => $level));
                 }
             }

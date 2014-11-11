@@ -59,8 +59,12 @@ function basic_newsletter_join($email, $interest_level = 4, $lang = null, $get_c
 {
     require_lang('newsletter');
 
-    if (is_null($lang)) $lang = user_lang();
-    if (is_null($newsletter_id)) $newsletter_id = db_get_first_id();
+    if (is_null($lang)) {
+        $lang = user_lang();
+    }
+    if (is_null($newsletter_id)) {
+        $newsletter_id = db_get_first_id();
+    }
 
     $code_confirm = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter', 'code_confirm', array('email' => $email));
     if (is_null($code_confirm)) {

@@ -481,7 +481,7 @@ class Module_admin_newsletter extends standard_crud_module
 
         $fields->attach(form_input_line(do_lang_tempcode('HOST'), new ocp_tempcode(), 'server', get_option('imap_host'), true));
         $fields->attach(form_input_line(do_lang_tempcode('USERNAME'), new ocp_tempcode(), 'username', get_option('imap_username'), true));
-        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), new ocp_tempcode(), 'password', true, get_option('imap_password')));
+        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), new ocp_tempcode(), 'password', true, null, get_option('imap_password')));
         $fields->attach(form_input_integer(do_lang_tempcode('PORT'), new ocp_tempcode(), 'port', intval(get_option('imap_port')), true));
 
         url_default_parameters__disable();
@@ -885,7 +885,9 @@ class Module_admin_newsletter extends standard_crud_module
 
             $fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'), do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'), 'in_full', post_param_integer('in_full', 0) == 1));
 
-            if (function_exists('set_time_limit')) @set_time_limit(180);
+            if (function_exists('set_time_limit')) {
+                @set_time_limit(180);
+            }
             disable_php_memory_limit();
 
             $chosen_categories = '';
