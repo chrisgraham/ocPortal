@@ -117,11 +117,11 @@ function _password_censor($text, $scan_type = 1, $explicit_only = false)
                     continue;
                 }
                 if (!is_null($GLOBALS['FORUM_DRIVER']->get_member_from_username($m))) {
-                    continue;
-                } // A username
+                    continue; // A username
+                }
                 if (preg_match('#://[^ ]*' . preg_quote($m, '#') . '#', $text) != 0) {
-                    continue;
-                } // Part of a URL
+                    continue; // Part of a URL
+                }
 
                 $c = 0;
                 if (preg_match('#\d#', $m) != 0) {

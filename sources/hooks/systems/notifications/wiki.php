@@ -44,8 +44,8 @@ class Hook_Notification_wiki extends Hook_Notification
 
         $total = $GLOBALS['SITE_DB']->query_select_value_if_there('wiki_pages', 'COUNT(*)');
         if ($total > 300) {
-            return parent::create_category_tree($notification_code, $id);
-        } // Too many, so just allow removing UI
+            return parent::create_category_tree($notification_code, $id); // Too many, so just allow removing UI
+        }
 
         static $wiki_seen = array();
         if ($id === null) {

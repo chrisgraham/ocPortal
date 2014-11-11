@@ -64,8 +64,8 @@ class Hook_rss_calendar
             $row = $_row[1];
 
             if (!array_key_exists('id', $row)) {
-                continue;
-            } // RSS event
+                continue; // RSS event
+            }
 
             $id = strval($row['id']);
             $author = '';

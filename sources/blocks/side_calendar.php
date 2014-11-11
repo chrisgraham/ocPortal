@@ -217,8 +217,8 @@ class Block_side_calendar
                 continue;
             }
             if ($real_from != $from) {
-                continue;
-            } // We won't render continuations
+                continue; // We won't render continuations
+            }
 
             // Because we looked 100 days before (to find stuff that might be doing a span), we need to do an extra check to see if stuff is actually in our true window
             $starts_within = (($real_from >= $period_start) && ($real_from < $period_end));

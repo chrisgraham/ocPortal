@@ -36,8 +36,8 @@ function _delete_attachment($id, $connection)
     // Get attachment details
     $_attachment_info = $connection->query_select('attachments', array('a_url', 'a_thumb_url'), array('id' => $id), '', 1);
     if (!array_key_exists(0, $_attachment_info)) {
-        return;
-    } // Already gone
+        return; // Already gone
+    }
     $attachment_info = $_attachment_info[0];
 
     // Delete url and thumb_url if local

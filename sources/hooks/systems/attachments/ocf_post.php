@@ -29,8 +29,8 @@ class Hook_attachments_ocf_post
     public function run($id, $connection)
     {
         if (get_forum_type() != 'ocf') {
-            return false;
-        } // Shouldn't be here, but maybe it's left over somehow
+            return false; // Shouldn't be here, but maybe it's left over somehow
+        }
         require_code('ocf_forums');
         require_code('ocf_topics');
         $info = $GLOBALS['FORUM_DB']->query_select('f_posts', array('p_cache_forum_id', 'p_intended_solely_for', 'p_poster', 'p_topic_id'), array('id' => intval($id)), '', 1);

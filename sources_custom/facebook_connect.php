@@ -154,16 +154,16 @@ function handle_facebook_connection_login($current_logged_in_member)
     }*/
 
     if ((!is_null($member_id)) && ($current_logged_in_member !== null) && (!is_guest($current_logged_in_member)) && ($current_logged_in_member != $member_id)) {
-        return $current_logged_in_member;
-    } // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
+        return $current_logged_in_member; // User has an active login, and the Facebook account is bound to a DIFFERENT login. Take precedence to the other login that is active on top of this
+    }
 
     // If logged in before using Facebook, do some synching
     if (!is_null($member_id)) {
         $last_visit_time = $member_id[0]['m_last_visit_time'];
         if ($timezone !== null) {
             if ((!is_numeric($member_row[0]['m_timezone_offset'])) && (tz_time(time(), $timezone) == tz_time(time(), $member_row[0]['m_timezone_offset']))) {
-                $timezone = $member_row[0]['m_timezone_offset'];
-            } // If equivalent, don't change
+                $timezone = $member_row[0]['m_timezone_offset']; // If equivalent, don't change
+            }
         }
 
         $update_map = array();

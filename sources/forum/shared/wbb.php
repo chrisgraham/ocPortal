@@ -113,8 +113,8 @@ class forum_driver_wbb_shared extends forum_driver_base
     public function install_create_custom_field($name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0)
     {
         if (!array_key_exists('bb_forum_number', $_POST)) {
-            $_POST['bb_forum_number'] = '';
-        } // for now
+            $_POST['bb_forum_number'] = ''; // for now
+        }
 
         $name = 'ocp_' . $name;
         $test = $this->connection->query('SELECT profilefieldid FROM bb' . $_POST['bb_forum_number'] . '_profilefields WHERE ' . db_string_equal_to('title', $name));

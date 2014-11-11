@@ -110,8 +110,8 @@ class Hook_search_ocf_posts
             do_lang('SEARCH_FORUM_POSTS'),
             do_lang('_SEARCH_PRIVATE_TOPICS'),
         ))) {
-            return array();
-        } // Search placeholder label, not real search
+            return array(); // Search placeholder label, not real search
+        }
 
         if (get_forum_type() != 'ocf') {
             return array();

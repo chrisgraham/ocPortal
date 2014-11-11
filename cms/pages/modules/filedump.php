@@ -305,8 +305,8 @@ class Module_filedump
             if (!should_ignore_file('uploads/filedump' . $_place . $filename, IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) {
                 $_full = get_custom_file_base() . '/uploads/filedump' . $_place . $filename;
                 if (!file_exists($_full)) {
-                    continue;
-                } // Broken symlink or (?) permission problem
+                    continue; // Broken symlink or (?) permission problem
+                }
 
                 if (!isset($db_rows[$_place])) {
                     $db_rows[$_place] = list_to_map('name', $GLOBALS['SITE_DB']->query_select('filedump', array('*'), array('path' => $_place)));
@@ -678,8 +678,8 @@ class Module_filedump
             if (!should_ignore_file('uploads/filedump' . $place . $filename, IGNORE_ACCESS_CONTROLLERS | IGNORE_HIDDEN_FILES)) {
                 $_full = get_custom_file_base() . '/uploads/filedump' . $place . $filename;
                 if (!file_exists($_full)) {
-                    continue;
-                } // Broken symlink or (?) permission problem
+                    continue; // Broken symlink or (?) permission problem
+                }
 
                 $is_directory = !is_file($_full);
 
@@ -689,12 +689,12 @@ class Module_filedump
 
                 if (($is_directory) && ($recursive)) {
                     if ($this->_folder_search($place . $filename . '/', $_description, $search, $type_filter, $recursive)) {
-                        return true;
-                    } // Look deeper
+                        return true; // Look deeper
+                    }
                 } else {
                     if ($this->_matches_filter($filename, $_description, $search, $type_filter)) {
-                        return true;
-                    } // File under matches
+                        return true; // File under matches
+                    }
                 }
             }
         }
@@ -1240,8 +1240,8 @@ class Module_filedump
         }
 
         if (function_exists('set_time_limit')) {
-            @set_time_limit(0);
-        } // Slowly uploading a file can trigger time limit, on some servers
+            @set_time_limit(0); // Slowly uploading a file can trigger time limit, on some servers
+        }
 
         $place = filter_naughty(post_param('place'));
 

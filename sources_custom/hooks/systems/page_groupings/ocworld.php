@@ -25,8 +25,8 @@ class Hook_page_groupings_ocworld
     {
         $zone = get_module_zone('ocworld');
         if ($zone === NULL) {
-            return array();
-        } // Zone not installed yet
+            return array(); // Zone not installed yet
+        }
 
         return array(
             array('rich_content','menu/ocworld',array('ocworld',array(),$zone),do_lang_tempcode('ocworld:OCWORLD')),

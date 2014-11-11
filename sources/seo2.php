@@ -155,8 +155,8 @@ function _seo_meta_find_data($keyword_sources, $description = '')
 
         $source = strip_comcode($source);
         if (ocp_mb_strtoupper($source) == $source) {
-            $source = ocp_mb_strtolower($source);
-        } // Don't leave in all caps, as is ugly, and also would break our Proper Noun detection
+            $source = ocp_mb_strtolower($source); // Don't leave in all caps, as is ugly, and also would break our Proper Noun detection
+        }
 
         $i = 0;
         $len_a = strlen($source);

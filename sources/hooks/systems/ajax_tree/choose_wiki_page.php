@@ -52,8 +52,8 @@ class Hook_choose_wiki_page
             $_id = strval($t['id']);
 
             if ($stripped_id === $_id) {
-                continue;
-            } // Possible when we look under as a root
+                continue; // Possible when we look under as a root
+            }
 
             $title = $t['title'];
             $has_children = ($t['child_count'] != 0);

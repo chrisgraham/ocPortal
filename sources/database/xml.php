@@ -91,8 +91,8 @@ function init__database__xml()
     }
 
     if (function_exists('set_time_limit')) {
-        @set_time_limit(100);
-    } // XML DB is *slow*
+        @set_time_limit(100); // XML DB is *slow*
+    }
 }
 
 /**
@@ -741,8 +741,8 @@ class Database_Static_xml
                 $fields = $this->db_query($schema_query, $db, null, null, $fail_ok);
             }
             if (is_null($fields)) {
-                return array();
-            } // Can happen during installation
+                return array(); // Can happen during installation
+            }
         }
 
         $schema = array();
@@ -1002,8 +1002,8 @@ class Database_Static_xml
             }
             $full_path = $db[0] . '/' . $table_name . '/' . $file;
             if ((strlen($full_path) >= 255) && (strpos(strtolower(PHP_OS), 'win') !== false)) {
-                continue;
-            } // :(
+                continue; // :(
+            }
             $read = $this->_read_record($full_path, $schema, $must_contain, $include_unused_fields);
             if (!is_null($read)) {
                 $the_key = preg_replace('#\.[\w\-]+$#', '', $file);
@@ -1056,13 +1056,13 @@ class Database_Static_xml
             if ($table_as != '') {
                 $key = preg_replace('#^' . preg_quote($table_as, '#') . '\.#', '', $key);
                 if (strpos($key, '.') !== false) {
-                    return array();
-                } // Not for our table
+                    return array(); // Not for our table
+                }
             }
 
             if ((!is_null($schema)) && (!array_key_exists($key, $schema))) {
-                return array();
-            } // Not in our table (join involved. must be in other join)
+                return array(); // Not in our table (join involved. must be in other join)
+            }
 
             if (substr($where_expr[2][1], 0, 1) == '%') {
                 $where_expr[2][1] = substr($where_expr[2][1], 1);
@@ -1081,12 +1081,12 @@ class Database_Static_xml
             if ($table_as != '') {
                 $key = preg_replace('#^' . preg_quote($table_as, '#') . '\.#', '', $key);
                 if (strpos($key, '.') !== false) {
-                    return array();
-                } // Not for our table
+                    return array(); // Not for our table
+                }
             }
             if ((!is_null($schema)) && (!array_key_exists($key, $schema))) {
-                return array();
-            } // Not in our table (join involved. must be in other join)
+                return array(); // Not in our table (join involved. must be in other join)
+            }
             return array($key => $where_expr[2][1]);
         }
         return array();
@@ -1150,15 +1150,15 @@ class Database_Static_xml
         $bc = count($bits) - 2;
         $i = 0;
         if (trim($bits[$i]) == '') {
-            $i++;
-        } // Whitespace between tags
+            $i++; // Whitespace between tags
+        }
         if ((!isset($bits[$i])) || ($bits[$i] != 'ocportal')) {
             warn_exit('Unrecognised XML in ' . $path);
         }
         $i++; // Skip past "ocPortal"
         if (trim($bits[$i]) == '') {
-            $i++;
-        } // Whitespace between tags
+            $i++; // Whitespace between tags
+        }
         while ($i < $bc) {
             $field = $bits[$i];
             $i++;
@@ -1166,8 +1166,8 @@ class Database_Static_xml
             $i++;
             $i++; // Skip past closing tag
             if (trim($bits[$i]) == '') {
-                $i++;
-            } // Whitespace between tags
+                $i++; // Whitespace between tags
+            }
             $_record[$field] = html_entity_decode($data, ENT_QUOTES, get_charset());
         }
 
@@ -1179,8 +1179,8 @@ class Database_Static_xml
             foreach ($_record as $key => $val) {
                 $new_val = mixed();
                 if ((!array_key_exists($key, $schema)) && (!$include_unused_fields)) {
-                    continue;
-                } // Been deleted
+                    continue; // Been deleted
+                }
                 $type = $schema[$key];
                 $schema_type = preg_replace('#[^\w]#', '', $type);
 
@@ -1241,8 +1241,8 @@ class Database_Static_xml
     {
         foreach ($records as $guid => $record) {
             if (!is_string($guid)) {
-                $guid = strval($guid);
-            } // As PHP can use type for array keys
+                $guid = strval($guid); // As PHP can use type for array keys
+            }
             $this->_write_record($db, $table_name, $guid, $record, $fail_ok);
         }
     }
@@ -2298,8 +2298,8 @@ class Database_Static_xml
         $done = 0;
         foreach ($records as $guid => $record) {
             if (!is_string($guid)) {
-                $guid = strval($guid);
-            } // As PHP can use type for array keys
+                $guid = strval($guid); // As PHP can use type for array keys
+            }
             $test = $this->_execute_expression($where_expr, $record, $query);
             if ($test) {
                 if ($i >= $start) {
@@ -2373,8 +2373,8 @@ class Database_Static_xml
         $done = 0;
         foreach ($records as $guid => $record) {
             if (!is_string($guid)) {
-                $guid = strval($guid);
-            } // As PHP can use type for array keys
+                $guid = strval($guid); // As PHP can use type for array keys
+            }
             $test = $this->_execute_expression($where_expr, $record, $query);
             if ($test) {
                 if ($i >= $start) {
@@ -2710,8 +2710,8 @@ class Database_Static_xml
                     // Handle the join as condition
                     foreach ($records as $guid => $record) {
                         if (!is_string($guid)) {
-                            $guid = strval($guid);
-                        } // As PHP can use type for array keys
+                            $guid = strval($guid); // As PHP can use type for array keys
+                        }
                         $new_record = $record;
                         foreach ($record as $key => $val) {
                             $new_record[$joined_as . '.' . $key] = $val;
@@ -3073,8 +3073,8 @@ class Database_Static_xml
         $joined_as_test = $this->_parsing_read($at, $tokens, $query, true);
         if ((!is_null($joined_as_test)) && ($joined_as_test != 'ON') && ($joined_as_test != 'WHERE') && ($joined_as_test != ',') && ($joined_as_test != 'LEFT') && ($joined_as_test != 'RIGHT') && ($joined_as_test != 'INNER') && ($joined_as_test != 'JOIN')) {
             if ($joined_as_test == 'AS') {
-                $joined_as_test = $this->_parsing_read($at, $tokens, $query);
-            } // 'AS' is optional
+                $joined_as_test = $this->_parsing_read($at, $tokens, $query); // 'AS' is optional
+            }
             $joined_as = $joined_as_test;
         } else {
             $joined_as = $join_table;
@@ -3200,8 +3200,8 @@ class Database_Static_xml
         // Handle the join as condition
         foreach ($records_b as $guid => $record) {
             if (!is_string($guid)) {
-                $guid = strval($guid);
-            } // As PHP can use type for array keys
+                $guid = strval($guid); // As PHP can use type for array keys
+            }
             $new_record = $record;
             foreach ($record as $key => $val) {
                 $new_record[$joined_as . '.' . $key] = $val;

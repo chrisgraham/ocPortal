@@ -129,8 +129,8 @@ function generate_text_summary($_temp_summary, $words_searched)
                         $count++;
 
                         if ($count > 5) {
-                            break;
-                        } // Good enough
+                            break; // Good enough
+                        }
                     }
                 }
                 if (($count > $best_yet) || (($best_yet == $count) && ($i - 500 < $best_pos_min))) {
@@ -143,8 +143,8 @@ function generate_text_summary($_temp_summary, $words_searched)
                     }
 
                     if ($count > 5) {
-                        break;
-                    } // Good enough
+                        break; // Good enough
+                    }
                 }
             }
             $best_pos = intval(floatval($best_pos_min + $best_pos_max) / 2.0) - 250; // Move it from center pos, to where we want to start from
@@ -176,8 +176,8 @@ function generate_text_summary($_temp_summary, $words_searched)
 function opensearch_script()
 {
     if (!has_actual_page_access(get_member(), 'search')) {
-        return;
-    } // No access
+        return; // No access
+    }
 
     $type = get_param('type', 'misc');
     switch ($type) {
@@ -322,8 +322,8 @@ function build_search_submitter_clauses($member_field_name, $member_id, $author,
 
     if ($clauses == '') {
         if ($author != '') {
-            return null;
-        } // Query should never succeed
+            return null; // Query should never succeed
+        }
 
         return '';
     }
@@ -512,8 +512,8 @@ function get_search_rows($meta_type, $meta_id_field, $content, $boolean_search, 
 
             $group_by_ok = (can_arbitrary_groupby() && $meta_id_field === 'id');
             if (strpos($table, ' LEFT JOIN') === false) {
-                $group_by_ok = false;
-            } // Don't actually need to do a group by, as no duplication possible
+                $group_by_ok = false; // Don't actually need to do a group by, as no duplication possible
+            }
 
             $keywords_query .= ($group_by_ok ? ' GROUP BY r.id' : '');
 
@@ -578,8 +578,8 @@ function get_search_rows($meta_type, $meta_id_field, $content, $boolean_search, 
                     }
 
                     if ($field == $order) {
-                        $order = 't' . $i . '.text_original';
-                    } // Ah, remap to the textual equivalent then
+                        $order = 't' . $i . '.text_original'; // Ah, remap to the textual equivalent then
+                    }
 
                     $tc_add = ' JOIN ' . $db->get_table_prefix() . 'translate t' . strval($i) . ' ON t' . strval($i) . '.id=' . $field . ' AND ' . db_string_equal_to('t' . strval($i) . '.language', user_lang());
                     if (strpos($orig_table_clause, $tc_add) !== false) {
@@ -640,8 +640,8 @@ function get_search_rows($meta_type, $meta_id_field, $content, $boolean_search, 
 
             $group_by_ok = (can_arbitrary_groupby() && $meta_id_field === 'id');
             if (strpos($table, ' LEFT JOIN') === false) {
-                $group_by_ok = false;
-            } // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+                $group_by_ok = false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+            }
 
             // Work out main query
             $query = '(';
@@ -849,8 +849,8 @@ function get_search_rows($meta_type, $meta_id_field, $content, $boolean_search, 
 
             $group_by_ok = (can_arbitrary_groupby() && $meta_id_field === 'id');
             if (strpos($table, ' LEFT JOIN') === false) {
-                $group_by_ok = false;
-            } // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+                $group_by_ok = false; // Don't actually need to do a group by, as no duplication possible. We want to avoid GROUP BY as it forces MySQL to create a temporary table, slowing things down a lot.
+            }
 
             // Work out our queries
             $query = ' FROM ' . $table_clause . ' WHERE ' . (($where_clause == '') ? '' : ($where_clause . (($where_clause_and == '') ? '' : ' AND ')));
@@ -896,8 +896,8 @@ function get_search_rows($meta_type, $meta_id_field, $content, $boolean_search, 
             $t_main_search_rows = $db->query($query, $max + $start, null, false, true, $fields);
             ocp_profile_end_for('SEARCH:t_main_search_rows', $query);
             if ($t_main_search_rows === null) {
-                $t_main_search_rows = array();
-            } // In case of a failed search query
+                $t_main_search_rows = array(); // In case of a failed search query
+            }
 
             $db->dedupe_mode = false;
         }
@@ -1282,8 +1282,8 @@ function build_search_results_interface($results, $start, $max, $direction, $gen
     $tabular_results = array();
     foreach ($results as $result) {
         if (array_key_exists('restricted', $result)) {
-            continue;
-        } // This has been blanked out due to insufficient access permissions or some other reason
+            continue; // This has been blanked out due to insufficient access permissions or some other reason
+        }
 
         $content_type = convert_ocportal_type_codes('search_hook', $result['type'], 'content_type');
         $id = mixed();

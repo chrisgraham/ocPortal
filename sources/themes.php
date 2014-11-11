@@ -214,8 +214,8 @@ function find_theme_image($id, $silent_fail = false, $leave_local = false, $them
             return '';
         }
         if ($truism) {
-            $THEME_IMAGES_CACHE[$site][$id] = $path;
-        } // only cache if we are looking up for our own theme/lang
+            $THEME_IMAGES_CACHE[$site][$id] = $path; // only cache if we are looking up for our own theme/lang
+        }
     } else {
         $path = $THEME_IMAGES_CACHE[$site][$id];
 

@@ -67,8 +67,8 @@ class Hook_cron_downloads_followup_email
         }
 
         if (intval($last)>$time-60*60*$cron_interval) {
-            return;
-        } // Don't do more than once per $cron_interval (default is 24 hours)
+            return; // Don't do more than once per $cron_interval (default is 24 hours)
+        }
 
         if (function_exists('set_time_limit')) {
             @set_time_limit(0);

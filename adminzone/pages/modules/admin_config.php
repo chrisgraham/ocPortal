@@ -174,14 +174,14 @@ class Module_admin_config
         $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
-            return $this->config_choose();
-        } // List of categories
+            return $this->config_choose(); // List of categories
+        }
         if ($type == 'category') {
-            return $this->config_category();
-        } // Category editing UI
+            return $this->config_category(); // Category editing UI
+        }
         if ($type == 'set') {
-            return $this->config_set();
-        } // Category editing actualiser
+            return $this->config_set(); // Category editing actualiser
+        }
 
         if (addon_installed('xml_fields')) {
             if ($type == 'xml_fields') {
@@ -363,8 +363,8 @@ class Module_admin_config
 
             $_group = strtolower(trim(preg_replace('#(&.*;)|[^\w\d\s]#U', '', $_group)));
             if ((array_key_exists($_group, $all_known_groups)) && ($all_known_groups[$_group] != $myrow['group'])) {
-                $_group = 'std_' . $myrow['group'];
-            } // If cat names translate to same things or are in non-latin characters like Cyrillic
+                $_group = 'std_' . $myrow['group']; // If cat names translate to same things or are in non-latin characters like Cyrillic
+            }
 
             $all_known_groups[$_group] = $myrow['group'];
         }

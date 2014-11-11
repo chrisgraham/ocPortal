@@ -247,16 +247,16 @@ function _parse_command_actual($no_term_needed = false)
             switch ($next_2) {
                 case 'DEC':
                     if (($target[0] == 'LIST') || ($target[0] == 'ARRAY_APPEND')) {
-                        parser_error('LIST is only a one way type');
-                    } // We needed to read a target (for assignment), but we really wanted a variable (subset of target) -- we ended up with something that WAS target but NOT variable (we couldn't have known till now)
+                        parser_error('LIST is only a one way type'); // We needed to read a target (for assignment), but we really wanted a variable (subset of target) -- we ended up with something that WAS target but NOT variable (we couldn't have known till now)
+                    }
                     pparse__parser_next();
                     $command = array('DEC', $target, $GLOBALS['I']);
                     break;
 
                 case 'INC':
                     if (($target[0] == 'LIST') || ($target[0] == 'ARRAY_APPEND')) {
-                        parser_error('LIST is only a one way type');
-                    } // We needed to read a target (for assignment), but we really wanted a variable (subset of target) -- we ended up with something that WAS target but NOT variable (we couldn't have known till now)
+                        parser_error('LIST is only a one way type'); // We needed to read a target (for assignment), but we really wanted a variable (subset of target) -- we ended up with something that WAS target but NOT variable (we couldn't have known till now)
+                    }
                     pparse__parser_next();
                     $command = array('INC', $target, $GLOBALS['I']);
                     break;

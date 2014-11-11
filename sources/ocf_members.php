@@ -321,11 +321,11 @@ function ocf_get_all_custom_fields_match_member($member_id, $public_view = null,
 
             $editability = mixed(); // If stays as NULL, not editable
             if (isset($editable_with_comcode[$field_to_show['cf_type']])) {
-                $editability = true;
-            } // Editable: Supports Comcode
+                $editability = true; // Editable: Supports Comcode
+            }
             elseif (isset($editable_without_comcode[$field_to_show['cf_type']])) {
-                $editability = false;
-            } // Editable: Does not support Comcode
+                $editability = false; // Editable: Does not support Comcode
+            }
 
             $edit_type = 'line';
             if (in_array($field_to_show['cf_type'], array('list', 'radiolist'))) {

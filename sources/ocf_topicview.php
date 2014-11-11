@@ -158,8 +158,8 @@ function ocf_get_details_to_show_post($_postdetails, $topic_info, $only_post = f
         $post['last_edit_time_string'] = get_timezoned_date($_postdetails['p_last_edit_time']);
         $post['last_edit_by_username'] = $GLOBALS['OCF_DRIVER']->get_username($_postdetails['p_last_edit_by']);
         if ($post['last_edit_by_username'] == '') {
-            $post['last_edit_by_username'] = do_lang('UNKNOWN');
-        } // Shouldn't happen, but imported data can be weird
+            $post['last_edit_by_username'] = do_lang('UNKNOWN'); // Shouldn't happen, but imported data can be weird
+        }
     }
 
     // Find title
@@ -402,8 +402,8 @@ function ocf_read_in_topic($topic_id, $start, $max, $view_poll_results = false, 
             $_postdetailss = list_to_map('id', $GLOBALS['FORUM_DB']->query($query, $max, $start));
         }
         if (($start == 0) && (count($_postdetailss) < $max)) {
-            $out['max_rows'] = $max;
-        } // We know that they're all on this screen
+            $out['max_rows'] = $max; // We know that they're all on this screen
+        }
         else {
             $out['max_rows'] = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE ' . $where);
         }

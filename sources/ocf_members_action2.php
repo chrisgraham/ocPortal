@@ -863,8 +863,8 @@ function ocf_edit_member($member_id, $email_address, $preview_posts, $dob_day, $
     $changes = array();
     foreach ($custom_fields as $field => $value) {
         if (!array_key_exists($field, $all_fields_types)) {
-            continue;
-        } // Trying to set a field we're not allowed to (doesn't apply to our group)
+            continue; // Trying to set a field we're not allowed to (doesn't apply to our group)
+        }
 
         $change = ocf_set_custom_field($member_id, $field, $value, $all_fields_types[$field], true);
         if (!is_null($change)) {
@@ -1728,8 +1728,8 @@ function ocf_member_choose_photo($param_name, $upload_name, $member_id = null)
                 }
             }
             if ($old == $x) {
-                return;
-            } // Not changed, bomb out as we don't want to generate a thumbnail
+                return; // Not changed, bomb out as we don't want to generate a thumbnail
+            }
         }
     }
     // At this point in the code, we know a photo was uploaded.

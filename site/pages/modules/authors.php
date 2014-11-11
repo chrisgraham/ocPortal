@@ -122,8 +122,8 @@ class Module_authors
             $author = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
         }
         if ((is_null($author)) || ($author == '')) {
-            warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-        } // Really don't want to have to search on this
+            warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Really don't want to have to search on this
+        }
 
         if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
             require_code('awards');

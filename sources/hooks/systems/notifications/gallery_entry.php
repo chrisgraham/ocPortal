@@ -44,8 +44,8 @@ class Hook_Notification_gallery_entry extends Hook_Notification
 
         $total = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'COUNT(*)');
         if ($total > 300) {
-            return parent::create_category_tree($notification_code, $id);
-        } // Too many, so just allow removing UI
+            return parent::create_category_tree($notification_code, $id); // Too many, so just allow removing UI
+        }
 
         $page_links = get_gallery_tree($id, '', null, false, null, false, false, true, false, 5);
         $filtered = array();

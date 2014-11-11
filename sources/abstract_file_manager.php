@@ -332,8 +332,8 @@ function _translate_dir_access($world_access)
     }
 
     if (_ftp_info() === false) {
-        return 0777;
-    } // We want the FTP user to be able to delete.. otherwise it gets awkward for them
+        return 0777; // We want the FTP user to be able to delete.. otherwise it gets awkward for them
+    }
 
     return $world_access ? 0777 : 0755;
 }
@@ -367,8 +367,8 @@ function _translate_file_access($world_access, $file_type = '')
     }
 
     if (_ftp_info() === false) {
-        return 0666 | $mask;
-    } // We want the FTP user to be able to delete.. otherwise it gets awkward for them
+        return 0666 | $mask; // We want the FTP user to be able to delete.. otherwise it gets awkward for them
+    }
 
     return ($world_access ? 0666 : 0644) | $mask;
 }
@@ -628,8 +628,8 @@ function afm_copy($old_path, $new_path, $world_access)
 function afm_move($basic_old_path, $basic_new_path)
 {
     if (is_dir(get_custom_file_base() . '/' . $basic_new_path)) {
-        $basic_new_path .= substr($basic_old_path, strrpos($basic_old_path, '/'));
-    } // If we are moving to a path, add on the filename to that path
+        $basic_new_path .= substr($basic_old_path, strrpos($basic_old_path, '/')); // If we are moving to a path, add on the filename to that path
+    }
 
     $old_path = _rescope_path($basic_old_path);
     $new_path = _rescope_path($basic_new_path);

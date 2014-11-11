@@ -43,8 +43,8 @@ class Hook_rss_authors
         $content = new ocp_tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), null, '', 1000);
         if (count($rows) == 1000) {
-            return null;
-        } // Too much
+            return null; // Too much
+        }
         foreach ($rows as $i => $row) {
             if ($i == $max) {
                 break;

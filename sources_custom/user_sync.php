@@ -327,8 +327,8 @@ function user_sync_handle_field_remap($field_name, $remap_scheme, $remote_data, 
 
         case 'field': // Direct field lookup
             if (!array_key_exists(1, $remap_scheme)) {
-                $remap_scheme[1] = $field_name;
-            } // Identity map, by default
+                $remap_scheme[1] = $field_name; // Identity map, by default
+            }
             if (!array_key_exists($remap_scheme[1], $remote_data)) { // Not found!
                 resourcefs_logging('Requested to import missing remote field, ' . $remap_scheme[1] . '.', 'warn');
                 return user_sync_get_field_default($field_name);
@@ -535,12 +535,12 @@ function user_sync__outbound($member_id)
         // Go through other fields
         foreach ($field_remap as $key => $remap_scheme) {
             if (is_null($remap_scheme)) {
-                continue;
-            } // Not actually mapped
+                continue; // Not actually mapped
+            }
 
             if ($remap_scheme[0] != 'field') {
-                continue;
-            } // Not a direct mapping, we can't process backwards
+                continue; // Not a direct mapping, we can't process backwards
+            }
 
             if (in_array($key, $native_fields)) {
                 $data = $record['m_' . $key];

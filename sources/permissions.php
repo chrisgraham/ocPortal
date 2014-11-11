@@ -89,8 +89,8 @@ function handle_permission_check_logging($member, $op, $params, $result)
             }
             $self_url = get_self_url(true);
             if (!is_string($self_url)) {
-                $self_url = get_self_url_easy();
-            } // A weirdness can happen here. If some kind of fatal error happens then output buffers can malfunction making it impossible to use Tempcode as above. So we fall back to this. (This function may be called in a fatal error due to the 'display_php_errors' permissions).
+                $self_url = get_self_url_easy(); // A weirdness can happen here. If some kind of fatal error happens then output buffers can malfunction making it impossible to use Tempcode as above. So we fall back to this. (This function may be called in a fatal error due to the 'display_php_errors' permissions).
+            }
             fwrite($PERMISSION_CHECK_LOGGER, "\n\n" . date('Y/m/d h:m:i') . ' -- ' . $self_url . ' -- ' . $GLOBALS['FORUM_DRIVER']->get_username(get_member()) . "\n");
         } else {
             $PERMISSION_CHECK_LOGGER = false;
@@ -210,8 +210,8 @@ function has_actual_page_access($member = null, $page = null, $zone = null, $cat
             $zone = get_module_zone($page);
         }
         if ($zone === null) {
-            $zone = get_zone_name();
-        } // Weird problem that can happen on some AJAX hooks
+            $zone = get_zone_name(); // Weird problem that can happen on some AJAX hooks
+        }
     }
 
     if (!has_zone_access($member, $zone)) {
@@ -331,8 +331,8 @@ function has_page_access($member, $page, $zone, $at_now = false)
         }
     }
     if (!$found_match_key_one) {
-        $at_now = false;
-    } // We found it makes no difference. Let our caching work better.
+        $at_now = false; // We found it makes no difference. Let our caching work better.
+    }
 
     if (count($denied_groups) == count($groups2)) {
         $test = $GLOBALS['SITE_DB']->query_value_if_there('SELECT member_id FROM ' . get_table_prefix() . 'member_page_access WHERE (' . $pg_where . ') AND (member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))', false, true);
@@ -391,8 +391,8 @@ function load_up_all_module_category_permissions($member, $module = null)
     }
     $db = $GLOBALS[($module == 'forums') ? 'FORUM_DB' : 'SITE_DB'];
     if ($db->query_value_if_there('SELECT COUNT(*) FROM ' . $db->get_table_prefix() . 'group_category_access WHERE ' . $catclause . '(' . $groups . ')') > 1000) {
-        return;
-    } // Performance issue
+        return; // Performance issue
+    }
     $perhaps = $db->query('SELECT ' . $select . ' FROM ' . $db->get_table_prefix() . 'group_category_access WHERE ' . $catclause . '(' . $groups . ') UNION ALL SELECT ' . $select . ' FROM ' . $db->get_table_prefix() . 'member_category_access WHERE ' . $catclause . '(member_id=' . strval($member) . ' AND (active_until IS NULL OR active_until>' . strval(time()) . '))', null, null, false, true);
 
     $LOADED_ALL_CATEGORY_PERMISSIONS_FOR_CACHE[$module][$member] = true;
@@ -469,8 +469,8 @@ function _get_where_clause_groups($member, $consider_clubs = true)
     $out = '';
     foreach ($groups as $id) {
         if (!is_numeric($id)) {
-            $id = -10;
-        } // Workaround problems in some forum driver data
+            $id = -10; // Workaround problems in some forum driver data
+        }
 
         if ($out != '') {
             $out .= ' OR ';
@@ -479,8 +479,8 @@ function _get_where_clause_groups($member, $consider_clubs = true)
     }
     if ($out == '') {
         if ((!$consider_clubs) && (get_forum_type() == 'ocf')) {
-            return 'group_id=' . strval(db_get_first_id());
-        } // Hmm, user was just put in a club! :S
+            return 'group_id=' . strval(db_get_first_id()); // Hmm, user was just put in a club! :S
+        }
         fatal_exit(do_lang_tempcode('MEMBER_NO_GROUP')); // Shouldn't happen
     }
 
@@ -692,8 +692,8 @@ function has_privilege($member, $permission, $page = null, $cats = null)
 
     $result = has_privilege($member, $permission, $page, $cats);
     if ($member != get_member()) {
-        unset($PRIVILEGE_CACHE[$member]);
-    } // Don't waste memory
+        unset($PRIVILEGE_CACHE[$member]); // Don't waste memory
+    }
     return $result;
 }
 

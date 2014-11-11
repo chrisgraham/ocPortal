@@ -378,8 +378,8 @@ function manualproc_mail($to, $subject, $message, $additional_headers, $addition
             $retcode = proc_close($handle);
         }
         if (($retcode == -1) && ($stderr == '')) {
-            $retcode = 0;
-        } // https://bugs.php.net/bug.php?id=29123
+            $retcode = 0; // https://bugs.php.net/bug.php?id=29123
+        }
 
         if ($retcode != 0) {
             trigger_error('Sendmail error code: ' . strval($retcode) . ' [' . $retmsg . ']', E_USER_WARNING);

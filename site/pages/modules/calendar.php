@@ -506,8 +506,8 @@ class Module_calendar
             case 'day': // Like a diary
                 $id = get_param('id', date('Y-m-d', utctime_to_usertime()));
                 if (strpos($id, '-') === false) {
-                    $id = date('Y-m-d', utctime_to_usertime());
-                } // The ID was actually a filter, will need to use default date/time
+                    $id = date('Y-m-d', utctime_to_usertime()); // The ID was actually a filter, will need to use default date/time
+                }
                 $self_encompassing = ($id == date('Y-m-d', utctime_to_usertime()));
                 $date = $id;
                 $explode = explode('-', $id);
@@ -1279,8 +1279,8 @@ class Module_calendar
                             if ($continues) {
                                 $_from = mktime(0, 0, 0, intval(date('m', $_from)), intval(date('d', $_from)) + 1, intval(date('Y', $_from)));
                                 if (intval(date('m', $_from)) != $i) {
-                                    $continues = false;
-                                } // Don't let it roll to another month
+                                    $continues = false; // Don't let it roll to another month
+                                }
                             }
                         } else {
                             $continues = false;

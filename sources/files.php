@@ -442,15 +442,15 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
 
     if (isset($ignore_filenames_and_dir_names[strtolower($filename)])) {
         if (preg_match('#^' . $ignore_filenames_and_dir_names[strtolower($filename)] . '$#i', $dir) != 0) {
-            return true;
-        } // Check dir context
+            return true; // Check dir context
+        }
     }
 
     $extension = get_file_extension($filename);
     if (isset($ignore_extensions[strtolower($extension)])) {
         if (preg_match('#^' . $ignore_extensions[strtolower($extension)] . '$#i', $dir) != 0) {
-            return true;
-        } // Check dir context
+            return true; // Check dir context
+        }
     }
     foreach (array_merge($is_file ? $ignore_filename_patterns : array(), $ignore_filename_and_dir_name_patterns) as $pattern) {
         list($filename_pattern, $dir_pattern) = $pattern;
@@ -479,17 +479,17 @@ function should_ignore_file($filepath, $bitmask = 0, $bitmask_defaults = 0)
 
     if (($bitmask & IGNORE_NONBUNDLED_SCATTERED) != 0) {
         if (preg_match('#^data_custom/addon_screenshots(/|$)#', strtolower($filepath)) != 0) {
-            return true;
-        } // Relating to addon build, but not defined in addons
+            return true; // Relating to addon build, but not defined in addons
+        }
         if (preg_match('#^exports/static(/|$)#', strtolower($filepath)) != 0) {
-            return true;
-        } // Empty directory, so has to be a special exception
+            return true; // Empty directory, so has to be a special exception
+        }
         if (preg_match('#^exports/builds(/|$)#', strtolower($filepath)) != 0) {
-            return true;
-        } // Needed to stop build recursion
+            return true; // Needed to stop build recursion
+        }
         if (preg_match('#^_tests(/|$)#', strtolower($filepath)) != 0) {
-            return true;
-        } // Test set may have various temporary files buried within
+            return true; // Test set may have various temporary files buried within
+        }
 
         static $addon_files = null;
         if ($addon_files === null) {

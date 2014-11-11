@@ -548,8 +548,8 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
             $level = $level_ranges[$current_range][0];
             $start = $level_ranges[$current_range][1];
             if ($start == 0) {
-                $start = 1;
-            } // Hack for when error starts before a line, messing up our output
+                $start = 1; // Hack for when error starts before a line, messing up our output
+            }
 
             if ($i == $start) { // Add in a font tag
                 $x = 8;

@@ -183,8 +183,8 @@ function _save_available_quiz_answers($id, $text, $type)
         }
 
         if (count($as) == 0) {
-            continue;
-        } // Was only an orphaned explanation, so ignore
+            continue; // Was only an orphaned explanation, so ignore
+        }
 
         $_q = array_shift($as);
         $question = $_q[0];
@@ -222,8 +222,8 @@ function _save_available_quiz_answers($id, $text, $type)
         } else { // We're replacing an existing question
             if (multi_lang_content()) {
                 if ($existing[$i]['q_question_extra_text'] == 1) {
-                    $existing[$i] += insert_lang('q_question_extra_text', '', 2);
-                } // Fix possible corruption
+                    $existing[$i] += insert_lang('q_question_extra_text', '', 2); // Fix possible corruption
+                }
             }
 
             $map = array(

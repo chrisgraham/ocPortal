@@ -137,14 +137,14 @@ function _check_sizes($primary_key, $fields, $id_name, $skip_size_check = false,
     }
     if ((!$skip_size_check) && (substr($id_name, 0, 1) != '#')) {
         if ($key_size >= ($primary_key ? DB_MAX_PRIMARY_KEY_SIZE : DB_MAX_KEY_SIZE)) {
-            fatal_exit('Key too long at ' . integer_format($key_size) . ' bytes [' . $id_name . ']');
-        } // 252 for firebird
+            fatal_exit('Key too long at ' . integer_format($key_size) . ' bytes [' . $id_name . ']'); // 252 for firebird
+        }
         if ($total_size >= DB_MAX_ROW_SIZE) {
             fatal_exit('Fieldset (row) too long at ' . integer_format($total_size) . ' bytes [' . $id_name . ']');
         }
         if ($key_size_unicode >= DB_MAX_KEY_SIZE_UNICODE) {
-            fatal_exit('Unicode version of key too long at ' . integer_format($key_size_unicode) . ' bytes [' . $id_name . ']');
-        } // 252 for firebird
+            fatal_exit('Unicode version of key too long at ' . integer_format($key_size_unicode) . ' bytes [' . $id_name . ']'); // 252 for firebird
+        }
         if ($total_size_unicode >= DB_MAX_ROW_SIZE_UNICODE) {
             fatal_exit('Unicode version of fieldset (row) too long at ' . integer_format($total_size_unicode) . ' bytes [' . $id_name . ']');
         }
@@ -166,8 +166,8 @@ function _helper_create_table($this_ref, $table_name, $fields, $skip_size_check 
     require_code('database_action');
 
     if ((preg_match('#^[\w]+$#', $table_name) == 0) || (strlen($table_name) + 7 > DB_MAX_IDENTIFIER_SIZE)) {
-        fatal_exit('Inappropriate identifier: ' . $table_name);
-    } // (the +7 is for prefix: max length of 7 chars allocated for prefix)
+        fatal_exit('Inappropriate identifier: ' . $table_name); // (the +7 is for prefix: max length of 7 chars allocated for prefix)
+    }
 
     if (!$skip_size_check) {
         _check_sizes(true, $fields, $table_name, false, false);

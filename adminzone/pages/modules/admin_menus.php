@@ -487,8 +487,8 @@ class Module_admin_menus
 
         // See if we can tidy it back to a page-link
         if (preg_match('#^\w+$#', $url) != 0) {
-            $url = ':' . $url;
-        } // So users do not have to think about zones
+            $url = ':' . $url; // So users do not have to think about zones
+        }
         $page_link = url_to_page_link($url, true);
         if ($page_link != '') {
             $url = $page_link;

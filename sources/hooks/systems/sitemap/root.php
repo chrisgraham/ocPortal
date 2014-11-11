@@ -29,12 +29,12 @@ class Hook_sitemap_root extends Hook_sitemap_base
     {
         if (get_option('collapse_user_zones') == '0') {
             if ($page_link == '') {
-                return SITEMAP_NODE_HANDLED;
-            } // Imaginery node
+                return SITEMAP_NODE_HANDLED; // Imaginery node
+            }
         } else {
             if ($page_link == ':') {
-                return SITEMAP_NODE_HANDLED;
-            } // Welcome zone
+                return SITEMAP_NODE_HANDLED; // Welcome zone
+            }
         }
         return SITEMAP_NODE_NOT_HANDLED;
     }

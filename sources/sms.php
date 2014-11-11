@@ -98,8 +98,8 @@ function sms_wrap($message, $to_sms)
         // Find the phone number configured
         $cpf_values = $GLOBALS['FORUM_DRIVER']->get_custom_fields($to_member);
         if (!array_key_exists('mobile_phone_number', $cpf_values)) {
-            continue;
-        } // :S  -- should be there
+            continue; // :S  -- should be there
+        }
         $to = cleanup_mobile_number($cpf_values['mobile_phone_number']);
         if ($to == '') {
             continue;

@@ -128,8 +128,8 @@ function get_php_file_api($filename, $include_code = true)
                 }
             }
             if (!array_key_exists($j, $lines)) {
-                continue;
-            } // No function: probably we commented it out
+                continue; // No function: probably we commented it out
+            }
 
             // Parse comment block bits
             $description = '';
@@ -354,16 +354,16 @@ function _read_php_function_line($_line)
                 } elseif (($char == ',') && (($_line[$k - 1] != '\'') || ($_line[$k - 2] != '='))) {
                     $default_raw = $arg_default;
                     if ($arg_default === 'true') {
-                        $default = 'boolean-true';
-                    } // hack, to stop booleans coming out of arrays as integers
+                        $default = 'boolean-true'; // hack, to stop booleans coming out of arrays as integers
+                    }
                     elseif ($arg_default === 'false') {
                         $default = 'boolean-false';
                     } else {
                         $default = @eval('return ' . $arg_default . ';');
                     } // Could be unprocessable by php.php in standalone mode
                     if (!isset($default)) {
-                        $default = null;
-                    } // Fix for HHVM, #1161
+                        $default = null; // Fix for HHVM, #1161
+                    }
                     $parameters[] = array('name' => $arg_name, 'default' => $default, 'default_raw' => $default_raw, 'ref' => $ref);
                     $arg_name = '';
                     $arg_default = '';
@@ -372,16 +372,16 @@ function _read_php_function_line($_line)
                 } elseif ($char == ')') {
                     $default_raw = $arg_default;
                     if ($arg_default === 'true') {
-                        $default = 'boolean-true';
-                    } // hack, to stop booleans coming out of arrays as integers
+                        $default = 'boolean-true'; // hack, to stop booleans coming out of arrays as integers
+                    }
                     elseif ($arg_default === 'false') {
                         $default = 'boolean-false';
                     } else {
                         $default = @eval('return ' . $arg_default . ';');
                     } // Could be unprocessable by php.php in standalone mode
                     if (!isset($default)) {
-                        $default = null;
-                    } // Fix for HHVM, #1161
+                        $default = null; // Fix for HHVM, #1161
+                    }
                     $parameters[] = array('name' => $arg_name, 'default' => $default, 'default_raw' => $default_raw, 'ref' => $ref);
                     $parse = 'done';
                 } else {
@@ -708,8 +708,8 @@ function test_fail_php_type_check($type, $function_name, $name, $value, $echo = 
             break;
         case 'AUTO_LINK':
             if ((!is_integer($value)) || ($value < -1)) {
-                _fail_php_type_check($type, $function_name, $name, $value, $echo);
-            } // -1 means something different to NULL
+                _fail_php_type_check($type, $function_name, $name, $value, $echo); // -1 means something different to NULL
+            }
             break;
         case 'BINARY':
             if ((!is_integer($value)) || (($value != 0) && ($value != 1))) {

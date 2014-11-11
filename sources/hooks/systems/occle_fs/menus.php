@@ -101,8 +101,8 @@ class Hook_occle_fs_menus extends resource_fs_base
     public function folder_add($filename, $path, $properties)
     {
         if ($path != '') {
-            return false;
-        } // Only one depth allowed for this resource type
+            return false; // Only one depth allowed for this resource type
+        }
 
         list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
@@ -111,8 +111,8 @@ class Hook_occle_fs_menus extends resource_fs_base
         $menu = $this->_create_name_from_label($label);
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items', 'i_menu', array('i_menu' => $menu));
         if (!is_null($test)) {
-            $menu .= '_' . uniqid('', true);
-        } // uniqify
+            $menu .= '_' . uniqid('', true); // uniqify
+        }
 
         $order = db_get_first_id();
         $parent = null;
@@ -240,8 +240,8 @@ class Hook_occle_fs_menus extends resource_fs_base
         list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         require_code('menus2');
 
@@ -307,8 +307,8 @@ class Hook_occle_fs_menus extends resource_fs_base
         list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         require_code('menus2');
 

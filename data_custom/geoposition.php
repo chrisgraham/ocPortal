@@ -108,18 +108,18 @@ if (!is_null($lstring)) {
                 }
                 while ($num_entries == 0);
                 if (is_null($bits['id'])) {
-                    $bits['id'] = $backup;
-                } // Could find nothing, so revert to being specific
+                    $bits['id'] = $backup; // Could find nothing, so revert to being specific
+                }
             }
 
             echo '[';
 
             if (isset($bits['id'])) {
-                echo strval($bits['id']);
-            } // Category or Location
+                echo strval($bits['id']); // Category or Location
+            }
             elseif (isset($bits['ce_id'])) {
-                echo strval($bits['ce_id']);
-            } // Entry
+                echo strval($bits['ce_id']); // Entry
+            }
             else {
                 echo strval($bits['id']);
             } // Location

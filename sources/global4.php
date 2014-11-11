@@ -158,8 +158,8 @@ function geolocate_ip($ip = null)
 
     $long_ip = ip2long($ip);
     if ($long_ip === false) {
-        return null;
-    } // No IP6 support
+        return null; // No IP6 support
+    }
 
     $query = 'SELECT * FROM ' . get_table_prefix() . 'ip_country WHERE begin_num<=' . sprintf('%u', $long_ip) . ' AND end_num>=' . sprintf('%u', $long_ip);
     $results = $GLOBALS['SITE_DB']->query($query);
@@ -428,16 +428,16 @@ function prevent_double_submit($type, $a = null, $b = null)
     );
     if (!is_null($a)) {
         if ($a == '') {
-            return;
-        } // Cannot work with this
+            return; // Cannot work with this
+        }
         $where += array(
             'param_a' => substr($a, 0, 80),
         );
     }
     if (!is_null($b)) {
         if ($b == '') {
-            return;
-        } // Cannot work with this
+            return; // Cannot work with this
+        }
         $where += array(
             'param_b' => substr($b, 0, 80),
         );
@@ -459,8 +459,8 @@ function prevent_double_submit($type, $a = null, $b = null)
 function _log_it($type, $a = null, $b = null)
 {
     if (!function_exists('get_member')) {
-        return;
-    } // If this is during installation
+        return; // If this is during installation
+    }
 
     if ((get_option('site_closed') == '1') && (get_option('stats_when_closed') == '0')) {
         return;

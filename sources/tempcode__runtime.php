@@ -376,8 +376,8 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                 $_data = new ocp_tempcode();
                 $_data->from_assembly($data);
                 if ($_data->bits == array()) {
-                    $data = false;
-                } // Corrupt somehow
+                    $data = false; // Corrupt somehow
+                }
             } else {
                 $data = false;
             }
@@ -396,8 +396,8 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             if ($data !== false) {
                 $_data->from_assembly($data);
                 if ($_data->bits == array()) {
-                    $data = false;
-                } // Corrupt somehow
+                    $data = false; // Corrupt somehow
+                }
             }
         }
     } else {
@@ -504,8 +504,8 @@ function handle_symbol_preprocessing($bit, &$children)
                     $url_parts['type'] = 'misc';
                 }
                 if (is_null($url_parts['type'])) {
-                    $url_parts['type'] = 'misc';
-                } // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+                    $url_parts['type'] = 'misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+                }
                 if (!array_key_exists('page', $url_parts)) {
                     return;
                 }
@@ -526,8 +526,8 @@ function handle_symbol_preprocessing($bit, &$children)
                 $ob_info = isset($CONTENT_OBS[$looking_for]) ? $CONTENT_OBS[$looking_for] : null;
                 if (!is_null($ob_info)) {
                     if (!isset($LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']])) {
-                        $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']] = true;
-                    } // Indicator to preload this
+                        $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']] = true; // Indicator to preload this
+                    }
                 }
             }
             return;
@@ -1109,8 +1109,8 @@ class ocp_tempcode
                     } else {
                         foreach ($bit[3] as $i => $param) {
                             if (is_object($param)) {
-                                $bit[3][$i] = $param->bind($send_parameters, $codename, $under_loop || ($bit[2] == 'LOOP') || ($bit[2] == 'IF_PASSED') || ($bit[2] == 'IF_PASSED_AND_TRUE'));
-                            } // We need to be able to keep the parameters for bubbling down later
+                                $bit[3][$i] = $param->bind($send_parameters, $codename, $under_loop || ($bit[2] == 'LOOP') || ($bit[2] == 'IF_PASSED') || ($bit[2] == 'IF_PASSED_AND_TRUE')); // We need to be able to keep the parameters for bubbling down later
+                            }
 
                             if (($i == 0) && ($bit_2 == 'IF_NON_EMPTY')) { // To save memory
                                 if (!$bit[3][$i]->is_empty()) {

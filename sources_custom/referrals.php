@@ -26,8 +26,8 @@ function assign_referral_awards($referee, $trigger)
     $referee_displayname = $GLOBALS['FORUM_DRIVER']->get_username($referee, true);
     $referee_email = $GLOBALS['FORUM_DRIVER']->get_member_email_address($referee);
     if ($referee_email == '') {
-        return;
-    } // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
+        return; // Weird situation! Somehow the member has no email address defined and hence we can't lookup the referral, can't normally happen
+    }
 
     require_lang('referrals');
     require_code('notifications');
@@ -57,8 +57,8 @@ function assign_referral_awards($referee, $trigger)
     }
     $referrer_username = $GLOBALS['FORUM_DRIVER']->get_username($referrer);
     if (is_null($referrer_username)) {
-        return;
-    } // Deleted member
+        return; // Deleted member
+    }
     $referrer_displayname = $GLOBALS['FORUM_DRIVER']->get_username($referrer, true);
     if (is_guest($referrer)) {
         return;
@@ -519,8 +519,8 @@ function referrer_report_script($ret = false)
         if (($ref['qualified'] == 1) && (!is_null($ref['referee_id']))) { // Clarify, are they really qualified?
             $qualifications = $GLOBALS['SITE_DB']->query_select('referees_qualified_for', array('q_time', 'q_action'), array('q_referee' => $ref['referee_id'], 'q_scheme_name' => $scheme_name));
             if (count($qualifications) == 0) {
-                $ref['qualified'] = 0;
-            } // Not actually qualified for this scheme
+                $ref['qualified'] = 0; // Not actually qualified for this scheme
+            }
         }
 
         $deleted = false;

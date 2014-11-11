@@ -118,8 +118,8 @@ END;
         <h1 class="screen_title">{$title}</h1>
 END;
     if (@ob_end_flush() !== false) {
-        @ob_start();
-    } // Push out and recreate buffer
+        @ob_start(); // Push out and recreate buffer
+    }
     flush();
 }
 

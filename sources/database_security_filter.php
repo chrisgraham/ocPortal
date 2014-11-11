@@ -55,8 +55,8 @@ function is_simple_query($query)
             }
         }
         if (preg_match('/[a-z]\(/', strtolower($query))) {
-            return false;
-        } // SQL functions
+            return false; // SQL functions
+        }
         return true;
     }
     return false;

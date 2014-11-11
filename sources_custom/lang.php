@@ -82,8 +82,8 @@ if (!function_exists('_do_lang')) {
         }
 
         if ($lang == 'xxx') {
-            return 'xxx';
-        } // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
+            return 'xxx'; // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
+        }
 
         if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && (($require_result) || (!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename, $LANGUAGE_STRINGS_CACHE[$lang])))) {
             if ($lang != fallback_lang()) {
@@ -149,8 +149,8 @@ if (!function_exists('_do_lang')) {
                         critical_error('RELAY', 'Missing language code: ' . escape_html($codename) . '. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/' . fallback_lang() . '/*.ini) for ocPortal on this website have been corrupted.');
                     }
                     if ($REQUIRE_LANG_LOOP >= 2) {
-                        return '';
-                    } // Probably failing to load global.ini, so just output with some text missing
+                        return ''; // Probably failing to load global.ini, so just output with some text missing
+                    }
                     require_code('caches3');
                     erase_cached_language();
                     fatal_exit(do_lang_tempcode('MISSING_LANG_ENTRY', escape_html($codename)));
@@ -323,8 +323,8 @@ if (!function_exists('get_translated_text')) {
         }
 
         if ($lang == 'xxx') {
-            return '!!!';
-        } // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
+            return '!!!'; // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
+        }
         $result = $connection->query_select('translate', array('text_original', 'text_parsed'), array('id' => $entry, 'language' => $lang), '', 1);
         if (!array_key_exists(0, $result)) {
             $result = $connection->query_select('translate', array('*'), array('id' => $entry, 'language' => get_site_default_lang()), '', 1);
@@ -385,16 +385,16 @@ function google_translate($str_in, $lang)
     }
 
     if ($DOING_TRANSLATE) {
-        return $tempcode ? protect_from_escaping($str_in) : $str_in;
-    } // Don't want loops
+        return $tempcode ? protect_from_escaping($str_in) : $str_in; // Don't want loops
+    }
 
     if ($str_in == '') {
         return $tempcode ? protect_from_escaping(escape_html('')) : escape_html('');
     }
 
     if (strpos($str_in, 'gtranslate_cache') !== false) {
-        return $tempcode ? protect_from_escaping($str_in) : $str_in;
-    } // Stop loops about corrupt/missing database tables
+        return $tempcode ? protect_from_escaping($str_in) : $str_in; // Stop loops about corrupt/missing database tables
+    }
 
     require_code('GTranslate');
     $translate = new GTranslate();

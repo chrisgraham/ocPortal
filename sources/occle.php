@@ -300,8 +300,8 @@ class virtual_bash
         if (($this->output[STREAM_STDCOMMAND] == '') && ($this->output[STREAM_STDHTML] == '') && ($this->output[STREAM_STDOUT] == '')) {
             // Exit with an error
             if ($this->output[STREAM_STDERR] != '') {
-                $this->output[STREAM_STDERR] = do_lang('PROBLEM_ACCESSING_RESPONSE') . "\n" . $this->output[STREAM_STDERR];
-            } // Ugh...got to work with language strings designed for JavaScript
+                $this->output[STREAM_STDERR] = do_lang('PROBLEM_ACCESSING_RESPONSE') . "\n" . $this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for JavaScript
+            }
             else {
                 $this->output[STREAM_STDERR] = do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
             }
@@ -310,8 +310,8 @@ class virtual_bash
                 return new ocp_tempcode();
             }
         } elseif ($this->output[STREAM_STDERR] != '') {
-            $this->output[STREAM_STDERR] = do_lang('ERROR_NON_TERMINAL') . "\n" . $this->output[STREAM_STDERR];
-        } // And again :-(
+            $this->output[STREAM_STDERR] = do_lang('ERROR_NON_TERMINAL') . "\n" . $this->output[STREAM_STDERR]; // And again :-(
+        }
 
         $notifications = get_queued_messages(false);
 
@@ -403,8 +403,8 @@ class virtual_bash
                 case OUT_OPTION:
                     // Options parsing hasn't started yet; the next character should be a dash ('-')
                     if ($next_char != '-') {
-                        break 2;
-                    } // This is *not* an option!
+                        break 2; // This is *not* an option!
+                    }
                     $option_mode = IN_OPTION;
                     $this->parse_runtime['parse_position']++;
 
@@ -455,8 +455,8 @@ class virtual_bash
                 case IN_OPTION_SYNTAX:
                     // Look for that elusive '='
                     if ($next_char != '=') {
-                        break 2;
-                    } // PANIC!!
+                        break 2; // PANIC!!
+                    }
                     $option_mode = IN_OPTION_VALUE;
                     $this->parse_runtime['parse_position']++;
 
@@ -485,8 +485,8 @@ class virtual_bash
                     } elseif ($next_char == '\\') {
                         // An escape character (currently only backslash ('\')) has been used
                         if ($this->parse_runtime['escape_used']) {
-                            $this->parsed_input[SECTION_OPTIONS][$current_option] .= '\\';
-                        } // Add the backslash to the option value, as it has been escaped
+                            $this->parsed_input[SECTION_OPTIONS][$current_option] .= '\\'; // Add the backslash to the option value, as it has been escaped
+                        }
                         $this->parse_runtime['escape_used'] = !$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
                         $this->parse_runtime['parse_position']++;
                     } else {
@@ -566,13 +566,13 @@ class virtual_bash
                             $this->parse_runtime['parse_position']++;
                             $this->parse_runtime['escape_used'] = false;
                         } else {
-                            break 2;
-                        } // PANIC!!
+                            break 2; // PANIC!!
+                        }
                     } elseif ($next_char == '\\') {
                         // An escape character (currently only backslash ('\')) has been used
                         if ($this->parse_runtime['escape_used']) {
-                            $this->parsed_input[SECTION_PARAMETERS][$current_parameter] .= '\\';
-                        } // Add the backslash to the parameter value, as it has been escaped
+                            $this->parsed_input[SECTION_PARAMETERS][$current_parameter] .= '\\'; // Add the backslash to the parameter value, as it has been escaped
+                        }
                         $this->parse_runtime['escape_used'] = !$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
                         $this->parse_runtime['parse_position']++;
                     } elseif ((($next_char == '>') || ($next_char == '<') || ($next_char == '1') || ($next_char == '2') || ($next_char == '3') || ($next_char == '4') || ($next_char == '|')) && ($this->current_input[$this->parse_runtime['parse_position'] - 1] == ' ') && (!$this->parse_runtime['escape_used']) && ($this->parse_runtime['current_mode'] != MODE_QUOTES)) {
@@ -736,8 +736,8 @@ class virtual_bash
                     } elseif ($next_char == '\\') {
                         // An escape character (currently only backslash ('\')) has been used
                         if ($this->parse_runtime['escape_used']) {
-                            $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] .= '\\';
-                        } // Add the backslash to the extra value, as it has been escaped
+                            $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] .= '\\'; // Add the backslash to the extra value, as it has been escaped
+                        }
                         $this->parse_runtime['escape_used'] = !$this->parse_runtime['escape_used']; // If the current backslash hasn't been backslashed, switch on the escape flag...in other words, invert the flag
                         $this->parse_runtime['parse_position']++;
                     } else {
@@ -791,8 +791,8 @@ class virtual_bash
         $block = substr($this->current_input, $start_pos, $end_pos - $start_pos);
 
         if (($block == '<') || ($block == '>') || ($block == '>>') || ($block == '|')) {
-            return true;
-        } // These are all simple redirect instructions that are easy to check
+            return true; // These are all simple redirect instructions that are easy to check
+        }
         if (preg_match('#[1-4](&[1-4])*>(>)?#', $block) === 1) {
             return true;
         }
@@ -921,8 +921,8 @@ class virtual_bash
             } else {
                 // It's not a lone command; see if it's a script - check first in the main script dir
                 if (file_exists(get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND], true))) {
-                    $script_file = get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]);
-                } // It's in the main script dir
+                    $script_file = get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); // It's in the main script dir
+                }
                 else {
                     $script_file = $this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]));
                 } // Exhaustive search

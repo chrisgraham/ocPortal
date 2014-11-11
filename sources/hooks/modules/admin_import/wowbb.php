@@ -421,8 +421,8 @@ class Hook_wowbb
                     $v = 3;
                 }
                 if ($p['post_polls'] == 1) {
-                    $v = 4;
-                } // This ones a bit hackerish, but closest we can get to concept
+                    $v = 4; // This ones a bit hackerish, but closest we can get to concept
+                }
                 $group_id = import_id_remap_get('group', strval($p['user_group_id']), true);
                 if (!is_null($group_id)) {
                     $access_mapping[$group_id] = $v;

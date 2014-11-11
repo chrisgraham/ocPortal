@@ -232,8 +232,8 @@ class Hook_vb3
 
             $row_group_leader = null;
             if (!is_null($row['userid'])) {
-                $row_group_leader = -$row['userid'];
-            } // This will be fixed when we import members
+                $row_group_leader = -$row['userid']; // This will be fixed when we import members
+            }
 
             $row_promotion_target = null;
             $row_promotion_target = $row['joinusergroupid']; // This will be fixed when all the usergroups are added

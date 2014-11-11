@@ -169,8 +169,8 @@ function delete_bookmark($id, $member = null)
 {
     $where = array('id' => $id);
     if (!is_null($member)) {
-        $where['b_owner'] = $member;
-    } // Second select param for needed security
+        $where['b_owner'] = $member; // Second select param for needed security
+    }
     $GLOBALS['SITE_DB']->query_delete('bookmarks', $where, '', 1);
 
     decache('menu');

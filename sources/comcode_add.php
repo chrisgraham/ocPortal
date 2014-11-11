@@ -203,8 +203,8 @@ function _get_group_tags($group = null)
     $not_found = array();
     foreach (array_keys($all_tags[0] + $all_tags[1]) as $tag) {
         if (in_array($tag, array('attachment'))) {
-            continue;
-        } // Explicitly don't want to allow these (attachment will already be listed if allowed)
+            continue; // Explicitly don't want to allow these (attachment will already be listed if allowed)
+        }
         foreach ($group_tags as $_group) {
             if (in_array($tag, $_group)) {
                 continue 2;
@@ -700,8 +700,8 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
 {
     // Don't show fields that can't apply across multiple attachments
     if (($tag == 'attachment') && (get_param_integer('multi', 0) == 1) && (($param == 'description') || ($param == 'filename') || ($param == 'thumb_url'))) {
-        return true;
-    } // Consider 'handled' already
+        return true; // Consider 'handled' already
+    }
 
     if ((($tag == 'attachment') || ($tag == 'media')) && ($param == 'type')) {
         $list = new ocp_tempcode();

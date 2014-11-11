@@ -87,8 +87,8 @@ class Hook_task_import_rss
             // Dates
             $post_time = array_key_exists('clean_add_date', $item) ? $item['clean_add_date'] : (array_key_exists('add_date', $item) ? strtotime($item['add_date']) : time());
             if ($post_time === false) {
-                $post_time = time();
-            } // We've seen this situation in an error email, it's if the add date won't parse by PHP
+                $post_time = time(); // We've seen this situation in an error email, it's if the add date won't parse by PHP
+            }
             if (($post_time < 0) || ($post_time > 2147483647)) {
                 $post_time = 2147483647;
             }
@@ -155,8 +155,8 @@ class Hook_task_import_rss
                 $cat_ids = array();
                 foreach ($cats_to_process as $j => $cat) {
                     if ($cat == 'Uncategorized') {
-                        continue;
-                    } // Skip blank category creation
+                        continue; // Skip blank category creation
+                    }
 
                     $cat_id = mixed();
                     foreach ($NEWS_CATS as $_cat => $news_cat) {
@@ -400,8 +400,8 @@ class Hook_task_import_rss
 
                         $submitter = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'id', array('m_username' => $comment_author));
                         if (is_null($submitter)) {
-                            $submitter = $GLOBALS['FORUM_DRIVER']->get_guest_id();
-                        } // If comment is made by a non-member, assign comment to guest account
+                            $submitter = $GLOBALS['FORUM_DRIVER']->get_guest_id(); // If comment is made by a non-member, assign comment to guest account
+                        }
 
                         $forum = (is_null(find_overridden_comment_forum('news'))) ? get_option('comments_forum_name') : find_overridden_comment_forum('news');
 

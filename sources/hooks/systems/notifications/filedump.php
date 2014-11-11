@@ -49,8 +49,8 @@ class Hook_Notification_filedump extends Hook_Notification
         $files = get_directory_contents($path, '', false, false);
 
         if (count($files) > 30) {
-            return array();
-        } // Too many, so don't show
+            return array(); // Too many, so don't show
+        }
 
         $page_links = array();
         foreach ($files as $file) {

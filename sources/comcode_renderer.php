@@ -279,8 +279,8 @@ function _comcode_to_tempcode($comcode, $source_member = null, $as_admin = false
     }
 
     if (!$structure_sweep) {
-        $comcode = unixify_line_format($comcode);
-    } // Done already if this is a structure sweep
+        $comcode = unixify_line_format($comcode); // Done already if this is a structure sweep
+    }
 
     // Ensures the 'title' tags are incremental with their anchors
     global $STRUCTURE_LIST;
@@ -1293,8 +1293,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             }
 
             if (($attributes['param'] == '') && (isset($attributes['author']))) {
-                $attributes['param'] = $attributes['author'];
-            } // Compatibility with SMF
+                $attributes['param'] = $attributes['author']; // Compatibility with SMF
+            }
 
             if ($attributes['param'] != '') {
                 $attributes['param'] = protect_from_escaping(comcode_to_tempcode($attributes['param'], $source_member, $as_admin, 60, null, $connection, false, false, false, false, false, $highlight_bits, $on_behalf_of_member));
@@ -1334,8 +1334,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
 
             $level = ($attributes['param'] != '') ? intval($attributes['param']) : 1;
             if ($level == 0) {
-                $level = 1;
-            } // Stop crazy Comcode causing stack errors with the toc
+                $level = 1; // Stop crazy Comcode causing stack errors with the toc
+            }
 
             $uniq_id = strval(count($STRUCTURE_LIST));
             $STRUCTURE_LIST[] = array($level, $embed, $uniq_id);
@@ -1703,8 +1703,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
                 if ($zone == '_SEARCH') {
                     $zone = get_page_zone($page, false);
                     if (is_null($zone)) {
-                        $zone = '';
-                    } // Oh dear, well it will be correctly identified as not found anyway
+                        $zone = ''; // Oh dear, well it will be correctly identified as not found anyway
+                    }
                 }
                 $ptest = _request_page($page, $zone);
                 if ($ptest !== false) {
@@ -2319,8 +2319,8 @@ function _do_contents_level($tree_structure, $list_types, $base, $the_level = 0)
         if (array_key_exists(3, $level)) {
             $under = _do_contents_level($level[3], $list_types, $base, $the_level + 1);
             if ($the_level < $base - 1) {
-                return $under;
-            } // Top level not assembled because it has top level title, above contents
+                return $under; // Top level not assembled because it has top level title, above contents
+            }
             $_line->attach($under);
         }
 

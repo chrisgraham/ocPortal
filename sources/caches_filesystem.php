@@ -108,8 +108,8 @@ class ocp_filecache
         $path = get_custom_file_base() . '/caches/persistent/' . md5($key) . '.gcd';
         $myfile = @fopen($path, GOOGLE_APPENGINE ? 'wb' : 'ab');
         if ($myfile === false) {
-            return;
-        } // Failure
+            return; // Failure
+        }
 
         @flock($myfile, LOCK_EX);
         if (!GOOGLE_APPENGINE) {

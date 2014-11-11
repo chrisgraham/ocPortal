@@ -188,8 +188,8 @@ function filter_form_field_default($name, $val)
                                 $WORDS_TO_FILTER_CACHE = $temp_remember;
                             } else {
                                 if (strpos($val, $attributes['embed']) !== false) {
-                                    warn_exit_wordfilter($name, do_lang_tempcode('WORD_FILTER_YOU', escape_html($attributes['embed'])));
-                                } // In soviet Russia, words filter you
+                                    warn_exit_wordfilter($name, do_lang_tempcode('WORD_FILTER_YOU', escape_html($attributes['embed']))); // In soviet Russia, words filter you
+                                }
                             }
                             break;
                         case 'replace':

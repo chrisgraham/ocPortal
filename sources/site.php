@@ -125,8 +125,8 @@ function init__site()
     require_code('permissions');
     global $ZONE;
     if ($ZONE['zone_require_session'] == 1) {
-        header('X-Frame-Options: SAMEORIGIN');
-    } // Clickjacking protection
+        header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+    }
     if (($ZONE['zone_name'] != '') && (!is_httpauth_login()) && ((get_session_id() == '') || ($SESSION_CONFIRMED_CACHE == 0)) && ($ZONE['zone_require_session'] == 1) && (get_page_name() != 'login')) {
         access_denied((($real_zone == 'data') || (has_zone_access(get_member(), $ZONE['zone_name']))) ? 'ZONE_ACCESS_SESSION' : 'ZONE_ACCESS', $ZONE['zone_name'], true);
     } else {
@@ -288,13 +288,13 @@ function inform_non_canonical_parameter($param)
 function attach_message($message, $type = 'inform', $put_in_helper_panel = false)
 {
     if ((error_reporting() == 0) && ($type == 'warn')) {
-        return '';
-    } // Suppressing errors
+        return ''; // Suppressing errors
+    }
 
     static $am_looping = false;
     if ($am_looping) {
-        return '';
-    } // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
+        return ''; // Was a lang lookup error and got in an infinite loop of attaching errors about missing lang errors (because each iteration causes a reevaluation of past messages)
+    }
     $am_looping = true;
 
     global $ATTACH_MESSAGE_CALLED, $ATTACHED_MESSAGES, $ATTACHED_MESSAGES_RAW, $LATE_ATTACHED_MESSAGES;
@@ -990,8 +990,8 @@ function request_page($codename, $required, $zone = null, $page_type = null, $be
     }
 
     if (($zone == 'site') && (get_option('collapse_user_zones') == '1')) {
-        $zone = '';
-    } // Might have been explicitly said in Tempcode, for example
+        $zone = ''; // Might have been explicitly said in Tempcode, for example
+    }
 
     $details = _request_page($codename, $zone, $page_type, null, $no_redirect_check);
 
@@ -1507,8 +1507,8 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
             if ($support_smart_decaching) {
                 $mtime = filemtime($file_base . '/' . $string);
                 if ($mtime > time()) {
-                    $mtime = time();
-                } // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+                    $mtime = time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+                }
                 $pcache = persistent_cache_get(array('COMCODE_PAGE', $codename, $zone, $theme, user_lang()), $mtime);
             } else {
                 $pcache = persistent_cache_get(array('COMCODE_PAGE', $codename, $zone, $theme, user_lang()));
@@ -1522,8 +1522,8 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                 if ($support_smart_decaching) {
                     $mtime = filemtime($file_base . '/' . $string);
                     if ($mtime > time()) {
-                        $mtime = time();
-                    } // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+                        $mtime = time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+                    }
                 }
                 if ((!$support_smart_decaching) || ((($comcode_page[0]['p_edit_date'] !== null) && ($comcode_page[0]['p_edit_date'] >= $mtime)) || (($comcode_page[0]['p_edit_date'] === null) && ($comcode_page[0]['p_add_date'] !== null) && ($comcode_page[0]['p_add_date'] >= $mtime)))) { // Make sure it has not been edited since last edited or created
                     $comcode_page_row = $comcode_page[0];
@@ -1532,8 +1532,8 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                 } else {
                     $mtime = filemtime($file_base . '/' . $string);
                     if ($mtime > time()) {
-                        $mtime = time();
-                    } // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+                        $mtime = time(); // Timezone error, we have to assume that cache is ok rather than letting us get in a loop decacheing the file. It'll get fixed automatically in a few hours when the hours of the timezone difference passes.
+                    }
                     $GLOBALS['SITE_DB']->query_update('comcode_pages', array('p_edit_date' => $mtime), array('the_page' => $codename, 'the_zone' => $zone), '', 1);
                     $GLOBALS['SITE_DB']->query_delete('cached_comcode_pages', array('the_zone' => $zone, 'the_page' => $codename));
                     delete_lang($comcode_page[0]['string_index']);

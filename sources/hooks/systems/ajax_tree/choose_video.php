@@ -51,8 +51,8 @@ class Hook_choose_video
 
             if (($t['child_count'] == 0) || (strpos($_id, 'member_') !== false)) {
                 if (($editable_filter) && ((can_submit_to_gallery($_id) === false) || (!has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $_id))))) {
-                    continue;
-                } // A bit of a fudge (assumes if you cannot add to a gallery, you cannot edit its contents), but stops noise in the edit list
+                    continue; // A bit of a fudge (assumes if you cannot add to a gallery, you cannot edit its contents), but stops noise in the edit list
+                }
             }
 
             if ($id === $_id) { // Possible when we look under as a root

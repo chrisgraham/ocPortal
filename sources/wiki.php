@@ -653,8 +653,8 @@ function wiki_derive_chain($id, $root = null)
 
         $page_id = $parent_details[$page_id][0]; // For next time
         if (array_key_exists($page_id, $seen_before)) {
-            break;
-        } // Stop loops
+            break; // Stop loops
+        }
     }
     if ($chain == '') {
         $chain = strval($page_id);

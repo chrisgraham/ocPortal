@@ -216,8 +216,8 @@ class forum_driver_base
 
         $ret = $this->_get_username($id);
         if ($ret == '') {
-            $ret = null;
-        } // Odd, but sometimes
+            $ret = null; // Odd, but sometimes
+        }
         $USER_NAME_CACHE[$id] = $ret;
         if ($use_displayname) {
             $ret = get_displayname($ret);

@@ -52,8 +52,8 @@ function ocf_validate_post($post_id, $topic_id = null, $forum_id = null, $poster
     ), array('id' => $post_id), '', 1);
 
     if (!array_key_exists(0, $topic_info)) {
-        return $topic_id;
-    } // Dodgy, topics gone missing
+        return $topic_id; // Dodgy, topics gone missing
+    }
     $is_starter = ($topic_info[0]['t_cache_first_post_id'] == $post_id);
 
     $GLOBALS['FORUM_DB']->query_update('f_topics', array( // Validating a post will also validate a topic

@@ -1006,8 +1006,8 @@ function __check_tag($tag, $attributes, $self_close, $close, $errors)
                     $content = preg_replace('#((<![CDATA[)|(]]>)|(<!--)|(-->))#', '', $content);
                     $js_validity = check_js($content, true);
                     if (is_array($js_validity)) {
-                        $errors = array_merge($errors, $js_validity);
-                    } // Some kind of error
+                        $errors = array_merge($errors, $js_validity); // Some kind of error
+                    }
                 }
                 break;
 
@@ -1017,8 +1017,8 @@ function __check_tag($tag, $attributes, $self_close, $close, $errors)
                     $content = preg_replace('#((<![CDATA[)|(]]>)|(<!--)|(-->))#', '', $content);
                     $css_validity = _validate_css_sheet($content);
                     if (is_array($css_validity)) {
-                        $errors = array_merge($errors, $css_validity);
-                    } // Some kind of error
+                        $errors = array_merge($errors, $css_validity); // Some kind of error
+                    }
                 }
                 break;
 
@@ -1363,8 +1363,8 @@ function _check_attributes($tag, $attributes, $self_close, $close)
 
             $css_validity = _validate_css_class($value, 0);
             if (is_array($css_validity)) {
-                $errors = array_merge($errors, $css_validity);
-            } // Some kind of error
+                $errors = array_merge($errors, $css_validity); // Some kind of error
+            }
         }
 
         if ($attribute == 'id') { // Check we don't have duplicate IDs
@@ -1452,8 +1452,8 @@ function _check_externals($tag, $attributes, $self_close, $close)
             if (!is_null($sheet)) {
                 $css_validity = _validate_css_sheet($sheet);
                 if (is_array($css_validity)) {
-                    $errors = array_merge($errors, $css_validity);
-                } // Some kind of error
+                    $errors = array_merge($errors, $css_validity); // Some kind of error
+                }
             }
         }
     }
@@ -1475,8 +1475,8 @@ function _check_externals($tag, $attributes, $self_close, $close)
                 }
                 $js_validity = check_js($js, true);
                 if (is_array($js_validity)) {
-                    $errors = array_merge($errors, $js_validity);
-                } // Some kind of error
+                    $errors = array_merge($errors, $js_validity); // Some kind of error
+                }
             }
         }
     }
@@ -2070,8 +2070,8 @@ function _check_css_value($key, $value, $_i)
     $value = trim($value);
 
     if (substr($value, 0, 11) == '!important ') {
-        $value = substr($value, 11);
-    } // Strip off the important flag if it's present
+        $value = substr($value, 11); // Strip off the important flag if it's present
+    }
 
     $error = null;
 

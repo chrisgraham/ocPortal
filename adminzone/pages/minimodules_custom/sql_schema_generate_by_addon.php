@@ -25,8 +25,8 @@ foreach ($tables_by as $t => $ts) {
     $tables = array();
     foreach ($ts as $table) {
         if (!array_key_exists($table, $all_tables)) {
-            continue;
-        } // Not installed
+            continue; // Not installed
+        }
 
         $tables[$table] = $all_tables[$table];
     }

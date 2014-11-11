@@ -233,8 +233,8 @@ function _insert_lang($field_name, $text, $level, $connection = null, $comcode =
     }
 
     if (get_mass_import_mode()) {
-        $comcode = false;
-    } // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
+        $comcode = false; // For speed, and to avoid instantly showing Comcode errors from sloppy bbcode
+    }
 
     if ($lang === null) {
         $lang = user_lang();
@@ -556,8 +556,8 @@ function _comcode_lang_string($lang_code)
     }
 
     if ((substr($lang_code, 0, 4) == 'DOC_') && (is_wide() == 1)) {
-        return new ocp_tempcode();
-    } // Not needed if wide, and we might be going wide to reduce chance of errors occuring
+        return new ocp_tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
+    }
 
     if (multi_lang_content()) {
         $comcode_page = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages p LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'translate t ON t.id=string_index AND ' . db_string_equal_to('t.language', user_lang()), array('string_index', 'text_parsed', 'source_user'), array('the_page' => $lang_code, 'the_zone' => '!'), '', 1);

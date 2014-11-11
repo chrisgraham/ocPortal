@@ -140,8 +140,8 @@ function init__js_validator()
         foreach ($JS_PROTOTYPES as $prototype => $details) {
             if ((!is_null($details[0])) && ($details[0] != '')) {
                 if (!array_key_exists(2, $JS_PROTOTYPES[$details[0]])) {
-                    $JS_PROTOTYPES[$details[0]][2] = array();
-                } // This is an inverse-list of all the classes inheriting from self
+                    $JS_PROTOTYPES[$details[0]][2] = array(); // This is an inverse-list of all the classes inheriting from self
+                }
 
                 $t = $details[0];
                 do {
@@ -309,11 +309,11 @@ function js_check_variable_list($JS_LOCAL_VARIABLES)
         foreach ($unique as $t1) {
             foreach ($unique as $t2) {
                 if ($t1 == '') {
-                    continue;
-                } // Weird
+                    continue; // Weird
+                }
                 if ($t2 == '') {
-                    continue;
-                } // Weird
+                    continue; // Weird
+                }
                 if ($t1 == 'Null') {
                     continue;
                 }
@@ -566,8 +566,8 @@ function js_check_expression($e, $secondary = false, $is_guarded = false)
     $c_pos = $e[count($e) - 1];
 
     if ($e[0] == 'VARIABLE_REFERENCE') {
-        $e[0] = 'VARIABLE';
-    } // Handled in the same way
+        $e[0] = 'VARIABLE'; // Handled in the same way
+    }
     if ($e[0] == 'SOLO') {
         $type = js_check_expression($e[1], false, $is_guarded);
         return $type;
@@ -943,21 +943,21 @@ function js_get_variable_type($variable)
     $identifier = $variable[1];
 
     if (count($variable[2]) != 0) {
-        return '!Object';
-    } // Too complex
+        return '!Object'; // Too complex
+    }
 
     if (!isset($JS_LOCAL_VARIABLES[$identifier])) {
         return '!Object';
     }
 
     if (count($JS_LOCAL_VARIABLES[$identifier]['types']) == 0) {
-        return '!Object';
-    } // There is a problem, but it will be identified elsewhere.
+        return '!Object'; // There is a problem, but it will be identified elsewhere.
+    }
 
     $temp = array_unique(array_values(array_diff($JS_LOCAL_VARIABLES[$identifier]['types'], array('Null', 'Undefined'))));
     if (count($temp) != 0) {
-        return $temp[0];
-    } // We'll assume the first set type is the actual type
+        return $temp[0]; // We'll assume the first set type is the actual type
+    }
     return '!Object';
 }
 
@@ -1024,8 +1024,8 @@ function js_infer_expression_type_to_variable_type($type, $expr)
 function js_ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null)
 {
     if (($actual_type == '!Object')) {
-        return true;
-    } // We can't check it
+        return true; // We can't check it
+    }
 
     global $JS_PROTOTYPES;
 
@@ -1033,8 +1033,8 @@ function js_ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null)
     $allowed_types = array('Undefined' => 1, 'Null' => 1);
     foreach ($_allowed_types as $type) {
         if ($type == '') {
-            continue;
-        } // Weird
+            continue; // Weird
+        }
 
         if ($type[0] == '!') {
             $allowed_types += $JS_PROTOTYPES[substr($type, 1)][2];

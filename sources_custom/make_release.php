@@ -469,8 +469,8 @@ function populate_build_files_array($dir = '', $pretend_dir = '')
 
             // Update time of version in version.php
             elseif ($pretend_dir . $file == 'sources/version.php') {
-                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('/\d{10}/', strval(time()), file_get_contents(get_file_base() . '/' . $dir . $file), 1);
-            } // Copy file as-is
+                $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = preg_replace('/\d{10}/', strval(time()), file_get_contents(get_file_base() . '/' . $dir . $file), 1); // Copy file as-is
+            }
             else {
                 $MAKE_INSTALLERS__FILE_ARRAY[$pretend_dir . $file] = file_get_contents(get_file_base() . '/' . $dir . $file);
             }
@@ -506,8 +506,8 @@ function make_files_manifest() // Builds files.dat, the ocPortal file manifest (
         }
 
         if ($file == 'sources/version.php') {
-            $contents = preg_replace('/\d{10}/', '', $contents);
-        } // Not interested in differences in file time
+            $contents = preg_replace('/\d{10}/', '', $contents); // Not interested in differences in file time
+        }
 
         $files[$file] = array(sprintf('%u', crc32(preg_replace('#[\r\n\t ]#', '', $contents))));
     }

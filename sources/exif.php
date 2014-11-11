@@ -35,8 +35,8 @@ function get_exif_data($path, $filename = null)
     }
 
     if (!function_exists('exif_read_data')) {
-        return array();
-    } // EXIF extension not installed
+        return array(); // EXIF extension not installed
+    }
 
     $meta_data = @exif_read_data($path, 'ANY_TAG');
 

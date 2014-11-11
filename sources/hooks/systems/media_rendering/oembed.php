@@ -184,8 +184,8 @@ class Hook_media_rendering_oembed
             $data['type'] = 'link';
         }
         if (!array_key_exists('type',$data)) {
-            return NULL;
-        } // E.g. an error result, with an "error" value - but we don't show errors as we just fall back instead
+            return NULL; // E.g. an error result, with an "error" value - but we don't show errors as we just fall back instead
+        }
         if ((!array_key_exists('thumbnail_url',$data)) && (array_key_exists('media_url',$data))) {
             $data['thumbnail_url'] = $data['media_url']; // noembed uses this, naughty
             unset($data['media_url']);
@@ -293,8 +293,8 @@ class Hook_media_rendering_oembed
                     if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];
                     if (array_key_exists('thumbnail_height',$data)) $map['height']=$data['thumbnail_height'];*/
                 if (array_key_exists('description',$data)) {
-                    $map['description'] = $data['description'];
-                } // not official, but embed.ly has it
+                    $map['description'] = $data['description']; // not official, but embed.ly has it
+                }
                 elseif (array_key_exists('title',$data)) {
                     $map['description'] = $data['title'];
                 }

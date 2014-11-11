@@ -46,8 +46,8 @@ class Hook_whats_news_comcode_pages
 
         require_code('ocfiltering');
         if ($filter == '') {
-            $filter = ',';
-        } // Just welcome zone
+            $filter = ','; // Just welcome zone
+        }
         $or_list = ocfilter_to_sqlfragment($filter, 'b.the_zone', null, null, null, null, false);
 
         $_rows = $GLOBALS['SITE_DB']->query('SELECT a.* FROM ' . get_table_prefix() . 'cached_comcode_pages a JOIN ' . get_table_prefix() . 'comcode_pages b ON a.the_page=b.the_page AND a.the_zone=b.the_zone WHERE p_add_date>' . strval($cutoff_time) . ' AND (' . $or_list . ')', $max);
@@ -75,8 +75,8 @@ class Hook_whats_news_comcode_pages
             $pages = find_all_pages($zone, 'comcode_custom/' . get_site_default_lang(), 'txt', false, $cutoff_time);
             foreach (array_keys($pages) as $page) {
                 if (!is_string($page)) {
-                    $page = strval($page);
-                } // PHP can be weird when things like '404' are put in arrays
+                    $page = strval($page); // PHP can be weird when things like '404' are put in arrays
+                }
 
                 if (substr($page, 0, 6) == 'panel_') {
                     continue;

@@ -168,8 +168,8 @@ function comcode_to_tempcode($comcode, $source_member = null, $as_admin = false,
 function strip_comcode($text, $for_extract = false)
 {
     if ($text == '' || preg_match('#^[\w\d\-\_\(\) \.,:;/"\'\!\?]*$$#', $text) != 0) {
-        return $text;
-    } // Optimisation
+        return $text; // Optimisation
+    }
 
     require_code('mail');
     if (function_exists('comcode_to_clean_text')) {// For benefit of installer, which disables mail.php

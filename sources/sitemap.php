@@ -636,8 +636,8 @@ abstract class Hook_sitemap_base
                     $row = array($title, $icon, $description) + $row;
 
                     if ($link[2][2] == $zone) {
-                        break;
-                    } // If was a perfect match, break out
+                        break; // If was a perfect match, break out
+                    }
                 }
             }
 

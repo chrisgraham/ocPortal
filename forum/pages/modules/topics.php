@@ -1492,8 +1492,8 @@ class Module_topics
         } else {
             if (!is_null($forum_id)) {
                 if (!has_category_access(get_member(), 'forums', strval($forum_id))) {
-                    access_denied('CATEGORY_ACCESS');
-                } // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+                    access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+                }
             }
 
             $breadcrumbs = ocf_forum_breadcrumbs($forum_id, null, null, false);
@@ -1790,8 +1790,8 @@ class Module_topics
         }
         if (!is_null($forum_id)) {
             if (!has_category_access(get_member(), 'forums', strval($forum_id))) {
-                access_denied('CATEGORY_ACCESS');
-            } // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+                access_denied('CATEGORY_ACCESS'); // Can happen if trying to reply to a stated whisper made to you in a forum you don't have access to
+            }
         } else {
             // It must be a Private Topic. Do we have access?
             $from = $topic_info[0]['t_pt_from'];
@@ -2143,8 +2143,8 @@ class Module_topics
         $add_poll = post_param_integer('add_poll', 0);
         $topic_validated = $validated;
         if ($validated == 1) {
-            $topic_validated = 1 - $add_poll;
-        } // If a topic is gonna have a poll added, it starts unvalidated. Adding the poll will validate it.
+            $topic_validated = 1 - $add_poll; // If a topic is gonna have a poll added, it starts unvalidated. Adding the poll will validate it.
+        }
 
         $anonymous = post_param_integer('anonymous', 0);
         $poster_name_if_guest = post_param('poster_name_if_guest', null);

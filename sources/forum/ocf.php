@@ -417,8 +417,8 @@ class forum_driver_ocf extends forum_driver_base
             $this->install_create_custom_field($field, 10);
             $field_bits = $this->connection->query_select('f_custom_fields', array('id', 'cf_type'), array($GLOBALS['SITE_DB']->translate_field_ref('cf_name') => 'ocp_' . $field));
             if (!array_key_exists(0, $field_bits)) {
-                return;
-            } // Possible on an MSN, and there's an inconsistency (e.g. no points addon)
+                return; // Possible on an MSN, and there's an inconsistency (e.g. no points addon)
+            }
         }
         $field_type = $field_bits[0]['cf_type'];
         $field_id = $field_bits[0]['id'];
@@ -756,8 +756,8 @@ class forum_driver_ocf extends forum_driver_base
     public function topic_url($id, $forum = '', $tempcode_okay = false)
     {
         if (is_null($id)) {
-            return '';
-        } // Should not happen, but if it does, this is how we should handle it.
+            return ''; // Should not happen, but if it does, this is how we should handle it.
+        }
 
         unset($forum);
         $_url = build_url(array('page' => 'topicview', 'id' => $id), get_module_zone('topicview'), null, false, false, !$tempcode_okay);
@@ -782,8 +782,8 @@ class forum_driver_ocf extends forum_driver_base
     public function post_url($id, $forum, $tempcode_okay = false)
     {
         if (is_null($id)) {
-            return '';
-        } // Should not happen, but if it does, this is how we should handle it.
+            return ''; // Should not happen, but if it does, this is how we should handle it.
+        }
 
         unset($forum);
 
@@ -1456,8 +1456,8 @@ class forum_driver_ocf extends forum_driver_base
         $password_hashed_salted = $this->get_member_row_field($id, 'm_pass_hash_salted');
         $password_compat_scheme = $this->get_member_row_field($id, 'm_password_compat_scheme');
         if ($password_compat_scheme == 'plain') {
-            $password_hashed_salted = md5($password_hashed_salted);
-        } // can't do direct representation for this, would be a plain text cookie; so in forum_authorise_login we expect it to be md5'd and compare thusly (as per non-cookie call to that function)
+            $password_hashed_salted = md5($password_hashed_salted); // can't do direct representation for this, would be a plain text cookie; so in forum_authorise_login we expect it to be md5'd and compare thusly (as per non-cookie call to that function)
+        }
         ocp_setcookie(get_pass_cookie(), $password_hashed_salted);
         $_COOKIE[get_pass_cookie()] = $password_hashed_salted;
     }
@@ -1550,17 +1550,17 @@ class forum_driver_ocf extends forum_driver_base
             }
             $last = $this->get_member_row_field($id, $restrict_setting);
             if ($last > time()) {
-                $last = time() - $restrict_answer;
-            } // Weird clock problem
+                $last = time() - $restrict_answer; // Weird clock problem
+            }
             $wait_time = $restrict_answer - time() + $last;
             if (($wait_time > 0) && (addon_installed('stats'))) {
                 // Don't do flood control in every situation
                 if (get_page_name() == 'join') {
-                    return;
-                } // Not when joining (too early to be annoying!)
+                    return; // Not when joining (too early to be annoying!)
+                }
                 if ((!running_script('index')) && (!running_script('iframe'))) {
-                    return;
-                } // Not when probably running some AJAX script
+                    return; // Not when probably running some AJAX script
+                }
                 $captcha = post_param('captcha', '');
                 if ($captcha != '') { // Don't consider a CAPTCHA submitting, it'll drive people nuts to get flood control right after a CAPTCHA
                     require_code('captcha');
@@ -1601,8 +1601,8 @@ class forum_driver_ocf extends forum_driver_base
 
         $seconds_since_last_visit = time() - $this->get_member_row_field($id, 'm_last_visit_time');
         if ($seconds_since_last_visit < 0) {
-            $seconds_since_last_visit = 0;
-        } // can happen if system clock changes
+            $seconds_since_last_visit = 0; // can happen if system clock changes
+        }
         if ($restrict_answer != 0) {
             if (is_guest($id)) { // bit of a hack, so that guests don't trip each others limits. Works out statistically.
                 if (get_option('session_prudence') == '0') {
@@ -1610,8 +1610,8 @@ class forum_driver_ocf extends forum_driver_base
                     $num_guests = 0;
                     foreach ($SESSION_CACHE as $c) {
                         if (!array_key_exists('member_id', $c)) {
-                            continue;
-                        } // Workaround to HipHop PHP weird bug
+                            continue; // Workaround to HipHop PHP weird bug
+                        }
 
                         if (($c['last_activity'] > time() - 60 * 4) && (is_guest($c['member_id']))) {
                             $num_guests++;

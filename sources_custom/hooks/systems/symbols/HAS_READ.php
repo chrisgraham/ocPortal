@@ -5,14 +5,14 @@ class Hook_symbol_HAS_READ
     public function run($param)
     {
         if (!isset($param[1])) {
-            return '1';
-        } // Not enough parameters
+            return '1'; // Not enough parameters
+        }
         if (is_guest()) {
-            return '1';
-        } // Guests can't be tracked, assume read (so no unread icon might show, which is the normal use-case for this feature)
+            return '1'; // Guests can't be tracked, assume read (so no unread icon might show, which is the normal use-case for this feature)
+        }
         if (!$GLOBALS['SITE_DB']->table_exists('content_read')) {
-            return '0';
-        } // Not installed yet
+            return '0'; // Not installed yet
+        }
 
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('content_read','r_time',array(
             'r_content_type' => $param[0],
@@ -29,8 +29,8 @@ class Hook_symbol_HAS_READ
             $cleanup_days = intval($param[2]);
             $content_time = intval($param[3]);
             if ($content_time<time()-60*60*24*$cleanup_days) {
-                return '1';
-            } // Content too old, not tracking, assume read
+                return '1'; // Content too old, not tracking, assume read
+            }
         }
 
         return '0';

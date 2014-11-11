@@ -78,8 +78,8 @@ function init__tempcode()
     global $SIMPLE_ESCAPED, $XSS_DETECT;
     $SIMPLE_ESCAPED = array(ENTITY_ESCAPED);
     if ($XSS_DETECT) {
-        $SIMPLE_ESCAPED = array(12345);
-    } // Don't allow $SIMPLE_ESCAPED to work, as we need to work through full manual escaping
+        $SIMPLE_ESCAPED = array(12345); // Don't allow $SIMPLE_ESCAPED to work, as we need to work through full manual escaping
+    }
 
     require_code('symbols');
 
@@ -190,8 +190,8 @@ function missing_template_parameter($origin)
 {
     list($parameter, $template_name) = ($origin == '') ? array(do_lang('UNKNOWN'), do_lang('UNKNOWN')) : explode('/', $origin, 2);
     if (strtolower($template_name) != $template_name && (!is_file(get_file_base() . '/themes/default/templates/' . $template_name . '.tpl'))) {
-        return '';
-    } // Some kind of custom template, will be error prone
+        return ''; // Some kind of custom template, will be error prone
+    }
     attach_message(do_lang_tempcode('MISSING_TEMPLATE_PARAMETER', $parameter, $template_name), 'warn');
     return '';
 }
@@ -377,8 +377,8 @@ function closure_loop($param, $args, $main_function)
                         ocp_mark_as_escaped($val);
                     }
                     if ($key == '' && isset($array[$key])) {
-                        $array[] = $val;
-                    } // Empty keys: which are done to allow "="s in strings by putting in an empty key
+                        $array[] = $val; // Empty keys: which are done to allow "="s in strings by putting in an empty key
+                    }
                     else {
                         $array[$key] = $val;
                     }
@@ -393,8 +393,8 @@ function closure_loop($param, $args, $main_function)
             $array = isset($param['vars'][$array_key]) ? $param['vars'][$array_key] : array();
         }
         if (!is_array($array)) {
-            return do_lang('TEMPCODE_NOT_ARRAY');
-        } // Must have this, otherwise will loop over the Tempcode object
+            return do_lang('TEMPCODE_NOT_ARRAY'); // Must have this, otherwise will loop over the Tempcode object
+        }
         if (isset($param[1 + 1])) { /* NB: +1 is due to there being a non-numeric index here too */
             $columns = intval($param[1]);
             $row_starter = isset($param[2 + 1]) ? $param[2] : '<tr>';
@@ -698,8 +698,8 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                 $_data = new ocp_tempcode();
                 $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));
                 if (!$test) {
-                    $_data = false;
-                } // failed
+                    $_data = false; // failed
+                }
             }
         } else {
             global $SITE_INFO;
@@ -737,8 +737,8 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                     $_data = new ocp_tempcode();
                     $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));
                     if (!$test) {
-                        $_data = false;
-                    } // failed
+                        $_data = false; // failed
+                    }
                 }
             }
         }
@@ -858,8 +858,8 @@ function handle_symbol_preprocessing($seq_part, &$children)
                     $url_parts['type'] = 'misc';
                 }
                 if ($url_parts['type'] === null) {
-                    $url_parts['type'] = 'misc';
-                } // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+                    $url_parts['type'] = 'misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+                }
                 if (!array_key_exists('page', $url_parts)) {
                     return;
                 }
@@ -879,8 +879,8 @@ function handle_symbol_preprocessing($seq_part, &$children)
 
                     $ob_info = isset($CONTENT_OBS[$looking_for]) ? $CONTENT_OBS[$looking_for] : null;
                     if ($ob_info !== null) {
-                        $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']] = true;
-                    } // Indicator to preload this
+                        $LOADED_MONIKERS_CACHE[$url_parts['type']][$url_parts['page']][$url_parts['id']] = true; // Indicator to preload this
+                    }
                 }
             }
             return;
@@ -1391,8 +1391,8 @@ class ocp_tempcode
 
         $result = tempcode_include($file); // We don't eval on this because we want it to potentially be op-code cached by e.g. Zend Accelerator
         if (!is_array($result)) {
-            return false;
-        } // May never get here, as PHP fatal errors can't be suppressed or skipped over
+            return false; // May never get here, as PHP fatal errors can't be suppressed or skipped over
+        }
 
         $this->cached_output = null;
         list($this->seq_parts, $this->preprocessable_bits, $this->codename, $this->pure_lang, $this->code_to_preexecute) = $result;
@@ -1546,8 +1546,8 @@ class ocp_tempcode
             foreach ($parameters as $key => $parameter) {
                 if (is_object($parameter)) {
                     if (count($parameter->preprocessable_bits) != 0) {
-                        $parameter->handle_symbol_preprocessing();
-                    } // Needed to force children to be populated. Otherwise it is possible but not definite that evaluation will result in children being pushed down.
+                        $parameter->handle_symbol_preprocessing(); // Needed to force children to be populated. Otherwise it is possible but not definite that evaluation will result in children being pushed down.
+                    }
                     $out->children[] = array($parameter->codename, isset($parameter->children) ? $parameter->children : array(), isset($parameter->fresh) ? $parameter->fresh : false);
                 } elseif ((is_string($parameter)) && ($key == '_GUID')) {
                     $out->children[] = array(':guid', array(array(':' . $parameter, array(), true)), true);
@@ -1566,8 +1566,8 @@ class ocp_tempcode
                         }
                     }
                 } elseif ($parameter->is_empty_shell()) {
-                    $parameters[$key] = '';
-                } // Little optimisation to save memory
+                    $parameters[$key] = ''; // Little optimisation to save memory
+                }
             } elseif ($p_type == 'boolean') {
                 $parameters[$key] = $parameter ? '1' : '0';
             } elseif (($p_type != 'array') && ($p_type != 'NULL')) {
@@ -1579,8 +1579,8 @@ class ocp_tempcode
         foreach ($this->seq_parts as $seq_parts_group) {
             foreach ($seq_parts_group as $seq_part) {
                 if ((($seq_part[0][0] != 's') || (substr($seq_part[0], 0, 14) != 'string_attach_')) && ($seq_part[2] != TC_LANGUAGE_REFERENCE)) {
-                    $seq_part[1] = &$parameters;
-                } // & is to preserve memory
+                    $seq_part[1] = &$parameters; // & is to preserve memory
+                }
                 $out->seq_parts[0][] = $seq_part;
             }
         }
@@ -1745,8 +1745,8 @@ class ocp_tempcode
 
         $tmp = ob_get_clean();
         if ((!$MEMORY_OVER_SPEED) && (!$NO_EVAL_CACHE) && (!$GLOBALS['STUCK_ABORT_SIGNAL'])) {
-            $this->cached_output = $tmp;
-        } // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+            $this->cached_output = $tmp; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+        }
         if (!$no_eval_cache_before) {
             $NO_EVAL_CACHE = $no_eval_cache_before;
         }
@@ -1846,8 +1846,8 @@ class ocp_tempcode
         $ret = ob_get_clean();
 
         if ((!$MEMORY_OVER_SPEED) && (!$NO_EVAL_CACHE) && (!$GLOBALS['STUCK_ABORT_SIGNAL'])) {
-            $this->cached_output = $ret;
-        } // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+            $this->cached_output = $ret; // Optimisation to store it in here. We don't do the same for evaluate_echo as that's a final use case and hence it would be unnecessarily inefficient to store the result
+        }
 
         if (!$no_eval_cache_before) {
             $NO_EVAL_CACHE = $no_eval_cache_before;
@@ -2010,11 +2010,11 @@ function debug_eval($code, &$tpl_funcs = null, $parameters = null, $cl = null)
     global $NO_EVAL_CACHE, $XSS_DETECT, $KEEP_TPL_FUNCS, $FULL_RESET_VAR_CODE, $RESET_VAR_CODE;
 
     if ($code === null) {
-        return '';
-    } // HHVM issue
+        return ''; // HHVM issue
+    }
     if ($code == '') {
-        return '';
-    } // Blank eval returns false
+        return ''; // Blank eval returns false
+    }
     $result = @eval($code);
     if ($result === false) {
         if ($GLOBALS['DEV_MODE']) {

@@ -127,8 +127,8 @@ function _param_invalid($name, $ret, $posted)
 
     static $param_invalid_looping = false;
     if ($param_invalid_looping) {
-        return '0';
-    } // stop loop, e.g. with keep_fatalistic=<corruptvalue>
+        return '0'; // stop loop, e.g. with keep_fatalistic=<corruptvalue>
+    }
     $param_invalid_looping = true;
 
     if (!is_null($ret)) {
@@ -441,8 +441,8 @@ function _inet_pton($ip)
 function ip_cidr_check($ip, $cidr)
 {
     if ((strpos($ip, ':') === false) !== (strpos($cidr, ':') === false)) {
-        return false;
-    } // Different IP address type
+        return false; // Different IP address type
+    }
 
     if (strpos($ip, ':') === false) {
         // IPv4...
@@ -498,8 +498,8 @@ function _log_hack_attack_and_exit($reason, $reason_param_a = '', $reason_param_
     attach_to_screen_header('<meta name="robots" content="noindex" />'); // XHTMLXHTML
 
     if (!$silent) {
-        set_http_status_code('403');
-    } // Stop spiders ever storing the URL that caused this
+        set_http_status_code('403'); // Stop spiders ever storing the URL that caused this
+    }
 
     if (!addon_installed('securitylogging')) {
         if ($silent) {
@@ -722,8 +722,8 @@ function add_ip_ban($ip, $descrip = '', $ban_until = null, $ban_positive = true)
 
     require_code('global4');
     if ((!is_null($ban_until)) && (ip_banned($ip, true))) {
-        return false;
-    } // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
+        return false; // Don't allow shortening ban period automatically, or having a negative ban negating a positive one!
+    }
 
     $GLOBALS['SITE_DB']->query_delete('banned_ip', array('ip' => $ip), '', 1);
     $GLOBALS['SITE_DB']->query_insert('banned_ip', array('ip' => $ip, 'i_descrip' => $descrip, 'i_ban_until' => $ban_until, 'i_ban_positive' => $ban_positive ? 1 : 0), false, true); // To stop weird race-like conditions
@@ -804,8 +804,8 @@ function get_webservice_result($error_message)
         return null;
     }
     if (get_domain() == 'localhost') {
-        return null;
-    } // In case of no Internet connection
+        return null; // In case of no Internet connection
+    }
 
     if ((!function_exists('has_zone_access')) || (!has_zone_access(get_member(), 'adminzone'))) {
         return null;
@@ -1004,8 +1004,8 @@ function relay_error_notification($text, $ocproducts = true, $notification_type 
     if ((function_exists('get_value')) && ($GLOBALS['BOOTSTRAPPING'] == 0) && (array_key_exists('SITE_DB', $GLOBALS)) && (!is_null($GLOBALS['SITE_DB']))) {
         $num = intval(get_value('num_error_mails_' . date('Y-m-d'))) + 1;
         if ($num == 51) {
-            return;
-        } // We've sent too many error mails today
+            return; // We've sent too many error mails today
+        }
         $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'values WHERE the_name LIKE \'' . db_encode_like('num\_error\_mails\_%') . '\'');
         persistent_cache_delete('VALUES');
         set_value('num_error_mails_' . date('Y-m-d'), strval($num));
@@ -1085,11 +1085,11 @@ function relay_error_notification($text, $ocproducts = true, $notification_type 
 function may_see_stack_dumps()
 {
     if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
-        return true;
-    } // myOCP exception
+        return true; // myOCP exception
+    }
     if ((function_exists('ocp_srv')) && (ocp_srv('REQUEST_METHOD') == '')) {
-        return true;
-    } // Command line
+        return true; // Command line
+    }
     if ((function_exists('running_script')) && (running_script('upgrader'))) {
         return true;
     }

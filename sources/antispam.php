@@ -66,8 +66,8 @@ function check_rbls($page_level = false, $user_ip = null)
         critical_error('BANNED');
     }
     if ($is_already_ip_banned === false) {
-        return;
-    } // Cached that we're not banned
+        return; // Cached that we're not banned
+    }
 
     // Check exclusions
     $exclusions = explode(',', get_option('spam_check_exclusions'));
@@ -142,12 +142,12 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
         );
 
         if ($we_have_a_result_already) {
-            return array(ANTISPAM_RESPONSE_SKIP, null);
-        } // We know better than this RBL can tell us, so stick with what we know
+            return array(ANTISPAM_RESPONSE_SKIP, null); // We know better than this RBL can tell us, so stick with what we know
+        }
         $rbl_response = rbl_resolve($user_ip, $rbl, $page_level);
         if (is_null($rbl_response)) {
-            return array(ANTISPAM_RESPONSE_ERROR, null);
-        } // Error
+            return array(ANTISPAM_RESPONSE_ERROR, null); // Error
+        }
 
         foreach ($rtornevall as $rbl_t => $rbl_tc) {
             if ((($rbl_response[3] & $rbl_tc) != 0) && ($block[$rbl_t])) {
@@ -180,12 +180,12 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
         );
 
         if ($we_have_a_result_already) {
-            return array(ANTISPAM_RESPONSE_SKIP, null);
-        } // We know better than this RBL can tell us, so stick with what we know
+            return array(ANTISPAM_RESPONSE_SKIP, null); // We know better than this RBL can tell us, so stick with what we know
+        }
         $rbl_response = rbl_resolve($user_ip, $rbl, $page_level);
         if (is_null($rbl_response)) {
-            return array(ANTISPAM_RESPONSE_ERROR, null);
-        } // Error
+            return array(ANTISPAM_RESPONSE_ERROR, null); // Error
+        }
 
         foreach ($rnjabl as $njcheck => $value) {
             if (($rbl_response[3] == $value) && ($block[$njcheck])) {
@@ -214,12 +214,12 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
         );
 
         if ($we_have_a_result_already) {
-            return array(ANTISPAM_RESPONSE_SKIP, null);
-        } // We know better than this RBL can tell us, so stick with what we know
+            return array(ANTISPAM_RESPONSE_SKIP, null); // We know better than this RBL can tell us, so stick with what we know
+        }
         $rbl_response = rbl_resolve($user_ip, $rbl, $page_level);
         if (is_null($rbl_response)) {
-            return array(ANTISPAM_RESPONSE_ERROR, null);
-        } // Error
+            return array(ANTISPAM_RESPONSE_ERROR, null); // Error
+        }
 
         foreach ($refnet as $efcheck => $value) {
             if (($rbl_response[3] == $value) && ($block[$njcheck])) {
@@ -237,8 +237,8 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
         }
         $rbl_response = rbl_resolve($user_ip, $rbl, $page_level);
         if (is_null($rbl_response)) {
-            return array(ANTISPAM_RESPONSE_ERROR, null);
-        } // Error
+            return array(ANTISPAM_RESPONSE_ERROR, null); // Error
+        }
 
         $_confidence_level = floatval($rbl_response[2]) / 255.0;
         $threat_type = intval($rbl_response[3]);
@@ -247,8 +247,8 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
                 $spam_stale_threshold = intval(get_option('spam_stale_threshold'));
 
                 if (intval($rbl_response[1]) > $spam_stale_threshold) {
-                    return array(ANTISPAM_RESPONSE_STALE, null);
-                } // We know this IP is stale now so don't check other RBLs as no others support stale checks
+                    return array(ANTISPAM_RESPONSE_STALE, null); // We know this IP is stale now so don't check other RBLs as no others support stale checks
+                }
 
                 $confidence_level = $_confidence_level * 4.0; // Actually, this is a threat level, not a confidence level. We have a fudge factor to try and normalise it, seeing that Google was actually reported with a threat level.
                 return array(ANTISPAM_RESPONSE_ACTIVE, $confidence_level);
@@ -261,12 +261,12 @@ function check_rbl($rbl, $user_ip, $we_have_a_result_already = false, $page_leve
     $rbl_response = rbl_resolve($user_ip, $rbl, $page_level);
     if ($rbl_response[3] != 0) {
         if ($we_have_a_result_already) {
-            return array(ANTISPAM_RESPONSE_SKIP, null);
-        } // We know better than this RBL can tell us, so stick with what we know
+            return array(ANTISPAM_RESPONSE_SKIP, null); // We know better than this RBL can tell us, so stick with what we know
+        }
         $rbl_response = rbl_resolve($user_ip, $rbl, $page_level);
         if (is_null($rbl_response)) {
-            return array(ANTISPAM_RESPONSE_ERROR, null);
-        } // Error
+            return array(ANTISPAM_RESPONSE_ERROR, null); // Error
+        }
 
         return array(ANTISPAM_RESPONSE_ACTIVE_UNKNOWN_STALE, null);
     }
@@ -287,8 +287,8 @@ function rbl_resolve($ip, $rbl_domain, $page_level)
         $arpa = implode('.', array_reverse(explode('.', $ip)));
     } else { // ipv6
         if (strpos($rbl_domain, 'httpbl.org') !== false) {
-            return null;
-        } // Not supported
+            return null; // Not supported
+        }
 
         $_ip = explode(':', $ip);
         $normalised_ip = '';
@@ -433,8 +433,8 @@ function _check_stopforumspam($user_ip, $username = null, $email = null)
         $url .= '&email=' . urlencode(convert_to_internal_encoding($email, get_charset(), 'utf-8'));
     }
     if ($key != '') {
-        $url .= '&api_key=' . urlencode($key);
-    } // Key not needed for read requests, but give it as a courtesy
+        $url .= '&api_key=' . urlencode($key); // Key not needed for read requests, but give it as a courtesy
+    }
     $_result = http_download_file($url, null, false);
 
     secure_serialized_data($_result);

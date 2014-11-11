@@ -2915,8 +2915,8 @@ function ecv2_TO_TIMESTAMP($lang, $escaped, $param)
     if (isset($param[0])) {
         $value = strval(strtotime($param[0]));
         if ((array_key_exists(1, $param)) && ($param[1] == '1')) {
-            $value = strval(usertime_to_utctime(intval($value)));
-        } // '1' means date was in user-time so needs converting to a UTC timestamp
+            $value = strval(usertime_to_utctime(intval($value))); // '1' means date was in user-time so needs converting to a UTC timestamp
+        }
     } else {
         $value = strval(time());
     }
@@ -3570,8 +3570,8 @@ function ecv2_LOOP(&$value, $lang, $escaped, $param)
         $first = true;
         foreach ($array as $go_key => $go) {
             if (!is_array($go)) {
-                $go = array('_loop_key' => make_string_tempcode(is_integer($go_key) ? strval($go_key) : $go_key), '_loop_var' => make_string_tempcode($go));
-            } // In case it's not a list of maps, but just a list
+                $go = array('_loop_key' => make_string_tempcode(is_integer($go_key) ? strval($go_key) : $go_key), '_loop_var' => make_string_tempcode($go)); // In case it's not a list of maps, but just a list
+            }
 
             if ((isset($param[2])) && ($col % $columns == 0) && ($col != 0)) {
                 $value .= $row_starter;

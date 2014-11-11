@@ -53,8 +53,8 @@ class Hook_tags
                 $id_field = $info['id_field'];
 
                 if (($table == 'comcode_pages') || (is_array($id_field))) {
-                    continue;
-                } // Can't handle these cases
+                    continue; // Can't handle these cases
+                }
 
                 $sql = 'SELECT m.* FROM ' . get_table_prefix() . 'seo_meta m';
                 $sql .= ' LEFT JOIN ' . get_table_prefix() . $table . ' r ON r.' . $id_field . '=m.meta_for_id AND ' . db_string_equal_to('m.meta_for_type', $seo_type_code);

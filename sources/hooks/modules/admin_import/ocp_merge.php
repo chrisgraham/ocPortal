@@ -509,8 +509,8 @@ class Hook_ocp_merge
         foreach ($rows as $row) {
             $row['i_member_id'] = $on_same_msn ? $row['i_member_id'] : import_id_remap_get('member', strval($row['i_member_id']), true);
             if (is_null($row['i_member_id'])) {
-                continue;
-            } // Uh oh - someones deleted and they had invoices - lets hope they paid them ;)
+                continue; // Uh oh - someones deleted and they had invoices - lets hope they paid them ;)
+            }
             if (get_param_integer('keep_preserve_ids', 0) == 0) {
                 unset($row['id']);
             }
@@ -567,8 +567,8 @@ class Hook_ocp_merge
         foreach ($rows as $row) {
             $row['s_member_id'] = $on_same_msn ? $row['s_member_id'] : import_id_remap_get('member', strval($row['s_member_id']), true);
             if (is_null($row['s_member_id'])) {
-                continue;
-            } // Uh oh - someones deleted and they had invoices - lets hope they paid them ;)
+                continue; // Uh oh - someones deleted and they had invoices - lets hope they paid them ;)
+            }
             if (substr($row['s_type_code'], 0, 9) == 'USERGROUP') {
                 $remap_id = import_id_remap_get('usergroup_sub', substr($row['s_type_code'], 9), true);
                 if (is_null($remap_id)) {

@@ -581,8 +581,8 @@ function disable_php_memory_limit()
         @ini_set('memory_limit', '-1');
     } else {
         if (is_numeric($shl)) {
-            $shl .= 'M';
-        } // Units are in MB for this, while PHP's memory limit setting has it in bytes
+            $shl .= 'M'; // Units are in MB for this, while PHP's memory limit setting has it in bytes
+        }
         @ini_set('memory_limit', $shl);
     }
 }
@@ -711,8 +711,8 @@ function catch_fatal_errors()
 
     if (!is_null($error)) {
         if (!array_key_exists('message', $error)) {
-            return;
-        } // Needed for HipHop PHP
+            return; // Needed for HipHop PHP
+        }
         if (substr($error['message'], 0, 26) == 'Maximum execution time of ') {
             if (function_exists('i_force_refresh')) {
                 i_force_refresh();
@@ -816,8 +816,8 @@ function is_browser_decacheing()
     }
 
     if (GOOGLE_APPENGINE) {
-        return false;
-    } // Decaching by mistake is real-bad when Google Cloud Storage is involved
+        return false; // Decaching by mistake is real-bad when Google Cloud Storage is involved
+    }
 
     if (is_null(get_value('ran_once'))) { // Track whether ocPortal has run at least once
         set_value('ran_once', '1');
@@ -1091,16 +1091,16 @@ function in_safe_mode()
 {
     global $SITE_INFO;
     if (isset($SITE_INFO['safe_mode'])) {
-        return ($SITE_INFO['safe_mode'] == '1');
-    } // Useful for testing HPHP support, and generally more robust and fast
+        return ($SITE_INFO['safe_mode'] == '1'); // Useful for testing HPHP support, and generally more robust and fast
+    }
 
     global $CHECKING_SAFEMODE, $REQUIRED_CODE;
     if (!isset($REQUIRED_CODE['lang']) || $REQUIRED_CODE['lang'] == 0) {
-        return false;
-    } // Too early. We can get in horrible problems when doing get_member() below if lang hasn't loaded yet
+        return false; // Too early. We can get in horrible problems when doing get_member() below if lang hasn't loaded yet
+    }
     if ($CHECKING_SAFEMODE) {
-        return false;
-    } // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
+        return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
+    }
     $CHECKING_SAFEMODE = true;
     $ret = ((get_param_integer('keep_safe_mode', 0) == 1) && ((isset($GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['IS_ACTUALLY_ADMIN'])) || (!array_key_exists('FORUM_DRIVER', $GLOBALS)) || ($GLOBALS['FORUM_DRIVER'] === null) || (!function_exists('get_member')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))));
     $CHECKING_SAFEMODE = false;
@@ -1612,8 +1612,8 @@ function unixify_line_format($in, $desired_charset = null, $html = false, $from_
 
     static $from = null;
     if ($from === null) {
-        $from = array("\r\n", '&#8298;', "\r");
-    } // &#8298; is very odd- seems to come from open office copy & paste
+        $from = array("\r\n", '&#8298;', "\r"); // &#8298; is very odd- seems to come from open office copy & paste
+    }
     static $to = null;
     if ($to === null) {
         $to = array("\n", '', "\n");
@@ -2071,8 +2071,8 @@ function require_css($css)
 function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
 {
     if (!$minify) {
-        return;
-    } // Optimisation disabled if no minification. Turn off minificiation when debugging JavaScript/CSS, as smart caching won't work with the merge system.
+        return; // Optimisation disabled if no minification. Turn off minificiation when debugging JavaScript/CSS, as smart caching won't work with the merge system.
+    }
 
     $is_admin = $GLOBALS['FORUM_DRIVER']->is_super_admin(get_member());
     $zone_name = get_zone_name();
@@ -2094,8 +2094,8 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
     if ($zone_name != '') {
         $welcome_value = get_value_newer_than($grouping_codename_welcome . $type, time() - 60 * 60 * 24);
         if ($welcome_value === null) {
-            return null;
-        } // Don't do this if we haven't got for welcome zone yet (we try and make all same as welcome zone if possible - so we need it to compare against)
+            return null; // Don't do this if we haven't got for welcome zone yet (we try and make all same as welcome zone if possible - so we need it to compare against)
+        }
     } else {
         $welcome_value = $value;
     }
@@ -2113,14 +2113,14 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
                 $resources = array_keys($arr);
                 $value = implode(',', $resources) . '::???';
                 if ($type == '.js') {
-                    $value = preg_replace('#(^|,)javascript_#', '${1}', $value);
-                } // Shorten
+                    $value = preg_replace('#(^|,)javascript_#', '${1}', $value); // Shorten
+                }
             }
         }
     }
     if (($type == '.js') && ($value !== null)) {
-        $value = preg_replace('#(^|,)(?!javascript)#', '${1}javascript_', $value);
-    } // Unshorten
+        $value = preg_replace('#(^|,)(?!javascript)#', '${1}javascript_', $value); // Unshorten
+    }
 
     // If set, ensure merged resources file exists, and apply it
     if ($value !== null) {
@@ -2156,8 +2156,8 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
             if ($hash != $old_hash) {
                 $value = implode(',', $resources) . '::' . $hash;
                 if ($type == '.js') {
-                    $value = preg_replace('#(^|,)javascript_#', '${1}', $value);
-                } // Shorten
+                    $value = preg_replace('#(^|,)javascript_#', '${1}', $value); // Shorten
+                }
                 set_value($grouping_codename . $type, $value);
             }
         }
@@ -2203,12 +2203,12 @@ function _handle_web_resource_merging($type, &$arr, $minify, $https, $mobile)
             }
 
             if ((count($arr) == 0) && (running_script('snippet'))) {
-                return null;
-            } // No need to load up merged, as we already have the merged one loaded; but we did successfully also skip loading was that were included in that merge
+                return null; // No need to load up merged, as we already have the merged one loaded; but we did successfully also skip loading was that were included in that merge
+            }
 
             if ($resources !== array()) {
-                $arr[$grouping_codename] = 0;
-            } // Add in merge one to load instead
+                $arr[$grouping_codename] = 0; // Add in merge one to load instead
+            }
 
             return $grouping_codename;
         }
@@ -2261,8 +2261,8 @@ function convert_data_encodings($known_utf8 = false)
     $VALID_ENCODING = true;
 
     if ($CONVERTED_ENCODING) {
-        return;
-    } // Already done it
+        return; // Already done it
+    }
 
     if (preg_match('#^[\x00-\x7F]*$#', serialize($_POST) . serialize($_GET) . serialize($_FILES)) != 0) { // Simple case, all is ASCII
         $CONVERTED_ENCODING = true;

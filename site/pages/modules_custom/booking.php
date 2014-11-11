@@ -231,14 +231,14 @@ class Module_booking
 
         // Decide what to do
         if ($type == 'misc') {
-            return $this->choose_bookables_and_dates();
-        } // NB: This may be skipped, if blocks were used to access
+            return $this->choose_bookables_and_dates(); // NB: This may be skipped, if blocks were used to access
+        }
         if ($type == 'flesh_out') {
-            return $this->flesh_out();
-        } // Finish full details for the booking
+            return $this->flesh_out(); // Finish full details for the booking
+        }
         if ($type == 'account') {
-            return $this->join_or_login();
-        } // NB: This may be skipped if user already logged in
+            return $this->join_or_login(); // NB: This may be skipped if user already logged in
+        }
         if ($type == 'done') {
             return $this->thanks();
         }
@@ -443,15 +443,15 @@ class Module_booking
         $quantity = post_param_integer('bookable_' . strval($bookable['id']) . '_quantity', 0);
         $date_from = get_input_date('bookable_' . strval($bookable['id']) . '_date_from');
         if (is_null($date_from)) {
-            $date_from = get_input_date('bookable_date_from');
-        } // allow to be specified for whole form (the norm actually)
+            $date_from = get_input_date('bookable_date_from'); // allow to be specified for whole form (the norm actually)
+        }
         if (is_null($date_from)) {
             $date_from = time();
         }
         $date_to = get_input_date('bookable_' . strval($bookable['id']) . '_date_to');
         if (is_null($date_to)) {
-            $date_to = get_input_date('bookable_date_to');
-        } // allow to be specified for whole form (the norm actually); may still be null, if ranges not being used
+            $date_to = get_input_date('bookable_date_to'); // allow to be specified for whole form (the norm actually); may still be null, if ranges not being used
+        }
         if (is_null($date_to)) {
             $date_to = $date_from;
         }

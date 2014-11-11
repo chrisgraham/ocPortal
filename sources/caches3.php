@@ -196,14 +196,14 @@ function erase_cached_language()
                         $key = 'script__' . md5(serialize(ocp_srv('SCRIPT_NAME')) . serialize($_GET));
                     }
                     if ($key . '.lcd' == $file) {
-                        continue;
-                    } // Will be open/locked
+                        continue; // Will be open/locked
+                    }
 
                     $i = 0;
                     while ((@unlink($path . '/' . $file) === false) && ($i < 5)) {
                         if (!file_exists($path . '/' . $file)) {
-                            break;
-                        } // Race condition, gone already
+                            break; // Race condition, gone already
+                        }
                         sleep(1); // May be race condition, lock
                         $i++;
                     }
@@ -256,8 +256,8 @@ function erase_cached_templates($preserve_some = false)
                         $i = 0;
                         while ((@unlink($path . $file) === false) && ($i < 5)) {
                             if (!file_exists($path . $file)) {
-                                break;
-                            } // Race condition, gone already
+                                break; // Race condition, gone already
+                            }
                             sleep(1); // May be race condition, lock
                             $i++;
                         }

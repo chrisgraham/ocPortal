@@ -568,8 +568,8 @@ class Module_admin_stats
         $time_start = get_input_date('time_start', true);
         $time_end = get_input_date('time_end', true);
         if (!is_null($time_end)) {
-            $time_end += 60 * 60 * 24 - 1;
-        } // So it is end of day not start
+            $time_end += 60 * 60 * 24 - 1; // So it is end of day not start
+        }
         if (is_null($time_start)) {
             $time_start = 0;
         }
@@ -683,8 +683,8 @@ class Module_admin_stats
         $time_start = get_input_date('time_start', true);
         $time_end = get_input_date('time_end', true);
         if (!is_null($time_end)) {
-            $time_end += 60 * 60 * 24 - 1;
-        } // So it is end of day not start
+            $time_end += 60 * 60 * 24 - 1; // So it is end of day not start
+        }
         if (is_null($time_start)) {
             $time_start = 0;
         }
@@ -814,8 +814,8 @@ class Module_admin_stats
         $time_start = get_input_date('time_start', true);
         $time_end = get_input_date('time_end', true);
         if (!is_null($time_end)) {
-            $time_end += 60 * 60 * 24 - 1;
-        } // So it is end of day not start
+            $time_end += 60 * 60 * 24 - 1; // So it is end of day not start
+        }
         if (is_null($time_start)) {
             $time_start = 0;
         }
@@ -958,8 +958,8 @@ class Module_admin_stats
         $time_start = get_input_date('time_start', true);
         $time_end = get_input_date('time_end', true);
         if (!is_null($time_end)) {
-            $time_end += 60 * 60 * 24 - 1;
-        } // So it is end of day not start
+            $time_end += 60 * 60 * 24 - 1; // So it is end of day not start
+        }
         if (is_null($time_start)) {
             $time_start = 0;
         }
@@ -1002,8 +1002,8 @@ class Module_admin_stats
                 foreach ($categories as $cat) {
                     $where = db_string_equal_to('the_page', $page);
                     if (substr($page, 0, 6) == 'pages/') {
-                        $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-                    } // Legacy compatibility
+                        $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+                    }
                     $count = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE (' . $where . ') AND s_get LIKE \'' . db_encode_like('<param>page=catalogues</param>\n<param>type=category</param>\n<param>id=' . strval($cat['id']) . '</param>%') . '\' AND date_and_time>' . strval($time_start) . ' AND date_and_time<' . strval($time_end));
                     $cc_cat_written = do_lang('CATALOGUE_CATEGORY') . ': ' . get_translated_text($cat['cc_title']);
                     $views[$cc_cat_written] = array($count, $page);
@@ -1018,8 +1018,8 @@ class Module_admin_stats
             }
             $where = db_string_equal_to('the_page', $page);
             if (substr($page, 0, 6) == 'pages/') {
-                $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-            } // Legacy compatibility
+                $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+            }
             $views[$page2] = array($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE (' . $where . ') AND date_and_time>' . strval($time_start) . ' AND date_and_time<' . strval($time_end)), $page);
             $total += $views[$page2][0];
         }
@@ -1111,8 +1111,8 @@ class Module_admin_stats
         // NB: not used in default templates
         $where = db_string_equal_to('the_page', $page);
         if (substr($page, 0, 6) == 'pages/') {
-            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-        } // Legacy compatibility
+            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+        }
         $reasonable_max = 10000;
         $rows = $GLOBALS['SITE_DB']->query('SELECT date_and_time FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ') ORDER BY ' . $sortable . ' ' . $sort_order, $reasonable_max, null, false, true);
         if (count($rows) < 1) {
@@ -1196,8 +1196,8 @@ class Module_admin_stats
 
         $where = db_string_equal_to('the_page', $page);
         if (substr($page, 0, 6) == 'pages/') {
-            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-        } // Legacy compatibility
+            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+        }
         $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
         $rows = $GLOBALS['SITE_DB']->query('SELECT id,referer FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' AND referer LIKE \'' . db_encode_like('http://www.google.%q=%') . '\' ORDER BY ' . $sortable . ' ' . $sort_order, 2000/*reasonable limit*/);
         if (count($rows) < 1) {
@@ -1290,8 +1290,8 @@ class Module_admin_stats
 
             $where = db_string_equal_to('the_page', $page);
             if (substr($page, 0, 6) == 'pages/') {
-                $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-            } // Legacy compatibility
+                $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+            }
             $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
             $rows = $GLOBALS['SITE_DB']->query('SELECT DISTINCT ip FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' ORDER BY ' . $sortable . ' ' . $sort_order, 1000/*reasonable limit*/);
             shuffle($rows);
@@ -1374,8 +1374,8 @@ class Module_admin_stats
         $reasonable_max = 10000;
         $where = db_string_equal_to('the_page', $page);
         if (substr($page, 0, 6) == 'pages/') {
-            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-        } // Legacy compatibility
+            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+        }
         $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
         $reasonable_max = 10000;
         $rows = $GLOBALS['SITE_DB']->query('SELECT date_and_time FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' ORDER BY ' . $sortable . ' ' . $sort_order, $reasonable_max/*reasonable limit*/);
@@ -1604,8 +1604,8 @@ class Module_admin_stats
 
         $where = db_string_equal_to('the_page', $page);
         if (substr($page, 0, 6) == 'pages/') {
-            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-        } // Legacy compatibility
+            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+        }
         $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
         $query = 'SELECT id,date_and_time FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' AND date_and_time>' . strval(time() - ($total * 60 * 60)) . ' AND date_and_time<=' . strval(time()) . ' ORDER BY ' . $sortable . ' ' . $sort_order;
         $rows = $GLOBALS['SITE_DB']->query($query, 10000/*reasonable limit*/);
@@ -1683,8 +1683,8 @@ class Module_admin_stats
 
         $where = db_string_equal_to('the_page', $page);
         if (substr($page, 0, 6) == 'pages/') {
-            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page);
-        } // Legacy compatibility
+            $where .= ' OR ' . db_string_equal_to('the_page', '/' . $page); // Legacy compatibility
+        }
         $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
         $rows = $GLOBALS['SITE_DB']->query('SELECT id,' . $type . ' FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' ORDER BY ' . $sortable . ' ' . $sort_order, 10000/*reasonable limit*/);
         if (count($rows) < 1) {

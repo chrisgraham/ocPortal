@@ -85,8 +85,8 @@ class video_syndication_vimeo
             // This code is a bit annoying. Ideally we'd do a remote tag search (vimeo.videos.search), but Vimeo's API seems to be buggy/lagged here. We'll therefore look at our local mappings.
             $transcoding_id = $GLOBALS['SITE_DB']->query_value_if_there('SELECT t_id FROM ' . get_table_prefix() . 'video_transcoding WHERE t_local_id=' . strval($local_id) . ' AND t_id LIKE \'' . db_encode_like('vimeo\_%') . '\'');
             if (is_null($transcoding_id)) {
-                return array();
-            } // Not uploaded yet
+                return array(); // Not uploaded yet
+            }
 
             $transcoding_id = preg_replace('#^vimeo_#','',$transcoding_id);
         }
@@ -209,8 +209,8 @@ class video_syndication_vimeo
         );
 
         if (!is_null($bound_to_local_id)) {
-            return $detected_video;
-        } // else we ignore remote videos that aren't bound to local ones
+            return $detected_video; // else we ignore remote videos that aren't bound to local ones
+        }
 
         return NULL;
     }

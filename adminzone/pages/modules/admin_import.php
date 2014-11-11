@@ -683,8 +683,8 @@ class Module_admin_import
             $fields = $GLOBALS['SITE_DB']->query('SELECT m_table,m_name FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'db_meta WHERE (NOT (m_table LIKE \'' . db_encode_like('f_%') . '\')) AND (' . db_string_equal_to('m_type', $db_abstraction) . ' OR ' . db_string_equal_to('m_type', '*' . $db_abstraction) . ' OR ' . db_string_equal_to('m_type', '?' . $db_abstraction) . $extra . ')');
             foreach ($fields as $field) {
                 if ($field['m_table'] == 'stats') {
-                    continue;
-                } // Lots of data and it's not important
+                    continue; // Lots of data and it's not important
+                }
 
                 //echo '(working) '.$field['m_table'].'/'.$field['m_name'].'<br />';
 

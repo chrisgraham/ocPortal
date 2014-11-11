@@ -72,8 +72,8 @@ function external_db_user_from_session()
 {
     $coookie_session_name = get_long_value('external_db_login__session_name');
     if (empty($_COOKIE[$coookie_session_name])) {
-        return null;
-    } // No session
+        return null; // No session
+    }
     $cookie = $_COOKIE[$coookie_session_name];
 
     $db = external_db();
@@ -129,8 +129,8 @@ function external_db_user_sync($member, $record)
 
     $username = $record[$username_field];
     if ($username != '') {
-        $update_map['m_username'] = $username;
-    } // Ok, it's valid, so we can sync it
+        $update_map['m_username'] = $username; // Ok, it's valid, so we can sync it
+    }
 
     // Re-sync e-mail address and password, just in case it was changed in the other system
     //  NB: We have no way of synching local changes back. You could consider blocking off the members module

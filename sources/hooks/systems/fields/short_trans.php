@@ -101,8 +101,8 @@ class Hook_fields_short_trans
     public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if (is_null($actual_value)) {
-            $actual_value = '';
-        } // Plug anomaly due to unusual corruption
+            $actual_value = ''; // Plug anomaly due to unusual corruption
+        }
         return form_input_line_comcode($_cf_name, $_cf_description, 'field_' . strval($field['id']), $actual_value, $field['cf_required'] == 1);
     }
 

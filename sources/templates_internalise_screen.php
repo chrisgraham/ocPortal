@@ -29,8 +29,8 @@
 function internalise_own_screen($screen_content, $refresh_time = null, $refresh_if_changed = null)
 {
     if (!has_js()) {
-        return $screen_content;
-    } // We need JS to make this a seamless process
+        return $screen_content; // We need JS to make this a seamless process
+    }
     if (!is_null(get_bot_type())) {
         return $screen_content;
     }

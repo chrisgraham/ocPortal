@@ -71,8 +71,8 @@ class Block_main_content
         }
         $content_id = isset($map['id']) ? $map['id'] : null;
         if ($content_id === '') {
-            return new ocp_tempcode();
-        } // Might have happened due to some bad chaining in a template
+            return new ocp_tempcode(); // Might have happened due to some bad chaining in a template
+        }
         $randomise = ($content_id === null);
         $zone = isset($map['zone']) ? $map['zone'] : '_SEARCH';
         $efficient = (isset($map['efficient']) ? $map['efficient'] : '1') == '1';

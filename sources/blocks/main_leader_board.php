@@ -112,8 +112,8 @@ class Block_main_leader_board
 
             $username = $GLOBALS['FORUM_DRIVER']->get_username($member);
             if (is_null($username)) {
-                continue;
-            } // Deleted member now
+                continue; // Deleted member now
+            }
 
             $out->attach(do_template('POINTS_LEADER_BOARD_ROW', array(
                 '_GUID' => '68caa55091aade84bc7ca760e6655a45',

@@ -641,8 +641,8 @@ class database_driver
                     } elseif (is_float($v)) {
                         $values .= float_to_raw_string($v, 10);
                     } elseif (($key == 'begin_num') || ($key == 'end_num')) {
-                        $values .= $v;
-                    } // Fudge, for all our known large unsigned integers
+                        $values .= $v; // Fudge, for all our known large unsigned integers
+                    }
                     else {
                         $values .= '\'' . $this->static_ob->db_escape_string($v) . '\'';
                     }
@@ -720,8 +720,8 @@ class database_driver
                 } elseif (is_integer($value)) {
                     $where .= $key . '=' . strval($value);
                 } elseif (($key == 'begin_num') || ($key == 'end_num')) {
-                    $where .= $key . '=' . $value;
-                } // Fudge, for all our known large unsigned integers
+                    $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
+                }
                 else {
                     if ($value === null) {
                         $where .= $key . ' IS NULL';
@@ -755,11 +755,11 @@ class database_driver
     {
         $values = $this->query_select($table, array($selected_value), $where_map, $end, 1, null, $fail_ok, $lang_fields);
         if ($values === null) {
-            return null;
-        } // error
+            return null; // error
+        }
         if (!array_key_exists(0, $values)) {
-            fatal_exit(do_lang_tempcode('QUERY_NULL', escape_html($this->_get_where_expand($this->table_prefix . $table, array($selected_value), $where_map, $end))));
-        } // No result found
+            fatal_exit(do_lang_tempcode('QUERY_NULL', escape_html($this->_get_where_expand($this->table_prefix . $table, array($selected_value), $where_map, $end)))); // No result found
+        }
         return $this->_query_select_value($values);
     }
 
@@ -772,8 +772,8 @@ class database_driver
     protected function _query_select_value($values)
     {
         if (!array_key_exists(0, $values)) {
-            return null;
-        } // No result found
+            return null; // No result found
+        }
         $first = $values[0];
         $v = current($first); // Result found. Maybe a value of 'null'
         return $v;
@@ -794,8 +794,8 @@ class database_driver
     {
         $values = $this->query_select($table, array($select), $where_map, $end, 1, null, $fail_ok, $lang_fields);
         if ($values === null) {
-            return null;
-        } // error
+            return null; // error
+        }
         return $this->_query_select_value($values);
     }
 
@@ -832,8 +832,8 @@ class database_driver
 
         $values = $this->query($query, 1, null, $fail_ok, $skip_safety_check, $lang_fields);
         if ($values === null) {
-            return null;
-        } // error
+            return null; // error
+        }
         return $this->_query_select_value($values);
     }
 
@@ -1239,8 +1239,8 @@ class database_driver
                     // Copy results to lang cache, but only if not null AND unset to avoid any confusion
                     foreach ($ret as $i => $row) {
                         if (!isset($row[$field])) {
-                            continue;
-                        } // Probably dereferenced to text_original in WHERE, but not selected
+                            continue; // Probably dereferenced to text_original in WHERE, but not selected
+                        }
 
                         $entry = $row[preg_replace('#^.*\.#', '', $field)];
 
@@ -1292,8 +1292,8 @@ class database_driver
                 } elseif (is_integer($value)) {
                     $where .= $key . '=' . strval($value);
                 } elseif (($key == 'begin_num') || ($key == 'end_num')) {
-                    $where .= $key . '=' . $value;
-                } // Fudge, for all our known large unsigned integers
+                    $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
+                }
                 else {
                     if ($value === null) {
                         $where .= $key . ' IS NULL';
@@ -1323,8 +1323,8 @@ class database_driver
                 } elseif (is_integer($value)) {
                     $update .= $key . '=' . strval($value);
                 } elseif (($key == 'begin_num') || ($key == 'end_num')) {
-                    $where .= $key . '=' . $value;
-                } // Fudge, for all our known large unsigned integers
+                    $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
+                }
                 else {
                     $update .= $key . '=\'' . $this->static_ob->db_escape_string($value) . '\'';
                 }
@@ -1385,8 +1385,8 @@ class database_driver
             } elseif (is_integer($value)) {
                 $where .= $key . '=' . strval($value);
             } elseif (($key == 'begin_num') || ($key == 'end_num')) {
-                $where .= $key . '=' . $value;
-            } // Fudge, for all our known large unsigned integers
+                $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
+            }
             else {
                 if ($value === null) {
                     $where .= $key . ' IS NULL';
@@ -1528,8 +1528,8 @@ class database_driver
     public function table_is_locked($table)
     {
         if (in_array($table, array('stats', 'banner_clicks', 'member_tracking', 'usersonline_track', 'download_logging'))) {
-            return false;
-        } // Actually, we have delayed insert for these so locking is not an issue
+            return false; // Actually, we have delayed insert for these so locking is not an issue
+        }
 
         if (substr(get_db_type(), 0, 5) != 'mysql') {
             return false;
@@ -1546,8 +1546,8 @@ class database_driver
             }
             $locks = $db->query('SHOW OPEN TABLES FROM ' . $db_name . ' WHERE `Table`=\'' . db_escape_string($db->get_table_prefix() . $table) . '\' AND In_use>=1', null, null, true);
             if (is_null($locks)) {
-                return false;
-            } // MySQL version older than 5.0 (e.g. 4.1.x)
+                return false; // MySQL version older than 5.0 (e.g. 4.1.x)
+            }
             $locked = count($locks) >= 1;
             $tries++;
             if ($locked) {

@@ -253,8 +253,8 @@ function ocf_has_read_topic($topic_id, $topic_last_time = null, $member_id = nul
     }
 
     if ($topic_last_time < $post_history_days_ago) {
-        return true;
-    } // We don't store that old
+        return true; // We don't store that old
+    }
     if (is_null($member_last_time)) {
         $member_last_time = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_read_logs', 'l_time', array('l_member_id' => $member_id, 'l_topic_id' => $topic_id));
     }

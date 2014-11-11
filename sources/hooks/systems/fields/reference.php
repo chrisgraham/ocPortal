@@ -32,8 +32,8 @@ class Hook_fields_reference
         }
 
         if (($filter !== null) && (substr($filter, 0, 3) != 'ck_')) {
-            return array();
-        } // To avoid a wasteful query
+            return array(); // To avoid a wasteful query
+        }
 
         require_lang('fields');
         static $cats = null;

@@ -295,11 +295,11 @@ function does_lang_exist($lang)
         return false;
     }
     if ($lang == 'Gibb') {
-        return true;
-    } // Test language
+        return true; // Test language
+    }
     if ($lang == 'xxx') {
-        return true;
-    } // Test language
+        return true; // Test language
+    }
     if ($lang == fallback_lang()) {
         return true;
     }
@@ -785,8 +785,8 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
     }
 
     if ($lang == 'xxx') {
-        return 'xxx';
-    } // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
+        return 'xxx'; // Helpful for testing language compliancy. We don't expect to see non x's if we're running this language
+    }
 
     if ((!isset($LANGUAGE_STRINGS_CACHE[$lang][$codename])) && (($require_result) || (!isset($LANGUAGE_STRINGS_CACHE[$lang])) || (!array_key_exists($codename, $LANGUAGE_STRINGS_CACHE[$lang])))) {
         if ($lang != fallback_lang()) {
@@ -817,8 +817,8 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
                     critical_error('RELAY', 'Missing language code: ' . escape_html($codename) . '. This language code is required to produce error messages, and thus a critical error was prompted by the non-ability to show less-critical error messages. It is likely the source language files (lang/' . fallback_lang() . '/*.ini) for ocPortal on this website have been corrupted.');
                 }
                 if ($REQUIRE_LANG_LOOP >= 2) {
-                    return '';
-                } // Probably failing to load global.ini, so just output with some text missing
+                    return ''; // Probably failing to load global.ini, so just output with some text missing
+                }
                 require_code('caches3');
                 erase_cached_language();
 
@@ -1151,8 +1151,8 @@ function get_translated_tempcode($table, $row, $field_name, $connection = null, 
         }
 
         if ($lang == 'xxx') {
-            return make_string_tempcode('!!!');
-        } // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
+            return make_string_tempcode('!!!'); // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
+        }
 
         if ((isset($connection->text_lookup_cache[$entry])) && ($lang == user_lang())) {
             $ret = $connection->text_lookup_cache[$entry];
@@ -1280,8 +1280,8 @@ function get_translated_text($entry, $connection = null, $lang = null, $force = 
     }
 
     if ($lang == 'xxx') {
-        return '!!!';
-    } // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
+        return '!!!'; // Helpful for testing language compliancy. We don't expect to see non x's/!'s if we're running this language
+    }
     $result = $connection->query_select('translate', array('text_original', 'text_parsed'), array('id' => $entry, 'language' => $lang), '', 1);
     if (!isset($result[0])) {
         if ($force) {

@@ -86,8 +86,8 @@ class Hook_fields_picture
             return '';
         }
         if ($ev == STRING_MAGIC_NULL) {
-            return '';
-        } // LEGACY: Fix to bad data that got in
+            return ''; // LEGACY: Fix to bad data that got in
+        }
 
         $img_url = $ev;
         if (url_is_local($img_url)) {

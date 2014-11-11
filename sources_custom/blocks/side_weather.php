@@ -85,8 +85,8 @@ class Block_side_weather
         $max_days = isset($map['max_days']) ? intval($map['max_days']) : 2;
 
         if (array_key_exists('param', $map)) {
-            $loc_code = $map['param'];
-        } // need to pass loc ID ex :INXX0087
+            $loc_code = $map['param']; // need to pass loc ID ex :INXX0087
+        }
         else {
             $loc_code = '34503';
         } // if not found setting a default location for weather
@@ -152,8 +152,8 @@ class Block_side_weather
         }
 
         if (!isset($rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'])) {
-            return new ocp_tempcode();
-        } // No weather for here
+            return new ocp_tempcode(); // No weather for here
+        }
 
         $location_city = $rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['CITY'];
         $location_region = $rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['REGION'];

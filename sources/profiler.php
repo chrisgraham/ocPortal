@@ -123,8 +123,8 @@ function _ocp_profile_end_for($identifier, $specifics = null)
     global $PROFILER_DATA;
 
     if (!isset($PROFILER_DATA[$identifier])) {
-        return;
-    } // Error, should never happen
+        return; // Error, should never happen
+    }
 
     end($PROFILER_DATA[$identifier]);
     $key = key($PROFILER_DATA[$identifier]);
@@ -205,8 +205,8 @@ function _ocp_profiler_script_end()
     global $PAGE_START_TIME, $PROFILER_PATH, $PROFILER_FILEHANDLE;
 
     if (!isset($PROFILER_FILEHANDLE)) {
-        return;
-    } // Never started, so don't tail off
+        return; // Never started, so don't tail off
+    }
 
     // Lock out further profiling
     global $PROFILING_ALLOWED;

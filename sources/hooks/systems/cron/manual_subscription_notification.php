@@ -33,8 +33,8 @@ class Hook_cron_manual_subscription_notification
         $last_time = is_null($_last_time) ? mixed() : intval($_last_time);
         if (!is_null($last_time)) {
             if ($last_time < 60 * 60 * 24) {
-                return;
-            } // Only do once per day
+                return; // Only do once per day
+            }
         }
 
         if (get_option('manual_subscription_expiry_notice') == '') {
@@ -56,8 +56,8 @@ class Hook_cron_manual_subscription_notification
                     if ((!is_null($expiry_time)) && (($expiry_time - time()) < ($manual_subscription_expiry_notice * 24 * 60 * 60)) && ($expiry_time >= time())) {
                         if (!is_null($last_time)) {
                             if (($expiry_time - $last_time) < ($manual_subscription_expiry_notice * 24 * 60 * 60)) {
-                                continue;
-                            } // Notification already sent!
+                                continue; // Notification already sent!
+                            }
                         }
 
                         if (($expiry_time - time()) < ($manual_subscription_expiry_notice * 24 * 60 * 60)) {

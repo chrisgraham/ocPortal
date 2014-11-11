@@ -146,8 +146,8 @@ foreach ($all_downloads_to_add as $i => $d) {
 
 foreach ($all_downloads_to_add as $i => $d) {
     if (!isset($d['full_local_path'])) {
-        continue;
-    } // Could not find file above
+        continue; // Could not find file above
+    }
 
     $full_local_path = $d['full_local_path'];
     $file_size = filesize($full_local_path);

@@ -50,8 +50,8 @@ function set_from_referrer_field()
 
     $referrer = post_param('referrer', '');
     if ($referrer == '') {
-        return;
-    } // NB: This doesn't mean failure, it may already have been set by the recommend module when the recommendation was *made*
+        return; // NB: This doesn't mean failure, it may already have been set by the recommend module when the recommendation was *made*
+    }
 
     $referrer_member = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_members WHERE ' . db_string_equal_to('m_username', $referrer) . ' OR ' . db_string_equal_to('m_email_address', $referrer));
     if (!is_null($referrer_member)) {

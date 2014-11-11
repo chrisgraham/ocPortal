@@ -444,8 +444,8 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
     }
 
     if ((function_exists('memory_get_usage')) && (ini_get('memory_usage') == '8M')) {
-        return '';
-    } // Some cowardice... don't want to tempt fate
+        return ''; // Some cowardice... don't want to tempt fate
+    }
 
     if (is_null($extension)) {
         $extension = get_file_extension($url);
@@ -538,14 +538,14 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
                                 }
                                 $file_data .= $it;
                                 if (strlen($file_data) >= 3 * 1024 * 1024) {
-                                    break;
-                                } // 3MB is enough
+                                    break; // 3MB is enough
+                                }
                             }
                             @zip_entry_close($entry);
                             $mash .= ' ' . create_data_mash($entry_name, $file_data);
                             if (strlen($mash) >= 3 * 1024 * 1024) {
-                                break;
-                            } // 3MB is enough
+                                break; // 3MB is enough
+                            }
                         }
                     }
                 }
@@ -566,14 +566,14 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
                     $entry_name = $entry['path'];
                     $mash .= ' ' . $entry_name;
                     if ($entry['size'] >= 3 * 1024 * 1024) {
-                        continue;
-                    } // 3MB is enough
+                        continue; // 3MB is enough
+                    }
                     $_entrya = tar_get_file($myfile_tar, $entry['path']);
                     if (!is_null($_entrya)) {
                         $mash .= ' ' . create_data_mash($entry_name, $_entrya['data']);
                         if (strlen($mash) >= 3 * 1024 * 1024) {
-                            break;
-                        } // 3MB is enough
+                            break; // 3MB is enough
+                        }
                     }
                 }
                 tar_close($myfile_tar);
@@ -595,8 +595,8 @@ function create_data_mash($url, $data = null, $extension = null, $direct_path = 
                                 $it = gzread($myfile, 1024);
                                 $file_data .= $it;
                                 if (strlen($file_data) >= 3 * 1024 * 1024) {
-                                    break;
-                                } // 3MB is enough
+                                    break; // 3MB is enough
+                                }
                             }
                             $mash = ' ' . create_data_mash(preg_replace('#\.gz#i', '', $url), $file_data);
                         }
@@ -1201,8 +1201,8 @@ function log_download($id, $size, $got_before)
 {
     // Log
     if (!$got_before) {
-        $GLOBALS['SITE_DB']->query_insert('download_logging', array('id' => $id, 'member_id' => get_member(), 'ip' => get_ip_address(), 'date_and_time' => time()), false, true);
-    } // Suppress errors in case of race condition
+        $GLOBALS['SITE_DB']->query_insert('download_logging', array('id' => $id, 'member_id' => get_member(), 'ip' => get_ip_address(), 'date_and_time' => time()), false, true); // Suppress errors in case of race condition
+    }
 
     // Update download count
     $GLOBALS['SITE_DB']->query('UPDATE ' . get_table_prefix() . 'download_downloads SET num_downloads=(num_downloads+1) WHERE id=' . strval($id), 1, null, true);

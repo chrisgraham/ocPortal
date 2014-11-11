@@ -59,8 +59,8 @@ class Hook_mysql
 
         foreach ($tables as $table) {
             if ($table['m_table'] == 'sessions') {
-                continue;
-            } // HEAP, so can't be repaired
+                continue; // HEAP, so can't be repaired
+            }
 
             $table = get_table_prefix() . $table['m_table'];
 

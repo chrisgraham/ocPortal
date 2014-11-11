@@ -126,8 +126,8 @@ if (function_exists('imagecolorallocatealpha')) {
 
             $orig_path = find_theme_image($image_code, true, true, 'default', 'EN');
             if ($orig_path == '') {
-                continue;
-            } // Theme has specified non-existent image as themewizard-compatible
+                continue; // Theme has specified non-existent image as themewizard-compatible
+            }
 
             if (strpos($orig_path, '/' . fallback_lang() . '/') !== false) {
                 $composite = 'themes/' . filter_naughty($theme) . '/images/EN/';

@@ -553,8 +553,8 @@ function _build_url($vars, $zone_name = '', $skip = null, $keep_all = false, $av
         $symbol = '?';
         foreach ($vars as $key => $val) {
             if ($val === null) {
-                continue;
-            } // NULL means skip
+                continue; // NULL means skip
+            }
 
             if (!is_string($key)) {
                 $key = strval($key);
@@ -1013,8 +1013,8 @@ function load_moniker_hooks()
         $hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach ($hooks as $hook => $sources_dir) {
             if ($hook == 'banner' || $hook == 'banner_type' || $hook == 'catalogue' || $hook == 'post') {
-                continue;
-            } // FUDGEFUDGE: Optimisation, not ideal!
+                continue; // FUDGEFUDGE: Optimisation, not ideal!
+            }
 
             $info_function = extract_module_functions(get_file_base() . '/' . $sources_dir . '/hooks/systems/content_meta_aware/' . $hook . '.php', array('info'), null, false, 'Hook_content_meta_aware_' . $hook);
             if ($info_function[0] !== null) {
@@ -1051,11 +1051,11 @@ function find_id_moniker($url_parts, $zone)
         return null;
     }
     if (strpos($url_parts['page'], '[') !== false) {
-        return null;
-    } // A regexp in a comparison URL, in breadcrumbs code
+        return null; // A regexp in a comparison URL, in breadcrumbs code
+    }
     if ($zone == '[\w\_\-]*') {
-        return null;
-    } // Part of a breadcrumbs regexp
+        return null; // Part of a breadcrumbs regexp
+    }
 
     // Does this URL arrangement support monikers?
     global $CONTENT_OBS;
@@ -1074,8 +1074,8 @@ function find_id_moniker($url_parts, $zone)
 
         // Moniker may be held the other side of a redirect
         if (!function_exists('_request_page')) {
-            return null;
-        } // In installer
+            return null; // In installer
+        }
         $page_place = _request_page($url_parts['page'], $zone);
         if ($page_place[0] == 'REDIRECT') {
             $url_parts['page'] = $page_place[1]['r_to_page'];
@@ -1092,8 +1092,8 @@ function find_id_moniker($url_parts, $zone)
             $url_parts['type'] = 'misc';
         }
         if ($url_parts['type'] === null) {
-            $url_parts['type'] = 'misc';
-        } // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+            $url_parts['type'] = 'misc'; // NULL means "do not take from environment"; so we default it to 'misc' (even though it might actually be left out when SEO URLs are off, we know it cannot be for SEO URLs)
+        }
 
         if (array_key_exists('id', $url_parts)) {
             if ($url_parts['id'] === null) {
@@ -1164,8 +1164,8 @@ function find_id_moniker($url_parts, $zone)
                         foreach ($pages as $page => &$ids) {
                             foreach ($ids as $id => $status) {
                                 if (is_bool($status)) {
-                                    $ids[$id] = false;
-                                } // Could not look up, but we don't want to search for it again so mark as missing
+                                    $ids[$id] = false; // Could not look up, but we don't want to search for it again so mark as missing
+                                }
                             }
                         }
                     }
@@ -1205,8 +1205,8 @@ function find_id_moniker($url_parts, $zone)
         }
 
         if ($looking_for == '_WILD:_WILD') {
-            return null;
-        } // We don't generate these automatically
+            return null; // We don't generate these automatically
+        }
 
         // Otherwise try to generate a new one
         require_code('urls2');

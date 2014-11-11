@@ -163,8 +163,8 @@ function find_lang_content_names($ids)
     foreach ($langidfields as $field) {
         $db = $GLOBALS[((substr($field['m_table'], 0, 2) == 'f_') ? 'FORUM_DB' : 'SITE_DB')];
         if (is_null($db)) {
-            continue;
-        } // None forum driver
+            continue; // None forum driver
+        }
         $or_list = '';
         foreach ($ids as $id) {
             if (!isset($ret[$id])) { // Try and lookup anything not found yet
@@ -260,8 +260,8 @@ function lookup_language_full_name($code)
     global $LANGS_MAP_CACHE;
 
     if ($code == 'EN') {
-        return 'English';
-    } // Optimisation
+        return 'English'; // Optimisation
+    }
 
     if ($LANGS_MAP_CACHE === null) {
         $LANGS_MAP_CACHE = persistent_cache_get('LANGS_MAP_CACHE');

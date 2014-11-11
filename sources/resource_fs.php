@@ -765,8 +765,8 @@ class resource_fs_base
     {
         $label = basename($filename, '.' . RESOURCEFS_DEFAULT_EXTENSION); // Default implementation is simply to assume the stub of the filename (or may be a raw label already, with no file type) is the resource label
         if (array_key_exists('label', $properties)) {
-            $label = $properties['label'];
-        } // ...unless the label was explicitly given
+            $label = $properties['label']; // ...unless the label was explicitly given
+        }
         return array($properties, $label); // Leave properties alone
     }
 
@@ -1012,16 +1012,16 @@ class resource_fs_base
     protected function _log_if_save_matchup($resource_type, $resource_id, $path, $properties)
     {
         if ($resource_type === null) {
-            return;
-        } // Too difficult to check, don't bother; only expert coding would lead to this scenario anyway
+            return; // Too difficult to check, don't bother; only expert coding would lead to this scenario anyway
+        }
         if ($resource_id === false) {
             return;
         }
 
         global $RESOURCEFS_LOGGER;
         if ($RESOURCEFS_LOGGER === null) {
-            return;
-        } // Too much unnecessarily work if the logger is not on
+            return; // Too much unnecessarily work if the logger is not on
+        }
 
         $ok = true;
 
@@ -1095,8 +1095,8 @@ class resource_fs_base
             }
 
             if (is_null($cat_resource_type)) {
-                return '';
-            } // Exists in root
+                return ''; // Exists in root
+            }
 
             // Do we need to load up a linker table for getting the category?
             if ((!is_null($relationship['linker_table'])) && ($cma_info['table'] != $relationship['linker_table'])) {
@@ -1114,8 +1114,8 @@ class resource_fs_base
                 // Convert category to path
                 $subpath = $this->folder_convert_id_to_filename($cat_resource_type, $category_id);
                 if (is_null($subpath)) {
-                    continue;
-                } // Weird, some kind of broken category. We'll have to say we cannot find, as it won't be linked into the folder tree.
+                    continue; // Weird, some kind of broken category. We'll have to say we cannot find, as it won't be linked into the folder tree.
+                }
 
                 // Full subpath requested?
                 if ($full_subpath) {
@@ -1596,11 +1596,11 @@ class resource_fs_base
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
-            return;
-        } // Can not be done
+            return; // Can not be done
+        }
         if ($resource_type == 'comcode_page') {
-            return;
-        } // Can not be done
+            return; // Can not be done
+        }
         $cma_info = $this->_get_cma_info($resource_type);
         $module = $cma_info['permissions_type_code'];
 
@@ -1618,11 +1618,11 @@ class resource_fs_base
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
-            return null;
-        } // Can not be done
+            return null; // Can not be done
+        }
         if ($resource_type == 'comcode_page') {
-            return null;
-        } // Can not be done
+            return null; // Can not be done
+        }
         $cma_info = $this->_get_cma_info($resource_type);
         $module = $cma_info['permissions_type_code'];
 
@@ -1686,11 +1686,11 @@ class resource_fs_base
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
-            return;
-        } // Can not be done
+            return; // Can not be done
+        }
         if ($resource_type == 'comcode_page') {
-            return;
-        } // Can not be done
+            return; // Can not be done
+        }
         $cma_info = $this->_get_cma_info($resource_type);
         $module = $cma_info['permissions_type_code'];
 
@@ -1721,11 +1721,11 @@ class resource_fs_base
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
-            return array();
-        } // Can not be done
+            return array(); // Can not be done
+        }
         if ($resource_type == 'comcode_page') {
-            return array();
-        } // Can not be done
+            return array(); // Can not be done
+        }
         $cma_info = $this->_get_cma_info($resource_type);
         $module = $cma_info['permissions_type_code'];
 
@@ -1796,11 +1796,11 @@ class resource_fs_base
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
-            return;
-        } // Can not be done
+            return; // Can not be done
+        }
         if ($resource_type == 'comcode_page') {
-            return;
-        } // Can not be done
+            return; // Can not be done
+        }
         $cma_info = $this->_get_cma_info($resource_type);
         $module = $cma_info['permissions_type_code'];
 
@@ -1824,11 +1824,11 @@ class resource_fs_base
     {
         list($resource_type, $category) = $this->folder_convert_filename_to_id($filename);
         if ($resource_type == 'zone') {
-            return array();
-        } // Can not be done
+            return array(); // Can not be done
+        }
         if ($resource_type == 'comcode_page') {
-            return array();
-        } // Can not be done
+            return array(); // Can not be done
+        }
         $cma_info = $this->_get_cma_info($resource_type);
         $module = $cma_info['permissions_type_code'];
 
@@ -2193,8 +2193,8 @@ class resource_fs_base
         $cat_resource_type = mixed();
         if (count($meta_dir) != 0) {
             if (is_null($this->folder_resource_type)) {
-                return false;
-            } // Should not be possible
+                return false; // Should not be possible
+            }
 
             list($cat_resource_type, $cat_id) = $this->folder_convert_filename_to_id(implode('/', $meta_dir));
         }
@@ -2228,8 +2228,8 @@ class resource_fs_base
             }
             $extra = '';
             if (can_arbitrary_groupby()) {
-                $extra .= 'GROUP BY main.' . $relationship['id_field'] . ' ';
-            } // In case it's not a real category table, just an implied one by self-categorisation of entries
+                $extra .= 'GROUP BY main.' . $relationship['id_field'] . ' '; // In case it's not a real category table, just an implied one by self-categorisation of entries
+            }
             $extra .= 'ORDER BY main.' . $relationship['id_field'];
             if (is_null($relationship['cat_field'])) {
                 $where = array();

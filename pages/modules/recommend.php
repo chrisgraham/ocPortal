@@ -447,11 +447,11 @@ class Module_recommend
 
                                 foreach ($csv_header_line_fields as $key2 => $value2) {
                                     if (preg_match('#\?\?ame#', $value2) != 0) {
-                                        $name_index = $key2;
-                                    } // Windows mail
+                                        $name_index = $key2; // Windows mail
+                                    }
                                     if (preg_match('#E\-mail#', $value2) != 0) {
-                                        $email_index = $key2;
-                                    } // both
+                                        $email_index = $key2; // both
+                                    }
                                 }
 
                                 while (($csv_line = fgetcsv($myfile, 10240, $del)) !== false) { // Reading a CSV record
@@ -495,14 +495,14 @@ class Module_recommend
 
                             foreach ($first_row_exploded as $key => $value) {
                                 if (preg_match('#\?Name#', $value) != 0) {
-                                    $name_index = $key;
-                                } // Windows mail
+                                    $name_index = $key; // Windows mail
+                                }
                                 if (preg_match('#^Name$#', $value) != 0) {
-                                    $name_index = $key;
-                                } // Outlook Express
+                                    $name_index = $key; // Outlook Express
+                                }
                                 if (preg_match('#E\-mail\sAddress#', $value) != 0) {
-                                    $email_index = $key;
-                                } // both
+                                    $email_index = $key; // both
+                                }
                             }
 
                             while (($csv_line = fgetcsv($myfile, 10240, $del)) !== false) { // Reading a CSV record

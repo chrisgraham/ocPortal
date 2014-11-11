@@ -268,8 +268,8 @@ class Hook_phpbb3
 
             $row_group_leader = null;
             if (!is_null($row['user_id'])) {
-                $row_group_leader = -$row['user_id'];
-            } // This will be fixed when we import members
+                $row_group_leader = -$row['user_id']; // This will be fixed when we import members
+            }
 
             $is_super_admin = 0;
             $is_super_moderator = 0;
@@ -616,8 +616,8 @@ class Hook_phpbb3
             foreach ($permissions as $p) {
                 $group_id = import_id_remap_get('group', strval($p['group_id']), true);
                 if (is_null($group_id)) {
-                    continue;
-                } // maybe bots group (6)
+                    continue; // maybe bots group (6)
+                }
                 if ($p['auth_role_id'] != 0) { // Do role
                     $rp = $db->query('SELECT * FROM ' . $table_prefix . 'acl_roles_data WHERE role_id=' . strval($p['auth_role_id']));
                     foreach ($rp as $_p) {
@@ -774,8 +774,8 @@ class Hook_phpbb3
                 }
 
                 if ($row['forum_id'] == 0) {
-                    continue;
-                } // Weird, 0 forum
+                    continue; // Weird, 0 forum
+                }
                 $forum_id = import_id_remap_get('forum', strval($row['forum_id']));
 
                 $id_new = ocf_make_topic($forum_id, '', $this->convert_topic_emoticon($row['icon_id']), $row['topic_approved'], ($row['topic_status'] == 1) ? 0 : 1, ($row['topic_type'] > 0) ? 1 : 0, ($row['topic_type'] > 2) ? 1 : 0, 0, null, null, false, $row['topic_views']);

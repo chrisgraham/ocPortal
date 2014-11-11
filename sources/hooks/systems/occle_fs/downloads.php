@@ -267,8 +267,8 @@ class Hook_occle_fs_downloads extends resource_fs_base
         list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         require_code('downloads2');
 
@@ -373,8 +373,8 @@ class Hook_occle_fs_downloads extends resource_fs_base
         list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         require_code('downloads2');
 

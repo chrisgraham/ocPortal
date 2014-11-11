@@ -102,8 +102,8 @@ class Hook_cart_orders
         if (is_null($search)) {
             $count = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'shopping_order WHERE ' . $where);
             if ($count > 50) {
-                return array();
-            } // Too many to list
+                return array(); // Too many to list
+            }
         }
 
         $start = 0;

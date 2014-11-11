@@ -99,8 +99,8 @@ function get_default_option($name)
 
     $value = $ob->get_default();
     if (is_null($value)) {
-        $value = '';
-    } // Cannot save a NULL. We don't need to save as NULL anyway, options are only disabled when they wouldn't have been used anyway
+        $value = ''; // Cannot save a NULL. We don't need to save as NULL anyway, options are only disabled when they wouldn't have been used anyway
+    }
 
     return $value;
 }
@@ -138,8 +138,8 @@ function set_option($name, $value, $will_be_formally_set = 1)
         $CONFIG_OPTIONS_CACHE[$name] = $map;
 
         if ($will_be_formally_set == 0 && $GLOBALS['IN_MINIKERNEL_VERSION']) {
-            return;
-        } // Don't save in the installer
+            return; // Don't save in the installer
+        }
 
         $GLOBALS['SITE_DB']->query_insert('config', $map);
     } else {

@@ -52,13 +52,13 @@ class Hook_cron_content_reviews
 
             // Dispatch notification
             if ((!file_exists(get_file_base() . '/sources/hooks/systems/content_meta_aware/' . filter_naughty_harsh($content_type) . '.php')) && (!file_exists(get_file_base() . '/sources_custom/hooks/systems/content_meta_aware/' . filter_naughty_harsh($content_type) . '.php'))) {
-                continue;
-            } // Weird :S
+                continue; // Weird :S
+            }
             require_code('content');
             $object = get_content_object($content_type);
             if (is_null($object)) {
-                continue;
-            } // Weird :S
+                continue; // Weird :S
+            }
             $info = $object->info();
             $auto_action_str = do_lang('CONTENT_REVIEW_AUTO_ACTION_' . $auto_action);
             list($zone, $attributes,) = page_link_decode($info['edit_page_link_pattern']);

@@ -658,8 +658,8 @@ function ocf_get_forum_view($forum_id, $forum_info, $start = 0, $max = null)
 
     if (!is_null($forum_id)) { // Anyone may view the root (and see the topics in the root - but there will hardly be any)
         if (!has_category_access($member_id, 'forums', strval($forum_id))) {
-            access_denied('CATEGORY_ACCESS_LEVEL');
-        } // We're only allowed to view it existing from a parent forum, or nothing at all -- so access denied brother!
+            access_denied('CATEGORY_ACCESS_LEVEL'); // We're only allowed to view it existing from a parent forum, or nothing at all -- so access denied brother!
+        }
     }
 
     // Find our subforums first
@@ -671,8 +671,8 @@ function ocf_get_forum_view($forum_id, $forum_info, $start = 0, $max = null)
 
         $subforum_rows = $GLOBALS['FORUM_DB']->query('SELECT f.* FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums f WHERE f.id=' . strval($forum_id) . ' OR f_parent_forum=' . strval($forum_id) . ' ORDER BY f_parent_forum,' . $sort, $max_forum_inspect, null, false, false, array('f_description' => 'LONG_TRANS__COMCODE', 'f_intro_question' => 'LONG_TRANS__COMCODE'));
         if (count($subforum_rows) == $max_forum_inspect) {
-            $subforum_rows = array();
-        } // Will cause performance breakage
+            $subforum_rows = array(); // Will cause performance breakage
+        }
     } else {
         $subforum_rows = $GLOBALS['FORUM_DB']->query_select('f_forums f', array('f.*'), null, 'ORDER BY f_parent_forum,' . $sort, null, null, false, array('f_description' => 'LONG_TRANS__COMCODE', 'f_intro_question' => 'LONG_TRANS__COMCODE'));
     }
@@ -855,8 +855,8 @@ function ocf_get_forum_view($forum_id, $forum_info, $start = 0, $max = null)
         $topic_rows = $GLOBALS['FORUM_DB']->query($query, $max, $start);
     }
     if (($start == 0) && (count($topic_rows) < $max)) {
-        $max_rows = $max;
-    } // We know that they're all on this screen
+        $max_rows = $max; // We know that they're all on this screen
+    }
     else {
         $max_rows = $GLOBALS['FORUM_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics WHERE ' . $where, false, true);
     }
@@ -911,8 +911,8 @@ function ocf_get_forum_view($forum_id, $forum_info, $start = 0, $max = null)
         $out['may_change_max'] = 1;
         $out['may_move_topics'] = 1;
         if (has_privilege(get_member(), 'multi_delete_topics')) {
-            $out['may_delete_topics'] = 1;
-        } // Only super admins can casually delete topics - other staff are expected to trash them. At least deleted posts or trashed topics can be restored!
+            $out['may_delete_topics'] = 1; // Only super admins can casually delete topics - other staff are expected to trash them. At least deleted posts or trashed topics can be restored!
+        }
     }
     return $out;
 }

@@ -64,8 +64,8 @@ function calculate_latest_leader_board($retrieve = true)
         $id = $GLOBALS['FORUM_DRIVER']->mrow_id($member);
 
         if (is_guest($id)) {
-            continue;
-        } // Should not happen, but some forum drivers might suck ;)
+            continue; // Should not happen, but some forum drivers might suck ;)
+        }
         if ((!$show_staff) && ($GLOBALS['FORUM_DRIVER']->is_staff($id))) {
             continue;
         }

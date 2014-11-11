@@ -64,8 +64,8 @@ class Hook_rss_chat
             }
 
             if (!array_key_exists($row['room_id'], $categories)) {
-                continue;
-            } // Message is in deleted room (although should not exist in DB anymore!)
+                continue; // Message is in deleted room (although should not exist in DB anymore!)
+            }
 
             if (check_chatroom_access($categories[$row['room_id']], true)) {
                 $id = strval($row['id']);

@@ -33,8 +33,8 @@ class override_notes_consistency_test_set extends ocp_test_case
             }
 
             if (file_exists(dirname($file) . '/index.php')) {
-                continue;
-            } // Zone directory, no override support
+                continue; // Zone directory, no override support
+            }
 
             $contents = file_get_contents(get_file_base() . '/' . $file);
 

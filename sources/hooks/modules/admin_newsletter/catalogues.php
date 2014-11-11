@@ -79,8 +79,8 @@ class Hook_whats_news_catalogues
 
             $c_name = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'c_name', array('id' => $row['cc_id']));
             if (is_null($c_name)) {
-                continue;
-            } // Corruption
+                continue; // Corruption
+            }
             $c_title = $GLOBALS['SITE_DB']->query_select_value('catalogues', 'c_title', array('c_name' => $c_name));
 
             $fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('id', 'cf_type'), array('c_name' => $c_name), 'ORDER BY cf_order');

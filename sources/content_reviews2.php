@@ -119,8 +119,8 @@ function content_review_get_fields($content_type, $content_id = null, $catalogue
         // Specification of a specific date
 
         if ((!is_null($next_review_time)) && ($next_review_time < time())) {
-            $next_review_time = null;
-        } // Stop edits resetting the reviewed status and leaving the old date there
+            $next_review_time = null; // Stop edits resetting the reviewed status and leaving the old date there
+        }
 
         $fields->attach(form_input_date(do_lang_tempcode('NEXT_REVIEW_DATE'), do_lang_tempcode('DESCRIPTION_NEXT_REVIEW_DATE'), 'next_review_time', false, is_null($next_review_time), false, $next_review_time));
 
@@ -220,8 +220,8 @@ function schedule_content_review($content_type, $content_id, $review_freq, $next
 
     // Work out review time
     if ((is_null($next_review_time)) && (is_null($review_freq))) {
-        return;
-    } // Nothing to schedule
+        return; // Nothing to schedule
+    }
     $calc_review_time = (time() + $review_freq);
     if ((is_null($next_review_time))/* || ($calc_review_time<$next_review_time)*/) {
         $next_review_time = $calc_review_time;

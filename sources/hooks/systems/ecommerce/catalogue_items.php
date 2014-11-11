@@ -35,8 +35,8 @@ class Hook_catalogue_items
         if (is_null($search)) {
             $cnt = $GLOBALS['SITE_DB']->query_select_value('catalogue_entries t1 LEFT JOIN ' . get_table_prefix() . 'catalogues t2 ON t1.c_name=t2.c_name', 'COUNT(*)', array('c_ecommerce' => 1));
             if ($cnt > 50) {
-                return array();
-            } // Too many to list
+                return array(); // Too many to list
+            }
         }
 
         require_code('catalogues');

@@ -222,8 +222,8 @@ class Hook_sitemap_zone extends Hook_sitemap_base
 
             case '':
                 if (get_option('collapse_user_zones') == '0') {
-                    $applicable_page_groupings = array();
-                } // else flow on...
+                    $applicable_page_groupings = array(); // else flow on...
+                }
 
             case 'site':
                 if ($use_page_groupings) {

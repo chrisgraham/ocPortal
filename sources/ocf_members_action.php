@@ -274,8 +274,8 @@ function ocf_make_member($username, $password, $email_address, $secondary_groups
     $all_fields_types = collapse_2d_complexity('id', 'cf_type', $all_fields);
     foreach ($custom_fields as $field_num => $value) {
         if (!array_key_exists($field_num, $all_fields_types)) {
-            continue;
-        } // Trying to set a field we're not allowed to (doesn't apply to our group)
+            continue; // Trying to set a field we're not allowed to (doesn't apply to our group)
+        }
 
         $row['field_' . strval($field_num)] = $value;
     }
@@ -542,8 +542,8 @@ function ocf_make_custom_field($name, $locked = 0, $description = '', $default =
     $map += insert_lang('cf_description', $description, 2, $GLOBALS['FORUM_DB']);
     $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields', $map + array('cf_encrypted' => $encrypted), true, true);
     if (is_null($id)) {
-        $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields', $map, true);
-    } // Still upgrading, cf_encrypted does not exist yet
+        $id = $GLOBALS['FORUM_DB']->query_insert('f_custom_fields', $map, true); // Still upgrading, cf_encrypted does not exist yet
+    }
 
     list($_type, $index) = get_cpf_storage_for($type);
 

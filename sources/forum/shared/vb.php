@@ -92,8 +92,8 @@ class forum_driver_vb_shared extends forum_driver_base
     public function install_create_custom_field($name, $length, $locked = 1, $viewable = 0, $settable = 0, $required = 0)
     {
         if (!array_key_exists('vb_table_prefix', $_POST)) {
-            $_POST['vb_table_prefix'] = '';
-        } // for now
+            $_POST['vb_table_prefix'] = ''; // for now
+        }
 
         $name = 'ocp_' . $name;
         if ((!isset($GLOBALS['SITE_INFO']['vb_version'])) || ($GLOBALS['SITE_INFO']['vb_version'] >= 3.6)) {

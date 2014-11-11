@@ -586,8 +586,8 @@ class Module_downloads
         $subcats = array();
         foreach ($cats as $letter => $rows) {
             if (!is_string($letter)) {
-                $letter = strval($letter);
-            } // Numbers come out as numbers not strings, even if they went in as strings- darned PHP
+                $letter = strval($letter); // Numbers come out as numbers not strings, even if they went in as strings- darned PHP
+            }
 
             $has_download = false;
 

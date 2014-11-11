@@ -105,8 +105,8 @@ class Hook_fields_random
         }
 
         if (is_null($actual_value)) {
-            $actual_value = '';
-        } // Plug anomaly due to unusual corruption
+            $actual_value = ''; // Plug anomaly due to unusual corruption
+        }
         return form_input_line($_cf_name, $_cf_description, 'field_' . strval($field['id']), $actual_value, $field['cf_required'] == 1);
     }
 

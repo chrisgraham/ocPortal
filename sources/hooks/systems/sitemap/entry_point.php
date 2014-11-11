@@ -244,11 +244,11 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
         $row_x = $this->_load_row_from_page_groupings(null, $zone, $page, $type, $id);
         if ($row_x != array()) {
             if ($_title !== null) {
-                $row_x[0] = null;
-            } // We have a better title
+                $row_x[0] = null; // We have a better title
+            }
             if ($icon !== null) {
-                $row_x[1] = null;
-            } // We have a better icon
+                $row_x[1] = null; // We have a better icon
+            }
             $this->_ameliorate_with_row($struct, $row_x, $meta_gather);
         }
 

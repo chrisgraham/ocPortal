@@ -29,8 +29,8 @@ class Hook_attachments_ocf_signature
     public function run($id, $connection)
     {
         if (get_forum_type() != 'ocf') {
-            return false;
-        } // Shouldn't be here, but maybe it's left over somehow
+            return false; // Shouldn't be here, but maybe it's left over somehow
+        }
         return true;
     }
 }

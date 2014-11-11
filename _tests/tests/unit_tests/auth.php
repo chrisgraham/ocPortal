@@ -76,8 +76,8 @@ class auth_test_set extends ocp_test_case
         $ips = array();
         $server_addr = get_ip_address(3, ocp_srv('SERVER_ADDR'));
         if (($server_addr == '0000:0000:0000:0000:0000:0000:*:*') && (ocp_srv('HTTP_HOST') == 'localhost')) {
-            $server_addr = '127.0.0.*';
-        } // DNS will resolve localhost using ipv4, regardless of what Apache self-reports, at least on my current dev machine -- ChrisG
+            $server_addr = '127.0.0.*'; // DNS will resolve localhost using ipv4, regardless of what Apache self-reports, at least on my current dev machine -- ChrisG
+        }
         $ips[$server_addr] = true;
         $ips['1.2.3.4'] = false;
 

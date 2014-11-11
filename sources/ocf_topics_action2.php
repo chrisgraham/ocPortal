@@ -295,8 +295,8 @@ function ocf_delete_topic($topic_id, $reason = '', $post_target_topic_id = null,
 function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB: From is good to add a additional security/integrity. We'll never move from more than one forum. Extra constraints that cause no harm are good in a situation that doesn't govern general efficiency.
 {
     if ($from == $to) {
-        return;
-    } // That would be nuts, and interfere with our logic
+        return; // That would be nuts, and interfere with our logic
+    }
 
     require_code('notifications');
     require_code('ocf_topics');
@@ -365,8 +365,8 @@ function ocf_move_topics($from, $to, $topics = null, $check_perms = true) // NB:
         $GLOBALS['FORUM_DB']->query_update('f_posts', array('p_cache_forum_id' => $to), array('p_topic_id' => $topics[0]));
     } else { // Unknown number
         if (count($topics) == 0) {
-            return;
-        } // Nuts, lol
+            return; // Nuts, lol
+        }
 
         $or_list = '';
         foreach ($topics as $topic_id) {

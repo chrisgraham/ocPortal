@@ -310,8 +310,8 @@ class Module_tickets
 
                 foreach ($tickets as $topic) {
                     if (($topic['closed']) && (has_privilege(get_member(), 'support_operator')) && (count($tickets) > 3)) {
-                        continue;
-                    } // Staff don't see closed tickets
+                        continue; // Staff don't see closed tickets
+                    }
 
                     list($ticket_type_tpl) = $this->_render_ticket_row($topic);
 
@@ -427,8 +427,8 @@ class Module_tickets
         if (!is_null($id)) { // Existing ticket
             $_temp = explode('_', $id);
             if (!isset($_temp[1])) {
-                warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-            } // Normal topic, not a ticket!
+                warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // Normal topic, not a ticket!
+            }
             $ticket_owner = intval($_temp[0]);
             $ticket_id = $_temp[1];
 

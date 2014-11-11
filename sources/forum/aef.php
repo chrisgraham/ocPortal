@@ -1051,8 +1051,8 @@ class forum_driver_aef extends forum_driver_base
     {
         $user_level = $this->get_member_row_field($member, 'u_member_group');
         if (in_array($user_level, array(1, 2, 3))) {
-            return true;
-        } // return all administrators + all moderators
+            return true; // return all administrators + all moderators
+        }
         return false;
     }
 
@@ -1382,8 +1382,8 @@ class forum_driver_aef extends forum_driver_base
     {
         $ip = $this->connection->query_select_value_if_there('posts', 'poster_ip', array('poster_id' => $member));
         if (!is_null($ip)) {
-            return $ip;
-        } // the IP is not stored in phpBB format
+            return $ip; // the IP is not stored in phpBB format
+        }
         return '';
     }
 

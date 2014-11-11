@@ -305,8 +305,8 @@ class Module_lost_password
         if ($code != $correct_code) {
             $test = $GLOBALS['SITE_DB']->query_select_value_if_there('adminlogs', 'date_and_time', array('the_type' => 'LOST_PASSWORD', 'param_a' => strval($member_id), 'param_b' => $code));
             if (!is_null($test)) {
-                warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE'));
-            } // Just an old code that has expired
+                warn_exit(do_lang_tempcode('INCORRECT_PASSWORD_RESET_CODE')); // Just an old code that has expired
+            }
             log_hack_attack_and_exit('HACK_ATTACK_PASSWORD_CHANGE'); // Incorrect code, hack attack
         }
 

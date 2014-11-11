@@ -98,8 +98,8 @@ class Block_side_tag_cloud
                     continue;
                 }
                 if (strlen(is_numeric($keyword) ? strval(intval($keyword)) : $keyword) < 4) {
-                    continue;
-                } // Won't be indexed, plus will uglify the tag list
+                    continue; // Won't be indexed, plus will uglify the tag list
+                }
                 if (!array_key_exists($keyword, $tags)) {
                     $tags[$keyword] = 0;
                 }

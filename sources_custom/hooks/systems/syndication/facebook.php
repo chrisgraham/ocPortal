@@ -178,8 +178,8 @@ class Hook_Syndication_facebook
         }
 
         if (get_option('facebook_uid') == '') {
-            return false;
-        } // No configured target
+            return false; // No configured target
+        }
 
         if (($this->auth_is_set(get_member())) && (get_option('facebook_uid') == strval($FACEBOOK_CONNECT->getUser()))) {
             return false; // Avoid double syndication, will already go to the user
@@ -232,8 +232,8 @@ class Hook_Syndication_facebook
         }
 
         if ($post_to_uid == 'me') {
-            $post_to_uid = $fb->getUser();
-        } // May not be needed, but just in case
+            $post_to_uid = $fb->getUser(); // May not be needed, but just in case
+        }
 
         try {
             $ret = $fb->api('/' . $post_to_uid . '/feed', 'POST', $attachment);

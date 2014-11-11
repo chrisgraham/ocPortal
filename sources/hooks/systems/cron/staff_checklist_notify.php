@@ -56,8 +56,8 @@ class Hook_cron_staff_checklist_notify
                 foreach ($ret as $r) {
                     if (!is_null($r[2])) {
                         if ($r[2] > 0) {
-                            $outstanding++;
-                        } // A tally of undone stuff
+                            $outstanding++; // A tally of undone stuff
+                        }
                     } elseif (!is_null($r[1])) {
                         if ($r[1] < 0) {// Needed doing in the past
                             $outstanding++;

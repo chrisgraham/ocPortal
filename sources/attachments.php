@@ -244,8 +244,8 @@ function attachments_script()
 
     $_full = get_custom_file_base() . '/' . rawurldecode($full);
     if (!file_exists($_full)) {
-        warn_exit(do_lang_tempcode('_MISSING_RESOURCE', 'url:' . escape_html($full)));
-    } // File is missing, we can't do anything
+        warn_exit(do_lang_tempcode('_MISSING_RESOURCE', 'url:' . escape_html($full))); // File is missing, we can't do anything
+    }
     $size = filesize($_full);
 
     header('Accept-Ranges: bytes');

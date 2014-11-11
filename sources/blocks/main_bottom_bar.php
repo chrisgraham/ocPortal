@@ -88,8 +88,8 @@ class Block_main_bottom_bar
                 }
                 $pgid = $bits['m_primary_group'];//$GLOBALS['FORUM_DRIVER']->get_member_row_field($member,'m_primary_group');
                 if (is_null($pgid)) {
-                    continue;
-                } // Deleted member
+                    continue; // Deleted member
+                }
                 $groups_seen[$pgid] = 1;
                 $col = get_group_colour($pgid);
                 $usergroup = ocf_get_group_name($pgid);
@@ -135,8 +135,8 @@ class Block_main_bottom_bar
         $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true, false, false, null, null, true);
         foreach ($all_groups as $gid => $gtitle) {
             if ($gid == db_get_first_id()) {
-                continue;
-            } // Throw out the first, guest
+                continue; // Throw out the first, guest
+            }
             if (array_key_exists($gid, $groups_seen)) {
                 $groups[] = array('GCOLOUR' => get_group_colour($gid), 'GID' => strval($gid), 'GTITLE' => $gtitle);
             }

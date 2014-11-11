@@ -487,8 +487,8 @@ class Database_Static_oracle
                 for ($j = 1; $j <= $num_fields; $j++) {
                     $v = ociresult($stmt, $j);
                     if (is_object($v)) {
-                        $v = $v->load();
-                    } // For CLOB's
+                        $v = $v->load(); // For CLOB's
+                    }
                     if ($v === false) {
                         fatal_exit(do_lang_tempcode('QUERY_FAILED', ocierror($stmt)));
                     }

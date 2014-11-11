@@ -79,8 +79,8 @@ function sync_video_syndication($local_id = null, $new_upload = false, $reupload
             foreach ($remote_videos as $video) {
                 if (!$GLOBALS['DEV_MODE']) {
                     if (get_value('handling_video_currently__' . strval($video['bound_to_local_id'])) === '1') {
-                        continue;
-                    } // Check lock
+                        continue; // Check lock
+                    }
                     set_value('handling_video_currently__' . strval($video['bound_to_local_id']), '1'); // Set lock
                 }
 
@@ -103,8 +103,8 @@ function sync_video_syndication($local_id = null, $new_upload = false, $reupload
 
                 if (!$GLOBALS['DEV_MODE']) {
                     if (get_value('handling_video_currently__' . strval($video['local_id'])) === '1') {
-                        continue;
-                    } // Check lock
+                        continue; // Check lock
+                    }
                     set_value('handling_video_currently__' . strval($video['local_id']), '1'); // Set lock
                 }
 
@@ -215,8 +215,8 @@ function _sync_remote_video($ob, $video, $local_videos, $orphaned_handling, $reu
         if ($reupload) {
             foreach ($services as $_service) {
                 if ($_service->recognises_as_remote($local_video['url'])) {
-                    $reupload = false;
-                } // Actually, this isn't handleable as a reupload, the URL is on a remote service
+                    $reupload = false; // Actually, this isn't handleable as a reupload, the URL is on a remote service
+                }
             }
             if ($reupload) {
                 $changes += array('url' => $local_video['url']);
@@ -248,8 +248,8 @@ function _sync_onlylocal_video($ob, $local_video)
 {
     $remote_video = $ob->upload_video($local_video);
     if (is_null($remote_video)) {
-        return;
-    } // Didn't work, can't do anything further
+        return; // Didn't work, can't do anything further
+    }
 
     $service_name = preg_replace('#^video\_syndication\_#', '', get_class($ob));
     $service_title = $ob->get_service_title();

@@ -151,8 +151,8 @@ function assign_refresh($url, $multiplier = 0.0)
         $url = $url->evaluate();
     }
     if (strpos($url, 'keep_session') !== false) {
-        $url = enforce_sessioned_url($url);
-    } // In case the session changed in transit (this refresh URL may well have been relayed from a much earlier point)
+        $url = enforce_sessioned_url($url); // In case the session changed in transit (this refresh URL may well have been relayed from a much earlier point)
+    }
     if ((strpos($url, "\n") !== false) || (strpos($url, "\r") !== false)) {
         log_hack_attack_and_exit('HEADER_SPLIT_HACK');
     }
@@ -285,8 +285,8 @@ function page_not_found($codename, $zone)
     $did_mean = array();
     foreach ($all_pages_in_zone as $possibility) {
         if (is_integer($possibility)) {
-            $possibility = strval($possibility);
-        } // e.g. '404' page has been converted to integer by PHP, grr
+            $possibility = strval($possibility); // e.g. '404' page has been converted to integer by PHP, grr
+        }
 
         $from = str_replace('cms_', '', str_replace('admin_', '', $possibility));
         $to = str_replace('cms_', '', str_replace('admin_', '', $codename));

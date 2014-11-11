@@ -26,8 +26,8 @@ function incoming_uploads_script()
     $is_uploaded = false;
 
     if ($GLOBALS['DEV_MODE']) {
-        sleep(4);
-    } // Makes testing more realistic
+        sleep(4); // Makes testing more realistic
+    }
 
     $path = get_custom_file_base() . '/uploads/incoming';
     if (!file_exists($path)) {
@@ -88,8 +88,8 @@ function incoming_uploads_script()
         $max_length = 255;
         $field_type_test = $GLOBALS['SITE_DB']->query_select_value('db_meta', 'm_type', array('m_name' => 'i_orig_filename'));
         if ($field_type_test == 'ID_TEXT') {
-            $max_length = 80;
-        } // Legacy
+            $max_length = 80; // Legacy
+        }
         $name = substr($name, max(0, strlen($name) - $max_length));
 
         header('Content-type: text/plain; charset=' . get_charset());

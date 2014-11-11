@@ -140,8 +140,8 @@ class Block_main_image_fader_news
                 $body = get_translated_tempcode('news', $just_news_row, 'news_article');
             }
             if ($body->is_empty()) {
-                continue;
-            } // Invalid: empty text
+                continue; // Invalid: empty text
+            }
 
             $date = get_timezoned_date($row['date_and_time']);
             $date_raw = strval($row['date_and_time']);

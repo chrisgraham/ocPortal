@@ -69,8 +69,8 @@ function init__global3()
     }
     // This is similar, but for integers. As before, it should only be used when NULL and -1 aren't appropiate OR as the "ignore this field" indicator.
     if (!defined('INTEGER_MAGIC_NULL')) {
-        define('INTEGER_MAGIC_NULL', 1634817353);
-    } // VERY unlikely to occur, but is both a 32bit unsigned and a 32 bit signed number
+        define('INTEGER_MAGIC_NULL', 1634817353); // VERY unlikely to occur, but is both a 32bit unsigned and a 32 bit signed number
+    }
 
     global $ZONE_DEFAULT_PAGES_CACHE;
     $ZONE_DEFAULT_PAGES_CACHE = array();
@@ -165,8 +165,8 @@ function get_file_extension($name)
 function is_suexec_like()
 {
     if (running_script('webdav')) {
-        return true;
-    } // Has to assume so, as cannot intercede
+        return true; // Has to assume so, as cannot intercede
+    }
 
     if (GOOGLE_APPENGINE) {
         return false;
@@ -695,8 +695,8 @@ function ocp_mb_strlen($in)
         return strlen($in);
     }
     if (function_exists('mb_strlen')) {
-        return @mb_strlen($in);
-    } // @ is because there could be invalid unicode involved
+        return @mb_strlen($in); // @ is because there could be invalid unicode involved
+    }
     if (function_exists('iconv_strlen')) {
         return @iconv_strlen($in);
     }
@@ -1279,8 +1279,8 @@ function array_peek($array, $depth_down = 1)
 function fix_id($param)
 {
     if (preg_match('#^[A-Za-z][\w]*$#', $param) != 0) {
-        return $param;
-    } // Optimisation
+        return $param; // Optimisation
+    }
 
     $length = strlen($param);
     $new = '';
@@ -2742,8 +2742,8 @@ function make_fractionable_editable($content_type, $id, $title)
 function strip_html($in)
 {
     if ((strpos($in, '<') === false) && (strpos($in, '&') === false)) {
-        return $in;
-    } // Optimisation
+        return $in; // Optimisation
+    }
 
     $search = array(
         '#<script[^>]*?' . '>.*?</script>#si',    // Strip out JavaScript

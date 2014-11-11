@@ -70,8 +70,8 @@ class Hook_rss_downloads
             if (!array_key_exists($row['category_id'], $categories)) {
                 $c = $GLOBALS['SITE_DB']->query_select_value_if_there('download_categories', 'category', array('id' => $row['category_id']));
                 if (is_null($c)) {
-                    continue;
-                } // Slight corruption
+                    continue; // Slight corruption
+                }
                 $categories[$row['category_id']] = get_translated_text($c);
             }
             if (!array_key_exists($row['category_id'], $categories)) {

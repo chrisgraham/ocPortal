@@ -222,8 +222,8 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
         }
     }
     if ($pass_id === null) {
-        $pass_id = strval(mt_rand(0, 32000));
-    } // This is a unique ID that refers to this specific piece of comcode
+        $pass_id = strval(mt_rand(0, 32000)); // This is a unique ID that refers to this specific piece of comcode
+    }
     global $COMCODE_ATTACHMENTS;
     if (!array_key_exists($pass_id, $COMCODE_ATTACHMENTS)) {
         $COMCODE_ATTACHMENTS[$pass_id] = array();
@@ -294,8 +294,8 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
     $list_type = 'ul';
 
     if ($is_all_semihtml) {
-        filter_html($as_admin, $source_member, $pos, $len, $comcode, false, false);
-    } // Pre-filter the whole lot (note that this means during general output we do no additional filtering)
+        filter_html($as_admin, $source_member, $pos, $len, $comcode, false, false); // Pre-filter the whole lot (note that this means during general output we do no additional filtering)
+    }
 
     while ($pos < $len) {
         $next = $comcode[$pos];
@@ -2029,8 +2029,8 @@ function parse_single_comcode_tag($data, $tag = '\w+')
                 if ($next == '=') {
                     $in_attribute = true;
                     if (($i != strlen($_attributes) - 1) && ($_attributes[$i + 1] == '"')) {
-                        $i++;
-                    } // Skip opening "
+                        $i++; // Skip opening "
+                    }
                     $current_value = '';
                 } elseif ($next == ']') {
                     $attributes[''] = substr($_attributes, $i + 1);
@@ -2042,8 +2042,8 @@ function parse_single_comcode_tag($data, $tag = '\w+')
                 if ($next == '"') {
                     $in_attribute = false;
                     if (($i != strlen($_attributes) - 1) && ($_attributes[$i + 1] == ' ')) {
-                        $i++;
-                    } // Skip space
+                        $i++; // Skip space
+                    }
                     $attributes[$current_attribute] = str_replace(array('\\[', '\\]', '\\{', '\\}', '\\\''), array('[', ']', '{', '}', '\''), $current_value);
                     $current_attribute = '';
                 } else {

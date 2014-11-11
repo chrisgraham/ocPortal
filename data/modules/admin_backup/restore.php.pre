@@ -117,8 +117,8 @@ while (($line = fgets($myfile, 10000000)) !== false) {
         }
     } else {
         if (substr($line, 0, 2) != '//') {
-            break;
-        } // Done
+            break; // Done
+        }
 
         $line = substr($line, 2);
 

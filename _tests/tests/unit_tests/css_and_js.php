@@ -61,8 +61,8 @@ class css_and_js_test_set extends ocp_test_case
                     }
                 }
                 if ((!is_null($errors)) && ($errors['errors'] == array())) {
-                    $errors = null;
-                } // Normalise
+                    $errors = null; // Normalise
+                }
                 $this->assertTrue(is_null($errors), 'Bad JS in ' . $f);
                 if (!is_null($errors)) {
                     if (get_param_integer('debug', 0) == 1) {
@@ -89,8 +89,8 @@ class css_and_js_test_set extends ocp_test_case
                 $contents = file_get_contents($path);
                 $errors = check_css($contents);
                 if ((!is_null($errors)) && ($errors['errors'] == array())) {
-                    $errors = null;
-                } // Normalise
+                    $errors = null; // Normalise
+                }
                 $this->assertTrue(is_null($errors), 'Bad CSS in ' . $f);
                 if (!is_null($errors)) {
                     var_dump($errors['errors']);

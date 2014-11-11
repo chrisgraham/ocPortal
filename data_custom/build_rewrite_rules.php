@@ -13,8 +13,8 @@ $zones = array('', 'site', 'forum', 'adminzone', 'cms', 'collaboration');
 $zone_list = '';
 foreach ($zones as $zone) {
     if ($zone == '') {
-        continue;
-    } // We don't need to put this one in
+        continue; // We don't need to put this one in
+    }
     if ($zone_list != '') {
         $zone_list .= '|';
     }

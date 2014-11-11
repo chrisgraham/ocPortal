@@ -106,8 +106,8 @@ function has_privacy_access($content_type, $content_id, $viewing_member_id = nul
             return true;
         }
         if (is_null($GLOBALS['SITE_DB']->query_select_value_if_there('content_privacy', 'content_id', array('content_type' => $content_type, 'content_id' => $content_id)))) {
-            return true;
-        } // Maybe there was no privacy row, default to access on
+            return true; // Maybe there was no privacy row, default to access on
+        }
         return false;
     }
 

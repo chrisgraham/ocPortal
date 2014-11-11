@@ -450,8 +450,8 @@ function _get_all_image_ids_type(&$ids, $dir, $type, $recurse, $dirs_only, $skip
     if ($_dir !== false) {
         while (false !== ($file = readdir($_dir))) {
             if ($file[0] == '.' || $file == 'index.html') {
-                continue;
-            } // Optimisation, so no need for should_ignore_file call
+                continue; // Optimisation, so no need for should_ignore_file call
+            }
             if (in_array($file, $skip)) {
                 continue;
             }
@@ -742,8 +742,8 @@ function find_all_themes($full_details = false)
 function tidy_theme_img_code($new, $old, $table, $field, $db = null)
 {
     if ($new === $old) {
-        return;
-    } // Still being used
+        return; // Still being used
+    }
 
     $path = find_theme_image($old, true, true);
     if ((is_null($path)) || ($path == '')) {

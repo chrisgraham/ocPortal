@@ -429,8 +429,8 @@ function upgrade_script()
                     $_version_database = get_value('ocf_version');
                     $version_database = floatval($_version_database);
                     if (is_null($_version_database)) {
-                        $version_database = 2.1;
-                    } // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
+                        $version_database = 2.1; // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
+                    }
                     if ($version_database < $version_files) {
                         echo do_lang('FU_MUST_UPGRADE_OCF', fu_link('upgrader.php?type=ocf', do_lang('FU_UPGRADE_OCF')));
                     }
@@ -918,8 +918,8 @@ function move_modules()
                 $path_b = zone_black_magic_filterer(get_file_base() . '/' . $_path_b);
                 if (($zone2 != $zone) && (file_exists($path_a)) && (filemtime($path_a) >= filemtime($path_b))) {
                     if (($page == 'filedump') && ($zone2 == 'cms')) {
-                        continue;
-                    } // This has moved between versions
+                        continue; // This has moved between versions
+                    }
 
                     $out .= '<li><input type="checkbox" name="' . uniqid('', true) . '" value="move:' . escape_html($_path_a . ':' . $_path_b) . '" /> ' . do_lang('FILE_MOVED', '<kbd>' . escape_html($page) . '</kbd>', '<kbd>' . escape_html($zone2) . '</kbd>', '<kbd>' . escape_html($zone) . '</kbd>') . '</li>';
                     $outr[] = $path_b;
@@ -1014,8 +1014,8 @@ function run_integrity_check($basic = false, $allow_merging = true, $unix_help =
     $hook_files = array();
     foreach ($hook_keys as $hook) {
         if (!isset($master_data['sources/hooks/systems/addon_registry/' . filter_naughty_harsh($hook) . '.php'])) {
-            continue;
-        } // Old addon
+            continue; // Old addon
+        }
 
         $path = get_custom_file_base() . '/sources/hooks/systems/addon_registry/' . filter_naughty_harsh($hook) . '.php';
         if (!file_exists($path)) {
@@ -1074,17 +1074,17 @@ function run_integrity_check($basic = false, $allow_merging = true, $unix_help =
         }
 
         if ((!isset($master_data[$real_file])) && (strpos($real_file, '_custom') !== false)) {
-            continue;
-        } // These won't be in the manifest
+            continue; // These won't be in the manifest
+        }
         if ($file == 'data/files.dat') {
-            continue;
-        } // Can't check integrity against self!
+            continue; // Can't check integrity against self!
+        }
         if ($file == 'data/files_previous.dat') {
-            continue;
-        } // Comes in outside scope of files.dat
+            continue; // Comes in outside scope of files.dat
+        }
         if (($file == 'recommended.htaccess') || ($file == 'plain.htaccess')) {
-            continue;
-        } // May be renamed
+            continue; // May be renamed
+        }
 
         $file_info = @$master_data[$real_file];
 
@@ -1095,8 +1095,8 @@ function run_integrity_check($basic = false, $allow_merging = true, $unix_help =
             }
         } elseif (!is_null($file_info)) {
             if (@filesize(get_file_base() . '/' . $real_file) > 1024 * 1024) {
-                continue;
-            } // Too big, so special exception
+                continue; // Too big, so special exception
+            }
 
             $file_contents = @file_get_contents(get_file_base() . '/' . $real_file);
             if ($file_contents === false) {
@@ -1276,8 +1276,8 @@ function check_outdated__handle_overrides($dir, $rela, &$master_data, &$hook_fil
                                 }
                             } else { // Get hash from non-overridden file (equiv file)
                                 if ($only_if_noncustom) {
-                                    $true_hash = null;
-                                } // Except we can't as we're not looking at the .editfrom and thus can't expect equality
+                                    $true_hash = null; // Except we can't as we're not looking at the .editfrom and thus can't expect equality
+                                }
                                 else {
                                     $true_hash = $_true_hash;
                                 }
@@ -1448,8 +1448,8 @@ function check_alien($addon_files, $old_files, $files, $dir, $rela = '', $raw = 
     }
 
     if (strlen($alien) > 100000) {
-        $alien = '';
-    } // Reasonable limit
+        $alien = ''; // Reasonable limit
+    }
 
     return array($alien, $addon);
 }
@@ -1485,8 +1485,8 @@ function version_specific()
     $_version_database = get_value('version');
     $version_database = floatval($_version_database);
     if (is_null($_version_database)) {
-        $version_database = 2.1;
-    } // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
+        $version_database = 2.1; // Either 2.0 or 2.1, and they are equivalent in terms of what we need to do
+    }
     if ($version_database < $version_files) {
         if ($version_database < 9.0) {
             $dh = @opendir(get_custom_file_base() . '/imports/mods');

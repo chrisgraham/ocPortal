@@ -188,8 +188,8 @@ function preview_script()
 function cron_bridge_script($caller)
 {
     if (function_exists('set_time_limit')) {
-        @set_time_limit(1000);
-    } // May get overridden lower later on
+        @set_time_limit(1000); // May get overridden lower later on
+    }
 
     // In query mode, ocPortal will just give advice on CRON settings to use
     if (get_param_integer('querymode', 0) == 1) {
@@ -261,8 +261,8 @@ function iframe_script()
         warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
     }
     if ($zones[0]['zone_require_session'] == 1) {
-        header('X-Frame-Options: SAMEORIGIN');
-    } // Clickjacking protection
+        header('X-Frame-Options: SAMEORIGIN'); // Clickjacking protection
+    }
     if (($zones[0]['zone_name'] != '') && (get_option('windows_auth_is_enabled') != '1') && ((get_session_id() == '') || ($GLOBALS['SESSION_CONFIRMED_CACHE'] == 0)) && (!is_guest()) && ($zones[0]['zone_require_session'] == 1)) {
         access_denied('ZONE_ACCESS_SESSION');
     }

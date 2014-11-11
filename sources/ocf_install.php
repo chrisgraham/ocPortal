@@ -159,8 +159,8 @@ function uninstall_ocf()
 function install_ocf($upgrade_from = null)
 {
     if (strtoupper(ocp_srv('REQUEST_METHOD')) != 'POST') {
-        exit();
-    } // Needed as YSlow can load as GET's in background and cause horrible results
+        exit(); // Needed as YSlow can load as GET's in background and cause horrible results
+    }
 
     require_code('ocf_members');
     require_code('ocf_topics');

@@ -274,8 +274,8 @@ function catch_fatal_errors()
 function ocportal_error_handler($errno, $errstr, $errfile, $errline)
 {
     if (error_reporting() == 0) {
-        return false;
-    } // This actually tells if @ was used oddly enough. You wouldn't figure from the PHP docs.
+        return false; // This actually tells if @ was used oddly enough. You wouldn't figure from the PHP docs.
+    }
 
     if ($errno == E_USER_ERROR) {
         $errno = E_ERROR;

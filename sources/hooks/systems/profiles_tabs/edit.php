@@ -75,8 +75,8 @@ class Hook_Profiles_Tabs_edit
         }
 
         if (function_exists('set_time_limit')) {
-            @set_time_limit(60);
-        } // Raise time limit, as can be slow
+            @set_time_limit(60); // Raise time limit, as can be slow
+        }
 
         $tabs = array();
 

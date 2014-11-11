@@ -357,13 +357,13 @@ function gallery_has_content($name)
     }
     if (array_key_exists($name, $GALLERY_ENTRIES_CATS_USED_CACHE)) {
         if ($num_galleries >= 300) {
-            $GALLERY_ENTRIES_CATS_USED_CACHE = null;
-        } // It's not right so reset it
+            $GALLERY_ENTRIES_CATS_USED_CACHE = null; // It's not right so reset it
+        }
         return true;
     }
     if ($num_galleries >= 300) {
-        $GALLERY_ENTRIES_CATS_USED_CACHE = null;
-    } // It's not right so reset it
+        $GALLERY_ENTRIES_CATS_USED_CACHE = null; // It's not right so reset it
+    }
 
     global $GALLERY_PAIRS_CACHE;
     if (is_null($GALLERY_PAIRS_CACHE)) {
@@ -644,8 +644,8 @@ function get_gallery_tree($category_id = 'root', $breadcrumbs = '', $gallery_inf
             }
             $children[0]['child_count'] = $good_row_count;
             if (($good_row_count == 0) && (!$purity) && ($gallery_info['is_member_synched'])) {
-                $children[0]['child_count'] = 1;
-            } // XHTMLXHTML
+                $children[0]['child_count'] = 1; // XHTMLXHTML
+            }
             $children[0]['video_count'] = $GLOBALS['SITE_DB']->query_select_value('videos', 'COUNT(*)', array('cat' => $category_id));
             $children[0]['image_count'] = $GLOBALS['SITE_DB']->query_select_value('images', 'COUNT(*)', array('cat' => $category_id));
         }
@@ -797,8 +797,8 @@ function can_submit_to_gallery($name)
         }
         $parent_id = $GLOBALS['SITE_DB']->query_select_value('galleries', 'parent_id', array('name' => $name));
         if (is_null($parent_id)) {
-            return false;
-        } // No, does not even exist (probably a block was given a bad parameter)
+            return false; // No, does not even exist (probably a block was given a bad parameter)
+        }
 
         return can_submit_to_gallery($parent_id);
     }
@@ -832,8 +832,8 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
     }
 
     if ($category_id == '') {
-        $category_id = 'root';
-    } // To fix corrupt data
+        $category_id = 'root'; // To fix corrupt data
+    }
 
     $url_map = array('page' => 'galleries', 'type' => 'misc', 'id' => $category_id, 'keep_gallery_root' => ($root == 'root') ? null : $root);
     if (get_page_name() == 'galleries') {

@@ -62,8 +62,8 @@ class Hook_admin_stats_ocf_demographics
         $time_start = get_input_date('time_start', true);
         $time_end = get_input_date('time_end', true);
         if (!is_null($time_end)) {
-            $time_end += 60 * 60 * 24 - 1;
-        } // So it is end of day not start
+            $time_end += 60 * 60 * 24 - 1; // So it is end of day not start
+        }
 
         if ((is_null($time_start)) && (is_null($time_end))) {
             $rows = $GLOBALS['FORUM_DB']->query_select('f_members', array('m_dob_year', 'COUNT(*) AS cnt', null, 'GROUP BY m_dob_year'));

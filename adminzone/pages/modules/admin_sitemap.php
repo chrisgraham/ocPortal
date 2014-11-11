@@ -148,8 +148,8 @@ class Module_admin_sitemap
         $type = get_param('type', 'misc');
 
         if ($type == 'misc') {
-            return $this->misc();
-        } // Do-next menu
+            return $this->misc(); // Do-next menu
+        }
         if ($type == 'sitemap') {
             return $this->sitemap();
         }

@@ -255,8 +255,8 @@ class Module_groups
         $_others = array();
         foreach ($groups as $group) {
             if ($group['id'] == 1) {
-                continue;
-            } // Don't show guest usergroup
+                continue; // Don't show guest usergroup
+            }
 
             if (in_array($group['id'], $staff_groups)) {
                 $_staff[$group['id']] = $group;
@@ -280,15 +280,15 @@ class Module_groups
                                     $next = $group2['g_promotion_target'];
                                     $_ranks[$group['id']][$group2['id']] = $group2;
                                     if (array_key_exists($next, $_ranks[$group['id']])) {
-                                        break;
-                                    } // uhoh- loop
+                                        break; // uhoh- loop
+                                    }
                                     $found = true;
                                     break;
                                 }
                             }
                             if (!$found) {
-                                break;
-                            } // uhoh- either loop, or unfound usergroup
+                                break; // uhoh- either loop, or unfound usergroup
+                            }
                         }
                     }
                 }

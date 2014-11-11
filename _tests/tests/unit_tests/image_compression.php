@@ -67,8 +67,8 @@ class image_compression_test_set extends ocp_test_case
                     $filesize -= 800; // For the palette (not in all gifs, but needed for non-trivial ones)
                     $min_ratio = 0.8;
                     if (is_ani($base . '/' . $file)) {
-                        continue;
-                    } // Can't do animated gifs
+                        continue; // Can't do animated gifs
+                    }
                 } else {
                     $filesize -= 73;
                     $min_ratio = 0.28;

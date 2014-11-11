@@ -237,8 +237,8 @@ class Hook_worldpay
 
         $code = post_param('transStatus');
         if ($code == 'C') {
-            exit();
-        } // Cancellation signal, won't process
+            exit(); // Cancellation signal, won't process
+        }
 
         $txn_id = post_param('transId');
         $cart_id = post_param('cartId');

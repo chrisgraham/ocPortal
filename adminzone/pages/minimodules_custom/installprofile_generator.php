@@ -201,8 +201,8 @@ require_code('config2');
 foreach ($config_options as $option) {
     $name = $option['c_name'];
     if (in_array($name, array('site_name', 'description', 'site_scope', 'copyright', 'staff_address', 'keywords', 'google_analytics', 'fixed_width', 'site_closed', 'closed', 'stats_store_time', 'show_content_tagging', 'show_content_tagging_inline', 'show_screen_actions', 'collapse_user_zones'))) {
-        continue;
-    } // These are set separately
+        continue; // These are set separately
+    }
     $value = get_option($name);
     if ($value == get_default_option($name)) {
         continue;

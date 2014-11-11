@@ -627,8 +627,8 @@ if (isset($_GET['test'])) {
     $start = isset($_GET['start']) ? intval($_GET['start']) : 0;
     foreach ($files as $i => $to_use) {
         if ($i <= $start) {
-            continue;
-        } // Set to largest number we know so far work
+            continue; // Set to largest number we know so far work
+        }
 
         if (strpos(file_get_contents($to_use), '/*CQC: No check*/') !== false) {
             echo 'SKIP: ' . $to_use;
@@ -1417,8 +1417,8 @@ function check_db_map($table, $expr_map, $c_pos, $must_be_complete = false)
     }
     if (($must_be_complete) && (isset($GLOBALS['TABLE_FIELDS'][$table])) && (!is_null($GLOBALS['TABLE_FIELDS']))) {
         if ((isset($GLOBALS['TABLE_FIELDS'][$table]['id'])) && (strpos($GLOBALS['TABLE_FIELDS'][$table]['id'], 'AUTO') !== false)) {
-            $map['id'] = 'integer';
-        } // Auto
+            $map['id'] = 'integer'; // Auto
+        }
         $missing = implode(', ', array_diff(array_keys($GLOBALS['TABLE_FIELDS'][$table]), array_keys($map)));
         if ($missing != '') {
             log_warning('Table field map may be incomplete (unsure, but can\'t see: ' . $missing . ' )', $c_pos);
@@ -1921,24 +1921,24 @@ function get_variable_type($variable)
     $identifier = $variable[1];
 
     if (count($variable[2]) != 0) {
-        return 'mixed';
-    } // Too complex
+        return 'mixed'; // Too complex
+    }
 
     if (!isset($LOCAL_VARIABLES[$identifier])) {
         return 'mixed';
     }
 
     if (count($LOCAL_VARIABLES[$identifier]['types']) == 0) {
-        return 'mixed';
-    } // There is a problem, but it will be identified elsewhere.
+        return 'mixed'; // There is a problem, but it will be identified elsewhere.
+    }
 
     $temp = array_unique(array_values(array_diff($LOCAL_VARIABLES[$identifier]['types'], array('null'))));
     if ($temp == array('boolean-false', 'boolean')) {
         return 'boolean';
     }
     if (count($temp) != 0) {
-        return is_array($temp[0]) ? $temp[0][0] : $temp[0];
-    } // We'll assume the first set type is the actual type
+        return is_array($temp[0]) ? $temp[0][0] : $temp[0]; // We'll assume the first set type is the actual type
+    }
     return 'null';
 }
 
@@ -2037,8 +2037,8 @@ function ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null, $ex
     }
 
     if (($actual_type == 'mixed') || ($actual_type == '?mixed') || ($actual_type == '~mixed')) {
-        return true;
-    } // We can't check it
+        return true; // We can't check it
+    }
 
     // Tidy up our allow list to be a nice map
     if ((!$extra_strict) && ((in_array('boolean', $_allowed_types)) || (in_array('?boolean', $_allowed_types)))) {
@@ -2054,8 +2054,8 @@ function ensure_type($_allowed_types, $actual_type, $pos, $alt_error = null, $ex
         }
 
         if (($type == 'mixed') || ($type == '?mixed') || ($type == '~mixed') || ($type == 'resource') || ($type == '?resource') || ($type == '~resource')) {
-            return true;
-        } // Anything works!
+            return true; // Anything works!
+        }
         if ($type[0] == '?') {
             $type = substr($type, 1);
             $allowed_types['null'] = 1;

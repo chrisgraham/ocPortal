@@ -185,8 +185,8 @@ class Hook_ipb2 extends Hook_ipb_base
             if ($parent_test[0]['parent_id'] != -1) { // Pointing to parent
                 $parent_forum = import_id_remap_get('forum', strval($row['parent_id']), true);
                 if (!is_null($parent_forum)) {
-                    $rows[$row_number]['parent_id'] = null;
-                } // Mark it as good (we do not need to fix this parenting)
+                    $rows[$row_number]['parent_id'] = null; // Mark it as good (we do not need to fix this parenting)
+                }
                 $category_id = db_get_first_id();
             } else { // Pointing to category
                 $category_id = import_id_remap_get('category', strval($row['parent_id']));

@@ -129,11 +129,11 @@ class Hook_Profiles_Tabs_Edit_privacy
 
             $cpf_title = get_translated_text($cpf_data[0]['cf_name'],$GLOBALS['FORUM_DB']);
             if ((preg_replace('#^((\s)|(<br\s*/?' . '>)|(&nbsp;))*#','',$cpf_title) === '') && (count($member_cpfs)>15)) {
-                continue;
-            } // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
+                continue; // If there are lots of CPFs, and this one seems to have a blank name, skip it (likely corrupt data)
+            }
             if ((preg_replace('#^((\s)|(<br\s*/?' . '>)|(&nbsp;))*#','',$cpf) === '') && (count($member_cpfs)>15)) {
-                continue;
-            } // If there are lots of CPFs, and this one seems to have a blank value, skip it
+                continue; // If there are lots of CPFs, and this one seems to have a blank value, skip it
+            }
 
             $cpf_ids[] = $cpf_id;
 

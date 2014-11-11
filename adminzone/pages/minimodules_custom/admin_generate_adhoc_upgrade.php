@@ -62,8 +62,8 @@ if ($type == 'auto_probe') {
         $has_openid = in_array('openid', $auto_probe);
         foreach ($addons['non_bundled'] as $addon => $files) {
             if ($addon == 'utf8' || $addon == 'simplified_emails') {
-                continue;
-            } // Two common false positives
+                continue; // Two common false positives
+            }
 
             foreach ($files as $file) {
                 if (file_exists($probe_dir . '/' . $file)) {

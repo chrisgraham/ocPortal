@@ -32,8 +32,8 @@ function tasks_script()
         't_locked' => 0,
     ), '', 1);
     if (!array_key_exists(0, $task_rows)) {
-        return;
-    } // Missing / locked / secure_ref error
+        return; // Missing / locked / secure_ref error
+    }
     $GLOBALS['SITE_DB']->query_update('task_queue', array(
         't_locked' => 1,
     ), array(

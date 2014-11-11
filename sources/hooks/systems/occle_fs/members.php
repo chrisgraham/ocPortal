@@ -38,8 +38,8 @@ class Hook_occle_fs_members
             // We're listing the users
             $cnt = $GLOBALS['SITE_DB']->query_select_value('f_members', 'COUNT(*)');
             if ($cnt > 1000) {
-                return false;
-            } // Too much to process
+                return false; // Too much to process
+            }
 
             $users = $GLOBALS['SITE_DB']->query_select('f_members', array('id', 'm_username', 'm_join_time'));
             foreach ($users as $user) {
@@ -247,8 +247,8 @@ class Hook_occle_fs_members
                 'wide',
                 'max_attach_size'
             ))) {
-                return false;
-            } // Can't delete a hard-coded (non-custom) profile field
+                return false; // Can't delete a hard-coded (non-custom) profile field
+            }
 
             require_code('ocf_members_action');
             require_code('ocf_members_action2');

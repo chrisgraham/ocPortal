@@ -24,8 +24,8 @@
 function init__uploads()
 {
     if (function_exists('set_time_limit')) {
-        @set_time_limit(0);
-    } // On some server setups, slow uploads can trigger the time-out
+        @set_time_limit(0); // On some server setups, slow uploads can trigger the time-out
+    }
 
     if (!defined('OCP_UPLOAD_ANYTHING')) {
         define('OCP_UPLOAD_IMAGE', 1);
@@ -65,8 +65,8 @@ function is_plupload($fake_prepopulation = false)
             if (substr($value, -4) == '.dat') { // By .dat name
                 $filename = post_param(str_replace('hidFileID', 'hidFileName', $key), '');
                 if ($filename == '') {
-                    continue;
-                } // Was cancelled during plupload, but plupload can't cancel so was allowed to finish. So we have hidFileID but not hidFileName.
+                    continue; // Was cancelled during plupload, but plupload can't cancel so was allowed to finish. So we have hidFileID but not hidFileName.
+                }
 
                 $path = 'uploads/incoming/' . filter_naughty($value);
                 if (file_exists(get_custom_file_base() . '/' . $path)) {
@@ -269,8 +269,8 @@ function get_url($specify_name, $attach_name, $upload_folder, $obfuscate = 0, $e
         $is_image = is_image($url[0]);
         if ($url[0] != '') {
             if ($enforce_type == OCP_UPLOAD_IMAGE) {
-                $is_image = true;
-            } // Must be an image if it got to here. Maybe came from oEmbed and not having an image extension.
+                $is_image = true; // Must be an image if it got to here. Maybe came from oEmbed and not having an image extension.
+            }
         }
         if ($url == array('', '')) {
             return array('', '', '', '');

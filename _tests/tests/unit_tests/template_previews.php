@@ -85,8 +85,8 @@ class template_previews_test_set extends ocp_test_case
                 continue;
             }
             if ($temp_name == 'ADMIN_ZONE_SEARCH') {
-                continue;
-            } // Only in admin theme, causes problem
+                continue; // Only in admin theme, causes problem
+            }
 
             if (is_plain_text_template($temp_name)) {
                 continue;
@@ -96,8 +96,8 @@ class template_previews_test_set extends ocp_test_case
             $function = $list[1];
 
             if (is_file(get_file_base() . '/_tests/screens_tested/' . $function . '.tmp')) {
-                continue;
-            } // To make easier to debug through
+                continue; // To make easier to debug through
+            }
 
             if (function_exists('set_time_limit')) {
                 @set_time_limit(0);
@@ -175,12 +175,12 @@ class template_previews_test_set extends ocp_test_case
             $hook = null;
 
             if ($template == 'ADMIN_ZONE_SEARCH.tpl') {
-                continue;
-            } // Only in admin theme, causes problem
+                continue; // Only in admin theme, causes problem
+            }
 
             if (is_file(get_file_base() . '/_tests/screens_tested/consistency__' . $function . '.tmp')) {
-                continue;
-            } // To make easier to debug through
+                continue; // To make easier to debug through
+            }
 
             if (function_exists('set_time_limit')) {
                 @set_time_limit(0);
@@ -243,12 +243,12 @@ class template_previews_test_set extends ocp_test_case
             $hook = null;
 
             if ($template == 'ADMIN_ZONE_SEARCH.tpl') {
-                continue;
-            } // Only in admin theme, causes problem
+                continue; // Only in admin theme, causes problem
+            }
 
             if (is_file(get_file_base() . '/_tests/screens_tested/nonemissing__' . $function . '.tmp')) {
-                continue;
-            } // To make easier to debug through
+                continue; // To make easier to debug through
+            }
 
             if (function_exists('set_time_limit')) {
                 @set_time_limit(0);

@@ -84,8 +84,8 @@ function catalogue_file_script()
     }
     $ev_check = $GLOBALS['SITE_DB']->query_select_value($table, $url_field, array($id_field => $entry_id)); // Has to return a result, will give a fatal error if not -- i.e. it implicitly checks the schema variables given
     if (!in_array($ev, explode("\n", $ev_check))) {
-        access_denied('I_ERROR');
-    } // ID mismatch for the file requested, to give a security error
+        access_denied('I_ERROR'); // ID mismatch for the file requested, to give a security error
+    }
     if ($table == 'catalogue_efv_short') { // Now check the match, if we support checking on it
         $c_name = $GLOBALS['SITE_DB']->query_select_value('catalogue_entries', 'c_name', array('id' => $entry_id));
         if (substr($c_name, 0, 1) != '_') { // Doesn't work on custom fields (this is documented)

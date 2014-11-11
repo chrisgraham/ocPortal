@@ -85,8 +85,8 @@ if (($shl === false) || ($shl == '') || ($shl == '0')) {
     @ini_set('memory_limit', '-1');
 } else {
     if (is_numeric($shl)) {
-        $shl .= 'M';
-    } // Units are in MB for this, while PHP's memory limit setting has it in bytes
+        $shl .= 'M'; // Units are in MB for this, while PHP's memory limit setting has it in bytes
+    }
     @ini_set('memory_limit', $shl);
 }
 
@@ -515,8 +515,8 @@ function step_3()
     $advertise_on = post_param_integer('advertise_on', 0);
     $email = $_POST['email'];
     if ($email == do_lang('EMAIL_ADDRESS')) {
-        $email = '';
-    } // In case was left as the label
+        $email = ''; // In case was left as the label
+    }
     if (($email != '') || ($advertise_on == 1)) {
         require_code('files');
         http_download_file('http://ocportal.com/uploads/website_specific/ocportal.com/scripts/newsletter_join.php?url=' . urlencode('http://' . ocp_srv('HTTP_HOST') . ocp_srv('SCRIPT_NAME')) . '&email=' . urlencode($email) . '&interest_level=' . $_POST['interest_level'] . '&advertise_on=' . strval($advertise_on) . '&lang=' . $INSTALL_LANG, null, false);
@@ -597,8 +597,8 @@ function step_3()
         }
 
         if ((count($databases) == 1) && ($database == 'xml')) {
-            continue;
-        } // If they only have experimental XML option, they'll choose it - we don't want that - we want them to get the error
+            continue; // If they only have experimental XML option, they'll choose it - we don't want that - we want them to get the error
+        }
 
         if (($database == 'mysqli') && (!function_exists('mysqli_connect'))) {
             continue;

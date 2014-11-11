@@ -109,8 +109,8 @@ class Hook_occle_fs_news extends resource_fs_base
     public function folder_add($filename, $path, $properties)
     {
         if ($path != '') {
-            return false;
-        } // Only one depth allowed for this resource type
+            return false; // Only one depth allowed for this resource type
+        }
 
         list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
@@ -241,8 +241,8 @@ class Hook_occle_fs_news extends resource_fs_base
         list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         require_code('news2');
 
@@ -327,8 +327,8 @@ class Hook_occle_fs_news extends resource_fs_base
         list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         require_code('news2');
 

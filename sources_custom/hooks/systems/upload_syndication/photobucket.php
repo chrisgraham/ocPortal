@@ -51,8 +51,8 @@ class Hook_upload_syndication_photobucket
     {
         $req_key = get_long_value('photobucket_oauth_key__' . strval(get_member()));
         if ($req_key === NULL) {
-            return false;
-        } // No receive_authorisation() started yet
+            return false; // No receive_authorisation() started yet
+        }
 
         if ($this->_logged_in) {
             return true;

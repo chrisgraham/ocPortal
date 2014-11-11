@@ -371,8 +371,8 @@ function save_comcode_page($zone, $new_file, $lang, $text, $validated, $parent_p
         $add_time = time();
     }
     if (is_null($file)) {
-        $file = $new_file;
-    } // Not renamed
+        $file = $new_file; // Not renamed
+    }
 
     // Check page name
     require_code('type_validation');

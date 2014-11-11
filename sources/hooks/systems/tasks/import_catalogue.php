@@ -121,8 +121,8 @@ class Hook_task_import_catalogue
         $matched_ids = array();
         while (($data = fgetcsv($handle, 100000, $del)) !== false) {
             if ($data === array(null)) {
-                continue;
-            } // blank line
+                continue; // blank line
+            }
             $test = $this->import_csv_lines($catalogue_name, $data, $root_cat, $fields, $categories, $csv_field_titles, $key_field, $new_handling, $delete_handling, $update_handling, $matched_ids, $notes_field, $meta_keywords_field, $meta_description_field, $allow_rating, $allow_comments, $allow_trackbacks);
             if (!is_null($test)) {
                 fclose($handle);
@@ -182,8 +182,8 @@ class Hook_task_import_catalogue
 
         if (array_key_exists($notes_field, $csv_field_titles)) {
             if (!array_key_exists($csv_field_titles[$notes_field], $csv_data)) {
-                $csv_data[$csv_field_titles[$notes_field]] = '';
-            } // Not set for this particular row, even though column exists in the CSV
+                $csv_data[$csv_field_titles[$notes_field]] = ''; // Not set for this particular row, even though column exists in the CSV
+            }
 
             $notes = $csv_data[$csv_field_titles[$notes_field]];
             unset($csv_field_titles[$notes_field]);
@@ -191,8 +191,8 @@ class Hook_task_import_catalogue
 
         if (array_key_exists($meta_keywords_field, $csv_field_titles)) {
             if (!array_key_exists($csv_field_titles[$meta_keywords_field], $csv_data)) {
-                $csv_data[$csv_field_titles[$meta_keywords_field]] = '';
-            } // Not set for this particular row, even though column exists in the CSV
+                $csv_data[$csv_field_titles[$meta_keywords_field]] = ''; // Not set for this particular row, even though column exists in the CSV
+            }
 
             $meta_keywords = $csv_data[$csv_field_titles[$meta_keywords_field]];
             unset($csv_field_titles[$meta_keywords_field]);
@@ -200,8 +200,8 @@ class Hook_task_import_catalogue
 
         if (array_key_exists($meta_description_field, $csv_field_titles)) {
             if (!array_key_exists($csv_field_titles[$meta_description_field], $csv_data)) {
-                $csv_data[$csv_field_titles[$meta_description_field]] = '';
-            } // Not set for this particular row, even though column exists in the CSV
+                $csv_data[$csv_field_titles[$meta_description_field]] = ''; // Not set for this particular row, even though column exists in the CSV
+            }
 
             $meta_description = $csv_data[$csv_field_titles[$meta_description_field]];
             unset($csv_field_titles[$meta_description_field]);
@@ -209,8 +209,8 @@ class Hook_task_import_catalogue
 
         if (array_key_exists($key_field, $csv_field_titles)) {
             if (!array_key_exists($csv_field_titles[$key_field], $csv_data)) {
-                $csv_data[$csv_field_titles[$key_field]] = '';
-            } // Not set for this particular row, even though column exists in the CSV
+                $csv_data[$csv_field_titles[$key_field]] = ''; // Not set for this particular row, even though column exists in the CSV
+            }
 
             $key = $csv_data[$csv_field_titles[$key_field]];
         }
@@ -223,8 +223,8 @@ class Hook_task_import_catalogue
 
             if (array_key_exists($field_name, $csv_field_titles)) {
                 if (!array_key_exists($csv_field_titles[$field_name], $csv_data)) {
-                    $csv_data[$csv_field_titles[$field_name]] = '';
-                } // Not set for this particular row, even though column exists in the CSV
+                    $csv_data[$csv_field_titles[$field_name]] = ''; // Not set for this particular row, even though column exists in the CSV
+                }
 
                 $value = trim($csv_data[$csv_field_titles[$field_name]]);
 

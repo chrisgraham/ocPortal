@@ -158,8 +158,8 @@ class Hook_occle_fs_authors extends resource_fs_base
 
         // Author editing works via re-adding
         if ($label != $resource_id) {
-            delete_author($resource_id);
-        } // Delete old one if we renamed
+            delete_author($resource_id); // Delete old one if we renamed
+        }
         add_author($label, $url, $member_id, $description, $skills, $meta_keywords, $meta_description);
 
         return $resource_id;

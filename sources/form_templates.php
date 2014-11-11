@@ -396,8 +396,8 @@ function get_comcode_editor($field_name = 'post', $cut_down = false)
     }
     $_buttons[] = 'comcode';
     if (!$cut_down) {
-        $_buttons[] = 'list';
-    } // NB: list isn't actually a comcode tag, it's a textcode syntax
+        $_buttons[] = 'list'; // NB: list isn't actually a comcode tag, it's a textcode syntax
+    }
 
     // Links
     if (!$cut_down) {
@@ -1967,8 +1967,8 @@ function alternate_fields_set__end($set_name, $pretty_name, $description, $field
 {
     global $DOING_ALTERNATE_FIELDS_SET;
     if ($DOING_ALTERNATE_FIELDS_SET === null) {
-        return $fields;
-    } // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
+        return $fields; // Didn't actually start set, probably because some logic said not to - so just flow to append as normal
+    }
 
     if ((!is_null($existing_image_preview_url)) && ($existing_image_preview_url != '')) {
         if (url_is_local($existing_image_preview_url)) {

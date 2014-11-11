@@ -226,11 +226,11 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
     $unknowns = array();
     foreach ($questions as $i => $question) {
         if (!array_key_exists($question['id'], $_given_answers)) {
-            continue;
-        } // Question did not exist when this quiz entry was filled
+            continue; // Question did not exist when this quiz entry was filled
+        }
         if ($question['q_marked'] == 0) {
-            continue;
-        } // Don't count non-marked questions
+            continue; // Don't count non-marked questions
+        }
 
         $question_text = get_translated_text($question['q_question_text']);
 
@@ -499,8 +499,8 @@ function typed_answer_is_correct($given_answer, $all_answers, $strict = false)
         }
 
         if (get_translated_text($a['q_answer_text']) === $filtered_given_answer) {
-            return ($a['q_is_correct'] == 1);
-        } // Match exactly; "===" needed to stop PHPs weird type coercion that happens even for strings
+            return ($a['q_is_correct'] == 1); // Match exactly; "===" needed to stop PHPs weird type coercion that happens even for strings
+        }
 
         if ((!$strict) && (levenshtein($filtered_answer, $filtered_given_answer) <= intval(strlen($filtered_answer) * 0.2))) { // Matches inexactly
             if ($a['q_is_correct'] == 1) {

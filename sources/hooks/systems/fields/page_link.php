@@ -108,8 +108,8 @@ class Hook_fields_page_link
     public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if (is_null($actual_value)) {
-            $actual_value = '';
-        } // Plug anomaly due to unusual corruption
+            $actual_value = ''; // Plug anomaly due to unusual corruption
+        }
 
         $_actual_value = explode(' ', $actual_value, 2);
         if (!array_key_exists(1, $_actual_value)) {

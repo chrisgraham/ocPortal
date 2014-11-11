@@ -229,8 +229,8 @@ function staff_checklist_time_ago_and_due($seconds_ago, $recur_hours = null)
     }
 
     if ($seconds_to_go == 0) {
-        return array(do_lang_tempcode('DUE_NOW'), 0);
-    } // Due for first time now (this is a special encoding for non-recurring tasks that still need doing on some form of schedule and need doing for first time now)
+        return array(do_lang_tempcode('DUE_NOW'), 0); // Due for first time now (this is a special encoding for non-recurring tasks that still need doing on some form of schedule and need doing for first time now)
+    }
     if ($seconds_to_go > 0) {
         return array(do_lang_tempcode('DUE_TIME', is_null($seconds_ago) ? do_lang_tempcode('NA_EM') : make_string_tempcode(escape_html(display_time_period($seconds_ago))), make_string_tempcode(escape_html(display_time_period($seconds_to_go)))), $seconds_to_go);
     } else {

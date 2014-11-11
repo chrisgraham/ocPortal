@@ -76,8 +76,8 @@ class Hook_members_ecommerce
         $subscriptions = array();
         foreach ($_subscriptions as $_subscription) {
             if (!$_subscription['is_active']) {
-                continue;
-            } // We only show active subscriptions here
+                continue; // We only show active subscriptions here
+            }
 
             $subscriptions[] = prepare_templated_subscription($_subscription);
         }

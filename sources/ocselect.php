@@ -133,8 +133,8 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
         if ($filter == '') {
             foreach ($db_fields as $key => $type) {
                 if ($key == 'notes') {
-                    continue;
-                } // Protected, staff notes
+                    continue; // Protected, staff notes
+                }
                 if ((isset($info['ocselect_protected_fields'])) && (in_array($key, $info['ocselect_protected_fields']))) {
                     continue;
                 }

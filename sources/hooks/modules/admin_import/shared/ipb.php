@@ -308,8 +308,8 @@ class Hook_ipb_base
                 }
 
                 if ($row['mgroup'] == 0) {
-                    $row['mgroup'] = db_get_first_id();
-                } // Not really necessary - but repairs problem in my test db
+                    $row['mgroup'] = db_get_first_id(); // Not really necessary - but repairs problem in my test db
+                }
                 $primary_group = import_id_remap_get('group',strval($row['mgroup']));
                 $language = is_null($row['language'])?'':strtoupper($row['language']);
                 if ((!file_exists(get_custom_file_base() . '/lang_custom/' . $language)) && (!file_exists(get_file_base() . '/lang/' . $language))) {

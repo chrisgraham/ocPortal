@@ -114,8 +114,8 @@ class Module_admin_ssl
             @sort($pk); // @'d for inconsitency (some integer keys like 404) (annoying PHP quirk)
             foreach ($pk as $page) {
                 if (!is_string($page)) {
-                    $page = strval($page);
-                } // strval($page) as $page could have become numeric due to array imprecision
+                    $page = strval($page); // strval($page) as $page could have become numeric due to array imprecision
+                }
                 $ticked = is_page_https($zone, $page);
                 $content->attach(do_template('SSL_CONFIGURATION_ENTRY', array('_GUID' => 'a08c339d93834f968c8936b099c677a3', 'TICKED' => $ticked, 'PAGE' => $page, 'ZONE' => $zone)));
             }
@@ -137,8 +137,8 @@ class Module_admin_ssl
             $pages = find_all_pages_wrap($zone);
             foreach (array_keys($pages) as $page) {
                 if (!is_string($page)) {
-                    $page = strval($page);
-                } // strval($page) as $page could have become numeric due to array imprecision
+                    $page = strval($page); // strval($page) as $page could have become numeric due to array imprecision
+                }
                 $id = $zone . ':' . $page;
                 $value = post_param_integer('ssl_' . $zone . '__' . $page, 0);
                 $GLOBALS['SITE_DB']->query_delete('https_pages', array('https_page_name' => $id), '', 1);

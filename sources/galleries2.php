@@ -129,8 +129,8 @@ function read_intel_endian_int($buffer)
         return ord($buffer[0]) | (ord($buffer[1]) << 8);
     }
     if (strlen($buffer) < 4) {
-        warn_exit(do_lang_tempcode('CORRUPT_FILE', do_lang('VIDEO')));
-    } // Error
+        warn_exit(do_lang_tempcode('CORRUPT_FILE', do_lang('VIDEO'))); // Error
+    }
     return ord($buffer[0]) | (ord($buffer[1]) << 8) | (ord($buffer[2]) << 16) | (ord($buffer[3]) << 24);
 }
 
@@ -146,8 +146,8 @@ function read_network_endian_int($buffer)
         return ord($buffer[1]) | (ord($buffer[0]) << 8);
     }
     if (strlen($buffer) < 4) {
-        warn_exit(do_lang_tempcode('CORRUPT_FILE', do_lang('VIDEO')));
-    } // Error
+        warn_exit(do_lang_tempcode('CORRUPT_FILE', do_lang('VIDEO'))); // Error
+    }
     return ord($buffer[3]) | (ord($buffer[2]) << 8) | (ord($buffer[1]) << 16) | (ord($buffer[0]) << 24);
 }
 
@@ -187,8 +187,8 @@ function _get_wmv_details_do_chunk_list($file, $chunk_length = null)
         $sub_chunk_length = read_intel_endian_int(fread($file, 4));
         $count += $sub_chunk_length;
         if ($sub_chunk_length <= 24) {
-            return null;
-        } // Some kind of error that would cause mayhem
+            return null; // Some kind of error that would cause mayhem
+        }
         fseek($file, 4, SEEK_CUR); // Can't read 64 bit
 
         // Header chunk
@@ -320,8 +320,8 @@ function _get_mov_details_do_atom_list($file, $atom_size = null)
     while ((!feof($file)) && ((is_null($atom_size)) || ($count < $atom_size)) && ((is_null($length)) || (is_null($width)) || (is_null($height)))) {
         $next_read = fread($file, 4);
         if (strlen($next_read) < 4) {
-            return array($count, $width, $height, $length);
-        } // END / problem
+            return array($count, $width, $height, $length); // END / problem
+        }
         $size = read_network_endian_int($next_read);
         if ($size < 8) { // NB: uuid atom can be of size 8 (i.e. empty) on some rare files
             return array($count, $width, $height, $length); // END / problem
@@ -1144,8 +1144,8 @@ function watermark_gallery_image($gallery, $file_path, $filename)
     $watermark_bottom_right = '';
     do {
         if ($gallery == '') {
-            return;
-        } // We couldn't find any matermarks
+            return; // We couldn't find any matermarks
+        }
 
         $_gallery = $GLOBALS['SITE_DB']->query_select('galleries', array('parent_id', 'watermark_top_left', 'watermark_top_right', 'watermark_bottom_left', 'watermark_bottom_right'), array('name' => $gallery), '', 1);
         $watermark_top_left = $_gallery[0]['watermark_top_left'];
@@ -1160,8 +1160,8 @@ function watermark_gallery_image($gallery, $file_path, $filename)
     $ext = get_file_extension($filename);
     $source = @imagecreatefromstring(file_get_contents($file_path));
     if ($source === false) {
-        return;
-    } // We couldn't load it for some reason
+        return; // We couldn't load it for some reason
+    }
 
     // Apply the watermarks
     _watermark_corner($source, $watermark_top_left, 0, 0);

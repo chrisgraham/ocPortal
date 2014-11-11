@@ -179,8 +179,8 @@ class Hook_cron_newsletter_periodic
         ksort($automatic);
         $_automatic = new ocp_tempcode();
         if (count($automatic) == 0) {
-            return null;
-        } // Nothing new
+            return null; // Nothing new
+        }
         foreach ($automatic as $tp) {
             $_automatic->attach($tp);
         }

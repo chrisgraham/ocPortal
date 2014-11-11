@@ -106,8 +106,8 @@ class Hook_pointstore_permission
         }
         foreach (array_keys($_pages) as $_page) {
             if (is_integer($_page)) {
-                $_page = strval($_page);
-            } // PHP array combining weirdness
+                $_page = strval($_page); // PHP array combining weirdness
+            }
             $temp = form_input_list_entry($_page, $page == $_page);
             $pages->attach($temp);
         }
@@ -146,8 +146,8 @@ class Hook_pointstore_permission
             $hidden = new ocp_tempcode();
             $hours = $row['p_hours'];
             if ($hours == 400000) {
-                $hours = null;
-            } // LEGACY: Around 100 years, but meaning unlimited
+                $hours = null; // LEGACY: Around 100 years, but meaning unlimited
+            }
             $fields->attach($this->get_fields('_' . strval($i), get_translated_text($row['p_title']), get_translated_text($row['p_description']), $row['p_enabled'], $row['p_cost'], $hours, $row['p_type'], $row['p_privilege'], $row['p_zone'], $row['p_page'], $row['p_module'], $row['p_category'], get_translated_text($row['p_mail_subject']), get_translated_text($row['p_mail_body'])));
             $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '4055cbfc1c94723f4ad72a80ede0b554', 'TITLE' => do_lang_tempcode('ACTIONS'))));
             $fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete_permission_' . strval($i), false));

@@ -220,8 +220,8 @@ class Module_login
             $passion->attach(build_keep_post_fields(array('redirect')));
             $redirect_passon = post_param('redirect', null);
             if (!is_null($redirect_passon)) {
-                $passion->attach(form_input_hidden('redirect_passon', $redirect_passon));
-            } // redirect_passon is used when there are POST fields, as it says what the redirect will be on the post-login-check hop (post fields prevent us doing an immediate HTTP-level redirect).
+                $passion->attach(form_input_hidden('redirect_passon', $redirect_passon)); // redirect_passon is used when there are POST fields, as it says what the redirect will be on the post-login-check hop (post fields prevent us doing an immediate HTTP-level redirect).
+            }
         }
 
         // Lost password link

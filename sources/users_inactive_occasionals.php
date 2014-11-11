@@ -329,8 +329,8 @@ function try_httpauth_login()
     }
 
     if (!is_null($member)) {
-        create_session($member, 1, (isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1'));
-    } // This will mark it as confirmed
+        create_session($member, 1, (isset($_COOKIE[get_member_cookie() . '_invisible'])) && ($_COOKIE[get_member_cookie() . '_invisible'] == '1')); // This will mark it as confirmed
+    }
 
     return $member;
 }

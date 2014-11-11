@@ -333,8 +333,8 @@ function add_news($title, $news, $author = null, $validated = 1, $allow_rating =
             }
 
             if (is_null($news_category_id)) {
-                continue;
-            } // Double selected
+                continue; // Double selected
+            }
 
             $GLOBALS['SITE_DB']->query_insert('news_category_entries', array('news_entry' => $id, 'news_entry_category' => $news_category_id));
 

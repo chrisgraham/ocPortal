@@ -63,8 +63,8 @@ function block_helper_script()
                 if (!HHVM) {
                     $addon_files = eval($matches[1]);
                     if ($addon_files === false) {
-                        $addon_files = array();
-                    } // Some kind of PHP error
+                        $addon_files = array(); // Some kind of PHP error
+                    }
                 } else {
                     require_code('hooks/systems/addon_registry/' . $addon_name);
                     $hook_ob = object_factory('Hook_addon_registry_' . $addon_name);
@@ -463,8 +463,8 @@ function block_helper_script()
             $value = post_param($parameter, null);
             if (is_null($value)) {
                 if (post_param_integer('tick_on_form__' . $parameter, null) === null) {
-                    continue;
-                } // If not on form, continue, otherwise must be 0
+                    continue; // If not on form, continue, otherwise must be 0
+                }
                 $value = '0';
             }
             if (($value != '') && (($parameter != 'block_id') || ($value != '')) && (($parameter != 'failsafe') || ($value == '1')) && (($parameter != 'defer') || ($value == '1')) && (($parameter != 'cache') || ($value != block_cache_default($block))) && (($parameter != 'quick_cache') || ($value == '1'))) {
@@ -481,8 +481,8 @@ function block_helper_script()
         $comcode = '[block' . $bparameters . ']' . $block . '[/block]';
         $tempcode = '{$BLOCK,block=' . $block . $bparameters_tempcode . '}';
         if ($type_wanted == 'template') {
-            $comcode = $tempcode;
-        } // This is what will be written in
+            $comcode = $tempcode; // This is what will be written in
+        }
 
         $comcode_semihtml = comcode_to_tempcode($comcode, null, false, 60, null, null, true, false, false);
 

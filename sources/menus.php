@@ -422,8 +422,8 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
             $branch['only_on_page'] = static_evaluate_tempcode(template_to_tempcode($branch['only_on_page']));
         }
         if (($branch['only_on_page'] != '') && (!match_key_match($branch['only_on_page']))) {
-            return array(null, false);
-        } // We are not allowed to render this on this page
+            return array(null, false); // We are not allowed to render this on this page
+        }
     }
 
     // Spacers
@@ -590,8 +590,8 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
         }
     }
     if (($children->is_empty()) && ($url->is_empty())) {
-        return array(null, false);
-    } // Nothing here!
+        return array(null, false); // Nothing here!
+    }
 
     // Caption and tooltip
     $caption = $branch['title'];

@@ -174,8 +174,8 @@ class Block_main_forum_topics
                     $username = $topic[$username_key];
                     $member_id = array_key_exists($memberid_key, $topic) ? $topic[$memberid_key] : null;
                     if ((!is_null($forum_names_map)) && (!array_key_exists($topic['forum_id'], $forum_names_map))) {
-                        continue;
-                    } // Maybe Private Topic, slipped in via reference to a missing forum
+                        continue; // Maybe Private Topic, slipped in via reference to a missing forum
+                    }
                     $forum_name = is_null($forum_names_map) ? null : $forum_names_map[$topic['forum_id']];
 
                     $out->attach(do_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC', array(

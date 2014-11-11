@@ -264,8 +264,8 @@ class Notification_dispatcher
             foreach ($members as $to_member_id => $setting) {
                 if (!is_null($this->no_notify_for__notification_code)) {
                     if (notifications_enabled($this->no_notify_for__notification_code, $this->no_notify_for__code_category, $to_member_id)) {
-                        continue;
-                    } // Signal they are getting some other notification for this
+                        continue; // Signal they are getting some other notification for this
+                    }
                 }
 
                 if (($to_member_id !== $this->from_member_id) || ($testing)) {
@@ -382,8 +382,8 @@ function _find_member_statistical_notification_type($to_member_id)
         reset($possible_settings);
         $setting = key($possible_settings);
         if (is_null($setting)) {
-            $setting = A_INSTANT_EMAIL;
-        } // Nothing available, so save as an e-mail notification even though it cannot be received
+            $setting = A_INSTANT_EMAIL; // Nothing available, so save as an e-mail notification even though it cannot be received
+        }
     }
     $cache[$to_member_id] = $setting;
     $setting |= A_WEB_NOTIFICATION;
@@ -723,8 +723,8 @@ function notifications_setting($notification_code, $notification_category, $memb
         if ($test === null) {
             $ob = _get_notification_ob_for_code($notification_code);
             if ($ob === null) {
-                return A_NA;
-            } // Can happen in template test sets, as this can be called up by a symbol
+                return A_NA; // Can happen in template test sets, as this can be called up by a symbol
+            }
             //if ($ob===NULL) fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
             $test = $ob->get_initial_setting($notification_code, $notification_category);
         }

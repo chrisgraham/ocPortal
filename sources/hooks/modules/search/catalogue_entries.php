@@ -132,8 +132,8 @@ class Hook_search_catalogue_entries
                     if (!is_guest()) {
                         $dob_year = intval($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_dob_year'));
                         if ($dob_year != 0) {
-                            $special = integer_format(intval(date('Y', utctime_to_usertime(time()))) - $dob_year);
-                        } // number_format'ing this is kind of funny actually
+                            $special = integer_format(intval(date('Y', utctime_to_usertime(time()))) - $dob_year); // number_format'ing this is kind of funny actually
+                        }
                     }
                     $extra = '_ranged';
                 }
@@ -329,8 +329,8 @@ class Hook_search_catalogue_entries
             $table .= $privacy_join;
 
             if (is_null($title_field)) {
-                return array();
-            } // No fields in catalogue -- very odd
+                return array(); // No fields in catalogue -- very odd
+            }
             if ($g_or == '') {
                 $rows = get_search_rows('catalogue_entry', 'id', $content, $boolean_search, $boolean_operator, $only_search_meta, $direction, $max, $start, $only_titles, $table, $trans_fields, $where_clause, $content_where, $remapped_orderer, 'r.*,r.id AS id,r.cc_id AS r_cc_id,' . $title_field . ' AS b_cv_value' . $extra_select, $nontrans_fields);
             } else {

@@ -67,8 +67,8 @@ class Block_main_contact_catalogues
 
         $catalogue_name = array_key_exists('param', $map) ? $map['param'] : '';
         if ($catalogue_name == '') {
-            $catalogue_name = $GLOBALS['SITE_DB']->query_select_value('catalogues', 'c_name');
-        } // Random/arbitrary (first one that comes out of the DB)
+            $catalogue_name = $GLOBALS['SITE_DB']->query_select_value('catalogues', 'c_name'); // Random/arbitrary (first one that comes out of the DB)
+        }
 
         $special_fields = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => $catalogue_name), 'ORDER BY cf_order');
         require_code('fields');

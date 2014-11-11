@@ -167,8 +167,8 @@ function add_menu_item_simple($menu, $parent, $caption, $url = '', $expanded = 0
 
     $id = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items', 'id', array('i_url' => $url, 'i_menu' => $menu));
     if (!is_null($id)) {
-        return $id;
-    } // Already exists
+        return $id; // Already exists
+    }
     if (is_string($parent)) {
         $parent = $GLOBALS['SITE_DB']->query_select_value_if_there('menu_items', 'i_parent', array('i_url' => $parent));
     }

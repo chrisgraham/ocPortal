@@ -25,8 +25,8 @@ class Hook_cron_sitemap
     public function run()
     {
         if (!is_guest()) {
-            return;
-        } // Bad idea
+            return; // Bad idea
+        }
 
         $time = time();
         $last_time = intval(get_long_value('last_sitemap_time_calc'));
@@ -36,8 +36,8 @@ class Hook_cron_sitemap
         }
 
         if (($last_time > time() - 60 * 60 * 24) && (@filesize(get_custom_file_base() . '/ocp_sitemap.xml') > 10)) {
-            return;
-        } // Every day
+            return; // Every day
+        }
 
         set_long_value('last_sitemap_time_calc', strval($time));
 

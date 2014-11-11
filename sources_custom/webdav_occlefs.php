@@ -379,8 +379,8 @@ namespace webdav_occlefs {
                 list($filename, $filetype, $filesize, $filetime) = $l;
                 if ($filename == $currentName) {
                     if (is_null($filesize)) {
-                        $filesize = strlen($this->get());
-                    } // Needed at least for Cyberduck
+                        $filesize = strlen($this->get()); // Needed at least for Cyberduck
+                    }
                     return $filesize;
                 }
             }

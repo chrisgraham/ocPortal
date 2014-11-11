@@ -301,8 +301,8 @@ class Module_admin_orders
                 $res = $GLOBALS['SITE_DB']->query_select('shopping_order_details', array('p_id', 'p_name'), array('order_id' => $row['id']));
 
                 if (!array_key_exists(0, $res)) {
-                    continue;
-                } // DB corruption
+                    continue; // DB corruption
+                }
                 $product_det = $res[0];
 
                 $view_url = build_url(array('page' => 'catalogues', 'type' => 'entry', 'id' => $product_det['p_id']), get_module_zone('catalogues'));

@@ -149,8 +149,8 @@ function xhtmlise_html($html, $definitely_want = false, $snippet = false)
                     do {
                         $previous = array_pop($TAG_STACK);
                         if ($basis_token != $previous) {
-                            $new .= '</' . $previous . '>';
-                        } // We'll have to assume it should be implicitly closed
+                            $new .= '</' . $previous . '>'; // We'll have to assume it should be implicitly closed
+                        }
                     }
                     while ($basis_token != $previous);
                     $new .= '</' . $basis_token . '>'; // Ok so we finally got an opener match and managed to put out our closer
@@ -624,8 +624,8 @@ function _smart_grammar_says_continue($nieve_end_pos, $grammar_completeness_tole
     }
     $para_end_pos = is_null($best_pos) ? strlen($html) : $best_pos;
     if ($para_end_pos == $real_offset + 1) {
-        return false;
-    } // Just finished paragraph
+        return false; // Just finished paragraph
+    }
     // Decide, is it worth maintaining the paragraph?
     if ($para_end_pos - $nieve_end_pos <= intval(round($grammar_completeness_tolerance * $desired_length))) {
         return true;
@@ -650,8 +650,8 @@ function _smart_grammar_says_continue($nieve_end_pos, $grammar_completeness_tole
     }
     $sentence_end_pos = is_null($best_pos) ? strlen($html) : ($best_pos + 1);
     if ($sentence_end_pos == $real_offset) {
-        return false;
-    } // Just finished sentence
+        return false; // Just finished sentence
+    }
     // Decide, is it worth maintaining the sentence?
     if ($sentence_end_pos - $nieve_end_pos <= intval(round($grammar_completeness_tolerance * $desired_length))) {
         return true;

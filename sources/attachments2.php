@@ -40,8 +40,8 @@ function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, 
     require_code('comcode_compiler');
 
     if (function_exists('set_time_limit')) {
-        @set_time_limit(600);
-    } // Thumbnail generation etc can take some time
+        @set_time_limit(600); // Thumbnail generation etc can take some time
+    }
 
     global $COMCODE_ATTACHMENTS;
     unset($COMCODE_ATTACHMENTS[$id]); // In case we have some kind of conflict
@@ -97,8 +97,8 @@ function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, 
             // Handle attachment extraction
             $matches_extract = array();
             if (preg_match('#\[attachment( [^\]]*)type="extract"( [^\]]*)?\]new_' . $matches[1] . '\[/attachment\]#', $comcode, $matches_extract) != 0) {
-                _handle_attachment_extraction($comcode, $key, $type, $id, $matches_extract, $connection);
-            } // Handle missing attachment markup for uploaded attachments
+                _handle_attachment_extraction($comcode, $key, $type, $id, $matches_extract, $connection); // Handle missing attachment markup for uploaded attachments
+            }
             elseif ((strpos($comcode, ']new_' . $matches[1] . '[/attachment]') === false) && (strpos($comcode, ']new_' . $matches[1] . '[/attachment_safe]') === false)) {
                 if (preg_match('#\]\d+\[/attachment\]#', $comcode) == 0) { // Attachment could have already been put through (e.g. during a preview). If we have actual ID's referenced, it's almost certainly the case.
                     $comcode .= "\n\n" . '[attachment]new_' . $matches[1] . '[/attachment]';
@@ -111,8 +111,8 @@ function do_comcode_attachments($comcode, $type, $id, $previewing_only = false, 
     global $LAX_COMCODE;
     $temp = $LAX_COMCODE;
     if ($has_one) {
-        $LAX_COMCODE = true;
-    } // We don't want a simple syntax error to cause us to lose our attachments
+        $LAX_COMCODE = true; // We don't want a simple syntax error to cause us to lose our attachments
+    }
     $tempcode = comcode_to_tempcode($comcode, $member, $insert_as_admin, 60, $id, $connection, false, false, false, false, false, null, $for_member);
     $LAX_COMCODE = $temp;
     $ATTACHMENTS_ALREADY_REFERENCED = $old_already;
@@ -286,8 +286,8 @@ function _handle_attachment_extraction(&$comcode, $key, $type, $id, $matches_ext
 
             foreach ($dir as $entry) {
                 if (substr($entry['path'], -1) == '/') {
-                    continue;
-                } // Ignore folders
+                    continue; // Ignore folders
+                }
 
                 $_file = preg_replace('#\..*\.#', '.', basename($entry['path']));
 

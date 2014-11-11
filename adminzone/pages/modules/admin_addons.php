@@ -330,8 +330,8 @@ class Module_admin_addons
     public function gui()
     {
         if (function_exists('set_time_limit')) {
-            @set_time_limit(180);
-        } // So it can scan inside addons
+            @set_time_limit(180); // So it can scan inside addons
+        }
 
         $GLOBALS['NO_QUERY_LIMIT'] = true;
 

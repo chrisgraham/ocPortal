@@ -166,8 +166,8 @@ function upload_will_syndicate($name)
 function handle_upload_syndication($name, $title, $description, $url, $filename, $remove_locally_if_no_quota)
 {
     if (!url_is_local($url)) {
-        return $url;
-    } // Not an upload
+        return $url; // Not an upload
+    }
 
     $new_url = $url;
 

@@ -50,8 +50,8 @@ function check_comcode($comcode, $source_member = null, $as_admin = false, $conn
             }
         }
         if ($has_one) {
-            $LAX_COMCODE = true;
-        } // We don't want a simple syntax error to cause us to lose our attachments
+            $LAX_COMCODE = true; // We don't want a simple syntax error to cause us to lose our attachments
+        }
     }
     comcode_to_tempcode($comcode, $source_member, $as_admin, 60, null, $connection, false, false, false, false, true);
     $LAX_COMCODE = $temp;

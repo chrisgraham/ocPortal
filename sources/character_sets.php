@@ -409,8 +409,8 @@ function will_be_unicode_neutered($data)
 {
     $data = @htmlentities($data, ENT_COMPAT, 'UTF-8');
     if ($data == '') {
-        return false;
-    } // Some servers fail at the first step
+        return false; // Some servers fail at the first step
+    }
     for ($i = 0; $i < strlen($data); $i++) {
         if (ord($data[$i]) > 0x7F) {
             return false;

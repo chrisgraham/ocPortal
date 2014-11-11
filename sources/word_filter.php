@@ -62,8 +62,8 @@ function check_word_filter($a, $name = null, $no_die = false, $try_patterns = fa
         if (!is_null($rows)) {
             foreach ($rows as $i => $r) {
                 if (($i == 0) && (!array_key_exists('w_replacement', $r))) {
-                    return $a;
-                } // Safe upgrading
+                    return $a; // Safe upgrading
+                }
                 $WORDS_TO_FILTER_CACHE[strtolower($r['word'])] = $r;
             }
         }
@@ -72,8 +72,8 @@ function check_word_filter($a, $name = null, $no_die = false, $try_patterns = fa
     // Find words
     $words = str_word_count($a, 2);
     if (is_null($words)) {
-        $words = array();
-    } // HPHP issue #113
+        $words = array(); // HPHP issue #113
+    }
 
     // Apply filter for complete blocked words
     $changes = array();

@@ -196,8 +196,8 @@ function _export_xml_row($table, $row, $db_fields, $seo_type_code, $permissions_
             }
         } else { // Simple field.
             if (!array_key_exists($name, $row)) {
-                continue;
-            } // Shouldn't happen, but corruption could lead to this
+                continue; // Shouldn't happen, but corruption could lead to this
+            }
             switch (gettype($row[$name])) { // Serialise as string
                 case 'integer':
                     switch (str_replace('?', '', str_replace('*', '', $field['m_type']))) {
@@ -405,8 +405,8 @@ function _import_xml_row($parsed, &$all_existing_data, $all_fields, $all_id_fiel
     $ops = array();
 
     if (!array_key_exists($table[0], $all_fields)) {
-        return array();
-    } // No such table
+        return array(); // No such table
+    }
 
     if (!array_key_exists($table[0], $all_existing_data)) {
         $all_existing_data[$table[0]] = $GLOBALS['SITE_DB']->query_select($table[0], array('*'), null, '', null, null, false, array());
@@ -424,8 +424,8 @@ function _import_xml_row($parsed, &$all_existing_data, $all_fields, $all_id_fiel
             }
         }
         if ($field['m_name'] != $key) {
-            continue;
-        } // No such field
+            continue; // No such field
+        }
 
         $value = mixed();
 
@@ -564,8 +564,8 @@ function _import_xml_row($parsed, &$all_existing_data, $all_fields, $all_id_fiel
             }
         }
         if ($field['m_name'] != $row_tag) {
-            continue;
-        } // No such field
+            continue; // No such field
+        }
 
         if ((strpos($field['m_type'], 'TRANS') !== false) && (multi_lang_content())) { // Translation layer integration.
             if ($update) { // Update in lang layer

@@ -548,8 +548,8 @@ class Module_quiz
         }
         if (!is_null($quiz['q_timeout'])) {
             if (time() - $last_visit_time > $quiz['q_timeout'] * 60 + 10) {
-                warn_exit(do_lang_tempcode('TOO_LONG_ON_SCREEN'));
-            } // +10 is for page load time, worst case scenario to be fair
+                warn_exit(do_lang_tempcode('TOO_LONG_ON_SCREEN')); // +10 is for page load time, worst case scenario to be fair
+            }
         }
 
         // Save our entry

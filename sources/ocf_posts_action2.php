@@ -126,8 +126,8 @@ function ocf_send_topic_notification($url, $topic_id, $forum_id, $sender_member_
     if ($topic_title == '') {
         $topic_info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('t_pt_to', 't_pt_from', 't_cache_first_title'), array('id' => $topic_id), '', 1);
         if (!array_key_exists(0, $topic_info)) {
-            return;
-        } // Topic's gone missing somehow (e.g. race condition)
+            return; // Topic's gone missing somehow (e.g. race condition)
+        }
         $topic_title = $topic_info[0]['t_cache_first_title'];
     }
 
@@ -143,8 +143,8 @@ function ocf_send_topic_notification($url, $topic_id, $forum_id, $sender_member_
     if ($is_pt) {
         $topic_info = $GLOBALS['FORUM_DB']->query_select('f_topics', array('t_pt_to', 't_pt_from', 't_cache_first_title'), array('id' => $topic_id), '', 1);
         if (!array_key_exists(0, $topic_info)) {
-            return;
-        } // Topic's gone missing somehow (e.g. race condition)
+            return; // Topic's gone missing somehow (e.g. race condition)
+        }
 
         $limit_to[] = $topic_info[0]['t_pt_to'];
         $limit_to[] = $topic_info[0]['t_pt_from'];

@@ -138,8 +138,8 @@ function find_member_subscriptions($member_id, $usergroup_subscriptions_only = f
             $expiry_time = $term_end_time;
             if (!$is_manual) {
                 if ($sub['s_state'] != 'cancelled') {
-                    $expiry_time = null;
-                } // Auto-renewal --> no expiry
+                    $expiry_time = null; // Auto-renewal --> no expiry
+                }
             }
             $is_active = ($expiry_time === null || $expiry_time > time());
 

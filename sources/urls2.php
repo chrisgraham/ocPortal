@@ -48,8 +48,8 @@ function set_execution_context($new_get, $new_zone = '_SEARCH', $new_current_scr
     global $RELATIVE_PATH, $ZONE;
     $RELATIVE_PATH = ($new_zone == '_SEARCH') ? get_page_zone(get_param('page')) : $new_zone;
     if ($new_zone != $old_zone) {
-        $ZONE = null;
-    } // So zone details will have to reload
+        $ZONE = null; // So zone details will have to reload
+    }
 
     global $PAGE_NAME_CACHE;
     $PAGE_NAME_CACHE = null;
@@ -210,8 +210,8 @@ function _url_to_filename($url_full)
     foreach ($bad_chars as $bad_char) {
         $good_char = '!' . strval(ord($bad_char));
         if ($bad_char == ':') {
-            $good_char = ';';
-        } // So page_links save nice
+            $good_char = ';'; // So page_links save nice
+        }
         $new_name = str_replace($bad_char, $good_char, $new_name);
     }
     if (strlen($new_name) <= 255) {
@@ -319,8 +319,8 @@ function _fixup_protocolless_urls($in)
     $in = remove_url_mistakes($in); // Chain in some other stuff
 
     if (strpos($in, '://') !== false) {
-        return $in;
-    } // Absolute
+        return $in; // Absolute
+    }
 
     if (substr($in, 0, 1) == '#') {
         return $in;
@@ -376,8 +376,8 @@ function _url_to_page_link($url, $abs_only = false, $perfect_only = true)
 
     // Parse the URL
     if ((strpos($url, '&') !== false) && (strpos($url, '?') === false)) {
-        $url = preg_replace('#&#', '?', $url, 1);
-    } // Old-style short URLs workl like this (no first ?, just &)
+        $url = preg_replace('#&#', '?', $url, 1); // Old-style short URLs workl like this (no first ?, just &)
+    }
     $parsed_url = @parse_url($url);
     if ($parsed_url === false) {
         require_code('site');
@@ -445,8 +445,8 @@ function _url_to_page_link($url, $abs_only = false, $perfect_only = true)
         }
     }
     if (!$does_match) {
-        return '';
-    } // No match was found
+        return ''; // No match was found
+    }
 
     // Parse query string component into the waiting (and partly-filled-already) attribute data array
     if (array_key_exists('query', $parsed_url)) {
@@ -458,8 +458,8 @@ function _url_to_page_link($url, $abs_only = false, $perfect_only = true)
                 $attributes[$_bit[0]] = $_bit[1];
                 if (strpos($attributes[$_bit[0]], ':') !== false) {
                     if ($perfect_only) {
-                        return '';
-                    } // Could not convert this URL to a page-link, because it contains a colon
+                        return ''; // Could not convert this URL to a page-link, because it contains a colon
+                    }
                     unset($attributes[$_bit[0]]);
                 }
             }
@@ -550,8 +550,8 @@ function autogenerate_new_url_moniker($ob_info, $url_parts, $zone)
     $_moniker_src = $db->query_select($ob_info['table'], $select, $where); // NB: For Comcode pages visited, this won't return anything -- it will become more performant when the page actually loads, so the moniker won't need redoing each time
     $GLOBALS['NO_DB_SCOPE_CHECK'] = $bak;
     if (!array_key_exists(0, $_moniker_src)) {
-        return null;
-    } // been deleted?
+        return null; // been deleted?
+    }
 
     if ($ob_info['id_field_numeric']) {
         if (substr($ob_info['title_field'], 0, 5) == 'CALL:') {
@@ -681,8 +681,8 @@ function _choose_moniker($page, $type, $id, $moniker_src, $no_exists_check_for =
     do {
         if (!is_null($no_exists_check_for)) {
             if ($moniker == preg_replace('#^.*/#', '', $no_exists_check_for)) {
-                return $moniker;
-            } // This one is okay, we know it is safe
+                return $moniker; // This one is okay, we know it is safe
+            }
         }
 
         $dupe_sql = 'SELECT m_resource_id FROM ' . get_table_prefix() . 'url_id_monikers WHERE ';
@@ -775,8 +775,8 @@ function _give_moniker_scope($page, $type, $id, $zone, $main)
 
     if (!is_null($ob_info['parent_category_field'])) {
         if ($ob_info['parent_category_field'] == 'the_zone') {
-            $ob_info['parent_category_field'] = 'p_parent_page';
-        } // Special exception for Comcode page monikers
+            $ob_info['parent_category_field'] = 'p_parent_page'; // Special exception for Comcode page monikers
+        }
 
         // Lookup DB record so we can discern the category
         $bak = $GLOBALS['NO_DB_SCOPE_CHECK'];
@@ -793,8 +793,8 @@ function _give_moniker_scope($page, $type, $id, $zone, $main)
         $_moniker_src = $GLOBALS['SITE_DB']->query_select($ob_info['table'], $select, get_content_where_for_str_id(($type == '') ? $page : $id, $ob_info));
         $GLOBALS['NO_DB_SCOPE_CHECK'] = $bak;
         if (!array_key_exists(0, $_moniker_src)) {
-            return $moniker;
-        } // been deleted?
+            return $moniker; // been deleted?
+        }
 
         // Discern the path (will effectively recurse, due to find_id_moniker call)
         $parent = $_moniker_src[0][$ob_info['parent_category_field']];

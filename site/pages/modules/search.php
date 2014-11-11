@@ -170,8 +170,8 @@ class Module_search
         require_code('database_search');
 
         if (function_exists('set_time_limit')) {
-            @set_time_limit(15);
-        } // We really don't want to let it thrash the DB too long
+            @set_time_limit(15); // We really don't want to let it thrash the DB too long
+        }
 
         $type = get_param('type', 'misc');
         if (($type == 'misc') || ($type == 'results')) {
@@ -555,8 +555,8 @@ class Module_search
                 $only_search_meta = get_param_integer('only_search_meta', 0) == 1;
                 $direction = get_param('direction', 'ASC');
                 if (function_exists('set_time_limit')) {
-                    @set_time_limit(5);
-                } // Prevent errant search hooks (easily written!) taking down a server. Each call given 5 seconds (calling set_time_limit resets the timer).
+                    @set_time_limit(5); // Prevent errant search hooks (easily written!) taking down a server. Each call given 5 seconds (calling set_time_limit resets the timer).
+                }
                 $hook_results = $ob->run($content, $only_search_meta, $direction, $max, $start, $only_titles, $content_where, $author, $author_id, $cutoff, $sort, $max, $boolean_operator, $where_clause, $search_under, $boolean_search ? 1 : 0);
                 if (is_null($hook_results)) {
                     continue;

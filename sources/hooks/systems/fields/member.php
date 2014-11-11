@@ -109,8 +109,8 @@ class Hook_fields_member
     public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
         if (is_null($actual_value)) {
-            $actual_value = '';
-        } // Plug anomaly due to unusual corruption
+            $actual_value = ''; // Plug anomaly due to unusual corruption
+        }
         if ($actual_value == '') {
             if ($field['cf_default'] == '!') {
                 $actual_value = $GLOBALS['FORUM_DRIVER']->get_username(get_member());

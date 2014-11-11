@@ -252,8 +252,8 @@ function upgrade_module($zone, $module)
 {
     $rows = $GLOBALS['SITE_DB']->query_select('modules', array('*'), array('module_the_name' => $module), '', 1);
     if (!array_key_exists(0, $rows)) {
-        return (-2);
-    } // Not installed, so can't upgrade
+        return (-2); // Not installed, so can't upgrade
+    }
 
     $upgrade_from = $rows[0]['module_version'];
     $upgrade_from_hack = $rows[0]['module_hack_version'];
@@ -483,8 +483,8 @@ function upgrade_block($block)
 {
     $rows = $GLOBALS['SITE_DB']->query_select('blocks', array('*'), array('block_name' => $block), '', 1);
     if (!array_key_exists(0, $rows)) {
-        return (-2);
-    } // Not installed, so can't upgrade
+        return (-2); // Not installed, so can't upgrade
+    }
 
     $upgrade_from = $rows[0]['block_version'];
     $upgrade_from_hack = $rows[0]['block_hack_version'];

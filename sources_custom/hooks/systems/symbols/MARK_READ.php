@@ -16,11 +16,11 @@ class Hook_symbol_MARK_READ
         }
 
         if (!isset($param[1])) {
-            return '';
-        } // Not enough parameters
+            return ''; // Not enough parameters
+        }
         if (is_guest()) {
-            return '';
-        } // Guests can't be tracked
+            return ''; // Guests can't be tracked
+        }
 
         $GLOBALS['SITE_DB']->query_insert('content_read',array(
             'r_content_type' => $param[0],

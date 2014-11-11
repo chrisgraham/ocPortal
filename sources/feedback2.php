@@ -120,8 +120,8 @@ function trackback_script()
     } else {
         $time = get_param_integer('time');
         if ($time > time() - 60 * 5) {
-            exit();
-        } // Trackback link intentionally goes stale after 5 minutes, so it can't be statically stored and spam hammered
+            exit(); // Trackback link intentionally goes stale after 5 minutes, so it can't be statically stored and spam hammered
+        }
 
         //Add a trackback for the specified page
         $output = actualise_post_trackback($allow_trackbacks, $page, strval($id));

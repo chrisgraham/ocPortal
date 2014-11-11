@@ -141,8 +141,8 @@ function messages_script()
         }
         $room_row = $room_check[0];
         if (!check_chatroom_access($room_row, true, null, true)) {
-            return;
-        } // Possibly the room was closed already
+            return; // Possibly the room was closed already
+        }
         $event_id = $GLOBALS['SITE_DB']->query_insert('chat_events', array(
             'e_type_code' => 'JOIN_IM',
             'e_member_id' => get_member(),
@@ -233,8 +233,8 @@ function messages_script()
         }
         $room_row = $room_check[0];
         if (!check_chatroom_access($room_row, true, null, true)) {
-            return;
-        } // Possibly the room was closed already
+            return; // Possibly the room was closed already
+        }
         $allow_list = $room_row['allow_list'];
         $_people = $allow_list . ',' . filter_invites_for_blocking($people);
         $GLOBALS['SITE_DB']->query_update('chat_rooms', array('allow_list' => $_people), array('id' => $room_id), '', 1);
@@ -401,8 +401,8 @@ function _chat_messages_script_ajax($room_id, $backlog = false, $message_id = nu
         }
         $room_row = $room_check[0];
         if (!check_chatroom_access($room_row, true)) {
-            return;
-        } // Possibly the room was closed already
+            return; // Possibly the room was closed already
+        }
         $welcome = ((array_key_exists(get_member(), get_chatters_in_room($room_id))) || (!$backlog) || (get_param_integer('no_reenter_message', 0) == 1)) ? null : $room_row['c_welcome'];
     } else {
         $welcome = null;
@@ -1059,8 +1059,8 @@ function get_chatters_in_room_tpl($users)
                 }
             } else {
                 if (!$usernames->is_empty()) {
-                    $usernames->attach(escape_html(', '));
-                } // NB: OCF_USER_MEMBER would have auto-added comma
+                    $usernames->attach(escape_html(', ')); // NB: OCF_USER_MEMBER would have auto-added comma
+                }
                 $usernames->attach(escape_html(do_lang('GUEST')));
             }
         }

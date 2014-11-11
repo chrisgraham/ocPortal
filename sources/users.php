@@ -181,8 +181,8 @@ function get_member($quick_only = false)
 
     if ($GETTING_MEMBER) {
         if (!isset($GLOBALS['FORUM_DRIVER'])) {
-            return db_get_first_id();
-        } // :S
+            return db_get_first_id(); // :S
+        }
         return $GLOBALS['FORUM_DRIVER']->get_guest_id();
     }
     $GETTING_MEMBER = true;
@@ -478,8 +478,8 @@ function delete_expired_sessions_or_recover($member = null)
     global $SESSION_CACHE;
     foreach ($SESSION_CACHE as $_session => $row) {
         if (!array_key_exists('member_id', $row)) {
-            continue;
-        } // Workaround to HipHop PHP weird bug
+            continue; // Workaround to HipHop PHP weird bug
+        }
 
         // Delete expiry from cache
         if ($row['last_activity'] < time() - intval(60.0 * 60.0 * max(0.017, floatval(get_option('session_expiry_time'))))) {

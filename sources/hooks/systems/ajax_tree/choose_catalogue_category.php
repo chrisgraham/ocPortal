@@ -64,8 +64,8 @@ class Hook_choose_catalogue_category
             }
 
             if ($stripped_id === $_id) {
-                continue;
-            } // Possible when we look under as a root
+                continue; // Possible when we look under as a root
+            }
             $title = $t['title'];
             $has_children = ($t['child_count'] != 0);
             $selectable = (($addable_filter !== true) || $t['addable']);

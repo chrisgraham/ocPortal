@@ -28,8 +28,8 @@ class Hook_comcode
     {
         if (multi_lang_content()) {
             if ($GLOBALS['SITE_DB']->query_select_value('translate', 'COUNT(*)') > 100000) {
-                return null;
-            } // Too much work. Can be done from upgrader, but people won't go in there so much. People don't really need to go emptying this cache on real sites.
+                return null; // Too much work. Can be done from upgrader, but people won't go in there so much. People don't really need to go emptying this cache on real sites.
+            }
         }
 
         $info = array();

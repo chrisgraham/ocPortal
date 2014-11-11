@@ -82,8 +82,8 @@ class Hook_rss_catalogues
                 }
             }
             if (!array_key_exists($row['cc_id'], $categories)) {
-                continue;
-            } // The catalogue was filtered out, thus category not known
+                continue; // The catalogue was filtered out, thus category not known
+            }
             $_category = $categories[$row['cc_id']];
             if ((has_category_access(get_member(), 'catalogues_catalogue', $_category['c_name'])) && ((get_value('disable_cat_cat_perms') === '1') || (has_category_access(get_member(), 'catalogues_category', strval($row['cc_id']))))) {
                 if (!isset($catalogues[$_category['c_name']])) {

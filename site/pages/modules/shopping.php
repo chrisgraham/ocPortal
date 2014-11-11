@@ -672,8 +672,8 @@ class Module_shopping
                 $res = $GLOBALS['SITE_DB']->query_select('shopping_order_details', array('p_id', 'p_name'), array('order_id' => $row['id']));
 
                 if (!array_key_exists(0, $res)) {
-                    continue;
-                } // DB corruption
+                    continue; // DB corruption
+                }
                 $product_det = $res[0];
 
                 $order_title = $product_det['p_name'];

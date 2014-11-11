@@ -166,8 +166,8 @@ class Module_admin_lang
             return $this->set_lang_code();
         }
         if ($type == '_code2') {
-            return $this->set_lang_code_2();
-        } // This is a lang string setter called from an external source. Strings may be from many different files
+            return $this->set_lang_code_2(); // This is a lang string setter called from an external source. Strings may be from many different files
+        }
         if ($type == 'export_po') {
             return $this->export_po();
         }
@@ -434,8 +434,8 @@ class Module_admin_lang
         $names = find_lang_content_names($ids_to_lookup);
         foreach ($to_translate as $i => $it) {
             if ($it['importance_level'] == 0) {
-                continue;
-            } // Corrupt data
+                continue; // Corrupt data
+            }
 
             $id = $it['id'];
             $old = $it['text_original'];
@@ -444,8 +444,8 @@ class Module_admin_lang
 
             $name = $names[$id];
             if (is_null($name)) {
-                continue;
-            } // Orphaned string
+                continue; // Orphaned string
+            }
 
             if ($google != '') {
                 $actions = do_template('TRANSLATE_ACTION', array('_GUID' => 'f625cf15c9db5e5af30fc772a7f0d5ff', 'LANG_FROM' => $it['language'], 'LANG_TO' => $lang, 'NAME' => 'trans_' . strval($id), 'OLD' => $old));
@@ -885,8 +885,8 @@ msgstr ""
         foreach (array_unique(array_merge(array_keys($for_base_lang), array_keys($for_base_lang_2))) as $key) {
             $val = post_param($key, null);
             if (($val === null) && (!array_key_exists($key, $for_base_lang))) {
-                $val = $for_base_lang_2[$key];
-            } // Not in lang, but is in lang_custom, AND not set now - must copy though
+                $val = $for_base_lang_2[$key]; // Not in lang, but is in lang_custom, AND not set now - must copy though
+            }
             if (($val !== null) && ((!array_key_exists($key, $for_base_lang)) || (str_replace("\n", '\n', $val) != $for_base_lang[$key]))) {
                 if (fwrite($myfile, $key . '=' . str_replace("\n", '\n', $val) . "\n") == 0) {
                     warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));

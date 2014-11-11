@@ -213,8 +213,8 @@ function namelike_script()
             } else {
                 $likea = $GLOBALS['FORUM_DRIVER']->get_matching_members($id . '%', 15);
                 if ((count($likea) == 15) && (addon_installed('chat')) && (!is_guest())) {
-                    $likea = $GLOBALS['FORUM_DRIVER']->get_matching_members($id . '%', 15, true);
-                } // Limit to friends, if possible
+                    $likea = $GLOBALS['FORUM_DRIVER']->get_matching_members($id . '%', 15, true); // Limit to friends, if possible
+                }
 
                 foreach ($likea as $l) {
                     if (count($names) < 15) {

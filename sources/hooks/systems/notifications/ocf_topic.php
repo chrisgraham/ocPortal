@@ -47,8 +47,8 @@ class Hook_Notification_ocf_topic extends Hook_Notification
 
         $total = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums', 'COUNT(*)');
         if ($total > 300) {
-            return parent::create_category_tree($notification_code, $id);
-        } // Too many, so just allow removing UI
+            return parent::create_category_tree($notification_code, $id); // Too many, so just allow removing UI
+        }
 
         if (!is_null($id)) {
             if (substr($id, 0, 6) != 'forum:') {
@@ -83,8 +83,8 @@ class Hook_Notification_ocf_topic extends Hook_Notification
             $max_topic_rows = max(0, 200 - $total);
             $types2 = $GLOBALS['SITE_DB']->query_select('notifications_enabled', array('l_code_category'), array('l_notification_code' => 'ocf_topic', 'l_member_id' => get_member()), 'ORDER BY id DESC', $max_topic_rows/*reasonable limit*/);
             if (count($types2) == $max_topic_rows) {
-                $types2 = array();
-            } // Too many to consider
+                $types2 = array(); // Too many to consider
+            }
 
             foreach ($types2 as $type) {
                 if (is_numeric($type['l_code_category'])) {
@@ -207,16 +207,16 @@ class Hook_Notification_ocf_topic extends Hook_Notification
     public function list_members_who_have_enabled($notification_code, $category = null, $to_member_ids = null, $start = 0, $max = 300)
     {
         if ((!is_numeric($category)) && (!is_null($category))) {
-            warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
-        } // We should never be accessing as forum:<id>, that is used only behind the scenes
+            warn_exit(do_lang_tempcode('INTERNAL_ERROR')); // We should never be accessing as forum:<id>, that is used only behind the scenes
+        }
 
         list($members, $maybe_more) = $this->_all_members_who_have_enabled($notification_code, $category, $to_member_ids, $start, $max);
 
         if (is_numeric($category)) { // This is a topic. Also merge in people monitoring forum
             $forum_details = $GLOBALS['FORUM_DB']->query_select('f_topics', array('t_forum_id', 't_pt_from', 't_pt_to'), array('id' => intval($category)));
             if (!array_key_exists(0, $forum_details)) {
-                return array(array(), false);
-            } // Topic deleted already?
+                return array(array(), false); // Topic deleted already?
+            }
             $forum_id = $forum_details[0]['t_forum_id'];
 
             if (!is_null($forum_id)) { // Forum

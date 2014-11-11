@@ -41,8 +41,8 @@ function upgrade_addon_soft($addon)
 
     $rows = $GLOBALS['SITE_DB']->query_select('addons', array('*'), array('addon_name' => $addon), '', 1);
     if (!array_key_exists(0, $rows)) {
-        return (-2);
-    } // Not installed, so can't upgrade
+        return (-2); // Not installed, so can't upgrade
+    }
 
     $upgrade_from = $rows[0]['addon_version'];
 
@@ -164,8 +164,8 @@ function find_remote_addons()
 {
     static $addons = array();
     if ($addons !== array()) {
-        return $addons;
-    } // Caching
+        return $addons; // Caching
+    }
     $stub = (get_param_integer('localhost', 0) == 1) ? get_base_url() : 'http://ocportal.com';
     $v = 'Version ' . float_to_raw_string(ocp_version_number(), 1);
     $url = $stub . '/data/ajax_tree.php?hook=choose_download&id=' . rawurlencode($v) . '&file_type=tar&full_depth=1';
@@ -390,8 +390,8 @@ function find_addon_dependencies_on($addon)
             $path = get_file_base() . '/sources/hooks/systems/addon_registry/' . filter_naughty_harsh($hook) . '.php';
         }
         if (!file_exists($path)) {
-            continue;
-        } // May have been uninstalled, find_all_hooks could have stale caching
+            continue; // May have been uninstalled, find_all_hooks could have stale caching
+        }
 
         $_hook_bits = extract_module_functions($path, array('get_dependencies'));
         if (is_null($_hook_bits[0])) {

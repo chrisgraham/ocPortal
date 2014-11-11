@@ -391,8 +391,8 @@ function find_periods_recurrence($timezone, $do_timezone_conv, $start_year, $sta
         }
 
         if ($i == 300) {
-            break;
-        } // Let's be reasonable
+            break; // Let's be reasonable
+        }
     }
     while (($recurrence != '') && ($recurrence != 'none') && ($a < $period_end) && ((is_null($recurrences)) || ($i < $recurrences)));
 
@@ -562,8 +562,8 @@ function date_range($from, $to, $do_time = true, $force_absolute = false)
     $days = ($to - $from) / (60 * 60 * 24.0);
     if (($to - $from > 60 * 60 * 24) || (!$do_time)) {
         if ($days - intval($days) < 0.1) {
-            $days = floor($days);
-        } // If it's only 0.1 above a day, we will actually round down. It's useful for stopping confusion around DST changes in particular.
+            $days = floor($days); // If it's only 0.1 above a day, we will actually round down. It's useful for stopping confusion around DST changes in particular.
+        }
         $_length = do_lang('DAYS', integer_format(intval(ceil($days))));
     } else {
         $_length = display_time_period($to - $from);
@@ -928,8 +928,8 @@ function detect_conflicts($member_id, $skip_id, $start_year, $start_month, $star
                 case DETECT_CONFLICT_SCOPE_SAME_MEMBER:
                 case DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE_IF_GLOBAL:
                     if ($member_calendar !== $event['e_member_calendar']) {
-                        continue 2;
-                    } // we know one is not global, so we can do a direct compare, knowing NULL will not equal any member value
+                        continue 2; // we know one is not global, so we can do a direct compare, knowing NULL will not equal any member value
+                    }
                     break;
                 case DETECT_CONFLICT_SCOPE_SAME_MEMBER_OR_SAME_TYPE:
                     if (($type != $event['e_type']) && ($member_calendar !== $event['e_member_calendar']/*we know we don't need to consider a NULL to NULL match separately as it can't happen in this branch*/)) {
@@ -1317,8 +1317,8 @@ function find_concrete_day_of_month($year, $month, $day, $monthly_spec_type, $ho
 
             $month_start = mktime(0, 0, 0, $month, 1, $year);
             if (strtotime('+0 Tuesday', mktime(0, 0, 0, 1, 1, 2013)) != mktime(0, 0, 0, 1, 1, 2013)) {
-                $month_start -= 1;
-            } // This "-1" is needed on SOME PHP versions, to set the window 1 second before where we're looking to make it find something right at the start of the actual window
+                $month_start -= 1; // This "-1" is needed on SOME PHP versions, to set the window 1 second before where we're looking to make it find something right at the start of the actual window
+            }
             if (function_exists('date_default_timezone_set')) {
                 date_default_timezone_set($timezone);
             } else {

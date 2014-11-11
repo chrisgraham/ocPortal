@@ -39,8 +39,8 @@ class Hook_occle_command_cd
                 $parameters[0] = $pwd;
             } else {
                 if ($parameters[0] == '~') {
-                    $parameters[0] = '/home';
-                } // Not really a part of the architecture, but handy
+                    $parameters[0] = '/home'; // Not really a part of the architecture, but handy
+                }
                 $parameters[0] = $occle_fs->_pwd_to_array($parameters[0]);
             }
 

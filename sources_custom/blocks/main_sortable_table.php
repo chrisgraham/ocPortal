@@ -309,8 +309,8 @@ class Block_main_sortable_table
         // Work out data types
         foreach ($headers as $j => &$header) {
             if ($header['SORTABLE_TYPE'] !== null) {
-                continue;
-            } // Already known
+                continue; // Already known
+            }
 
             $header['SORTABLE_TYPE'] = $this->determine_field_type($_rows, $j);
         }
@@ -318,8 +318,8 @@ class Block_main_sortable_table
         // Work out filterability
         foreach ($headers as $j => &$header) {
             if ($header['FILTERABLE'] !== null) {
-                continue;
-            } // Already known
+                continue; // Already known
+            }
 
             $values = array();
             foreach ($_rows as &$row) {

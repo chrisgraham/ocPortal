@@ -138,12 +138,12 @@ function transcode_video($url, $table, $local_id, $local_id_field, $url_field, $
         // IMMEDIATE LOCAL FFMPEG
 
         if (strpos(@ini_get('disable_functions'), 'shell_exec') !== false) {
-            return $url;
-        } // Can't do
+            return $url; // Can't do
+        }
 
         if (url_is_local($url)) {
-            return $url;
-        } // Can't locally transcode a remote URL
+            return $url; // Can't locally transcode a remote URL
+        }
 
         $ffmpeg_path = get_option('ffmpeg_path'); // mencoder path
 
@@ -246,8 +246,8 @@ function store_transcoding_success($transcoder_id, $new_url = null)
         't_id' => $transcoder_id,
     ), '', 1);
     if (!array_key_exists(0, $descript_rows)) {
-        return;
-    } // No match
+        return; // No match
+    }
     $descript_row = $descript_rows[0];
 
     // The database for for what has been transcoded

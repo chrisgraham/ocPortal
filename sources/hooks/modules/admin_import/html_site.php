@@ -638,8 +638,8 @@ class Hook_html_site
             $point_a = intval(3.0 * floatval($cnt) / 8.0);
             $point_b = intval(5.0 * floatval($cnt) / 8.0);
             if (($cnt < 24)/*The peak algorithm breaks down on small data sets due to integer rounding problems and local maxima*/ || ($point_a == $point_b)) {
-                break;
-            } // Okay now we need to scan manually over the few that are left
+                break; // Okay now we need to scan manually over the few that are left
+            }
 
             // Take the 3/8 point of the search list, and find it's levenshtein distance
             if (is_null($positions[$point_a][1])) {

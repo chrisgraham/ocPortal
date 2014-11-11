@@ -31,8 +31,8 @@ class Hook_cron_subscription_mails
         $time = time();
         $last_time = intval(get_long_value('last_subscription_mail_send'));
         if ($last_time > $time - 30 * 60) {
-            return;
-        } // Every 30 minutes
+            return; // Every 30 minutes
+        }
 
         require_code('ecommerce_subscriptions');
         $_subscribers_1 = collapse_1d_complexity('s_member_id', $GLOBALS['SITE_DB']->query_select('subscriptions', array('DISTINCT s_member_id')));

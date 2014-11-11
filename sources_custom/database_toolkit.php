@@ -73,8 +73,8 @@ function xml_dump_script()
                 if ($dh !== false) {
                     while (($f = readdir($dh)) !== false) {
                         if ((substr($f, -4) == '.dat') || (substr($f, -4) == '.xml')) {
-                            $last_m_time = @max($last_m_time, filemtime($path . '/' . $f));
-                        } // @ because of the 255 read filepath limit on Windows
+                            $last_m_time = @max($last_m_time, filemtime($path . '/' . $f)); // @ because of the 255 read filepath limit on Windows
+                        }
                     }
                     closedir($dh);
                 }

@@ -198,16 +198,16 @@ class installer_test_set extends ocp_test_case
                 http_download_file($url, null, true, false, 'ocPortal', $post);
                 $this->assertTrue($GLOBALS['HTTP_MESSAGE'] == '200');
                 if ($GLOBALS['HTTP_MESSAGE'] != '200') {
-                    break;
-                } // Don't keep installing if there's an error
+                    break; // Don't keep installing if there's an error
+                }
             }
 
             unlink(get_file_base() . '/_config.php');
             rename(get_file_base() . '/_config.php.bak', get_file_base() . '/_config.php');
 
             if ($GLOBALS['HTTP_MESSAGE'] != '200') {
-                break;
-            } // Don't do further trials if there's an error
+                break; // Don't do further trials if there's an error
+            }
         }
     }
 }

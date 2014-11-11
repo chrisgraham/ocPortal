@@ -217,8 +217,8 @@ class Block_main_gallery_embed
                         if (has_delete_permission('mid', get_member(), $row_image['submitter'], 'cms_galleries', array('gallery', $row_image['cat']))) {
                             $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '__ed', 'id' => $row_image['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
                             if ($row_image['submitter'] == get_member()) {
-                                $GLOBALS['DO_NOT_CACHE_THIS'] = true;
-                            } // If delete was due to groups, groups is a cache key anyways
+                                $GLOBALS['DO_NOT_CACHE_THIS'] = true; // If delete was due to groups, groups is a cache key anyways
+                            }
                         }
 
                         $entry_map = array(
@@ -274,8 +274,8 @@ class Block_main_gallery_embed
                         if (has_delete_permission('mid', get_member(), $row_video['submitter'], 'cms_galleries', array('gallery', $row_video['cat']))) {
                             $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '__ev', 'id' => $row_video['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
                             if ($row_video['submitter'] == get_member()) {
-                                $GLOBALS['DO_NOT_CACHE_THIS'] = true;
-                            } // If delete was due to groups, groups is a cache key anyways
+                                $GLOBALS['DO_NOT_CACHE_THIS'] = true; // If delete was due to groups, groups is a cache key anyways
+                            }
                         }
 
                         $entry_map = array(

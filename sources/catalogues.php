@@ -343,8 +343,8 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
                     }
                 }
                 if (!$found) {
-                    $order_by = '0';
-                } // Could not find
+                    $order_by = '0'; // Could not find
+                }
             }
         }
     } else {
@@ -1359,8 +1359,8 @@ function get_catalogue_entries_tree($catalogue_name, $submitter = null, $categor
 {
     if (($category_id === null) && ($levels === null)) {
         if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)', array('c_name' => $catalogue_name)) > 1000) {
-            return array();
-        } // Too many!
+            return array(); // Too many!
+        }
     }
 
     if ($category_id === null) {
@@ -1478,8 +1478,8 @@ function get_catalogue_entries_tree($catalogue_name, $submitter = null, $categor
 function create_selection_list_catalogue_category_tree($catalogue_name, $it = null, $addable_filter = false, $use_compound_list = false)
 {
     if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)', array('c_name' => $catalogue_name)) > 1000) {
-        return new ocp_tempcode();
-    } // Too many!
+        return new ocp_tempcode(); // Too many!
+    }
 
     $tree = array();
     $temp_rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title'), array('c_name' => $catalogue_name, 'cc_parent_id' => null), 'ORDER BY id DESC', intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);

@@ -186,8 +186,8 @@ function is_ticket_forum($forum_id)
 
     $root_ticket_forum_id = get_ticket_forum_id(null, null, false, true);
     if (($root_ticket_forum_id == db_get_first_id()) && ($forum_id != db_get_first_id())) {
-        return false;
-    } // If ticket forum (oddly) set as root, don't cascade it through all!
+        return false; // If ticket forum (oddly) set as root, don't cascade it through all!
+    }
     if ($forum_id === $root_ticket_forum_id) {
         return true;
     }

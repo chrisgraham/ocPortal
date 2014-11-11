@@ -1250,8 +1250,8 @@ class Hook_smf2
                 $member_id = $row2['id_member'];
                 if ((!is_null($member_id)) && ($member_id != 0)) {
                     if (!isset($answers[strval($row2['id_choice'])])) {
-                        continue;
-                    } // Safety
+                        continue; // Safety
+                    }
 
                     $answer = $answers[strval($row2['id_choice'])];
 
@@ -1718,8 +1718,8 @@ class Hook_smf2
 
         $rows = $db->query('SELECT * FROM ' . $table_prefix . 'ads', null, null, true);
         if (is_null($rows)) {
-            return;
-        } // SMFAds addon not installed
+            return; // SMFAds addon not installed
+        }
         foreach ($rows as $row) {
             $test = $GLOBALS['SITE_DB']->query_select_value_if_there('banners', 'name', array('name' => $row['NAME']));
             if (is_null($test)) {
@@ -1744,8 +1744,8 @@ class Hook_smf2
 
         $rows = $db->query_select('tp_variables', array('value1 AS title', 'id'), array('type' => 'category'), '', null, null, true);
         if (is_null($rows)) {
-            return;
-        } // Not TinyPortal
+            return; // Not TinyPortal
+        }
         foreach ($rows as $row) {
             if (import_check_if_imported('news_category', strval($row['id']))) {
                 continue;

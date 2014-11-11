@@ -104,8 +104,8 @@ foreach ($todo as $i => $_target_file) {
 
     if ($_target_file == 'data/upgrader2.php') {
         if ($file_offset + 20 < count($todo)) {
-            continue;
-        } // Only extract on last step, to avoid possible transitionary bugs between versions of this file (this is the file running and refreshing now, i.e this file!)
+            continue; // Only extract on last step, to avoid possible transitionary bugs between versions of this file (this is the file running and refreshing now, i.e this file!)
+        }
     } else {
         if ($i < $file_offset) {
             continue;
@@ -245,8 +245,8 @@ function upgrader2_check_master_password($password_given_hashed)
     $actual_password_hashed = $SITE_INFO['master_password'];
 
     if ($password_given_hashed == md5($actual_password_hashed)) {
-        return true;
-    } // LEGACY: Upgrade from v7 where hashed input password given even if plain-text password is in use
+        return true; // LEGACY: Upgrade from v7 where hashed input password given even if plain-text password is in use
+    }
 
     return ($password_given_hashed == $actual_password_hashed);
 }

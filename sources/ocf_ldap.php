@@ -336,8 +336,8 @@ function ocf_ldap_hash($cn, $password)
 
     $stored = ocf_get_ldap_hash($cn);
     if (is_null($stored)) {
-        return '!!!';
-    } // User is valid locally, but not on LDAP
+        return '!!!'; // User is valid locally, but not on LDAP
+    }
     $type_pos = strpos($stored, '}');
     $type = substr($stored, 1, $type_pos - 1);
     if ((strtolower($type) == 'crypt') && (strlen($stored) == 41)) {

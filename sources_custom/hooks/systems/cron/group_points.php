@@ -25,12 +25,12 @@ class Hook_cron_group_points
         $time = time();
         $last_time = intval(get_value('last_group_points'));
         if ($last_time>time()-24*60*60*27) {
-            return;
-        } // Only once within a month
+            return; // Only once within a month
+        }
 
         if (date('j') != '1') {
-            return;
-        } // Only on first day
+            return; // Only on first day
+        }
 
         require_code('points');
         require_code('points2');

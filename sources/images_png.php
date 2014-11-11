@@ -67,8 +67,8 @@ function png_compress($path, $lossy = false)
         for ($x = 0; $x < $width; $x++) {
             $at = imagecolorat($img, $x, $y);
             if ($lossy) {
-                $at = $at & ~bindec('00001111' . '00001111' . '00001111' . '00111111');
-            } // Reduce to a colour resolution of 16 distinct values on each of RGB, and 4 on A
+                $at = $at & ~bindec('00001111' . '00001111' . '00001111' . '00111111'); // Reduce to a colour resolution of 16 distinct values on each of RGB, and 4 on A
+            }
             $colours[$at] = true;
             if (count($colours) > 300) { // Give some grace, but >300 is unworkable (at least 44 too many)
                 // Too many colours for 8-bit...

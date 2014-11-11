@@ -28,8 +28,8 @@ class Hook_cron_insults
         $time = time();
         $last_time = intval(get_value('last_insult_time'));
         if ($last_time>time()-24*60*60) {
-            return;
-        } // run it once a day
+            return; // run it once a day
+        }
         set_value('last_insult_time',strval($time));
 
         // how many points a correct response will give

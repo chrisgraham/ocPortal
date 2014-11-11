@@ -126,8 +126,8 @@ function delete_approval_point($name)
         // If there is only one approval point then it's the one we've been
         // asked to remove. Let's just remove the whole workflow.
         if (count(get_approval_points_for_workflow($workflow['workflow_id'])) == 1) {
-            delete_workflow($workflow['workflow_id']);
-        } // Otherwise we can just remove this one point
+            delete_workflow($workflow['workflow_id']); // Otherwise we can just remove this one point
+        }
         else {
             $GLOBALS['SITE_DB']->query_delete('workflow_approval_points', array('workflow_approval_name' => $name, 'workflow_id' => $workflow['workflow_id']), '', 1);
         }

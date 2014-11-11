@@ -115,8 +115,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
     public function folder_add($filename, $path, $properties)
     {
         if ($path != '') {
-            return false;
-        } // Only one depth allowed for this resource type
+            return false; // Only one depth allowed for this resource type
+        }
 
         list($properties, $label) = $this->_folder_magic_filter($filename, $path, $properties);
 
@@ -265,8 +265,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
         list($properties, $label) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         $zone = $category;
         $page = $this->_create_name_from_label($label);
@@ -296,8 +296,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
 
         $test = _request_page($page, $zone, null, null, true);
         if ($test !== false) {
-            $page .= '_' . uniqid('', true);
-        } // Uniqify
+            $page .= '_' . uniqid('', true); // Uniqify
+        }
 
         require_code('zones3');
         $full_path = save_comcode_page($zone, $page, $lang, $text, $validated, $parent_page, $add_time, $edit_time, $show_as_edit, $submitter, null, $meta_keywords, $meta_description);
@@ -369,8 +369,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
         list($properties,) = $this->_file_magic_filter($filename, $path, $properties);
 
         if (is_null($category)) {
-            return false;
-        } // Folder not found
+            return false; // Folder not found
+        }
 
         $zone = $category;
 
@@ -402,8 +402,8 @@ class Hook_occle_fs_comcode_pages extends resource_fs_base
         if ($page != $old_page) {
             $test = _request_page($page, $zone, null, null, true);
             if ($test !== false) {
-                $page .= '_' . uniqid('', true);
-            } // Uniqify
+                $page .= '_' . uniqid('', true); // Uniqify
+            }
         }
 
         require_code('zones3');

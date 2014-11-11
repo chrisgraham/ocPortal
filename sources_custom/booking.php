@@ -228,8 +228,8 @@ function add_booking($request, $member_id)
 
                 $code = find_free_bookable_code($req['bookable_id'], $day, $month, $year, $code); // Hopefully $code will stay the same, but it might not
                 if (is_null($code)) {
-                    fatal_exit(do_lang_tempcode('INTERNAL_ERROR'));
-                } // Should not be possible, as we already checked availability
+                    fatal_exit(do_lang_tempcode('INTERNAL_ERROR')); // Should not be possible, as we already checked availability
+                }
 
                 $row = array(
                     'bookable_id' => $req['bookable_id'],

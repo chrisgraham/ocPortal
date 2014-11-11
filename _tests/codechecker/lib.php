@@ -167,8 +167,8 @@ function do_dir($dir, $no_custom = false, $orig_priority = false, $avoid = null)
             }
             $stripped_path = preg_replace('#^' . preg_quote($OCPORTAL_PATH . '/', '#') . '#', '', $dir . '/') . $file;
             if ($stripped_path == 'exports') {
-                continue;
-            } // Would be covered by IGNORE_NONBUNDLED_SCATTERED, but we don't always have that
+                continue; // Would be covered by IGNORE_NONBUNDLED_SCATTERED, but we don't always have that
+            }
             if (should_ignore_file($stripped_path, $bitmask, 0)) {
                 continue;
             }

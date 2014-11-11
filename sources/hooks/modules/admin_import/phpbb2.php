@@ -191,8 +191,8 @@ class Hook_phpbb2
 
             $row_group_leader = null;
             if ($row['group_moderator'] != 0) {
-                $row_group_leader = -$row['group_moderator'];
-            } // This will be fixed when we import members
+                $row_group_leader = -$row['group_moderator']; // This will be fixed when we import members
+            }
 
             $is_super_admin = 0;
             $is_super_moderator = 0;
@@ -492,8 +492,8 @@ class Hook_phpbb2
                         $v = 3;
                     }
                     if ($p['auth_pollcreate'] == 1) {
-                        $v = 4;
-                    } // This ones a bit hackerish, but closest we can get to concept
+                        $v = 4; // This ones a bit hackerish, but closest we can get to concept
+                    }
                     if ((array_key_exists('auth_mod', $p)) && ($p['auth_mod'] == 1)) {
                         $v = 5;
                     }

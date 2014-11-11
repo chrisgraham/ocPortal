@@ -98,8 +98,8 @@ function ecv($lang, $escaped, $type, $name, $param)
                 // A less common symbol?
                 require_code('symbols2');
                 if (function_exists('ecv2_' . $name)) {
-                    $value = call_user_func('ecv2_' . $name, $lang, $escaped, $param);
-                } // A constant?
+                    $value = call_user_func('ecv2_' . $name, $lang, $escaped, $param); // A constant?
+                }
                 elseif (defined($name)) {
                     $value = @strval(constant($name));
                     if (!is_string($value)) {
@@ -508,8 +508,8 @@ function ecv($lang, $escaped, $type, $name, $param)
         return $value;
     }
     if ($escaped != array() && $escaped != array(ENTITY_ESCAPED)) {
-        apply_tempcode_escaping(array_diff($escaped, array(ENTITY_ESCAPED)), $value);
-    } // Escape but without ENTITY_ESCAPED because we don't do that on lang strings
+        apply_tempcode_escaping(array_diff($escaped, array(ENTITY_ESCAPED)), $value); // Escape but without ENTITY_ESCAPED because we don't do that on lang strings
+    }
     elseif ($GLOBALS['XSS_DETECT']) {
         ocp_mark_as_escaped($value);
     }
@@ -1286,8 +1286,8 @@ function symbol_truncator($param, $type, $tooltip_if_truncated = null)
             ocp_mark_as_escaped($html);
         }
         if (($html == $not_html) && (strpos($html, '&') === false) && (strpos($html, '<') === false)) {
-            $is_html = false;
-        } // Conserve memory
+            $is_html = false; // Conserve memory
+        }
     } else {
         $not_html = $param[0];
         $html = escape_html($param[0]);
@@ -1307,15 +1307,15 @@ function symbol_truncator($param, $type, $tooltip_if_truncated = null)
             case 'left':
                 $temp = (($is_html || $grammar_completeness_tolerance != 0.0) ? xhtml_substr($html, 0, $amount - 3, $literal_pos, false, $grammar_completeness_tolerance) : escape_html(ocp_mb_substr($not_html, 0, $amount - 3)));
                 if ($temp != $html && in_array(substr($temp, -1), array('.', '?', '!'))) {
-                    $temp .= '<br class="ellipsis_break" />';
-                } // so the "..." does not go right after the sentence terminator
+                    $temp .= '<br class="ellipsis_break" />'; // so the "..." does not go right after the sentence terminator
+                }
                 $truncated = ($temp == $html) ? $temp : str_replace(array('</p>&hellip;', '</div>&hellip;'), array('&hellip;</p>', '&hellip;</div>'), (ocp_trim($temp, true) . '&hellip;'));
                 break;
             case 'expand':
                 $temp = (($is_html || $grammar_completeness_tolerance != 0.0) ? xhtml_substr($html, 0, $amount - 3, $literal_pos, false, $grammar_completeness_tolerance) : escape_html(ocp_mb_substr($not_html, 0, $amount - 3)));
                 if ($temp != $html && in_array(substr($temp, -1), array('.', '?', '!'))) {
-                    $temp .= '<br class="ellipsis_break" />';
-                } // so the "..." does not go right after the sentence terminator
+                    $temp .= '<br class="ellipsis_break" />'; // so the "..." does not go right after the sentence terminator
+                }
                 $_truncated = do_template('COMCODE_HIDE', array('_GUID' => '3ead7fdb5b510930f54310e3c32147c2', 'TEXT' => protect_from_escaping($temp), 'CONTENT' => protect_from_escaping($html)));
                 $truncated = $_truncated->evaluate();
                 break;
@@ -1975,8 +1975,8 @@ function ecv_TRIM($lang, $escaped, $param)
 function ocp_trim($text, $try_hard = false)
 {
     if (memory_get_usage() > 1024 * 1024 * 40) {
-        return trim($text);
-    } // Don't have enough memory
+        return trim($text); // Don't have enough memory
+    }
     do {
         $before = $text;
         $text = preg_replace(array('#^\s+#', '#^(<br\s*/?' . '>\s*)+#', '#^(&nbsp;)+#', '#\s+$#', '#(<br\s*/?' . '>\s*)+$#', '#(&nbsp;)+$#'), array('', '', '', '', '', ''), $text);

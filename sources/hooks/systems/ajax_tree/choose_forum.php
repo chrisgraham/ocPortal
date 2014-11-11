@@ -63,8 +63,8 @@ class Hook_choose_forum
             }
 
             if ($stripped_id === $_id) {
-                continue;
-            } // Possible when we look under as a root
+                continue; // Possible when we look under as a root
+            }
             $title = $t['title'];
             $description = array_key_exists($t['group'], $categories) ? $categories[$t['group']] : '';
             $has_children = ($t['child_count'] != 0);

@@ -37,8 +37,8 @@ function mailto_obfuscated()
 function obfuscate_entities($val)
 {
     if (strpos($val, '&') !== false) {
-        return $val;
-    } // Prevent double encoding
+        return $val; // Prevent double encoding
+    }
 
     $out = '';
     for ($i = 0; $i < strlen($val); $i++) {

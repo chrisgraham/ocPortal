@@ -834,8 +834,8 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
     $put_no_delete = false;
     if ((!is_null($post_params)) || ($raw_post) || (count($files) != 0)) {
         if (is_null($post_params)) {
-            $post_params = array();
-        } // POST is implied
+            $post_params = array(); // POST is implied
+        }
 
         if ($raw_post) {
             $_postdetails_params = $post_params[0];
@@ -1107,8 +1107,8 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
                                             $HTTP_DOWNLOAD_URL = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
                                             $HTTP_MESSAGE = strval(curl_getinfo($ch, CURLINFO_HTTP_CODE));
                                             if ($HTTP_MESSAGE == '206') {
-                                                $HTTP_MESSAGE = '200';
-                                            } // We don't care about partial-content return code, as ocP implementation gets ranges differently and we check '200' as a return result
+                                                $HTTP_MESSAGE = '200'; // We don't care about partial-content return code, as ocP implementation gets ranges differently and we check '200' as a return result
+                                            }
                                             if (strpos($HTTP_DOWNLOAD_MIME_TYPE, ';') !== false) {
                                                 $HTTP_CHARSET = substr($HTTP_DOWNLOAD_MIME_TYPE, 8 + strpos($HTTP_DOWNLOAD_MIME_TYPE, 'charset='));
                                                 $HTTP_DOWNLOAD_MIME_TYPE = substr($HTTP_DOWNLOAD_MIME_TYPE, 0, strpos($HTTP_DOWNLOAD_MIME_TYPE, ';'));
@@ -1253,11 +1253,11 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
         if (($base_url_parsed['host'] == $connect_to) && (function_exists('get_option')) && (get_option('ip_forwarding') == '1')) { // For cases where we have IP-forwarding, and a strong firewall (i.e. blocked to our own domain's IP by default)
             $connect_to = ocp_srv('LOCAL_ADDR');
             if ($connect_to == '') {
-                $connect_to = '127.0.0.1';
-            } // Localhost can fail due to IP6
+                $connect_to = '127.0.0.1'; // Localhost can fail due to IP6
+            }
         } elseif (preg_match('#(\s|,|^)gethostbyname(\s|$|,)#i', @ini_get('disable_functions')) == 0) {
-            $connect_to = gethostbyname($connect_to);
-        } // for DNS cacheing
+            $connect_to = gethostbyname($connect_to); // for DNS cacheing
+        }
         $proxy = function_exists('get_option') ? get_option('proxy') : null;
         if ($proxy == '') {
             $proxy = null;
@@ -1269,8 +1269,8 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
             $mysock = @fsockopen($connect_to, array_key_exists('port', $url_parts) ? $url_parts['port'] : 80, $errno, $errstr, $timeout);
         }
         if (is_null($mysock)) {
-            $mysock = false;
-        } // For Quercus #4549
+            $mysock = false; // For Quercus #4549
+        }
     } else {
         $mysock = false;
     } // Can't handle SSL here, so let it flow onto the PHP stream wrappers implementation

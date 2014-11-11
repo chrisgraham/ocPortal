@@ -163,8 +163,8 @@ function find_theme_seed($theme, $no_easy_anchor = false)
             $css_path = get_file_base() . '/themes/default/css/global.css';
         }
         if (!is_file($css_path)) {
-            return '426aa9';
-        } // Not ideal, but default theme is this
+            return '426aa9'; // Not ideal, but default theme is this
+        }
         $css_file_contents = file_get_contents($css_path);
         $matches = array();
         if (preg_match('#\{\$THEME\_WIZARD\_COLOR,\#(.{6}),seed,.*\}#', $css_file_contents, $matches) != 0) {
@@ -296,8 +296,8 @@ function generate_logo($name, $font_choice = 'Vera', $logo_theme_image = 'logo/d
         $file_path_stub = convert_url_to_path($url);
         if (!is_null($file_path_stub)) {
             if (!file_exists($file_path_stub)) {
-                $file_path_stub = get_file_base() . '/themes/default/images/EN/logo/' . filter_naughty($theme_image) . '.png';
-            } // Exceptional situation. Maybe theme got corrupted?
+                $file_path_stub = get_file_base() . '/themes/default/images/EN/logo/' . filter_naughty($theme_image) . '.png'; // Exceptional situation. Maybe theme got corrupted?
+            }
             $data = file_get_contents($file_path_stub);
         } else {
             $data = http_download_file($url);
@@ -475,8 +475,8 @@ function make_theme($themename, $source_theme, $algorithm, $seed, $use, $dark = 
                     foreach (array_keys($_langs) as $lang) {
                         $orig_path = find_theme_image($image_code, true, true, $source_theme, $lang);
                         if ($orig_path == '') {
-                            continue;
-                        } // Theme has specified non-existent image as themewizard-compatible
+                            continue; // Theme has specified non-existent image as themewizard-compatible
+                        }
 
                         if ((strpos($orig_path, '/' . $lang . '/') === false) && ($lang != fallback_lang())) {
                             continue;
@@ -1379,8 +1379,8 @@ function re_hue_image($path, $seed, $source_theme, $also_s_and_v = false, $inver
                 $v = min($v * 3, 255); // Because it's harder to see deviations of black
             }
             if ($seed_s < 10) {
-                $s = $seed_s;
-            } // To stop red colours for gray-scale images
+                $s = $seed_s; // To stop red colours for gray-scale images
+            }
             if ($also_s_and_v) {
                 $sat_dif = 0; // Actually causes weirdness
                 $result = hsv_to_rgb(floatval(fix_colour($h + $hue_dif, true)), floatval(fix_colour($s + $sat_dif)), floatval(fix_colour($v + $val_dif)));

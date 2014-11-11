@@ -296,8 +296,8 @@ class Module_admin_quiz
             // Choose the maximum number of rows we'll need who could potentially win
             $num_winners = $GLOBALS['SITE_DB']->query_select_value('quizzes', 'q_num_winners', array('id' => $id));
             if ($num_winners == 0) {
-                $num_winners = 3;
-            } // Having 0 helps nobody, and having more than 0 if zero set hurts nobody
+                $num_winners = 3; // Having 0 helps nobody, and having more than 0 if zero set hurts nobody
+            }
             if ($num_winners < 0) {
                 inform_exit(do_lang_tempcode('NO_ENTRIES'));
             }

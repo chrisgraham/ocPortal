@@ -102,8 +102,8 @@ function ocf_get_topic_tree($forum_id = null, $breadcrumbs = null, $title = null
     // Children of this forum
     $rows = $GLOBALS['FORUM_DB']->query_select('f_forums', array('id', 'f_name'), array('f_parent_forum' => $forum_id), 'ORDER BY f_forum_grouping_id,f_position', 200);
     if (count($rows) == 200) {
-        $rows = array();
-    } // Too many, this method will suck
+        $rows = array(); // Too many, this method will suck
+    }
     $tmap = array('t_forum_id' => $forum_id);
     if ((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) {
         $tmap['t_validated'] = 1;

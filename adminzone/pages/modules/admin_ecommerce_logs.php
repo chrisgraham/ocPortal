@@ -596,8 +596,8 @@ class Module_admin_ecommerce_logs
                 $types['WAGE']['AMOUNT'] += $transaction['t_amount'];
             } else {
                 if (!array_key_exists($type_code, $types)) {
-                    $types[$type_code] = array('TYPE' => $type_code, 'AMOUNT' => 0, 'SPECIAL' => false);
-                } // In case product no longer exists
+                    $types[$type_code] = array('TYPE' => $type_code, 'AMOUNT' => 0, 'SPECIAL' => false); // In case product no longer exists
+                }
                 $types[$type_code]['AMOUNT'] += $transaction['t_amount'];
             }
         }

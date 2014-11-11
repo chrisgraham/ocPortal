@@ -110,8 +110,8 @@ class Hook_task_send_newsletter
                 }
 
                 if (function_exists('gc_collect_cycles')) {
-                    gc_collect_cycles();
-                } // Stop problem with PHP leaking memory
+                    gc_collect_cycles(); // Stop problem with PHP leaking memory
+                }
             }
             $start += 100;
         }

@@ -442,8 +442,8 @@ function ticket_incoming_message($from_email, $subject, $body, $attachments)
             // Validate
             $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier(get_option('ticket_forum_name'), $existing_ticket);
             if (is_null($topic_id)) {
-                $existing_ticket = null;
-            } // Invalid
+                $existing_ticket = null; // Invalid
+            }
         }
     }
 
@@ -516,8 +516,8 @@ function ticket_incoming_message($from_email, $subject, $body, $attachments)
 
     // Check there can be no forgery vulnerability
     if (has_privilege($member_id, 'comcode_dangerous')) {
-        $member_id = $GLOBALS['FORUM_DRIVER']->get_guest_id();
-    } // Sorry, we can't let e-mail posting with staff permissions
+        $member_id = $GLOBALS['FORUM_DRIVER']->get_guest_id(); // Sorry, we can't let e-mail posting with staff permissions
+    }
 
     // Add in attachments
     foreach ($attachments as $filename => $filedata) {

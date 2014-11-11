@@ -375,8 +375,8 @@ function tar_extract_to_folder(&$resource, $path, $use_afm = false, $files = nul
                 if (file_exists(get_custom_file_base() . '/' . $path . $file['path'])) {
                     $changed = (file_get_contents(get_custom_file_base() . '/' . $path . $file['path']) != $data['data']);
                     if (!$changed) {
-                        continue;
-                    } // So old mtime can stay as is
+                        continue; // So old mtime can stay as is
+                    }
                 }
 
                 $myfile = @fopen(get_custom_file_base() . '/' . $path . $file['path'], 'wb');

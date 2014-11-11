@@ -227,14 +227,14 @@ class Module_cms_galleries extends standard_crud_module
             return $this->__gimp();
         }
         if ($type == 'ss') {
-            return $this->ss();
-        } // actualiser: orphan mass add/delete
+            return $this->ss(); // actualiser: orphan mass add/delete
+        }
         if ($type == 'sa') {
-            return $this->sa();
-        } // actualiser: orphan add
+            return $this->sa(); // actualiser: orphan add
+        }
         if ($type == 'sd') {
-            return $this->sd();
-        } // actualiser: orphan delete
+            return $this->sd(); // actualiser: orphan delete
+        }
 
         return new ocp_tempcode();
     }
@@ -445,8 +445,8 @@ class Module_cms_galleries extends standard_crud_module
             $tmp_name = $__file['tmp_name'];
             $file = $__file['name'];
             if ($file == '') {
-                continue;
-            } // Not filled in this one
+                continue; // Not filled in this one
+            }
 
             switch (get_file_extension($file)) {
                 case 'zip':
@@ -1086,8 +1086,8 @@ class Module_cms_galleries extends standard_crud_module
         } else {
             $num_galleries = $GLOBALS['SITE_DB']->query_select_value('galleries', 'COUNT(*)');
             if ($num_galleries == 1) {
-                $cat = 'root';
-            } // Only option!
+                $cat = 'root'; // Only option!
+            }
         }
         if ((get_value('no_confirm_url_spec_cats') !== '1') || ($cat == '')) {
             $root_cat = get_long_value('root_cat__images');
@@ -1096,8 +1096,8 @@ class Module_cms_galleries extends standard_crud_module
                 $root_cat = '';
             }
             if (empty($root_cat) && $GLOBALS['SITE_DB']->query_select_value('galleries', 'accept_images', array('name' => 'root')) == 0) {
-                $root_cat = 'root';
-            } // Don't show 'root' itself
+                $root_cat = 'root'; // Don't show 'root' itself
+            }
             $fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'), do_lang_tempcode('DESCRIPTION_GALLERY'), 'cat', $root_cat, 'choose_gallery', $filters, true, $cat, false, null, false, $gallery_title));
         } else {
             $hidden->attach(form_input_hidden('cat', $cat));
@@ -1680,8 +1680,8 @@ class Module_cms_galleries_alt extends standard_crud_module
         } else {
             $num_galleries = $GLOBALS['SITE_DB']->query_select_value('galleries', 'COUNT(*)');
             if ($num_galleries == 1) {
-                $cat = 'root';
-            } // Only option!
+                $cat = 'root'; // Only option!
+            }
         }
         if ((get_value('no_confirm_url_spec_cats') !== '1') || ($cat == '')) {
             $root_cat = get_long_value('root_cat__videos');
@@ -1690,8 +1690,8 @@ class Module_cms_galleries_alt extends standard_crud_module
                 $root_cat = '';
             }
             if (empty($root_cat) && $GLOBALS['SITE_DB']->query_select_value('galleries', 'accept_videos', array('name' => 'root')) == 0) {
-                $root_cat = 'root';
-            } // Don't show 'root' itself
+                $root_cat = 'root'; // Don't show 'root' itself
+            }
             $fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'), do_lang_tempcode('DESCRIPTION_GALLERY'), 'cat', $root_cat, 'choose_gallery', $filters, true, $cat, false, null, false, $gallery_title));
         } else {
             $hidden->attach(form_input_hidden('cat', $cat));
@@ -2185,8 +2185,8 @@ class Module_cms_galleries_cat extends standard_crud_module
         }
         $gallery_mode_is = get_option('gallery_mode_is');
         if (($name != '') && ($flow_mode_interface != (($gallery_mode_is == 'flow') ? 1 : 0))) {
-            $gallery_mode_is = '';
-        } // Continue current
+            $gallery_mode_is = ''; // Continue current
+        }
         if ($gallery_mode_is != '') {
             $hidden->attach(form_input_hidden('flow_mode_interface', ($gallery_mode_is == 'flow') ? '1' : '0'));
         } else {

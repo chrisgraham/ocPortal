@@ -401,11 +401,11 @@ function create_catalogue_category_tree($catalogue_name = 'places', $country = n
         }
 
         if (intval($location['l_population']) < 100) {
-            continue;
-        } // Too small to consider
+            continue; // Too small to consider
+        }
         if (is_null($location['l_longitude'])) {
-            continue;
-        } // No info, probably an error or unconventional location
+            continue; // No info, probably an error or unconventional location
+        }
 
         $tree_pos = array();
         $tree_pos[] = $location['l_continent'];
@@ -470,8 +470,8 @@ function create_catalogue_category_tree($catalogue_name = 'places', $country = n
 function _create_catalogue_subtree($fields, $first_cat, $catalogue_name, $root_cat, $full_tree, $node, $tree_pos)
 {
     if (!array_key_exists('children', $node)) {
-        $node['children'] = array();
-    } // Bottom level
+        $node['children'] = array(); // Bottom level
+    }
 
     $id = _create_catalogue_position($catalogue_name, $tree_pos, $root_cat, $node['details'], $full_tree);
 

@@ -49,8 +49,8 @@ $HTML_ESCAPE_2 = array('&amp;'/*,'&quot;','&quot;'*/, '&quot;', '&#039;', '&lt;'
 function code_editor_escape_html($string)
 {
     if ($string === '') {
-        return '';
-    } // Optimisation
+        return ''; // Optimisation
+    }
 
     return str_replace($GLOBALS['HTML_ESCAPE_1_STRREP'], $GLOBALS['HTML_ESCAPE_2'], $string);
 }

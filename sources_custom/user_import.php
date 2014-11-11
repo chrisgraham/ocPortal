@@ -78,8 +78,8 @@ function do_user_import()
             // Match to ID
             $remote_match_key_value = $row[$USER_IMPORT_WANTED[USER_IMPORT_MATCH_KEY]];
             if ($remote_match_key_value == '') {
-                continue;
-            } // No key, and it's not a good idea for us to try to match to a blank value
+                continue; // No key, and it's not a good idea for us to try to match to a blank value
+            }
             if ((substr(USER_IMPORT_MATCH_KEY, 0, 2) != 'm_') && (USER_IMPORT_MATCH_KEY != 'id')) {
                 $cpf_id = $cpf_ids[USER_IMPORT_MATCH_KEY];
                 $member_id = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_member_custom_fields', 'mf_member_id', array('field_' . strval($cpf_id) => $remote_match_key_value));

@@ -1062,8 +1062,8 @@ function get_gd_version()
 function is_image($name)
 {
     if (substr(basename($name), 0, 1) == '.') {
-        return false;
-    } // Temporary file that some OS's make
+        return false; // Temporary file that some OS's make
+    }
 
     $ext = get_file_extension($name);
 
@@ -1133,8 +1133,8 @@ function is_video($name, $as_admin, $must_be_true_video = false)
         require_code('mime_types');
         $ext = get_file_extension($name);
         if (($ext == 'rm') || ($ext == 'ram')) {
-            return true;
-        } // These have audio mime types, but may be videos
+            return true; // These have audio mime types, but may be videos
+        }
         $mime_type = get_mime_type($ext, $as_admin);
         return ((substr($mime_type, 0, 6) == 'video/') || (($allow_audio) && (substr($mime_type, 0, 6) == 'audio/')));
     }

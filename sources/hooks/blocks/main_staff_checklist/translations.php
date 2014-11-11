@@ -34,8 +34,8 @@ class Hook_checklist_translations
         }
 
         if (substr(get_db_type(), 0, 5) != 'mysql') {
-            return array();
-        } // Only tested on MySQL
+            return array(); // Only tested on MySQL
+        }
 
         $langs = find_all_langs();
         $num_langs = count($langs);

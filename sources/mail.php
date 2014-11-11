@@ -278,8 +278,8 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
 
     if (!$coming_out_of_queue) {
         if ((mt_rand(0, 100) == 1) && (!$GLOBALS['SITE_DB']->table_is_locked('logged_mail_messages'))) {
-            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'logged_mail_messages WHERE m_date_and_time<' . strval(time() - 60 * 60 * 24 * 14) . ' AND m_queued=0');
-        } // Log it all for 2 weeks, then delete
+            $GLOBALS['SITE_DB']->query('DELETE FROM ' . get_table_prefix() . 'logged_mail_messages WHERE m_date_and_time<' . strval(time() - 60 * 60 * 24 * 14) . ' AND m_queued=0'); // Log it all for 2 weeks, then delete
+        }
 
         $through_queue =
             (!$bypass_queue) &&
@@ -655,8 +655,8 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
         if (!is_null($file_path_stub)) {
             $total_filesize += @filesize($file_path_stub);
             if ($total_filesize > 1024 * 1024 * 5) {
-                continue;
-            } // Too large to process into an email
+                continue; // Too large to process into an email
+            }
 
             $file_contents = @file_get_contents($file_path_stub);
         } else {
@@ -681,8 +681,8 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
                             require_code('mime_types');
                             $total_filesize += @filesize($_full);
                             if ($total_filesize > 1024 * 1024 * 5) {
-                                continue;
-                            } // Too large to process into an email
+                                continue; // Too large to process into an email
+                            }
                             $file_contents = file_get_contents($_full);
                             $mime_type = get_mime_type(get_file_extension($filename), has_privilege($as, 'comcode_dangerous'));
                         }
@@ -696,8 +696,8 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
                 }
                 $total_filesize += strlen($file_contents);
                 if ($total_filesize > 1024 * 1024 * 5) {
-                    continue;
-                } // Too large to process into an email
+                    continue; // Too large to process into an email
+                }
                 if (!is_null($GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'])) {
                     $mime_type = $GLOBALS['HTTP_DOWNLOAD_MIME_TYPE'];
                 }

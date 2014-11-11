@@ -189,8 +189,8 @@ function convert_timezone_offset_to_formal_timezone($offset)
         $converted = tz_time($time_now, $zone);
         if ($converted == $expected) {
             if (tz_time($time_now, get_server_timezone()) == $converted) {
-                return get_server_timezone();
-            } // Prefer to set the site timezone if it is currently the same
+                return get_server_timezone(); // Prefer to set the site timezone if it is currently the same
+            }
             return $zone;
         }
     }
@@ -283,8 +283,8 @@ function get_timezoned_date($timestamp, $include_time = true, $verbose = false, 
     }
 
     if (gmdate('H:i', $timestamp) == '00:00') {
-        $include_time = false;
-    } // Probably means no time is known
+        $include_time = false; // Probably means no time is known
+    }
 
     // Work out timezone
     $usered_timestamp = $utc_time ? $timestamp : utctime_to_usertime($timestamp, $member);
@@ -315,8 +315,8 @@ function get_timezoned_date($timestamp, $include_time = true, $verbose = false, 
             $ret = /*Today is obvious do_lang('TODAY').$joiner.*/
                 $ret2;
             if ($ret == '') {
-                $ret = do_lang('TODAY');
-            } // it'll be because avoid contextual dates is not on
+                $ret = do_lang('TODAY'); // it'll be because avoid contextual dates is not on
+            }
         } else {
             $yesterday = my_strftime($date_string1, $usered_now_timestamp - 24 * 60 * 60);
             if ($ret1 == $yesterday) { // It is/was yesterday

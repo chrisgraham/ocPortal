@@ -37,8 +37,8 @@ class tracker_categories_test_set extends ocp_test_case
         $addons = find_all_hooks('systems', 'addon_registry');
         foreach ($categories as $category) {
             if (strtolower($category) != $category) {
-                continue;
-            } // Only lower case must correspond to addons
+                continue; // Only lower case must correspond to addons
+            }
             if (strpos($category, '(old)') !== false) {
                 continue;
             }

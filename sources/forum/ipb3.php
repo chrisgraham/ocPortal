@@ -657,8 +657,8 @@ class forum_driver_ipb3 extends forum_driver_ipb_shared
         }
         $rows = $this->connection->query_select('emoticons', array('*'));
         if (!is_array($rows)) {
-            return array();
-        } // weird importer trouble
+            return array(); // weird importer trouble
+        }
         $this->EMOTICON_CACHE = array();
         foreach ($rows as $myrow) {
             if (strlen($myrow['image']) > 0) {

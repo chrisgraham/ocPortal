@@ -54,8 +54,8 @@ function _sitemap_xml_serialize_sitemap_node($node)
         $langs = find_all_langs();
         foreach (array_keys($langs) as $lang) {
             if (($lang != fallback_lang()) && (count(get_directory_contents(get_custom_file_base() . '/lang_custom/' . $lang, '', true, false, true)) < 5)) {
-                continue;
-            } // Probably this is just the utf8 addon
+                continue; // Probably this is just the utf8 addon
+            }
 
             $url_test = static_evaluate_tempcode(symbol_tempcode('PAGE_LINK', array($page_link, '0', '1')));
             if (strpos($url_test, '?') !== false) {

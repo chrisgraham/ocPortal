@@ -369,8 +369,8 @@ class Block_main_members
 
                         $cnt++;
                         if ($cnt + $start == $max) {
-                            break;
-                        } // We have to read deep with media mode, as the number to display is not determinable within an SQL limit range
+                            break; // We have to read deep with media mode, as the number to display is not determinable within an SQL limit range
+                        }
                     }
                 }
             } else {

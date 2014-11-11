@@ -256,13 +256,13 @@ class Module_sites
     {
         $rows = $GLOBALS['SITE_DB']->query('SELECT d.*,d.id AS d_id FROM ' . get_table_prefix() . 'download_downloads d USE INDEX(downloadauthor) WHERE ' . db_string_equal_to('author', 'ocProducts') . ' AND validated=1 AND ' . $GLOBALS['SITE_DB']->translate_field_ref('name') . ' LIKE \'' . db_encode_like('%' . $name) . '\' ORDER BY add_date DESC', 1, null, false, false, array('name' => 'SHORT_TRANS'));
         if (!array_key_exists(0, $rows)) {
-            return null;
-        } // Shouldn't happen, but let's avoid transitional errors
+            return null; // Shouldn't happen, but let's avoid transitional errors
+        }
 
         if (!is_null($version_must_be_newer_than)) {
             if (strpos($version_must_be_newer_than, '.') === false) {
-                $version_must_be_newer_than .= '.0.0';
-            } // Weird, but PHP won't do version_compare right without it
+                $version_must_be_newer_than .= '.0.0'; // Weird, but PHP won't do version_compare right without it
+            }
         }
 
         $myrow = $rows[0];
@@ -310,8 +310,8 @@ class Module_sites
 
         $list = new ocp_tempcode();
         if (!@ftp_chdir($conn_id, $directory)) {
-            return $list;
-        } // Can't rely on ftp_nlist if not a directory
+            return $list; // Can't rely on ftp_nlist if not a directory
+        }
         $contents = ftp_nlist($conn_id, $directory);
         if ($contents === false) {
             return $list;

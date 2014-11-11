@@ -78,8 +78,8 @@ class Hook_fields_float
         if (($_cf_name == do_lang('LATITUDE_FIELD_NAME')) || ($_cf_name == do_lang('LONGITUDE_FIELD_NAME'))) {
             if (is_object($ev)) {
                 if ($ev->evaluate() == do_lang('NA_EM')) {
-                    return '';
-                } // Cleanup noisy data
+                    return ''; // Cleanup noisy data
+                }
             }
         }
 

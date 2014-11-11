@@ -158,8 +158,8 @@ class Block_main_multi_content
         $filter = isset($map['filter']) ? $map['filter'] : '';
         $filter_b = isset($map['filter_b']) ? $map['filter_b'] : '';
         if ($filter_b == '*') {
-            return new ocp_tempcode();
-        } // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution
+            return new ocp_tempcode(); // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution
+        }
         $ocselect = isset($map['ocselect']) ? $map['ocselect'] : '';
         $zone = isset($map['zone']) ? $map['zone'] : '_SEARCH';
         $efficient = (isset($map['efficient']) ? $map['efficient'] : '1') == '1';
@@ -286,8 +286,8 @@ class Block_main_multi_content
         }
 
         if (is_array($info['id_field'])) {
-            $lifetime = null;
-        } // Cannot join on this
+            $lifetime = null; // Cannot join on this
+        }
         if ($lifetime !== null) {
             $block_cache_id = md5(serialize($map));
             $query .= ' LEFT JOIN ' . $info['connection']->get_table_prefix() . 'feature_lifetime_monitor m ON m.content_id=r.' . $info['id_field'] . ' AND ' . db_string_equal_to('m.block_cache_id', $block_cache_id);
