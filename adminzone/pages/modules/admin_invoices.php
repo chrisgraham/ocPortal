@@ -158,7 +158,7 @@ class Module_admin_invoices
 		{
 			$products=$object->get_products(false,$product);
 			$amount=$products[$product][1];
-			if ($amount=='?') warn_exit(do_lang_tempcode('INVOICE_REQURIRED_AMOUNT'));
+			if ($amount=='?') warn_exit(do_lang_tempcode('INVOICE_REQUIRED_AMOUNT'));
 		}
 
 		$to=post_param('to');

@@ -131,6 +131,7 @@ class Hook_addon_registry_ocf_warnings
 			lorem_globalise(
 				do_lorem_template('OCF_SAVED_WARNING',array(
 					'MESSAGE'=>lorem_phrase(),
+					'MESSAGE_HTML'=>lorem_phrase(),
 					'EXPLANATION'=>lorem_phrase(),
 					'TITLE'=>lorem_word(),
 					'DELETE_LINK'=>placeholder_link(),

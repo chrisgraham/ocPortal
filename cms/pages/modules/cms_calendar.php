@@ -1143,7 +1143,7 @@ class Module_cms_calendar_cat extends standard_aed_module
 		edit_event_type(intval($id),post_param('title'),get_theme_img_code('calendar'),post_param('external_feed'));
 		if (!fractional_edit())
 		{
-			$this->set_permissions(strval($id));
+			$this->set_permissions($id);
 		}
 	}
 

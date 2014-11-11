@@ -80,7 +80,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 	global $IMG_CODES;
 	if (!isset($IMG_CODES[$site]))
 	{
-		$cache=NULL;
+		static $cache=NULL;
 		if ($site=='site')
 		{
 			$cache=persistant_cache_get('THEME_IMAGES');
@@ -94,7 +94,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 			if ($site=='site')
 			{
 				if ($cache===NULL) $cache=array();
-				$cache[$theme][$lang]=$IMG_CODES[$site];
+				$cache[$theme][$true_lang]=$IMG_CODES[$site];
 				persistant_cache_set('THEME_IMAGES',$cache);
 			}
 		} else
@@ -190,7 +190,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		if ($db->connection_write==$GLOBALS['SITE_DB']->connection_write) // If guard is here because a MSN site can't make assumptions about the file system of the central site
 		{
-			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && ($GLOBALS['SEMI_DEBUG_MODE'])))
+			if ((($path!==NULL) && ($path!='')) || (($silent_fail) && (!$GLOBALS['SEMI_DEBUG_MODE'])))
 			{
 				$nql_backup=$GLOBALS['NO_QUERY_LIMIT'];
 				$GLOBALS['NO_QUERY_LIMIT']=true;
@@ -217,7 +217,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 
 		global $SITE_INFO;
 
-		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && (url_is_local($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
+		if (($path!='') && ((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0')) && (url_is_local($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))) // Missing image, so erase to re-search for it
 		{
 			unset($IMG_CODES[$site][$id]);
 			return find_theme_image($id,$silent_fail,$leave_local,$theme,$lang,$db,$pure_only);
@@ -231,7 +231,7 @@ function find_theme_image($id,$silent_fail=false,$leave_local=false,$theme=NULL,
 		} else
 		{
 			global $SITE_INFO;
-			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && (!is_file(get_file_base().'/'.rawurldecode($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))));
+			$missing=(!$pure_only) && (((!isset($SITE_INFO['disable_smart_decaching'])) || ($SITE_INFO['disable_smart_decaching']=='0')) && ((!isset($SITE_INFO['no_disk_sanity_checks'])) || ($SITE_INFO['no_disk_sanity_checks']=='0')) && (!is_file(get_file_base().'/'.rawurldecode($path)) && (!is_file(get_custom_file_base().'/'.rawurldecode($path)))));
 			if ((substr($path,0,22)=='themes/default/images/') || ($missing)) // Not found, so throw away custom theme image and look in default theme images to restore default
 			{
 				if ($missing)

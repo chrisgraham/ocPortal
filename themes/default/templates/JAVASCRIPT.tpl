@@ -185,7 +185,8 @@ function initialise_error_mechanism()
 			{
 				window.done_one_error=true;
 				var alert='{!JAVASCRIPT_ERROR^;}\n\n'+code+': '+msg+'\n'+file;
-				window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED^;}');
+				if (window.document.body) // i.e. if loaded
+					window.fauxmodal_alert(alert,null,'{!ERROR_OCCURRED^;}');
 			}
 			return false;
 		};
@@ -2223,7 +2224,10 @@ function EntitiesToUnicode(din)
 {$,load the HTML as XHTML}
 function Load(xmlString) {
 	var xml;
-	if (typeof DOMParser!="undefined") xml=(new DOMParser()).parseFromString(xmlString,"text/xml");
+	if (typeof DOMParser!="undefined")
+	{
+		xml=(new DOMParser()).parseFromString(xmlString,"text/xml");
+	}
 	else {
 		var ieDOM=["MSXML2.DOMDocument","MSXML.DOMDocument","Microsoft.XMLDOM"];
 		for (var i=0;i<ieDOM.length && !xml;i++) {

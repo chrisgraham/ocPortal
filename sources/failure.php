@@ -504,26 +504,29 @@ function add_ip_ban($ip,$descrip='')
 		$ip_cleaned=str_replace('*','',$ip);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
 		$ip_cleaned=str_replace('..','.',$ip_cleaned);
-		$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
-		if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) // Safer
+		if (trim($ip_cleaned)!='')
 		{
-			if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents))
+			$contents=str_replace('# deny from xxx.xx.x.x (leave this comment here!)','# deny from xxx.xx.x.x (leave this comment here!)'.chr(10).'deny from '.$ip_cleaned,$original_contents);
+			if ((function_exists('file_put_contents')) && (defined('LOCK_EX'))) // Safer
 			{
-				file_put_contents(get_file_base().'/.htaccess',$original_contents,LOCK_EX);
-				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
-			}
-		} else
-		{
-			$myfile=fopen(get_file_base().'/.htaccess','wt');
-			if (fwrite($myfile,$contents)<strlen($contents))
+				if (file_put_contents(get_file_base().'/.htaccess',$contents,LOCK_EX)<strlen($contents))
+				{
+					file_put_contents(get_file_base().'/.htaccess',$original_contents,LOCK_EX);
+					warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				}
+			} else
 			{
-				rewind($myfile);
-				fwrite($myfile,$original_contents);
-				warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				$myfile=fopen(get_file_base().'/.htaccess','wt');
+				if (fwrite($myfile,$contents)<strlen($contents))
+				{
+					rewind($myfile);
+					fwrite($myfile,$original_contents);
+					warn_exit(do_lang_tempcode('COULD_NOT_SAVE_FILE'));
+				}
+				fclose($myfile);
 			}
-			fclose($myfile);
+			sync_file(get_file_base().'/.htaccess');
 		}
-		sync_file(get_file_base().'/.htaccess');
 	}
 }
 
@@ -756,7 +759,7 @@ function relay_error_notification($text,$ocproducts=true,$notification_type='err
 
 	require_code('notifications');
 	require_code('comcode');
-	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),$text,NULL,get_site_default_lang());
+	$mail=do_lang('ERROR_MAIL',comcode_escape($error_url),str_replace(array('[html','[/html'),array('&#91;html','&#91;/html'),$text),NULL,get_site_default_lang());
 	dispatch_notification($notification_type,NULL,do_lang('ERROR_OCCURRED_SUBJECT',get_page_name(),NULL,NULL,get_site_default_lang()),$mail,NULL,A_FROM_SYSTEM_PRIVILEGED);
 	if (
 		($ocproducts) && 
@@ -1013,7 +1016,10 @@ function _access_denied($class,$param,$force_login)
 	require_code('site');
 	log_stats('/access_denied',0);
 
-	if (((is_guest()) && ($GLOBALS['NON_PAGE_SCRIPT']==0)) || ($force_login))
+	if (((is_guest()) && ((running_script('attachment')) || (running_script('dload')) || ($GLOBALS['NON_PAGE_SCRIPT']==0))) || ($force_login))
+	// We do want to supply a nice login screen for attachment/dload scripts because they are sometimes externally linked to (e.g. in emails or hotlinks)
+	// Otherwise we want flat access denied due to a flat request/response model
+	// NB: Also see similar running_script lines in globalise function
 	{
 		@ob_end_clean();
 

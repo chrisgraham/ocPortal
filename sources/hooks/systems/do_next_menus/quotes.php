@@ -31,8 +31,11 @@ class Hook_do_next_menus_quotes
 	{
 		if (!addon_installed('random_quotes')) return array();
 
+		$zone=get_page_zone('quotes',false);
+		if (is_null($zone)) return array();
+
 		return array(
-			array('style','quotes',array('quotes',array(),get_page_zone('quotes')),do_lang_tempcode('QUOTES'),('DOC_QUOTES')),
+			array('style','quotes',array('quotes',array(),$zone),do_lang_tempcode('QUOTES'),('DOC_QUOTES')),
 		);
 	}
 

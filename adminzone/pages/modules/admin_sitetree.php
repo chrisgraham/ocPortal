@@ -443,10 +443,12 @@ class Module_admin_sitetree
 		$pages=find_all_pages_wrap($zone);
 		foreach ($pages as $page=>$type)
 		{
+			if (is_integer($page)) $page=strval($page);
+
 			if (substr($type,0,7)=='modules')
 			{
 				$info=extract_module_info(zone_black_magic_filterer(get_file_base().'/'.$zone.(($zone=='')?'':'/').'pages/'.$type.'/'.$page.'.php'));
-				if ((!is_null($info)) && (array_key_exists('locked',$info)) && ($info['locked']==1)) continue;
+				if ((!is_null($info)) && (array_key_exists('locked',$info)) && ($info['locked'])) continue;
 			}
 			$fields->attach(form_input_tick($zone.':'.$page,do_lang_tempcode('_TYPE',escape_html($type)),'page__'.$page,false));
 		}
@@ -662,6 +664,8 @@ class Module_admin_sitetree
 		$pages=find_all_pages_wrap($zone);
 		foreach ($pages as $page=>$type)
 		{
+			if (is_integer($page)) $page=strval($page);
+
 			// We can't move admin modules
 			if (($zone=='adminzone') && (substr($page,0,6)=='admin_') && (substr($type,0,6)=='module')) continue;
 
@@ -707,7 +711,7 @@ class Module_admin_sitetree
 			return do_template('YESNO_SCREEN',array('_GUID'=>'c6e872cc62bdc7cf1c5157fbfdb2dfd6','TITLE'=>$title,'TEXT'=>do_lang_tempcode('Q_SURE'),'URL'=>$post_url,'HIDDEN'=>$hidden));
 		}
 
-		$new_zone=post_param('destination_zone');
+		$new_zone=post_param('destination_zone',''/*Could be welcome zone so need to imply '' is valid*/);
 		if (substr($new_zone,-1)==':') $new_zone=substr($new_zone,0,strlen($new_zone)-1);
 
 		//$pages=find_all_pages_wrap($zone);

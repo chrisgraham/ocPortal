@@ -184,6 +184,7 @@ abbr.dtstart, abbr.dtend {
 	color: #2a3d5a; /* {$,wizard, 53% (seed sat_to 53) + 47% !W/B}*/
 	padding: 3px;
 	margin-left: -1px;
+	min-height: 1.3em;
 }
 
 .no_description {

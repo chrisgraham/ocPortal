@@ -701,14 +701,6 @@ function handle_symbol_preprocessing($bit,&$children)
 		case 'BLOCK':
 			$param=$bit[3];
 
-			global $REQUEST_BLOCK_NEST_LEVEL;
-			$REQUEST_BLOCK_NEST_LEVEL++;
-			if ($REQUEST_BLOCK_NEST_LEVEL>40) // 100 caused xdebug error, but ocPortal will have some overhead in both error handler and other code to get to here. We want xdebug error to not show, but of course to provide the same benefits as that error.
-			{
-				$REQUEST_BLOCK_NEST_LEVEL=0;
-				warn_exit(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE'));
-			}
-
 			foreach ($param as $i=>$p)
 				if (is_object($p)) $param[$i]=$p->evaluate();
 
@@ -723,10 +715,21 @@ function handle_symbol_preprocessing($bit,&$children)
 
 			//if (strpos(serialize($param),'side_stored_menu')!==false) { @debug_print_backtrace();exit(); } // Useful for debugging
 
+			global $REQUEST_BLOCK_NEST_LEVEL;
+
 			global $LOADED_BLOCKS;
 			if (isset($LOADED_BLOCKS[serialize($param)]))
 			{
 				$REQUEST_BLOCK_NEST_LEVEL--;
+				return;
+			}
+
+			$REQUEST_BLOCK_NEST_LEVEL++;
+			if ($REQUEST_BLOCK_NEST_LEVEL>20)
+			{
+				$REQUEST_BLOCK_NEST_LEVEL=0;
+				$LOADED_BLOCKS[serialize($param)]=do_lang_tempcode('INTERNAL_ERROR');
+				attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE',is_string($param[0])?$param[0]:'block'),'warn');
 				return;
 			}
 

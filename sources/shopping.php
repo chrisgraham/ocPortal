@@ -388,7 +388,14 @@ function payment_form()
 			warn_exit(do_lang_tempcode('NO_SSL_SETUP'));
 		}
 
-		$fields=is_null($order_id)?new ocp_tempcode():get_transaction_form_fields(NULL,$order_id,$item_name,float_to_raw_string($price),NULL,'');
+		if (is_null($order_id))
+		{
+			$fields=new ocp_tempcode();
+			$hidden=new ocp_tempcode();
+		} else
+		{
+			list($fields,$hidden)=get_transaction_form_fields(NULL,strval($order_id),$item_name,float_to_raw_string($price),NULL,'');
+		}
 
 		/*$via	=get_option('payment_gateway');
 		require_code('hooks/systems/ecommerce_via/'.filter_naughty_harsh($via));
@@ -396,7 +403,7 @@ function payment_form()
 		$ipn_url=$object->get_ipn_url();*/
 		$finish_url=build_url(array('page'=>'purchase','type'=>'finish'),get_module_zone('purchase'));
 
-		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('FIELDS'=>$fields));
+		$result=do_template('PURCHASE_WIZARD_STAGE_TRANSACT',array('FIELDS'=>$fields,'HIDDEN'=>$hidden));
 
 		require_javascript('javascript_validation');
 

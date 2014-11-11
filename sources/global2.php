@@ -57,18 +57,12 @@ function init__global2()
 	@header('Cache-Control: no-cache, max-age=0');
 	@header('Pragma: no-cache'); // for proxies, and also IE
 
-	if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
+	if ((is_file('closed.html')) && (get_param_integer('keep_force_open',0)==0))
 	{
-		if (is_file('closed.html'))
+		if ((strpos($_SERVER['PHP_SELF'],'upgrader.php')===false) && (strpos($_SERVER['PHP_SELF'],'execute_temp.php')===false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file']=='0')))
 		{
 			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
-			header('Location: closed.html');
-			exit();
-		}
-		if (@is_file('../closed.html'))
-		{
-			if ((@strpos($_SERVER['SERVER_SOFTWARE'],'IIS')===false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
-			header('Location: ../closed.html');
+			header('Location: '.(is_file($RELATIVE_PATH.'closed.html')?'closed.html':'../closed.html'));
 			exit();
 		}
 	}
@@ -1157,7 +1151,7 @@ function in_safe_mode()
 	global $CHECKING_SAFEMODE;
 	if ($CHECKING_SAFEMODE) return false; // Stops infinite loops (e.g. Check safe mode > Check access > Check usergroups > Check implicit usergroup hooks > Check whether to look at custom implicit usergroup hooks [i.e. if not in safe mode])
 	$CHECKING_SAFEMODE=true;
-	$ret=((get_param_integer('keep_safe_mode',0)==1) && ((isset($GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['IS_ACTUALLY_ADMIN'])) || (!array_key_exists('FORUM_DRIVER',$GLOBALS)) || ($GLOBALS['FORUM_DRIVER']===NULL) || (!function_exists('get_member')) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))));
+	$ret=((get_param_integer('keep_safe_mode',0)==1) && ((isset($GLOBALS['IS_ACTUALLY_ADMIN']) && ($GLOBALS['IS_ACTUALLY_ADMIN'])) || (!array_key_exists('FORUM_DRIVER',$GLOBALS)) || ($GLOBALS['FORUM_DRIVER']===NULL) || (!function_exists('get_member')) || (empty($GLOBALS['MEMBER_CACHED'])) || ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))));
 	$CHECKING_SAFEMODE=false;
 	return $ret;
 }
@@ -1434,6 +1428,7 @@ function get_param($name,$default=false,$no_security=false)
 	{
 		if (((isset($a[100])) && (strpos(substr($a,10),'::slash::slash:')===false) && (strpos(substr($a,10),'://')===false) && (strpos(substr($a,10),'::slash::slash:')===false)) || (preg_match('#\n|\000|<|(".*[=<>])|\.\./|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0))
 		{
+			if ($name=='page') $_GET[$name]=''; // Stop loops
 			log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 		}
 	} else
@@ -1442,6 +1437,7 @@ function get_param($name,$default=false,$no_security=false)
 		{
 			if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi',$a)!=0)
 			{
+				if ($name=='page') $_GET[$name]=''; // Stop loops
 				log_hack_attack_and_exit('DODGY_GET_HACK',$name,$a);
 			}
 

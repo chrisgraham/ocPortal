@@ -409,6 +409,7 @@ function _build_url($vars,$zone_name='',$skip=NULL,$keep_all=false,$avoid_remap=
 	$url=get_base_url(is_page_https($zone_name,isset($vars['page'])?$vars['page']:''),$zone_name);
 	$url.='/';
 
+	// For bots we explicitly unset skippable injected 'keep_' params because it bloats the crawl-space
 	if (($CACHE_BOT_TYPE!==NULL) && (get_bot_type()!==NULL))
 	{
 		foreach ($vars as $key=>$val)
@@ -938,6 +939,8 @@ function find_id_moniker($url_parts)
 
 							if ($or_list!='') $or_list.=' OR ';
 							$or_list.='('.db_string_equal_to('m_resource_page',$page).' AND '.db_string_equal_to('m_resource_type',$type).' AND '.db_string_equal_to('m_resource_id',$id).')';
+
+							$LOADED_MONIKERS[$page][$type][$id]=$id; // Will be replaced with correct value if it is looked up
 						}
 					}
 				}

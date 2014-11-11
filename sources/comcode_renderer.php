@@ -1365,7 +1365,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				} else
 				{
 					require_lang('permissions');
-					$temp_tpl=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$GLOBALS['FORUM_DRIVER']->get_username($source_member))));
+					$username=$GLOBALS['FORUM_DRIVER']->get_username($source_member);
+					if (is_null($username)) $username=do_lang('DELETED');
+					$temp_tpl=do_template('WARNING_TABLE',array('WARNING'=>do_lang_tempcode('permissions:ACCESS_DENIED__REUSE_ATTACHMENT',$username)));
 					break;
 					//access_denied('REUSE_ATTACHMENT');
 				}
@@ -1759,22 +1761,9 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 
 			if ((!array_key_exists('param',$attributes)) || ($attributes['param']==''))
 			{
-				$text=$embed->evaluate();
+				$key=$embed->evaluate();
 
-				$page=get_tutorial_link('concept__'.preg_replace('#[^\w_]#','_',$text));
-				if (!is_null($page))
-				{
-					$zone=get_comcode_zone($page,false);
-				}
-				if ((is_null($page)) || (is_null($zone)))
-				{
-					$temp_tpl=make_string_tempcode($text);
-				} else
-				{
-					$_url=build_url(array('page'=>$page),$zone);
-					$_url->attach('#concept__'.preg_replace('#[^\w_]#','_',$text));
-					$temp_tpl=do_template('COMCODE_CONCEPT',array('_GUID'=>'ee0cd05f87329923f05145180004d8a8','TEXT'=>$text,'URL'=>$_url));
-				}
+				$temp_tpl=symbol_tempcode('DISPLAY_CONCEPT',array($key));
 			} else
 			{
 				$temp_tpl=do_template('COMCODE_CONCEPT_INLINE',array('_GUID'=>'381a59de4d6f8967446c12bf4641a9ce','TEXT'=>$embed,'FULL'=>$attributes['param']));
@@ -1797,10 +1786,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					$cid=substr($_key,0,strlen($_key)-4);
 					$to_parse=array_key_exists($cid.'_value',$attributes)?$attributes[$cid.'_value']:new ocp_tempcode();
 					$value=is_object($to_parse)?$to_parse:comcode_to_tempcode($to_parse,$source_member,$as_admin,60,NULL,$connection,false,false,false,false,false,$highlight_bits,$on_behalf_of_member);
-					$concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT',array('_GUID'=>'4baf6dabc32146c594c7fd922791b6b2','A'=>'concept__'.preg_replace('#[^\w]#','_',$_value),'KEY'=>$key,'VALUE'=>$value)));
-
-					if ((get_param('type','')=='') && (get_param('id','',true)==''))
-						set_tutorial_link('concept__'.preg_replace('#[^\w]#','_',$key),get_page_name());
+					$concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT',array('_GUID'=>'4baf6dabc32146c594c7fd922791b6b2','A'=>'concept___'.preg_replace('#[^\w]#','_',$key),'KEY'=>$key,'VALUE'=>$value)));
 				}
 			}
 
@@ -2243,7 +2229,8 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 					if (strpos($attributes['param'],':')!==false)
 					{
 						global $OVERRIDE_SELF_ZONE;
-						list($zone,$attributes,$hash)=page_link_decode($attributes['param']);
+						$page_link=$attributes['param'];
+						list($zone,$attributes,$hash)=page_link_decode($page_link);
 						if (!array_key_exists('page',$attributes)) $attributes['page']='';
 						if (($zone=='_SELF') && (!is_null($OVERRIDE_SELF_ZONE))) $zone=$OVERRIDE_SELF_ZONE;
 					} else
@@ -2306,7 +2293,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 				if ($ptest===false)
 				{
 					//$temp_tpl->attach(' ['.do_lang('MISSING_RESOURCE').']');  // Don't want this as we might be making the page immediately
-					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
+					if ((!in_array(get_page_name(),$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!in_array($page,$GLOBALS['DONT_CARE_MISSING_PAGES'])) && (!running_script('iframe')))
 					{
 						if ($ignore_if_hidden)
 						{
@@ -2314,7 +2301,7 @@ function _do_tags_comcode($tag,$attributes,$embed,$comcode_dangerous,$pass_id,$m
 						} else
 						{
 							require_code('failure');
-							relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','page',$zone.':'.$page),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
+							relay_error_notification(do_lang('MISSING_RESOURCE_COMCODE','page_link',$page_link),false,$GLOBALS['FORUM_DRIVER']->is_staff($source_member)?'error_occurred_missing_reference_important':'error_occurred_missing_reference');
 						}
 					}
 				}

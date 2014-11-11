@@ -142,7 +142,7 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 	} else
 	{
 		$ip_bans=persistant_cache_get('IP_BANS');
-		if (is_null($ip_bans))
+		if (!is_array($ip_bans))
 		{
 			$ip_bans=$GLOBALS['SITE_DB']->query('SELECT ip FROM '.get_table_prefix().'usersubmitban_ip',NULL,NULL,true);
 			if (!is_null($ip_bans))
@@ -173,7 +173,7 @@ function ip_banned($ip) // This is the very first query called, so we will be a 
 				}
 			}
 
-			if (($self_ip!='') && (!compare_ip_address($ban['ip'],$self_ip))) continue;
+			if (($self_ip!='') && (compare_ip_address($ban['ip'],$self_ip))) continue;
 			if (compare_ip_address($ban['ip'],'127.0.0.1')) continue;
 			if (compare_ip_address($ban['ip'],'fe00:0000:0000:0000:0000:0000:0000:0000')) continue;
 			return true;

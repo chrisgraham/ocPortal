@@ -213,6 +213,7 @@ function try_su_login($member)
 	if (has_specific_permission($member,'assume_any_member'))
 	{
 		$su=$GLOBALS['FORUM_DRIVER']->get_member_from_username($ks);
+		if ((is_null($su)) && (is_numeric($ks))) $su=intval($ks);
 
 		if (is_null($su))
 		{
@@ -305,19 +306,22 @@ function try_cookie_login()
 
 			secure_serialized_data($the_cookie,array());
 
-			$unserialize=unserialize($the_cookie);
+			$unserialize=@unserialize($the_cookie);
 
-			if (array_key_exists($real_member_cookie,$unserialize))
+			if (is_array($unserialize))
 			{
-				$the_member=$unserialize[$real_member_cookie];
-				if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
-				$_COOKIE[get_member_cookie()]=$the_member;
-			}
-			if (array_key_exists($real_pass_cookie,$unserialize))
-			{
-				$the_pass=$unserialize[$real_pass_cookie];
-				if (get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
-				$_COOKIE[get_pass_cookie()]=$the_pass;
+				if (array_key_exists($real_member_cookie,$unserialize))
+				{
+					$the_member=$unserialize[$real_member_cookie];
+					if (get_magic_quotes_gpc()) $the_member=addslashes($the_member);
+					$_COOKIE[get_member_cookie()]=$the_member;
+				}
+				if (array_key_exists($real_pass_cookie,$unserialize))
+				{
+					$the_pass=$unserialize[$real_pass_cookie];
+					if (get_magic_quotes_gpc()) $the_pass=addslashes($the_pass);
+					$_COOKIE[get_pass_cookie()]=$the_pass;
+				}
 			}
 		}
 	}

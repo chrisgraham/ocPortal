@@ -430,7 +430,7 @@ class Module_newsletter
 		$email=trim(get_param('email'));
 		$lang=$GLOBALS['SITE_DB']->query_value('newsletter','language',array('email'=>$email));
 		$salt=$GLOBALS['SITE_DB']->query_value('newsletter','pass_salt',array('email'=>$email));
-		$new_password=produce_salt();
+		$new_password=get_rand_password();
 		$GLOBALS['SITE_DB']->query_update('newsletter',array('the_password'=>md5($new_password.$salt)),array('email'=>$email),'',1);
 
 		$message=do_lang('NEWSLETTER_PASSWORD_CHANGE',comcode_escape(get_ip_address()),comcode_escape($new_password),NULL,$lang);

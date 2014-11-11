@@ -123,8 +123,8 @@ class Block_main_google_map_users
 		{
 			if ($i!=0) $member_data_js.=',';
 			$member_data_js.="['".addslashes($member_data['m_username'])."',".
-				float_to_raw_string(floatval($member_data['field_'.$latitude_cpf_id])).",".
-				float_to_raw_string(floatval($member_data['field_'.$longitude_cpf_id])).",".
+				float_to_raw_string(@floatval($member_data['field_'.$latitude_cpf_id])).",".
+				float_to_raw_string(@floatval($member_data['field_'.$longitude_cpf_id])).",".
 				strval($member_data['m_primary_group'])."]";
 		}
 		$member_data_js.="];";

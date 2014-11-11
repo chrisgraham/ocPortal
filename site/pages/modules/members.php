@@ -144,7 +144,9 @@ class Module_members
 		{
 			$get_url=find_script('index');
 		}
-		$hidden=build_keep_form_fields('_SELF',true,array('filter'));
+		$hidden=new ocp_tempcode();
+		$hidden->attach(build_keep_form_fields('_SELF',true,array('filter')));
+		$hidden->attach(form_input_hidden('zone',get_zone_name()));
 
 		$start=get_param_integer('md_start',0);
 		$max=get_param_integer('md_max',50);

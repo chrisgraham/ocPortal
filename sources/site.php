@@ -59,7 +59,7 @@ function init__site()
 	$canonical_keep_params=explode(',',is_null(get_value('canonical_keep_params'))?'':get_value('canonical_keep_params'));
 	foreach (array_keys($_GET) as $key)
 	{
-		if ((substr($key,0,5)=='keep_') && (!in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
+		if ((substr($key,0,5)=='keep_') && (!@in_array($key,$canonical_keep_params))) $NON_CANONICAL_PARAMS[]=$key;
 	}
 
 	global $ATTACHED_MESSAGES,$ATTACHED_MESSAGES_RAW,$FAILED_TO_ATTACH_ALL_ERRORS;
@@ -1005,6 +1005,15 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 
 	if ($zone===NULL) $zone=get_zone_name();
 
+	global $REQUEST_PAGE_NEST_LEVEL;
+	$REQUEST_PAGE_NEST_LEVEL++;
+	if ($REQUEST_PAGE_NEST_LEVEL>20)
+	{
+		$REQUEST_PAGE_NEST_LEVEL=0;
+		attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE',$codename),'warn');
+		return new ocp_tempcode();
+	}
+
 	$details=persistant_cache_get(array('PAGE_INFO',$codename,$required,$zone));
 	if (($details===NULL) || ($details===false))
 	{
@@ -1012,13 +1021,6 @@ function request_page($codename,$required,$zone=NULL,$page_type=NULL,$being_incl
 		persistant_cache_set(array('PAGE_INFO',$codename,$required,$zone),$details);
 	}
 
-	global $REQUEST_PAGE_NEST_LEVEL;
-	$REQUEST_PAGE_NEST_LEVEL++;
-	if ($REQUEST_PAGE_NEST_LEVEL>50)
-	{
-		$REQUEST_PAGE_NEST_LEVEL=0;
-		warn_exit(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE'));
-	}
 //if (rand(0,10)==1) @exit('!'.$zone.':'.$codename.'!'.$REQUEST_PAGE_NEST_LEVEL.chr(10));
 	// Run hooks, if any exist
 	$hooks=find_all_hooks('systems','upon_page_load');

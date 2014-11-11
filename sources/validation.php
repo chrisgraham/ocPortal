@@ -1212,7 +1212,7 @@ function _get_next_tag()
 
 				if ($next=='=')
 				{
-					require_code('type_validation');
+					if (function_exists('require_code')) require_code('type_validation');
 					if (!is_alphanumeric(preg_replace('#^([^:]+):#','${1}',$current_attribute_name)))
 					{
 						$errors[]=array('XML_TAG_BAD_ATTRIBUTE',$current_attribute_name);

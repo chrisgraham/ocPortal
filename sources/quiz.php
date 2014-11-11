@@ -212,7 +212,7 @@ function handle_quiz_answers($id,$text,$type)
 						'q_answer_text'=>lang_remap($existing_a[$x]['q_answer_text'],$a),
 						'q_is_correct'=>$is_correct,
 						'q_order'=>$x,
-						'q_explanation'=>insert_lang($explanation,2),
+						'q_explanation'=>lang_remap($existing_a[$x]['q_explanation'],$explanation),
 					),array('id'=>$existing_a[$x]['id']),'',1);
 				} else
 				{

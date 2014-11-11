@@ -1326,14 +1326,14 @@ class forum_driver_ocf extends forum_driver_base
 			$test=ocf_is_on_ldap($username);
 			if (!$test)
 			{
-				$out['error']=(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+				$out['error']=is_null($username)?do_lang_tempcode('USER_NO_EXIST'):do_lang_tempcode('_USER_NO_EXIST',escape_html($username));
 				return $out;
 			}
 
 			$test_auth=ocf_ldap_authorise_login($username,$password_raw);
 			if ($test_auth['m_pass_hash_salted']=='!!!')
 			{
-				$out['error']=(do_lang_tempcode('USER_BAD_PASSWORD'));
+				$out['error']=do_lang_tempcode('USER_BAD_PASSWORD');
 				return $out;
 			}
 
@@ -1360,7 +1360,7 @@ class forum_driver_ocf extends forum_driver_base
 
 		if ((!array_key_exists(0,$rows)) || ($rows[0]===NULL)) // All hands to lifeboats
 		{
-			$out['error']=(do_lang_tempcode('_USER_NO_EXIST',escape_html($username)));
+			$out['error']=is_null($username)?do_lang_tempcode('USER_NO_EXIST'):do_lang_tempcode('_USER_NO_EXIST',escape_html($username));
 			return $out;
 		}
 		$row=$rows[0];
