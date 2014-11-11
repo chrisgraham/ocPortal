@@ -480,8 +480,8 @@ class virtual_bash
                             $this->parse_runtime['parse_position']++;
                             $this->parse_runtime['escape_used'] = false;
                         } else {
-                            break 2;
-                        } // PANIC!!
+                            break 2; // PANIC!!
+                        }
                     } elseif ($next_char == '\\') {
                         // An escape character (currently only backslash ('\')) has been used
                         if ($this->parse_runtime['escape_used']) {
@@ -508,8 +508,8 @@ class virtual_bash
                             $this->parsed_input[SECTION_OPTIONS][$current_option] .= $next_char;
                             $this->parse_runtime['parse_position']++;
                         } else {
-                            break 2;
-                        } // PANIC!!
+                            break 2; // PANIC!!
+                        }
                     }
 
                     // Parameter replacement
@@ -597,8 +597,8 @@ class virtual_bash
                                 $parameter_mode = OUT_PARAMETER;
                                 $current_parameter++;
                             } else {
-                                break 2;
-                            } // PANIC!!
+                                break 2; // PANIC!!
+                            }
                         }
                     } else {
                         if ($this->parse_runtime['current_mode'] == MODE_NORMAL) {
@@ -620,8 +620,8 @@ class virtual_bash
                             $this->parsed_input[SECTION_PARAMETERS][$current_parameter] .= $next_char;
                             $this->parse_runtime['parse_position']++;
                         } else {
-                            break 2;
-                        } // PANIC!!
+                            break 2; // PANIC!!
+                        }
 
                         $this->parse_runtime['escape_used'] = false;
                     }
@@ -731,8 +731,8 @@ class virtual_bash
                             $this->parse_runtime['parse_position']++;
                             $this->parse_runtime['escape_used'] = false;
                         } else {
-                            break 2;
-                        } // PANIC!!
+                            break 2; // PANIC!!
+                        }
                     } elseif ($next_char == '\\') {
                         // An escape character (currently only backslash ('\')) has been used
                         if ($this->parse_runtime['escape_used']) {
@@ -763,8 +763,8 @@ class virtual_bash
                             $this->parsed_input[SECTION_EXTRAS][$current_extra][REDIRECT_IDENTIFIER] .= $next_char;
                             $this->parse_runtime['parse_position']++;
                         } else {
-                            break 2;
-                        } // PANIC!!
+                            break 2; // PANIC!!
+                        }
                     }
 
                     break;
@@ -924,8 +924,8 @@ class virtual_bash
                     $script_file = get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); // It's in the main script dir
                 }
                 else {
-                    $script_file = $this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]));
-                } // Exhaustive search
+                    $script_file = $this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND])); // Exhaustive search
+                }
 
                 if (($script_file !== false) && (is_readable($script_file))) {
                     // It *is* a script, so let's run it :)

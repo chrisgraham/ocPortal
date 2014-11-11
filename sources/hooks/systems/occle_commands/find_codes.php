@@ -56,8 +56,8 @@ class Hook_occle_command_find_codes
 
                 return array('',do_template('OCCLE_FIND_CODES',array('_GUID' => '3374d1a80727aecc271722f2184743d0','FILES' => $files)),'','');
             } else {
-                return array('','','',do_lang('INCOMPLETE_ERROR'));
-            } // Directory doesn't exist
+                return array('','','',do_lang('INCOMPLETE_ERROR')); // Directory doesn't exist
+            }
         }
     }
 }

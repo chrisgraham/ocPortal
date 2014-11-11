@@ -1592,7 +1592,8 @@ function _check_labelling($tag, $attributes, $self_close, $close)
     if (($tag == 'label') && (isset($attributes['for']))) {
         $FOR_LABEL_IDS[$attributes['for']] = 1;
         $FOR_LABEL_IDS_2[$attributes['for']] = 1;
-    } // Check we that all input tags have labels
+    }
+    // Check we that all input tags have labels
     elseif ((!$close) && (($tag == 'textarea') || ($tag == 'select') || (($tag == 'input') && ((!isset($attributes['type'])) || (($attributes['type'] != 'hidden') && ($attributes['type'] != 'button') && ($attributes['type'] != 'image') && ($attributes['type'] != 'reset') && ($attributes['type'] != 'submit')))))) {
         if (isset($attributes['id'])) {
             $INPUT_TAG_IDS[$attributes['id']] = 1;

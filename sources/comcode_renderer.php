@@ -573,7 +573,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             }
         }
         return do_template('WARNING_BOX', array('_GUID' => 'faea04a9d6f1e409d99b8485d28b2225', 'WARNING' => do_lang_tempcode('comcode:NO_ACCESS_FOR_TAG', escape_html($tag), escape_html($username))));
-    } // These are just for convenience.. we will remap to more formalised Comcode
+    }
+    // These are just for convenience.. we will remap to more formalised Comcode
     elseif ($tag == 'codebox') {
         $attributes['scroll'] = 1;
         $tag = 'code';
@@ -2015,7 +2016,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
                 if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {
                     $url = get_custom_base_url() . '/' . $url;
                 }
-            } // New attachments: uploads
+            }
+            // New attachments: uploads
             elseif (!is_numeric($id)) {
                 if (substr($id, 0, 4) == 'new_') {
                     disable_php_memory_limit(); // In case needs lots of RAM for thumbnail generation

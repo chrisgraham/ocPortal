@@ -236,10 +236,10 @@ class Hook_Notification_ocf_topic extends Hook_Notification
             $forum_id = intval(substr($category, 6));
         }
 
-        if (!is_null($forum_id)) {
+        if (!is_null($forum_id)) { // We know PTs have been pre-filtered before notification is sent out, to limit them
             list($members, $maybe_more) = $this->_all_members_who_have_enabled_with_zone_access(array($members, $maybe_more), 'forum', $notification_code, $category, $to_member_ids, $start, $max);
             list($members, $maybe_more) = $this->_all_members_who_have_enabled_with_category_access(array($members, $maybe_more), 'forums', $notification_code, strval($forum_id), $to_member_ids, $start, $max);
-        } // We know PTs have been pre-filtered before notification is sent out, to limit them
+        }
 
         // Filter members who has more than one unread posts in that topic
         if (is_numeric($category)) {

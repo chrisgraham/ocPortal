@@ -250,7 +250,8 @@ function _enforce_temporary_passwords($member)
             $force_change_message = do_lang_tempcode('YOU_HAVE_TEMPORARY_PASSWORD', escape_html($username));
             require_code('urls');
             $redirect_url = build_url(array('page' => 'members', 'type' => 'view', 'id' => $member), get_module_zone('members'), null, false, false, false, 'tab__edit__settings');
-        } // Too old?
+        }
+        // Too old?
         elseif (intval(get_option('password_change_days')) > 0) {
             require_code('password_rules');
             if (member_password_too_old($member)) {

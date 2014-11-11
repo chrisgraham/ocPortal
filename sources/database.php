@@ -1392,8 +1392,8 @@ class database_driver
                     $where .= $key . ' IS NULL';
                 } else {
                     if ((is_string($value)) && ($value == '') && ($this->static_ob->db_empty_is_null())) {
-                        $where .= $key . ' IS NULL';
-                    } //$value=' ';
+                        $where .= $key . ' IS NULL'; // $value=' ';
+                    }
                     else {
                         $where .= db_string_equal_to($key, $value);
                     }

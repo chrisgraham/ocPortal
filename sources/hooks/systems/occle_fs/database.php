@@ -113,8 +113,8 @@ class Hook_occle_fs_database
                 );
             }
         } else {
-            return false;
-        } // Directory doesn't exist
+            return false; // Directory doesn't exist
+        }
 
         return $listing;
     }
@@ -154,8 +154,8 @@ class Hook_occle_fs_database
             }
             $GLOBALS['SITE_DB']->query_insert($meta_dir[0], $where);
         } else {
-            return false;
-        } // Directories aren't allowed to be added anywhere else
+            return false; // Directories aren't allowed to be added anywhere else
+        }
 
         return true;
     }
@@ -181,8 +181,8 @@ class Hook_occle_fs_database
             $where = $this->_do_where($meta_dir[0], $dir_name);
             $GLOBALS['SITE_DB']->query_delete($meta_dir[0], $where, '', 1);
         } else {
-            return false;
-        } // Directories aren't allowed to be removed anywhere else
+            return false; // Directories aren't allowed to be removed anywhere else
+        }
 
         return true;
     }
@@ -216,8 +216,8 @@ class Hook_occle_fs_database
                 $GLOBALS['SITE_DB']->query_update($meta_dir[0], array($file_name => ''), $where);
             }
         } else {
-            return false;
-        } // Files shouldn't even exist anywhere else!
+            return false; // Files shouldn't even exist anywhere else!
+        }
 
         return true;
     }
@@ -248,8 +248,8 @@ class Hook_occle_fs_database
             }
             return is_null($output[0][$file_name]) ? '' : strval($output[0][$file_name]);
         } else {
-            return false;
-        } // Files shouldn't even exist anywhere else!
+            return false; // Files shouldn't even exist anywhere else!
+        }
 
         return false;
     }
@@ -295,8 +295,8 @@ class Hook_occle_fs_database
                 $GLOBALS['SITE_DB']->query_update($meta_dir[0], $update, $where, '', 1);
             }
         } else {
-            return false;
-        } // Files shouldn't even exist anywhere else!
+            return false; // Files shouldn't even exist anywhere else!
+        }
 
         return true;
     }
@@ -338,8 +338,8 @@ class Hook_occle_fs_database
             } elseif (array_key_exists($pair[0], $_db_keys)) {
                 $where[$pair[0]] = null;
             } else {
-                return false;
-            } // Invalid key
+                return false; // Invalid key
+            }
         }
 
         return $where;

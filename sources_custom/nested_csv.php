@@ -66,8 +66,8 @@ function get_nested_csv_structure()
                 }
                 while ($vl_temp !== false) { // If there's nothing past the headings this loop never executes
                     while (count($vl_temp) < count($header_row)) {
-                        $vl_temp[] = '';
-                    } // Pad out row to be complete
+                        $vl_temp[] = ''; // Pad out row to be complete
+                    }
 
                     $new_entry = array();
                     foreach ($header_row as $j => $heading) {

@@ -144,8 +144,8 @@ class Hook_occle_fs_members
                 }
             }
         } else {
-            return false;
-        } // Directory doesn't exist
+            return false; // Directory doesn't exist
+        }
 
         return $listing;
     }
@@ -171,8 +171,8 @@ class Hook_occle_fs_members
             require_code('ocf_members_action2');
             ocf_make_member($new_dir_name, 'occle', '', null, null, null, null, array(), null, null, 1, null, null, '', '', '', 0, 1, 1, '', '', '', 1, 1, null, 1, 1, null, '', false);
         } else {
-            return false;
-        } // Directories aren't allowed to be added anywhere else
+            return false; // Directories aren't allowed to be added anywhere else
+        }
 
         return true;
     }
@@ -198,8 +198,8 @@ class Hook_occle_fs_members
             require_code('ocf_members_action2');
             ocf_delete_member($GLOBALS['FORUM_DRIVER']->get_member_from_username($dir_name));
         } else {
-            return false;
-        } // Directories aren't allowed to be removed anywhere else
+            return false; // Directories aren't allowed to be removed anywhere else
+        }
 
         return true;
     }
@@ -275,8 +275,8 @@ class Hook_occle_fs_members
                 return false;
             }
         } else {
-            return false;
-        } // Files shouldn't even exist anywhere else!
+            return false; // Files shouldn't even exist anywhere else!
+        }
 
         return true;
     }
@@ -431,8 +431,8 @@ class Hook_occle_fs_members
                 return false;
             }
         } else {
-            return false;
-        } // Group files can't be written, and other files shouldn't even exist anywhere else!
+            return false; // Group files can't be written, and other files shouldn't even exist anywhere else!
+        }
 
         return true;
     }

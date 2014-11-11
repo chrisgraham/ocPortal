@@ -250,7 +250,8 @@ class Block_main_content
 
             // Get content ID
             $content_id = extract_content_str_id_from_data($award_content_row, $info);
-        } // Select mode
+        }
+        // Select mode
         else {
             if ($content_type == 'comcode_page') { // FUDGEFUDGE
                 // Try and force a parse of the page, so it's in the system

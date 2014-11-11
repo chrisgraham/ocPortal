@@ -112,7 +112,8 @@ function ecv($lang, $escaped, $type, $name, $param)
                         }
                         apply_tempcode_escaping($escaped, $value);
                     }
-                } // Error :-(
+                }
+                // Error :-(
                 else {
                     $value = '';
                     if ($GLOBALS['XSS_DETECT']) {

@@ -37,7 +37,9 @@ class overused_globals_test_set extends ocp_test_case
                     if (strpos($contents, '@chdir($FILE_BASE);') !== false) {
                         continue;
                     }
-                } // Front end controller script, will have lots of globals
+                }
+
+                // Front end controller script, will have lots of globals
 
                 // global $FOO
                 $num_matches = preg_match_all('#^\s*global ([^;]*);#m', $contents, $matches);

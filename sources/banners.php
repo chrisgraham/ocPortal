@@ -194,7 +194,8 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
             log_hack_attack_and_exit('HEADER_SPLIT_HACK');
         }
         header('Location: ' . $url);
-    } // Being called to display a banner
+    }
+    // Being called to display a banner
     else {
         if ($dest === null) {
             $dest = get_param('dest', '');

@@ -835,11 +835,11 @@ class Hook_smf2
                         continue;
                     }
                     if ((integer)$gid === 0) {
-                        continue;
-                    } //We already did all groups so skip
+                        continue; // We already did all groups so skip
+                    }
                     if ((integer)$gid === 1) {
-                        continue;
-                    } //Admin so skip
+                        continue; // Admin so skip
+                    }
                     // Check for SMF Global Moderators Group and map to ocp SuperModerators
                     if ((integer)$gid === 2) {
                         //Yup its Moderators so let's get value
@@ -1523,8 +1523,8 @@ class Hook_smf2
         //Let's start the cycle
         foreach ($arr as $key => $val) {
             if ((integer)$key === 0) {
-                continue;
-            } //That's the one we set for return so skip!
+                continue; // That's the one we set for return so skip!
+            }
             //Set default value of 0 lowest so we can sort to highest
             $v = 0;
             //So it should be!

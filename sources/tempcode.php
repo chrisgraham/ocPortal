@@ -424,8 +424,8 @@ function closure_loop($param, $args, $main_function)
             if (!is_array($go)) {
                 $go = array('_loop_var' => $go);
             } else {
-                $go['_loop_var'] = '(array)';
-            } // In case it's not a list of maps, but just a list
+                $go['_loop_var'] = '(array)'; // In case it's not a list of maps, but just a list
+            }
 
             if ((isset($param[2])) && ($col % $columns == 0) && ($col != 0)) {
                 $value .= $row_starter;
@@ -1437,9 +1437,9 @@ class ocp_tempcode
                             $val->_mark_all_as_escaped(false);
                         }
                     }
-                    if (!isset($seq_part[1][0])) {// Only if it's a parameter map, not a parameter list
-                        $seq_part[1]['_escaped'] = true;
-                    } // Temporarily mark as escaped. Many seq_parts share a referenced list of parameters, and its naive/slow to re-mark for each
+                    if (!isset($seq_part[1][0])) { // Only if it's a parameter map, not a parameter list
+                        $seq_part[1]['_escaped'] = true; // Temporarily mark as escaped. Many seq_parts share a referenced list of parameters, and its naive/slow to re-mark for each
+                    }
                     $done[] = &$seq_part[1];
                 }
             }

@@ -286,11 +286,11 @@ class Hook_usergroup
 
         $groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($member);
 
-        if ($sub['s_auto_recur'] == 1) {
+        if ($sub['s_auto_recur'] == 1) { // Non-auto-recur can be topped up at will
             if (in_array($group_id, $groups)) {
                 return ECOMMERCE_PRODUCT_ALREADY_HAS;
             }
-        } // Non-auto-recur can be topped up at will
+        }
 
         return ECOMMERCE_PRODUCT_AVAILABLE;
     }

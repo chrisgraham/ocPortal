@@ -426,8 +426,8 @@ function _inet_pton($ip)
     $normalised_ip = '';
     $normalised_ip .= str_pad('', (4 * (8 - count($_ip))), '0000', STR_PAD_LEFT); // Fill out trimmed 0's on left
     foreach ($_ip as $seg) {// Copy rest in
-        $normalised_ip .= str_pad($seg, 4, '0', STR_PAD_LEFT);
-    } // Pad out each component in full, building up $normalised_ip
+        $normalised_ip .= str_pad($seg, 4, '0', STR_PAD_LEFT); // Pad out each component in full, building up $normalised_ip
+    }
     return $normalised_ip;
 }
 

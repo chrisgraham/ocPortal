@@ -121,8 +121,8 @@ if (!is_null($lstring)) {
                 echo strval($bits['ce_id']); // Entry
             }
             else {
-                echo strval($bits['id']);
-            } // Location
+                echo strval($bits['id']); // Location
+            }
 
             echo ',';
 

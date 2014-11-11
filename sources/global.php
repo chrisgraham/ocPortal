@@ -503,8 +503,8 @@ if (!GOOGLE_APPENGINE) {
 @ini_set('auto_detect_line_endings', '0');
 @ini_set('default_socket_timeout', '60');
 if (function_exists('set_magic_quotes_runtime')) {
-    @set_magic_quotes_runtime(0);
-} // @'d because it's deprecated and PHP 5.3 may give an error
+    @set_magic_quotes_runtime(0); // @'d because it's deprecated and PHP 5.3 may give an error
+}
 @ini_set('html_errors', '1');
 @ini_set('docref_root', 'http://www.php.net/manual/en/');
 @ini_set('docref_ext', '.php');

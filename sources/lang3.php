@@ -362,8 +362,8 @@ function _lang_remap($field_name, $id, $text, $connection = null, $comcode = fal
         if ((function_exists('ocp_admirecookie')) && ((ocp_admirecookie('use_wysiwyg', '1') == '0') && (get_value('edit_with_my_comcode_perms') === '1')) || (!has_privilege($member, 'allow_html')) || (!has_privilege($member, 'use_very_dangerous_comcode'))) {
             $source_user = $member;
         } else {
-            $source_user = $for_member;
-        } // Reset to latest submitter for main record
+            $source_user = $for_member; // Reset to latest submitter for main record
+        }
     }
 
     if ($comcode) {

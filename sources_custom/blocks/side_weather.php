@@ -88,8 +88,8 @@ class Block_side_weather
             $loc_code = $map['param']; // need to pass loc ID ex :INXX0087
         }
         else {
-            $loc_code = '34503';
-        } // if not found setting a default location for weather
+            $loc_code = '34503'; // if not found setting a default location for weather
+        }
 
         if (!is_numeric($loc_code)) {
             $test = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_weather_codes', 'w_code', array('w_string' => $loc_code));

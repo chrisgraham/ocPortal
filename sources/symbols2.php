@@ -532,8 +532,8 @@ function ecv2_IMG_INLINE($lang, $escaped, $param)
                 require_code('mime_types');
                 $value = 'data:' . get_mime_type(get_file_extension($file_path), false) . ';base64,' . base64_encode(file_get_contents($file_path));
             } else {
-                return ecv_IMG($lang, $escaped, $param);
-            } // LEGACY: IE8
+                return ecv_IMG($lang, $escaped, $param); // LEGACY: IE8
+            }
         } else {
             return ecv_IMG($lang, $escaped, $param);
         }

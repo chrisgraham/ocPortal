@@ -77,8 +77,8 @@ class Hook_occle_fs_root
             sync_file($path . $new_dir_name);
             return $ret;
         } else {
-            return false;
-        } //Directory exists
+            return false; // Directory exists
+        }
     }
 
     /**
@@ -102,8 +102,8 @@ class Hook_occle_fs_root
             sync_file($path . $dir_name);
             return true;
         } else {
-            return false;
-        } //Directory doesn't exist
+            return false; // Directory doesn't exist
+        }
     }
 
     /**
@@ -125,8 +125,8 @@ class Hook_occle_fs_root
             sync_file($path . $file_name);
             return $ret;
         } else {
-            return false;
-        } //File doesn't exist
+            return false; // File doesn't exist
+        }
     }
 
     /**
@@ -149,8 +149,8 @@ class Hook_occle_fs_root
         if ((is_dir($path)) && (file_exists($path . $file_name)) && (is_readable($path . $file_name))) {
             return file_get_contents($path . $file_name);
         } else {
-            return false;
-        } //File doesn't exist
+            return false; // File doesn't exist
+        }
     }
 
     /**
@@ -179,8 +179,8 @@ class Hook_occle_fs_root
             sync_file($path . $file_name);
             return $output;
         } else {
-            return false;
-        } //File doesn't exist
+            return false; // File doesn't exist
+        }
     }
 
     /**

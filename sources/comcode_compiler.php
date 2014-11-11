@@ -505,7 +505,8 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                             } else {
                                 $list_type = 'ul';
                             }
-                        } // Rule?
+                        }
+                        // Rule?
                         else {
                             list($close_list, $list_indent) = _close_open_lists($list_indent, $list_type);
                             if ($GLOBALS['XSS_DETECT']) {

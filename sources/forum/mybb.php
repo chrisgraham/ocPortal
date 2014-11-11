@@ -1027,8 +1027,8 @@ class forum_driver_mybb extends forum_driver_base
     {
         $user_level = $this->get_member_row_field($member, 'usergroup');
         if (in_array($user_level, array(3, 4, 6))) {
-            return true;
-        } //return all administrators + all moderators
+            return true; // return all administrators + all moderators
+        }
         //if ($user_level==4) return true; //this returns only administrators
         return false;
     }

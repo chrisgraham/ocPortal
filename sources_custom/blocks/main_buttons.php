@@ -120,8 +120,8 @@ class Block_main_buttons
             $map['extra'] = '';
         }
         if (!array_key_exists('title', $map)) {
-            $map['title'] = 'I support';
-        } //default value
+            $map['title'] = 'I support'; // default value
+        }
         $max = array_key_exists('max', $map) ? intval($map['max']) : 100;
         $height = (!empty($map['height'])) ? $map['height'] : '100%';//default: 100%
 

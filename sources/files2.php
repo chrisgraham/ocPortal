@@ -1272,8 +1272,8 @@ function _http_download_file($url, $byte_limit = null, $trigger_error = true, $n
             $mysock = false; // For Quercus #4549
         }
     } else {
-        $mysock = false;
-    } // Can't handle SSL here, so let it flow onto the PHP stream wrappers implementation
+        $mysock = false; // Can't handle SSL here, so let it flow onto the PHP stream wrappers implementation
+    }
     if ($mysock !== false) {
         if (function_exists('stream_set_timeout')) {
             if (@stream_set_timeout($mysock, intval($timeout)) === false) {

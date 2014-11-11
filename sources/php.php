@@ -359,8 +359,8 @@ function _read_php_function_line($_line)
                     elseif ($arg_default === 'false') {
                         $default = 'boolean-false';
                     } else {
-                        $default = @eval('return ' . $arg_default . ';');
-                    } // Could be unprocessable by php.php in standalone mode
+                        $default = @eval('return ' . $arg_default . ';'); // Could be unprocessable by php.php in standalone mode
+                    }
                     if (!isset($default)) {
                         $default = null; // Fix for HHVM, #1161
                     }
@@ -377,8 +377,8 @@ function _read_php_function_line($_line)
                     elseif ($arg_default === 'false') {
                         $default = 'boolean-false';
                     } else {
-                        $default = @eval('return ' . $arg_default . ';');
-                    } // Could be unprocessable by php.php in standalone mode
+                        $default = @eval('return ' . $arg_default . ';'); // Could be unprocessable by php.php in standalone mode
+                    }
                     if (!isset($default)) {
                         $default = null; // Fix for HHVM, #1161
                     }

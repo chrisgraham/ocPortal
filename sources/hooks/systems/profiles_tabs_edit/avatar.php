@@ -58,8 +58,8 @@ class Hook_Profiles_Tabs_Edit_avatar
                         if (!is_null($stock)) { // Stock
                             $urls[0] = ($stock == '')?'':find_theme_image($stock,false,true);
                         } else {
-                            $urls[0] = '';
-                        } // None
+                            $urls[0] = ''; // None
+                        }
                     } else {
                         if ((url_is_local($stock)) && (!$GLOBALS['FORUM_DRIVER']->is_super_admin($member_id_viewing))) {
                             $old = $GLOBALS['FORUM_DB']->query_select_value('f_members','m_avatar_url',array('id' => $member_id_of));

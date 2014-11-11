@@ -539,8 +539,8 @@ class Hook_mybb
             $ban_till = $ban_time + $ban_period; //the user is banned till this date/time
 
             if (!$perm_banned) {
-                continue;
-            } //add just IPs of permanently banned users
+                continue; // add just IPs of permanently banned users
+            }
 
             if (import_check_if_imported('ip_ban', strval($row['uid']))) {
                 continue;

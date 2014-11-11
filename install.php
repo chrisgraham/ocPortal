@@ -203,8 +203,8 @@ $css_url = 'install.php?type=css';
 $css_url_2 = 'install.php?type=css_2';
 $logo_url = 'install.php?type=logo';
 if (is_null($DEFAULT_FORUM)) {
-    $DEFAULT_FORUM = 'ocf';
-} // Shouldn't happen, but who knows
+    $DEFAULT_FORUM = 'ocf'; // Shouldn't happen, but who knows
+}
 require_code('tempcode_compiler');
 $css_nocache = _do_template('default', '/css/', 'no_cache', 'no_cache', 'EN', '.css');
 $out_final = do_template('INSTALLER_HTML_WRAP', array(
