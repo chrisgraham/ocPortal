@@ -64,8 +64,6 @@ An introduction to the ocPortal framework:
  - [page="docs:tut_hardcore_1"]Making an addon (part 1)[/page]
  - [page="docs:tut_hardcore_2"]Making an addon (part 2)[/page]
  - [page="docs:tut_hardcore_3"]Making an addon (part 3)[/page]
- - [url="Example addon (league standings)"]{$BRAND_BASE_URL}/docs/league_standings__example_addon.zip[/url]
- - [url="Example addon (property)"]{$BRAND_BASE_URL}/docs/custom_modules_example__pty.zip[/url]
 and information about integrating third-party code:
  - [page="docs:tut_integration"]Integration of ocPortal and other installed scripts/applications[/page]
 

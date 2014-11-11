@@ -885,6 +885,9 @@ class Module_admin_newsletter extends standard_crud_module
 
             $fields->attach(form_input_tick(do_lang_tempcode('EMBED_FULL_ARTICLES'), do_lang_tempcode('DESCRIPTION_EMBED_FULL_ARTICLES'), 'in_full', post_param_integer('in_full', 0) == 1));
 
+            if (function_exists('set_time_limit')) @set_time_limit(180);
+            disable_php_memory_limit();
+
             $chosen_categories = '';
             foreach (array_keys($_hooks) as $hook) {
                 require_code('hooks/modules/admin_newsletter/' . filter_naughty_harsh($hook));
@@ -901,7 +904,7 @@ class Module_admin_newsletter extends standard_crud_module
                     }
                     $matches = array();
                     $num_matches = preg_match_all('#<option [^>]*value="([^"]*)"[^>]*>([^<]*)</option>#', $cats, $matches);
-                    if ($num_matches < 500) { /*reasonable limit*/
+                    if ($num_matches < 1500) { /*reasonable limit*/
                         for ($i = 0; $i < $num_matches; $i++) {
                             $hook_result = $object->run(0, $lang, $matches[1][$i]);
                             if ($hook_result == array()) {

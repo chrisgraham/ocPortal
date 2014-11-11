@@ -783,7 +783,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             return $temp_tpl;
 
         case 'section':
-            $name = (array_key_exists('param', $attributes)) ? $attributes['param'] : 'section' . strval(mt_rand(0, 100));
+            $name = (array_key_exists('param', $attributes)) ? $attributes['param'] : ('section' . strval(mt_rand(0, 100)));
             $default = (array_key_exists('default', $attributes)) ? $attributes['default'] : '0';
             $temp_tpl = do_template('COMCODE_SECTION', array('_GUID' => 'a902962ccdc80046c999d6fed907d105', 'PASS_ID' => 'x' . $pass_id, 'DEFAULT' => $default == '1', 'NAME' => $name, 'CONTENT' => $embed));
             break;
@@ -794,7 +794,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             break;
 
         case 'big_tab':
-            $name = (array_key_exists('param', $attributes)) ? $attributes['param'] : 'big_tab' . strval(mt_rand(0, 100));
+            $name = (array_key_exists('param', $attributes)) ? $attributes['param'] : ('big_tab' . strval(mt_rand(0, 100)));
             $default = (array_key_exists('default', $attributes)) ? $attributes['default'] : '0';
             $temp_tpl = do_template('COMCODE_BIG_TABS_TAB', array('_GUID' => 'f6219b1acd6999acae770da20b95fb99', 'PASS_ID' => 'x' . $pass_id, 'DEFAULT' => $default == '1', 'NAME' => $name, 'CONTENT' => $embed));
             break;
@@ -836,7 +836,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             break;
 
         case 'menu':
-            $name = (array_key_exists('param', $attributes)) ? $attributes['param'] : 'mnu' . strval(mt_rand(0, 100));
+            $name = (array_key_exists('param', $attributes)) ? $attributes['param'] : ('mnu' . strval(mt_rand(0, 100)));
             $type = (array_key_exists('type', $attributes)) ? $attributes['type'] : 'tree';
             require_code('menus');
             require_code('menus_comcode');
@@ -1253,19 +1253,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
 
         case 'concept':
             if ((!array_key_exists('param', $attributes)) || ($attributes['param'] == '')) {
-                $text = $embed->evaluate();
-
-                $page = get_tutorial_link('concept__' . preg_replace('#[^\w_]#', '_', $text));
-                if (!is_null($page)) {
-                    $zone = get_comcode_zone($page, false);
-                }
-                if ((is_null($page)) || (is_null($zone))) {
-                    $temp_tpl = make_string_tempcode($text);
-                } else {
-                    $_url = build_url(array('page' => $page), $zone);
-                    $_url->attach('#concept__' . preg_replace('#[^\w_]#', '_', $text));
-                    $temp_tpl = do_template('COMCODE_CONCEPT', array('_GUID' => 'ee0cd05f87329923f05145180004d8a8', 'TEXT' => $text, 'URL' => $_url));
-                }
+                $key = $embed->evaluate();
+                $temp_tpl = symbol_tempcode('DISPLAY_CONCEPT', array($key));
             } else {
                 $temp_tpl = do_template('COMCODE_CONCEPT_INLINE', array('_GUID' => '381a59de4d6f8967446c12bf4641a9ce', 'TEXT' => $embed, 'FULL' => $attributes['param']));
             }
@@ -1281,11 +1270,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
                     $cid = substr($_key, 0, strlen($_key) - 4);
                     $to_parse = array_key_exists($cid . '_value', $attributes) ? $attributes[$cid . '_value'] : new ocp_tempcode();
                     $value = comcode_to_tempcode($to_parse, $source_member, $as_admin, 60, null, $connection, false, false, false, false, false, $highlight_bits, $on_behalf_of_member);
-                    $concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT', array('_GUID' => '4baf6dabc32146c594c7fd922791b6b2', 'A' => 'concept__' . preg_replace('#[^\w]#', '_', $_value), 'KEY' => $key, 'VALUE' => $value)));
-
-                    if ((get_param('type', '') == '') && (get_param('id', '', true) == '')) {
-                        set_tutorial_link('concept__' . preg_replace('#[^\w]#', '_', $key), get_page_name());
-                    }
+                    $concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT', array('_GUID' => '4baf6dabc32146c594c7fd922791b6b2', 'A' => 'concept__' . preg_replace('#[^\w]#', '_', $key), 'KEY' => $key, 'VALUE' => $value)));
                 }
             }
 
@@ -1628,7 +1613,8 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
                 $attributes['target'] = '_blank';
             }
             $rel = (($as_admin) || has_privilege($source_member, 'search_engine_links')) ? '' : 'nofollow';
-            if (array_key_exists('rel', $attributes)) {
+            if (array_key_exists(
+            , $attributes)) {
                 $rel = trim($rel . ' ' . $attributes['rel']);
             }
             $rel = str_replace('nofollow nofollow', 'nofollow', $rel);
@@ -1783,7 +1769,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
 
             $caption = array_key_exists('caption', $attributes) ? $attributes['caption'] : '';
 
-            $temp_tpl = do_template('COMCODE_THUMB', array('_GUID' => '1b0d25f72ef5f816091269e29c586d60', 'CAPTION' => $caption, 'ALIGN' => $align, 'PASS_ID' => (intval($pass_id) < 0) ? strval(mt_rand(0, 10000)) : $pass_id, 'URL_THUMB' => $url_thumb, 'URL_FULL' => $url_full));
+            $temp_tpl = do_template('COMCODE_THUMB', array('_GUID' => '1b0d25f72ef5f816091269e29c586d60', 'CAPTION' => $caption, 'ALIGN' => $align, 'URL_THUMB' => $url_thumb, 'URL_FULL' => $url_full));
 
             if (array_key_exists('float', $attributes)) {
                 $temp_tpl = do_template('FLOATER', array('_GUID' => 'cbc56770714a44f56676f43da282cc7a', 'FLOAT' => $attributes['float'], 'CONTENT' => $temp_tpl));

@@ -1794,8 +1794,8 @@ function ecv2_HAS_PAGE_ACCESS($lang, $escaped, $param)
     $value = '';
 
     if ((isset($param[0])) && (function_exists('has_page_access'))) {
-    	if (!isset($param[1])) {
-    	    $param[1] = '_SEARCH';
+        if (!isset($param[1])) {
+            $param[1] = '_SEARCH';
         }
 
         $value = has_page_access(((!is_null($param)) && (isset($param[2]))) ? intval($param[2]) : get_member(), $param[0], $param[1], ((!is_null($param)) && (isset($param[3]))) ? ($param[3] == '1') : false) ? '1' : '0';
@@ -3224,6 +3224,88 @@ function ecv2_THEME_WIZARD_COLOR($lang, $escaped, $param)
     if ($escaped != array()) {
         apply_tempcode_escaping($escaped, $value);
     }
+    return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME                The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array                        Array of escaping operations.
+ * @param  array                        Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string                       The result.
+ */
+function ecv2_SELF_PAGE_LINK($lang, $escaped, $param)
+{
+    $value = '';
+    if (running_script('index') || running_script('iframe')) {
+        $value = get_zone_name() . ':' . get_page_name();
+        foreach ($_GET as $key=>$val)
+        {
+            if ($key == 'page' || is_array($val) || substr($key, 0, 5) == 'keep_') {
+                continue;
+            }
+            $value .= ':' . $key . '=' . $val;
+        }
+    }
+
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped, $value);
+    }
+
+    return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME                The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array                        Array of escaping operations.
+ * @param  array                        Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string                       The result.
+ */
+function ecv2_SET_TUTORIAL_LINK($lang, $escaped, $param)
+{
+    $value = '';
+    if ($GLOBALS['XSS_DETECT']) {
+        ocp_mark_as_escaped($value);
+    }
+
+    if ((array_key_exists(1, $param)) && ($param[1] != '') && ($param[1][0] != '#')) {
+        set_tutorial_link($param[0], $param[1]);
+    }
+
+    return $value;
+}
+
+/**
+ * Evaluate a particular Tempcode symbol.
+ *
+ * @param  LANGUAGE_NAME                The language to evaluate this symbol in (some symbols refer to language elements).
+ * @param  array                        Array of escaping operations.
+ * @param  array                        Parameters to the symbol. For all but directive it is an array of strings. For directives it is an array of Tempcode objects. Actually there may be template-style parameters in here, as an influence of singular_bind and these may be Tempcode, but we ignore them.
+ * @return string                       The result.
+ */
+function ecv2_DISPLAY_CONCEPT($lang, $escaped, $param)
+{
+    $value = '';
+    if (array_key_exists(0, $param)) {
+        $key = $param[0];
+        $page_link = get_tutorial_link('concept___' . preg_replace('#[^\w_]#', '_', $key));
+        if (is_null($page_link)) {
+            $temp_tpl = make_string_tempcode($key);
+        } else {
+            list($zone, $attributes, $hash) = page_link_decode($page_link);
+            $_url = build_url($attributes, $zone, null, false, false, false, $hash);
+            $temp_tpl = do_template('COMCODE_CONCEPT', array('_GUID' => 'ee0cd05f87329923f05145180004d8a8', 'TEXT' => $key, 'URL' => $_url));
+        }
+        $value = $temp_tpl->evaluate();
+    }
+
+    if ($escaped != array()) {
+        apply_tempcode_escaping($escaped, $value);
+    }
+
     return $value;
 }
 

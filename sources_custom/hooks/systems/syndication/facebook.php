@@ -50,7 +50,7 @@ class Hook_Syndication_facebook
 
                                         '" . addslashes(do_lang('HOW_TO_SYNDICATE')) . "',
 
-                                        '" . addslashes(do_lang('SYNDICATE_TO_OWN_WALL',get_site_name())) . "',
+                                        '" . addslashes(do_lang('SYNDICATE_TO_OWN_WALL', get_site_name())) . "',
 
                                         function(val) {
                                                         if (val!='" . addslashes(do_lang('INPUTSYSTEM_CANCEL')) . "')
@@ -74,59 +74,69 @@ class Hook_Syndication_facebook
         if (!is_null($member_id)) {
             $save_to .= '__' . strval($member_id);
         }
-        return get_long_value($save_to) !== NULL;
+        return get_long_value($save_to) !== null;
     }
 
-    public function auth_set($member_id,$oauth_url)
+    public function auth_set($member_id, $oauth_url)
     {
         require_lang('facebook');
         require_code('facebook_connect');
         global $FACEBOOK_CONNECT;
 
-        $code = get_param('code','',true);
+        $code = get_param('code', '', true);
 
         if ($code == '') {
-            $oauth_redir_url = $FACEBOOK_CONNECT->getLoginUrl(array('redirect_uri' => $oauth_url->evaluate(),'scope' => array('publish_stream','offline_access')));
+            $oauth_redir_url = $FACEBOOK_CONNECT->getLoginUrl(array('redirect_uri' => $oauth_url->evaluate(), 'scope' => array('publish_stream', 'offline_access')));
             require_code('site2');
             smart_redirect($oauth_redir_url);
         }
 
-        if (!is_null(get_param('error_reason',null))) { // oauth happened and ERROR!
-            attach_message(do_lang_tempcode('FACEBOOK_OAUTH_FAIL',escape_html(get_param('error_reason'))),'warn');
+        if (!is_null(get_param('error_reason', null))) { // oauth happened and ERROR!
+            attach_message(do_lang_tempcode('FACEBOOK_OAUTH_FAIL', escape_html(get_param('error_reason'))), 'warn');
             return false;
         }
 
         // oauth apparently worked
         $access_token = $FACEBOOK_CONNECT->getAccessToken();
         if (is_null($access_token)) { // Actually it didn't
-            attach_message(do_lang_tempcode('FACEBOOK_OAUTH_FAIL',escape_html(do_lang('UNKNOWN'))),'warn');
+            attach_message(do_lang_tempcode('FACEBOOK_OAUTH_FAIL', escape_html(do_lang('UNKNOWN'))), 'warn');
             return false;
         }
 
         if (is_null($member_id)) {
+            $FACEBOOK_CONNECT->setExtendedAccessToken();
+            $facebook->api('/oauth/access_token', 'POST',
+                array(
+                    'grant_type' => 'fb_exchange_token',
+                    'client_id' => get_option('facebook_appid'),
+                    'client_secret' => get_option('facebook_secret_code'),
+                    'fb_exchange_token' => $access_token
+                )
+            );
+
             if (get_option('facebook_uid') == '') {
                 require_code('config2');
                 $facebook_uid = $FACEBOOK_CONNECT->getUser();
-                set_option('facebook_uid',strval($facebook_uid));
+                set_option('facebook_uid', strval($facebook_uid));
             }
         }
 
-        if ((strpos($access_token,'|') === false) || (is_null($member_id))) { // If for users, not if application access token, which will happen on a refresh (as user token will not confirm twice)
+        if ((strpos($access_token, '|') === false) || (is_null($member_id))) { // If for users, not if application access token, which will happen on a refresh (as user token will not confirm twice)
             $save_to = 'facebook_oauth_token';
             if (!is_null($member_id)) {
                 $save_to .= '__' . strval($member_id);
             }
-            set_long_value($save_to,$access_token);
+            set_long_value($save_to, $access_token);
 
-            $facebook_syndicate_to_page = get_param('facebook_syndicate_to_page',null);
-            if ($facebook_syndicate_to_page !== NULL) {
-                set_long_value('facebook_syndicate_to_page__' . strval($member_id),$facebook_syndicate_to_page);
+            $facebook_syndicate_to_page = get_param('facebook_syndicate_to_page', null);
+            if ($facebook_syndicate_to_page !== null) {
+                set_long_value('facebook_syndicate_to_page__' . strval($member_id), $facebook_syndicate_to_page);
             }
         }
 
         if (get_page_name() != 'facebook_oauth') { // Take member back to page that implicitly shows their results
             require_code('site2');
-            smart_redirect(str_replace('&syndicate_start__facebook=1','',str_replace('oauth_in_progress=1&','oauth_in_progress=0&',$oauth_url->evaluate())));
+            smart_redirect(str_replace('&syndicate_start__facebook=1', '', str_replace('oauth_in_progress=1&', 'oauth_in_progress=0&', $oauth_url->evaluate())));
         }
 
         return true;
@@ -138,17 +148,17 @@ class Hook_Syndication_facebook
         if (!is_null($member_id)) {
             $save_to .= '__' . strval($member_id);
         }
-        set_long_value($save_to,null);
+        set_long_value($save_to, null);
     }
 
-    public function syndicate_user_activity($member_id,$row)
+    public function syndicate_user_activity($member_id, $row)
     {
         if (($this->is_available()) && ($this->auth_is_set($member_id))) {
             $page_syndicate = (get_option('facebook_member_syndicate_to_page') == '1' && get_option('facebook_uid') != '' && get_long_value('facebook_syndicate_to_page__' . strval($member_id)) === '1');
             return $this->_send(
                 get_long_value('facebook_oauth_token__' . strval($member_id)),
                 $row,
-                $page_syndicate?get_option('facebook_uid'):'me',
+                $page_syndicate ? get_option('facebook_uid') : 'me',
                 $member_id,
                 $page_syndicate
             );
@@ -163,7 +173,7 @@ class Hook_Syndication_facebook
             return false;
         }
 
-        if (get_long_value('facebook_oauth_token') === NULL) {
+        if (get_long_value('facebook_oauth_token') === null) {
             return false;
         }
 
@@ -190,24 +200,24 @@ class Hook_Syndication_facebook
         return false;
     }
 
-    protected function _send($token,$row,$post_to_uid = 'me',$member_id = null,$silent_warn = false)
+    protected function _send($token, $row, $post_to_uid = 'me', $member_id = null, $silent_warn = false)
     {
         require_lang('facebook');
         require_code('facebook_connect');
 
         // Prepare message
-        list($message) = render_activity($row,false);
+        list($message) = render_activity($row, false);
         $name = $row['a_label_1'];
         require_code('character_sets');
-        $name = convert_to_internal_encoding($name,get_charset(),'utf-8');
-        $link = ($row['a_page_link_1'] == '')?'':static_evaluate_tempcode(page_link_to_tempcode($row['a_page_link_1']));
+        $name = convert_to_internal_encoding($name, get_charset(), 'utf-8');
+        $link = ($row['a_page_link_1'] == '') ? '' : static_evaluate_tempcode(page_link_to_tempcode($row['a_page_link_1']));
         $message = strip_html($message->evaluate());
-        $message = convert_to_internal_encoding($message,get_charset(),'utf-8');
+        $message = convert_to_internal_encoding($message, get_charset(), 'utf-8');
 
         // Send message
         $appid = get_option('facebook_appid');
         $appsecret = get_option('facebook_secret_code');
-        $fb = new ocpFacebook(array('appId' => $appid,'secret' => $appsecret));
+        $fb = new ocpFacebook(array('appId' => $appid, 'secret' => $appsecret));
         $fb->setAccessToken($token);
 
         $attachment = array('description' => $message);
@@ -226,14 +236,14 @@ class Hook_Syndication_facebook
         } // May not be needed, but just in case
 
         try {
-            $ret = $fb->api('/' . $post_to_uid . '/feed','POST',$attachment);
+            $ret = $fb->api('/' . $post_to_uid . '/feed', 'POST', $attachment);
         } catch (Exception $e) {
             if ((!is_null($member_id)) && (count($_POST) == 0)) {
-                $this->auth_set($member_id,get_self_url());
+                $this->auth_set($member_id, get_self_url());
             }
 
             if (!$silent_warn) {
-                attach_message($e->getMessage(),'warn');
+                attach_message($e->getMessage(), 'warn');
             }
         }
 

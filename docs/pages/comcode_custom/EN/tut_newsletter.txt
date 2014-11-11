@@ -20,6 +20,26 @@ The interest levels feature is off-by-default, but even when disabled you may se
 Newsletter subscribers may use a password, chosen at subscription (or randomly assigned, depending on how signup happened), to control their subscription settings. They may change their interest level for all newsletters, as well as remove interest totally. They may also have their password reset for the event that they lost it: this is only possible via confirmation of a reset, received via a link sent to the subscription e-mail address. As passwords may be reset at any time, and are only used in rare circumstances, there is no feature to choose your password.
 [/surround]
 
+[title="2"]Newsletter signup[/title]
+
+You will typically invite people to join the newsletter via the [tt]main_newsletter_signup[/tt] block.
+You can also have people signup directly via the [tt]site:newsletter[/tt] module.
+
+The newsletter process has a mandatory e-mail confirmation step so as to stop people signing up others to the newsletter, which may be illegal in some jurisdictions and is at least a nuisance.
+
+When a user hits the block and subscribes through it, one of the following situations will happen:
+ - A new subscription -- ocPortal will sign them up and send a confirmation e-mail
+ - An existing subscription never confirmed -- ocPortal will treat this as a refresh to a new subscription, re-sending the confirmation e-mail
+ - An existing subscription -- ocPortal will show an error
+
+The maintenace module is a bit richer:
+ - A new subscription -- ocPortal will sign them up and send a confirmation e-mail
+ - An existing subscription never confirmed -- ocPortal will treat this as a refresh to a new subscription, re-sending the confirmation e-mail (regardless of what password was entered)
+ - An existing subscription, with the wrong maintenance password -- ocPortal will give an error (with an option to re-set the password), unless you are logged in with a privileged account
+ - An existing subscription, with the correct maintenance password -- ocPortal will update the newsletter subscription
+
+The block sets only for a single newsletter, and does not support subscription levels. The maintenance module can do for multiple newsletters at once, and does support subscription levels. This difference between block and maintenance page is intentional, as the block is intended only for new signups to a specific newsletter, not for changing existing subscriptions.
+
 [title="2"]Sending newsletters[/title]
 
 Newsletters are created using Comcode, and sent out in a dual format: both text and HTML. Most users will be able to read the HTML variant, as this is now by far the standard for common e-mail messages; however if they have this disabled, or an unusual e-mail client that cannot read HTML mails, then they will see the plain text version, which is your original Comcode.

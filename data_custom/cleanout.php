@@ -532,7 +532,6 @@ function cleanup()
         delete_value('ocf_member_count');
         delete_value('last_occle_command');
         delete_value('site_bestmember');
-        set_long_value('THEME_IMG_DIMS', null);
     }
 
     if ($aggressive_action_cleanup) {

@@ -155,12 +155,6 @@ function actual_edit_theme_image($old_id, $theme, $lang, $id, $path, $quick = fa
     }
 
     if (!$quick) {
-        if ((function_exists('persistent_cache_delete')) && (!is_null($GLOBALS['PERSISTENT_CACHE']))) {
-            persistent_cache_delete('THEME_IMG_DIMS');
-        } else {
-            set_long_value('THEME_IMG_DIMS', null);
-        }
-
         if (addon_installed('!ssl')) {
             require_code('caches3');
             erase_cached_templates(); // Paths may have been cached

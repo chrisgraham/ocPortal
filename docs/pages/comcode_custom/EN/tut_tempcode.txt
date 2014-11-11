@@ -468,6 +468,10 @@ Tempcode does not have explicit data-types, everything is text. However we may i
 		<td>Get URL to current screen. You don't need to give any parameters, but if you do: the first is whether to go to the website home page if you are at where you're at due to a form post, the second is whether to included posted parameters as parameters in the URL, the first is whether to avoid the short URL facility, and further parameters are additional URL parameters.</td>
 	</tr>
 	<tr style="background: #DDFFDD">
+		<td>{$SELF_PAGE_LINK}</td>
+		<td>Get page-link to current screen.</td>
+	</tr>
+	<tr style="background: #DDFFDD">
 		<td>{$META_DATA,created}</td>
 		<td>Fetch a defined dublin core meta data property (by code name), relating to the current content. Also supports some Facebook connect fields, HTML SEO meta data (keywords, meta_description). You can also query HTML SEO meta data for specific content item, by giving two additional parameters: the content type and the content ID</td>
 	</tr>
@@ -1054,6 +1058,14 @@ These are advanced symbols, and mirror ocPortal's internal API. The parameters a
 		<td>{$FIND_ID_VIA_OCCLEFS_FILENAME,<resource-type>,<filename>}</td>
 		<td>Find the resource ID from the OcCLE-fs (repository) filename</td>
 	</tr>
+    <tr style="background: #FFDDDD">
+    	<td>{$DISPLAY_CONCEPT,concept_name}</td>
+    	<td>Displays a link to a concept, if it has been saved already from a concept table.</td>
+    </tr>
+    <tr style="background: #FFDDDD">
+    	<td>{$SELF_TUTORIAL_LINK,tutorial_id,page-link}</td>
+    	<td>Creates a tutorial link for the given tutorial_id to the given page-link. Needs doing in Tempcode because the Comcode parser doesn't know the target page for Comcode being parsed.</td>
+    </tr>
 	<tr style="background: #DDFFDD">
 		<td>{$CPF_LIST,<field-title>}</td>
 		<td>Find all the possible values for a custom profile field in a loop-iterable string</td>

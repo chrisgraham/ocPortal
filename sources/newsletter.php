@@ -43,6 +43,7 @@ function incoming_bounced_email_script()
 
 /**
  * Add to the newsletter, in the simplest way.
+ * No authorisation support here, checks it works only for non-subscribed or non-confirmed members.
  *
  * @param  EMAIL                        The email address of the subscriber
  * @param  integer                      The interest level
@@ -56,57 +57,54 @@ function incoming_bounced_email_script()
  */
 function basic_newsletter_join($email, $interest_level = 4, $lang = null, $get_confirm_mail = false, $newsletter_id = null, $forename = '', $surname = '')
 {
-    if (is_null($lang)) {
-        $lang = user_lang();
-    }
-    if (is_null($newsletter_id)) {
-        $newsletter_id = db_get_first_id();
-    }
+    require_lang('newsletter');
 
-    require_code('crypt');
-    $password = get_rand_password();
-    $code_confirm = $get_confirm_mail ? mt_rand(1, 9999999) : 0;
-    $test = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter_subscribe', 'the_level', array('newsletter_id' => $newsletter_id, 'email' => $email));
-    if ($test === 0) {
-        $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe', array('newsletter_id' => $newsletter_id, 'email' => $email), '', 1);
-        $test = null;
-    }
-    if (is_null($test)) {
-        require_lang('newsletter');
+    if (is_null($lang)) $lang = user_lang();
+    if (is_null($newsletter_id)) $newsletter_id = db_get_first_id();
 
-        $test = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter', 'email', array('email' => $email));
-        if (is_null($test)) {
-            require_code('crypt');
-
-            $salt = produce_salt();
-            $GLOBALS['SITE_DB']->query_insert('newsletter', array(
-                'n_forename' => $forename,
-                'n_surname' => $surname,
-                'join_time' => time(),
-                'email' => $email,
-                'code_confirm' => $code_confirm,
-                'pass_salt' => $salt,
-                'the_password' => ratchet_hash($password, $salt, PASSWORD_SALT),
-                'language' => $lang,
-            ), false, true); // race condition
-
-            if ($get_confirm_mail) {
-                $_url = build_url(array('page' => 'newsletter', 'type' => 'confirm', 'email' => $email, 'confirm' => $code_confirm), get_module_zone('newsletter'));
-                $url = $_url->evaluate();
-                $message = do_lang('NEWSLETTER_SIGNUP_TEXT', comcode_escape($url), comcode_escape($password), array($forename, $surname, $email, get_site_name()), $lang);
-                require_code('mail');
-                mail_wrap(do_lang('NEWSLETTER_SIGNUP', null, null, null, $lang), $message, array($email), null, '', '', 3, null, false, null, false, false, false, 'MAIL', true);
-            }
+    $code_confirm = $GLOBALS['SITE_DB']->query_select_value_if_there('newsletter', 'code_confirm', array('email' => $email));
+    if (is_null($code_confirm)) {
+        // New, set their details
+        require_code('crypt');
+        $password = get_rand_password();
+        $salt = produce_salt();
+        $code_confirm = $get_confirm_mail ? mt_rand(1, 9999999) : 0;
+        $GLOBALS['SITE_DB']->query_insert('newsletter', array(
+            'n_forename' => $forename,
+            'n_surname' => $surname,
+            'join_time' => time(),
+            'email' => $email,
+            'code_confirm' => $code_confirm,
+            'pass_salt' => $salt,
+            'the_password' => ratchet_hash($password, $salt, PASSWORD_SALT),
+            'language' => $lang,
+        ), false, true); // race condition
+    } else {
+        if ($code_confirm > 0) {
+            // Was not confirmed, allow confirm mail to go again as if this was new, and update their details
+            $GLOBALS['SITE_DB']->query_update('newsletter', array('n_forename' => $forename, 'n_surname' => $surname, 'join_time' => time(), 'language' => $lang), array('email' => $email), '', 1);
+            $password = do_lang('NEWSLETTER_PASSWORD_ENCRYPTED');
         } else {
-            $GLOBALS['SITE_DB']->query_update('newsletter', array('join_time' => time()), array('email' => $email), '', 1);
-            $password = '';
+            // Already on newsletter and confirmed so don't allow tampering without authorisation, which this method can't do
+            return do_lang('NA');
         }
-        $GLOBALS['SITE_DB']->query_insert('newsletter_subscribe', array('newsletter_id' => $newsletter_id, 'the_level' => $interest_level, 'email' => $email), false, true); // race condition
-
-        return $password;
     }
 
-    return do_lang('NA');
+    // Send confirm email
+    if ($get_confirm_mail) {
+        $_url = build_url(array('page' => 'newsletter', 'type' => 'confirm', 'email' => $email, 'confirm' => $code_confirm), get_module_zone('newsletter'));
+        $url = $_url->evaluate();
+        $newsletter_url = build_url(array('page' => 'newsletter'), get_module_zone('newsletter'));
+        $message = do_lang('NEWSLETTER_SIGNUP_TEXT', comcode_escape($url), comcode_escape($password), array($forename, $surname, $email, get_site_name(), $newsletter_url->evaluate()), $lang);
+        require_code('mail');
+        mail_wrap(do_lang('NEWSLETTER_SIGNUP', null, null, null, $lang), $message, array($email), null, '', '', 3, null, false, null, false, false, false, 'MAIL', true);
+    }
+
+    // Set subscription
+    $GLOBALS['SITE_DB']->query_delete('newsletter_subscribe', array('newsletter_id' => $newsletter_id, 'email' => $email), '', 1);
+    $GLOBALS['SITE_DB']->query_insert('newsletter_subscribe', array('newsletter_id' => $newsletter_id, 'the_level' => $interest_level, 'email' => $email), false, true); // race condition
+
+    return $password;
 }
 
 /**

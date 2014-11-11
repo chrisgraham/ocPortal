@@ -73,13 +73,10 @@ function init__global2()
     @header('Pragma: no-cache'); // for proxies, and also IE
 
     // Closed site message
-    if (((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file'] != '1')) && (strpos(isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_ENV['SCRIPT_NAME'], 'upgrader.php') === false)) {
-        if ((is_file('closed.html')) || (@is_file('../closed.html'))) {
-            $server_software = isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : (isset($_ENV['SERVER_SOFTWARE']) ? $_ENV['SERVER_SOFTWARE'] : '');
-            if ((strpos($server_software, 'IIS') === false)) {
-                header('HTTP/1.0 503 Service Temporarily Unavailable');
-            }
-            header('Location: ' . get_base_url() . 'closed.html');
+    if ((is_file('closed.html')) && (get_param_integer('keep_force_open', 0) == 0)) {
+        if ((strpos($_SERVER['PHP_SELF'], 'upgrader.php') === false) && (strpos($_SERVER['PHP_SELF'], 'execute_temp.php') === false) && ((!isset($SITE_INFO['no_extra_closed_file'])) || ($SITE_INFO['no_extra_closed_file'] == '0'))) {
+            if ((@strpos($_SERVER['SERVER_SOFTWARE'], 'IIS') === false)) header('HTTP/1.0 503 Service Temporarily Unavailable');
+            header('Location: ' . (is_file($RELATIVE_PATH . 'closed.html') ? 'closed.html' : '../closed.html'));
             exit();
         }
     }
@@ -1392,17 +1389,17 @@ function get_param($name, $default = false, $no_security = false)
     $is_url = ($name == 'from') || ($name == 'preview_url') || ($name == 'redirect') || ($name == 'redirect_passon') || ($name == 'url');
     if (($name != 's_message') && (!$is_url) && (!$no_security)) {
         if (((isset($a[100])) && (strpos(substr($a, 10), '::slash::slash:') === false) && (strpos(substr($a, 10), '://') === false) && (strpos(substr($a, 10), '::slash::slash:') === false)) || (preg_match('#\n|\000|<|(".*[=<>])|\.\./|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi', $a) != 0)) {
-            if ($name == 'page') {
+            if ($name == 'page') { // Stop loops
                 $_GET[$name] = '';
-            } // Stop loops
+            }
             log_hack_attack_and_exit('DODGY_GET_HACK', $name, $a);
         }
     } else {
         if ($is_url) {
             if (preg_match('#\n|\000|<|(".*[=<>])|^\s*((((j\s*a\s*v\s*a\s*)|(v\s*b\s*))?s\s*c\s*r\s*i\s*p\s*t)|(d\s*a\s*t\s*a\s*))\s*:#mi', $a) != 0) {
-                if ($name == 'page') {
+                if ($name == 'page') { // Stop loops
                     $_GET[$name] = '';
-                } // Stop loops
+                }
                 log_hack_attack_and_exit('DODGY_GET_HACK', $name, $a);
             }
 

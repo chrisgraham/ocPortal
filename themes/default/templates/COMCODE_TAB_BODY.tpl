@@ -1,4 +1,4 @@
-<div aria-labeledby="t_{TITLE|*}" role="tabpanel" id="g_{TITLE|*}" style="display: {$?,{$OR,{DEFAULT},{$NOT,{$JS_ON}}},block,none}">
+<div aria-labeledby="t_{$GET|*,tab_sets}_{TITLE|*}" role="tabpanel" id="g_{$GET|*,tab_sets}_{TITLE|*}" style="display: {$?,{$OR,{DEFAULT},{$NOT,{$JS_ON}}},block,none}">
 	{+START,IF_PASSED,PAGE_LINK}
 		<div class="spaced"><div class="ajax_tree_list_loading vertical_alignment"></div></div>
 
