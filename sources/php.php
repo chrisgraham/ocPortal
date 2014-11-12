@@ -56,6 +56,7 @@ function get_php_file_api($filename, $include_code = true)
     require_code('type_validation');
 
     $classes = array();
+    $class_has_comments = array();
 
     // Open up PHP file
     if ($filename == 'phpstub.php') {
@@ -109,20 +110,30 @@ function get_php_file_api($filename, $include_code = true)
             $functions = array_key_exists('__global', $classes) ? $classes['__global']['functions'] : array();
         }
 
-        // Detect an API function
+        // Detect an API class or function
         if (substr($ltrim, 0, 3) == '/**') {
             $depth = strlen($line) - strlen($ltrim);
 
-            // Find function line
+            // Find class or function line
             for ($j = $i + 1; array_key_exists($j, $lines); $j++) {
                 $line2 = $lines[$j];
-                if (substr($line2, 0, $depth + 9) == str_repeat(' ', $depth) . 'function ') {
+                $_depth = str_repeat(' ', $depth);
+
+                if (substr($line2, 0, $depth + 6) == $_depth . 'class ') {
+                    // Is a class
+                    $class_with_comments = preg_replace('#\s.*$#s', '', substr($line2, $depth + 6));
+                    $class_has_comments[$class_with_comments] = true;
+                    continue 2;
+                }
+
+                if (substr($line2, 0, $depth + 9) == $_depth . 'function ') {
                     // Parse function line
                     $_line = substr($line2, $depth + 9);
                     list($function_name, $parameters) = _read_php_function_line($_line);
                     break;
                 }
-                if ((substr(trim($line2), 0, 3) == '/**') || ((strpos($line2, '*/') !== false) && (array_key_exists($j + 1, $lines)) && (strpos($lines[$j + 1], 'function ') === false))) { // Probably just skipped past a top header
+
+                if ((substr(trim($line2), 0, 3) == '/**') || ((strpos($line2, '*/') !== false) && (array_key_exists($j + 1, $lines)) && (strpos($lines[$j + 1], 'function ') === false) && (strpos($lines[$j + 1], 'class ') === false))) { // Probably just skipped past a top header
                     $i = $j - 1;
                     continue 2;
                 }
@@ -282,6 +293,7 @@ function get_php_file_api($filename, $include_code = true)
     for ($i = 0; array_key_exists($i, $lines); $i++) {
         $line = ltrim($lines[$i]);
         if ((substr($line, 0, 9) == 'function ') && ((trim($lines[$i - 1]) == '') || (trim($lines[$i - 1]) == '{'))) {
+            // Infer some parameters from the function line, given we have no phpdoc
             if (substr($lines[$i], 0, 9) == 'function ') { // Only if not class level (i.e. global)
                 $function_name = preg_replace('#function\s+(\w+)\s*\(.*#s', '${1}', $line);
                 $parameters = array();
@@ -306,6 +318,25 @@ function get_php_file_api($filename, $include_code = true)
                 exit('Missing function comment for: ' . $line);
             }
             fatal_exit(do_lang_tempcode('MISSING_FUNCTION_COMMENT', rtrim($line)));
+        }
+    }
+
+    // See if there are classes with no comments
+    foreach (array_keys($classes) as $class)
+    {
+        if ($class == '__global') {
+            continue;
+        }
+
+        if (empty($class_has_comments[$class])) {
+            if (!function_exists('do_lang_tempcode')) {
+                exit('Missing class comment for: ' . $line);
+            }
+            fatal_exit(do_lang_tempcode('MISSING_CLASS_COMMENT', rtrim($class)));
+
+            $classes[$class]['comment'] = '';
+        } else {
+            $classes[$class]['comment'] = $class_has_comments[$class];
         }
     }
 

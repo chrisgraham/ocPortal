@@ -706,6 +706,14 @@ function check($structure)
         check_function($function);
     }
     foreach ($structure['classes'] as $class) {
+        if (substr($class['name'], 0, 1) == strtolower(substr($class['name'], 0, 1))) {
+            log_warning('Class names should start with an upper case letter, \'' . $class['name'] . '\'');
+        }
+
+        if (substr($class['name'], 1) != strtolower(substr($class['name'], 1))) {
+            log_warning('Class names should be lower case apart from the first letter, \'' . $class['name'] . '\'');
+        }
+
         $CURRENT_CLASS = $class['name'];
         foreach ($class['functions'] as $function) {
             if ($function['name'] == $class['name']) {
