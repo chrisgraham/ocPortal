@@ -1174,7 +1174,7 @@ class Tempcode
     public $preprocessed = false;
     public $cached_output;
 
-    var $children = null, $fresh = null;
+    public $children = null, $fresh = null;
 
     /**
      * Constructor of Tempcode

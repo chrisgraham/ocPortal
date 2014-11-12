@@ -72,9 +72,9 @@ function convert_bad_entities($data, $charset = 'ISO-8859-1')
 class OCP_simple_xml_reader
 {
     // Used during parsing
-    var $tag_stack, $attribute_stack, $children_stack, $text_stack;
+    public $tag_stack, $attribute_stack, $children_stack, $text_stack;
 
-    var $gleamed, $error;
+    public $gleamed, $error;
 
     /**
      * Constructs the XML reader: parses the given data. Check $gleamed and $error after constructing.

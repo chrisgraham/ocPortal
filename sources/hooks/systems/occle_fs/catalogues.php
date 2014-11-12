@@ -25,7 +25,7 @@ require_code('resource_fs');
  */
 class Hook_occle_fs_catalogues extends Resource_fs_base
 {
-    var $folder_resource_type = array('catalogue', 'catalogue_category');
+    public $folder_resource_type = array('catalogue', 'catalogue_category');
     public $file_resource_type = 'catalogue_entry';
 
     /**

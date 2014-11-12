@@ -51,8 +51,8 @@ function load_breadcrumb_substitutions($current_breadcrumb, $data)
 class Breadcrumb_substitution_loader
 {
     // Used during parsing
-    var $tag_stack, $attribute_stack, $text_so_far;
-    var $substitution_current_match_key, $substitution_current_label, $links, $substitutions;
+    public $tag_stack, $attribute_stack, $text_so_far;
+    public $substitution_current_match_key, $substitution_current_label, $links, $substitutions;
     public $current_breadcrumbs;
     public $breadcrumb_tpl;
 

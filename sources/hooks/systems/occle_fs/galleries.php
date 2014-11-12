@@ -26,7 +26,7 @@ require_code('resource_fs');
 class Hook_occle_fs_galleries extends Resource_fs_base
 {
     public $folder_resource_type = 'gallery';
-    var $file_resource_type = array('image', 'video');
+    public $file_resource_type = array('image', 'video');
 
     /**
      * Standard occle_fs function for seeing how many resources are. Useful for determining whether to do a full rebuild.

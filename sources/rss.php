@@ -35,9 +35,9 @@ function extract_plain_links($matches)
 class OCP_RSS
 {
     // Used during parsing
-    var $type, $namespace_stack, $version, $tag_stack, $attribute_stack, $text_so_far;
+    public $type, $namespace_stack, $version, $tag_stack, $attribute_stack, $text_so_far;
 
-    var $gleamed_feed, $gleamed_items;
+    public $gleamed_feed, $gleamed_items;
 
     public $feed_url;
 

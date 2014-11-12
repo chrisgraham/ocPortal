@@ -782,7 +782,7 @@ class Tempcode
 
     public $pure_lang = false;
 
-    var $children = null, $fresh = null;
+    public $children = null, $fresh = null;
 
     /**
      * Constructor of tempcode

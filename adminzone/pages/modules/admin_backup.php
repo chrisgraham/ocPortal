@@ -82,7 +82,7 @@ class Module_admin_backup
     {
     }
 
-    var $title;
+    private $title;
 
     /**
      * Module pre-run function. Allows us to know meta-data for <head> before we start streaming output.

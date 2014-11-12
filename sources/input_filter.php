@@ -288,8 +288,8 @@ function load_field_restrictions($this_page = null, $this_type = null)
 class Field_restriction_loader
 {
     // Used during parsing
-    var $tag_stack, $attribute_stack, $text_so_far;
-    var $this_page, $this_type;
+    public $tag_stack, $attribute_stack, $text_so_far;
+    public $this_page, $this_type;
     public $levels_from_filtered;
     public $field_qualification_stack;
 

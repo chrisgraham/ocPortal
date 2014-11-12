@@ -25,7 +25,7 @@ require_code('resource_fs');
  */
 class Hook_occle_fs_forums extends Resource_fs_base
 {
-    var $folder_resource_type = array('forum', 'topic');
+    public $folder_resource_type = array('forum', 'topic');
     public $file_resource_type = 'post';
 
     /**

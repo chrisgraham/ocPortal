@@ -448,7 +448,7 @@ function get_db_forums_password()
 class Database_driver
 {
     public $table_prefix;
-    var $connection_read, $connection_write;
+    public $connection_read, $connection_write;
 
     public $text_lookup_original_cache;
     public $text_lookup_cache;
