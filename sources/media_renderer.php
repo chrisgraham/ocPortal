@@ -341,18 +341,20 @@ abstract class Media_renderer_with_fallback
     {
         if ((peek_media_mode() & MEDIA_LOWFI) != 0) {
             // Work out where to direct links to
-            if (!empty($GLOBALS['TEMPCODE_SETGET']['comcode__current_linking_context'])) {
-                // Tempcode has specified
-                $attributes['click_url'] = $GLOBALS['TEMPCODE_SETGET']['comcode__current_linking_context'];
-                if ($attributes['click_url'] == '-') {
-                    // Special notation indicating to not use a link, i.e. an explicit "no link"
-                    $attributes['click_url'] = '';
+            if (empty($attributes['click_url'])) {
+                if (!empty($GLOBALS['TEMPCODE_SETGET']['comcode__current_linking_context'])) {
+                    // Tempcode has specified
+                    $attributes['click_url'] = $GLOBALS['TEMPCODE_SETGET']['comcode__current_linking_context'];
+                    if ($attributes['click_url'] == '-') {
+                        // Special notation indicating to not use a link, i.e. an explicit "no link"
+                        $attributes['click_url'] = '';
+                    }
+                } else {
+                    // Natural link
+                    if (!is_null($click_url)) {
+                        $attributes['click_url'] = $click_url;
+                    } // Else: no link
                 }
-            } else {
-                // Natural link
-                if (!is_null($click_url)) {
-                    $attributes['click_url'] = $click_url;
-                } // Else: no link
             }
 
             // Thumbnail?

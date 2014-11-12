@@ -84,7 +84,7 @@ class Hook_media_rendering_realmedia extends Media_renderer_with_fallback
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
-        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member, $url);
         if ($ret !== null) {
             return $ret;
         }
