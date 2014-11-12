@@ -444,6 +444,9 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
         if (isset($html_content_cache[$cache_sig])) {
             list($html_evaluated, $message_plain, $EMAIL_ATTACHMENTS) = $html_content_cache[$cache_sig];
         } else {
+            require_code('media_renderer');
+            push_media_mode(peek_media_mode() | MEDIA_LOWFI);
+
             $GLOBALS['NO_LINK_TITLES'] = true;
             global $LAX_COMCODE;
             $temp = $LAX_COMCODE;
@@ -482,6 +485,8 @@ function mail_wrap($subject_line, $message_raw, $to_email = null, $to_name = nul
             $message_plain = comcode_to_clean_text($message_raw);
 
             $html_content_cache[$cache_sig] = array($html_evaluated, $message_plain, $EMAIL_ATTACHMENTS);
+
+            pop_media_mode();
         }
         $attachments = array_merge(is_null($attachments) ? array() : $attachments, $EMAIL_ATTACHMENTS);
     } else {

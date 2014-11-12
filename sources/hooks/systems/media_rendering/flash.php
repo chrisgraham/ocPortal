@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_media_rendering_flash
+class Hook_media_rendering_flash extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.
@@ -80,6 +80,11 @@ class Hook_media_rendering_flash
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        if ($ret !== null) {
+            return $ret;
+        }
+
         return do_template('MEDIA_FLASH', array('_GUID' => '4ce841bd751ec736d146ab46246974f5', 'HOOK' => 'flash') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

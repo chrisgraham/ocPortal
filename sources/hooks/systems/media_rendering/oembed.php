@@ -280,11 +280,28 @@ class Hook_media_rendering_oembed
             return $this->_fallback_render($url, $attributes, $source_member);
         }
 
+        if ($GLOBALS['MEDIA_MODE'] == MEDIA_LOWFI) {
+            if (isset($data['thumbnail_url'])) {
+                $data['type'] = 'photo';
+                $data['url'] = $data['thumbnail_url'];
+            } else {
+                return $this->_fallback_render($url, $attributes, $source_member);
+            }
+        }
+
         switch ($data['type']) {
             case 'photo':
-                unset($attributes['width']);
-                unset($attributes['height']);
-                $map = array('width' => $data['width'], 'height' => $data['height'], 'click_url' => $url);
+                $map = array(
+                    'click_url' => $url,
+                );
+                if (isset($data['width'])) {
+                    unset($attributes['width']);
+                    $map['width'] = $data['width'];
+                }
+                if (isset($data['height'])) {
+                    unset($attributes['height']);
+                    $map['height'] = $data['height'];
+                }
                 $url = $data['url']; // NB: This will also have been constrained to the maxwidth/maxheight (at least it is for Flickr)
                 /*if (array_key_exists('thumbnail_url',$data)) $map['thumb_url']=$data['thumbnail_url']; Cannot control the size, so we'll make our own inside image_websafe
                     if (array_key_exists('thumbnail_width',$data)) $map['width']=$data['thumbnail_width'];

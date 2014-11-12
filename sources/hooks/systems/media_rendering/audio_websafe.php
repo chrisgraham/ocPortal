@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_media_rendering_audio_websafe
+class Hook_media_rendering_audio_websafe extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.
@@ -92,6 +92,11 @@ class Hook_media_rendering_audio_websafe
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        if ($ret !== null) {
+            return $ret;
+        }
+
         // Put in defaults
         if ((!array_key_exists('width', $attributes)) || (!is_numeric($attributes['width']))) {
             $attributes['width'] = get_option('attachment_default_width');

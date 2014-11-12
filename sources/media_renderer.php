@@ -35,6 +35,46 @@ function init__media_renderer()
     define('MEDIA_TYPE_AUDIO', 4);
     define('MEDIA_TYPE_OTHER', 8);
     define('MEDIA_TYPE_ALL', 15);
+
+    define('MEDIA_LOWFI', 1);
+
+    /** Options for media rendering.
+     *
+     * @global boolean $MEDIA_MODE
+     */
+    global $MEDIA_MODE;
+    $MEDIA_MODE = array(0);
+}
+
+/**
+ * Set the media mode.
+ *
+ * @param  integer                      The current media mode
+ */
+function push_media_mode($m)
+{
+    global $MEDIA_MODE;
+    array_push($MEDIA_MODE, $m);
+}
+
+/**
+ * Restore the media mode.
+ */
+function pop_media_mode()
+{
+    global $MEDIA_MODE;
+    array_pop($MEDIA_MODE);
+}
+
+/**
+ * Return the current media mode.
+ *
+ * @return integer                      The current media mode
+ */
+function peek_media_mode()
+{
+    global $MEDIA_MODE;
+    return $MEDIA_MODE[count($MEDIA_MODE) - 1];
 }
 
 /**
@@ -282,4 +322,56 @@ function _create_media_template_parameters($url, $attributes, $as_admin = false,
         'NUM_DOWNLOADS' => array_key_exists('num_downloads', $attributes) ? $attributes['num_downloads'] : null,
         'DESCRIPTION' => comcode_to_tempcode($attributes['description'], $source_member, $as_admin),
     );
+}
+
+abstract class Media_renderer_with_fallback
+{
+    /**
+     * If we are rendering in low-fi, result to simple image fall-back.
+     *
+     * @param  mixed                    URL to render
+     * @param  mixed                    URL to render (no sessions etc)
+     * @param  array                    Attributes (e.g. width, height, length)
+     * @param  boolean                  Whether there are admin privileges, to render dangerous media types
+     * @param  ?MEMBER                  Member to run as (NULL: current member)
+     * @param  mixed                    URL to route clicks through to
+     * @return ?tempcode                Rendered version (NULL: do not render)
+     */
+    public function fallback_render($url, $url_safe, $attributes, $as_admin, $source_member, $click_url = null)
+    {
+        if ((peek_media_mode() & MEDIA_LOWFI) != 0) {
+            // Work out where to direct links to
+            if (!empty($GLOBALS['TEMPCODE_SETGET']['comcode__current_linking_context'])) {
+                // Tempcode has specified
+                $attributes['click_url'] = $GLOBALS['TEMPCODE_SETGET']['comcode__current_linking_context'];
+                if ($attributes['click_url'] == '-') {
+                    // Special notation indicating to not use a link, i.e. an explicit "no link"
+                    $attributes['click_url'] = '';
+                }
+            } else {
+                // Natural link
+                if (!is_null($click_url)) {
+                    $attributes['click_url'] = $click_url;
+                } // Else: no link
+            }
+
+            // Thumbnail?
+            if (method_exists($this, 'get_video_thumbnail')) {
+                $test = $this->get_video_thumbnail($url);
+                if ($test !== null) {
+                    $url = $test;
+                    $url_safe = $test;
+                    $attributes['thumb'] = '0'; // Don't re-thumbnail
+                }
+            }
+
+            // Render as image
+            require_code('hooks/systems/media_rendering/image_websafe');
+            $ob = new Hook_media_rendering_image_websafe();
+            $attributes['framed'] = '0';
+            return $ob->render($url, $url_safe, $attributes, $as_admin, $source_member);
+        }
+
+        return null;
+    }
 }

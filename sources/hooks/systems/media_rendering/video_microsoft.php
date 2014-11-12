@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_media_rendering_video_microsoft
+class Hook_media_rendering_video_microsoft extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.
@@ -83,6 +83,11 @@ class Hook_media_rendering_video_microsoft
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        if ($ret !== null) {
+            return $ret;
+        }
+
         return do_template('MEDIA_VIDEO_GENERAL', array('_GUID' => 'ff0826858882a48040397fb7bbe99549', 'HOOK' => 'video_microsoft') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

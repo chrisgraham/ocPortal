@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_media_rendering_pdf
+class Hook_media_rendering_pdf extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.
@@ -77,6 +77,11 @@ class Hook_media_rendering_pdf
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        if ($ret !== null) {
+            return $ret;
+        }
+
         return do_template('MEDIA_PDF', array('_GUID' => '8e37123f120505eea27f482edaf78357', 'HOOK' => 'pdf') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_media_rendering_realmedia
+class Hook_media_rendering_realmedia extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.
@@ -80,6 +80,11 @@ class Hook_media_rendering_realmedia
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        if ($ret !== null) {
+            return $ret;
+        }
+
         return do_template('MEDIA_REALMEDIA', array('_GUID' => '313a28331ac2ab936b57a26dffb363c1', 'HOOK' => 'realmedia') + _create_media_template_parameters($url, $attributes, $as_admin, $source_member));
     }
 }

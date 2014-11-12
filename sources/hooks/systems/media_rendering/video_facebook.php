@@ -17,7 +17,7 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_media_rendering_video_facebook
+class Hook_media_rendering_video_facebook extends Media_renderer_with_fallback
 {
     /**
      * Get the label for this media rendering type.
@@ -101,6 +101,11 @@ class Hook_media_rendering_video_facebook
      */
     public function render($url, $url_safe, $attributes, $as_admin = false, $source_member = null)
     {
+        $ret = $this->fallback_render($url, $url_safe, $attributes, $as_admin, $source_member);
+        if ($ret !== null) {
+            return $ret;
+        }
+
         if (is_object($url)) {
             $url = $url->evaluate();
         }
