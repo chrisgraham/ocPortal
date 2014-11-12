@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_side_personal_stats
 {
     /**

@@ -184,7 +184,7 @@ function generate_notifications($member_id)
 
         if (!is_null($_notifications)) {
             list($__notifications, $num_unread_pps) = $_notifications;
-            $notifications = new ocp_tempcode();
+            $notifications = new Tempcode();
             if (!$notifications->from_assembly($__notifications, true)) {
                 $notifications = null;
             }
@@ -196,7 +196,7 @@ function generate_notifications($member_id)
         $GLOBALS['NO_QUERY_LIMIT'] = true;
 
         $unread_pps = ocf_get_pp_rows();
-        $notifications = new ocp_tempcode();
+        $notifications = new Tempcode();
         $num_unread_pps = 0;
         foreach ($unread_pps as $unread_pp) {
             $just_post_row = db_map_restrict($unread_pp, array('id', 'p_post'));
@@ -230,7 +230,7 @@ function generate_notifications($member_id)
             if ($description != '') {
                 $description = ' (' . $description . ')';
             }
-            $profile_link = is_guest($by_id) ? new ocp_tempcode() : $GLOBALS['OCF_DRIVER']->member_profile_url($by_id, false, true);
+            $profile_link = is_guest($by_id) ? new Tempcode() : $GLOBALS['OCF_DRIVER']->member_profile_url($by_id, false, true);
             $redirect = get_self_url(true, true);
             $ignore_url = build_url(array('page' => 'topics', 'type' => 'mark_read_topic', 'id' => $unread_pp['p_topic_id'], 'redirect' => $redirect), get_module_zone('topics'));
             $ignore_url_2 = build_url(array('page' => 'topics', 'type' => 'mark_read_topic', 'id' => $unread_pp['p_topic_id'], 'redirect' => $redirect, 'ajax' => 1), get_module_zone('topics'));

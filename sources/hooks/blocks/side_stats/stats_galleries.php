@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats_galleries
 {
     /**
@@ -27,12 +31,12 @@ class Hook_stats_galleries
     public function run()
     {
         if (!addon_installed('galleries')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_lang('galleries');
 
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
 
         if (get_option('galleries_show_stats_count_galleries') == '1') {
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '979bcf993db7c01ced08d8f8a696fec0', 'KEY' => do_lang_tempcode('GALLERIES'), 'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'galleries WHERE name NOT LIKE \'' . db_encode_like('download_%') . '\'')))));
@@ -44,7 +48,7 @@ class Hook_stats_galleries
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'a9274594cde52028fc810b7b780e9942', 'KEY' => do_lang_tempcode('VIDEOS'), 'VALUE' => integer_format($GLOBALS['SITE_DB']->query_value_if_there('videos', 'COUNT(*)')))));
         }
         if ($bits->is_empty_shell()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         $section = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => '128d3b49ad53927dff65252735dd2106', 'SECTION' => do_lang_tempcode('GALLERIES'), 'CONTENT' => $bits));
 

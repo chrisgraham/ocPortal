@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
-class Hook_Preview_download
+
+/**
+ * Hook class.
+ */
+class Hook_preview_download
 {
     /**
      * Find whether this preview hook applies.

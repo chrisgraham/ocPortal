@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_posting_field
 {
     // ==============
@@ -120,7 +124,7 @@ class Hook_fields_posting_field
 
         list($attachments, $attach_size_field) = get_attachments('field_' . strval($field['id']));
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
         $hidden_fields->attach($attach_size_field);
 
         $help_zone = get_comcode_zone('userguide_comcode', false);
@@ -159,7 +163,7 @@ class Hook_fields_posting_field
             'COMCODE_EDITOR' => $comcode_editor,
             'COMCODE_EDITOR_SMALL' => $comcode_editor_small,
             'CLASS' => $class,
-            'COMCODE_URL' => is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
+            'COMCODE_URL' => is_null($help_zone) ? new Tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
             'EMOTICON_CHOOSER' => $emoticon_chooser,
             'POST' => $actual_value,
             'DEFAULT_PARSED' => $default_parsed,

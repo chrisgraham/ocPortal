@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
+
+/**
+ * Hook class.
+ */
 class Hook_resource_meta_aware_menu
 {
     /**

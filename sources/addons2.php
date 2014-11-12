@@ -781,10 +781,10 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
     $info += get_default_addon_details();
     $addon = $info['name'];
     $php = false;
-    $overwrite = new ocp_tempcode();
+    $overwrite = new Tempcode();
     $dirs = array();
-    $files = new ocp_tempcode();
-    $files_warnings = new ocp_tempcode();
+    $files = new Tempcode();
+    $files_warnings = new Tempcode();
 
     sort_maps_by($directory, 'path');
 
@@ -849,7 +849,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
         }
     }
     tar_close($tar);
-    $chmod = new ocp_tempcode();
+    $chmod = new Tempcode();
     $root_chmod = false;
     foreach (array_keys($dirs) as $dir) {
         if ((is_writable_wrap(get_file_base() . '/' . $dir)) && (file_exists(get_file_base() . '/' . $dir))) {
@@ -875,7 +875,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
 
     // Check incompatibilities, and show general warning
     // NB: It's theoretically possible that there may be incompatibilities between two addons installing together, and we can't detect this (only incompatibilities for what is already installed). However it's very unlikely as multi-install is only really going to happen with official addons which have no such problems.
-    $warnings = new ocp_tempcode();
+    $warnings = new Tempcode();
     if ($info['author'] != 'Core Team') {
         static $done_non_core_warn = false;
         if (!$done_non_core_warn) {
@@ -884,7 +884,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
         $done_non_core_warn = true;
     }
     $incompatibilities = collapse_1d_complexity('addon_name', $GLOBALS['SITE_DB']->query_select('addons_dependencies', array('addon_name'), array('addon_name_dependant_upon' => $addon, 'addon_name_incompatibility' => 1)));
-    $_incompatibilities = new ocp_tempcode();
+    $_incompatibilities = new Tempcode();
     foreach ($incompatibilities as $in) {
         if (!$_incompatibilities->is_empty()) {
             $_incompatibilities->attach(do_lang_tempcode('LIST_SEP'));
@@ -913,7 +913,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
             $dependencies[] = $dependency;
         }
     }
-    $_dependencies_str = new ocp_tempcode();
+    $_dependencies_str = new Tempcode();
     foreach ($dependencies as $in) {
         if (!$_dependencies_str->is_empty()) {
             $_dependencies_str->attach(do_lang_tempcode('LIST_SEP'));
@@ -952,7 +952,7 @@ function inform_about_addon_install($file, $also_uninstalling = null, $also_inst
     }
     //if ($chmod!='') $warnings->attach(do_template('ADDON_INSTALL_WARNING',array('_GUID'=>'78121e40b9a26c2f33d09f7eee7b74be','WARNING'=>do_lan g_tempcode('ADDON_WARNING_CHMOD',escape_html($chmod))))); // Now uses AFM
 
-    $files_combined = new ocp_tempcode();
+    $files_combined = new Tempcode();
     $files_combined->attach($files_warnings);
     $files_combined->attach($files);
 
@@ -1038,7 +1038,7 @@ function inform_about_addon_uninstall($addon, $also_uninstalling = null, $addon_
     if (is_null($addon_info)) {
         $addon_info = read_addon_info($addon, true);
     }
-    $files = new ocp_tempcode();
+    $files = new Tempcode();
     // The files can come in as either a newline-separated string or an array.
     // If its an array then we use it as-is, if it's a string then we explode it first.
     if (is_array($addon_info['files'])) {
@@ -1057,8 +1057,8 @@ function inform_about_addon_uninstall($addon, $also_uninstalling = null, $addon_
             unset($dependencies[array_search($d, $dependencies)]);
         }
     }
-    $warnings = new ocp_tempcode();
-    $_dependencies_str = new ocp_tempcode();
+    $warnings = new Tempcode();
+    $_dependencies_str = new Tempcode();
     foreach ($dependencies as $in) {
         if (!$_dependencies_str->is_empty()) {
             $_dependencies_str->attach(do_lang_tempcode('LIST_SEP'));

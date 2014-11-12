@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    weather
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_weather
 {
     /**

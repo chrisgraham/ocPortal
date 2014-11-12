@@ -53,7 +53,7 @@ function _urlise_lang($string, $url, $title, $new_window)
         }
     }
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $out->attach(protect_from_escaping($prior));
     $out->attach(hyperlink($url, protect_from_escaping($section), $new_window, false, $title));
     $out->attach(protect_from_escaping($after));

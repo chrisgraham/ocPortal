@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    external_db_login
  */
+
+/**
+ * Module page class.
+ */
 class Mx_join extends Module_join
 {
     /**

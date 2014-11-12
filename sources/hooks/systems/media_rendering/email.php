@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
+
+/**
+ * Hook class.
+ */
 class Hook_media_rendering_email
 {
     /**
@@ -88,6 +92,6 @@ class Hook_media_rendering_email
         }
         $EMAIL_ATTACHMENTS[$url] = $attributes['filename'];
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

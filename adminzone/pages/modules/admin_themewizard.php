@@ -158,7 +158,7 @@ class Module_admin_themewizard
             return $this->__make_logo();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -176,14 +176,14 @@ class Module_admin_themewizard
 
         $source_theme = get_param('source_theme', 'default');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         if (count(find_all_themes()) == 1) {
             $hidden->attach(form_input_hidden('source_theme', $source_theme));
         } else {
             $themes = create_selection_list_themes($source_theme, true);
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_codename(do_lang_tempcode('NEW_THEME'), do_lang_tempcode('DESCRIPTION_NAME'), 'themename', get_param('themename', ''), true));
 
@@ -195,7 +195,7 @@ class Module_admin_themewizard
             $fields->attach(form_input_list(do_lang_tempcode('SOURCE_THEME'), do_lang_tempcode('DESCRIPTION_SOURCE_THEME'), 'source_theme', $themes, null, true));
         }
 
-        $radios = new ocp_tempcode();
+        $radios = new Tempcode();
         $radios->attach(form_input_radio_entry('algorithm', 'equations', $source_theme == 'default', do_lang_tempcode('THEMEGEN_ALGORITHM_EQUATIONS')));
         $radios->attach(form_input_radio_entry('algorithm', 'hsv', $source_theme != 'default', do_lang_tempcode('THEMEGEN_ALGORITHM_HSV')));
         $fields->attach(form_input_radio(do_lang_tempcode('THEMEGEN_ALGORITHM'), do_lang_tempcode('DESCRIPTION_THEMEGEN_ALGORITHM'), 'algorithm', $radios, true));
@@ -290,9 +290,9 @@ class Module_admin_themewizard
         $post_url = build_url(array('page' => '_SELF', 'type' => 'step4'), '_SELF');
         $submit_name = do_lang_tempcode('ADD_THEME');
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_tick(do_lang_tempcode('USE_ON_ZONES'), do_lang_tempcode('DESCRIPTION_USE_ON_ZONES'), 'use_on_all', true));
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('source_theme', $source_theme));
         $hidden->attach(form_input_hidden('algorithm', $algorithm));
         $hidden->attach(form_input_hidden('seed', $seed));
@@ -397,11 +397,11 @@ class Module_admin_themewizard
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('config:SITE_NAME'), do_lang_tempcode('DESCRIPTION_LOGO_NAME'), 'name', get_option('site_name'), true));
         $fields->attach(form_input_theme_image(do_lang_tempcode('LOGO_THEME_IMAGE'), '', 'logo_theme_image', $default_logos, null));
         $fields->attach(form_input_theme_image(do_lang_tempcode('BACKGROUND_THEME_IMAGE'), '', 'background_theme_image', $default_backgrounds));
-        $font_choices = new ocp_tempcode();
+        $font_choices = new Tempcode();
         $dh = opendir(get_file_base() . '/data_custom/fonts');
         $fonts = array();
         if ($dh !== false) {

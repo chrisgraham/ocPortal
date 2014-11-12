@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
+
+/**
+ * Block class.
+ */
 class Block_side_stats
 {
     /**
@@ -59,10 +63,10 @@ class Block_side_stats
      */
     public function run($map)
     {
-        $full_tpl = new ocp_tempcode();
+        $full_tpl = new Tempcode();
 
         // Inbuilt
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
         $on_forum = $GLOBALS['FORUM_DRIVER']->get_num_users_forums();
         if (!is_null($on_forum)) {
             if (get_option('activity_show_stats_count_users_online') == '1') {

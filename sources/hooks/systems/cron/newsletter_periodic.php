@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_newsletter_periodic
 {
     /**
@@ -177,7 +181,7 @@ class Hook_cron_newsletter_periodic
             }
         }
         ksort($automatic);
-        $_automatic = new ocp_tempcode();
+        $_automatic = new Tempcode();
         if (count($automatic) == 0) {
             return null; // Nothing new
         }

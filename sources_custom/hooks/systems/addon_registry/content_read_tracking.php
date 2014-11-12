@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    content_read_tracking
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_content_read_tracking
 {
     /**

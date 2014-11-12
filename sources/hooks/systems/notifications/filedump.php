@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-class Hook_Notification_filedump extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_filedump extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

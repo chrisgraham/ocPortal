@@ -129,7 +129,7 @@ class Module_admin_points
             return $this->points_log();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -142,7 +142,7 @@ class Module_admin_points
     {
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $time_start = filectime(get_file_base() . '/_config.php') - 60 * 60 * 24 * 365 * 5; // 5 years before site start time, so that the default is "beginning"
 
         $fields->attach(form_input_date(do_lang_tempcode('FROM'), '', 'from', true, false, false, $time_start, 10, intval(date('Y')) - 9));
@@ -201,7 +201,7 @@ class Module_admin_points
         if (count($rows) == 0) {
             return inform_screen($this->title, do_lang_tempcode('NO_ENTRIES'));
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('AMOUNT'), do_lang_tempcode('FROM'), do_lang_tempcode('TO'), do_lang_tempcode('REASON'), do_lang_tempcode('REVERSE')), $sortables, 'sort', $sortable . ' ' . $sort_order);
         foreach ($rows as $myrow) {

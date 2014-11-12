@@ -218,7 +218,7 @@ class Module_groups
             return $this->decline();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -305,7 +305,7 @@ class Module_groups
         $max = get_param_integer('staff_max', intval(get_option('important_groups_per_page')));
         $max_rows = count($_staff);
         $fields_title = results_field_title(array(do_lang_tempcode('NAME'), do_lang_tempcode('COUNT_MEMBERS')), $sortables);
-        $staff = new ocp_tempcode();
+        $staff = new Tempcode();
         $i = 0;
         foreach ($_staff as $row) {
             if ($i < $start) {
@@ -330,7 +330,7 @@ class Module_groups
             $max = get_param_integer('rank_max_' . strval($g_id), intval(get_option('important_groups_per_page')));
             $max_rows = count($_rank);
             $fields_title = results_field_title(array(do_lang_tempcode('NAME'), do_lang_tempcode('COUNT_MEMBERS'), do_lang_tempcode('PROMOTION_THRESHOLD')), $sortables);
-            $rank = new ocp_tempcode();
+            $rank = new Tempcode();
             $i = 0;
             foreach ($_rank as $row) {
                 if ($i < $start) {
@@ -344,7 +344,7 @@ class Module_groups
                 $url = build_url(array('page' => '_SELF', 'type' => 'view', 'id' => $row['id']), '_SELF');
                 $num_members = integer_format(ocf_get_group_members_raw_count($row['id'], true));
                 $_p_t = $row['g_promotion_threshold'];
-                $p_t = new ocp_tempcode();
+                $p_t = new Tempcode();
                 if ((!is_null($_p_t)) && (array_key_exists($row['g_promotion_target'], $_rank))) {
                     $p_t = do_lang_tempcode('PROMOTION_TO', escape_html(integer_format($_p_t)), escape_html($_rank[$row['g_promotion_target']]['_name']));
                 }
@@ -374,7 +374,7 @@ class Module_groups
         $_others = $GLOBALS['FORUM_DB']->query($sql, $max, $start);
         $max_rows = $GLOBALS['FORUM_DB']->query_value_if_there(str_replace('SELECT * ', 'SELECT COUNT(*) ', $sql));
         $fields_title = results_field_title(array(do_lang_tempcode('NAME'), do_lang_tempcode('COUNT_MEMBERS')), $sortables);
-        $others = new ocp_tempcode();
+        $others = new Tempcode();
         foreach ($_others as $row) {
             $group_name = get_translated_text($row['g_name'], $GLOBALS['FORUM_DB']);
 
@@ -414,7 +414,7 @@ class Module_groups
             $leader_link = hyperlink($leader_url, $leader_name, false, true);
             $leader = paragraph(do_lang_tempcode('GROUP_LED_BY', $leader_link), 'gfgdfggdf');
         } else {
-            $leader = new ocp_tempcode();
+            $leader = new Tempcode();
         }
 
         // Promotion
@@ -422,21 +422,21 @@ class Module_groups
             $promote_link = ocf_get_group_link($group['g_promotion_target']);
             $promotion_info = do_lang_tempcode('OCF_PROMOTION_INFO', integer_format($group['g_promotion_threshold']), $promote_link->evaluate());
         } else {
-            $promotion_info = new ocp_tempcode();
+            $promotion_info = new Tempcode();
         }
 
         // To add
         if (ocf_may_control_group($id, get_member())) {
             $add_url = build_url(array('page' => '_SELF', 'type' => 'add_to', 'id' => $id), '_SELF');
         } else {
-            $add_url = new ocp_tempcode();
+            $add_url = new Tempcode();
         }
 
         // To apply
         $my_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups(get_member());
         if (is_guest()) {
-            $apply_url = new ocp_tempcode();
-            $apply_text = new ocp_tempcode();
+            $apply_url = new Tempcode();
+            $apply_text = new Tempcode();
         } else {
             if (!in_array($id, $my_groups)) {
                 $apply_url = build_url(array('page' => '_SELF', 'type' => 'apply', 'id' => $id), '_SELF');
@@ -445,8 +445,8 @@ class Module_groups
                 $apply_url = build_url(array('page' => '_SELF', 'type' => 'resign', 'id' => $id), '_SELF');
                 $apply_text = do_lang_tempcode('RESIGN_FROM_GROUP');
             } else {
-                $apply_url = new ocp_tempcode();
-                $apply_text = new ocp_tempcode();
+                $apply_url = new Tempcode();
+                $apply_text = new Tempcode();
             }
         }
 
@@ -460,7 +460,7 @@ class Module_groups
         $_primary_members = ocf_get_group_members_raw($id, true, true, false, false, $max, $start);
         if (count($_primary_members) > 0) {
             $max_rows = ocf_get_group_members_raw_count($id, true, true, false, false);
-            $primary_members = new ocp_tempcode();
+            $primary_members = new Tempcode();
             foreach ($_primary_members as $i => $primary_member) {
                 $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($primary_member['gm_member_id'], false, true);
                 $temp = do_template('OCF_VIEW_GROUP_MEMBER', array('_GUID' => 'b96b674ac713e9790ecb78c15af1baab', 'ID' => strval($primary_member['gm_member_id']), 'NAME' => $primary_member['m_username'], 'URL' => $url));
@@ -469,17 +469,17 @@ class Module_groups
             $fields_title = results_field_title(array(do_lang_tempcode('PRIMARY_MEMBERS')), $sortables, 'p_sort', $sortable . ' ' . $sort_order);
             $primary_members = results_table(do_lang_tempcode('PRIMARY_MEMBERS'), $start, 'p_start', $max, 'p_max', $max_rows, $fields_title, $primary_members, $sortables, $sortable, $sort_order, 'p_sort', null, null, null, 6);
         } else {
-            $primary_members = new ocp_tempcode();
+            $primary_members = new Tempcode();
         }
 
-        $edit_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
 
         // Secondary members
         $s_start = get_param_integer('s_start', 0);
         $s_max = get_param_integer('s_max', intval(get_option('secondary_members_per_page')));
         $_secondary_members = ocf_get_group_members_raw($id, false, true, true, ocf_may_control_group($id, get_member()), $s_max, $s_start);
-        $secondary_members = new ocp_tempcode();
-        $prospective_members = new ocp_tempcode();
+        $secondary_members = new Tempcode();
+        $prospective_members = new Tempcode();
         $s_max_rows = ocf_get_group_members_raw_count($id, false, false, true, ocf_may_control_group($id, get_member()));
         $d_max_rows = ocf_get_group_members_raw_count($id, false, true, true, ocf_may_control_group($id, get_member()));
         foreach ($_secondary_members as $secondary_member) {
@@ -743,7 +743,7 @@ class Module_groups
             $text = paragraph(do_lang_tempcode('OPTIONAL_REASON'));
             $submit_name = do_lang_tempcode('DECLINE_FROM_GROUP');
             $post_url = build_url(array('page' => '_SELF', 'type' => get_param('type')), '_SELF', null, true);
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $hidden = form_input_hidden('id', strval($id));
             $fields->attach(form_input_line(do_lang_tempcode('REASON'), '', 'reason', '', false));
 

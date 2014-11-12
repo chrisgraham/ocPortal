@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    actionlog
  */
-class Hook_Notification_actionlog extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_actionlog extends Hook_notification__Staff
 {
     /**
      * Find whether a handled notification code supports categories.

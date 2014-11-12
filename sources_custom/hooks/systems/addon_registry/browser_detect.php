@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    browser_detect
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_browser_detect
 {
     /**

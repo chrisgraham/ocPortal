@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
-class Hook_Notification_content_validated extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_content_validated extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

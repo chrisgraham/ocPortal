@@ -78,7 +78,7 @@ if (!function_exists('parse_translated_text')) {
                 return $ret;
             }
 
-            $connection->text_lookup_cache[$entry] = new ocp_tempcode();
+            $connection->text_lookup_cache[$entry] = new Tempcode();
             $connection->text_lookup_cache[$entry]->from_assembly($result);
 
             $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;

@@ -507,7 +507,7 @@ function placeholder_blank()
  */
 function placeholder_breadcrumbs()
 {
-    $tpl_url = new ocp_tempcode();
+    $tpl_url = new Tempcode();
     $tpl_url->attach(hyperlink(placeholder_url(), escape_html(lorem_phrase()), false, false, do_lang_tempcode('GO_BACKWARDS_TO', lorem_phrase()), null, null, 'up'));
     $tpl_url->attach(do_lorem_template('BREADCRUMB_SEPARATOR'));
     $tpl_url->attach(hyperlink(placeholder_url(), escape_html(lorem_phrase()), false, false, do_lang_tempcode('GO_BACKWARDS_TO', lorem_phrase()), null, null, 'up'));
@@ -552,7 +552,7 @@ function lorem_globalise($middle, $message = null, $type = '', $include_header_a
         return $middle;
     }
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $out->attach(do_lorem_template('GLOBAL_HTML_WRAP', array(
         'MIDDLE' => $middle,
     )));
@@ -606,7 +606,7 @@ function placeholder_avatar()
  */
 function placeholder_emoticon_chooser()
 {
-    $em = new ocp_tempcode();
+    $em = new Tempcode();
     foreach (placeholder_emoticons() as $emo) {
         $code = $emo[2];
         $em->attach(do_lorem_template('EMOTICON_CLICK_CODE', array('_GUID' => '93968e9ff0308fff92d1d45e433557e2', 'FIELD_NAME' => 'post', 'CODE' => $code, 'IMAGE' => apply_emoticons($code))));
@@ -654,7 +654,7 @@ function placeholder_img_code($type = '')
  */
 function placeholder_pagination()
 {
-    $selectors = new ocp_tempcode();
+    $selectors = new Tempcode();
     foreach (placeholder_array() as $k => $v) {
         $selectors->attach(do_lorem_template('PAGINATION_PER_PAGE_OPTION', array(
             'SELECTED' => true,
@@ -669,7 +669,7 @@ function placeholder_pagination()
         'SELECTORS' => $selectors
     ));
 
-    $parts = new ocp_tempcode();
+    $parts = new Tempcode();
     foreach (placeholder_array() as $k => $v) {
         $j = $k + 1;
         if ($k == 0) {

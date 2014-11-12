@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ad_success
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_ad_success
 {
     /**

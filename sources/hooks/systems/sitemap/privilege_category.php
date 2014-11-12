@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_permission_management
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_privilege_category extends Hook_sitemap_base
 {
     /**

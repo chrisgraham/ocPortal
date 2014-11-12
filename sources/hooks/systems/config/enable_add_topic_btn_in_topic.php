@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_enable_add_topic_btn_in_topic
 {
     /**

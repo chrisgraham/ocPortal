@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_exists_gallery
 {
     /**
@@ -30,7 +34,7 @@ class Hook_exists_gallery
 
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('galleries', 'name', array('name' => $val));
         if (is_null($test)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($val))));

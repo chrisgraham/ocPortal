@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_forwarding
 {
     /**
@@ -77,7 +81,7 @@ class Hook_pointstore_forwarding
      */
     public function get_fields()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('MAIL_DOMAIN'), do_lang_tempcode('DESCRIPTION_MAIL_DOMAIN'), 'dforw', '', true));
         $fields->attach(form_input_integer(do_lang_tempcode('MAIL_COST'), do_lang_tempcode('_DESCRIPTION_MAIL_COST'), 'forw', null, true));
         return $fields;
@@ -93,8 +97,8 @@ class Hook_pointstore_forwarding
         $rows = $GLOBALS['SITE_DB']->query('SELECT price,name FROM ' . get_table_prefix() . 'prices WHERE name LIKE \'' . db_encode_like('forw_%') . '\'');
         $out = array();
         foreach ($rows as $i => $row) {
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
             $domain = substr($row['name'], strlen('forw_'));
             $hidden->attach(form_input_hidden('dforw_' . strval($i), $domain));
             $fields->attach(form_input_line(do_lang_tempcode('MAIL_DOMAIN'), do_lang_tempcode('DESCRIPTION_MAIL_DOMAIN'), 'ndforw_' . strval($i), substr($row['name'], 5), true));
@@ -115,7 +119,7 @@ class Hook_pointstore_forwarding
     public function newforwarding()
     {
         if (get_option('is_on_forw_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWFORWARDING');
@@ -132,7 +136,7 @@ class Hook_pointstore_forwarding
         }
 
         // Build up fields
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('ADDRESS_DESIRED_STUB'), '', 'email-prefix', '', true));
         $fields->attach(form_input_list(do_lang_tempcode('ADDRESS_DESIRED_DOMAIN'), '', 'esuffix', $list));
@@ -161,7 +165,7 @@ class Hook_pointstore_forwarding
     public function _newforwarding()
     {
         if (get_option('is_on_forw_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('type_validation');
@@ -204,7 +208,7 @@ class Hook_pointstore_forwarding
 
         // Return
         $proceed_url = build_url(array('page' => '_SELF', 'type' => '__newforwarding', 'id' => 'forwarding'), '_SELF');
-        $keep = new ocp_tempcode();
+        $keep = new Tempcode();
         $keep->attach(form_input_hidden('prefix', $prefix));
         $keep->attach(form_input_hidden('suffix', $_suffix));
         $keep->attach(form_input_hidden('email', $email));
@@ -229,7 +233,7 @@ class Hook_pointstore_forwarding
     public function __newforwarding()
     {
         if (get_option('is_on_forw_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWFORWARDING');

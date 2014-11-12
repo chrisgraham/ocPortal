@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_chat
 {
     /**
@@ -54,7 +58,7 @@ class Hook_rss_chat
             }
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             if ((!array_key_exists($row['room_id'], $categories)) && ($count >= 100)) {
                 $_categories = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('*'), array('id' => $row['room_id']), '', 1);
@@ -90,7 +94,7 @@ class Hook_rss_chat
 
                 $view_url = build_url(array('page' => 'chat', 'type' => 'room', 'id' => $row['room_id']), get_module_zone('chat'), null, false, false, true);
 
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
             }

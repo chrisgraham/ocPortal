@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_content_meta_aware_forum
 {
     /**

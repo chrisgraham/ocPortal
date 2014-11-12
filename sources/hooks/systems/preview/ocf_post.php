@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-class Hook_Preview_ocf_post
+
+/**
+ * Hook class.
+ */
+class Hook_preview_ocf_post
 {
     /**
      * Find whether this preview hook applies.
@@ -61,7 +65,7 @@ class Hook_Preview_ocf_post
                 $p['message'] = get_translated_tempcode('f_posts', $p, 'p_post', $GLOBALS['FORUM_DB']);
 
                 $temp = $post_html;
-                $post_html = new ocp_tempcode();
+                $post_html = new Tempcode();
                 $post_html = do_template('COMCODE_QUOTE_BY', array('_GUID' => 'ba33b8277a991e48c7174c0469771a44', 'SAIDLESS' => false, 'BY' => $p['p_poster_name_if_guest'], 'CONTENT' => $p['message']));
                 $post_html->attach($temp);
             }
@@ -87,8 +91,8 @@ class Hook_Preview_ocf_post
         if (strlen($post_title) > 120) {
             warn_exit(do_lang_tempcode('TITLE_TOO_LONG'));
         }
-        $unvalidated = ((post_param_integer('validated', 0) == 0) && (get_param('page', '') == 'topics')) ? do_lang_tempcode('UNVALIDATED') : new ocp_tempcode();
-        $emphasis = new ocp_tempcode();
+        $unvalidated = ((post_param_integer('validated', 0) == 0) && (get_param('page', '') == 'topics')) ? do_lang_tempcode('UNVALIDATED') : new Tempcode();
+        $emphasis = new Tempcode();
         $intended_solely_for = post_param('intended_solely_for', null);
         if ($intended_solely_for == '') {
             $intended_solely_for = null;
@@ -107,7 +111,7 @@ class Hook_Preview_ocf_post
         if ($_postdetails_avatar != '') {
             $post_avatar = do_template('OCF_TOPIC_POST_AVATAR', array('_GUID' => '2683c09eabd7a9f1fdc57a20117483ef', 'AVATAR' => $_postdetails_avatar));
         } else {
-            $post_avatar = new ocp_tempcode();
+            $post_avatar = new Tempcode();
         }
         require_code('ocf_groups');
         require_code('ocf_members');
@@ -127,16 +131,16 @@ class Hook_Preview_ocf_post
             }
             $poster = do_template('OCF_POSTER_MEMBER', array('_GUID' => '976a6ceb631bbdcdd950b723cb5d2487', 'ONLINE' => true, 'ID' => strval($post_owner), 'POSTER_DETAILS' => $poster_details, 'PROFILE_URL' => $GLOBALS['FORUM_DRIVER']->member_profile_url($post_owner, false, true), 'POSTER_USERNAME' => $poster_username));
         } else {
-            $poster_details = new ocp_tempcode();
+            $poster_details = new Tempcode();
             $custom_fields = do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => '9cbbc5913d8164970f19c38a210fda95', 'NAME' => do_lang_tempcode('IP_ADDRESS'), 'VALUE' => (get_ip_address())));
             $poster_details = do_template('OCF_GUEST_DETAILS', array('_GUID' => '2db48e17db9f060c04386843f2d0f105', 'CUSTOM_FIELDS' => $custom_fields));
             $poster_username = post_param('poster_name_if_guest', do_lang('GUEST'));
-            $ip_link = ((has_actual_page_access(get_member(), 'admin_lookup')) && (addon_installed('securitylogging'))) ? build_url(array('page' => 'admin_lookup', 'param' => get_ip_address()), get_module_zone('admin_lookup')) : new ocp_tempcode();
+            $ip_link = ((has_actual_page_access(get_member(), 'admin_lookup')) && (addon_installed('securitylogging'))) ? build_url(array('page' => 'admin_lookup', 'param' => get_ip_address()), get_module_zone('admin_lookup')) : new Tempcode();
             $poster = do_template('OCF_POSTER_GUEST', array('_GUID' => '9c0ba6198663de96facc7399a08e8281', 'LOOKUP_IP_URL' => $ip_link, 'POSTER_DETAILS' => $poster_details, 'POSTER_USERNAME' => $poster_username));
         }
 
         // Rank images
-        $rank_images = new ocp_tempcode();
+        $rank_images = new Tempcode();
         $posters_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($post_owner, true);
         foreach ($posters_groups as $group) {
             $rank_image = ocf_get_group_property($group, 'rank_image');
@@ -156,7 +160,7 @@ class Hook_Preview_ocf_post
                 'LAST_EDIT_USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()),
             ));
         } else {
-            $last_edited = new ocp_tempcode();
+            $last_edited = new Tempcode();
         }
 
         $map = array(

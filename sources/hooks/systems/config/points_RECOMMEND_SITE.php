@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    recommend
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_points_RECOMMEND_SITE
 {
     /**

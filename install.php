@@ -148,7 +148,7 @@ if ($minor != '') {
 }
 $CHMOD_ARRAY = get_chmod_array($INSTALL_LANG);
 
-$password_prompt = new ocp_tempcode();
+$password_prompt = new Tempcode();
 
 if (!array_key_exists('step', $_GET)) {
     $_GET['step'] = '1';
@@ -287,7 +287,7 @@ function step_1()
     erase_cached_language();
 
     // Integrity check
-    $warnings = new ocp_tempcode();
+    $warnings = new Tempcode();
     global $DATADOTOCP_FILE;
     if (!@is_resource($DATADOTOCP_FILE)) { // Do an integrity check - missing corrupt files
         if ((array_key_exists('skip_disk_checks', $_GET)) || (file_exists(get_file_base() . '/.git'))) {
@@ -446,7 +446,7 @@ function step_1()
     ksort($langs);
     unset($langs['EN']);
     $langs = array_merge(array('EN' => 'lang'), $langs);
-    $tlanguages = new ocp_tempcode();
+    $tlanguages = new Tempcode();
     foreach (array_keys($langs) as $lang) {
         if (array_key_exists($lang, $lookup)) {
             $stub = ($lang == 'EN') ? '' : (' (unofficial, ' . strval(intval(round(100.0 * $lang_count[$lang] / $lang_count['EN']))) . '% changed)');
@@ -528,7 +528,7 @@ function step_3()
     ksort($forums);
     $forums = array_merge(array('none' => 1), $forums);
     $forum_info = better_parse_ini_file(get_file_base() . '/sources/forum/forums.ini');
-    $tforums = new ocp_tempcode();
+    $tforums = new Tempcode();
     $classes = array();
     foreach (array_keys($forums) as $forum) {
         $class = array_key_exists($forum . '_class', $forum_info) ? $forum_info[$forum . '_class'] : 'general';
@@ -542,8 +542,8 @@ function step_3()
             $DEFAULT_FORUM = $SITE_INFO['forum_type'];
         }
     }
-    $default_version = new ocp_tempcode();
-    $simple_forums = new ocp_tempcode(); // For is JS is off, this is a simple flat list of all versions (rather than a two level list - with first level being $tforums and the second level being filtered using CSS 'display' from $versions)
+    $default_version = new Tempcode();
+    $simple_forums = new Tempcode(); // For is JS is off, this is a simple flat list of all versions (rather than a two level list - with first level being $tforums and the second level being filtered using CSS 'display' from $versions)
 
     foreach ($classes as $class => $forums) {
         if (trim($class) == '') {
@@ -554,7 +554,7 @@ function step_3()
         if (is_null($mapped_name)) {
             $mapped_name = ucwords($class);
         }
-        $versions = new ocp_tempcode();
+        $versions = new Tempcode();
         $first = true;
         $forums = array_reverse($forums);
         $rec = in_array($DEFAULT_FORUM, $forums);
@@ -587,7 +587,7 @@ function step_3()
     $databases = array_merge(get_dir_contents('sources/database', true), get_dir_contents('sources_custom/database', true));
     ksort($databases);
     $database_names = better_parse_ini_file(get_file_base() . '/sources/database/database.ini');
-    $tdatabase = new ocp_tempcode();
+    $tdatabase = new Tempcode();
     $dbs_found = 0;
     foreach (array_keys($databases) as $database) {
         if (!GOOGLE_APPENGINE) {
@@ -694,7 +694,7 @@ function step_4()
     // Our forum is
     $forum_type = post_param('forum_type');
     require_code('forum/' . $forum_type);
-    $GLOBALS['FORUM_DRIVER'] = object_factory('forum_driver_' . filter_naughty_harsh($forum_type));
+    $GLOBALS['FORUM_DRIVER'] = object_factory('Forum_driver_' . filter_naughty_harsh($forum_type));
     $GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED = array();
 
     // Try and grab ourselves forum details
@@ -782,7 +782,7 @@ function step_4()
         unset($SITE_INFO['base_url']);
     }
 
-    $sections = new ocp_tempcode();
+    $sections = new Tempcode();
 
     // Detect FTP settings
 
@@ -826,11 +826,11 @@ function step_4()
     if ((@is_array($FILE_ARRAY)) && (!is_suexec_like())) {
         $title = protect_from_escaping(escape_html('FTP'));
         $text = do_lang_tempcode('AUTO_INSTALL');
-        $hidden = new ocp_tempcode();
-        $options = new ocp_tempcode();
-        $options->attach(make_option(do_lang_tempcode('FTP_DOMAIN'), new ocp_tempcode(), 'ftp_domain', post_param('ftp_domain', $ftp_domain), false, true));
-        $options->attach(make_option(do_lang_tempcode('FTP_USERNAME'), new ocp_tempcode(), 'ftp_username', post_param('ftp_username', $ftp_username), false, true));
-        $options->attach(make_option(do_lang_tempcode('FTP_PASSWORD'), new ocp_tempcode(), 'ftp_password', post_param('ftp_password', ''), true));
+        $hidden = new Tempcode();
+        $options = new Tempcode();
+        $options->attach(make_option(do_lang_tempcode('FTP_DOMAIN'), new Tempcode(), 'ftp_domain', post_param('ftp_domain', $ftp_domain), false, true));
+        $options->attach(make_option(do_lang_tempcode('FTP_USERNAME'), new Tempcode(), 'ftp_username', post_param('ftp_username', $ftp_username), false, true));
+        $options->attach(make_option(do_lang_tempcode('FTP_PASSWORD'), new Tempcode(), 'ftp_password', post_param('ftp_password', ''), true));
         $options->attach(make_option(do_lang_tempcode('FTP_DIRECTORY'), do_lang_tempcode('FTP_FOLDER'), 'ftp_folder', post_param('ftp_folder', $ftp_folder)));
         $options->attach(make_option(do_lang_tempcode('FTP_FILES_PER_GO'), do_lang_tempcode('DESCRIPTION_FTP_FILES_PER_GO'), 'max', post_param('max', '1000')));
         $sections->attach(do_template('INSTALLER_STEP_4_SECTION', array('_GUID' => '50fcb00f4d1da1813e94d86529ea0862', 'HIDDEN' => $hidden, 'TITLE' => $title, 'TEXT' => $text, 'OPTIONS' => $options)));
@@ -839,9 +839,9 @@ function step_4()
     // General settings
 
     $title = do_lang_tempcode('GENERAL_SETTINGS');
-    $text = new ocp_tempcode();
-    $options = new ocp_tempcode();
-    $hidden = new ocp_tempcode();
+    $text = new Tempcode();
+    $options = new Tempcode();
+    $hidden = new Tempcode();
     if (!GOOGLE_APPENGINE) {
         $options->attach(make_option(do_lang_tempcode('DOMAIN'), example('DOMAIN_EXAMPLE'), 'domain', $domain, false, true));
         $options->attach(make_option(do_lang_tempcode('BASE_URL'), example('BASE_URL_TEXT'), 'base_url', $base_url, false, true));
@@ -860,8 +860,8 @@ function step_4()
 
     // Database settings for forum (if applicable)
 
-    $hidden = new ocp_tempcode();
-    $forum_text = new ocp_tempcode();
+    $hidden = new Tempcode();
+    $forum_text = new Tempcode();
     if (($forum_type == 'ocf') || ($forum_type == 'none')) {
         $forum_title = do_lang_tempcode('MEMBER_SETTINGS');
     } else {
@@ -871,7 +871,7 @@ function step_4()
         }
         $forum_title = do_lang_tempcode('_FORUM_SETTINGS', escape_html($_forum_type));
     }
-    $forum_options = new ocp_tempcode();
+    $forum_options = new Tempcode();
     $use_msn = post_param_integer('use_msn', 0);
     if ($use_msn == 0) {
         $use_msn = post_param_integer('use_multi_db', 0);
@@ -882,11 +882,11 @@ function step_4()
             if ($forum_type != 'ocf') {
                 $forum_text = do_lang_tempcode('AUTODETECT');
             }
-            $forum_options->attach(make_option(do_lang_tempcode('DATABASE_NAME'), new ocp_tempcode(), 'db_forums', $db_forums, false, true));
+            $forum_options->attach(make_option(do_lang_tempcode('DATABASE_NAME'), new Tempcode(), 'db_forums', $db_forums, false, true));
             if (!$GLOBALS['DB_STATIC_OBJECT']->db_is_flat_file_simple()) {
                 $forum_options->attach(make_option(do_lang_tempcode('DATABASE_HOST'), example('', 'DATABASE_HOST_TEXT'), 'db_forums_host', $db_forums_host, false, true));
-                $forum_options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'), new ocp_tempcode(), 'db_forums_user', $db_forums_user, false, true));
-                $forum_options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'), new ocp_tempcode(), 'db_forums_password', $db_forums_password, true));
+                $forum_options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'), new Tempcode(), 'db_forums_user', $db_forums_user, false, true));
+                $forum_options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'), new Tempcode(), 'db_forums_password', $db_forums_password, true));
             } else {
                 $hidden->attach(form_input_hidden('db_forums_host', 'localhost'));
                 $hidden->attach(form_input_hidden('db_forums_user', ''));
@@ -908,12 +908,12 @@ function step_4()
 
     // Database settings for site
 
-    $text = ($use_msn == 1) ? do_lang_tempcode(($forum_type == 'ocf') ? 'DUPLICATE_OCF' : 'DUPLICATE') : new ocp_tempcode();
-    $options = make_option(do_lang_tempcode('DATABASE_NAME'), new ocp_tempcode(), 'db_site', $db_site, false, true);
+    $text = ($use_msn == 1) ? do_lang_tempcode(($forum_type == 'ocf') ? 'DUPLICATE_OCF' : 'DUPLICATE') : new Tempcode();
+    $options = make_option(do_lang_tempcode('DATABASE_NAME'), new Tempcode(), 'db_site', $db_site, false, true);
     if (!$GLOBALS['DB_STATIC_OBJECT']->db_is_flat_file_simple()) {
         $options->attach(make_option(do_lang_tempcode('DATABASE_HOST'), example('', 'DATABASE_HOST_TEXT'), 'db_site_host', $db_site_host, false, true));
-        $options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'), new ocp_tempcode(), 'db_site_user', $db_site_user, false, true));
-        $options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'), new ocp_tempcode(), 'db_site_password', $db_site_password, true));
+        $options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'), new Tempcode(), 'db_site_user', $db_site_user, false, true));
+        $options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'), new Tempcode(), 'db_site_password', $db_site_password, true));
     } else {
         $hidden->attach(form_input_hidden('db_site_host', 'localhost'));
         $hidden->attach(form_input_hidden('db_site_user', ''));
@@ -939,11 +939,11 @@ function step_4()
 
             $title = do_lang_tempcode('LIVE_DATABASE_SETTINGS');
             $text = do_lang_tempcode('LIVE_DATABASE_SETTINGS_HELP');
-            $options = new ocp_tempcode();
-            $options->attach(make_option(do_lang_tempcode('DATABASE_HOST'), new ocp_tempcode(), 'gae_live_db_site_host', ':/cloudsql/<application>:<application>', false, true));
-            $options->attach(make_option(do_lang_tempcode('DATABASE_NAME'), new ocp_tempcode(), 'gae_live_db_site', '<application>', false, true));
-            $options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'), new ocp_tempcode(), 'gae_live_db_site_user', 'root', false, true));
-            $options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'), new ocp_tempcode(), 'gae_live_db_site_password', '', true));
+            $options = new Tempcode();
+            $options->attach(make_option(do_lang_tempcode('DATABASE_HOST'), new Tempcode(), 'gae_live_db_site_host', ':/cloudsql/<application>:<application>', false, true));
+            $options->attach(make_option(do_lang_tempcode('DATABASE_NAME'), new Tempcode(), 'gae_live_db_site', '<application>', false, true));
+            $options->attach(make_option(do_lang_tempcode('DATABASE_USERNAME'), new Tempcode(), 'gae_live_db_site_user', 'root', false, true));
+            $options->attach(make_option(do_lang_tempcode('DATABASE_PASSWORD'), new Tempcode(), 'gae_live_db_site_password', '', true));
             $sections->attach(do_template('INSTALLER_STEP_4_SECTION', array('HIDDEN' => '', 'TITLE' => $title, 'TEXT' => $text, 'OPTIONS' => $options)));
 
             $js->attach('
@@ -971,9 +971,9 @@ function step_4()
 
     if (!GOOGLE_APPENGINE) {
         $title = do_lang_tempcode('COOKIE_SETTINGS');
-        $text = new ocp_tempcode();
-        $options = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $text = new Tempcode();
+        $options = new Tempcode();
+        $hidden = new Tempcode();
         $options->attach(make_option(do_lang_tempcode('COOKIE'), example('COOKIE_EXAMPLE', 'COOKIE_TEXT'), 'user_cookie', $member_cookie, false, true));
         $options->attach(make_option(do_lang_tempcode('COOKIE_PASSWORD'), example('COOKIE_PASSWORD_EXAMPLE', 'COOKIE_PASSWORD_TEXT'), 'pass_cookie', $pass_cookie, false, true));
         $options->attach(make_option(do_lang_tempcode('COOKIE_DOMAIN'), example('COOKIE_DOMAIN_EXAMPLE', 'COOKIE_DOMAIN_TEXT'), 'cookie_domain', $cookie_domain));
@@ -1117,7 +1117,7 @@ function step_5()
     // Give warning if database contains data
     require_code('database');
     if (post_param_integer('confirm', 0) == 0) {
-        $tmp = new database_driver(trim(post_param('db_site')), trim(post_param('db_site_host')), trim(post_param('db_site_user')), trim(post_param('db_site_password')), $table_prefix);
+        $tmp = new Database_driver(trim(post_param('db_site')), trim(post_param('db_site_host')), trim(post_param('db_site_user')), trim(post_param('db_site_password')), $table_prefix);
         $test = $tmp->query_select_value_if_there('config', 'c_value', array('c_name' => 'is_on_block_cache'), '', true);
         unset($tmp);
         if (!is_null($test)) {
@@ -1147,7 +1147,7 @@ function step_5()
 
     // Give warning if setting up a multi-site-network to a bad database
     if (($_POST['db_forums'] != $_POST['db_site']) && (get_forum_type() == 'ocf')) {
-        $tmp = new database_driver(trim(post_param('db_forums')), trim(post_param('db_forums_host')), trim(post_param('db_forums_user')), trim(post_param('db_forums_password')), $table_prefix);
+        $tmp = new Database_driver(trim(post_param('db_forums')), trim(post_param('db_forums_host')), trim(post_param('db_forums_user')), trim(post_param('db_forums_password')), $table_prefix);
         if (is_null($tmp->query_select_value_if_there('db_meta', 'COUNT(*)', null, '', true))) {
             warn_exit(do_lang_tempcode('MSN_FORUM_DB_NOT_OCF_ALREADY'));
         }
@@ -1156,7 +1156,7 @@ function step_5()
     // FTP uploads if we're in the quick installer
     global $FILE_ARRAY;
     $still_ftp = false;
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
     if (@is_array($FILE_ARRAY)) {
         $ftp_status = step_5_ftp();
         $log->attach($ftp_status[0]);
@@ -1198,7 +1198,7 @@ function include_ocf()
     $SITE_INFO['db_forums_user'] = $SITE_INFO['db_site_user'];
     $SITE_INFO['db_forums_password'] = $SITE_INFO['db_site_password'];
     $SITE_INFO['ocf_table_prefix'] = array_key_exists('table_prefix', $SITE_INFO) ? $SITE_INFO['table_prefix'] : get_default_table_prefix();
-    $GLOBALS['FORUM_DRIVER'] = object_factory('forum_driver_ocf');
+    $GLOBALS['FORUM_DRIVER'] = object_factory('Forum_driver_ocf');
     $GLOBALS['FORUM_DB'] = $GLOBALS['SITE_DB'];
     $GLOBALS['FORUM_DRIVER']->connection = $GLOBALS['SITE_DB'];
     $GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED = array();
@@ -1481,7 +1481,7 @@ function step_5_ftp()
 
     test_htaccess(is_suexec_like() ? null : $conn);
 
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
     if ($done_all) {
         // If the file user is different to the FTP user, we need to make it world writeable
         if (!is_suexec_like()) {
@@ -1513,7 +1513,7 @@ function step_5_ftp()
  */
 function step_5_checks()
 {
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     if (count($_POST) == 0) {
         exit(do_lang('INST_POST_ERROR'));
@@ -1554,7 +1554,7 @@ function step_5_checks()
  */
 function step_5_write_config()
 {
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     $base_url = post_param('base_url');
     if (substr($base_url, -1) == '/') {
@@ -1758,12 +1758,12 @@ if (!function_exists(\'git_repos\')) {
  */
 function step_5_uninstall()
 {
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
     require_code('database_action');
     require_code('config');
 
     if (post_param('forum_type') != 'none') {
-        $tmp = new database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), '');
+        $tmp = new Database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), '');
         unset($tmp);
     }
 
@@ -2015,7 +2015,7 @@ function step_6()
         $url .= '&keep_safe_mode=1';
     }
 
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     $config_file = '_config.php';
     require_once(get_file_base() . '/' . $config_file);
@@ -2051,9 +2051,9 @@ function big_installation_common()
     require_code('database');
     $forum_type = get_forum_type();
     require_code('forum/' . $forum_type);
-    $GLOBALS['FORUM_DRIVER'] = object_factory('forum_driver_' . filter_naughty_harsh($forum_type));
+    $GLOBALS['FORUM_DRIVER'] = object_factory('Forum_driver_' . filter_naughty_harsh($forum_type));
     if ($forum_type != 'none') {
-        $GLOBALS['FORUM_DRIVER']->connection = new database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), $GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix());
+        $GLOBALS['FORUM_DRIVER']->connection = new Database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), $GLOBALS['FORUM_DRIVER']->get_drivered_table_prefix());
     }
     $GLOBALS['FORUM_DRIVER']->MEMBER_ROWS_CACHED = array();
     $GLOBALS['FORUM_DB'] = &$GLOBALS['FORUM_DRIVER']->connection;
@@ -2079,7 +2079,7 @@ function step_7()
 {
     big_installation_common();
 
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     if (method_exists($GLOBALS['FORUM_DRIVER'], 'forum_install_as_needed')) {
         $GLOBALS['FORUM_DRIVER']->forum_install_as_needed();
@@ -2129,7 +2129,7 @@ function step_8()
 {
     big_installation_common();
 
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     $modules = find_all_modules('site');
     foreach ($modules as $module => $type) {
@@ -2155,7 +2155,7 @@ function step_9()
 {
     big_installation_common();
 
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     $modules = find_all_modules('forum');
     foreach ($modules as $module => $type) {
@@ -2195,7 +2195,7 @@ function step_10()
 {
     big_installation_common();
 
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
     $log->attach(step_10_populate_database());
     $log->attach(step_10_forum_stuff());
 
@@ -2228,7 +2228,7 @@ function step_10()
  */
 function step_10_populate_database()
 {
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     // Make sure that any menu items here come after what we have already
     global $ADD_MENU_COUNTER;
@@ -2257,7 +2257,7 @@ function step_10_populate_database()
  */
 function step_10_forum_stuff()
 {
-    $log = new ocp_tempcode();
+    $log = new Tempcode();
 
     $forum_type = post_param('forum_type');
 
@@ -2422,9 +2422,9 @@ function handle_self_referencing_embedment()
             $SITE_INFO['db_type'] = get_param('db_type');
             require_code('database');
             if (get_param('db_site') == '') {
-                $db = new database_driver(get_param('db_forums'), get_param('db_forums_host'), get_param('db_forums_user'), get_param('db_forums_password'), '', true);
+                $db = new Database_driver(get_param('db_forums'), get_param('db_forums_host'), get_param('db_forums_user'), get_param('db_forums_password'), '', true);
             } else {
-                $db = new database_driver(get_param('db_site'), get_param('db_site_host'), get_param('db_site_user'), get_param('db_site_password'), '', true);
+                $db = new Database_driver(get_param('db_site'), get_param('db_site_host'), get_param('db_site_user'), get_param('db_site_password'), '', true);
             }
             $connection = &$db->connection_write;
             if (count($connection) > 4) { // Okay, we can't be lazy anymore
@@ -2587,7 +2587,7 @@ function example($example, $description = '')
     if ($example == '') {
         return do_lang_tempcode($description);
     }
-    $it = new ocp_tempcode();
+    $it = new Tempcode();
     if ($description != '') {
         $it->attach(do_lang_tempcode($description));
         $it->attach('<br />');

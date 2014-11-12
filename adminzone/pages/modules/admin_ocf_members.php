@@ -204,7 +204,7 @@ class Module_admin_ocf_members
             return $this->_import_csv();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -386,7 +386,7 @@ class Module_admin_ocf_members
 
         require_lang('ocf_lurkers');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         url_default_parameters__enable();
 
@@ -431,7 +431,7 @@ class Module_admin_ocf_members
             }
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_integer(do_lang_tempcode('DELURK_MAX_POSTS'), do_lang_tempcode('DELURK_MAX_POSTS_DESCRIPTION'), 'max_posts', $max_posts, true));
         if (addon_installed('points')) {
             $fields->attach(form_input_integer(do_lang_tempcode('DELURK_MAX_POINTS'), do_lang_tempcode('DELURK_MAX_POINTS_DESCRIPTION'), 'max_points', $max_points, true));
@@ -441,7 +441,7 @@ class Module_admin_ocf_members
         $fields->attach(form_input_integer(do_lang_tempcode('DELURK_MAX_LOGGED_ACTIONS'), do_lang_tempcode('DELURK_MAX_LOGGED_ACTIONS_DESCRIPTION'), 'max_logged_actions', $max_logged_actions, true));
         $fields->attach(form_input_integer(do_lang_tempcode('DELURK_MIN_DAYS_SINCE_LOGIN'), do_lang_tempcode('DELURK_MIN_DAYS_SINCE_LOGIN_DESCRIPTION'), 'min_days_since_login', $min_days_since_login, true));
         $fields->attach(form_input_integer(do_lang_tempcode('DELURK_MIN_DAYS_SINCE_JOIN'), do_lang_tempcode('DELURK_MIN_DAYS_SINCE_JOIN_DESCRIPTION'), 'min_days_since_join', $min_days_since_join, true));
-        $groups = new ocp_tempcode();
+        $groups = new Tempcode();
         $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), ($group_count > 200) ? array('g_is_private_club' => 0) : null);
         foreach ($rows as $row) {
@@ -596,9 +596,9 @@ class Module_admin_ocf_members
 
         require_lang('ocf');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         handle_max_file_size($hidden);
         $fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_IMPORT_CSV'), 'file', true, null, null, true, 'csv,txt'));
         $fields->attach(form_input_line(do_lang_tempcode('DEFAULT_PASSWORD'), do_lang_tempcode('DESCRIPTION_DEFAULT_PASSWORD'), 'default_password', '', false));

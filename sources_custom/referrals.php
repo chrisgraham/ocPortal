@@ -604,8 +604,8 @@ function referrer_report_script($ret = false)
     } else {
         require_code('templates_results_table');
 
-        $fields_title = new ocp_tempcode();
-        $fields = new ocp_tempcode();
+        $fields_title = new Tempcode();
+        $fields = new Tempcode();
         foreach ($data as $i => $data_row) {
             if ($i == 0) {
                 $fields_title->attach(results_field_title(array_keys($data_row)));
@@ -631,7 +631,7 @@ function referrer_report_script($ret = false)
 
         $title = get_screen_title('_REFERRALS', true, array(escape_html($scheme_title)));
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach($title);
         $out->attach($results_table);
 

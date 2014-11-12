@@ -75,7 +75,7 @@ function realtime_rain_script()
 
     shuffle($events);
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($events as $event) {
         $out->attach(do_template('REALTIME_RAIN_BUBBLE', $event));
     }

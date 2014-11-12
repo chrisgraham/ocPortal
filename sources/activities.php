@@ -42,7 +42,7 @@ function syndicate_described_activity($a_language_string_code = '', $a_label_1 =
     $hooks = find_all_hooks('systems', 'activities');
     foreach (array_keys($hooks) as $hook) { // We only expect one actually
         require_code('hooks/systems/activities/' . $hook);
-        $ob = object_factory('Activity_' . $hook);
+        $ob = object_factory('Hook_activities_' . $hook);
         if (get_param_integer('keep_debug_notifications', 0) == 1) {
             $ob->syndicate_described_activity($a_language_string_code, $a_label_1, $a_label_2, $a_label_3, $a_page_link_1, $a_page_link_2, $a_page_link_3, $a_addon, $a_is_public, $a_member_id, $sitewide_too, $a_also_involving);
         } else {
@@ -76,7 +76,7 @@ function has_external_site_wide_syndication()
 function get_syndication_option_fields()
 {
     $hooks = find_all_hooks('systems', 'activities');
-    $ret = new ocp_tempcode();
+    $ret = new Tempcode();
     foreach (array_keys($hooks) as $hook) { // We only expect one actually
         require_code('hooks/systems/activities/' . $hook);
         $ob = object_factory('Activity_' . $hook);

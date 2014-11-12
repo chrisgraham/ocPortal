@@ -89,7 +89,7 @@ function add_bookmark_form($post_url)
 
     require_code('form_templates');
     $rows = $GLOBALS['SITE_DB']->query_select('bookmarks', array('DISTINCT b_folder'), array('b_owner' => get_member()), 'ORDER BY b_folder');
-    $list = new ocp_tempcode();
+    $list = new Tempcode();
     $list->attach(form_input_list_entry('', false, do_lang_tempcode('NA_EM')));
     $list->attach(form_input_list_entry('!', true, do_lang_tempcode('ROOT_EM')));
     foreach ($rows as $row) {
@@ -97,7 +97,7 @@ function add_bookmark_form($post_url)
             $list->attach(form_input_list_entry($row['b_folder']));
         }
     }
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     $set_name = 'folder';
     $required = true;

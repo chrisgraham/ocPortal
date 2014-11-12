@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_chat_bot_default
 {
     /**

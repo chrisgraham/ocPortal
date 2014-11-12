@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    match_key_permissions
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_fs_extended_config__match_key_message
 {
     /**

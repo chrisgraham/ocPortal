@@ -14,7 +14,7 @@ $username = $GLOBALS['FORUM_DRIVER']->get_username($id, true);
 
 $group_points = get_group_points();
 
-$fields = new ocp_tempcode();
+$fields = new Tempcode();
 
 asort($group_points);
 

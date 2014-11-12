@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_realtime_rain_points
 {
     /**

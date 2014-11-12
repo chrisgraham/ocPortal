@@ -94,7 +94,7 @@ class Module_admin_banners
             return $this->banner_statistics();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -135,7 +135,7 @@ class Module_admin_banners
 
         $rows = $GLOBALS['SITE_DB']->query_select('banners', array('*'), null, '', $max, $start);
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('banners', 'COUNT(*)');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach ($rows as $myrow) {
             $name = hyperlink(build_url(array('page' => 'banners', 'type' => 'view', 'source' => $myrow['name']), get_module_zone('banners')), $myrow['name'], false, true);
 

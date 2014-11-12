@@ -62,7 +62,7 @@ function ocportal_cleanup($caches = null)
             @set_time_limit(0);
         }
     }
-    $messages = new ocp_tempcode();
+    $messages = new Tempcode();
     $hooks = find_all_hooks('systems', 'cleanup');
     if ((array_key_exists('ocf', $hooks)) && (array_key_exists('ocf_topics', $hooks))) {
         // A little re-ordering

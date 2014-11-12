@@ -166,7 +166,7 @@ class Module_admin_errorlog
         }
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('TYPE'), do_lang_tempcode('MESSAGE')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         for ($i = $start; $i < $start + $max; $i++) {
             if (!array_key_exists($i, $stuff)) {
                 break;
@@ -180,7 +180,7 @@ class Module_admin_errorlog
                 escape_html($message)
             )));
         }
-        $error = results_table(do_lang_tempcode('ERROR_LOG'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $error = results_table(do_lang_tempcode('ERROR_LOG'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
 
         // Read in end of permissions file
         require_all_lang();

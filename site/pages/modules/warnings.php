@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_warnings extends standard_crud_module
+class Module_warnings extends Standard_crud_module
 {
     public $lang_type = 'WARNING';
     public $select_name = 'SUBMITTER';
@@ -151,7 +151,7 @@ class Module_warnings extends standard_crud_module
             return $this->undo_silence_from_forum();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -171,22 +171,22 @@ class Module_warnings extends standard_crud_module
         }
         $max_rows = count($rows);
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $f = array(do_lang_tempcode('SLASH_OR', do_lang_tempcode('DATE'), do_lang_tempcode('BY')), do_lang('WHETHER_MAKE_WARNING'), do_lang('CHANGED_USERGROUP'), do_lang('PUNISHMENT_UNDOING'));
         $fields_title = results_field_title($f, array());
         foreach ($rows as $row) {
             $date = hyperlink(build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $row['id'], 'redirect' => get_self_url(true)), '_SELF'), get_timezoned_date($row['w_time']), false, true, $row['w_explanation']);
             $by = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['w_by']);
-            $date_by = new ocp_tempcode();
+            $date_by = new Tempcode();
             $date_by->attach(do_lang_tempcode('SLASH_OR', $date, $by));
 
             $is_warning = escape_html($row['w_is_warning'] ? do_lang_tempcode('YES') : do_lang_tempcode('NO'));
 
             $changed_usergroup_from = escape_html((is_null($row['p_changed_usergroup_from']) ? do_lang_tempcode('NO') : do_lang_tempcode('YES')));
-            $charged_points = ($row['p_charged_points'] == 0) ? new ocp_tempcode() : div(hyperlink(build_url(array('page' => '_SELF', 'type' => 'undo_charge'), '_SELF'), do_lang_tempcode('RESTORE_POINTS', integer_format($row['p_charged_points'])), false, true, '', null, form_input_hidden('id', strval($row['id']))), 'dsgsgdfgddgdf');
-            $undoing = new ocp_tempcode();
+            $charged_points = ($row['p_charged_points'] == 0) ? new Tempcode() : div(hyperlink(build_url(array('page' => '_SELF', 'type' => 'undo_charge'), '_SELF'), do_lang_tempcode('RESTORE_POINTS', integer_format($row['p_charged_points'])), false, true, '', null, form_input_hidden('id', strval($row['id']))), 'dsgsgdfgddgdf');
+            $undoing = new Tempcode();
             if ($row['p_probation'] == 0) {
-                $_undoing_link = new ocp_tempcode();
+                $_undoing_link = new Tempcode();
             } else {
                 $_undoing_url = build_url(array('page' => '_SELF', 'type' => 'undo_probation'), '_SELF');
                 $_undoing_link = div(hyperlink($_undoing_url, do_lang_tempcode('REMOVE_PROBATION_DAYS', integer_format($row['p_probation'])), false, false, '', null, form_input_hidden('id', strval($row['id']))), '46t54yhrtghdfhdhdfg');
@@ -387,8 +387,8 @@ class Module_warnings extends standard_crud_module
             $member_id = get_param_integer('member_id', get_member());
         }
 
-        $hidden = new ocp_tempcode();
-        $fields = new ocp_tempcode();
+        $hidden = new Tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
 
@@ -483,7 +483,7 @@ class Module_warnings extends standard_crud_module
                 $fields->attach(form_input_tick(do_lang_tempcode('BANNED_MEMBER'), do_lang_tempcode('DESCRIPTION_BANNED_MEMBER'), 'banned_member', false));
 
                 $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), array('g_is_private_club' => 0));
-                $groups = new ocp_tempcode();
+                $groups = new Tempcode();
                 $groups->attach(form_input_list_entry('-1', false, do_lang_tempcode('NA_EM')));
                 foreach ($rows as $group) {
                     if ($group['id'] != db_get_first_id()) {
@@ -565,7 +565,7 @@ class Module_warnings extends standard_crud_module
 
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -604,7 +604,7 @@ class Module_warnings extends standard_crud_module
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['FORUM_DB']->query_select('f_warnings', array('*'), null, 'ORDER BY w_time DESC');
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, $GLOBALS['FORUM_DRIVER']->get_username($m['w_member_id']) . ' (' . get_timezoned_date($m['w_time']) . ')'));
         }

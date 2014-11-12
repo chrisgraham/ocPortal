@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    extended_media_rendering
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_extended_media_rendering
 {
     /**

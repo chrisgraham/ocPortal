@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_main_only_if_match
 {
     /**
@@ -46,13 +50,13 @@ class Block_main_only_if_match
     public function run($map)
     {
         if (!array_key_exists('param', $map)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         if (match_key_match($map['param'])) {
             $caption = array_key_exists('caption', $map) ? $map['caption'] : '';
             return comcode_to_tempcode($caption, get_member(), true);
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

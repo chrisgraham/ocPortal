@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_themewizard_ocf_forum
 {
     /**

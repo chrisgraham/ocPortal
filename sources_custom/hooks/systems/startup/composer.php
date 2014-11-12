@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_startup_composer
 {
     public function run()

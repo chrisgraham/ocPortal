@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    devguide
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_devguide
 {
     /**
@@ -142,8 +146,8 @@ class Hook_addon_registry_devguide
      */
     public function tpl_preview__administrative__php_function()
     {
-        $parameters = new ocp_tempcode();
-        $full_parameters = new ocp_tempcode();
+        $parameters = new Tempcode();
+        $full_parameters = new Tempcode();
 
         foreach (placeholder_array() as $value) {
             $parameters->attach(do_lorem_template('PHP_PARAMETER_LIST', array(
@@ -161,7 +165,7 @@ class Hook_addon_registry_devguide
             )));
         }
 
-        $classes = new ocp_tempcode();
+        $classes = new Tempcode();
         foreach (placeholder_array() as $k => $value) {
             $return = do_lorem_template('PHP_PARAMETER_BIT', array(
                 'NAME' => lorem_word(),
@@ -213,7 +217,7 @@ class Hook_addon_registry_devguide
      */
     public function tpl_preview__administrative__block_main_block_help()
     {
-        $parameters = new ocp_tempcode();
+        $parameters = new Tempcode();
 
         foreach (placeholder_array() as $value) {
             $parameters->attach(do_lorem_template('BLOCK_MAIN_BLOCK_HELP_PARAMETER', array(

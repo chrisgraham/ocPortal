@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Notification_ocf_group_join_request extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_group_join_request extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

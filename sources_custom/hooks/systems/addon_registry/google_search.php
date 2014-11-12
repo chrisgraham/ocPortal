@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    google_search
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_google_search
 {
     /**

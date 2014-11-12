@@ -148,10 +148,10 @@ function incoming_uploads_script()
 
         // Test harness
         $title = get_screen_title('UPLOAD');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_upload(do_lang_tempcode('FILE'), '', 'file', true, null, null, false));
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $out2 = globalise(do_template('FORM_SCREEN', array('_GUID' => '632edbf0ca9f6f644cd9ebbd817b90f3', 'TITLE' => $title, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => do_lang_tempcode('PROCEED'), 'TEXT' => '', 'HIDDEN' => $hidden, 'URL' => find_script('incoming_uploads', true), 'FIELDS' => $fields)), null, '', true);
         $out2->evaluate_echo();
     }

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-class Hook_Notification_ticket_assigned_staff extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ticket_assigned_staff extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

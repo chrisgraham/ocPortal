@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_check_max_execution_time
 {
     /**

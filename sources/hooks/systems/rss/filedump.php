@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_filedump
 {
     /**
@@ -48,7 +52,7 @@ class Hook_rss_filedump
 
         require_code('files2');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $files = get_directory_contents(get_custom_file_base() . '/uploads/filedump/');
         $_rows = $GLOBALS['SITE_DB']->query_select('filedump', null, null, '', null, null, true);
         if (is_null($_rows)) {
@@ -98,7 +102,7 @@ class Hook_rss_filedump
 
             $view_url = get_custom_base_url() . '/uploads/filedump/' . $file;
 
-            $if_comments = new ocp_tempcode();
+            $if_comments = new Tempcode();
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }

@@ -132,7 +132,7 @@ function get_award_fields($content_type, $id = null)
 {
     require_code('form_templates');
 
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     $rows = $GLOBALS['SITE_DB']->query_select('award_types', array('*'), array('a_content_type' => $content_type));
     foreach ($rows as $i => $row) {
         $rows[$i]['_title'] = get_translated_text($row['a_title']);
@@ -151,7 +151,7 @@ function get_award_fields($content_type, $id = null)
                 $has_award = (get_param_integer('award', null) === $row['id']);
             }
 
-            $description = (get_translated_text($row['a_description']) == '') ? new ocp_tempcode() : do_lang_tempcode('PRESENT_AWARD', get_translated_tempcode('award_types', $row, 'a_description'));
+            $description = (get_translated_text($row['a_description']) == '') ? new Tempcode() : do_lang_tempcode('PRESENT_AWARD', get_translated_tempcode('award_types', $row, 'a_description'));
 
             if (!$has_award) {
                 $current_content_title = mixed();

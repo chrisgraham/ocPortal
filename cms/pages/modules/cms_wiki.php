@@ -187,7 +187,7 @@ class Module_cms_wiki
             return $this->_edit_tree();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -220,9 +220,9 @@ class Module_cms_wiki
      */
     public function get_page_fields($id = null, $title = '', $notes = '', $hide_posts = 0, $page_id = -1)
     {
-        $fields = new ocp_tempcode();
-        $fields2 = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $fields2 = new Tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('SCREEN_TITLE'), do_lang_tempcode('SCREEN_TITLE_DESC'), 'title', $title, true));
@@ -413,7 +413,7 @@ class Module_cms_wiki
             $fields2->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false));
         }
 
-        $revision_history = new ocp_tempcode();
+        $revision_history = new Tempcode();
         if (multi_lang_content()) {
             $restore_from = get_param_integer('restore_from', -1);
             if ($restore_from != -1) {
@@ -443,7 +443,7 @@ class Module_cms_wiki
             }
         }
 
-        $posting_form = get_posting_form(do_lang('SAVE'), 'menu___generic_admin__edit_this_category', $description, $edit_url, new ocp_tempcode(), $fields, do_lang_tempcode('PAGE_TEXT'), '', $fields2, $_description, null, null, false);
+        $posting_form = get_posting_form(do_lang('SAVE'), 'menu___generic_admin__edit_this_category', $description, $edit_url, new Tempcode(), $fields, do_lang_tempcode('PAGE_TEXT'), '', $fields2, $_description, null, null, false);
 
         list($warning_details, $ping_url) = handle_conflict_resolution();
 
@@ -566,8 +566,8 @@ class Module_cms_wiki
         list($warning_details, $ping_url) = handle_conflict_resolution();
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
-        $fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'), new ocp_tempcode(), 'children', $children, false, null, true));
+        $fields = new Tempcode();
+        $fields->attach(form_input_text(do_lang_tempcode('CHILD_PAGES'), new Tempcode(), 'children', $children, false, null, true));
         $form = do_template('FORM', array('_GUID' => 'b908438ccfc9be6166cf7c5c81d5de8b', 'FIELDS' => $fields, 'URL' => $post_url, 'HIDDEN' => '', 'TEXT' => '', 'SUBMIT_ICON' => 'buttons__save', 'SUBMIT_NAME' => do_lang_tempcode('SAVE')));
 
         return do_template('WIKI_MANAGE_TREE_SCREEN', array('_GUID' => '83da3f20799b66b8846eafa4251a5d01', 'PAGE_TITLE' => $page_title, 'PING_URL' => $ping_url, 'WARNING_DETAILS' => $warning_details, 'TITLE' => $this->title, 'FORM' => $form, 'WIKI_TREE' => $wiki_tree));

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_member_multi
 {
     // ==============
@@ -86,10 +90,10 @@ class Hook_fields_member_multi
         }
 
         if ($ev == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (($ev == '') ? array() : explode("\n", $ev) as $ev) {
             $out->attach(paragraph($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(intval($ev))));
         }

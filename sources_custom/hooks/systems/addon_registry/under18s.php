@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    under18s
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_under18s
 {
     /**

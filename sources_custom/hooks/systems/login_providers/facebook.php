@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    facebook_support
  */
+
+/**
+ * Hook class.
+ */
 class Hook_login_provider_facebook
 {
     /**

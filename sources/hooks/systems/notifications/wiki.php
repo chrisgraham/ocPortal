@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-class Hook_Notification_wiki extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_wiki extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_download_category extends Hook_sitemap_content
 {
     protected $content_type = 'download_category';

@@ -10,6 +10,10 @@ This notification hook was created using the classifieds notification hook as a 
  * @copyright  None asserted
  * @package    downloads_followup_email
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_downloads_followup_email
 {
     /**
@@ -96,7 +100,7 @@ class Hook_cron_downloads_followup_email
         // For each distinct member id, send a download follow-up notification
         foreach ($member_ids as $id) {
             // Create template object to hold download list
-            $download_list = new ocp_tempcode();
+            $download_list = new Tempcode();
             $member_id = $GLOBALS['FORUM_DRIVER']->get_guest_id();
             $member_name = 'Guest';
             $member_id = $id['member_id'];

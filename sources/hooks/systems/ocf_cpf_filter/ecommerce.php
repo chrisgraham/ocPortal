@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
+
+/**
+ * Hook class.
+ */
 class Hook_ocf_cpf_filter_ecommerce
 {
     /**

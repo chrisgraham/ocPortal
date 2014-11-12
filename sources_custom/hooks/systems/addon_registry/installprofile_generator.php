@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    installprofile_generator
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_installprofile_generator
 {
     /**

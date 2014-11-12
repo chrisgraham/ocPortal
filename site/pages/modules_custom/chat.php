@@ -7,6 +7,9 @@
 
 */
 
+/**
+ * Module page class.
+ */
 class Mx_chat extends Module_chat
 {
     /**
@@ -107,7 +110,7 @@ class Mx_chat extends Module_chat
             return $this->_set_effects();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

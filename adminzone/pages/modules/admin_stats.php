@@ -295,7 +295,7 @@ class Module_admin_stats
                 }
             }
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -351,7 +351,7 @@ class Module_admin_stats
     {
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $month_start = utctime_to_usertime(mktime(0, 0, 0, intval(date('m')), 1, intval(date('Y'))));
         $prior_month = intval(date('m')) - 1;
         $prior_year = intval(date('Y'));
@@ -443,7 +443,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('PEAK')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $real_data = array();
         for ($i = 0; $i < $max; $i++) {
             if (!array_key_exists($i, $data)) {
@@ -460,7 +460,7 @@ class Module_admin_stats
         if ($csv) {
             make_csv($real_data, 'users_online.csv');
         }
-        $list = results_table(do_lang_tempcode('USERS_ONLINE_STATISTICS'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('USERS_ONLINE_STATISTICS'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
 
         $output = create_scatter_graph($data, do_lang('DATE'), do_lang('USERS_ONLINE'), '', '');
         $this->save_graph('Global-Users-online', $output);
@@ -524,7 +524,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('PEAK')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $real_data = array();
         for ($i = 0; $i < $max; $i++) {
             if (!array_key_exists($i, $data)) {
@@ -538,7 +538,7 @@ class Module_admin_stats
 
             $fields->attach(results_entry(array($data[$i]['key'], integer_format($data[$i]['value'])), true));
         }
-        $list = results_table(do_lang_tempcode('SUBMISSION_STATISTICS'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('SUBMISSION_STATISTICS'), $start, 'start', $max, 'max', $i, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
         if ($csv) {
             make_csv($real_data, 'submission_rates.csv');
         }
@@ -632,7 +632,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('URL'), do_lang_tempcode('LOAD_TIME')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $real_data = array();
         $i = 0;
         foreach ($data as $url => $_value) {
@@ -653,7 +653,7 @@ class Module_admin_stats
 
             $i++;
         }
-        $list = results_table(do_lang_tempcode('LOAD_TIMES'), $start, 'start', $max, 'max', count($data), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('LOAD_TIMES'), $start, 'start', $max, 'max', count($data), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
         if ($csv) {
             make_csv($real_data, 'load_times.csv');
         }
@@ -748,7 +748,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('URL'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $i = 0;
         $degrees = 360.0 / $total;
         $done_total = 0;
@@ -787,7 +787,7 @@ class Module_admin_stats
             $fields->attach(results_entry(array(do_lang('OTHER'), float_format((360 - $done_total) / $degrees)), true));
         }
 
-        $list = results_table(do_lang_tempcode('TOP_REFERRERS'), $start, 'start', $max, 'max', count($referrers), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('TOP_REFERRERS'), $start, 'start', $max, 'max', count($referrers), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
 
         $output = create_pie_chart($data);
         $this->save_graph('Global-Referrers', $output);
@@ -892,7 +892,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('KEYWORD'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $degrees = ($total == 0) ? 360.0 : (360 / $total);
         $done_total = 0;
         $data = array();
@@ -926,7 +926,7 @@ class Module_admin_stats
             $data[do_lang('OTHER')] = 360 - $done_total;
             $fields->attach(results_entry(array(do_lang('OTHER'), float_format((360 - $done_total) / $degrees)), true));
         }
-        $list = results_table(do_lang_tempcode('TOP_SEARCH_KEYWORDS'), $start, 'start', $max, 'max', count($keywords), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('TOP_SEARCH_KEYWORDS'), $start, 'start', $max, 'max', count($keywords), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
         if ($csv) {
             make_csv($real_data, 'search_keywords.csv');
         }
@@ -1042,7 +1042,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('URL'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $i = 0;
         $real_data = array();
         foreach ($views as $url => $_value) {
@@ -1064,7 +1064,7 @@ class Module_admin_stats
             $i++;
         }
         unset($views['(' . do_lang('ALL') . ')']);
-        $list = results_table(do_lang_tempcode('PAGES_STATISTICS'), $start, 'start', $max, 'max', count($views), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('PAGES_STATISTICS'), $start, 'start', $max, 'max', count($views), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
         if ($csv) {
             make_csv($real_data, 'page_stats.csv');
         }
@@ -1116,11 +1116,11 @@ class Module_admin_stats
         $reasonable_max = 10000;
         $rows = $GLOBALS['SITE_DB']->query('SELECT date_and_time FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ') ORDER BY ' . $sortable . ' ' . $sort_order, $reasonable_max, null, false, true);
         if (count($rows) < 1) {
-            $list_views = new ocp_tempcode();
+            $list_views = new Tempcode();
         } else {
             require_code('templates_results_table');
             $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $i = 0;
             while (array_key_exists($i, $rows)) {
                 $row = $rows[$i];
@@ -1201,8 +1201,8 @@ class Module_admin_stats
         $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
         $rows = $GLOBALS['SITE_DB']->query('SELECT id,referer FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' AND referer LIKE \'' . db_encode_like('http://www.google.%q=%') . '\' ORDER BY ' . $sortable . ' ' . $sort_order, 2000/*reasonable limit*/);
         if (count($rows) < 1) {
-            $list_keywords = new ocp_tempcode();
-            $graph_keywords = new ocp_tempcode();
+            $list_keywords = new Tempcode();
+            $graph_keywords = new Tempcode();
         } else {
             $keywords = array();
             $num_keywords = 0;
@@ -1232,14 +1232,14 @@ class Module_admin_stats
                 }
             }
             if ($num_keywords == 0) {
-                $list_keywords = new ocp_tempcode();
-                $graph_keywords = new ocp_tempcode();
+                $list_keywords = new Tempcode();
+                $graph_keywords = new Tempcode();
             } else {
                 $degrees = 360 / $num_keywords;
 
                 require_code('templates_results_table');
                 $fields_title = results_field_title(array(do_lang_tempcode('KEYWORD'), do_lang_tempcode('PEAK')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-                $fields = new ocp_tempcode();
+                $fields = new Tempcode();
                 $done_total = 0;
                 $data = array();
                 $i = 0;
@@ -1296,8 +1296,8 @@ class Module_admin_stats
             $rows = $GLOBALS['SITE_DB']->query('SELECT DISTINCT ip FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' ORDER BY ' . $sortable . ' ' . $sort_order, 1000/*reasonable limit*/);
             shuffle($rows);
             if (count($rows) < 1) {
-                $list_regionality = new ocp_tempcode();
-                $graph_regionality = new ocp_tempcode();
+                $list_regionality = new Tempcode();
+                $graph_regionality = new Tempcode();
             } else {
                 $regions = array();
                 $data = array();
@@ -1318,7 +1318,7 @@ class Module_admin_stats
 
                 require_code('templates_results_table');
                 $fields_title = results_field_title(array(do_lang_tempcode('REGIONALITY'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-                $fields = new ocp_tempcode();
+                $fields = new Tempcode();
                 $done_total = 0;
                 $i = 0;
                 foreach ($regions as $key => $value) {
@@ -1352,8 +1352,8 @@ class Module_admin_stats
             }
         } else {
             // Geo-IP data isn't installed
-            $list_regionality = new ocp_tempcode();
-            $graph_regionality = new ocp_tempcode();
+            $list_regionality = new Tempcode();
+            $graph_regionality = new Tempcode();
         }
 
         //************************************************************************************************
@@ -1380,11 +1380,11 @@ class Module_admin_stats
         $reasonable_max = 10000;
         $rows = $GLOBALS['SITE_DB']->query('SELECT date_and_time FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' ORDER BY ' . $sortable . ' ' . $sort_order, $reasonable_max/*reasonable limit*/);
         if (count($rows) < 1) {
-            $list_views = new ocp_tempcode();
+            $list_views = new Tempcode();
         } else {
             require_code('templates_results_table');
             $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $i = 0;
             while (array_key_exists($i, $rows)) {
                 $row = $rows[$i];
@@ -1453,7 +1453,7 @@ class Module_admin_stats
         // Let's give them the option of only clearing out stored graphs, or deleting everything.
 
         require_code('form_templates');
-        $controls = new ocp_tempcode();
+        $controls = new Tempcode();
 
         $controls->attach(form_input_radio_entry('clear', 'some', true, do_lang_tempcode('DESCRIPTION_CLEAR_GRAPHS')));
         $controls->attach(form_input_radio_entry('clear', 'all', false, do_lang_tempcode('DESCRIPTION_CLEAR_ALL')));
@@ -1611,13 +1611,13 @@ class Module_admin_stats
         $rows = $GLOBALS['SITE_DB']->query($query, 10000/*reasonable limit*/);
         if ((count($rows) < 1) || (count($rows) == 10000)) {
             $list = paragraph(do_lang_tempcode('TOO_MUCH_DATA'), '', 'red_alert');
-            $graph = new ocp_tempcode();
+            $graph = new Tempcode();
             return array($graph, $list);
         }
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $data = array();
         $round = 60 * 60 * $hours;
         $start_date_and_time = time() + $round - (time() + $round) % $round - $total * 60 * 60;
@@ -1688,8 +1688,8 @@ class Module_admin_stats
         $ip_filter = $GLOBALS['DEV_MODE'] ? '' : (' AND ' . db_string_not_equal_to('ip', get_ip_address()));
         $rows = $GLOBALS['SITE_DB']->query('SELECT id,' . $type . ' FROM ' . get_table_prefix() . 'stats WHERE (' . $where . ')' . $ip_filter . ' ORDER BY ' . $sortable . ' ' . $sort_order, 10000/*reasonable limit*/);
         if (count($rows) < 1) {
-            $list = new ocp_tempcode();
-            $graph = new ocp_tempcode();
+            $list = new Tempcode();
+            $graph = new Tempcode();
             return array($graph, $list);
         }
 
@@ -1705,7 +1705,7 @@ class Module_admin_stats
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode($list_title), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $data = array();
         $done_total = 0;
         $i = 0;

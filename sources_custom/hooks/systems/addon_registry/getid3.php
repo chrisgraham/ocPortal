@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    getid3
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_getid3
 {
     /**

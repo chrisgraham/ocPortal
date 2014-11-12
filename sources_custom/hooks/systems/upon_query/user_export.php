@@ -7,6 +7,9 @@
 
 */
 
+/**
+ * Hook class.
+ */
 class Hook_upon_query_user_export
 {
     public $member_rows_old = array();

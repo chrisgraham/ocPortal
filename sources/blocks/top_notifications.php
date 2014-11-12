@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
+
+/**
+ * Block class.
+ */
 class Block_top_notifications
 {
     /**
@@ -46,11 +50,11 @@ class Block_top_notifications
     public function run($map)
     {
         if (is_guest()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         if (!has_js()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $max = isset($map['max']) ? intval($map['max']) : 5;

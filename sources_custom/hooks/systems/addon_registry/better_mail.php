@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    better_mail
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_better_mail
 {
     /**

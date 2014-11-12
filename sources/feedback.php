@@ -241,7 +241,7 @@ function get_rating_box($content_url, $content_title, $content_type, $content_id
         return display_rating($content_url, $content_title, $content_type, $content_id, 'RATING_BOX', $submitter);
     }
 
-    return new ocp_tempcode();
+    return new Tempcode();
 }
 
 /**
@@ -260,7 +260,7 @@ function display_rating($content_url, $content_title, $content_type, $content_id
     $rating_data = get_rating_simple_array($content_url, $content_title, $content_type, $content_id, 'RATING_FORM', $submitter);
 
     if (is_null($rating_data)) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     return do_template($display_tpl, $rating_data);
@@ -355,8 +355,8 @@ function get_rating_simple_array($content_url, $content_title, $content_type, $c
         }
 
         // Work out possible errors that mighr prevent rating being allowed
-        $error = new ocp_tempcode();
-        $rate_url = new ocp_tempcode();
+        $error = new Tempcode();
+        $rate_url = new Tempcode();
         if ((get_option('allow_own_rate') == '0') && ($submitter === get_member()) && (!is_guest())) {
             $error = do_lang_tempcode('RATE_DENIED_OWN');
         } elseif (!has_privilege(get_member(), 'rate', get_page_name())) {
@@ -659,7 +659,7 @@ function get_comments($content_type, $allow_comments, $content_id, $invisible_if
         return $renderer->render_as_comment_topic($content_type, $content_id, $allow_comments, $invisible_if_no_comments, $forum, $post_warning, $_comments, $explicit_allow, $reverse, $highlight_by_user, $allow_reviews, $num_to_show_limit);
     }
 
-    return new ocp_tempcode(); // No franchise to render comments
+    return new Tempcode(); // No franchise to render comments
 }
 
 /**
@@ -939,7 +939,7 @@ function update_spacer_post($allow_comments, $content_type, $content_id, $conten
         return;
     }
 
-    $home_link = is_null($content_title) ? new ocp_tempcode() : hyperlink($content_url, escape_html($content_title));
+    $home_link = is_null($content_title) ? new Tempcode() : hyperlink($content_url, escape_html($content_title));
 
     if (is_null($forum)) {
         $forum = get_option('comments_forum_name');
@@ -999,8 +999,8 @@ function get_trackbacks($content_type, $content_id, $allow_trackback, $type = ''
 
         $trackbacks = $GLOBALS['SITE_DB']->query_select('trackbacks', array('*'), array('trackback_for_type' => $content_type, 'trackback_for_id' => $content_id), 'ORDER BY trackback_time DESC', 300);
 
-        $content = new ocp_tempcode();
-        $items = new ocp_tempcode();
+        $content = new Tempcode();
+        $items = new Tempcode();
 
         global $CURRENT_SCREEN_TITLE;
 
@@ -1059,7 +1059,7 @@ function get_trackbacks($content_type, $content_id, $allow_trackback, $type = ''
             $output = $content;
         }
     } else {
-        $output = new ocp_tempcode();
+        $output = new Tempcode();
     }
 
     return $output;

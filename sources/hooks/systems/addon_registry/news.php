@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_news
 {
     /**
@@ -324,7 +328,7 @@ class Hook_addon_registry_news
         require_lang('news');
         require_lang('ocf');
         require_css('news');
-        $contents = new ocp_tempcode();
+        $contents = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $contents->attach(do_lorem_template('NEWS_BOX', array(
                 'BLOG' => lorem_phrase(),
@@ -454,7 +458,7 @@ class Hook_addon_registry_news
      */
     public function tpl_preview__block_side_news()
     {
-        $contents = new ocp_tempcode();
+        $contents = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_SUMMARY', array(
                 'ID' => placeholder_id(),
@@ -492,7 +496,7 @@ class Hook_addon_registry_news
     public function tpl_preview__block_side_news_categories()
     {
         require_lang('news');
-        $contents = new ocp_tempcode();
+        $contents = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $contents->attach(do_lorem_template('BLOCK_SIDE_NEWS_CATEGORIES_CATEGORY', array(
                 'URL' => placeholder_url(),

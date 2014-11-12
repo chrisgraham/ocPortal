@@ -204,7 +204,7 @@ class Module_admin_orders
             $this->_order_export();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -291,7 +291,7 @@ class Module_admin_orders
         $NO_DB_SCOPE_CHECK = true;
 
         $rows = $GLOBALS['SITE_DB']->query('SELECT t1.*,(t3.p_quantity*t3.included_tax) as tax FROM ' . get_table_prefix() . 'shopping_order t1' . $extra_join . ' LEFT JOIN ' . get_table_prefix() . 'shopping_order_details t3 ON t1.id=t3.order_id ' . $cond . ' GROUP BY t1.id ORDER BY ' . db_string_equal_to('t1.order_status', 'ORDER_STATUS_cancelled') . ',' . $sortable . ' ' . $sort_order, $max, $start, false, true);
-        $order_entries = new ocp_tempcode();
+        $order_entries = new Tempcode();
         foreach ($rows as $row) {
             if ($row['purchase_through'] == 'cart') {
                 $view_url = build_url(array('page' => '_SELF', 'type' => 'order_det', 'id' => $row['id']), '_SELF');
@@ -409,7 +409,7 @@ class Module_admin_orders
 
         // Show products in the order
         $rows = $GLOBALS['SITE_DB']->query_select('shopping_order_details', array('*'), array('order_id' => $id), 'ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);
-        $product_entries = new ocp_tempcode();
+        $product_entries = new Tempcode();
         foreach ($rows as $row) {
             $product_info_url = build_url(array('page' => 'catalogues', 'type' => 'entry', 'id' => $row['p_id']), get_module_zone('catalogues'));
 
@@ -472,7 +472,7 @@ class Module_admin_orders
                 'CONTACT_PHONE' => $address['contact_phone'],
             ));
         } else {
-            $shipping_address = new ocp_tempcode();
+            $shipping_address = new Tempcode();
         }
 
         // Show screen...
@@ -535,7 +535,7 @@ class Module_admin_orders
 
         $update_url = build_url(array('page' => '_SELF', 'type' => '_add_note', 'redirect' => $redirect_url), '_SELF');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $note = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'notes', array('id' => $id));
 
@@ -681,7 +681,7 @@ class Module_admin_orders
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $order_status_list = get_order_status_list();
 

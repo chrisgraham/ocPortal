@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    help_page
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_help_page
 {
     /**

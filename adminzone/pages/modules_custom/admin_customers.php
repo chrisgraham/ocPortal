@@ -710,7 +710,7 @@ class Module_admin_customers
             return $this->charge();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -737,7 +737,7 @@ class Module_admin_customers
             $member_id = $GLOBALS['FORUM_DRIVER']->get_member_from_username($username);
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_username(do_lang_tempcode('USERNAME'), '', 'member_username', $username, true));
         $fields->attach(form_input_integer(do_lang_tempcode('CREDIT_AMOUNT'), do_lang_tempcode('CREDIT_AMOUNT_DESCRIPTION'), 'amount', get_param_integer('amount', 3), true));
         $fields->attach(form_input_tick(do_lang_tempcode('ALLOW_OVERDRAFT'), do_lang_tempcode('DESCRIPTION_ALLOW_OVERDRAFT'), 'allow_overdraft', true));
@@ -759,11 +759,11 @@ class Module_admin_customers
 
             $text = do_lang_tempcode('CUSTOMER_CURRENTLY_HAS', escape_html(number_format($num_credits)));
         } else {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
         }
 
         require_code('templates_columned_table');
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         $logs = $GLOBALS['SITE_DB']->query_select('credit_charge_log', array('charging_member_id', 'num_credits', 'date_and_time', 'reason'), array('member_id' => $member_id), 'ORDER BY date_and_time DESC', 10);
         foreach ($logs as $log) {
             $charging_username = $GLOBALS['FORUM_DRIVER']->get_username($log['charging_member_id']);

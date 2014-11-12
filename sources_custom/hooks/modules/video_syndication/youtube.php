@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
-class video_syndication_youtube
+
+/**
+ * Hook class.
+ */
+class Hook_video_syndication_youtube
 {
     public $_access_token = null;
 

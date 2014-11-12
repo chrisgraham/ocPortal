@@ -218,7 +218,7 @@ class Module_points
             return $this->points_profile();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -237,7 +237,7 @@ class Module_points
         }
         $fields = form_input_username(do_lang_tempcode('USERNAME'), '', 'username', $username, true, false);
         $submit_name = do_lang_tempcode('SEARCH');
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         $text->attach(paragraph(do_lang_tempcode('POINTS_SEARCH_FORM')));
         $text->attach(paragraph(do_lang_tempcode('WILDCARD')));
 
@@ -266,7 +266,7 @@ class Module_points
             return warn_screen($this->title, do_lang_tempcode('NO_RESULTS'));
         }
 
-        $results = new ocp_tempcode();
+        $results = new Tempcode();
         foreach ($rows as $myrow) {
             $id = $GLOBALS['FORUM_DRIVER']->mrow_id($myrow);
             if (!is_guest($id)) {

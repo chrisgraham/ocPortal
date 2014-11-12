@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
-class Hook_Preview_comcode_page
+
+/**
+ * Hook class.
+ */
+class Hook_preview_comcode_page
 {
     /**
      * Find whether this preview hook applies.

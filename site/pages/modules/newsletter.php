@@ -241,7 +241,7 @@ class Module_newsletter
             return $this->newsletter_unsubscribe();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -280,7 +280,7 @@ class Module_newsletter
         $text = comcode_to_tempcode($message, null, true);
 
         // Build up the join form
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('EMAIL_ADDRESS'), do_lang_tempcode('DESCRIPTION_SUBSCRIBE_ADDRESS'), 'email', $their_email, true));
         $fields->attach(form_input_line(do_lang_tempcode('FORENAME'), '', 'forename', $forename, false));
         $fields->attach(form_input_line(do_lang_tempcode('SURNAME'), '', 'surname', $surname, false));

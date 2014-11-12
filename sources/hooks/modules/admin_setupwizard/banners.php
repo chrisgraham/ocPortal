@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_banners
 {
     /**
@@ -43,14 +47,14 @@ class Hook_sw_banners
     public function get_fields($field_defaults)
     {
         if (!addon_installed('banners')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $current_settings = $this->get_current_settings();
         $field_defaults += $current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
 
         require_lang('banners');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         if ($current_settings['have_default_banners_donation'] == '1') {
             $fields->attach(form_input_tick(do_lang_tempcode('HAVE_DEFAULT_BANNERS_DONATION'), do_lang_tempcode('DESCRIPTION_HAVE_DEFAULT_BANNERS_DONATION'), 'have_default_banners_donation', $field_defaults['have_default_banners_donation'] == '1'));
         }

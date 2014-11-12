@@ -404,7 +404,7 @@ class Module_news
             return $this->news_cat_select(null);
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -434,7 +434,7 @@ class Module_news
             $categories = $GLOBALS['SITE_DB']->query_select('news_categories', array('*'), $map, 'ORDER BY ' . $GLOBALS['SITE_DB']->translate_field_ref('nc_title'), $max, $start); // Ordered by title (can do efficiently as limited numbers of non-blogs)
             $max_rows = $GLOBALS['SITE_DB']->query_select_value('news_categories', 'COUNT(*)', $map);
         }
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $join = ' LEFT JOIN ' . get_table_prefix() . 'news_category_entries d ON d.news_entry=r.id';
         if ($blogs === 1) {
             $q_filter .= ' AND c.nc_owner IS NOT NULL';
@@ -469,7 +469,7 @@ class Module_news
             }
             $submit_url = build_url($map, get_module_zone('cms_news'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
 
         require_code('templates_pagination');
@@ -506,7 +506,7 @@ class Module_news
             }
             $submit_url = build_url($map, get_module_zone('cms_news'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
 
         // Render
@@ -555,7 +555,7 @@ class Module_news
 
         // Load details
         $date = get_timezoned_date($myrow['date_and_time']);
-        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $myrow['author']), get_module_zone('authors')) : new ocp_tempcode();
+        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $myrow['author']), get_module_zone('authors')) : new Tempcode();
         $author = $myrow['author'];
         $news_full_plain = get_translated_text($myrow['news_article']);
         if ($news_full->is_empty()) {
@@ -570,7 +570,7 @@ class Module_news
 
             $warning_details = do_template('WARNING_BOX', array('_GUID' => '5fd82328dc2ac9695dc25646237065b0', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? 'UNVALIDATED_TEXT_NON_DIRECT' : 'UNVALIDATED_TEXT')));
         } else {
-            $warning_details = new ocp_tempcode();
+            $warning_details = new Tempcode();
         }
 
         // Views
@@ -585,7 +585,7 @@ class Module_news
         if ((has_actual_page_access(null, ($blog === 1) ? 'cms_blogs' : 'cms_news', null, null)) && (has_edit_permission('high', get_member(), $myrow['submitter'], ($blog === 1) ? 'cms_blogs' : 'cms_news', array('news', $myrow['news_category'])))) {
             $edit_url = build_url(array('page' => ($blog === 1) ? 'cms_blogs' : 'cms_news', 'type' => '_ed', 'id' => $id), get_module_zone(($blog === 1) ? 'cms_blogs' : 'cms_news'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
         $tmp = array('page' => '_SELF', 'type' => 'misc');
         if ($filter != '*') {
@@ -605,7 +605,7 @@ class Module_news
             }
             $submit_url = build_url($map, get_module_zone('cms_news'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
 
         $categories = array(strval($myrow['news_category']) => $category);
@@ -625,7 +625,7 @@ class Module_news
         }
 
         // Newsletter tie-in
-        $newsletter_url = new ocp_tempcode();
+        $newsletter_url = new Tempcode();
         if (addon_installed('newsletter')) {
             require_lang('newsletter');
             if (has_actual_page_access(get_member(), 'admin_newsletter')) {

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_task_find_orphaned_uploads
 {
     /**

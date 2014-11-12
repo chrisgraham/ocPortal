@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_is_on_rss
 {
     /**

@@ -305,7 +305,7 @@ function create_selection_list_zones($sel = null, $no_go = null, $reorder = null
     }
 
     $zones = find_all_zones(false, true);
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     if (!is_null($reorder)) {
         $_zones_a = array();
         $_zones_b = array();

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_wiki
 {
     /**
@@ -226,7 +230,7 @@ class Hook_addon_registry_wiki
     public function tpl_preview__wiki_page_screen()
     {
         require_lang('ocf');
-        $extra = new ocp_tempcode();
+        $extra = new Tempcode();
         $extra = do_lorem_template('BUTTON_SCREEN_ITEM', array(
             'REL' => 'edit',
             'IMMEDIATE' => false,

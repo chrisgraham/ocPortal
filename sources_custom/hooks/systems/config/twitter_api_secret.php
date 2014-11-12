@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    twitter_support
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_twitter_api_secret
 {
     /**

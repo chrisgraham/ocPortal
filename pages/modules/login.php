@@ -179,7 +179,7 @@ class Module_login
             return $this->invisible();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -189,7 +189,7 @@ class Module_login
      */
     public function login_before()
     {
-        $passion = new ocp_tempcode(); // Hidden fields
+        $passion = new Tempcode(); // Hidden fields
 
         // Where we will be redirected to after login, for GET requests (POST requests are handled further in the code)
         $redirect_default = get_self_url(true, true); // The default is to go back to where we are after login. Note that this is not necessarily the URL to the login module, as login screens happen on top of screens you're not allowed to access. If it is the URL to the login module, we'll realise this later in this code. This URL is coded to not redirect to root if we have $_POST, because we relay $_POST values and have intelligence (via $passion).
@@ -230,7 +230,7 @@ class Module_login
             $forgotten_link = build_url(array('page' => 'lost_password', 'wide_high' => get_param_integer('wide_high', null)), get_module_zone('lost_password'));
             $extra = do_lang_tempcode('IF_FORGOTTEN_PASSWORD', escape_html($forgotten_link->evaluate()));
         } else {
-            $extra = new ocp_tempcode();
+            $extra = new Tempcode();
         }
 
         // Render
@@ -260,8 +260,8 @@ class Module_login
             if (count($_POST) <= 4) { // Only the login username, password, remember-me and redirect
                 require_code('site2');
                 assign_refresh($url, 0.0);
-                $post = new ocp_tempcode();
-                $refresh = new ocp_tempcode();
+                $post = new Tempcode();
+                $refresh = new Tempcode();
             } else {
                 $post = build_keep_post_fields(array('login_username', 'password', 'remember', 'login_invisible', 'redirect'));
                 $redirect_passon = post_param('redirect_passon', null); // redirect_passon is used when there are POST fields, as it says what the redirect will be on this post-login-check hop (post fields prevent us doing an immediate HTTP-level redirect).

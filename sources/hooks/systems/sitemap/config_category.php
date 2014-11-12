@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_config_category extends Hook_sitemap_base
 {
     /**

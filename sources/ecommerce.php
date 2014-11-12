@@ -130,8 +130,8 @@ function get_transaction_form_fields($trans_id, $purchase_id, $item_name, $amoun
 
     require_code('form_templates');
 
-    $fields = new ocp_tempcode();
-    $hidden = new ocp_tempcode();
+    $fields = new Tempcode();
+    $hidden = new Tempcode();
 
     $fields->attach(form_input_line(do_lang_tempcode('CARDHOLDER_NAME'), do_lang_tempcode('DESCRIPTION_CARDHOLDER_NAME'), 'name', ecommerce_test_mode() ? $GLOBALS['FORUM_DRIVER']->get_username(get_member()) : get_ocp_cpf('payment_cardholder_name'), true));
     $fields->attach(form_input_list(do_lang_tempcode('CARD_TYPE'), '', 'card_type', $object->create_selection_list_card_types(ecommerce_test_mode() ? 'Visa' : get_ocp_cpf('payment_type'))));

@@ -28,7 +28,7 @@
  */
 function content_review_get_fields($content_type, $content_id = null, $catalogue_name = null)
 {
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     if (!has_privilege(get_member(), 'set_content_review_settings')) {
         return $fields;
@@ -126,7 +126,7 @@ function content_review_get_fields($content_type, $content_id = null, $catalogue
 
         // Specification of auto-action to perform
 
-        $auto_action_list = new ocp_tempcode();
+        $auto_action_list = new Tempcode();
         $auto_actions = array();
         $auto_actions[] = 'leave';
         if (!is_null($content_info['validated_field'])) {

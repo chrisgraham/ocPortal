@@ -232,7 +232,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
     // Tag level
     $current_tag = '';
     $attribute_map = array();
-    $tag_output = new ocp_tempcode();
+    $tag_output = new Tempcode();
     $continuation = '';
     $close = mixed();
 
@@ -261,7 +261,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
     $just_title = false;
     global $NUM_COMCODE_LINES_PARSED;
     $NUM_COMCODE_LINES_PARSED = 0;
-    $queued_tempcode = new ocp_tempcode();
+    $queued_tempcode = new Tempcode();
     $mindless_mode = false; // If we're doing a semi parse mode and going over a tag we don't actually process
     $tag_raw = '';
 
@@ -622,7 +622,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
 
                     if (($next == "\n") && ($white_space_area) && ($print_mode) && ($list_indent == 0)) { // We might need to put some queued up stuff here: when we print, we can't float thumbnails
                         $tag_output->attach($queued_tempcode);
-                        $queued_tempcode = new ocp_tempcode();
+                        $queued_tempcode = new Tempcode();
                     }
                     if (($next == "\n") && ($white_space_area) && (!$in_semihtml) && ((!$just_ended) || ($semiparse_mode) || (substr($comcode, $pos, 3) == ' - '))) { // Hard-new-lines
                         ++$NUM_COMCODE_LINES_PARSED;
@@ -735,7 +735,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 }
                                                 $p_len++;
                                             }
-                                            $ret = new ocp_tempcode();
+                                            $ret = new Tempcode();
                                             $less_pos = $pos - 1;
                                             $ret->parse_from($comcode, $less_pos, $p_len);
                                             $pos = $p_len;
@@ -743,7 +743,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 $matches = array();
                                                 if (preg_match('#\{\!([\w\d\_\:]+)(\}|$)#U', substr($comcode, $less_pos, $p_len - $less_pos), $matches) != 0) { // Hacky code to extract the lang string name
                                                     $temp_lang_string = $matches[1];
-                                                    $ret = new ocp_tempcode(); // Put into new Tempcode object to attach to, as what comcode_lang_string returns may be cached yet we may append to $ret
+                                                    $ret = new Tempcode(); // Put into new Tempcode object to attach to, as what comcode_lang_string returns may be cached yet we may append to $ret
                                                     $ret->attach(static_evaluate_tempcode(comcode_lang_string($temp_lang_string))); // Recreate as a Comcode lang string
                                                 }
                                             }
@@ -758,7 +758,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                                                 }
                                                 $p_len++;
                                             }
-                                            $ret = new ocp_tempcode();
+                                            $ret = new Tempcode();
                                             $less_pos = $pos - 1;
                                             $ret->parse_from($comcode, $less_pos, $p_len);
                                             $pos = $p_len;
@@ -1426,7 +1426,7 @@ function __comcode_to_tempcode($comcode, $source_member, $as_admin, $wrap_pos, $
                             }
                             $embed_output = _do_tags_comcode($_last[0], $_last[1], $tag_output, $comcode_dangerous, $pass_id, $pos, $source_member, $as_admin, $connection, $comcode, $_structure_sweep, $semiparse_mode, $highlight_bits, null, $in_semihtml, $is_all_semihtml);
                         } else {
-                            $embed_output = new ocp_tempcode();
+                            $embed_output = new Tempcode();
                         }
 
                         $in_code_tag = false;
@@ -1827,7 +1827,7 @@ function _opened_tag($mindless_mode, $as_admin, $source_member, $attribute_map, 
         ++$NUM_COMCODE_LINES_PARSED;
     }
 
-    $tag_output = new ocp_tempcode();
+    $tag_output = new Tempcode();
     $textual_area = isset($TEXTUAL_TAGS[$current_tag]);
 
     $white_space_area = $textual_area;

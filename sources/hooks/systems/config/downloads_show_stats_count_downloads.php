@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_downloads_show_stats_count_downloads
 {
     /**

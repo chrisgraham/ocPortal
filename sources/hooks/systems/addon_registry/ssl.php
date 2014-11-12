@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ssl
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ssl
 {
     /**
@@ -128,7 +132,7 @@ class Hook_addon_registry_ssl
     public function tpl_preview__administrative__ssl_configuration_screen()
     {
         require_lang('ssl');
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $k = 0;
         foreach (placeholder_array() as $_k => $v) {
             foreach (placeholder_array() as $k => $v2) {

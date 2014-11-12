@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_catalogue_subcats_per_page
 {
     /**

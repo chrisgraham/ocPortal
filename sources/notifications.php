@@ -70,7 +70,7 @@ function _get_notification_ob_for_code($notification_code)
         foreach (array_keys($hooks) as $hook) {
             $path = 'hooks/systems/notifications/' . filter_naughty($hook);
             require_code($path);
-            $ob = object_factory('Hook_Notification_' . filter_naughty($hook));
+            $ob = object_factory('Hook_notification_' . filter_naughty($hook));
             if (method_exists($ob, 'list_handled_codes')) {
                 if (array_key_exists($notification_code, $ob->list_handled_codes())) {
                     return $ob;
@@ -79,7 +79,7 @@ function _get_notification_ob_for_code($notification_code)
         }
     } else { // Ah, we know already (file exists directly) - so quick route
         require_code($path);
-        return object_factory('Hook_Notification_' . filter_naughty(preg_replace('#\_\_\w*$#', '', $notification_code)));
+        return object_factory('Hook_notification_' . filter_naughty(preg_replace('#\_\_\w*$#', '', $notification_code)));
     }
     return null;
     //return object_factory('Hook_Notification'); // default
@@ -137,8 +137,6 @@ function dispatch_notification($notification_code, $code_category, $subject, $me
 /**
  * Dispatcher object.
  * Used to create a closure for a notification dispatch, so we can then tell that to send in the background (register_shutdown_function), for performance reasons.
- *
- * @package    core_notifications
  */
 class Notification_dispatcher
 {
@@ -755,6 +753,10 @@ function delete_all_notifications_on($notification_code, $notification_category)
  *
  * @package    core_notifications
  */
+
+/**
+ * Hook class.
+ */
 class Hook_Notification
 {
     /**
@@ -1113,7 +1115,11 @@ class Hook_Notification
  *
  * @package    core_notifications
  */
-class Hook_Notification__Staff extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification__Staff extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

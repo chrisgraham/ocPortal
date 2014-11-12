@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_whats_news_galleries
 {
     /**
@@ -54,7 +58,7 @@ class Hook_whats_news_galleries
 
         $max = intval(get_option('max_newsletter_whatsnew'));
 
-        $new = new ocp_tempcode();
+        $new = new Tempcode();
 
         $count = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'galleries WHERE name NOT LIKE \'' . db_encode_like('download\_%') . '\'');
         if ($count < 500) {

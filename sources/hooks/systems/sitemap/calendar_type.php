@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_calendar_type extends Hook_sitemap_content
 {
     protected $content_type = 'calendar_type';

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    page_management
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_page_management
 {
     /**
@@ -158,7 +162,7 @@ class Hook_addon_registry_page_management
     public function tpl_preview__administrative__validate_check_screen()
     {
         require_lang('validation');
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $val) {
             $content->attach(do_lorem_template('VALIDATE_CHECK_ERROR', array(
                 'URL' => placeholder_url(),

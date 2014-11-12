@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-class Hook_Notification_news_entry extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_news_entry extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

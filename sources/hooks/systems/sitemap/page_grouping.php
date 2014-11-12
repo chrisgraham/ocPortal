@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_page_grouping extends Hook_sitemap_base
 {
     /**

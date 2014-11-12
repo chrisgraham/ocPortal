@@ -374,13 +374,13 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
 
     if ($do_sorting) {
         // Render sort change dropdown
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         foreach ($fields as $i => $field) {
             if ($field['cf_searchable'] == 1) {
                 $potential_sorter_name = get_translated_text($field['cf_name']);
                 foreach (array('ASC' => '_ASCENDING', 'DESC' => '_DESCENDING') as $dir_code => $dir_lang) {
                     $sort_sel = (($order_by == strval($i)) && ($direction == $dir_code));
-                    $_potential_sorter_name = new ocp_tempcode();
+                    $_potential_sorter_name = new Tempcode();
                     $_potential_sorter_name->attach(escape_html($potential_sorter_name));
                     $_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
                     $selectors->attach(do_template('PAGINATION_SORTER', array('_GUID' => 'dfdsfdsusd0fsd0dsf', 'SELECTED' => $sort_sel, 'NAME' => protect_from_escaping($_potential_sorter_name), 'VALUE' => strval($field['id']) . ' ' . $dir_code)));
@@ -411,7 +411,7 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
         foreach ($extra_sorts as $extra_sort_code => $extra_sort_lang) {
             foreach (array('ASC' => '_ASCENDING', 'DESC' => '_DESCENDING') as $dir_code => $dir_lang) {
                 $sort_sel = (($order_by == $extra_sort_code) && ($direction == $dir_code));
-                $_potential_sorter_name = new ocp_tempcode();
+                $_potential_sorter_name = new Tempcode();
                 $_potential_sorter_name->attach(do_lang_tempcode($extra_sort_lang));
                 $_potential_sorter_name->attach(do_lang_tempcode($dir_lang));
                 $selectors->attach(do_template('PAGINATION_SORTER', array('_GUID' => 'xfdsfdsusd0fsd0dsf', 'SELECTED' => $sort_sel, 'NAME' => protect_from_escaping($_potential_sorter_name), 'VALUE' => $extra_sort_code . ' ' . $dir_code)));
@@ -425,11 +425,11 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
             catalogue_entries_manual_sort($fields, $entries, $order_by, $direction);
         }
     } else {
-        $sorting = new ocp_tempcode();
+        $sorting = new Tempcode();
     }
 
     // Build up entries
-    $entry_buildup = new ocp_tempcode();
+    $entry_buildup = new Tempcode();
 
     // Possibly some extra stuff for shopping carts
     $extra_map = array();
@@ -519,7 +519,7 @@ function get_catalogue_category_entry_buildup($category_id, $catalogue_name, $ca
             }
 
             if (!$entry_buildup->is_empty()) {
-                $head = new ocp_tempcode();
+                $head = new Tempcode();
                 $field_count = 0;
                 foreach ($fields as $i => $field) {
                     if (((($field['cf_put_in_category'] == 1) && ($view_type == 'CATEGORY')) || (($field['cf_put_in_search'] == 1) && ($view_type == 'SEARCH'))) && ($field['cf_visible'] == 1)) {
@@ -881,9 +881,9 @@ function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root
 
     // Prepare output map
     $map = array();
-    $map['FIELDS'] = new ocp_tempcode();
-    $map['FIELDS_GRID'] = new ocp_tempcode();
-    $map['FIELDS_TABULAR'] = new ocp_tempcode();
+    $map['FIELDS'] = new Tempcode();
+    $map['FIELDS_GRID'] = new Tempcode();
+    $map['FIELDS_TABULAR'] = new Tempcode();
     $map['fields'] = $fields;
     //$fields_1d=array();
     //$fields_2d=array();
@@ -922,7 +922,7 @@ function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root
                 require_code('images');
                 $map['FIELD_' . $str_i . '_THUMB'] = do_image_thumb($dereference_ev, ($i == 0) ? '' : (is_object($map['FIELD_0']) ? $map['FIELD_0']->evaluate() : $map['FIELD_0']), false, false);
             } else {
-                $map['FIELD_' . $str_i . '_THUMB'] = new ocp_tempcode();
+                $map['FIELD_' . $str_i . '_THUMB'] = new Tempcode();
             }
             $map['_FIELD_' . $str_id . '_THUMB'] = $map['FIELD_' . $str_i . '_THUMB'];
         }
@@ -1017,7 +1017,7 @@ function get_catalogue_entry_map($entry, $catalogue, $view_type, $tpl_set, $root
     $self_url = build_url($url_map, $zone, null, false, false, true);
     if (($feedback_details) || ($only_fields !== array(0))) {
         require_code('feedback');
-        $map['RATING'] = ($entry['allow_rating'] == 1) ? display_rating($self_url, $c_value, 'catalogues__' . $catalogue_name, strval($id), 'RATING_INLINE_STATIC', $entry['ce_submitter']) : new ocp_tempcode();
+        $map['RATING'] = ($entry['allow_rating'] == 1) ? display_rating($self_url, $c_value, 'catalogues__' . $catalogue_name, strval($id), 'RATING_INLINE_STATIC', $entry['ce_submitter']) : new Tempcode();
     }
     if ($feedback_details) {
         require_code('feedback');
@@ -1080,7 +1080,7 @@ function create_selection_list_catalogues($it = null, $prefer_ones_with_entries 
     if (count($rows) == intval(get_option('general_safety_listing_limit'))) {
         attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__ALPHABETICAL', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
     }
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $row) {
         if (substr($row['c_name'], 0, 1) == '_') {
             continue;
@@ -1263,7 +1263,7 @@ function _get_catalogue_entry_field($field_id, $entry_id, $type = 'short', $only
 
     // Pre-caching of whole entry
     static $catalogue_entry_cache = array();
-    if ((!isset($catalogue_entry_cache[$entry_id])) || (class_exists('resource_fs_base')/*Implies resource-fs import*/)) {
+    if ((!isset($catalogue_entry_cache[$entry_id])) || (class_exists('Resource_fs_base')/*Implies resource-fs import*/)) {
         $catalogue_entry_cache[$entry_id] = array();
         $query = '';
         foreach (array('catalogue_efv_float', 'catalogue_efv_integer', 'catalogue_efv_long', 'catalogue_efv_long_trans', 'catalogue_efv_short', 'catalogue_efv_short_trans',) as $table) {
@@ -1301,7 +1301,7 @@ function _get_catalogue_entry_field($field_id, $entry_id, $type = 'short', $only
         }
 
         $value = isset($catalogue_entry_cache[$entry_id][$field_id]) ? $catalogue_entry_cache[$entry_id][$field_id] : null;
-        if (class_exists('resource_fs_base')) {
+        if (class_exists('Resource_fs_base')) {
             $catalogue_entry_cache = array();
         }
     } else {
@@ -1478,7 +1478,7 @@ function get_catalogue_entries_tree($catalogue_name, $submitter = null, $categor
 function create_selection_list_catalogue_category_tree($catalogue_name, $it = null, $addable_filter = false, $use_compound_list = false)
 {
     if ($GLOBALS['SITE_DB']->query_select_value('catalogue_categories', 'COUNT(*)', array('c_name' => $catalogue_name)) > 1000) {
-        return new ocp_tempcode(); // Too many!
+        return new Tempcode(); // Too many!
     }
 
     $tree = array();
@@ -1496,7 +1496,7 @@ function create_selection_list_catalogue_category_tree($catalogue_name, $it = nu
         $tree = array_merge($tree, $subtree);
     }
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($tree as $category) {
         if (($addable_filter) && (!$category['addable'])) {
             continue;
@@ -1536,7 +1536,7 @@ function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs
     }
 
     if ($breadcrumbs === null) {
-        $breadcrumbs = new ocp_tempcode();
+        $breadcrumbs = new Tempcode();
     }
 
     // Put our title onto our breadcrumbs
@@ -1568,7 +1568,7 @@ function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs
     }
 
     // Children of this category
-    $breadcrumbs2 = new ocp_tempcode();
+    $breadcrumbs2 = new Tempcode();
     $breadcrumbs2->attach($breadcrumbs);
     $breadcrumbs2->attach(do_template('BREADCRUMB_SEPARATOR'));
     $rows = $GLOBALS['SITE_DB']->query_select('catalogue_categories', array('id', 'cc_title'), array('c_name' => $catalogue_name, 'cc_parent_id' => $category_id), 'ORDER BY id DESC', intval(get_option('general_safety_listing_limit'))/*reasonable limit to stop it dying*/);
@@ -1589,7 +1589,7 @@ function get_catalogue_category_tree($catalogue_name, $category_id, $breadcrumbs
         foreach ($rows as $child) {
             $child_id = $child['id'];
             $child_title = $child['_cc_title'];
-            $child_breadcrumbs = new ocp_tempcode();
+            $child_breadcrumbs = new Tempcode();
             $child_breadcrumbs->attach($breadcrumbs2);
 
             $child_children = get_catalogue_category_tree($catalogue_name, $child_id, $child_breadcrumbs, $child_title, ($levels === null) ? null : ($levels - 1), $addable_filter, $use_compound_list);
@@ -1628,7 +1628,7 @@ function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for
     $url = build_url($map, get_module_zone('catalogues'));
 
     if ($category_id === null) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     if (($category_id != $root) || (!$no_link_for_me_sir)) {
@@ -1647,7 +1647,7 @@ function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for
     }
 
     if ($category_id == $root) {
-        $below = new ocp_tempcode();
+        $below = new Tempcode();
     } else {
         $below = catalogue_category_breadcrumbs($PT_PAIR_CACHE[$category_id]['cc_parent_id'], $root, false, $attach_to_url_filter);
     }
@@ -1657,11 +1657,11 @@ function catalogue_category_breadcrumbs($category_id, $root = null, $no_link_for
         if (!$below->is_empty()) {
             $tpl_url = do_template('BREADCRUMB_SEPARATOR');
         } else {
-            $tpl_url = new ocp_tempcode();
+            $tpl_url = new Tempcode();
         }
         $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
     } else {
-        $tpl_url = new ocp_tempcode();
+        $tpl_url = new Tempcode();
     }
 
     $below->attach($tpl_url);
@@ -1813,7 +1813,7 @@ function render_catalogue_entry_screen($id, $no_title = false, $attach_to_url_fi
         }
     }
     if ($no_title) {
-        $map['TITLE'] = new ocp_tempcode();
+        $map['TITLE'] = new Tempcode();
     } else {
         if ((get_value('no_awards_in_titles') !== '1') && (addon_installed('awards'))) {
             require_code('awards');
@@ -1832,7 +1832,7 @@ function render_catalogue_entry_screen($id, $no_title = false, $attach_to_url_fi
     seo_meta_load_for('catalogue_entry', strval($id), strip_tags($title_to_use_2));
 
     if ($map['BREADCRUMBS'] === '') {
-        $map['BREADCRUMBS'] = new ocp_tempcode();
+        $map['BREADCRUMBS'] = new Tempcode();
         $url = build_url(array('page' => '_SELF', 'type' => 'index', 'id' => $catalogue_name), '_SELF');
         $map['BREADCRUMBS']->attach(hyperlink($url, escape_html(get_translated_text($catalogue['c_title'])), false, false, do_lang('INDEX')));
         $map['BREADCRUMBS']->attach(do_template('BREADCRUMB_SEPARATOR'));

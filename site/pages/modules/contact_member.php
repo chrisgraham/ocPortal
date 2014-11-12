@@ -117,7 +117,7 @@ class Module_contact_member
             return $this->actual();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -132,7 +132,7 @@ class Module_contact_member
 
         $text = do_lang_tempcode('EMAIL_MEMBER_TEXT');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $default_email = (is_guest()) ? '' : $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_email_address');
         $default_name = (is_guest()) ? '' : $GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_username');
@@ -155,7 +155,7 @@ class Module_contact_member
             }
         }
         $size = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id, 'm_max_email_attach_size_mb');
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         if ($size != 0) {
             handle_max_file_size($hidden);
             $fields->attach(form_input_upload_multi(do_lang_tempcode('_ATTACHMENT'), do_lang_tempcode('EMAIL_ATTACHMENTS', integer_format($size)), 'attachment', false));

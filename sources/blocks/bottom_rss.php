@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_bottom_rss
 {
     /**
@@ -61,7 +65,7 @@ class Block_bottom_rss
         $url = array_key_exists('param', $map) ? $map['param'] : (get_brand_base_url() . '/backend.php?type=rss&mode=news&filter=16,17,18,19,20'); // http://channel9.msdn.com/Feeds/RSS/
 
         require_code('rss');
-        $rss = new rss($url);
+        $rss = new OCP_RSS($url);
         if (!is_null($rss->error)) {
             return do_template('WARNING_BOX', array('_GUID' => '7ae6a91db7c7ac7d607b9e29ddafc344', 'WARNING' => $rss->error));
         }
@@ -74,7 +78,7 @@ class Block_bottom_rss
 
         // Now for the actual stream contents
         $max = array_key_exists('max_entries', $map) ? intval($map['max_entries']) : 10;
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rss->gleamed_items as $i => $item) {
             if ($i >= $max) {
                 break;

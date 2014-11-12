@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_symbol_CATALOGUE_ENTRY_FOR
 {
     /**

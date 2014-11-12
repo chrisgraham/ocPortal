@@ -186,8 +186,8 @@ function member_personal_links_and_details($member_id)
         return $cache[$member_id];
     }
 
-    $details = new ocp_tempcode();
-    $links = new ocp_tempcode();
+    $details = new Tempcode();
+    $links = new Tempcode();
 
     if (get_forum_type() != 'none') {
         // Post count

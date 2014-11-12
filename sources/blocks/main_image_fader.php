@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Block class.
+ */
 class Block_main_image_fader
 {
     /**

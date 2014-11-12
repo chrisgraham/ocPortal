@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    workflows
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_workflows
 {
     /**

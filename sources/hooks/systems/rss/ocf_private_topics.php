@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_ocf_private_topics
 {
     /**
@@ -54,7 +58,7 @@ class Hook_rss_ocf_private_topics
         require_code('ocf_notifications');
         $rows = ocf_get_pp_rows($max);
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             $id = strval($row['p_id']);
             $author = $row['t_cache_first_username'];
@@ -81,7 +85,7 @@ class Hook_rss_ocf_private_topics
             if ($prefix == 'RSS_') {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '448f736ecf0154960177c131dde76125', 'COMMENT_URL' => $view_url, 'ID' => strval($row['p_id'])));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

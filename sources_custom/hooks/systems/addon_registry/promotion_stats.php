@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    promotion_stats
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_promotion_stats
 {
     /**

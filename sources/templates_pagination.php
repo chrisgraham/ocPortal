@@ -81,7 +81,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
     $_selectors[] = $max;
     sort($_selectors);
     $_selectors = array_unique($_selectors);
-    $selectors = new ocp_tempcode();
+    $selectors = new Tempcode();
     foreach ($_selectors as $selector_value) {
         if ($selector_value > $max_rows) {
             $selector_value = $max_rows;
@@ -98,7 +98,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
     $GLOBALS['INCREMENTAL_ID_GENERATOR']++;
 
     if ($max < $max_rows) { // If they don't all fit on one page
-        $parts = new ocp_tempcode();
+        $parts = new Tempcode();
         $num_pages = ($max == 0) ? 1 : intval(ceil(floatval($max_rows) / floatval($max)));
 
         // Link to first
@@ -107,7 +107,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
             $cat_url = _build_pagination_cat_url($url_array, $post_array, $hash);
             $first = do_template('PAGINATION_CONTINUE_FIRST', array('_GUID' => 'f5e510da318af9b37c3a4b23face5ae3', 'TITLE' => $title, 'P' => strval(1), 'FIRST_URL' => $cat_url));
         } else {
-            $first = new ocp_tempcode();
+            $first = new Tempcode();
         }
 
         // Link to previous
@@ -139,7 +139,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
         if ($from > 0) {
             $continues_left = do_template('PAGINATION_CONTINUE');
         } else {
-            $continues_left = new ocp_tempcode();
+            $continues_left = new Tempcode();
         }
 
         $bot = (is_guest()) && (!is_null(get_bot_type()));
@@ -163,7 +163,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
         if ($to < $num_pages) {
             $continues_right = do_template('PAGINATION_CONTINUE');
         } else {
-            $continues_right = new ocp_tempcode();
+            $continues_right = new Tempcode();
         }
 
         // Link to next
@@ -186,12 +186,12 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
             $cat_url = _build_pagination_cat_url($url_array, $post_array, $hash);
             $last = do_template('PAGINATION_CONTINUE_LAST', array('_GUID' => '2934936df4ba90989e949a8ebe905522', 'TITLE' => $title, 'P' => strval($num_pages), 'LAST_URL' => $cat_url));
         } else {
-            $last = new ocp_tempcode();
+            $last = new Tempcode();
         }
 
         // Page jump dropdown, if we had to crop
         if ($num_pages > $max_page_links) {
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             $pg_start = 0;
             $pg_to = $num_pages;
             $pg_at = intval(floatval($start) / floatval($max));
@@ -212,7 +212,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
             $hidden = build_keep_form_fields('_SELF', true, $dont_auto_keep);
             $pages_list = do_template('PAGINATION_LIST_PAGES', array('_GUID' => '9e1b394763619433f23b8ed95f5ac134', 'URL' => $get_url, 'HIDDEN' => $hidden, 'START_NAME' => $start_name, 'LIST' => $list));
         } else {
-            $pages_list = new ocp_tempcode();
+            $pages_list = new Tempcode();
         }
 
         // Put it all together
@@ -255,7 +255,7 @@ function pagination($title, $start, $start_name, $max, $max_name, $max_rows, $ke
         ));
     }
 
-    return new ocp_tempcode();
+    return new Tempcode();
 }
 
 /**

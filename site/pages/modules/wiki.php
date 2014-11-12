@@ -259,7 +259,7 @@ class Module_wiki
                     $this->title = get_screen_title('ERROR_OCCURRED');
                     $add_access = (has_submit_permission('low', get_member(), get_ip_address(), 'cms_wiki'));
                     require_lang('zones');
-                    $add_url = $add_access ? build_url(array('page' => 'cms_wiki', 'type' => 'add_page', 'id' => $find, 'redirect' => get_self_url(true, true)), get_module_zone('cms_wiki')) : new ocp_tempcode();
+                    $add_url = $add_access ? build_url(array('page' => 'cms_wiki', 'type' => 'add_page', 'id' => $find, 'redirect' => get_self_url(true, true)), get_module_zone('cms_wiki')) : new Tempcode();
                     return do_template('MISSING_SCREEN', array('_GUID' => 'ba778c816860a9594983ed9ef03d0c42', 'TITLE' => $this->title, 'ADD_URL' => $add_url, 'PAGE' => $find));
                 }
                 $chain = wiki_derive_chain($id);
@@ -429,7 +429,7 @@ class Module_wiki
             return $this->_post();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -491,7 +491,7 @@ class Module_wiki
 
         // Children Links
         $num_children = 0;
-        $children = new ocp_tempcode();
+        $children = new Tempcode();
         if (get_option('wiki_enable_children') == '1') {
             $children_rows = $GLOBALS['SITE_DB']->query_select('wiki_children c LEFT JOIN ' . get_table_prefix() . 'wiki_pages p ON c.child_id=p.id', array('child_id', 'c.title', 'hide_posts', 'description'), array('c.parent_id' => $id), 'ORDER BY c.the_order');
             foreach ($children_rows as $myrow) {
@@ -514,7 +514,7 @@ class Module_wiki
                         'BODY_CONTENT' => (trim($child_description) != '') ? strval(strlen($child_description)) : null,
                     ));
                 } else {
-                    $sup = ($myrow['hide_posts'] == 1) ? new ocp_tempcode() : do_lang_tempcode('EMPTY');
+                    $sup = ($myrow['hide_posts'] == 1) ? new Tempcode() : do_lang_tempcode('EMPTY');
                 }
 
                 $url = build_url(array('page' => '_SELF', 'type' => 'misc', 'id' => wiki_derive_chain($child_id)), '_SELF');
@@ -527,7 +527,7 @@ class Module_wiki
         $staff_access = has_privilege(get_member(), 'edit_lowrange_content', 'cms_wiki', array('wiki_page', $id));
 
         // Main text (posts)
-        $posts = new ocp_tempcode();
+        $posts = new Tempcode();
         $include_expansion = (strpos($description_comcode, '[attachment') !== false);
         foreach ($dbposts as $myrow) {
             // Work out posters details
@@ -549,7 +549,7 @@ class Module_wiki
             if (!is_null($rating_array)) {
                 $rating = do_template('WIKI_RATING', $rating_array);
             } else {
-                $rating = new ocp_tempcode();
+                $rating = new Tempcode();
             }
 
             // Display the post then ;)
@@ -565,14 +565,14 @@ class Module_wiki
                 $move_url = build_url(array('page' => '_SELF', 'type' => 'move', 'id' => $chain, 'post_id' => $post_id), '_SELF');
                 $extra->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => 'b4325cd1bac924cc83771d4c3c41be8b', 'REL' => 'move', 'IMMEDIATE' => false, 'URL' => $move_url, 'FULL_TITLE' => do_lang_tempcode('MOVE'), 'TITLE' => do_lang_tempcode('MOVE'), 'IMG' => 'buttons__move')));
             } else {
-                $extra = new ocp_tempcode();
+                $extra = new Tempcode();
             }
             $poster_url = is_guest($poster) ? '' : $GLOBALS['FORUM_DRIVER']->member_profile_url($poster, false, true);
             $rate_url = get_self_url(true);
             $posts->attach(do_template('WIKI_POST', array(
                 '_GUID' => 'a29b107abfaf7689c8392676c63093f5',
                 'INCLUDE_EXPANSION' => $include_expansion_here,
-                'UNVALIDATED' => ($myrow['validated'] == 0) ? do_lang_tempcode('UNVALIDATED') : new ocp_tempcode(),
+                'UNVALIDATED' => ($myrow['validated'] == 0) ? do_lang_tempcode('UNVALIDATED') : new Tempcode(),
                 'STAFF_ACCESS' => $staff_access,
                 'RATE_URL' => $rate_url . '#post_' . strval($post_id),
                 'RATING' => $rating,
@@ -628,29 +628,29 @@ class Module_wiki
             $search_url=build_url(array('page'=>'search','type'=>'misc','id'=>'wiki_posts','search_under'=>$id),get_module_zone('search'));
             $search_button=do_template('BUTTON_SCREEN',array('_GUID'=>'ad8783a0af3a35f21022b30397f1b03e','IMMEDIATE'=>false,'REL'=>'search','URL'=>$search_url,'TITLE'=>do_lang_tempcode('SEARCH'),'IMG'=>'buttons__search'));
         } else */
-        $search_button = new ocp_tempcode();
+        $search_button = new Tempcode();
         $changes_url = build_url(array('page' => '_SELF', 'type' => 'changes', 'id' => $chain), '_SELF');
         $changes_button = do_template('BUTTON_SCREEN', array('_GUID' => '99ad7faac817326510583a69ac719d58', 'IMMEDIATE' => false, 'REL' => 'history', 'URL' => $changes_url, 'TITLE' => do_lang_tempcode('WIKI_CHANGELOG'), 'IMG' => 'buttons__changes'));
         if ((get_option('wiki_enable_children') == '1') && (has_privilege(get_member(), 'wiki_manage_tree', 'cms_wiki', array('wiki_page', $id))) && (has_actual_page_access(get_member(), 'cms_wiki'))) {
             $tree_url = build_url(array('page' => 'cms_wiki', 'type' => 'edit_tree', 'id' => $chain, 'redirect' => get_self_url(true, true)), get_module_zone('cms_wiki'));
             $tree_button = do_template('BUTTON_SCREEN', array('_GUID' => 'e6edc9f39b6b0aff86cffbaa98c51827', 'REL' => 'edit', 'IMMEDIATE' => false, 'URL' => $tree_url, 'TITLE' => do_lang_tempcode('__WIKI_EDIT_TREE'), 'IMG' => 'buttons__edit_tree'));
         } else {
-            $tree_button = new ocp_tempcode();
+            $tree_button = new Tempcode();
         }
         if ((has_edit_permission('cat_low', get_member(), null, 'cms_wiki', array('wiki_page', $id))) && (has_actual_page_access(get_member(), 'cms_wiki'))) {
             $edit_url = build_url(array('page' => 'cms_wiki', 'type' => 'edit_page', 'id' => $chain, 'redirect' => get_self_url(true, true)), get_module_zone('cms_wiki'));
             $edit_button = do_template('BUTTON_SCREEN', array('_GUID' => '5d8783a0af3a35f21022b30397f1b03e', 'REL' => 'edit', 'IMMEDIATE' => false, 'URL' => $edit_url, 'TITLE' => do_lang_tempcode('_WIKI_EDIT_PAGE'), 'IMG' => 'buttons__edit'));
         } else {
-            $edit_button = new ocp_tempcode();
+            $edit_button = new Tempcode();
         }
         if (($may_post) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_wiki', array('wiki_page', $id))) && (($id != db_get_first_id()) || (has_privilege(get_member(), 'feature')))) {
             $post_url = build_url(array('page' => '_SELF', 'type' => 'post', 'id' => $chain), '_SELF');
             $post_button = do_template('BUTTON_SCREEN', array('_GUID' => 'c26462f34a64c4bf80c1fb7c40102eb0', 'IMMEDIATE' => false, 'URL' => $post_url, 'TITLE' => do_lang_tempcode('MAKE_POST'), 'IMG' => 'buttons__new_reply'));
         } else {
-            $post_button = new ocp_tempcode();
+            $post_button = new Tempcode();
         }
 
-        $tpl = new ocp_tempcode();
+        $tpl = new Tempcode();
         $tpl->attach($search_button);
         $tpl->attach($changes_button);
         $tpl->attach($post_button);
@@ -686,7 +686,7 @@ class Module_wiki
         }
         $where = (!is_null($id)) ? ('the_page=' . strval($id)) : (db_string_equal_to('the_action', 'WIKI_MAKE_POST') . ' OR ' . db_string_equal_to('the_action', 'WIKI_EDIT_PAGE'));
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'wiki_changes WHERE ' . $where . ' ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('templates_results_table');
         foreach ($rows as $myrow) {
             if (!has_category_access(get_member(), 'wiki_page', strval($myrow['the_page']))) {
@@ -773,7 +773,7 @@ class Module_wiki
 
         require_code('form_templates');
 
-        $posting_form = get_posting_form(do_lang('MERGE_WIKI_POSTS'), 'menu___generic_admin__merge', $merged, $merge_url, new ocp_tempcode(), new ocp_tempcode());
+        $posting_form = get_posting_form(do_lang('MERGE_WIKI_POSTS'), 'menu___generic_admin__merge', $merged, $merge_url, new Tempcode(), new Tempcode());
 
         return do_template('POSTING_SCREEN', array('_GUID' => '4372327fb689ef70a9ac5d275dd454f1', 'POSTING_FORM' => $posting_form, 'HIDDEN' => '', 'TITLE' => $this->title, 'TEXT' => do_lang_tempcode('WIKI_MERGE_TEXT')));
     }
@@ -923,7 +923,7 @@ class Module_wiki
 
         require_code('form_templates');
 
-        $specialisation = new ocp_tempcode();
+        $specialisation = new Tempcode();
 
         $parsed = null;
 
@@ -995,14 +995,14 @@ class Module_wiki
             }
         }
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
 
         require_code('fields');
         if (has_tied_catalogue('wiki_post')) {
             append_form_custom_fields('wiki_post', ($mode == 'edit') ? strval($post_id) : null, $specialisation, $hidden_fields);
         }
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
 
         list($page_id,) = get_param_wiki_chain('id', strval(db_get_first_id()));
         require_lang('notifications');
@@ -1049,7 +1049,7 @@ class Module_wiki
 
         $javascript = (function_exists('captcha_ajax_check') ? captcha_ajax_check() : '');
 
-        $posting_form = get_posting_form($submit_name, ($mode == 'edit') ? 'menu___generic_admin__edit_this' : 'menu___generic_admin__add_one', $message, $post_url, $hidden_fields, new ocp_tempcode(), null, '', $specialisation, $parsed, $javascript);
+        $posting_form = get_posting_form($submit_name, ($mode == 'edit') ? 'menu___generic_admin__edit_this' : 'menu___generic_admin__add_one', $message, $post_url, $hidden_fields, new Tempcode(), null, '', $specialisation, $parsed, $javascript);
 
         if ($mode == 'post') {
             url_default_parameters__disable();

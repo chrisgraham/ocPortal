@@ -18,7 +18,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_iotds extends standard_crud_module
+class Module_cms_iotds extends Standard_crud_module
 {
     public $lang_type = 'IOTD';
     public $special_edit_frontend = true;
@@ -90,7 +90,7 @@ class Module_cms_iotds extends standard_crud_module
             return $this->do_next_manager($this->title, do_lang_tempcode('SUCCESS'), null);
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -156,8 +156,8 @@ class Module_cms_iotds extends standard_crud_module
     {
         list($allow_rating, $allow_comments, $allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating, $allow_comments, $allow_trackbacks);
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
         handle_max_file_size($hidden, 'image');
         $fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
@@ -229,7 +229,7 @@ class Module_cms_iotds extends standard_crud_module
 
         $current_iotd = $this->_get_iotd_boxes(1, 1);
         $unused_iotd = $this->_get_iotd_boxes(0, 0, $only_owned);
-        $used_iotd = new ocp_tempcode();
+        $used_iotd = new Tempcode();
         if ($used == 1) {
             $used_iotd = $this->_get_iotd_boxes(1);
         }
@@ -260,13 +260,13 @@ class Module_cms_iotds extends standard_crud_module
         if (count($rows) == 100) { // Ah, too much, then we should pick a better set
             $rows = $GLOBALS['SITE_DB']->query_select('iotd', array('*'), $where, 'ORDER BY add_date DESC', 100);
         }
-        $previews = new ocp_tempcode();
+        $previews = new Tempcode();
         foreach ($rows as $myrow) {
             require_code('iotds');
             $previews->attach(render_iotd_box($myrow, '_SEARCH', true, false));
         }
         if (($previews->is_empty()) && ($current == 1)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return $previews;

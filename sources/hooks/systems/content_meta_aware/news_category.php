@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Hook class.
+ */
 class Hook_content_meta_aware_news_category
 {
     /**

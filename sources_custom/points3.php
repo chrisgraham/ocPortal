@@ -84,7 +84,7 @@ function points_profile($member_id_of, $member_id_viewing)
     $from = points_get_transactions('from', $member_id_of, $member_id_viewing);
 
     // If we're staff, we can show the charge log too
-    $chargelog_details = new ocp_tempcode();
+    $chargelog_details = new Tempcode();
     if (has_privilege($member_id_viewing, 'view_charge_log')) {
         $start = get_param_integer('charge_start', 0);
         $max = get_param_integer('charge_max', intval(get_option('point_logs_per_page')));
@@ -100,7 +100,7 @@ function points_profile($member_id_of, $member_id_viewing)
 
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('chargelog', 'COUNT(*)', array('member_id' => $member_id_of));
         $rows = $GLOBALS['SITE_DB']->query_select('chargelog', array('*'), array('member_id' => $member_id_of), 'ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);
-        $charges = new ocp_tempcode();
+        $charges = new Tempcode();
         $from_name = get_site_name();
         $to_name = $GLOBALS['FORUM_DRIVER']->get_username($member_id_of, true);
         if (is_null($to_name)) {
@@ -133,7 +133,7 @@ function points_profile($member_id_of, $member_id_viewing)
             $give_template = do_lang_tempcode('PE_LACKING_GIFT_POINTS');
         }
         if (!$give_ok) {
-            $give_template = new ocp_tempcode();
+            $give_template = new Tempcode();
         }
     }
 

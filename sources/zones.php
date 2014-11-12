@@ -528,7 +528,7 @@ function _load_mini_code($string, $map = null)
 
             $out = $test1;
         } else {
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             if ((!is_bool($test1)) && (!is_integer($test1))) { // Not an automatic return code
                 $_test1 = is_string($test1) ? $test1 : strval($test1);
 
@@ -548,7 +548,7 @@ function _load_mini_code($string, $map = null)
             _solemnly_leave($test2);
         }
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach($test2);
     }
 
@@ -987,7 +987,7 @@ function do_block($codename, $map = null, $ttl = null)
                         $GLOBALS['SITE_DB']->query_delete('cache_on', array('cached_for' => $codename), '', 1);
                         persistent_cache_delete('BLOCK_CACHE_ON_CACHE');
 
-                        $out = new ocp_tempcode();
+                        $out = new Tempcode();
                         $out->attach(@strval($object));
                         if (!$GLOBALS['OUTPUT_STREAMING']) {
                             restore_output_state(false, true);
@@ -1067,7 +1067,7 @@ function do_block($codename, $map = null, $ttl = null)
 
         $GLOBALS['NO_QUERY_LIMIT'] = $nql_backup;
     } else {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach(@strval($object));
         if (!$GLOBALS['OUTPUT_STREAMING']) {
             restore_output_state(false, true);
@@ -1396,7 +1396,7 @@ function extract_module_functions($path, $functions, $params = null, $prefer_dir
             }
             $CLASS_CACHE[$path] = $new_classes;
         }
-        if ((isset($new_classes[0])) && ($new_classes[0] == 'standard_crud_module')) {
+        if ((isset($new_classes[0])) && ($new_classes[0] == 'Standard_crud_module')) {
             array_shift($new_classes);
         }
         if (isset($new_classes[0])) {

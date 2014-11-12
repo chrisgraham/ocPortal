@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    devguide
  */
+
+/**
+ * Block class.
+ */
 class Block_main_code_documentor
 {
     /**
@@ -77,15 +81,15 @@ class Block_main_code_documentor
 
         $_classes = get_php_file_api($filename);
 
-        $classes = new ocp_tempcode();
+        $classes = new Tempcode();
 
         foreach ($_classes as $class) {
             if ($class['name'] == '__global') {
                 $class['name'] = do_lang('GLOBAL_FUNCTIONS') . '_' . basename($filename);
             }
 
-            $function_summaries = new ocp_tempcode();
-            $functions = new ocp_tempcode();
+            $function_summaries = new Tempcode();
+            $functions = new Tempcode();
 
             foreach ($class['functions'] as $function) {
                 $ret = render_php_function($function, $class);

@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_quiz extends standard_crud_module
+class Module_cms_quiz extends Standard_crud_module
 {
     public $lang_type = 'QUIZ';
     public $select_name = 'NAME';
@@ -127,7 +127,7 @@ class Module_cms_quiz extends standard_crud_module
             return $this->misc();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -182,7 +182,7 @@ class Module_cms_quiz extends standard_crud_module
         $_header_row[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($_header_row, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -218,7 +218,7 @@ class Module_cms_quiz extends standard_crud_module
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['SITE_DB']->query_select('quizzes', array('id', 'q_name'), null, 'ORDER BY q_add_date DESC', 300);
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['q_name'])));
         }
@@ -273,9 +273,9 @@ class Module_cms_quiz extends standard_crud_module
             $text = do_lang('EXAMPLE_QUESTIONS');
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'name', $name, true));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('SURVEY', $type == 'SURVEY', do_lang_tempcode('SURVEY')));
         $list->attach(form_input_list_entry('TEST', $type == 'TEST', do_lang_tempcode('TEST')));
         $list->attach(form_input_list_entry('COMPETITION', $type == 'COMPETITION', do_lang_tempcode('COMPETITION')));
@@ -316,7 +316,7 @@ class Module_cms_quiz extends standard_crud_module
             $fields->attach(form_input_integer(do_lang_tempcode('POINTS_FOR_COMPLETING'), do_lang_tempcode('DESCRIPTION_POINTS_FOR_COMPLETING'), 'points_for_passing', $points_for_passing, true));
         }
         if (addon_installed('newsletter')) {
-            $newsletters = new ocp_tempcode();
+            $newsletters = new Tempcode();
             $newsletters->attach(form_input_list_entry('', false, do_lang_tempcode('NONE_EM')));
             $_newsletters = $GLOBALS['SITE_DB']->query_select('newsletters', array('*'), null, 'ORDER BY id');
             foreach ($_newsletters as $n) {
@@ -341,7 +341,7 @@ class Module_cms_quiz extends standard_crud_module
         // Permissions
         $fields->attach($this->get_permission_fields(($id === null) ? null : strval($id), null, ($id === null)));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**

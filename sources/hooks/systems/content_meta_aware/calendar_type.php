@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_content_meta_aware_calendar_type
 {
     /**

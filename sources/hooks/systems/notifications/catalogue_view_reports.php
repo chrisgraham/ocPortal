@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
-class Hook_Notification_catalogue_view_reports extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_catalogue_view_reports extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

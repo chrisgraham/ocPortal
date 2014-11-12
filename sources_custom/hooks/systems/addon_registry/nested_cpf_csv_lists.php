@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    nested_cpf_csv_lists
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_nested_cpf_csv_lists
 {
     /**

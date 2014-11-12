@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
+
+/**
+ * Block class.
+ */
 class Block_main_custom_comcode_tags
 {
     /**
@@ -70,7 +74,7 @@ class Block_main_custom_comcode_tags
             return paragraph(do_lang_tempcode('NONE_EM'), '', 'nothing_here');
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($tags as $tag) {
             $content->attach(do_template('CUSTOM_COMCODE_TAG_ROW', array(
                 '_GUID' => '28c257f5d0c596aa828fd9556b0df4a9',

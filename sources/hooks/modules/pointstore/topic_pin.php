@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_topic_pin
 {
     /**
@@ -52,14 +56,14 @@ class Hook_pointstore_topic_pin
     {
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
         if (get_option('is_on_' . $class . '_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TOPIC_PINNING');
 
         // Build up fields
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         if (get_forum_type() == 'ocf') {
             $set_name = 'topic';
             $required = true;
@@ -117,7 +121,7 @@ class Hook_pointstore_topic_pin
     {
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
         if (get_option('is_on_' . $class . '_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TOPIC_PINNING');
@@ -171,7 +175,7 @@ class Hook_pointstore_topic_pin
     {
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
         if (get_option('is_on_' . $class . '_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TOPIC_PINNING');

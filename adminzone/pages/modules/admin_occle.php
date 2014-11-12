@@ -141,10 +141,10 @@ class Module_admin_occle
         $command = post_param('occle_command', '');
         if ($command != '') {
             //We've had a normal form submission
-            $temp = new virtual_bash($command);
+            $temp = new Virtual_shell($command);
             $commands = $temp->output_html();
         } else {
-            $commands = new ocp_tempcode();
+            $commands = new Tempcode();
         }
 
         $content = do_template('OCCLE_MAIN', array(

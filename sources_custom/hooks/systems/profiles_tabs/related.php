@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    related_members
  */
-class Hook_Profiles_Tabs_related
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_related
 {
     /**
      * Find whether this hook is active.

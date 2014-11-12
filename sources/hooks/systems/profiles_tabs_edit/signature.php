@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-class Hook_Profiles_Tabs_Edit_signature
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_signature
 {
     /**
      * Find whether this hook is active.
@@ -106,7 +110,7 @@ class Hook_Profiles_Tabs_Edit_signature
 
         list($attachments, $attach_size_field) = get_attachments('signature');
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
         $hidden_fields->attach($attach_size_field);
 
         $continue_url = get_self_url();
@@ -133,7 +137,7 @@ class Hook_Profiles_Tabs_Edit_signature
         $default_parsed = comcode_to_tempcode($signature_original, null, false, 60, null, null, true);
         $LAX_COMCODE = $temp;
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_template('POSTING_FIELD', array(
             '_GUID' => '0424aff8c7961ed20ac525e7de04c219',
             'PRETTY_NAME' => do_lang_tempcode('SIGNATURE'),
@@ -145,7 +149,7 @@ class Hook_Profiles_Tabs_Edit_signature
             'COMCODE_EDITOR' => $comcode_editor,
             'COMCODE_EDITOR_SMALL' => $comcode_editor_small,
             'CLASS' => $class,
-            'COMCODE_URL' => is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
+            'COMCODE_URL' => is_null($help_zone) ? new Tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
             'EXTRA' => '',
             'POST_COMMENT' => $post_comment,
             'EMOTICON_CHOOSER' => $emoticon_chooser,

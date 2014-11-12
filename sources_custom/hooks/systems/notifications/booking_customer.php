@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
-class Hook_Notification_booking_customer extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_booking_customer extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

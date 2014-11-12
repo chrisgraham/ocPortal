@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_max_ip_addresses_per_subscriber
 {
     /**

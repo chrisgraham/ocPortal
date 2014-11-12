@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_warnings
  */
-class Hook_Profiles_Tabs_warnings
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_warnings
 {
     /**
      * Find whether this hook is active.
@@ -53,7 +57,7 @@ class Hook_Profiles_Tabs_warnings
         require_lang('ocf');
         require_css('ocf');
 
-        $warnings = new ocp_tempcode();
+        $warnings = new Tempcode();
         $rows = $GLOBALS['FORUM_DB']->query_select('f_warnings', array('*'), array('w_member_id' => $member_id_of, 'w_is_warning' => 1));
         foreach ($rows as $row) {
             $warning_by = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['w_by']);

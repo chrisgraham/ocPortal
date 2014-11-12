@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Block class.
+ */
 class Block_main_members
 {
     /**
@@ -393,7 +397,7 @@ class Block_main_members
         require_code('templates_results_table');
 
         if (($display_mode == 'listing') && (count($rows) > 0)) {
-            $results_entries = new ocp_tempcode();
+            $results_entries = new Tempcode();
 
             $_fields_title = array();
             $_fields_title[] = (get_option('display_name_generator') == '') ? do_lang_tempcode('USERNAME') : do_lang_tempcode('NAME');
@@ -451,16 +455,16 @@ class Block_main_members
             }
             $results_table = results_table(do_lang_tempcode('MEMBERS'), $start, $block_id . '_start', $max, $block_id . '_max', $max_rows, $fields_title, $results_entries, $sortables, $sortable, $sort_order, $block_id . '_sort');
 
-            $sorting = new ocp_tempcode();
+            $sorting = new Tempcode();
         } else {
-            $results_table = new ocp_tempcode();
+            $results_table = new Tempcode();
 
             $do_pagination = ((array_key_exists('pagination', $map) ? $map['pagination'] : '0') == '1');
             if ($do_pagination) {
                 require_code('templates_pagination');
                 $pagination = pagination(do_lang_tempcode('MEMBERS'), $start, $block_id . '_start', $max, $block_id . '_max', $max_rows, true);
             } else {
-                $pagination = new ocp_tempcode();
+                $pagination = new Tempcode();
             }
 
             $sorting = results_sorter($sortables, $sortable, $sort_order, $block_id . '_sort');
@@ -512,7 +516,7 @@ class Block_main_members
             'PER_ROW' => is_null($per_row) ? '' : strval($per_row),
             'DISPLAY_MODE' => $display_mode,
             'MEMBER_BOXES' => $member_boxes,
-            'PAGINATION' => new ocp_tempcode(),
+            'PAGINATION' => new Tempcode(),
             'RESULTS_TABLE' => $results_table,
             'USERGROUPS' => $usergroups,
             'SYMBOLS' => $symbols,

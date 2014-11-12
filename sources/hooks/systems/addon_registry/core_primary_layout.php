@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_primary_layout
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_primary_layout
 {
     /**
@@ -145,7 +149,7 @@ class Hook_addon_registry_core_primary_layout
      */
     public function tpl_preview__breadcrumb()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach(lorem_phrase());
         $out->attach(do_lorem_template('BREADCRUMB_SEPARATOR', array()));
         $out->attach(lorem_phrase());

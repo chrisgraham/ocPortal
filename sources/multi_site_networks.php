@@ -44,9 +44,9 @@ function do_netlink($redir_url = '')
     require_code('textfiles');
     $lines = explode("\n", read_text_file('netlink', null, true));
     if (count($lines) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     foreach ($lines as $line) {
         $parts = explode('=', $line, 2);
         if (count($parts) != 2) {

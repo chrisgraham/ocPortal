@@ -26,7 +26,7 @@
  */
 function columned_table_header_row($values)
 {
-    $cells = new ocp_tempcode();
+    $cells = new Tempcode();
     foreach ($values as $value) {
         $cells->attach(do_template('COLUMNED_TABLE_HEADER_ROW_CELL', array('_GUID' => '5002f54ccddf7259f3460d8c0759fd1a', 'VALUE' => $value)));
     }
@@ -43,7 +43,7 @@ function columned_table_header_row($values)
  */
 function columned_table_row($values, $escape = false)
 {
-    $cells = new ocp_tempcode();
+    $cells = new Tempcode();
     foreach ($values as $value) {
         if (($escape) && ((!is_object($value)) || ($value->pure_lang !== true))) {
             $value = make_string_tempcode(escape_html(is_object($value) ? $value->evaluate() : $value));

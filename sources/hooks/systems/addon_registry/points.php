@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_points
 {
     /**
@@ -189,7 +193,7 @@ class Hook_addon_registry_points
      */
     public function tpl_preview__points_leader_board()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW', array(
                 'ID' => placeholder_id(),
@@ -219,9 +223,9 @@ class Hook_addon_registry_points
      */
     public function tpl_preview__points_leader_board_screen()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $week_tpl = new ocp_tempcode();
+            $week_tpl = new Tempcode();
             foreach (placeholder_array() as $_k => $_v) {
                 $week_tpl->attach(do_lorem_template('POINTS_LEADER_BOARD_ROW', array(
                     'ID' => placeholder_id(),
@@ -255,7 +259,7 @@ class Hook_addon_registry_points
      */
     public function tpl_preview__points_search_screen()
     {
-        $results = new ocp_tempcode();
+        $results = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $results->attach(do_lorem_template('POINTS_SEARCH_RESULT', array(
                 'URL' => placeholder_url(),

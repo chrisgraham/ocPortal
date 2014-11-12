@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_occle_chat_announce
 {
     /**

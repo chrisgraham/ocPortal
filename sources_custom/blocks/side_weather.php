@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    weather
  */
+
+/**
+ * Block class.
+ */
 class Block_side_weather
 {
     /**
@@ -86,7 +90,8 @@ class Block_side_weather
 
         if (array_key_exists('param', $map)) {
             $loc_code = $map['param']; // need to pass loc ID ex :INXX0087
-        } else {
+        }
+        else {
             $loc_code = '34503'; // if not found setting a default location for weather
         }
 
@@ -104,7 +109,7 @@ class Block_side_weather
                     if (preg_match('#"woeid":\s*"(\d+)"#', $result, $matches) != 0) {
                         $loc_code = $matches[1];
                     } else {
-                        return new ocp_tempcode();
+                        return new Tempcode();
                     }
                 } else {
                     $result = http_download_file('http://uk.weather.yahoo.com/search/weather?p=' . urlencode($loc_code));
@@ -114,7 +119,7 @@ class Block_side_weather
                     } elseif (preg_match('#-(\d+)/#', $GLOBALS['HTTP_DOWNLOAD_URL'], $matches) != 0) {
                         $loc_code = $matches[1];
                     } else {
-                        return new ocp_tempcode();
+                        return new Tempcode();
                     }
                 }
 
@@ -136,7 +141,7 @@ class Block_side_weather
         } else {
             $rss_url = 'http://weather.yahooapis.com/forecastrss?p=' . urlencode($loc_code) . '&u=' . urlencode($temperature_unit);
         }
-        $rss = new rss($rss_url);
+        $rss = new OCP_RSS($rss_url);
 
         if (!is_null($rss->error)) {
             $GLOBALS['DO_NOT_CACHE_THIS'] = true;
@@ -144,14 +149,14 @@ class Block_side_weather
             relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED', '', $rss->error), false, 'error_occurred_weather');
             if (cron_installed()) {
                 if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
-                    return new ocp_tempcode();
+                    return new Tempcode();
                 }
             }
             return do_template('INLINE_WIP_MESSAGE', array('_GUID' => '046c437a5c3799838155b5c5fbe3be26', 'MESSAGE' => htmlentities($rss->error)));
         }
 
         if (!isset($rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'])) {
-            return new ocp_tempcode(); // No weather for here
+            return new Tempcode(); // No weather for here
         }
 
         $location_city = $rss->gleamed_feed['HTTP://XML.WEATHER.YAHOO.COM/NS/RSS/1.0:LOCATION'][0]['CITY'];

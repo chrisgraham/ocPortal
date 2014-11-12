@@ -319,7 +319,7 @@ class Module_admin_addons
             return $this->modules_view();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -418,7 +418,7 @@ class Module_admin_addons
 
         sort_maps_by($_tpl_addons, '!COLOUR,NAME');
 
-        $tpl_addons = new ocp_tempcode();
+        $tpl_addons = new Tempcode();
         foreach ($_tpl_addons as $t) {
             $tpl_addons->attach(do_template('ADDON_SCREEN_ADDON', $t));
         }
@@ -439,7 +439,7 @@ class Module_admin_addons
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $set_name = 'addon';
         $required = true;
         $set_title = do_lang_tempcode('SOURCE');
@@ -453,14 +453,14 @@ class Module_admin_addons
 
         $fields->attach(alternate_fields_set__end($set_name, $set_title, '', $field_set, $required));
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden);
 
         $submit_name = do_lang_tempcode('IMPORT_ADDON');
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_addon_import', 'uploading' => 1), '_SELF');
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         $text->attach(paragraph(do_lang_tempcode('HELP_IMPORTING_ADDON')));
 
         require_code('files2');
@@ -518,14 +518,14 @@ class Module_admin_addons
     {
         appengine_live_guard();
 
-        $warnings = new ocp_tempcode();
-        $install_files = new ocp_tempcode();
-        $uninstall_files = new ocp_tempcode();
+        $warnings = new Tempcode();
+        $install_files = new Tempcode();
+        $uninstall_files = new Tempcode();
 
         $installing = array();
         $uninstalling = array();
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         foreach ($_POST + $_GET as $key => $passed) {
             if (substr($key, 0, 8) == 'install_') {
@@ -796,7 +796,7 @@ class Module_admin_addons
         $all_langs = find_all_langs();
         ksort($all_langs);
         $i = 0;
-        $tpl_languages = new ocp_tempcode();
+        $tpl_languages = new Tempcode();
         $_lang_file_map = get_custom_file_base() . '/lang_custom/langs.ini';
         if (!file_exists($_lang_file_map)) {
             $_lang_file_map = get_file_base() . '/lang/langs.ini';
@@ -805,7 +805,7 @@ class Module_admin_addons
         foreach ($all_langs as $lang => $dir) {
             if ($dir == 'lang_custom') {
                 $files = $this->do_dir($dir . '/' . $lang);
-                $frm_langs = new ocp_tempcode();
+                $frm_langs = new Tempcode();
                 $frm_langs->attach(form_input_hidden('lang', $lang));
                 foreach (array_keys($files) as $file) {
                     $frm_langs->attach(form_input_hidden('file_' . strval($i), $file));
@@ -822,11 +822,11 @@ class Module_admin_addons
         $all_themes = find_all_themes();
         ksort($all_themes);
         $i = 0;
-        $tpl_themes = new ocp_tempcode();
+        $tpl_themes = new Tempcode();
         foreach ($all_themes as $theme => $theme_title) {
             if ($theme != 'default') {
                 $files = $this->do_dir('themes/' . $theme);
-                $frm_themes = new ocp_tempcode();
+                $frm_themes = new Tempcode();
                 foreach (array_keys($files) as $file) {
                     $frm_themes->attach(form_input_hidden('file_' . strval($i), $file));
                     $i++;
@@ -839,7 +839,7 @@ class Module_admin_addons
         $url = build_url(array('page' => '_SELF', 'type' => '_addon_export', 'exp' => 'custom'), '_SELF');
         $files = $this->do_dir('');
         ksort($files);
-        $frm_files = new ocp_tempcode();
+        $frm_files = new Tempcode();
         $i = 0;
         foreach (array_keys($files) as $file) {
             $frm_files->attach(do_template('ADDON_EXPORT_FILE_CHOICE', array('_GUID' => '77a91b947259c5e0cc7b5240b24425ca', 'ID' => strval($i), 'PATH' => $file)));
@@ -1116,7 +1116,7 @@ class Module_admin_addons
     public function modules_view()
     {
         $zone = get_param('id');
-        $tpl_modules = new ocp_tempcode();
+        $tpl_modules = new Tempcode();
 
         require_code('templates_columned_table');
         require_code('zones2');
@@ -1157,26 +1157,26 @@ class Module_admin_addons
             $hacked_by = $info['hacked_by'];
             $hack_version = $info['hack_version'];
 
-            $actions = new ocp_tempcode();
-            $status = new ocp_tempcode();
+            $actions = new Tempcode();
+            $status = new Tempcode();
 
             if (array_key_exists($module, $module_rows)) {
                 $row = $module_rows[$module];
                 if (!$info['locked']) {
-                    $hidden = new ocp_tempcode();
+                    $hidden = new Tempcode();
                     $hidden->attach(form_input_hidden('zone', $zone));
                     $hidden->attach(form_input_hidden('module', $module));
                     $actions->attach(do_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY', array('_GUID' => '331afd26f5e62a6a4cdc4e2c520a4114', 'HIDDEN' => $hidden, 'NAME' => $module, 'URL' => build_url(array('page' => '_SELF', 'type' => 'uninstall'), '_SELF'))));
                 }
                 if ($row[$prefix . '_version'] < $version) {
                     $status = do_lang_tempcode('STATUS_TO_UPGRADE');
-                    $hidden = new ocp_tempcode();
+                    $hidden = new Tempcode();
                     $hidden->attach(form_input_hidden('zone', $zone));
                     $hidden->attach(form_input_hidden('module', $module));
                     $actions->attach(do_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY', array('_GUID' => 'e5d012cb8c839e0e869f1edfa008dacd', 'HIDDEN' => $hidden, 'NAME' => $module, 'URL' => build_url(array('page' => '_SELF', 'type' => 'upgrade'), '_SELF'))));
                 } elseif ((!is_null($hack_version)) && ($row[$prefix . '_hack_version'] < $hack_version)) {
                     $status = do_lang_tempcode('STATUS_TO_HACK');
-                    $hidden = new ocp_tempcode();
+                    $hidden = new Tempcode();
                     $hidden->attach(form_input_hidden('zone', $zone));
                     $hidden->attach(form_input_hidden('module', $module));
                     $actions->attach(do_template('COLUMNED_TABLE_ACTION_UPGRADE_ENTRY', array('_GUID' => '42c4473bf31dfd329e921e443ccc2ec3', 'HIDDEN' => $hidden, 'NAME' => $module, 'URL' => build_url(array('page' => '_SELF', 'type' => 'upgrade'), '_SELF'))));
@@ -1184,13 +1184,13 @@ class Module_admin_addons
                     $status = do_lang_tempcode('STATUS_CURRENT');
                 }
                 if (!$info['locked']) {
-                    $hidden = new ocp_tempcode();
+                    $hidden = new Tempcode();
                     $hidden->attach(form_input_hidden('zone', $zone));
                     $hidden->attach(form_input_hidden('module', $module));
                     $actions->attach(do_template('COLUMNED_TABLE_ACTION_REINSTALL_ENTRY', array('_GUID' => 'c2d820af4b9a2f8633f6f5a4e3de76bc', 'HIDDEN' => $hidden, 'NAME' => $module, 'URL' => build_url(array('page' => '_SELF', 'type' => 'reinstall'), '_SELF'))));
                 }
             } else {
-                $hidden = new ocp_tempcode();
+                $hidden = new Tempcode();
                 $hidden->attach(form_input_hidden('zone', $zone));
                 $hidden->attach(form_input_hidden('module', $module));
                 $actions->attach(do_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY', array('_GUID' => '6b438e07cfe154afc21439479fd76978', 'HIDDEN' => $hidden, 'NAME' => $module, 'URL' => build_url(array('page' => '_SELF', 'type' => 'reinstall'), '_SELF'))));

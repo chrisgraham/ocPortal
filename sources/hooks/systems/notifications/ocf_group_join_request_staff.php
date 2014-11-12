@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Notification_ocf_group_join_request_staff extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_group_join_request_staff extends Hook_notification__Staff
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

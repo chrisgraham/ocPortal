@@ -220,7 +220,7 @@ function _inspect($args, $force_plain = false)
 
         if ($plain) {
             echo "\n\n" . $arg_name . ' is...' . "\n";
-            if ((is_object($arg_value) && (is_a($arg_value, 'ocp_tempcode')))) {
+            if ((is_object($arg_value) && (is_a($arg_value, 'Tempcode')))) {
                 echo 'Tempcode: ' . $arg_value->evaluate() . ' (';
                 var_dump($arg_value);
                 echo ')';
@@ -228,7 +228,7 @@ function _inspect($args, $force_plain = false)
                 var_dump($arg_value);
             }
         } else {
-            if ((is_object($arg_value) && (is_a($arg_value, 'ocp_tempcode')))) {
+            if ((is_object($arg_value) && (is_a($arg_value, 'Tempcode')))) {
                 attach_message($arg_name . ' is...' . "\n" . 'Tempcode: ' . $arg_value->evaluate());
             } else {
                 attach_message($arg_name . ' is...' . "\n" . var_export($arg_value, true));

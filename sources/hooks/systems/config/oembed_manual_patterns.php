@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_oembed_manual_patterns
 {
     /**

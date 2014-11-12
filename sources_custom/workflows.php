@@ -54,7 +54,7 @@ function workflow_choose_ui($include_inherit = false, $include_current = false)
     if (count($all_workflows) > 1) {
         // Grab the default workflow
         $def = get_default_workflow();
-        $workflows = new ocp_tempcode();
+        $workflows = new Tempcode();
 
         // If we've been asked to show a "current" option then add that
         if ($include_current) {
@@ -78,7 +78,7 @@ function workflow_choose_ui($include_inherit = false, $include_current = false)
     } elseif (count($all_workflows) == 1) {
         return form_input_hidden('workflow', 'wf_' . current(array_keys($all_workflows)));
     } else {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }
 
@@ -171,7 +171,7 @@ function get_workflow_form($workflow_content_id)
 
     // Do not let guests edit the status of content
     if (is_guest()) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     //////////////////////////////////////////////////
@@ -179,8 +179,8 @@ function get_workflow_form($workflow_content_id)
     //////////////////////////////////////////////////
 
     // These will hold the form code
-    $workflow_fields = new ocp_tempcode();
-    $workflow_hidden = new ocp_tempcode();
+    $workflow_fields = new Tempcode();
+    $workflow_hidden = new Tempcode();
 
     // We already know the content ID
     $workflow_hidden->attach(form_input_hidden('content_id', strval($workflow_content_id)));
@@ -313,7 +313,7 @@ function get_workflow_form($workflow_content_id)
 
     // If we have no control over this workflow then don't bother showing it
     if (!$have_permission_over_a_point) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     ///////////////////
@@ -422,7 +422,7 @@ function get_workflow_form($workflow_content_id)
 
     // Bail out if there's nothing to the workflow
     if ($approval_status == array()) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     // Attach the title to the form first, along with usage info
@@ -688,7 +688,7 @@ function workflow_update_handler()
 
     // Finally return a success message
     $return_url = strip_tags(post_param('return_url'));
-    return redirect_screen(new ocp_tempcode(), $return_url, $success_message);
+    return redirect_screen(new Tempcode(), $return_url, $success_message);
 }
 
 /**

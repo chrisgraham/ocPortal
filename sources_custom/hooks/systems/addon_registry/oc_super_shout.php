@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_super_shout
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_super_shout
 {
     /**

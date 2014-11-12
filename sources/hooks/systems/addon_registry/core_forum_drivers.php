@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_forum_drivers
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_forum_drivers
 {
     /**

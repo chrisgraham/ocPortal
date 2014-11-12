@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    group_points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_group_points
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_windows_auth_is_enabled
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    random_quotes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_random_quotes
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_member
 {
     // ==============
@@ -86,7 +90,7 @@ class Hook_fields_member
         }
 
         if ($ev == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink(intval($ev));

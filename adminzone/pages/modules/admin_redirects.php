@@ -146,7 +146,7 @@ class Module_admin_redirects
             return $this->actual();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -159,18 +159,18 @@ class Module_admin_redirects
         require_css('redirects_editor');
 
         $post_url = build_url(array('page' => '_SELF', 'type' => 'actual'), '_SELF');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('redirects', array('*'));
         $num_zones = $GLOBALS['SITE_DB']->query_select_value('zones', 'COUNT(*)');
         require_code('zones3');
         foreach ($rows as $i => $row) {
             if ($num_zones > 50) {
-                $from_zones = new ocp_tempcode();
+                $from_zones = new Tempcode();
             } else {
                 $from_zones = create_selection_list_zones($row['r_from_zone']);
                 $from_zones->attach(form_input_list_entry('*', $row['r_from_zone'] == '*', do_lang_tempcode('_ALL')));
             }
-            $to_zones = ($num_zones > 50) ? new ocp_tempcode() : create_selection_list_zones($row['r_to_zone']);
+            $to_zones = ($num_zones > 50) ? new Tempcode() : create_selection_list_zones($row['r_to_zone']);
             $fields->attach(do_template('REDIRECTE_TABLE_REDIRECT', array(
                 '_GUID' => 'fd1ea392a98e588bb1f553464d315ef0',
                 'I' => strval($i),
@@ -186,13 +186,13 @@ class Module_admin_redirects
         }
         $default = explode(':', get_param('page_link', '*:'), 2);
         if ($num_zones > 50) {
-            $to_zones = new ocp_tempcode();
-            $from_zones = new ocp_tempcode();
+            $to_zones = new Tempcode();
+            $from_zones = new Tempcode();
         } else {
             $zones = create_selection_list_zones($default[0]);
-            $to_zones = new ocp_tempcode();
+            $to_zones = new Tempcode();
             $to_zones->attach($zones);
-            $from_zones = new ocp_tempcode();
+            $from_zones = new Tempcode();
             $from_zones->attach($zones);
             $from_zones->attach(form_input_list_entry('*', $default[0] == '*', do_lang_tempcode('_ALL')));
         }

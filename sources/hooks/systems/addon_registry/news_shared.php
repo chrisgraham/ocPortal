@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news_shared
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_news_shared
 {
     /**

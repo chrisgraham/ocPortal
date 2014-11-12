@@ -116,7 +116,7 @@ class Module_admin_ocf_ldap
         if ($type == 'actual') {
             return $this->actual();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -126,9 +126,9 @@ class Module_admin_ocf_ldap
      */
     public function gui()
     {
-        $groups_add = new ocp_tempcode();
-        $groups_delete = new ocp_tempcode();
-        $members_delete = new ocp_tempcode();
+        $groups_add = new Tempcode();
+        $groups_delete = new Tempcode();
+        $members_delete = new Tempcode();
 
         $all_ldap_groups = ocf_get_all_ldap_groups();
         foreach ($all_ldap_groups as $group) {

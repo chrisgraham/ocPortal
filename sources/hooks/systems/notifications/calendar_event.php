@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-class Hook_Notification_calendar_event extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_calendar_event extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

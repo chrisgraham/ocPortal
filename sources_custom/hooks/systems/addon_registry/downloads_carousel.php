@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads_carousel
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_downloads_carousel
 {
     /**

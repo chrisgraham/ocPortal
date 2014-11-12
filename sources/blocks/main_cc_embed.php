@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Block class.
+ */
 class Block_main_cc_embed
 {
     /**
@@ -130,9 +134,9 @@ class Block_main_cc_embed
 
         // Sorting and pagination
         if (!$do_sorting) {
-            $sorting = new ocp_tempcode();
+            $sorting = new Tempcode();
         }
-        $pagination = new ocp_tempcode();
+        $pagination = new Tempcode();
         if ($do_pagination) {
             require_code('templates_pagination');
             $pagination = pagination(do_lang_tempcode('ENTRIES'), $start, $block_id . '_start', $max, $block_id . '_max', $max_rows);
@@ -154,7 +158,7 @@ class Block_main_cc_embed
                 break;
         }
 
-        $cart_link = new ocp_tempcode();
+        $cart_link = new Tempcode();
         $is_ecommerce = is_ecommerce_catalogue($catalogue_name, $catalogue);
         if ($is_ecommerce) {
             if (get_forum_type() != 'ocf') {

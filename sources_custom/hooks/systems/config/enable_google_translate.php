@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    google_translate
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_enable_google_translate
 {
     /**

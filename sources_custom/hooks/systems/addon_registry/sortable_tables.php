@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    sortable_tables
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_sortable_tables
 {
     /**

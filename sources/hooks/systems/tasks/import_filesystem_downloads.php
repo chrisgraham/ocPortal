@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_task_import_filesystem_downloads
 {
     /**

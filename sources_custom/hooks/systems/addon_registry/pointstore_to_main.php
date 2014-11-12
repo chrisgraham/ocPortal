@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore_to_main
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_pointstore_to_main
 {
     /**

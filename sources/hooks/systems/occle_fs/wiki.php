@@ -20,7 +20,10 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_wiki extends resource_fs_base
+/**
+ * Hook class.
+ */
+class Hook_occle_fs_wiki extends Resource_fs_base
 {
     public $folder_resource_type = 'wiki_page';
     public $file_resource_type = 'wiki_post';

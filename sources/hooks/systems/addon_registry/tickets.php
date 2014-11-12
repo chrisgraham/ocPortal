@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_tickets
 {
     /**
@@ -168,7 +172,7 @@ class Hook_addon_registry_tickets
      */
     public function tpl_preview__support_tickets_screen()
     {
-        $links = new ocp_tempcode();
+        $links = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $links->attach(do_lorem_template('SUPPORT_TICKET_LINK', array(
                 'NUM_POSTS' => placeholder_number(),
@@ -218,7 +222,7 @@ class Hook_addon_registry_tickets
         require_javascript('javascript_ajax');
         require_lang('ocf');
 
-        $comments = new ocp_tempcode();
+        $comments = new Tempcode();
 
         $comment_form = do_lorem_template('COMMENTS_POSTING_FORM', array(
             'JOIN_BITS' => lorem_phrase_html(),
@@ -241,7 +245,7 @@ class Hook_addon_registry_tickets
             'CREATE_TICKET_MAKE_POST' => true,
         ));
 
-        $other_tickets = new ocp_tempcode();
+        $other_tickets = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $other_tickets->attach(do_lorem_template('SUPPORT_TICKET_LINK', array(
                 'NUM_POSTS' => placeholder_number(),

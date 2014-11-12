@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_gifts
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_ocgifts
 {
     /**
@@ -102,7 +106,7 @@ class Hook_pointstore_ocgifts
         $title = get_screen_title('OCGIFTS_TITLE');
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_username(do_lang_tempcode('TO_USERNAME'), do_lang_tempcode('MEMBER_TO_GIVE'), 'username', get_param('username', ''), true));
 

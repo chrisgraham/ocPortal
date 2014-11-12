@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    myocp
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_site_cleanup
 {
     /**

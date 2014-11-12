@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    uninstaller
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_uninstaller
 {
     /**

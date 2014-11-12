@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_symbol_CHAT_IM
 {
     /**

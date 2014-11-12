@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_menus
 {
     /**
@@ -296,8 +300,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__mobile()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(3) as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_mobile', array(
                 'CAPTION' => lorem_word(),
@@ -379,8 +383,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__tree()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(3) as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_tree', array(
                 'CAPTION' => lorem_word(),
@@ -462,8 +466,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__dropdown()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(3) as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_dropdown', array(
                 'CAPTION' => lorem_word(),
@@ -537,8 +541,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__embossed()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(3) as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_embossed', array(
                 'CAPTION' => lorem_word(),
@@ -620,8 +624,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__popup()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(3) as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_popup', array(
                 'CAPTION' => lorem_word(),
@@ -703,8 +707,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__select()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(3) as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_select', array(
                 'CAPTION' => lorem_word(),
@@ -786,8 +790,8 @@ class Hook_addon_registry_core_menus
      */
     public function tpl_preview__block_menu__sitemap()
     {
-        $child = new ocp_tempcode();
-        $content = new ocp_tempcode();
+        $child = new Tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $v) {
             $child->attach(do_lorem_template('MENU_BRANCH_sitemap', array(
                 'CAPTION' => lorem_word(),

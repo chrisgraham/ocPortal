@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_ocf_birthdays
 {
     /**
@@ -54,7 +58,7 @@ class Hook_rss_ocf_birthdays
 
         $done = 0;
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             $year = intval(date('Y', time()));
             $next_birthday_time_a = mktime(0, 0, 0, $row['m_dob_month'], $row['m_dob_day'], $year);
@@ -89,7 +93,7 @@ class Hook_rss_ocf_birthdays
 
                 $view_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($row['id'], false, true);
 
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
 

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads_followup_email
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_downloads_followup_email
 {
     /**

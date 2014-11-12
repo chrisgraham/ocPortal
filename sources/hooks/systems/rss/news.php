@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_news
 {
     /**
@@ -59,7 +63,7 @@ class Hook_rss_news
         }
         $categories = collapse_2d_complexity('id', '_title', $_categories);
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             if (has_category_access(get_member(), 'news', strval($row['news_category']))) {
                 $id = strval($row['id']);
@@ -100,7 +104,7 @@ class Hook_rss_news
                 if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                     $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'b4f25f5cf68304f8d402bb06851489d6', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
                 } else {
-                    $if_comments = new ocp_tempcode();
+                    $if_comments = new Tempcode();
                 }
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

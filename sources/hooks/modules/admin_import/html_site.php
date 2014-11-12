@@ -41,6 +41,10 @@ function fake_levenshtein($a, $b)
  * @copyright  ocProducts Ltd
  * @package    import
  */
+
+/**
+ * Hook class.
+ */
 class Hook_html_site
 {
     /**
@@ -84,9 +88,9 @@ class Hook_html_site
         //  - whether to fix invalid XHTML
         //  - the base URL to use to turn absolute URLs into relative URLs
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
-        $themes = new ocp_tempcode();
+        $themes = new Tempcode();
         require_code('themes2');
         $_themes = find_all_themes();
         require_code('form_templates');

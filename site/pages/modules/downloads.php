@@ -338,7 +338,7 @@ class Module_downloads
             breadcrumb_add_segment($breadcrumbs, protect_from_escaping('<span>' . $title_to_use_tempcode->evaluate() . '</span>'));
 
             // Images in associated gallery
-            $images_details = new ocp_tempcode();
+            $images_details = new Tempcode();
             $image_url = '';
             $counter = 0;
             if (addon_installed('galleries')) {
@@ -351,8 +351,8 @@ class Module_downloads
                 }
                 $rows = $GLOBALS['SITE_DB']->query_select('images', array('*'), $map, 'ORDER BY id', 200/*Stop sillyness, could be a DOS attack*/);
                 $div = 2;
-                $_out = new ocp_tempcode();
-                $_row = new ocp_tempcode();
+                $_out = new Tempcode();
+                $_row = new Tempcode();
                 require_code('images');
                 while (array_key_exists($counter, $rows)) {
                     $row = $rows[$counter];
@@ -370,7 +370,7 @@ class Module_downloads
                     if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('galleries', 'download_' . strval($id))))) {
                         $iedit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ed', 'id' => $row['id']), get_module_zone('cms_galleries'));
                     } else {
-                        $iedit_url = new ocp_tempcode();
+                        $iedit_url = new Tempcode();
                     }
                     $_content = do_template('DOWNLOAD_SCREEN_IMAGE', array('_GUID' => 'fba0e309aa0ae04891e32c65a625b177', 'ID' => strval($row['id']), 'VIEW_URL' => $view_url, 'EDIT_URL' => $iedit_url, 'THUMB' => $thumb, 'DESCRIPTION' => $image_description));
 
@@ -378,7 +378,7 @@ class Module_downloads
 
                     if (($counter % $div == 1) && ($counter != 0)) {
                         $_out->attach(do_template('DOWNLOAD_GALLERY_ROW', array('_GUID' => '205c4f5387e98c534d5be1bdfcccdd7d', 'CELLS' => $_row)));
-                        $_row = new ocp_tempcode();
+                        $_row = new Tempcode();
                     }
 
                     $counter++;
@@ -442,7 +442,7 @@ class Module_downloads
             return $this->view_download_screen();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -489,7 +489,7 @@ class Module_downloads
             'add_date DESC' => 'NEWEST_FIRST',
             'fixed_random ASC' => 'RANDOM',
         );
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         foreach ($_selectors as $selector_value => $selector_name) {
             $selected = ($sort == $selector_value);
             $selectors->attach(do_template('PAGINATION_SORTER', array('_GUID' => 'af660c0ebf014bb296d576b2854aa911', 'SELECTED' => $selected, 'NAME' => do_lang_tempcode($selector_name), 'VALUE' => $selector_value)));
@@ -511,17 +511,17 @@ class Module_downloads
         if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'submit_midrange_content')) {
             $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'ad', 'cat' => $category_id), get_module_zone('cms_downloads'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'submit_cat_midrange_content')) {
             $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'ac', 'parent_id' => $category_id), get_module_zone('cms_downloads'));
         } else {
-            $add_cat_url = new ocp_tempcode();
+            $add_cat_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_downloads', null, array('downloads', strval($category_id)), 'edit_cat_midrange_content')) {
             $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_ec', 'id' => $category_id), get_module_zone('cms_downloads'));
         } else {
-            $edit_cat_url = new ocp_tempcode();
+            $edit_cat_url = new Tempcode();
         }
 
         // Render
@@ -595,7 +595,7 @@ class Module_downloads
             $data['CAT_TITLE'] = $letter;
             $data['LETTER'] = $letter;
 
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
 
             foreach ($rows as $myrow) {
                 $out->attach(render_download_box($myrow, true, true/*breadcrumbs?*/, null, null, false/*context?*/));
@@ -611,17 +611,17 @@ class Module_downloads
         if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'submit_midrange_content'))) {
             $submit_url = build_url(array('page' => 'cms_downloads', 'type' => 'ad', 'cat' => $id), get_module_zone('cms_downloads'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
         if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'submit_cat_midrange_content'))) {
             $add_cat_url = build_url(array('page' => 'cms_downloads', 'type' => 'ac', 'parent_id' => $id), get_module_zone('cms_downloads'));
         } else {
-            $add_cat_url = new ocp_tempcode();
+            $add_cat_url = new Tempcode();
         }
         if ((is_numeric($id)) && (has_actual_page_access(null, 'cms_downloads', null, array('downloads', $id), 'edit_cat_midrange_content'))) {
             $edit_cat_url = build_url(array('page' => 'cms_downloads', 'type' => '_ec', 'id' => $id), get_module_zone('cms_downloads'));
         } else {
-            $edit_cat_url = new ocp_tempcode();
+            $edit_cat_url = new Tempcode();
         }
 
         // Render
@@ -672,7 +672,7 @@ class Module_downloads
             }
         }
 
-        $warning_details = new ocp_tempcode();
+        $warning_details = new Tempcode();
 
         // Validation
         if (($myrow['validated'] == 0) && (addon_installed('unvalidated'))) {
@@ -690,8 +690,8 @@ class Module_downloads
         }
 
         // Management links
-        $edit_url = new ocp_tempcode();
-        $add_img_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
+        $add_img_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_downloads', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_downloads', array('downloads', $myrow['category_id'])))) {
             $edit_url = build_url(array('page' => 'cms_downloads', 'type' => '_ed', 'id' => $id), get_module_zone('cms_downloads'));
         }
@@ -706,7 +706,7 @@ class Module_downloads
         if (!is_null($myrow['out_mode_id'])) {
             $outmode_url = build_url(array('page' => '_SELF', 'type' => 'entry', 'id' => $myrow['out_mode_id']), '_SELF');
         } else {
-            $outmode_url = new ocp_tempcode();
+            $outmode_url = new Tempcode();
         }
 
         // Stats
@@ -719,12 +719,12 @@ class Module_downloads
         if (!is_null($myrow['edit_date'])) {
             $edit_date = make_string_tempcode(get_timezoned_date($myrow['edit_date'], false));
         } else {
-            $edit_date = new ocp_tempcode();
+            $edit_date = new Tempcode();
         }
 
         // Download link
         $author = $myrow['author'];
-        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $author), get_module_zone('authors')) : new ocp_tempcode();
+        $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $author), get_module_zone('authors')) : new Tempcode();
 
         // Licence
         $licence_title = null;

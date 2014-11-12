@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_whois
 {
     /**
@@ -61,7 +65,7 @@ class Hook_occle_command_whois
                 $ip = '';
             }
 
-            $ip_list = new ocp_tempcode();
+            $ip_list = new Tempcode();
             foreach ($rows as $row) {
                 $ip_list->attach(do_template('LOOKUP_IP_LIST_ENTRY', array('_GUID' => '01e74a2a146dab9a407b23c40f4555ad', 'IP' => $row['ip'])));
             }

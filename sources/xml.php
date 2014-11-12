@@ -68,10 +68,8 @@ function convert_bad_entities($data, $charset = 'ISO-8859-1')
 
 /**
  * Simple XML reader.
- *
- * @package    core
  */
-class ocp_simple_xml_reader
+class OCP_simple_xml_reader
 {
     // Used during parsing
     var $tag_stack, $attribute_stack, $children_stack, $text_stack;
@@ -83,7 +81,7 @@ class ocp_simple_xml_reader
      *
      * @param  string                   The XML data
      */
-    public function ocp_simple_xml_reader($xml_data)
+    public function __construct($xml_data)
     {
         require_code('xml');
 

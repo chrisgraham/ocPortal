@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
-class Hook_Preview_quiz
+
+/**
+ * Hook class.
+ */
+class Hook_preview_quiz
 {
     /**
      * Find whether this preview hook applies.

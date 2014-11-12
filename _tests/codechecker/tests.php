@@ -379,7 +379,7 @@ END;
     $tests[36] = <<<END
 // <bad construction>
 
-\$a=new ocp_tempcode(1);
+\$a=new Tempcode(1);
 unset(\$a);
 END;
 

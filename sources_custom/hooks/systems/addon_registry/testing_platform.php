@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    testing_platform
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_testing_platform
 {
     /**

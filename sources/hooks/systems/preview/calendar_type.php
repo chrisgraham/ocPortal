@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-class Hook_Preview_calendar_type
+
+/**
+ * Hook class.
+ */
+class Hook_preview_calendar_type
 {
     /**
      * Find whether this preview hook applies.

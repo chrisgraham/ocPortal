@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_banners
 {
     /**
@@ -56,18 +60,18 @@ class Hook_pointstore_banners
     public function bannerinfo()
     {
         if (get_option('is_on_banner_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_BANNER');
 
         $banner_name = $GLOBALS['SITE_DB']->query_select_value_if_there('sales', 'details', array('memberid' => get_member(), 'purchasetype' => 'banner'));
         if (!is_null($banner_name)) {
-            $activate = new ocp_tempcode();
+            $activate = new Tempcode();
             $upgrade_url = build_url(array('page' => '_SELF', 'type' => 'upgradebanner', 'id' => 'banners'), '_SELF');
             $upgrade = do_template('POINTSTORE_BANNERS_UPGRADE', array('_GUID' => '975688582e5acbfc0a84a4ef2c3b824e', 'UPGRADE_URL' => $upgrade_url));
         } else {
-            $upgrade = new ocp_tempcode();
+            $upgrade = new Tempcode();
             $activate_url = build_url(array('page' => '_SELF', 'type' => 'newbanner', 'id' => 'banners'), '_SELF');
             $activate = do_template('POINTSTORE_BANNERS_ACTIVATE', array('_GUID' => '1f06d08517395e8c22607727fe9f5b91', 'ACTIVATE_URL' => $activate_url));
         }
@@ -98,7 +102,7 @@ class Hook_pointstore_banners
     public function newbanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $this->handle_has_banner_already();
@@ -111,7 +115,7 @@ class Hook_pointstore_banners
         $title = get_screen_title('ADD_BANNER');
         $post_url = build_url(array('page' => '_SELF', 'type' => '_newbanner', 'id' => 'banners', 'uploading' => 1), '_SELF');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden, 'image');
 
         return do_template('FORM_SCREEN', array('_GUID' => '45b8878d92712e07c4eb5497f1a33e33', 'HIDDEN' => $hidden, 'TITLE' => $title, 'TEXT' => $text, 'FIELDS' => $fields, 'URL' => $post_url, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => do_lang_tempcode('ADD_BANNER'), 'JAVASCRIPT' => $javascript));
@@ -125,7 +129,7 @@ class Hook_pointstore_banners
     public function _newbanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('uploads');
@@ -152,7 +156,7 @@ class Hook_pointstore_banners
         $banner = show_banner($name, '', comcode_to_tempcode($caption), $direct_code, (url_is_local($image_url) ? (get_custom_base_url() . '/') : '') . $image_url, '', $site_url, '', get_member());
         $proceed_url = build_url(array('page' => '_SELF', 'type' => '__newbanner', 'id' => 'banners'), '_SELF');
         $cancel_url = build_url(array('page' => '_SELF'), '_SELF');
-        $keep = new ocp_tempcode();
+        $keep = new Tempcode();
         $keep->attach(form_input_hidden('image_url', $image_url));
         $keep->attach(form_input_hidden('site_url', $site_url));
         $keep->attach(form_input_hidden('caption', $caption));
@@ -192,7 +196,7 @@ class Hook_pointstore_banners
     public function __newbanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $this->check_afford_banner();
@@ -270,7 +274,7 @@ class Hook_pointstore_banners
     public function upgradebanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_BANNER_UPGRADE');
@@ -297,7 +301,7 @@ class Hook_pointstore_banners
     public function _upgradebanner()
     {
         if (get_option('is_on_banner_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_BANNER_UPGRADE');
@@ -348,7 +352,7 @@ class Hook_pointstore_banners
         $ord = post_param_integer('ord', 0);
         if ($ord == 0) {
             $proceed_url = build_url(array('page' => '_SELF', 'type' => '_upgradebanner', 'id' => 'banners'), '_SELF');
-            $keep = new ocp_tempcode();
+            $keep = new Tempcode();
             $keep->attach(form_input_hidden('hits', strval($futhit)));
             $keep->attach(form_input_hidden('importance', strval($futimp)));
             $keep->attach(form_input_hidden('ord', '1'));

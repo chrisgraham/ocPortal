@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-class Hook_Preview_iotd
+
+/**
+ * Hook class.
+ */
+class Hook_preview_iotd
 {
     /**
      * Find whether this preview hook applies.

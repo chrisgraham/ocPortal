@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    reported_content
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_reported_content
 {
     /**

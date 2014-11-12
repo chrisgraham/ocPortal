@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_pointstore
 {
     /**
@@ -213,15 +217,15 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__administrative__pointstore_log_screen()
     {
-        $cells = new ocp_tempcode();
+        $cells = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD', array('VALUE' => lorem_word()), null, false, 'RESULTS_TABLE_FIELD'));
         }
         $header_row = do_lorem_template('RESULTS_TABLE_ENTRY', array('VALUES' => $cells), null, false, 'RESULTS_TABLE_ENTRY');
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach (placeholder_array() as $_k => $_v) {
                 $cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL', array('VALUE' => $_v)));
             }
@@ -256,7 +260,7 @@ class Hook_addon_registry_pointstore
 
         $warning_details = do_lorem_template('WARNING_BOX', array('WARNING' => lorem_phrase()));
 
-        $add_forms = new ocp_tempcode();
+        $add_forms = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $add_forms->attach(do_lorem_template('POINTSTORE_PRICES_FORM_WRAP', array('TITLE' => lorem_phrase(), 'FORM' => placeholder_form())));
         }
@@ -467,7 +471,7 @@ class Hook_addon_registry_pointstore
      */
     public function tpl_preview__pointstore_screen()
     {
-        $items = new ocp_tempcode();
+        $items = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $item = do_lorem_template('POINTSTORE_ITEM', array('ITEM' => lorem_phrase()));
             $items->attach($item);

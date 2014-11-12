@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-class Hook_Profiles_Tabs_points
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_points
 {
     /**
      * Find whether this hook is active.

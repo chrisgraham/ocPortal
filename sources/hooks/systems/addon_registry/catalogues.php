@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_catalogues
 {
     /**
@@ -247,7 +251,7 @@ class Hook_addon_registry_catalogues
      */
     public function tpl_preview__grid_category_screen()
     {
-        $subcategories = new ocp_tempcode();
+        $subcategories = new Tempcode();
         $subcategories->attach(do_lorem_template('SIMPLE_PREVIEW_BOX', array(
             'TITLE' => lorem_phrase(),
             'SUMMARY' => lorem_paragraph_html(),
@@ -260,8 +264,8 @@ class Hook_addon_registry_catalogues
             'TAG' => lorem_word(),
         ));
 
-        $entries = new ocp_tempcode();
-        $fields = new ocp_tempcode();
+        $entries = new Tempcode();
+        $fields = new Tempcode();
         foreach (placeholder_array() as $v) {
             $fields->attach(do_lorem_template('CATALOGUE_DEFAULT_GRID_ENTRY_FIELD', array(
                 'ENTRYID' => placeholder_random_id(),
@@ -287,7 +291,7 @@ class Hook_addon_registry_catalogues
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
 
-            'CART_LINK' => new ocp_tempcode(),
+            'CART_LINK' => new Tempcode(),
 
             'START' => '0',
             'MAX' => '10',
@@ -325,7 +329,7 @@ class Hook_addon_registry_catalogues
      */
     public function tpl_preview__fieldmap_category_screen()
     {
-        $subcategories = new ocp_tempcode();
+        $subcategories = new Tempcode();
         $tags = do_lorem_template('TAGS', array(
             'TAGS' => placeholder_array(),
             'TYPE' => null,
@@ -333,8 +337,8 @@ class Hook_addon_registry_catalogues
             'TAG' => lorem_word(),
         ));
 
-        $entries = new ocp_tempcode();
-        $fields = new ocp_tempcode();
+        $entries = new Tempcode();
+        $fields = new Tempcode();
         foreach (placeholder_array() as $v) {
             $fields->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD', array(
                 'ENTRYID' => placeholder_random_id(),
@@ -368,7 +372,7 @@ class Hook_addon_registry_catalogues
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
 
-            'CART_LINK' => new ocp_tempcode(),
+            'CART_LINK' => new Tempcode(),
 
             'START' => '0',
             'MAX' => '10',
@@ -407,7 +411,7 @@ class Hook_addon_registry_catalogues
     public function tpl_preview__list_category_screen()
     {
         $type = 'default';
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $v) {
             $content->attach(do_lorem_template('CATALOGUE_DEFAULT_TITLELIST_ENTRY', array(
                 'VIEW_URL' => placeholder_url(),
@@ -434,7 +438,7 @@ class Hook_addon_registry_catalogues
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
 
-            'CART_LINK' => new ocp_tempcode(),
+            'CART_LINK' => new Tempcode(),
 
             'START' => '0',
             'MAX' => '10',
@@ -472,7 +476,7 @@ class Hook_addon_registry_catalogues
      */
     public function tpl_preview__tabular_category_screen__links()
     {
-        $subcategories = new ocp_tempcode();
+        $subcategories = new Tempcode();
         $tags = do_lorem_template('TAGS', array(
             'TAGS' => placeholder_array(),
             'TYPE' => null,
@@ -480,9 +484,9 @@ class Hook_addon_registry_catalogues
             'TAG' => lorem_word(),
         ));
 
-        $row = new ocp_tempcode();
-        $entry_fields = new ocp_tempcode();
-        $head = new ocp_tempcode();
+        $row = new Tempcode();
+        $entry_fields = new Tempcode();
+        $head = new Tempcode();
         foreach (placeholder_array() as $v) {
             $head->attach(do_lorem_template('CATALOGUE_links_TABULAR_HEADCELL', array(
                 'SORT_ASC_SELECTED' => true,
@@ -520,7 +524,7 @@ class Hook_addon_registry_catalogues
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
 
-            'CART_LINK' => new ocp_tempcode(),
+            'CART_LINK' => new Tempcode(),
 
             'START' => '0',
             'MAX' => '10',
@@ -558,7 +562,7 @@ class Hook_addon_registry_catalogues
      */
     public function tpl_preview__tabular_category_screen()
     {
-        $subcategories = new ocp_tempcode();
+        $subcategories = new Tempcode();
         $tags = do_lorem_template('TAGS', array(
             'TAGS' => placeholder_array(),
             'TYPE' => null,
@@ -566,7 +570,7 @@ class Hook_addon_registry_catalogues
             'TAG' => lorem_word(),
         ));
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         $head = do_lorem_template('CATALOGUE_DEFAULT_TABULAR_HEADCELL', array(
             'SORT_ASC_SELECTED' => true,
             'SORT_DESC_SELECTED' => false,
@@ -578,7 +582,7 @@ class Hook_addon_registry_catalogues
             'FIELD' => lorem_word(),
             'FIELDTYPE' => 'text',
         ));
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_lorem_template('CATALOGUE_DEFAULT_TABULAR_ENTRY_FIELD', array(
             'FIELDID' => placeholder_id(),
             'ENTRYID' => placeholder_id(),
@@ -602,7 +606,7 @@ class Hook_addon_registry_catalogues
             'ROOT' => placeholder_id(),
             'BLOCK_PARAMS' => '',
 
-            'CART_LINK' => new ocp_tempcode(),
+            'CART_LINK' => new Tempcode(),
 
             'START' => '0',
             'MAX' => '10',
@@ -647,7 +651,7 @@ class Hook_addon_registry_catalogues
             'TAG' => lorem_word(),
         ));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach (placeholder_array() as $v) {
             $fields->attach(do_lorem_template('CATALOGUE_DEFAULT_FIELDMAP_ENTRY_FIELD', array(
                 'ENTRYID' => placeholder_id(),

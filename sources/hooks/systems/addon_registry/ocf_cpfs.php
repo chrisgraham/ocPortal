@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_cpfs
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_cpfs
 {
     /**
@@ -148,7 +152,7 @@ class Hook_addon_registry_ocf_cpfs
      */
     public function tpl_preview__administrative__ocf_cpf_stats_screen()
     {
-        $lines = new ocp_tempcode();
+        $lines = new Tempcode();
         foreach (placeholder_array() as $value) {
             $lines->attach(do_lorem_template('OCF_CPF_STATS_LINE', array(
                 'CNT' => placeholder_number(),

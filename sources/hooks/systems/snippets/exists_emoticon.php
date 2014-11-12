@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_exists_emoticon
 {
     /**
@@ -30,7 +34,7 @@ class Hook_exists_emoticon
 
         $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_emoticons', 'e_code', array('e_code' => $val));
         if (is_null($test)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_lang('ocf');

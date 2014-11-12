@@ -43,7 +43,7 @@ class resource_fs_test_set extends ocp_test_case
         foreach ($occlefs_hooks as $occlefs_hook => $dir) {
             $path = get_file_base() . '/' . $dir . '/hooks/systems/occle_fs/' . $occlefs_hook . '.php';
             $contents = file_get_contents($path);
-            if (strpos($contents, ' extends resource_fs_base') !== false) {
+            if (strpos($contents, ' extends Resource_fs_base') !== false) {
                 require_code('hooks/systems/occle_fs/' . $occlefs_hook);
                 $ob = object_factory('Hook_occle_fs_' . $occlefs_hook);
                 $this->resourcefs_obs[$occlefs_hook] = $ob;
@@ -75,7 +75,7 @@ class resource_fs_test_set extends ocp_test_case
 
     public function testCount()
     {
-        $occle_fs = new occle_fs();
+        $occle_fs = new OcCLE_fs();
 
         foreach ($this->resourcefs_obs as $occlefs_hook => $ob) {
             $count = 0;

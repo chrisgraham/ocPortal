@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_form_interfaces
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_form_interfaces
 {
     /**
@@ -590,7 +594,7 @@ class Hook_addon_registry_core_form_interfaces
      */
     public function tpl_preview__form_single_field()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $name = placeholder_random_id();
         $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_FLOAT', array(
@@ -629,7 +633,7 @@ class Hook_addon_registry_core_form_interfaces
         require_lang('dates');
         require_javascript('javascript_theme_colours');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $name = placeholder_random_id();
         $_input1 = do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
@@ -667,7 +671,7 @@ class Hook_addon_registry_core_form_interfaces
             'INPUT' => $_input2,
             'COMCODE' => '',
         ));
-        $inputs = new ocp_tempcode();
+        $inputs = new Tempcode();
         $inputs->attach($input1);
         $inputs->attach($input2);
         $fieldset = do_lorem_template('FORM_SCREEN_FIELDS_SET', array(
@@ -749,7 +753,7 @@ class Hook_addon_registry_core_form_interfaces
             'TITLE' => lorem_phrase(),
             'THEME_ALSO_INCLUDE_PAGES' => false,
         )));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
             $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
@@ -763,7 +767,7 @@ class Hook_addon_registry_core_form_interfaces
             'ENTRIES' => $list,
             'TITLE' => lorem_phrase(),
         ));
-        $radios = new ocp_tempcode();
+        $radios = new Tempcode();
         $name = placeholder_random_id();
         $radios->attach(do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY', array(
             'DESCRIPTION' => lorem_sentence(),
@@ -815,7 +819,7 @@ class Hook_addon_registry_core_form_interfaces
             'NAME' => $name,
             'DEFAULT' => '',
         ));
-        $_description = new ocp_tempcode();
+        $_description = new Tempcode();
         $_description->attach(lorem_phrase());
         $_description->attach(do_lorem_template('FORM_DESCRIP_SEP'));
         $extra = do_lorem_template('HYPERLINK_POPUP_WINDOW', array(
@@ -1001,10 +1005,10 @@ class Hook_addon_registry_core_form_interfaces
         require_lang('comcode');
         require_lang('dates');
 
-        $fields = new ocp_tempcode();
-        $list = new ocp_tempcode();
+        $fields = new Tempcode();
+        $list = new Tempcode();
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach (placeholder_array() as $val) {
             $entries->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => '',
@@ -1063,7 +1067,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $input = new ocp_tempcode();
+        $input = new Tempcode();
         foreach (placeholder_array(1) as $k => $v) {
             $input->attach(do_lorem_template('FORM_SCREEN_INPUT_LINE_MULTI', array(
                 'CLASS' => '',
@@ -1299,7 +1303,7 @@ class Hook_addon_registry_core_form_interfaces
         )));
 
         $name = placeholder_random_id();
-        $input = new ocp_tempcode();
+        $input = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $input->attach(do_lorem_template('FORM_SCREEN_INPUT_USERNAME_MULTI', array(
                 'PRETTY_NAME' => lorem_word(),
@@ -1322,7 +1326,7 @@ class Hook_addon_registry_core_form_interfaces
             'COMCODE' => '',
         )));
 
-        $input = new ocp_tempcode();
+        $input = new Tempcode();
         $options = array(
             array(
                 'option1',
@@ -1348,7 +1352,7 @@ class Hook_addon_registry_core_form_interfaces
                 array(
                     $options,
                     null,
-                    new ocp_tempcode()
+                    new Tempcode()
                 )
             );
         }
@@ -1555,8 +1559,8 @@ class Hook_addon_registry_core_form_interfaces
     {
         require_lang('comcode');
         require_lang('dates');
-        $input = new ocp_tempcode();
-        $fields = new ocp_tempcode();
+        $input = new Tempcode();
+        $fields = new Tempcode();
         foreach (placeholder_array(1) as $key => $val) {
             $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST_ENTRY_PICTURE', array(
                 'CHECKED' => true,
@@ -1576,10 +1580,10 @@ class Hook_addon_registry_core_form_interfaces
                 'COMCODE' => '',
             )));
         }
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $i = 0;
         foreach (placeholder_array() as $k => $v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach (placeholder_array() as $_k => $_v) {
                 $temp = do_lorem_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array(
                     'CHECKED' => true,
@@ -1677,7 +1681,7 @@ class Hook_addon_registry_core_form_interfaces
         require_lang('dates');
 
 
-        $buttons = new ocp_tempcode();
+        $buttons = new Tempcode();
         $_buttons = array(
             'img',
             'thumb',
@@ -1700,7 +1704,7 @@ class Hook_addon_registry_core_form_interfaces
             )));
         }
 
-        $micro_buttons = new ocp_tempcode();
+        $micro_buttons = new Tempcode();
         $_micro_buttons = array(
             array(
                 't' => 'b',
@@ -1776,9 +1780,9 @@ class Hook_addon_registry_core_form_interfaces
     public function tpl_preview__administrative__form_screen_input_permission()
     {
         require_lang('permissions');
-        $permission_rows = new ocp_tempcode();
+        $permission_rows = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $overrides = new ocp_tempcode();
+            $overrides = new Tempcode();
             $all_global = true;
             foreach (placeholder_array() as $_k => $_v) {
                 $overrides->attach(do_lorem_template('FORM_SCREEN_INPUT_PERMISSION_OVERRIDE', array(
@@ -1845,7 +1849,7 @@ class Hook_addon_registry_core_form_interfaces
     {
         require_lang('permissions');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $name = placeholder_random_id();
         $input = do_lorem_template('FORM_SCREEN_INPUT_RADIO_LIST', array(
@@ -1914,7 +1918,7 @@ class Hook_addon_registry_core_form_interfaces
         require_lang('blocks');
         require_lang('comcode');
 
-        $links = new ocp_tempcode();
+        $links = new Tempcode();
         foreach (placeholder_array() as $v) {
             $links->attach(do_lorem_template('BLOCK_HELPER_BLOCK_CHOICE', array(
                 'USAGE' => placeholder_array(),

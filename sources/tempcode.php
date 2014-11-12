@@ -273,7 +273,7 @@ function build_closure_tempcode($type, $name, $parameters, $escaping = null)
         $parameters = array();
     }
 
-    $ret = new ocp_tempcode(array(array($myfunc => $funcdef), array(array(array($myfunc, ($parameters === null) ? array() : $parameters, $type, $name, '')))));
+    $ret = new Tempcode(array(array($myfunc => $funcdef), array(array(array($myfunc, ($parameters === null) ? array() : $parameters, $type, $name, '')))));
     if ($type == TC_LANGUAGE_REFERENCE) {
         $ret->pure_lang = true;
     }
@@ -468,7 +468,7 @@ function make_string_tempcode($string)
     ;
     $code_to_preexecute = array($myfunc => "\$tpl_funcs['$myfunc']=\"echo \\\"" . php_addslashes_twice($string) . "\\\";\";\n");
     $seq_parts = array(array(array($myfunc, array(), TC_KNOWN, '', '')));
-    return new ocp_tempcode(array($code_to_preexecute, $seq_parts));
+    return new Tempcode(array($code_to_preexecute, $seq_parts));
 }
 
 /**
@@ -694,7 +694,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             if (isset($LOADED_TPL_CACHE[$codename][$theme])) {
                 $_data = $LOADED_TPL_CACHE[$codename][$theme];
             } else {
-                $_data = new ocp_tempcode();
+                $_data = new Tempcode();
                 $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));
                 if (!$test) {
                     $_data = false; // failed
@@ -733,7 +733,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
             }
             if ((!$support_smart_decaching) || (($tcp_time !== false) && (is_file($file_path)))/*if in install can be found yet no file at path due to running from data.ocp*/ && ($found !== null)) {
                 if ((!$support_smart_decaching) || (filemtime($file_path) < $tcp_time)) {
-                    $_data = new ocp_tempcode();
+                    $_data = new Tempcode();
                     $test = $_data->from_assembly_executed($tcp_path, array($codename, $codename, $lang, $theme, $suffix, $type, $fallback));
                     if (!$test) {
                         $_data = false; // failed
@@ -772,7 +772,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
     }
 
     if (!isset($parameters)) { // Streamlined if no parameters involved
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->codename = $codename;
         $out->code_to_preexecute = $_data->code_to_preexecute;
         if (!$GLOBALS['OUTPUT_STREAMING']) {
@@ -798,7 +798,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
 
     if ($special_treatment) {
         if ($KEEP_MARKERS) {
-            $__data = new ocp_tempcode();
+            $__data = new Tempcode();
             $__data->attach('<!-- START-TEMPLATE=' . $codename . ' -->');
             $__data->attach($ret);
             $__data->attach('<!-- END-TEMPLATE=' . $codename . ' -->');
@@ -1143,7 +1143,7 @@ function handle_symbol_preprocessing($seq_part, &$children)
                     $children[] = array(':page: ' . $param[0], isset($tp_value->children) ? $tp_value->children : array(), isset($tp_value->fresh) ? $tp_value->fresh : false);
                 }
             } else {
-                $tp_value = new ocp_tempcode();
+                $tp_value = new Tempcode();
             }
 
             $PAGES_CACHE[serialize($param)] = $tp_value;
@@ -1159,10 +1159,8 @@ function handle_symbol_preprocessing($seq_part, &$children)
 
 /**
  * Tempcode (compiled implementation).
- *
- * @package    core
  */
-class ocp_tempcode
+class Tempcode
 {
     public $code_to_preexecute;
     public $seq_parts; // List of list of closure pairs: (0) function name, and (1) parameters, (2) type, (3) name         We use a 2D list to make attach ops very fast
@@ -1183,7 +1181,7 @@ class ocp_tempcode
      *
      * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
      */
-    public function ocp_tempcode($details = null)
+    public function __construct($details = null)
     {
         $this->cached_output = null;
 
@@ -1525,7 +1523,7 @@ class ocp_tempcode
             $parameters['_GUID'] = isset($trace[3]) ? ($trace[3]['function'] . '/' . $trace[2]['function']) : (isset($trace[2]) ? $trace[2]['function'] : $trace[1]['function']);
         }
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->codename = $codename;
         $out->code_to_preexecute = $this->code_to_preexecute;
         $out->preprocessable_bits = array();

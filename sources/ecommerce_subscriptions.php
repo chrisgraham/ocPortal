@@ -198,7 +198,7 @@ function prepare_templated_subscription($subscription)
         'TYPE_CODE' => $subscription['type_code'],
         'ITEM_NAME' => $subscription['item_name'],
         'USERGROUP_SUBSCRIPTION_TITLE' => $subscription['usergroup_subscription_title'], // May be NULL, if not a usergroup subscription
-        'USERGROUP_SUBSCRIPTION_DESCRIPTION' => is_null($subscription['usergroup_subscription_description']) ? new ocp_tempcode() : $subscription['usergroup_subscription_description'],
+        'USERGROUP_SUBSCRIPTION_DESCRIPTION' => is_null($subscription['usergroup_subscription_description']) ? new Tempcode() : $subscription['usergroup_subscription_description'],
         'USERGROUP_SUBSCRIPTION_ID' => is_null($subscription['usergroup_subscription_id']) ? '' : strval($subscription['usergroup_subscription_id']),
         'USERGROUP_ID' => is_null($subscription['usergroup_id']) ? '' : strval($subscription['usergroup_id']),
         'USERGROUP_NAME' => $subscription['usergroup_name'],
@@ -218,6 +218,6 @@ function prepare_templated_subscription($subscription)
         'TERM_START_TIME' => get_timezoned_date($subscription['term_start_time'], false, false, false, true),
         'TERM_END_TIME' => get_timezoned_date($subscription['term_end_time'], false, false, false, true),
         'EXPIRY_TIME' => is_null($subscription['expiry_time']) ? '' : get_timezoned_date($subscription['expiry_time'], false, false, false, true),
-        'CANCEL_BUTTON' => ($subscription['state'] == 'active') ? make_cancel_button($subscription['auto_fund_key'], $subscription['via']) : new ocp_tempcode(),
+        'CANCEL_BUTTON' => ($subscription['state'] == 'active') ? make_cancel_button($subscription['auto_fund_key'], $subscription['via']) : new Tempcode(),
     );
 }

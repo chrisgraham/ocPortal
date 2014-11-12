@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_video_sync_transcoding
 {
     /**
@@ -62,7 +66,7 @@ class Hook_config_video_sync_transcoding
         $hooks = find_all_hooks('modules', 'video_syndication');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/modules/video_syndication/' . filter_naughty($hook));
-            $ob = object_factory('video_syndication_' . filter_naughty($hook));
+            $ob = object_factory('Hook_video_syndication_' . filter_naughty($hook));
             $label = $ob->get_service_title();
 
             $list .= static_evaluate_tempcode(form_input_list_entry($hook, $hook == get_option($name), $label));

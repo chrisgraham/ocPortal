@@ -243,7 +243,7 @@ class Module_booking
             return $this->thanks();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -547,7 +547,7 @@ class Module_booking
         // Booking not related to members
         if (get_option('member_booking_only') == '0') {
             require_code('form_templates');
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_line(do_lang_tempcode('YOUR_NAME'), '', 'customer_name', $GLOBALS['FORUM_DRIVER']->get_username(get_member()), true));
             $fields->attach(form_input_email(do_lang_tempcode('YOUR_EMAIL_ADDRESS'), '', 'customer_email', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), true));
             $fields->attach(form_input_email(do_lang_tempcode('ALT_FIELD', do_lang_tempcode('CONFIRM_EMAIL_ADDRESS')), '', 'customer_email_confirm', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), true));

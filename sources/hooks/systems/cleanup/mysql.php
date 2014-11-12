@@ -19,6 +19,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_mysql
 {
     /**
@@ -47,7 +51,7 @@ class Hook_mysql
      */
     public function run()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
 
         $tables = $GLOBALS['SITE_DB']->query_select('db_meta', array('DISTINCT m_table'));
         if (count($GLOBALS['SITE_DB']->connection_write) > 4) { // Okay, we can't be lazy anymore

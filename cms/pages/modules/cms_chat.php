@@ -218,7 +218,7 @@ class Module_cms_chat
             return $this->_chat_edit_message();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -256,7 +256,7 @@ class Module_cms_chat
 
         require_code('chat_lobby');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach ($rows as $row) {
             $has_mod_access = ((has_privilege(get_member(), 'edit_lowrange_content', 'cms_chat', array('chat', $row['id']))) || ($row['room_owner'] == get_member()) && (has_privilege(get_member(), 'moderate_my_private_rooms')));
             if ((!handle_chatroom_pruning($row)) && ($has_mod_access)) {
@@ -335,7 +335,7 @@ class Module_cms_chat
         }
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('chat_messages', 'COUNT(*)', array('room_id' => $room_id));
         $rows = $GLOBALS['SITE_DB']->query_select('chat_messages', array('*'), array('room_id' => $room_id), 'ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('templates_results_table');
         $array = array(do_lang_tempcode('MEMBER'), do_lang_tempcode('DATE_TIME'), do_lang_tempcode('MESSAGE'));
         if (has_js()) {
@@ -655,7 +655,7 @@ class Module_cms_chat
             access_denied('PRIVILEGE', 'edit_lowrange_content');
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_tick(do_lang_tempcode('PROCEED'), do_lang_tempcode('Q_SURE'), 'continue_delete', false));
         $text = paragraph(do_lang_tempcode('CONFIRM_DELETE_ALL_MESSAGES', escape_html(get_chatroom_name($id))));

@@ -197,7 +197,7 @@ class Module_pointstore
         if ($type == 'misc') {
             return $this->interface_pointstore();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -209,7 +209,7 @@ class Module_pointstore
     {
         $points_left = available_points(get_member());
 
-        $items = new ocp_tempcode();
+        $items = new Tempcode();
 
         $_hooks = find_all_hooks('modules', 'pointstore');
         foreach (array_keys($_hooks) as $hook) {
@@ -236,7 +236,7 @@ class Module_pointstore
             }
             $pointstore_mail_forwarding_link = do_template('POINTSTORE_MFORWARDING_LINK', array('_GUID' => 'e93666809dc3e47e3660245711f545ee', 'FORWARDING_URL' => $_pointstore_mail_forwarding_link));
         } else {
-            $pointstore_mail_forwarding_link = new ocp_tempcode();
+            $pointstore_mail_forwarding_link = new Tempcode();
         }
         if (get_option('is_on_pop3_buy') == '1') {
             $pop3_url = build_url(array('page' => '_SELF', 'type' => 'pop3info', 'id' => 'pop3'), '_SELF');
@@ -248,7 +248,7 @@ class Module_pointstore
             }
             $pointstore_mail_pop3_link = do_template('POINTSTORE_MPOP3_LINK', array('_GUID' => '42925a17262704450e451ad8502bce0d', 'POP3_URL' => $_pointstore_mail_pop3_link));
         } else {
-            $pointstore_mail_pop3_link = new ocp_tempcode();
+            $pointstore_mail_pop3_link = new Tempcode();
         }
 
         if ((!$pointstore_mail_pop3_link->is_empty()) || (!$pointstore_mail_pop3_link->is_empty())) {

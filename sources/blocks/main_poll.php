@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Block class.
+ */
 class Block_main_poll
 {
     /**
@@ -55,7 +59,7 @@ class Block_main_poll
         if ((has_actual_page_access(null, 'cms_polls', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_polls'))) {
             $submit_url = build_url(array('page' => 'cms_polls', 'type' => 'ad', 'redirect' => get_self_url(true, false)), get_module_zone('cms_polls'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
 
         // Lookup poll row

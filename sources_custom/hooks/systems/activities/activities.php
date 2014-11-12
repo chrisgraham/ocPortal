@@ -14,7 +14,10 @@
  */
 // activity_feed addon's implementation of activity syndication. Which in turn implements syndication hooks for further syndication (i.e. it's a syndication API built on top of a syndication API, as we don't want to provide lots of implementation code in ocPortal itself when no default use case is shipped).
 
-class Activity_activities
+/**
+ * Hook class.
+ */
+class Hook_activities_activities
 {
     /**
      * Syndicate human-intended descriptions of activities performed to the internal wall, and external listeners.
@@ -53,7 +56,7 @@ class Activity_activities
         $dests = find_all_hooks('systems', 'syndication');
         foreach (array_keys($dests) as $hook) {
             require_code('hooks/systems/syndication/' . $hook);
-            $ob = object_factory('Hook_Syndication_' . $hook);
+            $ob = object_factory('Hook_syndication_' . $hook);
             if (($ob->is_available()) && ($ob->auth_is_set_site())) {
                 return true;
             }
@@ -68,7 +71,7 @@ class Activity_activities
      */
     public function get_syndication_option_fields()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('activities');
         if ((has_privilege(get_member(), 'syndicate_site_activity')) && (has_external_site_wide_syndication())) {
             require_lang('activities');

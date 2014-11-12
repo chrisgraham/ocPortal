@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
-class Hook_Notification_pointstore_request_pop3 extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_pointstore_request_pop3 extends Hook_notification__Staff
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

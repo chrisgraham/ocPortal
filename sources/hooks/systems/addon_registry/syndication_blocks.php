@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_syndication_blocks
 {
     /**
@@ -155,7 +159,7 @@ class Hook_addon_registry_syndication_blocks
      */
     public function tpl_preview__block_side_rss()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $content->attach(do_lorem_template('BLOCK_SIDE_RSS_SUMMARY', array(
                 'FEED_URL' => placeholder_url(),
@@ -188,7 +192,7 @@ class Hook_addon_registry_syndication_blocks
     {
         require_lang('news');
         require_css('news');
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $news_full = do_lorem_template('BLOCK_MAIN_RSS_FULL', array(
                 'NEWS_FULL' => lorem_paragraph(),

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    random_quotes
  */
+
+/**
+ * Block class.
+ */
 class Block_main_quotes
 {
     /**
@@ -72,7 +76,7 @@ class Block_main_quotes
         if (!file_exists($place)) {
             warn_exit(do_lang_tempcode('DIRECTORY_NOT_FOUND', escape_html($place)));
         }
-        $edit_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
         if (($file == 'quotes') && (has_actual_page_access(get_member(), 'quotes', 'adminzone'))) {
             $edit_url = build_url(array('page' => 'quotes'), 'adminzone');
         }

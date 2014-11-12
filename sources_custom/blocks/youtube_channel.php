@@ -8,6 +8,9 @@
  */
 /*EXTRA FUNCTIONS: json_decode*/
 
+/**
+ * Block class.
+ */
 class Block_youtube_channel
 {
     /**
@@ -126,7 +129,7 @@ class Block_youtube_channel
             $api_v2 = "http://gdata.youtube.com/feeds/api/users/$channel_name/uploads?max-results=$channel_maxvideos&start-index=$channel_startvideo&orderby=$orderby&v=2";
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         //$i will count the iterations through the foreach loop
         $i = 1;

@@ -60,7 +60,7 @@ function init__database()
          *
          * @global object $SITE_DB
          */
-        $SITE_DB = new database_driver(get_db_site(), get_db_site_host(), get_db_site_user(), get_db_site_password(), get_table_prefix());
+        $SITE_DB = new Database_driver(get_db_site(), get_db_site_host(), get_db_site_user(), get_db_site_password(), get_table_prefix());
     }
 
     global $UPON_QUERY_HOOKS_CACHE;
@@ -444,10 +444,8 @@ function get_db_forums_password()
 
 /**
  * Database handling.
- *
- * @package    core
  */
-class database_driver
+class Database_driver
 {
     public $table_prefix;
     var $connection_read, $connection_write;
@@ -472,7 +470,7 @@ class database_driver
      * @param boolean         Whether to on error echo an error and return with a NULL, rather than giving a critical error
      * @param ?object         Static call object (NULL: use global static call object)
      */
-    public function database_driver($db_name, $db_host, $db_user, $db_password, $table_prefix, $fail_ok = false, $static = null)
+    public function __construct($db_name, $db_host, $db_user, $db_password, $table_prefix, $fail_ok = false, $static = null)
     {
         $this->text_lookup_original_cache = array();
         $this->text_lookup_cache = array();
@@ -513,7 +511,7 @@ class database_driver
     {
         global $FILECACHE_OBJECT;
         require_code('database/xml');
-        $chain_db = new database_driver(get_custom_file_base() . '/caches/persistent', '', '', '', get_table_prefix(), false, object_factory('Database_Static_xml'));
+        $chain_db = new Database_driver(get_custom_file_base() . '/caches/persistent', '', '', '', get_table_prefix(), false, object_factory('Database_Static_xml'));
         $chain_connection = &$chain_db->connection_write;
         if (count($chain_connection) > 4) { // Okay, we can't be lazy anymore
             $chain_connection = call_user_func_array(array($chain_db->static_ob, 'db_get_connection'), $chain_connection);
@@ -642,7 +640,8 @@ class database_driver
                         $values .= float_to_raw_string($v, 10);
                     } elseif (($key == 'begin_num') || ($key == 'end_num')) {
                         $values .= $v; // Fudge, for all our known large unsigned integers
-                    } else {
+                    }
+                    else {
                         $values .= '\'' . $this->static_ob->db_escape_string($v) . '\'';
                     }
                 }
@@ -720,7 +719,8 @@ class database_driver
                     $where .= $key . '=' . strval($value);
                 } elseif (($key == 'begin_num') || ($key == 'end_num')) {
                     $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
-                } else {
+                }
+                else {
                     if ($value === null) {
                         $where .= $key . ' IS NULL';
                     } else {
@@ -1206,7 +1206,7 @@ class database_driver
         if ($QUERY_LOG) {
             $after = microtime(true);
             $text = (!is_null($max)) ? ($query . ' (' . (is_null($start) ? '0' : strval($start)) . '-' . strval((is_null($start) ? 0 : $start) + $max) . ')') : $query;
-            $out = array('time' => ($after - $before), 'text' => $text, 'rows' => is_array($ret) ? count($ret) : null);
+            $out = array('time' => ($after - $before), 'text' => $text, 'rows' => is_array($ret) ? count($ret) : NULL);
             $QUERY_LIST[] = $out;
         }
         /*if (microtime_diff($after,$before)>1.0)  Generally one would use MySQL's own slow query log, which will impact ocPortal performance less
@@ -1291,7 +1291,8 @@ class database_driver
                     $where .= $key . '=' . strval($value);
                 } elseif (($key == 'begin_num') || ($key == 'end_num')) {
                     $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
-                } else {
+                }
+                else {
                     if ($value === null) {
                         $where .= $key . ' IS NULL';
                     } else {
@@ -1321,7 +1322,8 @@ class database_driver
                     $update .= $key . '=' . strval($value);
                 } elseif (($key == 'begin_num') || ($key == 'end_num')) {
                     $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
-                } else {
+                }
+                else {
                     $update .= $key . '=\'' . $this->static_ob->db_escape_string($value) . '\'';
                 }
             }
@@ -1382,13 +1384,15 @@ class database_driver
                 $where .= $key . '=' . strval($value);
             } elseif (($key == 'begin_num') || ($key == 'end_num')) {
                 $where .= $key . '=' . $value; // Fudge, for all our known large unsigned integers
-            } else {
+            }
+            else {
                 if ($value === null) {
                     $where .= $key . ' IS NULL';
                 } else {
                     if ((is_string($value)) && ($value == '') && ($this->static_ob->db_empty_is_null())) {
                         $where .= $key . ' IS NULL'; // $value=' ';
-                    } else {
+                    }
+                    else {
                         $where .= db_string_equal_to($key, $value);
                     }
                 }

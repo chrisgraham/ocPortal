@@ -123,7 +123,7 @@ class Module_notifications
             return $this->advanced();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

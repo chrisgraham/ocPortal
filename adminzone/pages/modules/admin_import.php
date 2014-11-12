@@ -202,7 +202,7 @@ class Module_admin_import
             return $this->do_import();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -212,7 +212,7 @@ class Module_admin_import
      */
     public function choose_importer()
     {
-        $hooks = new ocp_tempcode();
+        $hooks = new Tempcode();
         $_hooks = find_all_hooks('modules', 'admin_import');
         $__hooks = array();
         require_code('form_templates');
@@ -259,7 +259,7 @@ class Module_admin_import
             return redirect_screen($this->title, $redirect_url, do_lang_tempcode('REDIRECTED_TO_CACHE_MODULES'));
         }
 
-        $sessions = new ocp_tempcode();
+        $sessions = new Tempcode();
         $_sessions = $GLOBALS['SITE_DB']->query_select('import_session', array('*'));
         require_code('form_templates');
         foreach ($_sessions as $session) {
@@ -352,7 +352,7 @@ class Module_admin_import
         }
 
         // Build the form
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         if (!method_exists($object, 'probe_db_access')) {
             $fields->attach(form_input_line(do_lang_tempcode('DATABASE_NAME'), do_lang_tempcode('_FROM_IMPORTING_SYSTEM'), 'db_name', $db_name, true));
@@ -406,7 +406,7 @@ class Module_admin_import
         if (($db_name == get_db_site()) && ($importer == 'ocp_merge') && ($db_table_prefix == $GLOBALS['SITE_DB']->get_table_prefix())) {
             warn_exit(do_lang_tempcode('IMPORT_SELF_NO'));
         }
-        $import_source = is_null($db_name) ? null : new database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
+        $import_source = is_null($db_name) ? null : new Database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
         unset($import_source);
 
         // Save data
@@ -470,7 +470,7 @@ class Module_admin_import
         if ((array_key_exists('ocf_members', $_import_list_2)) && (get_forum_type() == $importer) && ($db_name == get_db_forums()) && ($db_table_prefix == $GLOBALS['FORUM_DB']->get_table_prefix())) {
             $_import_list_2['ocf_switch'] = do_lang_tempcode('SWITCH_TO_OCF');
         }
-        $import_list = new ocp_tempcode();
+        $import_list = new Tempcode();
         //asort($_import_list_2); Let's preserve order here
         $just = get_param('just', null);
         $first = true;
@@ -484,7 +484,7 @@ class Module_admin_import
                     'DISABLED' => true,
                     'NAME' => 'import_' . $import,
                     'TEXT' => $text,
-                    'ADVANCED_URL' => $info['supports_advanced_import'] ? build_url(array('page' => '_SELF', 'type' => 'advanced_hook', 'session' => $session, 'content_type' => $import, 'importer' => $importer), '_SELF') : new ocp_tempcode(),
+                    'ADVANCED_URL' => $info['supports_advanced_import'] ? build_url(array('page' => '_SELF', 'type' => 'advanced_hook', 'session' => $session, 'content_type' => $import, 'importer' => $importer), '_SELF') : new Tempcode(),
                 )));
             } else {
                 $checked = (is_null($just)) && ($first);
@@ -493,7 +493,7 @@ class Module_admin_import
                     'CHECKED' => $checked,
                     'NAME' => 'import_' . $import,
                     'TEXT' => $text,
-                    'ADVANCED_URL' => $info['supports_advanced_import'] ? build_url(array('page' => '_SELF', 'type' => 'advanced_hook', 'session' => $session, 'content_type' => $import, 'importer' => $importer), '_SELF') : new ocp_tempcode()
+                    'ADVANCED_URL' => $info['supports_advanced_import'] ? build_url(array('page' => '_SELF', 'type' => 'advanced_hook', 'session' => $session, 'content_type' => $import, 'importer' => $importer), '_SELF') : new Tempcode()
                 )));
             }
             if ($just == $import) {
@@ -514,7 +514,7 @@ class Module_admin_import
 
         $url = build_url(array('page' => '_SELF', 'type' => 'import', 'session' => $session, 'importer' => $importer), '_SELF');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(build_keep_post_fields($skip_hidden));
         $hidden->attach(build_keep_form_fields('', true));
 
@@ -566,7 +566,7 @@ class Module_admin_import
             warn_exit(do_lang_tempcode('IMPORT_SELF_NO'));
         }
 
-        $import_source = is_null($db_name) ? null : new database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
+        $import_source = is_null($db_name) ? null : new Database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
 
         // Some preliminary tests
         $happy = get_param_integer('happy', 0);
@@ -592,12 +592,12 @@ class Module_admin_import
 
         $info = $object->info();
         $_import_list = $info['import'];
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $parts_done = collapse_2d_complexity('imp_id', 'imp_session', $GLOBALS['SITE_DB']->query_select('import_parts_done', array('imp_id', 'imp_session'), array('imp_session' => get_session_id())));
         $import_last = '-1';
         if (get_forum_type() != 'ocf') {
             require_code('forum/ocf');
-            $GLOBALS['OCF_DRIVER'] = new forum_driver_ocf();
+            $GLOBALS['OCF_DRIVER'] = new Forum_driver_ocf();
             $GLOBALS['OCF_DRIVER']->connection = $GLOBALS['SITE_DB'];
             $GLOBALS['OCF_DRIVER']->MEMBER_ROWS_CACHED = array();
         }
@@ -671,7 +671,7 @@ class Module_admin_import
      */
     public function ocf_switch()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
 
         $todos = array('MEMBER' => array('member', db_get_first_id(), null), 'GROUP' => array('group', null, 'group_id'));
         foreach ($todos as $db_abstraction => $definition) {

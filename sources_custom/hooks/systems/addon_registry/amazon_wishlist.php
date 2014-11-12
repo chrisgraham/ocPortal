@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    amazon_wishlist
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_amazon_wishlist
 {
     /**

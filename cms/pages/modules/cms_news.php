@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_news extends standard_crud_module
+class Module_cms_news extends Standard_crud_module
 {
     public $lang_type = 'NEWS';
     public $select_name = 'TITLE';
@@ -163,7 +163,7 @@ class Module_cms_news extends standard_crud_module
             return $this->_import_news();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -226,7 +226,7 @@ class Module_cms_news extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         $only_owned = has_privilege(get_member(), 'edit_highrange_content', 'cms_news') ? null : get_member();
@@ -353,8 +353,8 @@ class Module_cms_news extends standard_crud_module
         $cats1 = create_selection_list_news_categories($main_news_category, false, true, is_integer($main_news_category), null, true);
         $cats2 = create_selection_list_news_categories(is_null($news_category) ? array() : $news_category, false, true, is_integer($main_news_category), null, true);
 
-        $fields = new ocp_tempcode();
-        $fields2 = new ocp_tempcode();
+        $fields = new Tempcode();
+        $fields2 = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_list(do_lang_tempcode('MAIN_CATEGORY'), do_lang_tempcode('DESCRIPTION_MAIN_CATEGORY'), 'main_news_category', $cats1));
@@ -381,7 +381,7 @@ class Module_cms_news extends standard_crud_module
         $fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '90e0f1f4557eb78d58b9a13c3e1e65dc', 'SECTION_HIDDEN' => $news == '' && $image == '' && (is_null($scheduled)) && ($title == ''/*=new entry and selected news cats was from URL*/ || is_null($news_category) || $news_category == array()), 'TITLE' => do_lang_tempcode('ADVANCED'))));
         $fields2->attach(form_input_text_comcode(do_lang_tempcode('NEWS_SUMMARY'), do_lang_tempcode('DESCRIPTION_NEWS_SUMMARY'), 'news', $news, false));
         $fields2->attach(form_input_multi_list(do_lang_tempcode('SECONDARY_CATEGORIES'), do_lang_tempcode('DESCRIPTION_SECONDARY_CATEGORIES'), 'news_category', $cats2));
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         //handle_max_file_size($hidden,'image'); Attachments will add this
         $fields2->attach(form_input_upload(do_lang_tempcode('IMAGE'), do_lang_tempcode('DESCRIPTION_NEWS_IMAGE_OVERRIDE'), 'file', false, $image, null, true, str_replace(' ', '', get_option('valid_images'))));
         if ((addon_installed('calendar')) && (has_privilege(get_member(), 'scheduled_publication_times'))) {
@@ -489,7 +489,7 @@ class Module_cms_news extends standard_crud_module
 
         $ret = $this->get_form_fields($id, $cat, $categories, get_translated_text($myrow['title']), get_translated_text($myrow['news']), $myrow['author'], $myrow['validated'], $myrow['allow_rating'], $myrow['allow_comments'], $myrow['allow_trackbacks'], 0, $myrow['notes'], $myrow['news_image'], $scheduled);
 
-        $ret[2] = new ocp_tempcode();
+        $ret[2] = new Tempcode();
         $ret[3] = '';
         $ret[4] = false;
         $ret[5] = get_translated_text($myrow['news_article']);
@@ -765,7 +765,7 @@ class Module_cms_news extends standard_crud_module
         require_code('news2');
         $fields = import_rss_fields(false);
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('lang', $lang));
         handle_max_file_size($hidden);
 
@@ -808,7 +808,7 @@ class Module_cms_news extends standard_crud_module
         }
 
         require_code('rss');
-        $rss = new rss($rss_url, true);
+        $rss = new OCP_RSS($rss_url, true);
 
         // Cleanup
         if (url_is_local($rss_url)) {// Means it is a temp file
@@ -825,7 +825,7 @@ class Module_cms_news extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_news_cat extends standard_crud_module
+class Module_cms_news_cat extends Standard_crud_module
 {
     public $lang_type = 'NEWS_CATEGORY';
     public $select_name = 'TITLE';
@@ -864,7 +864,7 @@ class Module_cms_news_cat extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -903,8 +903,8 @@ class Module_cms_news_cat extends standard_crud_module
      */
     public function get_form_fields($id = null, $title = '', $img = '', $notes = '', $owner = null, $category_id = null)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
         $fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
@@ -916,7 +916,7 @@ class Module_cms_news_cat extends standard_crud_module
             $set_name = 'rep_image';
             $required = true;
             $set_title = do_lang_tempcode('IMAGE');
-            $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
+            $field_set = (count($ids) == 0) ? new Tempcode() : alternate_fields_set__start($set_name);
 
             $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_UPLOAD'), 'file', $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 

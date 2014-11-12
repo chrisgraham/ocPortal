@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_users_online
 {
     /**
@@ -38,7 +42,7 @@ class Hook_occle_command_users_online
             if (is_null($members)) {
                 return array('', '', do_lang('TOO_MANY_USERS_ONLINE'), '');
             }
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             $guests = 0;
 
             $valid_members = array();

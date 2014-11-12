@@ -86,12 +86,12 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
     $may_mass_moderate = (array_key_exists('may_move_topics', $details)) || (array_key_exists('may_delete_topics', $details));
 
     // Find forum groupings
-    $forum_groupings = new ocp_tempcode();
+    $forum_groupings = new Tempcode();
     if ($type != 'pt') {
         foreach ($details['forum_groupings'] as $best => $forum_grouping) {
             if (array_key_exists('subforums', $forum_grouping)) { // We only show if there is something in it
                 // Subforums
-                $forums = new ocp_tempcode();
+                $forums = new Tempcode();
                 foreach ($forum_grouping['subforums'] as $subforum) {
                     if ((array_key_exists('last_topic_id', $subforum)) && (!is_null($subforum['last_topic_id']))) {
                         if (!is_null($subforum['last_member_id'])) {
@@ -137,7 +137,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
                         $subforum_num_topics = do_lang_tempcode('NA_EM');
                         $latest = do_lang_tempcode('NA_EM');
                         $subforum['has_new'] = false;
-                        $subforums = new ocp_tempcode();
+                        $subforums = new Tempcode();
                         $new_post_or_not = 'redirect';
                     } else {
                         if ($subforum['redirection'] != '') {
@@ -152,7 +152,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
                         $subforum_num_topics = protect_from_escaping(escape_html(integer_format($subforum['num_topics'])));
 
                         // Subsubforums
-                        $subforums = new ocp_tempcode();
+                        $subforums = new Tempcode();
                         ksort($subforum['children']);
                         foreach ($subforum['children'] as $child) {
                             // Work out where the subsubforum url is
@@ -170,7 +170,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
                         }
                     }
 
-                    $edit_url = has_actual_page_access(get_member(), 'admin_ocf_forums') ? build_url(array('page' => 'admin_ocf_forums', 'type' => '_ed', 'id' => $subforum['id']), 'adminzone') : new ocp_tempcode();
+                    $edit_url = has_actual_page_access(get_member(), 'admin_ocf_forums') ? build_url(array('page' => 'admin_ocf_forums', 'type' => '_ed', 'id' => $subforum['id']), 'adminzone') : new Tempcode();
 
                     $forum_rules_url = '';
                     $intro_question_url = '';
@@ -260,7 +260,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
     }
 
     // Find topics
-    $topics = new ocp_tempcode();
+    $topics = new Tempcode();
     $pinned = false;
     $num_unread = 0;
     foreach ($details['topics'] as $topic) {
@@ -312,7 +312,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
     }
     $buttons = ocf_button_screen_wrap($button_array);
 
-    $starter_title = ($type == 'pt') ? do_lang_tempcode('WITH_TITLING') : new ocp_tempcode();
+    $starter_title = ($type == 'pt') ? do_lang_tempcode('WITH_TITLING') : new Tempcode();
 
     // Wrap it all up
     $action_url = build_url(array('page' => 'topics'), get_module_zone('topics'), null, false, true);
@@ -342,12 +342,12 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
             'FORUM_NAME' => $forum_name,
         ));
     } else {
-        $topic_wrapper = new ocp_tempcode();
+        $topic_wrapper = new Tempcode();
         $moderator_actions = '';
     }
 
     // Filters
-    $filters = new ocp_tempcode();
+    $filters = new Tempcode();
     if (get_option('enable_pt_filtering') == '1') {
         if ($type == 'pt') {
             $filter_cats = ocf_get_filter_cats(true);
@@ -359,7 +359,7 @@ function ocf_render_forumview($id, $forum_info, $current_filter_cat, $max, $star
                     $filtered_url = build_url(array('page' => '_SELF', 'category' => $filter_cat), '_SELF', null, true, false, false, 'tab__pts');
                     $filter_active = $filter_cat == $current_filter_cat;
                     $filters_arr[] = array(
-                        'URL' => $filter_active ? new ocp_tempcode() : $filtered_url,
+                        'URL' => $filter_active ? new Tempcode() : $filtered_url,
                         'CAPTION' => $filter_cat,
                         'HAS_NEXT' => isset($filter_cats[$fi + 1]),
                     );
@@ -404,7 +404,7 @@ function ocf_get_topic_array($topic_row, $member_id, $hot_topic_definition, $inv
         $post_row = db_map_restrict($topic_row, array('p_post')) + array('id' => $topic_row['t_cache_first_post_id']);
         $topic['first_post'] = get_translated_tempcode('f_posts', $post_row, 'p_post', $GLOBALS['FORUM_DB']);
     } else {
-        $topic['first_post'] = new ocp_tempcode();
+        $topic['first_post'] = new Tempcode();
     }
 
     $topic['id'] = $topic_row['id'];
@@ -537,14 +537,14 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
     $url = build_url($map, get_module_zone('topicview'));
 
     // Modifiers
-    $topic_row_links = new ocp_tempcode();
+    $topic_row_links = new Tempcode();
     $modifiers = $topic['modifiers'];
     if (in_array('unread', $modifiers)) {
         $first_unread_url = build_url(array('page' => 'topicview', 'id' => $topic['id'], 'type' => 'first_unread'), get_module_zone('topicview'));
         $first_unread_url->attach('#first_unread');
         $topic_row_links->attach(do_template('OCF_FORUM_TOPIC_ROW_LINK', array('_GUID' => '6f52881ed999f4c543c9d8573b37fa48', 'URL' => $first_unread_url, 'IMG' => 'unread', 'ALT' => do_lang_tempcode('JUMP_TO_FIRST_UNREAD'))));
     }
-    $topic_row_modifiers = new ocp_tempcode();
+    $topic_row_modifiers = new Tempcode();
     foreach ($modifiers as $modifier) {
         if ($modifier != 'unread') {
             $topic_row_modifiers->attach(do_template('OCF_FORUM_TOPIC_ROW_MODIFIER', array('_GUID' => 'fbcb8791b571187fd699aa6796c3f401', 'IMG' => $modifier, 'ALT' => do_lang_tempcode('MODIFIER_' . $modifier))));
@@ -589,7 +589,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
     }
 
     // Marker
-    $marker = new ocp_tempcode();
+    $marker = new Tempcode();
     if ($has_topic_marking) {
         $marker = do_template('OCF_TOPIC_MARKER', array('_GUID' => '62ff977640d3d4270cf333edab42a18f', 'ID' => strval($topic['id'])));
     }
@@ -609,7 +609,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
         $breadcrumbs = ocf_forum_breadcrumbs($topic['forum_id'], null, null, false);
     } else {
         $hover = protect_from_escaping(is_null($topic['first_time']) ? '' : escape_html(get_timezoned_date($topic['first_time'])));
-        $breadcrumbs = new ocp_tempcode();
+        $breadcrumbs = new Tempcode();
     }
 
     return do_template('OCF_FORUM_TOPIC_ROW', array(

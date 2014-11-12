@@ -120,9 +120,9 @@ function get_html_trace()
     }
     $GLOBALS['SUPPRESS_ERROR_DEATH'] = true;
     $_trace = debug_backtrace();
-    $trace = new ocp_tempcode();
+    $trace = new Tempcode();
     foreach ($_trace as $i => $stage) {
-        $traces = new ocp_tempcode();
+        $traces = new Tempcode();
 //    if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;
         $file = '';
         $line = '';
@@ -134,10 +134,10 @@ function get_html_trace()
                 $line = strval($__value);
             }
             if ($key == 'args') {
-                $_value = new ocp_tempcode();
+                $_value = new Tempcode();
                 foreach ($__value as $param) {
                     if (!((is_array($param)) && (array_key_exists('GLOBALS', $param)))) { // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
-                        if ((is_object($param) && (is_a($param, 'ocp_tempcode'))) || (is_null($param))) {
+                        if ((is_object($param) && (is_a($param, 'Tempcode'))) || (is_null($param))) {
                             $__value = gettype($param);
                         } else {
                             @ob_start();
@@ -161,7 +161,7 @@ function get_html_trace()
                     $value = $__value;
                 }
 
-                if ((is_object($value) && (is_a($value, 'ocp_tempcode'))) || (is_array($value) && (strlen(serialize($value)) > 100))) {
+                if ((is_object($value) && (is_a($value, 'Tempcode'))) || (is_array($value) && (strlen(serialize($value)) > 100))) {
                     $_value = make_string_tempcode(escape_html(gettype($value)));
                 } else {
                     @ob_start();
@@ -191,7 +191,7 @@ function fatal_exit($text)
 
     // To break any looping of errors
     global $EXITING;
-    if ((!is_null($EXITING)) || (!class_exists('ocp_tempcode'))) {
+    if ((!is_null($EXITING)) || (!class_exists('Tempcode'))) {
         if ((get_domain() == 'localhost') || ((function_exists('get_member')) && (has_privilege(get_member(), 'see_stack_dump')))) {
             die_html_trace($text);
         } else {
@@ -203,7 +203,7 @@ function fatal_exit($text)
     $title = get_screen_title('ERROR_OCCURRED');
 
     $trace = get_html_trace();
-    $echo = new ocp_tempcode();
+    $echo = new Tempcode();
     $echo->attach(do_template('FATAL_SCREEN', array('_GUID' => '95877d427cf4e785b2f16cc71381e7eb', 'TITLE' => $title, 'MESSAGE' => $text, 'TRACE' => $trace)));
     $css_url = 'install.php?type=css';
     $css_url_2 = 'install.php?type=css_2';
@@ -407,7 +407,7 @@ function warn_exit($text)
 {
     // To break any looping of errors
     global $EXITING;
-    if ((!is_null($EXITING)) || (!class_exists('ocp_tempcode'))) {
+    if ((!is_null($EXITING)) || (!class_exists('Tempcode'))) {
         if ((get_domain() == 'localhost') || ((function_exists('get_member')) && (has_privilege(get_member(), 'see_stack_dump')))) {
             die_html_trace($text);
         } else {
@@ -418,7 +418,7 @@ function warn_exit($text)
 
     $title = get_screen_title('ERROR_OCCURRED');
 
-    $echo = new ocp_tempcode();
+    $echo = new Tempcode();
     $echo->attach(do_template('WARN_SCREEN', array('_GUID' => '723ede24462dfc4cd4485851819786bc', 'TITLE' => $title, 'TEXT' => $text, 'PROVIDE_BACK' => false)));
     $css_url = 'install.php?type=css';
     $css_url_2 = 'install.php?type=css_2';

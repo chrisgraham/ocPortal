@@ -225,7 +225,7 @@ function get_attachments($posting_field_name)
         $max_attachments = 100;
     }
     if ($max_attachments == 0) {
-        return array(new ocp_tempcode(), new ocp_tempcode());
+        return array(new Tempcode(), new Tempcode());
     }
 
     require_code('files2');
@@ -233,7 +233,7 @@ function get_attachments($posting_field_name)
     $no_quota = (ocf_get_member_best_group_property(get_member(), 'max_daily_upload_mb') == 0);
     if ($no_quota) {
         if (is_null($syndication_json)) {
-            return array(new ocp_tempcode(), new ocp_tempcode());
+            return array(new Tempcode(), new Tempcode());
         }
     } else {
         $filter = mixed();
@@ -242,7 +242,7 @@ function get_attachments($posting_field_name)
 
     $num_attachments = post_param_integer('num_attachments', has_js() ? 1 : 3);
 
-    $attachments = new ocp_tempcode();
+    $attachments = new Tempcode();
     for ($i = 1; $i <= $num_attachments; $i++) {
         $attachments->attach(do_template('ATTACHMENT', array(
             '_GUID' => 'c3b38ca70cbd1c5f9cf91bcae9ed1134',
@@ -315,7 +315,7 @@ function get_posting_form($submit_name, $submit_icon, $post, $post_url, $hidden_
         $post_comment = do_lang_tempcode('POST_COMMENT');
     }
     if (is_null($specialisation2)) {
-        $specialisation2 = new ocp_tempcode();
+        $specialisation2 = new Tempcode();
     }
 
     list($attachments, $attach_size_field) = get_attachments('post');
@@ -356,7 +356,7 @@ function get_posting_form($submit_name, $submit_icon, $post, $post_url, $hidden_
         'COMCODE_EDITOR' => $comcode_editor,
         'COMCODE_EDITOR_SMALL' => $comcode_editor_small,
         'CLASS' => $class,
-        'COMCODE_URL' => is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
+        'COMCODE_URL' => is_null($help_zone) ? new Tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone),
         'EXTRA' => $extra,
         'POST_COMMENT' => $post_comment,
         'EMOTICON_CHOOSER' => $emoticon_chooser,
@@ -384,7 +384,7 @@ function get_comcode_editor($field_name = 'post', $cut_down = false)
 {
     require_lang('comcode');
 
-    $buttons = new ocp_tempcode();
+    $buttons = new Tempcode();
     $_buttons = array();
 
     // Non-wrappers
@@ -427,7 +427,7 @@ function get_comcode_editor($field_name = 'post', $cut_down = false)
         $buttons->attach(do_template('COMCODE_EDITOR_BUTTON', array('_GUID' => 'e4fe3bc16cec070e06532fedc598d075', 'DIVIDER' => $divider, 'FIELD_NAME' => $field_name, 'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button), 'B' => $button)));
     }
 
-    $micro_buttons = new ocp_tempcode();
+    $micro_buttons = new Tempcode();
     if (!$cut_down) {
         $_micro_buttons = array(
             array('t' => 'b'),
@@ -641,7 +641,7 @@ function form_input_author($pretty_name, $description, $name, $default, $require
 
     $tabindex = get_form_field_tabindex($tabindex);
 
-    $_description = new ocp_tempcode();
+    $_description = new Tempcode();
     $_description->attach($description);
     if (has_js()) {
         $_description->attach(do_template('FORM_DESCRIP_SEP'));
@@ -796,7 +796,7 @@ function form_input_line_multi($pretty_name, $description, $name, $default_array
 
     $default_array[0] = filter_form_field_default($name, array_key_exists(0, $default_array) ? $default_array[0] : '');
 
-    $input = new ocp_tempcode();
+    $input = new Tempcode();
     $i = 0;
     foreach ($default_array as $default) {
         $_required = ($i < $num_required) ? '_required' : '';
@@ -856,7 +856,7 @@ function form_input_text_multi($pretty_name, $description, $name, $default_array
 
     $default_array[0] = filter_form_field_default($name, array_key_exists(0, $default_array) ? $default_array[0] : '');
 
-    $input = new ocp_tempcode();
+    $input = new Tempcode();
     $i = 0;
     foreach ($default_array as $default) {
         $_required = ($i < $num_required) ? '_required' : '';
@@ -896,7 +896,7 @@ function form_input_username_multi($pretty_name, $description, $name, $default_a
 
     $tabindex = get_form_field_tabindex($tabindex);
 
-    $input = new ocp_tempcode();
+    $input = new Tempcode();
     $i = 0;
     foreach ($default_array as $default) {
         if (is_null($default)) {
@@ -980,7 +980,7 @@ function form_input_text_comcode($pretty_name, $description, $name, $default, $r
     $tabindex = get_form_field_tabindex($tabindex);
 
     $_required = ($required) ? '_required' : '';
-    $default_parsed = new ocp_tempcode();
+    $default_parsed = new Tempcode();
 
     $default = filter_form_field_default($name, $default);
 
@@ -1002,7 +1002,7 @@ function form_input_text_comcode($pretty_name, $description, $name, $default, $r
         $LAX_COMCODE = $temp;
     } else {
         $w = false;
-        $default_parsed = new ocp_tempcode();
+        $default_parsed = new Tempcode();
     }
 
     $input = do_template('FORM_SCREEN_INPUT_TEXT', array(
@@ -1048,7 +1048,7 @@ function form_input_huge_comcode($pretty_name, $description, $name, $default, $r
     check_suhosin_request_size(strlen($default));
 
     $_required = ($required) ? '_required' : '';
-    $default_parsed = new ocp_tempcode();
+    $default_parsed = new Tempcode();
 
     attach_wysiwyg();
 
@@ -1066,11 +1066,11 @@ function form_input_huge_comcode($pretty_name, $description, $name, $default, $r
         $LAX_COMCODE = $temp;
     } else {
         $w = false;
-        $default_parsed = new ocp_tempcode();
+        $default_parsed = new Tempcode();
     }
 
     $help_zone = get_comcode_zone('userguide_comcode', false);
-    $_comcode = is_null($help_zone) ? new ocp_tempcode() : do_template('COMCODE_MESSAGE', array('_GUID' => 'fbcf2413f754ca5829b9f4c908746843', 'NAME' => $name, 'W' => $w, 'URL' => build_url(array('page' => 'userguide_comcode'), $help_zone)));
+    $_comcode = is_null($help_zone) ? new Tempcode() : do_template('COMCODE_MESSAGE', array('_GUID' => 'fbcf2413f754ca5829b9f4c908746843', 'NAME' => $name, 'W' => $w, 'URL' => build_url(array('page' => 'userguide_comcode'), $help_zone)));
 
     return do_template('FORM_SCREEN_INPUT_HUGE_COMCODE', array(
         '_GUID' => 'b8231827be2f4a00e12fcd8986119588',
@@ -1112,7 +1112,7 @@ function form_input_huge($pretty_name, $description, $name, $default, $required,
     check_suhosin_request_size(strlen($default));
 
     $_required = ($required) ? '_required' : '';
-    $default_parsed = new ocp_tempcode();
+    $default_parsed = new Tempcode();
 
     return do_template('FORM_SCREEN_INPUT_HUGE', array(
         '_GUID' => '9d51961cd53c3fcadb8f83b905b2bbea',
@@ -1186,7 +1186,7 @@ function form_input_tick($pretty_name, $description, $name, $ticked, $tabindex =
 function form_input_various_ticks($options, $description, $_tabindex = null, $_pretty_name = '', $simple_style = false, $custom_name = null, $custom_value = null)
 {
     if (count($options) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $options = array_values($options);
@@ -1202,10 +1202,10 @@ function form_input_various_ticks($options, $description, $_tabindex = null, $_p
         $_pretty_name = do_lang_tempcode('OPTIONS');
     }
 
-    $input = new ocp_tempcode();
+    $input = new Tempcode();
 
     if (count($options[0]) != 3) {
-        $options = array(array($options, null, new ocp_tempcode()));
+        $options = array(array($options, null, new Tempcode()));
     }
     foreach ($options as $_option) {
         $out = array();
@@ -1382,7 +1382,7 @@ function form_input_tree_list($pretty_name, $description, $name, $root_id, $hook
     $object = object_factory('Hook_' . $hook);
 
     if ((!has_js()) || (get_option('tree_lists') == '0')) {
-        $simple_content = new ocp_tempcode();
+        $simple_content = new Tempcode();
         $simple_content->attach(form_input_list_entry('', false, do_lang('NA')));
         $simple_content->attach($object->simple($root_id, $options, $default));
 
@@ -1390,7 +1390,7 @@ function form_input_tree_list($pretty_name, $description, $name, $root_id, $hook
             if ($required) {
                 inform_exit(do_lang_tempcode('NO_OF_THIS', $pretty_name));
             }
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         if ($multi_select) {
             return form_input_multi_list($pretty_name, $description, $name, $simple_content, $tabindex, 10, $required);
@@ -1495,7 +1495,7 @@ function form_input_all_and_not($pretty_name, $description, $base, $list, $type 
 
     $type = filter_form_field_default($base, $type);
 
-    $radios = new ocp_tempcode();
+    $radios = new Tempcode();
     $radios->attach(form_input_radio_entry($base, '*', $type == '*', do_lang_tempcode('USE_ALL'), $tabindex));
     $radios->attach(form_input_radio_entry($base, '-', $type == '-', do_lang_tempcode('USE_ALL_EXCEPT_SELECTED'), $tabindex));
     $radios->attach(form_input_radio_entry($base, '+', $type == '+', do_lang_tempcode('USE_ALL_SELECTED'), $tabindex));
@@ -1574,7 +1574,7 @@ function form_input_theme_image($pretty_name, $description, $name, $ids, $select
     }
 
     if (count($ids) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $tabindex = get_form_field_tabindex($tabindex);
@@ -1632,7 +1632,7 @@ function form_input_theme_image($pretty_name, $description, $name, $ids, $select
     }
 
     // Show each category
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     foreach ($categories as $cat => $ids) {
         $cat = titleify($cat);
 
@@ -1646,7 +1646,7 @@ function form_input_theme_image($pretty_name, $description, $name, $ids, $select
             $cat = do_lang($avatars ? 'GENERAL' : 'UNNAMED');
         }
 
-        $_category = new ocp_tempcode();
+        $_category = new Tempcode();
         $i = 0;
         $category_expanded = false;
         foreach ($ids as $id) {
@@ -1715,7 +1715,7 @@ function form_input_date__scheduler($pretty_name, $description, $name, $required
     if (cron_installed()) {
         return form_input_date($pretty_name, $description, $name, $required, $null_default, $do_time, $default_time, $total_years_to_show, $year_start, $tabindex);
     }
-    return new ocp_tempcode();
+    return new Tempcode();
 }
 
 /**
@@ -1948,7 +1948,7 @@ function alternate_fields_set__start($set_name)
         warn_exit(do_lang_tempcode('INTERNAL_ERROR'));
     }
     $DOING_ALTERNATE_FIELDS_SET = $set_name;
-    return new ocp_tempcode();
+    return new Tempcode();
 }
 
 /**
@@ -2017,7 +2017,7 @@ function single_field__end()
  */
 function form_input_na($pretty_name, $tabindex = null)
 {
-    return _form_input('', $pretty_name, new ocp_tempcode(), new ocp_tempcode(), false, false, null);
+    return _form_input('', $pretty_name, new Tempcode(), new Tempcode(), false, false, null);
 }
 
 /**
@@ -2048,7 +2048,7 @@ function _form_input($name, $pretty_name, $description, $input, $required, $comc
     }
 
     $help_zone = get_comcode_zone('userguide_comcode', false);
-    $_comcode = ((is_null($help_zone)) || (!$comcode)) ? new ocp_tempcode() : do_template('COMCODE_MESSAGE', array('_GUID' => '7668b8365e34b2484be7c2c271f82e79', 'NAME' => $name, 'W' => $w, 'URL' => build_url(array('page' => 'userguide_comcode'), $help_zone)));
+    $_comcode = ((is_null($help_zone)) || (!$comcode)) ? new Tempcode() : do_template('COMCODE_MESSAGE', array('_GUID' => '7668b8365e34b2484be7c2c271f82e79', 'NAME' => $name, 'W' => $w, 'URL' => build_url(array('page' => 'userguide_comcode'), $help_zone)));
 
     global $DOING_ALTERNATE_FIELDS_SET;
     if ($DOING_ALTERNATE_FIELDS_SET !== null) {

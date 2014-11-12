@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_calendar
 {
     /**

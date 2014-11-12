@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
-class video_syndication_vimeo
+
+/**
+ * Hook class.
+ */
+class Hook_video_syndication_vimeo
 {
     public $_vimeo_ob;
     public $_request_token = null;

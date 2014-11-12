@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_cpfs
  */
-class Hook_Profiles_Tabs_Edit_privacy
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_privacy
 {
     /**
      * Find whether this hook is active.
@@ -109,7 +113,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 
         require_javascript('javascript_multi');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         require_code('themes2');
 
@@ -163,7 +167,7 @@ class Hook_Profiles_Tabs_Edit_privacy
 
             // Show privacy options for this field
             if (get_option('complex_privacy_options') == '0') { // Simple style
-                $privacy_options = new ocp_tempcode();
+                $privacy_options = new Tempcode();
                 $privacy_options->attach(form_input_list_entry('guests', $view_by_guests, do_lang_tempcode('VISIBLE_TO_GUESTS')));
                 $privacy_options->attach(form_input_list_entry('members', $view_by_members && !$view_by_guests, do_lang_tempcode('VISIBLE_TO_MEMBERS')));
                 $privacy_options->attach(form_input_list_entry('friends', $view_by_friends && !$view_by_members && !$view_by_guests, do_lang_tempcode('VISIBLE_TO_FRIENDS')));
@@ -176,7 +180,7 @@ class Hook_Profiles_Tabs_Edit_privacy
                 //$fields->attach(form_input_tick(do_lang_tempcode('MEMBERS'),do_lang_tempcode('DESCRIPTION_VISIBLE_TO_MEMBERS'),'members_'.strval($cpf_id),$view_by_members));  Same as 'all' in groups
                 $fields->attach(form_input_tick(do_lang_tempcode('FRIENDS'), do_lang_tempcode('DESCRIPTION_VISIBLE_TO_FRIENDS'), 'friends_' . strval($cpf_id), $view_by_friends));
 
-                $groups = new ocp_tempcode();
+                $groups = new Tempcode();
                 $groups->attach(form_input_list_entry('all', $view_by_groups == array('all'), do_lang_tempcode('_ALL')));
                 foreach ($tmp_groups as $gr_key => $group) {
                     if ($group == get_option('probation_usergroup')) {

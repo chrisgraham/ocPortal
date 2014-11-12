@@ -18,7 +18,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocdeadpeople extends standard_crud_module
+class Module_admin_ocdeadpeople extends Standard_crud_module
 {
     public $lang_type = 'DISEASE';
     public $select_name = 'NAME';
@@ -171,7 +171,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
         if ($type == 'view') {
             return $this->view();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -228,8 +228,8 @@ class Module_admin_ocdeadpeople extends standard_crud_module
 
     public function get_form_fields($id = null, $name = '', $image = '', $cure = '', $cure_price = 10, $immunization = '', $immunization_price = 5, $spread_rate = 12, $points_per_spread = 10, $enabled = 0)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
 
@@ -265,7 +265,7 @@ class Module_admin_ocdeadpeople extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $rows = $GLOBALS['SITE_DB']->query_select('diseases', array('*'), null);
 

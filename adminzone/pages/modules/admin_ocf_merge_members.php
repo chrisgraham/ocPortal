@@ -119,7 +119,7 @@ class Module_admin_ocf_merge_members
             return $this->actual();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -129,7 +129,7 @@ class Module_admin_ocf_merge_members
      */
     public function gui()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
 

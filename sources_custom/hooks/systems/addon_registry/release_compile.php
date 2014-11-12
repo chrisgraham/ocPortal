@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    release_compile
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_release_compile
 {
     /**

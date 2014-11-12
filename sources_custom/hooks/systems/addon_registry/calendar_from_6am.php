@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar_from_6am
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_calendar_from_6am
 {
     /**

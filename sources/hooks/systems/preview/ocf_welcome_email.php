@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    welcome_emails
  */
-class Hook_Preview_ocf_welcome_email
+
+/**
+ * Hook class.
+ */
+class Hook_preview_ocf_welcome_email
 {
     /**
      * Find whether this preview hook applies.
@@ -52,7 +56,7 @@ class Hook_Preview_ocf_welcome_email
      */
     public function run()
     {
-        $preview = new ocp_tempcode();
+        $preview = new Tempcode();
         $preview->attach(comcode_to_tempcode(post_param('text'), get_member()));
 
         return array($preview, null);

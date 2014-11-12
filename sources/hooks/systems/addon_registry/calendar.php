@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_calendar
 {
     /**
@@ -296,8 +300,8 @@ class Hook_addon_registry_calendar
      */
     public function tpl_preview__block_side_calendar()
     {
-        $_entries = new ocp_tempcode();
-        $__entries = new ocp_tempcode();
+        $_entries = new Tempcode();
+        $__entries = new Tempcode();
         $dotw = 0;
         for ($j = 1; $j <= 31; $j++) {
             if ($j == 10) {
@@ -329,7 +333,7 @@ class Hook_addon_registry_calendar
                 $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW', array(
                     'ENTRIES' => $__entries,
                 )));
-                $__entries = new ocp_tempcode();
+                $__entries = new Tempcode();
                 $dotw = 0;
             } else {
                 $dotw++;
@@ -429,9 +433,9 @@ class Hook_addon_registry_calendar
         require_lang('dates');
         switch ($view) {
             case 'day':
-                $hours = new ocp_tempcode();
+                $hours = new Tempcode();
                 for ($i = 0; $i < 24; $i++) {
-                    $_streams = new ocp_tempcode();
+                    $_streams = new Tempcode();
                     foreach (placeholder_array(2) as $k => $v) {
                         $entry = do_lorem_template('CALENDAR_DAY_ENTRY_FREE', array(
                             'CLASS' => lorem_word(),
@@ -480,9 +484,9 @@ class Hook_addon_registry_calendar
                 break;
 
             case 'week':
-                $hours = new ocp_tempcode();
+                $hours = new Tempcode();
                 for ($i = 0; $i < 24; $i++) {
-                    $days = new ocp_tempcode();
+                    $days = new Tempcode();
                     for ($j = 0; $j < 7; $j++) {
                         if ($i % 2 == 0) {
                             $entries = do_lorem_template('CALENDAR_WEEK_ENTRY_FREE', array(
@@ -546,9 +550,9 @@ class Hook_addon_registry_calendar
                     'TEXT' => '',
                 ));
 
-                $days = new ocp_tempcode();
+                $days = new Tempcode();
                 foreach (placeholder_array() as $k => $v) {
-                    $entries = new ocp_tempcode();
+                    $entries = new Tempcode();
                     foreach (placeholder_array() as $_k => $_v) {
                         $entries->attach(do_lorem_template('CALENDAR_MONTH_ENTRY', array(
                             'ID' => placeholder_id(),
@@ -572,7 +576,7 @@ class Hook_addon_registry_calendar
                     )));
                 }
 
-                $weeks = new ocp_tempcode();
+                $weeks = new Tempcode();
                 foreach (placeholder_array() as $k => $v) {
                     $weeks->attach(do_lorem_template('CALENDAR_MONTH_WEEK', array(
                         'WEEK_URL' => placeholder_url(),
@@ -590,7 +594,7 @@ class Hook_addon_registry_calendar
 
             case 'year':
                 $months = '';
-                $month_rows = new ocp_tempcode();
+                $month_rows = new Tempcode();
                 for ($i = 1; $i <= 12; $i++) {
                     if ((($i - 1) % 3 == 0) && ($i != 1)) {
                         $month_rows->attach(do_lorem_template('CALENDAR_YEAR_MONTH_ROW', array(
@@ -605,8 +609,8 @@ class Hook_addon_registry_calendar
                         $months = '';
                     }
 
-                    $_entries = new ocp_tempcode();
-                    $__entries = new ocp_tempcode();
+                    $_entries = new Tempcode();
+                    $__entries = new Tempcode();
                     $dotw = 0;
                     for ($j = 1; $j <= 31; $j++) {
                         if ($j == 10) {
@@ -638,7 +642,7 @@ class Hook_addon_registry_calendar
                             $_entries->attach(do_lorem_template('CALENDAR_YEAR_MONTH_DAY_ROW', array(
                                 'ENTRIES' => $__entries,
                             )));
-                            $__entries = new ocp_tempcode();
+                            $__entries = new Tempcode();
                             $dotw = 0;
                         } else {
                             $dotw++;
@@ -717,14 +721,14 @@ class Hook_addon_registry_calendar
      */
     public function tpl_preview__calendar_event_screen()
     {
-        $sub = new ocp_tempcode();
+        $sub = new Tempcode();
         foreach (placeholder_array() as $v) {
             $sub->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_PERSONAL_SUBSCRIPTION', array(
                 'UNSUBSCRIBE_URL' => placeholder_url(),
                 'TIME' => placeholder_time(),
             )));
         }
-        $subed = new ocp_tempcode();
+        $subed = new Tempcode();
         foreach (placeholder_array() as $v) {
             $subed->attach(do_lorem_template('CALENDAR_EVENT_SCREEN_SUBSCRIPTION', array(
                 'MEMBER_ID' => placeholder_id(),

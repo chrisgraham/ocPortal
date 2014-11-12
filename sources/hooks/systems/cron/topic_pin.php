@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_topic_pin
 {
     /**

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    addon_publish
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_addon_publish
 {
     /**

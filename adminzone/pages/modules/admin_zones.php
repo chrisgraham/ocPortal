@@ -371,7 +371,7 @@ class Module_admin_zones
                 }
             } else { // Can't edit a non-Comcode page in the zone editor
                 $comcode = null;
-                $edit_url = new ocp_tempcode();
+                $edit_url = new Tempcode();
             }
 
             $field_name = 'edit_' . $for . '_textarea';
@@ -381,7 +381,7 @@ class Module_admin_zones
             } else {
                 $settings = null;
                 $button = 'block';
-                $comcode_editor = new ocp_tempcode();
+                $comcode_editor = new Tempcode();
                 $comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON', array('_GUID' => '0acc5dcf299325d0cf55871923148a54', 'DIVIDER' => false, 'FIELD_NAME' => $field_name, 'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button), 'B' => $button)));
                 $button = 'comcode';
                 $comcode_editor->attach(do_template('COMCODE_EDITOR_BUTTON', array('_GUID' => '1acc5dcf299325d0cf55871923148a54', 'DIVIDER' => false, 'FIELD_NAME' => $field_name, 'TITLE' => do_lang_tempcode('INPUT_COMCODE_' . $button), 'B' => $button)));
@@ -407,7 +407,7 @@ class Module_admin_zones
             $is_panel = (substr($for, 0, 6) == 'panel_');
 
             require_code('zones3');
-            $zone_list = ($for == $current_for) ? create_selection_list_zones($redirecting_to, array($id)) : new ocp_tempcode() /*not simple so leave field out*/
+            $zone_list = ($for == $current_for) ? create_selection_list_zones($redirecting_to, array($id)) : new Tempcode() /*not simple so leave field out*/
             ;
 
             $editor[$for] = static_evaluate_tempcode(do_template('ZONE_EDITOR_PANEL', array(
@@ -569,7 +569,7 @@ class Module_admin_zones
         ";
 
         $fields = '';
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
         $fields .= static_evaluate_tempcode(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
@@ -608,7 +608,7 @@ class Module_admin_zones
                 $set_name = 'logo_choose_' . $theme;
                 $required = true;
                 $set_title = do_lang_tempcode('LOGO');
-                $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
+                $field_set = (count($ids) == 0) ? new Tempcode() : alternate_fields_set__start($set_name);
 
                 $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'logo_upload_' . $theme, $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 
@@ -675,7 +675,7 @@ class Module_admin_zones
 
         url_default_parameters__enable();
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'zone', '', true));
         list($_fields, $hidden, $javascript) = $this->get_form_fields();
         $fields->attach($_fields);
@@ -788,7 +788,7 @@ class Module_admin_zones
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('zones', 'COUNT(*)');

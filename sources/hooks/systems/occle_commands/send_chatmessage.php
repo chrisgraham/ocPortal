@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_send_chatmessage
 {
     /**

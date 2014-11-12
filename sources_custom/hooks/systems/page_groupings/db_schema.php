@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    db_schema
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_db_schema
 {
     /**

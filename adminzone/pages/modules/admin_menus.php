@@ -120,7 +120,7 @@ class Module_admin_menus
             return $this->_edit_menu();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -132,13 +132,13 @@ class Module_admin_menus
     {
         require_code('form_templates');
         $rows = $GLOBALS['SITE_DB']->query_select('menu_items', array('DISTINCT i_menu'), null, 'ORDER BY i_menu');
-        $list = new ocp_tempcode();//form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
+        $list = new Tempcode();//form_input_list_entry('',false,do_lang_tempcode('NA_EM'));
         foreach ($rows as $row) {
             $item_count = $GLOBALS['SITE_DB']->query_select_value('menu_items', 'COUNT(*)', array('i_menu' => $row['i_menu']));
             $label = do_lang_tempcode('MENU_ITEM_COUNT', escape_html($row['i_menu']), escape_html(integer_format($item_count)));
             $list->attach(form_input_list_entry($row['i_menu'], false, $label));
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $set_name = 'menu';
         $required = true;
@@ -273,14 +273,14 @@ class Module_admin_menus
         $delete_url = build_url($map, '_SELF');
 
         require_code('form_templates');
-        $fields_template = new ocp_tempcode();
+        $fields_template = new Tempcode();
         $fields_template->attach(form_input_line(do_lang_tempcode('LINK'), do_lang_tempcode('MENU_ENTRY_URL'), 'url', '', false));
         $options = array(
-            array(do_lang_tempcode('MENU_ENTRY_NEW_WINDOW'), 'new_window', false, new ocp_tempcode()),
+            array(do_lang_tempcode('MENU_ENTRY_NEW_WINDOW'), 'new_window', false, new Tempcode()),
             array(do_lang_tempcode('MENU_ENTRY_CHECK_PERMS'), 'check_perms', true, do_lang_tempcode('DESCRIPTION_MENU_ENTRY_CHECK_PERMS')),
         );
         $fields_template->attach(form_input_various_ticks($options, '', null, do_lang_tempcode('OPTIONS'), false));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         if (!$clickable_sections) {
             $list->attach(form_input_list_entry('page', false, do_lang_tempcode('PAGE')));
         }
@@ -290,17 +290,17 @@ class Module_admin_menus
 
         $fields_template->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '9d8636a88bfca7069d1fc0ff5a30c237', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('ADVANCED'))));
         $fields_template->attach(form_input_line(do_lang_tempcode('CAPTION_LONG'), do_lang_tempcode('MENU_ENTRY_CAPTION_LONG'), 'caption_long', '', false));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('', false, do_lang_tempcode('NONE_EM')));
         require_code('themes2');
         $list->attach(create_selection_list_theme_images(null, null, false, true, 'icons/'));
         $fields_template->attach(form_input_list(do_lang_tempcode('THEME_IMAGE'), do_lang_tempcode('DESCRIPTION_THEME_IMAGE_FOR_MENU_ITEM'), 'theme_img_code', $list, null, false, false));
         $fields_template->attach(form_input_line(do_lang_tempcode('RESTRICT_PAGE_VISIBILITY'), do_lang_tempcode('MENU_ENTRY_MATCH_KEYS'), 'match_tags', '', false));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('0', false, do_lang_tempcode('INCLUDE_SITEMAP_NO')));
         $list->attach(form_input_list_entry('1', false, do_lang_tempcode('INCLUDE_SITEMAP_OVER')));
         $list->attach(form_input_list_entry('2', false, do_lang_tempcode('INCLUDE_SITEMAP_UNDER')));
-        $fields_template->attach(form_input_list(do_lang_tempcode('INCLUDE_SITEMAP'), new ocp_tempcode(), 'include_sitemap', $list, null, false, false));
+        $fields_template->attach(form_input_list(do_lang_tempcode('INCLUDE_SITEMAP'), new Tempcode(), 'include_sitemap', $list, null, false, false));
 
         require_javascript('javascript_ajax');
         require_javascript('javascript_tree_list');
@@ -343,7 +343,7 @@ class Module_admin_menus
      */
     public function menu_branch($id, $branch, &$order, $clickable_sections, $menu_items)
     {
-        $child_branches = new ocp_tempcode();
+        $child_branches = new Tempcode();
         foreach ($menu_items as $menu_item) {
             if ($menu_item['i_parent'] == $branch) {
                 $caption = get_translated_text($menu_item['i_caption']);

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    xml_db_manage
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_xml_db_manage
 {
     /**

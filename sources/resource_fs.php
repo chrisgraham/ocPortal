@@ -524,10 +524,8 @@ function remap_portable_as_resource_id($resource_type, $portable)
 
 /**
  * Resource-fs base class.
- *
- * @package    occle
  */
-class resource_fs_base
+class Resource_fs_base
 {
     /*
     FINDING INFORMATION ABOUT HOOK STRUCTURE

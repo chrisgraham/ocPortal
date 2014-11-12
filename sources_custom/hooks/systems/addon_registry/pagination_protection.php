@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    pagination_protection
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_pagination_protection
 {
     /**

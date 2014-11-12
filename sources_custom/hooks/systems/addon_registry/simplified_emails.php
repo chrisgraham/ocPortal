@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    simplified_emails
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_simplified_emails
 {
     /**

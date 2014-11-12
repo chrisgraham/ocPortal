@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    msn
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_msn
 {
     /**
@@ -148,7 +152,7 @@ class Hook_addon_registry_msn
      */
     public function tpl_preview__netlink()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $url = placeholder_url();
         foreach (placeholder_array() as $key => $value) {
             $content->attach(form_input_list_entry($url->evaluate(), false, lorem_word()));

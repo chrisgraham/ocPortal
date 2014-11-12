@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_email
 {
     // ==============
@@ -78,7 +82,7 @@ class Hook_fields_email
     public function render_field_value($field, $ev)
     {
         if ($ev == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         return do_template('HYPERLINK_EMAIL', array('_GUID' => 'f074c9a299fb3b1836a5a76270378666', 'VALUE' => $ev));
     }

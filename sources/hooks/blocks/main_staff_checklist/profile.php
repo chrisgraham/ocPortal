@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_profile
 {
     /**

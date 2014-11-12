@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    textbased_persistent_cacheing
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_textbased_persistent_cacheing
 {
     /**

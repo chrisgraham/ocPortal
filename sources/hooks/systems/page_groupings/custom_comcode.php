@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_custom_comcode
 {
     /**

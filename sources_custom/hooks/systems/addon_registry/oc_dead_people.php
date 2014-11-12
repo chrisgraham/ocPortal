@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_dead_people
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_dead_people
 {
     /**

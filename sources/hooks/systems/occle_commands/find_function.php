@@ -116,7 +116,7 @@ class Hook_occle_command_find_function
 
             require_code('php');
             require_lang('phpdoc');
-            $tpl = new ocp_tempcode();
+            $tpl = new Tempcode();
 
             $contents = file_get_contents(get_custom_file_base() . '/data_custom/functions.dat');
             if ($contents == '') {

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
+
+/**
+ * Block class.
+ */
 class Block_main_contact_us
 {
     /**
@@ -67,7 +71,7 @@ class Block_main_contact_us
         $block_id = md5(serialize($map));
 
         if ((post_param_integer('_comment_form_post', 0) == 1) && (post_param('_block_id', '') == $block_id) && ($post != '')) {
-            $message = new ocp_tempcode();/*Used to be written out here*/
+            $message = new Tempcode();/*Used to be written out here*/
             attach_message(do_lang_tempcode('MESSAGE_SENT'), 'inform');
 
             // Check CAPTCHA
@@ -97,7 +101,7 @@ class Block_main_contact_us
                 assign_refresh($redirect, 0.0);
             }
         } else {
-            $message = new ocp_tempcode();
+            $message = new Tempcode();
         }
 
         if (get_forum_type() != 'none') { // If ocf_forum not installed, will still work
@@ -131,7 +135,7 @@ class Block_main_contact_us
                     $default_text = do_lang('COMMENTS_DEFAULT_TEXT', $redirect);
                 }
 
-                $hidden = new ocp_tempcode();
+                $hidden = new Tempcode();
                 $hidden->attach(form_input_hidden('_block_id', $block_id));
 
                 $comment_details = do_template('COMMENTS_POSTING_FORM', array(
@@ -168,10 +172,10 @@ class Block_main_contact_us
                     'TYPE' => $type,
                 ));
             } else {
-                $out = new ocp_tempcode();
+                $out = new Tempcode();
             }
         } else {
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
         }
 
         return $out;

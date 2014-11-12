@@ -78,7 +78,7 @@ class Module_admin_unvalidated
      */
     public function run()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         require_code('form_templates');
 
         $_hooks = find_all_hooks('modules', 'admin_unvalidated');
@@ -99,7 +99,7 @@ class Module_admin_unvalidated
             if (count($rows) == 100) {
                 attach_message(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'), 'warn');
             }
-            $content = new ocp_tempcode();
+            $content = new Tempcode();
             foreach ($rows as $row) {
                 if (is_array($info['db_identifier'])) {
                     $id = '';

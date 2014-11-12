@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
+
+/**
+ * Block class.
+ */
 class Block_main_rating
 {
     /**

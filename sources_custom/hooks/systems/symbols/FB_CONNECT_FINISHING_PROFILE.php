@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_symbol_FB_CONNECT_FINISHING_PROFILE
 {
     public function run($param)

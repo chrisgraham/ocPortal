@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    users_online_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_users_online_block
 {
     /**
@@ -125,7 +129,7 @@ class Hook_addon_registry_users_online_block
      */
     public function tpl_preview__block_side_users_online()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('BLOCK_SIDE_USERS_ONLINE_USER', array(
                 'URL' => placeholder_url(),
@@ -136,8 +140,8 @@ class Hook_addon_registry_users_online_block
             )));
         }
 
-        $newest = new ocp_tempcode();
-        $birthdays = new ocp_tempcode();
+        $newest = new Tempcode();
+        $birthdays = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $newest->attach(lorem_phrase());
 

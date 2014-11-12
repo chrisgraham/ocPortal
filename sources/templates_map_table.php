@@ -27,7 +27,7 @@
  */
 function map_table($title, $fields)
 {
-    $_fields = new ocp_tempcode();
+    $_fields = new Tempcode();
     foreach ($fields as $key => $val) {
         if (!is_array($val)) {
             $raw = true;

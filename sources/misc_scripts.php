@@ -376,12 +376,12 @@ function emoticons_script()
     }
 
     // Render UI
-    $content = new ocp_tempcode();
-    $current_row = new ocp_tempcode();
+    $content = new Tempcode();
+    $current_row = new Tempcode();
     foreach ($rows as $i => $myrow) {
         if (($i % $cols == 0) && ($i != 0)) {
             $content->attach(do_template('OCF_EMOTICON_ROW', array('_GUID' => '283bff0bb281039b94ff2d4dcaf79172', 'CELLS' => $current_row)));
-            $current_row = new ocp_tempcode();
+            $current_row = new Tempcode();
         }
 
         $code_esc = $myrow['e_code'];

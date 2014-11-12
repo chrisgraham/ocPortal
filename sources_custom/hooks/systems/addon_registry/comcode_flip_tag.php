@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    comcode_flip_tag
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_comcode_flip_tag
 {
     /**

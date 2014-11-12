@@ -31,10 +31,8 @@ function extract_plain_links($matches)
 
 /**
  * RSS loader.
- *
- * @package    core
  */
-class rss
+class OCP_RSS
 {
     // Used during parsing
     var $type, $namespace_stack, $version, $tag_stack, $attribute_stack, $text_so_far;
@@ -51,7 +49,7 @@ class rss
      * @param  URLPATH                  The URL to the RSS we will be reading
      * @param  boolean                  Whether the 'url' is actually a filesystem path
      */
-    public function rss($url, $is_filesystem_path = false)
+    public function __construct($url, $is_filesystem_path = false)
     {
         require_lang('rss');
         require_code('xml');

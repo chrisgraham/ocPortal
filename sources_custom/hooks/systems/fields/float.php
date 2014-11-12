@@ -148,7 +148,7 @@ class Hook_fields_float
         if ($_cf_name == do_lang('LATITUDE_FIELD_NAME')) { // Assumes there is a Longitude field too
             global $LATITUDE;
             $LATITUDE = $actual_value; // Store for when Longitude field is rendered - critical, else won't be entered
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return form_input_float($_cf_name, $_cf_description, 'field_' . strval($field['id']), (is_null($actual_value) || ($actual_value === '')) ? null : floatval($actual_value), $field['cf_required'] == 1);

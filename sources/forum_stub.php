@@ -33,7 +33,11 @@ function init__forum_stub()
  *
  * @package    core
  */
-class forum_driver_base
+
+/**
+ * Forum driver class.
+ */
+class Forum_driver_base
 {
     public $connection;
 

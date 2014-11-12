@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_members_quiz
 {
     /**
@@ -71,7 +75,7 @@ class Hook_members_quiz
         if (!array_key_exists($order, $_selectors)) {
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         foreach ($_selectors as $selector_value => $selector_name) {
             $selected = ($order == $selector_value);
             $selectors->attach(do_template('PAGINATION_SORTER', array('SELECTED' => $selected, 'NAME' => do_lang_tempcode($selector_name), 'VALUE' => $selector_value)));
@@ -182,7 +186,7 @@ class Hook_members_quiz
             $category['RUNNING_OUT_OF__CREDIT'] = strval($category['RUNNING_OUT_OF__CREDIT']);
         }
 
-        $delete_url = new ocp_tempcode();
+        $delete_url = new Tempcode();
         if (has_actual_page_access(get_member(), 'admin_quiz')) {
             $delete_url = build_url(array('page' => 'admin_quiz', 'type' => 'delete_quiz_results'), get_module_zone('admin_quiz'));
         }

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_forum_blocks
 {
     /**
@@ -137,7 +141,7 @@ class Hook_addon_registry_forum_blocks
     {
         require_lang('ocf');
         //Create the 'BLOCK_MAIN_FORUM_TOPICS_TOPIC' template value
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('BLOCK_MAIN_FORUM_TOPICS_TOPIC', array(
                 'POST' => lorem_paragraph(),
@@ -176,7 +180,7 @@ class Hook_addon_registry_forum_blocks
         require_lang('news');
         require_lang('ocf');
         //Create the 'BLOCK_SIDE_FORUM_NEWS_SUMMARY' template value
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('BLOCK_SIDE_FORUM_NEWS_SUMMARY', array(
                 'REPLIES' => lorem_word(),
@@ -217,7 +221,7 @@ class Hook_addon_registry_forum_blocks
     {
         require_lang('news');
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('NEWS_BOX', array(
                 'TRUNCATE' => false,

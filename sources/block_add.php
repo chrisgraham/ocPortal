@@ -40,7 +40,7 @@ function block_helper_script()
 
     $type = get_param('type', 'step1');
 
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
 
     if ($type == 'step1') { // Ask for block
         // Find what addons all our block files are in, and icons if possible
@@ -106,7 +106,7 @@ function block_helper_script()
         }
 
         // Show block list
-        $links = new ocp_tempcode();
+        $links = new Tempcode();
         $blocks = find_all_blocks();
         $dh = @opendir(get_file_base() . '/sources_custom/miniblocks');
         if ($dh !== false) {
@@ -131,7 +131,7 @@ function block_helper_script()
             }
             $this_block_type = (is_null($addon_name) || (strpos($addon_name, 'block') !== false) || ($addon_name == 'core')) ? substr($block, 0, (strpos($block, '_') === false) ? strlen($block) : strpos($block, '_')) : $addon_name;
             if (!array_key_exists($this_block_type, $block_types)) {
-                $block_types[$this_block_type] = new ocp_tempcode();
+                $block_types[$this_block_type] = new Tempcode();
             }
             if (!is_null($addon_icon)) {
                 $block_types_icon[$this_block_type] = $addon_icon;
@@ -145,7 +145,7 @@ function block_helper_script()
             if (is_null($block_use)) {
                 $block_use = '';
             }
-            $descriptiont = ($block_description == '' && $block_use == '') ? new ocp_tempcode() : do_lang_tempcode('BLOCK_HELPER_1X', $block_description, $block_use);
+            $descriptiont = ($block_description == '' && $block_use == '') ? new Tempcode() : do_lang_tempcode('BLOCK_HELPER_1X', $block_description, $block_use);
 
             $url = find_script('block_helper') . '?type=step2&block=' . urlencode($block) . '&field_name=' . urlencode(get_param('field_name')) . $keep->evaluate();
             if (get_param('utheme', '') != '') {
@@ -203,7 +203,7 @@ function block_helper_script()
 
         $block = trim(get_param('block'));
         $title = get_screen_title('_BLOCK_HELPER', true, array(escape_html($block), escape_html($back_url)));
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         // Load up renderer hooks
         $block_ui_renderers = array();
@@ -309,14 +309,14 @@ function block_helper_script()
                     }
                     closedir($dh);
                     sort($options);
-                    $list = new ocp_tempcode();
+                    $list = new Tempcode();
                     foreach ($options as $option) {
                         $list->attach(form_input_list_entry($option, $has_default && $option == $default));
                     }
                     $fields->attach(form_input_list(titleify($parameter), escape_html($description), $parameter, $list, null, false, false));
                 } /*elseif ($block.':'.$parameter=='menu:param') // special case for menus     Disabled so Sitemap nodes may be entered
                     {
-                            $list=new ocp_tempcode();
+                            $list=new Tempcode();
                             $rows=$GLOBALS['SITE_DB']->query_select('menu_items',array('DISTINCT i_menu'),NULL,'ORDER BY i_menu');
                             foreach ($rows as $row)
                             {
@@ -325,7 +325,7 @@ function block_helper_script()
                             $fields->attach(form_input_list(titleify($parameter),escape_html($description),$parameter,$list,NULL,false,false));
                     }*/
                 elseif ($parameter == 'zone') { // zone list
-                    $list = new ocp_tempcode();
+                    $list = new Tempcode();
                     $list->attach(form_input_list_entry('_SEARCH', ($default == '')));
                     $list->attach(create_selection_list_zones(($default == '') ? null : $default));
                     $fields->attach(form_input_list(titleify($parameter), escape_html($description), $parameter, $list, null, false, false));
@@ -355,7 +355,7 @@ function block_helper_script()
                     closedir($dh);
                     $fonts = array_unique($fonts);
                     sort($fonts);
-                    $list = new ocp_tempcode();
+                    $list = new Tempcode();
                     foreach ($fonts as $font) {
                         $list->attach(form_input_list_entry($font, $font == $default));
                     }
@@ -363,7 +363,7 @@ function block_helper_script()
                 } elseif (preg_match('#' . do_lang('BLOCK_IND_EITHER') . ' (.+)#i', $description, $matches) != 0) { // list
                     $description = preg_replace('# \(' . do_lang('BLOCK_IND_EITHER') . '.*\)#U', '', $description); // predefined selections
 
-                    $list = new ocp_tempcode();
+                    $list = new Tempcode();
                     $matches2 = array();
                     $num_matches = preg_match_all('#\'([^\']*)\'="([^"]*)"#', $matches[1], $matches2);
                     if ($num_matches != 0) {
@@ -380,7 +380,7 @@ function block_helper_script()
                 } elseif (preg_match('#\(' . do_lang('BLOCK_IND_HOOKTYPE') . ': \'([^\'/]*)/([^\'/]*)\'\)#i', $description, $matches) != 0) { // hook list
                     $description = preg_replace('#\s*\(' . do_lang('BLOCK_IND_HOOKTYPE') . ': \'([^\'/]*)/([^\'/]*)\'\)#i', '', $description);
 
-                    $list = new ocp_tempcode();
+                    $list = new Tempcode();
                     $hooks = find_all_hooks($matches[1], $matches[2]);
                     ksort($hooks);
                     if (($default == '') && ($has_default)) {
@@ -427,7 +427,7 @@ function block_helper_script()
             $block_use = '';
         }
         if (($block_description == '') && ($block_use == '')) {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
         } else {
             $text = do_lang_tempcode('BLOCK_HELPER_2', escape_html(cleanup_block_name($block)), escape_html($block_description), escape_html($block_use));
         }

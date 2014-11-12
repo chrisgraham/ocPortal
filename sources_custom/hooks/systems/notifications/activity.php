@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-class Hook_Notification_activity extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_activity extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

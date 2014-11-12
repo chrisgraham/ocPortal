@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
+
+/**
+ * Hook class.
+ */
 class Hook_search_comcode_pages
 {
     /**

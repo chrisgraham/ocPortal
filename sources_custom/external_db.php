@@ -57,7 +57,7 @@ function external_db()
     $db_password = get_long_value('external_db_login__db_password');
 
     require_code('database/' . filter_naughty($db_type));
-    $db = new database_driver($db_name, $db_host, $db_user, $db_password, '', false, object_factory('Database_Static_' . $db_type));
+    $db = new Database_driver($db_name, $db_host, $db_user, $db_password, '', false, object_factory('Database_Static_' . $db_type));
 
     return $db;
 }

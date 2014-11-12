@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_manual_subscription_expiry_notice
 {
     /**

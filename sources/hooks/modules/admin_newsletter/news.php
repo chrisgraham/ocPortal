@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Hook class.
+ */
 class Hook_whats_news_news
 {
     /**
@@ -55,7 +59,7 @@ class Hook_whats_news_news
 
         $max = intval(get_option('max_newsletter_whatsnew'));
 
-        $new = new ocp_tempcode();
+        $new = new Tempcode();
 
         require_code('ocfiltering');
         $or_list = ocfilter_to_sqlfragment($filter, 'news_category');

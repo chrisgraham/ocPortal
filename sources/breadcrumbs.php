@@ -37,7 +37,7 @@ function load_breadcrumb_substitutions($current_breadcrumb, $data)
 {
     global $BREADCRUMB_SUBSTITUTIONS_CACHE;
     if ($BREADCRUMB_SUBSTITUTIONS_CACHE === null) {
-        $temp = new breadcrumb_substitution_loader();
+        $temp = new Breadcrumb_substitution_loader();
         $temp->go($current_breadcrumb, $data);
         $BREADCRUMB_SUBSTITUTIONS_CACHE = $temp->substitutions;
     }
@@ -47,10 +47,8 @@ function load_breadcrumb_substitutions($current_breadcrumb, $data)
 
 /**
  * Breadcrumb composition class.
- *
- * @package    breadcrumbs
  */
-class breadcrumb_substitution_loader
+class Breadcrumb_substitution_loader
 {
     // Used during parsing
     var $tag_stack, $attribute_stack, $text_so_far;

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-class Hook_Notification_comment_posted extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_comment_posted extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

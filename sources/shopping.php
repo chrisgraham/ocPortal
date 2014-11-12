@@ -420,8 +420,8 @@ function payment_form()
         $price = $GLOBALS['SITE_DB']->query_select_value('shopping_order', 'tot_price', array('id' => $order_id));
         $item_name = do_lang('CART_ORDER', strval($order_id));
         if (is_null($order_id)) {
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
         } else {
             list($fields, $hidden) = get_transaction_form_fields(null, strval($order_id), $item_name, float_to_raw_string($price), null, '');
         }
@@ -493,7 +493,7 @@ function get_current_order_id()
  */
 function get_order_status_list()
 {
-    $status_list = new ocp_tempcode();
+    $status_list = new Tempcode();
     $status = array(
         'ORDER_STATUS_awaiting_payment' => do_lang_tempcode('ORDER_STATUS_awaiting_payment'),
         'ORDER_STATUS_payment_received' => do_lang_tempcode('ORDER_STATUS_payment_received'),

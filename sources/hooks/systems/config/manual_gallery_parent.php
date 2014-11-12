@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_manual_gallery_parent
 {
     /**

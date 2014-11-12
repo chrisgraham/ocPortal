@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_blocks
 {
     /**
@@ -44,6 +48,6 @@ class Hook_blocks
         erase_block_cache();
         erase_persistent_cache();
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_rm
 {
     /**

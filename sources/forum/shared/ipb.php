@@ -23,7 +23,11 @@
  *
  * @package    core_forum_drivers
  */
-class forum_driver_ipb_shared extends forum_driver_base
+
+/**
+ * Forum driver class.
+ */
+class Forum_driver_ipb_shared extends Forum_driver_base
 {
     /**
      * Check the connected DB is valid for this forum driver.
@@ -189,7 +193,7 @@ class forum_driver_ipb_shared extends forum_driver_base
     {
         require_code('comcode_compiler');
         $emoticons = $this->connection->query_select('emoticons', array('*'), array('clickable' => 1));
-        $em = new ocp_tempcode();
+        $em = new Tempcode();
         foreach ($emoticons as $emo) {
             $code = $this->ipb_unescape($emo['typed']);
             $em->attach(do_template('EMOTICON_CLICK_CODE', array('_GUID' => '0d84b3bc399b53c6dda24ae6369e641d', 'FIELD_NAME' => $field_name, 'CODE' => $code, 'IMAGE' => apply_emoticons($code))));

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_galleries
 {
     /**
@@ -41,7 +45,7 @@ class Hook_sw_galleries
     public function get_fields($field_defaults)
     {
         if (!addon_installed('galleries')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $field_defaults += $this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP

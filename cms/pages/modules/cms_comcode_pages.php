@@ -158,7 +158,7 @@ class Module_cms_comcode_pages
             return $this->__ed();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -280,7 +280,7 @@ class Module_cms_comcode_pages
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $add_new_permission = has_add_comcode_page_permission();
         if ($add_new_permission) {
             $fields->attach(form_input_line(do_lang_tempcode('PAGE'), do_lang_tempcode('DESCRIPTION_NEW_COMCODE_PAGE'), 'page_link_2', '', true));
@@ -289,7 +289,7 @@ class Module_cms_comcode_pages
             $submit_name = null;
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('lang', $lang));
         $hidden->attach(form_input_hidden('type', '_ed'));
         $hidden->attach(build_keep_form_fields('_SELF'));
@@ -449,7 +449,7 @@ class Module_cms_comcode_pages
             }
 
             // Work out meta data
-            $page_title = new ocp_tempcode();
+            $page_title = new Tempcode();
             if (!is_null($row)) {
                 $username = protect_from_escaping($GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['p_submitter']));
 
@@ -493,7 +493,7 @@ class Module_cms_comcode_pages
             $_table_rows = array_reverse($_table_rows);
         }
 
-        $table_rows = new ocp_tempcode();
+        $table_rows = new Tempcode();
         if (!$found_via_query) {
             $max_rows = count($_table_rows);
         }
@@ -508,7 +508,7 @@ class Module_cms_comcode_pages
             }
 
             if ($table_row['zone'] == '') {
-                $zone_hyperlink = new ocp_tempcode();
+                $zone_hyperlink = new Tempcode();
             } else {
                 $zone_url = build_url(array('page' => ''), preg_replace('#([\w\d\_]{22})#', '${1} ', $table_row['zone']));
 
@@ -536,7 +536,7 @@ class Module_cms_comcode_pages
 
         $table = results_table(do_lang('COMCODE_PAGES'), $start, 'start', $max, 'max', $max_rows, $header_row, $table_rows, $sortables, $sortable, $sort_order, 'sort', null, null, null, 8, 'fdgfdfdfdggfd', true);
 
-        $extra = $fields->is_empty() ? new ocp_tempcode() : do_template('FORM', array('FIELDS' => $fields, 'TEXT' => '', 'URL' => $post_url, 'GET' => true, 'HIDDEN' => '', 'SUBMIT_NAME' => $submit_name, 'SUBMIT_ICON' => 'menu___generic_admin__add_one'));
+        $extra = $fields->is_empty() ? new Tempcode() : do_template('FORM', array('FIELDS' => $fields, 'TEXT' => '', 'URL' => $post_url, 'GET' => true, 'HIDDEN' => '', 'SUBMIT_NAME' => $submit_name, 'SUBMIT_ICON' => 'menu___generic_admin__add_one'));
 
         // Custom fields
         require_code('fields');
@@ -560,7 +560,7 @@ class Module_cms_comcode_pages
             'HIDDEN' => $hidden,
             'SUBMIT_NAME' => $submit_name,
             'LINKS' => $links,
-            'SUB_TITLE' => $fields->is_empty() ? new ocp_tempcode() : do_lang_tempcode('COMCODE_PAGE_ADD'),
+            'SUB_TITLE' => $fields->is_empty() ? new Tempcode() : do_lang_tempcode('COMCODE_PAGE_ADD'),
             'EXTRA' => $extra,
         ));
 
@@ -699,7 +699,7 @@ class Module_cms_comcode_pages
         $filesarray = $this->get_comcode_revisions($zone, 'comcode_custom/' . $lang, $file . '.txt');
         rsort($filesarray);
         $i = 0;
-        $revision_history = new ocp_tempcode();
+        $revision_history = new Tempcode();
         $max = intval(get_option('number_revisions_show'));
         $last_path = $file_base . '/' . $restore_from;
         if (file_exists($last_path)) {
@@ -762,16 +762,16 @@ class Module_cms_comcode_pages
             list($meta_keywords, $meta_description) = seo_meta_get_for('comcode_page', $zone . ':' . $file);
         }
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
 
         if ((addon_installed('page_management')) && (has_actual_page_access(get_member(), 'adminzone'))) {
             $delete_url = build_url(array('page' => 'admin_sitemap', 'type' => '_delete', 'page__' . $file => 1, 'zone' => $zone), get_module_zone('admin_sitemap'));
         } else {
-            $delete_url = new ocp_tempcode();
+            $delete_url = new Tempcode();
         }
 
-        $fields = new ocp_tempcode();
-        $fields2 = new ocp_tempcode();
+        $fields = new Tempcode();
+        $fields2 = new Tempcode();
         if (addon_installed('page_management')) {
             if (has_actual_page_access(get_member(), 'admin_sitemap')) {
                 $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_CODENAME'), 'title', $file, true));
@@ -865,7 +865,7 @@ class Module_cms_comcode_pages
             url_default_parameters__disable();
         }
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         if (addon_installed('points')) {
             $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => get_self_url(true, true)), get_module_zone('login'));
             $_login_url = escape_html($login_url->evaluate());

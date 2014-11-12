@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_core
 {
     /**
@@ -48,7 +52,7 @@ class Hook_sw_core
      */
     public function get_fields($field_defaults)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $field_defaults += $this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP
 

@@ -120,7 +120,7 @@ class Module_supermembers
         $all_usergroups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
 
         // Calculate
-        $groups = new ocp_tempcode();
+        $groups = new Tempcode();
         $groups_current = array();
         $old_group = mixed();
         foreach ($rows as $r) {
@@ -144,9 +144,9 @@ class Module_supermembers
                 if (!array_key_exists(0, $author_rows)) {
                     $author_rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), array('author' => $username), '', 1);
                 }
-                $skills = array_key_exists(0, $author_rows) ? get_translated_tempcode('authors', $author_rows[0], 'skills') : new ocp_tempcode();
+                $skills = array_key_exists(0, $author_rows) ? get_translated_tempcode('authors', $author_rows[0], 'skills') : new Tempcode();
             } else {
-                $skills = new ocp_tempcode();
+                $skills = new Tempcode();
             }
 
             $days = intval(round(floatval(time() - $GLOBALS['FORUM_DRIVER']->mrow_lastvisit($r)) / (60.0 * 60.0 * 24.0)));
@@ -155,9 +155,9 @@ class Module_supermembers
             if (addon_installed('authors')) {
                 $author_url = build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $username), get_module_zone('authors'));
             } else {
-                $author_url = new ocp_tempcode();
+                $author_url = new Tempcode();
             }
-            $points_url = addon_installed('points') ? build_url(array('page' => 'points', 'type' => 'member', 'id' => $id), get_module_zone('points')) : new ocp_tempcode();
+            $points_url = addon_installed('points') ? build_url(array('page' => 'points', 'type' => 'member', 'id' => $id), get_module_zone('points')) : new Tempcode();
             $pm_url = $GLOBALS['FORUM_DRIVER']->member_pm_url($id, true);
             $profile_url = $GLOBALS['FORUM_DRIVER']->member_profile_url($id, false, true);
 

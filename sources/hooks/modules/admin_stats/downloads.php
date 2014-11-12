@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_stats_downloads
 {
     /**
@@ -121,7 +125,7 @@ class Hook_admin_stats_downloads
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('TITLE'), do_lang_tempcode('COUNT_DOWNLOADS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $real_data = array();
         $i = 0;
         foreach ($downloads as $download_name => $value) {
@@ -140,7 +144,7 @@ class Hook_admin_stats_downloads
 
             $i++;
         }
-        $list = results_table(do_lang_tempcode('SECTION_DOWNLOADS'), $start, 'start', $max, 'max', count($downloads), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('SECTION_DOWNLOADS'), $start, 'start', $max, 'max', count($downloads), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
         if ($csv) {
             make_csv($real_data, 'download_stats.csv');
         }

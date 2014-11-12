@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_stats_block
 {
     /**
@@ -145,8 +149,8 @@ class Hook_addon_registry_stats_block
      */
     public function tpl_preview__block_side_stats()
     {
-        $full_tpl = new ocp_tempcode();
-        $bits = new ocp_tempcode();
+        $full_tpl = new Tempcode();
+        $bits = new Tempcode();
         foreach (placeholder_array() as $v) {
             $bits->attach(do_lorem_template('BLOCK_SIDE_STATS_SUBLINE', array(
                 'KEY' => lorem_phrase(),

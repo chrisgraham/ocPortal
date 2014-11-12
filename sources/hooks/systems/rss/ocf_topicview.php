@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_ocf_topicview
 {
     /**
@@ -54,7 +58,7 @@ class Hook_rss_ocf_topicview
         $rows = $GLOBALS['FORUM_DB']->query('SELECT * FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts WHERE p_time>' . strval($cutoff) . (((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) ? ' AND p_validated=1 ' : '') . ' AND ' . $filters . ' ORDER BY p_time DESC,id DESC', $max, null, false, true);
         $categories = list_to_map('id', $GLOBALS['FORUM_DB']->query('SELECT id,t_cache_first_title FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_topics WHERE t_cache_last_time>' . strval($cutoff), $max));
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             if (!array_key_exists($row['p_topic_id'], $categories)) {
                 continue;
@@ -82,7 +86,7 @@ class Hook_rss_ocf_topicview
                 if ($prefix == 'RSS_') {
                     $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'ed06bc8f174a5427e1789820666fdd81', 'COMMENT_URL' => $view_url, 'ID' => strval($row['p_topic_id'])));
                 } else {
-                    $if_comments = new ocp_tempcode();
+                    $if_comments = new Tempcode();
                 }
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

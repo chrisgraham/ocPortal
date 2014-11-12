@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_symbol_FB_CONNECT_UID
 {
     public function run($param)

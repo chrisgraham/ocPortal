@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-class Hook_Profiles_Tabs_galleries
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_galleries
 {
     /**
      * Find whether this hook is active.

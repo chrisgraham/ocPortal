@@ -192,7 +192,7 @@ class Module_iotds
             return $this->view();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -252,7 +252,7 @@ class Module_iotds
         if ((has_actual_page_access(null, 'cms_iotds', null, null)) && (has_edit_permission('high', get_member(), $myrow['submitter'], 'cms_iotds'))) {
             $edit_url = build_url(array('page' => 'cms_iotds', 'type' => '_ed', 'id' => $id), get_module_zone('cms_iotds'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
 
         return do_template('IOTD_ENTRY_SCREEN', array(

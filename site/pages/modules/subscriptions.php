@@ -214,7 +214,7 @@ class Module_subscriptions
         if ($type == 'cancel') {
             return $this->cancel();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

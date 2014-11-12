@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_import_types_catalogues
 {
     /**

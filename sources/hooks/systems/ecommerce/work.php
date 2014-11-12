@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
+
+/**
+ * Hook class.
+ */
 class Hook_work
 {
     /**
@@ -27,7 +31,7 @@ class Hook_work
      */
     public function get_identifier_manual_field_inputter($type_code)
     {
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('invoices', array('*'), array('i_type_code' => $type_code), 'ORDER BY id DESC');
         foreach ($rows as $row) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($row['i_member_id']);

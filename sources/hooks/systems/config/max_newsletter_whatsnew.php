@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_max_newsletter_whatsnew
 {
     /**

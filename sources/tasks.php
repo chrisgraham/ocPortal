@@ -164,7 +164,7 @@ function call_user_func_array__long_task($plain_title, $title, $hook, $args = nu
             @ignore_user_abort(true); // Must keep going till completion
 
             register_shutdown_function('call_user_func_array__long_task', $plain_title, $title, $hook, $args, false, $force_immediate, $send_notification);
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         // Disable limits, as tasks can be resource-intensive
@@ -179,7 +179,7 @@ function call_user_func_array__long_task($plain_title, $title, $hook, $args = nu
         $result = call_user_func_array(array($ob, 'run'), $args);
         if (is_null($result)) {
             if (is_null($title)) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
             return inform_screen($title, do_lang_tempcode('SUCCESS'));
         }
@@ -244,7 +244,7 @@ function call_user_func_array__long_task($plain_title, $title, $hook, $args = nu
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
         exit();
 
-        return new ocp_tempcode(); // Will never get here
+        return new Tempcode(); // Will never get here
     }
 
     // Enqueue...

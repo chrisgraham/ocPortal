@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_top_login
 {
     /**
@@ -46,7 +50,7 @@ class Block_top_login
     public function run($map)
     {
         if (!is_guest()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_css('personal_stats');

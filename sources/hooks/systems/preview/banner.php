@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
-class Hook_Preview_banner
+
+/**
+ * Hook class.
+ */
+class Hook_preview_banner
 {
     /**
      * Find whether this preview hook applies.

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_task_import_member_csv
 {
     /**
@@ -38,7 +42,7 @@ class Hook_task_import_member_csv
         $num_edited = 0;
         $done = 0;
 
-        $outputted_messages = new ocp_tempcode();
+        $outputted_messages = new Tempcode();
 
         require_code('ocf_members_action2');
         $headings = member_get_csv_headings();

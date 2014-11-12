@@ -111,7 +111,7 @@ class Module_report_content
             return $this->actualiser();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     public function form()
@@ -154,7 +154,7 @@ class Module_report_content
 
         url_default_parameters__enable();
 
-        $specialisation = new ocp_tempcode();
+        $specialisation = new Tempcode();
         if (!is_guest()) {
             $options = array();
             if (get_option('is_on_anonymous_posts') == '1') {
@@ -162,7 +162,7 @@ class Module_report_content
             }
             $specialisation = form_input_various_ticks($options, '');
         } else {
-            $specialisation = new ocp_tempcode();
+            $specialisation = new Tempcode();
         }
         if (addon_installed('captcha')) {
             require_code('captcha');

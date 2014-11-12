@@ -26,8 +26,8 @@ class rss_test_set extends ocp_test_case
         require_code('rss');
         $rssfeed = get_file_base() . "/_tests/tests/testrss.cms";
         $atomfeed = get_file_base() . "/_tests/tests/testatom.cms";
-        $rss = new rss($rssfeed, true);
-        $atom = new rss($atomfeed, true);
+        $rss = new OCP_RSS($rssfeed, true);
+        $atom = new OCP_RSS($atomfeed, true);
         $rsstitle = $rss->gleamed_items[0]['title'];
         $atomtitle = $atom->gleamed_items[0]['title'];
         $this->assertTrue('Item Example' == $rsstitle);

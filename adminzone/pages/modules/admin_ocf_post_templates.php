@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_post_templates extends standard_crud_module
+class Module_admin_ocf_post_templates extends Standard_crud_module
 {
     public $lang_type = 'POST_TEMPLATE';
     public $select_name = 'TITLE';
@@ -122,7 +122,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
         if ($type == '_import') {
             return $this->_import();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -154,7 +154,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_import', 'uploading' => 1), '_SELF');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $supported = 'tar';
         if ((function_exists('zip_open')) || (get_option('unzip_cmd') != '')) {
@@ -318,7 +318,7 @@ class Module_admin_ocf_post_templates extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -345,13 +345,13 @@ class Module_admin_ocf_post_templates extends standard_crud_module
      */
     public function get_form_fields($title = '', $text = '', $forum_multi_code = '', $use_default_forums = 0)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('_POST'), do_lang_tempcode('DESCRIPTION_POST_TEMPLATE_X'), 'text', $text, true));
         $fields->attach(ocf_get_forum_multi_code_field($forum_multi_code));
         $fields->attach(form_input_tick(do_lang_tempcode('DEFAULT'), do_lang_tempcode('USE_AS_DEFAULT_ON_APPLICABLE_FORUMS'), 'use_default_forums', $use_default_forums == 1));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_news
 {
     /**
@@ -53,14 +57,14 @@ class Hook_sw_news
     public function get_fields($field_defaults)
     {
         if (!addon_installed('news')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $current_settings = $this->get_current_settings();
         $field_defaults += $current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
 
         require_lang('news');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_tick(do_lang_tempcode('KEEP_BLOGS'), do_lang_tempcode('DESCRIPTION_KEEP_BLOGS'), 'keep_blogs', $field_defaults['keep_blogs'] == '1'));
 

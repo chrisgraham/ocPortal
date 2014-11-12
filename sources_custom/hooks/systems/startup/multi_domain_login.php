@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    multi_domain_login
  */
+
+/**
+ * Hook class.
+ */
 class Hook_startup_multi_domain_login
 {
     public function run($MICRO_BOOTUP, $MICRO_AJAX_BOOTUP)

@@ -158,7 +158,7 @@ class Module_authors
             return $this->show_author();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -196,11 +196,11 @@ class Module_authors
                 $give_points_url = build_url(array('page' => 'points', 'type' => 'member', 'id' => $handle), get_module_zone('points'));
                 $point_details = do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array('_GUID' => '2bfb9bf9b5fdf1dad34102abd4bc4648', 'ACTION' => hyperlink($give_points_url, do_lang_tempcode('AUTHOR_POINTS'))));
             } else {
-                $point_details = new ocp_tempcode();
+                $point_details = new Tempcode();
             }
         } else {
-            $forum_details = new ocp_tempcode();
-            $point_details = new ocp_tempcode();
+            $forum_details = new Tempcode();
+            $point_details = new Tempcode();
         }
 
         // Homepage
@@ -208,21 +208,21 @@ class Module_authors
         if (strlen($url) > 0) {
             $url_details = do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array('_GUID' => '4276bac5acb0ce5839a90614438c1049', 'ACTION' => hyperlink($url, do_lang_tempcode('AUTHOR_HOMEPAGE'), false, false, '', null, null, 'me')));
         } else {
-            $url_details = new ocp_tempcode();
+            $url_details = new Tempcode();
         }
 
         // (Self?) description
-        $description = empty($details['description']) ? new ocp_tempcode() : get_translated_tempcode('authors', $details, 'description');
+        $description = empty($details['description']) ? new Tempcode() : get_translated_tempcode('authors', $details, 'description');
 
         // Skills
-        $skills = empty($details['skills']) ? new ocp_tempcode() : get_translated_tempcode('authors', $details, 'skills');
+        $skills = empty($details['skills']) ? new Tempcode() : get_translated_tempcode('authors', $details, 'skills');
 
         // Edit link, for staff
         if (has_edit_author_permission(get_member(), $author)) {
             $edit_author_url = build_url(array('page' => 'cms_authors', 'type' => '_ad', 'author' => $author), get_module_zone('cms_authors'));
             $staff_details = do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array('_GUID' => '604b1a986cee4924998cee722b72936e', 'ACTION' => hyperlink($edit_author_url, do_lang_tempcode('DEFINE_AUTHOR'), false)));
         } else {
-            $staff_details = new ocp_tempcode();
+            $staff_details = new Tempcode();
         }
 
         // Search link
@@ -230,12 +230,12 @@ class Module_authors
             $search_url = build_url(array('page' => 'search', 'author' => $author), get_module_zone('search'));
             $search_details = do_template('AUTHOR_SCREEN_POTENTIAL_ACTION_ENTRY', array('_GUID' => '6fccd38451bc1198024e2452f8539411', 'ACTION' => hyperlink($search_url, do_lang_tempcode('SEARCH'), false)));
         } else {
-            $search_details = new ocp_tempcode();
+            $search_details = new Tempcode();
         }
 
         // Downloads
         // Not done via main_multi_content block due to need for custom query
-        $downloads_released = new ocp_tempcode();
+        $downloads_released = new Tempcode();
         if (addon_installed('downloads')) {
             require_code('downloads');
             require_lang('downloads');
@@ -263,7 +263,7 @@ class Module_authors
 
         // News
         // Not done via main_multi_content block due to need for custom query
-        $news_released = new ocp_tempcode();
+        $news_released = new Tempcode();
         if (addon_installed('news')) {
             require_lang('news');
 
@@ -289,7 +289,7 @@ class Module_authors
         }
 
         // Edit link
-        $edit_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
         if (has_edit_author_permission(get_member(), $author)) {
             $edit_url = build_url(array('page' => 'cms_authors', 'type' => '_ad', 'id' => $author), 'cms');
         }

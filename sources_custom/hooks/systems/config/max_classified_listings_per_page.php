@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_max_classified_listings_per_page
 {
     /**

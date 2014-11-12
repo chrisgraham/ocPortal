@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-class Hook_Notification_invoice extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_invoice extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

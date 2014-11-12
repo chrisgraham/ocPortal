@@ -811,6 +811,6 @@ class Module_admin_version
     public function run()
     {
         // This used to be a real module, before ocPortal was free
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

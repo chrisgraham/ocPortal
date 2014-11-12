@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_chat extends standard_crud_module
+class Module_admin_chat extends Standard_crud_module
 {
     public $lang_type = 'CHATROOM';
     public $select_name = 'NAME';
@@ -109,7 +109,7 @@ class Module_admin_chat extends standard_crud_module
         if ($type == '_delete_all') {
             return $this->_delete_all();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -162,7 +162,7 @@ class Module_admin_chat extends standard_crud_module
         if (count($rows) == 500) {
             warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach ($rows as $row) {
             if (!handle_chatroom_pruning($row)) {
                 $fields->attach(form_input_list_entry(strval($row['id']), false, $row['room_name']));
@@ -200,7 +200,7 @@ class Module_admin_chat extends standard_crud_module
         // Permissions
         $fields->attach($this->get_permission_fields($id));
 
-        $delete_fields = new ocp_tempcode();
+        $delete_fields = new Tempcode();
         $logs_url = build_url(array('page' => 'chat', 'type' => 'download_logs', 'id' => $id), get_module_zone('chat'));
         $delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE_CHATROOM', escape_html($logs_url->evaluate())), 'delete', false));
 
@@ -275,7 +275,7 @@ class Module_admin_chat extends standard_crud_module
      */
     public function delete_all()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_tick(do_lang_tempcode('PROCEED'), do_lang_tempcode('Q_SURE'), 'continue_delete', false));
         $posting_name = do_lang_tempcode('PROCEED');

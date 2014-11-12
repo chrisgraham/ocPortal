@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_task_sitemap
 {
     /**

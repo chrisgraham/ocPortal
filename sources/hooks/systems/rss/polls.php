@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_polls
 {
     /**
@@ -40,7 +44,7 @@ class Hook_rss_polls
             return null;
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'poll WHERE add_time>' . strval($cutoff) . ' AND (votes1+votes2+votes3+votes4+votes5+votes6+votes7+votes8+votes9+votes10<>0 OR is_current=1) ORDER BY add_time DESC', $max);
         foreach ($rows as $row) {
             $id = strval($row['id']);
@@ -70,7 +74,7 @@ class Hook_rss_polls
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '0a3e8d0b18e619d88f12bc7665fbbbca', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

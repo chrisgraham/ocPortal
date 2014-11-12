@@ -134,7 +134,7 @@ class Module_filedump
             // Show breadcrumbs
             $dirs = explode('/', substr($place, 0, strlen($place) - 1));
             $pre = '';
-            $breadcrumbs = new ocp_tempcode();
+            $breadcrumbs = new Tempcode();
             foreach ($dirs as $i => $d) {
                 if ($i == 0) {
                     $d = do_lang('FILEDUMP');
@@ -243,7 +243,7 @@ class Module_filedump
             return $this->_broken();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -386,7 +386,7 @@ class Module_filedump
 
             $url = mixed();
 
-            $rows = new ocp_tempcode();
+            $rows = new Tempcode();
             foreach ($files as $i => $file) {
                 $filename = $file['filename'];
                 $_place = $file['place'];
@@ -397,8 +397,8 @@ class Module_filedump
                     $description = make_string_tempcode($_description);
                     $description_2 = $description;
                 } else {
-                    $description = new ocp_tempcode();
-                    $description_2 = ($is_directory) ? do_lang_tempcode('FOLDER') : new ocp_tempcode();
+                    $description = new Tempcode();
+                    $description_2 = ($is_directory) ? do_lang_tempcode('FOLDER') : new Tempcode();
                 }
 
                 $choosable = ((!is_null($db_row)) && ($db_row['the_member'] == get_member())) || (has_privilege(get_member(), 'delete_anything_filedump'));
@@ -444,7 +444,7 @@ class Module_filedump
                     $embed_url = build_url(array('page' => '_SELF', 'type' => 'embed', 'place' => $_place, 'file' => $filename), '_SELF');
                 }
 
-                $choose_action = new ocp_tempcode();
+                $choose_action = new Tempcode();
                 if ($file['choosable']) {
                     $choose_action->attach(do_template('COLUMNED_TABLE_ROW_CELL_TICK', array(
                         'LABEL' => do_lang_tempcode('CHOOSE'),
@@ -518,14 +518,14 @@ class Module_filedump
                     $size,
                     $owner,
                     is_null($file['time']) ? do_lang_tempcode('NA') : make_string_tempcode(escape_html($file['time'])),
-                    is_null($embed_url) ? ($file['is_directory'] ? do_lang_tempcode('IS_DIRECTORY') : new ocp_tempcode()) : hyperlink($embed_url, do_lang_tempcode('_FILEDUMP_EMBED')),
+                    is_null($embed_url) ? ($file['is_directory'] ? do_lang_tempcode('IS_DIRECTORY') : new Tempcode()) : hyperlink($embed_url, do_lang_tempcode('_FILEDUMP_EMBED')),
                     $choose_action
                 )));
             }
 
             $listing = do_template('COLUMNED_TABLE', array('_GUID' => '1c0a91d47c5fc8a7c2b35c7d9b36132f', 'HEADER_ROW' => $header_row, 'ROWS' => $rows));
         } else {
-            $listing = new ocp_tempcode();
+            $listing = new Tempcode();
         }
 
         // Find directories we could move stuff into / upload to
@@ -557,17 +557,17 @@ class Module_filedump
             $submit_name = do_lang_tempcode('FILEDUMP_UPLOAD');
 
             $max_filesize = floatval(get_max_file_size());
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
             if ($max_filesize < 30.0) {
                 $config_url = get_upload_limit_config_url();
                 $text->attach(do_lang_tempcode(is_null($config_url) ? 'MAXIMUM_UPLOAD' : 'MAXIMUM_UPLOAD_STAFF', escape_html(($max_filesize > 10.0) ? integer_format(intval($max_filesize)) : float_format($max_filesize / 1024.0 / 1024.0)), escape_html(is_null($config_url) ? '' : $config_url)));
             }
 
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             url_default_parameters__enable();
             $fields->attach(form_input_upload_multi(do_lang_tempcode('FILES'), do_lang_tempcode('DESCRIPTION_FILES'), 'files', true));
             $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION_FILES'), 'description', '', false));
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             foreach ($directories as $directory) {
                 $_directory = '/' . $directory . (($directory == '') ? '' : '/');
                 $list->attach(form_input_list_entry($_directory, ($_directory == $place), '/' . $directory));
@@ -576,7 +576,7 @@ class Module_filedump
 
             url_default_parameters__disable();
 
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
             handle_max_file_size($hidden);
 
             $upload_form = do_template('FORM', array(
@@ -590,7 +590,7 @@ class Module_filedump
                 'URL' => $post_url,
             ));
         } else {
-            $upload_form = new ocp_tempcode();
+            $upload_form = new Tempcode();
         }
 
         // Do a form so people can make folders
@@ -599,9 +599,9 @@ class Module_filedump
 
             $submit_name = do_lang_tempcode('FILEDUMP_CREATE_FOLDER');
 
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_FOLDER_NAME'), 'name', '', true));
-            $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), new ocp_tempcode(), 'description', '', false));
+            $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), new Tempcode(), 'description', '', false));
 
             $hidden = form_input_hidden('place', $place);
 
@@ -618,7 +618,7 @@ class Module_filedump
                 'URL' => $post_url,
             ));
         } else {
-            $create_folder_form = new ocp_tempcode();
+            $create_folder_form = new Tempcode();
         }
 
         $post_url = build_url(array('page' => '_SELF', 'type' => 'mass', 'redirect' => get_self_url(true)), '_SELF');
@@ -831,7 +831,7 @@ class Module_filedump
 
         $adv = do_lang('BLOCK_IND_ADVANCED');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_line_comcode(do_lang_tempcode('COMCODE_TAG_attachment_NAME_OF_PARAM_description'), do_lang('COMCODE_TAG_attachment_PARAM_description'), 'description', $description, false));
 
@@ -839,7 +839,7 @@ class Module_filedump
         if (substr($_description, 0, strlen($adv) + 1) == $adv) {
             $_description = substr($_description, 0, strlen($adv) + 1);
         }
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('', false, do_lang('MEDIA_TYPE_')));
         $hooks = find_all_hooks('systems', 'media_rendering');
         foreach (array_keys($hooks) as $hook) {
@@ -861,7 +861,7 @@ class Module_filedump
 
         /*$_description=do_lang('COMCODE_TAG_attachment_PARAM_align');
         if (substr($_description,0,strlen($adv)+1)==$adv) $_description=substr($_description,0,strlen($adv)+1);
-        $list=new ocp_tempcode();
+        $list=new Tempcode();
         foreach (explode('|',$_description) as $option)
         {
             list($option_val,$option_label)=explode('=',$option,2);
@@ -873,7 +873,7 @@ class Module_filedump
         if (substr($_description, 0, strlen($adv) + 1) == $adv) {
             $_description = substr($_description, 0, strlen($adv) + 1);
         }
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         foreach (explode('|', $_description) as $option) {
             list($option_val, $option_label) = explode('=', $option, 2);
             $list->attach(form_input_list_entry($option_val, ($option_val == post_param('float', '')), $option_label));
@@ -1352,9 +1352,9 @@ class Module_filedump
 
         require_code('form_templates');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $i = 0;
         foreach ($broken as $from => $to) {
             $pretty = do_lang_tempcode('FILEDUMP_BROKEN', escape_html(basename($from)));

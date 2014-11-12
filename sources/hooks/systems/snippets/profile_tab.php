@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_profile_tab
 {
     /**
@@ -43,14 +47,14 @@ class Hook_profile_tab
         set_execution_context(array('page' => 'members', 'type' => 'view', 'id' => $member_id_of) + $keep_get);
 
         require_code('hooks/systems/profiles_tabs/' . $hook);
-        $ob = object_factory('Hook_Profiles_Tabs_' . $hook);
+        $ob = object_factory('Hook_profiles_tabs_' . $hook);
         if ($ob->is_active($member_id_of, $member_id_viewing)) {
             // We need to minimise the dependency stuff that comes out, we don't need any default values
             push_output_state(false, true);
 
             // And, go
             $ret = $ob->render_tab($member_id_of, $member_id_viewing);
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             $out->attach(symbol_tempcode('CSS_TEMPCODE'));
             $out->attach(symbol_tempcode('JS_TEMPCODE'));
             $out->attach($ret[1]);

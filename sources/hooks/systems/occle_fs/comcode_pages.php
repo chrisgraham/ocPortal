@@ -20,7 +20,10 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_comcode_pages extends resource_fs_base
+/**
+ * Hook class.
+ */
+class Hook_occle_fs_comcode_pages extends Resource_fs_base
 {
     public $folder_resource_type = 'zone';
     public $file_resource_type = 'comcode_page';

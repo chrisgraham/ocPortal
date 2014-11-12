@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_themeing
  */
+
+/**
+ * Hook class.
+ */
 class Hook_exists_theme
 {
     /**
@@ -30,7 +34,7 @@ class Hook_exists_theme
 
         $test = file_exists(get_file_base() . '/themes/' . $val) || file_exists(get_custom_file_base() . '/themes/' . $val);
         if (!$test) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($val))));

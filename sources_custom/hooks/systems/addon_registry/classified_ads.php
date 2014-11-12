@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    classified_ads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_classified_ads
 {
     /**

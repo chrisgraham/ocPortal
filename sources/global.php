@@ -108,7 +108,7 @@ function require_code($codename, $light_exit = false)
             $orig = str_replace(array('?' . '>', '<' . '?php'), array('', ''), file_get_contents($path_b));
             $a = file_get_contents($path_a);
 
-            if (((strpos($codename, '.php') === false) || (strpos($a, 'class Mx_') === false)) && (strpos($a, ' extends forum_driver_') === false)) {
+            if (((strpos($codename, '.php') === false) || (strpos($a, 'class Mx_') === false)) && (strpos($a, ' extends Forum_driver_') === false)) {
                 $functions_before = get_defined_functions();
                 $classes_before = get_declared_classes();
                 if (HHVM) {

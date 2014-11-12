@@ -106,7 +106,7 @@ class Module_users_online
             warn_exit(do_lang_tempcode('TOO_MANY_USERS_ONLINE'));
         }
 
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         $members = array_reverse($members);
         sort_maps_by($members, 'last_activity');
         $members = array_reverse($members);
@@ -119,7 +119,7 @@ class Module_users_online
                 $location = 'RSS';
                 $at_url = make_string_tempcode(find_script('backend'));
             } elseif (($location == '') && ($row['the_page'] == '')) {
-                $at_url = new ocp_tempcode();
+                $at_url = new Tempcode();
             } else {
                 $map = array('page' => $row['the_page']);
                 if ($row['the_type'] != '') {

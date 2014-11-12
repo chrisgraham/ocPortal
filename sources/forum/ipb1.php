@@ -30,11 +30,9 @@ function init__forum__ipb1()
 }
 
 /**
- * Forum Driver.
- *
- * @package    core_forum_drivers
+ * Forum driver class.
  */
-class forum_driver_ipb1 extends forum_driver_ipb_shared
+class Forum_driver_ipb1 extends forum_driver_ipb_shared
 {
     /**
      * From a member row, get the member's name.

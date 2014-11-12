@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    users_online_block
  */
+
+/**
+ * Block class.
+ */
 class Block_side_users_online
 {
     /**
@@ -63,7 +67,7 @@ class Block_side_users_online
         require_code('users2');
         $members = get_users_online(false, null, $count);
         if (is_null($members)) {
-            return new ocp_tempcode(); // Too many to show
+            return new Tempcode(); // Too many to show
         }
 
         if (get_forum_type() == 'ocf') {
@@ -72,7 +76,7 @@ class Block_side_users_online
             require_css('ocf');
         }
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $guests = 0;
         $_members = 0;
         $done_members = array();
@@ -105,8 +109,8 @@ class Block_side_users_online
             }
         }
 
-        $newest = new ocp_tempcode();
-        $birthdays = new ocp_tempcode();
+        $newest = new Tempcode();
+        $birthdays = new Tempcode();
         if (get_forum_type() == 'ocf') {
             require_lang('ocf');
 

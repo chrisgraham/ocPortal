@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    password_censor
  */
+
+/**
+ * Hook class.
+ */
 class Hook_comcode_self_destruct
 {
     /**

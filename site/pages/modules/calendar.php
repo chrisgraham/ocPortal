@@ -418,7 +418,7 @@ class Module_calendar
             return $this->view_event();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -634,7 +634,7 @@ class Module_calendar
         }
 
         $interests_url = build_url(array('page' => '_SELF', 'type' => 'interests', 'view' => $view, 'id' => $id), '_SELF');
-        $event_types_1 = new ocp_tempcode();
+        $event_types_1 = new Tempcode();
         $types = $GLOBALS['SITE_DB']->query_select('calendar_types', array('id', 't_title'));
         foreach ($types as $type) {
             if ($type['id'] == db_get_first_id()) {
@@ -653,7 +653,7 @@ class Module_calendar
             $event_types_1->attach(do_template('CALENDAR_EVENT_TYPE', array('_GUID' => '104b723d5211f400267345f616c4a677', 'S' => 'I', 'INTERESTED' => $interested, 'TYPE' => get_translated_text($type['t_title']), 'TYPE_ID' => strval($type['id']))));
         }
         $filter_url = build_url(array('page' => '_SELF', 'type' => 'misc', 'view' => $view, 'id' => $id), '_SELF', null, false, true);
-        $event_types_2 = new ocp_tempcode();
+        $event_types_2 = new Tempcode();
         foreach ($types as $type) {
             if ($type['id'] == db_get_first_id()) {
                 continue;
@@ -666,7 +666,7 @@ class Module_calendar
             $event_types_2->attach(do_template('CALENDAR_EVENT_TYPE', array('_GUID' => '7511d60148835b7f4fea68a246af424e', 'S' => 'F', 'INTERESTED' => $interested, 'TYPE' => get_translated_text($type['t_title']), 'TYPE_ID' => strval($type['id']))));
         }
 
-        $add_url = new ocp_tempcode();
+        $add_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_calendar'))) {
             $and_filter = $this->get_and_filter(true);
             if ((has_privilege(get_member(), 'calendar_add_to_others')) || (is_null(get_param_integer('member_id', null)))) {
@@ -680,19 +680,19 @@ class Module_calendar
         }
         $day = date('Y-m-d', $timestamp);
         $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'day', 'id' => $day));
-        $day_url = ($view == 'day') ? new ocp_tempcode() : build_url($map, '_SELF');
+        $day_url = ($view == 'day') ? new Tempcode() : build_url($map, '_SELF');
         $week = get_week_number_for($timestamp);
         $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'week', 'id' => $week));
-        $week_url = ($view == 'week') ? new ocp_tempcode() : build_url($map, '_SELF');
+        $week_url = ($view == 'week') ? new Tempcode() : build_url($map, '_SELF');
         $month = date('Y-m', $timestamp);
         $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'month', 'id' => $month));
-        $month_url = ($view == 'month') ? new ocp_tempcode() : build_url($map, '_SELF');
+        $month_url = ($view == 'month') ? new Tempcode() : build_url($map, '_SELF');
         $year = date('Y', $timestamp);
         $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'year', 'id' => $year));
-        $year_url = ($view == 'year') ? new ocp_tempcode() : build_url($map, '_SELF');
+        $year_url = ($view == 'year') ? new Tempcode() : build_url($map, '_SELF');
 
         // RSS
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         for ($i = 0; $i < 10; $i++) {
             $fields->attach(form_input_line(do_lang_tempcode('FEED', integer_format($i + 1)), '', 'feed_' . strval($i), ocp_admirecookie('feed_' . strval($i)), false));
@@ -744,7 +744,7 @@ class Module_calendar
 
         sort_maps_by($happenings, 0);
 
-        $hours = new ocp_tempcode();
+        $hours = new Tempcode();
         $streams = array(array());
         foreach ($happenings as $happening) {
             list($e_id, $event, $from, $to, $real_from, $real_to, $utc_real_from) = $happening;
@@ -795,7 +795,7 @@ class Module_calendar
             // Fill in stream gaps as appropriate
             $_title = is_integer($event['e_title']) ? get_translated_text($event['e_title']) : $event['e_title'];
             $down = strval($to_h - $from_h);
-            $description = (intval($down) < 3) ? new ocp_tempcode() : ((!is_string($event['e_content']) && !isset($event['e_content__text_parsed'])) ? get_translated_tempcode('calendar_events', $just_event_row, 'e_content') : $event['e_content']);
+            $description = (intval($down) < 3) ? new Tempcode() : ((!is_string($event['e_content']) && !isset($event['e_content__text_parsed'])) ? get_translated_tempcode('calendar_events', $just_event_row, 'e_content') : $event['e_content']);
             $priority_lang = do_lang_tempcode('PRIORITY_' . strval($event['e_priority']));
             $priority_icon = 'calendar/priority_' . strval($event['e_priority']);
             $streams[$found_stream][$from_h] = array('TPL' => 'CALENDAR_DAY_ENTRY', 'DESCRIPTION' => $description, 'DOWN' => $down, 'ID' => is_string($event['e_id']) ? $event['e_id'] : strval($event['e_id']), 'T_TITLE' => array_key_exists('t_title', $event) ? (is_string($event['t_title']) ? $event['t_title'] : get_translated_text($event['t_title'])) : 'RSS', 'PRIORITY' => strval($event['e_priority']), 'ICON' => $icon, 'TIME' => $date, 'TITLE' => $_title, 'URL' => $url, 'PRIORITY_LANG' => $priority_lang, 'PRIORITY_ICON' => $priority_icon, 'RECURRING' => $event['e_recurrence'] != 'none', 'VALIDATED' => $event['validated'] == 1);
@@ -809,7 +809,7 @@ class Module_calendar
             $hour = locale_filter(date(do_lang('time_hour_and_mins'), $i * 60 * 60));
 
             // The streams need rendering for each hour
-            $_streams = new ocp_tempcode();
+            $_streams = new Tempcode();
             foreach ($streams as $stream) {
                 $down = '1';
                 $priority = 'free_time';
@@ -834,7 +834,7 @@ class Module_calendar
                 }
                 if ($entry != '') {
                     $timestamp = $period_start + $i * 60 * 60;
-                    $add_url = new ocp_tempcode();
+                    $add_url = new Tempcode();
                     if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_calendar'))) {
                         $and_filter = $this->get_and_filter(true);
                         if ((has_privilege(get_member(), 'calendar_add_to_others')) || (is_null(get_param_integer('member_id', null)))) {
@@ -890,7 +890,7 @@ class Module_calendar
         }
         for ($j = 0; $j < 7; $j++) {
             for ($i = 0; $i < 24; $i++) {
-                $entries = new ocp_tempcode();
+                $entries = new Tempcode();
 
                 $class = '';
                 $worst_priority = 6;
@@ -972,11 +972,11 @@ class Module_calendar
         }
 
         // Now render
-        $hours = new ocp_tempcode();
+        $hours = new Tempcode();
         for ($i = 0; $i < 24; $i++) {
             $hour = locale_filter(date(do_lang('time_hour_and_mins'), $i * 60 * 60));
 
-            $days = new ocp_tempcode();
+            $days = new Tempcode();
             for ($j = 0; $j < 7; $j++) {
                 $class = $streams[$i][$j][0];
                 $entries = $streams[$i][$j][1];
@@ -990,7 +990,7 @@ class Module_calendar
 
                 if ($class != 'continuation') {
                     $timestamp = $period_start + ($i + 24 * $j) * 60 * 60;
-                    $add_url = new ocp_tempcode();
+                    $add_url = new Tempcode();
                     if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_submit_permission('low', get_member(), get_ip_address(), 'cms_calendar'))) {
                         $and_filter = $this->get_and_filter(true);
                         if ((has_privilege(get_member(), 'calendar_add_to_others')) || (is_null(get_param_integer('member_id', null)))) {
@@ -1102,8 +1102,8 @@ class Module_calendar
         }
         $empty_entry = do_template('CALENDAR_MONTH_ENTRY_FREE', array('_GUID' => 'c8eba771bd5f9a58d4822f4a2dac57a2', 'CLASS' => 'spacer', 'TEXT' => ''));
 
-        $weeks = new ocp_tempcode();
-        $days = new ocp_tempcode();
+        $weeks = new Tempcode();
+        $days = new Tempcode();
         $week_date = locale_filter(date(do_lang('calendar_day_of_month'), $period_start));
         $week_count = intval(get_week_number_for($period_start, true));
         $day_of_week = date('D', $period_start);
@@ -1112,7 +1112,7 @@ class Module_calendar
         }
         $dotw = $ex_array[$day_of_week] - 1;
         for ($i = 1; $i <= $_days; $i++) {
-            $entries = new ocp_tempcode();
+            $entries = new Tempcode();
 
             $timestamp = $period_start + ($i - 1) * 60 * 60 * 24 + 60 * 60;
             $day_of_week = date('D', $timestamp);
@@ -1120,7 +1120,7 @@ class Module_calendar
                 $map = array_merge($filter, array('page' => '_SELF', 'type' => 'misc', 'view' => 'week', 'id' => $explode[0] . '-' . strval($week_count)));
                 $week_url = build_url($map, '_SELF');
                 $weeks->attach(do_template('CALENDAR_MONTH_WEEK', array('_GUID' => '1010b12d8677bc577f30a013e9a838ce', 'WEEK_URL' => $week_url, 'WEEK_DATE' => $week_date, 'DAYS' => $days)));
-                $days = new ocp_tempcode();
+                $days = new Tempcode();
                 $week_date = locale_filter(date(do_lang('calendar_day_of_month'), $period_start + ($i - 1) * 60 * 60 * 24));
                 $week_count++;
                 $dotw = 0;
@@ -1222,7 +1222,7 @@ class Module_calendar
         sort_maps_by($happenings, 0);
 
         $months = '';
-        $month_rows = new ocp_tempcode();
+        $month_rows = new Tempcode();
         for ($i = 1; $i <= 12; $i++) {
             $entries = array();
             $priorities = array();
@@ -1303,8 +1303,8 @@ class Module_calendar
             $_period_end = mktime(0, 0, 0, $i + 1, 0, intval($explode[0]));
             $_days = intval(round(floatval($_period_end - $_period_start) / floatval(60 * 60 * 24)));
 
-            $_entries = new ocp_tempcode();
-            $__entries = new ocp_tempcode();
+            $_entries = new Tempcode();
+            $__entries = new Tempcode();
             $_dotw = date('D', $_period_start);
             if (get_option('ssw') == '0') {
                 $ex_array = array('Mon' => 0, 'Tue' => 1, 'Wed' => 2, 'Thu' => 3, 'Fri' => 4, 'Sat' => 5, 'Sun' => 6);
@@ -1351,7 +1351,7 @@ class Module_calendar
 
                 if ($dotw == 6) {
                     $_entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ROW', array('_GUID' => 'f0d29f0cf53ba119a7ab4351807a9f2f', 'ENTRIES' => $__entries)));
-                    $__entries = new ocp_tempcode();
+                    $__entries = new Tempcode();
                     $dotw = 0;
                 } else {
                     $dotw++;
@@ -1400,7 +1400,7 @@ class Module_calendar
         $back_url = $this->back_url;
 
         // Validation
-        $warning_details = new ocp_tempcode();
+        $warning_details = new Tempcode();
         if (($event['validated'] == 0) && (addon_installed('unvalidated'))) {
             if ((!has_privilege(get_member(), 'jump_to_unvalidated')) && ((is_guest()) || ($event['e_submitter'] != get_member()) && ($event['e_member_calendar'] != get_member()))) {
                 access_denied('PRIVILEGE', 'jump_to_unvalidated');
@@ -1419,7 +1419,7 @@ class Module_calendar
         $is_public = $_is_public ? do_lang_tempcode('YES') : do_lang_tempcode('NO');
 
         // Personal subscriptions (reminders)
-        $subscribed = new ocp_tempcode();
+        $subscribed = new Tempcode();
         if ((has_privilege(get_member(), 'view_event_subscriptions')) && (cron_installed())) {
             $subscriptions = $GLOBALS['SITE_DB']->query_select('calendar_reminders', array('DISTINCT n_member_id'), array('e_id' => $id), '', 100);
             if (count($subscriptions) < 100) {
@@ -1432,9 +1432,9 @@ class Module_calendar
                 }
             }
         }
-        $_subscriptions = new ocp_tempcode();
+        $_subscriptions = new Tempcode();
         if ((is_guest()) || (!cron_installed())) {
-            $subscribe_url = new ocp_tempcode();
+            $subscribe_url = new Tempcode();
         } else {
             $subscriptions = $GLOBALS['SITE_DB']->query_select('calendar_reminders', array('id', 'n_seconds_before'), array('e_id' => $id, 'n_member_id' => get_member()));
             foreach ($subscriptions as $subscription) {
@@ -1464,7 +1464,7 @@ class Module_calendar
         if ((has_actual_page_access(null, 'cms_calendar', null, null)) && (has_edit_permission(($event['e_member_calendar'] !== null) ? 'low' : 'mid', get_member(), $event['e_submitter'], 'cms_calendar', array('calendar', $event['e_type'])))) {
             $edit_url = build_url(array('page' => 'cms_calendar', 'type' => '_ed', 'id' => $id, 'private' => get_param_integer('private', null), 'member_id' => get_param_integer('member_id', null)), get_module_zone('cms_calendar'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
 
         // Work out all our various dates
@@ -1591,7 +1591,7 @@ class Module_calendar
         require_code('form_templates');
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_subscribe_event', 'id' => $id), '_SELF');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_float(do_lang_tempcode('REMINDER_TIME'), do_lang_tempcode('DESCRIPTION_REMINDER_TIME'), 'hours_before', 1.0, true));
         $submit_name = do_lang_tempcode('SUBSCRIBE_EVENT');
 

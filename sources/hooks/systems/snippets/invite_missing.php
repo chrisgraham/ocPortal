@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_invite_missing
 {
     /**
@@ -30,7 +34,7 @@ class Hook_invite_missing
 
         $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_invites', 'i_email_address', array('i_email_address' => $val, 'i_taken' => 0));
         if (!is_null($test)) {
-            return new ocp_tempcode(); // All ok
+            return new Tempcode(); // All ok
         }
 
         // Some kind of issue...

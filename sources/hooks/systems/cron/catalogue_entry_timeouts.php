@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_catalogue_entry_timeouts
 {
     /**

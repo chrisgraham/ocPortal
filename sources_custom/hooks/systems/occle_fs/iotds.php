@@ -15,7 +15,10 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_iotds extends resource_fs_base
+/**
+ * Hook class.
+ */
+class Hook_occle_fs_iotds extends Resource_fs_base
 {
     public $file_resource_type = 'iotd';
 

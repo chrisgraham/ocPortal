@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_custom
 {
     /**
@@ -43,7 +47,7 @@ class Hook_pointstore_custom
     {
         require_lang('points');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'custom_title' . $name_suffix, $title, true));
         $fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'custom_description' . $name_suffix, $description, true));
@@ -68,8 +72,8 @@ class Hook_pointstore_custom
         $rows = $GLOBALS['SITE_DB']->query_select('pstore_customs', array('*'), null, 'ORDER BY id');
         $out = array();
         foreach ($rows as $i => $row) {
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
             $fields->attach($this->get_fields('_' . strval($i), get_translated_text($row['c_title']), get_translated_text($row['c_description']), $row['c_enabled'], $row['c_cost'], $row['c_one_per_member'], get_translated_text($row['c_mail_subject']), get_translated_text($row['c_mail_body'])));
             $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '01362c21b40d7905b76ee6134198a128', 'TITLE' => do_lang_tempcode('ACTIONS'))));
             $fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete_custom_' . strval($i), false));

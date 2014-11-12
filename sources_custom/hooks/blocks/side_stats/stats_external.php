@@ -20,7 +20,7 @@ class Hook_stats_external
      */
     public function run()
     {
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
         $map = array();
         $url = get_base_url();
         list($rank, $links, $speed) = getAlexaRank($url);

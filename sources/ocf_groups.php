@@ -82,7 +82,7 @@ function ocf_create_selection_list_usergroups($it = null)
 {
     $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
     $_m = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), ($group_count > 200) ? array('g_is_private_club' => 0) : null, 'ORDER BY g_order');
-    $entries = new ocp_tempcode();
+    $entries = new Tempcode();
     foreach ($_m as $m) {
         $entries->attach(form_input_list_entry(strval($m['id']), $it === $m['id'], get_translated_text($m['g_name'], $GLOBALS['FORUM_DB'])));
     }

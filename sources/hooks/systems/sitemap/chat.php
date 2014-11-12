@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_chat extends Hook_sitemap_content
 {
     protected $content_type = 'chat';

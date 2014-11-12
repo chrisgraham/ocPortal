@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_choose_download
 {
     /**
@@ -89,8 +93,8 @@ class Hook_choose_download
 
                     if (addon_installed('galleries')) {
                         // Images
-                        $images_details = new ocp_tempcode();
-                        $_out = new ocp_tempcode();
+                        $images_details = new Tempcode();
+                        $_out = new Tempcode();
                         require_lang('galleries');
                         $cat = 'download_' . strval($eid);
                         $map = array('cat' => $cat);
@@ -100,8 +104,8 @@ class Hook_choose_download
                         $rows = $GLOBALS['SITE_DB']->query_select('images', array('*'), $map, 'ORDER BY id', 200/*Stop sillyness, could be a DOS attack*/);
                         $counter = 0;
                         $div = 2;
-                        $_out = new ocp_tempcode();
-                        $_row = new ocp_tempcode();
+                        $_out = new Tempcode();
+                        $_row = new Tempcode();
                         require_code('images');
                         while (array_key_exists($counter, $rows)) {
                             $row = $rows[$counter];
@@ -113,14 +117,14 @@ class Hook_choose_download
                             $thumb_url = ensure_thumbnail($row['url'], $row['thumb_url'], 'galleries', 'images', $row['id']);
                             $description_image = get_translated_tempcode('download_downloads', $row, 'description');
                             $thumb = do_image_thumb($thumb_url, '');
-                            $iedit_url = new ocp_tempcode();
+                            $iedit_url = new Tempcode();
                             $_content = do_template('DOWNLOAD_SCREEN_IMAGE', array('_GUID' => '45905cd5823af4b066ccbc18a39edd74', 'ID' => strval($row['id']), 'VIEW_URL' => $view_url, 'EDIT_URL' => $iedit_url, 'THUMB' => $thumb, 'DESCRIPTION' => $description_image));
 
                             $_row->attach(do_template('DOWNLOAD_GALLERY_IMAGE_CELL', array('_GUID' => 'e016f7655dc6519d9536aa51e4bed57b', 'CONTENT' => $_content)));
 
                             if (($counter % $div == 1) && ($counter != 0)) {
                                 $_out->attach(do_template('DOWNLOAD_GALLERY_ROW', array('_GUID' => '59744ea8227da11901ddb3f4de04c88d', 'CELLS' => $_row)));
-                                $_row = new ocp_tempcode();
+                                $_row = new Tempcode();
                             }
 
                             $counter++;

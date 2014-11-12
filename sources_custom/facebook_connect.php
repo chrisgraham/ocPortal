@@ -9,7 +9,7 @@
 
 function init__facebook_connect()
 {
-    if (!class_exists('ocp_tempcode')) {
+    if (!class_exists('Tempcode')) {
         return;
     }
 
@@ -58,7 +58,7 @@ function init__facebook_connect()
 // This is only called if we know we have a user logged into Facebook, who has authorised to our app
 function handle_facebook_connection_login($current_logged_in_member)
 {
-    if (!class_exists('ocp_tempcode')) {
+    if (!class_exists('Tempcode')) {
         return null;
     }
 

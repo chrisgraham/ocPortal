@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_combo_multi
 {
     // ==============
@@ -33,7 +37,7 @@ class Hook_fields_combo_multi
     {
         $fields = array();
         $type = '_LIST';
-        $special = new ocp_tempcode();
+        $special = new Tempcode();
         $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', '---'));
         $list = explode('|', $row['cf_default']);
         $display = array_key_exists('trans_name', $row) ? $row['trans_name'] : get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
@@ -96,7 +100,7 @@ class Hook_fields_combo_multi
             $all[] = array('OPTION' => $option, 'HAS' => isset($exploded_chosen[$option]));
         }
         foreach (array_keys($exploded_chosen) as $chosen) {
-            if (trim($option, ' -') == '') {
+            if (trim($option,' -') == '') {
                 continue;
             }
             if (!isset($exploded_inbuilt[$chosen])) {

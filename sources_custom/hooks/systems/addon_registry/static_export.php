@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    static_export
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_static_export
 {
     /**

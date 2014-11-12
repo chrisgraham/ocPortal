@@ -142,7 +142,7 @@ class Module_admin_wordfilter
             return $this->remove_word();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -153,7 +153,7 @@ class Module_admin_wordfilter
     public function word_filter_interface()
     {
         require_code('form_templates');
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $words = $GLOBALS['SITE_DB']->query_select('wordfilter', array('*'), null, 'ORDER BY word');
         foreach ($words as $word) {
             $word_text = (($word['w_substr'] == 1) ? '*' : '') . $word['word'] . (($word['w_substr'] == 1) ? '*' : '');
@@ -169,13 +169,13 @@ class Module_admin_wordfilter
 
             $tpl = do_template('FORM', array('_GUID' => 'a752cea5acab633e1cc0781f0e77e0be', 'TABINDEX' => strval(get_form_field_tabindex()), 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'URL' => $delete_url, 'SUBMIT_ICON' => 'menu___generic_admin__delete', 'SUBMIT_NAME' => $submit_name));
         } else {
-            $tpl = new ocp_tempcode();
+            $tpl = new Tempcode();
         }
 
         // Do a form so people can add
         $post_url = build_url(array('page' => '_SELF', 'type' => 'add'), '_SELF');
         $submit_name = do_lang_tempcode('ADD_WORDFILTER');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('WORD'), do_lang_tempcode('DESCRIPTION_WORD'), 'word_2', '', true));
         $fields->attach(form_input_line(do_lang_tempcode('REPLACEMENT'), do_lang_tempcode('DESCRIPTION_REPLACEMENT'), 'replacement', '', false));
         $fields->attach(form_input_tick(do_lang_tempcode('WORD_SUBSTR'), do_lang_tempcode('DESCRIPTION_WORD_SUBSTR'), 'substr', false));

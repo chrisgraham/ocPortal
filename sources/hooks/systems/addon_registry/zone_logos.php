@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    zone_logos
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_zone_logos
 {
     /**

@@ -47,7 +47,7 @@ function template_to_tempcode_static(/*&*/
         $theme = is_null($GLOBALS['FORUM_DRIVER']) ? 'default' : $GLOBALS['FORUM_DRIVER']->get_theme();
     }
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $continuation = '';
     $symbol_len = strlen($text);
     while (true) {
@@ -177,7 +177,7 @@ function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $them
                     case ',':
                         $dirty_param = ($type == TC_DIRECTIVE);
                         if ($dirty_param) {
-                            $param[$params] = new ocp_tempcode();
+                            $param[$params] = new Tempcode();
                         } else {
                             $param[$params] = '';
                         }
@@ -187,7 +187,7 @@ function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $them
                     case '{':
                         if (!$dirty_param) {
                             $param_string = $param[$params - 1];
-                            $t = new ocp_tempcode(); // For some very odd reason, PHP 4.3 doesn't allow you to do $param[$params-1]=new ocp_tempcode(); $param[$params-1]->attach($param_string); (causes memory corruption apparently)
+                            $t = new Tempcode(); // For some very odd reason, PHP 4.3 doesn't allow you to do $param[$params-1]=new Tempcode(); $param[$params-1]->attach($param_string); (causes memory corruption apparently)
                             $t->attach($param_string);
                             $param[$params - 1] = $t;
                             $dirty_param = true;
@@ -236,7 +236,7 @@ function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $them
                         $dirty_param = ($type == TC_DIRECTIVE);
                         $mode = SYMBOL_PARSE_PARAM;
                         if ($dirty_param) {
-                            $param[$params] = new ocp_tempcode();
+                            $param[$params] = new Tempcode();
                         } else {
                             $param[$params] = '';
                         }
@@ -324,10 +324,8 @@ function read_single_uncompiled_variable($text, &$symbol_pos, $symbol_len, $them
 
 /**
  * Static implementation of Tempcode.
- *
- * @package    core_rich_media
  */
-class ocp_tempcode_static
+class Tempcode_static
 {
     // An array of bits where each bit is array($escape,$type,$value)
     //   NB: 'escape' doesn't apply for tempcode-typed-parameters or language-references
@@ -338,7 +336,7 @@ class ocp_tempcode_static
     /**
      * Constructor of tempcode
      */
-    public function ocp_tempcode()
+    public function __construct()
     {
         $this->bits = array();
     }

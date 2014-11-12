@@ -19,11 +19,9 @@
  */
 
 /**
- * Cache Driver.
- *
- * @package    core
+ * Cache driver class.
  */
-class ocp_filecache
+class Persistent_cacheing_filecache
 {
     /**
      * Constructor.

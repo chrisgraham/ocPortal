@@ -13,6 +13,9 @@
  */
 /*EXTRA FUNCTIONS: simplexml_load_string|hash_hmac*/
 
+/**
+ * Block class.
+ */
 class Block_side_amazon_wishlist
 {
     /**

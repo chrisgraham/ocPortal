@@ -552,7 +552,7 @@ function get_param_wiki_chain($parameter_name, $default_value = null)
  */
 function wiki_breadcrumbs($chain, $current_title = null, $final_link = false, $links = true, $this_link_virtual_root = false)
 {
-    $insbreadcrumbs = new ocp_tempcode();
+    $insbreadcrumbs = new Tempcode();
     $token = strtok($chain, '/');
     $rebuild_chain = '';
     while ($token !== false) {
@@ -680,7 +680,7 @@ function wiki_show_tree($select = null, $id = null, $breadcrumbs = '', $include_
     }
 
     if ($GLOBALS['SITE_DB']->query_select_value('wiki_pages', 'COUNT(*)') > 1000) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $wiki_seen = array();
@@ -744,7 +744,7 @@ function _wiki_show_tree(&$wiki_seen, $select, $id, $breadcrumbs, $title, $use_c
 
     $rows = $GLOBALS['SITE_DB']->query_select('wiki_children', array('*'), array('parent_id' => $id), 'ORDER BY title', intval(get_option('general_safety_listing_limit'))/*reasonable limit*/);
     $compound_list = strval($id) . ',';
-    $_below = new ocp_tempcode();
+    $_below = new Tempcode();
     foreach ($rows as $i => $myrow) {
         if (!in_array($myrow['child_id'], $wiki_seen)) {
             if (!has_category_access(get_member(), 'wiki_page', strval($myrow['child_id']))) {

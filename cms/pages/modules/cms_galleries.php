@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_galleries extends standard_crud_module
+class Module_cms_galleries extends Standard_crud_module
 {
     public $lang_type = 'IMAGE';
     public $select_name_description = 'DESCRIPTION_IMAGE';
@@ -171,7 +171,7 @@ class Module_cms_galleries extends standard_crud_module
         require_css('galleries');
         require_lang('dearchive');
 
-        $this->alt_crud_module->add_text = new ocp_tempcode();
+        $this->alt_crud_module->add_text = new Tempcode();
 
         $cat = get_param('cat', '');
         if ($cat != '') {
@@ -236,7 +236,7 @@ class Module_cms_galleries extends standard_crud_module
             return $this->sd(); // actualiser: orphan delete
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -287,7 +287,7 @@ class Module_cms_galleries extends standard_crud_module
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_tree_list(do_lang_tempcode('GALLERY'), '', 'name', null, 'choose_gallery', array('must_accept_something' => true, 'purity' => false, 'addable_filter' => true, 'filter' => $condition, 'member_id' => $member_id), true, $cat));
 
@@ -318,14 +318,14 @@ class Module_cms_galleries extends standard_crud_module
 
         // To choose to batch import from an attached tar or zip file (zip file only supported if zip module running on php install)
         $post_url = build_url(array('page' => '_SELF', 'type' => '__gimp', 'cat' => $cat, 'uploading' => 1, 'redirect' => get_param('redirect', null)), '_SELF');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $supported = 'tar';
         if ((function_exists('zip_open')) || (get_option('unzip_cmd') != '')) {
             $supported .= ', zip';
         }
         $fields->attach(form_input_upload_multi(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_ARCHIVE_MEDIA', escape_html($supported), escape_html(str_replace(',', ', ', get_option('valid_images') . ',' . get_allowed_video_file_types()))), 'file', true, null, null, true, str_replace(' ', '', get_option('valid_images') . ',' . $supported)));
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_GIMP_TITLE'), 'set_title', '', get_option('gallery_media_title_required') == '1'));
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden);
         if (function_exists('imagecreatefromstring')) {
             if ($this->has_at_least_one_watermark($cat)) {
@@ -347,7 +347,7 @@ class Module_cms_galleries extends standard_crud_module
             $config_url = get_upload_limit_config_url();
             $text = paragraph(do_lang_tempcode(is_null($config_url) ? 'MAXIMUM_UPLOAD' : 'MAXIMUM_UPLOAD_STAFF', escape_html(($max > 10.0) ? integer_format(intval($max)) : float_format($max)), escape_html(is_null($config_url) ? '' : $config_url)));
         } else {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
         }
         // Show form
         $hidden->attach(form_input_hidden('test', '1'));
@@ -355,7 +355,7 @@ class Module_cms_galleries extends standard_crud_module
 
         // Orphaned upload form
         // To choose to batch import what already exists in gallery directory, but is orphaned
-        $orphaned_content = new ocp_tempcode();
+        $orphaned_content = new Tempcode();
         if (($GLOBALS['FORUM_DRIVER']->is_staff(get_member())) && ($GLOBALS['SITE_DB']->query_select_value('images', 'COUNT(*)') + $GLOBALS['SITE_DB']->query_select_value('videos', 'COUNT(*)') < 4000)) {
             require_code('images');
             $there = array();
@@ -390,15 +390,15 @@ class Module_cms_galleries extends standard_crud_module
             }
             $add_url = build_url(array('page' => '_SELF', 'type' => 'ss'), '_SELF');
             if (!$orphaned_content->is_empty()) {
-                $fields_2 = new ocp_tempcode();
-                $hidden_2 = new ocp_tempcode();
+                $fields_2 = new Tempcode();
+                $hidden_2 = new Tempcode();
 
                 $hidden_2->attach(form_input_hidden('ss_cat', $cat));
                 $fields_2->attach(form_input_multi_list(do_lang_tempcode('ENTRIES'), '', 'ss_files', $orphaned_content));
                 if ($this->has_at_least_one_watermark($cat)) {
                     $fields_2->attach(form_input_various_ticks(array(array(do_lang_tempcode('WATERMARK'), 'ss_watermark', true, '')), '', null, do_lang_tempcode('OPTIONS')));
                 }
-                $radios = new ocp_tempcode();
+                $radios = new Tempcode();
                 $radios->attach(form_input_radio_entry('type', 'sa', true, do_lang_tempcode('ADD_GALLERY_SELECTION')));
                 $radios->attach(form_input_radio_entry('type', 'sd', false, do_lang_tempcode('DELETE_GALLERY_SELECTION')));
                 $fields_2->attach(form_input_radio(do_lang_tempcode('ACTION'), '', 'type', $radios, true));
@@ -408,10 +408,10 @@ class Module_cms_galleries extends standard_crud_module
 
                 $form2 = do_template('FORM', array('_GUID' => '79c9fd4f29197460f08443bf2ffdf8b2', 'SECONDARY_FORM' => true, 'TABINDEX' => strval(get_form_field_tabindex()), 'FIELDS' => $fields_2, 'SUBMIT_ICON' => 'menu___generic_admin__import', 'SUBMIT_NAME' => do_lang_tempcode('PROCEED'), 'URL' => $add_url, 'TEXT' => '', 'HIDDEN' => $hidden_2));
             } else {
-                $form2 = new ocp_tempcode();
+                $form2 = new Tempcode();
             }
         } else {
-            $form2 = new ocp_tempcode();
+            $form2 = new Tempcode();
         }
 
         return do_template('GALLERY_IMPORT_SCREEN', array('_GUID' => '607c819ff751268294e5e590a0d41533', 'TITLE' => $this->title, 'FORM2' => $form2, 'FORM' => $form));
@@ -631,7 +631,7 @@ class Module_cms_galleries extends standard_crud_module
         check_privilege('mass_import'/*Not currently scoped to categories,array('galleries',$cat)*/);
 
         if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         make_member_gallery_if_needed($cat);
@@ -1063,8 +1063,8 @@ class Module_cms_galleries extends standard_crud_module
         }
 
         require_code('images');
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
         handle_max_file_size($hidden, 'image');
         if (strpos($cat, '?') !== false) {
@@ -1164,7 +1164,7 @@ class Module_cms_galleries extends standard_crud_module
             $hidden->attach(form_input_hidden('allow_rating', strval($allow_rating)));
             $hidden->attach(form_input_hidden('allow_comments', strval($allow_comments)));
             $hidden->attach(form_input_hidden('allow_trackbacks', strval($allow_trackbacks)));
-            $feedback_fields = new ocp_tempcode();
+            $feedback_fields = new Tempcode();
         }
         $fields->attach(meta_data_get_fields('image', is_null($id) ? null : strval($id), false, null, ($seo_fields->is_empty() && $feedback_fields->is_empty()) ? META_DATA_HEADER_YES : META_DATA_HEADER_FORCE));
         $fields->attach($seo_fields);
@@ -1247,7 +1247,7 @@ class Module_cms_galleries extends standard_crud_module
                     $delete_fields = form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false);
                 }
             } else {
-                $delete_fields = new ocp_tempcode();
+                $delete_fields = new Tempcode();
             }
         }
 
@@ -1467,7 +1467,7 @@ class Module_cms_galleries extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_galleries_alt extends standard_crud_module
+class Module_cms_galleries_alt extends Standard_crud_module
 {
     public $lang_type = 'VIDEO';
     public $select_name = 'NAME';
@@ -1660,8 +1660,8 @@ class Module_cms_galleries_alt extends standard_crud_module
             $cat = get_param('cat', '');
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
         handle_max_file_size($hidden);
         if (strpos($cat, '?') !== false) {
@@ -1717,7 +1717,7 @@ class Module_cms_galleries_alt extends standard_crud_module
             }
         }
         $thumb_width = intval(get_option('thumb_width'));
-        $validated_field = new ocp_tempcode();
+        $validated_field = new Tempcode();
         if (has_some_cat_privilege(get_member(), 'bypass_validation_' . $this->permissions_require . 'range_content', null, $this->permissions_cat_require)) {
             if (addon_installed('unvalidated')) {
                 $validated_field = form_input_tick(do_lang_tempcode('VALIDATED'), do_lang_tempcode($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()) ? 'DESCRIPTION_VALIDATED_SIMPLE' : 'DESCRIPTION_VALIDATED'), 'validated', $validated == 1);
@@ -1762,7 +1762,7 @@ class Module_cms_galleries_alt extends standard_crud_module
             $hidden->attach(form_input_hidden('allow_rating', strval($allow_rating)));
             $hidden->attach(form_input_hidden('allow_comments', strval($allow_comments)));
             $hidden->attach(form_input_hidden('allow_trackbacks', strval($allow_trackbacks)));
-            $feedback_fields = new ocp_tempcode();
+            $feedback_fields = new Tempcode();
         }
         $fields->attach(meta_data_get_fields('video', is_null($id) ? null : strval($id), false, null, ($seo_fields->is_empty() && $feedback_fields->is_empty()) ? META_DATA_HEADER_YES : META_DATA_HEADER_FORCE));
         $fields->attach($seo_fields);
@@ -1846,7 +1846,7 @@ class Module_cms_galleries_alt extends standard_crud_module
                     $delete_fields = form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false);
                 }
             } else {
-                $delete_fields = new ocp_tempcode();
+                $delete_fields = new Tempcode();
             }
         }
 
@@ -2076,7 +2076,7 @@ class Module_cms_galleries_alt extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_galleries_cat extends standard_crud_module
+class Module_cms_galleries_cat extends Standard_crud_module
 {
     public $lang_type = 'GALLERY';
     public $select_name = 'NAME';
@@ -2137,7 +2137,7 @@ class Module_cms_galleries_cat extends standard_crud_module
         $accept_images = take_param_int_modeavg($accept_images, 'accept_images', 'galleries', 1);
         $accept_videos = take_param_int_modeavg($accept_videos, 'accept_videos', 'galleries', 1);
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         if (is_null($flow_mode_interface)) {
             $cnt = $GLOBALS['SITE_DB']->query_select_value('galleries', 'COUNT(*)');
@@ -2148,7 +2148,7 @@ class Module_cms_galleries_cat extends standard_crud_module
             }
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'fullname', $fullname, true));
         if ($name != 'root') {
             if (get_option('manual_gallery_codename') == '1') {
@@ -2178,7 +2178,7 @@ class Module_cms_galleries_cat extends standard_crud_module
             }
         }
         if ((get_option('manual_gallery_media_types') == '1') || ($accept_images == 0) || ($accept_videos == 0)) {
-            $fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'), 'accept_images', $accept_images == 1, do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')), array(do_lang_tempcode('ACCEPT_VIDEOS'), 'accept_videos', $accept_videos == 1, do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))), new ocp_tempcode(), null, do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
+            $fields->attach(form_input_various_ticks(array(array(do_lang_tempcode('ACCEPT_IMAGES'), 'accept_images', $accept_images == 1, do_lang_tempcode('DESCRIPTION_ACCEPT_IMAGES')), array(do_lang_tempcode('ACCEPT_VIDEOS'), 'accept_videos', $accept_videos == 1, do_lang_tempcode('DESCRIPTION_ACCEPT_VIDEOS'))), new Tempcode(), null, do_lang_tempcode('ACCEPTED_MEDIA_TYPES')));
         } else {
             $hidden->attach(form_input_hidden('accept_images', '1'));
             $hidden->attach(form_input_hidden('accept_videos', '1'));
@@ -2230,7 +2230,7 @@ class Module_cms_galleries_cat extends standard_crud_module
         } else {
             $hidden->attach(form_input_hidden('allow_rating', strval($allow_rating)));
             $hidden->attach(form_input_hidden('allow_comments', strval($allow_comments)));
-            $feedback_fields = new ocp_tempcode();
+            $feedback_fields = new Tempcode();
         }
         $fields->attach(meta_data_get_fields('gallery', ($name == '') ? null : $name, true, null, ($seo_fields->is_empty() && $feedback_fields->is_empty()) ? META_DATA_HEADER_YES : META_DATA_HEADER_FORCE));
         $fields->attach($seo_fields);

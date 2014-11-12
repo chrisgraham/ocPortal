@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    themewizard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_themewizard_compute_equation
 {
     /**

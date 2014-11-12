@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats_forum
 {
     /**
@@ -27,7 +31,7 @@ class Hook_stats_forum
     public function run()
     {
         if (get_forum_type() != 'none') {
-            $bits = new ocp_tempcode();
+            $bits = new Tempcode();
             if (get_option('forum_show_stats_count_members') == '1') {
                 $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'a2dbcdec813d5a5edbb416bf087b4a97', 'KEY' => do_lang_tempcode('COUNT_MEMBERS'), 'VALUE' => integer_format($GLOBALS['FORUM_DRIVER']->get_members()))));
             }
@@ -99,11 +103,11 @@ class Hook_stats_forum
                 }
             }
             if ($bits->is_empty_shell()) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
             $forums = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => '52cd616760efe17adcec4b97e1305301', 'SECTION' => do_lang_tempcode('FORUM_SLASH_COMMUNITY'), 'CONTENT' => $bits));
         } else {
-            $forums = new ocp_tempcode();
+            $forums = new Tempcode();
         }
 
         return $forums;

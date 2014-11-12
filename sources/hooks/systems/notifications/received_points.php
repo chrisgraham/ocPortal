@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-class Hook_Notification_received_points extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_received_points extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

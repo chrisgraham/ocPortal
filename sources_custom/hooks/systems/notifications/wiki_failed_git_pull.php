@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    weather
  */
-class Hook_Notification_wiki_failed_git_pull extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_wiki_failed_git_pull extends Hook_notification__Staff
 {
     /**
      * Get a list of all the notification codes this hook can handle.

@@ -74,7 +74,7 @@ function do_next_manager_hooked($title, $text, $type, $main_title = null)
             $_text = make_string_tempcode($text);
         }
     } else {
-        $_text = new ocp_tempcode();
+        $_text = new Tempcode();
     }
 
     set_helper_panel_text(comcode_lang_string('menus:DOC_HELPER_PANEL'));
@@ -111,7 +111,7 @@ function do_next_manager_hooked($title, $text, $type, $main_title = null)
 function do_next_manager($title, $text, $main = null, $main_title = null, $url_add_one = null, $url_edit_this = null, $url_edit_one = null, $url_view_this = null, $url_view_archive = null, $url_add_to_category = null, $url_add_one_category = null, $url_edit_one_category = null, $url_edit_this_category = null, $url_view_this_category = null, $entry_extras = null, $category_extras = null, $additional_extras = null, $additional_title = null, $intro = null, $entries_title = null, $categories_title = null)
 {
     if (is_null($intro)) {
-        $intro = new ocp_tempcode();
+        $intro = new Tempcode();
     }
 
     require_code('failure');
@@ -126,7 +126,7 @@ function do_next_manager($title, $text, $main = null, $main_title = null, $url_a
     $keep_simplified_donext = get_param_integer('keep_simplified_donext', null);
     $simplified = ((($keep_simplified_donext !== 0) && (get_option('simplified_donext') == '1')) || ($keep_simplified_donext == 1));
 
-    $sections = new ocp_tempcode();
+    $sections = new Tempcode();
 
     // Main section stuff (the "Main" section is not always shown - it is shown when the do-next screen is being used as a traditional menu, not as a followup-action screen)
     if (!is_null($main)) {
@@ -309,10 +309,10 @@ function do_next_manager($title, $text, $main = null, $main_title = null, $url_a
 function _do_next_section($list, $title)
 {
     if (count($list) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
-    $next_items = new ocp_tempcode();
+    $next_items = new Tempcode();
 
     $num_siblings = 0;
     foreach ($list as $i => $_option) {
@@ -376,7 +376,7 @@ function _do_next_section($list, $title)
     }
 
     if ($next_items->is_empty()) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     return do_template('DO_NEXT_SECTION', array(

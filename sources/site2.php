@@ -112,7 +112,7 @@ function get_staff_actions_list()
  */
 function get_page_warning_details($zone, $codename, $edit_url)
 {
-    $warning_details = new ocp_tempcode();
+    $warning_details = new Tempcode();
     if ((!has_privilege(get_member(), 'jump_to_unvalidated')) && (addon_installed('unvalidated'))) {
         access_denied('PRIVILEGE', 'jump_to_unvalidated');
     }
@@ -120,7 +120,7 @@ function get_page_warning_details($zone, $codename, $edit_url)
     if (!$edit_url->is_empty()) {
         $menu_links = $GLOBALS['SITE_DB']->query('SELECT DISTINCT i_menu FROM ' . get_table_prefix() . 'menu_items WHERE ' . db_string_equal_to('i_url', $zone . ':' . $codename) . ' OR ' . db_string_equal_to('i_url', '_SEARCH:' . $codename));
         if (count($menu_links) != 0) {
-            $menu_items_linking = new ocp_tempcode();;
+            $menu_items_linking = new Tempcode();;
             foreach ($menu_links as $menu_link) {
                 if (!$menu_items_linking->is_empty()) {
                     $menu_items_linking->attach(do_lang_tempcode('LIST_SEP'));
@@ -315,8 +315,8 @@ function page_not_found($codename, $zone)
     $add_access = has_add_comcode_page_permission($zone);
     $redirect_access = addon_installed('redirects_editor') && has_actual_page_access(get_member(), 'admin_redirects');
     require_lang('zones');
-    $add_url = $add_access ? build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $zone . ':' . $codename), get_module_zone('cms_comcode_pages')) : new ocp_tempcode();
-    $add_redirect_url = $redirect_access ? build_url(array('page' => 'admin_redirects', 'type' => 'misc', 'page_link' => $zone . ':' . $codename), get_module_zone('admin_redirects')) : new ocp_tempcode();
+    $add_url = $add_access ? build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'page_link' => $zone . ':' . $codename), get_module_zone('cms_comcode_pages')) : new Tempcode();
+    $add_redirect_url = $redirect_access ? build_url(array('page' => 'admin_redirects', 'type' => 'misc', 'page_link' => $zone . ':' . $codename), get_module_zone('admin_redirects')) : new Tempcode();
     return do_template('MISSING_SCREEN', array('_GUID' => '22f371577cd2ba437e7b0cb241931575', 'TITLE' => $title, 'DID_MEAN' => $_did_mean, 'ADD_URL' => $add_url, 'ADD_REDIRECT_URL' => $add_redirect_url, 'PAGE' => $codename));
 }
 

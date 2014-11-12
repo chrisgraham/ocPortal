@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    webdav
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_webdav
 {
     /**

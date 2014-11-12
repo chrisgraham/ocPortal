@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    printer_friendly_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_printer_friendly_block
 {
     /**

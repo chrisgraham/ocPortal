@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_gambling
 {
     /**
@@ -53,7 +57,7 @@ class Hook_pointstore_gambling
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
 
         if (get_option('is_on_' . $class . '_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('GAMBLING');
@@ -69,7 +73,7 @@ class Hook_pointstore_gambling
         }
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_integer(do_lang_tempcode('AMOUNT'), do_lang_tempcode('DESCRIPTION_GAMBLE_AMOUNT', integer_format($cost), integer_format($max)), 'amount', $cost, true));
 
         $text = do_lang_tempcode('GAMBLE_A', integer_format($cost), integer_format($max), integer_format($points_left));
@@ -87,7 +91,7 @@ class Hook_pointstore_gambling
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
 
         if (get_option('is_on_' . $class . '_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $amount = post_param_integer('amount', -1);

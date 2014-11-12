@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
-class Hook_Preview_poll
+
+/**
+ * Hook class.
+ */
+class Hook_preview_poll
 {
     /**
      * Find whether this preview hook applies.
@@ -38,7 +42,7 @@ class Hook_Preview_poll
     public function run()
     {
         // Our questions templated
-        $tpl = new ocp_tempcode();
+        $tpl = new Tempcode();
         $i = 1;
         do {
             $answer_plain = post_param('option' . strval($i));
@@ -52,7 +56,7 @@ class Hook_Preview_poll
         }
         while ($answer_plain != '');
 
-        $submit_url = new ocp_tempcode();
+        $submit_url = new Tempcode();
 
         // Do our final template
         $question_plain = post_param('question');

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_polls
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_stats
 {
     /**
@@ -40,7 +44,7 @@ class Hook_sw_stats
     public function get_fields($field_defaults)
     {
         if (!addon_installed('stats')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $field_defaults += $this->get_current_settings(); // $field_defaults will take precedence, due to how "+" operator works in PHP
@@ -48,7 +52,7 @@ class Hook_sw_stats
         $stats_store_time = $field_defaults['stats_store_time'];
 
         require_lang('stats');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_integer(do_lang_tempcode('STORE_TIME'), do_lang_tempcode('CONFIG_OPTION_stats_store_time'), 'stats_store_time', intval($stats_store_time), true));
 
         return $fields;

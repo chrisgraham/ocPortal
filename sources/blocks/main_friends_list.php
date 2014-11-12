@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Block class.
+ */
 class Block_main_friends_list
 {
     /**

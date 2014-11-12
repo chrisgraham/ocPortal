@@ -21,11 +21,9 @@
 require_code('forum/shared/wbb');
 
 /**
- * Forum Driver.
- *
- * @package    core_forum_drivers
+ * Forum driver class.
  */
-class forum_driver_wbb2 extends forum_driver_wbb_shared
+class Forum_driver_wbb2 extends forum_driver_wbb_shared
 {
     /**
      * Get the ID of the usergroup that is for guests.

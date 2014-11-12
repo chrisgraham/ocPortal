@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Block class.
+ */
 class Block_main_member_bar
 {
     /**
@@ -46,7 +50,7 @@ class Block_main_member_bar
     public function run($map)
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_css('ocf');
@@ -72,7 +76,7 @@ class Block_main_member_bar
             list($links, $details, $num_unread_pps) = member_personal_links_and_details($member_id);
 
             // Any unread PT-PPs?
-            $pt_extra = ($num_unread_pps == 0) ? new ocp_tempcode() : do_lang_tempcode('NUM_UNREAD', integer_format($num_unread_pps));
+            $pt_extra = ($num_unread_pps == 0) ? new Tempcode() : do_lang_tempcode('NUM_UNREAD', integer_format($num_unread_pps));
             $private_topic_url = build_url(array('page' => 'members', 'type' => 'view', 'id' => $member_id), get_module_zone('members'), null, true, false, false, 'tab__pts');
 
             $bar = do_template('OCF_MEMBER_BAR', array(

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_filedump
 {
     /**

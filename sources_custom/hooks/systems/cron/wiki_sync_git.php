@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki_sync
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_wiki_sync_git
 {
     /**

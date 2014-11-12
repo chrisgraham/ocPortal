@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_ocf_unread_topics
 {
     /**
@@ -61,7 +65,7 @@ class Hook_rss_ocf_unread_topics
         }
         $categories = collapse_2d_complexity('id', 'f_name', $GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE f_cache_num_posts>0'));
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             if (((!is_null($row['t_forum_id'])) || ($row['t_pt_to'] == get_member())) && (has_category_access(get_member(), 'forums', strval($row['t_forum_id'])))) {
                 $id = strval($row['id']);
@@ -87,7 +91,7 @@ class Hook_rss_ocf_unread_topics
                 if ($prefix == 'RSS_') {
                     $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '517e4d1be810446bda57d8632dadb4d6', 'COMMENT_URL' => $view_url, 'ID' => strval($row['t_id'])));
                 } else {
-                    $if_comments = new ocp_tempcode();
+                    $if_comments = new Tempcode();
                 }
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

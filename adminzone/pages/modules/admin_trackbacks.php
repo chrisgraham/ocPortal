@@ -102,7 +102,7 @@ class Module_admin_trackbacks
             return $this->delete_trackbacks();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

@@ -60,7 +60,7 @@ function render_image_box($row, $zone = '_SEARCH', $give_context = true, $includ
     $url = build_url($map, $zone);
 
     // Breadcrumbs
-    $breadcrumbs = new ocp_tempcode();
+    $breadcrumbs = new Tempcode();
     if ($include_breadcrumbs) {
         $breadcrumbs = gallery_breadcrumbs($row['cat'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, false, $zone);
     }
@@ -131,7 +131,7 @@ function render_video_box($row, $zone = '_SEARCH', $give_context = true, $includ
     $url = build_url($map, $zone);
 
     // Breadcrumbs
-    $breadcrumbs = new ocp_tempcode();
+    $breadcrumbs = new Tempcode();
     if ($include_breadcrumbs) {
         $breadcrumbs = gallery_breadcrumbs($row['cat'], is_null($root) ? get_param('keep_gallery_root', 'root') : $root, false, $zone);
     }
@@ -225,10 +225,10 @@ function render_gallery_box($myrow, $root = 'root', $show_member_stats_if_approp
             require_code('ocf_members2');
             $member_info = render_member_box($member_id, true, null, null, true, null, false);
         } else {
-            $member_info = new ocp_tempcode();
+            $member_info = new Tempcode();
         }
     } else {
-        $member_info = new ocp_tempcode();
+        $member_info = new Tempcode();
     }
 
     // Meta data
@@ -253,7 +253,7 @@ function render_gallery_box($myrow, $root = 'root', $show_member_stats_if_approp
 
     // If empty gallery (special case for galleries - as galleries may often be empty, due to Personal Gallery system)
     if (($quit_if_empty) && ($num_images == 0) && ($num_videos == 0) && ($num_children == 0)) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     // Image
@@ -286,7 +286,7 @@ function render_gallery_box($myrow, $root = 'root', $show_member_stats_if_approp
         require_code('images');
         $thumb = do_image_thumb($pic, '');
     } else {
-        $thumb = new ocp_tempcode();
+        $thumb = new Tempcode();
     }
 
     // Breadcrumbs
@@ -843,7 +843,7 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
 
     if (($category_id == $root) || ($category_id == 'root')) {
         if ($no_link_for_me_sir) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('galleries', 'fullname', array('name' => $category_id)));
         return hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up');
@@ -853,7 +853,7 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
     if (!array_key_exists($category_id, $PT_PAIR_CACHE_G)) {
         $category_rows = $GLOBALS['SITE_DB']->query_select('galleries', array('parent_id', 'fullname'), array('name' => $category_id), '', 1);
         if (!array_key_exists(0, $category_rows)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }//fatal_exit(do_lang_tempcode('CAT_NOT_FOUND',escape_html($category_id)));
         $PT_PAIR_CACHE_G[$category_id] = $category_rows[0];
     }
@@ -863,7 +863,7 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
         $tpl_url = do_template('BREADCRUMB_SEPARATOR');
         $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
     } else {
-        $tpl_url = new ocp_tempcode();
+        $tpl_url = new Tempcode();
     }
 
     if ($PT_PAIR_CACHE_G[$category_id]['parent_id'] == $category_id) {
@@ -873,7 +873,7 @@ function gallery_breadcrumbs($category_id, $root = 'root', $no_link_for_me_sir =
     if ((get_option('personal_under_members') == '1') && (get_forum_type() == 'ocf')) {
         $owner = get_member_id_from_gallery_name($category_id, null, true);
         if (!is_null($owner)) {
-            $below = new ocp_tempcode();
+            $below = new Tempcode();
             foreach (array(array('_SEARCH:members:misc', do_lang_tempcode('MEMBERS')), array('_SEARCH:members:view:' . strval($owner) . '#tab__galleries', do_lang_tempcode('ocf:MEMBER_PROFILE', escape_html($GLOBALS['FORUM_DRIVER']->get_username($owner, true))))) as $i => $bits) {
                 list($page_link, $title) = $bits;
                 list($zone, $map, $hash) = page_link_decode($page_link);

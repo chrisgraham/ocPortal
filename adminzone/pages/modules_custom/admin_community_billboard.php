@@ -18,7 +18,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_community_billboard extends standard_crud_module
+class Module_admin_community_billboard extends Standard_crud_module
 {
     public $lang_type = 'COMMUNITY_BILLBOARD';
     public $special_edit_frontend = true;
@@ -125,7 +125,7 @@ class Module_admin_community_billboard extends standard_crud_module
             return $this->misc();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -195,7 +195,7 @@ class Module_admin_community_billboard extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -224,7 +224,7 @@ class Module_admin_community_billboard extends standard_crud_module
      */
     public function get_form_fields($message = '', $days = 1, $notes = '', $validated = 0)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line_comcode(do_lang_tempcode('MESSAGE'), do_lang_tempcode('DESCRIPTION_MESSAGE'), 'message', $message, true));
         $fields->attach(form_input_integer(do_lang_tempcode('NUMBER_DAYS'), do_lang_tempcode('NUMBER_DAYS_DESCRIPTION'), 'days', $days, true));
@@ -233,7 +233,7 @@ class Module_admin_community_billboard extends standard_crud_module
         }
         $fields->attach(form_input_tick(do_lang_tempcode('IMMEDIATE_USE'), do_lang_tempcode('DESCRIPTION_IMMEDIATE_USE'), 'validated', $validated == 1));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -257,7 +257,7 @@ class Module_admin_community_billboard extends standard_crud_module
 
         $text = do_template('COMMUNITY_BILLBOARD_DETAILS', array('_GUID' => 'dcc7a8b027d450a3c17c79b23b39cd87', 'USERNAME' => $username, 'DAYS_ORDERED' => integer_format($myrow['days']), 'DATE_RAW' => strval($date_raw), 'DATE' => $date));
 
-        return array($fields, $hidden, new ocp_tempcode(), $text);
+        return array($fields, $hidden, new Tempcode(), $text);
     }
 
     /**

@@ -106,7 +106,7 @@ function occle_script()
                 if (trim($command) == 'exit') {
                     break;
                 }
-                $temp = new virtual_bash(trim($command));
+                $temp = new Virtual_shell(trim($command));
                 if (trim($temp->output[STREAM_STDHTML]) != '') {
                     fwrite($stdout, trim(comcode_to_clean_text(semihtml_to_comcode(preg_replace('#<(\w+) [^<>]*>#', '<${1}>', $temp->output[STREAM_STDHTML])))));
                 }
@@ -121,7 +121,7 @@ function occle_script()
             fclose($stderr);
             fclose($stdout);
         } else {
-            $temp = new virtual_bash(trim($command));
+            $temp = new Virtual_shell(trim($command));
             $temp->output_xml();
         }
         if (get_option('occle_chat_announce') == '1') {
@@ -132,10 +132,8 @@ function occle_script()
 
 /**
  * OcCLE.
- *
- * @package    occle
  */
-class virtual_bash
+class Virtual_shell
 {
     public $current_input;
     public $parsed_input;
@@ -151,7 +149,7 @@ class virtual_bash
      * @param  ?array                   An array of prior output to be prepended (NULL: none)
      * @param  ?array                   An array of prior parameters (NULL: none)
      */
-    public function virtual_bash($inputted_command, $prior_output = null, $parameters = null)
+    public function Virtual_shell($inputted_command, $prior_output = null, $parameters = null)
     {
         if (!defined('MODE_NORMAL')) {
             define('MODE_NORMAL', 0); // Not in quotes
@@ -301,12 +299,13 @@ class virtual_bash
             // Exit with an error
             if ($this->output[STREAM_STDERR] != '') {
                 $this->output[STREAM_STDERR] = do_lang('PROBLEM_ACCESSING_RESPONSE') . "\n" . $this->output[STREAM_STDERR]; // Ugh...got to work with language strings designed for JavaScript
-            } else {
+            }
+            else {
                 $this->output[STREAM_STDERR] = do_lang('TERMINAL_PROBLEM_ACCESSING_RESPONSE');
             }
 
             if ($blank_ok) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
         } elseif ($this->output[STREAM_STDERR] != '') {
             $this->output[STREAM_STDERR] = do_lang('ERROR_NON_TERMINAL') . "\n" . $this->output[STREAM_STDERR]; // And again :-(
@@ -861,8 +860,8 @@ class virtual_bash
                     if (!isset($extra[STREAM_IDENTIFIER][0])) {
                         $extra[STREAM_IDENTIFIER] = array(STREAM_STDOUT);
                     }
-                    $virtual_bash = new virtual_bash($extra[REDIRECT_IDENTIFIER]);
-                    $virtual_output = $virtual_bash->return_output();
+                    $virtual_shell = new Virtual_shell($extra[REDIRECT_IDENTIFIER]);
+                    $virtual_output = $virtual_shell->return_output();
                     $pertinant_output = $virtual_output[$extra[STREAM_IDENTIFIER][count($extra[STREAM_IDENTIFIER]) - 1]];
                     if ($virtual_output[STREAM_STDERR] != '') {
                         $this->output[STREAM_STDERR] = $virtual_output[STREAM_STDERR];
@@ -921,7 +920,8 @@ class virtual_bash
                 // It's not a lone command; see if it's a script - check first in the main script dir
                 if (file_exists(get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND], true))) {
                     $script_file = get_custom_file_base() . '/data/modules/admin_occle/' . filter_naughty_harsh($this->parsed_input[SECTION_COMMAND]); // It's in the main script dir
-                } else {
+                }
+                else {
                     $script_file = $this->_find_script_file(filter_naughty_harsh($this->parsed_input[SECTION_COMMAND])); // Exhaustive search
                 }
 
@@ -933,8 +933,8 @@ class virtual_bash
 
                     foreach ($script_lines as $script_line) {
                         if (strlen($script_line) > 0) {
-                            $virtual_bash = new virtual_bash($script_line, $this->parsed_input[SECTION_PARAMETERS]);
-                            $script_output = $virtual_bash->return_output();
+                            $virtual_shell = new Virtual_shell($script_line, $this->parsed_input[SECTION_PARAMETERS]);
+                            $script_output = $virtual_shell->return_output();
                             $this->output = $this->_combine_streams($this->output, $script_output);
                         }
                     }
@@ -1081,7 +1081,7 @@ class virtual_bash
     protected function _array_to_html($array)
     {
         // Convert an array to an HTML format
-        $output = new ocp_tempcode();
+        $output = new Tempcode();
         $key = mixed();
         foreach ($array as $key => $value) {
             if (is_array($value)) {
@@ -1290,7 +1290,7 @@ function get_queued_messages($xml = true)
     if ($xml) {
         $output = '';
     } else {
-        $output = new ocp_tempcode();
+        $output = new Tempcode();
     }
 
     $_loc = get_value('last_occle_command');

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_is_on_community_billboard_buy
 {
     /**

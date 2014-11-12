@@ -192,7 +192,7 @@ function notification_poller_script()
 function get_web_notifications($max = null, $start = 0)
 {
     if (is_guest()) {
-        return array(new ocp_tempcode(), 0);
+        return array(new Tempcode(), 0);
     }
 
     $where = array(
@@ -201,7 +201,7 @@ function get_web_notifications($max = null, $start = 0)
     );
 
     $rows = $GLOBALS['SITE_DB']->query_select('digestives_tin', array('*'), $where, 'ORDER BY d_date_and_time DESC', $max, $start);
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $row) {
         $member_id = $row['d_from_member_id'];
         if ($member_id < 0) {
@@ -311,11 +311,11 @@ function web_notification_to_xml($row)
 function get_pts($max = null, $start = 0)
 {
     if (get_forum_type() != 'ocf') {
-        return array(new ocp_tempcode(), 0);
+        return array(new Tempcode(), 0);
     }
 
     if (is_guest()) {
-        return array(new ocp_tempcode(), 0);
+        return array(new Tempcode(), 0);
     }
 
     ocf_require_all_forum_stuff();
@@ -324,7 +324,7 @@ function get_pts($max = null, $start = 0)
     $rows = ocf_get_pp_rows($max, false, false);
     $max_rows = count(ocf_get_pp_rows(intval(get_option('general_safety_listing_limit')), true, false));
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $i => $topic) {
         $topic_url = build_url(array('page' => 'topicview', 'id' => $topic['id'], 'type' => 'findpost'), get_module_zone('topicview'));
         $topic_url->attach('#post_' . strval($topic['id']));

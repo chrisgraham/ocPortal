@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-class Hook_Notification_member_entered_chatroom extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_member_entered_chatroom extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

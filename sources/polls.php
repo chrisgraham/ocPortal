@@ -61,10 +61,10 @@ function render_poll_box($results, $myrow, $zone = '_SEARCH', $include_manage_li
 
     $poll_results = 'show_poll_results_' . strval($myrow['id']);
     $vote_url = get_self_url(false, true, array('poll_id' => $myrow['id'], $poll_results => 1));
-    $result_url = $results ? new ocp_tempcode() : get_self_url(false, true, array($poll_results => 1));
+    $result_url = $results ? new Tempcode() : get_self_url(false, true, array($poll_results => 1));
 
     // Our questions templated
-    $tpl = new ocp_tempcode();
+    $tpl = new Tempcode();
     for ($i = 1; $i <= $num_options; $i++) {
         $answer = get_translated_tempcode('poll', $just_poll_row, 'option' . strval($i));
         $answer_plain = get_translated_text($myrow['option' . strval($i)]);
@@ -88,19 +88,19 @@ function render_poll_box($results, $myrow, $zone = '_SEARCH', $include_manage_li
         if ((has_actual_page_access(null, 'cms_polls', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_polls'))) {
             $submit_url = build_url(array('page' => 'cms_polls', 'type' => 'ad', 'redirect' => get_self_url(true, true, array())), get_module_zone('cms_polls'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
 
         $archive_url = build_url(array('page' => 'polls', 'type' => 'misc'), $zone);
     } else {
-        $submit_url = new ocp_tempcode();
-        $archive_url = new ocp_tempcode();
+        $submit_url = new Tempcode();
+        $archive_url = new Tempcode();
     }
 
     // Do our final template
     $question = get_translated_tempcode('poll', $just_poll_row, 'question');
     $question_plain = get_translated_text($myrow['question']);
-    $full_url = new ocp_tempcode();
+    $full_url = new Tempcode();
     if ((get_page_name() != 'polls') || (get_param('type', '') != 'view')) {
         $full_url = build_url(array('page' => 'polls', 'type' => 'view', 'id' => $myrow['id']), $zone);
     }
@@ -237,7 +237,7 @@ function create_selection_list_polls($it = null, $only_owned = null)
         }
         $rows = $GLOBALS['SITE_DB']->query_select('poll', array('question', 'is_current', 'votes1', 'votes2', 'votes3', 'votes4', 'votes5', 'votes6', 'votes7', 'votes8', 'votes9', 'votes10', 'id'), $where + array('date_and_time' => null), 'ORDER BY add_time DESC', 400);
     }
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $myrow) {
         $selected = !is_null($it);
 

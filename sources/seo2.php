@@ -56,7 +56,7 @@ function seo_get_fields($type, $id = null, $show_header = true)
         list($keywords, $description) = seo_meta_get_for($type, $id);
     }
 
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     if ((get_option('enable_seo_fields') != 'no') && ((get_option('enable_seo_fields') != 'only_on_edit') || (!is_null($id)))) {
         if ($show_header) {
             $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array(

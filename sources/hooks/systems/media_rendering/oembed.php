@@ -23,6 +23,9 @@ Notes...
  - Link/semantic-webpage rendering will not use passed description parameter, etc. This is intentional: the normal flow of rendering through a standardised media template is not used.
 */
 
+/**
+ * Hook class.
+ */
 class Hook_media_rendering_oembed
 {
     /**
@@ -148,7 +151,7 @@ class Hook_media_rendering_oembed
             case 'text/xml':
             case 'text/xml+oembed':
                 require_code('xml');
-                $parsed = new ocp_simple_xml_reader($result);
+                $parsed = new OCP_simple_xml_reader($result);
                 list($root_tag, $root_attributes, , $this_children) = $parsed->gleamed;
                 if ($root_tag == 'oembed') {
                     foreach ($this_children as $child) {
@@ -344,7 +347,7 @@ class Hook_media_rendering_oembed
         }
 
         // Should not get here
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -372,7 +375,7 @@ class Hook_media_rendering_oembed
             $source_member = get_member();
         }
         $comcode = '';
-        $url_tempcode = new ocp_tempcode();
+        $url_tempcode = new Tempcode();
         $url_tempcode->attach($url);
         return _do_tags_comcode('url', array('param' => $link_captions_title), $url_tempcode, false, '', 0, $source_member, false, $GLOBALS['SITE_DB'], $comcode, false, false);
     }

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_iotds
 {
     /**

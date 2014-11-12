@@ -35,7 +35,7 @@ function ocf_render_topic($topic, $has_topic_marking, $pt = false, $show_forum =
         if (!is_null($ticket_type_id)) {
             $_ticket_type_name = $GLOBALS['SITE_DB']->query_select_value_if_there('ticket_types', 'ticket_type_name', array('id' => $ticket_type_id));
 
-            $d = new ocp_tempcode();
+            $d = new Tempcode();
             $d->attach(div(escape_html($topic['description'])));
             $ticket_type_name = get_translated_text($_ticket_type_name);
             $d->attach(div(escape_html($ticket_type_name)));

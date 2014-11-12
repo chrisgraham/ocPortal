@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_author
 {
     /**
@@ -96,7 +100,7 @@ class Hook_fields_author
         }
 
         if ($ev == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return hyperlink(build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $ev), get_module_zone('authors')), $ev, false, true);

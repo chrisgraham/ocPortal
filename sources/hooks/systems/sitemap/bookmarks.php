@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    bookmarks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_bookmarks extends Hook_sitemap_base
 {
     /**

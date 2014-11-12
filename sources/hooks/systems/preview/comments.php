@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-class Hook_Preview_comments
+
+/**
+ * Hook class.
+ */
+class Hook_preview_comments
 {
     /**
      * Find whether this preview hook applies.
@@ -71,8 +75,8 @@ class Hook_Preview_comments
             require_code('ocf_members2');
             $poster_details = render_member_box(get_member(), false, $hooks, $hook_objects, false, null, false);
         } else {
-            $custom_fields = new ocp_tempcode();
-            $poster_details = new ocp_tempcode();
+            $custom_fields = new Tempcode();
+            $poster_details = new Tempcode();
         }
         if (addon_installed('ocf_forum')) {
             if (is_guest()) {

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_tickets
 {
     /**

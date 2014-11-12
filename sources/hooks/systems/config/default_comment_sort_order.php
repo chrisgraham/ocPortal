@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_default_comment_sort_order
 {
     /**

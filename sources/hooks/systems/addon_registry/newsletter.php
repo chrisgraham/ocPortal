@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_newsletter
 {
     /**
@@ -205,7 +209,7 @@ class Hook_addon_registry_newsletter
      */
     public function tpl_preview__administrative__newsletter_subscribers_screen()
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('NEWSLETTER_SUBSCRIBER', array(
                 'EMAIL' => lorem_word(),
@@ -271,7 +275,7 @@ class Hook_addon_registry_newsletter
                 'URL' => placeholder_url(),
                 'BACK_URL' => placeholder_url(),
                 'PREVIEW' => $preview,
-                'FIELDS' => new ocp_tempcode(),
+                'FIELDS' => new Tempcode(),
                 'TITLE' => lorem_title(),
             )), null, '', true)
         );

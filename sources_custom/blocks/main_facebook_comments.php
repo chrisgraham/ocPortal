@@ -45,7 +45,7 @@ class Block_main_facebook_comments
 
         $appid = get_option('facebook_appid');
         if ($appid == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         return do_template('BLOCK_MAIN_FACEBOOK_COMMENTS', array('_GUID' => '99de0fd4bc8b3f57d4f9238b798bfcbf', 'URL' => 'http://developers.facebook.com/docs/reference/plugins/like-box'));
     }

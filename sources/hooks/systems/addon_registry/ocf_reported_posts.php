@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_reported_posts
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_reported_posts
 {
     /**

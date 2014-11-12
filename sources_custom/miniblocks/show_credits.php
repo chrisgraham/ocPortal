@@ -18,12 +18,12 @@ i_solemnly_declare(I_UNDERSTAND_SQL_INJECTION | I_UNDERSTAND_XSS | I_UNDERSTAND_
 $existing_customer = !is_guest() && !is_null($GLOBALS['SITE_DB']->query_select_value_if_there('credit_purchases', 'num_credits', array('member_id' => get_member())));
 
 require_lang('customers');
-$whats_this = new ocp_tempcode();
-$guest_msg = new ocp_tempcode();
-$welcome_msg = new ocp_tempcode();
-$tickets_open_msg = new ocp_tempcode();
-$no_credits_link = new ocp_tempcode();
-$credits_message = new ocp_tempcode();
+$whats_this = new Tempcode();
+$guest_msg = new Tempcode();
+$welcome_msg = new Tempcode();
+$tickets_open_msg = new Tempcode();
+$no_credits_link = new Tempcode();
+$credits_message = new Tempcode();
 if (get_page_name() != 'commercial_support') {
     $commercial_support_url = build_url(array('page' => 'commercial_support'), 'site');
     if (is_object($commercial_support_url)) {

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_themeing
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_themeing
 {
     /**
@@ -186,7 +190,7 @@ class Hook_addon_registry_core_themeing
     public function tpl_preview__administrative__theme_manage_screen()
     {
         require_lang('zones');
-        $themes = new ocp_tempcode();
+        $themes = new Tempcode();
         foreach (placeholder_array() as $value) {
             $themes->attach(do_lorem_template('THEME_MANAGE', array(
                 'THEME_USAGE' => lorem_phrase(),
@@ -302,7 +306,7 @@ class Hook_addon_registry_core_themeing
             );
         }
 
-        $_parameters = new ocp_tempcode();
+        $_parameters = new Tempcode();
         foreach (placeholder_array() as $value) {
             $_parameters->attach(form_input_list_entry($value, false, $value));
         }
@@ -317,7 +321,7 @@ class Hook_addon_registry_core_themeing
             ));
         }
 
-        $template_editors = new ocp_tempcode();
+        $template_editors = new Tempcode();
 
         $template_editors->attach(do_lorem_template('TEMPLATE_EDIT_SCREEN_EDITOR', array(
             'CODENAME' => lorem_word(),
@@ -403,9 +407,9 @@ class Hook_addon_registry_core_themeing
      */
     public function tpl_preview__administrative__template_preview_screen()
     {
-        $templates = new ocp_tempcode();
-        $lis = new ocp_tempcode();
-        $ftemp = new ocp_tempcode();
+        $templates = new Tempcode();
+        $lis = new Tempcode();
+        $ftemp = new Tempcode();
         $list = array();
         foreach (placeholder_array() as $v) {
             $list[] = $v;
@@ -447,7 +451,7 @@ class Hook_addon_registry_core_themeing
 
         $tree = do_lorem_template('TEMPLATE_TREE_ITEM', $parameters);
 
-        $middle = new ocp_tempcode();
+        $middle = new Tempcode();
         foreach (placeholder_array() as $value) {
             $middle->attach(do_lorem_template('TEMPLATE_TREE_ITEM_WRAP', array(
                 'CONTENT' => lorem_phrase(),
@@ -476,7 +480,7 @@ class Hook_addon_registry_core_themeing
      */
     public function tpl_preview__administrative__template_list_screen()
     {
-        $ftemp = new ocp_tempcode();
+        $ftemp = new Tempcode();
         foreach (placeholder_array() as $v) {
             $ftemp->attach(do_lorem_template('TEMPLATE_LIST_ENTRY', array(
                 'COUNT' => placeholder_number(),

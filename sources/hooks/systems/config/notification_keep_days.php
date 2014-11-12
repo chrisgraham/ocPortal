@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_notification_keep_days
 {
     /**

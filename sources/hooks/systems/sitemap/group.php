@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_group extends Hook_sitemap_content
 {
     protected $content_type = 'group';

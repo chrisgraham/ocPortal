@@ -28,8 +28,6 @@ to the mdb file). In the properties there is option to choose username and passw
 
 /**
  * Database Driver.
- *
- * @package    core_database_drivers
  */
 class Database_Static_ibm
 {

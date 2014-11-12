@@ -138,7 +138,7 @@ class Module_vforums
         } elseif ($type == 'involved') {
             $content = $this->involved_topics();
         } else {
-            $content = new ocp_tempcode();
+            $content = new Tempcode();
         }
 
         return do_template('OCF_VFORUM_SCREEN', array('_GUID' => '8dca548982d65500ab1800ceec2ddc61', 'TITLE' => $this->title, 'CONTENT' => $content));
@@ -336,10 +336,10 @@ class Module_vforums
         }
 
         // Display topics
-        $topics = new ocp_tempcode();
+        $topics = new Tempcode();
         $pinned = false;
         require_code('templates_pagination');
-        $topic_wrapper = new ocp_tempcode();
+        $topic_wrapper = new Tempcode();
         $forum_name_map = collapse_2d_complexity('id', 'f_name', $GLOBALS['FORUM_DB']->query('SELECT id,f_name FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_forums WHERE f_cache_num_posts>0'));
         foreach ($topics_array as $topic) {
             if ((!$no_pin) && ($pinned) && (!in_array('pinned', $topic['modifiers']))) {
@@ -379,7 +379,7 @@ class Module_vforums
             ));
         }
 
-        $_buttons = new ocp_tempcode();
+        $_buttons = new Tempcode();
         $archive_url = $GLOBALS['FORUM_DRIVER']->forum_url(db_get_first_id(), true);
         $_buttons->attach(do_template('BUTTON_SCREEN', array('_GUID' => '8c928f1f703e9ba232a7033adee19a31', 'TITLE' => do_lang_tempcode('ROOT_FORUM'), 'IMG' => 'buttons__all', 'IMMEDIATE' => false, 'URL' => $archive_url)));
         if ($title->evaluate() == do_lang('TOPICS_UNREAD')) {

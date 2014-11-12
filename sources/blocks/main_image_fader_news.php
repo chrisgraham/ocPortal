@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Block class.
+ */
 class Block_main_image_fader_news
 {
     /**
@@ -78,7 +82,7 @@ class Block_main_image_fader_news
         }
 
         require_code('ocfiltering');
-        $ocfilter = ocfilter_to_sqlfragment($cat, 'r.news_category', 'news_categories', null, 'r.news_category', 'id');
+		$ocfilter = ocfilter_to_sqlfragment($cat, 'r.news_category', 'news_categories', NULL, 'r.news_category', 'id');
 
         $q_filter = '';
         if ($blogs === 0) {
@@ -146,7 +150,7 @@ class Block_main_image_fader_news
             $date = get_timezoned_date($row['date_and_time']);
             $date_raw = strval($row['date_and_time']);
 
-            $author_url = (addon_installed('authors')) ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new ocp_tempcode();
+            $author_url = (addon_installed('authors')) ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new Tempcode();
 
             $news[] = array(
                 'TITLE' => $title,

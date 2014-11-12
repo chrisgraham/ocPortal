@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
+
+/**
+ * Block class.
+ */
 class Block_side_tag_cloud
 {
     /**
@@ -121,7 +125,7 @@ class Block_side_tag_cloud
         ksort($tags);
 
         if (count($tags) == 0) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         // Work out variation in sizings

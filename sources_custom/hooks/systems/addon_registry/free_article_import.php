@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    free_article_import
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_free_article_import
 {
     /**

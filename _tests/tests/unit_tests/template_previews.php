@@ -254,12 +254,12 @@ class template_previews_test_set extends ocp_test_case
                 @set_time_limit(0);
             }
 
-            $ATTACHED_MESSAGES = new ocp_tempcode();
+            $ATTACHED_MESSAGES = new Tempcode();
             $ATTACHED_MESSAGES_RAW = array();
             $out1 = render_screen_preview($template, $hook, $function);
 
             if ($ATTACHED_MESSAGES === null) {
-                $ATTACHED_MESSAGES = new ocp_tempcode();
+                $ATTACHED_MESSAGES = new Tempcode();
             }
             $put_out = (!$ATTACHED_MESSAGES->is_empty()) || (count($ATTACHED_MESSAGES_RAW) > 0);
             $this->assertFalse($put_out, 'Messages put out by ' . $function . '  (' . strip_tags($ATTACHED_MESSAGES->evaluate()) . ')');

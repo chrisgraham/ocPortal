@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Block class.
+ */
 class Block_bottom_news
 {
     /**
@@ -64,7 +68,7 @@ class Block_bottom_news
         $filter_and = array_key_exists('filter_and', $map) ? $map['filter_and'] : '';
         require_lang('news');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         // News Query
         require_code('ocfiltering');

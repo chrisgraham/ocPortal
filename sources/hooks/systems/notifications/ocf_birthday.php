@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Notification_ocf_birthday extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_birthday extends Hook_Notification
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

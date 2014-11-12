@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_bank
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_bank_dividend
 {
     /**

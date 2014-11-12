@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    redirects_editor
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_fs_extended_config__redirect
 {
     /**

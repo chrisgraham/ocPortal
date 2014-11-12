@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
+
+/**
+ * Block class.
+ */
 class Block_menu
 {
     /**

@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_emoticons extends standard_crud_module
+class Module_admin_ocf_emoticons extends Standard_crud_module
 {
     public $lang_type = 'EMOTICON';
     public $select_name = 'EMOTICON';
@@ -143,7 +143,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
         if ($type == '_import') {
             return $this->_import();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -178,7 +178,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
         require_code('form_templates');
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_import', 'uploading' => 1), '_SELF');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $supported = 'tar';
         if ((function_exists('zip_open')) || (get_option('unzip_cmd') != '')) {
             $supported .= ', zip';
@@ -364,8 +364,8 @@ class Module_admin_ocf_emoticons extends standard_crud_module
             attach_message(do_lang_tempcode('EDITING_ON_WRONG_MSN'), 'warn');
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('CODE'), do_lang_tempcode('DESCRIPTION_EMOTICON_CODE'), 'code', $code, true));
 
@@ -376,7 +376,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
             $set_name = 'image';
             $required = true;
             $set_title = do_lang_tempcode('IMAGE');
-            $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
+            $field_set = (count($ids) == 0) ? new Tempcode() : alternate_fields_set__start($set_name);
 
             $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'file', $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 
@@ -395,7 +395,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
             $fields->attach($image_chooser_field);
         }
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         for ($i = 0; $i <= 4; $i++) {
             $list->attach(form_input_list_entry(strval($i), $i == $relevance_level, do_lang_tempcode('EMOTICON_RELEVANCE_LEVEL_' . strval($i))));
         }
@@ -415,7 +415,7 @@ class Module_admin_ocf_emoticons extends standard_crud_module
     public function create_selection_list_radio_entries()
     {
         $_m = $GLOBALS['FORUM_DB']->query_select('f_emoticons', array('e_code', 'e_theme_img_code'));
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         $first = true;
         foreach ($_m as $m) {
             $url = find_theme_image($m['e_theme_img_code']);

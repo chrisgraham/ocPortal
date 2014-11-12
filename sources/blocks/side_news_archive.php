@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Block class.
+ */
 class Block_side_news_archive
 {
     /**
@@ -73,7 +77,7 @@ class Block_side_news_archive
         $rows = array_reverse($rows);
 
         if (count($rows) == 0) {
-            return new ocp_tempcode(); // Nothing
+            return new Tempcode(); // Nothing
         }
         $first = $rows[0]['date_and_time'];
         $last = $rows[count($rows) - 1]['date_and_time'];

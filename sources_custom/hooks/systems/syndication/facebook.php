@@ -1,6 +1,9 @@
 <?php
 
-class Hook_Syndication_facebook
+/**
+ * Hook class.
+ */
+class Hook_syndication_facebook
 {
     public function get_service_name()
     {

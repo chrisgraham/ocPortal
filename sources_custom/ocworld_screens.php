@@ -19,7 +19,7 @@
 function realms()
 {
     $rows = $GLOBALS['SITE_DB']->query_select('w_realms', array('*'));
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $myrow) {
         $owner = $GLOBALS['FORUM_DRIVER']->get_username($myrow['owner']);
         if (is_null($owner)) {
@@ -92,7 +92,7 @@ function output_inventory_screen($member_id)
     $health = $GLOBALS['SITE_DB']->query_select_value('w_members', 'health', array('id' => $member_id));
 
     $rows = $GLOBALS['SITE_DB']->query_select('w_inventory', array('*'), array('item_owner' => $member_id));
-    $inventory = new ocp_tempcode();
+    $inventory = new Tempcode();
     foreach ($rows as $myrow) {
         $item_rows = $GLOBALS['SITE_DB']->query_select('w_itemdef', array('*'), array('name' => $myrow['item_name']));
         if (!array_key_exists(0, $item_rows)) {
@@ -188,7 +188,7 @@ function output_room_screen($member_id)
     $has_down_room = (!is_null($down_room)) && ($down_room != '') && ($locked_down == 0);
 
     $rows = $GLOBALS['SITE_DB']->query_select('w_portals', array('name', 'end_location_realm', 'owner'), array('start_location_x' => $x, 'start_location_y' => $y, 'start_location_realm' => $realm), 'ORDER BY name');
-    $portals = new ocp_tempcode();
+    $portals = new Tempcode();
     foreach ($rows as $myrow) {
         $dest_realm = $myrow['end_location_realm'];
 
@@ -216,7 +216,7 @@ function output_room_screen($member_id)
 
     $other_person = post_param_integer('tmember', -1);
     $rows = $GLOBALS['SITE_DB']->query_select('w_members', array('*'), array('location_x' => $x, 'location_y' => $y, 'location_realm' => $realm), 'ORDER BY lastactive DESC');
-    $people_here = new ocp_tempcode();
+    $people_here = new Tempcode();
     foreach ($rows as $myrow) {
         $this_member_name = $GLOBALS['FORUM_DRIVER']->get_username($myrow['id']);
         if (is_null($this_member_name)) {
@@ -226,12 +226,12 @@ function output_room_screen($member_id)
     }
 
     $rows = $GLOBALS['SITE_DB']->query_select('w_members', array('*'), array('location_x' => $x, 'location_y' => $y, 'location_realm' => $realm), 'ORDER BY lastactive DESC', 15);
-    $members = new ocp_tempcode();
+    $members = new Tempcode();
     foreach ($rows as $myrow) {
         $id = $myrow['id'];
         $health = $myrow['health'];
 
-        $aux = new ocp_tempcode();
+        $aux = new Tempcode();
         if ($id >= 0) {
             $name = $GLOBALS['FORUM_DRIVER']->get_username($id);
             if (is_null($name)) {
@@ -262,12 +262,12 @@ function output_room_screen($member_id)
     }
 
     $rows = $GLOBALS['SITE_DB']->query_select('w_items', array('*'), array('location_x' => $x, 'location_y' => $y, 'location_realm' => $realm, 'cost' => 0));
-    $items = new ocp_tempcode();
+    $items = new Tempcode();
     foreach ($rows as $myrow) {
         $rows2 = $GLOBALS['SITE_DB']->query_select('w_itemdef', array('*'), array('name' => $myrow['name']), '', 1);
         $myrow2 = $rows2[0];
 
-        $aux = new ocp_tempcode();
+        $aux = new Tempcode();
         if (($myrow2['healthy'] == 1) && ($myrow2['bribable'] == 1)) {
             $aux = do_lang_tempcode('W_IS_HEALTH_AND_BRIBABLE');
         } elseif ($myrow2['healthy'] == 1) {
@@ -298,7 +298,7 @@ function output_room_screen($member_id)
     }
 
     $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'w_items WHERE location_x=' . strval($x) . ' AND location_y=' . strval($y) . ' AND location_realm=' . strval($realm) . ' AND cost>0');
-    $items_sale = new ocp_tempcode();
+    $items_sale = new Tempcode();
     foreach ($rows as $myrow) {
         $rows2 = $GLOBALS['SITE_DB']->query_select('w_itemdef', array('*'), array('name' => $myrow['name']), '', 1);
         $myrow2 = $rows2[0];
@@ -308,7 +308,7 @@ function output_room_screen($member_id)
             $seller = do_lang('UNKNOWN');
         }
 
-        $aux = new ocp_tempcode();
+        $aux = new Tempcode();
         if (($myrow2['healthy'] == 1) && ($myrow2['bribable'] == 1)) {
             $aux = do_lang_tempcode('W_IS_HEALTH_AND_BRIBABLE');
         } elseif ($myrow2['healthy'] == 1) {
@@ -342,7 +342,7 @@ function output_room_screen($member_id)
     // PEOPLE HERE
     $other_person = post_param_integer('member', -1);
     $rows = $GLOBALS['SITE_DB']->query_select('w_members', array('*'), array('location_x' => $x, 'location_y' => $y, 'location_realm' => $realm), 'ORDER BY lastactive DESC');
-    $people_here = new ocp_tempcode();
+    $people_here = new Tempcode();
     foreach ($rows as $myrow) {
         if ($myrow['id'] >= 0) {
             $this_member_name = $GLOBALS['FORUM_DRIVER']->get_username($myrow['id']);
@@ -376,7 +376,7 @@ function output_room_screen($member_id)
     // ITEMS HELD
     $item = post_param('item', '');
     $rows = $GLOBALS['SITE_DB']->query_select('w_inventory', array('*'), array('item_owner' => $member_id));
-    $items_held = new ocp_tempcode();
+    $items_held = new Tempcode();
     foreach ($rows as $myrow) {
         $items_held->attach(do_template('W_MAIN_ITEM_OWNED', array('_GUID' => '85b1de9cf8c11b535b28bf033fa11dc9', 'SELECTED' => false, 'NAME' => $myrow['item_name'])));
     }
@@ -385,7 +385,7 @@ function output_room_screen($member_id)
     // ITEMS OWNED
     $item = post_param('item', '');
     $rows = $GLOBALS['SITE_DB']->query_select('w_itemdef', array('*'), array('owner' => $member_id));
-    $_items_owned = new ocp_tempcode();
+    $_items_owned = new Tempcode();
     foreach ($rows as $myrow) {
         $selected = $myrow['name'] == $item;
         $tpl = do_template('W_MAIN_ITEM_OWNED', array('_GUID' => 'dfa2971a5196b3c60d9bbd5240b0d269', 'SELECTED' => $selected, 'NAME' => $myrow['name']));

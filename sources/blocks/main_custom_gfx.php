@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
+
+/**
+ * Block class.
+ */
 class Block_main_custom_gfx
 {
     /**

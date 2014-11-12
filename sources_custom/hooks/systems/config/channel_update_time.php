@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    twitter_feed_integration_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_channel_update_time
 {
     /**

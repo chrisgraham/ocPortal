@@ -135,7 +135,7 @@ class Module_admin_setupwizard
             return $this->step11();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -169,13 +169,13 @@ class Module_admin_setupwizard
         $done_once = !is_null($_done_once);
 
         $post_url = build_url(array('page' => '_SELF', 'type' => 'step2'), '_SELF', array('keep_theme_seed', 'keep_theme_dark', 'keep_theme_source', 'keep_theme_algorithm'));
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         $text->attach(paragraph(do_lang_tempcode($done_once ? 'SETUPWIZARD_1_DESCRIBE_ALT' : 'SETUPWIZARD_1_DESCRIBE')));
         $rescue_url = build_url(array('page' => '', 'keep_safe_mode' => '1'), '');
         $text->attach(paragraph(do_lang_tempcode('SETUPWIZARD_SAFE_MODE', escape_html($rescue_url->evaluate()), escape_html(find_theme_image('icons/24x24/tool_buttons/software_chat')), escape_html(find_theme_image('icons/48x48/tool_buttons/software_chat')))));
         $submit_name = do_lang_tempcode('PROCEED');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $inner = do_template('FORM', array('_GUID' => '71316d91703e3549301f57182405c997', 'SKIP_VALIDATION' => true, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => $text, 'SUBMIT_ICON' => 'buttons__proceed', 'SUBMIT_NAME' => $submit_name, 'HIDDEN' => ''));
         return do_template('SETUPWIZARD_SCREEN', array('TITLE' => $this->title, 'STEP' => '1', 'INNER' => $inner));
@@ -209,7 +209,7 @@ class Module_admin_setupwizard
         $submit_name = do_lang_tempcode('PROCEED');
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_lang('zones');
 
         $site_name = get_option('site_name');
@@ -241,7 +241,7 @@ class Module_admin_setupwizard
             $keywords = do_lang('EXAMPLE_KEYWORDS');
         }
 
-        $installprofiles = new ocp_tempcode();
+        $installprofiles = new Tempcode();
         $hooks = find_all_hooks('modules', 'admin_setupwizard_installprofiles');
         $installprofiles->attach(form_input_list_entry('', true, do_lang_tempcode('NA_EM')));
         require_code('zones2');
@@ -641,7 +641,7 @@ class Module_admin_setupwizard
                     }
                 }
             }
-            $main_list = new ocp_tempcode();
+            $main_list = new Tempcode();
             $main_list->attach(form_input_list_entry('NO', $position == 'NO', do_lang_tempcode('BLOCK_CONFIGURATION__PANEL_NO')));
             $main_list->attach(form_input_list_entry('YES', $position == 'YES', do_lang_tempcode('BLOCK_CONFIGURATION__PANEL_YES')));
             $main_list->attach(form_input_list_entry('YES_CELL', $position == 'YES_CELL', do_lang_tempcode('BLOCK_CONFIGURATION__PANEL_YES_CELL')));
@@ -671,7 +671,7 @@ class Module_admin_setupwizard
                     }
                 }
             }
-            $side_list = new ocp_tempcode();
+            $side_list = new Tempcode();
             $side_list->attach(form_input_list_entry('PANEL_NONE', $position == 'PANEL_NONE', do_lang_tempcode('BLOCK_CONFIGURATION__PANEL_NONE')));
             $side_list->attach(form_input_list_entry('PANEL_LEFT', $position == 'PANEL_LEFT', do_lang_tempcode('BLOCK_CONFIGURATION__PANEL_LEFT')));
             $side_list->attach(form_input_list_entry('PANEL_RIGHT', $position == 'PANEL_RIGHT', do_lang_tempcode('BLOCK_CONFIGURATION__PANEL_RIGHT')));
@@ -727,7 +727,7 @@ class Module_admin_setupwizard
         }
 
         require_code('form_templates');
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('balanced', array_key_exists('rules', $field_defaults) ? ($field_defaults['rules'] == 'balanced') : true, do_lang_tempcode('SETUPWIZARD_RULES_balanced')));
         $list->attach(form_input_list_entry('liberal', array_key_exists('rules', $field_defaults) ? ($field_defaults['rules'] == 'liberal') : false, do_lang_tempcode('SETUPWIZARD_RULES_liberal')));
         $list->attach(form_input_list_entry('corporate', array_key_exists('rules', $field_defaults) ? ($field_defaults['rules'] == 'corporate') : false, do_lang_tempcode('SETUPWIZARD_RULES_corporate')));
@@ -758,7 +758,7 @@ class Module_admin_setupwizard
         $submit_name = do_lang_tempcode('PROCEED');
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_colour(do_lang_tempcode('SEED_COLOUR'), do_lang_tempcode('DESCRIPTION_SEED_COLOUR'), 'seed_hex', '#' . find_theme_seed('default'), true));
         $fields->attach(form_input_tick(do_lang_tempcode('DARK_THEME'), do_lang_tempcode('DESCRIPTION_DARK_THEME'), 'dark', get_param_integer('dark', 0) == 1));
 
@@ -789,7 +789,7 @@ class Module_admin_setupwizard
         $submit_name = do_lang_tempcode('PROCEED');
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_tick(do_lang_tempcode('CLOSED_SITE'), do_lang_tempcode('CONFIG_OPTION_site_closed'), 'site_closed', true));
         $fields->attach(form_input_text(do_lang_tempcode('MESSAGE'), do_lang_tempcode('CONFIG_OPTION_closed'), 'closed', get_option('closed'), false));
 

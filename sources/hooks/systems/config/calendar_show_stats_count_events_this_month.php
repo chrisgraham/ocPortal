@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_calendar_show_stats_count_events_this_month
 {
     /**

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_support_credits
 {
     /**

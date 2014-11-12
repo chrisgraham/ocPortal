@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    users_online_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_usersonline_show_birthdays
 {
     /**

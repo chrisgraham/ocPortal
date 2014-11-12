@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
+
+/**
+ * Block class.
+ */
 class Block_main_banner_wave
 {
     /**
@@ -70,7 +74,7 @@ class Block_main_banner_wave
         $b_type = $map['param'];
         $myquery = 'SELECT * FROM ' . get_table_prefix() . 'banners WHERE ((((the_type<>1) OR ((campaign_remaining>0) AND ((expiry_date IS NULL) or (expiry_date>' . strval(time()) . ')))) AND ' . db_string_not_equal_to('name', '') . ')) AND validated=1 AND ' . db_string_equal_to('b_type', $b_type) . ' ORDER BY name';
         $banners = $GLOBALS['SITE_DB']->query($myquery, 200/*just in case of insane amounts of data*/);
-        $assemble = new ocp_tempcode();
+        $assemble = new Tempcode();
 
         if (count($banners) > $max) {
             shuffle($banners);

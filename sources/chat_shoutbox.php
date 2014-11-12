@@ -82,7 +82,7 @@ function shoutbox_script($ret = false, $room_id = null, $num_messages = null)
         }
     }
 
-    $tpl = new ocp_tempcode();
+    $tpl = new Tempcode();
     while (count($_tpl) > $num_messages) {
         array_shift($_tpl);
     }

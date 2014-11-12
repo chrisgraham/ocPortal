@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_ocf_topics
 {
     /**
@@ -50,7 +54,7 @@ class Hook_ocf_topics
     public function run()
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('tasks');

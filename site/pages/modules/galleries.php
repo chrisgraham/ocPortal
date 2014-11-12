@@ -501,7 +501,7 @@ class Module_galleries
             return $this->show_video();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -528,21 +528,21 @@ class Module_galleries
         // Management links
         if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $cat))) && (can_submit_to_gallery($cat))) {
             $submit_cat = ($myrow['is_member_synched'] == 1) ? ('member_' . strval(get_member()) . '_' . $cat) : $cat;
-            $submit_image_url = ($myrow['accept_images'] == 0) ? new ocp_tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
-            $submit_video_url = ($myrow['accept_videos'] == 0) ? new ocp_tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'av', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
+            $submit_image_url = ($myrow['accept_images'] == 0) ? new Tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
+            $submit_video_url = ($myrow['accept_videos'] == 0) ? new Tempcode() : build_url(array('page' => 'cms_galleries', 'type' => 'av', 'cat' => $submit_cat), get_module_zone('cms_galleries'));
         } else {
-            $submit_image_url = new ocp_tempcode();
-            $submit_video_url = new ocp_tempcode();
+            $submit_image_url = new Tempcode();
+            $submit_video_url = new Tempcode();
         }
         if ((!$implied_existence) && (has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('cat_mid', get_member(), get_member_id_from_gallery_name($cat), 'cms_galleries', array('galleries', $cat)))) {
             $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ec', 'id' => $cat), get_module_zone('cms_galleries'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
         if ((!$implied_existence) && (has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('cat_mid', get_member(), get_ip_address(), 'cms_galleries'))) {
             $add_gallery_url = build_url(array('page' => 'cms_galleries', 'type' => 'ac', 'cat' => $cat), get_module_zone('cms_galleries'));
         } else {
-            $add_gallery_url = new ocp_tempcode();
+            $add_gallery_url = new Tempcode();
         }
 
         // Flow mode puts emphasis on subgalleries, rather than entries; it is subgalleries that there are a lot of, rather than entries
@@ -565,7 +565,7 @@ class Module_galleries
             $order = 'name ASC';
         }
         $rows_children = $GLOBALS['SITE_DB']->query_select('galleries', array('*'), array('parent_id' => $cat), 'ORDER BY ' . $order, intval(get_option('subgallery_link_limit'))/*reasonable limit*/);
-        $children = new ocp_tempcode();
+        $children = new Tempcode();
         if (count($rows_children) == intval(get_option('subgallery_link_limit'))) {
             $rows_children = array(); // Lots of personal galleries. Will need to be reached via member profiles
         }
@@ -618,7 +618,7 @@ class Module_galleries
             'add_date DESC' => 'NEWEST_FIRST',
             'title ASC' => 'TITLE'
         ));
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         foreach ($_selectors as $selector_value => $selector_name) {
             $selected = ($sort == $selector_value);
             $selectors->attach(do_template('PAGINATION_SORTER', array('_GUID' => '2cda0eb8456ba50801d803f33b2e1e9b', 'SELECTED' => $selected, 'NAME' => do_lang_tempcode($selector_name), 'VALUE' => $selector_value)));
@@ -664,19 +664,19 @@ class Module_galleries
 
         // View current entry
         $row = null;
-        $current_entry = new ocp_tempcode();
-        $view_url = new ocp_tempcode();
+        $current_entry = new Tempcode();
+        $view_url = new Tempcode();
         $full_url = '';
-        $entry_edit_url = new ocp_tempcode();
-        $entry_rating_details = new ocp_tempcode();
-        $entry_comment_details = new ocp_tempcode();
-        $entry_trackback_details = new ocp_tempcode();
+        $entry_edit_url = new Tempcode();
+        $entry_rating_details = new Tempcode();
+        $entry_comment_details = new Tempcode();
+        $entry_trackback_details = new Tempcode();
         $entry_add_date_raw = '';
         $entry_edit_date_raw = '';
         $entry_views = '';
         $entry_title = '';
         $entry_submitter = null;
-        $entry_description = new ocp_tempcode();
+        $entry_description = new Tempcode();
         $probe_type = get_param('probe_type', 'first');
         $probe_id = get_param_integer('probe_id', 0);
 
@@ -731,7 +731,7 @@ class Module_galleries
 
             $warning_details = do_template('WARNING_BOX', array('_GUID' => '5500ce574232db1e1577b3d69bbc0d6d', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? 'UNVALIDATED_TEXT_NON_DIRECT' : 'UNVALIDATED_TEXT')));
         } else {
-            $warning_details = new ocp_tempcode();
+            $warning_details = new Tempcode();
         }
         switch ($probe_type) {
             case 'video':
@@ -859,7 +859,7 @@ class Module_galleries
                 break;
         }
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
 
         // Display entries
         $where = db_string_equal_to('cat', $cat);
@@ -915,7 +915,7 @@ class Module_galleries
                 }
             }
 
-            $_edit_url = new ocp_tempcode();
+            $_edit_url = new Tempcode();
             if (has_delete_permission('mid', get_member(), $row['submitter'], 'cms_galleries', array('gallery', $row['cat']))) {
                 $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => ($type == 'image') ? '__ed' : '__ev', 'id' => $row['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
             }
@@ -947,7 +947,7 @@ class Module_galleries
             require_code('ocf_members');
             require_code('ocf_members2');
         }
-        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new ocp_tempcode() : render_member_box($member_id, true, null, null, true, null, false);
+        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new Tempcode() : render_member_box($member_id, true, null, null, true, null, false);
 
         // Rep-image
         $rep_image_url = '';
@@ -1041,7 +1041,7 @@ class Module_galleries
             require_code('ocf_members');
             require_code('ocf_members2');
         }
-        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new ocp_tempcode() : render_member_box($member_id, true, null, null, true, null, false);
+        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new Tempcode() : render_member_box($member_id, true, null, null, true, null, false);
 
         // Render
         return do_template('GALLERY_REGULAR_MODE_SCREEN', array(
@@ -1130,13 +1130,13 @@ class Module_galleries
 
             $warning_details = do_template('WARNING_BOX', array('_GUID' => 'c32faacba974e648a67e5e91ffd3d8e5', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? 'UNVALIDATED_TEXT_NON_DIRECT' : 'UNVALIDATED_TEXT')));
         } else {
-            $warning_details = new ocp_tempcode();
+            $warning_details = new Tempcode();
         }
 
         if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', $cat)))) {
             $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ed', 'id' => $id), get_module_zone('cms_galleries'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
 
         $add_date = get_timezoned_date($myrow['add_date']);
@@ -1149,7 +1149,7 @@ class Module_galleries
             require_code('ocf_members');
             require_code('ocf_members2');
         }
-        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new ocp_tempcode() : render_member_box($member_id, true, null, null, true, null, false);
+        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new Tempcode() : render_member_box($member_id, true, null, null, true, null, false);
 
         return do_template('GALLERY_ENTRY_SCREEN', array(
             '_GUID' => '332a19b6a72505f8e1eb4d288df247ce',
@@ -1245,7 +1245,7 @@ class Module_galleries
 
             $warning_details = do_template('WARNING_BOX', array('_GUID' => 'b32faacba974e648a67e5e91ffd3d8e5', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? 'UNVALIDATED_TEXT_NON_DIRECT' : 'UNVALIDATED_TEXT')));
         } else {
-            $warning_details = new ocp_tempcode();
+            $warning_details = new Tempcode();
         }
 
         // Comments
@@ -1254,7 +1254,7 @@ class Module_galleries
         if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_galleries', array('galleries', $cat)))) {
             $edit_url = build_url(array('page' => 'cms_galleries', 'type' => '_ev', 'id' => $id), get_module_zone('cms_galleries'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
 
         $add_date = get_timezoned_date($myrow['add_date']);
@@ -1270,7 +1270,7 @@ class Module_galleries
             require_code('ocf_members');
             require_code('ocf_members2');
         }
-        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new ocp_tempcode() : render_member_box($member_id, true, null, null, true, null, false);
+        $member_details = ((is_null($member_id)) || (get_forum_type() != 'ocf')) ? new Tempcode() : render_member_box($member_id, true, null, null, true, null, false);
 
         $video_details = show_video_details($myrow);
 
@@ -1420,7 +1420,7 @@ class Module_galleries
         }
 
         // UI for navigating all this
-        $nav_ui = is_null($first_id) ? new ocp_tempcode() : $this->show_nav($category_name, $where, $join, $current_id, $first_id, $back_id, $next_id, $root, $position, $total, $current_type, $first_type, $back_type, $next_type, $slideshow, $wide_high, $start, $max, $cat, $sort, $sort_backwards, $sql_suffix_images, $sql_suffix_videos, $image_select, $video_select);
+        $nav_ui = is_null($first_id) ? new Tempcode() : $this->show_nav($category_name, $where, $join, $current_id, $first_id, $back_id, $next_id, $root, $position, $total, $current_type, $first_type, $back_type, $next_type, $slideshow, $wide_high, $start, $max, $cat, $sort, $sort_backwards, $sql_suffix_images, $sql_suffix_videos, $image_select, $video_select);
 
         return array($total/*aka $n*/, $position/*aka $x*/, $nav_ui, $first_id, $back_id, $next_id, $first_type, $back_type, $next_type);
     }
@@ -1465,15 +1465,15 @@ class Module_galleries
             $slideshow_previous_url = build_url(array('page' => '_SELF', 'type' => $back_type, 'wide_high' => 1, 'id' => $back_id, 'slideshow' => 1, 'ajax' => 1, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF', null, true); // Continues, but as slideshow
             $back_url = build_url(array('page' => '_SELF', 'type' => $back_type, 'id' => $back_id, 'slideshow' => ($slideshow == 0) ? null : $slideshow, 'wide_high' => ($wide_high == 0) ? null : $wide_high, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF', null, true);
         } else {
-            $slideshow_previous_url = new ocp_tempcode();
-            $back_url = new ocp_tempcode();
+            $slideshow_previous_url = new Tempcode();
+            $back_url = new Tempcode();
         }
         if (!is_null($next_id)) {
             $slideshow_next_url = build_url(array('page' => '_SELF', 'type' => $next_type, 'wide_high' => 1, 'id' => $next_id, 'slideshow' => 1, 'ajax' => 1, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF', null, true); // Continues, but as slideshow
             $next_url = build_url(array('page' => '_SELF', 'type' => $next_type, 'id' => $next_id, 'slideshow' => ($slideshow == 0) ? null : $slideshow, 'wide_high' => ($wide_high == 0) ? null : $wide_high, 'days' => (get_param('days', '') == '') ? null : get_param('days'), 'sort' => ($sort == 'add_date DESC') ? null : $sort, 'select' => ($image_select == '*') ? null : $image_select, 'video_select' => ($video_select == '*') ? null : $video_select) + propagate_ocselect(), '_SELF', null, true);
         } else {
-            $slideshow_next_url = new ocp_tempcode();
-            $next_url = new ocp_tempcode();
+            $slideshow_next_url = new Tempcode();
+            $next_url = new Tempcode();
         }
 
         // Link to show more. Preserve info about where we were
@@ -1482,7 +1482,7 @@ class Module_galleries
 
         // Only one entry?
         if ($n == 1) {
-            $slideshow_url = new ocp_tempcode();
+            $slideshow_url = new Tempcode();
         }
 
         return do_template('GALLERY_NAV', array(

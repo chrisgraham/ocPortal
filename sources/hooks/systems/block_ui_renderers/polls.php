@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Hook class.
+ */
 class Hook_block_ui_renderers_polls
 {
     /**
@@ -32,7 +36,7 @@ class Hook_block_ui_renderers_polls
     public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
         if ($block . ':' . $parameter == 'main_poll:param') { // special case for polls
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('poll', array('id', 'question'), null, 'ORDER BY id DESC', 100/*In case insane number*/);
             $list->attach(form_input_list_entry('', false, do_lang('NA')));
             foreach ($rows as $row) {

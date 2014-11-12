@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
-class Hook_Notification_iotd_chosen extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_iotd_chosen extends Hook_Notification
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

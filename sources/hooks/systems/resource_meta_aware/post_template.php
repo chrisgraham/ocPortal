@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_post_templates
  */
+
+/**
+ * Hook class.
+ */
 class Hook_resource_meta_aware_post_template
 {
     /**

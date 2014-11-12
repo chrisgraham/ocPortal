@@ -126,7 +126,7 @@ class Module_admin_notifications
                 continue;
             }
             require_code('hooks/systems/notifications/' . $hook);
-            $ob = object_factory('Hook_Notification_' . $hook);
+            $ob = object_factory('Hook_notification_' . $hook);
             $_notification_codes = $ob->list_handled_codes();
             foreach ($_notification_codes as $notification_code => $notification_details) {
                 $allowed_setting = $ob->allowed_settings($notification_code);

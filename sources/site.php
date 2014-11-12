@@ -231,7 +231,7 @@ function attach_to_javascript($data)
 {
     global $JAVASCRIPT;
     if ($JAVASCRIPT === null) {
-        $JAVASCRIPT = new ocp_tempcode();
+        $JAVASCRIPT = new Tempcode();
     }
     $JAVASCRIPT->attach($data);
 }
@@ -247,7 +247,7 @@ function attach_to_screen_header($data)
 {
     global $EXTRA_HEAD;
     if ($EXTRA_HEAD === null) {
-        $EXTRA_HEAD = new ocp_tempcode();
+        $EXTRA_HEAD = new Tempcode();
     }
     $EXTRA_HEAD->attach($data);
 }
@@ -348,12 +348,12 @@ function attach_message($message, $type = 'inform', $put_in_helper_panel = false
         $ATTACHED_MESSAGES_RAW[] = array($message, $type);
         if ($GLOBALS['TEMPCODE_OUTPUT_STARTED']) {
             if ($LATE_ATTACHED_MESSAGES === null) {
-                $LATE_ATTACHED_MESSAGES = new ocp_tempcode();
+                $LATE_ATTACHED_MESSAGES = new Tempcode();
             }
             $LATE_ATTACHED_MESSAGES->attach($message_tpl);
         } else {
             if ($ATTACHED_MESSAGES === null) {
-                $ATTACHED_MESSAGES = new ocp_tempcode();
+                $ATTACHED_MESSAGES = new Tempcode();
             }
             $ATTACHED_MESSAGES->attach($message_tpl);
         }
@@ -412,7 +412,7 @@ function breadcrumbs($show_self = true)
     if ($BREADCRUMBS === null) {
         $BREADCRUMBS = breadcrumbs_get_default_stub(($BREADCRUMB_EXTRA_SEGMENTS === null || $BREADCRUMB_EXTRA_SEGMENTS->is_empty()) && $show_self);
     }
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $out->attach($BREADCRUMBS);
     if (($BREADCRUMB_EXTRA_SEGMENTS !== null) && (!$BREADCRUMB_EXTRA_SEGMENTS->is_empty())) {
         if (!$out->is_empty()) {
@@ -460,7 +460,7 @@ function breadcrumbs($show_self = true)
 function breadcrumbs_get_default_stub($link_to_self_entrypoint = true)
 {
     global $BREADCRUMB_SET_PARENTS, $DISPLAYED_TITLE, $BREADCRUMB_SET_SELF;
-    $stub = new ocp_tempcode();
+    $stub = new Tempcode();
 
     // Special hard-coded link to sitemap structure for Admin and CMS zones
     $zone = get_zone_name();
@@ -522,7 +522,7 @@ function breadcrumb_add_segment($segment, $final_title = null)
     global $BREADCRUMB_EXTRA_SEGMENTS;
 
     if ($BREADCRUMB_EXTRA_SEGMENTS === null) {
-        $BREADCRUMB_EXTRA_SEGMENTS = new ocp_tempcode();
+        $BREADCRUMB_EXTRA_SEGMENTS = new Tempcode();
     }
     $BREADCRUMB_EXTRA_SEGMENTS->attach($segment);
     if ($final_title !== null) {
@@ -1028,7 +1028,7 @@ function request_page($codename, $required, $zone = null, $page_type = null, $be
                 return $ret;
             }
             $REQUEST_PAGE_NEST_LEVEL--;
-            return new ocp_tempcode();
+            return new Tempcode();
         }
     }
 
@@ -1127,7 +1127,7 @@ function request_page($codename, $required, $zone = null, $page_type = null, $be
     }
 
     $REQUEST_PAGE_NEST_LEVEL--;
-    return new ocp_tempcode(); // should never get here
+    return new Tempcode(); // should never get here
 }
 
 /**
@@ -1147,7 +1147,7 @@ function _request_page($codename, $zone, $page_type = null, $lang = null, $no_re
     if ($REQUEST_PAGE_NEST_LEVEL > 20) {
         $REQUEST_PAGE_NEST_LEVEL = 0;
         attach_message(do_lang_tempcode('STOPPED_RECURSIVE_RESOURCE_INCLUDE', $codename), 'warn');
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $details = persistent_cache_get(array('PAGE_INFO', $codename, $zone, $page_type, $lang, $no_redirect_check));
@@ -1599,16 +1599,16 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
                 'redirect' => $redirect), get_module_zone('cms_comcode_pages'));
         }
     } else {
-        $edit_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
     }
-    $add_child_url = new ocp_tempcode();
+    $add_child_url = new Tempcode();
     if (has_add_comcode_page_permission($zone)) {
         if (strpos($raw_comcode, 'main_comcode_page_children') !== false) {
-            $add_child_url = (get_option('is_on_comcode_page_children') == '1') ? build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'parent_page' => $codename, 'page_link' => $zone . ':'/*Don't make too many assumptions about user flow ,'lang'=>user_lang()*//*,'redirect'=>$redirect*/), get_module_zone('cms_comcode_pages')) : new ocp_tempcode();
+            $add_child_url = (get_option('is_on_comcode_page_children') == '1') ? build_url(array('page' => 'cms_comcode_pages', 'type' => '_ed', 'parent_page' => $codename, 'page_link' => $zone . ':'/*Don't make too many assumptions about user flow ,'lang'=>user_lang()*//*,'redirect'=>$redirect*/), get_module_zone('cms_comcode_pages')) : new Tempcode();
         }
     }
 
-    $warning_details = new ocp_tempcode();
+    $warning_details = new Tempcode();
     if (($comcode_page_row['p_validated'] !== null) && ($comcode_page_row['p_validated'] == 0)) {
         require_code('site2');
         $warning_details = get_page_warning_details($zone, $codename, $edit_url);
@@ -1652,7 +1652,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
         'BEING_INCLUDED' => $being_included,
         'SUBMITTER' => strval($comcode_page_row['p_submitter']),
         'TAGS' => (get_option('show_content_tagging') == '0') ? /*optimisation, can be intensive with many page includes*/
-            new ocp_tempcode() : get_loaded_tags('comcode_pages'),
+            new Tempcode() : get_loaded_tags('comcode_pages'),
         'WARNING_DETAILS' => $warning_details,
         'EDIT_DATE_RAW' => ($comcode_page_row['p_edit_date'] === null) ? '' : strval($comcode_page_row['p_edit_date']),
         'SHOW_AS_EDIT' => $comcode_page_row['p_show_as_edit'] == 1,
@@ -1681,7 +1681,7 @@ function load_comcode_page($string, $zone, $codename, $file_base = null, $being_
 function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_sir = true, $jumps = 0)
 {
     if ($jumps == 10) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $map = array('page' => $the_page);
@@ -1693,11 +1693,11 @@ function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_s
     $url = build_url($map, $the_zone);
 
     if ($the_page == '') {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
     if ($the_page == $root) {
         if ($no_link_for_me_sir) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         $_title = $GLOBALS['SITE_DB']->query_select_value_if_there('cached_comcode_pages', 'cc_page_title', array('the_page' => $the_page, 'the_zone' => $the_zone));
         $title = null;
@@ -1738,16 +1738,16 @@ function comcode_breadcrumbs($the_page, $the_zone, $root = '', $no_link_for_me_s
         $title = $the_page;
     }
     if (!$no_link_for_me_sir) {
-        $tpl_url = ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == '') ? new ocp_tempcode() : do_template('BREADCRUMB_SEPARATOR');
+        $tpl_url = ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == '') ? new Tempcode() : do_template('BREADCRUMB_SEPARATOR');
         $_title = is_object($title) ? $title->evaluate() : $title;
         $tooltip = ($jumps == 0) ? do_lang_tempcode('VIRTUAL_ROOT') : do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode(strip_tags($_title), ENT_QUOTES, get_charset()));
 
         $title = symbol_truncator(array($_title, BREADCRUMB_CROP_LENGTH, '1', '1'), 'spread', $tooltip);
-        $tpl_url->attach(hyperlink($url, $title, false, false, (strlen($_title) > BREADCRUMB_CROP_LENGTH) ? new ocp_tempcode() : $tooltip, null, null, 'up'));
+        $tpl_url->attach(hyperlink($url, $title, false, false, (strlen($_title) > BREADCRUMB_CROP_LENGTH) ? new Tempcode() : $tooltip, null, null, 'up'));
     } else {
-        $tpl_url = new ocp_tempcode();
+        $tpl_url = new Tempcode();
         if ($jumps == 0) {
-            $tpl_url = ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == '') ? new ocp_tempcode() : do_template('BREADCRUMB_SEPARATOR');
+            $tpl_url = ($PT_PAIR_CACHE_CP[$the_page]['p_parent_page'] == '') ? new Tempcode() : do_template('BREADCRUMB_SEPARATOR');
             $_title = is_object($title) ? $title->evaluate() : $title;
             if ($_title != '') {
                 $tpl_url->attach('<span>' . $_title . '</span>');

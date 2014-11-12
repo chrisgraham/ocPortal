@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_polls extends standard_crud_module
+class Module_cms_polls extends Standard_crud_module
 {
     public $lang_type = 'POLL';
     public $archive_entry_point = '_SEARCH:polls:misc';
@@ -100,7 +100,7 @@ class Module_cms_polls extends standard_crud_module
             return $this->misc();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -177,7 +177,7 @@ class Module_cms_polls extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $only_owned = has_privilege(get_member(), 'edit_midrange_content', 'cms_polls') ? null : get_member();
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering, (is_null($only_owned) ? array() : array('submitter' => $only_owned)));
@@ -238,7 +238,7 @@ class Module_cms_polls extends standard_crud_module
     {
         list($allow_rating, $allow_comments, $allow_trackbacks) = $this->choose_feedback_fields_statistically($allow_rating, $allow_comments, $allow_trackbacks);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line_comcode(do_lang_tempcode('QUESTION'), do_lang_tempcode('DESCRIPTION_QUESTION'), 'question', $question, true));
         $fields->attach(form_input_line_comcode(do_lang_tempcode('ANSWER_X', integer_format(1)), do_lang_tempcode('DESCRIPTION_ANSWER'), 'option1', $a1, true));
@@ -271,7 +271,7 @@ class Module_cms_polls extends standard_crud_module
             $fields->attach(content_review_get_fields('poll', is_null($id) ? null : strval($id)));
         }
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**

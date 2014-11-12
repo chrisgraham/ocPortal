@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    authors
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_authors
 {
     /**
@@ -168,7 +172,7 @@ class Hook_addon_registry_authors
     {
         require_lang('authors');
 
-        $news_released = new ocp_tempcode();
+        $news_released = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $tpl = do_lorem_template('NEWS_BRIEF', array(
                 'DATE' => placeholder_time(),
@@ -180,7 +184,7 @@ class Hook_addon_registry_authors
             $news_released->attach($tpl);
         }
 
-        $downloads_released = new ocp_tempcode();
+        $downloads_released = new Tempcode();
         foreach (placeholder_array() as $v) {
             $downloads_released->attach(lorem_sentence_html());
         }
@@ -205,8 +209,8 @@ class Hook_addon_registry_authors
             'ACTION' => hyperlink(placeholder_url(), do_lang_tempcode('AUTHOR_PROFILE'))
         ));
 
-        $skills = new ocp_tempcode();
-        $description = new ocp_tempcode();
+        $skills = new Tempcode();
+        $description = new Tempcode();
 
         return array(
             lorem_globalise(do_lorem_template('AUTHOR_SCREEN', array(
@@ -238,7 +242,7 @@ class Hook_addon_registry_authors
     {
         require_lang('authors');
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach(do_lorem_template('AUTHOR_POPUP_WINDOW_DEFINED', array(
             'AUTHOR' => lorem_phrase(),
             'FIELD_NAME' => lorem_word(),

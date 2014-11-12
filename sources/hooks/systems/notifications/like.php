@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
-class Hook_Notification_like extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_like extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

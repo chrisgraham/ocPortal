@@ -43,7 +43,7 @@ function render_banner_box($row, $zone = '_SEARCH', $give_context = true, $guid 
 
     $just_banner_row = db_map_restrict($row, array('name', 'caption'));
 
-    $url = new ocp_tempcode();
+    $url = new Tempcode();
 
     $_title = $row['name'];
     $title = $give_context ? do_lang('CONTENT_IS_OF_TYPE', do_lang('BANNER'), $_title) : $_title;
@@ -75,7 +75,7 @@ function render_banner_type_box($row, $zone = '_SEARCH', $give_context = true, $
 {
     require_lang('banners');
 
-    $url = new ocp_tempcode();
+    $url = new Tempcode();
 
     $_title = $row['id'];
     if ($_title == '') {
@@ -280,7 +280,7 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
             if ((has_actual_page_access(null, 'cms_banners')) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_banners'))) {
                 $add_banner_url = build_url(array('page' => 'cms_banners', 'type' => 'ad'), get_module_zone('cms_banners'));
             } else {
-                $add_banner_url = new ocp_tempcode();
+                $add_banner_url = new Tempcode();
             }
             $content = do_template('BANNERS_NONE', array('_GUID' => 'b786ec327365d1ef38134ce401db9dd2', 'ADD_BANNER_URL' => $add_banner_url));
             if ($ret) {
@@ -338,7 +338,7 @@ function banners_script($ret = false, $type = null, $dest = null, $b_type = null
  */
 function create_selection_list_banner_types($it = null)
 {
-    $list = new ocp_tempcode();
+    $list = new Tempcode();
     $rows = $GLOBALS['SITE_DB']->query_select('banner_types', array('id', 't_image_width', 't_image_height', 't_is_textual'), null, 'ORDER BY id');
     foreach ($rows as $row) {
         $caption = ($row['id'] == '') ? do_lang('GENERAL') : $row['id'];
@@ -490,7 +490,7 @@ function create_selection_list_banners($it = null, $only_owned = null)
     if (count($rows) == 300) {
         $rows = $GLOBALS['SITE_DB']->query_select('banners', array('name'), $where, 'ORDER BY add_date DESC', 150);
     }
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $myrow) {
         $selected = ($myrow['name'] == $it);
         $out->attach(form_input_list_entry($myrow['name'], $selected));

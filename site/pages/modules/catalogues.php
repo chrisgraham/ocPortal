@@ -601,7 +601,7 @@ class Module_catalogues
                     $breadcrumbs->attach('<span>' . escape_html($_title) . '</span>');
                 }
             } else {
-                $breadcrumbs = new ocp_tempcode();
+                $breadcrumbs = new Tempcode();
                 $url = build_url(array('page' => '_SELF', 'type' => 'index', 'id' => $catalogue_name), '_SELF');
                 $catalogue_title = get_translated_text($catalogue['c_title']);
                 $breadcrumbs->attach(hyperlink($url, escape_html($catalogue_title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', escape_html($catalogue_name))));
@@ -721,7 +721,7 @@ class Module_catalogues
             return $this->view_catalogue_entry();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -746,7 +746,7 @@ class Module_catalogues
         $query .= ' AND c.c_name NOT LIKE \'' . db_encode_like('\_%') . '\'';
         $rows = $GLOBALS['SITE_DB']->query('SELECT c.* ' . $query . (can_arbitrary_groupby() ? ' GROUP BY c.c_name' : ''), $max, $start);
         $max_rows = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(DISTINCT c.c_name) ' . $query);
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach ($rows as $myrow) {
             $first_category = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogue_categories', 'MIN(id)', array('c_name' => $myrow['c_name'], 'cc_parent_id' => null));
             if (is_null($first_category)) {
@@ -799,7 +799,7 @@ class Module_catalogues
 
         // Render categories
         // Not done via main_multi_content block due to need for custom query
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows_subcategories as $myrow) {
             if ((get_value('disable_cat_cat_perms') !== '1') && (!has_category_access(get_member(), 'catalogues_category', strval($myrow['id'])))) {
                 continue;
@@ -813,7 +813,7 @@ class Module_catalogues
         if (has_actual_page_access(null, 'cms_catalogues', null, array('catalogues_catalogue', $catalogue_name), 'submit_cat_midrange_content')) {
             $add_cat_url = build_url(array('page' => 'cms_catalogues', 'type' => 'add_category', 'catalogue_name' => $catalogue_name), get_module_zone('cms_catalogues'));
         } else {
-            $add_cat_url = new ocp_tempcode();
+            $add_cat_url = new Tempcode();
         }
 
         // Render
@@ -851,7 +851,7 @@ class Module_catalogues
 
         $tpl_set = $catalogue_name;
 
-        $category_buildup = new ocp_tempcode();
+        $category_buildup = new Tempcode();
 
         $max = null;
         $start = null;
@@ -903,22 +903,22 @@ class Module_catalogues
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name, 'catalogues_category', strval($id)), 'submit_midrange_content')) {
             $add_link = build_url(array('page' => 'cms_catalogues', 'type' => 'add_entry', 'catalogue_name' => $catalogue_name, 'category_id' => $id), get_module_zone('cms_catalogues'));
         } else {
-            $add_link = new ocp_tempcode();
+            $add_link = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name, 'catalogues_category', strval($id)), 'submit_cat_midrange_content')) {
             $add_cat_url = build_url(array('page' => 'cms_catalogues', 'type' => 'add_category', 'catalogue_name' => $catalogue_name, 'parent_id' => $id), get_module_zone('cms_catalogues'));
         } else {
-            $add_cat_url = new ocp_tempcode();
+            $add_cat_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name, 'catalogues_category', strval($id)), 'edit_cat_midrange_content')) {
             $edit_cat_url = build_url(array('page' => 'cms_catalogues', 'type' => '_edit_category', 'catalogue_name' => $catalogue_name, 'id' => $id), get_module_zone('cms_catalogues'));
         } else {
-            $edit_cat_url = new ocp_tempcode();
+            $edit_cat_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name), 'edit_cat_highrange_content')) {
             $edit_catalogue_url = build_url(array('page' => 'cms_catalogues', 'type' => '_edit_catalogue', 'id' => $catalogue_name), get_module_zone('cms_catalogues'));
         } else {
-            $edit_catalogue_url = new ocp_tempcode();
+            $edit_catalogue_url = new Tempcode();
         }
 
         return do_template(
@@ -970,7 +970,7 @@ class Module_catalogues
         if ($is_ecommerce) {
             $tpl_set = 'products';
         }
-        $cart_link = new ocp_tempcode();
+        $cart_link = new Tempcode();
         if ($is_ecommerce) {
             if (get_forum_type() != 'ocf') {
                 warn_exit(do_lang_tempcode('NO_OCF'));
@@ -986,22 +986,22 @@ class Module_catalogues
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name, 'catalogues_category', strval($id)), 'submit_midrange_content')) {
             $add_link = build_url(array('page' => 'cms_catalogues', 'type' => 'add_entry', 'catalogue_name' => $catalogue_name, 'category_id' => $id), get_module_zone('cms_catalogues'));
         } else {
-            $add_link = new ocp_tempcode();
+            $add_link = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name, 'catalogues_category', strval($id)), 'submit_cat_midrange_content')) {
             $add_cat_url = build_url(array('page' => 'cms_catalogues', 'type' => 'add_category', 'catalogue_name' => $catalogue_name, 'parent_id' => $id), get_module_zone('cms_catalogues'));
         } else {
-            $add_cat_url = new ocp_tempcode();
+            $add_cat_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name, 'catalogues_category', strval($id)), 'edit_cat_midrange_content')) {
             $edit_cat_url = build_url(array('page' => 'cms_catalogues', 'type' => '_edit_category', 'catalogue_name' => $catalogue_name, 'id' => $id), get_module_zone('cms_catalogues'));
         } else {
-            $edit_cat_url = new ocp_tempcode();
+            $edit_cat_url = new Tempcode();
         }
         if (has_actual_page_access(null, 'cms_catalogues', null, (get_value('disable_cat_cat_perms') === '1') ? array('catalogues_catalogue', $catalogue_name) : array('catalogues_catalogue', $catalogue_name), 'edit_cat_highrange_content')) {
             $edit_catalogue_url = build_url(array('page' => 'cms_catalogues', 'type' => '_edit_catalogue', 'id' => $catalogue_name), get_module_zone('cms_catalogues'));
         } else {
-            $edit_catalogue_url = new ocp_tempcode();
+            $edit_catalogue_url = new Tempcode();
         }
 
         // Find display type

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    user_sync
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_user_sync
 {
     /**

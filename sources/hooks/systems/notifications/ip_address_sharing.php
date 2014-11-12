@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
-class Hook_Notification_ip_address_sharing extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ip_address_sharing extends Hook_notification__Staff
 {
     /**
      * Get a list of all the notification codes this hook can handle.

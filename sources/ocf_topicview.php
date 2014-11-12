@@ -457,7 +457,7 @@ function ocf_read_in_topic($topic_id, $start, $max, $view_poll_results = false, 
                     }
                 }
                 $temp = $_postdetails['message'];
-                $_postdetails['message'] = new ocp_tempcode();
+                $_postdetails['message'] = new Tempcode();
                 $_postdetails['message'] = do_template('COMCODE_QUOTE_BY', array('_GUID' => '4521bfe295b1834460f498df488ee7cb', 'SAIDLESS' => false, 'BY' => $p['p_poster_name_if_guest'], 'CONTENT' => $p['message']));
                 $_postdetails['message']->attach($temp);
             }
@@ -663,7 +663,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
     require_lang('ocf');
     require_code('ocf_members2');
 
-    $buttons = new ocp_tempcode();
+    $buttons = new Tempcode();
 
     if ((array_key_exists('may_validate_posts', $topic_info)) && (addon_installed('unvalidated')) && ((($topic_info['validated'] == 0) && ($_postdetails['id'] == $topic_info['first_post_id'])) || ($_postdetails['validated'] == 0))) {
         $map = array('page' => 'topics', 'type' => 'validate_post', 'id' => $_postdetails['id']);
@@ -677,7 +677,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
         }
         $action_url = build_url($map, get_module_zone('topics'));
         $_title = do_lang_tempcode('VALIDATE_POST');
-        $_title_full = new ocp_tempcode();
+        $_title_full = new Tempcode();
         $_title_full->attach($_title);
         $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
         $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '712fdaee35f378e37b007f3a73246690', 'REL' => 'validate', 'IMMEDIATE' => true, 'IMG' => 'menu__adminzone__audit__unvalidated', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $action_url)));
@@ -710,14 +710,14 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
             $javascript_explicit_quote = 'return topic_reply(false,this,\'' . strval($_postdetails['id']) . '\',\'' . addslashes($_postdetails['poster_username']) . '\',\'' . $replying_to_post . '\',\'' . $replying_to_post_plain . '\',true);';
         }
         $_title = do_lang_tempcode(($topic_info['is_threaded'] == 1) ? '_REPLY' : '_QUOTE_POST');
-        $_title_full = new ocp_tempcode();
+        $_title_full = new Tempcode();
         $_title_full->attach(do_lang_tempcode(($topic_info['is_threaded'] == 1) ? 'REPLY' : 'QUOTE_POST'));
         $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
         $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => 'fc13d12cfe58324d78befec29a663b4f', 'REL' => 'add reply', 'IMMEDIATE' => false, 'IMG' => ($topic_info['is_threaded'] == 1) ? 'buttons__new_reply' : 'buttons__new_quote', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $action_url, 'JAVASCRIPT' => $javascript)));
 
         if ($topic_info['is_threaded'] == 1) { // Second button for replying with explicit quote
             $_title = do_lang_tempcode('QUOTE_POST');
-            $_title_full = new ocp_tempcode();
+            $_title_full = new Tempcode();
             $_title_full->attach($_title);
             $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
             $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => 'fc13d12cfe58324d78befec29a663b4f', 'REL' => 'add reply', 'IMMEDIATE' => false, 'IMG' => 'buttons__new_quote', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $action_url, 'JAVASCRIPT' => $javascript_explicit_quote)));
@@ -734,7 +734,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
 
                 if (($ticket_owner == get_member()) || (has_privilege(get_member(), 'support_operator'))) {
                     $_title = do_lang_tempcode('QUOTE_TO_NEW_TICKET');
-                    $_title_full = new ocp_tempcode();
+                    $_title_full = new Tempcode();
                     $_title_full->attach($_title);
                     $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
 
@@ -754,7 +754,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
         $whisper_type = (get_option('inline_pp_advertise') == '0') ? 'new_pt' : 'whisper';
         $action_url = build_url(array('page' => 'topics', 'type' => $whisper_type, 'id' => $_postdetails['topic_id'], 'quote' => $_postdetails['id'], 'intended_solely_for' => $_postdetails['poster']), get_module_zone('topics'));
         $_title = do_lang_tempcode('WHISPER');
-        $_title_full = new ocp_tempcode();
+        $_title_full = new Tempcode();
         $_title_full->attach($_title);
         $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
         $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => 'fb1c74bae9c553dc160ade85adf289b5', 'REL' => 'add reply contact', 'IMMEDIATE' => false, 'IMG' => (get_option('inline_pp_advertise') == '0') ? 'buttons__send' : 'buttons__whisper', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $action_url)));
@@ -800,7 +800,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
         }
         $delete_url = build_url($map, get_module_zone('topics'));
         $_title = do_lang_tempcode('DELETE');
-        $_title_full = new ocp_tempcode();
+        $_title_full = new Tempcode();
         $_title_full->attach(do_lang_tempcode('DELETE_POST'));
         $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
         $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '8bf6d098ddc217eef75718464dc03d41', 'REL' => 'delete', 'IMMEDIATE' => false, 'IMG' => 'menu___generic_admin__delete', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $delete_url)));
@@ -810,7 +810,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
         if ((array_key_exists('may_report_posts', $topic_info)) && (addon_installed('ocf_reported_posts')) && (is_null(get_bot_type()))) {
             $action_url = build_url(array('page' => 'topics', 'type' => 'report_post', 'id' => $_postdetails['id']), get_module_zone('topics'));
             $_title = do_lang_tempcode('_REPORT_POST');
-            $_title_full = new ocp_tempcode();
+            $_title_full = new Tempcode();
             $_title_full->attach(do_lang_tempcode('REPORT_POST'));
             $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
             $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => 'f81cbe84f524b4ed9e089c6e89a7c717', 'REL' => 'report', 'IMMEDIATE' => false, 'IMG' => 'buttons__report', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $action_url, 'JAVASCRIPT' => 'return open_link_as_overlay(this,null,\'100%\');')));
@@ -830,7 +830,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
     if ((has_privilege(get_member(), 'view_content_history')) && ($_postdetails['has_history'])) {
         $action_url = build_url(array('page' => 'admin_ocf_history', 'type' => 'misc', 'post_id' => $_postdetails['id']), 'adminzone');
         $_title = do_lang_tempcode('POST_HISTORY');
-        $_title_full = new ocp_tempcode();
+        $_title_full = new Tempcode();
         $_title_full->attach($_title);
         $_title_full->attach(do_lang_tempcode('ID_NUM', strval($_postdetails['id'])));
         $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '6086b2ae226bf2a69d1e34641d22ae21', 'REL' => 'history', 'IMMEDIATE' => false, 'IMG' => 'buttons__history', 'TITLE' => $_title, 'FULL_TITLE' => $_title_full, 'URL' => $action_url)));
@@ -857,7 +857,7 @@ function ocf_render_post_buttons($topic_info, $_postdetails, $may_reply, $render
  */
 function ocf_get_post_emphasis($_postdetails)
 {
-    $emphasis = new ocp_tempcode();
+    $emphasis = new Tempcode();
     if ($_postdetails['is_emphasised']) {
         $emphasis = do_lang_tempcode('IMPORTANT');
     } elseif (array_key_exists('intended_solely_for', $_postdetails)) {

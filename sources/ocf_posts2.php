@@ -71,11 +71,11 @@ function render_post_box($row, $use_post_title = false, $give_context = true, $i
         if ($avatar != '') {
             $post_avatar = do_template('OCF_TOPIC_POST_AVATAR', array('_GUID' => ($guid != '') ? $guid : 'f5769e8994880817dc441f70bbeb070e', 'AVATAR' => $avatar));
         } else {
-            $post_avatar = new ocp_tempcode();
+            $post_avatar = new Tempcode();
         }
 
         // Rank images
-        $rank_images = new ocp_tempcode();
+        $rank_images = new Tempcode();
         foreach ($posters_groups as $group) {
             $rank_image = ocf_get_group_property($group, 'rank_image');
             $group_leader = ocf_get_group_property($group, 'group_leader');
@@ -91,8 +91,8 @@ function render_post_box($row, $use_post_title = false, $give_context = true, $i
             require_code('ocf_members2');
             $poster_details = render_member_box($row['p_poster'], false, null, null, false, null, false);
         } else {
-            $custom_fields = new ocp_tempcode();
-            $poster_details = new ocp_tempcode();
+            $custom_fields = new Tempcode();
+            $poster_details = new Tempcode();
         }
         if (addon_installed('ocf_forum')) {
             if ((!is_guest($row['p_poster'])) && (!is_null($primary_group))) {
@@ -130,7 +130,7 @@ function render_post_box($row, $use_post_title = false, $give_context = true, $i
             'LAST_EDIT_USERNAME' => is_null($row['p_last_edit_by']) ? '' : $GLOBALS['FORUM_DRIVER']->get_username($row['p_last_edit_by']),
         ));
     } else {
-        $last_edited = new ocp_tempcode();
+        $last_edited = new Tempcode();
     }
     $last_edited_raw = is_null($row['p_last_edit_time']) ? '' : strval($row['p_last_edit_time']);
 
@@ -161,7 +161,7 @@ function render_post_box($row, $use_post_title = false, $give_context = true, $i
     }
 
     // Emphasis? PP to?
-    $emphasis = new ocp_tempcode();
+    $emphasis = new Tempcode();
     if ($row['p_is_emphasised'] == 1) {
         $emphasis = do_lang_tempcode('IMPORTANT');
     } elseif (!is_null($row['p_intended_solely_for'])) {

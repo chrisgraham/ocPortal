@@ -19,11 +19,9 @@
  */
 
 /**
- * Cache Driver.
- *
- * @package    core
+ * Cache driver class.
  */
-class ocp_eacceleratorcache
+class Persistent_cacheing_eacceleratorcache
 {
     public $objects_list = null;
 

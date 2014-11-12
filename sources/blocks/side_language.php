@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    language_block
  */
+
+/**
+ * Block class.
+ */
 class Block_side_language
 {
     /**

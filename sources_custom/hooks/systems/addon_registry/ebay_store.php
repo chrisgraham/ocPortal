@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ebay_store
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ebay_store
 {
     /**

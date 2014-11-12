@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_downloads
 {
     /**
@@ -259,7 +263,7 @@ class Hook_addon_registry_downloads
     {
         $subcategories = lorem_paragraph_html();
 
-        $downloads = new ocp_tempcode();
+        $downloads = new Tempcode();
         $map = array(
             'ORIGINAL_FILENAME' => lorem_phrase(),
             'AUTHOR' => lorem_phrase(),
@@ -310,7 +314,7 @@ class Hook_addon_registry_downloads
     {
         $subcats = array();
         foreach (placeholder_array() as $cat) {
-            $downloads = new ocp_tempcode();
+            $downloads = new Tempcode();
             $map = array(
                 'ORIGINAL_FILENAME' => lorem_phrase(),
                 'AUTHOR' => lorem_phrase(),
@@ -359,7 +363,7 @@ class Hook_addon_registry_downloads
     public function tpl_preview__download_screen()
     {
         require_lang('galleries');
-        $images_details = new ocp_tempcode();
+        $images_details = new Tempcode();
         foreach (placeholder_array() as $row) {
             $image = do_lorem_template('DOWNLOAD_SCREEN_IMAGE', array(
                 'ID' => placeholder_id(),

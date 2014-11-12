@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Block class.
+ */
 class Block_main_gallery_embed
 {
     /**
@@ -188,7 +192,7 @@ class Block_main_gallery_embed
         sort_maps_by($combined, ($_dir == 'DESC') ? '!2' : '2');
 
         // Display
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($combined as $i => $c) {
             if ($i >= $start) {
                 $just_media_row = db_map_restrict($c[0], array('id', 'description'));
@@ -213,7 +217,7 @@ class Block_main_gallery_embed
 
                         $entry_rating_details = ($row_image['allow_rating'] == 1) ? display_rating($view_url, get_translated_text($row_image['title']), 'images', strval($row_image['id']), 'RATING_INLINE_STATIC', $row_image['submitter']) : null;
 
-                        $_edit_url = new ocp_tempcode();
+                        $_edit_url = new Tempcode();
                         if (has_delete_permission('mid', get_member(), $row_image['submitter'], 'cms_galleries', array('gallery', $row_image['cat']))) {
                             $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '__ed', 'id' => $row_image['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
                             if ($row_image['submitter'] == get_member()) {
@@ -270,7 +274,7 @@ class Block_main_gallery_embed
 
                         $entry_rating_details = ($row_video['allow_rating'] == 1) ? display_rating($view_url, get_translated_text($row_video['title']), 'videos', strval($row_video['id']), 'RATING_INLINE_STATIC', $row_video['submitter']) : null;
 
-                        $_edit_url = new ocp_tempcode();
+                        $_edit_url = new Tempcode();
                         if (has_delete_permission('mid', get_member(), $row_video['submitter'], 'cms_galleries', array('gallery', $row_video['cat']))) {
                             $_edit_url = build_url(array('page' => 'cms_galleries', 'type' => '__ev', 'id' => $row_video['id'], 'redirect' => get_self_url(true)), get_module_zone('cms_galleries'));
                             if ($row_video['submitter'] == get_member()) {
@@ -317,7 +321,7 @@ class Block_main_gallery_embed
                 if ((has_actual_page_access(null, 'cms_galleries', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_galleries', array('galleries', $cat))) && (can_submit_to_gallery($cat))) {
                     $submit_url = build_url(array('page' => 'cms_galleries', 'type' => 'ad', 'cat' => $cat, 'redirect' => SELF_REDIRECT), get_module_zone('cms_galleries'));
                 } else {
-                    $submit_url = new ocp_tempcode();
+                    $submit_url = new Tempcode();
                 }
                 return do_template('BLOCK_NO_ENTRIES', array(
                     '_GUID' => ($guid != '') ? $guid : 'bf84d65b8dd134ba6cd7b1b7bde99de2',
@@ -331,7 +335,7 @@ class Block_main_gallery_embed
         }
 
         // Pagination
-        $pagination = new ocp_tempcode();
+        $pagination = new Tempcode();
         if ($do_pagination) {
             require_code('templates_pagination');
             $_selectors = array_map('intval', explode(',', get_option('gallery_selectors')));

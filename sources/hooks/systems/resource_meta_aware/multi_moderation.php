@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_multi_moderations
  */
+
+/**
+ * Hook class.
+ */
 class Hook_resource_meta_aware_multi_moderation
 {
     /**

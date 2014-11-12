@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    cleanup_repository
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_cleanup_repository
 {
     /**

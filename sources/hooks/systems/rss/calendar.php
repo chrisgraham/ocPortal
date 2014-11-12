@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_calendar
 {
     /**
@@ -42,7 +46,7 @@ class Hook_rss_calendar
 
         $filters = ocfilter_to_sqlfragment($_filters, 'c.id', 'calendar_types', null, 'e_type', 'id');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $_categories = $GLOBALS['SITE_DB']->query('SELECT c.id,c.t_title FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_types c WHERE ' . $filters, null, null, false, true, array('t_title' => 'SHORT_TRANS__COMCODE'));
         foreach ($_categories as $i => $_category) {
             $_categories[$i]['_t_title'] = get_translated_text($_category['t_title']);
@@ -95,7 +99,7 @@ class Hook_rss_calendar
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '202a32693ce54d9ce960b72e66714df0', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

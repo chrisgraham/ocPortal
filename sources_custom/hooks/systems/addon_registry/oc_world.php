@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_world
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_world
 {
     /**

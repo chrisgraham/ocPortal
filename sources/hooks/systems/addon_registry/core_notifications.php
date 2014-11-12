@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_notifications
 {
     /**
@@ -180,7 +184,7 @@ class Hook_addon_registry_core_notifications
      */
     public function tpl_preview__notification_browse_screen()
     {
-        $notifications = new ocp_tempcode();
+        $notifications = new Tempcode();
         $notifications->attach(
             do_lorem_template('NOTIFICATION_WEB', array(
                 'ID' => placeholder_id(),

@@ -309,7 +309,7 @@ class Module_shopping
             return $this->order_det();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -341,7 +341,7 @@ class Module_shopping
         $max_rows = count($result);
 
         if ($max_rows > 0) {
-            $shopping_cart = new ocp_tempcode();
+            $shopping_cart = new Tempcode();
 
             $fields_title = results_field_title(
                 array(
@@ -413,16 +413,16 @@ class Module_shopping
                 'PAYMENT_FORM' => $payment_form,
             ));
         } else {
-            $update_cart_url = new ocp_tempcode();
-            $empty_cart_url = new ocp_tempcode();
+            $update_cart_url = new Tempcode();
+            $empty_cart_url = new Tempcode();
 
             $results_table = do_lang_tempcode('CART_EMPTY');
-            $proceed_box = new ocp_tempcode();
+            $proceed_box = new Tempcode();
         }
 
         $ecom_catalogue = $GLOBALS['SITE_DB']->query_select_value_if_there('catalogues', 'c_name', array('c_ecommerce' => 1));
 
-        $cont_shopping_url = is_null($ecom_catalogue) ? new ocp_tempcode() : build_url(array('page' => 'catalogues', 'type' => 'category', 'catalogue_name' => $ecom_catalogue), get_module_zone('catalogues'));
+        $cont_shopping_url = is_null($ecom_catalogue) ? new Tempcode() : build_url(array('page' => 'catalogues', 'type' => 'category', 'catalogue_name' => $ecom_catalogue), get_module_zone('catalogues'));
 
         // Product ID string for hidden field in Shopping cart
         $pro_ids_val = is_array($pro_ids) ? implode(',', $pro_ids) : '';

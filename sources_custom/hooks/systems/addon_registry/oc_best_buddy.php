@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_best_buddy
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_best_buddy
 {
     /**

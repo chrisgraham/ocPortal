@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    printer_friendly_block
  */
+
+/**
+ * Block class.
+ */
 class Block_side_printer_friendly
 {
     /**

@@ -120,7 +120,7 @@ class Module_admin_staff
             return $this->staff_edit();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -145,7 +145,7 @@ class Module_admin_staff
         if (count($staff) >= 400) {
             warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
         }
-        $available = new ocp_tempcode();
+        $available = new Tempcode();
         require_code('form_templates');
         foreach ($staff as $row_staff) {
             $id = $GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);

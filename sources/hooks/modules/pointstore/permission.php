@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_permission
 {
     /**
@@ -53,7 +57,7 @@ class Hook_pointstore_permission
     {
         require_lang('points');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'permission_title' . $name_suffix, $title, true));
         $fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'permission_description' . $name_suffix, $description, true));
@@ -61,7 +65,7 @@ class Hook_pointstore_permission
         $fields->attach(form_input_integer(do_lang_tempcode('PERMISSION_HOURS'), do_lang_tempcode('DESCRIPTION_PERMISSION_HOURS'), 'permission_hours' . $name_suffix, $hours, false));
         $fields->attach(form_input_tick(do_lang_tempcode('ENABLED'), '', 'permission_enabled' . $name_suffix, $enabled == 1));
 
-        $types = new ocp_tempcode();
+        $types = new Tempcode();
         $_types = array('member_privileges', 'member_zone_access', 'member_page_access', 'member_category_access');
         foreach ($_types as $_type) {
             $types->attach(form_input_list_entry($_type, $type == $_type, do_lang_tempcode('PERM_TYPE_' . $_type)));
@@ -71,7 +75,7 @@ class Hook_pointstore_permission
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'c1ee1d8ff171d8de6cd5ed14b5a59afb', 'SECTION_HIDDEN' => false, 'TITLE' => do_lang_tempcode('SETTINGS'))));
 
         require_all_lang();
-        $privileges = new ocp_tempcode();
+        $privileges = new Tempcode();
         $temp = form_input_list_entry('', false, do_lang_tempcode('NA_EM'));
         $privileges->attach($temp);
         $_privileges = $GLOBALS['SITE_DB']->query_select('privilege_list', array('*'), null, 'ORDER BY p_section,the_name');
@@ -90,13 +94,13 @@ class Hook_pointstore_permission
             $privileges->attach($temp);
         }
         $fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_privilege'), do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_privilege'), 'permission_privilege' . $name_suffix, $privileges, null, false, false));
-        $zones = new ocp_tempcode();
+        $zones = new Tempcode();
         //$zones->attach(form_input_list_entry('',false,do_lang_tempcode('NA_EM')));      Will always scope to a zone. Welcome zone would be '' anyway, so we're simplifying the code by having a zone setting which won't hurt anyway
         require_code('zones2');
         require_code('zones3');
         $zones->attach(create_selection_list_zones($zone));
         $fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_zone'), do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_zone'), 'permission_zone' . $name_suffix, $zones, null, false, false));
-        $pages = new ocp_tempcode();
+        $pages = new Tempcode();
         $temp = form_input_list_entry('', false, do_lang_tempcode('NA_EM'));
         $pages->attach($temp);
         $_zones = find_all_zones();
@@ -112,7 +116,7 @@ class Hook_pointstore_permission
             $pages->attach($temp);
         }
         $fields->attach(form_input_list(do_lang_tempcode('PERMISSION_SCOPE_page'), do_lang_tempcode('DESCRIPTION_PERMISSION_SCOPE_page'), 'privilege_page' . $name_suffix, $pages, null, false, false));
-        $modules = new ocp_tempcode();
+        $modules = new Tempcode();
         $temp = form_input_list_entry('', false, do_lang_tempcode('NA_EM'));
         $modules->attach($temp);
         $_modules = find_all_hooks('systems', 'module_permissions');
@@ -137,13 +141,13 @@ class Hook_pointstore_permission
      */
     public function config()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('pstore_permissions', array('*'), null, 'ORDER BY id');
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $out = array();
         foreach ($rows as $i => $row) {
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
             $hours = $row['p_hours'];
             if ($hours == 400000) {
                 $hours = null; // LEGACY: Around 100 years, but meaning unlimited

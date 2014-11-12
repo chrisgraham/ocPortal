@@ -186,7 +186,7 @@ function warnings_script()
     // Show list of saved warnings
     // ---------------------------
 
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     $rows = $GLOBALS['FORUM_DB']->query_select('f_saved_warnings', array('*'), null, 'ORDER BY s_title');
     $keep = symbol_tempcode('KEEP');
     $url = find_script('warnings') . '?type=delete' . $keep->evaluate();

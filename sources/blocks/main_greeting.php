@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_main_greeting
 {
     /**
@@ -60,7 +64,7 @@ class Block_main_greeting
     {
         $forum = get_forum_type();
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
 
         if ($forum != 'none') {
             // Standard welcome back vs into greeting

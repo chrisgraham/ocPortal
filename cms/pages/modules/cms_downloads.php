@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_downloads extends standard_crud_module
+class Module_cms_downloads extends Standard_crud_module
 {
     public $lang_type = 'DOWNLOAD';
     public $select_name = 'NAME';
@@ -175,7 +175,7 @@ class Module_cms_downloads extends standard_crud_module
             return $this->_import2();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -217,7 +217,7 @@ class Module_cms_downloads extends standard_crud_module
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_import'), '_SELF');
         $submit_name = do_lang_tempcode('LOAD_FTP_FILES');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('FTP_SERVER_URL'), do_lang_tempcode('DESCRIPTION_FTP_SERVER_URL'), 'server_url', 'ftp://ftp.example.com/files/', true));
         $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_PATH'), do_lang_tempcode('DESCRIPTION_DESTINATION_PATH'), 'destination', null, 'choose_download_category', array('addable_filter' => true), true));
@@ -257,7 +257,7 @@ class Module_cms_downloads extends standard_crud_module
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_import2'), '_SELF');
         $submit_name = do_lang_tempcode('LOAD_FILESYSTEM_FILES');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('DIRECTORY'), do_lang_tempcode('DIRECTORY_RELATIVE_INSTALL'), 'server_path', 'uploads/website_specific/my_downloads/', true));
         $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_PATH'), do_lang_tempcode('DESCRIPTION_DESTINATION_PATH'), 'destination', null, 'choose_download_category', array('addable_filter' => true), true));
@@ -348,8 +348,8 @@ class Module_cms_downloads extends standard_crud_module
             }
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
         handle_max_file_size($hidden);
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'name', $name, true));
@@ -509,7 +509,7 @@ class Module_cms_downloads extends standard_crud_module
             $radios->attach(form_input_radio_entry('delete', '2', false, do_lang_tempcode('DELETE_FULL')));
             $delete_fields = form_input_radio(do_lang_tempcode('DELETE_STATUS'), do_lang_tempcode('DESCRIPTION_DELETE_STATUS'), 'delete', $radios);
         } else {
-            $delete_fields = new ocp_tempcode();
+            $delete_fields = new Tempcode();
         }
 
         $ret[2] = $delete_fields;
@@ -740,7 +740,7 @@ class Module_cms_downloads extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_downloads_alt extends standard_crud_module
+class Module_cms_downloads_alt extends Standard_crud_module
 {
     public $lang_type = 'DOWNLOAD_LICENCE';
     public $select_name = 'TITLE';
@@ -769,12 +769,12 @@ class Module_cms_downloads_alt extends standard_crud_module
      */
     public function get_form_fields($title = '', $text = '')
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('TEXT'), do_lang_tempcode('DESCRIPTION_LICENCE_TEXT'), 'text', $text, true));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -849,7 +849,7 @@ class Module_cms_downloads_alt extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_downloads_cat extends standard_crud_module
+class Module_cms_downloads_cat extends Standard_crud_module
 {
     public $lang_type = 'DOWNLOAD_CATEGORY';
     public $select_name = 'NAME';
@@ -896,7 +896,7 @@ class Module_cms_downloads_cat extends standard_crud_module
             }
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'category', $category, true));
         if (!is_null($parent_id)) {
@@ -906,7 +906,7 @@ class Module_cms_downloads_cat extends standard_crud_module
         if (get_option('enable_staff_notes') == '1') {
             $fields->attach(form_input_text(do_lang_tempcode('NOTES'), do_lang_tempcode('DESCRIPTION_NOTES'), 'notes', $notes, false));
         }
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden, 'image');
         $fields->attach(form_input_upload(do_lang_tempcode('REPRESENTATIVE_IMAGE'), do_lang_tempcode('DESCRIPTION_REPRESENTATIVE_IMAGE'), 'rep_image', false, $rep_image, null, true, str_replace(' ', '', get_option('valid_images'))));
 

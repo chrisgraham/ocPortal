@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_entry_point extends Hook_sitemap_base
 {
     /**
@@ -47,18 +51,18 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
 
                 if ($details[0] == 'MODULES' || $details[0] == 'MODULES_CUSTOM') {
                     $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points'), array(/*$check_perms=*/
-                        true,/*$member_id=*/
-                        null,/*$support_crosslinks=*/
-                        true,/*$be_deferential=*/
-                        true));
+                            true,/*$member_id=*/
+                            null,/*$support_crosslinks=*/
+                            true,/*$be_deferential=*/
+                            true));
                     if (!is_null($functions[0])) {
                         if (is_file(get_file_base() . '/' . str_replace('/modules_custom/', '/modules/', $path))) {
                             $path = str_replace('/modules_custom/', '/modules/', $path);
                             $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points', 'get_wrapper_icon'), array(/*$check_perms=*/
-                                true,/*$member_id=*/
-                                null,/*$support_crosslinks=*/
-                                true,/*$be_deferential=*/
-                                true));
+                                    true,/*$member_id=*/
+                                    null,/*$support_crosslinks=*/
+                                    true,/*$be_deferential=*/
+                                    true));
                         }
                     }
                     if (!is_null($functions[0])) {
@@ -140,18 +144,18 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
             $entry_point = $entry_points[$orig_page_link];
         } else {
             $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points'), array(/*$check_perms=*/
-                true,/*$member_id=*/
-                null,/*$support_crosslinks=*/
-                true,/*$be_deferential=*/
-                false));
+                    true,/*$member_id=*/
+                    null,/*$support_crosslinks=*/
+                    true,/*$be_deferential=*/
+                    false));
             if (is_null($functions[0])) {
                 if (is_file(get_file_base() . '/' . str_replace('/modules_custom/', '/modules/', $path))) {
                     $path = str_replace('/modules_custom/', '/modules/', $path);
                     $functions = extract_module_functions(get_file_base() . '/' . $path, array('get_entry_points', 'get_wrapper_icon'), array(/*$check_perms=*/
-                        true,/*$member_id=*/
-                        null,/*$support_crosslinks=*/
-                        true,/*$be_deferential=*/
-                        false));
+                            true,/*$member_id=*/
+                            null,/*$support_crosslinks=*/
+                            true,/*$be_deferential=*/
+                            false));
                 }
             }
 
@@ -188,7 +192,7 @@ class Hook_sitemap_entry_point extends Hook_sitemap_base
         $_title = $entry_point[0];
         $icon = $entry_point[1];
         if (is_null($_title)) {
-            $title = new ocp_tempcode();
+            $title = new Tempcode();
         } elseif (is_object($_title)) {
             $title = $_title;
         } else {

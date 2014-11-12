@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_stats_clean
 {
     /**

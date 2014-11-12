@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
-class Hook_Notification_staff_checklist extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_staff_checklist extends Hook_notification__Staff
 {
     /**
      * Get a list of all the notification codes this hook can handle.

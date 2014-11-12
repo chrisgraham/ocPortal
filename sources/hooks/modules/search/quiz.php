@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_search_quiz
 {
     /**

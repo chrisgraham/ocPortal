@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_backups
 {
     /**
@@ -71,7 +75,7 @@ class Hook_page_backups
             $this->process($path);
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

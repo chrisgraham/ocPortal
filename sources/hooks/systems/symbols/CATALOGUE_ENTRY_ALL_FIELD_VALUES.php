@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_symbol_CATALOGUE_ENTRY_ALL_FIELD_VALUES
 {
     /**

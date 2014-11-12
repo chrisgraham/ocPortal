@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_iotds
 {
     /**
@@ -259,7 +263,7 @@ class Hook_addon_registry_iotds
      */
     public function tpl_preview__iotd_view_screen_iotd()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $content->attach(do_lorem_template('IOTD_BOX', array(
             'SUBMITTER' => placeholder_id(),
             'ID' => placeholder_id(),
@@ -292,7 +296,7 @@ class Hook_addon_registry_iotds
         require_lang('captcha');
 
         require_lang('trackbacks');
-        $trackbacks = new ocp_tempcode();
+        $trackbacks = new Tempcode();
         foreach (placeholder_array(1) as $k => $v) {
             $trackbacks->attach(do_lorem_template('TRACKBACK', array(
                 'ID' => placeholder_id(),
@@ -311,7 +315,7 @@ class Hook_addon_registry_iotds
             'TRACKBACK_TITLE' => lorem_phrase(),
         ));
 
-        $rating_details = new ocp_tempcode();
+        $rating_details = new Tempcode();
 
         $review_titles = array();
         $review_titles[] = array(

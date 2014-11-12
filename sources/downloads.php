@@ -80,12 +80,12 @@ function render_download_box($row, $pic = true, $include_breadcrumbs = true, $zo
         }
         $download_url = build_url($map, $zone);
     } else {
-        $download_url = new ocp_tempcode();
+        $download_url = new Tempcode();
     }
     $date = get_timezoned_date($row['add_date'], false);
     $date_raw = $row['add_date'];
 
-    $breadcrumbs = $include_breadcrumbs ? download_breadcrumbs($row['category_id'], is_null($root) ? get_param_integer('keep_download_root', null) : $root, false, $zone) : new ocp_tempcode();
+    $breadcrumbs = $include_breadcrumbs ? download_breadcrumbs($row['category_id'], is_null($root) ? get_param_integer('keep_download_root', null) : $root, false, $zone) : new Tempcode();
 
     // Download has image?
     $pic_suffix = '';
@@ -101,10 +101,10 @@ function render_download_box($row, $pic = true, $include_breadcrumbs = true, $zo
             $thumb_url = ensure_thumbnail($rows[0]['url'], $rows[0]['thumb_url'], 'galleries', 'images', $rows[0]['id']);
             $imgcode = do_image_thumb($thumb_url, do_lang('DOWNLOAD_THUMBNAIL'));
         } else {
-            $imgcode = new ocp_tempcode();
+            $imgcode = new Tempcode();
         }
     } else {
-        $imgcode = new ocp_tempcode();
+        $imgcode = new Tempcode();
     }
 
     // Rating
@@ -394,7 +394,7 @@ function create_selection_list_download_category_tree($it = null, $use_compound_
  */
 function create_selection_list_download_licences($it = null, $allow_na = false)
 {
-    $list = new ocp_tempcode();
+    $list = new Tempcode();
     if ($allow_na) {
         $list->attach(form_input_list_entry('-1', false, do_lang_tempcode('NA_EM')));
     }
@@ -505,7 +505,7 @@ function download_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = 
 
     if (($category_id == $root) || ($category_id == db_get_first_id())) {
         if ($no_link_for_me_sir) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         $title = get_translated_text($GLOBALS['SITE_DB']->query_select_value('download_categories', 'category', array('id' => $category_id)));
         return hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up');
@@ -525,7 +525,7 @@ function download_breadcrumbs($category_id, $root = null, $no_link_for_me_sir = 
         $tpl_url = do_template('BREADCRUMB_SEPARATOR');
         $tpl_url->attach(hyperlink($url, escape_html($title), false, false, do_lang_tempcode('GO_BACKWARDS_TO', $title), null, null, 'up'));
     } else {
-        $tpl_url = new ocp_tempcode();
+        $tpl_url = new Tempcode();
     }
 
     if ($PT_PAIR_CACHE_D[$category_id]['parent_id'] == $category_id) {

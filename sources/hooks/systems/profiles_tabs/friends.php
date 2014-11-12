@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-class Hook_Profiles_Tabs_friends
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_friends
 {
     /**
      * Find whether this hook is active.
@@ -53,8 +57,8 @@ class Hook_Profiles_Tabs_friends
             return array($title, null, $order, 'tabs/member_account/friends');
         }
 
-        $add_friend_url = new ocp_tempcode();
-        $remove_friend_url = new ocp_tempcode();
+        $add_friend_url = new Tempcode();
+        $remove_friend_url = new Tempcode();
         require_code('chat');
         if (($member_id_of != $member_id_viewing) && (!is_guest())) {
             if (!member_befriended($member_id_of)) {

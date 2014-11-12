@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_css_compile__text
 {
     /**
@@ -30,6 +34,6 @@ class Hook_css_compile__text
             require_code('tempcode_compiler');
             return template_to_tempcode(post_param('css'));
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

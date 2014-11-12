@@ -189,7 +189,7 @@ if (!function_exists('_do_lang')) {
             if (((is_object($token1)) && ($token2 === null)) || (($token2 !== null) && (is_object($token2)))) { // Tempcode only supported in first two
                 $bits = preg_split('#\{\d[^\}]*\}#', $out, 2, PREG_SPLIT_OFFSET_CAPTURE);
 
-                $ret = new ocp_tempcode();
+                $ret = new Tempcode();
                 foreach ($bits as $bit) {
                     if ($XSS_DETECT) {
                         ocp_mark_as_escaped($bit[0]);

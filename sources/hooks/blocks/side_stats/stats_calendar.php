@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats_calendar
 {
     /**
@@ -27,12 +31,12 @@ class Hook_stats_calendar
     public function run()
     {
         if (!addon_installed('calendar')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_lang('calendar');
 
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
         if (get_option('calendar_show_stats_count_events') == '1') {
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'bf4ae0b77a8ee8bef42adb8d7beb3884', 'KEY' => do_lang_tempcode('EVENTS'), 'VALUE' => integer_format($GLOBALS['SITE_DB']->query_select_value('calendar_events', 'COUNT(*)')))));
         }
@@ -53,7 +57,7 @@ class Hook_stats_calendar
         }
 
         if ($bits->is_empty_shell()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $section = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => 'ff9667093f093bec44a7be5e97bf183c', 'SECTION' => do_lang_tempcode('CALENDAR'), 'CONTENT' => $bits));

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_photos
  */
-class Hook_Notification_ocf_choose_photo extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_choose_photo extends Hook_notification__Staff
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

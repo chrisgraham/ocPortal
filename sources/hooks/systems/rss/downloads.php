@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_downloads
 {
     /**
@@ -44,7 +48,7 @@ class Hook_rss_downloads
             return null;
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $_categories = $GLOBALS['SITE_DB']->query_select('download_categories', array('id', 'category'), null, '', 300);
         foreach ($_categories as $i => $_category) {
             $_categories[$i]['_title'] = get_translated_text($_category['category']);
@@ -85,7 +89,7 @@ class Hook_rss_downloads
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '2a3615d747190e5268df1e7d9eaee7be', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             $keep = symbol_tempcode('KEEP');

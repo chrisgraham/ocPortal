@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_language_editing
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_language_editing
 {
     /**
@@ -152,7 +156,7 @@ class Hook_addon_registry_core_language_editing
      */
     public function tpl_preview__administrative__translate_language_criticise_screen()
     {
-        $file = new ocp_tempcode();
+        $file = new Tempcode();
         $files = '';
         foreach (placeholder_array() as $value) {
             $crit = do_lorem_template('TRANSLATE_LANGUAGE_CRITICISM', array(
@@ -185,7 +189,7 @@ class Hook_addon_registry_core_language_editing
     public function tpl_preview__administrative__translate_screen_content_screen()
     {
         require_lang('lang');
-        $lines = new ocp_tempcode();
+        $lines = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
             $actions = do_lorem_template('TRANSLATE_ACTION', array(
                 'LANG_FROM' => fallback_lang(),

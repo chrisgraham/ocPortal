@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_version
 {
     /**
@@ -40,7 +44,7 @@ class Hook_checklist_version
         }
 
         if ($version_outdated) {
-            $url = new ocp_tempcode(); // Don't want to point people to upgrade addons if on an old version
+            $url = new Tempcode(); // Don't want to point people to upgrade addons if on an old version
         } else {
             $url = build_url(array('page' => 'admin_addons', 'type' => 'misc'), get_module_zone('admin_messaging'));
         }

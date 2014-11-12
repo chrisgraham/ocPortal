@@ -19,11 +19,9 @@
  */
 
 /**
- * Forum Driver.
- *
- * @package    core_forum_drivers
+ * Forum driver class.
  */
-class forum_driver_phpbb2 extends forum_driver_base
+class Forum_driver_phpbb2 extends Forum_driver_base
 {
     /**
      * Check the connected DB is valid for this forum driver.
@@ -200,7 +198,7 @@ class forum_driver_phpbb2 extends forum_driver_base
     {
         require_code('comcode_compiler');
         $emoticons = $this->connection->query_select('smilies', array('*'), null, 'GROUP BY code');
-        $em = new ocp_tempcode();
+        $em = new Tempcode();
         foreach ($emoticons as $emo) {
             $code = $emo['code'];
             $em->attach(do_template('EMOTICON_CLICK_CODE', array('_GUID' => '37ca734c4aea443920632e36e48fabc0', 'FIELD_NAME' => $field_name, 'CODE' => $code, 'IMAGE' => apply_emoticons($code))));

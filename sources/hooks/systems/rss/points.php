@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_points
 {
     /**
@@ -44,7 +48,7 @@ class Hook_rss_points
 
         require_lang('points');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'gifts WHERE ' . $filters . ' AND date_and_time>' . strval($cutoff) . ' ORDER BY date_and_time DESC', $max);
         foreach ($rows as $row) {
             $id = strval($row['id']);
@@ -73,7 +77,7 @@ class Hook_rss_points
 
             $view_url = build_url(array('page' => 'points', 'type' => 'member', 'id' => $row['gift_to']), get_module_zone('points'), null, false, false, true);
 
-            $if_comments = new ocp_tempcode();
+            $if_comments = new Tempcode();
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }

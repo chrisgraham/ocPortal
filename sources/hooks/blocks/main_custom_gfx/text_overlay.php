@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
+
+/**
+ * Hook class.
+ */
 class Hook_main_custom_gfx_text_overlay
 {
     /**

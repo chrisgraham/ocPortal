@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_task_manage
 {
     /**
@@ -29,7 +33,7 @@ class Hook_checklist_task_manage
         $type = get_param('type');
 
         if (!has_zone_access(get_member(), 'adminzone')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         decache('main_staff_checklist');
@@ -80,6 +84,6 @@ class Hook_checklist_task_manage
                 break;
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

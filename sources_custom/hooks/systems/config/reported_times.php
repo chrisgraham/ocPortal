@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    reported_content
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_reported_times
 {
     /**

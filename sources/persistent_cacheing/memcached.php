@@ -21,11 +21,9 @@
 /*EXTRA FUNCTIONS: Memcached*/
 
 /**
- * Cache Driver.
- *
- * @package    core
+ * Cache driver class.
  */
-class ocp_memcached extends Memcached
+class Persistent_cacheing_memcached extends Memcached
 {
     /**
      * Constructor.

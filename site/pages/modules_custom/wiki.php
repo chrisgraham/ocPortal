@@ -20,8 +20,8 @@
 /*function init__site__pages__modules_custom__wiki($code)      TODO: This will need to be done in Mx_wiki as we cannot mix code overrides with code rewriting
 {
     $code=str_replace(
-        ',$merge_url,new ocp_tempcode(),new ocp_tempcode());',
-        ',$merge_url,new ocp_tempcode(),new ocp_tempcode(),NULL,\'\',NULL,NULL,NULL,NULL,true,true,get_option(\'wiki_enable_wysiwyg\')==\'0\');',
+        ',$merge_url,new Tempcode(),new Tempcode());',
+        ',$merge_url,new Tempcode(),new Tempcode(),NULL,\'\',NULL,NULL,NULL,NULL,true,true,get_option(\'wiki_enable_wysiwyg\')==\'0\');',
         $code
     );
     $code=str_replace(

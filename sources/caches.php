@@ -36,26 +36,26 @@ function init__caches()
     $use_memcache = ((array_key_exists('use_mem_cache', $SITE_INFO)) && ($SITE_INFO['use_mem_cache'] != '') && ($SITE_INFO['use_mem_cache'] != '0'));// Default to off because badly configured caches can result in lots of very slow misses and lots of lost sessions || ((!array_key_exists('use_mem_cache',$SITE_INFO)) && ((function_exists('xcache_get')) || (function_exists('wincache_ucache_get')) || (function_exists('apc_fetch')) || (function_exists('eaccelerator_get')) || (function_exists('mmcache_get'))));
     if (($use_memcache) && (!$GLOBALS['IN_MINIKERNEL_VERSION'])) {
         if ((class_exists('Memcached')) && (($SITE_INFO['use_mem_cache'] == 'memcached') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_memcached');
-            $PERSISTENT_CACHE = new ocp_memcached();
+            require_code('persistent_cacheing/memcached');
+            $PERSISTENT_CACHE = new Persistent_cacheing_memcached();
         } elseif ((class_exists('Memcache')) && (($SITE_INFO['use_mem_cache'] == 'memcache') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_memcache');
-            $PERSISTENT_CACHE = new ocp_memcache();
+            require_code('persistent_cacheing/memcache');
+            $PERSISTENT_CACHE = new Persistent_cacheing_memcache();
         } elseif ((function_exists('apc_fetch')) && (($SITE_INFO['use_mem_cache'] == 'apc') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_apc');
-            $PERSISTENT_CACHE = new ocp_apccache();
+            require_code('persistent_cacheing/apc');
+            $PERSISTENT_CACHE = new Persistent_cacheing_apccache();
         } elseif (((function_exists('eaccelerator_put')) || (function_exists('mmcache_put'))) && (($SITE_INFO['use_mem_cache'] == 'eaccelerator') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_eaccelerator');
-            $PERSISTENT_CACHE = new ocp_eacceleratorcache();
+            require_code('persistent_cacheing/eaccelerator');
+            $PERSISTENT_CACHE = new Persistent_cacheing_eacceleratorcache();
         } elseif ((function_exists('xcache_get')) && (($SITE_INFO['use_mem_cache'] == 'xcache') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_xcache');
-            $PERSISTENT_CACHE = new ocp_xcache();
+            require_code('persistent_cacheing/xcache');
+            $PERSISTENT_CACHE = new Persistent_cacheing_xcache();
         } elseif ((function_exists('wincache_ucache_get')) && (($SITE_INFO['use_mem_cache'] == 'wincache') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_wincache');
-            $PERSISTENT_CACHE = new ocp_wincache();
+            require_code('persistent_cacheing/wincache');
+            $PERSISTENT_CACHE = new Persistent_cacheing_wincache();
         } elseif ((file_exists(get_custom_file_base() . '/caches/persistent/')) && (($SITE_INFO['use_mem_cache'] == 'filesystem') || ($SITE_INFO['use_mem_cache'] == '1'))) {
-            require_code('caches_filesystem');
-            $PERSISTENT_CACHE = new ocp_filecache();
+            require_code('persistent_cacheing/filesystem');
+            $PERSISTENT_CACHE = new Persistent_cacheing_filecache();
         }
     }
 }
@@ -236,7 +236,7 @@ function get_cache_entry($codename, $cache_identifier, $ttl = 10000, $tempcode =
         }
 
         if ($tempcode) {
-            $ob = new ocp_tempcode();
+            $ob = new Tempcode();
             if (!$ob->from_assembly($cache_rows[0]['the_value'], true)) {
                 return null;
             }

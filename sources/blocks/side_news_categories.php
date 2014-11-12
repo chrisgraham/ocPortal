@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Block class.
+ */
 class Block_side_news_categories
 {
     /**
@@ -66,7 +70,7 @@ class Block_side_news_categories
         } else {
             $categories = $GLOBALS['SITE_DB']->query_select('news_categories', array('*'), array('nc_owner' => null));
         }
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $categories2 = array();
         foreach ($categories as $category) {
             if (has_category_access(get_member(), 'news', strval($category['id']))) {

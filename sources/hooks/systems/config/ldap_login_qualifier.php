@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_ldap_login_qualifier
 {
     /**

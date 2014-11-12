@@ -134,7 +134,7 @@ class Module_admin_ocf_history
             return $this->delete();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -170,7 +170,7 @@ class Module_admin_ocf_history
         $max_rows = $GLOBALS['FORUM_DB']->query_select_value('f_post_history', 'COUNT(*)', $where);
 
         $posts = $GLOBALS['FORUM_DB']->query_select('f_post_history', array('*'), $where, 'ORDER BY h_action_date_and_time DESC', $max, $start);
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($posts as $post) {
             $create_date_and_time = get_timezoned_date($post['h_create_date_and_time']);
             $action_date_and_time = get_timezoned_date($post['h_action_date_and_time']);
@@ -192,12 +192,12 @@ class Module_admin_ocf_history
                 }
                 $link = hyperlink($relates_to, $relates_text, false, true, $relates_tooltip);
             } else {
-                $link = new ocp_tempcode();
+                $link = new Tempcode();
             }
             $action = do_lang($post['h_action']);
 
             // Buttons
-            $buttons = new ocp_tempcode();
+            $buttons = new Tempcode();
             if (has_privilege(get_member(), 'delete_content_history')) { // Delete permanently
                 $url = build_url(array('page' => '_SELF', 'type' => 'delete', 'h_id' => $post['id']), '_SELF', null, true);
                 $buttons->attach(do_template('BUTTON_SCREEN_ITEM', array('_GUID' => '11c9f9ef4a646493544cb29778134960', 'IMMEDIATE' => true, 'URL' => $url, 'IMG' => 'menu___generic_admin__delete', 'FULL_TITLE' => do_lang_tempcode('DELETE_HISTORY_POST'), 'TITLE' => do_lang_tempcode('DELETE_HISTORY_POST'))));
@@ -231,11 +231,11 @@ class Module_admin_ocf_history
             if (array_key_exists(0, $original_post)) {
                 $action = do_lang('CURRENT');
                 $link = hyperlink(build_url(array('page' => 'topicview', 'type' => 'findpost', 'id' => $post_id), get_module_zone('topicview')), do_lang_tempcode('VIEW_POST'), false, true);
-                $buttons = new ocp_tempcode();
+                $buttons = new Tempcode();
                 $action_date_and_time = '';
                 $action_date_and_time_raw = '';
                 $owner_member = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($original_post[0]['p_poster']);
-                $alterer_member = new ocp_tempcode();
+                $alterer_member = new Tempcode();
                 $before = get_translated_text($original_post[0]['p_post'], $GLOBALS['FORUM_DB']);
                 $create_date_and_time = get_timezoned_date($original_post[0]['p_time']);
                 $create_date_and_time_raw = strval($original_post[0]['p_time']);

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Profiles_Tabs_Edit_delete
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_delete
 {
     /**
      * Find whether this hook is active.
@@ -80,7 +84,7 @@ class Hook_Profiles_Tabs_Edit_delete
             }
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_tick(do_lang_tempcode(($member_id_of != $member_id_viewing) ? 'DELETE_WITHOUT_MERGING' : 'DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false));
 

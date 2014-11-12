@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_ticket_type_lead_times
 {
     /**

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    static_export
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_static_export
 {
     /**

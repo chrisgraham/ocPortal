@@ -609,7 +609,7 @@ function test_fail_php_type_check($type, $function_name, $name, $value, $echo = 
             }
             break;
         case 'tempcode':
-            if ((!is_object($value)) || (!is_a($value, 'ocp_tempcode'))) {
+            if ((!is_object($value)) || (!is_a($value, 'Tempcode'))) {
                 _fail_php_type_check($type, $function_name, $name, $value, $echo);
             }
             break;
@@ -755,8 +755,8 @@ function _fail_php_type_check($type, $function_name, $name, $value, $echo = fals
  */
 function render_php_function($function, $class, $show_filename = false)
 {
-    $parameters = new ocp_tempcode();
-    $full_parameters = new ocp_tempcode();
+    $parameters = new Tempcode();
+    $full_parameters = new Tempcode();
     foreach ($function['parameters'] as $parameter) {
         //           if (!array_key_exists('type',$parameter)) exit($function['name']);
 
@@ -771,7 +771,7 @@ function render_php_function($function, $class, $show_filename = false)
         $return = render_php_function_do_bits($function['return']);
         $return_type = $function['return']['type'];
     } else {
-        $return = new ocp_tempcode();
+        $return = new Tempcode();
         $return_type = 'void';
     }
 
@@ -821,7 +821,7 @@ function render_php_function($function, $class, $show_filename = false)
  */
 function render_php_function_do_bits($parameter)
 {
-    $bits = new ocp_tempcode();
+    $bits = new Tempcode();
 
     if (array_key_exists('name', $parameter)) { // Name
         $bits->attach(do_template('PHP_PARAMETER_BIT', array('_GUID' => '81bd29ddf7c9b4d2ae03ca870575cb18', 'NAME' => do_lang_tempcode('NAME'), 'VALUE' => $parameter['name'])));
@@ -941,7 +941,7 @@ function ocp_type_to_hhvm_type($t)
         $t = 'string';
     }
     if (in_array($t, array('tempcode'))) {
-        $t = 'ocp_tempcode';
+        $t = 'Tempcode';
     }
     if (in_array($t, array('list', 'map'))) {
         $t = 'array';

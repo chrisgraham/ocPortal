@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    composer
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_composer
 {
     /**

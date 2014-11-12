@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
-class Hook_Notification_needs_validation extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_needs_validation extends Hook_notification__Staff
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

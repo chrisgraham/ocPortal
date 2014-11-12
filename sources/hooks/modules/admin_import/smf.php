@@ -77,7 +77,7 @@ class Hook_smf
         );
         $_cleanup_url = build_url(array('page' => 'admin_cleanup'), get_module_zone('admin_cleanup'));
         $cleanup_url = $_cleanup_url->evaluate();
-        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new ocp_tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
+        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new Tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
 
         return $info;
     }

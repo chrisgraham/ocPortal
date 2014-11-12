@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    openid
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_openid
 {
     /**

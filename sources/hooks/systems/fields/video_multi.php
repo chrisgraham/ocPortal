@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_video_multi
 {
     // ==============
@@ -98,7 +102,7 @@ class Hook_fields_video_multi
             require_code('transcoding');
         }
 
-        $ret = new ocp_tempcode();
+        $ret = new Tempcode();
         $evs = explode("\n", $ev);
         foreach ($evs as $ev) {
             if (addon_installed('galleries')) {
@@ -180,7 +184,7 @@ class Hook_fields_video_multi
         require_code('galleries');
         $ffield = form_input_upload_multi($_cf_name, $_cf_description, 'field_' . strval($field['id']), $say_required, null, ($field['cf_required'] == 1) ? null/*so unlink option not shown*/ : (($actual_value == '') ? null : explode("\n", $actual_value)), true, get_allowed_video_file_types());
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden);
 
         return array($ffield, $hidden);

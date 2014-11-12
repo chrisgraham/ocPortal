@@ -212,7 +212,7 @@ function myocp_add_site($codename, $name, $email_address, $password, $descriptio
 function myocp_add_site_raw($server, $codename, $email_address, $password)
 {
     // Create database, set title and description and domain
-    $master_conn = new database_driver(get_db_site(), 'localhost'/*$server*/, 'root', $GLOBALS['SITE_INFO']['mysql_root_password'], 'ocp_');
+    $master_conn = new Database_driver(get_db_site(), 'localhost'/*$server*/, 'root', $GLOBALS['SITE_INFO']['mysql_root_password'], 'ocp_');
     $master_conn->query('DROP DATABASE `myocp_site_' . $codename . '`', null, null, true);
     $master_conn->query('CREATE DATABASE `myocp_site_' . $codename . '`', null, null, true);
     $user = substr(md5('myocp_site_' . $codename), 0, 16);
@@ -224,7 +224,7 @@ function myocp_add_site_raw($server, $codename, $email_address, $password)
         attach_message($cmd, 'inform');
     }
     shell_exec($cmd);
-    $db_conn = new database_driver('myocp_site_' . $codename, 'localhost'/*$server*/, $user, $GLOBALS['SITE_INFO']['mysql_myocp_password'], 'ocp_');
+    $db_conn = new Database_driver('myocp_site_' . $codename, 'localhost'/*$server*/, $user, $GLOBALS['SITE_INFO']['mysql_myocp_password'], 'ocp_');
     $db_conn->query_update('config', array('c_value' => $email_address), array('c_name' => 'staff_address'), '', 1);
     $pass = md5($password);
     $salt = '';
@@ -287,7 +287,7 @@ function get_site_categories()
  */
 function create_selection_list_site_categories($cat)
 {
-    $cat_list = new ocp_tempcode();
+    $cat_list = new Tempcode();
     $categories = get_site_categories();
     foreach ($categories as $_cat) {
         $cat_list->attach(form_input_list_entry($_cat, $_cat == $cat));
@@ -303,7 +303,7 @@ function create_selection_list_site_categories($cat)
  */
 function create_selection_list_servers($server)
 {
-    $server_list = new ocp_tempcode();
+    $server_list = new Tempcode();
     $servers = find_all_servers();
     foreach ($servers as $_server) {
         $server_list->attach(form_input_list_entry($_server, $_server == $server));
@@ -664,7 +664,7 @@ function myocp_delete_old_sites()
 function myocp_delete_site($server, $codename, $bulk = false)
 {
     // Database
-    $master_conn = new database_driver(get_db_site(), 'localhost'/*$server*/, 'root', $GLOBALS['SITE_INFO']['mysql_root_password'], 'ocp_');
+    $master_conn = new Database_driver(get_db_site(), 'localhost'/*$server*/, 'root', $GLOBALS['SITE_INFO']['mysql_root_password'], 'ocp_');
     $master_conn->query('DROP DATABASE IF EXISTS `myocp_site_' . $codename . '`');
     $user = substr(md5('myocp_site_' . $codename), 0, 16);
     $master_conn->query('REVOKE ALL ON `myocp_site_' . $codename . '`.* FROM \'' . $user . '\'', null, null, true);

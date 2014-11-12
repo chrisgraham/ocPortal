@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Block class.
+ */
 class Block_main_bottom_bar
 {
     /**
@@ -46,11 +50,11 @@ class Block_main_bottom_bar
     public function run($map)
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         if (!isset($GLOBALS['FORUM_DRIVER'])) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('ocf_general');
@@ -63,7 +67,7 @@ class Block_main_bottom_bar
         $stats = ocf_get_forums_stats();
 
         // Users online
-        $users_online = new ocp_tempcode();
+        $users_online = new Tempcode();
         $count = 0;
         require_code('users2');
         $members = get_users_online(false, null, $count);
@@ -110,7 +114,7 @@ class Block_main_bottom_bar
         }
 
         // Birthdays
-        $birthdays = new ocp_tempcode();
+        $birthdays = new Tempcode();
         if (get_option('enable_birthdays') != '0') {
             $_birthdays = ocf_find_birthdays();
             foreach ($_birthdays as $_birthday) {
@@ -151,7 +155,7 @@ class Block_main_bottom_bar
             'NUM_POSTS' => integer_format($stats['num_posts']),
             'BIRTHDAYS' => $birthdays,
             'USERS_ONLINE' => $users_online,
-            'USERS_ONLINE_URL' => has_actual_page_access(get_member(), 'users_online') ? build_url(array('page' => 'users_online'), get_module_zone('users_online')) : new ocp_tempcode(),
+            'USERS_ONLINE_URL' => has_actual_page_access(get_member(), 'users_online') ? build_url(array('page' => 'users_online'), get_module_zone('users_online')) : new Tempcode(),
             'GROUPS' => $groups,
             '_NUM_GUESTS' => strval($num_guests),
             '_NUM_MEMBERS' => strval($num_members),

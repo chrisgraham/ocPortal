@@ -223,7 +223,7 @@ function append_form_custom_fields($content_type, $id, &$fields, &$hidden, $fiel
             }
         }
         if (!array_key_exists($field_cat, $field_groups)) {
-            $field_groups[$field_cat] = new ocp_tempcode();
+            $field_groups[$field_cat] = new Tempcode();
         }
 
         $_cf_description = escape_html(get_translated_text($field['cf_description']));
@@ -406,15 +406,15 @@ function create_selection_list_field_type($type = '', $limit_to_storage_set = fa
     } else {
         $types = $_types;
     }
-    $_type_list = new ocp_tempcode();
-    $type_list = new ocp_tempcode();
+    $_type_list = new Tempcode();
+    $type_list = new Tempcode();
     $last_type = do_lang_tempcode('OTHER');
     foreach ($types as $_type) {
         if (is_object($_type)) {
             if (!$_type_list->is_empty()) {
                 $type_list->attach(form_input_list_group($last_type, $_type_list));
             }
-            $_type_list = new ocp_tempcode();
+            $_type_list = new Tempcode();
             $last_type = $_type;
         } else {
             $ob = get_fields_hook($_type);

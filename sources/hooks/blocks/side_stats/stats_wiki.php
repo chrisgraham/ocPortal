@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats_wiki
 {
     /**
@@ -27,13 +31,13 @@ class Hook_stats_wiki
     public function run()
     {
         if (!addon_installed('wiki')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('wiki_stats');
         require_lang('wiki');
 
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
         if (get_option('wiki_show_stats_count_pages') == '1') {
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '8bbd18d5169c4e5449b252880ecda716', 'KEY' => do_lang_tempcode('COUNT_PAGES'), 'VALUE' => integer_format(get_num_wiki_pages()))));
         }
@@ -41,7 +45,7 @@ class Hook_stats_wiki
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'd8cf3d5aabc18777f609760010303ace', 'KEY' => do_lang_tempcode('COUNT_POSTS'), 'VALUE' => integer_format(get_num_wiki_posts()))));
         }
         if ($bits->is_empty_shell()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         $wiki = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => 'ea19e51db4e62958843ace808016af1e', 'SECTION' => do_lang_tempcode('WIKI'), 'CONTENT' => $bits));
 

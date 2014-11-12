@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_forum
 {
     /**
@@ -723,7 +727,7 @@ class Hook_addon_registry_ocf_forum
 
         require_lang('ocf');
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $out->attach(do_lorem_template('OCF_PRIVATE_TOPIC_LINK', array(
                 'TOPIC_URL' => placeholder_url(),
@@ -873,8 +877,8 @@ class Hook_addon_registry_ocf_forum
 
         require_lang('ocf');
 
-        $details = new ocp_tempcode();
-        $links = new ocp_tempcode();
+        $details = new Tempcode();
+        $links = new Tempcode();
         $details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE', array(
             'KEY' => lorem_word(),
             'VALUE' => placeholder_number(),
@@ -971,7 +975,7 @@ class Hook_addon_registry_ocf_forum
 
         require_lang('ocf');
 
-        $birthdays = new ocp_tempcode();
+        $birthdays = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $birthdays->attach(do_lorem_template('OCF_BIRTHDAY_LINK', array(
                 'AGE' => placeholder_number(),
@@ -1042,7 +1046,7 @@ class Hook_addon_registry_ocf_forum
         require_lang('ocf');
 
         //buttons
-        $buttons = new ocp_tempcode();
+        $buttons = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $buttons->attach(do_lorem_template('BUTTON_SCREEN', array(
                 'REL' => lorem_word(),
@@ -1055,7 +1059,7 @@ class Hook_addon_registry_ocf_forum
 
 
         //topics
-        $topics = new ocp_tempcode();
+        $topics = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $marker = do_lorem_template('OCF_TOPIC_MARKER', array(
                 'ID' => placeholder_id() . strval($k),
@@ -1126,9 +1130,9 @@ class Hook_addon_registry_ocf_forum
 
 
         //forum groupings
-        $forum_groupings = new ocp_tempcode();
+        $forum_groupings = new Tempcode();
         foreach (placeholder_array(1) as $k => $v) {
-            $forums = new ocp_tempcode();
+            $forums = new Tempcode();
             foreach (placeholder_array() as $_k => $_v) {
                 $poster = do_lorem_template('OCF_USER_MEMBER', array(
                     'FIRST' => true,
@@ -1210,7 +1214,7 @@ class Hook_addon_registry_ocf_forum
             'DESCRIPTION' => lorem_phrase(),
         ));
 
-        $members_viewing = new ocp_tempcode();
+        $members_viewing = new Tempcode();
         foreach (placeholder_array() as $_k => $_v) {
             $members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
                 'FIRST' => true,
@@ -1339,7 +1343,7 @@ class Hook_addon_registry_ocf_forum
 
         require_lang('ocf');
 
-        $posts = new ocp_tempcode();
+        $posts = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $posts->attach(lorem_paragraph_html());
         }
@@ -1363,7 +1367,7 @@ class Hook_addon_registry_ocf_forum
         require_css('ocf');
 
         //topics
-        $topics = new ocp_tempcode();
+        $topics = new Tempcode();
         if (addon_installed('ocf_forum')) {
             foreach (placeholder_array() as $k => $v) {
                 $marker = do_lorem_template('OCF_TOPIC_MARKER', array(
@@ -1522,7 +1526,7 @@ class Hook_addon_registry_ocf_forum
         ));
 
         foreach (placeholder_array() as $k => $v) {
-            $members_viewing = new ocp_tempcode();
+            $members_viewing = new Tempcode();
             foreach (placeholder_array() as $_k => $_v) {
                 $members_viewing->attach(do_lorem_template('OCF_USER_MEMBER', array(
                     'FIRST' => $members_viewing->is_empty(),
@@ -1556,7 +1560,7 @@ class Hook_addon_registry_ocf_forum
                 'CREATE_TICKET_MAKE_POST' => true,
             ));
 
-            $poll = new ocp_tempcode();
+            $poll = new Tempcode();
             $num_choices = do_lorem_template('PARAGRAPH', array(
                 'TEXT' => lorem_phrase(),
                 'CLASS' => lorem_word(),
@@ -1564,8 +1568,8 @@ class Hook_addon_registry_ocf_forum
             $private = $num_choices;
 
             if (!$voted) {
-                $answers = new ocp_tempcode();
-                $answer_tpl = new ocp_tempcode();
+                $answers = new Tempcode();
+                $answer_tpl = new Tempcode();
                 foreach (placeholder_array() as $_k => $_v) {
                     $answer_tpl->attach(do_lorem_template('OCF_TOPIC_POLL_ANSWER_RADIO', array(
                         'REAL_BUTTON' => '',
@@ -1576,7 +1580,7 @@ class Hook_addon_registry_ocf_forum
                 }
                 $answers->attach($answer_tpl);
 
-                $answer_tpl = new ocp_tempcode();
+                $answer_tpl = new Tempcode();
                 foreach (placeholder_array() as $_k => $_v) {
                     $answer_tpl->attach(do_lorem_template('OCF_TOPIC_POLL_ANSWER', array(
                         'REAL_BUTTON' => '',
@@ -1605,9 +1609,9 @@ class Hook_addon_registry_ocf_forum
                     'MAXIMUM_SELECTIONS' => placeholder_number(),
                 )));
             } else {
-                $answers = new ocp_tempcode();
+                $answers = new Tempcode();
 
-                $answer_tpl = new ocp_tempcode();
+                $answer_tpl = new Tempcode();
                 $answer_tpl->attach(do_lorem_template('OCF_TOPIC_POLL_ANSWER_RESULTS', array(
                     'ID' => placeholder_random(),
                     'NUM_VOTES' => '10',
@@ -1632,7 +1636,7 @@ class Hook_addon_registry_ocf_forum
 
                 $answers->attach($answer_tpl);
 
-                $button = new ocp_tempcode();
+                $button = new Tempcode();
 
                 $poll->attach(do_lorem_template('OCF_TOPIC_POLL_VIEW_RESULTS', array(
                     'ID' => placeholder_random(),
@@ -1649,7 +1653,7 @@ class Hook_addon_registry_ocf_forum
             }
 
             //buttons
-            $buttons = new ocp_tempcode();
+            $buttons = new Tempcode();
             foreach (placeholder_array(1) as $_k => $_v) {
                 $buttons->attach(do_lorem_template('BUTTON_SCREEN', array(
                     'REL' => lorem_word(),
@@ -1661,7 +1665,7 @@ class Hook_addon_registry_ocf_forum
             }
 
             //posts
-            $posts = new ocp_tempcode();
+            $posts = new Tempcode();
             $first_unread = do_lorem_template('OCF_TOPIC_FIRST_UNREAD');
 
             $last_edited = do_lorem_template('OCF_TOPIC_POST_LAST_EDITED', array(
@@ -1716,7 +1720,7 @@ class Hook_addon_registry_ocf_forum
             ));
 
             //buttons
-            $buttons = new ocp_tempcode();
+            $buttons = new Tempcode();
             foreach (placeholder_array(1) as $_k => $_v) {
                 $buttons->attach(do_lorem_template('BUTTON_SCREEN_ITEM', array(
                     'REL' => lorem_word(),
@@ -1760,7 +1764,7 @@ class Hook_addon_registry_ocf_forum
         }
 
         //buttons
-        $buttons = new ocp_tempcode();
+        $buttons = new Tempcode();
         foreach (placeholder_array(1) as $k => $v) {
             $buttons->attach(do_lorem_template('BUTTON_SCREEN', array(
                 'REL' => lorem_word(),

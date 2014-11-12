@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
-class Hook_Notification_messaging extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_messaging extends Hook_notification__Staff
 {
     /**
      * Find whether a handled notification code supports categories.

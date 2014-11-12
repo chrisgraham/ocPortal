@@ -21,6 +21,9 @@
 NB: This is for Web Standards validation, not Content validation.
 */
 
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_validation
 {
     /**
@@ -169,7 +172,7 @@ class Hook_addon_registry_core_validation
      */
     public function tpl_preview__administrative__validate()
     {
-        $display = new ocp_tempcode();
+        $display = new Tempcode();
         $display->attach(do_lorem_template('VALIDATE_SCREEN', array(
             'MSG' => lorem_phrase(),
             'RETURN_URL' => placeholder_url(),
@@ -214,8 +217,8 @@ class Hook_addon_registry_core_validation
      */
     public function tpl_preview__administrative__validate_error_screen()
     {
-        $errors = new ocp_tempcode();
-        $display = new ocp_tempcode();
+        $errors = new Tempcode();
+        $display = new Tempcode();
         foreach (placeholder_array() as $key => $_error) {
             $errors->attach(do_lorem_template('VALIDATE_ERROR', array(
                 'I' => lorem_word() . strval($key),
@@ -236,7 +239,7 @@ class Hook_addon_registry_core_validation
             'RET' => lorem_phrase(),
         )));
 
-        $markers = new ocp_tempcode();
+        $markers = new Tempcode();
         foreach (placeholder_array() as $key => $_error) {
             $markers->attach(do_lorem_template('VALIDATE_MARKER', array(
                 'I' => lorem_word() . strval($key),

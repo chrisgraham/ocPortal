@@ -312,7 +312,7 @@ class Module_banners
             return $this->view_banner();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -360,7 +360,7 @@ class Module_banners
         $hr[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($hr, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $url_map = array('page' => '_SELF', 'type' => 'view');
 
@@ -376,7 +376,7 @@ class Module_banners
         foreach ($rows as $row) {
             $view_link = build_url($url_map + array('source' => $row['name']), '_SELF');
 
-            $deployment_agreement = new ocp_tempcode();
+            $deployment_agreement = new Tempcode();
             switch ($row['the_type']) {
                 case BANNER_PERMANENT:
                     $deployment_agreement = do_lang_tempcode('BANNER_PERMANENT');
@@ -451,7 +451,7 @@ class Module_banners
 
         $has_banner_network = $GLOBALS['SITE_DB']->query_select_value('banners', 'SUM(views_from)') != 0.0;
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('templates_map_table');
         $fields->attach(map_table_field(do_lang_tempcode('TYPE'), $type));
         if ($myrow['b_type'] != '') {
@@ -473,7 +473,7 @@ class Module_banners
 
         $banner = show_banner($myrow['name'], $myrow['b_title_text'], get_translated_tempcode('banners', $myrow, 'caption'), $myrow['b_direct_code'], $myrow['img_url'], $source, $myrow['site_url'], $myrow['b_type'], $myrow['submitter']);
 
-        $edit_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_banners', null, null)) && (has_edit_permission('mid', get_member(), $myrow['submitter'], 'cms_banners'))) {
             $edit_url = build_url(array('page' => 'cms_banners', 'type' => '_ed', 'id' => $source), get_module_zone('cms_banners'));
         }

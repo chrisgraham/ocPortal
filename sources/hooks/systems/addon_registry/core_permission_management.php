@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_permission_management
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_permission_management
 {
     /**
@@ -165,7 +169,7 @@ class Hook_addon_registry_core_permission_management
 
         require_css('forms');
 
-        $groups = new ocp_tempcode();
+        $groups = new Tempcode();
         foreach (placeholder_array() as $id => $group_name) {
             $groups->attach(form_input_list_entry(strval($id), false, $group_name));
         }
@@ -197,7 +201,7 @@ class Hook_addon_registry_core_permission_management
         require_css('forms');
 
         $color = 'b7b7b7';
-        $header_cells = new ocp_tempcode();
+        $header_cells = new Tempcode();
         foreach (placeholder_array() as $id => $name) {
             $header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
                 'COLOR' => $color,
@@ -210,10 +214,10 @@ class Hook_addon_registry_core_permission_management
             'GROUP' => '+/-',
         )));
 
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         $p_rows = placeholder_array();
         foreach ($p_rows as $id => $page) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             $code = '';
 
             foreach (placeholder_array() as $gid => $g_name) {
@@ -241,7 +245,7 @@ class Hook_addon_registry_core_permission_management
             'k_match_key' => '',
         );
 
-        $rows2 = new ocp_tempcode();
+        $rows2 = new Tempcode();
         foreach ($m_rows as $row) {
             $msg = lorem_phrase();
             $rows2->attach(do_lorem_template('PERMISSION_KEYS_MESSAGE_ROW', array(
@@ -276,7 +280,7 @@ class Hook_addon_registry_core_permission_management
 
         require_css('forms');
 
-        $header_cells = new ocp_tempcode();
+        $header_cells = new Tempcode();
         foreach (placeholder_array() as $id => $name) {
             $header_cells->attach(do_lorem_template('PERMISSION_HEADER_CELL', array(
                 'COLOR' => 'b7b7b7',
@@ -288,15 +292,15 @@ class Hook_addon_registry_core_permission_management
             'GROUP' => '',
         )));
 
-        $cols = new ocp_tempcode();
+        $cols = new Tempcode();
         foreach (placeholder_array() as $id => $g_name) {
             $cols->attach(do_lorem_template('PERMISSION_COLUMN_SIZER'));
         }
         $k = 0;
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         foreach (placeholder_array() as $zone) {
             foreach (placeholder_array() as $page) {
-                $cells = new ocp_tempcode();
+                $cells = new Tempcode();
                 $code = '';
 
                 $has = true;
@@ -344,14 +348,14 @@ class Hook_addon_registry_core_permission_management
 
         require_css('forms');
 
-        $sections = new ocp_tempcode();
-        $rows = new ocp_tempcode();
-        $header_cells = new ocp_tempcode();
-        $cols = new ocp_tempcode();
+        $sections = new Tempcode();
+        $rows = new Tempcode();
+        $header_cells = new Tempcode();
+        $cols = new Tempcode();
         //permission rows
         $k = 0;
         foreach (placeholder_array() as $permission) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
 
             foreach (placeholder_array() as $id => $group) {
                 $k++;

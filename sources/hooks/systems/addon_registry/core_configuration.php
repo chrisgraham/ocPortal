@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_configuration
 {
     /**
@@ -290,7 +294,7 @@ class Hook_addon_registry_core_configuration
      */
     public function tpl_preview__administrative__config_category_screen()
     {
-        $groups = new ocp_tempcode();
+        $groups = new Tempcode();
 
         foreach (placeholder_array() as $k => $group) {
             $group = do_lorem_template('CONFIG_GROUP', array(

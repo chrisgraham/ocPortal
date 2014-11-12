@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_thief
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_octhief_type
 {
     /**

@@ -156,12 +156,12 @@ function trackback_script()
 function feedback_fields($allow_rating, $allow_comments, $allow_trackbacks, $send_trackbacks, $notes, $allow_reviews = null, $default_off = false, $has_notes = true, $show_header = true, $field_name_prefix = '')
 {
     if (get_option('enable_feedback') == '0') {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     require_code('feedback');
     require_code('form_templates');
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     if (($send_trackbacks) && (get_option('is_on_trackbacks') == '1')) {
         require_lang('trackbacks');
         $fields->attach(form_input_line(do_lang_tempcode('SEND_TRACKBACKS'), do_lang_tempcode('DESCRIPTION_SEND_TRACKBACKS'), $field_name_prefix . 'send_trackbacks', get_param('trackback', ''), false));
@@ -171,7 +171,7 @@ function feedback_fields($allow_rating, $allow_comments, $allow_trackbacks, $sen
     }
     if (get_option('is_on_comments') == '1') {
         if (!is_null($allow_reviews)) {
-            $choices = new ocp_tempcode();
+            $choices = new Tempcode();
             $choices->attach(form_input_list_entry('0', !$allow_comments && !$allow_reviews, do_lang('NO')));
             $choices->attach(form_input_list_entry('1', $allow_comments && !$allow_reviews, do_lang('ALLOW_COMMENTS_ONLY')));
             $choices->attach(form_input_list_entry('2', $allow_reviews, do_lang('ALLOW_REVIEWS')));

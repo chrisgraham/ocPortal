@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_awards
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
+
+/**
+ * Hook class.
+ */
 class Hook_comcode_pages
 {
     /**
@@ -47,6 +51,6 @@ class Hook_comcode_pages
 
         erase_comcode_page_cache();
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

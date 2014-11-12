@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_aggregate_types extends standard_crud_module
+class Module_admin_aggregate_types extends Standard_crud_module
 {
     public $lang_type = 'AGGREGATE_TYPE_INSTANCE';
     public $select_name = 'LABEL';
@@ -170,7 +170,7 @@ class Module_admin_aggregate_types extends standard_crud_module
             return $this->_sync();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -207,8 +207,8 @@ class Module_admin_aggregate_types extends standard_crud_module
 
             if ($aggregate_type == '') {
                 require_code('form_templates');
-                $fields = new ocp_tempcode();
-                $list = new ocp_tempcode();
+                $fields = new Tempcode();
+                $list = new Tempcode();
                 $types = parse_aggregate_xml();
                 foreach (array_keys($types) as $type) {
                     $list->attach(form_input_list_entry($type, false, titleify($type)));
@@ -224,8 +224,8 @@ class Module_admin_aggregate_types extends standard_crud_module
             $other_parameters = array();
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('LABEL'), do_lang_tempcode('DESCRIPTION_LABEL'), 'aggregate_label', $aggregate_label, true));
 
@@ -241,7 +241,7 @@ class Module_admin_aggregate_types extends standard_crud_module
 
         $hidden->attach(form_input_hidden('aggregate_type', $aggregate_type));
 
-        $delete_fields = new ocp_tempcode();
+        $delete_fields = new Tempcode();
         if ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member())) {
             $delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE_AGGREGATE_MATCHES'), do_lang_tempcode('DESCRIPTION_DELETE_AGGREGATE_MATCHES'), 'delete_matches', false));
         }
@@ -280,7 +280,7 @@ class Module_admin_aggregate_types extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -430,9 +430,9 @@ class Module_admin_aggregate_types extends standard_crud_module
 
         $_type = get_param('sync_type', '');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $types = parse_aggregate_xml();
         foreach (array_keys($types) as $type) {
             $list->attach(form_input_list_entry($type, $_type == $type, titleify($type)));

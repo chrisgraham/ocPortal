@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    theme_debug
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_theme_debug
 {
     /**

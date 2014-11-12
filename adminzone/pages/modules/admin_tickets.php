@@ -124,7 +124,7 @@ class Module_admin_tickets
             return $this->_edit_ticket_type();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -136,7 +136,7 @@ class Module_admin_tickets
     {
         require_lang('permissions');
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         require_code('form_templates');
         $ticket_types = collapse_2d_complexity('id', 'ticket_type_name', $GLOBALS['SITE_DB']->query_select('ticket_types', array('*'), null, 'ORDER BY id'));
         foreach ($ticket_types as $ticket_type_id => $ticket_type_name) {
@@ -149,7 +149,7 @@ class Module_admin_tickets
 
             $tpl = do_template('FORM', array('_GUID' => '2d2e76f5cfc397a78688db72170918d4', 'TABINDEX' => strval(get_form_field_tabindex()), 'GET' => true, 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'URL' => $edit_url, 'SUBMIT_ICON' => 'menu___generic_admin__edit_this_category', 'SUBMIT_NAME' => $submit_name));
         } else {
-            $tpl = new ocp_tempcode();
+            $tpl = new Tempcode();
         }
 
         // Do a form so people can add
@@ -210,7 +210,7 @@ class Module_admin_tickets
 
         $submit_name = do_lang_tempcode('SAVE');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TYPE'), do_lang_tempcode('DESCRIPTION_TICKET_TYPE'), 'ticket_type_name', $ticket_type_name, false));
         $fields->attach(form_input_tick(do_lang_tempcode('TICKET_GUEST_EMAILS_MANDATORY'), do_lang_tempcode('DESCRIPTION_TICKET_GUEST_EMAILS_MANDATORY'), 'guest_emails_mandatory', $details['guest_emails_mandatory']));
         $fields->attach(form_input_tick(do_lang_tempcode('TICKET_SEARCH_FAQ'), do_lang_tempcode('DESCRIPTION_TICKET_SEARCH_FAQ'), 'search_faq', $details['search_faq']));

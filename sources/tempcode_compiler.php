@@ -327,7 +327,7 @@ function compile_template($data, $template_name, $theme, $lang, $tolerate_errors
                                     foreach ($opener_params as $param) {
                                         $myfunc = 'tcpfunc_' . fast_uniqid();
                                         $funcdef = build_closure_function($myfunc, $param);
-                                        $symbol_params[] = new ocp_tempcode(array(array($myfunc => $funcdef), array(array(array($myfunc, array(/* Is currently unbound */), TC_KNOWN, '', ''))))); // Parameters will be bound in later.
+                                        $symbol_params[] = new Tempcode(array(array($myfunc => $funcdef), array(array(array($myfunc, array(/* Is currently unbound */), TC_KNOWN, '', ''))))); // Parameters will be bound in later.
                                     }
 
                                     $pp_bit = array(array(), TC_SYMBOL, str_replace('"', '', $first_param), $symbol_params);
@@ -565,7 +565,7 @@ function compile_template($data, $template_name, $theme, $lang, $tolerate_errors
                             }
                             $funcdef = /*if (!isset(\$tpl_funcs['$myfunc']))\n\t*/
                                 "\$tpl_funcs['$myfunc']=\"$reset_code echo " . php_addslashes($_past_level_data) . ";\";\n";
-                            $past_level_data = array('new ocp_tempcode(array(array(\'' . $myfunc . '\'=>"' . php_addslashes($funcdef) . '"),array(array(array("' . $myfunc . '",array(),' . strval(TC_KNOWN) . ',\'\',\'\')))))');
+                            $past_level_data = array('new Tempcode(array(array(\'' . $myfunc . '\'=>"' . php_addslashes($funcdef) . '"),array(array(array("' . $myfunc . '",array(),' . strval(TC_KNOWN) . ',\'\',\'\')))))');
                         }
                         switch ($directive_name) {
                             case 'COMMENT':
@@ -917,7 +917,7 @@ function template_to_tempcode(/*&*/
     list($parts, $preprocessable_bits) = compile_template(substr($text, $symbol_pos), $codename, $theme, $lang, $tolerate_errors);
 
     if (count($parts) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $output_streaming = (function_exists('get_option')) && (get_option('output_streaming') == '1');
@@ -946,7 +946,7 @@ function template_to_tempcode(/*&*/
         $seq_parts[] = array(array($myfunc, array(/* Is currently unbound */), TC_KNOWN, '', ''));
     }
 
-    $ret = new ocp_tempcode(array($funcdefs, $seq_parts)); // Parameters will be bound in later.
+    $ret = new Tempcode(array($funcdefs, $seq_parts)); // Parameters will be bound in later.
     $ret->preprocessable_bits = array_merge($ret->preprocessable_bits, $preprocessable_bits);
     $ret->codename = $codename;
     return $ret;

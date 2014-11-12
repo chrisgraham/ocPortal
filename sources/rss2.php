@@ -223,7 +223,7 @@ function rss_backend_script()
 
         $rss_cloud = do_template('RSS_CLOUD', array('_GUID' => 'a47c40a4c137ea1e5abfc71346547313', 'TYPE' => ($type == 'news') ? '' : $type, 'PORT' => strval($port), 'LOCAL_BASE_URL' => $local_base_url));
     } else {
-        $rss_cloud = new ocp_tempcode();
+        $rss_cloud = new Tempcode();
     }
 
     // Firefox (and probably other browsers, but I didn't test) doesn't want to display Atom feeds inline if they're sent as text/xml+atom, even if the Content-Disposition is sent to inline :(

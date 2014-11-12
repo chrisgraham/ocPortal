@@ -174,7 +174,7 @@ class Module_admin_quiz
             return $this->delete_quiz_results();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -207,7 +207,7 @@ class Module_admin_quiz
         require_code('form_templates');
 
         $_m = $GLOBALS['SITE_DB']->query_select('quizzes', array('id', 'q_name'), null, 'ORDER BY q_add_date DESC', 300);
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['q_name'])));
         }
@@ -222,7 +222,7 @@ class Module_admin_quiz
      */
     public function export_quiz()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $quiz_list = $this->create_selection_list_entries();
 
         $fields->attach(form_input_list(do_lang_tempcode('QUIZ'), do_lang_tempcode('DESCRIPTION_QUIZZES_EXPORT'), 'quiz_id', $quiz_list));
@@ -254,7 +254,7 @@ class Module_admin_quiz
         require_code('form_templates');
 
         $_m = $GLOBALS['SITE_DB']->query_select('quizzes', array('*'), array('q_type' => 'COMPETITION'), 'ORDER BY q_validated DESC,q_add_date DESC', 300);
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['q_name'])));
         }
@@ -262,7 +262,7 @@ class Module_admin_quiz
             inform_exit(do_lang_tempcode('NO_ENTRIES'));
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_list(do_lang_tempcode('QUIZ'), '', 'id', $entries, null, true));
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_find_winner'), '_SELF');
@@ -346,7 +346,7 @@ class Module_admin_quiz
             }
         }
 
-        $_winners = new ocp_tempcode();
+        $_winners = new Tempcode();
         foreach ($winners as $i => $winner) {
             $member_id = $GLOBALS['SITE_DB']->query_select_value('quiz_entries', 'q_member', array('id' => $winner['q_entry']));
             $url = $GLOBALS['FORUM_DRIVER']->member_profile_url($member_id, false, true);
@@ -387,7 +387,7 @@ class Module_admin_quiz
         }
 
         $_m = $GLOBALS['SITE_DB']->query_select('quizzes', array('*'), $where, 'ORDER BY q_validated DESC,q_add_date DESC', 300);
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['q_name']) . ' (' . do_lang($m['q_type']) . ')'));
         }
@@ -395,7 +395,7 @@ class Module_admin_quiz
             inform_exit(do_lang_tempcode('NO_ENTRIES'));
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_list(do_lang_tempcode('QUIZ'), '', 'id', $entries, null, true));
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_quiz_results'), '_SELF', null, false, true);
@@ -413,7 +413,7 @@ class Module_admin_quiz
     {
         $id = get_param_integer('id', null); // quiz ID
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('templates_results_table');
         require_code('templates_map_table');
@@ -424,7 +424,7 @@ class Module_admin_quiz
             foreach ($question_rows as $q) {
                 $question = get_translated_text($q['q_question_text']);
 
-                $answers = new ocp_tempcode();
+                $answers = new Tempcode();
                 $answer_rows = $GLOBALS['SITE_DB']->query_select('quiz_question_answers', array('*'), array('q_question' => $q['id']), 'ORDER BY id');
                 $all_answers = array();
                 foreach ($answer_rows as $i => $a) {
@@ -447,7 +447,7 @@ class Module_admin_quiz
             }
             $summary = do_template('MAP_TABLE', array('_GUID' => '2b0c2ba0070ba810c5e4b5b4aedcb15f', 'WIDTH' => '300', 'FIELDS' => $fields));
         } else {
-            $summary = new ocp_tempcode();
+            $summary = new Tempcode();
         }
 
         // Show results table
@@ -475,7 +475,7 @@ class Module_admin_quiz
         if (count($rows) == 0) {
             return inform_screen($this->title, do_lang_tempcode('NO_ENTRIES'));
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $_fields_title = array();
         $_fields_title[] = do_lang_tempcode('DATE');
         if (is_null($id)) {

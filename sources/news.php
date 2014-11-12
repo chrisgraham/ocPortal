@@ -79,7 +79,7 @@ function render_news_box($row, $zone = '_SEARCH', $give_context = true, $brief =
         $truncate = false;
     }
 
-    $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new ocp_tempcode();
+    $author_url = addon_installed('authors') ? build_url(array('page' => 'authors', 'type' => 'misc', 'id' => $row['author']), get_module_zone('authors')) : new Tempcode();
     $author = $row['author'];
 
     $seo_bits = (get_value('no_tags') === '1') ? array('', '') : seo_meta_get_for('news', strval($row['id']));
@@ -230,7 +230,7 @@ function create_selection_list_news_categories($it = null, $show_all_personal_ca
         }
     }
 
-    $categories = new ocp_tempcode();
+    $categories = new Tempcode();
     $add_cat = true;
 
     foreach ($_cats as $cat) {
@@ -284,7 +284,7 @@ function create_selection_list_news($it, $only_owned = null, $editable_filter = 
         attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__RECENT_ONLY', escape_html(integer_format(intval(get_option('general_safety_listing_limit'))))), 'warn');
     }
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     foreach ($rows as $myrow) {
         if (!has_category_access(get_member(), 'news', strval($myrow['news_category']))) {
             continue;

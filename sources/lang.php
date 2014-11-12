@@ -862,7 +862,7 @@ function _do_lang($codename, $token1 = null, $token2 = null, $token3 = null, $la
         if (((is_object($token1)) && ($token2 === null)) || (($token2 !== null) && (is_object($token2)))) { // Tempcode only supported in first two
             $bits = preg_split('#\{\d[^\}]*\}#', $out, 2, PREG_SPLIT_OFFSET_CAPTURE);
 
-            $ret = new ocp_tempcode();
+            $ret = new Tempcode();
             foreach ($bits as $bit) {
                 if ($XSS_DETECT) {
                     ocp_mark_as_escaped($bit[0]);
@@ -1158,7 +1158,7 @@ function get_translated_tempcode($table, $row, $field_name, $connection = null, 
             $ret = $connection->text_lookup_cache[$entry];
             if ($ret !== '') {
                 if (is_string($ret)) {
-                    $connection->text_lookup_cache[$entry] = new ocp_tempcode();
+                    $connection->text_lookup_cache[$entry] = new Tempcode();
                     $connection->text_lookup_cache[$entry]->from_assembly($ret);
                     $ret = $connection->text_lookup_cache[$entry];
                 }
@@ -1223,7 +1223,7 @@ function get_translated_tempcode($table, $row, $field_name, $connection = null, 
         return parse_translated_text($table, $row, $field_name, $connection, $lang, $force, $as_admin);
     }
 
-    $parsed = new ocp_tempcode();
+    $parsed = new Tempcode();
     if (!$parsed->from_assembly($result, true)) { // Corrupted
         require_code('lang3');
         return parse_translated_text($table, $row, $field_name, $connection, $lang, $force, $as_admin);

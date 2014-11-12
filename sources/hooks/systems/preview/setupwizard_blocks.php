@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    setupwizard
  */
-class Hook_Preview_setupwizard_blocks
+
+/**
+ * Hook class.
+ */
+class Hook_preview_setupwizard_blocks
 {
     /**
      * Find whether this preview hook applies.

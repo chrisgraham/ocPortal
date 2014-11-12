@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_signatures
 {
     /**
@@ -134,7 +138,7 @@ class Hook_addon_registry_ocf_signatures
         require_lang('ocf');
         require_css('ocf');
 
-        $buttons = new ocp_tempcode();
+        $buttons = new Tempcode();
         $_buttons = array(
             'img',
             'thumb',
@@ -157,7 +161,7 @@ class Hook_addon_registry_ocf_signatures
             )));
         }
 
-        $micro_buttons = new ocp_tempcode();
+        $micro_buttons = new Tempcode();
         $_micro_buttons = array(
             array(
                 't' => 'b',
@@ -194,14 +198,14 @@ class Hook_addon_registry_ocf_signatures
             'EMOTICON_CHOOSER' => '',
             'SUBMIT_ICON' => 'buttons__save',
             'SUBMIT_NAME' => lorem_word(),
-            'HIDDEN_FIELDS' => new ocp_tempcode(),
+            'HIDDEN_FIELDS' => new Tempcode(),
             'URL' => placeholder_url(),
             'POST' => lorem_sentence(),
             'DEFAULT_PARSED' => lorem_sentence(),
             'CONTINUE_URL' => placeholder_url(),
             'ATTACHMENTS' => lorem_phrase(),
-            'SPECIALISATION' => new ocp_tempcode(),
-            'SPECIALISATION2' => new ocp_tempcode(),
+            'SPECIALISATION' => new Tempcode(),
+            'SPECIALISATION2' => new Tempcode(),
             'REQUIRED' => true,
         ));
 

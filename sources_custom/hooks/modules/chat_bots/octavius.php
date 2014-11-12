@@ -37,6 +37,9 @@
 # INTO THE REAL WORLD WITH THOSE HABITS.
 ######################################################
 
+/**
+ * Hook class.
+ */
 class Hook_chat_bot_octavius
 {
     /**

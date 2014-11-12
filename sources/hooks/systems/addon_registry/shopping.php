@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_shopping
 {
     /**
@@ -243,7 +247,7 @@ class Hook_addon_registry_shopping
      */
     public function show_custom_tables($tplset)
     {
-        $fields_title = new ocp_tempcode();
+        $fields_title = new Tempcode();
         foreach (array(
                      lorem_word(),
                      lorem_word_2(),
@@ -254,9 +258,9 @@ class Hook_addon_registry_shopping
                 'VALUE' => $v,
             )));
         }
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
 
             $entry_data = array(
                 lorem_word(),
@@ -275,7 +279,7 @@ class Hook_addon_registry_shopping
             )));
         }
 
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         foreach (placeholder_array(11) as $k => $v) {
             $selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
                 'SELECTED' => '',
@@ -294,7 +298,7 @@ class Hook_addon_registry_shopping
         return do_lorem_template('RESULTS_' . $tplset . 'TABLE', array(
             'FIELDS_TITLE' => $fields_title,
             'FIELDS' => $entries,
-            'MESSAGE' => new ocp_tempcode(),
+            'MESSAGE' => new Tempcode(),
             'SORT' => $sort,
             'PAGINATION' => placeholder_pagination(),
             'WIDTHS' => array(
@@ -410,9 +414,9 @@ class Hook_addon_registry_shopping
         //results_entry starts
 
 
-        $shopping_cart = new ocp_tempcode();
+        $shopping_cart = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach (placeholder_array(8) as $_v) {
                 $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
                     'VALUE' => $_v,
@@ -441,7 +445,7 @@ class Hook_addon_registry_shopping
                 $currency . placeholder_number(),
                 $del_item
             );
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach ($values as $value) {
                 $cells->attach(do_lorem_template('RESULTS_TABLE_cart_FIELD', array(
                     'VALUE' => $value,
@@ -454,7 +458,7 @@ class Hook_addon_registry_shopping
         }
         //results_entry ends
 
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
                 'SELECTED' => '',
@@ -473,7 +477,7 @@ class Hook_addon_registry_shopping
             'WIDTHS' => array(),
             'FIELDS_TITLE' => $fields_title,
             'FIELDS' => $shopping_cart,
-            'MESSAGE' => new ocp_tempcode(),
+            'MESSAGE' => new Tempcode(),
             'SORT' => $sort,
             'PAGINATION' => lorem_word(),
         ));
@@ -576,8 +580,8 @@ class Hook_addon_registry_shopping
         require_css('catalogues');
         require_lang('catalogues');
 
-        $fields = new ocp_tempcode();
-        $fields_table = new ocp_tempcode();
+        $fields = new Tempcode();
+        $fields_table = new Tempcode();
 
         foreach (placeholder_array() as $v) {
             $_field = do_lorem_template('CATALOGUE_products_FIELDMAP_ENTRY_FIELD', array(
@@ -607,7 +611,7 @@ class Hook_addon_registry_shopping
             'TITLE' => lorem_phrase(),
         ), null, false);
 
-        $rating_inside = new ocp_tempcode();
+        $rating_inside = new Tempcode();
 
         $map = array(
             'FIELD_0' => lorem_phrase(),
@@ -659,8 +663,8 @@ class Hook_addon_registry_shopping
         require_css('catalogues');
         require_lang('catalogues');
 
-        $fields = new ocp_tempcode();
-        $fields_table = new ocp_tempcode();
+        $fields = new Tempcode();
+        $fields_table = new Tempcode();
 
         foreach (placeholder_array() as $v) {
             $_field = do_lorem_template('CATALOGUE_products_GRID_ENTRY_FIELD', array(
@@ -690,7 +694,7 @@ class Hook_addon_registry_shopping
             'TITLE' => lorem_phrase(),
         ), null, false);
 
-        $rating_inside = new ocp_tempcode();
+        $rating_inside = new Tempcode();
 
         $map = array(
             'FIELD_0' => lorem_phrase(),
@@ -761,7 +765,7 @@ class Hook_addon_registry_shopping
 
         //results_entry starts
         $array = placeholder_array();
-        $cells = new ocp_tempcode();
+        $cells = new Tempcode();
         foreach ($array as $k => $v) {
             if ($k == 1) {
                 $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
@@ -779,9 +783,9 @@ class Hook_addon_registry_shopping
         }
         $fields_title = $cells;
 
-        $order_entries = new ocp_tempcode();
+        $order_entries = new Tempcode();
         foreach ($array as $k1 => $_v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach ($array as $k2 => $v) {
                 $tick = do_lorem_template('RESULTS_TABLE_TICK', array(
                     'ID' => placeholder_id() . '_' . strval($k1) . '_' . strval($k2),
@@ -796,7 +800,7 @@ class Hook_addon_registry_shopping
         }
         //results_entry ends
 
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         $sortable = null;
         foreach ($array as $k => $v) {
             $selectors->attach(do_lorem_template('PAGINATION_SORTER', array(

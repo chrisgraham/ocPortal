@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_tag_spinner
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_tag_spinner
 {
     /**

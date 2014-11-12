@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
-class Hook_Preview_ocf_signature
+
+/**
+ * Hook class.
+ */
+class Hook_preview_ocf_signature
 {
     /**
      * Find whether this preview hook applies.

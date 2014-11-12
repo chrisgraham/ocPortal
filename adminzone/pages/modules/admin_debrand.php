@@ -99,7 +99,7 @@ class Module_admin_debrand
             return $this->actual();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -137,7 +137,7 @@ class Module_admin_debrand
             $start_page = do_lang('REBRAND_DASHBOARD');
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('REBRAND_NAME'), do_lang_tempcode('DESCRIPTION_REBRAND_NAME'), 'rebrand_name', $rebrand_name, true));
         $fields->attach(form_input_line(do_lang_tempcode('REBRAND_BASE_URL'), do_lang_tempcode('DESCRIPTION_BRAND_BASE_URL', escape_html('docs' . strval(ocp_version()))), 'rebrand_base_url', $rebrand_base_url, true));
         $fields->attach(form_input_line(do_lang_tempcode('COMPANY_NAME'), '', 'company_name', $company_name, true));

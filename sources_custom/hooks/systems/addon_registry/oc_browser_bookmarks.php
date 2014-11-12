@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_browser_bookmarks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_browser_bookmarks
 {
     /**

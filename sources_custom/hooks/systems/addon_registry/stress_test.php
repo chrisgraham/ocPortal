@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    stress_test
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_stress_test
 {
     /**

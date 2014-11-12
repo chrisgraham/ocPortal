@@ -101,7 +101,7 @@ class Module_admin_cleanup
             return $this->do_rebuild();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -117,8 +117,8 @@ class Module_admin_cleanup
 
         require_code('form_templates');
 
-        $fields_cache = new ocp_tempcode();
-        $fields_optimise = new ocp_tempcode();
+        $fields_cache = new Tempcode();
+        $fields_optimise = new Tempcode();
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/cleanup/' . filter_naughty_harsh($hook));
             $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
@@ -136,7 +136,7 @@ class Module_admin_cleanup
             }
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '4a9d6e722f246887160c444a062a9d00', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('CACHES_PAGE_EXP_OPTIMISERS'), 'HELP' => '')));
         $fields->attach($fields_optimise);
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '3ddb387dba8c42ac4ef7b85621052e11', 'TITLE' => do_lang_tempcode('CACHES_PAGE_EXP_CACHES'), 'HELP' => do_lang_tempcode('CACHES_PAGE_CACHES'))));

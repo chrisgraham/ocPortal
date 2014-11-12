@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_startup_referrals
 {
     public function run()

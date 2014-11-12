@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Block class.
+ */
 class Block_main_contact_catalogues
 {
     /**
@@ -119,8 +123,8 @@ class Block_main_contact_catalogues
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
-        $text = new ocp_tempcode();
+        $fields = new Tempcode();
+        $text = new Tempcode();
 
         if ($use_captcha) {
             $fields->attach(form_input_captcha());
@@ -129,7 +133,7 @@ class Block_main_contact_catalogues
 
         $field_groups = array();
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         url_default_parameters__enable();
 
@@ -150,7 +154,7 @@ class Block_main_contact_catalogues
                 }
             }
             if (!array_key_exists($field_cat, $field_groups)) {
-                $field_groups[$field_cat] = new ocp_tempcode();
+                $field_groups[$field_cat] = new Tempcode();
             }
 
             $_cf_description = escape_html(get_translated_text($field['cf_description']));

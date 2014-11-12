@@ -161,7 +161,7 @@ class Module_admin_invoices
         if ($type == 'deliver') {
             return $this->deliver();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -194,7 +194,7 @@ class Module_admin_invoices
         $to = get_param('to', '');
 
         $products = find_all_products();
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         foreach ($products as $type_code => $details) {
             if ($details[0] == PRODUCT_INVOICE) {
                 $text = do_lang_tempcode('CUSTOM_PRODUCT_' . $type_code);
@@ -207,7 +207,7 @@ class Module_admin_invoices
         if ($list->is_empty()) {
             inform_exit(do_lang_tempcode('NOTHING_TO_INVOICE_FOR'));
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_list(do_lang_tempcode('PRODUCT'), '', 'type_code', $list));
         $fields->attach(form_input_username(do_lang_tempcode('USERNAME'), do_lang_tempcode('DESCRIPTION_INVOICE_FOR'), 'to', $to, true));
         $fields->attach(form_input_float(do_lang_tempcode('AMOUNT'), do_lang_tempcode('INVOICE_AMOUNT_TEXT', escape_html(get_option('currency'))), 'amount', null, false));

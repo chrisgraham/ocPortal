@@ -18,7 +18,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_booking extends standard_crud_module
+class Module_cms_booking extends Standard_crud_module
 {
     public $lang_type = 'BOOKABLE';
     public $select_name = 'TITLE';
@@ -141,7 +141,7 @@ class Module_cms_booking extends standard_crud_module
             return $this->bookings_crud_module->__ed();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -190,7 +190,7 @@ class Module_cms_booking extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -262,13 +262,13 @@ class Module_cms_booking extends standard_crud_module
             );
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('cycle_type', $details['cycle_type']));
         $hidden->attach(form_input_hidden('cycle_pattern', $details['cycle_pattern']));
         $hidden->attach(form_input_hidden('user_may_choose_code', strval($details['user_may_choose_code'])));
         $hidden->attach(form_input_hidden('timezone', get_server_timezone()));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', is_null($details['title']) ? '' : get_translated_text($details['title']), true));
         $fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', is_null($details['description']) ? '' : get_translated_text($details['description']), false));
         $fields->attach(form_input_line(do_lang_tempcode('PRICE'), do_lang_tempcode('DESCRIPTION_BOOKABLE_PRICE'), 'price', float_to_raw_string($details['price'], 2), true));
@@ -290,7 +290,7 @@ class Module_cms_booking extends standard_crud_module
 
         $fields->attach(form_input_text(do_lang_tempcode('BOOKABLE_CODES'), do_lang_tempcode('DESCRIPTION_BOOKABLE_CODES'), 'codes', implode("\n", $codes), true));
 
-        $_supplements = new ocp_tempcode();
+        $_supplements = new Tempcode();
         $all_supplements = $GLOBALS['SITE_DB']->query_select('bookable_supplement', array('id', 'title'), null, 'ORDER BY sort_order');
         foreach ($all_supplements as $s) {
             $_supplements->attach(form_input_list_entry(strval($s['id']), in_array($s['id'], $supplements), get_translated_text($s['title'])));
@@ -299,7 +299,7 @@ class Module_cms_booking extends standard_crud_module
             $fields->attach(form_input_multi_list(do_lang_tempcode('SUPPLEMENTS'), do_lang_tempcode('DESCRIPTION_BOOKABLE_SUPPLEMENTS'), 'supplements', $_supplements));
         }
 
-        $_blacks = new ocp_tempcode();
+        $_blacks = new Tempcode();
         $all_blacks = $GLOBALS['SITE_DB']->query_select('bookable_blacked', array('id', 'blacked_explanation'), null, 'ORDER BY blacked_from_year,blacked_from_month,blacked_from_day');
         foreach ($all_blacks as $s) {
             $_blacks->attach(form_input_list_entry(strval($s['id']), in_array($s['id'], $blacks), get_translated_text($s['blacked_explanation'])));
@@ -398,7 +398,7 @@ class Module_cms_booking extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_booking_supplements extends standard_crud_module
+class Module_cms_booking_supplements extends Standard_crud_module
 {
     public $lang_type = 'BOOKABLE_SUPPLEMENT';
     public $select_name = 'EXPLANATION';
@@ -443,7 +443,7 @@ class Module_cms_booking_supplements extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -493,11 +493,11 @@ class Module_cms_booking_supplements extends standard_crud_module
             $bookables = collapse_1d_complexity('id', $GLOBALS['SITE_DB']->query_select('bookable', array('id')));
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('promo_code', $details['promo_code']));
         $hidden->attach(form_input_hidden('timezone', get_server_timezone()));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', is_null($details['title']) ? '' : get_translated_text($details['title']), true));
         $fields->attach(form_input_line(do_lang_tempcode('PRICE'), do_lang_tempcode('DESCRIPTION_SUPPLEMENT_PRICE'), 'price', float_to_raw_string($details['price'], 2), true));
         $fields->attach(form_input_tick(do_lang_tempcode('PRICE_IS_PER_PERIOD'), do_lang_tempcode('DESCRIPTION_PRICE_IS_PER_PERIOD'), 'price_is_per_period', $details['price_is_per_period'] == 1));
@@ -506,7 +506,7 @@ class Module_cms_booking_supplements extends standard_crud_module
         $fields->attach(form_input_tick(do_lang_tempcode('SUPPORTS_NOTES'), do_lang_tempcode('DESCRIPTION_SUPPORTS_NOTES'), 'supports_notes', $details['supports_notes'] == 1));
         $fields->attach(form_input_integer(do_lang_tempcode('SORT_ORDER'), do_lang_tempcode('DESCRIPTION_SORT_ORDER'), 'sort_order', $details['sort_order'], true));
 
-        $_bookables = new ocp_tempcode();
+        $_bookables = new Tempcode();
         $all_bookables = $GLOBALS['SITE_DB']->query_select('bookable', array('id', 'title'), null, 'ORDER BY sort_order');
         foreach ($all_bookables as $s) {
             $_bookables->attach(form_input_list_entry(strval($s['id']), in_array($s['id'], $bookables), get_translated_text($s['title'])));
@@ -596,7 +596,7 @@ class Module_cms_booking_supplements extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_booking_blacks extends standard_crud_module
+class Module_cms_booking_blacks extends Standard_crud_module
 {
     public $lang_type = 'BOOKABLE_BLACKED';
     public $select_name = 'EXPLANATION';
@@ -640,7 +640,7 @@ class Module_cms_booking_blacks extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -686,15 +686,15 @@ class Module_cms_booking_blacks extends standard_crud_module
             $bookables = collapse_1d_complexity('id', $GLOBALS['SITE_DB']->query_select('bookable', array('id')));
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('timezone', get_server_timezone()));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_date(do_lang_tempcode('BLACKED_FROM'), do_lang_tempcode('DESCRIPTION_BLACKED_FROM'), 'blacked_from', true, false, false, array(0, 0, $details['blacked_from_month'], $details['blacked_from_day'], $details['blacked_from_year']), 10, null, null, true, get_server_timezone()));
         $fields->attach(form_input_date(do_lang_tempcode('BLACKED_TO'), do_lang_tempcode('DESCRIPTION_BLACKED_TO'), 'blacked_to', true, false, false, array(0, 0, $details['blacked_to_month'], $details['blacked_to_day'], $details['blacked_to_year']), 10, null, null, true, get_server_timezone()));
         $fields->attach(form_input_text(do_lang_tempcode('BLACKED_EXPLANATION'), do_lang_tempcode('DESCRIPTION_BLACKED_EXPLANATION'), 'blacked_explanation', is_null($details['blacked_explanation']) ? '' : get_translated_text($details['blacked_explanation']), true));
 
-        $_bookables = new ocp_tempcode();
+        $_bookables = new Tempcode();
         $all_bookables = $GLOBALS['SITE_DB']->query_select('bookable', array('id', 'title'), null, 'ORDER BY sort_order');
         foreach ($all_bookables as $s) {
             $_bookables->attach(form_input_list_entry(strval($s['id']), in_array($s['id'], $bookables), get_translated_text($s['title'])));
@@ -782,7 +782,7 @@ class Module_cms_booking_blacks extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_booking_bookings extends standard_crud_module
+class Module_cms_booking_bookings extends Standard_crud_module
 {
     public $lang_type = 'BOOKING';
     public $select_name = 'MEMBER_ID';
@@ -913,7 +913,7 @@ class Module_cms_booking_bookings extends standard_crud_module
         // FUTURE: Show paid at, transaction IDs, and codes, and allow sorting of those
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -948,9 +948,9 @@ class Module_cms_booking_bookings extends standard_crud_module
      */
     public function get_form_fields($details = null, $member_id = null)
     {
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         if (is_null($details)) {
             $bookable_id = get_param_integer('bookable_id', null);
@@ -960,7 +960,7 @@ class Module_cms_booking_bookings extends standard_crud_module
                     inform_exit(do_lang_tempcode('NO_CATEGORIES'));
                 }
 
-                $bookables_list = new ocp_tempcode();
+                $bookables_list = new Tempcode();
                 foreach ($bookables as $bookable) {
                     $bookables_list->attach(form_input_list_entry(strval($bookable['id']), false, get_translated_text($bookable['title'])));
                 }

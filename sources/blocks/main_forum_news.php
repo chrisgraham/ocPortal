@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_main_forum_news
 {
     /**
@@ -59,7 +63,7 @@ class Block_main_forum_news
     public function run($map)
     {
         if (has_no_forum()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_lang('news');
@@ -69,7 +73,7 @@ class Block_main_forum_news
         $num_topics = array_key_exists('param', $map) ? intval($map['param']) : 14;
         $forum_name = array_key_exists('forum', $map) ? $map['forum'] : do_lang('NEWS');
 
-        $optimise = (array_key_exists('optimise', $map)) && ($map['optimise'] == '1');
+        $optimise=(array_key_exists('optimise',$map)) && ($map['optimise']=='1');
 
         $num_topics = intval($num_topics);
 
@@ -77,7 +81,7 @@ class Block_main_forum_news
 
         $rows = array();
         $archive_url = null;
-        $submit_url = new ocp_tempcode();
+        $submit_url = new Tempcode();
 
         $forum_ids = array();
         if ((get_forum_type() == 'ocf') && ((strpos($forum_name, ',') !== false) || (preg_match('#\d[-\*\+]#', $forum_name) != 0) || (is_numeric($forum_name)))) {
@@ -121,23 +125,23 @@ class Block_main_forum_news
         }
 
         $i = 0;
-        $news_text = new ocp_tempcode();
+        $news_text = new Tempcode();
         while (array_key_exists($i, $rows)) {
             $myrow = $rows[$i];
 
             $id = $myrow['id'];
             $date = get_timezoned_date($myrow[$date_key]);
-            $author_url = (((array_key_exists('member_based', $map)) && ($map['member_based'] == '1')) || (!addon_installed('authors'))) ? new ocp_tempcode() : build_url(array('page' => 'authors', 'type' => 'misc', 'author' => $myrow['firstusername']), get_module_zone('authors'));
+            $author_url = (((array_key_exists('member_based', $map)) && ($map['member_based'] == '1')) || (!addon_installed('authors'))) ? new Tempcode() : build_url(array('page' => 'authors', 'type' => 'misc', 'author' => $myrow['firstusername']), get_module_zone('authors'));
             $author = $myrow['firstusername'];
             $news_title = $myrow['title'];
             if (is_object($myrow['firstpost'])) {
                 $news = $myrow['firstpost'];
                 if ($optimise) {
-                    $news = make_string_tempcode($news->evaluate());
+                    $news=make_string_tempcode($news->evaluate());
                     if (multi_lang_content()) {
-                        $GLOBALS['SITE_DB']->query_update('translate', array('text_parsed' => $news->to_assembly()), array('id' => $myrow['firstpost_language_string'], 'language' => user_lang()), '', 1);
+                        $GLOBALS['SITE_DB']->query_update('translate',array('text_parsed'=>$news->to_assembly()),array('id'=>$myrow['firstpost_language_string'],'language'=>user_lang()),'',1);
                     } else {
-                        $GLOBALS['SITE_DB']->query_update('f_posts', array('p_post__text_parsed' => $news->to_assembly()), array('id' => $myrow['id']), '', 1);
+                        $GLOBALS['SITE_DB']->query_update('f_posts',array('p_post__text_parsed'=>$news->to_assembly()),array('id'=>$myrow['id']),'',1);
                     }
                 }
             } else {
@@ -194,7 +198,7 @@ class Block_main_forum_news
             'TITLE' => $_title,
             'FORUM_NAME' => array_key_exists('forum', $map) ? $map['forum'] : do_lang('NEWS'),
             'CONTENT' => $news_text,
-            'BRIEF' => new ocp_tempcode(),
+            'BRIEF' => new Tempcode(),
             'ARCHIVE_URL' => $archive_url,
             'SUBMIT_URL' => $submit_url,
             'RSS_URL' => '',

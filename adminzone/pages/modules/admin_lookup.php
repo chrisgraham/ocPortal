@@ -150,7 +150,7 @@ class Module_admin_lookup
 
             $all_banned = collapse_1d_complexity('ip', $GLOBALS['SITE_DB']->query('SELECT ip FROM ' . get_table_prefix() . 'banned_ip WHERE i_ban_positive=1 AND (i_ban_until IS NULL OR i_ban_until>' . strval(time()) . ')'));
 
-            $ip_list = new ocp_tempcode();
+            $ip_list = new Tempcode();
             $groups = array();
             foreach ($rows as $row) {
                 if (strpos($row['ip'], ':') !== false) {
@@ -194,7 +194,7 @@ class Module_admin_lookup
                 $all_banned = $all_banned_filtered;
             }
             foreach ($groups as $mask => $group) {
-                $inner_ip_list = new ocp_tempcode();
+                $inner_ip_list = new Tempcode();
                 $one_sub_is_banned = false;
                 foreach ($group as $row) {
                     $date = get_timezoned_date($row['date_and_time']);
@@ -228,7 +228,7 @@ class Module_admin_lookup
             }
 
             if ($ip == '') {
-                $alerts = new ocp_tempcode();
+                $alerts = new Tempcode();
             } else {
                 list($alerts,) = find_security_alerts(array('ip' => $ip));
             }

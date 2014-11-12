@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_content_link_multi
 {
     /**
@@ -105,7 +109,7 @@ class Hook_fields_content_link_multi
         }
 
         if ($ev == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $type = preg_replace('#^choose\_#', '', substr($field['cf_type'], 3));
@@ -115,7 +119,7 @@ class Hook_fields_content_link_multi
             $type = 'topic';
         }
 
-        $ret = new ocp_tempcode();
+        $ret = new Tempcode();
         $evs = explode("\n", $ev);
         foreach ($evs as $ev) {
             require_code('content');
@@ -167,7 +171,7 @@ class Hook_fields_content_link_multi
             $select[] = $info['title_field'];
         }
         $rows = $db->query_select($info['table'], $select, null, is_null($info['add_time_field']) ? '' : ('ORDER BY ' . $info['add_time_field'] . ' DESC'), 2000/*reasonable limit*/);
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $_list = array();
         foreach ($rows as $row) {
             $id = extract_content_str_id_from_data($row, $info);

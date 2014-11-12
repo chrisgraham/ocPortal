@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    custom_comcode
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_custom_comcode
 {
     /**
@@ -146,7 +150,7 @@ class Hook_addon_registry_custom_comcode
      */
     public function tpl_preview__block_main_custom_comcode_tags()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $tag) {
             $content->attach(do_lorem_template('CUSTOM_COMCODE_TAG_ROW', array(
                 'TITLE' => lorem_word(),

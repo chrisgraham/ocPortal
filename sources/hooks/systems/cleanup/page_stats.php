@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_stats
 {
     /**
@@ -53,7 +57,7 @@ class Hook_page_stats
 
             require_code('form_templates');
 
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_integer(do_lang_tempcode('DPLU_DAYS'), do_lang_tempcode('DESCRIPTION_DELETE_DAYS'), 'delete_older_than', $delete_older_than, true));
             if ((addon_installed('search')) && ($GLOBALS['SITE_DB']->query_select_value('searches_logged', 'COUNT(*)') > 10000)) {
                 $fields->attach(form_input_tick(do_lang_tempcode('DELETE_SEARCH_STATS'), do_lang_tempcode('DESCRIPTION_DELETE_SEARCH_STATS'), 'search_stats', false));

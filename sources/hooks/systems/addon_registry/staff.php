@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    staff
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_staff
 {
     /**
@@ -136,7 +140,7 @@ class Hook_addon_registry_staff
      */
     public function tpl_preview__administrative__staff_admin_screen()
     {
-        $available = new ocp_tempcode();
+        $available = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $available->attach(do_lorem_template('STAFF_EDIT_WRAPPER', array(
                 'FORM' => placeholder_form(),

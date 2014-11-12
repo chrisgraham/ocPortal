@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_stats_search
 {
     /**
@@ -95,7 +99,7 @@ class Hook_admin_stats_search
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('KEYWORD'), do_lang_tempcode('COUNT_VIEWS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $degrees = 360 / $total;
         $done_total = 0;
         $data = array();
@@ -123,7 +127,7 @@ class Hook_admin_stats_search
             $data[do_lang('OTHER')] = 360 - $done_total;
             $fields->attach(results_entry(array(do_lang('OTHER'), float_format((360 - $done_total) / $degrees))));
         }
-        $list = results_table(do_lang_tempcode('SEARCH_STATISTICS'), $start, 'start', $max, 'max', count($keywords), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('SEARCH_STATISTICS'), $start, 'start', $max, 'max', count($keywords), $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
 
         $output = create_pie_chart($data);
         $ob->save_graph('Global-Search', $output);

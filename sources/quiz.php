@@ -136,7 +136,7 @@ function render_quiz($questions)
     require_code('form_templates');
 
     // Sort out qa input
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     foreach ($questions as $i => $q) {
         $name = 'q_' . strval($q['id']);
         $question = protect_from_escaping((!is_string($q['q_question_text']) && !isset($q['q_question_text__text_parsed'])) ? comcode_to_tempcode($q['q_question_text']) : get_translated_tempcode('quiz_questions', $q, 'q_question_text'));
@@ -144,7 +144,7 @@ function render_quiz($questions)
 
         switch ($q['q_type']) {
             case 'MULTIPLECHOICE':
-                $radios = new ocp_tempcode();
+                $radios = new Tempcode();
                 foreach ($q['answers'] as $a) {
                     $answer_text = (!is_string($a['q_answer_text']) && !isset($a['q_answer_text__text_parsed'])) ? comcode_to_tempcode($a['q_answer_text']) : get_translated_tempcode('quiz_question_answers', $a, 'q_answer_text');
                     $radios->attach(form_input_radio_entry($name, strval($a['id']), false, protect_from_escaping($answer_text)));
@@ -237,7 +237,7 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
         if ($question['q_type'] == 'SHORT' || $question['q_type'] == 'SHORT_STRICT' || $question['q_type'] == 'LONG') { // Text box ("free question"). May be an actual answer, or may not be
             $given_answer = $_given_answers[$question['id']][0];
 
-            $correct_answer = new ocp_tempcode();
+            $correct_answer = new Tempcode();
             $correct_explanation = mixed();
             if (count($question['answers']) == 0) {
                 $potential_extra_marks++;
@@ -281,8 +281,8 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
         } elseif ($question['q_type'] == 'MULTIMULTIPLE') { // Check boxes
             // Vector distance
             $wrongness = 0.0;
-            $accum = new ocp_tempcode();
-            $correct_answer = new ocp_tempcode();
+            $accum = new Tempcode();
+            $correct_answer = new Tempcode();
             $correct_explanation = null;
             foreach ($question['answers'] as $a) {
                 $for_this = in_array(strval($a['id']), $_given_answers[$question['id']]);
@@ -334,7 +334,7 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
             );
         } elseif ($question['q_type'] == 'MULTIPLECHOICE') { // Radio buttons
             $was_correct = false;
-            $correct_answer = new ocp_tempcode();
+            $correct_answer = new Tempcode();
             $correct_explanation = null;
             $given_answer = '';
             foreach ($question['answers'] as $a) {
@@ -389,9 +389,9 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
     $percentage_range = strval($minimum_percentage) . (($potential_extra_marks == 0) ? '' : ('-' . strval($maximum_percentage)));
 
     // Prepare results for display
-    $corrections_to_staff = new ocp_tempcode();
-    $corrections_to_member = new ocp_tempcode();
-    $affirmations_to_member = new ocp_tempcode();
+    $corrections_to_staff = new Tempcode();
+    $corrections_to_member = new Tempcode();
+    $affirmations_to_member = new Tempcode();
     foreach ($corrections as $correction) {
         if ((array_key_exists(4, $correction)) || ($quiz['q_reveal_answers'] == 1) || ($reveal_all)) {
             $__correction = do_lang_tempcode(
@@ -430,12 +430,12 @@ function score_quiz($entry_id, $quiz_id = null, $quiz = null, $questions = null,
             $affirmations_to_member->attach($__affirmation);
         }
     }
-    $unknowns_to_staff = new ocp_tempcode();
+    $unknowns_to_staff = new Tempcode();
     foreach ($unknowns as $unknown) {
         $_unknown = do_lang('QUIZ_UNKNOWN', comcode_escape($unknown[0]), comcode_escape($unknown[1]));
         $unknowns_to_staff->attach($_unknown);
     }
-    $given_answers_to_staff = new ocp_tempcode();
+    $given_answers_to_staff = new Tempcode();
     foreach ($given_answers as $given_answer) {
         $_given_answer = do_lang('QUIZ_RESULT', comcode_escape($given_answer['QUESTION']), comcode_escape($given_answer['GIVEN_ANSWER']));
         $given_answers_to_staff->attach($_given_answer);

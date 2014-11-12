@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_community_billboard
 {
     /**
@@ -226,7 +230,7 @@ class Hook_addon_registry_community_billboard
             'DATE' => placeholder_time(),
         ));
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
             $text = do_lorem_template('COMMUNITY_BILLBOARD_STORE_LIST_LINE', array(
                 'MESSAGE' => $value,

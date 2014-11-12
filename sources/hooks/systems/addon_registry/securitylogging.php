@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    securitylogging
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_securitylogging
 {
     /**
@@ -243,7 +247,7 @@ class Hook_addon_registry_securitylogging
      */
     public function tpl_preview__administrative__lookup_screen()
     {
-        $inner_ip_list = new ocp_tempcode();
+        $inner_ip_list = new Tempcode();
         foreach (placeholder_array() as $value) {
             $inner_ip_list->attach(do_lorem_template('LOOKUP_IP_LIST_ENTRY', array(
                 'LOOKUP_URL' => placeholder_url(),

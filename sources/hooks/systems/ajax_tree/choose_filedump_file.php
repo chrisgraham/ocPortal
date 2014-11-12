@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
+
+/**
+ * Hook class.
+ */
 class Hook_choose_filedump_file
 {
     /**

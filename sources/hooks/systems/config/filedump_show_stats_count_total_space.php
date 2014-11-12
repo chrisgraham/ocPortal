@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_filedump_show_stats_count_total_space
 {
     /**

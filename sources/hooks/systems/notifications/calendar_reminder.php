@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-class Hook_Notification_calendar_reminder extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_calendar_reminder extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
+
+/**
+ * Hook class.
+ */
 class Hook_task_send_newsletter
 {
     /**

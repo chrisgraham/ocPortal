@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_activities
 {
     /**
@@ -34,7 +38,7 @@ class Hook_rss_activities
 
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . get_table_prefix() . 'activities WHERE (' . $where_clause . ') AND a_time>' . strval($cutoff) . ' ORDER BY a_time DESC', $max, 0);
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             $id = strval($row['id']);
             $author = $GLOBALS['FORUM_DRIVER']->get_username($row['a_member_id']);
@@ -55,7 +59,7 @@ class Hook_rss_activities
 
             $view_url = build_url(array('page' => 'members', 'type' => 'view', 'id' => $row['a_member_id']), get_module_zone('members'), null, false, false, true);
 
-            $if_comments = new ocp_tempcode();
+            $if_comments = new Tempcode();
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }

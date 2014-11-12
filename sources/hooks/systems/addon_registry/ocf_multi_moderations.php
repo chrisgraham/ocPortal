@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_multi_moderations
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_multi_moderations
 {
     /**

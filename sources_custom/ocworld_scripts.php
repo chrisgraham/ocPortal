@@ -30,7 +30,7 @@ function ocworld_messages_script()
     list($realm, $x, $y) = array($rows[0]['location_realm'], $rows[0]['location_x'], $rows[0]['location_y']);
 
     $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'w_messages WHERE location_x=' . strval($x) . ' AND location_y=' . strval($y) . ' AND location_realm=' . strval($realm) . ' AND (destination=' . strval($member_id) . ' OR destination IS NULL OR originator_id=' . strval($member_id) . ') ORDER BY m_datetime DESC');
-    $messages = new ocp_tempcode();
+    $messages = new Tempcode();
     foreach ($rows as $myrow) {
         $message_sender = $GLOBALS['FORUM_DRIVER']->get_username($myrow['originator_id']);
         if (is_null($message_sender)) {

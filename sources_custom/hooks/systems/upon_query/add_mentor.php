@@ -7,6 +7,9 @@
 
 */
 
+/**
+ * Hook class.
+ */
 class Hook_upon_query_add_mentor
 {
     public function run_post($ob, $query, $max, $start, $fail_ok, $get_insert_id, $ret)

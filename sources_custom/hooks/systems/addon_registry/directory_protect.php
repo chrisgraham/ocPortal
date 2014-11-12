@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    directory_protect
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_directory_protect
 {
     /**

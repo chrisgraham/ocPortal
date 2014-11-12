@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_classifieds
 {
     /**

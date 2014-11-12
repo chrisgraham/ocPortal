@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ldap
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ldap
 {
     /**
@@ -144,7 +148,7 @@ class Hook_addon_registry_ldap
     public function tpl_preview__administrative__ocf_ldap_sync_screen()
     {
         require_lang('ocf');
-        $members_delete = new ocp_tempcode();
+        $members_delete = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
                 'NAME' => lorem_word() . placeholder_random(),
@@ -153,7 +157,7 @@ class Hook_addon_registry_ldap
             $members_delete->attach($tpl);
         }
 
-        $groups_delete = new ocp_tempcode();
+        $groups_delete = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
                 'NAME' => lorem_word() . placeholder_random(),
@@ -162,7 +166,7 @@ class Hook_addon_registry_ldap
             $groups_delete->attach($tpl);
         }
 
-        $groups_add = new ocp_tempcode();
+        $groups_add = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $tpl = do_lorem_template('OCF_LDAP_LIST_ENTRY', array(
                 'NAME' => lorem_word() . placeholder_random(),

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_highlight_name
 {
     /**
@@ -60,7 +64,7 @@ class Hook_pointstore_highlight_name
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
 
         if ((get_option('is_on_' . $class . '_buy') == '0') || (get_forum_type() != 'ocf')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         if ($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_highlighted_name') == 1) {
             warn_exit(do_lang_tempcode('_ALREADY_HAVE'));
@@ -90,7 +94,7 @@ class Hook_pointstore_highlight_name
         $class = str_replace('hook_pointstore_', '', strtolower(get_class($this)));
 
         if ((get_option('is_on_' . $class . '_buy') == '0') || (get_forum_type() != 'ocf')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         if ($GLOBALS['FORUM_DRIVER']->get_member_row_field(get_member(), 'm_highlighted_name') == 1) {
             warn_exit(do_lang_tempcode('_ALREADY_HAVE'));

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
+
+/**
+ * Hook class.
+ */
 class Hook_block_ui_renderers_awards
 {
     /**
@@ -32,7 +36,7 @@ class Hook_block_ui_renderers_awards
     public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
         if ($block . ':' . $parameter == 'main_awards:param') { // special case for awards
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('award_types', array('id', 'a_title'));
             foreach ($rows as $row) {
                 $list->attach(form_input_list_entry(strval($row['id']), $has_default && strval($row['id']) == $default, get_translated_text($row['a_title'])));

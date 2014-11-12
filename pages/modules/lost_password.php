@@ -98,7 +98,7 @@ class Module_lost_password
             return $this->step3();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -131,7 +131,7 @@ class Module_lost_password
      */
     public function step1()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         $set_name = 'account';
@@ -235,7 +235,7 @@ class Module_lost_password
             $zone = get_module_zone('lost_password');
             $_url = build_url(array('page' => 'lost_password', 'type' => 'step3', 'member' => $member_id), $zone);
             require_code('form_templates');
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_line(do_lang_tempcode('CODE'), '', 'code', null, true));
             $submit_name = do_lang_tempcode('PROCEED');
             return do_template('FORM_SCREEN', array('_GUID' => '9f03d4abe0140559ec6eba2fa34fe3d6', 'TITLE' => $this->title,
@@ -263,7 +263,7 @@ class Module_lost_password
         $code = trim(get_param('code', ''));
         if ($code == '') {
             require_code('form_templates');
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_username(do_lang_tempcode('USERNAME'), '', 'username', null, true));
             $fields->attach(form_input_line(do_lang_tempcode('CODE'), '', 'code', null, true));
             $submit_name = do_lang_tempcode('PROCEED');

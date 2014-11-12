@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_custom_comcode extends standard_crud_module
+class Module_admin_custom_comcode extends Standard_crud_module
 {
     public $table_prefix = 'tag_';
     public $array_key = 'tag_tag';
@@ -189,7 +189,7 @@ class Module_admin_custom_comcode extends standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -246,7 +246,7 @@ class Module_admin_custom_comcode extends standard_crud_module
             log_hack_attack_and_exit('ORDERBY_HACK');
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -276,7 +276,7 @@ class Module_admin_custom_comcode extends standard_crud_module
      */
     public function get_form_fields($title = '', $description = '', $enabled = 1, $tag = 'this', $replace = '<span class="example" style="color: {color}">{content}</span>', $example = '[this color="red"]blah[/this]', $parameters = 'color=black', $dangerous_tag = 0, $block_tag = 0, $textual_tag = 1)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('comcode_compiler');
         $fields->attach(form_input_codename(do_lang_tempcode('COMCODE_TAG'), do_lang_tempcode('DESCRIPTION_COMCODE_TAG'), 'tag', $tag, true, null, MAX_COMCODE_TAG_LOOK_AHEAD_LENGTH));
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TAG_TITLE'), 'title', $title, true));
@@ -289,7 +289,7 @@ class Module_admin_custom_comcode extends standard_crud_module
         $fields->attach(form_input_tick(do_lang_tempcode('TEXTUAL_TAG'), do_lang_tempcode('DESCRIPTION_TEXTUAL_TAG'), 'textual_tag', $textual_tag == 1));
         $fields->attach(form_input_tick(do_lang_tempcode('ENABLED'), '', 'enabled', $enabled == 1));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**

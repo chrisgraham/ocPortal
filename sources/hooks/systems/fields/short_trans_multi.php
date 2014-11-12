@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_short_trans_multi
 {
     // ==============
@@ -81,7 +85,7 @@ class Hook_fields_short_trans_multi
         if (is_object($ev)) {
             return $ev;
         }
-        $ret = new ocp_tempcode();
+        $ret = new Tempcode();
         foreach (($ev == '') ? array() : explode("\n", $ev) as $ev) {
             $ret->attach(paragraph(comcode_to_tempcode($ev)));
         }

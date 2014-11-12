@@ -18,15 +18,21 @@
  * @package    core
  */
 
-/*EXTRA FUNCTIONS: xcache\_.+*/
+/*EXTRA FUNCTIONS: Memcache*/
 
 /**
- * Cache Driver.
- *
- * @package    core
+ * Cache driver class.
  */
-class ocp_xcache
+class Persistent_cacheing_memcache extends Memcache
 {
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->connect('localhost', 11211);
+    }
+
     public $objects_list = null;
 
     /**
@@ -37,8 +43,8 @@ class ocp_xcache
     public function load_objects_list()
     {
         if (is_null($this->objects_list)) {
-            $this->objects_list = xcache_get(get_file_base() . 'PERSISTENT_CACHE_OBJECTS');
-            if ($this->objects_list === null) {
+            $this->objects_list = parent::get(get_file_base() . 'PERSISTENT_CACHE_OBJECTS');
+            if ($this->objects_list === false) {
                 $this->objects_list = array();
             }
         }
@@ -54,7 +60,7 @@ class ocp_xcache
      */
     public function get($key, $min_cache_date = null)
     {
-        $data = xcache_get($key);
+        $data = parent::get($key, $min_cache_date);
         if ($data === false) {
             return null;
         }
@@ -78,10 +84,10 @@ class ocp_xcache
         $objects_list = $this->load_objects_list();
         if (!array_key_exists($key, $objects_list)) {
             $objects_list[$key] = true;
-            xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
+            parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
         }
 
-        xcache_set($key, array(time(), $data), $expire_secs);
+        parent::set($key, array(time(), $data), $flags, $expire_secs);
     }
 
     /**
@@ -94,9 +100,9 @@ class ocp_xcache
         // Update list of persistent-objects
         $objects_list = $this->load_objects_list();
         unset($objects_list[$key]);
-        xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
+        parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
-        xcache_unset($key);
+        parent::delete($key);
     }
 
     /**
@@ -106,8 +112,8 @@ class ocp_xcache
     {
         // Update list of persistent-objects
         $objects_list = array();
-        xcache_set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
+        parent::set(get_file_base() . 'PERSISTENT_CACHE_OBJECTS', $objects_list);
 
-        xcache_unset_by_prefix('');
+        parent::flush();
     }
 }

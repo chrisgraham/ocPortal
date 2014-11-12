@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    hphp_buildkit
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_hphp_buildkit
 {
     /**

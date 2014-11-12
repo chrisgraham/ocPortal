@@ -13,6 +13,9 @@
  */
 /*EXTRA FUNCTIONS: json_decode*/
 
+/**
+ * Block class.
+ */
 class Block_side_similar_sites
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    collaboration_zone
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_collaboration_zone
 {
     /**

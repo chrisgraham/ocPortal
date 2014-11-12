@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    content_privacy
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_content_privacy
 {
     /**

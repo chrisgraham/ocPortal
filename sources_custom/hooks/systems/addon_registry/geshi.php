@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    geshi
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_geshi
 {
     /**

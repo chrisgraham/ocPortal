@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_theme_images
 {
     /**
@@ -56,6 +60,6 @@ class Hook_admin_theme_images
             }
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

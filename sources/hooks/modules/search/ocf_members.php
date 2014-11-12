@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_search_ocf_members
 {
     /**
@@ -119,7 +123,7 @@ class Hook_search_ocf_members
         }
         if (strpos($default_group, ',') !== false) {
             $bits = explode(',', $default_group);
-            $combination = new ocp_tempcode();
+            $combination = new Tempcode();
             foreach ($bits as $bit) {
                 if (!$combination->is_empty()) {
                     $combination->attach(do_lang_tempcode('LIST_SEP'));
@@ -315,7 +319,7 @@ class Hook_search_ocf_members
         require_code('ocf_members');
         if (get_param_integer('option__emails_only', 0) == 1) {
             $link = $GLOBALS['FORUM_DRIVER']->member_profile_hyperlink($row['id'], false, $row['m_username'], false);
-            $link2 = ($row['m_email_address'] == '') ? new ocp_tempcode() : hyperlink('mailto: ' . $row['m_email_address'], $row['m_email_address'], false, true);
+            $link2 = ($row['m_email_address'] == '') ? new Tempcode() : hyperlink('mailto: ' . $row['m_email_address'], $row['m_email_address'], false, true);
             return paragraph($link->evaluate() . ' &lt;' . $link2->evaluate() . '&gt;', 'e3f;l23kf;l320932kl');
         }
         require_code('ocf_members2');

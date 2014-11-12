@@ -313,7 +313,7 @@ class Module_admin_permissions
             return $this->set_privileges();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -325,8 +325,8 @@ class Module_admin_permissions
     {
         $groups_without = array();
         $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
-        $list1 = new ocp_tempcode();
-        $list2 = new ocp_tempcode();
+        $list1 = new Tempcode();
+        $list2 = new Tempcode();
         $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
         $moderator_groups = $GLOBALS['FORUM_DRIVER']->get_moderator_groups();
         foreach ($all_groups as $id => $name) {
@@ -355,7 +355,7 @@ class Module_admin_permissions
         $post_url = build_url(array('page' => '_SELF', 'type' => '_absorb'), '_SELF');
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_list(do_lang_tempcode('FROM'), do_lang_tempcode('PERMISSIONS_FROM'), 'from', $list1));
         $fields->attach(form_input_list(do_lang_tempcode('TO'), do_lang_tempcode('PERMISSIONS_TO'), 'to', $list2));
 
@@ -405,7 +405,7 @@ class Module_admin_permissions
 
         require_css('sitemap_editor');
 
-        $groups = new ocp_tempcode();
+        $groups = new Tempcode();
         $admin_groups = $GLOBALS['FORUM_DRIVER']->get_super_admin_groups();
         $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true);
         $initial_group = null;
@@ -460,7 +460,7 @@ class Module_admin_permissions
         require_code('character_sets');
 
         // Column headers (groups)
-        $header_cells = new ocp_tempcode();
+        $header_cells = new Tempcode();
         foreach ($groups as $id => $name) {
             if (in_array($id, $admin_groups)) {
                 continue;
@@ -482,7 +482,7 @@ class Module_admin_permissions
      */
     public function _choose_zone($title)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         require_lang('zones');
 
@@ -511,7 +511,7 @@ class Module_admin_permissions
 
         $header_cells = $this->_access_header($admin_groups, $groups);
 
-        $cols = new ocp_tempcode();
+        $cols = new Tempcode();
         foreach ($groups as $id => $g_name) {
             if (in_array($id, $admin_groups)) {
                 continue;
@@ -526,9 +526,9 @@ class Module_admin_permissions
         $p_rows[] = array('page_name' => '');
         $p_rows[] = array('page_name' => '');
         $p_rows[] = array('page_name' => '');
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         foreach ($p_rows as $id => $page) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             $code = '';
 
             $access_rows = collapse_1d_complexity('group_id', $GLOBALS['SITE_DB']->query_select('group_page_access', array('group_id'), array('page_name' => $page['page_name'])));
@@ -555,7 +555,7 @@ class Module_admin_permissions
         $m_rows[] = array('id' => 'new_3', 'k_message' => '', 'k_match_key' => '');
         $m_rows[] = array('id' => 'new_4', 'k_message' => '', 'k_match_key' => '');
         $m_rows[] = array('id' => 'new_5', 'k_message' => '', 'k_match_key' => '');
-        $rows2 = new ocp_tempcode();
+        $rows2 = new Tempcode();
         foreach ($m_rows as $row) {
             if ($row['k_message'] === '') {
                 $msg = '';
@@ -643,7 +643,7 @@ class Module_admin_permissions
 
         $header_cells = $this->_access_header($admin_groups, $groups);
 
-        $cols = new ocp_tempcode();
+        $cols = new Tempcode();
         foreach ($groups as $id => $g_name) {
             if (in_array($id, $admin_groups)) {
                 continue;
@@ -652,7 +652,7 @@ class Module_admin_permissions
         }
 
         // Rows (pages)
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         $zone = get_param('zone', null);
         if ($zone === null) {
             return $this->_choose_zone($this->title);
@@ -663,7 +663,7 @@ class Module_admin_permissions
             $pages = find_all_pages_wrap($zone);
 
             foreach (array_keys($pages) as $page) {
-                $cells = new ocp_tempcode();
+                $cells = new Tempcode();
                 $code = '';
 
                 $has = true;
@@ -777,13 +777,13 @@ class Module_admin_permissions
 
         $p_section = get_param('id', null);
         if ((is_null($p_section)) || ($p_section == '')) {
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             require_code('form_templates');
 
             $_sections = $this->_get_ordered_sections();
-            $sections = new ocp_tempcode();
-            $sections_common = new ocp_tempcode();
-            $sections_uncommon = new ocp_tempcode();
+            $sections = new Tempcode();
+            $sections_common = new Tempcode();
+            $sections_uncommon = new Tempcode();
             $doing_uncommon = false;
             foreach ($_sections as $s) {
                 if (is_null($s)) {
@@ -815,7 +815,7 @@ class Module_admin_permissions
 
         $header_cells = $this->_access_header($admin_groups, $groups);
 
-        $cols = new ocp_tempcode();
+        $cols = new Tempcode();
         foreach ($groups as $id => $g_name) {
             if (in_array($id, $admin_groups)) {
                 continue;
@@ -846,12 +846,12 @@ class Module_admin_permissions
         $all_page_permission_overridding = $GLOBALS['SITE_DB']->query_select('group_privileges', array('the_page', 'privilege'), array('category_name' => ''));
 
         // Rows (pages)
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         $where = array('p_section' => $p_section); // Added in because it was eating up too much memory
         $_permissions = collapse_2d_complexity('the_name', 'p_section', $GLOBALS['SITE_DB']->query_select('privilege_list', array('p_section', 'the_name'), $where, 'ORDER BY p_section,the_name'));
         $access_rows = $GLOBALS['SITE_DB']->query_select('group_privileges', array('privilege', 'group_id'), array('the_page' => '', 'module_the_name' => '', 'category_name' => ''));
         $current_section = '';
-        $sections = new ocp_tempcode();
+        $sections = new Tempcode();
         $_false = do_template('PERMISSION_CELL', array('_GUID' => '61aa7fa739e19caa1efb3695a5e2ab5d', 'CHECKED' => false, 'HUMAN' => '__human__', 'NAME' => '__name__'));
         $_true = do_template('PERMISSION_CELL', array('_GUID' => '44a888b40d7a34aed6ed2bf8ff47f1de', 'CHECKED' => true, 'HUMAN' => '__human__', 'NAME' => '__name__'));
         $true = $_true->evaluate();
@@ -886,7 +886,7 @@ class Module_admin_permissions
 
             if (($section != $current_section) && ($current_section != '')) {
                 $sections->attach(do_template('PERMISSION_PRIVILEGES_SECTION', array('_GUID' => '36bc9dfbeb7ee3d91f2a18057cd30551', 'HEADER_CELLS' => $header_cells, 'SECTION' => $rows, 'CURRENT_SECTION' => do_lang_tempcode($current_section))));
-                $rows = new ocp_tempcode();
+                $rows = new Tempcode();
             }
 
             $cells = '';

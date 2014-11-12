@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_main_content
 {
     /**
@@ -71,7 +75,7 @@ class Block_main_content
         }
         $content_id = isset($map['id']) ? $map['id'] : null;
         if ($content_id === '') {
-            return new ocp_tempcode(); // Might have happened due to some bad chaining in a template
+            return new Tempcode(); // Might have happened due to some bad chaining in a template
         }
         $randomise = ($content_id === null);
         $zone = isset($map['zone']) ? $map['zone'] : '_SEARCH';
@@ -99,7 +103,7 @@ class Block_main_content
             list(, $resource_page, $resource_type) = explode(':', $info['view_page_link_pattern']);
             $content_id = $info['connection']->query_select_value_if_there('url_id_monikers', 'm_resource_id', array('m_resource_page' => $resource_page, 'm_resource_type' => $resource_type, 'm_moniker' => $content_id));
             if ($content_id === null) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
         }
 
@@ -250,14 +254,15 @@ class Block_main_content
 
             // Get content ID
             $content_id = extract_content_str_id_from_data($award_content_row, $info);
-        } // Select mode
+        }
+        // Select mode
         else {
             if ($content_type == 'comcode_page') { // FUDGEFUDGE
                 // Try and force a parse of the page, so it's in the system
                 $bits = explode(':', $content_id);
                 $result = request_page(array_key_exists(1, $bits) ? $bits[1] : get_comcode_zone($bits[0]), false, $bits[0], 'comcode_custom', true);
                 if ($result === null || $result->is_empty()) {
-                    return new ocp_tempcode();
+                    return new Tempcode();
                 }
             }
 
@@ -266,7 +271,7 @@ class Block_main_content
             $rows = $info['connection']->query_select($info['table'] . ' r', array('r.*'), $wherea, '', 1, null, false, $lang_fields);
             if (!array_key_exists(0, $rows)) {
                 if ((isset($map['render_if_empty'])) && ($map['render_if_empty'] == '0')) {
-                    return new ocp_tempcode();
+                    return new Tempcode();
                 }
 
                 return do_template('BLOCK_NO_ENTRIES', array(
@@ -291,14 +296,14 @@ class Block_main_content
             list($archive_url_zone, $archive_url_map, $archive_url_hash) = page_link_decode($info['archive_url']);
             $archive_url = build_url($archive_url_map, $archive_url_zone, null, false, false, false, $archive_url_hash);
         } else {
-            $archive_url = new ocp_tempcode();
+            $archive_url = new Tempcode();
         }
 
         $rendered_content = $object->run($award_content_row, $zone, $give_context, $include_breadcrumbs, null, false, $guid);
 
         if ((isset($map['no_links'])) && ($map['no_links'] == '1')) {
             $submit_url = '';
-            $archive_url = new ocp_tempcode();
+            $archive_url = new Tempcode();
         }
 
         $raw_date = ($info['date_field'] == '') ? mixed() : $award_content_row[$info['date_field']];

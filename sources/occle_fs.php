@@ -29,10 +29,8 @@ function init__occle_fs()
 
 /**
  * Virtual filesystems.
- *
- * @package    occle
  */
-class occle_fs
+class OcCLE_fs
 {
     public $occle_fs;
     public $pwd;

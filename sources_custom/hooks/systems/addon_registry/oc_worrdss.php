@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_worrdss
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_worrdss
 {
     /**

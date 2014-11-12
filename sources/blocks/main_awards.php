@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
+
+/**
+ * Block class.
+ */
 class Block_main_awards
 {
     /**

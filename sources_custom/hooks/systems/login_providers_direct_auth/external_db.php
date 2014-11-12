@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    external_db_login
  */
+
+/**
+ * Hook class.
+ */
 class Hook_login_providers_direct_auth_external_db
 {
     /**

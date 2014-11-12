@@ -674,7 +674,7 @@ function load_user_stuff()
             $SITE_INFO['forum_type'] = 'ocf';
         }
         require_code('forum/' . $SITE_INFO['forum_type']);     // So we can at least get user details
-        $class = 'forum_driver_' . filter_naughty_harsh($SITE_INFO['forum_type']);
+        $class = 'Forum_driver_' . filter_naughty_harsh($SITE_INFO['forum_type']);
         if (class_exists($class . '_sub')) {
             $class .= '_sub';
         }
@@ -686,7 +686,7 @@ function load_user_stuff()
         if (($SITE_INFO['forum_type'] == 'ocf') && (get_db_forums() == get_db_site()) && ($FORUM_DRIVER->get_drivered_table_prefix() == get_table_prefix()) && (!$GLOBALS['DEV_MODE'])) { // NB: In debug mode needs separating so we can properly test our boundaries
             $FORUM_DRIVER->connection = &$SITE_DB;
         } elseif ($SITE_INFO['forum_type'] != 'none') {
-            $FORUM_DRIVER->connection = new database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), $FORUM_DRIVER->get_drivered_table_prefix());
+            $FORUM_DRIVER->connection = new Database_driver(get_db_forums(), get_db_forums_host(), get_db_forums_user(), get_db_forums_password(), $FORUM_DRIVER->get_drivered_table_prefix());
         }
         $FORUM_DRIVER->MEMBER_ROWS_CACHED = array();
         /** The connection to the active forum database.
@@ -1709,7 +1709,7 @@ function javascript_enforce($j, $theme = null, $minify = null)
 function javascript_tempcode($position = null)
 {
     global $JAVASCRIPTS, $JAVASCRIPT, $JAVASCRIPT_BOTTOM;
-    $js = new ocp_tempcode();
+    $js = new Tempcode();
 
     $minify = (get_param_integer('keep_no_minify', 0) == 0);
     $https = ((addon_installed('ssl')) && function_exists('is_page_https') && function_exists('get_zone_name') && ((tacit_https()) || is_page_https(get_zone_name(), get_page_name())));
@@ -1803,7 +1803,7 @@ function require_javascript($javascript)
 
     // Has to do this inline, as you're not allowed to reference sheets outside head
     if ((!isset($JAVASCRIPTS[$javascript])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])) {
-        $value = new ocp_tempcode();
+        $value = new Tempcode();
         _javascript_tempcode($javascript, $value);
         attach_to_screen_footer($value);
     }
@@ -1926,8 +1926,8 @@ function css_tempcode($inline = false, $only_global = false, $context = null, $t
         _handle_web_resource_merging('.css', $CSSS, $minify, $https, $mobile);
     }
 
-    $css = new ocp_tempcode();
-    $css_need_inline = new ocp_tempcode();
+    $css = new Tempcode();
+    $css_need_inline = new Tempcode();
     if ($only_global) {
         $css_to_do = array('global' => 1, 'no_cache' => 1);
         if (isset($CSSS['email'])) {
@@ -2049,7 +2049,7 @@ function require_css($css)
 
     // Has to move into footer
     if ((!isset($CSSS[$css])) && ($GLOBALS['TEMPCODE_OUTPUT_STARTED'])) {
-        $value = new ocp_tempcode();
+        $value = new Tempcode();
         _css_tempcode($css, $value, $value);
         attach_to_screen_footer($value);
     }

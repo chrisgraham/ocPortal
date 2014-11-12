@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_abstract_interfaces
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_abstract_interfaces
 {
     /**
@@ -361,7 +365,7 @@ class Hook_addon_registry_core_abstract_interfaces
      */
     public function tpl_preview__index_screen()
     {
-        $entry = new ocp_tempcode();
+        $entry = new Tempcode();
 
         foreach (placeholder_array() as $value) {
             $entry->attach(do_lorem_template('INDEX_SCREEN_ENTRY', array(
@@ -390,7 +394,7 @@ class Hook_addon_registry_core_abstract_interfaces
      */
     public function tpl_preview__index_screen_fancier_screen()
     {
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach (placeholder_array() as $value) {
             $entries->attach(do_lorem_template('INDEX_SCREEN_FANCIER_ENTRY', array(
                 'TITLE' => lorem_phrase(),
@@ -421,7 +425,7 @@ class Hook_addon_registry_core_abstract_interfaces
      */
     public function tpl_preview__map_table()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_lorem_template('MAP_TABLE_FIELD', array(
             'NAME' => lorem_word(),
             'VALUE' => lorem_phrase(),
@@ -615,8 +619,8 @@ class Hook_addon_registry_core_abstract_interfaces
             )
         );
 
-        $sections = new ocp_tempcode();
-        $next_items = new ocp_tempcode();
+        $sections = new Tempcode();
+        $next_items = new Tempcode();
         $i = 0;
         foreach ($list as $_option) {
             $option = $_option[0];
@@ -713,7 +717,7 @@ class Hook_addon_registry_core_abstract_interfaces
      */
     public function tpl_preview__full_table_screen()
     {
-        $table_rows = new ocp_tempcode();
+        $table_rows = new Tempcode();
         foreach (placeholder_array() as $row) {
             $actions = do_lorem_template('COLUMNED_TABLE_ACTION_DELETE_ENTRY', array(
                 'GET' => true,
@@ -768,7 +772,7 @@ class Hook_addon_registry_core_abstract_interfaces
                 $tick,
                 $actions
             );
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach ($values as $value) {
                 $cells->attach(do_lorem_template('COLUMNED_TABLE_ROW_CELL', array(
                     'VALUE' => $value,
@@ -791,7 +795,7 @@ class Hook_addon_registry_core_abstract_interfaces
             lorem_word(),
             lorem_word()
         );
-        $cells = new ocp_tempcode();
+        $cells = new Tempcode();
         foreach ($values as $value) {
             $cells->attach(do_lorem_template('COLUMNED_TABLE_HEADER_ROW_CELL', array(
                 'VALUE' => $value,
@@ -832,7 +836,7 @@ class Hook_addon_registry_core_abstract_interfaces
         //results_table starts
         //results_entry starts
         $array = placeholder_array();
-        $cells = new ocp_tempcode();
+        $cells = new Tempcode();
         foreach ($array as $k => $v) {
             if ($k == 1) {
                 $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
@@ -850,9 +854,9 @@ class Hook_addon_registry_core_abstract_interfaces
         }
         $fields_title = $cells;
 
-        $order_entries = new ocp_tempcode();
+        $order_entries = new Tempcode();
         foreach ($array as $k1 => $v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach ($array as $k2 => $v2) {
                 $tick = do_lorem_template('RESULTS_TABLE_TICK', array(
                     'ID' => placeholder_id() . '_' . strval($k1) . '_' . strval($k2),
@@ -867,7 +871,7 @@ class Hook_addon_registry_core_abstract_interfaces
         }
         //results_entry ends
 
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         $sortable = null;
         foreach ($array as $k => $v) {
             $selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
@@ -916,7 +920,7 @@ class Hook_addon_registry_core_abstract_interfaces
         //results_table starts
         //results_entry starts
         $array = placeholder_array();
-        $cells = new ocp_tempcode();
+        $cells = new Tempcode();
         foreach ($array as $k => $v) {
             if ($k == 1) {
                 $cells->attach(do_lorem_template('RESULTS_TABLE_FIELD_TITLE', array(
@@ -934,9 +938,9 @@ class Hook_addon_registry_core_abstract_interfaces
         }
         $fields_title = $cells;
 
-        $order_entries = new ocp_tempcode();
+        $order_entries = new Tempcode();
         foreach ($array as $k1 => $v) {
-            $cells = new ocp_tempcode();
+            $cells = new Tempcode();
             foreach ($array as $k2 => $v2) {
                 $tick = do_lorem_template('RESULTS_TABLE_TICK', array(
                     'ID' => placeholder_id() . '_' . strval($k1) . '_' . strval($k2),
@@ -951,7 +955,7 @@ class Hook_addon_registry_core_abstract_interfaces
         }
         //results_entry ends
 
-        $selectors = new ocp_tempcode();
+        $selectors = new Tempcode();
         $sortable = null;
         foreach ($array as $k => $v) {
             $selectors->attach(do_lorem_template('PAGINATION_SORTER', array(
@@ -998,7 +1002,7 @@ class Hook_addon_registry_core_abstract_interfaces
     public function tpl_preview__result_launcher_screen()
     {
         require_lang('ocf');
-        $part = new ocp_tempcode();
+        $part = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $part->attach(do_lorem_template('RESULTS_LAUNCHER_PAGE_NUMBER_LINK', array(
                 'TITLE' => lorem_phrase(),

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Block class.
+ */
 class Block_main_personal_galleries_list
 {
     /**
@@ -63,7 +67,7 @@ class Block_main_personal_galleries_list
         require_css('galleries');
 
         // Find galleries
-        $galleries = new ocp_tempcode();
+        $galleries = new Tempcode();
         $query = ' FROM ' . get_table_prefix() . 'galleries';
         $query .= ' WHERE name LIKE \'' . db_encode_like('member\_' . strval($member_id) . '\_%') . '\' OR g_owner=' . strval($member_id);
         $rows = $GLOBALS['SITE_DB']->query('SELECT *' . $query, $max, $start, false, true);
@@ -76,9 +80,9 @@ class Block_main_personal_galleries_list
         }
 
         // Management links
-        $add_gallery_url = new ocp_tempcode();
-        $add_image_url = new ocp_tempcode();
-        $add_video_url = new ocp_tempcode();
+        $add_gallery_url = new Tempcode();
+        $add_image_url = new Tempcode();
+        $add_video_url = new Tempcode();
         if ($member_id == get_member()) {
             if (count($rows) == 0) { // No gallery yet, so create via implication
                 $test = $GLOBALS['SITE_DB']->query_select('galleries', array('accept_images', 'accept_videos', 'name'), array('is_member_synched' => 1));

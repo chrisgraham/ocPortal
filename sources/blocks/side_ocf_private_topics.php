@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Block class.
+ */
 class Block_side_ocf_private_topics
 {
     /**
@@ -63,11 +67,11 @@ class Block_side_ocf_private_topics
     public function run($map)
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         if (is_guest()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         ocf_require_all_forum_stuff();
@@ -77,7 +81,7 @@ class Block_side_ocf_private_topics
         // Only show what's new in week. Some forums may want to tweak this, but forums themselves only mark unread topics for a week.
         $rows = ocf_get_pp_rows();
         require_lang('ocf');
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach ($rows as $topic) {
             $topic_url = build_url(array('page' => 'topicview', 'id' => $topic['id'], 'type' => 'findpost'), get_module_zone('topicview'));
             $topic_url->attach('#post_' . strval($topic['id']));
@@ -112,7 +116,7 @@ class Block_side_ocf_private_topics
         }
         $send_url = build_url(array('page' => 'topics', 'type' => 'new_pt', 'redirect' => SELF_REDIRECT), get_module_zone('topics'));
         if (!ocf_may_make_private_topic()) {
-            $send_url = new ocp_tempcode();
+            $send_url = new Tempcode();
         }
         $view_url = build_url(array('page' => 'members', 'type' => 'view', 'id' => get_member()), get_module_zone('members'), null, true, false, false, 'tab__pts');
         return do_template('BLOCK_SIDE_OCF_PRIVATE_TOPICS', array('_GUID' => '9376cd47884a78f3d1914c176b67ee28', 'SEND_URL' => $send_url, 'VIEW_URL' => $view_url, 'CONTENT' => $out, 'FORUM_NAME' => do_lang_tempcode('PRIVATE_TOPICS')));

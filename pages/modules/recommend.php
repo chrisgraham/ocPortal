@@ -208,7 +208,7 @@ class Module_recommend
             return $this->actual();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -227,12 +227,12 @@ class Module_recommend
         $submit_name = (!is_null($page_title)) ? make_string_tempcode($page_title) : do_lang_tempcode('SEND');
         $post_url = build_url(array('page' => '_SELF', 'type' => 'actual'), '_SELF', null, true);
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         $name = post_param('name', is_guest() ? '' : $GLOBALS['FORUM_DRIVER']->get_username(get_member(), true));
         $recommender_email_address = post_param('recommender_email_address', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('YOUR_NAME'), '', 'name', $name, true));
         $fields->attach(form_input_email(do_lang_tempcode('YOUR_EMAIL_ADDRESS'), '', 'recommender_email_address', $recommender_email_address, true));
         $already = array();
@@ -314,7 +314,7 @@ class Module_recommend
             }
         }
 
-        $text = is_null($page_title) ? do_lang_tempcode('RECOMMEND_SITE_TEXT') : new ocp_tempcode();
+        $text = is_null($page_title) ? do_lang_tempcode('RECOMMEND_SITE_TEXT') : new Tempcode();
 
         if (!is_null(get_param('from', null, true))) {
             $submit_name = do_lang_tempcode('SEND');
@@ -370,8 +370,8 @@ class Module_recommend
         $submit_name = do_lang_tempcode('PROCEED');
         $post_url = build_url(array('page' => '_SELF', 'type' => 'actual'), '_SELF');
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         $already = array();
         $email_counter = 0;
         foreach ($_POST as $key => $input_value) {

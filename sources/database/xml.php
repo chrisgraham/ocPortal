@@ -124,8 +124,6 @@ function _get_sql_keywords()
 
 /**
  * Database Driver.
- *
- * @package    core_database_drivers
  */
 class Database_Static_xml
 {

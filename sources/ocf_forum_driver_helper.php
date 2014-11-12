@@ -549,12 +549,12 @@ function _helper_get_post_remaining_details($this_ref, $topic_id, $post_ids)
 function _helper_get_emoticon_chooser($this_ref, $field_name)
 {
     if (get_option('is_on_emoticon_choosers') == '0') {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $extra_where = has_privilege(get_member(), 'use_special_emoticons') ? array() : array('e_is_special' => 0);
     $emoticons = $this_ref->connection->query_select('f_emoticons', array('*'), array('e_relevance_level' => 0) + $extra_where);
-    $em = new ocp_tempcode();
+    $em = new Tempcode();
     foreach ($emoticons as $emo) {
         $code = $emo['e_code'];
         if ($GLOBALS['XSS_DETECT']) {

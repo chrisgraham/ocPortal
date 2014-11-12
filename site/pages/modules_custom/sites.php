@@ -26,6 +26,9 @@ You also need:
  - an uploads/website_specific/ocportal.com/myocp/sites/myocp directory for sites to be built into
 */
 
+/**
+ * Module page class.
+ */
 class Module_sites
 {
     /**
@@ -192,7 +195,7 @@ class Module_sites
             return $this->_myocp();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -203,7 +206,7 @@ class Module_sites
     public function download_screen()
     {
         // Put together hosting-copy form
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('FTP_DOMAIN'), '', 'ftp_domain', '', true));
         $fields->attach(form_input_line(do_lang_tempcode('FTP_USERNAME'), '', 'ftp_username', '', true));
         $fields->attach(form_input_password(do_lang_tempcode('FTP_PASSWORD'), '', 'ftp_password', true));
@@ -215,7 +218,7 @@ class Module_sites
         // Put together details about releases
         $t = $GLOBALS['SITE_DB']->query_select_value_if_there('download_downloads', 'name', array($GLOBALS['SITE_DB']->translate_field_ref('description') => 'This is the latest version.'));
         if (!is_null($t)) {
-            $releases = new ocp_tempcode();
+            $releases = new Tempcode();
             $latest = get_translated_text($t);
             $release_quick = $this->do_release($latest, 'QUICK_');
             $release_manual = $this->do_release($latest . ' (manual)', 'MANUAL_');
@@ -308,7 +311,7 @@ class Module_sites
             $directory .= '/';
         }
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         if (!@ftp_chdir($conn_id, $directory)) {
             return $list; // Can't rely on ftp_nlist if not a directory
         }
@@ -398,7 +401,7 @@ class Module_sites
 
         $base_url = 'http://' . preg_replace('#^ftp\.#', '', post_param('ftp_domain')) . preg_replace('#/(public_html|www|httpdocs|htdocs)/#', '/', $search_under);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_list(do_lang_tempcode('FTP_DIRECTORY'), '', 'path', $list));
         $fields->attach(form_input_line(do_lang_tempcode('NEW_DIRECTORY'), do_lang_tempcode('DESCRIPTION_NEW_DIRECTORY'), 'extra_path', '', false));
         $fields->attach(form_input_line(do_lang_tempcode('BASE_URL'), do_lang_tempcode('DESCRIPTION_BASE_URL'), 'base_url', $base_url, true));
@@ -477,7 +480,7 @@ class Module_sites
      */
     public function myocp()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('MO_CODENAME'), do_lang('MO_CODENAME_DESCRIPTION'), 'codename', '', true));
         $fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'), do_lang_tempcode('MO_YOUR_EMAIL_ADDRESS'), 'email_address', $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member()), true));
         $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), do_lang_tempcode('MO_PASSWORD'), 'password', true));

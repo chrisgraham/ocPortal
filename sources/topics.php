@@ -37,8 +37,6 @@ The non-threaded ocf_forum view has its own rendering.
 
 /**
  * Manage threaded topics / comment topics.
- *
- * @package    core_feedback_features
  */
 class OCP_Topic
 {
@@ -101,7 +99,7 @@ class OCP_Topic
     public function render_as_comment_topic($content_type, $content_id, $allow_comments, $invisible_if_no_comments, $forum_name, $post_warning, $preloaded_comments, $explicit_allow, $reverse, $highlight_by_member, $allow_reviews, $num_to_show_limit)
     {
         if ((get_forum_type() == 'ocf') && (!addon_installed('ocf_forum'))) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $topic_id = $GLOBALS['FORUM_DRIVER']->find_topic_id_for_topic_identifier($forum_name, $content_type . '_' . $content_id);
@@ -124,7 +122,7 @@ class OCP_Topic
 
         if (!$this->error) {
             if ((count($this->all_posts_ordered) == 0) && ($invisible_if_no_comments)) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
 
             $may_reply = has_privilege(get_member(), 'comment', get_page_name());
@@ -177,7 +175,7 @@ class OCP_Topic
                 $post_url = get_self_url();
                 $form = $this->get_posting_form($content_type, $content_id, $allow_reviews, $post_url, $post_warning);
             } else {
-                $form = new ocp_tempcode();
+                $form = new Tempcode();
             }
 
             // Existing review ratings
@@ -224,7 +222,7 @@ class OCP_Topic
             ));
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -247,7 +245,7 @@ class OCP_Topic
     public function render_posts_from_topic($topic_id, $num_to_show_limit, $allow_comments, $invisible_if_no_comments, $forum_name, $preloaded_comments, $reverse, $may_reply, $highlight_by_member, $allow_reviews, $posts, $parent_id)
     {
         if ((get_forum_type() == 'ocf') && (!addon_installed('ocf_forum'))) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $max_thread_depth = get_param_integer('max_thread_depth', intval(get_option('max_thread_depth')));
@@ -260,7 +258,7 @@ class OCP_Topic
 
         if (!$this->error) {
             if ((count($this->all_posts_ordered) == 0) && ($invisible_if_no_comments)) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
 
             // Prepare review titles
@@ -290,7 +288,7 @@ class OCP_Topic
             return $ret;
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -727,7 +725,7 @@ class OCP_Topic
     protected function _render_post_tree($num_to_show_limit, $tree, $may_reply, $highlight_by_member, $all_individual_review_ratings, $forum_id, $topic_info, $depth = 0)
     {
         list($rendered,) = $tree;
-        $sequence = new ocp_tempcode();
+        $sequence = new Tempcode();
         foreach ($rendered as $post) {
             if (get_forum_type() == 'ocf') {
                 require_code('ocf_topicview');
@@ -738,7 +736,7 @@ class OCP_Topic
             // Misc details
             $datetime_raw = $post['date'];
             $datetime = get_timezoned_date($post['date']);
-            $poster_url = is_guest($post['member']) ? new ocp_tempcode() : $GLOBALS['FORUM_DRIVER']->member_profile_url($post['member'], false, true);
+            $poster_url = is_guest($post['member']) ? new Tempcode() : $GLOBALS['FORUM_DRIVER']->member_profile_url($post['member'], false, true);
             $poster_name = array_key_exists('username', $post) ? $post['username'] : $GLOBALS['FORUM_DRIVER']->get_username($post['member']);
             if (is_null($poster_name)) {
                 $poster_name = do_lang('UNKNOWN');
@@ -757,13 +755,13 @@ class OCP_Topic
             }
 
             // Edit URL
-            $emphasis = new ocp_tempcode();
-            $buttons = new ocp_tempcode();
-            $last_edited = new ocp_tempcode();
+            $emphasis = new Tempcode();
+            $buttons = new Tempcode();
+            $last_edited = new Tempcode();
             $last_edited_raw = '';
-            $unvalidated = new ocp_tempcode();
+            $unvalidated = new Tempcode();
             $poster = mixed();
-            $poster_details = new ocp_tempcode();
+            $poster_details = new Tempcode();
             $is_spacer_post = false;
             if (get_forum_type() == 'ocf') {
                 // Spacer post fiddling
@@ -793,7 +791,7 @@ class OCP_Topic
 
                 // Misc meta details for post
                 $emphasis = ocf_get_post_emphasis($post);
-                $unvalidated = ($post['validated'] == 0) ? do_lang_tempcode('UNVALIDATED') : new ocp_tempcode();
+                $unvalidated = ($post['validated'] == 0) ? do_lang_tempcode('UNVALIDATED') : new Tempcode();
                 if (array_key_exists('last_edit_time', $post)) {
                     $last_edited = do_template('OCF_TOPIC_POST_LAST_EDITED', array(
                         '_GUID' => '6301ad8d8f80948ad8270828f1bdaf33',
@@ -838,12 +836,12 @@ class OCP_Topic
                         require_code('ocf_members2');
                         $poster_details = render_member_box($post, false, $hooks, $hook_objects, false, null, false);
                     } else {
-                        $custom_fields = new ocp_tempcode();
+                        $custom_fields = new Tempcode();
                         if ((array_key_exists('ip_address', $post)) && (addon_installed('ocf_forum'))) {
                             $custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => 'f7e62822e879682cf1588d9f49484bfa', 'NAME' => do_lang_tempcode('IP_ADDRESS'), 'VALUE' => ($post['ip_address']))));
                             $poster_details = do_template('OCF_GUEST_DETAILS', array('_GUID' => 'df42e7d5003834a60fdb3bf476b393c5', 'CUSTOM_FIELDS' => $custom_fields));
                         } else {
-                            $poster_details = new ocp_tempcode();
+                            $poster_details = new Tempcode();
                         }
                     }
                 }
@@ -859,7 +857,7 @@ class OCP_Topic
                             'POSTER_USERNAME' => $post['poster_username'],
                         ));
                     } else {
-                        $ip_link = ((array_key_exists('ip_address', $post)) && (has_actual_page_access(get_member(), 'admin_lookup'))) ? build_url(array('page' => 'admin_lookup', 'param' => $post['ip_address']), get_module_zone('admin_lookup')) : new ocp_tempcode();
+                        $ip_link = ((array_key_exists('ip_address', $post)) && (has_actual_page_access(get_member(), 'admin_lookup'))) ? build_url(array('page' => 'admin_lookup', 'param' => $post['ip_address']), get_module_zone('admin_lookup')) : new Tempcode();
                         $poster = do_template('OCF_POSTER_GUEST', array(
                             '_GUID' => '93107543c6a0138f379e7124b72b24ff',
                             'LOOKUP_IP_URL' => $ip_link,
@@ -889,7 +887,7 @@ class OCP_Topic
                 actualise_rating(true, 'post', strval($post['id']), get_self_url(), $post['title']);
                 $rating = display_rating(get_self_url(), $post['title'], 'post', strval($post['id']), 'RATING_INLINE_DYNAMIC', $post['member']);
             } else {
-                $rating = new ocp_tempcode();
+                $rating = new Tempcode();
             }
 
             if (array_key_exists('intended_solely_for', $post)) {
@@ -1005,7 +1003,7 @@ class OCP_Topic
 
         $title = do_lang_tempcode($allow_reviews ? 'POST_REVIEW' : 'MAKE_COMMENT');
 
-        $join_bits = new ocp_tempcode();
+        $join_bits = new Tempcode();
         if (is_guest()) {
             $redirect = get_self_url(true, true);
             $login_url = build_url(array('page' => 'login', 'type' => 'misc', 'redirect' => $redirect), get_module_zone('login'));

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_comcode_pages
 {
     /**
@@ -34,7 +38,7 @@ class Hook_rss_comcode_pages
     {
         $filters = explode(',', $_filters);
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $_rows = $GLOBALS['SITE_DB']->query_select('cached_comcode_pages', array('the_page', 'the_zone'));
         $rows = array();
         foreach ($_rows as $row) {
@@ -121,7 +125,7 @@ class Hook_rss_comcode_pages
 
                 $view_url = build_url(array('page' => $page), $zone, null, false, false, true);
 
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
             }

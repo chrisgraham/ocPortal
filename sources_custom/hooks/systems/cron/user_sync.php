@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    user_sync
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_user_sync
 {
     /**

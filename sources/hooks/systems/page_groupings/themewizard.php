@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    themewizard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_themewizard
 {
     /**

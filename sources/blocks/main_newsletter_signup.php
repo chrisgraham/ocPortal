@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
+
+/**
+ * Block class.
+ */
 class Block_main_newsletter_signup
 {
     /**

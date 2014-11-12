@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    youtube_channel_integration_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_youtube_channel_integration_block
 {
     /**

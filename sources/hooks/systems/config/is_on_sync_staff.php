@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    staff
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_is_on_sync_staff
 {
     /**

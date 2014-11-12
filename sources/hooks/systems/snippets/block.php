@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_block
 {
     /**
@@ -37,7 +41,7 @@ class Hook_block
         $map = block_params_str_to_arr($_map);
 
         if (!array_key_exists('block', $map)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $auth_key = get_param_integer('auth_key');
@@ -64,7 +68,7 @@ class Hook_block
         }
 
         // And, go
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach(symbol_tempcode('CSS_TEMPCODE'));
         $out->attach(symbol_tempcode('JS_TEMPCODE'));
         $out->attach(do_block($map['block'], $map));

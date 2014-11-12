@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    gallery_syndication
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_gallery_syndication
 {
     /**

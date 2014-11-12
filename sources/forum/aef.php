@@ -19,11 +19,9 @@
  */
 
 /**
- * Forum Driver.
- *
- * @package    core_forum_drivers
+ * Forum driver class.
  */
-class forum_driver_aef extends forum_driver_base
+class Forum_driver_aef extends Forum_driver_base
 {
     /**
      * Check the connected DB is valid for this forum driver.
@@ -197,7 +195,7 @@ class forum_driver_aef extends forum_driver_base
     public function get_emoticon_chooser($field_name = 'post')
     {
         $emoticons = $this->connection->query_select('smileys', array('*'), array('smstatus' => 0));
-        $em = new ocp_tempcode();
+        $em = new Tempcode();
         require_code('comcode_compiler');
         foreach ($emoticons as $emo) {
             $code = $emo['smcode'];

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
-class Hook_Preview_wiki_page
+
+/**
+ * Hook class.
+ */
+class Hook_preview_wiki_page
 {
     /**
      * Find whether this preview hook applies.

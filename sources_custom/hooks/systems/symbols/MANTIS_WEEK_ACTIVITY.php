@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
+
+/**
+ * Hook class.
+ */
 class Hook_symbol_MANTIS_WEEK_ACTIVITY
 {
     public function run($param)

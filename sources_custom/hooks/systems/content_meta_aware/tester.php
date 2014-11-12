@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    tester
  */
+
+/**
+ * Hook class.
+ */
 class Hook_content_meta_aware_tester
 {
     /**

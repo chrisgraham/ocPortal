@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_polls
 {
     /**

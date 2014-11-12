@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    sms
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_sms_high_limit
 {
     /**

@@ -696,7 +696,7 @@ function delete_news($id)
  */
 function import_rss_fields($import_to_blog)
 {
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     $set_name = 'rss';
     $required = true;
@@ -747,7 +747,7 @@ function _get_wordpress_db_data()
     }
 
     // Create DB connection
-    $db = new database_driver($db_name, $host_name, $db_user, $db_passwrod, $db_table_prefix);
+    $db = new Database_driver($db_name, $host_name, $db_user, $db_passwrod, $db_table_prefix);
 
     $users = $db->query('SELECT * FROM ' . db_escape_string($db_name) . '.' . db_escape_string($db_table_prefix) . '_users', null, null, true);
     if (is_null($users)) {

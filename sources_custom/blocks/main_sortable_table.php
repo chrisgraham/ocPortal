@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    sortable_tables
  */
+
+/**
+ * Block class.
+ */
 class Block_main_sortable_table
 {
     /**
@@ -336,7 +340,7 @@ class Block_main_sortable_table
         }
 
         // Create template-ready data
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         $tooltip_headers_sortable = array();
         foreach (array_keys($tooltip_headers) as $j) {
             $field_type = $this->determine_field_type($_rows_tooltip, $j);

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_forum_blocks
 {
     /**

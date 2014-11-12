@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_whats_news_ocf_forumview
 {
     /**
@@ -46,7 +50,7 @@ class Hook_whats_news_ocf_forumview
     {
         $max = intval(get_option('max_newsletter_whatsnew'));
 
-        $new = new ocp_tempcode();
+        $new = new Tempcode();
 
         if (get_forum_type() != 'ocf') {
             return array();

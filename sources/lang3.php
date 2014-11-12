@@ -60,7 +60,7 @@ function _choose_language($title, $tip = false, $allow_all_selection = false)
         $text = do_lang_tempcode('CHOOSE_LANG_DESCRIP_ADD_TO_MAIN_LANG_FIRST', escape_html($lang_name));
     }
 
-    $langs = new ocp_tempcode();
+    $langs = new Tempcode();
     if ($allow_all_selection) {
         $langs->attach(form_input_list_entry('', false, do_lang_tempcode('_ALL')));
     }
@@ -182,7 +182,7 @@ function get_language_title($lang)
  */
 function _create_selection_list_langs($select_lang = null, $show_unset = false)
 {
-    $langs = new ocp_tempcode();
+    $langs = new Tempcode();
     $_langs = find_all_langs();
 
     if ($select_lang === null) {
@@ -473,7 +473,7 @@ function parse_translated_text($table, &$row, $field_name, $connection, $lang, $
         }
 
         if (($result !== null) && ($result != '')) {
-            $connection->text_lookup_cache[$entry] = new ocp_tempcode();
+            $connection->text_lookup_cache[$entry] = new Tempcode();
             if (!$connection->text_lookup_cache[$entry]->from_assembly($result, true)) {
                 $result = null;
             }
@@ -557,7 +557,7 @@ function _comcode_lang_string($lang_code)
     }
 
     if ((substr($lang_code, 0, 4) == 'DOC_') && (is_wide() == 1)) {
-        return new ocp_tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
+        return new Tempcode(); // Not needed if wide, and we might be going wide to reduce chance of errors occuring
     }
 
     if (multi_lang_content()) {
@@ -572,7 +572,7 @@ function _comcode_lang_string($lang_code)
                 'string_index__source_user' => $comcode_page[0]['source_user'],
             );
             if (($comcode_page[0]['text_parsed'] !== null) && ($comcode_page[0]['text_parsed'] != '')) {
-                $parsed = new ocp_tempcode();
+                $parsed = new Tempcode();
                 if (!$parsed->from_assembly($comcode_page[0]['text_parsed'], true)) {
                     $ret = get_translated_tempcode('cached_comcode_pages', $comcode_page_row_cached_only, 'string_index');
                     unset($GLOBALS['RECORDED_LANG_STRINGS_CONTENT'][$comcode_page[0]['string_index']]);

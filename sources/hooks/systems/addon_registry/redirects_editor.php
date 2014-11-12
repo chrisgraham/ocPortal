@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    redirects_editor
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_redirects_editor
 {
     /**
@@ -133,7 +137,7 @@ class Hook_addon_registry_redirects_editor
     {
         require_javascript('javascript_ajax');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach (placeholder_array() as $i => $row) {
             $fields->attach(do_lorem_template('REDIRECTE_TABLE_REDIRECT', array(
                 'I' => strval($i),

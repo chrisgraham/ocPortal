@@ -173,7 +173,7 @@ class Module_admin_security
             return $this->alert_view();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -201,13 +201,13 @@ class Module_admin_security
         $map = (!is_null($member_id)) ? array('failed_account' => $GLOBALS['FORUM_DRIVER']->get_username($member_id)) : null;
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('failedlogins', 'COUNT(*)', $map);
         $rows = $GLOBALS['SITE_DB']->query_select('failedlogins', array('*'), $map, 'ORDER BY ' . $_sortable . ' ' . $sort_order, $max, $start);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach ($rows as $row) {
             $time = get_timezoned_date($row['date_and_time']);
             $lookup_url = build_url(array('page' => 'admin_lookup', 'param' => $row['ip']), '_SELF');
             $fields->attach(results_entry(array(escape_html($row['failed_account']), escape_html($time), hyperlink($lookup_url, $row['ip']))));
         }
-        $failed_logins = results_table(do_lang_tempcode('FAILED_LOGINS'), $start, 'failed_start', $max, 'failed_max', $max_rows, $fields_title, $fields, $sortables, $_sortable, $sort_order, 'failed_sort', new ocp_tempcode());
+        $failed_logins = results_table(do_lang_tempcode('FAILED_LOGINS'), $start, 'failed_start', $max, 'failed_max', $max_rows, $fields_title, $fields, $sortables, $_sortable, $sort_order, 'failed_sort', new Tempcode());
 
         $member_id = post_param_integer('member_id', null);
         $map = (!is_null($member_id)) ? array('member_id' => $member_id) : null;

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats
 {
     /**
@@ -46,7 +50,7 @@ class Hook_stats
     public function run()
     {
         if (!is_null($GLOBALS['CURRENT_SHARE_USER'])) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $hooks = find_all_hooks('systems', 'disposable_values');
@@ -55,6 +59,6 @@ class Hook_stats
         }
         persistent_cache_delete('VALUES');
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

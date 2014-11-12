@@ -469,7 +469,7 @@ function get_days_between($initial_start_month, $initial_start_day, $initial_sta
  */
 function create_selection_list_event_types($it = null)
 {
-    $type_list = new ocp_tempcode();
+    $type_list = new Tempcode();
     $types = $GLOBALS['SITE_DB']->query_select('calendar_types', array('id', 't_title'));
     $first_type = null;
     foreach ($types as $i => $type) {
@@ -756,9 +756,9 @@ function calendar_matches($auth_member_id, $member_id, $restrict, $period_start,
             } else {
                 require_code('rss');
 
-                $rss = new rss($temp_file_path, true);
+                $rss = new OCP_RSS($temp_file_path, true);
 
-                $content = new ocp_tempcode();
+                $content = new Tempcode();
                 foreach ($rss->gleamed_items as $item) {
                     if (array_key_exists('guid', $item)) {
                         $full_url = $item['guid'];
@@ -841,7 +841,7 @@ function create_selection_list_events($only_owned, $it, $edit_viewable_events = 
         warn_exit(do_lang_tempcode('TOO_MANY_TO_CHOOSE_FROM'));
     }
     $events = $GLOBALS['SITE_DB']->query_select('calendar_events', array('id', 'e_title', 'e_type'), $where);
-    $list = new ocp_tempcode();
+    $list = new Tempcode();
     foreach ($events as $event) {
         if (!has_category_access(get_member(), 'calendar', strval($event['e_type']))) {
             continue;
@@ -890,7 +890,7 @@ function detect_conflicts($member_id, $skip_id, $start_year, $start_month, $star
 
     $conflicts = detect_happening_at($member_id, $skip_id, $our_times, !has_privilege(get_member(), 'sense_personal_conflicts'));
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $found_ids = array();
     foreach ($conflicts as $conflict) {
         list($id, $event, ,) = $conflict;
@@ -1431,7 +1431,7 @@ function monthly_spec_type_chooser($day_of_month, $month, $year, $default_monthl
     require_code('form_templates');
     require_lang('calendar');
 
-    $radios = new ocp_tempcode();
+    $radios = new Tempcode();
 
     foreach (array('day_of_month', 'day_of_month_backwards', 'dow_of_month', 'dow_of_month_backwards') as $monthly_spec_type) {
         $day = find_abstract_day($year, $month, $day_of_month, $monthly_spec_type);

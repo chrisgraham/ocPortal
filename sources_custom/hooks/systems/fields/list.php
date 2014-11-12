@@ -27,7 +27,7 @@ class Hook_fields_list
     {
         $fields = array();
         $type = '_LIST';
-        $special = new ocp_tempcode();
+        $special = new Tempcode();
         $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', '---'));
         $list = ($row['cf_default'] == '') ? array() : explode('|', $row['cf_default']);
         $display = array_key_exists('trans_name', $row) ? $row['trans_name'] : get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
@@ -134,7 +134,7 @@ class Hook_fields_list
         } else {
             $list = explode('|', $default);
         }
-        $_list = new ocp_tempcode();
+        $_list = new Tempcode();
         if (($field['cf_required'] == 0) || ($actual_value == $default) || ($actual_value == '') || (is_null($actual_value))) {
             if ((array_key_exists(0, $list)) && ($list[0] == do_lang('NOT_DISCLOSED'))) {
                 $actual_value = $list[0]; // "Not Disclosed" will become the default if it is there

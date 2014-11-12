@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Block class.
+ */
 class Block_side_galleries
 {
     /**
@@ -76,7 +80,7 @@ class Block_side_galleries
         if ($depth == 0) {
             $content = $this->inside($zone, $galleries, 'BLOCK_SIDE_GALLERIES_LINE', $show_empty);
         } else {
-            $content = new ocp_tempcode();
+            $content = new Tempcode();
 
             foreach ($galleries as $gallery) {
                 if (($show_empty) || (gallery_has_content($gallery['name']))) {
@@ -109,7 +113,7 @@ class Block_side_galleries
      */
     public function inside($zone, $galleries, $tpl, $show_empty)
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         foreach ($galleries as $gallery) {
             if (($show_empty) || (gallery_has_content($gallery['name']))) {

@@ -70,7 +70,7 @@ function special_page_types($special_page_type, &$out,/*&*/
         @set_time_limit(280);
     }
 
-    $middle_spt = new ocp_tempcode();
+    $middle_spt = new Tempcode();
 
     if (is_null($out_evaluated)) {
         ob_start();
@@ -107,7 +107,7 @@ function special_page_types($special_page_type, &$out,/*&*/
     if ($special_page_type == 'ide_linkage') {
         $title = get_screen_title('IDE_LINKAGE');
 
-        $file_links = new ocp_tempcode();
+        $file_links = new Tempcode();
 
         global $JAVASCRIPTS, $CSSS, $REQUIRED_CODE, $LANGS_REQUESTED;
         /*foreach (array_keys($JAVASCRIPTS) as $name) Already in list of templates
@@ -162,7 +162,7 @@ function special_page_types($special_page_type, &$out,/*&*/
     if ($special_page_type == 'theme_images') {
         $title = get_screen_title('THEME_IMAGE_EDITING');
 
-        $theme_images = new ocp_tempcode();
+        $theme_images = new Tempcode();
 
         global $RECORDED_THEME_IMAGES;
         foreach (array_keys($RECORDED_THEME_IMAGES) as $theme_image_details) {
@@ -199,7 +199,7 @@ function special_page_types($special_page_type, &$out,/*&*/
         global $RECORDED_LANG_STRINGS_CONTENT;
         require_lang('lang');
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('lang2');
         $names = find_lang_content_names(array_keys($RECORDED_LANG_STRINGS_CONTENT));
         foreach ($RECORDED_LANG_STRINGS_CONTENT as $key => $forum_db) {
@@ -207,7 +207,7 @@ function special_page_types($special_page_type, &$out,/*&*/
             if ($value_found != '') {
                 $description = make_string_tempcode(escape_html($value_found));
                 if ((get_option('google_translate_api_key') == '') || (user_lang() == get_site_default_lang())) {
-                    $actions = new ocp_tempcode();
+                    $actions = new Tempcode();
                 } else {
                     require_javascript('javascript_translate');
                     $actions = do_template('TRANSLATE_ACTION', array('_GUID' => '441cd96588b2a4f74e94003643262833', 'LANG_FROM' => get_site_default_lang(), 'LANG_TO' => user_lang(), 'NAME' => 'trans_' . strval($key), 'OLD' => $value_found));
@@ -243,14 +243,14 @@ function special_page_types($special_page_type, &$out,/*&*/
         require_lang('lang');
         require_code('form_templates');
         require_code('lang2');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $descriptions = get_lang_file_descriptions(fallback_lang());
         foreach (array_keys($RECORDED_LANG_STRINGS) as $key) {
             $value_found = do_lang($key, null, null, null, null, false);
-            $description = array_key_exists($key, $descriptions) ? make_string_tempcode($descriptions[$key]) : new ocp_tempcode();
+            $description = array_key_exists($key, $descriptions) ? make_string_tempcode($descriptions[$key]) : new Tempcode();
             if (!is_null($value_found)) {
                 if ((get_option('google_translate_api_key') == '') || (user_lang() == get_site_default_lang())) {
-                    $actions = new ocp_tempcode();
+                    $actions = new Tempcode();
                 } else {
                     require_javascript('javascript_translate');
                     $actions = do_template('TRANSLATE_ACTION', array('_GUID' => '031eb918cb3bcaf4339130b46f8b1b8a', 'LANG_FROM' => get_site_default_lang(), 'LANG_TO' => user_lang(), 'NAME' => 'l_' . $key, 'OLD' => str_replace('\n', "\n", $value_found)));
@@ -272,7 +272,7 @@ function special_page_types($special_page_type, &$out,/*&*/
 
         global $RECORD_TEMPLATES_USED;
         $RECORD_TEMPLATES_USED = false;
-        $templates = new ocp_tempcode();
+        $templates = new Tempcode();
 
         if ($special_page_type == 'templates') {
             $title = get_screen_title('TEMPLATES');
@@ -287,7 +287,7 @@ function special_page_types($special_page_type, &$out,/*&*/
         } else {
             $title = get_screen_title('TEMPLATE_TREE');
 
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
             global $CSSS, $JAVASCRIPTS;
             foreach (array_keys($CSSS) as $c) {
                 $hidden->attach(form_input_hidden('f' . strval(mt_rand(0, 100000)) . 'file', $c . '.css'));
@@ -308,7 +308,7 @@ function special_page_types($special_page_type, &$out,/*&*/
         require_lang('profiling');
 
         global $QUERY_LIST;
-        $queries = new ocp_tempcode();
+        $queries = new Tempcode();
         $total_time = 0.0;
         $sort_order = get_param('query_sort', 'time');
         switch ($sort_order) {
@@ -509,18 +509,18 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
 
     // Output header
     if (count($_POST) == 0) {
-        $messy_url = (get_param_integer('keep_markers', 0) == 1) ? new ocp_tempcode() : build_url(array('page' => '_SELF', 'special_page_type' => 'code', 'keep_markers' => 1), '_SELF', null, true);
+        $messy_url = (get_param_integer('keep_markers', 0) == 1) ? new Tempcode() : build_url(array('page' => '_SELF', 'special_page_type' => 'code', 'keep_markers' => 1), '_SELF', null, true);
         $ignore_url = build_url(array('page' => '_SELF', 'keep_novalidate' => 1), '_SELF', null, true);
         $ignore_url_2 = build_url(array('page' => '_SELF', 'novalidate' => 1), '_SELF', null, true);
     } else {
-        $messy_url = new ocp_tempcode();
-        $ignore_url = new ocp_tempcode();
-        $ignore_url_2 = new ocp_tempcode();
+        $messy_url = new Tempcode();
+        $ignore_url = new Tempcode();
+        $ignore_url_2 = new Tempcode();
     }
     $error_lines = array();
-    $return_url = new ocp_tempcode();
+    $return_url = new Tempcode();
     if (count($error['errors']) != 0) {
-        $errorst = new ocp_tempcode();
+        $errorst = new Tempcode();
         foreach ($error['errors'] as $j => $_error) {
             $errorst->attach(do_template('VALIDATE_ERROR', array('_GUID' => '2239470f4b9bd38fcb570689cecaedd2', 'I' => strval($j), 'LINE' => integer_format($_error['line']), 'POS' => integer_format($_error['pos']), 'ERROR' => $_error['error'])));
             $error_lines[$_error['line']] = 1;
@@ -579,7 +579,7 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
                     $colour = 'olive';
                 }
                 $previous = ($i == 0) ? '' : $out[$i - 1];
-                $string = new ocp_tempcode();
+                $string = new Tempcode();
                 if (($previous == ' ') || ($previous == "\n") || ($previous == "\r")) {
                     $string->attach(str_pad('', $level * 3 * 6, '&nbsp;'));
                 }
@@ -615,7 +615,7 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
                 $escaped_code->evaluate_echo();
             }
             if (isset($error_lines[$number])) {
-                $markers = new ocp_tempcode();
+                $markers = new Tempcode();
                 foreach ($error['errors'] as $j => $_error) {
                     if ($number == $_error['line']) {
                         $markers->attach(do_template('VALIDATE_MARKER', array('_GUID' => '4b1898d5f1e0f56d18a47561659da3bb', 'I' => strval($j), 'ERROR' => $_error['error'])));
@@ -631,7 +631,7 @@ function display_validation_results($out, $error, $preview_mode = false, $ret = 
         }
 
         // Marker
-        $end_markers = new ocp_tempcode();
+        $end_markers = new Tempcode();
         if (isset($error_lines[$number])) {
             foreach ($error['errors'] as $_error) {
                 if ($i == $_error['global_pos']) {

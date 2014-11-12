@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_block_ui_renderers_chat
 {
     /**
@@ -32,7 +36,7 @@ class Hook_block_ui_renderers_chat
     public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
         if ($block . ':' . $parameter == 'side_shoutbox:param') { // special case for chat rooms
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('id', 'room_name'), array('is_im' => 0), '', 100/*In case insane number*/);
             foreach ($rows as $row) {
                 $list->attach(form_input_list_entry(strval($row['id']), $has_default && strval($row['id']) == $default, $row['room_name']));

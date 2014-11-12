@@ -428,7 +428,7 @@ class Module_chat
             return $this->_set_effects();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -482,7 +482,7 @@ class Module_chat
         if (count($rows) == 200) { // Ah, limit to not show private ones then
             $rows = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('*'), array('is_im' => 0, 'allow_list' => ''), 'ORDER BY room_name DESC', 200);
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach ($rows as $myrow) {
             // Check to see if we are on the room's allow list, if we aren't, don't display the room :D
             $showroom = check_chatroom_access($myrow, true, $member_id);
@@ -500,17 +500,17 @@ class Module_chat
         if (has_actual_page_access($member_id, 'cms_chat')) {
             $mod_link = hyperlink(build_url(array('page' => 'cms_chat'), get_module_zone('cms_chat')), do_lang_tempcode('CHAT_MODERATION'));
         } else {
-            $mod_link = new ocp_tempcode();
+            $mod_link = new Tempcode();
         }
         if (!is_guest()) {
             $blocking_link = hyperlink(build_url(array('page' => '_SELF', 'type' => 'blocking_interface'), '_SELF'), do_lang_tempcode('MEMBER_BLOCKING'));
         } else {
-            $blocking_link = new ocp_tempcode();
+            $blocking_link = new Tempcode();
         }
         if ((has_privilege($member_id, 'create_private_room')) && (!is_guest())) {
             $private_room = hyperlink(build_url(array('page' => '_SELF', 'type' => 'private'), '_SELF'), do_lang_tempcode('CREATE_PRIVATE_CHATROOM'));
         } else {
-            $private_room = new ocp_tempcode();
+            $private_room = new Tempcode();
         }
 
         // Friend list and IM
@@ -519,8 +519,8 @@ class Module_chat
             $post_url_add_friend = build_url(array('page' => '_SELF', 'type' => 'friend_add', 'redirect' => get_self_url(true)), '_SELF');
             $post_url_remove_friends = build_url(array('page' => '_SELF', 'type' => 'friend_remove', 'redirect' => get_self_url(true)), '_SELF');
         } else {
-            $post_url_add_friend = new ocp_tempcode();
-            $post_url_remove_friends = new ocp_tempcode();
+            $post_url_add_friend = new Tempcode();
+            $post_url_remove_friends = new Tempcode();
         }
         $friends = show_im_contacts($member_id);
         $messages_php = find_script('messages');
@@ -547,16 +547,16 @@ class Module_chat
         if (!is_guest()) {
             $seteffects_link = hyperlink(build_url(array('page' => '_SELF', 'type' => 'set_effects'/*,'redirect'=>get_self_url(true,true)*/), '_SELF'), do_lang_tempcode('CHAT_SET_EFFECTS'), true);
         } else {
-            $seteffects_link = new ocp_tempcode();
+            $seteffects_link = new Tempcode();
         }
 
-        $message = new ocp_tempcode();
-        $message->attach(do_lang_tempcode('WELCOME_CHAT_LOBBY', $private_room->is_empty() ? new ocp_tempcode() : do_lang_tempcode('WELCOME_CHAT_LOBBY_PRIVATE_CHATROOMS'), $can_im ? do_lang_tempcode('WELCOME_CHAT_LOBBY_USE_IM') : new ocp_tempcode(), $can_im ? do_lang_tempcode((get_option('sitewide_im') == '1') ? 'WELCOME_CHAT_LOBBY_USE_IM2_SITEWIDE' : 'WELCOME_CHAT_LOBBY_USE_IM2_NO_SITEWIDE') : new ocp_tempcode()));
+        $message = new Tempcode();
+        $message->attach(do_lang_tempcode('WELCOME_CHAT_LOBBY', $private_room->is_empty() ? new Tempcode() : do_lang_tempcode('WELCOME_CHAT_LOBBY_PRIVATE_CHATROOMS'), $can_im ? do_lang_tempcode('WELCOME_CHAT_LOBBY_USE_IM') : new Tempcode(), $can_im ? do_lang_tempcode((get_option('sitewide_im') == '1') ? 'WELCOME_CHAT_LOBBY_USE_IM2_SITEWIDE' : 'WELCOME_CHAT_LOBBY_USE_IM2_NO_SITEWIDE') : new Tempcode()));
 
         if (has_actual_page_access(get_member(), 'admin_chat')) {
             $add_room_url = build_url(array('page' => 'admin_chat', 'type' => 'ad'), get_module_zone('admin_chat'));
         } else {
-            $add_room_url = new ocp_tempcode();
+            $add_room_url = new Tempcode();
         }
 
         return do_template('CHAT_LOBBY_SCREEN', array(
@@ -597,15 +597,15 @@ class Module_chat
         check_chatroom_access($room_row);
 
         $help_zone = get_comcode_zone('userguide_comcode', false);
-        $comcode_help = is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone);
+        $comcode_help = is_null($help_zone) ? new Tempcode() : build_url(array('page' => 'userguide_comcode'), $help_zone);
         $help_zone = get_comcode_zone('userguide_chatcode', false);
-        $chatcode_help = is_null($help_zone) ? new ocp_tempcode() : build_url(array('page' => 'userguide_chatcode'), $help_zone);
+        $chatcode_help = is_null($help_zone) ? new Tempcode() : build_url(array('page' => 'userguide_chatcode'), $help_zone);
 
         $posting_name = do_lang_tempcode('SEND_MESSAGE');
         $keep = symbol_tempcode('KEEP');
         $posting_url = find_script('messages') . '?mode=2&room_id=' . strval($room_id) . $keep->evaluate();
         $messages_link = find_script('messages') . '?room_id=' . strval($room_id) . '&zone=' . get_zone_name() . $keep->evaluate();
-        $buttons = new ocp_tempcode();
+        $buttons = new Tempcode();
         $_buttons = array(
             'url',
             'thumb',
@@ -631,7 +631,7 @@ class Module_chat
             }
         }
 
-        $micro_buttons = new ocp_tempcode();
+        $micro_buttons = new Tempcode();
         $_micro_buttons = array(
             'b',
             'i',
@@ -653,13 +653,13 @@ class Module_chat
         $messages_php = find_script('messages');
         $debug = (get_param_integer('debug', 0) == 1) ? 'block' : 'none';
 
-        $mod_link = new ocp_tempcode();
+        $mod_link = new Tempcode();
         if (has_actual_page_access(get_member(), 'cms_chat', null, array('chat', strval($room_id)), array('edit_lowrange_content', ($room_row['room_owner'] == get_member()) ? 'moderate_my_private_rooms' : null))) {
             $mod_url = build_url(array('page' => 'cms_chat', 'type' => 'room', 'id' => $room_id), get_module_zone('cms_chat'));
             $mod_link = hyperlink($mod_url, do_lang_tempcode('CHAT_MODERATION'), true);
         }
 
-        $admin_link = new ocp_tempcode();
+        $admin_link = new Tempcode();
         if (has_actual_page_access(get_member(), 'admin_chat')) {
             // The user is staff, so let him have the admin link
             $admin_url = build_url(array('page' => 'admin_chat', 'type' => '_ed', 'id' => $room_id), 'adminzone');
@@ -723,7 +723,7 @@ class Module_chat
         $posting_url = build_url(array('page' => '_SELF', 'type' => '_private'), '_SELF');
         $text = paragraph(do_lang_tempcode('CHAT_PRIVATE_CHATROOM_DESCRIPTION', display_time_period(60 * intval(get_option('chat_private_room_deletion_time')))));
         if (intval(get_option('chat_private_room_deletion_time')) == 0) {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
         }
 
         return do_template('FORM_SCREEN', array('_GUID' => '5697add8e81f641559a212697d35a470', 'HIDDEN' => $hidden, 'TITLE' => $this->title, 'FIELDS' => $fields, 'SUBMIT_ICON' => 'menu___generic_admin__add_one', 'SUBMIT_NAME' => $posting_name, 'URL' => $posting_url, 'TEXT' => $text));
@@ -801,12 +801,12 @@ class Module_chat
 
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         url_default_parameters__enable();
 
         $blocked = $GLOBALS['SITE_DB']->query_select('chat_blocking', array('member_blocked'), array('member_blocker' => get_member()));
-        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '85cbdbced505a6621ccbedc2de50c5f9', 'TITLE' => do_lang_tempcode('EXISTING_BLOCKS'), 'HELP' => (count($blocked) != 0) ? new ocp_tempcode() : do_lang_tempcode('NONE_EM'))));
+        $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '85cbdbced505a6621ccbedc2de50c5f9', 'TITLE' => do_lang_tempcode('EXISTING_BLOCKS'), 'HELP' => (count($blocked) != 0) ? new Tempcode() : do_lang_tempcode('NONE_EM'))));
         foreach ($blocked as $row) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($row['member_blocked'], true);
             if (!is_null($username)) {
@@ -1069,13 +1069,13 @@ class Module_chat
     public function chat_download_logs()
     {
         $chatrooms = chat_get_all_rooms();
-        $select = new ocp_tempcode();
+        $select = new Tempcode();
         $select_by_default = get_param_integer('id', null);
         foreach ($chatrooms as $value) {
             $select->attach(form_input_list_entry(strval($value['id']), $value['id'] == $select_by_default, $value['room_name'], false));
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_list(do_lang_tempcode('CHATROOM_NAME'), do_lang_tempcode('CHAT_DOWNLOAD_LOGS_CHATROOM_NAME'), 'room_name', $select));
         $fields->attach(form_input_date(do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE'), do_lang_tempcode('CHAT_DOWNLOAD_LOGS_START_DATE_DESCRIPTION'), 'start', true, false, true, time() - 4 * 60 * 60, 26));
@@ -1158,13 +1158,13 @@ class Module_chat
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_set_effects'), '_SELF');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $redirect = get_param('redirect', null);
         if (!is_null($redirect)) {
             $hidden->attach(form_input_hidden('redirect', $redirect));
         }
 
-        $setting_blocks = new ocp_tempcode();
+        $setting_blocks = new Tempcode();
 
         // Global settings
         $effect_settings = get_effect_settings(); // Find what the member has it set to

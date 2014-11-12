@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_ocf_groups extends standard_crud_module
+class Module_cms_ocf_groups extends Standard_crud_module
 {
     public $lang_type = 'CLUB';
     public $select_name = 'NAME';
@@ -96,7 +96,7 @@ class Module_cms_ocf_groups extends standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -131,13 +131,13 @@ class Module_cms_ocf_groups extends standard_crud_module
             $group_leader = $GLOBALS['FORUM_DRIVER']->get_username(get_member());
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_USERGROUP_TITLE'), 'name', $name, true));
         $fields->attach(form_input_username(do_lang_tempcode('GROUP_LEADER'), do_lang_tempcode('DESCRIPTION_GROUP_LEADER'), 'group_leader', $group_leader, false));
         $fields->attach(form_input_tick(do_lang_tempcode('OPEN_MEMBERSHIP'), do_lang_tempcode('OPEN_MEMBERSHIP_DESCRIPTION'), 'open_membership', $open_membership == 1));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -169,7 +169,7 @@ class Module_cms_ocf_groups extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)', array('g_is_private_club' => 1));
         require_code('form_templates');
@@ -200,7 +200,7 @@ class Module_cms_ocf_groups extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)', array('g_is_private_club' => 1));
         if ($count < 500) {
             $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name', 'g_promotion_target', 'g_is_super_admin', 'g_group_leader'), array('g_is_private_club' => 1), 'ORDER BY g_name');

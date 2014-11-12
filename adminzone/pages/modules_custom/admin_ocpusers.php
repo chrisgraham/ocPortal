@@ -171,7 +171,7 @@ class Module_admin_ocpusers
 
         $seen_before = array();
 
-        $_rows = new ocp_tempcode();
+        $_rows = new Tempcode();
         foreach ($rows as $i => $r) {
             if (array_key_exists($r['website_url'], $seen_before)) {
                 continue;

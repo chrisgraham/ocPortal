@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
-class Hook_Profiles_Tabs_filedump
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_filedump
 {
     /**
      * Find whether this hook is active.

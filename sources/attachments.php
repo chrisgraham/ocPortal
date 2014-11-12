@@ -67,7 +67,7 @@ function render_attachment($tag, $attributes, $attachment_row, $pass_id, $source
     $url = mixed();
     $url_safe = mixed();
     if ($tag == 'attachment') {
-        $url = new ocp_tempcode();
+        $url = new Tempcode();
 
         $url->attach(find_script('attachment') . '?id=' . urlencode(strval($attachment_row['id'])));
         if ($connection->connection_write != $GLOBALS['SITE_DB']->connection_write) {
@@ -76,7 +76,7 @@ function render_attachment($tag, $attributes, $attachment_row, $pass_id, $source
         } else {
             $attributes['num_downloads'] = symbol_tempcode('ATTACHMENT_DOWNLOADS', array(strval($attachment_row['id']), '0'));
         }
-        $url_safe = new ocp_tempcode();
+        $url_safe = new Tempcode();
         $url_safe->attach($url);
         $keep = symbol_tempcode('KEEP');
         $url->attach($keep);
@@ -86,7 +86,7 @@ function render_attachment($tag, $attributes, $attachment_row, $pass_id, $source
         }
 
         if ((array_key_exists('thumb_url', $attributes)) && ($attributes['thumb_url'] != '')) {
-            $attributes['thumb_url'] = new ocp_tempcode();
+            $attributes['thumb_url'] = new Tempcode();
             $attributes['thumb_url']->attach($url);
             $attributes['thumb_url']->attach('&thumb=1&no_count=1');
         }
@@ -357,7 +357,7 @@ function attachment_popup_script()
         access_denied('REUSE_ATTACHMENT');
     }
 
-    $list = new ocp_tempcode();
+    $list = new Tempcode();
     foreach ($members as $member_id => $username) {
         $list->attach(form_input_list_entry(strval($member_id), $member_id == $member_now, $username));
     }
@@ -366,7 +366,7 @@ function attachment_popup_script()
     $post_url = get_self_url();
 
     $rows = $connection->query_select('attachments', array('*'), array('a_member_id' => $member_now));
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     foreach ($rows as $myrow) {
         $may_delete = (get_member() == $myrow['a_member_id']) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()));
 

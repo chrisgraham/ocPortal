@@ -20,10 +20,8 @@
 
 /**
  * CRUD module (Create/Update/Delete), for operations on content types.
- *
- * @package    core
  */
-class standard_crud_module
+abstract class Standard_crud_module
 {
     public $module_type;
     public $redirect_type = null;
@@ -557,7 +555,7 @@ class standard_crud_module
             return $this->mass_delete();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -810,12 +808,12 @@ class standard_crud_module
             return $bits;
         }
 
-        $fields2 = new ocp_tempcode();
+        $fields2 = new Tempcode();
         $posting_form_tabindex = null;
         $extra_tpl_params = array();
         if (is_array($bits)) {
             $fields = $bits[0];
-            $hidden = array_key_exists(1, $bits) ? $bits[1] : new ocp_tempcode();
+            $hidden = array_key_exists(1, $bits) ? $bits[1] : new Tempcode();
             if ((array_key_exists(6, $bits)) && (!is_null($bits[6]))) {
                 $fields2 = $bits[6];
             }
@@ -830,7 +828,7 @@ class standard_crud_module
             }
         } else {
             $fields = $bits;
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
         }
 
         // Add in custom fields
@@ -888,7 +886,7 @@ class standard_crud_module
             require_javascript('javascript_catalogues');
 
             // New field
-            $fields_new = new ocp_tempcode();
+            $fields_new = new Tempcode();
             for ($i = 0; $i < 10; $i++) { // Up to 10 new fields for catalogue, although this number is arbitrary
                 list($_fields_new, $_hidden_new) = $this->get_field_fields((($i == 0) && (substr(get_param('id', ''), 0, 1) != '_')), 10, 'new_field_' . strval($i) . '_', $i);
                 $temp = do_template('FORM_FIELD_SET_GROUPER', array('_GUID' => '3eba3a73d1fbdf922707d63216e13e03' . get_class($this), 'VISIBLE' => ($i == 0) ? true : null, 'NAME' => do_lang_tempcode('NEW_FIELD', strval($i + 1)), 'ID' => 'NEW_FIELD_' . strval($i + 1), 'FIELDS' => $_fields_new->evaluate()/*FUDGEFUDGE*/));
@@ -1111,7 +1109,7 @@ class standard_crud_module
     {
         list($_entries,) = $this->get_entry_rows();
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_entries as $key => $row) {
             $readable = $row['_readable'];
             $entries->attach(form_input_list_entry($key, $key === get_param('id', null, true), $readable));
@@ -1152,7 +1150,7 @@ class standard_crud_module
             $map['continue'] = get_param('continue');
         }
 
-        $description = ($this->select_name_description != '') ? do_lang_tempcode($this->select_name_description) : new ocp_tempcode();
+        $description = ($this->select_name_description != '') ? do_lang_tempcode($this->select_name_description) : new Tempcode();
         if (method_exists($this, 'create_selection_list_radio_entries')) { // For picture selection lists only
             $entries = $this->create_selection_list_radio_entries();
             if ($entries->is_empty()) {
@@ -1304,9 +1302,9 @@ class standard_crud_module
         $tie_in_custom_form_fields = $this->has_tied_catalogue();
 
         $bits = $this->fill_in_edit_form($id);
-        $delete_fields = new ocp_tempcode();
+        $delete_fields = new Tempcode();
         $all_delete_fields_given = false;
-        $fields2 = new ocp_tempcode();
+        $fields2 = new Tempcode();
         $extra_tpl_params = array();
         if (is_array($bits)) {
             $fields = $bits[0];
@@ -1337,7 +1335,7 @@ class standard_crud_module
             }
         } else {
             $fields = $bits;
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
         }
 
         // Add in custom fields
@@ -1363,7 +1361,7 @@ class standard_crud_module
         $may_delete = (((!method_exists($this, 'may_delete_this')) || ($this->may_delete_this($id))) && ((!is_numeric($id)) || (intval($id) >= db_get_first_id() + $this->protect_first))) && ($delete_permission);
 
         // Deletion options
-        $action_fields = new ocp_tempcode();
+        $action_fields = new Tempcode();
         if ($may_delete) {
             if (!$all_delete_fields_given) {
                 $action_fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE'), 'delete', false));
@@ -1413,7 +1411,7 @@ class standard_crud_module
             $field_count = 0;
             $c_name = get_param('id', false, true);
             $rows = $GLOBALS['SITE_DB']->query_select('catalogue_fields', array('*'), array('c_name' => $c_name), 'ORDER BY cf_order');
-            $fields_existing = new ocp_tempcode();
+            $fields_existing = new Tempcode();
             foreach ($rows as $i => $myrow) {
                 $name = get_translated_text($myrow['cf_name']);
                 $description = get_translated_text($myrow['cf_description']);
@@ -1431,7 +1429,7 @@ class standard_crud_module
             }
 
             // New field
-            $fields_new = new ocp_tempcode();
+            $fields_new = new Tempcode();
             for ($i = 0; $i < 5; $i++) {
                 list($_fields_new, $_fields_hidden) = $this->get_field_fields(false, count($rows) + 10, 'new_field_' . strval($i) . '_', $field_count);
                 $temp = do_template('FORM_FIELD_SET_GROUPER', array('_GUID' => '8b9a632eafae003ccc6b007eefb0ce3d' . get_class($this), 'NAME' => do_lang_tempcode('NEW_FIELD', strval($i + 1)), 'ID' => 'NEW_FIELD_' . strval($i + 1), 'FIELDS' => $_fields_new->evaluate()/*FUDGEFUDGE*/));

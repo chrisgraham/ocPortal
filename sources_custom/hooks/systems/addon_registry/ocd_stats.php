@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocd_stats
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocd_stats
 {
     /**

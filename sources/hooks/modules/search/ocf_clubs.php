@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_clubs
  */
+
+/**
+ * Hook class.
+ */
 class Hook_search_ocf_clubs
 {
     /**

@@ -265,7 +265,7 @@ class Module_tickets
             return $this->unassign();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -277,8 +277,8 @@ class Module_tickets
     {
         require_code('feedback');
 
-        $message = new ocp_tempcode();
-        $links = new ocp_tempcode();
+        $message = new Tempcode();
+        $links = new Tempcode();
         $existing_ticket_types = array();
 
         if (!is_guest()) {
@@ -382,7 +382,7 @@ class Module_tickets
         if (function_exists('get_ocportal_support_timings')) { // FUDGEFUDGE. Extra code may be added in for ocPortal.com's ticket system
             $extra_details = get_ocportal_support_timings($topic['closed'] == 0, $last_poster_id, $ticket_type_name, $topic['lasttime']);
         } else {
-            $extra_details = new ocp_tempcode();
+            $extra_details = new Tempcode();
         }
 
         $tpl = do_template('SUPPORT_TICKET_LINK', array(
@@ -497,7 +497,7 @@ class Module_tickets
 
             // Render existing posts/info
             $pagination = null;
-            $staff_details = new ocp_tempcode();
+            $staff_details = new Tempcode();
             if (!$new) {
                 if (is_null($_comments)) {
                     warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -506,7 +506,7 @@ class Module_tickets
                     $topic_url = $GLOBALS['FORUM_DRIVER']->topic_url($topic_id, get_option('ticket_forum_name'), true);
                     $staff_details = is_object($topic_url) ? $topic_url : make_string_tempcode($topic_url);
                 } else {
-                    $staff_details = new ocp_tempcode();
+                    $staff_details = new Tempcode();
                 }
 
                 require_code('topics');
@@ -552,7 +552,7 @@ class Module_tickets
                 // "Staff only reply" tickbox
                 $has_staff_only = ((get_forum_type() == 'ocf') && ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())));
             } else {
-                $comments = new ocp_tempcode();
+                $comments = new Tempcode();
                 $has_staff_only = false;
                 $ticket_type_details = get_ticket_type(null);
             }
@@ -598,14 +598,14 @@ class Module_tickets
                     'TITLE' => do_lang_tempcode($new ? 'CREATE_TICKET_MAKE_POST' : 'REPLY'),
                 ));
             } else {
-                $comment_form = new ocp_tempcode();
+                $comment_form = new Tempcode();
             }
 
             // Show other tickets
             require_code('form_templates');
             require_code('feedback');
             list($warning_details, $ping_url) = handle_conflict_resolution(null, true);
-            $other_tickets = new ocp_tempcode();
+            $other_tickets = new Tempcode();
             $our_topic = null;
             $type_activity_overview = array();
             if (!is_guest($ticket_owner)) {
@@ -665,7 +665,7 @@ class Module_tickets
             }
 
             // Post templates
-            $post_templates = new ocp_tempcode();
+            $post_templates = new Tempcode();
             if ($has_staff_only) {
                 require_code('ocf_posts_action');
                 require_lang('ocf_post_templates');
@@ -673,7 +673,7 @@ class Module_tickets
                 $forum_id = get_ticket_forum_id($ticket_owner, $ticket_type_id);
 
                 $templates = ocf_get_post_templates($forum_id);
-                $_post_templates = new ocp_tempcode();
+                $_post_templates = new Tempcode();
                 foreach ($templates as $template) {
                     list($pt_title, $pt_text,) = $template;
                     $_post_templates->attach(form_input_list_entry(str_replace("\n", '\n', $pt_text), false, $pt_title));
@@ -692,7 +692,7 @@ class Module_tickets
                 $last_poster_id = isset($our_topic['lastmemberid']) ? $our_topic['lastmemberid'] : $GLOBALS['FORUM_DRIVER']->get_member_from_username($our_topic['lastusername']);
                 $extra_details = get_ocportal_support_timings($our_topic['closed'] == 0, $last_poster_id, $ticket_type_name, $our_topic['lasttime'], true);
             } else {
-                $extra_details = new ocp_tempcode();
+                $extra_details = new Tempcode();
             }
 
             // Render ticket screen
@@ -810,7 +810,7 @@ class Module_tickets
                 }
             }
 
-            $new_post = new ocp_tempcode();
+            $new_post = new Tempcode();
             $email = trim(post_param('email', ''));
             if ($email != '') {
                 $body = '> ' . str_replace("\n", "\n" . '> ', $post);
@@ -941,7 +941,7 @@ class Module_tickets
 
         $text = do_lang_tempcode('DESCRIPTION_SET_TICKET_EXTRA_ACCESS', escape_html($ticket_owner_username));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $access = array();
         $_access = $GLOBALS['SITE_DB']->query_select('ticket_extra_access', array('member_id'), array('ticket_id' => $id));

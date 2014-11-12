@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_html_abstractions
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_html_abstractions
 {
     /**

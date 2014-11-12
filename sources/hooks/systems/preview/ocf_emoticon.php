@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Preview_ocf_emoticon
+
+/**
+ * Hook class.
+ */
+class Hook_preview_ocf_emoticon
 {
     /**
      * Find whether this preview hook applies.

@@ -1277,7 +1277,7 @@ function build_search_results_interface($results, $start, $max, $direction, $gen
 {
     require_code('content');
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $i = 0;
     $tabular_results = array();
     foreach ($results as $result) {

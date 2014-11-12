@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_comments
 {
     /**
@@ -88,7 +92,7 @@ class Hook_rss_comments
 
         $title = null;
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         // Comment posts
         $forum = get_param('forum', get_option('comments_forum_name'));
         $count = 0;
@@ -111,7 +115,7 @@ class Hook_rss_comments
                         break 2;
                     }
 
-                    $if_comments = new ocp_tempcode();
+                    $if_comments = new Tempcode();
 
                     $id = strval($comment['id']);
                     $author = $GLOBALS['FORUM_DRIVER']->get_username($comment['member']);
@@ -136,7 +140,7 @@ class Hook_rss_comments
                     $category = '';
                     $category_raw = '';
 
-                    $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => new ocp_tempcode(), 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
+                    $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => new Tempcode(), 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
                 }
             }
 

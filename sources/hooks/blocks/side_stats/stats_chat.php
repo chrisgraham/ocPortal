@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats_chat
 {
     /**
@@ -27,13 +31,13 @@ class Hook_stats_chat
     public function run()
     {
         if (!addon_installed('chat')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('chat_stats');
         require_lang('chat');
 
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
 
         if (get_option('chat_show_stats_count_users') == '1') {
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '904a46b83a84728243f3fd655705cc04', 'KEY' => do_lang_tempcode('COUNT_CHATTERS'), 'VALUE' => integer_format(get_num_chatters()))));
@@ -45,7 +49,7 @@ class Hook_stats_chat
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => '0e86e89171ddd8225ac41e14b18ecdb0', 'KEY' => do_lang_tempcode('COUNT_CHATPOSTS'), 'VALUE' => integer_format(get_num_chatposts()))));
         }
         if ($bits->is_empty_shell()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $chat = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => '4d688c45e01ed34f257fd03100a6be6d', 'SECTION' => do_lang_tempcode('SECTION_CHAT'), 'CONTENT' => $bits));

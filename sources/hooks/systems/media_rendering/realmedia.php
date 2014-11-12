@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
+
+/**
+ * Hook class.
+ */
 class Hook_media_rendering_realmedia extends Media_renderer_with_fallback
 {
     /**

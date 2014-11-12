@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_is_on_strong_forum_tie
 {
     /**

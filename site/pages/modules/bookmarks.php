@@ -155,7 +155,7 @@ class Module_bookmarks
             return $this->_edit_bookmark();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -168,7 +168,7 @@ class Module_bookmarks
         require_code('form_templates');
         require_lang('zones');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '2efc21de71434c715f920c7dbd14e687', 'TITLE' => do_lang_tempcode('MOVE'))));
         $rows = $GLOBALS['SITE_DB']->query_select('bookmarks', array('DISTINCT b_folder'), array('b_owner' => get_member()), 'ORDER BY b_folder');
         $list = form_input_list_entry('', false, do_lang_tempcode('NA_EM'));

@@ -113,7 +113,7 @@ function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = tru
        }
        if (is_null($_notifications)) {
            $unread_pps = ocf_get_pp_rows();
-           $notifications = new ocp_tempcode();
+           $notifications = new Tempcode();
            $num_unread_pps = 0;
            foreach ($unread_pps as $unread_pp) {
                $by = $GLOBALS['OCF_DRIVER']->get_username($unread_pp['p_poster']);
@@ -165,7 +165,7 @@ function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = tru
            list($notifications,$num_unread_pps) = $_notifications;
        }
    } else {
-       $notifications = new ocp_tempcode();
+       $notifications = new Tempcode();
        $num_unread_pps = 0;
    }
 
@@ -217,7 +217,7 @@ function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = tru
             $head = do_template('OCF_GUEST_BAR',array('NAVIGATION' => get_zone_chooser(true),'LOGIN_URL' => $login_url,'JOIN_LINK' => $join_url,'FULL_LINK' => $full_link));
         }
     } else {
-        $head = new ocp_tempcode();
+        $head = new Tempcode();
     }
 
     if ($show_stats) {
@@ -228,7 +228,7 @@ function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = tru
         $all_colours = array_merge($all_colours,$all_colours,$all_colours,$all_colours);
 
       // Users online
-      $users_online = new ocp_tempcode();
+      $users_online = new Tempcode();
         $members = get_users_online();
         $members = collapse_2d_complexity('member_id','cache_username',$members);
         $guests = 0;
@@ -253,7 +253,7 @@ function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = tru
 
       // Birthdays
       $_birthdays = ocf_find_birthdays();
-        $birthdays = new ocp_tempcode();
+        $birthdays = new Tempcode();
         foreach ($_birthdays as $_birthday) {
             $birthday = do_template('OCF_USER_MEMBER',array('_GUID' => 'a98959187d37d80e134d47db7e3a52fa','FIRST' => $birthdays->is_empty(),'PROFILE_URL' => $GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id']),'USERNAME' => $_birthday['username']));
             if (array_key_exists('age',$_birthday)) {
@@ -288,7 +288,7 @@ function ocf_wrapper($title,$content,$show_personal_bar = true,$show_stats = tru
          'GROUPS' => $groups
       ));
     } else {
-        $foot = new ocp_tempcode();
+        $foot = new Tempcode();
     }
 
     $wrap = do_template('OCF_WRAPPER',array('_GUID' => '456c21db6c09ae260accfa4c2a59fce7','TITLE' => $title,'NOTIFICATIONS' => $notifications,'HEAD' => $head,'FOOT' => $foot,'CONTENT' => $content));

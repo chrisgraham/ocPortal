@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_stats_ocf_demographics
 {
     /**
@@ -125,14 +129,14 @@ class Hook_admin_stats_ocf_demographics
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('AGE'), do_lang_tempcode('COUNT_TOTAL')), $sortables);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $i = 0;
         foreach ($demographics as $age => $value) {
             $percent = round(100.0 * floatval($value) / floatval(count($rows)), 2);
             $fields->attach(results_entry(array(escape_html($age), integer_format($value) . ' (' . float_format($percent) . '%)')));
             $i++;
         }
-        $list = results_table(do_lang_tempcode('DEMOGRAPHICS'), $start, 'start', $max, 'max', count($demographics), $fields_title, $fields, $sortables, '', '', 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('DEMOGRAPHICS'), $start, 'start', $max, 'max', count($demographics), $fields_title, $fields, $sortables, '', '', 'sort', new Tempcode());
 
         $output = create_bar_chart($demographics, do_lang('AGE'), do_lang('COUNT_TOTAL'), '', '');
         $ob->save_graph('Global-Demographics', $output);

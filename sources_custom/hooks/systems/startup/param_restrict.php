@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_startup_param_restrict
 {
     public function run()

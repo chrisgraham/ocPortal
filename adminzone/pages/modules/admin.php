@@ -162,7 +162,7 @@ class Module_admin
                 return do_next_manager_hooked('MENU', 'menus:DOC_FRONTEND_ICONS', $type);
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -467,7 +467,7 @@ class Module_admin
         // Admin/CMS menu icons
         $current_results_type = do_lang('ADMIN_MODULES');
         if ($this->_section_match($section_limitations, $current_results_type)) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $hooks = find_all_hooks('systems', 'page_groupings');
             foreach (array_keys($hooks) as $hook) {
                 require_code('hooks/systems/page_groupings/' . filter_naughty_harsh($hook));
@@ -484,7 +484,7 @@ class Module_admin
                     $n = $i[3];
                     if (($i[0] != '') && ($this->_keyword_match(is_object($n) ? $n->evaluate() : $n)) && (has_actual_page_access(get_member(), $i[2][0], $i[2][2]))) {
                         $_url = build_url(array('page' => $i[2][0]) + $i[2][1], $i[2][2]);
-                        $breadcrumbs = new ocp_tempcode();
+                        $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => $i[0]), 'adminzone'), do_lang(strtoupper($i[0]))));
                         $sup = do_lang_tempcode('LOCATED_IN', $breadcrumbs);
                         $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => 'ec53a1d45fe6a80308bf509b896d2763', 'NAME' => $n, 'URL' => $_url, 'TITLE' => '', 'DESCRIPTION' => '', 'SUP' => $sup)));
@@ -496,7 +496,7 @@ class Module_admin
         // Module entry points
         $current_results_type = do_lang('SCREENS');
         if ($this->_section_match($section_limitations, $current_results_type)) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             foreach (find_all_zones(false, true) as $zone => $zone_details) {
                 $modules = find_all_modules($zone);
                 foreach (array_keys($modules) as $page) {
@@ -521,7 +521,7 @@ class Module_admin
                                 $n = (preg_match('#^[A-Z\_]+$#', $val) == 0) ? make_string_tempcode($val) : do_lang_tempcode($val);
                             }
                             if (($this->_keyword_match($n->evaluate())) && (has_actual_page_access(get_member(), $page, $zone))) {
-                                $breadcrumbs = new ocp_tempcode();
+                                $breadcrumbs = new Tempcode();
                                 $breadcrumbs->attach(hyperlink(build_url(array('page' => ''), $zone), $zone_details[1]));
                                 if (($zone == 'cms') || ($zone == 'adminzone')) {
                                     if (($page != 'admin') && ($page != 'cms')) {
@@ -597,7 +597,7 @@ class Module_admin
         $current_results_type = do_lang('IMPORT');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_import'))) {
             // Importers
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $hooks = find_all_hooks('modules', 'admin_import');
             foreach (array_keys($hooks) as $hook) {
                 if ($this->_keyword_match($hook)) {
@@ -614,7 +614,7 @@ class Module_admin
         $current_results_type = do_lang('CONFIGURATION');
         if ((($this->_section_match($section_limitations, $current_results_type)) || ($this->_section_match($section_limitations, do_lang('OPTION_CATEGORIES'))) || ($this->_section_match($section_limitations, do_lang('OPTION_GROUPS')))) && (has_actual_page_access(get_member(), 'admin_config'))) {
             // Config options- names, descriptions, groups, categories
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $map = array();
             $hooks = find_all_hooks('systems', 'config');
             $all_options = array();
@@ -644,7 +644,7 @@ class Module_admin
                     if (is_null($t)) {
                         $t = '';
                     }
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('SETUP')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
@@ -669,9 +669,9 @@ class Module_admin
                 }
             }
             $current_results_type = do_lang('OPTION_CATEGORIES');
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $current_results_type_2 = do_lang('OPTION_GROUPS');
-            $content[$current_results_type_2] = new ocp_tempcode();
+            $content[$current_results_type_2] = new Tempcode();
             foreach ($config_categories as $p => $groups) {
                 $_n = do_lang('CONFIG_CATEGORY_' . $p, null, null, null, null, false);
                 if (is_null($_n)) {
@@ -681,7 +681,7 @@ class Module_admin
                 if ($this->_keyword_match($n->evaluate())) {
                     $_url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => $p), 'adminzone');
                     $description = do_lang_tempcode('CONFIG_CATEGORY_DESCRIPTION__' . $p);
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('SETUP')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
@@ -699,14 +699,14 @@ class Module_admin
                         $post_max_size = (ini_get('post_max_size') == '0') ? do_lang('NA') : clean_file_size(php_return_bytes(ini_get('post_max_size')));
                         $_group_description = do_lang('CONFIG_GROUP_DESCRIP_' . $group, escape_html($post_max_size), escape_html($upload_max_filesize), null, null, false);
                         if (is_null($_group_description)) {
-                            $group_description = new ocp_tempcode();
+                            $group_description = new Tempcode();
                         } else {
                             $group_description = do_lang_tempcode('CONFIG_GROUP_DESCRIP_' . $group, escape_html($post_max_size), escape_html($upload_max_filesize), false);
                         }
                         $_url = build_url(array('page' => 'admin_config', 'type' => 'category', 'id' => $p), 'adminzone');
                         $url = $_url->evaluate();
                         $url .= '#group_' . $group;
-                        $breadcrumbs = new ocp_tempcode();
+                        $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('SETUP')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_config', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('CONFIGURATION')));
@@ -722,7 +722,7 @@ class Module_admin
         $current_results_type = do_lang('USERGROUPS');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_ocf_groups')) && (get_forum_type() == 'ocf')) {
             // Usergroups
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $map = array('g_is_private_club' => 0);
             $all_groups = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name'), $map);
             foreach ($all_groups as $p) {
@@ -730,7 +730,7 @@ class Module_admin
                 if ($this->_keyword_match($n)) {
                     $_url = build_url(array('page' => 'admin_ocf_groups', 'type' => '_ed', 'id' => $p['id']), 'adminzone');
                     $url = $_url->evaluate();
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
@@ -745,13 +745,13 @@ class Module_admin
         $current_results_type = do_lang('THEMES');
         if (($this->_section_match($section_limitations, $current_results_type)) && has_actual_page_access(get_member(), 'admin_themes')) {
             // Themes
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $map = array();
             foreach (array(do_lang('MOBILE_PAGES')) as $n) {
                 if ($this->_keyword_match($n)) {
                     $_url = build_url(array('page' => 'admin_themes', 'type' => 'edit_theme', 'theme' => $GLOBALS['FORUM_DRIVER']->get_theme('')), 'adminzone');
                     $url = $_url->evaluate();
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
@@ -766,7 +766,7 @@ class Module_admin
         $current_results_type = do_lang('ZONES');
         if (($this->_section_match($section_limitations, $current_results_type)) && has_actual_page_access(get_member(), 'admin_zones')) {
             // Zones
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $map = array();
             $all_groups = $GLOBALS['SITE_DB']->query_select('zones', array('zone_name', 'zone_title', 'zone_header_text'), $map, 'ORDER BY zone_title', 50/*reasonable limit; zone_title is sequential for default zones*/);
             foreach ($all_groups as $p) {
@@ -776,7 +776,7 @@ class Module_admin
                 if (($this->_keyword_match($n)) || ($this->_keyword_match($t)) || ($this->_keyword_match($ht))) {
                     $_url = build_url(array('page' => 'admin_zones', 'type' => '_edit', 'id' => $p['zone_name']), 'adminzone');
                     $url = $_url->evaluate();
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'setup'), 'adminzone'), do_lang_tempcode('STRUCTURE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('ZONES')));
@@ -791,7 +791,7 @@ class Module_admin
         // Blocks
         $current_results_type = do_lang('_BLOCKS');
         if ($this->_section_match($section_limitations, $current_results_type)) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $map = array();
             require_code('zones2');
             $all_blocks = find_all_blocks();
@@ -807,7 +807,7 @@ class Module_admin
         // Non-installed addons
         $current_results_type = do_lang('ADDONS');
         if ($this->_section_match($section_limitations, $current_results_type)) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $map = array();
             $dh = @opendir(get_custom_file_base() . '/imports/addons');
             if ($dh !== false) {
@@ -838,7 +838,7 @@ class Module_admin
         $current_results_type = do_lang('PRIVILEGES');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_permissions'))) {
             // Privileges- sections/names/descriptions
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $all_permissions = $GLOBALS['SITE_DB']->query_select('privilege_list', array('the_name', 'p_section'));
             $pt_sections = array();
             foreach ($all_permissions as $p) {
@@ -848,7 +848,7 @@ class Module_admin
                 }
                 if (($this->_keyword_match($n)) || ($this->_keyword_match($p['the_name']))) {
                     $_url = build_url(array('page' => 'admin_permissions', 'type' => 'privileges', 'id' => $p['p_section']), 'adminzone');
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_permissions', 'type' => 'privileges'), 'adminzone'), do_lang_tempcode('PRIVILEGES')));
@@ -860,7 +860,7 @@ class Module_admin
                 $pt_sections[$p['p_section']] = 1;
             }
             $current_results_type = do_lang('PRIVILEGE_SECTIONS');
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             foreach (array_keys($pt_sections) as $p) {
                 $n = do_lang($p, null, null, null, null, false);
                 if (is_null($n)) {
@@ -868,7 +868,7 @@ class Module_admin
                 }
                 if (($this->_keyword_match($n)) || ($this->_keyword_match($p))) {
                     $_url = build_url(array('page' => 'admin_permissions', 'type' => 'privileges', 'id' => $p), 'adminzone');
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_permissions', 'type' => 'privileges'), 'adminzone'), do_lang_tempcode('PRIVILEGES')));
@@ -881,7 +881,7 @@ class Module_admin
         $current_results_type = do_lang('USERGROUP_SETTINGS');
         if (($this->_section_match($section_limitations, $current_results_type)) && (get_forum_type() == 'ocf') && (has_actual_page_access(get_member(), 'admin_ocf_groups', 'adminzone'))) {
             // Usergroup settings
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $applicable_langstrings = array(
                 array('ENQUIRE_ON_NEW_IPS', 'DESCRIPTION_ENQUIRE_ON_NEW_IPS'),
                 array('FLOOD_CONTROL_ACCESS_SECS', 'DESCRIPTION_FLOOD_CONTROL_ACCESS_SECS'),
@@ -905,8 +905,8 @@ class Module_admin
                     if ($this->_keyword_match($n)) {
                         $n = do_lang_tempcode($array[0]);
                         $_url = build_url(array('page' => 'admin_ocf_groups', 'type' => 'ed'), 'adminzone');
-                        $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new ocp_tempcode();
-                        $breadcrumbs = new ocp_tempcode();
+                        $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new Tempcode();
+                        $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'security'), 'adminzone'), do_lang_tempcode('SECURITY')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_ocf_groups', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('USERGROUPS')));
@@ -921,7 +921,7 @@ class Module_admin
         $current_results_type = do_lang('MEMBER_SETTINGS');
         if (($this->_section_match($section_limitations, $current_results_type)) && (get_forum_type() == 'ocf') && (has_actual_page_access(get_member(), 'members'))) {
             // Member settings
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $applicable_langstrings = array(
                 array('REVEAL_AGE', 'DESCRIPTION_REVEAL_AGE'),
                 array('PREVIEW_POSTS', 'DESCRIPTION_PREVIEW_POSTS'),
@@ -934,7 +934,7 @@ class Module_admin
                     $n = do_lang($langstring);
                     if ($this->_keyword_match($n)) {
                         $n = do_lang_tempcode($array[0]);
-                        $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new ocp_tempcode();
+                        $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new Tempcode();
                         $_url = build_url(array('page' => 'members', 'type' => 'view'), get_module_zone('members'), null, false, false, false, 'tab__edit');
                         $url = $_url->evaluate();
                         $content[$current_results_type]->attach(do_template('INDEX_SCREEN_FANCIER_ENTRY', array('_GUID' => '4b2b7dd9c8c81f15583428fc2692bca5', 'NAME' => $n, 'URL' => $url, 'TITLE' => '', 'DESCRIPTION' => $descrip)));
@@ -947,7 +947,7 @@ class Module_admin
         // Zone options
         $current_results_type = do_lang('ZONE_OPTIONS');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_zones', 'adminzone'))) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $applicable_langstrings = array(
                 array('DEFAULT_PAGE', 'DESCRIPTION_DEFAULT_PAGE'),
                 array('HEADER_TEXT', 'DESCRIPTION_HEADER_TEXT'),
@@ -961,8 +961,8 @@ class Module_admin
                     if ($this->_keyword_match($n)) {
                         $n = do_lang_tempcode($array[0]);
                         $_url = build_url(array('page' => 'admin_zones', 'type' => 'edit'), 'adminzone');
-                        $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new ocp_tempcode();
-                        $breadcrumbs = new ocp_tempcode();
+                        $descrip = array_key_exists(1, $array) ? do_lang_tempcode($array[1]) : new Tempcode();
+                        $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'structure'), 'adminzone'), do_lang_tempcode('STRUCTURE')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_zones', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('ZONES')));
@@ -977,7 +977,7 @@ class Module_admin
         // Install options
         $current_results_type = do_lang('BASE_CONFIGURATION');
         if (($this->_section_match($section_limitations, $current_results_type)) && ($GLOBALS['FORUM_DRIVER']->is_super_admin(get_member()))) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             if (file_exists(get_file_base() . '/config_editor.php')) {
                 $file_contents = file_get_contents(get_file_base() . '/config_editor.php');
                 $matches = array();
@@ -995,7 +995,7 @@ class Module_admin
         // Language string names and contents
         $current_results_type = do_lang('MODULE_TRANS_NAME_admin_lang');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_lang', 'adminzone'))) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
 
             if (user_lang() != fallback_lang()) {
                 $content[$current_results_type]->attach(paragraph(do_lang_tempcode('SEARCH_LAUNCHPAD', escape_html(urlencode($raw_search_string)), escape_html(urlencode(user_lang())))));
@@ -1037,7 +1037,7 @@ class Module_admin
                 $_url = build_url(array('page' => 'admin_lang', 'type' => 'misc', 'lang' => user_lang(), 'lang_file' => $lang_file), 'adminzone');
                 $url = $_url->evaluate();
                 $url .= '#jmp_' . $n;
-                $breadcrumbs = new ocp_tempcode();
+                $breadcrumbs = new Tempcode();
                 $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                 $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                 $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_lang', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('TRANSLATE_CONTENT')));
@@ -1052,13 +1052,13 @@ class Module_admin
         // Theme images
         $current_results_type = do_lang('EDIT_THEME_IMAGES');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_themes', 'adminzone'))) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $images = $GLOBALS['SITE_DB']->query_select('theme_images', array('id', 'theme', 'lang'));
             foreach ($images as $image) {
                 $n = $image['id'];
                 if ($this->_keyword_match($n)) {
                     $_url = build_url(array('page' => 'admin_themes', 'type' => 'edit_image', 'theme' => $image['theme'], 'lang' => $image['lang'], 'id' => $n), 'adminzone');
-                    $breadcrumbs = new ocp_tempcode();
+                    $breadcrumbs = new Tempcode();
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                     $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                     $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
@@ -1078,7 +1078,7 @@ class Module_admin
         // Template names
         $current_results_type = do_lang('TEMPLATES');
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_themes', 'adminzone'))) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $tpl_found = array();
             foreach (array('templates_custom', 'templates') as $template_dir) {
                 $dh = opendir(get_file_base() . '/themes/default/' . $template_dir . '/');
@@ -1087,7 +1087,7 @@ class Module_admin
                         $n = $file;
                         if (($this->_keyword_match(basename($n, '.tpl'))) || ($this->_keyword_match($n)) || (($template_dir == 'templates_custom') && ($this->_keyword_match(file_get_contents(get_file_base() . '/themes/default/' . $template_dir . '/' . $n))))) {
                             $_url = build_url(array('page' => 'admin_themes', 'type' => '_edit_templates', 'theme' => $default_theme, 'f0file' => $file), 'adminzone');
-                            $breadcrumbs = new ocp_tempcode();
+                            $breadcrumbs = new Tempcode();
                             $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                             $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                             $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
@@ -1105,7 +1105,7 @@ class Module_admin
         // CSS file contents
         $current_results_type = 'CSS';
         if (($this->_section_match($section_limitations, $current_results_type)) && (has_actual_page_access(get_member(), 'admin_themes', 'adminzone'))) {
-            $content[$current_results_type] = new ocp_tempcode();
+            $content[$current_results_type] = new Tempcode();
             $dh = opendir(get_file_base() . '/themes/default/css/');
             while (($file = readdir($dh)) !== false) {
                 if (substr(strtolower($file), -4) == '.css') {
@@ -1116,7 +1116,7 @@ class Module_admin
                         if (isset($keywords[0])) {
                             $url .= '#' . $keywords[0][0];
                         }
-                        $breadcrumbs = new ocp_tempcode();
+                        $breadcrumbs = new Tempcode();
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin', 'type' => 'style'), 'adminzone'), do_lang_tempcode('STYLE')));
                         $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
                         $breadcrumbs->attach(hyperlink(build_url(array('page' => 'admin_themes', 'type' => 'misc'), 'adminzone'), do_lang_tempcode('THEMES')));
@@ -1139,7 +1139,7 @@ class Module_admin
             $software_search_url_2 = get_brand_base_url() . '/site/index.php?page=search&type=results&search_ocf_posts=1&days=-1&content=' . urlencode($raw_search_string);
             $pre = do_lang_tempcode('ADMINZONE_SEARCH_RESULTS', escape_html($raw_search_string), escape_html($search_url), array(escape_html($software_search_url), escape_html($software_search_url_2)));
         } else {
-            $pre = new ocp_tempcode();
+            $pre = new Tempcode();
         }
         $found_some = false;
         foreach ($content as $c) {
@@ -1148,7 +1148,7 @@ class Module_admin
                 break;
             }
         }
-        $post = ((strpos($raw_search_string, '"') !== false) || (!$found_some)) ? new ocp_tempcode() : do_lang_tempcode('ADMINZONE_SEARCH_TIP', escape_html(preg_replace('#\s@\w+#', '', $raw_search_string)));
+        $post = ((strpos($raw_search_string, '"') !== false) || (!$found_some)) ? new Tempcode() : do_lang_tempcode('ADMINZONE_SEARCH_TIP', escape_html(preg_replace('#\s@\w+#', '', $raw_search_string)));
 
         if ((!$found_some) && ($this->and_query)) { // Oh well, try as an OR query then
             $this->and_query = false;

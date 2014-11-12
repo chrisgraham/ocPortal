@@ -59,7 +59,7 @@ class Block_main_facebook_friends
 
         $appid = get_option('facebook_appid');
         if ($appid == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $stream = array_key_exists('stream', $map) ? $map['stream'] : '0';
@@ -69,7 +69,7 @@ class Block_main_facebook_friends
         $show_fanpage_link = array_key_exists('show_fanpage_link', $map) ? $map['show_fanpage_link'] : '0';
         $fanpage_name = (isset($map['fanpage_name']) && strlen($map['fanpage_name']) > 0) ? $map['fanpage_name'] : get_site_name();
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
 
         return do_template('BLOCK_MAIN_FACEBOOK_FRIENDS', array(
             '_GUID' => '5f4dc97379346496d8b8152a56a9ec84',

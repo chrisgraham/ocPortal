@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_photos
  */
-class Hook_Profiles_Tabs_Edit_photo
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_photo
 {
     /**
      * Find whether this hook is active.
@@ -69,7 +73,7 @@ class Hook_Profiles_Tabs_Edit_photo
         $thumb_url = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_photo_thumb_url');
 
         // UI fields
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         $set_name = 'photo';
@@ -98,11 +102,11 @@ class Hook_Profiles_Tabs_Edit_photo
             $fields->attach(alternate_fields_set__end($set_name, $set_title, do_lang_tempcode('DESCRIPTION_THUMBNAIL', escape_html($thumb_width)), $field_set, $required));
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden, 'image');
         $hidden->attach(form_input_hidden('submitting_photo_tab', '1'));
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         require_code('images');
         $max = floatval(get_max_image_size()) / floatval(1024 * 1024);
         if ($max < 3.0) {

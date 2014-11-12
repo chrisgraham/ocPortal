@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_stats_ocf_posting_rates
 {
     /**
@@ -57,7 +61,7 @@ class Hook_admin_stats_ocf_posting_rates
         if (get_param_integer('dated', 0) == 0) {
             $title = get_screen_title('POSTING_RATES');
 
-            $extra_fields = new ocp_tempcode();
+            $extra_fields = new Tempcode();
             require_code('form_templates');
             $extra_fields->attach(form_input_tick(do_lang_tempcode('HOURLY_BREAKDOWNS'), do_lang_tempcode('DESCRIPTION_HOURLY_BREAKDOWNS'), 'hourly', false));
 
@@ -151,7 +155,7 @@ class Hook_admin_stats_ocf_posting_rates
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE'), do_lang_tempcode('COUNT_TOTAL')), $sortables);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $real_data = array();
         $i = 0;
         foreach ($posting_rates as $date => $value) {
@@ -164,7 +168,7 @@ class Hook_admin_stats_ocf_posting_rates
 
             $i++;
         }
-        $list = results_table(do_lang_tempcode('POSTING_RATES'), $start, 'start', $max, 'max', count($posting_rates), $fields_title, $fields, $sortables, '', '', 'sort', new ocp_tempcode());
+        $list = results_table(do_lang_tempcode('POSTING_RATES'), $start, 'start', $max, 'max', count($posting_rates), $fields_title, $fields, $sortables, '', '', 'sort', new Tempcode());
         if ($csv) {
             make_csv($real_data, 'posting_rates.csv');
         }

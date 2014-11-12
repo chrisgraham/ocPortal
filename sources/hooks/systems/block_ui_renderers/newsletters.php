@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    newsletter
  */
+
+/**
+ * Hook class.
+ */
 class Hook_block_ui_renderers_newsletters
 {
     /**
@@ -32,7 +36,7 @@ class Hook_block_ui_renderers_newsletters
     public function render_block_ui($block, $parameter, $has_default, $default, $description)
     {
         if (($parameter == 'param') && (in_array($block, array('main_newsletter_signup')))) { // newsletter list
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
             foreach ($rows as $newsletter) {
                 $list->attach(form_input_list_entry(strval($newsletter['id']), $has_default && strval($newsletter['id']) == $default, get_translated_text($newsletter['title'])));

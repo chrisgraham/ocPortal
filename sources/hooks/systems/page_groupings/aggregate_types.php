@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    aggregate_types
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_aggregate_types
 {
     /**

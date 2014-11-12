@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    counting_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_main_count
 {
     /**

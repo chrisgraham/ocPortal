@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_gallery extends Hook_sitemap_content
 {
     protected $content_type = 'gallery';

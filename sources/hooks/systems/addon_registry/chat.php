@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_chat
 {
     /**
@@ -500,7 +504,7 @@ class Hook_addon_registry_chat
             'BLOCK_MEMBER_URL' => placeholder_url(),
         ));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         foreach (placeholder_array() as $key => $room) {
             $users = array(
@@ -508,7 +512,7 @@ class Hook_addon_registry_chat
                 '2' => 'admin',
             );
 
-            $usernames = new ocp_tempcode();
+            $usernames = new Tempcode();
 
             foreach ($users as $user) {
                 $usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
@@ -601,7 +605,7 @@ class Hook_addon_registry_chat
             'new_room'
         );
 
-        $buttons = new ocp_tempcode();
+        $buttons = new Tempcode();
         foreach ($_buttons as $button) {
             $buttons->attach(do_lorem_template('CHATCODE_EDITOR_BUTTON', array(
                 'TITLE' => do_lang_tempcode('INPUT_CHATCODE_' . $button),
@@ -609,7 +613,7 @@ class Hook_addon_registry_chat
             )));
         }
 
-        $micro_buttons = new ocp_tempcode();
+        $micro_buttons = new Tempcode();
         $_micro_buttons = array(
             'b',
             'i'
@@ -633,7 +637,7 @@ class Hook_addon_registry_chat
             '2' => 'admin',
         );
 
-        $usernames = new ocp_tempcode();
+        $usernames = new Tempcode();
         foreach ($users as $user) {
             $usernames->attach(do_lorem_template('OCF_USER_MEMBER', array(
                 'FIRST' => $usernames->is_empty(),
@@ -687,7 +691,7 @@ class Hook_addon_registry_chat
 
         require_css('forms');
 
-        $setting_blocks = new ocp_tempcode();
+        $setting_blocks = new Tempcode();
         foreach (placeholder_array() as $member => $values) {
             $effects = array();
             foreach (placeholder_array() as $k => $v) {

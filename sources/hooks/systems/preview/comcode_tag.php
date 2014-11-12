@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_Preview_comcode_tag
+
+/**
+ * Hook class.
+ */
+class Hook_preview_comcode_tag
 {
     /**
      * Find whether this preview hook applies.

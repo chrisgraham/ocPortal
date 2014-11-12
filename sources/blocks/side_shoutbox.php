@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Block class.
+ */
 class Block_side_shoutbox
 {
     /**
@@ -68,20 +72,20 @@ class Block_side_shoutbox
         if (is_null($room_id)) {
             $room_id = $GLOBALS['SITE_DB']->query_select_value_if_there('chat_rooms', 'MIN(id)', array('is_im' => 0/*,'room_language'=>user_lang()*/));
             if (is_null($room_id)) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
         }
 
         $room_check = $GLOBALS['SITE_DB']->query_select('chat_rooms', array('*'), array('id' => $room_id), '', 1);
         if (!array_key_exists(0, $room_check)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         require_code('chat');
         if (!check_chatroom_access($room_check[0], true)) {
             global $DO_NOT_CACHE_THIS; // We don't cache against access, so we have a problem and can't cache
             $DO_NOT_CACHE_THIS = true;
 
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $last_message_id = $GLOBALS['SITE_DB']->query_select_value('chat_messages', 'MAX(id)', array('room_id' => $room_id));
@@ -131,7 +135,7 @@ class Block_side_shoutbox
             }
         }
 
-        $tpl = new ocp_tempcode();
+        $tpl = new Tempcode();
         while (count($_tpl) > $num_messages) {
             array_shift($_tpl);
         }

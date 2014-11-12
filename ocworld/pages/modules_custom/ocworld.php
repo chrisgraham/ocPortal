@@ -365,7 +365,7 @@ class Module_ocworld
         $member_id = get_member();
         if (is_guest($member_id)) {
             ocw_refresh_with_message(do_lang_tempcode('W_NOT_LOGGED_IN'), 'warn');
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         $item = either_param('item', '');
 
@@ -461,7 +461,7 @@ class Module_ocworld
             } else { // Answer question screen
                 $troll_name = $GLOBALS['SITE_DB']->query_select_value('w_realms', 'troll_name', array('id' => $realm));
                 $this->title = get_screen_title('W_TROLL_Q', true, array(escape_html($troll_name)));
-                $questions = new ocp_tempcode();
+                $questions = new Tempcode();
                 for ($i = 1; $i <= $num_questions; $i++) {
                     $questions->attach(do_template('W_TROLL_QUESTION', array('_GUID' => 'b09eb44e4264a9dca5bdf651ca9a48d4', 'Q' => $q[$i], 'I' => strval($i))));
                 }
@@ -505,7 +505,7 @@ class Module_ocworld
                 ocw_refresh_with_message(do_lang_tempcode('W_ONLY_STAFF_REALLOC'), 'warn');
             }
 
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
 
             $rows = $GLOBALS['SITE_DB']->query_select('items', array('*'), array('copy_owner' => null));
             foreach ($rows as $myrow) {
@@ -525,7 +525,7 @@ class Module_ocworld
 
         if ($type == 'realms') {
             realms();
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         if ($type == 'up') {
@@ -533,28 +533,28 @@ class Module_ocworld
             if (!is_null($tpl)) {
                 return $tpl;
             }
-            ocw_refresh_with_message(new ocp_tempcode());
+            ocw_refresh_with_message(new Tempcode());
         }
         if ($type == 'down') {
             $tpl = try_to_enter_room($member_id, 0, 1, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
-            ocw_refresh_with_message(new ocp_tempcode());
+            ocw_refresh_with_message(new Tempcode());
         }
         if ($type == 'right') {
             $tpl = try_to_enter_room($member_id, 1, 0, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
-            ocw_refresh_with_message(new ocp_tempcode());
+            ocw_refresh_with_message(new Tempcode());
         }
         if ($type == 'left') {
             $tpl = try_to_enter_room($member_id, -1, 0, '');
             if (!is_null($tpl)) {
                 return $tpl;
             }
-            ocw_refresh_with_message(new ocp_tempcode());
+            ocw_refresh_with_message(new Tempcode());
         }
 
         if ($type == 'answered') {
@@ -715,7 +715,7 @@ class Module_ocworld
                 $made = $GLOBALS['SITE_DB']->query_select_value('w_realms', 'COUNT(*)', array('owner' => get_member()));
                 $left = intval(round($fortnights - $made));
 
-                $_qa = new ocp_tempcode();
+                $_qa = new Tempcode();
                 for ($i = 1; $i <= 30; $i++) {
                     $_qa->attach(do_template('W_REALM_SCREEN_QUESTION', array('_GUID' => '5fa7725f11b0df7e58ff83f2f1751515', 'I' => strval($i), 'Q' => '', 'A' => '')));
                 }
@@ -949,7 +949,7 @@ class Module_ocworld
                 }
                 $row = $rows[0];
 
-                $qatc = new ocp_tempcode();
+                $qatc = new Tempcode();
                 for ($i = 1; $i <= 30; $i++) {
                     $qatc->attach(do_template('W_REALM_SCREEN_QUESTION', array('_GUID' => '0510427a3895969dede2bd13db7d46a6', 'I' => strval($i), 'Q' => $row['q' . strval($i)], 'A' => $row['a' . strval($i)])));
                 }
@@ -1015,6 +1015,6 @@ class Module_ocworld
         }
 
         ocw_refresh_with_message(do_lang('SUCCESS'));
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

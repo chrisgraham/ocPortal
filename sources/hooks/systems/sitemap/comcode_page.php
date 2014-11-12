@@ -20,6 +20,9 @@
 
 require_code('hooks/systems/sitemap/page');
 
+/**
+ * Hook class.
+ */
 class Hook_sitemap_comcode_page extends Hook_sitemap_page
 {
     protected $content_type = 'comcode_page';

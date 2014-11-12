@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
+
+/**
+ * Block class.
+ */
 class Block_main_emoticon_codes
 {
     /**
@@ -63,7 +67,7 @@ class Block_main_emoticon_codes
 
         $smilies = $GLOBALS['FORUM_DRIVER']->find_emoticons(get_member());
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         global $EMOTICON_LEVELS;
         foreach ($smilies as $code => $imgcode) {
             if ((is_null($EMOTICON_LEVELS)) || ($EMOTICON_LEVELS[$code] < 3)) {

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    downloads
  */
+
+/**
+ * Hook class.
+ */
 class Hook_stats_downloads
 {
     /**
@@ -27,13 +31,13 @@ class Hook_stats_downloads
     public function run()
     {
         if (!addon_installed('downloads')) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('files');
         require_lang('downloads');
         require_code('downloads_stats');
-        $bits = new ocp_tempcode();
+        $bits = new Tempcode();
 
         if (get_option('downloads_show_stats_count_total') == '1') {
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'ff2bd884d88ddc8c5a81cff897f99a5a', 'KEY' => do_lang_tempcode('COUNT_TOTAL'), 'VALUE' => integer_format(get_num_archive_downloads()))));
@@ -48,7 +52,7 @@ class Hook_stats_downloads
             $bits->attach(do_template('BLOCK_SIDE_STATS_SUBLINE', array('_GUID' => 'b2589ae83652953ece220267043d75c9', 'KEY' => do_lang_tempcode('COUNT_BANDWIDTH'), 'VALUE' => clean_file_size(get_download_bandwidth()))));
         }
         if ($bits->is_empty_shell()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $files = do_template('BLOCK_SIDE_STATS_SECTION', array('_GUID' => '99ae3f35b3e5eda18901e97ac385d99c', 'SECTION' => do_lang_tempcode('SECTION_DOWNLOADS'), 'CONTENT' => $bits));

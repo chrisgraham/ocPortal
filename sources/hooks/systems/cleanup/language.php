@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_language
 {
     /**
@@ -43,6 +47,6 @@ class Hook_language
     {
         erase_cached_language();
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

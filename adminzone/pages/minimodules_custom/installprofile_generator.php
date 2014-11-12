@@ -43,6 +43,9 @@ $profile = <<<END
  * @package    setupwizard
  */
 
+/**
+ * Hook class.
+ */
 class Hook_admin_setupwizard_installprofiles_mycustomprofile
 {
     /**

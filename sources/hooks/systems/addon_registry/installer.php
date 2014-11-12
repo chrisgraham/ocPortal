@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    installer
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_installer
 {
     /**
@@ -200,7 +204,7 @@ class Hook_addon_registry_installer
         $warning->attach(do_lorem_template('INSTALLER_NOTICE', array(
             'MESSAGE' => lorem_sentence_html(),
         )));
-        $languages = new ocp_tempcode();
+        $languages = new Tempcode();
         foreach (placeholder_array() as $lang) {
             $entry = do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
@@ -286,11 +290,11 @@ class Hook_addon_registry_installer
                 '2' => 'forum2',
             )
         );
-        $tforums = new ocp_tempcode();
-        $default_version = new ocp_tempcode();
-        $simple_forums = new ocp_tempcode();
+        $tforums = new Tempcode();
+        $default_version = new Tempcode();
+        $simple_forums = new Tempcode();
         foreach ($forum_array as $key => $forums) {
-            $versions = new ocp_tempcode();
+            $versions = new Tempcode();
             foreach ($forums as $_key => $forum) {
                 $version = do_lang('VERSION_NUM', $_key);
                 $versions->attach(do_lorem_template('INSTALLER_FORUM_CHOICE_VERSION', array(
@@ -318,7 +322,7 @@ class Hook_addon_registry_installer
         }
 
         // Database chooser
-        $tdatabase = new ocp_tempcode();
+        $tdatabase = new Tempcode();
         foreach (placeholder_array() as $dbname) {
             $entry = do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
@@ -430,9 +434,9 @@ class Hook_addon_registry_installer
         require_lang('installer');
         require_lang('version');
 
-        $options = new ocp_tempcode();
-        $options->attach($this->make_option(lorem_phrase(), new ocp_tempcode(), 'ftp_username', '', false, true));
-        $options->attach($this->make_option(lorem_phrase(), new ocp_tempcode(), 'ftp_password', '', true));
+        $options = new Tempcode();
+        $options->attach($this->make_option(lorem_phrase(), new Tempcode(), 'ftp_username', '', false, true));
+        $options->attach($this->make_option(lorem_phrase(), new Tempcode(), 'ftp_password', '', true));
 
         $options->attach($this->make_tick(lorem_word(), lorem_phrase(), 'tick', 1));
 

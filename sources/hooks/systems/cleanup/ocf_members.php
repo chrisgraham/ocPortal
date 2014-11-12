@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_ocf_members
 {
     /**
@@ -54,7 +58,7 @@ class Hook_ocf_members
     public function run()
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('tasks');

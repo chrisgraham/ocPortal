@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_bottom_show_privacy_link
 {
     /**

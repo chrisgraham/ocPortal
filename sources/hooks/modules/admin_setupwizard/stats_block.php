@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_stats_block
 {
     /**

@@ -125,10 +125,10 @@ class Module_leader_board
 
         $first_week = $weeks[count($weeks) - 1]['date_and_time'];
         $weeks = collapse_1d_complexity('date_and_time', $weeks);
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach ($weeks as $week) {
             $rows = collapse_2d_complexity('lb_member', 'lb_points', $GLOBALS['SITE_DB']->query_select('leader_board', array('lb_member', 'lb_points'), array('date_and_time' => $week)));
-            $week_tpl = new ocp_tempcode();
+            $week_tpl = new Tempcode();
             foreach ($rows as $member => $points) {
                 $points_url = build_url(array('page' => 'points', 'type' => 'member', 'id' => $member), get_module_zone('points'));
 

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_community_billboard
 {
     /**
@@ -45,7 +49,7 @@ class Hook_pointstore_community_billboard
     public function community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
@@ -68,14 +72,14 @@ class Hook_pointstore_community_billboard
     public function _community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
 
         // Build up fields
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line_comcode(do_lang_tempcode('MESSAGE'), do_lang_tempcode('MESSAGE_DESCRIPTION'), 'message', '', true));
         $fields->attach(form_input_integer(do_lang_tempcode('NUMBER_DAYS'), do_lang_tempcode('NUMBER_DAYS_DESCRIPTION'), 'days', 1, true));
 
@@ -95,7 +99,7 @@ class Hook_pointstore_community_billboard
     public function __community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');
@@ -147,7 +151,7 @@ class Hook_pointstore_community_billboard
     public function ___community_billboard()
     {
         if (get_option('is_on_community_billboard_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWCOMMUNITY_BILLBOARD');

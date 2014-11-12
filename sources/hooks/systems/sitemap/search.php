@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_search extends Hook_sitemap_base
 {
     /**

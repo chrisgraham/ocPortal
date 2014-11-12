@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    pointstore
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_pop3
 {
     /**
@@ -77,7 +81,7 @@ class Hook_pointstore_pop3
      */
     public function get_fields()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('MAIL_DOMAIN'), do_lang_tempcode('DESCRIPTION_MAIL_DOMAIN'), 'dpop3', '', true));
         $fields->attach(form_input_integer(do_lang_tempcode('MAIL_COST'), do_lang_tempcode('_DESCRIPTION_MAIL_COST'), 'pop3', null, true));
         return $fields;
@@ -93,8 +97,8 @@ class Hook_pointstore_pop3
         $rows = $GLOBALS['SITE_DB']->query('SELECT price,name FROM ' . get_table_prefix() . 'prices WHERE name LIKE \'' . db_encode_like('pop3_%') . '\'');
         $out = array();
         foreach ($rows as $i => $row) {
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
             $domain = substr($row['name'], strlen('pop3_'));
             $hidden->attach(form_input_hidden('dpop3_' . strval($i), $domain));
             $fields->attach(form_input_line(do_lang_tempcode('MAIL_DOMAIN'), do_lang_tempcode('DESCRIPTION_MAIL_DOMAIN'), 'ndpop3_' . strval($i), substr($row['name'], 5), true));
@@ -115,18 +119,18 @@ class Hook_pointstore_pop3
     public function pop3info()
     {
         if (get_option('is_on_pop3_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_POP3');
 
         $test = $GLOBALS['SITE_DB']->query_select_value_if_there('sales', 'details', array('memberid' => get_member(), 'purchasetype' => 'pop3'));
         if (is_null($test)) {
-            $quota = new ocp_tempcode();
+            $quota = new Tempcode();
             $activate_url = build_url(array('page' => '_SELF', 'type' => 'newpop3', 'id' => 'pop3'), '_SELF');
             $activate = do_template('POINTSTORE_POP3_ACTIVATE', array('_GUID' => '2af73c37855846947aae8935391154cf', 'ACTIVATE_URL' => $activate_url, 'INITIAL_QUOTA' => integer_format(intval(get_option('initial_quota')))));
         } else {
-            $activate = new ocp_tempcode();
+            $activate = new Tempcode();
             $quota_url = build_url(array('page' => '_SELF', 'type' => 'buyquota', 'id' => 'pop3'), '_SELF');
             $quota = do_template('POINTSTORE_POP3_QUOTA', array('_GUID' => 'd0345bb481155e92aaee889cb742ab5a', 'MAX_QUOTA' => integer_format(intval(get_option('max_quota'))), 'QUOTA_URL' => $quota_url));
         }
@@ -142,7 +146,7 @@ class Hook_pointstore_pop3
     public function newpop3()
     {
         if (get_option('is_on_pop3_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWPOP3');
@@ -158,7 +162,7 @@ class Hook_pointstore_pop3
         }
 
         // Build up fields
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('ADDRESS_DESIRED_STUB'), '', 'email-prefix', $GLOBALS['FORUM_DRIVER']->get_username(get_member()), true));
         $fields->attach(form_input_list(do_lang_tempcode('ADDRESS_DESIRED_DOMAIN'), '', 'esuffix', $list));
@@ -203,7 +207,7 @@ class Hook_pointstore_pop3
     public function _newpop3()
     {
         if (get_option('is_on_pop3_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWPOP3');
@@ -245,7 +249,7 @@ class Hook_pointstore_pop3
 
         // Return
         $proceed_url = build_url(array('page' => '_SELF', 'type' => '__newpop3', 'id' => 'pop3'), '_SELF');
-        $keep = new ocp_tempcode();
+        $keep = new Tempcode();
         $keep->attach(form_input_hidden('prefix', $prefix));
         $keep->attach(form_input_hidden('suffix', $_suffix));
         $keep->attach(form_input_hidden('password', $pass1));
@@ -270,7 +274,7 @@ class Hook_pointstore_pop3
     public function __newpop3()
     {
         if (get_option('is_on_pop3_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_NEWPOP3');
@@ -335,7 +339,7 @@ class Hook_pointstore_pop3
     public function buyquota()
     {
         if (get_option('is_on_pop3_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_QUOTA');
@@ -377,7 +381,7 @@ class Hook_pointstore_pop3
     public function _buyquota()
     {
         if (get_option('is_on_pop3_buy') == '0') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $title = get_screen_title('TITLE_QUOTA');

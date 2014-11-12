@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_news_category extends Hook_sitemap_content
 {
     protected $content_type = 'news_category';

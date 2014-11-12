@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_adminzone_dashboard
 {
     /**
@@ -298,7 +302,7 @@ class Hook_addon_registry_core_adminzone_dashboard
             'NUM_QUEUE' => placeholder_id(),
         ));
 
-        $todo = new ocp_tempcode();
+        $todo = new Tempcode();
         $todo->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM', array(
             'URL' => placeholder_url(),
             'STATUS' => do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_ITEM_STATUS_1'),
@@ -316,7 +320,7 @@ class Hook_addon_registry_core_adminzone_dashboard
             'NUM_QUEUE' => placeholder_id(),
         )));
 
-        $custom_task = new ocp_tempcode();
+        $custom_task = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $custom_task->attach(do_lorem_template('BLOCK_MAIN_STAFF_CHECKLIST_CUSTOM_TASK', array(
                 'TASK_DONE' => 'checklist0',

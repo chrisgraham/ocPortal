@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_quiz_show_stats_count_total_open
 {
     /**

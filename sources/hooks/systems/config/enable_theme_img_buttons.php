@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_themeing
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_enable_theme_img_buttons
 {
     /**

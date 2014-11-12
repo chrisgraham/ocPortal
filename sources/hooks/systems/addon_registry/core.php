@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core
 {
     /**
@@ -1036,13 +1040,13 @@ class Hook_addon_registry_core
             'sources/caches.php',
             'sources/caches2.php',
             'sources/caches3.php',
-            'sources/caches_filesystem.php',
-            'sources/caches_eaccelerator.php',
-            'sources/caches_apc.php',
-            'sources/caches_xcache.php',
-            'sources/caches_wincache.php',
-            'sources/caches_memcache.php',
-            'sources/caches_memcached.php',
+            'sources/persistent_cacheing/filesystem.php',
+            'sources/persistent_cacheing/eaccelerator.php',
+            'sources/persistent_cacheing/apc.php',
+            'sources/persistent_cacheing/xcache.php',
+            'sources/persistent_cacheing/wincache.php',
+            'sources/persistent_cacheing/memcache.php',
+            'sources/persistent_cacheing/memcached.php',
             'sources/config.php',
             'sources/config2.php',
             'sources/critical_errors.php',
@@ -1601,9 +1605,9 @@ class Hook_addon_registry_core
      */
     public function tpl_preview__administrative__stack_trace_hyper_wrap()
     {
-        $trace = new ocp_tempcode();
+        $trace = new Tempcode();
         foreach (placeholder_array() as $value) {
-            $traces = new ocp_tempcode();
+            $traces = new Tempcode();
             foreach (placeholder_array() as $key => $value1) {
                 $traces->attach(do_lorem_template('STACK_TRACE_LINE', array(
                     'LINE' => $value1,
@@ -1722,8 +1726,8 @@ class Hook_addon_registry_core
      */
     public function tpl_preview__block_side_personal_stats()
     {
-        $details = new ocp_tempcode();
-        $links = new ocp_tempcode();
+        $details = new Tempcode();
+        $links = new Tempcode();
 
         $details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE', array(
             'KEY' => lorem_word(),
@@ -1771,8 +1775,8 @@ class Hook_addon_registry_core
      */
     public function tpl_preview__block_top_personal_stats()
     {
-        $details = new ocp_tempcode();
-        $links = new ocp_tempcode();
+        $details = new Tempcode();
+        $links = new Tempcode();
 
         $details->attach(do_lorem_template('BLOCK_SIDE_PERSONAL_STATS_LINE', array(
             'KEY' => lorem_word(),
@@ -1885,7 +1889,7 @@ class Hook_addon_registry_core
         require_code('comcode_renderer');
 
         $smilies = placeholder_emoticons();
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         global $EMOTICON_LEVELS;
         foreach ($smilies as $code => $imgcode) {
             if ((is_null($EMOTICON_LEVELS)) || ($EMOTICON_LEVELS[$code] < 3)) {
@@ -1958,7 +1962,7 @@ class Hook_addon_registry_core
      */
     public function tpl_preview__administrative__query_screen()
     {
-        $queries = new ocp_tempcode();
+        $queries = new Tempcode();
         foreach (placeholder_array() as $value) {
             $queries->attach(do_lorem_template('QUERY_LOG', array(
                 'TIME' => placeholder_number(),
@@ -2174,7 +2178,7 @@ class Hook_addon_registry_core
             'TYPE' => placeholder_id(),
         ));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_lorem_template('FORM_SCREEN_INPUT_HUGE', array(
             'RAW' => true,
             'SCROLLS' => '',

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    performance_compile
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_performance_compile
 {
     /**

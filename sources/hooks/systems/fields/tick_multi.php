@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_tick_multi
 {
     // ==============
@@ -33,7 +37,7 @@ class Hook_fields_tick_multi
     {
         $fields = array();
         $type = '_LIST';
-        $special = new ocp_tempcode();
+        $special = new Tempcode();
         $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', '---'));
         $list = explode('|', $row['cf_default']);
         $display = array_key_exists('trans_name', $row) ? $row['trans_name'] : get_translated_text($row['cf_name']); // 'trans_name' may have been set in CPF retrieval API, might not correspond to DB lookup if is an internal field
@@ -92,7 +96,7 @@ class Hook_fields_tick_multi
         $all = array();
         $exploded = ($ev == '') ? array() : array_flip(explode("\n", $ev));
         foreach (explode('|', $field['cf_default']) as $option) {
-            if (trim($option, ' -') == '') {
+            if (trim($option,' -') == '') {
                 continue;
             }
             $all[] = array('OPTION' => $option, 'HAS' => isset($exploded[$option]));

@@ -20,7 +20,10 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_banners extends resource_fs_base
+/**
+ * Hook class.
+ */
+class Hook_occle_fs_banners extends Resource_fs_base
 {
     public $folder_resource_type = 'banner_type';
     public $file_resource_type = 'banner';

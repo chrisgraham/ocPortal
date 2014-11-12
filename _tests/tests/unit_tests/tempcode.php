@@ -26,7 +26,7 @@ class tempcode_test_set extends ocp_test_case
         $tpl = do_template('tempcode_test', array(
             '_GUID' => '1f31d5279dd6a15a9fdba9296e1b7597',
             'EMPTY1' => '',
-            'EMPTY2' => new ocp_tempcode(),
+            'EMPTY2' => new Tempcode(),
             'NONEMPTY' => $nonempty,
             'PASSED' => 'This is a passed parameter',
             'SIMPLE_ARRAY' => array('1', '2', '3'),

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_continue_import
 {
     /**
@@ -67,7 +71,7 @@ class Hook_occle_command_continue_import
             require_code('hooks/modules/admin_import/' . filter_naughty_harsh($importer));
             $object = object_factory('Hook_' . filter_naughty_harsh($importer));
 
-            $import_source = is_null($db_name) ? null : new database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
+            $import_source = is_null($db_name) ? null : new Database_driver($db_name, $db_host, $db_user, $db_password, $db_table_prefix);
 
             if (get_forum_type() != 'ocf') {
                 require_code('forum/ocf');

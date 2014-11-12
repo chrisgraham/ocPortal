@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ecommerce
  */
+
+/**
+ * Hook class.
+ */
 class Hook_secpay
 {
     /**
@@ -227,7 +231,7 @@ class Hook_secpay
      */
     public function create_selection_list_card_types($it = null)
     {
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $array = array('Visa', 'Master Card', 'Switch', 'UK Maestro', 'Maestro', 'Solo', 'Delta', 'American Express', 'Diners Card', 'JCB');
         foreach ($array as $x) {
             $list->attach(form_input_list_entry($x, $it == $x));

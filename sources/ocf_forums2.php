@@ -28,7 +28,7 @@
 function ocf_create_selection_list_forum_groupings($avoid = null, $it = null)
 {
     $_m = $GLOBALS['FORUM_DB']->query_select('f_forum_groupings', array('*'));
-    $entries = new ocp_tempcode();
+    $entries = new Tempcode();
     foreach ($_m as $m) {
         if ($m['id'] !== $avoid) {
             $entries->attach(form_input_list_entry(strval($m['id']), $it === $m['id'], $m['c_title']));

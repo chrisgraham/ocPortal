@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    tester
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_tester
 {
     /**

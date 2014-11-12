@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
+
+/**
+ * Block class.
+ */
 class Block_top_search
 {
     /**

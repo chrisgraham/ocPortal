@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_ocf_forum
 {
     /**
@@ -66,14 +70,14 @@ class Hook_sw_ocf_forum
     public function get_fields($field_defaults)
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $current_settings = $this->get_current_settings();
         $field_defaults += $current_settings; // $field_defaults will take precedence, due to how "+" operator works in PHP
 
         require_lang('ocf');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         if (!is_ocf_satellite_site()) {
             if ($current_settings['have_default_rank_set'] == '1') {

@@ -19,11 +19,9 @@
  */
 
 /**
- * Forum Driver.
- *
- * @package    core_forum_drivers
+ * Forum driver class.
  */
-class forum_driver_none extends forum_driver_base
+class Forum_driver_none extends Forum_driver_base
 {
     /**
      * Get the administration username for the site.
@@ -160,7 +158,7 @@ class forum_driver_none extends forum_driver_base
     {
         require_code('comcode_compiler');
         $emoticons = $GLOBALS['SITE_DB']->query_select('f_emoticons', array('*'), array('e_relevance_level' => 0));
-        $em = new ocp_tempcode();
+        $em = new Tempcode();
         foreach ($emoticons as $emo) {
             $code = $emo['e_code'];
 

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    group_points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_group_points
 {
     /**
@@ -37,7 +41,7 @@ class Hook_cron_group_points
         $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(false, true, true);
         $group_points = get_group_points();
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         foreach ($groups as $group_id => $group_name) {
             if (isset($group_points[$group_id])) {

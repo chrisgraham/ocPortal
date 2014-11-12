@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    collaboration_zone
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_themewizard_collaboration_zone
 {
     /**

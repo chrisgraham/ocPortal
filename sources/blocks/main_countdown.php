@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    counting_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_main_countdown
 {
     /**
@@ -101,7 +105,7 @@ class Block_main_countdown
         $seconds = $positive_seconds_to_go;
 
         // The output display
-        $time = new ocp_tempcode();
+        $time = new Tempcode();
         if (($tailing >= 4) && ($precision >= 0)) {
             $time->attach(do_lang_tempcode((($years != 0)) ? 'COUNTDOWN_SEP' : 'COUNTDOWN_SEP_ZERO', strval($years), ($years == 1) ? do_lang_tempcode('YEAR') : do_lang_tempcode('DPLU_YEARS')));
         }

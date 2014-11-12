@@ -489,7 +489,7 @@ function _get_all_image_ids_type(&$ids, $dir, $type, $recurse, $dirs_only, $skip
  */
 function combo_get_image_paths($selected_path, $base_url, $base_path)
 {
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
 
     $paths = get_image_paths($base_url, $base_path);
     $i = 0;
@@ -595,7 +595,7 @@ function get_all_image_codes($base_path, $search_under, $recurse = true)
  */
 function create_selection_list_theme_images($it = null, $filter = null, $do_id = false, $include_all = false, $under = '')
 {
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     if (!$include_all) {
         $rows = $GLOBALS['SITE_DB']->query('SELECT id,path FROM ' . get_table_prefix() . 'theme_images WHERE ' . db_string_equal_to('theme', $GLOBALS['FORUM_DRIVER']->get_theme()) . ' ' . $filter . ' ORDER BY path');
         foreach ($rows as $myrow) {
@@ -639,7 +639,7 @@ function create_selection_list_themes($theme = null, $no_rely = false, $show_eve
     if (!$no_rely) {
         $entries = form_input_list_entry('-1', false, do_lang_tempcode($default_message_string));
     } else {
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
     }
     $themes = find_all_themes();
     foreach ($themes as $_theme => $title) {

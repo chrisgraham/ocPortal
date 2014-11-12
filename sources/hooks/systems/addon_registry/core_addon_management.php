@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_addon_management
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_addon_management
 {
     /**
@@ -170,7 +174,7 @@ class Hook_addon_registry_core_addon_management
      */
     public function tpl_preview__administrative__addon_screen()
     {
-        $add_ons = new ocp_tempcode();
+        $add_ons = new Tempcode();
 
         foreach (placeholder_array() as $value) {
             $actions = do_lorem_template('COLUMNED_TABLE_ACTION_INSTALL_ENTRY', array(
@@ -223,8 +227,8 @@ class Hook_addon_registry_core_addon_management
      */
     public function tpl_preview__administrative__addon_multi_confirm_screen()
     {
-        $install_files = new ocp_tempcode();
-        $uninstall_files = new ocp_tempcode();
+        $install_files = new Tempcode();
+        $uninstall_files = new Tempcode();
 
         $install = array(
             'news',
@@ -263,7 +267,7 @@ class Hook_addon_registry_core_addon_management
      */
     public function tpl_preview__administrative__addon_install_confirm_screen()
     {
-        $_dependencies = new ocp_tempcode();
+        $_dependencies = new Tempcode();
         foreach (placeholder_array() as $in) {
             if (!$_dependencies->is_empty()) {
                 $_dependencies->attach(do_lang_tempcode('LIST_SEP'));
@@ -275,7 +279,7 @@ class Hook_addon_registry_core_addon_management
             'WARNING' => do_lang_tempcode('ADDON_WARNING_PRESENT_DEPENDENCIES', $_dependencies, lorem_phrase()),
             'ADDON_WARNING_OVERWRITE' => lorem_phrase(),
         ));
-        $files = new ocp_tempcode();
+        $files = new Tempcode();
         foreach (placeholder_array() as $val) {
             $files->attach(do_lorem_template('ADDON_INSTALL_FILES_WARNING', array(
                 'PATH' => lorem_phrase(),
@@ -338,14 +342,14 @@ class Hook_addon_registry_core_addon_management
      */
     public function tpl_preview__administrative__addon_export_screen()
     {
-        $tpl_languages = new ocp_tempcode();
-        $tpl_themes = new ocp_tempcode();
+        $tpl_languages = new Tempcode();
+        $tpl_themes = new Tempcode();
 
         foreach (array(
                      'en',
                      'mal'
                  ) as $value) {
-            $frm_langs = new ocp_tempcode();
+            $frm_langs = new Tempcode();
             $i = 0;
             foreach (placeholder_array() as $file) {
                 $frm_langs->attach(form_input_hidden('file_' . strval($i), $file));
@@ -362,7 +366,7 @@ class Hook_addon_registry_core_addon_management
                      'default',
                      'ocp'
                  ) as $value) {
-            $frm_themes = new ocp_tempcode();
+            $frm_themes = new Tempcode();
             foreach (placeholder_array() as $file) {
                 $frm_themes->attach(form_input_hidden('file_' . strval($i), $file));
                 $i++;
@@ -375,7 +379,7 @@ class Hook_addon_registry_core_addon_management
         }
 
 
-        $frm_files = new ocp_tempcode();
+        $frm_files = new Tempcode();
         $i = 0;
         foreach (placeholder_array() as $file) {
             $frm_files->attach(do_lorem_template('ADDON_EXPORT_FILE_CHOICE', array(
@@ -414,9 +418,9 @@ class Hook_addon_registry_core_addon_management
             'downloads',
             'catalogues'
         );
-        $tpl_modules = new ocp_tempcode();
+        $tpl_modules = new Tempcode();
         foreach ($modules as $module) {
-            $actions = new ocp_tempcode();
+            $actions = new Tempcode();
             $status = do_lang_tempcode('STATUS_TO_UPGRADE');
 
             if ($module == 'downloads') {

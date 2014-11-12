@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_newsletter extends standard_crud_module
+class Module_admin_newsletter extends Standard_crud_module
 {
     public $lang_type = 'NEWSLETTER';
     public $select_name = 'TITLE';
@@ -210,7 +210,7 @@ class Module_admin_newsletter extends standard_crud_module
             }
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -271,12 +271,12 @@ class Module_admin_newsletter extends standard_crud_module
 
         // Select newsletter and attach CSV
         if (is_null($newsletter_id)) {
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
             require_code('form_templates');
 
             // Selection
-            $newsletters = new ocp_tempcode();
+            $newsletters = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
             foreach ($rows as $newsletter) {
                 $newsletters->attach(form_input_list_entry(strval($newsletter['id']), false, get_translated_text($newsletter['title'])));
@@ -288,12 +288,12 @@ class Module_admin_newsletter extends standard_crud_module
             $fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_UPLOAD_CSV_2'), 'file', true, null, null, true, 'csv,txt'));
             // Choose level
             if (get_option('interest_levels') == '0') {
-                $l = new ocp_tempcode();
+                $l = new Tempcode();
                 $l->attach(form_input_list_entry('0', false, do_lang_tempcode('NEWSLETTER_0')));
                 $l->attach(form_input_list_entry('4', $level == 4, do_lang_tempcode('NEWSLETTER_IMPORT')));
                 $fields->attach(form_input_list(do_lang_tempcode('SETTINGS'), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_LEVEL_3'), 'level', $l));
             } else {
-                $l = new ocp_tempcode();
+                $l = new Tempcode();
                 $l->attach(form_input_list_entry('0', false, do_lang_tempcode('NEWSLETTER_0')));
                 $l->attach(form_input_list_entry('1', $level == 1, do_lang_tempcode('NEWSLETTER_1')));
                 $l->attach(form_input_list_entry('2', $level == 2, do_lang_tempcode('NEWSLETTER_2')));
@@ -474,15 +474,15 @@ class Module_admin_newsletter extends standard_crud_module
             warn_exit(do_lang_tempcode('IMAP_NEEDED'));
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         url_default_parameters__enable();
 
-        $fields->attach(form_input_line(do_lang_tempcode('HOST'), new ocp_tempcode(), 'server', get_option('imap_host'), true));
-        $fields->attach(form_input_line(do_lang_tempcode('USERNAME'), new ocp_tempcode(), 'username', get_option('imap_username'), true));
-        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), new ocp_tempcode(), 'password', true, null, get_option('imap_password')));
-        $fields->attach(form_input_integer(do_lang_tempcode('PORT'), new ocp_tempcode(), 'port', intval(get_option('imap_port')), true));
+        $fields->attach(form_input_line(do_lang_tempcode('HOST'), new Tempcode(), 'server', get_option('imap_host'), true));
+        $fields->attach(form_input_line(do_lang_tempcode('USERNAME'), new Tempcode(), 'username', get_option('imap_username'), true));
+        $fields->attach(form_input_password(do_lang_tempcode('PASSWORD'), new Tempcode(), 'password', true, null, get_option('imap_password')));
+        $fields->attach(form_input_integer(do_lang_tempcode('PORT'), new Tempcode(), 'port', intval(get_option('imap_port')), true));
 
         url_default_parameters__disable();
 
@@ -511,14 +511,14 @@ class Module_admin_newsletter extends standard_crud_module
 
         $_folders = find_mail_folders($server, $port, $username, $password);
 
-        $folders = new ocp_tempcode();
+        $folders = new Tempcode();
         foreach ($_folders as $folder => $label) {
             $selected = ((get_option('imap_folder') != '') && (get_option('imap_folder') == $folder)) || ((get_option('imap_folder') == '') && (strpos(strtolower($folder), 'bounce') !== false));
             $folders->attach(form_input_list_entry($folder, $selected, $label));
         }
 
-        $fields = new ocp_tempcode();
-        $fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'), new ocp_tempcode(), 'box', $folders));
+        $fields = new Tempcode();
+        $fields->attach(form_input_list(do_lang_tempcode('DIRECTORY'), new Tempcode(), 'box', $folders));
 
         $submit_name = do_lang_tempcode('PROCEED');
         $post_url = get_self_url();
@@ -547,7 +547,7 @@ class Module_admin_newsletter extends standard_crud_module
         $out = _find_mail_bounces($server, $port, $box, $username, $password, false);
         $num = count($out);
 
-        $fields = '';//new ocp_tempcode();
+        $fields = '';//new Tempcode();
 
         $all_subscribers = array();
         $all_subscribers += collapse_2d_complexity('email', 'id', $GLOBALS['SITE_DB']->query_select('newsletter', array('email', 'id')));
@@ -640,11 +640,11 @@ class Module_admin_newsletter extends standard_crud_module
 
         // Select newsletter
         if (is_null($id)) {
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             require_code('form_templates');
 
             // Selection
-            $newsletters = new ocp_tempcode();
+            $newsletters = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
             foreach ($rows as $newsletter) {
                 $newsletters->attach(form_input_list_entry(strval($newsletter['id']), false, get_translated_text($newsletter['title'])));
@@ -675,7 +675,7 @@ class Module_admin_newsletter extends standard_crud_module
             $submit_name = do_lang_tempcode('VIEW_SUBSCRIBERS');
             $post_url = get_self_url();
 
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
             $hidden->attach(form_input_hidden('lang', $lang));
 
             $prune_url = build_url(array('page' => '_SELF', 'type' => 'bounce_filter_a'), '_SELF');
@@ -874,7 +874,7 @@ class Module_admin_newsletter extends standard_crud_module
 
             require_lang('menus');
 
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
 
             $_cutoff_time = get_value('newsletter_whatsnew');
             $cutoff_time = is_null($_cutoff_time) ? null : intval($_cutoff_time);
@@ -933,11 +933,11 @@ class Module_admin_newsletter extends standard_crud_module
             }
             $fields->attach(form_input_huge(do_lang_tempcode('CONTENT'), do_lang('NEWSLETTER_CONTENT_SELECT'), 'chosen_categories', $chosen_categories, true));
 
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
             $hidden->attach(form_input_hidden('chosen_content', '1'));
 
             if (cron_installed()) {
-                $periodic_options = new ocp_tempcode();
+                $periodic_options = new Tempcode();
 
                 $current_periodic_newsletters = $GLOBALS['SITE_DB']->query_select('newsletter_periodic', array('*'));
                 if (count($current_periodic_newsletters) == 0) {
@@ -986,7 +986,7 @@ class Module_admin_newsletter extends standard_crud_module
         // Bit of a hack, but we include the remove option here for simplicity
         // It has a confirm screen
         if (preg_match('#^remove\_existing\_(\d+)$#', post_param('periodic_choice', ''), $matches) != 0) {
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
             $hidden->attach(form_input_hidden('chosen_content', '1'));
             $hidden->attach(form_input_hidden('periodic_choice', 'periodic_remove_confirmed_' . $matches[1]));
             return do_template('PERIODIC_NEWSLETTER_REMOVE', array(
@@ -1174,13 +1174,13 @@ class Module_admin_newsletter extends standard_crud_module
 
         $submit_name = do_lang_tempcode('PREVIEW');
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('lang', $lang));
 
         // Build up form...
         // ================
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         $default_subject = get_option('newsletter_title');
@@ -1290,7 +1290,7 @@ class Module_admin_newsletter extends standard_crud_module
         } else {
             $fields->attach(form_input_tick(do_lang_tempcode('HTML_ONLY'), do_lang_tempcode('DESCRIPTION_HTML_ONLY'), 'html_only', $html_only));
         }
-        $l = new ocp_tempcode();
+        $l = new Tempcode();
         $priority = post_param_integer('priority', 3);
         if (!is_null($defaults)) {
             $priority = post_param_integer('priority', $defaults['np_priority']);
@@ -1344,7 +1344,7 @@ class Module_admin_newsletter extends standard_crud_module
             if (($c1 == $c2) && ($c1 == $c3) && ($c1 == $c4)) {
                 $fields->attach(form_input_tick(do_lang_tempcode('NEWSLETTER_PREFIX', escape_html($newsletter_title)), do_lang_tempcode('DESCRIPTION_NOSUBSCRIPTION_LEVEL', escape_html(integer_format($c4)), escape_html($newsletter_description)), strval($newsletter['id']), $level >= 1, null, '4'));
             } else {
-                $l = new ocp_tempcode();
+                $l = new Tempcode();
                 $l->attach(form_input_list_entry('0', $level == 0, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_0_ALT'), do_lang_tempcode('NUM_READERS', integer_format(0)))));
                 $l->attach(form_input_list_entry('1', $level == 1, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_1'), do_lang_tempcode('NUM_READERS', integer_format($c1)))));
                 $l->attach(form_input_list_entry('2', $level == 2, do_lang_tempcode('NNR', do_lang_tempcode('NEWSLETTER_2'), do_lang_tempcode('NUM_READERS', integer_format($c2)))));
@@ -1378,7 +1378,7 @@ class Module_admin_newsletter extends standard_crud_module
         handle_max_file_size($hidden);
 
         // Which newsletter template?
-        $template_choices = new ocp_tempcode();
+        $template_choices = new Tempcode();
         $dh = opendir(get_custom_file_base() . '/themes/default/templates_custom');
         while (($f = readdir($dh)) !== false) {
             if (preg_match('#^MAIL.*\.tpl$#', $f) != 0) {
@@ -1420,10 +1420,10 @@ class Module_admin_newsletter extends standard_crud_module
                 $current_day_of_month = post_param_integer('periodic_monthly', $defaults['np_day']);
             }
 
-            $radios = new ocp_tempcode();
+            $radios = new Tempcode();
 
-            $week_days_weekly = new ocp_tempcode();
-            $week_days_biweekly = new ocp_tempcode();
+            $week_days_weekly = new Tempcode();
+            $week_days_biweekly = new Tempcode();
             require_lang('dates');
             $week_days = array(1 => do_lang('MONDAY'), 2 => do_lang('TUESDAY'), 3 => do_lang('WEDNESDAY'), 4 => do_lang('THURSDAY'), 5 => do_lang('FRIDAY'), 6 => do_lang('SATURDAY'), 7 => do_lang('SUNDAY'));
             foreach ($week_days as $i => $this_day) {
@@ -1431,28 +1431,28 @@ class Module_admin_newsletter extends standard_crud_module
                 $week_days_biweekly->attach(form_input_list_entry(strval($i), ($i == $current_day_biweekly), $this_day, false, false));
             }
 
-            $weekly_desc = new ocp_tempcode();
+            $weekly_desc = new Tempcode();
             $weekly_desc->attach(do_lang('PERIODIC_WEEKLY_ON'));
             $weekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST', array('_GUID' => 'b0c43b5f6883be80af5911a587fc85bf', 'TABINDEX' => strval(get_form_field_tabindex(null)), 'REQUIRED' => '0', 'NAME' => 'periodic_weekday_weekly', 'CONTENT' => $week_days_weekly, 'INLINE_LIST' => '0')));
             $radios->attach(form_input_radio_entry('periodic_when', 'weekly', $frequency == 'weekly', $weekly_desc, null, ''));
 
-            $biweekly_desc = new ocp_tempcode();
+            $biweekly_desc = new Tempcode();
             $biweekly_desc->attach(do_lang('PERIODIC_BIWEEKLY_ON'));
             $biweekly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST', array('_GUID' => '533afb6cdf1da813dd55ae694b962151', 'TABINDEX' => strval(get_form_field_tabindex(null)), 'REQUIRED' => '0', 'NAME' => 'periodic_weekday_biweekly', 'CONTENT' => $week_days_biweekly, 'INLINE_LIST' => '0')));
             $radios->attach(form_input_radio_entry('periodic_when', 'biweekly', $frequency == 'biweekly', $biweekly_desc, null, ''));
 
-            $month_days = new ocp_tempcode();
+            $month_days = new Tempcode();
             foreach (range(1, 28) as $this_day) {
                 $suffix = gmdate('S', gmmktime(0, 0, 0, 1, $this_day, 1990));
                 $month_days->attach(form_input_list_entry(strval($this_day), ($this_day == 1), strval($this_day) . $suffix, $current_day_of_month == $this_day));
             }
-            $monthly_desc = new ocp_tempcode();
+            $monthly_desc = new Tempcode();
             $monthly_desc->attach(do_lang('PERIODIC_MONTHLY_ON'));
             $monthly_desc->attach(do_template('FORM_SCREEN_INPUT_LIST', array('_GUID' => '352012c3153342f5a954fcfa16c5503b', 'TABINDEX' => strval(get_form_field_tabindex(null)), 'REQUIRED' => '0', 'NAME' => 'periodic_monthly', 'CONTENT' => $month_days, 'INLINE_LIST' => '0')));
             $radios->attach(form_input_radio_entry('periodic_when', 'monthly', $frequency == 'monthly', $monthly_desc, null, ''));
             $fields->attach(form_input_radio(do_lang('PERIODIC_WHEN_CHOICE'), '', 'periodic_when', $radios, true));
 
-            $radios = new ocp_tempcode();
+            $radios = new Tempcode();
             $radios->attach(form_input_radio_entry('periodic_for', 'all', false, do_lang_tempcode('CREATE_PERIODIC_FOR_ALL'), null, ''));
             $radios->attach(form_input_radio_entry('periodic_for', 'future', true, do_lang_tempcode('CREATE_PERIODIC_FOR_FUTURE'), null, ''));
             $fields->attach(form_input_radio(do_lang('CREATE_PERIODIC_FOR'), '', 'periodic_for', $radios, true));
@@ -1711,7 +1711,7 @@ class Module_admin_newsletter extends standard_crud_module
             return $lang;
         }
 
-        $newsletters = new ocp_tempcode();
+        $newsletters = new Tempcode();
         $where = multi_lang() ? array('language' => $lang) : null;
         $rows = $GLOBALS['SITE_DB']->query_select('newsletter_archive', array('id', 'subject', 'date_and_time'), $where, 'ORDER BY date_and_time DESC');
         foreach ($rows as $newsletter) {
@@ -1762,11 +1762,11 @@ class Module_admin_newsletter extends standard_crud_module
      */
     public function get_form_fields($title = '', $description = '')
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_text(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, true));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -1797,7 +1797,7 @@ class Module_admin_newsletter extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -1820,7 +1820,7 @@ class Module_admin_newsletter extends standard_crud_module
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['title'], $GLOBALS['SITE_DB'])));
         }

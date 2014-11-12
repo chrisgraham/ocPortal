@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    image_syndication
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_image_syndication
 {
     /**

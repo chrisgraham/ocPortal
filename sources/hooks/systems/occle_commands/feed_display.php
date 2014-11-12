@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle_command_feed_display
 {
     /**
@@ -41,7 +45,7 @@ class Hook_occle_command_feed_display
             require_lang('news');
             require_code('rss');
 
-            $rss = new rss($parameters[0]);
+            $rss = new OCP_RSS($parameters[0]);
             if (!is_null($rss->error)) {
                 return array('', '', '', $rss->error);
             }
@@ -74,7 +78,7 @@ class Hook_occle_command_feed_display
 
             // Now for the actual stream contents
             $max = (array_key_exists('max', $options)) ? intval($options['max']) : 5;
-            $content = new ocp_tempcode();
+            $content = new Tempcode();
             require_code('xhtml');
             foreach ($rss->gleamed_items as $i => $item) {
                 if ($i >= $max) {

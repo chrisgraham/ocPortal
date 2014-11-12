@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_best_buddy
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_mentor_usergroup
 {
     /**

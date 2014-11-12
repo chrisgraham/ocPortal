@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_rich_media
 {
     /**
@@ -437,7 +441,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_big_tabs()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         $page = array();
         foreach (placeholder_array(4) as $v) {
@@ -523,7 +527,7 @@ class Hook_addon_registry_core_rich_media
     public function tpl_preview__emoticon_click_code()
     {
         $emoticon = placeholder_emoticons();
-        $emt = new ocp_tempcode();
+        $emt = new Tempcode();
         foreach ($emoticon as $k => $v) {
             $_emt = do_lorem_template('EMOTICON_IMG_CODE_THEMED', array(
                 'EMOTICON' => $k,
@@ -634,9 +638,9 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_mistake_screen()
     {
-        $line = new ocp_tempcode();
+        $line = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
-            $line_content = new ocp_tempcode();
+            $line_content = new Tempcode();
             $line_content->attach(lorem_phrase());
             if ($key == 0) {
                 $line_content->attach(do_lorem_template('COMCODE_MISTAKE_ERROR', array()));
@@ -729,7 +733,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_section_controller()
     {
-        $section = new ocp_tempcode();
+        $section = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $section->attach(do_lorem_template('COMCODE_SECTION', array(
                 'PASS_ID' => lorem_word(),
@@ -768,7 +772,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_carousel()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array(10) as $v) {
             $content->attach(placeholder_image());
         }
@@ -1090,7 +1094,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_random()
     {
-        $part = new ocp_tempcode();
+        $part = new Tempcode();
         foreach (placeholder_array(5) as $k => $v) {
             $part->attach(do_lorem_template('COMCODE_RANDOM_PART', array(
                 'NUM' => strval($k),
@@ -1227,7 +1231,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_concepts()
     {
-        $concept = new ocp_tempcode();
+        $concept = new Tempcode();
         foreach (placeholder_array() as $i => $v) {
             $concept->attach(do_lorem_template('COMCODE_CONCEPTS_CONCEPT', array(
                 'A' => lorem_word() . strval($i),
@@ -1360,7 +1364,7 @@ class Hook_addon_registry_core_rich_media
             'right_4' => 'bad romance',
         );
 
-        $_parts = new ocp_tempcode();
+        $_parts = new Tempcode();
         foreach ($attributes as $key => $val) {
             if (substr($key, 0, 5) == 'left_') {
                 $left = $val;
@@ -1454,7 +1458,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_contents()
     {
-        $line = new ocp_tempcode();
+        $line = new Tempcode();
         foreach (placeholder_array() as $v) {
             $line->attach(do_lorem_template('COMCODE_CONTENTS_LINE', array(
                 'LINE' => lorem_phrase(),
@@ -1531,7 +1535,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_table_screens()
     {
-        $tag_output = new ocp_tempcode();
+        $tag_output = new Tempcode();
 
         $tag_output->attach(do_lorem_template('COMCODE_CODE_SCROLL', array(
             'TITLE' => lorem_phrase(),
@@ -1665,7 +1669,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__attachments_browser()
     {
-        $list_cont = new ocp_tempcode();
+        $list_cont = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $list_cont->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => '',
@@ -1724,8 +1728,8 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_tab_body()
     {
-        $content = new ocp_tempcode();
-        $head = new ocp_tempcode();
+        $content = new Tempcode();
+        $head = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             if ($k == 0) {
                 $first = true;
@@ -2156,7 +2160,7 @@ class Hook_addon_registry_core_rich_media
      */
     public function tpl_preview__comcode_media_set()
     {
-        $media = new ocp_tempcode();
+        $media = new Tempcode();
 
         for ($i = 0; $i < 3; $i++) {
             $media->attach(do_lorem_template('MEDIA_IMAGE_WEBSAFE', array(

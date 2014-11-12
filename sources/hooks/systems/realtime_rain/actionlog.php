@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    actionlog
  */
+
+/**
+ * Hook class.
+ */
 class Hook_realtime_rain_actionlog
 {
     /**

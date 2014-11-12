@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-class Hook_Notification_gallery_entry extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_gallery_entry extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

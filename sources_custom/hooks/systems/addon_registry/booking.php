@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_booking
 {
     /**

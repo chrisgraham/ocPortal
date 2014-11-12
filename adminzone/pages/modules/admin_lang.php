@@ -172,7 +172,7 @@ class Module_admin_lang
             return $this->export_po();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -189,12 +189,12 @@ class Module_admin_lang
     public function choose_lang($title, $choose_lang_file = false, $add_lang = false, $text = '', $provide_na = true, $param_name = 'lang')
     {
         require_code('form_templates');
-        $langs = new ocp_tempcode();
+        $langs = new Tempcode();
         $langs->attach(create_selection_list_langs(null, $add_lang));
 
         $javascript = '';
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         if ($add_lang) {
             $set_name = 'language';
@@ -217,7 +217,7 @@ class Module_admin_lang
             $set_title = do_lang_tempcode('LANGUAGE_FILE');
             $field_set = alternate_fields_set__start($set_name);
 
-            $lang_files = new ocp_tempcode();
+            $lang_files = new Tempcode();
             $lang_files->attach(form_input_list_entry('', false, do_lang_tempcode('NA_EM')));
             $lang_files->attach(create_selection_list_lang_files());
             $field_set->attach(form_input_list(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_LANGUAGE_FILE'), 'lang_file', $lang_files, null, true));
@@ -302,7 +302,7 @@ class Module_admin_lang
         $lang_files_criticise = get_lang_files($lang);
 
         foreach (array_keys($lang_files_base) as $file_base) {
-            $file = new ocp_tempcode();
+            $file = new Tempcode();
 
             if (array_key_exists($file_base, $lang_files_criticise)) {
                 // Process this file
@@ -639,7 +639,7 @@ msgstr ""
         $GLOBALS['SCREEN_TEMPLATE_CALLED'] = '';
         exit();
 
-        return new ocp_tempcode(); // For code quality checker
+        return new Tempcode(); // For code quality checker
     }
 
     /**
@@ -686,7 +686,7 @@ msgstr ""
             $search = trim($search, '" ');
 
             require_code('form_templates');
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             global $LANGUAGE_STRINGS_CACHE;
             foreach ($LANGUAGE_STRINGS_CACHE[user_lang()] as $key => $value) {
                 if (strpos(strtolower($value), strtolower($search)) !== false) {
@@ -697,7 +697,7 @@ msgstr ""
                 inform_exit(do_lang_tempcode('NO_ENTRIES'));
             }
             $post_url = build_url(array('page' => '_SELF', 'type' => '_code2'), '_SELF');
-            $hidden = new ocp_tempcode();
+            $hidden = new Tempcode();
             $hidden->attach(form_input_hidden('redirect', get_self_url(true)));
             $hidden->attach(form_input_hidden('lang', $lang));
             return do_template('FORM_SCREEN', array('_GUID' => '2d7356fd2c4497ceb19450e65331c9c5', 'TITLE' => $this->title, 'HIDDEN' => $hidden, 'FIELDS' => $fields, 'URL' => $post_url, 'TEXT' => '', 'SUBMIT_ICON' => 'buttons__save', 'SUBMIT_NAME' => do_lang('TRANSLATE_CODE')));
@@ -756,7 +756,7 @@ msgstr ""
         // Make our translation page
         $lines = '';
         $google = $this->get_google_code($lang);
-        $actions = new ocp_tempcode();
+        $actions = new Tempcode();
         $next = 0;
         $trans_lot = '';
         $delimit = "\n" . '=-=-=-=-=-=-=-=-' . "\n";

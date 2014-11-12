@@ -45,7 +45,7 @@ function get_banner_form_fields($simplified = false, $name = '', $image_url = ''
 {
     require_code('images');
 
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     require_code('form_templates');
     $fields->attach(form_input_codename(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_BANNER_NAME'), 'name', $name, true));
     $fields->attach(form_input_line(do_lang_tempcode('DESTINATION_URL'), do_lang_tempcode('DESCRIPTION_BANNER_URL'), 'site_url', $site_url, false)); // Blank implies iframe or direct code
@@ -97,7 +97,7 @@ function get_banner_form_fields($simplified = false, $name = '', $image_url = ''
 
     $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '1184532268cd8a58adea01c3637dc4c5', 'TITLE' => do_lang_tempcode('DEPLOYMENT_DETERMINATION'))));
     if (has_privilege(get_member(), 'full_banner_setup')) {
-        $radios = new ocp_tempcode();
+        $radios = new Tempcode();
         $radios->attach(form_input_radio_entry('the_type', strval(BANNER_PERMANENT), ($the_type == BANNER_PERMANENT), do_lang_tempcode('BANNER_PERMANENT')));
         $radios->attach(form_input_radio_entry('the_type', strval(BANNER_CAMPAIGN), ($the_type == BANNER_CAMPAIGN), do_lang_tempcode('BANNER_CAMPAIGN')));
         $radios->attach(form_input_radio_entry('the_type', strval(BANNER_DEFAULT), ($the_type == BANNER_DEFAULT), do_lang_tempcode('BANNER_DEFAULT')));

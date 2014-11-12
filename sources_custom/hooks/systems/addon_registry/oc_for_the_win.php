@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_for_the_win
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_oc_for_the_win
 {
     /**

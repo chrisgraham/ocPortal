@@ -100,7 +100,7 @@ function get_screen_title($title, $dereference_lang = true, $params = null, $use
 
     global $SKIP_TITLING;
     if ($SKIP_TITLING) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     if (($dereference_lang) && (strpos($title, ' ') !== false)) {
@@ -267,7 +267,7 @@ function form_input_hidden($name, $value)
 function form_input_list_group($title, $entries)
 {
     if (browser_matches('ios')) { // Workaround to iOS bug
-        $entries2 = new ocp_tempcode();
+        $entries2 = new Tempcode();
         $entries2->attach(form_input_list_entry('', false, $title, false, true));
         $entries2->attach($entries);
         return $entries2;
@@ -308,7 +308,7 @@ function form_input_list_entry($value, $selected = false, $text = '', $red = fal
 function with_whitespace($in)
 {
     if ($in == '') {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
     return do_template('WITH_WHITESPACE', array('_GUID' => 'be3b74901d5522d4e67ff6313ad61643', 'CONTENT' => $in));
 }

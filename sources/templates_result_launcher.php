@@ -38,10 +38,10 @@ function results_launcher($title, $page, $category_id, $max, $max_rows, $type, $
 
     require_javascript('javascript_pagination');
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
 
     if ($max < $max_rows) { // If they don't all fit on one page
-        $part = new ocp_tempcode();
+        $part = new Tempcode();
         $num_pages = ($max == 0) ? 0 : min(intval(ceil(floatval($max_rows) / floatval($max))), $max_page_links);
         for ($x = 0; $x < $num_pages; $x++) {
             $cat_url = build_url(array('page' => $page, 'type' => $type, 'start' => ($x == 0) ? null : ($x * $max), 'id' => $category_id), get_module_zone($page));

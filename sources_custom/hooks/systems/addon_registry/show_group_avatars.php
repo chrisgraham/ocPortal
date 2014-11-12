@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    show_group_avatars
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_show_group_avatars
 {
     /**

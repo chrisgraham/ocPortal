@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_url_multi
 {
     // ==============
@@ -84,7 +88,7 @@ class Hook_fields_url_multi
             return '';
         }
 
-        $ret = new ocp_tempcode();
+        $ret = new Tempcode();
         $evs = explode("\n", $ev);
         foreach ($evs as $ev) {
             require_code('files2');

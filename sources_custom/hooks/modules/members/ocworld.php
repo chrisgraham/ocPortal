@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocworld
  */
+
+/**
+ * Hook class.
+ */
 class Hook_members_ocworld
 {
     /**

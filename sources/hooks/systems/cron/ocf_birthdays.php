@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_ocf_birthdays
 {
     /**
@@ -32,7 +36,7 @@ class Hook_cron_ocf_birthdays
 
             require_code('ocf_general');
             $_birthdays = ocf_find_birthdays();
-            $birthdays = new ocp_tempcode();
+            $birthdays = new Tempcode();
             foreach ($_birthdays as $_birthday) {
                 $member_url = $GLOBALS['OCF_DRIVER']->member_profile_url($_birthday['id'], false, true);
                 $username = $_birthday['username'];

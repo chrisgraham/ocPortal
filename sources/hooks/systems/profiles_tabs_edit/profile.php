@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Profiles_Tabs_Edit_profile
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_profile
 {
     /**
      * Find whether this hook is active.

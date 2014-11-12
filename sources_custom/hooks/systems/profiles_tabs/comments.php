@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    member_comments
  */
-class Hook_Profiles_Tabs_comments
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_comments
 {
     /**
      * Find whether this hook is active.

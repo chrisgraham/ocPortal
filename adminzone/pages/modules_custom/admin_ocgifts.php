@@ -18,7 +18,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocgifts extends standard_crud_module
+class Module_admin_ocgifts extends Standard_crud_module
 {
     public $lang_type = 'GIFT';
     public $select_name = 'NAME';
@@ -193,7 +193,7 @@ class Module_admin_ocgifts extends standard_crud_module
         if ($type == 'view') {
             return $this->view();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -248,8 +248,8 @@ class Module_admin_ocgifts extends standard_crud_module
 
     public function get_form_fields($id = null, $name = '', $category = '', $image = '', $price = 10, $enabled = 1)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
 
@@ -284,7 +284,7 @@ class Module_admin_ocgifts extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $rows = $GLOBALS['SITE_DB']->query_select('ocgifts', array('*'), null);
 

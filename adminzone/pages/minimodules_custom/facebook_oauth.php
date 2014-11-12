@@ -20,7 +20,7 @@ if ($facebook_appid == '') {
 }
 
 require_code('hooks/systems/syndication/facebook');
-$ob = new Hook_Syndication_facebook();
+$ob = new Hook_syndication_facebook();
 
 $result = $ob->auth_set(null, get_self_url(false, false, array('oauth_in_progress' => 1)));
 

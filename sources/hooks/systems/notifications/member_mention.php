@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
-class Hook_Notification_member_mention extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_member_mention extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_banners
 {
     /**
@@ -267,7 +271,7 @@ class Hook_addon_registry_banners
      */
     public function tpl_preview__block_main_banner_wave()
     {
-        $banners = new ocp_tempcode();
+        $banners = new Tempcode();
         $banners->attach(do_lorem_template('BANNER_FLASH', array(
             'B_TYPE' => lorem_phrase(),
             'WIDTH' => placeholder_number(),

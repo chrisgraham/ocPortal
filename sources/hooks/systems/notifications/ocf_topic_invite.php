@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-class Hook_Notification_ocf_topic_invite extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_topic_invite extends Hook_Notification
 {
     /**
      * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.

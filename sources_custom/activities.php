@@ -209,7 +209,7 @@ function render_activity($row, $use_inside_ocp = true)
 
     $datetime = $row['a_time'];
 
-    $message = new ocp_tempcode();
+    $message = new Tempcode();
 
     $test = do_lang($row['a_language_string_code'], '{1}', '{2}', '{3}', null, false);
     if (is_null($test)) {
@@ -221,7 +221,7 @@ function render_activity($row, $use_inside_ocp = true)
     $link = array();
     for ($i = 1; $i <= 3; $i++) {
         $label[$i] = comcode_to_tempcode($row['a_label_' . strval($i)], $guest_id, false, null);
-        $link[$i] = ($row['a_page_link_' . strval($i)] == '') ? new ocp_tempcode() : page_link_to_tempcode($row['a_page_link_' . strval($i)], !$use_inside_ocp);
+        $link[$i] = ($row['a_page_link_' . strval($i)] == '') ? new Tempcode() : page_link_to_tempcode($row['a_page_link_' . strval($i)], !$use_inside_ocp);
         if (($row['a_page_link_' . strval($i)] != '') && (strpos($test, '{' . strval($i + 3) . '}') === false)) {
             $label[$i] = hyperlink($link[$i], $label[$i]->evaluate());
         }

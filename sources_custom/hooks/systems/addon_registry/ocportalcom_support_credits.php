@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocportalcom_support_credits
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocportalcom_support_credits
 {
     /**

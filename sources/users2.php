@@ -156,9 +156,9 @@ function get_members_viewing_wrap($page = null, $type = null, $id = null, $forum
     $num_guests = 0;
     $num_members = 0;
     if (is_null($members)) {
-        $members_viewing = new ocp_tempcode();
+        $members_viewing = new Tempcode();
     } else {
-        $members_viewing = new ocp_tempcode();
+        $members_viewing = new Tempcode();
         if (!isset($members[get_member()])) {
             $members[get_member()] = array('mt_cache_username' => $GLOBALS['FORUM_DRIVER']->get_username(get_member()));
         }

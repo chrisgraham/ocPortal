@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    counting_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_count
 {
     /**
@@ -29,6 +33,6 @@ class Hook_count
         $name = get_param('name');
         update_stat($name, 1);
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

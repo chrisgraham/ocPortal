@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_tick
 {
     // ==============
@@ -33,7 +37,7 @@ class Hook_fields_tick
     {
         $fields = array();
         $type = '_LIST';
-        $special = new ocp_tempcode();
+        $special = new Tempcode();
         $special->attach(form_input_list_entry('', get_param('option_' . strval($row['id']), '') == '', do_lang_tempcode('NA_EM')));
         $special->attach(form_input_list_entry('0', get_param('option_' . strval($row['id']), '') == '0', do_lang_tempcode('NO')));
         $special->attach(form_input_list_entry('1', get_param('option_' . strval($row['id']), '') == '1', do_lang_tempcode('YES')));
@@ -114,7 +118,7 @@ class Hook_fields_tick
         if ($field['cf_required'] == 1) {
             return form_input_tick($_cf_name, $_cf_description, 'field_' . strval($field['id']), $actual_value == '1');
         }
-        $_list = new ocp_tempcode();
+        $_list = new Tempcode();
         $_list->attach(form_input_list_entry('', is_null($actual_value) || ($actual_value === ''), do_lang_tempcode('NA_EM')));
         $_list->attach(form_input_list_entry('0', $actual_value === '0', do_lang_tempcode('NO')));
         $_list->attach(form_input_list_entry('1', $actual_value === '1', do_lang_tempcode('YES')));

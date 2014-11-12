@@ -228,7 +228,7 @@ class Module_topics
             warn_exit(do_lang_tempcode('NOTHING_SELECTED'));
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -245,8 +245,8 @@ class Module_topics
         $submit_name = do_lang_tempcode('PROCEED');
         $type = '_' . get_param('type', 'misc');
         $post_url = build_url(array('page' => '_SELF', 'type' => $type, 'id' => get_param_integer('id', -1)), '_SELF', null, true);
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(build_keep_post_fields());
         $hidden->attach(build_keep_form_fields());
         $fields->attach(form_input_line(do_lang_tempcode('REASON'), '', 'reason', '', false));
@@ -341,7 +341,7 @@ class Module_topics
      */
     public function keep_markers()
     {
-        $markers = new ocp_tempcode();
+        $markers = new Tempcode();
         $_markers = $this->get_markers();
         foreach ($_markers as $marker) {
             $markers->attach(form_input_hidden('mark_' . strval($marker), '1'));
@@ -482,7 +482,7 @@ class Module_topics
         $this->handle_topic_breadcrumbs($topic_info[0]['t_forum_id'], $topic_id, $topic_info[0]['t_cache_first_title'], do_lang_tempcode('MOVE_POSTS'));
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $hidden = $this->keep_markers();
 
         $set_name = 'destination';
@@ -544,7 +544,7 @@ class Module_topics
         require_code('ocf_forums2');
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $hidden = $this->keep_markers();
         $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'), do_lang_tempcode('DESCRIPTION_POSTS_DESTINATION_FORUM'), 'to_forum_id', null, 'choose_forum', array(), true, strval($topic_info[0]['t_forum_id'])));
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('TOPIC_TITLE_WILL_BE'), 'title', $default_title, false, null, 120));
@@ -956,8 +956,8 @@ class Module_topics
         $post_text = $_mm['mm_post_text'];
         $submit_name = do_lang_tempcode('PERFORM_MULTI_MODERATION');
         $post_url = build_url(array('page' => '_SELF', 'type' => '_mass_multimod', 'mm_id' => $mm_id), '_SELF', null, true);
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(build_keep_post_fields());
         $hidden->attach(build_keep_form_fields());
         $fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'), do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'), 'post_text', $post_text, false));
@@ -974,7 +974,7 @@ class Module_topics
         $fields->attach(form_input_line(do_lang_tempcode('REASON'), do_lang_tempcode('OPTIONAL_REASON'), 'reason', '', false));
 
         $mm_title = get_translated_text($_mm['mm_name'], $GLOBALS['FORUM_DB']);
-        $action_list = new ocp_tempcode();
+        $action_list = new Tempcode();
         if ($_mm['mm_open_state'] == 1) {
             $action_list->attach(do_lang_tempcode('MULTI_MODERATION_WILL_OPEN'));
         }
@@ -1065,7 +1065,7 @@ class Module_topics
         require_code('ocf_forums2');
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'), do_lang_tempcode('DESCRIPTION_DESTINATION_FORUM'), 'to', null, 'choose_forum', array(), true, strval($forum_id)));
         $fields->attach(form_input_line(do_lang_tempcode('REASON'), do_lang_tempcode('DESCRIPTION_REASON'), 'description', '', false));
         $hidden = $this->keep_markers();
@@ -1238,9 +1238,9 @@ class Module_topics
         $default_filter_cat = get_param('id', '', true);
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $filter_cats = ocf_get_filter_cats();
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         foreach ($filter_cats as $filter_cat) {
             $filter_cat_text = ($filter_cat == '') ? do_lang_tempcode('NONE_EM') : make_string_tempcode($filter_cat);
             $selected = ($filter_cat == $default_filter_cat);
@@ -1346,13 +1346,13 @@ class Module_topics
     {
         $tabindex = get_form_field_tabindex(null);
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $extra = has_privilege(get_member(), 'use_special_emoticons') ? array() : array('e_is_special' => 0);
         $rows = $GLOBALS['FORUM_DB']->query_select('f_emoticons', array('e_theme_img_code'), array('e_use_topics' => 1) + $extra);
         $content->attach(do_template('FORM_SCREEN_INPUT_THEME_IMAGE_ENTRY', array('_GUID' => 'd9f9399072af3f19f21695aef01168c7', 'PRETTY' => do_lang_tempcode('NONE'), 'CODE' => '', 'URL' => find_theme_image('ocf_emoticons/none'), 'CHECKED' => $selected_path == '', 'NAME' => 'emoticon')));
 
         if (count($rows) == 0) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         foreach ($rows as $row) {
             $path = $row['e_theme_img_code'];
@@ -1374,7 +1374,7 @@ class Module_topics
      */
     public function attach_quotes($quotes)
     {
-        $post = new ocp_tempcode();
+        $post = new Tempcode();
         foreach ($quotes as $quote) {
             $_postdetails = $GLOBALS['FORUM_DB']->query_select('f_posts', array('p_cache_forum_id', 'p_post', 'p_poster_name_if_guest', 'p_topic_id', 'p_intended_solely_for', 'p_poster', 'p_validated', 'p_ip_address'), array('id' => $quote), '', 1);
             if (!array_key_exists(0, $_postdetails)) {
@@ -1430,16 +1430,16 @@ class Module_topics
     public function post_templates($forum_id)
     {
         if (!addon_installed('ocf_post_templates')) {
-            return array(new ocp_tempcode(), '');
+            return array(new Tempcode(), '');
         }
 
         require_lang('ocf_post_templates');
 
-        $specialisation = new ocp_tempcode();
+        $specialisation = new Tempcode();
 
         require_code('ocf_posts_action');
         $templates = ocf_get_post_templates($forum_id);
-        $post_templates = new ocp_tempcode();
+        $post_templates = new Tempcode();
         $post = '';
         foreach ($templates as $template) {
             list($title, $text, $default) = $template;
@@ -1502,8 +1502,8 @@ class Module_topics
 
         url_default_parameters__enable();
 
-        $hidden_fields = new ocp_tempcode();
-        $specialisation = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
+        $specialisation = new Tempcode();
 
         // Where to post to
         $map = array('page' => '_SELF', 'type' => '_add_reply');
@@ -1571,11 +1571,11 @@ class Module_topics
         }
 
         if (is_guest()) {
-            $specialisation->attach(form_input_line(do_lang_tempcode('GUEST_NAME'), new ocp_tempcode(), 'poster_name_if_guest', do_lang('GUEST'), true));
+            $specialisation->attach(form_input_line(do_lang_tempcode('GUEST_NAME'), new Tempcode(), 'poster_name_if_guest', do_lang('GUEST'), true));
         }
 
         // Various kinds of tick options
-        $specialisation2 = new ocp_tempcode();
+        $specialisation2 = new Tempcode();
         if ((!$private_topic) && (ocf_may_moderate_forum($forum_id, get_member()))) {
             $moderation_options = array(
                 array(do_lang_tempcode('OPEN'), 'open', true, do_lang_tempcode('DESCRIPTION_OPEN')),
@@ -1639,7 +1639,7 @@ class Module_topics
         }
 
         if (is_null($text)) {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
         }
 
         // CAPTCHA?
@@ -1810,7 +1810,7 @@ class Module_topics
             }
         }
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
         $hidden_fields->attach(form_input_hidden('topic_id', strval($topic_id)));
         $hidden_fields->attach(form_input_hidden('from_url', get_self_url(true, false, array('type' => get_param('type', 'misc')))));
 
@@ -1826,7 +1826,7 @@ class Module_topics
         $post_url = build_url($map, '_SELF');
 
         // Certain aspects relating to the posting system
-        $specialisation = new ocp_tempcode();
+        $specialisation = new Tempcode();
         if (get_option('is_on_post_titles') == '1') {
             $specialisation->attach(form_input_line(do_lang_tempcode('TITLE'), '', 'title', post_param('title', ''), false, 1, 120));
         }
@@ -1888,7 +1888,7 @@ class Module_topics
             append_form_custom_fields('post', null, $specialisation, $hidden_fields);
         }
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
 
         if (addon_installed('captcha')) {
             require_code('captcha');
@@ -1957,7 +1957,7 @@ class Module_topics
             $specialisation2->attach(content_review_get_fields('post'));
         }
 
-        $topic_posts = new ocp_tempcode();
+        $topic_posts = new Tempcode();
         $posts = $GLOBALS['FORUM_DB']->query('SELECT *,p.id AS id FROM ' . $GLOBALS['FORUM_DB']->get_table_prefix() . 'f_posts p WHERE p_topic_id=' . strval($topic_id) . ' AND (p_intended_solely_for IS NULL OR p_intended_solely_for=' . strval(get_member()) . ' OR p_poster=' . strval(get_member()) . ') AND p_validated=1 ORDER BY p_time DESC,p.id DESC', 20);
         foreach ($posts as $row) {
             $topic_posts->attach(render_post_box($row, true, false, false));
@@ -2024,7 +2024,7 @@ class Module_topics
 
         url_default_parameters__enable();
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
         if (!is_guest()) {
             $options = array();
             if (get_option('is_on_anonymous_posts') == '1') {
@@ -2032,7 +2032,7 @@ class Module_topics
             }
             $specialisation = form_input_various_ticks($options, '');
         } else {
-            $specialisation = new ocp_tempcode();
+            $specialisation = new Tempcode();
         }
 
         $hidden_fields->attach(form_input_hidden('forum_id', '-2'));
@@ -2045,7 +2045,7 @@ class Module_topics
         $hidden_fields->attach(form_input_hidden('o_post_id', strval($post_id)));
         $hidden_fields->attach(form_input_hidden('from_url', get_self_url(true)));
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
 
         if (addon_installed('captcha')) {
             require_code('captcha');
@@ -2532,8 +2532,8 @@ END;
             $text = paragraph(do_lang_tempcode('DELETE_POSTS_DESCRIPTION', integer_format($count), escape_html($ip), escape_html($ip_link)));
             $submit_name = do_lang_tempcode('DELETE_POST');
             $post_url = build_url(array('page' => '_SELF', 'type' => '_delete_post', 'id' => $post_id), '_SELF', null, true);
-            $fields = new ocp_tempcode();
-            $hidden = new ocp_tempcode();
+            $fields = new Tempcode();
+            $hidden = new Tempcode();
             $hidden->attach(build_keep_post_fields());
             $hidden->attach(build_keep_form_fields());
             $fields->attach(form_input_line(do_lang_tempcode('REASON'), '', 'reason', '', false));
@@ -2589,11 +2589,11 @@ END;
                 $post_id = get_param_integer('id');
 
                 $post_url = build_url(array('page' => '_SELF', 'type' => get_param('type')), '_SELF', null, true);
-                $hidden = new ocp_tempcode();
+                $hidden = new Tempcode();
                 $hidden->attach(form_input_hidden('id', strval($post_id)));
                 $hidden->attach(form_input_hidden('reason', post_param('reason')));
 
-                $stuff = new ocp_tempcode();
+                $stuff = new Tempcode();
                 foreach ($posts as $post) {
                     if (!$stuff->is_empty()) {
                         $stuff->attach(do_lang_tempcode('LIST_SEP'));
@@ -2710,7 +2710,7 @@ END;
             $answers = array();
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('QUESTION'), do_lang_tempcode('DESCRIPTION_QUESTION'), 'question', $question, true));
         $fields->attach(form_input_line_multi(do_lang_tempcode('ANSWER'), do_lang_tempcode('_DESCRIPTION_ANSWER'), 'answer_', $answers, 2));
 
@@ -2749,7 +2749,7 @@ END;
         }
         $post_url = build_url($map, '_SELF');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         url_default_parameters__enable();
         $fields->attach($this->get_poll_form_fields());
@@ -2762,7 +2762,7 @@ END;
         if (count($polls) != 0) {
             $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '1fb2af282b014c3a6ae09d986e4f72eb', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('ALT_COPY_EXISTING_POLL'))));
 
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             $list->attach(form_input_list_entry('', true, ''));
             foreach ($polls as $poll) {
                 $list->attach(form_input_list_entry(strval($poll['id']), false, do_lang_tempcode('POLL_IN_LIST', escape_html($poll['po_question']), escape_html($poll['t_cache_first_username']))));
@@ -2899,7 +2899,7 @@ END;
             attach_message(do_lang_tempcode('EDITING_FIRST_TOPIC_POST', escape_html($edit_topic_url->evaluate())), 'inform');
         }
 
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
         $intended_solely_for = $post_details[0]['p_intended_solely_for'];
         if (!is_null($intended_solely_for)) {
             $hidden_fields->attach(form_input_hidden('intended_solely_for', strval($intended_solely_for)));
@@ -2925,7 +2925,7 @@ END;
         $post = post_param('post', get_translated_text($post_details[0]['p_post'], $GLOBALS['FORUM_DB']));
 
         // Certain aspects relating to the posting system
-        $specialisation = new ocp_tempcode();
+        $specialisation = new Tempcode();
         if (((get_option('is_on_post_titles') == '1') || ($post_details[0]['p_title'] != '') || ($post_id == $topic_info[0]['t_cache_first_post_id']))) {
             $specialisation->attach(form_input_line(do_lang_tempcode('TITLE'), '', 'title', post_param('title', $post_details[0]['p_title']), false, 1, 120));
         }
@@ -2948,7 +2948,7 @@ END;
             $hidden_fields->attach(form_input_hidden('validated', '1'));
         }
 
-        $specialisation2 = new ocp_tempcode();
+        $specialisation2 = new Tempcode();
 
         require_code('fields');
         if (has_tied_catalogue('post')) {
@@ -3194,7 +3194,7 @@ END;
         $post_url = build_url(array('page' => '_SELF', 'type' => '_edit_topic', 'id' => $topic_id), '_SELF');
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), '', 'title', $topic_info[0]['t_cache_first_title'], false));
         if ((get_option('is_on_topic_descriptions') == '1') && (!$GLOBALS['FORUM_DRIVER']->topic_is_threaded($topic_id))) {
             $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), '', 'description', $topic_info[0]['t_description'], false));
@@ -3204,7 +3204,7 @@ END;
             $fields->attach($this->choose_topic_emoticon($topic_info[0]['t_emoticon']));
         }
         $options = array();
-        $hidden_fields = new ocp_tempcode();
+        $hidden_fields = new Tempcode();
         if (ocf_may_moderate_forum($forum_id, get_member())) {
             $moderation_options = array(
                 array(do_lang_tempcode('OPEN'), 'open', $topic_info[0]['t_is_open'] == 1, do_lang_tempcode('DESCRIPTION_OPEN')),
@@ -3328,8 +3328,8 @@ END;
         $this->check_has_mod_access($topic_id);
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(build_keep_post_fields());
         $hidden->attach(build_keep_form_fields());
 
@@ -3401,7 +3401,7 @@ END;
     {
         $topic_id = get_param_integer('id');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_username(do_lang_tempcode('USERNAME'), do_lang_tempcode('MEMBER_TO_INVITE'), 'username', '', false));
 
         $title = get_screen_title('INVITE_MEMBER_TO_PT');
@@ -3617,7 +3617,7 @@ END;
         require_code('ocf_forums2');
 
         // Certain aspects relating to the posting system
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), '', 'title', $topic_info[0]['t_cache_first_title'], false));
         $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION_FORUM'), do_lang_tempcode('DESCRIPTION_DESTINATION_FORUM'), 'to', null, 'choose_forum', array(), true, strval($forum_id)));
         $fields->attach(form_input_line(do_lang_tempcode('REASON'), do_lang_tempcode('DESCRIPTION_REASON'), 'description', '', false));
@@ -3802,8 +3802,8 @@ END;
         $post_text = $_mm['mm_post_text'];
         $submit_name = do_lang_tempcode('PERFORM_MULTI_MODERATION');
         $post_url = build_url(array('page' => '_SELF', 'type' => '_multimod', 'id' => $topic_id, 'mm_id' => $mm_id), '_SELF', null, true);
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(build_keep_post_fields());
         $hidden->attach(build_keep_form_fields());
         $fields->attach(form_input_text(do_lang_tempcode('MM_POST_TEXT'), do_lang_tempcode('DESCRIPTION_MM_POST_TEXT'), 'post_text', $post_text, false));
@@ -3820,7 +3820,7 @@ END;
         $fields->attach(form_input_line(do_lang_tempcode('REASON'), do_lang_tempcode('OPTIONAL_REASON'), 'reason', '', false));
 
         $mm_title = get_translated_text($_mm['mm_name'], $GLOBALS['FORUM_DB']);
-        $action_list = new ocp_tempcode();
+        $action_list = new Tempcode();
         if ($_mm['mm_open_state'] == 1) {
             $action_list->attach(do_lang_tempcode('MULTI_MODERATION_WILL_OPEN'));
         }
@@ -3939,7 +3939,7 @@ END;
         $text = do_lang_tempcode('MAKE_PERSONAL_DESCRIPTION');
         $submit_name = do_lang_tempcode('MAKE_PERSONAL');
         $post_url = build_url(array('page' => '_SELF', 'type' => '_make_private'), '_SELF');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $hidden = form_input_hidden('id', strval($topic_id));
         $fields->attach(form_input_username(do_lang_tempcode('FROM'), '', 'a', $a, true));
         $fields->attach(form_input_username(do_lang_tempcode('TO'), '', 'b', $b, true));

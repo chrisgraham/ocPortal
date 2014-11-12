@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocportal_tutorials
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocportal_tutorials
 {
     /**

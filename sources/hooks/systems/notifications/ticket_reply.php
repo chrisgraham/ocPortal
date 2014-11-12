@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-class Hook_Notification_ticket_reply extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ticket_reply extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

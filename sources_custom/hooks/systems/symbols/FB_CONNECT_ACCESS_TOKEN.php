@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_symbol_FB_CONNECT_ACCESS_TOKEN
 {
     public function run($param)

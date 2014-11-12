@@ -48,7 +48,7 @@ function build_menu($type, $menu, $silent_failure = false)
         // Empty?
         if (count($root['children']) == 0) {
             if ($silent_failure) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
 
             $redirect = get_self_url(true, true);
@@ -67,7 +67,7 @@ function build_menu($type, $menu, $silent_failure = false)
         $redirect = get_self_url(true, true);
         $url_map = array('page' => 'admin_menus', 'type' => 'edit', 'id' => $is_sitemap_menu ? null : $root['content_id'], 'redirect' => $redirect, 'clickable_sections' => (($type == 'popup') || ($type == 'dropdown')) ? 1 : 0);
         $url = build_url($url_map, get_module_zone('admin_menus'));
-        $_content = new ocp_tempcode(); // Done to preserve tree structure, special_page_type=tree
+        $_content = new Tempcode(); // Done to preserve tree structure, special_page_type=tree
         $_content->attach($content);
         $_content->attach(do_template('MENU_STAFF_LINK', array(
             '_GUID' => 'a5209ec65425bed1207e2f667d9116f6',
@@ -383,7 +383,7 @@ function _render_menu($menu, $source_member, $type, $as_admin = false)
     $num = count($new_children);
 
     // Render out top level
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     foreach ($new_children as $i => $child) {
         if (is_object($child)) {
             $content->attach($child);
@@ -524,7 +524,7 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
     } else { // URL
         // Carefully translate symbols in the URL
         $_url = $branch['url'];
-        $url = new ocp_tempcode();
+        $url = new Tempcode();
         if ($_url !== null) {
             $sym_pos = mixed();
             $sym_pos = strpos($_url, '{$');
@@ -544,7 +544,7 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
                     }
 
                     $url->attach(substr($_url, $prev, $sym_pos - $prev));
-                    $_ret = new ocp_tempcode();
+                    $_ret = new Tempcode();
                     $_ret->parse_from($_url, $sym_pos, $p_len);
                     $_url->attach($_ret);
                     $prev = $p_len;
@@ -575,7 +575,7 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
     $num = count($new_children);
 
     // Render out branches at this level
-    $children = new ocp_tempcode();
+    $children = new Tempcode();
     foreach ($new_children as $i => $child) {
         if (is_object($child)) {
             $children->attach($child);
@@ -595,7 +595,7 @@ function _render_menu_branch($branch, $codename, $source_member, $level, $type, 
 
     // Caption and tooltip
     $caption = $branch['title'];
-    $tooltip = isset($branch['extra_meta']['description']) ? $branch['extra_meta']['description'] : new ocp_tempcode();
+    $tooltip = isset($branch['extra_meta']['description']) ? $branch['extra_meta']['description'] : new Tempcode();
 
     // How to display
     if ((!isset($branch['modifiers']['expanded'])) && (!$expand_this) && (!$current_page) && ($url->is_empty())) {

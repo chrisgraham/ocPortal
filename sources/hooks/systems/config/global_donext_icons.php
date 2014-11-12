@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_configuration
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_global_donext_icons
 {
     /**

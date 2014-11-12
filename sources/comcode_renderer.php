@@ -339,7 +339,7 @@ function comcode_parse_error($preparse_mode, $_message, $pos, $comcode, $check_o
     }
 
     $len = strlen($comcode);
-    $lines = new ocp_tempcode();
+    $lines = new Tempcode();
     $number = 1;
     $sofar = '';
     $line = null;
@@ -407,7 +407,7 @@ function comcode_parse_error($preparse_mode, $_message, $pos, $comcode, $check_o
         }
     }
 
-    set_helper_panel_text(new ocp_tempcode());
+    set_helper_panel_text(new Tempcode());
 
     // Output our error / correction form
     @ob_end_clean(); // Emergency output, potentially, so kill off any active buffer
@@ -421,7 +421,7 @@ function comcode_parse_error($preparse_mode, $_message, $pos, $comcode, $check_o
     $echo->handle_symbol_preprocessing();
     $echo->evaluate_echo(null, true);
     exit();
-    return new ocp_tempcode(); // to trick code checker
+    return new Tempcode(); // to trick code checker
 }
 
 /**
@@ -485,13 +485,13 @@ function absoluteise_and_test_comcode_url($given_url, $source_member, $as_admin,
 function test_url($url_full, $tag_type, $given_url, $source_member)
 {
     if (get_option('check_broken_urls') == '0') {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
     if (strpos($url_full, '{$') !== false) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
-    $temp_tpl = new ocp_tempcode();
+    $temp_tpl = new Tempcode();
     require_code('global4');
     if (!handle_has_checked_recently($url_full)) {
         $GLOBALS['COMCODE_PARSE_URLS_CHECKED']++;
@@ -547,7 +547,7 @@ function test_url($url_full, $tag_type, $given_url, $source_member)
 function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_id, $marker, $source_member, $as_admin, $connection, &$comcode, $structure_sweep, $semiparse_mode, $highlight_bits = null, $on_behalf_of_member = null, $in_semihtml = false, $is_all_semihtml = false)
 {
     if (($structure_sweep) && ($tag != 'title')) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $param_given = isset($attributes['param']);
@@ -612,7 +612,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
         }
     }
 
-    $temp_tpl = new ocp_tempcode();
+    $temp_tpl = new Tempcode();
     switch ($tag) {
         case 'no_parse':
             $temp_tpl->attach($embed);
@@ -779,7 +779,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             break;
 
         case 'staff_note':
-            $temp_tpl = new ocp_tempcode();
+            $temp_tpl = new Tempcode();
             return $temp_tpl;
 
         case 'section':
@@ -819,7 +819,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             break;
 
         case 'tabs':
-            $heads = new ocp_tempcode();
+            $heads = new Tempcode();
             $tabs = explode(',', $attributes['param']);
             foreach ($tabs as $i => $tab) {
                 $heads->attach(do_template('COMCODE_TAB_HEAD', array('_GUID' => '735f70b1c8dcc78a0876136cfb4822a0', 'TITLE' => trim($tab), 'FIRST' => $i == 0, 'LAST' => !array_key_exists($i + 1, $tabs))));
@@ -1039,7 +1039,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
                 }
             }
 
-            $_parts = new ocp_tempcode();
+            $_parts = new Tempcode();
             krsort($attributes);
             foreach ($attributes as $num => $val) {
                 $_parts->attach(do_template('COMCODE_RANDOM_PART', array('_GUID' => '5fa49a916304f9caa0ddedeb01531142', 'NUM' => strval($num), 'VAL' => $val)));
@@ -1051,7 +1051,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
         case 'jumping':
             unset($attributes['param']);
 
-            $_parts = new ocp_tempcode();
+            $_parts = new Tempcode();
             foreach ($attributes as $val) {
                 $_temp = comcode_to_tempcode($val, $source_member, $as_admin, 60, null, $connection, false, false, false, false, false, $highlight_bits, $on_behalf_of_member);
                 $_parts->attach(do_template('COMCODE_JUMPING_PART', array('_GUID' => 'd163bd11920f39f0cb8ff2f6ba48bc80', 'PART' => $_temp->evaluate())));
@@ -1062,7 +1062,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
             break;
 
         case 'shocker':
-            $_parts = new ocp_tempcode();
+            $_parts = new Tempcode();
             foreach ($attributes as $key => $val) {
                 if (substr($key, 0, 5) == 'left_') {
                     $left = $val;
@@ -1263,12 +1263,12 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
         case 'concepts':
             $title = $embed->evaluate();
 
-            $concepts = new ocp_tempcode();
+            $concepts = new Tempcode();
             foreach ($attributes as $_key => $_value) {
                 if (substr($_key, -4) == '_key') {
                     $key = $_value;
                     $cid = substr($_key, 0, strlen($_key) - 4);
-                    $to_parse = array_key_exists($cid . '_value', $attributes) ? $attributes[$cid . '_value'] : new ocp_tempcode();
+                    $to_parse = array_key_exists($cid . '_value', $attributes) ? $attributes[$cid . '_value'] : new Tempcode();
                     $value = comcode_to_tempcode($to_parse, $source_member, $as_admin, 60, null, $connection, false, false, false, false, false, $highlight_bits, $on_behalf_of_member);
                     $concepts->attach(do_template('COMCODE_CONCEPTS_CONCEPT', array('_GUID' => '4baf6dabc32146c594c7fd922791b6b2', 'A' => 'concept__' . preg_replace('#[^\w]#', '_', $key), 'KEY' => $key, 'VALUE' => $value)));
                 }
@@ -2031,7 +2031,7 @@ function _do_tags_comcode($tag, $attributes, $embed, $comcode_dangerous, $pass_i
                     is_plupload(true);
                     $urls = get_url('', 'file' . $_id, 'uploads/attachments', 2, OCP_UPLOAD_ANYTHING, ((!array_key_exists('thumb', $attributes)) || ($attributes['thumb'] != '0')) && ($attributes['thumb_url'] == ''), '', '', true, true, true, true, $source_member);
                     if ($urls[0] == '') {
-                        return new ocp_tempcode();
+                        return new Tempcode();
                     }//warn_exit(do_lang_tempcode('ERROR_UPLOADING'));  Can't do this, because this might not be post-calculated if something went wrong once
                     $_size = $_FILES['file' . $_id]['size'];
                     $original_filename = $_FILES['file' . $_id]['name'];
@@ -2312,7 +2312,7 @@ function do_code_box($type, $embed, $numbers = true, $in_semihtml = false, $is_a
  */
 function _do_contents_level($tree_structure, $list_types, $base, $the_level = 0)
 {
-    $lines = new ocp_tempcode();
+    $lines = new Tempcode();
     foreach ($tree_structure as $level) {
         $_line = do_template('COMCODE_CONTENTS_LINE_FINAL', array('_GUID' => 'a3dd1bf2e16080993cf72edccb7f3608', 'ID' => $level[0], 'LINE' => $level[1], 'URL' => $level[2]));
         if (array_key_exists(3, $level)) {

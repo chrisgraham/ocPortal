@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    image_slider
  */
+
+/**
+ * Block class.
+ */
 class Block_main_image_slider
 {
     /**

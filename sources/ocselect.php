@@ -305,7 +305,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
 
     require_code('form_templates');
 
-    $form_fields = new ocp_tempcode();
+    $form_fields = new Tempcode();
     foreach ($fields_needed as $field) {
         list($field_type, $field_name, $field_label, $default_value, $extra) = $field;
 
@@ -319,7 +319,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
                 break;
 
             case 'days':
-                $list_options = new ocp_tempcode();
+                $list_options = new Tempcode();
                 $days_options = array();
                 foreach (array(2, 5, 15, 30, 45, 60, 120, 240, 365) as $days_option) {
                     $days_options[strval(time() - 60 * 60 * 24 * $days_option)] = do_lang_tempcode('SUBMIT_AGE_DAYS', escape_html(integer_format($days_option)));
@@ -332,7 +332,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
                 break;
 
             case 'tick':
-                $list_options = new ocp_tempcode();
+                $list_options = new Tempcode();
                 foreach (array('' => '', '0' => do_lang_tempcode('NO'), '1' => do_lang_tempcode('YES')) as $key => $val) {
                     $list_options->attach(form_input_list_entry($key, $default_value == $key, $val));
                 }
@@ -340,7 +340,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
                 break;
 
             case 'rating':
-                $list_options = new ocp_tempcode();
+                $list_options = new Tempcode();
                 $list_options->attach(form_input_list_entry('', $default_value == '', ''));
                 foreach (array(1 => '&#10025;', 4 => '&#10025;&#10025;', 6 => '&#10025;&#10025;&#10025;', 8 => '&#10025;&#10025;&#10025;&#10025;', 10 => '&#10025;&#10025;&#10025;&#10025;&#10025;') as $rating => $rating_label) {
                     $list_options->attach(form_input_list_entry(strval($rating), $default_value == strval($rating), protect_from_escaping($rating_label)));
@@ -349,7 +349,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
                 break;
 
             case 'list':
-                $list_options = new ocp_tempcode();
+                $list_options = new Tempcode();
                 $list_options->attach(form_input_list_entry('', $default_value == '', ''));
                 foreach ($extra as $key => $val) {
                     $list_options->attach(form_input_list_entry($key, $default_value == $key, $val));
@@ -358,7 +358,7 @@ function form_for_ocselect($filter, $labels = null, $content_type = null, $types
                 break;
 
             case 'multilist':
-                $list_options = new ocp_tempcode();
+                $list_options = new Tempcode();
                 foreach ($extra as $key => $val) {
                     $list_options->attach(form_input_list_entry($key, preg_match('#(^|,)' . preg_quote($key, '#') . '(,|$)#', $default_value) != 0, $val));
                 }

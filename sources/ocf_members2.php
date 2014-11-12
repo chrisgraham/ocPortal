@@ -107,7 +107,7 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
         }
         $primary_group = ocf_get_member_primary_group($poster_details);
         if ($primary_group === null) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         require_code('ocf_groups');
         $poster_details = array(
@@ -168,13 +168,13 @@ function render_member_box($poster_details, $preview = false, $hooks = null, $ho
         }
     }
 
-    $custom_fields = new ocp_tempcode();
+    $custom_fields = new Tempcode();
     foreach ($poster_details['custom_fields'] as $name => $value) {
         if (($value !== null) && ($value !== '')) {
             $custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => ($guid != '') ? $guid : '10b72cd1ec240c315e56bc8a0f3a92a1', 'MEMBER_ID' => strval($member_id), 'NAME' => $name, 'RAW' => $value['RAW'], 'VALUE' => is_object($value['RENDERED']) ? protect_from_escaping($value['RENDERED']) : $value['RENDERED'])));
         }
     }
-    $custom_fields_full = new ocp_tempcode();
+    $custom_fields_full = new Tempcode();
     if (isset($poster_details['custom_fields_full'])) {
         foreach ($poster_details['custom_fields_full'] as $name => $value) {
             if (($value !== null) && ($value !== '')) {

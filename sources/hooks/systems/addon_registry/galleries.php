@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_galleries
 {
     /**
@@ -419,11 +423,11 @@ class Hook_addon_registry_galleries
         //Need to create the form fields (instead of using placeholder_form()) because javascript is
         //using a field called 'files' (list type).
         require_lang('dearchive');
-        $fields = new ocp_tempcode();
-        $orphaned_content = new ocp_tempcode();
+        $fields = new Tempcode();
+        $orphaned_content = new Tempcode();
         $orphaned_content->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array('SELECTED' => false, 'DISABLED' => false, 'CLASS' => '', 'NAME' => 'test', 'TEXT' => 'test')));
         $input = do_lorem_template('FORM_SCREEN_INPUT_LIST', array('TABINDEX' => placeholder_id(), 'REQUIRED' => '_required', 'NAME' => 'files', 'CONTENT' => $orphaned_content, 'INLINE_LIST' => true));
-        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array('REQUIRED' => true, 'SKIP_LABEL' => false, 'NAME' => 'files', 'PRETTY_NAME' => lorem_phrase(), 'DESCRIPTION' => lorem_paragraph_html(), 'DESCRIPTION_SIDE' => '', 'INPUT' => $input, 'COMCODE' => new ocp_tempcode())));
+        $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array('REQUIRED' => true, 'SKIP_LABEL' => false, 'NAME' => 'files', 'PRETTY_NAME' => lorem_phrase(), 'DESCRIPTION' => lorem_paragraph_html(), 'DESCRIPTION_SIDE' => '', 'INPUT' => $input, 'COMCODE' => new Tempcode())));
 
         $form = do_lorem_template('FORM', array('TABINDEX' => placeholder_number(), 'FIELDS' => $fields, 'SUBMIT_ICON' => 'menu___generic_admin__import', 'SUBMIT_NAME' => lorem_word(), 'URL' => placeholder_url(), 'TEXT' => lorem_phrase(), 'HIDDEN' => '', 'BATCH_IMPORT_ARCHIVE_CONTENTS' => lorem_phrase()));
 
@@ -494,7 +498,7 @@ class Hook_addon_registry_galleries
     public function tpl_preview__block_main_gallery_embed()
     {
         //Create the 'GALLERY_ENTRY_WRAP' template
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $map = array('MEDIA_TYPE' => 'image', 'TITLE' => lorem_phrase(), 'DESCRIPTION' => lorem_paragraph(), 'TYPE' => 'image', 'ID' => strval($k), 'FILE_SIZE' => lorem_word(), 'SUBMITTER' => lorem_word(), 'FULL_URL' => placeholder_url(), 'THUMB_URL' => placeholder_url(), 'CAT' => lorem_word(), 'THUMB' => placeholder_image(), 'VIEW_URL' => placeholder_url(), 'ADD_DATE_RAW' => lorem_word(), 'EDIT_DATE_RAW' => placeholder_time(), 'VIEWS' => placeholder_id(), '_EDIT_URL' => placeholder_url());
             $entry = do_lorem_template('GALLERY_IMAGE', $map);
@@ -532,9 +536,9 @@ class Hook_addon_registry_galleries
      */
     public function tpl_preview__block_side_galleries()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             foreach (placeholder_array() as $_k => $_v) {
                 $out->attach(do_lorem_template('BLOCK_SIDE_GALLERIES_LINE_DEPTH', array('TITLE' => lorem_word(), 'URL' => placeholder_url())));
             }
@@ -621,7 +625,7 @@ class Hook_addon_registry_galleries
         ));
         $tags = do_lorem_template('TAGS', array('TAG' => lorem_word(), 'TAGS' => placeholder_array(), 'LINK_FULLSCOPE' => lorem_word(), 'TYPE' => null));
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach (placeholder_array(10) as $k => $v) {
             $entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY', array(
                 'DESCRIPTION' => lorem_paragraph_html(),
@@ -713,7 +717,7 @@ class Hook_addon_registry_galleries
         ));
         $tags = do_lorem_template('TAGS', array('TAG' => lorem_word(), 'TAGS' => placeholder_array(), 'LINK_FULLSCOPE' => lorem_word(), 'TYPE' => null));
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach (placeholder_array(10) as $k => $v) {
             $entries->attach(do_lorem_template('GALLERY_FLOW_ENTRY', array(
                 'DESCRIPTION' => lorem_paragraph_html(),
@@ -785,10 +789,10 @@ class Hook_addon_registry_galleries
     {
         $tags = do_lorem_template('TAGS', array('LINK_FULLSCOPE' => lorem_word(), 'TAG' => lorem_word(), 'TAGS' => placeholder_array(), 'TYPE' => null));
 
-        $entry = new ocp_tempcode();
+        $entry = new Tempcode();
         $map = array('MEDIA_TYPE' => 'image', 'TITLE' => lorem_phrase(), 'DESCRIPTION' => lorem_paragraph(), 'TYPE' => 'image', 'ID' => placeholder_id(), 'FILE_SIZE' => lorem_word(), 'SUBMITTER' => lorem_word(), 'FULL_URL' => placeholder_url(), 'THUMB_URL' => placeholder_url(), 'CAT' => lorem_word(), 'THUMB' => placeholder_image(), 'VIEW_URL' => placeholder_url(), 'EDIT_DATE_RAW' => placeholder_time(), 'ADD_DATE_RAW' => placeholder_time(), 'VIEWS' => placeholder_number(), '_EDIT_URL' => placeholder_url());
         $entry = do_lorem_template('GALLERY_IMAGE', $map);
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         $entries->attach(do_lorem_template('GALLERY_ENTRY_WRAP', array('ENTRY' => $entry) + $map));
 
         $video_details = do_lorem_template('GALLERY_VIDEO_INFO', array('HEIGHT' => placeholder_number(), 'WIDTH' => placeholder_number(), 'LENGTH' => placeholder_number()));

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    welcome_emails
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_welcome_emails
 {
     /**

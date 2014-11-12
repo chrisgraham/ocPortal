@@ -21,7 +21,7 @@ if ($api_key == '' || $api_secret == '') {
 }
 
 require_code('hooks/systems/syndication/twitter');
-$ob = new Hook_Syndication_twitter();
+$ob = new Hook_syndication_twitter();
 
 $result = $ob->auth_set(null, get_self_url(false, false, array('oauth_in_progress' => 1)));
 

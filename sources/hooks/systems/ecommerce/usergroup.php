@@ -146,7 +146,7 @@ class Hook_usergroup
      */
     public function get_identifier_manual_field_inputter($type_code)
     {
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('subscriptions', array('*'), array('s_type_code' => $type_code, 's_state' => 'new'), 'ORDER BY id DESC');
         foreach ($rows as $row) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($row['s_member_id']);
@@ -158,7 +158,7 @@ class Hook_usergroup
 
         $fields = alternate_fields_set__start('options');
 
-        $fields_inner = new ocp_tempcode();
+        $fields_inner = new Tempcode();
 
         if (!$list->is_empty()) {
             $fields_inner->attach(form_input_list(do_lang_tempcode('FINISH_STARTED_ALREADY'), do_lang_tempcode('DESCRIPTION_FINISH_STARTED_ALREADY'), 'purchase_id', $list, null, false, true));

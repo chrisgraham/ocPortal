@@ -133,7 +133,7 @@ class Hook_custom
             $row = $rows[0];
             return get_translated_tempcode('pstore_customs', $row, 'c_description');
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

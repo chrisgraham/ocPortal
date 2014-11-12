@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_rich_media
  */
+
+/**
+ * Hook class.
+ */
 class Hook_media_rendering_video_microsoft extends Media_renderer_with_fallback
 {
     /**

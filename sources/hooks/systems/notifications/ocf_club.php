@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_clubs
  */
-class Hook_Notification_ocf_club extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_club extends Hook_Notification
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

@@ -395,7 +395,7 @@ function restore_output_state($just_tempcode = false, $merge_current = false, $k
                         $GLOBALS[$var] = array_merge($val, $GLOBALS[$var]);
                     } elseif ($merge_tempcode) {
                         if ($GLOBALS[$var] === null) {
-                            $GLOBALS[$var] = new ocp_tempcode();
+                            $GLOBALS[$var] = new Tempcode();
                         }
                         $GLOBALS[$var]->attach($val);
                     } elseif (!$merge_current || $GLOBALS[$var] === array() || $GLOBALS[$var] === null || $GLOBALS[$var] === false || $GLOBALS[$var] === '' || $var == 'REFRESH_URL') {
@@ -485,7 +485,7 @@ function attach_to_screen_footer($data)
 {
     global $EXTRA_FOOT;
     if ($EXTRA_FOOT === null) {
-        $EXTRA_FOOT = new ocp_tempcode();
+        $EXTRA_FOOT = new Tempcode();
     }
     $EXTRA_FOOT->attach($data);
 }
@@ -2544,10 +2544,10 @@ function seo_meta_load_for($type, $id, $title = null)
 function get_loaded_tags($limit_to = null, $the_tags = null)
 {
     if (get_value('no_tags') === '1') {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
     if (!addon_installed('search')) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     if ($the_tags === null) {

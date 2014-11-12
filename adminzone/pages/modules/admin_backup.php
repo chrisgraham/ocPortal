@@ -153,7 +153,7 @@ class Module_admin_backup
             return $this->delete();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -190,7 +190,7 @@ class Module_admin_backup
         }
 
         require_code('form_templates');
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $content->attach(form_input_radio_entry('b_type', 'full', true, do_lang_tempcode('FULL_BACKUP')));
         $content->attach(form_input_radio_entry('b_type', 'incremental', false, do_lang_tempcode('INCREMENTAL_BACKUP')));
         $content->attach(form_input_radio_entry('b_type', 'sql', false, do_lang_tempcode('SQL_BACKUP')));
@@ -244,9 +244,9 @@ class Module_admin_backup
 
         if (count($entries) != 0) {
             require_code('templates_columned_table');
-            $header_row = columned_table_header_row(array(do_lang_tempcode('FILENAME'), do_lang_tempcode('TYPE'), do_lang_tempcode('SIZE'), do_lang_tempcode('DATE_TIME'), new ocp_tempcode()));
+            $header_row = columned_table_header_row(array(do_lang_tempcode('FILENAME'), do_lang_tempcode('TYPE'), do_lang_tempcode('SIZE'), do_lang_tempcode('DATE_TIME'), new Tempcode()));
 
-            $rows = new ocp_tempcode();
+            $rows = new Tempcode();
             foreach ($entries as $entry) {
                 $delete_url = build_url(array('page' => '_SELF', 'type' => 'confirm_delete', 'file' => $entry['file']), '_SELF');
                 $link = get_custom_base_url() . '/exports/backups/' . $entry['file'];
@@ -274,7 +274,7 @@ class Module_admin_backup
 
             $files = do_template('COLUMNED_TABLE', array('_GUID' => '726070efa71843236e975d87d4a17dae', 'HEADER_ROW' => $header_row, 'ROWS' => $rows));
         } else {
-            $files = new ocp_tempcode();
+            $files = new Tempcode();
         }
 
         return $files;
@@ -319,7 +319,7 @@ class Module_admin_backup
 
         $url = build_url(array('page' => '_SELF'), '_SELF');
         redirect_screen($this->title, $url, do_lang_tempcode('BACKUP_INFO_1', $file));
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

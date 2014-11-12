@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_ecommerce_orders
 {
     /**

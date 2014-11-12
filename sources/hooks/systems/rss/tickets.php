@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_tickets
 {
     /**
@@ -64,7 +68,7 @@ class Hook_rss_tickets
 
         $ticket_type_rows = collapse_2d_complexity('id', 'ticket_type_name', $GLOBALS['SITE_DB']->query_select('ticket_types', array('id', 'ticket_type_name')));
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $i => $row) {
             if ($i == $max) {
                 break;
@@ -96,7 +100,7 @@ class Hook_rss_tickets
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1')) {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '32c536b95de70994d0a13cfed18aa6ec', 'COMMENT_URL' => $view_url, 'ID' => strval($ticket_id)));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $ticket_id, 'NEWS' => '', 'DATE' => $date)));

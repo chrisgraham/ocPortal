@@ -67,7 +67,7 @@ function init__site__pages__modules_custom__galleries($code)
 
     // Add workflow warnings to images
     $code = str_replace(
-        '} else $warning_details = new ocp_tempcode();
+        '} else $warning_details = new Tempcode();
 
         if ((has_actual_page_access',
         '// Add the workflow form here for now, to save duplicating the condition
@@ -79,7 +79,7 @@ function init__site__pages__modules_custom__galleries($code)
         if (array_key_exists(\'video_views\',$myrow)) $content_type = \'video\';
         $workflow_content_id = get_workflow_content_id($content_type,strval($myrow[\'id\']));
         if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
-        } else $warning_details = new ocp_tempcode();
+        } else $warning_details = new Tempcode();
 
         if ((has_actual_page_access',
         $code
@@ -87,7 +87,7 @@ function init__site__pages__modules_custom__galleries($code)
 
     // Add workflow warnings to videos
     $code = str_replace(
-        '} else $warning_details = new ocp_tempcode();
+        '} else $warning_details = new Tempcode();
 
         // Comments',
         'require_code(\'workflows\');
@@ -95,7 +95,7 @@ function init__site__pages__modules_custom__galleries($code)
         // We need to find our ID first
         $workflow_content_id = get_workflow_content_id(\'video\',strval($id));
         if (!is_null($workflow_content_id)) $warning_details->attach(get_workflow_form($workflow_content_id));
-        } else $warning_details = new ocp_tempcode();
+        } else $warning_details = new Tempcode();
 
         // Comments',
         $code

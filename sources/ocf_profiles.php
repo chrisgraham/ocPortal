@@ -51,7 +51,7 @@ function render_profile_tabset($title, $member_id_of, $member_id_viewing = null,
     foreach (array_keys($hooks) as $hook) {
         if (($only_tab === null) || (preg_match('#(^|,)' . preg_quote($hook, '#') . '(,|$)#', $only_tab) != 0)) {
             require_code('hooks/systems/profiles_tabs/' . $hook);
-            $ob = object_factory('Hook_Profiles_Tabs_' . $hook);
+            $ob = object_factory('Hook_profiles_tabs_' . $hook);
             if ($ob->is_active($member_id_of, $member_id_viewing)) {
                 $tabs[$hook] = $ob->render_tab($member_id_of, $member_id_viewing, (preg_match('#(^|,)' . preg_quote($hook, '#') . '(,|$)#', $only_tab) == 0) && !browser_matches('ie6') && !browser_matches('ie7') && has_js());
             }

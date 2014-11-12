@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_tags
 {
     /**
@@ -72,6 +76,6 @@ class Hook_tags
 
         decache('side_tag_cloud');
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

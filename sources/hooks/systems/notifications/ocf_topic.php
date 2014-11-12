@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-class Hook_Notification_ocf_topic extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_topic extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

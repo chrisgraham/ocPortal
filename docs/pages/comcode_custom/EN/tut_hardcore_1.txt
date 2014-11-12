@@ -107,7 +107,7 @@ The second is more adventurous and help you get used to using the database, whic
 10 ocPortal.com points will be given to the first member to explain a yet-unexplained bug in this code...
 [code="PHP"]
 $data='blahblah';
-$output=new ocp_tempcode();
+$output=new Tempcode();
 $output.='<p>First paragraph</p>';
 $output.='<p>Some data: '.$data.'</p>';
 $output->evaluate();

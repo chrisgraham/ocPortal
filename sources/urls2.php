@@ -112,7 +112,7 @@ function _build_keep_form_fields($page = '', $keep_all = false, $exclude = null)
     if ($page == '_SELF') {
         $page = get_page_name();
     }
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
 
     if (count($_GET) > 0) {
         foreach ($_GET as $key => $val) {

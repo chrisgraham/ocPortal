@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
-class Hook_Preview_image
+
+/**
+ * Hook class.
+ */
+class Hook_preview_image
 {
     /**
      * Find whether this preview hook applies.

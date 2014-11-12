@@ -1236,7 +1236,7 @@ function create_selection_list($root_page_link, $under_only = false, $default = 
         $check_permissions_for = get_member();
     }
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     $root_node = retrieve_sitemap_node($root_page_link, null, null, null, null, false, '_SEARCH', false, false, $consider_validation, is_null($filter_func) ? 0 : SITEMAP_GATHER_DB_ROW);
 
     if (!$under_only) {
@@ -1317,7 +1317,7 @@ function _create_selection_list(&$out, $node, $default, $valid_selectable_conten
     }
 
     // Recurse, working out $children and $compound_list
-    $children = new ocp_tempcode();
+    $children = new Tempcode();
     $child_compound_list = '';
     if (isset($node['children'])) {
         foreach ($node['children'] as $child_node) {

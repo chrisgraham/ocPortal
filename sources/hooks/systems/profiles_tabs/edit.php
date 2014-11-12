@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Profiles_Tabs_edit
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit
 {
     /**
      * Find whether this hook is active.
@@ -39,7 +43,7 @@ class Hook_Profiles_Tabs_edit
         $hooks = find_all_hooks('systems', 'profiles_tabs_edit');
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/profiles_tabs_edit/' . $hook);
-            $ob = object_factory('Hook_Profiles_Tabs_Edit_' . $hook);
+            $ob = object_factory('Hook_profiles_tabs_edit_' . $hook);
             if ($ob->is_active($member_id_of, $member_id_viewing)) {
                 return true;
             }
@@ -86,7 +90,7 @@ class Hook_Profiles_Tabs_edit
         foreach (array_keys($hooks) as $hook) {
             if (($only_tab === null) || (preg_match('#(^|,)' . preg_quote($hook, '#') . '(,|$)#', $only_tab) != 0)) {
                 require_code('hooks/systems/profiles_tabs_edit/' . $hook);
-                $ob = object_factory('Hook_Profiles_Tabs_Edit_' . $hook);
+                $ob = object_factory('Hook_profiles_tabs_edit_' . $hook);
                 if ($ob->is_active($member_id_of, $member_id_viewing)) {
                     $tab = $ob->render_tab($member_id_of, $member_id_viewing, $only_tab !== $hook && $leave_to_ajax_if_possible);
 
@@ -108,7 +112,7 @@ class Hook_Profiles_Tabs_edit
 
         $javascript = '';
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         // Session ID check, if saving
         if ((count($_POST) != 0) && (count($tabs) != 0)) {

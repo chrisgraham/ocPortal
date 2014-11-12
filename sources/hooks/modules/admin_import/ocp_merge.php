@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
+
+/**
+ * Hook class.
+ */
 class Hook_ocp_merge
 {
     /**
@@ -134,7 +138,7 @@ class Hook_ocp_merge
 
         $_cleanup_url = build_url(array('page' => 'admin_cleanup'), get_module_zone('admin_cleanup'));
         $cleanup_url = $_cleanup_url->evaluate();
-        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new ocp_tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
+        $info['message'] = (get_param('type', 'misc') != 'import' && get_param('type', 'misc') != 'hook') ? new Tempcode() : do_lang_tempcode('FORUM_CACHE_CLEAR', escape_html($cleanup_url));
 
         return $info;
     }
@@ -739,7 +743,7 @@ class Hook_ocp_merge
             $test = $GLOBALS['SITE_DB']->query_select_value_if_there('authors', 'author', array('author' => $row['author']));
             if (is_null($test)) {
                 add_author($row['author'], $row['url'], array_key_exists('forum_handle', $row) ?/*LEGACY*/
-                    $row['forum_handle'] : $row['member_id'], $this->get_lang_string($db, $row['description']), $this->get_lang_string($db, $row['skills']));
+                        $row['forum_handle'] : $row['member_id'], $this->get_lang_string($db, $row['description']), $this->get_lang_string($db, $row['skills']));
             }
         }
         $this->_import_catalogue_entry_linkage($db, $table_prefix, 'author', null);

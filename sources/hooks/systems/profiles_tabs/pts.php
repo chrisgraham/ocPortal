@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-class Hook_Profiles_Tabs_pts
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_pts
 {
     /**
      * Find whether this hook is active.
@@ -64,7 +68,7 @@ class Hook_Profiles_Tabs_pts
 
         $root = db_get_first_id();
 
-        list($content) = ocf_render_forumview($id, null, $current_filter_cat, $max, $start, $root, $member_id_of, new ocp_tempcode());
+        list($content) = ocf_render_forumview($id, null, $current_filter_cat, $max, $start, $root, $member_id_of, new Tempcode());
 
         $content = do_template('OCF_MEMBER_PROFILE_PTS', array('_GUID' => '5d0cae3320634a1e4eb345154c853c35', 'CONTENT' => $content));
 

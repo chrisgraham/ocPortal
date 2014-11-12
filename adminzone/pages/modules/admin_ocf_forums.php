@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_forums extends standard_crud_module
+class Module_admin_ocf_forums extends Standard_crud_module
 {
     public $lang_type = 'FORUM';
     public $select_name = 'NAME';
@@ -139,7 +139,7 @@ class Module_admin_ocf_forums extends standard_crud_module
             return $this->reorder();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -205,8 +205,8 @@ class Module_admin_ocf_forums extends standard_crud_module
             $position = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forums', 'MAX(f_position)') + 1;
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'name', $name, true));
         $fields->attach(form_input_line_comcode(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, false));
@@ -227,7 +227,7 @@ class Module_admin_ocf_forums extends standard_crud_module
         $fields->attach(form_input_text_comcode(do_lang_tempcode('INTRO_QUESTION'), do_lang_tempcode('DESCRIPTION_INTRO_QUESTION'), 'intro_question', $intro_question, false));
         $fields->attach(form_input_line(do_lang_tempcode('INTRO_ANSWER'), do_lang_tempcode('DESCRIPTION_INTRO_ANSWER'), 'intro_answer', $intro_answer, false));
         $fields->attach(form_input_line(do_lang_tempcode('REDIRECTING'), do_lang_tempcode('DESCRIPTION_FORUM_REDIRECTION'), 'redirection', $redirection, false));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('last_post', $order == 'last_post', do_lang_tempcode('FORUM_ORDER_BY_LAST_POST')));
         $list->attach(form_input_list_entry('first_post', $order == 'first_post', do_lang_tempcode('FORUM_ORDER_BY_FIRST_POST')));
         $list->attach(form_input_list_entry('title', $order == 'title', do_lang_tempcode('FORUM_ORDER_BY_TITLE')));
@@ -261,7 +261,7 @@ class Module_admin_ocf_forums extends standard_crud_module
      */
     public function get_forum_tree($id, $forum, &$all_forums, $position = 0, $sub_num_in_parent_forum_grouping = 1, $order_sub_alpha = null, $parent_order_sub_alpha = null, $huge = false)
     {
-        $forum_groupings = new ocp_tempcode();
+        $forum_groupings = new Tempcode();
 
         if ($huge) {
             $all_forums = $GLOBALS['FORUM_DB']->query_select('f_forums', array('id', 'f_name', 'f_position', 'f_forum_grouping_id', 'f_order_sub_alpha', 'f_parent_forum'), array('f_parent_forum' => $id), 'ORDER BY f_parent_forum,f_position', 300);
@@ -323,7 +323,7 @@ class Module_admin_ocf_forums extends standard_crud_module
                     $forum_groupings->attach(do_template('OCF_EDIT_FORUM_SCREEN_GROUPING', array('_GUID' => '889173769e237b917b7e06eda0fb4350', 'ORDERINGS' => $orderings, 'GROUPING' => $C_TITLE[$forum_grouping_id], 'SUBFORUMS' => $forums)));
                     $forum_grouping_position++;
                 }
-                $forums = new ocp_tempcode();
+                $forums = new Tempcode();
                 $i = 0;
                 foreach ($subforums as $j => $subforum) {
                     $i = $j;
@@ -395,7 +395,7 @@ class Module_admin_ocf_forums extends standard_crud_module
         $forums = $this->get_forum_tree(db_get_first_id(), $GLOBALS['FORUM_DB']->query_select_value('f_forums', 'f_name', array('id' => db_get_first_id())), $all_forums, 0, 1, null, null, $huge);
 
         if ($huge) {
-            $reorder_url = new ocp_tempcode();
+            $reorder_url = new Tempcode();
         } else {
             $reorder_url = build_url(array('page' => '_SELF', 'type' => 'reorder'), '_SELF');
         }
@@ -511,13 +511,13 @@ class Module_admin_ocf_forums extends standard_crud_module
 
         $fields = $this->get_form_fields($r['id'], $r['f_name'], get_translated_text($r['f_description'], $GLOBALS['FORUM_DB']), $r['f_forum_grouping_id'], $r['f_parent_forum'], $r['f_position'], $r['f_post_count_increment'], $r['f_order_sub_alpha'], get_translated_text($r['f_intro_question'], $GLOBALS['FORUM_DB']), $r['f_intro_answer'], $r['f_redirection'], $r['f_order'], $r['f_is_threaded']);
 
-        $delete_fields = new ocp_tempcode();
+        $delete_fields = new Tempcode();
         if (intval($id) != db_get_first_id()) {
             $delete_fields->attach(form_input_tree_list(do_lang_tempcode('TARGET'), do_lang_tempcode('DESCRIPTION_TOPIC_MOVE_TARGET'), 'target_forum', null, 'choose_forum', array(), true, $id));
             $delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE_TOPICS'), do_lang_tempcode('DESCRIPTION_DELETE_TOPICS'), 'delete_topics', false));
         }
 
-        $action_fields = new ocp_tempcode();
+        $action_fields = new Tempcode();
         $action_fields->attach(form_input_tick(do_lang_tempcode('RESET_INTRO_ACCEPTANCE'), do_lang_tempcode('DESCRIPTION_RESET_INTRO_ACCEPTANCE'), 'reset_intro_acceptance', false));
 
         return array($fields[0], $fields[1], $delete_fields, null, false, null, $action_fields);

@@ -731,7 +731,7 @@ Most ocPortal create/edit/delete interfaces are done via an CRUD module, as this
 
 There are lots of CRUD module's to look at as examples in the CMS zone. This section describes how they work in general terms.
 
-Each CRUD module extends the 'standard_crud_module' base class. This class has many internal methods that abstract the interface and actualisation functions of the CRUD functionality, and it actually takes hold of the whole CRUD process, limiting the burden on us just to defining a few special methods/properties. We inherit from the CRUD class in our module to use its functionality. To do this it must first require up that class, just before the module is defined:
+Each CRUD module extends the 'Standard_crud_module' base class. This class has many internal methods that abstract the interface and actualisation functions of the CRUD functionality, and it actually takes hold of the whole CRUD process, limiting the burden on us just to defining a few special methods/properties. We inherit from the CRUD class in our module to use its functionality. To do this it must first require up that class, just before the module is defined:
 [code="PHP"]
 require_code('crud_module');
 [/code]

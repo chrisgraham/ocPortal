@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    breadcrumbs
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_breadcrumbs
 {
     /**

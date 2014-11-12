@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_video
 {
     // ==============
@@ -174,7 +178,7 @@ class Hook_fields_video
         require_code('galleries');
         $ffield = form_input_upload($_cf_name, $_cf_description, 'field_' . strval($field['id']), $say_required, ($field['cf_required'] == 1) ? null/*so unlink option not shown*/ : $actual_value, null, true, get_allowed_video_file_types());
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden);
 
         return array($ffield, $hidden);

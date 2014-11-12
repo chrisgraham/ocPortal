@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_admin_banners
 {
     /**

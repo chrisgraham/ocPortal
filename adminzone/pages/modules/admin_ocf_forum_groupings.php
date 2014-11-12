@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_forum_groupings extends standard_crud_module
+class Module_admin_ocf_forum_groupings extends Standard_crud_module
 {
     public $lang_type = 'FORUM_GROUPING';
     public $select_name = 'TITLE';
@@ -114,7 +114,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
         require_code('ocf_forums_action2');
         require_code('ocf_forums2');
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -127,12 +127,12 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
      */
     public function get_form_fields($title = '', $description = '', $expanded_by_default = 1)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, false));
         $fields->attach(form_input_tick(do_lang_tempcode('EXPANDED_BY_DEFAULT'), do_lang_tempcode('DESCRIPTION_EXPANDED_BY_DEFAULT'), 'expanded_by_default', $expanded_by_default == 1));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -163,7 +163,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -206,7 +206,7 @@ class Module_admin_ocf_forum_groupings extends standard_crud_module
         }
         $r = $m[0];
 
-        $delete_fields = new ocp_tempcode();
+        $delete_fields = new Tempcode();
 
         list($fields, $hidden) = $this->get_form_fields($r['c_title'], $r['c_description'], $r['c_expanded_by_default']);
         $list = ocf_create_selection_list_forum_groupings($id);

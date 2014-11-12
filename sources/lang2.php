@@ -225,7 +225,7 @@ function create_selection_list_lang_files($lang = null)
 
     require_lang('lang');
 
-    $lang_files = new ocp_tempcode();
+    $lang_files = new Tempcode();
     foreach (array_keys($_lang_files) as $lang_file) {
         if (!is_null($lang)) {
             $base_map = get_lang_file_map(fallback_lang(), $lang_file, true);

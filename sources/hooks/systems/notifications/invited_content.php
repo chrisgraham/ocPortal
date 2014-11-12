@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    content_privacy
  */
-class Hook_Notification_invited_content extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_invited_content extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

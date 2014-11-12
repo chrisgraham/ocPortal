@@ -1712,7 +1712,7 @@ function ocf_upgrade()
         $GLOBALS['FORUM_DB'] = $GLOBALS['SITE_DB'];
 
         require_code('forum/ocf');
-        $GLOBALS['FORUM_DRIVER'] = object_factory('forum_driver_ocf');
+        $GLOBALS['FORUM_DRIVER'] = object_factory('Forum_driver_ocf');
         $GLOBALS['FORUM_DRIVER']->connection = $GLOBALS['SITE_DB'];
 
         require_code('ocf_install');
@@ -2247,7 +2247,7 @@ function upgrade_sharedinstall_sites($from = 0)
         _general_db_init();
 
         // Reset DB
-        $GLOBALS['SITE_DB'] = new database_driver(get_db_site(), get_db_site_host(), get_db_site_user(), get_db_site_password(), get_table_prefix());
+        $GLOBALS['SITE_DB'] = new Database_driver(get_db_site(), get_db_site_host(), get_db_site_user(), get_db_site_password(), get_table_prefix());
         $GLOBALS['FORUM_DB'] = $GLOBALS['SITE_DB'];
 
         // NB: File path will be ok

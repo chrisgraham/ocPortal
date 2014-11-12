@@ -20,7 +20,10 @@
 
 require_code('resource_fs');
 
-class Hook_occle_fs_forum_groupings extends resource_fs_base
+/**
+ * Hook class.
+ */
+class Hook_occle_fs_forum_groupings extends Resource_fs_base
 {
     public $file_resource_type = 'forum_grouping';
 

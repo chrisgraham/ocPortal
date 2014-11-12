@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-class Hook_Profiles_Tabs_blog
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_blog
 {
     /**
      * Find whether this hook is active.
@@ -52,8 +56,8 @@ class Hook_Profiles_Tabs_blog
         }
 
         // Show recent blog posts
-        $recent_blog_posts = new ocp_tempcode();
-        $rss_url = new ocp_tempcode();
+        $recent_blog_posts = new Tempcode();
+        $rss_url = new Tempcode();
         $news_cat = $GLOBALS['SITE_DB']->query_select('news_categories', array('*'), array('nc_owner' => $member_id_of), '', 1);
         if ((array_key_exists(0, $news_cat)) && (has_category_access($member_id_viewing, 'news', strval($news_cat[0]['id'])))) {
             $category_id = $news_cat[0]['id'];
@@ -67,7 +71,7 @@ class Hook_Profiles_Tabs_blog
         if ($member_id_of == $member_id_viewing) {
             $add_blog_post_url = build_url(array('page' => 'cms_blogs', 'type' => 'ad'), get_module_zone('cms_blogs'));
         } else {
-            $add_blog_post_url = new ocp_tempcode();
+            $add_blog_post_url = new Tempcode();
         }
 
         // Wrap it all up

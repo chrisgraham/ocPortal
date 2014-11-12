@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_symbol_MARK_READ
 {
     public function run($param)

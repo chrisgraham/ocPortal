@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_zone_editor
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_zone_editor
 {
     /**

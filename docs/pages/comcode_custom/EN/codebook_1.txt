@@ -70,7 +70,7 @@ Recall that ocPortal zones are sub-directories of your site, which operate with 
 
 [title="4"]How do you create a new full-module?[/title]
 
-A module is a PHP file that defines one class. For a page in the 'site' zone named 'example', the file would be [tt]site/pages/modules/example.php[/tt] (or [tt]site/pages/modules_custom/example.php[/tt] if this module is non-official, or a modified version of an official module). Our module 'example' would contain a class named 'Module_example'. Usually this class does not inherit, although some modules do inherit from a class named 'standard_crud_module', which is used for acceleration/standardising development of add/edit/delete user interfaces.
+A module is a PHP file that defines one class. For a page in the 'site' zone named 'example', the file would be [tt]site/pages/modules/example.php[/tt] (or [tt]site/pages/modules_custom/example.php[/tt] if this module is non-official, or a modified version of an official module). Our module 'example' would contain a class named 'Module_example'. Usually this class does not inherit, although some modules do inherit from a class named 'Standard_crud_module', which is used for acceleration/standardising development of add/edit/delete user interfaces.
 
 [title="5"]The '[tt]info[/tt]' function[/title]
 
@@ -91,7 +91,7 @@ The [tt]run[/tt] function typically is written to do 4 things:
 1) Loads-up/records dependencies that all screens in the module use, using the [tt]require_code[/tt]/[tt]require_lang[/tt]/[tt]require_css[/tt]/[tt]require_javascript[/tt] API calls.
 2) Gets the URL parameter named 'type' into the variable [tt]$type[/tt], usually giving a default 'type' of 'misc' for when no 'type' parameter was specified. Remember that 'type' indicates which 'screen' the module will be outputting.
 3) Delegates to another function depending on [tt]$type[/tt].
-4) Outputs the result of the function that was delegates to, or [tt]new ocp_tempcode()[/tt] if no delegate was found for the given 'type'.
+4) Outputs the result of the function that was delegates to, or [tt]new Tempcode()[/tt] if no delegate was found for the given 'type'.
 
 For example,
 [code="PHP"]
@@ -112,7 +112,7 @@ function run()
     if ($type == 'misc') return $this->category_screen();
 
     // If we get to this point no delegate was found
-    return new ocp_tempcode();
+    return new Tempcode();
 }
 [/code]
 
@@ -255,7 +255,7 @@ All modules must also define the default screen, which is almost always identifi
 
 ocPortal is basically a programming language within a programming language. The outside programming language is PHP, and the inside programming language is Tempcode. Tempcode is two things:
 1) ocPortal's templating language/syntax
-2) The name for instances of compiled ocPortal templates. These instances are instances of the 'ocp_tempcode' object.
+2) The name for instances of compiled ocPortal templates. These instances are instances of the 'Tempcode' object.
 
 Tempcode (the language) is very rich and dynamic. It is designed so that templates can be infinitely complex but so that they can be cached so that the data that goes into them does not need to be recalculated each time. This cacheing usually only applies to blocks- modules generally do not employ Tempcode cacheing. For example, the 'main_multi_content' block might have been templated to look different for people in a certain usergroup, yet we also don't want to have to regenerate this block each time it is viewed. Tempcode is powerful enough to be able to represent arbitrary differences like this in a way that survives cacheing.
 
@@ -281,7 +281,7 @@ function category_screen()
     }
 
     // Create a new Tempcode object to hold our subcategory composition
-    $subcategories = new ocp_tempcode();
+    $subcategories = new Tempcode();
 
     // Loop through all our subcategories
     foreach ($rows as $row) {
@@ -357,7 +357,7 @@ class Module_example
                 return $this->screen_b();
         }
 
-        return new ocp_tempcode(); // An invalid screen was requested from this module
+        return new Tempcode(); // An invalid screen was requested from this module
     }
 
     public function screen_a()

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_poll extends Hook_sitemap_content
 {
     protected $content_type = 'poll';

@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_customprofilefields extends standard_crud_module
+class Module_admin_ocf_customprofilefields extends Standard_crud_module
 {
     public $lang_type = 'CUSTOM_PROFILE_FIELD';
     public $select_name = 'NAME';
@@ -134,7 +134,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
         if ($type == '_stats') {
             return $this->_stats();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -177,8 +177,8 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
      */
     public function get_form_fields($name = '', $description = '', $default = '', $public_view = 1, $owner_view = 1, $owner_set = 1, $encrypted = 0, $type = 'long_text', $required = 0, $show_on_join_form = 0, $show_in_posts = 0, $show_in_post_previews = 0, $order = null, $only_group = '', $locked = 0)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
         require_code('encryption');
@@ -206,7 +206,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 
         $fields->attach(form_input_tick(do_lang_tempcode('REQUIRED'), do_lang_tempcode('DESCRIPTION_REQUIRED'), 'required', $required == 1));
         $fields->attach(form_input_tick(do_lang_tempcode('SHOW_ON_JOIN_FORM'), do_lang_tempcode('DESCRIPTION_SHOW_ON_JOIN_FORM'), 'show_on_join_form', $show_on_join_form == 1));
-        $orderlist = new ocp_tempcode();
+        $orderlist = new Tempcode();
         $num_cpfs = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields', 'COUNT(*)');
         if ($name == '') {
             $num_cpfs++;
@@ -227,7 +227,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
         $fields->attach(form_input_tick(do_lang_tempcode('SHOW_IN_POST_PREVIEWS'), do_lang_tempcode('DESCRIPTION_SHOW_IN_POST_PREVIEWS'), 'show_in_post_previews', $show_in_post_previews == 1));
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name', 'g_is_super_admin'), array('g_is_private_club' => 0));
         if ($locked == 0) {
-            $groups = new ocp_tempcode();
+            $groups = new Tempcode();
             //$groups=form_input_list_entry('-1',false,do_lang_tempcode('_ALL'));
             foreach ($rows as $group) {
                 if ($group['id'] != db_get_first_id()) {
@@ -299,7 +299,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
         $record_start = get_param_integer('start', 0);
         $record_max = get_param_integer('max', 20);
         $record_counter = $record_start;
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering, null);
         $changed = false;
 
@@ -348,7 +348,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
 
             $edit_link = build_url($url_map + array('id' => $row['id']), '_SELF');
 
-            $orderlist = new ocp_tempcode();
+            $orderlist = new Tempcode();
             $num_cpfs = $GLOBALS['FORUM_DB']->query_select_value('f_custom_fields', 'COUNT(*)');
             $selected_one = false;
             $order = $row['cf_order'];
@@ -526,14 +526,14 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
      */
     public function stats()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $rows = $GLOBALS['FORUM_DB']->query_select('f_custom_fields', array('id', 'cf_name', 'cf_type'));
 
         require_code('form_templates');
         require_code('fields');
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $_list = array();
         foreach ($rows as $row) {
             $ob = get_fields_hook($row['cf_type']);
@@ -580,7 +580,7 @@ class Module_admin_ocf_customprofilefields extends standard_crud_module
         if (count($members_in_range) == 300) {
             attach_message(do_lang_tempcode('TOO_MUCH_CHOOSE__TOP_ONLY', escape_html(integer_format(300))), 'warn');
         }
-        $lines = new ocp_tempcode();
+        $lines = new Tempcode();
         foreach ($members_in_range as $row) {
             if (!is_null($row[$f_name])) {
                 $val = $row[$f_name];

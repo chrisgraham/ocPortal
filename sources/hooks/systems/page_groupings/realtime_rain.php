@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    realtime_rain
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_realtime_rain
 {
     /**

@@ -44,7 +44,7 @@ function build_comcode_menu($comcode, $menu, $source_member, $type)
     $current_level = $root;
 
     if (count($lines) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     foreach ($lines as $line) {

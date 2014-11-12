@@ -37,7 +37,7 @@ if ($done_something) {
 
 $group_points = get_group_points();
 
-$fields = new ocp_tempcode();
+$fields = new Tempcode();
 
 foreach ($groups as $group_id => $group_name) {
     if ($group_id == db_get_first_id()) {

@@ -42,13 +42,13 @@ function init__cms__pages__modules_custom__cms_galleries($code)
     // Here we end the comment we started above, both for images...
     $code = str_replace(
         '$validated_field=form_input_tick(do_lang_tempcode(\'VALIDATED\'),do_lang_tempcode(\'DESCRIPTION_VALIDATED\'),\'validated\',$validated==1);',
-        '$validated_field=new ocp_tempcode();',
+        '$validated_field=new Tempcode();',
         $code
     );
     // ...and videos.
     $code = str_replace(
         '$validated_field=form_input_tick(do_lang_tempcode(\'VALIDATED\'),do_lang_tempcode(\'DESCRIPTION_VALIDATED\'),\'validated\',$validated==1);',
-        '$validated_field=new ocp_tempcode();',
+        '$validated_field=new Tempcode();',
         $code
     );
 

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    stats_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_activity_show_stats_count_page_views_this_month
 {
     /**

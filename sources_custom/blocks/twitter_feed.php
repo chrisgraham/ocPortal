@@ -122,7 +122,7 @@ class Block_twitter_feed
         $twitter_logo_img_code = 'twitter_feed/bird_' . $twitter_color . '_' . $twitter_size;
 
         // Create template object
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         // Check for Twitter Support addon dependency before we go any further
         if (!addon_installed('Twitter Support', true)) {

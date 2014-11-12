@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_reference_multi
 {
     /**
@@ -106,12 +110,12 @@ class Hook_fields_reference_multi
         }
 
         if ($ev == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('content');
 
-        $ret = new ocp_tempcode();
+        $ret = new Tempcode();
         $evs = explode("\n", str_replace(',', "\n", $ev));
         foreach ($evs as $ev) {
             list($title) = content_get_details('catalogue_entry', $ev);
@@ -138,7 +142,7 @@ class Hook_fields_reference_multi
      */
     public function get_field_inputter($_cf_name, $_cf_description, $field, $actual_value, $new)
     {
-        /*$_list=new ocp_tempcode();
+        /*$_list=new Tempcode();
         $list=create_selection_list_catalogue_entries_tree($field['c_name'],intval($actual_value),NULL,false);
         if (($field['cf_required']==0) || ($actual_value==='') || (is_null($actual_value)) || ($list->is_empty()))
             $_list->attach(form_input_list_entry('',(($actual_value==='') || (is_null($actual_value))),do_lang_tempcode('NA_EM')));

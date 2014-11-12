@@ -56,7 +56,7 @@ function results_table($text_id, $start, $start_name, $max, $max_name, $max_rows
     }
 
     if (is_null($message)) {
-        $message = new ocp_tempcode();
+        $message = new Tempcode();
         if (!is_null($sortables)) {
             foreach ($sortables as $_sortable => $text) {
                 if (is_object($text)) {
@@ -73,7 +73,7 @@ function results_table($text_id, $start, $start_name, $max, $max_name, $max_rows
     if (!is_null($sortables)) {
         $sort = results_sorter($sortables, $sortable, $sort_order, $sort_name, $hash);
     } else {
-        $sort = new ocp_tempcode();
+        $sort = new Tempcode();
     }
 
     // Pagination
@@ -87,7 +87,7 @@ function results_table($text_id, $start, $start_name, $max, $max_name, $max_rows
             'FIELDS_TITLE' => $fields_title,
             'FIELDS' => $fields,
             'MESSAGE' => $message,
-            'SORT' => $skip_sortables_form ? new ocp_tempcode() : $sort,
+            'SORT' => $skip_sortables_form ? new Tempcode() : $sort,
             'PAGINATION' => $pagination,
             'WIDTHS' => $widths
         ),
@@ -112,14 +112,14 @@ function results_sorter($sortables, $sortable = null, $sort_order = null, $sort_
 {
     require_code('templates_pagination'); // Required because INCREMENTAL_ID_GENERATOR defined there
 
-    $selectors = new ocp_tempcode();
+    $selectors = new Tempcode();
     foreach ($sortables as $_sortable => $text) {
-        $text_ascending = new ocp_tempcode();
+        $text_ascending = new Tempcode();
         $text_ascending->attach($text);
         if ($_sortable != 'random') {
             $text_ascending->attach(do_lang_tempcode('_ASCENDING'));
         }
-        $text_descending = new ocp_tempcode();
+        $text_descending = new Tempcode();
         $text_descending->attach($text);
         $text_descending->attach(do_lang_tempcode('_DESCENDING'));
         $selector_value = $_sortable . ' ASC';
@@ -133,7 +133,7 @@ function results_sorter($sortables, $sortable = null, $sort_order = null, $sort_
     }
     $sort_url = get_self_url(false, false, array($sort_name => null));
     if ($selectors->is_empty()) {
-        $sort = new ocp_tempcode();
+        $sort = new Tempcode();
     } else {
         $sort = do_template('PAGINATION_SORT', array('_GUID' => '4afa1bae0f447b68e60192c515b13ca2', 'HASH' => $hash, 'SORT' => $sort_name, 'URL' => $sort_url, 'SELECTORS' => $selectors));
     }
@@ -152,7 +152,7 @@ function results_sorter($sortables, $sortable = null, $sort_order = null, $sort_
  */
 function results_entry($values, $auto_escape = false, $tplset = null, $guid = '9e340dd14173c7320b57243d607718ab')
 {
-    $cells = new ocp_tempcode();
+    $cells = new Tempcode();
     foreach ($values as $class => $value) {
         if (($auto_escape) && (!is_object($value))) {
             $value = escape_html($value);
@@ -179,7 +179,7 @@ function results_field_title($values, $sortables = null, $order_param = 'sort', 
         $sortables = array();
     }
 
-    $cells = new ocp_tempcode();
+    $cells = new Tempcode();
     foreach ($values as $value) {
         $found = mixed();
         foreach ($sortables as $key => $sortable) {

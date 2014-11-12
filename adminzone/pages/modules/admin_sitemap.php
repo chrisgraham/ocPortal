@@ -169,7 +169,7 @@ class Module_admin_sitemap
             return $this->_move();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -244,7 +244,7 @@ class Module_admin_sitemap
      */
     public function _choose_zone($title, $no_go = null)
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         require_code('zones2');
@@ -279,7 +279,7 @@ class Module_admin_sitemap
         $post_url = build_url(array('page' => '_SELF', 'type' => '_delete'), '_SELF');
         $submit_name = do_lang_tempcode('DELETE_PAGES');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $pages = find_all_pages_wrap($zone);
         foreach ($pages as $page => $type) {
             if (is_integer($page)) {
@@ -317,9 +317,9 @@ class Module_admin_sitemap
      */
     public function _delete()
     {
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
-        $file = new ocp_tempcode();
+        $file = new Tempcode();
         $zone = either_param('zone');
         $pages = array();
         require_code('site');
@@ -406,7 +406,7 @@ class Module_admin_sitemap
 
         decache('menu');
 
-        return $this->do_next_manager($this->title, null, $zone, new ocp_tempcode());
+        return $this->do_next_manager($this->title, null, $zone, new Tempcode());
     }
 
     /**
@@ -430,7 +430,7 @@ class Module_admin_sitemap
         $post_url = build_url(array('page' => '_SELF', 'type' => '_move'), '_SELF');
         $submit_name = do_lang_tempcode('MOVE_PAGES');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $pages = find_all_pages_wrap($zone);
         foreach ($pages as $page => $type) {
             if (is_integer($page)) {
@@ -517,7 +517,7 @@ class Module_admin_sitemap
             require_code('abstract_file_manager');
             force_have_afm_details();
         }
-        $cannot_move = new ocp_tempcode();
+        $cannot_move = new Tempcode();
         foreach ($pages as $page => $type) {
             if (!is_string($page)) {
                 $page = strval($page);
@@ -603,6 +603,6 @@ class Module_admin_sitemap
         if (has_js()) {
             return inform_screen($this->title, $message); // Came from sitemap editor, so want to just close this window when done
         }
-        return $this->do_next_manager($this->title, $moved_something, $new_zone, new ocp_tempcode());
+        return $this->do_next_manager($this->title, $moved_something, $new_zone, new Tempcode());
     }
 }

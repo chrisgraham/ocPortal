@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
+
+/**
+ * Module page class.
+ */
 class Module_classifieds
 {
     /**
@@ -133,7 +137,7 @@ class Module_classifieds
             return $this->adverts();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

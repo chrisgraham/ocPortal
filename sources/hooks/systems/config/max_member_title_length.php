@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_titles
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_max_member_title_length
 {
     /**

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    wordpress_style_page_children
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_wordpress_style_page_children
 {
     /**

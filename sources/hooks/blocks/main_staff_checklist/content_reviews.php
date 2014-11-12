@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    content_reviews
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_content_reviews
 {
     /**

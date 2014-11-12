@@ -10,7 +10,11 @@ This notification hook was created using the downloads notification hook as a te
  * @copyright  None asserted
  * @package    downloads_followup_email
  */
-class Hook_Notification_downloads_followup_email extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_downloads_followup_email extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

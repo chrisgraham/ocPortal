@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocbrowserbookmarks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_ocbrowserbookmarks
 {
     /**

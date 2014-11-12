@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Block class.
+ */
 class Block_side_calendar
 {
     /**
@@ -134,8 +138,8 @@ class Block_side_calendar
             $_period_end = mktime(0, 0, 0, $month + 1, 0, $year);
             $_days = intval(round(floatval($_period_end - $_period_start) / floatval(60 * 60 * 24)));
 
-            $_entries = new ocp_tempcode();
-            $__entries = new ocp_tempcode();
+            $_entries = new Tempcode();
+            $__entries = new Tempcode();
             $_dotw = date('D', $_period_start); // date() does not use locale so this is safe
             if (get_option('ssw') == '0') {
                 $ex_array = array('Mon' => 0, 'Tue' => 1, 'Wed' => 2, 'Thu' => 3, 'Fri' => 4, 'Sat' => 5, 'Sun' => 6);
@@ -182,7 +186,7 @@ class Block_side_calendar
 
                 if ($dotw == 6) {
                     $_entries->attach(do_template('CALENDAR_YEAR_MONTH_DAY_ROW', array('_GUID' => '4b4b1e5bcf541c66d1ba9a57c6521070', 'ENTRIES' => $__entries)));
-                    $__entries = new ocp_tempcode();
+                    $__entries = new Tempcode();
                     $dotw = 0;
                 } else {
                     $dotw++;

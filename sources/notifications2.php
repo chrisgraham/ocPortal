@@ -65,11 +65,11 @@ function notifications_ui($member_id_of)
     }
 
     // UI fields
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     $_notification_types = _get_available_notification_types($member_id_of);
     if (count($_notification_types) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $statistical_notification_type = _find_member_statistical_notification_type($member_id_of);
@@ -89,7 +89,7 @@ function notifications_ui($member_id_of)
             continue;
         }
         require_code('hooks/systems/notifications/' . $hook);
-        $ob = object_factory('Hook_Notification_' . $hook);
+        $ob = object_factory('Hook_notification_' . $hook);
         $_notification_codes = $ob->list_handled_codes();
         foreach ($_notification_codes as $notification_code => $notification_details) {
             if (array_key_exists($notification_code, $lockdown)) {
@@ -156,7 +156,7 @@ function notifications_ui($member_id_of)
         }
     }
     if (count($notification_sections) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     // Sort labels
@@ -433,7 +433,7 @@ function _notifications_build_category_tree($_notification_types, $notification_
         if ((!array_key_exists('num_children', $c)) && (array_key_exists('children', $c))) {
             $c['num_children'] = count($c['children']);
         }
-        $children = new ocp_tempcode();
+        $children = new Tempcode();
         if ((array_key_exists('num_children', $c)) && ($c['num_children'] != 0)) {
             $children = _notifications_build_category_tree($_notification_types, $notification_code, $ob, $notification_category, $depth + 1, $force_change_children_to_children);
         }

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_menus
  */
+
+/**
+ * Hook class.
+ */
 class Hook_management_menu
 {
     /**
@@ -30,6 +34,6 @@ class Hook_management_menu
             require_code('menus');
             return build_stored_menu('popup', '_management');
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

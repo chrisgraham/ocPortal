@@ -15,7 +15,10 @@
 
 require_code('crud_module');
 
-class Module_admin_workflow extends standard_crud_module
+/**
+ * Module page class.
+ */
+class Module_admin_workflow extends Standard_crud_module
 {
     public $lang_type = 'WORKFLOW';
     public $select_name = 'NAME';
@@ -191,7 +194,7 @@ class Module_admin_workflow extends standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -252,8 +255,8 @@ class Module_admin_workflow extends standard_crud_module
         require_code('form_templates');
 
         // These will hold our form elements, visible & hidden
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         // Grab all of the data we can about this workflow
         // Make some assumptions first
@@ -313,13 +316,13 @@ class Module_admin_workflow extends standard_crud_module
         $fields->attach(form_input_tick(do_lang('DEFAULT_WORKFLOW'), do_lang('DEFAULT_WORKFLOW_DESCRIPTION'), 'is_default', $default));
 
         // Actions
-        $fields2 = new ocp_tempcode();
+        $fields2 = new Tempcode();
         $fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('TITLE' => do_lang_tempcode('ACTIONS'))));
 
         // Add an option to redefine the approval permissions
         $fields2->attach(form_input_tick(do_lang('REDEFINE_WORKFLOW_POINTS'), do_lang('REDEFINE_WORKFLOW_POINTS_DESC'), 'redefine_points', false));
 
-        return array($fields, $hidden, new ocp_tempcode(), '', false, '', $fields2);
+        return array($fields, $hidden, new Tempcode(), '', false, '', $fields2);
     }
 
     /**
@@ -394,8 +397,8 @@ class Module_admin_workflow extends standard_crud_module
         }
 
         // These will hold our form fields
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         // Pass through the previous screen's data
         foreach (array('points', 'is_default', 'name') as $n) {
@@ -482,7 +485,7 @@ class Module_admin_workflow extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $rows = get_all_workflows();
         foreach ($rows as $id => $name) {
             $fields->attach(form_input_list_entry($id, false, $name));

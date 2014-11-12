@@ -138,7 +138,7 @@ class Module_invoices
         if ($type == 'pay') {
             return $this->pay();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

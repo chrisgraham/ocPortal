@@ -116,7 +116,7 @@ function php_addslashes_twice($in)
  */
 function make_string_tempcode($string)
 {
-    $tempcode = new ocp_tempcode();
+    $tempcode = new Tempcode();
     $tempcode->codename = ':string';
     $tempcode->attach($string);
     return $tempcode;
@@ -243,7 +243,7 @@ function do_lang_tempcode($symbol, $token1 = null, $token2 = null, $token3 = nul
             $parameters = array_merge($parameters, $token3);
         }
     }
-    $_ret = new ocp_tempcode();
+    $_ret = new Tempcode();
     $_ret->bits = array(array(array(), TC_LANGUAGE_REFERENCE, $symbol, $parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
     $_ret->pure_lang = true;
     return $_ret;
@@ -262,7 +262,7 @@ function symbol_tempcode($symbol, $parameters = null, $escape = null)
     if (is_null($parameters)) {
         $parameters = array();
     }
-    $_ret = new ocp_tempcode();
+    $_ret = new Tempcode();
     $_ret->bits = array(array(is_null($escape) ? array() : $escape, TC_SYMBOL, $symbol, $parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
     return $_ret;
 }
@@ -281,7 +281,7 @@ function directive_tempcode($directive, $content, $parameters = null)
         $parameters = array();
     }
     $parameters[] = $content;
-    $_ret = new ocp_tempcode();
+    $_ret = new Tempcode();
     $_ret->bits = array(array(array(), TC_DIRECTIVE, $directive, $parameters)); // An list of bits, which are stored as tuples, which contain a list of escaping
     return $_ret;
 }
@@ -373,7 +373,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
         if (!is_null($PERSISTENT_CACHE)) {
             $data = persistent_cache_get(array('TEMPLATE', $theme, $lang, $_codename));
             if (!is_null($data)) {
-                $_data = new ocp_tempcode();
+                $_data = new Tempcode();
                 $_data->from_assembly($data);
                 if ($_data->bits == array()) {
                     $data = false; // Corrupt somehow
@@ -382,7 +382,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
                 $data = false;
             }
         } elseif (is_null($data)) {
-            $_data = new ocp_tempcode();
+            $_data = new Tempcode();
             $tcp_path = get_custom_file_base() . '/themes/' . $theme . '/templates_cached/' . $lang . '/' . $_codename . $suffix . '.tcd';
             if (is_file($tcp_path)) {
                 $tmp = fopen($tcp_path, 'rb');
@@ -456,7 +456,7 @@ function do_template($codename, $parameters = null, $lang = null, $light_error =
 
     if ($special_treatment) {
         if ($KEEP_MARKERS) {
-            $__data = new ocp_tempcode();
+            $__data = new Tempcode();
             $__data->attach('<!-- START-TEMPLATE=' . $codename . ' -->');
             $__data->attach($ret);
             $__data->attach('<!-- END-TEMPLATE=' . $codename . ' -->');
@@ -588,7 +588,7 @@ function handle_symbol_preprocessing($bit, &$children)
             foreach ($param as $_param) {
                 $block_parts = explode('=', $_param, 2);
                 if (count($block_parts) != 2) {
-                    $BLOCKS_CACHE[serialize($param)] = new ocp_tempcode();
+                    $BLOCKS_CACHE[serialize($param)] = new Tempcode();
                     continue 2;
                 }
                 list($key, $val) = $block_parts;
@@ -755,7 +755,7 @@ function handle_symbol_preprocessing($bit, &$children)
                     $children[] = array(':page: ' . $param[0], $tp_value->children, $tp_value->fresh);
                 }
             } else {
-                $tp_value = new ocp_tempcode();
+                $tp_value = new Tempcode();
             }
 
             $PAGES_CACHE[serialize($param)] = $tp_value;
@@ -771,10 +771,8 @@ function handle_symbol_preprocessing($bit, &$children)
 
 /**
  * Tempcode (non-compiled implementation).
- *
- * @package    core
  */
-class ocp_tempcode
+class Tempcode
 {
     // An array of bits where each bit is array($escape,$type,$value[,$params])
     //   NB: 'escape' doesn't apply for tempcode-typed-parameters or language-references
@@ -791,7 +789,7 @@ class ocp_tempcode
      *
      * @param  ?array                   Pair: Code to preexecute, Initialisation seq-parts (NULL: start as empty)
      */
-    public function ocp_tempcode($details = null)
+    public function __construct($details = null)
     {
         if (!isset($details)) {
             $this->bits = array();
@@ -1067,7 +1065,7 @@ class ocp_tempcode
             }
         }
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->codename = $codename;
         if ($GLOBALS['RECORD_TEMPLATES_TREE']) {
             $out->children = isset($this->children) ? $this->children : array();

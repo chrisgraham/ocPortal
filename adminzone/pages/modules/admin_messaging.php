@@ -141,7 +141,7 @@ class Module_admin_messaging
             return $this->take_responsibility();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -151,7 +151,7 @@ class Module_admin_messaging
      */
     public function choose_message()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $start = get_param_integer('start', 0);
         $max = get_param_integer('max', 30);

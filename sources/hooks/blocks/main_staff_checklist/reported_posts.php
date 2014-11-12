@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_reported_posts
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_reported_posts
 {
     /**

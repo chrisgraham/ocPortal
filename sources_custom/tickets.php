@@ -2,7 +2,7 @@
 
 function get_ocportal_support_timings($open, $member_id, $ticket_type_name, $last_time, $say_more = false)
 {
-    $d = new ocp_tempcode();
+    $d = new Tempcode();
 
     if (!$open) {
         return $d;

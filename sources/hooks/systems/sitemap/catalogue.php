@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_catalogue extends Hook_sitemap_content
 {
     protected $content_type = 'catalogue';

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_wiki_show_stats_count_pages
 {
     /**

@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_groups extends standard_crud_module
+class Module_admin_ocf_groups extends Standard_crud_module
 {
     public $lang_type = 'GROUP';
     public $select_name = 'NAME';
@@ -134,7 +134,7 @@ class Module_admin_ocf_groups extends standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -210,8 +210,8 @@ class Module_admin_ocf_groups extends standard_crud_module
             $group_leader = '';
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_USERGROUP_TITLE'), 'name', $name, true));
 
@@ -225,7 +225,7 @@ class Module_admin_ocf_groups extends standard_crud_module
         $fields->attach(form_input_username(do_lang_tempcode('GROUP_LEADER'), do_lang_tempcode('DESCRIPTION_GROUP_LEADER'), 'group_leader', $group_leader, false));
 
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name', 'g_is_super_admin'), array('g_is_private_club' => 0));
-        $orderlist = new ocp_tempcode();
+        $orderlist = new Tempcode();
         $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
         $num_groups = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)', ($group_count > 200) ? array('g_is_private_club' => 0) : null);
         if (is_null($id)) {
@@ -261,7 +261,7 @@ class Module_admin_ocf_groups extends standard_crud_module
             $set_name = 'rank_image';
             $required = false;
             $set_title = do_lang_tempcode('RANK_IMAGE');
-            $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
+            $field_set = (count($ids) == 0) ? new Tempcode() : alternate_fields_set__start($set_name);
 
             $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'file', $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 
@@ -321,7 +321,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '0fd215401ffaace7f2f9f6aa73db4ce1', 'TITLE' => do_lang_tempcode('ACTIONS'))));
 
-        $copy_members_from_groups = new ocp_tempcode();
+        $copy_members_from_groups = new Tempcode();
         foreach ($rows as $row) {
             if (($row['id'] != db_get_first_id()) && ($row['id'] != $id)) {
                 $copy_members_from_groups->attach(form_input_list_entry(strval($row['id']), false, get_translated_text($row['g_name'], $GLOBALS['FORUM_DB'])));
@@ -330,7 +330,7 @@ class Module_admin_ocf_groups extends standard_crud_module
         $fields->attach(form_input_multi_list(do_lang_tempcode('COPY_MEMBERS_INTO'), do_lang_tempcode('DESCRIPTION_COPY_MEMBERS_INTO'), 'copy_members_into', $copy_members_from_groups));
 
         // Take permissions from
-        $permissions_from_groups = new ocp_tempcode();
+        $permissions_from_groups = new Tempcode();
         $permissions_from_groups = form_input_list_entry('-1', false, do_lang_tempcode('NA_EM'));
         foreach ($rows as $group) {
             if ($group['id'] != $id) {
@@ -392,7 +392,7 @@ class Module_admin_ocf_groups extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
 
@@ -427,7 +427,7 @@ class Module_admin_ocf_groups extends standard_crud_module
                 ($row['g_is_super_admin'] == 1) ? do_lang_tempcode('YES') : do_lang_tempcode('NO'),
             );
 
-            $orderlist = new ocp_tempcode();
+            $orderlist = new Tempcode();
             $selected_one = false;
             $order = $row['g_order'];
             for ($i = 0; $i < max(count($rows), $order); $i++) {
@@ -462,7 +462,7 @@ class Module_admin_ocf_groups extends standard_crud_module
      */
     public function create_selection_list_entries()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $order = (get_param_integer('keep_id_order', 0) == 0) ? 'g_promotion_threshold,id' : 'id';
         $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_order', 'g_name', 'g_promotion_target'), ($group_count > 300) ? array('g_is_private_club' => 0) : null, 'ORDER BY ' . $order);
@@ -519,7 +519,7 @@ class Module_admin_ocf_groups extends standard_crud_module
 
         $default_group = get_first_default_group();
 
-        $groups = new ocp_tempcode();
+        $groups = new Tempcode();
         $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
         if (($myrow['g_is_private_club'] == 1) && ($group_count > 300)) {
             $delete_fields = form_input_integer(do_lang_tempcode('NEW_USERGROUP'), do_lang_tempcode('DESCRIPTION_NEW_USERGROUP'), 'new_usergroup', null, false);
@@ -537,7 +537,7 @@ class Module_admin_ocf_groups extends standard_crud_module
         if (addon_installed('ecommerce')) {
             $usergroup_subs = $GLOBALS['FORUM_DB']->query_select('f_usergroup_subs', array('id', 's_title'), array('s_group_id' => intval($id)));
             if (count($usergroup_subs) != 0) {
-                $subs = new ocp_tempcode();
+                $subs = new Tempcode();
                 foreach ($usergroup_subs as $i => $sub) {
                     if ($i != 0) {
                         $subs->attach(do_lang_tempcode('LIST_SEP'));

@@ -145,7 +145,7 @@ function get_chatroom_fields($id = null, $is_made_by_me = false, $room_name = ''
 {
     require_code('form_templates');
 
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     $fields->attach(form_input_line(do_lang_tempcode('CHATROOM_NAME'), do_lang_tempcode('DESCRIPTION_CHATROOM_NAME'), 'room_name', $room_name, true));
     $fields->attach(form_input_line_comcode(do_lang_tempcode('WELCOME_MESSAGE'), do_lang_tempcode('DESCRIPTION_WELCOME_MESSAGE'), 'c_welcome', $welcome, false));
@@ -160,7 +160,7 @@ function get_chatroom_fields($id = null, $is_made_by_me = false, $room_name = ''
     $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '4381fe8487426cc3ae8afa090c2d4a44', 'SECTION_HIDDEN' => $allow2 == '' && $allow2_groups == '' && !$is_made_by_me, 'TITLE' => do_lang_tempcode($is_made_by_me ? 'PERMISSIONS' : 'LOWLEVEL_PERMISSIONS'))));
     $fields->attach(form_input_username_multi(do_lang_tempcode('ALLOW_LIST'), do_lang_tempcode('DESCRIPTION_ALLOW_LIST'), 'allow_list', array_map(array($GLOBALS['FORUM_DRIVER'], 'get_username'), ($allow2 == '') ? array() : array_map('intval', explode(',', $allow2))), 0, true));
     if ((!$is_made_by_me) || (get_option('group_private_chatrooms') == '1')) {
-        $usergroup_list = new ocp_tempcode();
+        $usergroup_list = new Tempcode();
         $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
         foreach ($groups as $key => $val) {
             if ($key != db_get_first_id()) {
@@ -190,7 +190,7 @@ function get_chatroom_fields($id = null, $is_made_by_me = false, $room_name = ''
     $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '605aae34cbc2c168c8e77a62ab9b8a47', 'SECTION_HIDDEN' => $disallow2 == '' && $disallow2_groups == '', 'TITLE' => do_lang_tempcode('ADVANCED'))));
     $fields->attach(form_input_username_multi(do_lang_tempcode('DISALLOW_LIST'), do_lang_tempcode('DESCRIPTION_DISALLOW_LIST'), 'disallow_list', array_map(array($GLOBALS['FORUM_DRIVER'], 'get_username'), ($disallow2 == '') ? array() : array_map('intval', explode(',', $disallow2))), 0, true));
     if ((!$is_made_by_me) || (get_option('group_private_chatrooms') == '1')) {
-        $usergroup_list = new ocp_tempcode();
+        $usergroup_list = new Tempcode();
         $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
         foreach ($groups as $key => $val) {
             if ($key != db_get_first_id()) {
@@ -226,7 +226,7 @@ function get_chatroom_fields($id = null, $is_made_by_me = false, $room_name = ''
         $fields->attach(content_review_get_fields('chat', is_null($id) ? null : strval($id)));
     }
 
-    return array($fields, new ocp_tempcode());
+    return array($fields, new Tempcode());
 }
 
 /**

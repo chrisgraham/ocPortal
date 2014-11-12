@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    authors
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_authors
 {
     /**
@@ -40,7 +44,7 @@ class Hook_rss_authors
             return null;
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('authors', array('*'), null, '', 1000);
         if (count($rows) == 1000) {
             return null; // Too much
@@ -66,7 +70,7 @@ class Hook_rss_authors
 
             $view_url = build_url(array('page' => 'authors', 'type' => 'view', 'id' => $row['author']), get_module_zone('authors'), null, false, false, true);
 
-            $if_comments = new ocp_tempcode();
+            $if_comments = new Tempcode();
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }

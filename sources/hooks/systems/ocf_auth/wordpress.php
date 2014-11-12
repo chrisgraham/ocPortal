@@ -19,6 +19,10 @@
  * @copyright  ocProducts Ltd
  * @package    import
  */
+
+/**
+ * Hook class.
+ */
 class Hook_ocf_auth_wordpress
 {
     /**

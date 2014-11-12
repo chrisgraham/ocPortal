@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocdeadpeople
  */
-class Hook_Notification_got_disease extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_got_disease extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

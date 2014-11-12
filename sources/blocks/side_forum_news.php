@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_side_forum_news
 {
     /**
@@ -59,7 +63,7 @@ class Block_side_forum_news
     public function run($map)
     {
         if (has_no_forum()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_css('news');
@@ -71,7 +75,7 @@ class Block_side_forum_news
         $date_key = array_key_exists('date_key', $map) ? $map['date_key'] : 'firsttime';
 
         $archive_url = null;
-        $submit_url = new ocp_tempcode();
+        $submit_url = new Tempcode();
 
         $forum_ids = array();
         if ((get_forum_type() == 'ocf') && ((strpos($forum_name, ',') !== false) || (preg_match('#\d[-\*\+]#', $forum_name) != 0) || (is_numeric($forum_name)))) {
@@ -113,7 +117,7 @@ class Block_side_forum_news
             $max_rows = 0;
             $topics = $GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids, $limit, 0, $max_rows, '', false, $date_key);
 
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             if (!is_null($topics)) {
                 sort_maps_by($topics, $date_key);
                 $topics = array_reverse($topics, false);
@@ -151,7 +155,7 @@ class Block_side_forum_news
                 'ARCHIVE_URL' => is_null($archive_url) ? '' : $archive_url,
             ));
         } else {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
     }
 }

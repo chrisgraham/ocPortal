@@ -113,7 +113,7 @@ class Module_admin_email_log
             return $this->mass_delete();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -143,7 +143,7 @@ class Module_admin_email_log
         }
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('DATE_TIME'), do_lang_tempcode('FROM'), do_lang_tempcode('TO'), do_lang_tempcode('SUBJECT')), $sortables, 'sort', $sortable . ' ' . $sort_order);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('logged_mail_messages', array('*'), null, 'ORDER BY  ' . $sortable . ' ' . $sort_order, $max, $start);
         foreach ($rows as $row) {
             $queued = $row['m_queued'] == 1;
@@ -200,7 +200,7 @@ class Module_admin_email_log
             )));
         }
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('logged_mail_messages', 'COUNT(*)');
-        $results_table = results_table(do_lang_tempcode('EMAIL_LOG'), $start, 'start', $max, 'max', $max_rows, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new ocp_tempcode());
+        $results_table = results_table(do_lang_tempcode('EMAIL_LOG'), $start, 'start', $max, 'max', $max_rows, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sort', new Tempcode());
 
         $mass_delete_url = build_url(array('page' => '_SELF', 'type' => 'mass_delete'), '_SELF');
         $mass_send_url = build_url(array('page' => '_SELF', 'type' => 'mass_send'), '_SELF');
@@ -220,7 +220,7 @@ class Module_admin_email_log
     {
         $id = get_param_integer('id');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         $rows = $GLOBALS['SITE_DB']->query_select('logged_mail_messages', array('*'), array('id' => $id));
@@ -267,7 +267,7 @@ class Module_admin_email_log
         $fields->attach(form_input_line_multi(do_lang_tempcode('EXTRA_BCC_ADDRESSES'), '', 'extra_bcc_addresses_', $extra_bcc_addresses, 0));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('MESSAGE'), '', 'message', $row['m_message'], true));
 
-        $radios = new ocp_tempcode();
+        $radios = new Tempcode();
         $radios->attach(form_input_radio_entry('action', 'edit', true, do_lang_tempcode('EDIT')));
         $radios->attach(form_input_radio_entry('action', 'send', false, do_lang_tempcode('EDIT_AND_SEND')));
         $radios->attach(form_input_radio_entry('action', 'delete', false, do_lang_tempcode('DELETE')));

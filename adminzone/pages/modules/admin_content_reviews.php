@@ -119,7 +119,7 @@ class Module_admin_content_reviews
 
         require_code('content');
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         require_code('form_templates');
 
         $_hooks = find_all_hooks('systems', 'content_meta_aware');
@@ -138,7 +138,7 @@ class Module_admin_content_reviews
                 continue;
             }
 
-            $content = new ocp_tempcode();
+            $content = new Tempcode();
             $content_ids = collapse_2d_complexity('content_id', 'next_review_time', $GLOBALS['SITE_DB']->query('SELECT content_id,next_review_time FROM ' . get_table_prefix() . 'content_reviews WHERE ' . db_string_equal_to('content_type', $content_type) . ' AND next_review_time<=' . strval(time()) . ' ORDER BY next_review_time', 100));
             $_content_ids = array();
             foreach ($content_ids as $content_id => $next_review_time) {

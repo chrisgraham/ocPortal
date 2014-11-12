@@ -178,7 +178,7 @@ class Module_search
             return $this->form();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -296,7 +296,7 @@ class Module_search
                 }
             }
 
-            $options = new ocp_tempcode();
+            $options = new Tempcode();
             if (array_key_exists('special_on', $info)) {
                 foreach ($info['special_on'] as $name => $display) {
                     $options->attach(do_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION', array('_GUID' => 'c1853f42d0a110026453f8b94c9f623c', 'CHECKED' => (!is_null($content)) || (get_param_integer('option_' . $id . '_' . $name, 0) == 1), 'NAME' => 'option_' . $id . '_' . $name, 'DISPLAY' => $display)));
@@ -325,7 +325,7 @@ class Module_search
             }
             $url = build_url($map, '_SELF', null, false, true);
 
-            $search_domains = new ocp_tempcode();
+            $search_domains = new Tempcode();
             $_search_domains = array();
             $_hooks = find_all_hooks('modules', 'search');
             foreach (array_keys($_hooks) as $hook) {
@@ -343,7 +343,7 @@ class Module_search
 
                 $checked = (get_param_integer('search_' . $hook, ((is_null($content)) || (get_param_integer('all_defaults', 0) == 1)) ? ($is_default_or_advanced ? 1 : 0) : 0) == 1);
 
-                $options_url = ((array_key_exists('special_on', $info)) || (array_key_exists('special_off', $info)) || (array_key_exists('extra_sort_fields', $info)) || (method_exists($ob, 'get_fields')) || (method_exists($ob, 'get_tree')) || (method_exists($ob, 'get_ajax_tree'))) ? build_url(array('page' => '_SELF', 'id' => $hook), '_SELF', null, false, true) : new ocp_tempcode();
+                $options_url = ((array_key_exists('special_on', $info)) || (array_key_exists('special_off', $info)) || (array_key_exists('extra_sort_fields', $info)) || (method_exists($ob, 'get_fields')) || (method_exists($ob, 'get_tree')) || (method_exists($ob, 'get_ajax_tree'))) ? build_url(array('page' => '_SELF', 'id' => $hook), '_SELF', null, false, true) : new Tempcode();
 
                 $_search_domains[] = array('_GUID' => '3d3099872184923aec0f49388f52c750', 'ADVANCED_ONLY' => (array_key_exists('advanced_only', $info)) && ($info['advanced_only']), 'CHECKED' => $checked, 'OPTIONS_URL' => $options_url, 'LANG' => $info['lang'], 'NAME' => $hook);
             }
@@ -586,7 +586,7 @@ class Module_search
                 }
             }
 
-            return array(new ocp_tempcode(), new ocp_tempcode(), 0);
+            return array(new Tempcode(), new Tempcode(), 0);
         }
 
         require_code('templates_pagination');

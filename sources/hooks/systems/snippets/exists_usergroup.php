@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_exists_usergroup
 {
     /**
@@ -30,7 +34,7 @@ class Hook_exists_usergroup
 
         $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('g_name') => $val));
         if (is_null($test)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return make_string_tempcode(strip_html(do_lang('ALREADY_EXISTS', escape_html($val))));

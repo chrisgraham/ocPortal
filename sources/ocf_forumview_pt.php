@@ -100,7 +100,7 @@ function ocf_get_private_topics($start = 0, $max = null, $member_id = null)
         $topic['first_time'] = $topic_row['t_cache_first_time'];
         $topic['first_title'] = $topic_row['t_cache_first_title'];
         if (is_null($topic_row['p_post'])) {
-            $topic['first_post'] = new ocp_tempcode();
+            $topic['first_post'] = new Tempcode();
         } else {
             $post_row = db_map_restrict($topic_row, array('p_post')) + array('id' => $topic_row['t_cache_first_post_id']);
             $topic['first_post'] = get_translated_tempcode('f_posts', $post_row, 'p_post', $GLOBALS['FORUM_DB']);

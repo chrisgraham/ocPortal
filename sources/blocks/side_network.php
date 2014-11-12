@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    msn
  */
+
+/**
+ * Block class.
+ */
 class Block_side_network
 {
     /**
@@ -70,6 +74,6 @@ class Block_side_network
             }
             return do_template('BLOCK_SIDE_NETWORK', array('_GUID' => '5fe8867b9f69670ad61e6c78b956fab2', 'CONTENT' => $if_network));
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

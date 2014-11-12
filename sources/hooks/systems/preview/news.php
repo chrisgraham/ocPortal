@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
-class Hook_Preview_news
+
+/**
+ * Hook class.
+ */
+class Hook_preview_news
 {
     /**
      * Find whether this preview hook applies.
@@ -50,7 +54,7 @@ class Hook_Preview_news
         $map_table_map[post_param('label_for__news')] = comcode_to_tempcode(post_param('news', ''));
 
         require_code('templates_map_table');
-        $map_table_fields = new ocp_tempcode();
+        $map_table_fields = new Tempcode();
         foreach ($map_table_map as $key => $val) {
             $map_table_fields->attach(map_table_field($key, $val, true));
         }

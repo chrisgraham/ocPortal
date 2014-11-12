@@ -217,10 +217,10 @@ function ocf_find_birthdays($time = null)
 function ocf_button_screen_wrap($buttons)
 {
     if (count($buttons) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
-    $b = new ocp_tempcode();
+    $b = new Tempcode();
     foreach ($buttons as $button) {
         $b->attach(do_template('BUTTON_SCREEN', array('_GUID' => 'bdd441c40c5b03134ce6541335fece2c', 'REL' => array_key_exists('rel', $button) ? $button['rel'] : null, 'IMMEDIATE' => $button['immediate'], 'URL' => $button['url'], 'IMG' => $button['img'], 'TITLE' => $button['title'])));
     }

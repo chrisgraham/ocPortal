@@ -148,7 +148,7 @@ if (!function_exists('critical_error')) {
                 $traces = '';
                 foreach ($stage as $key => $value) {
                     try {
-                        if ((is_object($value) && (is_a($value, 'ocp_tempcode'))) || (is_array($value) && (strlen(serialize($value)) > 500))) {
+                        if ((is_object($value) && (is_a($value, 'Tempcode'))) || (is_array($value) && (strlen(serialize($value)) > 500))) {
                             $_value = gettype($value);
                         } else {
                             $_value = gettype($value);

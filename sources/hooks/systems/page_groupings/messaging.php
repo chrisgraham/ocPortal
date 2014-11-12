@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_messaging
 {
     /**

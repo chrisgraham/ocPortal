@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    content_oop_api
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_content_oop_api
 {
     /**

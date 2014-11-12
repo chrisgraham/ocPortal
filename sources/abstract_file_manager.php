@@ -119,7 +119,7 @@ function get_afm_form()
 function get_afm_form_fields()
 {
     require_code('form_templates');
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     $ftp_username = get_value('ftp_username');
     $ftp_directory = get_value('ftp_directory');

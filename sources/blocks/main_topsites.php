@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    banners
  */
+
+/**
+ * Block class.
+ */
 class Block_main_topsites
 {
     /**
@@ -68,7 +72,7 @@ class Block_main_topsites
         $b_type = $map['param'];
         $myquery = 'SELECT * FROM ' . get_table_prefix() . 'banners WHERE validated=1 AND ' . db_string_equal_to('b_type', $b_type) . ' AND (expiry_date IS NULL OR expiry_date>' . strval(time()) . ') ORDER BY hits_from+hits_to DESC';
         $_banners = $GLOBALS['SITE_DB']->query($myquery, 200);
-        $assemble = new ocp_tempcode();
+        $assemble = new Tempcode();
 
         $banners = array();
 
@@ -94,7 +98,7 @@ class Block_main_topsites
         if ((has_actual_page_access(null, 'cms_banners', null, null)) && (has_submit_permission('mid', get_member(), get_ip_address(), 'cms_banners'))) {
             $submit_url = build_url(array('page' => 'cms_banners', 'type' => 'ad', 'redirect' => SELF_REDIRECT), get_module_zone('cms_banners'));
         } else {
-            $submit_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
         }
 
         return do_template('BLOCK_MAIN_TOPSITES', array('_GUID' => '776cecc3769b4f4e082be327da5b7248', 'TYPE' => $map['param'], 'BANNERS' => $banners, 'SUBMIT_URL' => $submit_url));

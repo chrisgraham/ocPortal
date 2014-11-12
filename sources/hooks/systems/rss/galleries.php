@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    galleries
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_galleries
 {
     /**
@@ -45,7 +49,7 @@ class Hook_rss_galleries
 
         require_lang('galleries');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $_galleries = array();
         if ($GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'galleries WHERE ' . $filters_1, false, true) < 3000) {
             $_galleries = $GLOBALS['SITE_DB']->query('SELECT fullname,name FROM ' . get_table_prefix() . 'galleries WHERE ' . $filters_1, null, null, false, true);
@@ -107,7 +111,7 @@ class Hook_rss_galleries
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => '65dc0cec8c75f565c58c95fa1667aa1e', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             require_code('images');

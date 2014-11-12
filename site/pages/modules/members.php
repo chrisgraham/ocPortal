@@ -190,7 +190,7 @@ class Module_members
             return $this->profile();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

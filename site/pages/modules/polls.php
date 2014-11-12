@@ -250,7 +250,7 @@ class Module_polls
             return $this->view();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -311,7 +311,7 @@ class Module_polls
         if ((has_actual_page_access(null, 'cms_polls', null, null)) && (has_edit_permission('high', get_member(), $myrow['submitter'], 'cms_polls'))) {
             $edit_url = build_url(array('page' => 'cms_polls', 'type' => '_ed', 'id' => $id), get_module_zone('cms_polls'));
         } else {
-            $edit_url = new ocp_tempcode();
+            $edit_url = new Tempcode();
         }
 
         // Load poll

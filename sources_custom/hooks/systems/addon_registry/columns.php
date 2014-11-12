@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    columns
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_columns
 {
     /**

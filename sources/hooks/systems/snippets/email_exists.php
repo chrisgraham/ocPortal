@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_email_exists
 {
     /**
@@ -30,7 +34,7 @@ class Hook_email_exists
 
         $test = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_members', 'm_username', array('m_email_address' => $val));
         if (is_null($test)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_lang('ocf');

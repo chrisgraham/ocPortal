@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_main_rss
 {
     /**
@@ -75,7 +79,7 @@ class Block_main_rss
                 continue;
             }
 
-            $rss = new rss($url);
+            $rss = new OCP_RSS($url);
             if (!is_null($rss->error)) {
                 $error = $rss->error;
                 continue;
@@ -89,7 +93,7 @@ class Block_main_rss
             relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED', $url, $error), false, 'error_occurred_rss');
             if (cron_installed()) {
                 if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
-                    return new ocp_tempcode();
+                    return new Tempcode();
                 }
             }
             return do_template('INLINE_WIP_MESSAGE', array('_GUID' => 'c2a067db18cd5f14392fa922b06967e4', 'MESSAGE' => htmlentities($error)));
@@ -116,7 +120,7 @@ class Block_main_rss
 
         // Now for the actual stream contents
         $max = array_key_exists('max_entries', $map) ? intval($map['max_entries']) : 10;
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $items = array();
         foreach ($rss_feeds as $_rss) {
             foreach ($_rss->gleamed_items as $item) {
@@ -146,7 +150,7 @@ class Block_main_rss
             $_title = $item['title'];
             $_title = array_key_exists('title', $item) ? $item['title'] : '';
 
-            $full_url = ($_full_url != '') ? hyperlink($_full_url, do_lang_tempcode('VIEW'), true, false, $_title) : new ocp_tempcode();
+            $full_url = ($_full_url != '') ? hyperlink($_full_url, do_lang_tempcode('VIEW'), true, false, $_title) : new Tempcode();
 
             if (array_key_exists('category', $rss->gleamed_items)) {
                 $_title = do_template('BLOCK_MAIN_RSS_TITLE', array('_GUID' => 'd962c1165564f080329decffeab88ba7', 'CATEGORY' => $rss->gleamed_items['category'], 'TITLE' => $_title));
@@ -154,13 +158,13 @@ class Block_main_rss
 
             if (!array_key_exists('news', $item)) {
                 $news = (array_key_exists('news_article', $item)) ? $item['news_article'] : '';
-                $news_full = new ocp_tempcode();
+                $news_full = new Tempcode();
             } else {
                 $news = $item['news'];
                 if (array_key_exists('news_article', $item)) {
                     $news_full = do_template('BLOCK_MAIN_RSS_FULL', array('_GUID' => 'adcd82c64966f54fb0173b8edc626bd7', 'NEWS_FULL' => $item['news_article']));
                 } else {
-                    $news_full = new ocp_tempcode();
+                    $news_full = new Tempcode();
                 }
             }
 
@@ -175,7 +179,7 @@ class Block_main_rss
                 }
                 $author = do_lang_tempcode('SUBMITTED_BY', $__author->evaluate());
             } else {
-                $author = new ocp_tempcode();
+                $author = new Tempcode();
             }
 
             // If we want to show in a tails arrangement (by default, we won't)
@@ -183,7 +187,7 @@ class Block_main_rss
                 $tails = do_template('BLOCK_MAIN_RSS_LIST_FIRST', array('_GUID' => '5ce8a5f1fd8a9487c01b63e791618589', 'X' => $author));
                 $tails->attach(do_template('BLOCK_MAIN_RSS_LIST_LAST', array('_GUID' => 'f199850d1b76cc4a6774731e1f89762e', 'X' => $full_url)));
             } else {
-                $tails = new ocp_tempcode();
+                $tails = new Tempcode();
             }
 
             if (array_key_exists('category', $item)) {
@@ -207,7 +211,7 @@ class Block_main_rss
                     $category = do_template('BLOCK_MAIN_RSS_CATEGORY_NO_IMG', array('_GUID' => '772e44215bd2682e51a96b7480753ded', 'CATEGORY' => $item['category']));
                 }
             } else {
-                $category = new ocp_tempcode();
+                $category = new Tempcode();
             }
 
             if (array_key_exists('add_date', $item)) {
@@ -247,7 +251,7 @@ class Block_main_rss
             }
             $author = do_lang_tempcode('RSS_SOURCE_FROM', $_author_string);
         } else {
-            $author = new ocp_tempcode();
+            $author = new Tempcode();
         }
 
         return do_template('BLOCK_MAIN_RSS', array('_GUID' => '6c9c1287abff88fda881e3e25ef7b296', 'FEED_URL' => $url, 'TITLE' => $rss->gleamed_feed['title'], 'COPYRIGHT' => $rss->gleamed_feed['copyright'], 'AUTHOR' => $author, 'CONTENT' => $content));

@@ -381,10 +381,10 @@ function comcode_helper_script_step2()
     $title = get_screen_title('_COMCODE_HELPER', true, array($tag));
 
     // Data will write through to here
-    $fields = new ocp_tempcode();
-    $fields_advanced = new ocp_tempcode();
+    $fields = new Tempcode();
+    $fields_advanced = new Tempcode();
     $done_tag_contents = false;
-    $hidden = new ocp_tempcode();
+    $hidden = new Tempcode();
     $javascript = '';
 
     $preview = true; // Whether we can preview the tag
@@ -442,7 +442,7 @@ function comcode_helper_script_step2()
                         if (substr($descriptiont, 0, 12) == '0|1 &ndash; ') {
                             $field = form_input_tick($parameter_name, protect_from_escaping(ucfirst(substr($descriptiont, 12))), $param, $default == '1');
                         } elseif ((substr($descriptiont, -1) != '.') && (strpos($descriptiont, '|') !== false)) {
-                            $list = new ocp_tempcode();
+                            $list = new Tempcode();
                             if (substr($descriptiont, 0, 1) != '=') {
                                 $list->attach(form_input_list_entry(''));
                             }
@@ -462,7 +462,7 @@ function comcode_helper_script_step2()
                                 $default_height = array_key_exists('height', $defaults) ? $defaults['height'] : get_param('default_height', '');
                                 $field = form_input_dimensions(do_lang_tempcode('DIMENSIONS'), do_lang_tempcode('COMCODE_TAG_PARAM_dimensions'), 'width', 'height', ($default_width == '') ? null : intval($default_width), ($default_height == '') ? null : intval($default_height), false);
                             } else {
-                                $field = new ocp_tempcode();
+                                $field = new Tempcode();
                             }
                         } else {
                             if ($supports_comcode) {
@@ -491,10 +491,10 @@ function comcode_helper_script_step2()
         $_params = $custom_tag_list[$tag];
         $params = explode(',', $_params['tag_parameters']);
         foreach ($params as $param) {
-            $description = new ocp_tempcode();
+            $description = new Tempcode();
             $fields->attach(form_input_line(preg_replace('#=.*$#', '', titleify($param)), protect_from_escaping($description), preg_replace('#=.*$#', '', $param), preg_replace('#^.*=#U', '', $param), false));
         }
-        $tag_description = new ocp_tempcode();
+        $tag_description = new Tempcode();
         $tag_description->attach(is_integer($_params['tag_description']) ? get_translated_text($_params['tag_description']) : $_params['tag_description']);
         $tag_description->attach(paragraph(is_integer($_params['tag_example']) ? get_translated_text($_params['tag_example']) : $_params['tag_example']));
     }
@@ -704,7 +704,7 @@ function _try_for_special_comcode_tag_specific_param_ui($tag, $actual_tag, $para
     }
 
     if ((($tag == 'attachment') || ($tag == 'media')) && ($param == 'type')) {
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $list->attach(form_input_list_entry('', $default == '', do_lang('MEDIA_TYPE_')));
         $hooks = find_all_hooks('systems', 'media_rendering');
         foreach (array_keys($hooks) as $hook) {

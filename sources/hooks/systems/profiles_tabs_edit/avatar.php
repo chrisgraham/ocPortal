@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_avatars
  */
-class Hook_Profiles_Tabs_Edit_avatar
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_avatar
 {
     /**
      * Find whether this hook is active.
@@ -99,7 +103,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 
         require_javascript('javascript_multi');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
         require_code('themes2');
         $ids = get_all_image_ids_type('ocf_default_avatars', true);
@@ -112,7 +116,7 @@ class Hook_Profiles_Tabs_Edit_avatar
                 $found_it = true;
             }
         }
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         if (has_privilege($member_id_viewing, 'own_avatars')) {
             $set_name = 'avatar';
             $required = false;
@@ -150,7 +154,7 @@ class Hook_Profiles_Tabs_Edit_avatar
 
         $text = do_template('OCF_EDIT_AVATAR_TAB', array('_GUID' => 'dbdac6ca3bc752b54d2a24a4c6e69c7c', 'MEMBER_ID' => strval($member_id_of), 'USERNAME' => $GLOBALS['FORUM_DRIVER']->get_username($member_id_of), 'AVATAR' => $avatar, 'WIDTH' => integer_format($width), 'HEIGHT' => integer_format($height)));
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('submitting_avatar_tab', '1'));
 
         $javascript = '';

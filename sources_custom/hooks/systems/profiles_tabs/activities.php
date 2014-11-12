@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
-class Hook_Profiles_Tabs_activities
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_activities
 {
     /**
      * Find whether this hook is active.
@@ -59,7 +63,7 @@ class Hook_Profiles_Tabs_activities
             $dests = find_all_hooks('systems', 'syndication');
             foreach (array_keys($dests) as $hook) {
                 require_code('hooks/systems/syndication/' . $hook);
-                $ob = object_factory('Hook_Syndication_' . $hook);
+                $ob = object_factory('Hook_syndication_' . $hook);
                 if ($ob->is_available()) {
                     if (either_param('syndicate_stop__' . $hook, null) !== null) {
                         $ob->auth_unset($member_id_of);

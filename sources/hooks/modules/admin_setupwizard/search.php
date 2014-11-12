@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_search
 {
     /**

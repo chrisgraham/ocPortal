@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
-class Hook_Notification_task_completed extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_task_completed extends Hook_Notification
 {
     /**
      * Find a bitmask of settings (email, SMS, etc) a notification code supports for listening on.

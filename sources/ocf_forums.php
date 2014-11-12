@@ -74,7 +74,7 @@ function render_forum_box($row, $zone = '_SEARCH', $give_context = true, $includ
     $num_topics = $row['f_cache_num_topics'];
     $num_posts = $row['f_cache_num_posts'];
 
-    $entry_details = new ocp_tempcode();
+    $entry_details = new Tempcode();
     $entry_details->attach(do_lang_tempcode('FORUM_NUM_TOPICS', escape_html(integer_format($num_topics))));
     $entry_details->attach(do_lang_tempcode('LIST_SEP'));
     $entry_details->attach(do_lang_tempcode('FORUM_NUM_POSTS', escape_html(integer_format($num_posts))));
@@ -305,7 +305,7 @@ function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_foru
     }
 
     if (is_null($end_point_forum)) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     static $cache = array();
@@ -316,7 +316,7 @@ function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_foru
     if (is_null($this_name)) {
         $_forum_details = $GLOBALS['FORUM_DB']->query_select('f_forums', array('f_name', 'f_parent_forum'), array('id' => $end_point_forum), '', 1);
         if (!array_key_exists(0, $_forum_details)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }//warn_exit(do_lang_tempcode('_MISSING_RESOURCE','forum#'.strval($end_point_forum)));
         $forum_details = $_forum_details[0];
         $this_name = escape_html($forum_details['f_name']);
@@ -338,7 +338,7 @@ function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_foru
         }
         $_this_name = hyperlink(build_url($map, get_module_zone('forumview')), $this_name, false, false, $start ? do_lang_tempcode('VIRTUAL_ROOT') : do_lang_tempcode('GO_BACKWARDS_TO', @html_entity_decode($this_name, ENT_QUOTES, get_charset())), null, null, 'up');
     } else {
-        $_this_name = new ocp_tempcode();
+        $_this_name = new Tempcode();
         $_this_name->attach('<span>');
         $_this_name->attach($this_name);
         $_this_name->attach('</span>');
@@ -349,7 +349,7 @@ function ocf_forum_breadcrumbs($end_point_forum, $this_name = null, $parent_foru
             $out->attach(do_template('BREADCRUMB_SEPARATOR'));
         }
     } else {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
     }
     $out->attach($_this_name);
 

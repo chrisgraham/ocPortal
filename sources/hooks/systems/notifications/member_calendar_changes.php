@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
-class Hook_Notification_member_calendar_changes extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_member_calendar_changes extends Hook_notification__Staff
 {
     /**
      * Get a list of all the notification codes this hook can handle.

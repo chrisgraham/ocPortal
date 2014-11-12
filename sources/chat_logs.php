@@ -61,7 +61,7 @@ function chat_logs_script()
     }
 
     // Build the text file
-    $message_contents = new ocp_tempcode();
+    $message_contents = new Tempcode();
     foreach ($messages as $_message) {
         $message_contents->attach(do_template('CHAT_MESSAGE', array(
             '_GUID' => 'ff22f181850feaba2a062b7edf71e332',

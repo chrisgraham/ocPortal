@@ -209,7 +209,7 @@ class Module_purchase
         if ($type == 'finish') {
             return $this->finish();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -241,7 +241,7 @@ class Module_purchase
 
         require_code('form_templates');
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $filter = get_param('filter', '');
         $type_filter = get_param_integer('type_filter', null);
         $products = find_all_products();
@@ -298,7 +298,7 @@ class Module_purchase
 
         $type_code = get_param('type_code');
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         $object = find_product($type_code);
         if (is_null($object)) {
             warn_exit(do_lang_tempcode('MISSING_RESOURCE'));
@@ -470,7 +470,7 @@ class Module_purchase
 
         $text = mixed();
         if (get_param_integer('include_message', 0) == 1) {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
             if (method_exists($object, 'product_info')) {
                 $text->attach($object->product_info(get_param_integer('product'), $this->title));
             } elseif (method_exists($object, 'get_message')) {
@@ -485,7 +485,7 @@ class Module_purchase
                 $transaction_button = make_transaction_button($type_code, $item_name, $purchase_id, floatval($price), get_option('currency'), $via);
             }
             $tpl = ($temp[$type_code][0] == PRODUCT_SUBSCRIPTION) ? 'PURCHASE_WIZARD_STAGE_SUBSCRIBE' : 'PURCHASE_WIZARD_STAGE_PAY';
-            $logos = method_exists($purchase_object, 'get_logos') ? $purchase_object->get_logos() : new ocp_tempcode();
+            $logos = method_exists($purchase_object, 'get_logos') ? $purchase_object->get_logos() : new Tempcode();
             $result = do_template($tpl, array(
                 'LOGOS' => $logos,
                 'TRANSACTION_BUTTON' => $transaction_button,

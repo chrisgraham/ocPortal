@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_feedback_features
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_feedback_features
 {
     /**
@@ -215,7 +219,7 @@ class Hook_addon_registry_core_feedback_features
      */
     public function tpl_preview__administrative__trackback_delete_screen()
     {
-        $trackbacks = new ocp_tempcode();
+        $trackbacks = new Tempcode();
         foreach (placeholder_array() as $k => $value) {
             $trackbacks->attach(do_lorem_template('TRACKBACK', array(
                 'ID' => strval($k),
@@ -349,7 +353,7 @@ class Hook_addon_registry_core_feedback_features
             'REVIEW_TITLE' => lorem_phrase(),
             'REVIEW_RATING' => make_string_tempcode(float_format(10.0)),
         );
-        $comments = new ocp_tempcode();
+        $comments = new Tempcode();
         foreach (placeholder_array() as $i => $comment) {
             $map = array(
                 'INDIVIDUAL_REVIEW_RATINGS' => array(),
@@ -361,7 +365,7 @@ class Hook_addon_registry_core_feedback_features
                 'POSTER_URL' => placeholder_url(),
                 'POSTER_NAME' => lorem_word(),
                 'POSTER' => null,
-                'POSTER_DETAILS' => new ocp_tempcode(),
+                'POSTER_DETAILS' => new Tempcode(),
                 'ID' => placeholder_id() . strval($i),
                 'POST' => lorem_phrase(),
                 'POST_COMCODE' => lorem_phrase(),
@@ -369,12 +373,12 @@ class Hook_addon_registry_core_feedback_features
                 'OTHER_IDS' => array(
                     placeholder_id()
                 ),
-                'RATING' => new ocp_tempcode(),
-                'EMPHASIS' => new ocp_tempcode(),
-                'BUTTONS' => new ocp_tempcode(),
+                'RATING' => new Tempcode(),
+                'EMPHASIS' => new Tempcode(),
+                'BUTTONS' => new Tempcode(),
                 'LAST_EDITED_RAW' => '',
-                'LAST_EDITED' => new ocp_tempcode(),
-                'UNVALIDATED' => new ocp_tempcode(),
+                'LAST_EDITED' => new Tempcode(),
+                'UNVALIDATED' => new Tempcode(),
                 'TOPIC_ID' => placeholder_id(),
                 'IS_SPACER_POST' => false,
                 'IS_THREADED' => false,
@@ -445,7 +449,7 @@ class Hook_addon_registry_core_feedback_features
     {
         $trackbacks = placeholder_array();
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         foreach ($trackbacks as $i => $value) {
             $content->attach(do_lorem_template('TRACKBACK', array(

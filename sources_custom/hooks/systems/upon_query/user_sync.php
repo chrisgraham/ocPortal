@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    user_sync
  */
+
+/**
+ * Hook class.
+ */
 class Hook_upon_query_user_sync
 {
     public function run_post($ob, $query, $max, $start, $fail_ok, $get_insert_id, $ret)

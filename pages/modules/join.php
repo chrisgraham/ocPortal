@@ -127,7 +127,7 @@ class Module_join
             return $this->step4();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -154,7 +154,7 @@ class Module_join
         }
         $url = build_url($map, '_SELF');
 
-        $group_select = new ocp_tempcode();
+        $group_select = new Tempcode();
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name', 'g_is_default'), array('g_is_presented_at_install' => 1), 'ORDER BY g_order');
         if (count($rows) > 1) {
             foreach ($rows as $group) {
@@ -243,7 +243,7 @@ class Module_join
         $code = intval($_code);
         if ($code <= 0) {
             require_code('form_templates');
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_email(do_lang_tempcode('EMAIL_ADDRESS'), '', 'email', '', true));
             $fields->attach(form_input_integer(do_lang_tempcode('CODE'), '', 'code', null, true));
             $submit_name = do_lang_tempcode('PROCEED');

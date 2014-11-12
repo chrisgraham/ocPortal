@@ -123,7 +123,7 @@ class Module_admin_pointstore
             return $this->set_prices();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -139,7 +139,7 @@ class Module_admin_pointstore
         $rows = $GLOBALS['SITE_DB']->query_select('sales', array('*'), null, 'ORDER BY date_and_time DESC', $max, $start);
         $max_rows = $GLOBALS['SITE_DB']->query_value('sales', 'COUNT(*)');
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         require_code('templates_results_table');
         require_code('templates_columned_table');
         $do_other_details = false;
@@ -234,8 +234,8 @@ class Module_admin_pointstore
      */
     public function interface_set_prices()
     {
-        $field_groups = new ocp_tempcode();
-        $add_forms = new ocp_tempcode();
+        $field_groups = new Tempcode();
+        $add_forms = new Tempcode();
 
         // Load up configuration from hooks
         $_hooks = find_all_hooks('modules', 'pointstore');
@@ -280,7 +280,7 @@ class Module_admin_pointstore
         $post_url = build_url(array('page' => '_SELF', 'type' => '_p'), '_SELF');
 
         if ($field_groups->is_empty()) {
-            $edit_form = new ocp_tempcode();
+            $edit_form = new Tempcode();
         } else {
             $edit_form = do_template('FORM_GROUPED', array(
                 '_GUID' => 'bf025026dcfc86cfd0a8ef3728bbf6d8',

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    usergroup_field_match
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_usergroup_field_match
 {
     /**

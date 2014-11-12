@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    occle
  */
+
+/**
+ * Hook class.
+ */
 class Hook_occle
 {
     /**
@@ -44,6 +48,6 @@ class Hook_occle
             ));
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

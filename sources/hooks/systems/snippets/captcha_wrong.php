@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    captcha
  */
+
+/**
+ * Hook class.
+ */
 class Hook_captcha_wrong
 {
     /**
@@ -30,7 +34,7 @@ class Hook_captcha_wrong
 
         require_code('captcha');
         if (check_captcha($val)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return make_string_tempcode(strip_html(do_lang('INVALID_SECURITY_CODE_ENTERED')));

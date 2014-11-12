@@ -157,7 +157,7 @@ class Module_cms_authors
             return $this->ed();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -235,8 +235,8 @@ class Module_cms_authors
         $post_url = build_url(array('page' => '_SELF', 'type' => '__ad', 'author' => $author), '_SELF');
         $submit_name = do_lang_tempcode('SAVE');
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         if (is_null($handle)) {
             $fields->attach(form_input_line(do_lang_tempcode('AUTHOR'), do_lang_tempcode('DESCRIPTION_NAME'), 'author', $author, true));
@@ -403,14 +403,14 @@ class Module_cms_authors
         $define_form = do_template('FORM', array('_GUID' => '1109c0cfdd598bf87134de1838709c39', 'TABINDEX' => strval(get_form_field_tabindex()), 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'GET' => true, 'URL' => $post_url, 'SUBMIT_ICON' => 'menu___generic_admin__edit_this', 'SUBMIT_NAME' => $submit_name));
 
         if (has_privilege(get_member(), 'delete_midrange_content')) {
-            $fields = new ocp_tempcode();
+            $fields = new Tempcode();
             $fields->attach(form_input_list(do_lang_tempcode('PARAMETER_A'), '', 'mauthor', $authors));
             $fields->attach(form_input_list(do_lang_tempcode('PARAMETER_B'), do_lang_tempcode('DESCRIPTION_NAME'), 'mauthor2', $authors));
             $post_url = build_url(array('page' => '_SELF', 'type' => '_mg'), '_SELF');
             $submit_name = do_lang_tempcode('MERGE_AUTHORS');
             $merge_form = do_template('FORM', array('_GUID' => 'd0dd075a54b72cfe47d3c2d9fe987c89', 'TABINDEX' => strval(get_form_field_tabindex()), 'SECONDARY_FORM' => true, 'HIDDEN' => '', 'TEXT' => '', 'FIELDS' => $fields, 'URL' => $post_url, 'SUBMIT_ICON' => 'menu___generic_admin__merge', 'SUBMIT_NAME' => $submit_name));
         } else {
-            $merge_form = new ocp_tempcode();
+            $merge_form = new Tempcode();
         }
 
         return do_template('AUTHOR_MANAGE_SCREEN', array('_GUID' => '84f8de5d53090d138cb653bb861f2f70', 'TITLE' => $this->title, 'MERGE_FORM' => $merge_form, 'DEFINE_FORM' => $define_form));
@@ -453,7 +453,7 @@ class Module_cms_authors
         }
         $authors = array_unique($authors);
         sort($authors);
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach ($authors as $author) {
             $selected = ($author == $it);
             $out->attach(form_input_list_entry($author, $selected, $author));

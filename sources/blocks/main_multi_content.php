@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_main_multi_content
 {
     /**
@@ -158,7 +162,7 @@ class Block_main_multi_content
         $filter = isset($map['filter']) ? $map['filter'] : '';
         $filter_b = isset($map['filter_b']) ? $map['filter_b'] : '';
         if ($filter_b == '*') {
-            return new ocp_tempcode(); // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution
+            return new Tempcode(); // Indicates some kind of referencing error, probably caused by Tempcode pre-processing - skip execution
         }
         $ocselect = isset($map['ocselect']) ? $map['ocselect'] : '';
         $zone = isset($map['zone']) ? $map['zone'] : '_SEARCH';
@@ -561,9 +565,9 @@ class Block_main_multi_content
             list($archive_url_zone, $archive_url_map, $archive_url_hash) = page_link_decode($info['archive_url']);
             $archive_url = build_url($archive_url_map, $archive_url_zone, null, false, false, false, $archive_url_hash);
         } else {
-            $archive_url = new ocp_tempcode();
+            $archive_url = new Tempcode();
         }
-        $view_url = array_key_exists('view_url', $info) ? $info['view_url'] : new ocp_tempcode();
+        $view_url = array_key_exists('view_url', $info) ? $info['view_url'] : new Tempcode();
 
         $done_already = array(); // We need to keep track, in case those pulled up via awards would also come up naturally
 
@@ -633,14 +637,14 @@ class Block_main_multi_content
         }
 
         if ((isset($map['no_links'])) && ($map['no_links'] == '1')) {
-            $submit_url = new ocp_tempcode();
-            $archive_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
+            $archive_url = new Tempcode();
         }
 
         // Empty? Bomb out somehow
         if (count($rendered_content) == 0) {
             if ((isset($map['render_if_empty'])) && ($map['render_if_empty'] == '0')) {
-                return new ocp_tempcode();
+                return new Tempcode();
             }
         }
 

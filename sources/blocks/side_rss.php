@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_side_rss
 {
     /**
@@ -72,14 +76,14 @@ class Block_side_rss
         $ticker = (array_key_exists('ticker', $map)) && ($map['ticker'] == '1');
 
         require_code('rss');
-        $rss = new rss($url);
+        $rss = new OCP_RSS($url);
         if (!is_null($rss->error)) {
             $GLOBALS['DO_NOT_CACHE_THIS'] = true;
             require_code('failure');
             relay_error_notification(do_lang('ERROR_HANDLING_RSS_FEED', $url, $rss->error), false, 'error_occurred_rss');
             if (cron_installed()) {
                 if (!$GLOBALS['FORUM_DRIVER']->is_staff(get_member())) {
-                    return new ocp_tempcode();
+                    return new Tempcode();
                 }
             }
             return do_template('INLINE_WIP_MESSAGE', array('_GUID' => 'b1da4a43b092dc991c27952a7ef530d1', 'MESSAGE' => htmlentities($rss->error)));
@@ -123,7 +127,7 @@ class Block_side_rss
             }
             $_author = do_lang_tempcode('RSS_SOURCE_FROM', $_author_string);
         } else {
-            $_author = new ocp_tempcode();
+            $_author = new Tempcode();
         }
         if (!array_key_exists('copyright', $rss->gleamed_feed)) {
             $rss->gleamed_feed['copyright'] = '';
@@ -134,7 +138,7 @@ class Block_side_rss
 
         // Now for the actual stream contents
         $max = array_key_exists('max_entries', $map) ? intval($map['max_entries']) : 5;
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($items as $i => $item) {
             if ($i >= $max) {
                 break;

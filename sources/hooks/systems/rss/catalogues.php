@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    catalogues
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_catalogues
 {
     /**
@@ -73,7 +77,7 @@ class Hook_rss_catalogues
             $catalogues[$catalogue['c_name']] = $catalogue;
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row) {
             if ((count($_categories) == 300) && (!array_key_exists($row['cc_id'], $categories))) {
                 $val = $GLOBALS['SITE_DB']->query_value_if_there('SELECT cc_title FROM ' . get_table_prefix() . 'catalogue_categories WHERE id=' . strval($row['cc_id']) . ' AND (' . $filters_1 . ')', false, true);
@@ -118,7 +122,7 @@ class Hook_rss_catalogues
                 if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                     $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'ee850d0e7f50b21f2dbe17cc49494baa', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
                 } else {
-                    $if_comments = new ocp_tempcode();
+                    $if_comments = new Tempcode();
                 }
 
                 $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));

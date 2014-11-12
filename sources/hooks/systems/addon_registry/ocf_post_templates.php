@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_post_templates
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_post_templates
 {
     /**
@@ -130,7 +134,7 @@ class Hook_addon_registry_ocf_post_templates
         require_lang('ocf');
         require_css('ocf');
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
             $list->attach(do_lorem_template('FORM_SCREEN_INPUT_LIST_ENTRY', array(
                 'SELECTED' => false,
@@ -146,7 +150,7 @@ class Hook_addon_registry_ocf_post_templates
             'LIST' => $list,
         ));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(do_lorem_template('FORM_SCREEN_FIELD', array(
             'REQUIRED' => true,
             'SKIP_LABEL' => false,

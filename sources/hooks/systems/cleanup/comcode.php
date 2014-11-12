@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_comcode
 {
     /**
@@ -49,6 +53,6 @@ class Hook_comcode
     {
         erase_comcode_cache();
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 }

@@ -60,7 +60,7 @@ function ocf_join_form($url, $captcha_if_enabled = true, $intro_message_if_enabl
     require_code('ocf_members_action2');
     require_code('form_templates');
 
-    $hidden = new ocp_tempcode();
+    $hidden = new Tempcode();
     $hidden->attach(build_keep_post_fields());
 
     $groups = ocf_get_all_default_groups(true);
@@ -402,7 +402,7 @@ function ocf_join_actual($captcha_if_enabled = true, $intro_message_if_enabled =
     }
 
     // Alert user to situation
-    $message = new ocp_tempcode();
+    $message = new Tempcode();
     if ($coppa) {
         if (!$skip_confirm) {
             $message->attach(do_lang_tempcode('OCF_WAITING_CONFIRM_MAIL'));

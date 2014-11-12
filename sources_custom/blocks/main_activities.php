@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
+
+/**
+ * Block class.
+ */
 class Block_main_activities
 {
     /**
@@ -178,7 +182,7 @@ class Block_main_activities
                 );
             }
         } else {
-            $pagination = new ocp_tempcode();
+            $pagination = new Tempcode();
         }
 
         return do_template('BLOCK_MAIN_ACTIVITIES', array(

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_addon_management
  */
+
+/**
+ * Hook class.
+ */
 class Hook_choose_ocportalcom_addon
 {
     /**
@@ -71,7 +75,7 @@ class Hook_choose_ocportalcom_addon
     {
         $file = $this->get_file($id);
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         if (is_null($id)) {// Root, needs an NA option
             $list->attach(form_input_list_entry('', false, do_lang_tempcode('NA_EM')));
         }

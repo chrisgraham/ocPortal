@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_catalogues extends standard_crud_module
+class Module_cms_catalogues extends Standard_crud_module
 {
     public $lang_type = 'CATALOGUE_ENTRY';
     public $select_name = 'ENTRY';
@@ -226,7 +226,7 @@ class Module_cms_catalogues extends standard_crud_module
             return $this->export_catalogue();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -317,7 +317,7 @@ class Module_cms_catalogues extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         $only_owned = has_privilege(get_member(), 'edit_midrange_content', 'cms_catalogues') ? null : get_member();
@@ -424,7 +424,7 @@ class Module_cms_catalogues extends standard_crud_module
         require_code('feedback');
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $hidden = form_input_hidden('catalogue_name', $catalogue_name);
 
@@ -491,7 +491,7 @@ class Module_cms_catalogues extends standard_crud_module
                 }
             }
             if (!array_key_exists($field_cat, $field_groups)) {
-                $field_groups[$field_cat] = new ocp_tempcode();
+                $field_groups[$field_cat] = new Tempcode();
             }
 
             $_cf_description = escape_html(get_translated_text($field['cf_description']));
@@ -575,7 +575,7 @@ class Module_cms_catalogues extends standard_crud_module
             }
         }
 
-        $fields2 = new ocp_tempcode();
+        $fields2 = new Tempcode();
         if ((!is_null($id)) && (is_ecommerce_catalogue($catalogue_name)) && (!$this->may_delete_this(strval($id)))) {
             $_submitter = $this->get_submitter($id);
             $submitter = $_submitter[0];
@@ -962,27 +962,27 @@ class Module_cms_catalogues extends standard_crud_module
         $submit_name = do_lang_tempcode('CATALOGUE_IMPORT');
 
         // Build up form
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
 
         $fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'), do_lang_tempcode('CSV_UPLOAD_DESC'), 'file_novalidate', true, null, null, true, 'csv,txt'));
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden);
 
         $fields->attach(form_input_codename(do_lang_tempcode('CATALOGUE_CSV_IMPORT_KEY_FIELD'), do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_IMPORT_KEY_FIELD'), 'key_field', '', false));
 
-        $new_handling_options = new ocp_tempcode();
+        $new_handling_options = new Tempcode();
         $new_handling_options->attach(form_input_radio_entry('new_handling', 'add', true, do_lang_tempcode('NEW_HANDLING_ADD')));
         $new_handling_options->attach(form_input_radio_entry('new_handling', 'skip', false, do_lang_tempcode('NEW_HANDLING_SKIP')));
         $fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_NEW_HANDLING'), do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_NEW_HANDLING'), 'new_handling', $new_handling_options));
 
-        $delete_handling_options = new ocp_tempcode();
+        $delete_handling_options = new Tempcode();
         $delete_handling_options->attach(form_input_radio_entry('delete_handling', 'delete', false, do_lang_tempcode('DELETE_HANDLING_DELETE')));
         $delete_handling_options->attach(form_input_radio_entry('delete_handling', 'leave', true, do_lang_tempcode('DELETE_HANDLING_LEAVE')));
         $fields->attach(form_input_radio(do_lang_tempcode('CATALOGUE_CSV_DELETE_HANDLING'), do_lang_tempcode('DESCRIPTION_CATALOGUE_CSV_DELETE_HANDLING'), 'delete_handling', $delete_handling_options));
 
-        $update_handling_options = new ocp_tempcode();
+        $update_handling_options = new Tempcode();
         $update_handling_options->attach(form_input_radio_entry('update_handling', 'overwrite', true, do_lang_tempcode('UPDATE_HANDLING_OVERWRITE')));
         $update_handling_options->attach(form_input_radio_entry('update_handling', 'freshen', false, do_lang_tempcode('UPDATE_HANDLING_FRESHEN')));
         $update_handling_options->attach(form_input_radio_entry('update_handling', 'skip', false, do_lang_tempcode('UPDATE_HANDLING_SKIP')));
@@ -1092,7 +1092,7 @@ class Module_cms_catalogues extends standard_crud_module
 
         $catalogue_name = get_param('catalogue_name');
         $this->_export_catalogue($catalogue_name);
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -1111,7 +1111,7 @@ class Module_cms_catalogues extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_catalogues_cat extends standard_crud_module
+class Module_cms_catalogues_cat extends Standard_crud_module
 {
     public $lang_type = 'CATALOGUE_CATEGORY';
     public $select_name = 'NAME';
@@ -1158,7 +1158,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $catalogue_name = get_param('catalogue_name');
 
@@ -1228,9 +1228,9 @@ class Module_cms_catalogues_cat extends standard_crud_module
             $parent_id = get_param_integer('parent_id', -1);
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('catalogue_name', $catalogue_name));
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, false));
@@ -1250,7 +1250,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
         }
 
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '745236e628a4d3da5355f07874433600', 'SECTION_HIDDEN' => is_null($move_target), 'TITLE' => do_lang_tempcode('CLASSIFIED_ADS'))));
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $fields->attach(form_input_tree_list(do_lang_tempcode('EXPIRY_MOVE_TARGET'), do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_TARGET'), 'move_target', null, 'choose_catalogue_category', array('catalogue_name' => $catalogue_name), false, is_null($move_target) ? null : strval($move_target)));
         if (cron_installed()) {
             $fields->attach(form_input_integer(do_lang_tempcode('EXPIRY_MOVE_DAYS_LOWER'), do_lang_tempcode('DESCRIPTION_EXPIRY_MOVE_DAYS_LOWER'), 'move_days_lower', $move_days_lower, true));
@@ -1503,7 +1503,7 @@ class Module_cms_catalogues_cat extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_catalogues_alt extends standard_crud_module
+class Module_cms_catalogues_alt extends Standard_crud_module
 {
     public $lang_type = 'CATALOGUE';
     public $select_name = 'CATALOGUE';
@@ -1559,8 +1559,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
      */
     public function get_form_fields($name = '', $title = '', $description = '', $display_type = 0, $is_tree = 1, $notes = '', $submit_points = 0, $ecommerce = 0, $send_view_reports = 'never', $default_review_freq = null)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
 
         if ($name == '') {
@@ -1587,7 +1587,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
 
             attach_message(do_lang_tempcode('EDITING_CUSTOM_FIELDS_HELP', do_lang_tempcode($info['content_type_label'])), 'inform', true);
 
-            $actions = new ocp_tempcode();
+            $actions = new Tempcode();
         } else {
             $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
             $complex_rename = ($name == 'products');
@@ -1597,7 +1597,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
             }
             $fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_CATALOGUE_DESCRIPTION'), 'description', $description, false));
 
-            $display_types = new ocp_tempcode();
+            $display_types = new Tempcode();
             foreach (array(C_DT_FIELDMAPS => 'DT_FIELDMAPS', C_DT_TITLELIST => 'DT_TITLELIST', C_DT_TABULAR => 'DT_TABULAR', C_DT_GRID => 'DT_GRID') as $_display_type => $display_type_str) {
                 $display_types->attach(form_input_list_entry(strval($_display_type), $display_type == $_display_type, do_lang_tempcode($display_type_str)));
             }
@@ -1630,7 +1630,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
                 $fields->attach(form_input_integer(do_lang_tempcode('SUBMIT_POINTS'), do_lang_tempcode('DESCRIPTION_SUBMIT_POINTS'), 'submit_points', $submit_points, false));
             }
 
-            $view_report_types = new ocp_tempcode();
+            $view_report_types = new Tempcode();
             $view_report_types->attach(form_input_list_entry('never', $send_view_reports == 'never', do_lang_tempcode('VR_NEVER')));
             $view_report_types->attach(form_input_list_entry('daily', $send_view_reports == 'daily', do_lang_tempcode('VR_DAILY')));
             $view_report_types->attach(form_input_list_entry('weekly', $send_view_reports == 'weekly', do_lang_tempcode('VR_WEEKLY')));
@@ -1647,7 +1647,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
             // Permissions
             $fields->attach($this->get_permission_fields($name, null, ($name == '')));
 
-            $actions = new ocp_tempcode();
+            $actions = new Tempcode();
             if (($name != '') && (get_value('disable_cat_cat_perms') !== '1')) {
                 $actions->attach(form_input_tick(do_lang_tempcode('RESET_CATEGORY_PERMISSIONS'), do_lang_tempcode('DESCRIPTION_RESET_CATEGORY_PERMISSIONS'), 'reset_category_permissions', false));
             }
@@ -1682,8 +1682,8 @@ class Module_cms_catalogues_alt extends standard_crud_module
      */
     public function get_field_fields($first_field, $num_fields_to_show, $prefix, $order, $name = '', $description = '', $type = 'short_text', $defines_order = 0, $visible = 1, $searchable = 1, $default = '', $required = 0, $put_in_category = 1, $put_in_search = 1)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_FIELD_NAME'), $prefix . 'name', $name, ($name != '') || $first_field)); // If this is gonna be a new field that might not be filled in, don't make them fill it in
@@ -1696,7 +1696,7 @@ class Module_cms_catalogues_alt extends standard_crud_module
         $type_list = create_selection_list_field_type($type, $name != '');
 
         $fields->attach(form_input_list(do_lang_tempcode('TYPE'), do_lang_tempcode(($name == '') ? 'DESCRIPTION_FIELD_TYPE_FIRST_TIME' : 'DESCRIPTION_FIELD_TYPE'), $prefix . 'type', $type_list));
-        $order_list = new ocp_tempcode();
+        $order_list = new Tempcode();
         for ($i = 0; $i < $num_fields_to_show; $i++) {
             $order_list->attach(form_input_list_entry(strval($i), $i == $order, integer_format($i + 1) . (($i == 0 && substr(get_param('id', ''), 0, 1) != '_') ? do_lang('NEW_FIELD_TITLE') : '')));
         }

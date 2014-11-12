@@ -220,9 +220,9 @@ function _ocportal_error_handler($type, $errno, $errstr, $errfile, $errline, $sy
 
     // Generate error message
     $outx = '<strong>' . strtoupper($type) . '</strong> [' . strval($errno) . '] ' . $errstr . ' in ' . $errfile . ' on line ' . strval($errline) . '<br />' . "\n";
-    if (class_exists('ocp_tempcode')) {
+    if (class_exists('Tempcode')) {
         if ($GLOBALS['SUPPRESS_ERROR_DEATH']) {
-            $trace = new ocp_tempcode();
+            $trace = new Tempcode();
         } else {
             $trace = get_html_trace();
         }
@@ -952,7 +952,7 @@ function _fatal_exit($text, $return = false)
     // To break any looping of errors
     global $EXITING;
     $EXITING++;
-    if (($EXITING > 1) || (running_script('upgrader')) || (!class_exists('ocp_tempcode'))) {
+    if (($EXITING > 1) || (running_script('upgrader')) || (!class_exists('Tempcode'))) {
         if (($EXITING == 2) && (function_exists('may_see_stack_dumps')) && (may_see_stack_dumps()) && ($GLOBALS['HAS_SET_ERROR_HANDLER'])) {
             die_html_trace(is_object($text) ? $text->evaluate() : escape_html($text));
         } else { // Failed even in die_html_trace
@@ -1156,7 +1156,7 @@ function put_value_in_stack_trace($value)
     try {
         if ((is_null($value)) || (is_array($value) && (strlen(serialize($value)) > MAX_STACK_TRACE_VALUE_LENGTH))) {
             $_value = gettype($value);
-        } elseif (is_object($value) && (is_a($value, 'ocp_tempcode'))) {
+        } elseif (is_object($value) && (is_a($value, 'Tempcode'))) {
             if (($value->codename == 'GLOBAL_HTML_WRAP') || (strlen(serialize($value)) > 1000)) { // NB: We can't do an eval on GLOBAL_HTML_WRAP because it may be output streaming, incomplete
                 $_value = 'Tempcode -> ...';
             } else {
@@ -1195,9 +1195,9 @@ function get_html_trace()
 {
     $GLOBALS['SUPPRESS_ERROR_DEATH'] = true;
     $_trace = debug_backtrace();
-    $trace = new ocp_tempcode();
+    $trace = new Tempcode();
     foreach ($_trace as $i => $stage) {
-        $traces = new ocp_tempcode();
+        $traces = new Tempcode();
         //if (in_array($stage['function'],array('get_html_trace','ocportal_error_handler','fatal_exit'))) continue;  Hinders more than helps
         $file = '';
         $line = '';
@@ -1209,7 +1209,7 @@ function get_html_trace()
                 $line = strval($__value);
             }
             if ($key == 'args') {
-                $_value = new ocp_tempcode();
+                $_value = new Tempcode();
                 foreach ($__value as $param) {
                     if (!((is_array($param)) && (array_key_exists('GLOBALS', $param)))) { // Some versions of PHP give the full environment as parameters. This will cause a recursive issue when outputting due to GLOBALS->ENV chaining.
                         $_value->attach(paragraph(put_value_in_stack_trace($param)));

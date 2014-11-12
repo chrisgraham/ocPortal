@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_whats_news_quiz
 {
     /**
@@ -39,7 +43,7 @@ class Hook_whats_news_quiz
 
         $max = intval(get_option('max_newsletter_whatsnew'));
 
-        $new = new ocp_tempcode();
+        $new = new Tempcode();
 
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'quizzes WHERE q_add_date>' . strval($cutoff_time) . ' ORDER BY q_add_date DESC', $max);
         if (count($rows) == $max) {

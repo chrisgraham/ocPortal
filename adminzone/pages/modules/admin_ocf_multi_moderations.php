@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_multi_moderations extends standard_crud_module
+class Module_admin_ocf_multi_moderations extends Standard_crud_module
 {
     public $lang_type = 'MULTI_MODERATION';
     public $select_name = 'NAME';
@@ -122,7 +122,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
         if ($type == '_import') {
             return $this->_import();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -154,7 +154,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
 
         $post_url = build_url(array('page' => '_SELF', 'type' => '_import', 'uploading' => 1), '_SELF');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $supported = 'tar';
         if ((function_exists('zip_open')) || (get_option('unzip_cmd') != '')) {
@@ -308,21 +308,21 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
     {
         require_code('ocf_forums2');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'name', $name, true));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('_POST'), do_lang_tempcode('DESCRIPTION_MULTI_MODERATION_POST'), 'post_text', $post_text, false));
         $fields->attach(form_input_tree_list(do_lang_tempcode('DESTINATION'), do_lang_tempcode('DESCRIPTION_DESTINATION_FORUM'), 'move_to', null, 'choose_forum', array(), false, is_null($move_to) ? null : strval($move_to)));
-        $pin_state_list = new ocp_tempcode();
+        $pin_state_list = new Tempcode();
         $pin_state_list->attach(form_input_radio_entry('pin_state', '-1', is_null($pin_state), do_lang_tempcode('NA_EM')));
         $pin_state_list->attach(form_input_radio_entry('pin_state', '0', $pin_state === 0, do_lang_tempcode('UNPIN_TOPIC')));
         $pin_state_list->attach(form_input_radio_entry('pin_state', '1', $pin_state === 1, do_lang_tempcode('PIN_TOPIC')));
         $fields->attach(form_input_radio(do_lang_tempcode('PIN_STATE'), do_lang_tempcode('DESCRIPTION_PIN_STATE'), 'pin_state', $pin_state_list));
-        $open_state_list = new ocp_tempcode();
+        $open_state_list = new Tempcode();
         $open_state_list->attach(form_input_radio_entry('open_state', '-1', is_null($open_state), do_lang_tempcode('NA_EM')));
         $open_state_list->attach(form_input_radio_entry('open_state', '0', $open_state === 0, do_lang_tempcode('CLOSE_TOPIC')));
         $open_state_list->attach(form_input_radio_entry('open_state', '1', $open_state === 1, do_lang_tempcode('OPEN_TOPIC')));
         $fields->attach(form_input_radio(do_lang_tempcode('OPEN_STATE'), do_lang_tempcode('DESCRIPTION_OPEN_STATE'), 'open_state', $open_state_list));
-        $sink_state_list = new ocp_tempcode();
+        $sink_state_list = new Tempcode();
         $sink_state_list->attach(form_input_radio_entry('sink_state', '-1', is_null($sink_state), do_lang_tempcode('NA_EM')));
         $sink_state_list->attach(form_input_radio_entry('sink_state', '0', $sink_state === 0, do_lang_tempcode('SINK_TOPIC')));
         $sink_state_list->attach(form_input_radio_entry('sink_state', '1', $sink_state === 1, do_lang_tempcode('UNSINK_TOPIC')));
@@ -330,7 +330,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
         $fields->attach(ocf_get_forum_multi_code_field($forum_multi_code));
         $fields->attach(form_input_line(do_lang_tempcode('TITLE_SUFFIX'), do_lang_tempcode('DESCRIPTION_TITLE_SUFFIX'), 'title_suffix', $title_suffix, false));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -367,7 +367,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -427,7 +427,7 @@ class Module_admin_ocf_multi_moderations extends standard_crud_module
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['FORUM_DB']->query_select('f_multi_moderations', array('id', 'mm_name'));
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['mm_name'], $GLOBALS['FORUM_DB'])));
         }

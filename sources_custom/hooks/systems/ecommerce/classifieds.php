@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
+
+/**
+ * Hook class.
+ */
 class Hook_classifieds
 {
     /**
@@ -25,7 +29,7 @@ class Hook_classifieds
         require_code('catalogues');
         require_lang('classifieds');
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('catalogue_entries e JOIN ' . get_table_prefix() . 'classifieds_prices c ON c.c_catalogue_name=e.c_name', array('e.*'), null, 'GROUP BY e.id ORDER BY ce_add_date DESC');
         foreach ($rows as $row) {
             $data_map = get_catalogue_entry_map($row, null, 'CATEGORY', 'DEFAULT', null, null, array(0));

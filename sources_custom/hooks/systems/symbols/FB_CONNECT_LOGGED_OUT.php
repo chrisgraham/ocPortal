@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_symbol_FB_CONNECT_LOGGED_OUT
 {
     public function run($param)

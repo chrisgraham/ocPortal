@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_wiki
 {
     /**
@@ -42,7 +46,7 @@ class Hook_rss_wiki
 
         $filters = ocfilter_to_sqlfragment($_filters, 'id', 'wiki_children', 'parent_id', 'parent_id', 'child_id');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $query = 'SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'wiki_pages p WHERE ' . $filters . ' AND ((add_date>' . strval($cutoff) . ' OR edit_date>' . strval($cutoff);
         $query .= ' OR EXISTS(SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'wiki_posts o WHERE o.page_id=p.id AND date_and_time>' . strval($cutoff) . '))';
         $query .= ')';
@@ -70,7 +74,7 @@ class Hook_rss_wiki
 
             $view_url = build_url(array('page' => 'wiki', 'type' => 'misc', 'id' => ($row['id'] == db_get_first_id()) ? null : $row['id']), get_module_zone('wiki'), null, false, false, true);
 
-            $if_comments = new ocp_tempcode();
+            $if_comments = new Tempcode();
 
             $content->attach(do_template($prefix . 'ENTRY', array('VIEW_URL' => $view_url, 'SUMMARY' => $summary, 'EDIT_DATE' => $edit_date, 'IF_COMMENTS' => $if_comments, 'TITLE' => $news_title, 'CATEGORY_RAW' => $category_raw, 'CATEGORY' => $category, 'AUTHOR' => $author, 'ID' => $id, 'NEWS' => $news, 'DATE' => $news_date)));
         }

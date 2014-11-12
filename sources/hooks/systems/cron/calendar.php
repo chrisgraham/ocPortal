@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    calendar
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_calendar
 {
     /**
@@ -67,7 +71,7 @@ class Hook_cron_calendar
 
                                 // OcCLE code
                                 require_code('occle');
-                                $temp = new virtual_bash($job_text);
+                                $temp = new Virtual_shell($job_text);
                                 $output = $temp->output_html(true);
                                 if (is_object($output)) {
                                     echo $output->evaluate();

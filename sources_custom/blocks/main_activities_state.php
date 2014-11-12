@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
+
+/**
+ * Block class.
+ */
 class Block_main_activities_state
 {
     /**

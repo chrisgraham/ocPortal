@@ -46,7 +46,7 @@ function build_preview($multi_return = false)
     $limit_to = null;
     foreach (array_keys($hooks) as $hook) {
         require_code('hooks/systems/preview/' . $hook);
-        $object = object_factory('Hook_Preview_' . $hook, true);
+        $object = object_factory('Hook_preview_' . $hook, true);
         if (is_null($object)) {
             continue;
         }
@@ -64,9 +64,9 @@ function build_preview($multi_return = false)
             break;
         }
     }
-    $validation = new ocp_tempcode();
-    $keyword_density = new ocp_tempcode();
-    $spelling = new ocp_tempcode();
+    $validation = new Tempcode();
+    $keyword_density = new Tempcode();
+    $spelling = new Tempcode();
     $meta_keywords = post_param('meta_keywords', '');
     $spellcheck = post_param_integer('perform_spellcheck', 0) == 1;
     $keywordcheck = (post_param_integer('perform_keywordcheck', 0) == 1) && ($meta_keywords != '');
@@ -274,7 +274,7 @@ function build_preview($multi_return = false)
         if (count($map_table_map) == 1) {
             $output = array_pop($map_table_map);
         } else {
-            $map_table_fields = new ocp_tempcode();
+            $map_table_fields = new Tempcode();
             foreach ($map_table_map as $key => $val) {
                 $map_table_fields->attach(map_table_field($key, $val, true));
             }
@@ -283,7 +283,7 @@ function build_preview($multi_return = false)
     }
 
     if (get_param_integer('js_only', 0) == 1) {
-        $output = new ocp_tempcode();
+        $output = new Tempcode();
     }
 
     // This is to get the Comcode attachments updated to the new IDs

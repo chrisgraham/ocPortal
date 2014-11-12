@@ -74,7 +74,7 @@ function authors_script()
 
     $field_name = get_param('field_name');
 
-    $content = new ocp_tempcode();
+    $content = new Tempcode();
     $i = 0;
     foreach ($rows as $author => $table) {
         if (($i >= $start) && ($i < $start + $max)) {

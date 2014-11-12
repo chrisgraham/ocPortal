@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    errorlog
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_errorlog
 {
     /**

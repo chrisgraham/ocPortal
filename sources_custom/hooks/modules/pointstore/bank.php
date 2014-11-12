@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_bank
  */
+
+/**
+ * Hook class.
+ */
 class Hook_pointstore_bank
 {
     /**
@@ -62,7 +66,7 @@ class Hook_pointstore_bank
         }
 
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_integer(do_lang_tempcode('AMOUNT'), do_lang_tempcode('DESCRIPTION_BANK_AMOUNT', integer_format($points_left)), 'amount', $points_left, true));
 

@@ -7,6 +7,9 @@
 
 */
 
+/**
+ * Hook class.
+ */
 class Hook_cron_user_export
 {
     /**

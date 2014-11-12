@@ -134,7 +134,7 @@ class Module_awards
             return $this->award_overview();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -145,7 +145,7 @@ class Module_awards
     public function choose_award()
     {
         $rows = $GLOBALS['SITE_DB']->query_select('award_types', array('*'));
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach ($rows as $myrow) {
             if ((!file_exists(get_file_base() . '/sources/hooks/systems/content_meta_aware/' . filter_naughty_harsh($myrow['a_content_type']) . '.php')) && (!file_exists(get_file_base() . '/sources_custom/hooks/systems/content_meta_aware/' . filter_naughty_harsh($myrow['a_content_type']) . '.php'))) {
                 continue;
@@ -163,7 +163,7 @@ class Module_awards
             }
         }
 
-        $add_url = new ocp_tempcode();
+        $add_url = new Tempcode();
         if (has_actual_page_access(get_member(), 'admin_awards')) {
             $add_url = build_url(array('page' => 'admin_awards', 'type' => 'ad'), get_module_zone('admin_awards'));
         }
@@ -180,7 +180,7 @@ class Module_awards
     {
         $award_types = $GLOBALS['SITE_DB']->query_select('award_types', array('*'));
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
 
         require_code('content');
 
@@ -254,7 +254,7 @@ class Module_awards
 
         $rows = $GLOBALS['SITE_DB']->query_select('award_archive', array('*'), array('a_type_id' => $id), 'ORDER BY date_and_time DESC', $max, $start);
         $max_rows = $GLOBALS['SITE_DB']->query_select_value('award_archive', 'COUNT(*)', array('a_type_id' => $id));
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $myrow) {
             require_code('content');
             $award_content_row = content_get_row($myrow['content_id'], $info);

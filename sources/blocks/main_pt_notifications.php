@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Block class.
+ */
 class Block_main_pt_notifications
 {
     /**
@@ -46,7 +50,7 @@ class Block_main_pt_notifications
     public function run($map)
     {
         if (get_forum_type() != 'ocf') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('ocf_general');
@@ -60,7 +64,7 @@ class Block_main_pt_notifications
                 require_javascript('javascript_ajax');
             }
         } else {
-            $notifications = new ocp_tempcode();
+            $notifications = new Tempcode();
             $num_unread_pps = 0;
         }
 

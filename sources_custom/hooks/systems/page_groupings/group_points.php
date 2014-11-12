@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    group_points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_group_points
 {
     /**
@@ -21,10 +25,10 @@ class Hook_page_groupings_group_points
      * @param  boolean                  Whether to use extensive documentation tooltips, rather than short summaries
      * @return array                    List of tuple of links (page grouping, icon, do-next-style linking data), label, help (optional) and/or nulls
      */
-    public function run($member_id = null, $extensive_docs = false)
+    public function run($member_id = null,$extensive_docs = false)
     {
         return array(
-            array('setup', 'menu/social/pointstore', array('group_points', array('type' => 'misc'), get_page_zone('group_points')), make_string_tempcode('Usergroup point assignments')),
+            array('setup','menu/social/pointstore',array('group_points',array('type' => 'misc'),get_page_zone('group_points')),make_string_tempcode('Usergroup point assignments')),
         );
     }
 }

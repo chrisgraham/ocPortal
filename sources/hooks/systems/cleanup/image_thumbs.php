@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_cleanup_tools
  */
+
+/**
+ * Hook class.
+ */
 class Hook_image_thumbs
 {
     /**
@@ -48,7 +52,7 @@ class Hook_image_thumbs
         erase_thumb_cache();
         erase_comcode_cache();
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

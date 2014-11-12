@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_calendar extends standard_crud_module
+class Module_cms_calendar extends Standard_crud_module
 {
     public $lang_type = 'CALENDAR_EVENT';
     public $select_name = 'TITLE';
@@ -247,7 +247,7 @@ class Module_cms_calendar extends standard_crud_module
             return $this->_export_ical();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -310,7 +310,7 @@ class Module_cms_calendar extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         $only_owned = has_privilege(get_member(), 'edit_lowrange_content', 'cms_calendar') ? null : get_member();
@@ -456,8 +456,8 @@ class Module_cms_calendar extends standard_crud_module
             $end_minute = null;
         }
 
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
 
@@ -480,7 +480,7 @@ class Module_cms_calendar extends standard_crud_module
         }
 
         // Priority
-        $priority_list = new ocp_tempcode();
+        $priority_list = new Tempcode();
         $priority_list->attach(form_input_list_entry('1', $priority == 1, do_lang_tempcode('PRIORITY_1')));
         $priority_list->attach(form_input_list_entry('2', $priority == 2, do_lang_tempcode('PRIORITY_2')));
         $priority_list->attach(form_input_list_entry('3', $priority == 3, do_lang_tempcode('PRIORITY_3')));
@@ -498,7 +498,7 @@ class Module_cms_calendar extends standard_crud_module
             }
         }
 
-        $fields2 = new ocp_tempcode();
+        $fields2 = new Tempcode();
 
         $fields2->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'fd78d3298730d0cb157b20f1b3dd6ae1', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('TIMEZONE'))));
 
@@ -549,7 +549,7 @@ class Module_cms_calendar extends standard_crud_module
                 if (get_forum_type() == 'ocf') {
                     unset($usergroup_list[db_get_first_id()]);
                 }
-                $t_usergroup_list = new ocp_tempcode();
+                $t_usergroup_list = new Tempcode();
                 foreach ($usergroup_list as $id => $name) {
                     $t_usergroup_list->attach(form_input_list_entry(strval($id), false, $name));
                 }
@@ -785,7 +785,7 @@ class Module_cms_calendar extends standard_crud_module
             $radios->attach(form_input_radio_entry('delete', '1', false, do_lang_tempcode('DELETE')));
             $delete_fields = form_input_radio(do_lang_tempcode('ACTION'), do_lang_tempcode('DESCRIPTION_FIX_PAST_RECURRENCES'), 'delete', $radios);
         } else {
-            $delete_fields = new ocp_tempcode();
+            $delete_fields = new Tempcode();
         }
 
         return array($fields[0], $fields[1], $delete_fields, '', true, $content, $fields[6], $parsed);
@@ -1184,12 +1184,12 @@ class Module_cms_calendar extends standard_crud_module
         $submit_name = do_lang_tempcode('IMPORT_ICAL');
 
         // Build up form
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('form_templates');
 
         $fields->attach(form_input_upload(do_lang_tempcode('UPLOAD'), do_lang_tempcode('DESCRIPTION_ICAL'), 'file_novalidate', false, null, null, true, 'ics,ical'));
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('lang', $lang));
         handle_max_file_size($hidden);
 
@@ -1232,7 +1232,7 @@ class Module_cms_calendar extends standard_crud_module
      */
     public function export_ical()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $type_list = create_selection_list_event_types();
 
         //Add all cal option
@@ -1258,7 +1258,7 @@ class Module_cms_calendar extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_calendar_cat extends standard_crud_module
+class Module_cms_calendar_cat extends Standard_crud_module
 {
     public $lang_type = 'EVENT_TYPE';
     public $select_name = 'EVENT_TYPE';
@@ -1284,8 +1284,8 @@ class Module_cms_calendar_cat extends standard_crud_module
      */
     public function get_form_fields($id = null, $title = '', $logo = '', $external_feed = '')
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
 
@@ -1295,7 +1295,7 @@ class Module_cms_calendar_cat extends standard_crud_module
         $set_name = 'image';
         $required = true;
         $set_title = do_lang_tempcode('IMAGE');
-        $field_set = (count($ids) == 0) ? new ocp_tempcode() : alternate_fields_set__start($set_name);
+        $field_set = (count($ids) == 0) ? new Tempcode() : alternate_fields_set__start($set_name);
 
         $field_set->attach(form_input_upload(do_lang_tempcode('UPLOAD'), '', 'file', $required, null, null, true, str_replace(' ', '', get_option('valid_images'))));
 
@@ -1353,7 +1353,7 @@ class Module_cms_calendar_cat extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);

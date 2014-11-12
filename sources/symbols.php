@@ -803,7 +803,7 @@ function ecv_REFRESH($lang, $escaped, $param)
         }
         $refresh = do_template('META_REFRESH_LINE', array('_GUID' => '6ee20694dfa474f160481a3ab5331d87', 'URL' => $REFRESH_URL[0], 'TIME' => integer_format($REFRESH_URL[1])));
     } else {
-        $refresh = new ocp_tempcode();
+        $refresh = new Tempcode();
     }
     $value = $refresh->evaluate();
 
@@ -825,7 +825,7 @@ function ecv_FEEDS($lang, $escaped, $param)
 {
     // Feeds
     if ((get_option('is_on_rss', true) === '1') && (addon_installed('syndication'))) {
-        $feeds = new ocp_tempcode();
+        $feeds = new Tempcode();
         if (addon_installed('news')) {
             $feeds->attach(do_template('RSS_HEADER', array('_GUID' => '53e135b04502d6df64f1570b61310f30', 'FEED_URL' => find_script('backend') . '?mode=news', 'TITLE' => do_lang('NEWS'))));
         }
@@ -1814,7 +1814,7 @@ function ecv_MESSAGES_TOP($lang, $escaped, $param)
 function ecv_MESSAGES_BOTTOM($lang, $escaped, $param)
 {
     // Extra stuff we can tag on (like messages)
-    $messages_bottom = new ocp_tempcode();
+    $messages_bottom = new Tempcode();
     if (get_option('site_closed') == '1') {
         require_code('global4');
         attach_message_site_closed($messages_bottom);
@@ -2470,7 +2470,7 @@ function ecv_OCF_RANK_IMAGE($lang, $escaped, $param)
 
     if (addon_installed('ocf_forum')) {
         require_code('ocf_groups');
-        $rank_images = new ocp_tempcode();
+        $rank_images = new Tempcode();
         $member_id = isset($param[0]) ? intval($param[0]) : get_member();
         $posters_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($member_id, true);
         foreach ($posters_groups as $group) {
@@ -2535,7 +2535,7 @@ function ecv_URL_FOR_GET_FORM($lang, $escaped, $param)
  */
 function ecv_HIDDENS_FOR_GET_FORM($lang, $escaped, $param)
 {
-    $_value = new ocp_tempcode();
+    $_value = new Tempcode();
     $url_bits = parse_url($param[0]);
     if ((array_key_exists('query', $url_bits)) && ($url_bits['query'] != '')) {
         foreach (explode('&', $url_bits['query']) as $exp) {

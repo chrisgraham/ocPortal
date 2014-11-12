@@ -119,7 +119,7 @@ function _intelligent_write_error_inline($path)
     } else {
         return do_lang_tempcode('WRITE_ERROR_MISSING_DIRECTORY', escape_html(dirname($path)), escape_html(dirname(dirname($path))));
     }
-    return new ocp_tempcode();
+    return new Tempcode();
 }
 
 /**

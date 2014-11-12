@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki_sync
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_wiki_sync_page_directory
 {
     /**

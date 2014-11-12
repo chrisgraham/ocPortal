@@ -45,7 +45,7 @@ class Block_main_facebook_like
 
         $appid = get_option('facebook_appid');
         if ($appid == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         return do_template('BLOCK_MAIN_FACEBOOK_LIKE');

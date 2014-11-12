@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_signatures
  */
+
+/**
+ * Hook class.
+ */
 class Hook_attachments_ocf_signature
 {
     /**

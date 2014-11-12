@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ocf_welcome_emails extends standard_crud_module
+class Module_admin_ocf_welcome_emails extends Standard_crud_module
 {
     public $lang_type = 'WELCOME_EMAIL';
     public $select_name = 'SUBJECT';
@@ -180,7 +180,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -219,7 +219,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
      */
     public function get_form_fields($name = '', $subject = '', $text = '', $send_time = 0, $newsletter = null, $usergroup = null, $usergroup_type = '')
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME_REFERENCE'), 'name', $name, true));
         $fields->attach(form_input_line(do_lang_tempcode('SUBJECT'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_SUBJECT'), 'subject', $subject, true));
         $fields->attach(form_input_huge_comcode(do_lang_tempcode('TEXT'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_TEXT'), 'text', $text, true));
@@ -231,7 +231,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
 
         if (addon_installed('newsletter')) {
             require_lang('newsletter');
-            $newsletters = new ocp_tempcode();
+            $newsletters = new Tempcode();
             $rows = $GLOBALS['SITE_DB']->query_select('newsletters', array('id', 'title'));
             if (get_forum_type() == 'ocf') {
                 $newsletters->attach(form_input_list_entry('', is_null($newsletter), do_lang_tempcode('WELCOME_EMAIL_MEMBERS')));
@@ -245,19 +245,19 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
         }
         if (get_forum_type() == 'ocf') {
             require_code('ocf_groups');
-            $usergroups = new ocp_tempcode();
+            $usergroups = new Tempcode();
             $usergroups->attach(form_input_list_entry('', $usergroup === null, do_lang_tempcode('NA_EM')));
             $usergroups->attach(ocf_create_selection_list_usergroups($usergroup));
             $fields->attach(form_input_list(do_lang_tempcode('GROUP'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP', escape_html(get_site_name())), 'usergroup', $usergroups, null, false, false));
 
-            $radios = new ocp_tempcode();
+            $radios = new Tempcode();
             $radios->attach(form_input_radio_entry('usergroup_type', '', true, do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_BOTH')));
             $radios->attach(form_input_radio_entry('usergroup_type', 'primary', false, do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_PRIMARY')));
             $radios->attach(form_input_radio_entry('usergroup_type', 'secondary', false, do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE_SECONDARY')));
             $fields->attach(form_input_radio(do_lang_tempcode('WELCOME_EMAIL_USERGROUP_TYPE'), do_lang_tempcode('DESCRIPTION_WELCOME_EMAIL_USERGROUP_TYPE'), 'usergroup_type', $radios, false));
         }
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -291,7 +291,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -312,7 +312,7 @@ class Module_admin_ocf_welcome_emails extends standard_crud_module
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['SITE_DB']->query_select('f_welcome_emails', array('*'));
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, $m['w_name']));
         }

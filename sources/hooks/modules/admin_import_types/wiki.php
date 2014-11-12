@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_import_types_wiki
 {
     /**

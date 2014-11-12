@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    wiki
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_wiki_page extends Hook_sitemap_content
 {
     protected $content_type = 'wiki_page';

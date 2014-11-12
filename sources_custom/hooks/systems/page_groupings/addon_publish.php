@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    addon_publish
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_addon_publish
 {
     /**

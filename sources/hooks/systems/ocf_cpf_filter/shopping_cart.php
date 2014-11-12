@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
+
+/**
+ * Hook class.
+ */
 class Hook_ocf_cpf_filter_shopping_cart
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    search
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_search
 {
     /**
@@ -305,7 +309,7 @@ class Hook_addon_registry_search
 
         require_code('database_search');
 
-        $options = new ocp_tempcode();
+        $options = new Tempcode();
         foreach (placeholder_array() as $value) {
             $options->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN_OPTION', array(
                 'NAME' => placeholder_random(),
@@ -343,7 +347,7 @@ class Hook_addon_registry_search
             'UNDERNEATH' => lorem_phrase(),
         ));
 
-        $search_domains = new ocp_tempcode();
+        $search_domains = new Tempcode();
         foreach (placeholder_array() as $value) {
             $search_domains->attach(do_lorem_template('SEARCH_FOR_SEARCH_DOMAIN', array(
                 'ADVANCED_ONLY' => lorem_phrase(),
@@ -358,7 +362,7 @@ class Hook_addon_registry_search
             'SEARCH_DOMAINS' => $search_domains,
         )));
 
-        $result = new ocp_tempcode();
+        $result = new Tempcode();
         $result->attach(do_lorem_template('SEARCH_RESULT', array(
             'CONTENT' => lorem_paragraph_html(),
             'TYPE' => placeholder_id(),

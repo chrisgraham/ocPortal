@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_language_editing
  */
+
+/**
+ * Hook class.
+ */
 class Hook_page_groupings_language
 {
     /**

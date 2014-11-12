@@ -708,6 +708,10 @@ function check($structure)
     foreach ($structure['classes'] as $class) {
         $CURRENT_CLASS = $class['name'];
         foreach ($class['functions'] as $function) {
+            if ($function['name'] == $class['name']) {
+                log_warning('Use __construct for construct name, not \'' . $function['name'] . '\'', $function['offset']);
+            }
+
             $LOCAL_VARIABLES['this'] = array('is_global' => false, 'conditioner' => array(), 'conditioned_zero' => false, 'conditioned_false' => false, 'conditioned_null' => false, 'types' => array('object'), 'references' => 0, 'object_type' => $CURRENT_CLASS, 'unused_value' => false, 'first_mention' => 0, 'mixed_tag' => false);
             check_function($function);
         }
@@ -1117,21 +1121,21 @@ function check_method($c, $c_pos, $function_guard = '')
         // Special rule for 'this->connection'
         if (($c[1][1] == 'this') && ($c[1][2][1][1] == 'connection')) {
             $method = $c[1][2][2][1][1];
-            $class = 'database_driver';
+            $class = 'Database_driver';
             return actual_check_method($class, $method, $params, $c_pos, $function_guard);
         }
 
         // Special rule for $GLOBALS['?_DB']
         if (($c[1][1] == 'GLOBALS') && (substr($c[1][2][1][1][0], -3) == 'LITERAL') && (substr($c[1][2][1][1][1], -3) == '_DB')) {
             $method = $c[1][2][2][1][1];
-            $class = 'database_driver';
+            $class = 'Database_driver';
             return actual_check_method($class, $method, $params, $c_pos, $function_guard);
         }
 
         // Special rule for $GLOBALS['FORUM_DRIVER']
         if (($c[1][1] == 'GLOBALS') && (substr($c[1][2][1][1][0], -3) == 'LITERAL') && ($c[1][2][1][1][1] == 'FORUM_DRIVER')) {
             $method = $c[1][2][2][1][1];
-            $class = 'forum_driver_base';
+            $class = 'Forum_driver_base';
             return actual_check_method($class, $method, $params, $c_pos, $function_guard);
         }
 
@@ -1141,7 +1145,7 @@ function check_method($c, $c_pos, $function_guard = '')
             add_variable_reference($object, $c_pos);
 
             if (((count($LOCAL_VARIABLES[$object]['types']) == 1) && ($LOCAL_VARIABLES[$object]['types'][0] == 'tempcode')) || (isset($FUNCTION_SIGNATURES[$LOCAL_VARIABLES[$object]['object_type']]))) { // Construction
-                $class = ($LOCAL_VARIABLES[$object]['types'][0] == 'tempcode') ? 'ocp_tempcode' : substr($LOCAL_VARIABLES[$object]['types'][0], 6);
+                $class = ($LOCAL_VARIABLES[$object]['types'][0] == 'tempcode') ? 'Tempcode' : substr($LOCAL_VARIABLES[$object]['types'][0], 6);
                 return actual_check_method($class, $method, $params, $c_pos, $function_guard);
             } else {
                 // Parameters
@@ -1226,8 +1230,8 @@ function check_call($c, $c_pos, $class = null, $function_guard = '')
     } else {
         $potential = null;
     }
-    if ((is_null($potential)) && ($class == 'forum_driver_base')) {
-        $class = 'forum_driver_ocf';
+    if ((is_null($potential)) && ($class == 'Forum_driver_base')) {
+        $class = 'Forum_driver_ocf';
         if (isset($FUNCTION_SIGNATURES[$class]['functions'][$function])) {
             $potential = $FUNCTION_SIGNATURES[$class]['functions'][$function];
         } else {
@@ -1235,7 +1239,7 @@ function check_call($c, $c_pos, $class = null, $function_guard = '')
         }
     }
 
-    if ($class == 'database_driver') {
+    if ($class == 'Database_driver') {
         $param = $c[2];
         if ((count($param) >= 2) && ($param[0][0] == 'LITERAL')) {
             $table = $param[0][1][1];
@@ -1490,7 +1494,7 @@ function get_insecure_functions()
         'better_parse_ini_file', 'deldir_contents',
         'include', 'include_once', 'require', 'require_once',
         'escapeshellarg', 'escapeshellcmd', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system',
-        'database_driver.query', 'database_driver._query', 'database_driver.query_value_if_there');
+        'Database_driver.query', 'Database_driver._query', 'Database_driver.query_value_if_there');
 }
 
 /*
@@ -1814,7 +1818,7 @@ function check_expression($e, $assignment = false, $equate_false = false, $funct
             if (count($inner[2]) != 0) {
                 check_call(array('CALL_METHOD', $inner[1], $inner[2]), $c_pos, $inner[1], $function_guard);
             }
-            if ($inner[1] == 'ocp_tempcode') {
+            if ($inner[1] == 'Tempcode') {
                 return 'tempcode';
             }
             return 'object-' . $inner[1];

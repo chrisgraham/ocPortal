@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    group_points
  */
+
+/**
+ * Hook class.
+ */
 class Hook_symbol_POINTS_FROM_USERGROUPS
 {
     /**

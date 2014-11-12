@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    devguide
  */
+
+/**
+ * Block class.
+ */
 class Block_main_block_help
 {
     /**
@@ -47,7 +51,7 @@ class Block_main_block_help
     {
         require_all_lang();
 
-        $blocks = new ocp_tempcode();
+        $blocks = new Tempcode();
 
         require_code('zones2');
         require_code('zones3');
@@ -64,7 +68,7 @@ class Block_main_block_help
             if (!is_array($_parameters)) {
                 continue;
             }
-            $parameters = new ocp_tempcode();
+            $parameters = new Tempcode();
             foreach ($_parameters as $parameter) {
                 $_description = do_lang('BLOCK_' . $block . '_PARAM_' . $parameter, null, null, null, null, false);
                 if (is_null($_description)) {

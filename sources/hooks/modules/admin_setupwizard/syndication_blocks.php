@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    syndication_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sw_syndication_blocks
 {
     /**

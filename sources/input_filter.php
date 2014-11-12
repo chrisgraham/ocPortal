@@ -266,7 +266,7 @@ function load_field_restrictions($this_page = null, $this_type = null)
     if ($FIELD_RESTRICTIONS === null) {
         $FIELD_RESTRICTIONS = array();
         if (function_exists('xml_parser_create')) {
-            $temp = new field_restriction_loader();
+            $temp = new Field_restriction_loader();
             if (is_null($this_page)) {
                 $this_page = get_page_name();
             }
@@ -284,10 +284,8 @@ function load_field_restrictions($this_page = null, $this_type = null)
 
 /**
  * Field restriction loader.
- *
- * @package    core
  */
-class field_restriction_loader
+class Field_restriction_loader
 {
     // Used during parsing
     var $tag_stack, $attribute_stack, $text_so_far;

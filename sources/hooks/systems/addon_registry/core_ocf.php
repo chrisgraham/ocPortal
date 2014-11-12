@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_ocf
 {
     /**
@@ -487,7 +491,7 @@ class Hook_addon_registry_core_ocf
      */
     public function tpl_preview__ocf_join_step1_screen()
     {
-        $group_select = new ocp_tempcode();
+        $group_select = new Tempcode();
 
         foreach (placeholder_array() as $key => $value) {
             $group_select->attach(form_input_list_entry(strval($key), false, $value));
@@ -515,7 +519,7 @@ class Hook_addon_registry_core_ocf
         require_css('forms');
 
         require_lang('dates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $name = lorem_word() . placeholder_random();
         $input = do_lorem_template('FORM_SCREEN_INPUT_LINE', array(
@@ -596,7 +600,7 @@ class Hook_addon_registry_core_ocf
         )));
 
         $name = lorem_word() . placeholder_random();
-        $timezone_list = new ocp_tempcode();
+        $timezone_list = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
             $timezone_list->attach(do_lorem_template('OCF_AUTO_TIME_ZONE_ENTRY', array(
                 'HOUR' => $value,
@@ -696,15 +700,15 @@ class Hook_addon_registry_core_ocf
      */
     public function tpl_preview__ocf_emoticon_table()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $cols = 4;
-        $current_row = new ocp_tempcode();
+        $current_row = new Tempcode();
         for ($i = 0; $i < 10; $i++) {
             if (($i % $cols == 0) && ($i != 0)) {
                 $content->attach(do_lorem_template('OCF_EMOTICON_ROW', array(
                     'CELLS' => $current_row,
                 )));
-                $current_row = new ocp_tempcode();
+                $current_row = new Tempcode();
             }
             $current_row->attach(do_lorem_template('OCF_EMOTICON_CELL', array(
                 'FIELD_NAME' => lorem_word(),
@@ -961,7 +965,7 @@ class Hook_addon_registry_core_ocf
             'TAB_LAST' => false,
         );
         $tabs2 = array();
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $name = placeholder_random_id();
         $input = do_lorem_template('FORM_SCREEN_INPUT_INTEGER', array(
             'TABINDEX' => placeholder_number(),
@@ -1024,7 +1028,7 @@ class Hook_addon_registry_core_ocf
      */
     public function tpl_preview__ocf_users_online_screen()
     {
-        $rows = new ocp_tempcode();
+        $rows = new Tempcode();
         foreach (placeholder_array() as $key => $value) {
             $rows->attach(do_lorem_template('OCF_USERS_ONLINE_ROW', array(
                 'IP' => placeholder_ip(),
@@ -1072,11 +1076,11 @@ class Hook_addon_registry_core_ocf
     public function tpl_preview__ocf_view_group_screen()
     {
         $_primary_members = placeholder_array();
-        $primary_members = new ocp_tempcode();
-        $_secondary_members = new ocp_tempcode();
-        $secondary_members = new ocp_tempcode();
-        $prospective_members = new ocp_tempcode();
-        $_prospective_members = new ocp_tempcode();
+        $primary_members = new Tempcode();
+        $_secondary_members = new Tempcode();
+        $secondary_members = new Tempcode();
+        $prospective_members = new Tempcode();
+        $_prospective_members = new Tempcode();
         foreach ($_primary_members as $i => $primary_member) {
             $temp = do_lorem_template('OCF_VIEW_GROUP_MEMBER', array(
                 'ID' => placeholder_id(),
@@ -1111,7 +1115,7 @@ class Hook_addon_registry_core_ocf
             'PAGINATION' => '',
         ), null, false);
 
-        $temp = new ocp_tempcode();
+        $temp = new Tempcode();
         foreach (placeholder_array() as $i => $v) {
             $temp = do_lorem_template('OCF_VIEW_GROUP_MEMBER_SECONDARY', array(
                 'ID' => placeholder_id(),
@@ -1186,7 +1190,7 @@ class Hook_addon_registry_core_ocf
                 'TITLE' => lorem_title(),
                 'LEADER' => lorem_phrase(),
                 'NAME' => lorem_word(),
-                'PROMOTION_INFO' => new ocp_tempcode(),
+                'PROMOTION_INFO' => new Tempcode(),
                 'ADD_URL' => placeholder_url(),
                 'APPLY_URL' => placeholder_url(),
                 'APPLY_TEXT' => lorem_phrase(),

@@ -208,7 +208,7 @@ class Module_admin_ip_ban
             return $this->multi_ban();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**

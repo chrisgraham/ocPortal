@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
+
+/**
+ * Block class.
+ */
 class Block_main_leader_board
 {
     /**
@@ -93,7 +97,7 @@ class Block_main_leader_board
         require_code('leader_board');
         $rows = calculate_latest_leader_board();
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $i = 0;
 
         // Are there any rank images going to display?

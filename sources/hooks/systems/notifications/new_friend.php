@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
-class Hook_Notification_new_friend extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_new_friend extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocportal_release_build
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocportal_release_build
 {
     /**

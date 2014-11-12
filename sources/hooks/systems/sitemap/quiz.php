@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_quiz extends Hook_sitemap_content
 {
     protected $content_type = 'quiz';

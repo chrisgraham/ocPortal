@@ -188,7 +188,7 @@ class Module_admin_ecommerce_logs
             return $this->cancel_subscription();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -199,7 +199,7 @@ class Module_admin_ecommerce_logs
     public function misc()
     {
         require_code('templates_donext');
-        return do_next_manager($this->title, new ocp_tempcode(),
+        return do_next_manager($this->title, new Tempcode(),
             array(
                 array('menu/adminzone/audit/ecommerce/cash_flow', array('_SELF', array('type' => 'cash_flow'), '_SELF'), do_lang('CASH_FLOW')),
                 array('menu/adminzone/audit/ecommerce/profit_loss', array('_SELF', array('type' => 'profit_loss'), '_SELF'), do_lang('PROFIT_LOSS')),
@@ -246,7 +246,7 @@ class Module_admin_ecommerce_logs
         if (count($rows) == 0) {
             return inform_screen($this->title, do_lang_tempcode('NO_ENTRIES'));
         }
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         require_code('templates_results_table');
         $fields_title = results_field_title(array(
             do_lang('TRANSACTION'),
@@ -304,7 +304,7 @@ class Module_admin_ecommerce_logs
 
         $post_url = build_url(array('page' => '_SELF', 'type' => 'logs'/*,'start'=>$start,'max'=>$max*/, 'sort' => $sortable . ' ' . $sort_order), '_SELF');
 
-        $products = new ocp_tempcode();
+        $products = new Tempcode();
         $product_rows = $GLOBALS['SITE_DB']->query_select('transactions', array('DISTINCT t_type_code'), null, 'ORDER BY t_type_code');
         foreach ($product_rows as $p) {
             $products->attach(form_input_list_entry($p['t_type_code']));
@@ -324,7 +324,7 @@ class Module_admin_ecommerce_logs
     public function trigger()
     {
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         url_default_parameters__enable();
 
@@ -332,7 +332,7 @@ class Module_admin_ecommerce_logs
         $type_code = get_param('type_code', null);
         if (is_null($type_code)) {
             $products = find_all_products();
-            $list = new ocp_tempcode();
+            $list = new Tempcode();
             foreach ($products as $type_code => $details) {
                 if (!is_string($type_code)) {
                     $type_code = strval($type_code);
@@ -366,7 +366,7 @@ class Module_admin_ecommerce_logs
             $needed_fields = method_exists($product_ob, 'get_needed_fields') ? $product_ob->get_needed_fields($type_code) : null;
             if (!is_null($needed_fields)) { // Only do step if we actually have fields - create intermediary step. get_self_url ensures first product-choose step choice is propagated.
                 $submit_name = do_lang('PROCEED');
-                $extra_hidden = new ocp_tempcode();
+                $extra_hidden = new Tempcode();
                 $extra_hidden->attach(form_input_hidden('got_purchase_key_dependencies', '1'));
                 if (is_array($needed_fields)) {
                     $extra_hidden->attach($needed_fields[0]);
@@ -406,7 +406,7 @@ class Module_admin_ecommerce_logs
         $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => 'f4e52dff9353fb767afbe0be9808591c', 'SECTION_HIDDEN' => true, 'TITLE' => do_lang_tempcode('ADVANCED'))));
         $fields->attach(form_input_float(do_lang_tempcode('AMOUNT'), do_lang_tempcode('MONEY_AMOUNT_DESCRIPTION', ecommerce_get_currency_symbol()), 'amount', null, false));
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('type_code', $type_code));
 
         url_default_parameters__disable();
@@ -512,7 +512,7 @@ class Module_admin_ecommerce_logs
     {
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $month_start = array(0, 0, intval(date('m')), 1, intval(date('Y')));
         $fields->attach(form_input_date(do_lang_tempcode('FROM'), '', 'from', true, false, false, $month_start, 10, intval(date('Y')) - 9));
         $fields->attach(form_input_date(do_lang_tempcode('TO'), '', 'to', true, false, false, time(), 10, intval(date('Y')) - 9));
@@ -725,7 +725,7 @@ class Module_admin_ecommerce_logs
             $data[$item_name][] = array($member_link, $expiry_date, $cancel_url, $subs['id']);
         }
 
-        $result = new ocp_tempcode();
+        $result = new Tempcode();
         foreach ($data as $key => $value) {
             $continues_for_same_product = true;
             foreach ($value as $val) {

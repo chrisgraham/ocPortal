@@ -12,7 +12,11 @@
  * @copyright  ocProducts Ltd
  * @package    classifieds
  */
-class Hook_Notification_classifieds extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_classifieds extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

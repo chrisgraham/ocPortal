@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    securitylogging
  */
+
+/**
+ * Hook class.
+ */
 class Hook_realtime_rain_security
 {
     /**

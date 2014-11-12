@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_cartoon_avatars
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_ocf_cartoon_avatars
 {
     /**

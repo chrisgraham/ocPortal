@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_fields
  */
+
+/**
+ * Hook class.
+ */
 class Hook_fields_upload_multi
 {
     // ==============
@@ -87,7 +91,7 @@ class Hook_fields_upload_multi
             return '';
         }
 
-        $ret = new ocp_tempcode();
+        $ret = new Tempcode();
         $evs = explode("\n", $ev);
         foreach ($evs as $ev) {
             $original_filename = basename($ev);
@@ -137,7 +141,7 @@ class Hook_fields_upload_multi
         $say_required = ($field['cf_required'] == 1) && (($actual_value == '') || (is_null($actual_value)));
         $ffield = form_input_upload_multi($_cf_name, $_cf_description, 'field_' . strval($field['id']), $say_required, null, ($field['cf_required'] == 1) ? null/*so unlink option not shown*/ : $default);
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden);
 
         return array($ffield, $hidden);

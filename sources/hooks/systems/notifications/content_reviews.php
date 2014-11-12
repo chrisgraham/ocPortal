@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    content_reviews
  */
-class Hook_Notification_content_reviews extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_content_reviews extends Hook_notification__Staff
 {
     /**
      * Find whether a handled notification code supports categories.

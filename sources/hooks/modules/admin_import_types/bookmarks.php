@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    bookmarks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_import_types_bookmarks
 {
     /**

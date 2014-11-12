@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
+
+/**
+ * Block class.
+ */
 class Block_main_staff_actions
 {
     /**
@@ -112,11 +116,11 @@ class Block_main_staff_actions
 
         require_code('templates_results_table');
         $fields_title = results_field_title(array(do_lang_tempcode('USERNAME'),/*do_lang_tempcode('IP_ADDRESS'),*/
-            do_lang_tempcode('DATE_TIME'), do_lang_tempcode('ACTION'), do_lang_tempcode('PARAMETER_A'), do_lang_tempcode('PARAMETER_B')), $sortables, 'sa_sort', $sortable . ' ' . $sort_order);
+                do_lang_tempcode('DATE_TIME'), do_lang_tempcode('ACTION'), do_lang_tempcode('PARAMETER_A'), do_lang_tempcode('PARAMETER_B')), $sortables, 'sa_sort', $sortable . ' ' . $sort_order);
 
         $max_rows = $max;//Don't want to encourage pagination (there's a better module they can go to) $GLOBALS['SITE_DB']->query_select_value('adminlogs','COUNT(*)');
         $rows = $GLOBALS['SITE_DB']->query_select('adminlogs', array('the_type', 'param_a', 'param_b', 'member_id', 'ip', 'date_and_time'), null, 'ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach ($rows as $myrow) {
             $username = $GLOBALS['FORUM_DRIVER']->get_username($myrow['member_id']);
             if (is_null($username)) {
@@ -154,7 +158,7 @@ class Block_main_staff_actions
             $fields->attach(results_entry(array(escape_html($username)/*Not enough space ,$ip*/, escape_html($date), $type_str, $_a, $_b)));
         }
 
-        $content = results_table(do_lang_tempcode('ACTIONS'), $start, 'sa_start', $max, 'sa_max', $max_rows, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sa_sort', new ocp_tempcode(), null, null, 5);
+        $content = results_table(do_lang_tempcode('ACTIONS'), $start, 'sa_start', $max, 'sa_max', $max_rows, $fields_title, $fields, $sortables, $sortable, $sort_order, 'sa_sort', new Tempcode(), null, null, 5);
 
         // Render block wrapper template around actions table
         return do_template('BLOCK_MAIN_STAFF_ACTIONS', array(

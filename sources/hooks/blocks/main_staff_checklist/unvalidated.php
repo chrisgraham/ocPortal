@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    unvalidated
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_unvalidated
 {
     /**

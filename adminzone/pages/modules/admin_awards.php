@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_awards extends standard_crud_module
+class Module_admin_awards extends Standard_crud_module
 {
     public $lang_type = 'AWARD_TYPE';
     public $select_name = 'TITLE';
@@ -159,7 +159,7 @@ class Module_admin_awards extends standard_crud_module
         if ($type == 'misc') {
             return $this->misc();
         }
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -216,7 +216,7 @@ class Module_admin_awards extends standard_crud_module
 
         $header_row = results_field_title($hr, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         list($rows, $max_rows) = $this->get_entry_rows(false, $current_ordering);
@@ -272,13 +272,13 @@ class Module_admin_awards extends standard_crud_module
             $hide_awardee = is_null($val) ? 1 : intval(round($val));
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), 'description', $description, true));
         if (addon_installed('points')) {
             $fields->attach(form_input_integer(do_lang_tempcode('POINTS'), do_lang_tempcode('DESCRIPTION_AWARD_POINTS'), 'points', $points, true));
         }
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $_hooks = array();
         $hooks = find_all_hooks('systems', 'content_meta_aware');
         foreach (array_keys($hooks) as $hook) {
@@ -306,7 +306,7 @@ class Module_admin_awards extends standard_crud_module
         // Permissions
         $fields->attach($this->get_permission_fields(is_null($id) ? null : strval($id), do_lang_tempcode('AWARD_PERMISSION_HELP'), false/*We want permissions off by default so we do not say new category is_null($id)*/, do_lang_tempcode('GIVE_AWARD')));
 
-        return array($fields, new ocp_tempcode());
+        return array($fields, new Tempcode());
     }
 
     /**
@@ -317,7 +317,7 @@ class Module_admin_awards extends standard_crud_module
     public function create_selection_list_entries()
     {
         $_m = $GLOBALS['SITE_DB']->query_select('award_types', array('id', 'a_title'));
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['a_title'])));
         }

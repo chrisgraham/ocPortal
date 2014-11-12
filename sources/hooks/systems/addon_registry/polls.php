@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    polls
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_polls
 {
     /**
@@ -238,7 +242,7 @@ class Hook_addon_registry_polls
      */
     public function poll($section = '')
     {
-        $tpl = new ocp_tempcode();
+        $tpl = new Tempcode();
         switch ($section) {
             case 'poll':
                 foreach (placeholder_array() as $k => $v) {
@@ -339,7 +343,7 @@ class Hook_addon_registry_polls
     public function tpl_preview__poll_screen()
     {
         require_lang('trackbacks');
-        $trackbacks = new ocp_tempcode();
+        $trackbacks = new Tempcode();
         foreach (placeholder_array(1) as $k => $v) {
             $trackbacks->attach(do_lorem_template('TRACKBACK', array(
                 'ID' => placeholder_id(),

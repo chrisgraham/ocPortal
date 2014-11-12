@@ -107,7 +107,7 @@ class Module_admin_referrals
             return $this->_adjust();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -121,7 +121,7 @@ class Module_admin_referrals
 
         $table = referrer_report_script(true);
 
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         $out->attach($this->title);
         $out->attach($table);
         return $out;
@@ -150,9 +150,9 @@ class Module_admin_referrals
         $referrals_count = $num_total_qualified_by_referrer;
         $is_qualified = $GLOBALS['SITE_DB']->query_select_value_if_there('referrer_override', 'o_is_qualified', array('o_referrer' => $member_id, 'o_scheme_name' => $scheme));
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_integer(do_lang_tempcode('QUALIFIED_REFERRALS_COUNT'), '', 'referrals_count', $referrals_count, true));
-        $is_qualified_list = new ocp_tempcode();
+        $is_qualified_list = new Tempcode();
         $is_qualified_list->attach(form_input_list_entry('', $is_qualified === null, do_lang_tempcode('IS_QUALIFIED_DETECT')));
         $is_qualified_list->attach(form_input_list_entry('1', $is_qualified === 1, do_lang_tempcode('YES')));
         $is_qualified_list->attach(form_input_list_entry('0', $is_qualified === 0, do_lang_tempcode('NO')));

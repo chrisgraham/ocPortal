@@ -128,7 +128,7 @@ function has_privilege_group($group_id, $permission, $page = null, $cats = null)
  */
 function get_category_permissions_hidden_on()
 {
-    $hidden = new ocp_tempcode();
+    $hidden = new Tempcode();
     $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
     foreach (array_keys($all_groups) as $id) {
         $hidden->attach(form_input_hidden('access_' . strval($id), '1'));
@@ -186,7 +186,7 @@ function get_category_permissions_for_environment($module, $category, $page = nu
     // Heading
     require_code('zones2');
     $_overridables = extract_module_functions_page(get_module_zone($page), $page, array('get_privilege_overrides'));
-    $out = new ocp_tempcode;
+    $out = new Tempcode;
     if (is_null($_overridables[0])) {
         $temp = do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '6789cb454688a1bc811af1b4011ede35', 'TITLE' => do_lang_tempcode('PERMISSIONS'), 'HELP' => $help, 'SECTION_HIDDEN' => true));
         $overridables = array();
@@ -254,7 +254,7 @@ function get_permissions_matrix($server_id, $access, $overridables, $privileges,
 
     // Permission rows for matrix
     require_code('form_templates');
-    $permission_rows = new ocp_tempcode();
+    $permission_rows = new Tempcode();
     $all_groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list(true);
     foreach (array_keys($access) as $id) {
         if ((!array_key_exists($id, $groups)) && (array_key_exists($id, $all_groups))) {
@@ -267,7 +267,7 @@ function get_permissions_matrix($server_id, $access, $overridables, $privileges,
             $view_access = $perhaps == 1;
             $tabindex = get_form_field_tabindex(null);
 
-            $overrides = new ocp_tempcode();
+            $overrides = new Tempcode();
             $all_global = true;
             foreach (array_keys($overridables) as $override) {
                 if (isset($privileges[$override][$id])) {
@@ -481,7 +481,7 @@ function get_page_permissions_for_environment($zone, $page, $help = null)
     }
 
     // Interface
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     $temp = do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '3bf8415fd44bf48c6ab49dede3dbfea5', 'TITLE' => do_lang_tempcode('PERMISSIONS'), 'HELP' => $help, 'SECTION_HIDDEN' => true));
     $fields->attach($temp);
     foreach ($groups as $id => $group_name) {

@@ -65,7 +65,7 @@ function lookup_member_page($member, &$name, &$id, &$ip)
             $id = $ids[0]['id'];
         }
         if (count($ids) != 1) {
-            $also = new ocp_tempcode();
+            $also = new Tempcode();
             foreach ($ids as $t => $_id) {
                 if ($t != 0) {
                     if (!$also->is_empty()) {
@@ -127,7 +127,7 @@ function get_stats_track($member, $ip, $start = 0, $max = 50, $sortable = 'date_
     $max_rows = $GLOBALS['SITE_DB']->query_value_if_there('SELECT COUNT(*) FROM ' . get_table_prefix() . 'stats WHERE ' . $query, false, true);
     $rows = $GLOBALS['SITE_DB']->query('SELECT the_page,date_and_time,s_get,post,browser,operating_system FROM ' . get_table_prefix() . 'stats WHERE ' . $query . ' ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start, false, true);
 
-    $out = new ocp_tempcode();
+    $out = new Tempcode();
     require_code('templates_results_table');
     $fields_title = results_field_title(array(do_lang_tempcode('PAGE'), do_lang_tempcode('DATE'), do_lang_tempcode('PARAMETERS'), do_lang_tempcode('USER_AGENT'), do_lang_tempcode('USER_OS')), $sortables, 'sort', $sortable . ' ' . $sort_order);
     foreach ($rows as $myrow) {
@@ -185,12 +185,12 @@ function find_security_alerts($where)
     }
     $_fields = array(do_lang_tempcode('FROM'), do_lang_tempcode('DATE_TIME'), do_lang_tempcode('IP_ADDRESS'), do_lang_tempcode('REASON'));
     if (has_js()) {
-        $_fields[] = new ocp_tempcode();
+        $_fields[] = new Tempcode();
     }
     $fields_title = results_field_title($_fields, $sortables, 'alert_sort', $sortable . ' ' . $sort_order);
     $max_rows = $GLOBALS['SITE_DB']->query_select_value('hackattack', 'COUNT(*)', $where);
     $rows = $GLOBALS['SITE_DB']->query_select('hackattack', array('*'), $where, 'ORDER BY ' . $sortable . ' ' . $sort_order, $max, $start);
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
     foreach ($rows as $row) {
         $time = get_timezoned_date($row['date_and_time']);
         $lookup_url = build_url(array('page' => 'admin_lookup', 'param' => $row['ip']), '_SELF');

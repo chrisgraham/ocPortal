@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    quizzes
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_quizzes
 {
     /**
@@ -168,7 +172,7 @@ class Hook_addon_registry_quizzes
      */
     public function tpl_preview__administrative__quiz_results_screen()
     {
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $fields->attach(do_lorem_template('MAP_TABLE_FIELD_RAW', array(
                 'ABBR' => '',
@@ -268,9 +272,9 @@ class Hook_addon_registry_quizzes
      */
     public function tpl_preview__quiz_archive_screen()
     {
-        $content_tests = new ocp_tempcode();
-        $content_competitions = new ocp_tempcode();
-        $content_surveys = new ocp_tempcode();
+        $content_tests = new Tempcode();
+        $content_competitions = new Tempcode();
+        $content_surveys = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $link = do_lorem_template('QUIZ_BOX', array(
                 'TYPE' => lorem_word(),
@@ -341,7 +345,7 @@ class Hook_addon_registry_quizzes
      */
     public function tpl_preview__quiz_survey_answers_mail()
     {
-        $given_answers = new ocp_tempcode();
+        $given_answers = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $given_answers->attach(lorem_phrase());
         }
@@ -379,17 +383,17 @@ class Hook_addon_registry_quizzes
      */
     public function tpl_preview__quiz_test_answers_mail()
     {
-        $unknowns = new ocp_tempcode();
+        $unknowns = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $unknowns->attach(lorem_phrase());
         }
 
-        $corrections = new ocp_tempcode();
+        $corrections = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $corrections->attach(lorem_phrase());
         }
 
-        $given_answers = new ocp_tempcode();
+        $given_answers = new Tempcode();
         foreach (placeholder_array() as $k => $v) {
             $given_answers->attach(lorem_phrase());
         }

@@ -252,7 +252,7 @@ class Module_tester
             return $this->__ed();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -267,7 +267,7 @@ class Module_tester
         $num_tests_incomplete = $GLOBALS['SITE_DB']->query_select_value('tests', 'COUNT(*)', array('t_status' => 0, 't_enabled' => 1));
         $num_tests = $num_tests_successful + $num_tests_failed + $num_tests_incomplete;
 
-        $testers = new ocp_tempcode();
+        $testers = new Tempcode();
         $_testers1 = collapse_1d_complexity('s_assigned_to', $GLOBALS['SITE_DB']->query_select('test_sections', array('DISTINCT s_assigned_to')));
         $_testers2 = collapse_1d_complexity('t_assigned_to', $GLOBALS['SITE_DB']->query_select('tests', array('DISTINCT t_assigned_to')));
         $_testers = array_unique(array_merge($_testers1, $_testers2));
@@ -330,22 +330,22 @@ class Module_tester
         }
         $where .= ' AND s.s_inheritable=0';
 
-        $sections = new ocp_tempcode();
+        $sections = new Tempcode();
         $query = 'SELECT *,t.id AS id FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'tests t LEFT JOIN ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'test_sections s ON t.t_section=s.id WHERE ' . $where . ' ORDER BY s.s_section,t.id';
         $_tests = $GLOBALS['SITE_DB']->query($query);
         $current = null;
         $current_2 = null;
         $current_3 = null;
-        $tests = new ocp_tempcode();
+        $tests = new Tempcode();
         foreach ($_tests as $test) {
             if ((!is_null($current)) && ($current != $test['t_section'])) {
-                $edit_test_section_url = new ocp_tempcode();
+                $edit_test_section_url = new Tempcode();
                 if ((has_privilege(get_member(), 'edit_own_tests')) && (($test['s_assigned_to'] == get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))) {
                     $edit_test_section_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $current), '_SELF');
                 }
 
                 $sections->attach(do_template('TESTER_GO_SECTION', array('_GUID' => '5ac788f72b881e403f75f76815706032', 'ID' => strval($current), 'EDIT_TEST_SECTION_URL' => $edit_test_section_url, 'NOTES' => $current_3, 'SECTION' => $current_2, 'TESTS' => $tests)));
-                $tests = new ocp_tempcode();
+                $tests = new Tempcode();
             }
             $current = $test['t_section'];
             $current_2 = $test['s_section'];
@@ -370,7 +370,7 @@ class Module_tester
         if (($tests->is_empty()) && ($sections->is_empty())) {
             $sections = paragraph(do_lang_tempcode('NO_ENTRIES'), '4tregerg344');
         } else {
-            $edit_test_section_url = new ocp_tempcode();
+            $edit_test_section_url = new Tempcode();
             if ((has_privilege(get_member(), 'edit_own_tests')) && (($test['s_assigned_to'] == get_member()) || ($GLOBALS['FORUM_DRIVER']->is_staff(get_member())))) {
                 $edit_test_section_url = build_url(array('page' => '_SELF', 'type' => '_ed', 'id' => $test['t_section']), '_SELF');
             }
@@ -378,7 +378,7 @@ class Module_tester
             $sections->attach(do_template('TESTER_GO_SECTION', array('_GUID' => '9bd53d8b0f0aab1a683660fac2b6ad85', 'ID' => strval($test['t_section']), 'EDIT_TEST_SECTION_URL' => $edit_test_section_url, 'NOTES' => $test['s_notes'], 'SECTION' => $test['s_section'], 'TESTS' => $tests)));
         }
 
-        $add_test_section_url = new ocp_tempcode();
+        $add_test_section_url = new Tempcode();
         if (has_privilege(get_member(), 'add_tests')) {
             $add_test_section_url = build_url(array('page' => '_SELF', 'type' => 'ad'), '_SELF');
         }
@@ -449,7 +449,7 @@ class Module_tester
      */
     public function get_section_list($it = null, $unassigned = false)
     {
-        $list2 = new ocp_tempcode();
+        $list2 = new Tempcode();
 
         $where = null;
         if ($unassigned) {
@@ -460,7 +460,7 @@ class Module_tester
             $section = $_section['s_section'];
             $id = $_section['id'];
             $count = $GLOBALS['SITE_DB']->query_select_value('tests', 'COUNT(*)', array('t_section' => $id));
-            $extra = new ocp_tempcode();
+            $extra = new Tempcode();
             if (!$unassigned) {
                 $username = $GLOBALS['FORUM_DRIVER']->get_username($_section['s_assigned_to']);
                 if (is_null($username)) {
@@ -513,7 +513,7 @@ class Module_tester
     {
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_DESCRIPTION'), $stub . '_test', $test, true));
         $list = $this->get_tester_list($assigned_to);
         $fields->attach(form_input_list(do_lang_tempcode('TESTER'), do_lang_tempcode('DESCRIPTION_TESTER_2'), $stub . '_assigned_to', $list));
@@ -538,7 +538,7 @@ class Module_tester
     {
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('NAME'), do_lang_tempcode('DESCRIPTION_NAME'), 'section', $section, true));
         $fields->attach(form_input_text(do_lang_tempcode('NOTES'), do_lang_tempcode('DESCRIPTION_NOTES'), 'notes', $notes, false));
@@ -729,7 +729,7 @@ class Module_tester
         $add_template = do_template('TESTER_TEST_GROUP_NEW', array('_GUID' => '3d0e12fdff0aef8f8aa5818e441238ee', 'ID' => 'add_-REPLACEME-', 'FIELDS' => $this->get_test_form_fields('add_-REPLACEME-')));
 
         $_tests = $GLOBALS['SITE_DB']->query_select('tests', array('*'), array('t_section' => $id));
-        $tests = new ocp_tempcode();
+        $tests = new Tempcode();
         foreach ($_tests as $test) {
             $_fields = $this->get_test_form_fields('edit_' . strval($test['id']), $test['t_test'], $test['t_assigned_to'], $test['t_enabled'], $test['t_inherit_section']);
             $_fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('_GUID' => '21f8a24eb794f271137d72360fb78136', 'TITLE' => do_lang_tempcode('ACTIONS'))));

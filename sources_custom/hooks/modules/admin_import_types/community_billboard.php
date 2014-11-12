@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    community_billboard
  */
+
+/**
+ * Hook class.
+ */
 class Hook_admin_import_types_community_billboard
 {
     /**

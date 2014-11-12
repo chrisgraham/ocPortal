@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    apache_config_files
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_apache_config_files
 {
     /**

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    tickets
  */
-class Hook_Preview_ticket
+
+/**
+ * Hook class.
+ */
+class Hook_preview_ticket
 {
     /**
      * Find whether this preview hook applies.

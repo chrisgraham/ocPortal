@@ -122,7 +122,7 @@ class Module_staff
             return $this->do_staff_member();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -147,7 +147,7 @@ class Module_staff
 
         sort_maps_by($rows, 'username');
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         foreach ($rows as $row_staff) {
             $id = $GLOBALS['FORUM_DRIVER']->mrow_id($row_staff);
 

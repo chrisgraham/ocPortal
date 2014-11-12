@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_comcode_pages
  */
+
+/**
+ * Hook class.
+ */
 class Hook_whats_news_comcode_pages
 {
     /**
@@ -42,7 +46,7 @@ class Hook_whats_news_comcode_pages
     {
         $max = intval(get_option('max_newsletter_whatsnew'));
 
-        $new = new ocp_tempcode();
+        $new = new Tempcode();
 
         require_code('ocfiltering');
         if ($filter == '') {

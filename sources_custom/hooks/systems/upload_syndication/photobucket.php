@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Hook class.
+ */
 class Hook_upload_syndication_photobucket
 {
     public $_api = null;

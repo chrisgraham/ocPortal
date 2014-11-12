@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_abstract_components
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_core_abstract_components
 {
     /**
@@ -365,7 +369,7 @@ class Hook_addon_registry_core_abstract_components
             );
         }
 
-        $boxes = new ocp_tempcode();
+        $boxes = new Tempcode();
         $box = do_lorem_template('STANDARDBOX_' . $type, array(
             'CONTENT' => lorem_sentence(),
             'LINKS' => $links,

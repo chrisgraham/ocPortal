@@ -328,7 +328,7 @@ function make_map_nice($map)
 function import_from_xml($xml_data, $delete_missing_rows = false)
 {
     require_code('xml');
-    $parsed = new ocp_simple_xml_reader($xml_data);
+    $parsed = new OCP_simple_xml_reader($xml_data);
     if (!is_null($parsed->error)) {
         warn_exit($parsed->error);
     }
@@ -712,7 +712,7 @@ function insert_lang_xml($field_name, $xml_data)
     }
 
     require_code('xml');
-    $parsed = new ocp_simple_xml_reader($xml_data);
+    $parsed = new OCP_simple_xml_reader($xml_data);
     if (!is_null($parsed->error)) {
         warn_exit($parsed->error);
     }

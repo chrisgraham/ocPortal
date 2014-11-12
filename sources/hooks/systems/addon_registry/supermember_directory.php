@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    supermember_directory
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_supermember_directory
 {
     /**

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    msn
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_network_links
 {
     /**

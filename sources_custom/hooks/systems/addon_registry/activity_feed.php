@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    activity_feed
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_activity_feed
 {
     /**

@@ -242,7 +242,7 @@ function parse_aggregate_xml($display_errors = false)
 
     require_code('tempcode_compiler');
 
-    $parsed = new ocp_simple_xml_reader($xml);
+    $parsed = new OCP_simple_xml_reader($xml);
 
     $parse_errors = array();
     $aggregate_types = array();

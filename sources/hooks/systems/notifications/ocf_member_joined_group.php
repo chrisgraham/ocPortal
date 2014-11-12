@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_ocf
  */
-class Hook_Notification_ocf_member_joined_group extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_ocf_member_joined_group extends Hook_Notification
 {
     /**
      * Find whether a handled notification code supports categories.

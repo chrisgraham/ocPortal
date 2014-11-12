@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_banners extends standard_crud_module
+class Module_cms_banners extends Standard_crud_module
 {
     public $lang_type = 'BANNER';
     public $view_entry_point = '_SEARCH:banners:view:source=_ID';
@@ -153,7 +153,7 @@ class Module_cms_banners extends standard_crud_module
             ";
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -263,13 +263,13 @@ class Module_cms_banners extends standard_crud_module
         $hr[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($hr, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         foreach ($rows as $row) {
             $edit_link = build_url($url_map + array('id' => $row['name']), '_SELF');
 
-            $deployment_agreement = new ocp_tempcode();
+            $deployment_agreement = new Tempcode();
             switch ($row['the_type']) {
                 case 0:
                     $deployment_agreement = do_lang_tempcode('BANNER_PERMANENT');
@@ -357,9 +357,9 @@ class Module_cms_banners extends standard_crud_module
             $fields->attach($this->get_permission_fields($name, null, ($name == '')));
         }
 
-        $edit_text = ($name == '') ? new ocp_tempcode() : do_template('BANNER_PREVIEW', array('_GUID' => 'b7c58bc13ff317870b6823716fd36f0c', 'PREVIEW' => show_banner($name, $title_text, comcode_to_tempcode($caption, $submitter), $direct_code, $image_url, '', $site_url, $b_type, is_null($submitter) ? get_member() : $submitter)));
+        $edit_text = ($name == '') ? new Tempcode() : do_template('BANNER_PREVIEW', array('_GUID' => 'b7c58bc13ff317870b6823716fd36f0c', 'PREVIEW' => show_banner($name, $title_text, comcode_to_tempcode($caption, $submitter), $direct_code, $image_url, '', $site_url, $b_type, is_null($submitter) ? get_member() : $submitter)));
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         handle_max_file_size($hidden, 'image');
 
         return array($fields, $hidden, null, $edit_text);
@@ -517,7 +517,7 @@ class Module_cms_banners extends standard_crud_module
 /**
  * Module page class.
  */
-class Module_cms_banners_cat extends standard_crud_module
+class Module_cms_banners_cat extends Standard_crud_module
 {
     public $lang_type = 'BANNER_TYPE';
     public $select_name = '_BANNER_TYPE';
@@ -570,7 +570,7 @@ class Module_cms_banners_cat extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         require_code('files');
@@ -599,8 +599,8 @@ class Module_cms_banners_cat extends standard_crud_module
      */
     public function get_form_fields($id = '', $is_textual = 0, $image_width = 160, $image_height = 600, $max_file_size = 250, $comcode_inline = 0)
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('CODENAME'), do_lang_tempcode('DESCRIPTION_BANNER_TYPE'), 'new_id', $id, false));
         if ($id != '') {

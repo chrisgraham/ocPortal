@@ -169,7 +169,7 @@ class Module_topicview
         if (!is_null($topic_info['forum_id'])) {
             $breadcrumbs = ocf_forum_breadcrumbs($topic_info['forum_id'], null, null, false);
         } else {
-            $breadcrumbs = new ocp_tempcode();
+            $breadcrumbs = new Tempcode();
             $breadcrumbs->attach(hyperlink(build_url(array('page' => 'members'), get_module_zone('members')), do_lang_tempcode('MEMBERS'), false, false, do_lang_tempcode('GO_BACKWARDS_TO', do_lang_tempcode('MEMBERS')), null, null, 'up'));
             $breadcrumbs->attach(do_template('BREADCRUMB_SEPARATOR'));
             if (has_privilege(get_member(), 'view_other_pt')) {
@@ -307,7 +307,7 @@ class Module_topicview
             $jump_post_id = get_param_integer('post_id', null);
 
             // Render non-threaded
-            $posts = new ocp_tempcode();
+            $posts = new Tempcode();
             $replied = false;
             if (is_null($topic_info['forum_id'])) {
                 decache('side_ocf_private_topics', array(get_member()));
@@ -339,14 +339,14 @@ class Module_topicview
                         'LAST_EDIT_USERNAME' => $_postdetails['last_edit_by_username'],
                     ));
                 } else {
-                    $last_edited = new ocp_tempcode();
+                    $last_edited = new Tempcode();
                 }
                 $last_edited_raw = (array_key_exists('last_edit_time', $_postdetails)) ? (is_null($_postdetails['last_edit_time']) ? '' : strval($_postdetails['last_edit_time'])) : '0';
 
                 $is_spacer_post = $_postdetails['is_spacer_post'];
 
                 // Post buttons
-                $buttons = new ocp_tempcode();
+                $buttons = new Tempcode();
                 if (!$is_spacer_post) {
                     $buttons = ocf_render_post_buttons($topic_info, $_postdetails, $may_reply);
                 }
@@ -365,11 +365,11 @@ class Module_topicview
                     if ((array_key_exists('poster_avatar', $_postdetails)) && ($_postdetails['poster_avatar'] != '')) {
                         $post_avatar = do_template('OCF_TOPIC_POST_AVATAR', array('_GUID' => 'd647ada9c11d56eedc0ff7894d33e83c', 'AVATAR' => $_postdetails['poster_avatar']));
                     } else {
-                        $post_avatar = new ocp_tempcode();
+                        $post_avatar = new Tempcode();
                     }
 
                     // Rank images
-                    $rank_images = new ocp_tempcode();
+                    $rank_images = new Tempcode();
                     if (!$is_spacer_post) {
                         $posters_groups = $GLOBALS['FORUM_DRIVER']->get_members_groups($_postdetails['poster'], true);
                         foreach ($posters_groups as $group) {
@@ -389,16 +389,16 @@ class Module_topicview
                             require_code('ocf_members2');
                             $poster_details = render_member_box($_postdetails, false, $hooks, $hook_objects, false, null, false);
                         } else {
-                            $custom_fields = new ocp_tempcode();
+                            $custom_fields = new Tempcode();
                             if (array_key_exists('ip_address', $_postdetails)) {
                                 $custom_fields->attach(do_template('OCF_MEMBER_BOX_CUSTOM_FIELD', array('_GUID' => 'd85be094dff0d039a64120d6f8f381bb', 'NAME' => do_lang_tempcode('IP_ADDRESS'), 'VALUE' => ($_postdetails['ip_address']))));
                                 $poster_details = do_template('OCF_GUEST_DETAILS', array('_GUID' => 'e43534acaf598008602e8da8f9725f38', 'CUSTOM_FIELDS' => $custom_fields));
                             } else {
-                                $poster_details = new ocp_tempcode();
+                                $poster_details = new Tempcode();
                             }
                         }
                     } else {
-                        $poster_details = new ocp_tempcode();
+                        $poster_details = new Tempcode();
                     }
 
                     if (!is_guest($_postdetails['poster'])) {
@@ -413,12 +413,12 @@ class Module_topicview
                             'HIGHLIGHT_NAME' => array_key_exists('poster_highlighted_name', $_postdetails) ? strval($_postdetails['poster_highlighted_name']) : null,
                         ));
                     } else {
-                        $ip_link = ((addon_installed('securitylogging')) && (array_key_exists('ip_address', $_postdetails)) && (has_actual_page_access(get_member(), 'admin_lookup'))) ? build_url(array('page' => 'admin_lookup', 'param' => $_postdetails['ip_address']), get_module_zone('admin_lookup')) : new ocp_tempcode();
+                        $ip_link = ((addon_installed('securitylogging')) && (array_key_exists('ip_address', $_postdetails)) && (has_actual_page_access(get_member(), 'admin_lookup'))) ? build_url(array('page' => 'admin_lookup', 'param' => $_postdetails['ip_address']), get_module_zone('admin_lookup')) : new Tempcode();
                         $poster = do_template('OCF_POSTER_GUEST', array('_GUID' => '36a8e550222cdac5165ef8f722be3def', 'LOOKUP_IP_URL' => $ip_link, 'POSTER_DETAILS' => $poster_details, 'POSTER_USERNAME' => $_postdetails['poster_username']));
                     }
 
                     // Signature
-                    $signature = new ocp_tempcode();
+                    $signature = new Tempcode();
                     if ((array_key_exists('signature', $_postdetails)) && (!$_postdetails['signature']->is_empty())) {
                         $signature = $_postdetails['signature'];
                     }
@@ -428,9 +428,9 @@ class Module_topicview
 
                 $post_title = $_postdetails['title'];
 
-                $first_unread = (($_postdetails['id'] == $first_unread_id) || (($first_unread_id < 0) && ($array_id == count($topic_info['posts']) - 1))) ? do_template('OCF_TOPIC_FIRST_UNREAD') : new ocp_tempcode();
+                $first_unread = (($_postdetails['id'] == $first_unread_id) || (($first_unread_id < 0) && ($array_id == count($topic_info['posts']) - 1))) ? do_template('OCF_TOPIC_FIRST_UNREAD') : new Tempcode();
 
-                $unvalidated = (($_postdetails['validated'] == 0) && (addon_installed('unvalidated'))) ? do_lang_tempcode('UNVALIDATED') : new ocp_tempcode();
+                $unvalidated = (($_postdetails['validated'] == 0) && (addon_installed('unvalidated'))) ? do_lang_tempcode('UNVALIDATED') : new Tempcode();
 
                 $post_url = $GLOBALS['FORUM_DRIVER']->post_url($_postdetails['id'], is_null($topic_info['forum_id']) ? '' : strval($topic_info['forum_id']), true);
 
@@ -446,7 +446,7 @@ class Module_topicview
                     actualise_rating(true, 'post', strval($_postdetails['id']), get_self_url(), $_postdetails['title']);
                     $rating = display_rating(get_self_url(), $_postdetails['title'], 'post', strval($_postdetails['id']), 'RATING_INLINE_DYNAMIC', $_postdetails['poster']);
                 } else {
-                    $rating = new ocp_tempcode();
+                    $rating = new Tempcode();
                 }
 
                 if ((isset($GLOBALS['META_DATA']['description'])) && ($GLOBALS['META_DATA']['description'] == '') && (($_postdetails['id'] === $jump_post_id) || (($array_id == 0) && ($jump_post_id === null)))) {
@@ -610,11 +610,11 @@ class Module_topicview
             $_poll = $topic_info['poll'];
             $voted_already = $_poll['voted_already'];
             $poll_results = (array_key_exists(0, $_poll['answers'])) && (array_key_exists('num_votes', $_poll['answers'][0]));
-            $answers = new ocp_tempcode();
+            $answers = new Tempcode();
             $real_button = false;
             if ($_poll['is_open']) {
                 if ($poll_results) {
-                    $button = new ocp_tempcode();
+                    $button = new Tempcode();
                 } elseif (($_poll['requires_reply']) && (!$replied)) {
                     $button = do_lang_tempcode('POLL_REQUIRES_REPLY');
                 } else {
@@ -671,12 +671,12 @@ class Module_topicview
             if ($_poll['is_private']) {
                 $private = paragraph(do_lang_tempcode('TOPIC_POLL_IS_PRIVATE'), 'dfgsdgdsgs');
             } else {
-                $private = new ocp_tempcode();
+                $private = new Tempcode();
             }
             if ($_poll['maximum_selections'] > 1) {
                 $num_choices = paragraph(($_poll['minimum_selections'] == $_poll['maximum_selections']) ? do_lang_tempcode('POLL_NOT_ENOUGH_ERROR_2', integer_format($_poll['minimum_selections'])) : do_lang_tempcode('POLL_NOT_ENOUGH_ERROR', integer_format($_poll['minimum_selections']), integer_format($_poll['maximum_selections'])), 'dsfsdfsdfs');
             } else {
-                $num_choices = new ocp_tempcode();
+                $num_choices = new Tempcode();
             }
 
             $poll = do_template('OCF_TOPIC_POLL' . ($poll_results ? '_VIEW_RESULTS' : ''), array(
@@ -692,7 +692,7 @@ class Module_topicview
                 'MAXIMUM_SELECTIONS' => integer_format($_poll['maximum_selections']),
             ));
         } else {
-            $poll = new ocp_tempcode();
+            $poll = new Tempcode();
         }
 
         // Quick reply
@@ -717,7 +717,7 @@ class Module_topicview
                 $post_row = db_map_restrict($topic_info['row'], array('id', 'p_post'));
                 $_postdetails = get_translated_tempcode('f_posts', $post_row, 'p_post', $GLOBALS['FORUM_DB']);
             } else {
-                $_postdetails = new ocp_tempcode();
+                $_postdetails = new Tempcode();
             }
             $first_post = $_postdetails;
             $first_post_url = $GLOBALS['FORUM_DRIVER']->post_url($topic_info['first_post_id'], is_null($topic_info['forum_id']) ? '' : strval($topic_info['forum_id']), true);
@@ -765,7 +765,7 @@ class Module_topicview
                 'SUBMIT_NAME' => do_lang_tempcode('REPLY'),
             ));
         } else {
-            $quick_reply = new ocp_tempcode();
+            $quick_reply = new Tempcode();
         }
 
         $action_url = build_url(array('page' => 'topics', 'id' => $id), get_module_zone('topics'));
@@ -886,7 +886,7 @@ class Module_topicview
             require_code('templates_pagination');
             $pagination = pagination(do_lang_tempcode('FORUM_POSTS'), $start, 'topic_start', $max, 'topic_max', $max_rows, false, 7, array(10, 20, 30));
         } else {
-            $pagination = new ocp_tempcode();
+            $pagination = new Tempcode();
         }
 
         // Members viewing this topic
@@ -897,7 +897,7 @@ class Module_topicview
         if (is_null($id)) {
             $num_guests = mixed();
             $num_members = mixed();
-            $members_viewing = new ocp_tempcode();
+            $members_viewing = new Tempcode();
         } else {
             list($num_guests, $num_members, $members_viewing) = get_members_viewing_wrap('topicview', '', strval($id), true);
         }
@@ -905,7 +905,7 @@ class Module_topicview
         if (($topic_info['validated'] == 0) && (addon_installed('unvalidated'))) {
             $warning_details = do_template('WARNING_BOX', array('_GUID' => '313de370c1aeab9545c4bee4e35e7f84', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? '_UNVALIDATED_TEXT_NON_DIRECT' : '_UNVALIDATED_TEXT', do_lang('FORUM_TOPIC'))));
         } else {
-            $warning_details = new ocp_tempcode();
+            $warning_details = new Tempcode();
         }
 
         require_code('ocf_general');

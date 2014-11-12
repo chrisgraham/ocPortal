@@ -6,6 +6,9 @@ This finds an ocPortal member's Facebook ID, in offline mode.
 Use FB_CONNECT_UID to get the Facebook ID of the currently active user, via an active Facebook Connect session.
 */
 
+/**
+ * Hook class.
+ */
 class Hook_symbol_USER_FB_CONNECT
 {
     public function run($param)

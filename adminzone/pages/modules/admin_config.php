@@ -219,7 +219,7 @@ class Module_admin_config
             }
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -248,7 +248,7 @@ class Module_admin_config
         }
 
         // Show all categories
-        $categories_tpl = new ocp_tempcode();
+        $categories_tpl = new Tempcode();
         ksort($categories);
         foreach ($categories as $category => $option_count) {
             // Some are skipped
@@ -388,7 +388,7 @@ class Module_admin_config
         }
 
         // Render option groups
-        $groups_tempcode = new ocp_tempcode();
+        $groups_tempcode = new Tempcode();
         require_code('form_templates');
         $_groups = array();
         foreach ($groups as $group_codename => $rows) {
@@ -529,7 +529,7 @@ class Module_admin_config
                             $tmp_value = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_forum_groupings', 'id', array('c_title' => get_option($name)));
 
                             require_code('ocf_forums2');
-                            $_list = new ocp_tempcode();
+                            $_list = new Tempcode();
                             if (!$required) {
                                 $list->attach(form_input_list_entry('', false, do_lang_tempcode('NA_EM')));
                             }
@@ -545,7 +545,7 @@ class Module_admin_config
                             $tmp_value = $GLOBALS['FORUM_DB']->query_select_value_if_there('f_groups', 'id', array($GLOBALS['FORUM_DB']->translate_field_ref('name') => get_option($name)));
 
                             require_code('ocf_groups');
-                            $_list = new ocp_tempcode();
+                            $_list = new Tempcode();
                             if (!$required) {
                                 $list->attach(form_input_list_entry('', false, do_lang_tempcode('NA_EM')));
                             }
@@ -565,7 +565,7 @@ class Module_admin_config
             $group_title = do_lang_tempcode($group_codename);
             $_group_description = do_lang('CONFIG_GROUP_DESCRIP_' . $group_codename, escape_html($post_max_size), escape_html($upload_max_filesize), null, null, false);
             if (is_null($_group_description)) {
-                $group_description = new ocp_tempcode();
+                $group_description = new Tempcode();
             } else {
                 $group_description = do_lang_tempcode('CONFIG_GROUP_DESCRIP_' . $group_codename, escape_html($post_max_size), escape_html($upload_max_filesize));
             }

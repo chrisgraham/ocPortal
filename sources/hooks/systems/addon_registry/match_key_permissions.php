@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    match_key_permissions
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_match_key_permissions
 {
     /**

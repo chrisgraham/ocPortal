@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_bottom_forum_news
 {
     /**
@@ -59,7 +63,7 @@ class Block_bottom_forum_news
     public function run($map)
     {
         if (has_no_forum()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         $limit = array_key_exists('param', $map) ? intval($map['param']) : 6;
@@ -88,7 +92,7 @@ class Block_bottom_forum_news
             $max_rows = 0;
             $topics = $GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids, $limit, 0, $max_rows, '', false, $date_key);
 
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             $_postdetailss = array();
             if (!is_null($topics)) {
                 sort_maps_by($topics, $date_key);
@@ -105,7 +109,7 @@ class Block_bottom_forum_news
 
             return do_template('BLOCK_BOTTOM_NEWS', array('_GUID' => '04d5390309dcba1f17391e9928da0d56', 'POSTS' => $_postdetailss));
         } else {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
     }
 }

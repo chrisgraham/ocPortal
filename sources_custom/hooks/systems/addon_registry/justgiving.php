@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    justgiving
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_justgiving
 {
     /**

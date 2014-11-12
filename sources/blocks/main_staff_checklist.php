@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core_adminzone_dashboard
  */
+
+/**
+ * Block class.
+ */
 class Block_main_staff_checklist
 {
     /**
@@ -124,7 +128,7 @@ class Block_main_staff_checklist
             $GLOBALS['SITE_DB']->query_insert('customtasks', array('tasktitle' => $new_task, 'datetimeadded' => time(), 'recurinterval' => $recurint, 'recurevery' => $recurevery, 'taskisdone' => null));
             decache('main_staff_checklist');
         }
-        $custasks = new ocp_tempcode();
+        $custasks = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query_select('customtasks', array('*'));
         foreach ($rows as $r) {
             $recurevery = '';
@@ -188,15 +192,15 @@ class Block_main_staff_checklist
         sort_maps_by($rets_todo_counts, '!2');
         sort_maps_by($rets_dates, '1');
 
-        $out_no_times = new ocp_tempcode();
+        $out_no_times = new Tempcode();
         foreach ($rets_no_times as $item) {
             $out_no_times->attach($item[0]);
         }
-        $out_todo_counts = new ocp_tempcode();
+        $out_todo_counts = new Tempcode();
         foreach ($rets_todo_counts as $item) {
             $out_todo_counts->attach($item[0]);
         }
-        $out_dates = new ocp_tempcode();
+        $out_dates = new Tempcode();
         foreach ($rets_dates as $item) {
             $out_dates->attach($item[0]);
         }

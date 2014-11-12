@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
+
+/**
+ * Hook class.
+ */
 class Hook_sitemap_topic extends Hook_sitemap_content
 {
     protected $content_type = 'topic';

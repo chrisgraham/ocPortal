@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    password_censor
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_password_censor
 {
     /**

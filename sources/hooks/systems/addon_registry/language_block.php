@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    language_block
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_language_block
 {
     /**

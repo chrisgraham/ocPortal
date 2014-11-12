@@ -424,7 +424,7 @@ class Module_admin_themes
             return $this->tempcode_tester();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -439,7 +439,7 @@ class Module_admin_themes
         // Look through zones
         $zones = $GLOBALS['SITE_DB']->query_select('zones', array('*'), null, 'ORDER BY zone_title', 50/*reasonable limit; zone_title is sequential for default zones*/);
         $free_choices = 0;
-        $zone_list_free_choices = new ocp_tempcode();
+        $zone_list_free_choices = new Tempcode();
         foreach ($zones as $zone) {
             if (!array_key_exists($zone['zone_theme'], $_themes)) {
                 if (!$zone_list_free_choices->is_empty()) {
@@ -455,7 +455,7 @@ class Module_admin_themes
 
         // Show all themes
         $site_default_theme = $GLOBALS['FORUM_DRIVER']->_get_theme(true);
-        $themes = new ocp_tempcode();
+        $themes = new Tempcode();
         $theme_default_reason = do_lang_tempcode('DEFAULT_THEME_BY_DEFAULT', escape_html(get_default_theme_name()));
         foreach ($_themes as $theme => $details) {
             if (is_integer($theme)) {
@@ -476,7 +476,7 @@ class Module_admin_themes
             $_date = ($theme == 'default') ? do_lang_tempcode('NA_EM') : protect_from_escaping(escape_html(get_timezoned_date($date, false)));
 
             // Where the theme is used
-            $zone_list = new ocp_tempcode();
+            $zone_list = new Tempcode();
             if ($theme == $site_default_theme) {
                 if ((count($zones) < 10) && (!is_ocf_satellite_site()) && ($free_choices == 0)) {
                     $zone_list->attach($zone_list_free_choices); // Actually will do nothing, as $free_choices==0
@@ -506,7 +506,7 @@ class Module_admin_themes
             if (!$zone_list->is_empty()) {
                 $theme_usage = do_lang_tempcode('THEME_USED_ON', $zone_list);
             } else {
-                $theme_usage = new ocp_tempcode();
+                $theme_usage = new Tempcode();
             }
 
             // Render
@@ -539,7 +539,7 @@ class Module_admin_themes
         require_lang('zones');
 
         if ((count($zones) < 10) && (!is_ocf_satellite_site()) && ($free_choices == 0)) {
-            $theme_default_reason = new ocp_tempcode(); // We don't need to know the reason really; don't over-complicate simple sites
+            $theme_default_reason = new Tempcode(); // We don't need to know the reason really; don't over-complicate simple sites
         }
 
         return do_template('THEME_MANAGE_SCREEN', array('_GUID' => '1dc277f18562976f6a23facec56a98e8', 'TITLE' => $this->title, 'THEMES' => $themes, 'THEME_DEFAULT_REASON' => $theme_default_reason, 'ZONES' => $zones, 'HAS_FREE_CHOICES' => $free_choices != 0));
@@ -566,7 +566,7 @@ class Module_admin_themes
         require_code('form_templates');
         require_code('permissions2');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $site_default_theme = preg_replace('#[^\w\-\.\d]#', '_', get_site_name());
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         if ($name != 'default') {
@@ -588,7 +588,7 @@ class Module_admin_themes
         if (method_exists($GLOBALS['FORUM_DRIVER'], 'get_skin_list')) {
             $map = file_exists(get_file_base() . '/themes/map.ini') ? better_parse_ini_file(get_file_base() . '/themes/map.ini') : array();
             $default_selection = array();
-            $mapping = new ocp_tempcode();
+            $mapping = new Tempcode();
             $all_skins = $GLOBALS['FORUM_DRIVER']->get_skin_list();
             foreach ($map as $key => $val) {
                 if ($val == $name) {
@@ -701,7 +701,7 @@ class Module_admin_themes
             $theme_wizard_url = build_url(array('page' => 'admin_themewizard', 'type' => 'misc'), get_module_zone('admin_themewizard'));
             $text = do_lang_tempcode('DESCRIPTION_ADD_THEME_MANUAL', escape_html($theme_wizard_url->evaluate()));
         } else {
-            $text = new ocp_tempcode();
+            $text = new Tempcode();
         }
 
         require_javascript('javascript_ajax');
@@ -935,7 +935,7 @@ class Module_admin_themes
      */
     public function choose_theme($title, $lang_too = false)
     {
-        $themes = new ocp_tempcode();
+        $themes = new Tempcode();
         $_themes = find_all_themes();
         require_code('form_templates');
         foreach ($_themes as $theme => $theme_title) {
@@ -966,7 +966,7 @@ class Module_admin_themes
 
         single_field__start();
 
-        $css = new ocp_tempcode();
+        $css = new Tempcode();
         $files = array();
         $_dir = opendir(get_file_base() . '/themes/default/css');
         while (false !== ($file = readdir($_dir))) {
@@ -1076,7 +1076,7 @@ class Module_admin_themes
 
         set_short_title($file);
 
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
 
         $advanced_mode = get_param_integer('advanced_mode', 0);
         if ($advanced_mode == 1) {
@@ -1114,7 +1114,7 @@ class Module_admin_themes
         rsort($filesarray);
 
         $i = 0;
-        $revision_history = new ocp_tempcode();
+        $revision_history = new Tempcode();
         $max = intval(get_option('number_revisions_show'));
         $last_path = $path;
         foreach ($filesarray as $time) {
@@ -1387,7 +1387,7 @@ class Module_admin_themes
         }
         $temp = form_input_list_group($new_stub, make_string_tempcode($files_tmp));
         $files .= $temp->evaluate(); // XHTMLXHTML
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $set_name = 'template';
         $required = true;
@@ -1432,7 +1432,7 @@ class Module_admin_themes
         $search = get_param('search', '', true);
         if ($search != '') {
             $filesarray = $this->get_template_files_array($theme);
-            $results = new ocp_tempcode();
+            $results = new Tempcode();
             foreach ($filesarray as $file) {
                 $full_path = ((strpos($file, '/default/templates/') !== false) ? get_file_base() : get_custom_file_base()) . '/themes/' . $file;
                 $contents = file_get_contents($full_path);
@@ -1458,7 +1458,7 @@ class Module_admin_themes
             }
         }
 
-        $template_editors = new ocp_tempcode();
+        $template_editors = new Tempcode();
         $templates = array();
 
         $files_seen = array();
@@ -1579,7 +1579,7 @@ class Module_admin_themes
             $filesarray = $this->get_template_files_array($theme, basename($file));
             rsort($filesarray);
             $j = 0;
-            $revision_history = new ocp_tempcode();
+            $revision_history = new Tempcode();
             $max = intval(get_option('number_revisions_show'));
             foreach ($filesarray as $time) {
                 // Find who did the revision
@@ -1657,7 +1657,7 @@ class Module_admin_themes
 
             $matches = array();
             $cnt = preg_match_all('#\{([\w][\w\_]*)\}#', $old_contents, $matches);
-            $parameters = new ocp_tempcode();
+            $parameters = new Tempcode();
             $p_done = array();
             for ($j = 0; $j < $cnt; $j++) {
                 if (array_key_exists($matches[1][$j], $p_done)) {
@@ -1840,7 +1840,7 @@ class Module_admin_themes
      */
     public function generate_from($array, $stub, $id)
     {
-        $out = new ocp_tempcode();
+        $out = new Tempcode();
         foreach ($array as $x) {
             list($op, $arity) = $x;
             $lang = do_lang_tempcode($stub . '__' . $op);
@@ -1970,8 +1970,8 @@ class Module_admin_themes
      */
     public function get_image_form_fields($theme, $lang, $id = '', $path = '')
     {
-        $fields = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
         $hidden->attach(form_input_hidden('theme', $theme));
         $hidden->attach(form_input_hidden('lang', $lang));
@@ -2020,7 +2020,7 @@ class Module_admin_themes
         $post_url = build_url(array('page' => '_SELF', 'type' => '_add_image', 'uploading' => 1), '_SELF');
         $submit_name = do_lang_tempcode('ADD_THEME_IMAGE');
 
-        $text = new ocp_tempcode();
+        $text = new Tempcode();
         require_code('images');
         $max = floatval(get_max_image_size()) / floatval(1024 * 1024);
         if ($max < 3.0) {
@@ -2130,7 +2130,7 @@ class Module_admin_themes
             'URL' => $post_url,
             'FIELD' => $fields,
             'SUBMIT_ICON' => 'buttons__proceed',
-            'SUBMIT_NAME' => has_js() ? new ocp_tempcode() : do_lang_tempcode('EDIT'), // We don't want a button if JS is on because clicking on images takes you through
+            'SUBMIT_NAME' => has_js() ? new Tempcode() : do_lang_tempcode('EDIT'), // We don't want a button if JS is on because clicking on images takes you through
         ));
 
         $add_url = build_url(array('page' => '_SELF', 'type' => 'add_image', 'theme' => $theme, 'lang' => $lang), '_SELF');
@@ -2280,8 +2280,8 @@ class Module_admin_themes
 
         // Loop over to display it all
         $displayed_already = array();
-        $lis = new ocp_tempcode();
-        $lis_admin = new ocp_tempcode();
+        $lis = new Tempcode();
+        $lis_admin = new Tempcode();
         foreach ($templates as $t) {
             // If we have a preview for it
             if (array_key_exists($t, $all_previews)) {
@@ -2309,7 +2309,7 @@ class Module_admin_themes
 
         // Prepare all to display...
 
-        $post = new ocp_tempcode();
+        $post = new Tempcode();
 
         /* $lis (the main previews) will be displayed in the main INDEX_SCREEN content */
 
@@ -2317,7 +2317,7 @@ class Module_admin_themes
         $post->attach(do_template('TEMPLATE_LIST_WRAP', array('_GUID' => '1e847f3c75998f2276765bc0c8ab6b78', 'LI' => $lis_admin, 'TITLE' => do_lang('ADMIN_SCREENS'))));
 
         // LISTING COMCODE FILES
-        $com_li = new ocp_tempcode();
+        $com_li = new Tempcode();
         foreach ($comcode_files as $zone => $pages) {
             if ($zone == 'pages') {
                 $zone = "";
@@ -2335,7 +2335,7 @@ class Module_admin_themes
         $post->attach(do_template('TEMPLATE_LIST_WRAP', array('_GUID' => 'adf69728048cbdbc3a0d9a2e2485a234', 'LI' => $com_li, 'TITLE' => do_lang('COMCODE_PAGES'))));
 
         // LISTING HTML FILES
-        $htm_li = new ocp_tempcode();
+        $htm_li = new Tempcode();
         foreach ($html_files as $zone => $pages) {
             foreach ($pages as $page => $type) {
                 $file = $page . '.htm';

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    news
  */
+
+/**
+ * Block class.
+ */
 class Block_main_news
 {
     /**
@@ -74,7 +78,7 @@ class Block_main_news
         $member_based = (isset($map['member_based'])) && ($map['member_based'] == '1');
         $attach_to_url_filter = ((isset($map['attach_to_url_filter']) ? $map['attach_to_url_filter'] : '0') == '1');
         $ocselect = isset($map['ocselect']) ? $map['ocselect'] : '';
-        $optimise = (array_key_exists('optimise', $map)) && ($map['optimise'] == '1');
+        $optimise=(array_key_exists('optimise',$map)) && ($map['optimise']=='1');
 
         // Pagination
         $block_id = get_block_id($map);
@@ -226,7 +230,7 @@ class Block_main_news
         $base_url = get_base_url();
 
         // Render loop
-        $news_text = new ocp_tempcode();
+        $news_text = new Tempcode();
         foreach ($rows as $i => $myrow) {
             if (has_category_access(get_member(), 'news', strval($myrow['news_category']))) {
                 $just_news_row = db_map_restrict($myrow, array('id', 'title', 'news', 'news_article'));
@@ -238,7 +242,7 @@ class Block_main_news
                 $news_title_plain = get_translated_text($myrow['title']);
 
                 // Author
-                $author_url = new ocp_tempcode();
+                $author_url = new Tempcode();
                 if ($show_author) {
                     $url_map = array('page' => 'authors', 'type' => 'misc', 'id' => $myrow['author']);
                     if ($attach_to_url_filter) {
@@ -343,7 +347,7 @@ class Block_main_news
                 $news_text->attach(do_template('NEWS_BOX', $map2));
             }
         }
-        $news_text2 = new ocp_tempcode();
+        $news_text2 = new Tempcode();
         foreach ($rows2 as $j => $myrow) {
             if (has_category_access(get_member(), 'news', strval($myrow['news_category']))) {
                 $just_news_row = db_map_restrict($myrow, array('id', 'title', 'news', 'news_article'));
@@ -383,7 +387,7 @@ class Block_main_news
         $archive_url = build_url($tmp, $zone);
         $_is_on_rss = get_option('is_rss_advertised', true);
         $is_on_rss = is_null($_is_on_rss) ? 0 : intval($_is_on_rss); // Set to zero if we don't want to show RSS links
-        $submit_url = new ocp_tempcode();
+        $submit_url = new Tempcode();
         $management_page = ($blogs === 1) ? 'cms_blogs' : 'cms_news';
         if ((($blogs !== 1) || (has_privilege(get_member(), 'have_personal_category', 'cms_news'))) && (has_actual_page_access(null, $management_page, null, null)) && (has_submit_permission('high', get_member(), get_ip_address(), $management_page))) {
             $map2 = array('page' => $management_page, 'type' => 'ad', 'redirect' => SELF_REDIRECT);
@@ -410,8 +414,8 @@ class Block_main_news
         $_title = isset($map['title']) ? protect_from_escaping(escape_html($map['title'])) : do_lang_tempcode(($blogs == 1) ? 'BLOGS_POSTS' : 'NEWS');
 
         // Feed URLs
-        $atom_url = new ocp_tempcode();
-        $rss_url = new ocp_tempcode();
+        $atom_url = new Tempcode();
+        $rss_url = new Tempcode();
         if ($is_on_rss == 1) {
             $atom_url = make_string_tempcode(find_script('backend') . '?type=atom&mode=news&filter=' . $filter);
             $atom_url->attach(symbol_tempcode('KEEP'));
@@ -421,10 +425,10 @@ class Block_main_news
 
         // Wipe out management/feed URLs if no links was requested
         if ((isset($map['no_links'])) && ($map['no_links'] == '1')) {
-            $submit_url = new ocp_tempcode();
-            $archive_url = new ocp_tempcode();
-            $atom_url = new ocp_tempcode();
-            $rss_url = new ocp_tempcode();
+            $submit_url = new Tempcode();
+            $archive_url = new Tempcode();
+            $atom_url = new Tempcode();
+            $rss_url = new Tempcode();
         }
 
         if ((count($rows) == 0) && (count($rows2) == 0)) {

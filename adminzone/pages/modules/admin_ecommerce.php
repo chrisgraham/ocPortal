@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_admin_ecommerce extends standard_crud_module
+class Module_admin_ecommerce extends Standard_crud_module
 {
     public $lang_type = 'USERGROUP_SUBSCRIPTION';
     public $select_name = 'TITLE';
@@ -154,7 +154,7 @@ class Module_admin_ecommerce extends standard_crud_module
             return $this->misc();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -201,7 +201,7 @@ class Module_admin_ecommerce extends standard_crud_module
             attach_message(do_lang_tempcode('ADD_USER_GROUP_FIRST', escape_html($add_usergroup_url->evaluate())), 'inform', true);
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
 
         if (is_null($group_id)) {
             $group_id = get_param_integer('group_id', db_get_first_id() + 3);
@@ -218,12 +218,12 @@ class Module_admin_ecommerce extends standard_crud_module
             $mail_uhoh = do_lang('_PAID_SUBSCRIPTION_UHOH', get_option('site_name'));
         }
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_line(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_TITLE'), 'title', $title, true));
         $fields->attach(form_input_text_comcode(do_lang_tempcode('DESCRIPTION'), do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_DESCRIPTION'), 'description', $description, true));
         $fields->attach(form_input_float(do_lang_tempcode('COST'), do_lang_tempcode('DESCRIPTION_USERGROUP_SUBSCRIPTION_COST'), 'cost', floatval($cost), true));
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         foreach (array('d', 'w', 'm', 'y') as $unit) {
             $list->attach(form_input_list_entry($unit, $unit == $length_units, do_lang_tempcode('LENGTH_UNIT_' . $unit)));
         }
@@ -235,7 +235,7 @@ class Module_admin_ecommerce extends standard_crud_module
             $hidden->attach(form_input_hidden('auto_recur', '1'));
         }
 
-        $list = new ocp_tempcode();
+        $list = new Tempcode();
         $groups = $GLOBALS['FORUM_DRIVER']->get_usergroup_list();
         if (get_forum_type() == 'ocf') {
             require_code('ocf_groups');
@@ -277,7 +277,7 @@ class Module_admin_ecommerce extends standard_crud_module
                 $fields->attach(do_template('FORM_SCREEN_FIELD_SPACER', array('TITLE' => do_lang_tempcode('EXTRA_SUBSCRIPTION_MAIL', integer_format($i + 1)), 'SECTION_HIDDEN' => ($subject == ''))));
                 $fields->attach(form_input_line_comcode(do_lang_tempcode('SUBJECT'), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_SUBJECT'), 'subject_' . strval($i), $subject, false));
                 $fields->attach(form_input_text_comcode(do_lang_tempcode('BODY'), do_lang_tempcode('DESCRIPTION_SUBSCRIPTION_BODY'), 'body_' . strval($i), $body, false, null, true));
-                $radios = new ocp_tempcode();
+                $radios = new Tempcode();
                 foreach (array('start', 'term_start', 'term_end', 'expiry') as $ref_point_type) {
                     $radios->attach(form_input_radio_entry('ref_point_' . strval($i), $ref_point_type, $ref_point == $ref_point_type, do_lang_tempcode('_SUBSCRIPTION_' . strtoupper($ref_point_type) . '_TIME')));
                 }
@@ -288,7 +288,7 @@ class Module_admin_ecommerce extends standard_crud_module
 
         $delete_fields = null;
         if ($GLOBALS['SITE_DB']->query_select_value('subscriptions', 'COUNT(*)', array('s_type_code' => 'USERGROUP' . strval($id))) > 0) {
-            $delete_fields = new ocp_tempcode();
+            $delete_fields = new Tempcode();
             $delete_fields->attach(form_input_tick(do_lang_tempcode('DELETE'), do_lang_tempcode('DESCRIPTION_DELETE_USERGROUP_SUB_DANGER'), 'delete', false));
         }
 
@@ -330,7 +330,7 @@ class Module_admin_ecommerce extends standard_crud_module
             do_lang_tempcode('ACTIONS'),
         ), $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_lang('ecommerce');
 
@@ -356,7 +356,7 @@ class Module_admin_ecommerce extends standard_crud_module
         $GLOBALS['NO_DB_SCOPE_CHECK'] = true;
 
         $_m = $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB']->query_select('f_usergroup_subs', array('*'));
-        $entries = new ocp_tempcode();
+        $entries = new Tempcode();
         foreach ($_m as $m) {
             $entries->attach(form_input_list_entry(strval($m['id']), false, get_translated_text($m['s_title'], $GLOBALS[(get_forum_type() == 'ocf') ? 'FORUM_DB' : 'SITE_DB'])));
         }

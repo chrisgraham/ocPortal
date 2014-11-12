@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    filedump
  */
+
+/**
+ * Hook class.
+ */
 class Hook_search_filedump
 {
     /**
@@ -134,7 +138,7 @@ class Hook_search_filedump
                 $dirs = explode('/', dirname($_path));
 
                 $pre = '';
-                $file_breadcrumbs = new ocp_tempcode();
+                $file_breadcrumbs = new Tempcode();
                 $breadcrumbs_url = build_url(array('page' => 'filedump', 'place' => $pre . '/'), get_module_zone('filedump'));
                 $file_breadcrumbs->attach(hyperlink($breadcrumbs_url, do_lang('ROOT')));
                 foreach ($dirs as $dir) {

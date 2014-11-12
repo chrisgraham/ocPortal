@@ -96,7 +96,7 @@ class Module_admin_ssl
             return $this->ssl_interface();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -106,7 +106,7 @@ class Module_admin_ssl
      */
     public function ssl_interface()
     {
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $zones = find_all_zones();
         foreach ($zones as $zone) {
             $pages = find_all_pages_wrap($zone);

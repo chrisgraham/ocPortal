@@ -24,8 +24,6 @@ require_code('database/shared/mysql');
 
 /**
  * Database Driver.
- *
- * @package    core_database_drivers
  */
 class Database_Static_mysql extends Database_super_mysql
 {

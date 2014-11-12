@@ -31,7 +31,7 @@ class occle_fs_test_set extends ocp_test_case
 
     public function testVar()
     {
-        $ob = new occle_fs();
+        $ob = new OcCLE_fs();
 
         // Check top-level 'var' works
         $var_files = $ob->listing(array('var'));
@@ -40,7 +40,7 @@ class occle_fs_test_set extends ocp_test_case
         foreach ($occlefs_hooks as $occlefs_hook => $dir) {
             $_path = get_file_base() . '/' . $dir . '/hooks/systems/occle_fs/' . $occlefs_hook . '.php';
             $contents = file_get_contents($_path);
-            if (strpos($contents, ' extends resource_fs_base') !== false) {
+            if (strpos($contents, ' extends Resource_fs_base') !== false) {
                 $cnt++;
             }
         }
@@ -118,7 +118,7 @@ class occle_fs_test_set extends ocp_test_case
         foreach ($occlefs_hooks as $occlefs_hook => $dir) {
             $path = get_file_base() . '/' . $dir . '/hooks/systems/occle_fs/' . $occlefs_hook . '.php';
             $contents = file_get_contents($path);
-            if (strpos($contents, ' extends resource_fs_base') !== false) {
+            if (strpos($contents, ' extends Resource_fs_base') !== false) {
                 $this->assertTrue(array_key_exists($occlefs_hook, $referenced_in_cma), 'Resource-FS hook not referenced: ' . $occlefs_hook);
             }
         }
@@ -127,7 +127,7 @@ class occle_fs_test_set extends ocp_test_case
     // This test will test the occle_fs_extended_config hooks are working properly, as well as the config option read/write in general.
     public function testEtcDir()
     {
-        $ob = new occle_fs();
+        $ob = new OcCLE_fs();
         $files = $ob->listing(array('etc'));
         foreach ($files[1] as $file) {
             if (strpos($file[0], '.' . RESOURCEFS_DEFAULT_EXTENSION) !== false) {

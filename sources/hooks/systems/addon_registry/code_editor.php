@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    code_editor
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_code_editor
 {
     /**

@@ -1,6 +1,9 @@
 <?php
 
-class Hook_Syndication_twitter
+/**
+ * Hook class.
+ */
+class Hook_syndication_twitter
 {
     public function get_service_name()
     {

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    iotds
  */
+
+/**
+ * Hook class.
+ */
 class Hook_rss_iotds
 {
     /**
@@ -35,7 +39,7 @@ class Hook_rss_iotds
             return null;
         }
 
-        $content = new ocp_tempcode();
+        $content = new Tempcode();
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'iotd WHERE add_date>' . strval($cutoff) . ' AND (used=1 OR is_current=1) ORDER BY add_date DESC', $max);
         foreach ($rows as $row) {
             $id = strval($row['id']);
@@ -61,7 +65,7 @@ class Hook_rss_iotds
             if (($prefix == 'RSS_') && (get_option('is_on_comments') == '1') && ($row['allow_comments'] >= 1)) {
                 $if_comments = do_template('RSS_ENTRY_COMMENTS', array('_GUID' => 'a8ccf291cb27c8ffb34f023416b85664', 'COMMENT_URL' => $view_url, 'ID' => strval($row['id'])));
             } else {
-                $if_comments = new ocp_tempcode();
+                $if_comments = new Tempcode();
             }
 
             require_code('images');

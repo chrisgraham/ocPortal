@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    recommend
  */
+
+/**
+ * Block class.
+ */
 class Block_main_screen_actions
 {
     /**

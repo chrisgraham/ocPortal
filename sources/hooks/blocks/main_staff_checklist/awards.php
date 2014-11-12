@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    awards
  */
+
+/**
+ * Hook class.
+ */
 class Hook_checklist_awards
 {
     /**
@@ -77,7 +81,7 @@ class Hook_checklist_awards
                     $_num_queue = integer_format($num_queue);
                     $num_new_since = do_lang_tempcode('NUM_NEW_SINCE', $_num_queue);
                 } else {
-                    $num_new_since = new ocp_tempcode();
+                    $num_new_since = new Tempcode();
                 }
 
                 list($info, $seconds_due_in) = staff_checklist_time_ago_and_due($seconds_ago, $limit_hours);

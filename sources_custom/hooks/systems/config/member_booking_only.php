@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    booking
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_member_booking_only
 {
     /**

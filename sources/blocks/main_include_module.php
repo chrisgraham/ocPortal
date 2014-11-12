@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    core
  */
+
+/**
+ * Block class.
+ */
 class Block_main_include_module
 {
     /**
@@ -61,11 +65,11 @@ class Block_main_include_module
         // Find out what we're virtualising
         $param = array_key_exists('param', $map) ? $map['param'] : '';
         if ($param == '') {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         list($zone, $attributes,) = page_link_decode($param);
         if (!array_key_exists('page', $attributes)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         if ($zone == '_SEARCH') {
             $zone = get_page_zone($attributes['page'], false);
@@ -73,7 +77,7 @@ class Block_main_include_module
             $zone = get_zone_name();
         }
         if (is_null($zone)) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
         foreach ($_GET as $key => $val) {
             if ((substr($key, 0, 5) == 'keep_') || ($merge_parameters)) {
@@ -83,7 +87,7 @@ class Block_main_include_module
 
         // Check permissions
         if (($only_if_permissions == 1) && (!has_actual_page_access(get_member(), $attributes['page'], $zone))) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('urls2');

@@ -23,7 +23,7 @@ require_code('crud_module');
 /**
  * Module page class.
  */
-class Module_cms_blogs extends standard_crud_module
+class Module_cms_blogs extends Standard_crud_module
 {
     public $lang_type = 'NEWS_BLOG';
     public $select_name = 'TITLE';
@@ -129,7 +129,7 @@ class Module_cms_blogs extends standard_crud_module
             return $this->_import_wordpress();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -187,7 +187,7 @@ class Module_cms_blogs extends standard_crud_module
         $fh[] = do_lang_tempcode('ACTIONS');
         $header_row = results_field_title($fh, $sortables, 'sort', $sortable . ' ' . $sort_order);
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         require_code('form_templates');
         $only_owned = has_privilege(get_member(), 'edit_midrange_content', 'cms_news') ? null : get_member();
@@ -282,9 +282,9 @@ class Module_cms_blogs extends standard_crud_module
         $cats1 = create_selection_list_news_categories($main_news_category, false, true, false, true);
         $cats2 = create_selection_list_news_categories((is_null($news_category) || (count($news_category) == 0)) ? array(get_param_integer('cat', null)) : $news_category, false, true, true, false);
 
-        $fields = new ocp_tempcode();
-        $fields2 = new ocp_tempcode();
-        $hidden = new ocp_tempcode();
+        $fields = new Tempcode();
+        $fields2 = new Tempcode();
+        $hidden = new Tempcode();
         require_code('form_templates');
         $fields->attach(form_input_line_comcode(do_lang_tempcode('TITLE'), do_lang_tempcode('DESCRIPTION_TITLE'), 'title', $title, true));
         if ($validated == 0) {
@@ -403,7 +403,7 @@ class Module_cms_blogs extends standard_crud_module
         }
 
         $ret = $this->get_form_fields($id, $cat, $categories, get_translated_text($myrow['title']), get_translated_text($myrow['news']), $myrow['author'], $myrow['validated'], $myrow['allow_rating'], $myrow['allow_comments'], $myrow['allow_trackbacks'], 0, $myrow['notes'], $myrow['news_image'], $scheduled);
-        $ret[2] = new ocp_tempcode();
+        $ret[2] = new Tempcode();
         $ret[3] = '';
         $ret[4] = false;
         $ret[5] = get_translated_text($myrow['news_article']);
@@ -663,7 +663,7 @@ class Module_cms_blogs extends standard_crud_module
 
         /* Database method */
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         $fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_HOST_NAME'), do_lang_tempcode('DESCRIPTION_WORDPRESS_HOST_NAME'), 'wp_host', 'localhost', false));
         $fields->attach(form_input_line(do_lang_tempcode('WORDPRESS_DB_NAME'), do_lang_tempcode('DESCRIPTION_WORDPRESS_DB_NAME'), 'wp_db', 'wordpress', false));
@@ -686,7 +686,7 @@ class Module_cms_blogs extends standard_crud_module
             $fields->attach(form_input_tick(do_lang_tempcode('DOWNLOAD_IMAGES'), do_lang_tempcode('DESCRIPTION_DOWNLOAD_IMAGES'), 'wp_download_images', true));
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('lang', $lang));
         handle_max_file_size($hidden);
 
@@ -739,7 +739,7 @@ class Module_cms_blogs extends standard_crud_module
             }
 
             require_code('rss');
-            $rss = new rss($rss_url, true);
+            $rss = new OCP_RSS($rss_url, true);
 
             // Cleanup
             if (url_is_local($rss_url)) {// Means it is a temp file
@@ -774,6 +774,6 @@ class Module_cms_blogs extends standard_crud_module
             return call_user_func_array__long_task(do_lang('IMPORT_WORDPRESS'), $this->title, 'import_wordpress', array($is_validated, $download_images, $to_own_account, $import_blog_comments, $import_to_blog, $import_wordpress_users));
         }
 
-        return new ocp_tempcode(); // Should not get here
+        return new Tempcode(); // Should not get here
     }
 }

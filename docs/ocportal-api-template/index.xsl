@@ -42,7 +42,7 @@
 					<br />
 					<br />
 					<br />
-					To find the forum driver API you can look at <em>core_forum_drivers</em>, but also look at the base <strong>forum_driver_base</strong> class under <em>core</em>.
+					To find the forum driver API you can look at <em>core_forum_drivers</em>, but also look at the base <strong>Forum_driver_base</strong> class under <em>core</em>.
 					<br />
 					To find the database API look at the <strong>database_driver</strong> class under <em>core</em>.
             </div>

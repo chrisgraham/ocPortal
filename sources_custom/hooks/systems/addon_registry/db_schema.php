@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    db_schema
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_db_schema
 {
     /**

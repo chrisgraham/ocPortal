@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    backup
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_backup
 {
     /**

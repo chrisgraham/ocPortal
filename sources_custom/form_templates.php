@@ -49,7 +49,7 @@ function form_input_tick($pretty_name, $description, $name, $ticked, $tabindex =
 function form_input_various_ticks($options, $description, $_tabindex = null, $_pretty_name = '', $simple_style = false, $custom_name = null, $custom_value = null)
 {
     if (count($options) == 0) {
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     $options = array_values($options);
@@ -65,10 +65,10 @@ function form_input_various_ticks($options, $description, $_tabindex = null, $_p
         $_pretty_name = do_lang_tempcode('OPTIONS');
     }
 
-    $input = new ocp_tempcode();
+    $input = new Tempcode();
 
     if (count($options[0]) != 3) {
-        $options = array(array($options, null, new ocp_tempcode()));
+        $options = array(array($options, null, new Tempcode()));
     }
     foreach ($options as $_option) {
         $out = array();

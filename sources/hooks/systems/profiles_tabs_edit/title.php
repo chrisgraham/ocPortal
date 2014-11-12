@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_member_titles
  */
-class Hook_Profiles_Tabs_Edit_title
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_title
 {
     /**
      * Find whether this hook is active.
@@ -60,7 +64,7 @@ class Hook_Profiles_Tabs_Edit_title
         }
 
         // UI fields
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $_title = $GLOBALS['FORUM_DRIVER']->get_member_row_field($member_id_of, 'm_title');
         require_code('form_templates');
         $fields->attach(form_input_line(do_lang_tempcode('MEMBER_TITLE'), '', 'member_title', $_title, false, null, intval(get_option('max_member_title_length'))));

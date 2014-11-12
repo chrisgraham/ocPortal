@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    staff_messaging
  */
+
+/**
+ * Block class.
+ */
 class Block_main_contact_simple
 {
     /**
@@ -66,7 +70,7 @@ class Block_main_contact_simple
                 }
             }
 
-            $message = new ocp_tempcode();/*Used to be written out here*/
+            $message = new Tempcode();/*Used to be written out here*/
 
             require_code('mail');
 
@@ -89,7 +93,7 @@ class Block_main_contact_simple
                 assign_refresh($redirect, 0.0);
             }
         } else {
-            $message = new ocp_tempcode();
+            $message = new Tempcode();
         }
 
         $box_title = array_key_exists('title', $map) ? $map['title'] : do_lang('CONTACT_US');
@@ -113,7 +117,7 @@ class Block_main_contact_simple
             $use_captcha = false;
         }
 
-        $hidden = new ocp_tempcode();
+        $hidden = new Tempcode();
         $hidden->attach(form_input_hidden('_block_id', $block_id));
 
         $comment_details = do_template('COMMENTS_POSTING_FORM', array(

@@ -12,6 +12,10 @@
  * @copyright  ocProducts Ltd
  * @package    oc_jester
  */
+
+/**
+ * Hook class.
+ */
 class Hook_config_ocjester_string_changes
 {
     /**

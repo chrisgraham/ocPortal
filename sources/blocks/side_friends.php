@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    chat
  */
+
+/**
+ * Block class.
+ */
 class Block_side_friends
 {
     /**
@@ -46,11 +50,11 @@ class Block_side_friends
     public function run($map)
     {
         if (is_guest()) {
-            return new ocp_tempcode(); // Guest has no friends
+            return new Tempcode(); // Guest has no friends
         }
 
         if ((get_page_name() == 'chat') && (get_param('type', 'misc') == 'misc')) {// Don't want to show if actually on chat lobby, which already has this functionality
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_code('chat');

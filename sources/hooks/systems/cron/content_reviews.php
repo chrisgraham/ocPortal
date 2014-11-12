@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    content_reviews
  */
+
+/**
+ * Hook class.
+ */
 class Hook_cron_content_reviews
 {
     /**

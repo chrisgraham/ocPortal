@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    core_notifications
  */
-class Hook_Profiles_Tabs_Edit_notifications
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_edit_notifications
 {
     /**
      * Find whether this hook is active.
@@ -71,6 +75,6 @@ class Hook_Profiles_Tabs_Edit_notifications
 
         $javascript = '';
 
-        return array($title, new ocp_tempcode(), $text, $javascript, $order, null, 'tool_buttons/notifications2');
+        return array($title, new Tempcode(), $text, $javascript, $order, null, 'tool_buttons/notifications2');
     }
 }

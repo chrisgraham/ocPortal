@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    counting_blocks
  */
+
+/**
+ * Hook class.
+ */
 class Hook_addon_registry_counting_blocks
 {
     /**

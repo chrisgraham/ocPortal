@@ -443,18 +443,18 @@ function _chat_messages_script_ajax($room_id, $backlog = false, $message_id = nu
 
     $messages_output = '';
     foreach ($messages as $_message) {
-        $edit_url = new ocp_tempcode();
-        $chat_ban_url = new ocp_tempcode();
-        $chat_unban_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
+        $chat_ban_url = new Tempcode();
+        $chat_unban_url = new Tempcode();
         if ((!is_null($room_check)) && (array_key_exists(0, $room_check))) {
             $moderator = is_chat_moderator($_message['member_id'], $room_id, $room_row['room_owner']);
             $edit_url = build_url(array('page' => 'cms_chat', 'type' => 'ed', 'id' => $_message['id'], 'room_id' => $_message['room_id']), get_module_zone('cms_chat'));
             if (has_privilege(get_member(), 'ban_chatters_from_rooms')) {
                 if (check_chatroom_access($room_row, true, $_message['member_id'])) {
                     $chat_ban_url = build_url(array('page' => 'cms_chat', 'type' => 'ban', 'id' => $_message['room_id'], 'member_id' => $_message['member_id']), get_module_zone('cms_chat'));
-                    $chat_unban_url = new ocp_tempcode();
+                    $chat_unban_url = new Tempcode();
                 } else {
-                    $chat_ban_url = new ocp_tempcode();
+                    $chat_ban_url = new Tempcode();
                     $chat_unban_url = build_url(array('page' => 'cms_chat', 'type' => 'unban', 'id' => $_message['room_id'], 'member_id' => $_message['member_id']), get_module_zone('cms_chat'));
                 }
             }
@@ -469,13 +469,13 @@ function _chat_messages_script_ajax($room_id, $backlog = false, $message_id = nu
                 $ban_url = build_url(array('page' => 'admin_actionlog', 'type' => 'toggle_submitter_ban', 'id' => $_message['member_id']), 'adminzone');
             }
         } else {
-            $ban_url = new ocp_tempcode();
+            $ban_url = new Tempcode();
         }
 
         if (($room_id != -1) && (addon_installed('actionlog')) && ((has_actual_page_access(get_member(), 'admin_actionlog')) || (has_actual_page_access(get_member(), 'cms_chat')))) {
             $staff_actions = do_template('CHAT_STAFF_ACTIONS', array('_GUID' => 'd3fbcaa9eee688452091583ee436e465', 'CHAT_BAN_URL' => $chat_ban_url, 'CHAT_UNBAN_URL' => $chat_unban_url, 'EDIT_URL' => $edit_url, 'BAN_URL' => $ban_url));
         } else {
-            $staff_actions = new ocp_tempcode();
+            $staff_actions = new Tempcode();
         }
 
         $avatar_url = $GLOBALS['FORUM_DRIVER']->get_member_avatar_url($_message['member_id']);
@@ -1042,7 +1042,7 @@ function get_chatters_in_room($room_id)
 function get_chatters_in_room_tpl($users)
 {
     require_code('users2');
-    $usernames = new ocp_tempcode();
+    $usernames = new Tempcode();
     $some_users = false;
     foreach ($users as $member_id => $username) {
         if (!member_blocked(get_member(), $member_id)) {

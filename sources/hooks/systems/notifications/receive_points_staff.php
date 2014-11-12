@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    points
  */
-class Hook_Notification_receive_points_staff extends Hook_Notification__Staff
+
+/**
+ * Hook class.
+ */
+class Hook_notification_receive_points_staff extends Hook_notification__Staff
 {
     /**
      * Find the initial setting that members have for a notification code (only applies to the member_could_potentially_enable members).

@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    ocf_forum
  */
-class Hook_Profiles_Tabs_posts
+
+/**
+ * Hook class.
+ */
+class Hook_profiles_tabs_posts
 {
     /**
      * Find whether this hook is active.

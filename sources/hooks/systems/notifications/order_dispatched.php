@@ -17,7 +17,11 @@
  * @copyright  ocProducts Ltd
  * @package    shopping
  */
-class Hook_Notification_order_dispatched extends Hook_Notification
+
+/**
+ * Hook class.
+ */
+class Hook_notification_order_dispatched extends Hook_Notification
 {
     /**
      * Get a list of all the notification codes this hook can handle.

@@ -17,6 +17,10 @@
  * @copyright  ocProducts Ltd
  * @package    forum_blocks
  */
+
+/**
+ * Block class.
+ */
 class Block_main_forum_topics
 {
     /**
@@ -59,7 +63,7 @@ class Block_main_forum_topics
     public function run($map)
     {
         if (has_no_forum()) {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
 
         require_css('news');
@@ -129,8 +133,8 @@ class Block_main_forum_topics
             $submit_url = build_url(array('page' => 'topics', 'type' => 'new_topic', 'id' => $forum_id), get_module_zone('topics'));
             $add_name = do_lang_tempcode('ADD_TOPIC');
         } else {
-            $submit_url = new ocp_tempcode();
-            $add_name = new ocp_tempcode();
+            $submit_url = new Tempcode();
+            $add_name = new Tempcode();
         }
 
         // Show all topics
@@ -143,7 +147,7 @@ class Block_main_forum_topics
             $max_rows = 0;
             $topics = $GLOBALS['FORUM_DRIVER']->show_forum_topics($forum_ids, $limit, 0, $max_rows, '', true, $date_key, $hot == 1);
 
-            $out = new ocp_tempcode();
+            $out = new Tempcode();
             if (!is_null($topics)) {
                 sort_maps_by($topics, $date_key);
                 $topics = array_reverse($topics, false);
@@ -220,7 +224,7 @@ class Block_main_forum_topics
                 'SUBMIT_URL' => $submit_url,
             ));
         } else {
-            return new ocp_tempcode();
+            return new Tempcode();
         }
     }
 }

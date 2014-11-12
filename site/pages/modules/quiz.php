@@ -339,7 +339,7 @@ class Module_quiz
             return $this->_do_quiz();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -353,9 +353,9 @@ class Module_quiz
         $max = get_param_integer('quizzes_max', 20);
 
         $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'quizzes WHERE ' . (((!has_privilege(get_member(), 'see_unvalidated')) && (addon_installed('unvalidated'))) ? 'q_validated=1 AND ' : '') . 'q_open_time<' . strval(time()) . ' AND (q_close_time IS NULL OR q_close_time>' . strval(time()) . ') ORDER BY q_type ASC,id DESC');
-        $content_tests = new ocp_tempcode();
-        $content_competitions = new ocp_tempcode();
-        $content_surveys = new ocp_tempcode();
+        $content_tests = new Tempcode();
+        $content_competitions = new Tempcode();
+        $content_surveys = new Tempcode();
         $num = 0;
         foreach ($rows as $myrow) {
             // Check access
@@ -501,10 +501,10 @@ class Module_quiz
 
             $warning_details = do_template('WARNING_BOX', array('_GUID' => 'fc690dedf8601cc456e011931dfec595', 'WARNING' => do_lang_tempcode((get_param_integer('redirected', 0) == 1) ? 'UNVALIDATED_TEXT_NON_DIRECT' : 'UNVALIDATED_TEXT')));
         } else {
-            $warning_details = new ocp_tempcode();
+            $warning_details = new Tempcode();
         }
 
-        $edit_url = new ocp_tempcode();
+        $edit_url = new Tempcode();
         if ((has_actual_page_access(null, 'cms_quiz', null, null)) && (has_edit_permission('mid', get_member(), $quiz['q_submitter'], 'cms_quiz', array('quiz', $quiz_id)))) {
             $edit_url = build_url(array('page' => 'cms_quiz', 'type' => '_ed', 'id' => $quiz_id), get_module_zone('cms_quiz'));
         }
@@ -572,7 +572,7 @@ class Module_quiz
                     'q_answer' => post_param('q_' . strval($question['id']), '')
                 ));
             } elseif ($question['q_type'] == 'MULTIMULTIPLE') { // Check boxes
-                $accum = new ocp_tempcode();
+                $accum = new Tempcode();
                 foreach ($question['answers'] as $a) {
                     if (post_param_integer('q_' . strval($question['id']) . '_' . strval($a['id']), 0) == 1) {
                         $GLOBALS['SITE_DB']->query_insert('quiz_entry_answer', array(

@@ -79,7 +79,7 @@ function create_selection_list_timezone_list($timezone = null)
         $timezone = get_site_timezone();
     }
 
-    $timezone_list = '';//new ocp_tempcode();
+    $timezone_list = '';//new Tempcode();
     $time_now = time();
     foreach (get_timezone_list() as $_timezone => $timezone_nice) {
         $timezone_list .= '<option ' . (($timezone == $_timezone) ? 'selected="selected" ' : '') . 'value="' . escape_html($_timezone) . '">' . escape_html($timezone_nice) . '</option>'; // XHTMLXHTML
@@ -99,7 +99,7 @@ function validate_ip_script()
     if ($code == '') {
         $title = get_screen_title('CONFIRM');
         require_code('form_templates');
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $fields->attach(form_input_codename(do_lang_tempcode('CODE'), '', 'code', '', true));
         $submit_name = do_lang_tempcode('PROCEED');
         $url = find_script('validateip') . $keep;
@@ -326,8 +326,8 @@ function ocf_read_in_custom_fields($custom_fields, $member_id = null)
  */
 function ocf_get_member_fields($mini_mode = true, $member_id = null, $groups = null, $email_address = '', $preview_posts = 0, $dob_day = null, $dob_month = null, $dob_year = null, $timezone = null, $custom_fields = null, $theme = null, $reveal_age = 1, $views_signatures = 1, $auto_monitor_contrib_content = null, $language = null, $allow_emails = 1, $allow_emails_from_staff = 1, $validated = 1, $primary_group = null, $username = '', $is_perm_banned = 0, $special_type = '', $highlighted_name = 0, $pt_allow = '*', $pt_rules_text = '', $on_probation_until = null)
 {
-    $fields = new ocp_tempcode();
-    $hidden = new ocp_tempcode();
+    $fields = new Tempcode();
+    $hidden = new Tempcode();
     list($_fields, $_hidden) = ocf_get_member_fields_settings($mini_mode, $member_id, $groups, $email_address, $preview_posts, $dob_day, $dob_month, $dob_year, $timezone, $theme, $reveal_age, $views_signatures, $auto_monitor_contrib_content, $language, $allow_emails, $allow_emails_from_staff, $validated, $primary_group, $username, $is_perm_banned, $special_type, $highlighted_name, $pt_allow, $pt_rules_text, $on_probation_until);
     $fields->attach($_fields);
     $hidden->attach($_hidden);
@@ -383,7 +383,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
         $auto_monitor_contrib_content = (get_option('allow_auto_notifications') == '0') ? 0 : 1;
     }
 
-    $hidden = new ocp_tempcode();
+    $hidden = new Tempcode();
 
     if (has_actual_page_access(get_member(), 'admin_ocf_members')) {
         $dob_optional = true;
@@ -410,7 +410,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
         $groups = is_null($member_id) ? ocf_get_all_default_groups(true) : $GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
     }
 
-    $fields = new ocp_tempcode();
+    $fields = new Tempcode();
 
     // Human name / Username
     if (ocf_field_editable('username', $special_type)) {
@@ -447,7 +447,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
         if ($email_address == '') {
             $email_address = trim(get_param('email_address', ''));
         }
-        $email_description = new ocp_tempcode();
+        $email_description = new Tempcode();
         if ((get_option('valid_email_domains') != '') && ($mini_mode)) { // domain restriction only applies on public join form ($mini_mode)
             $email_description = do_lang_tempcode('MUST_BE_EMAIL_DOMAIN', '<kbd>*.' . preg_replace('#\s*,\s*#', '</kbd>, <kbd>*.', escape_html(get_option('valid_email_domains'))) . '</kbd>', escape_html(get_option('valid_email_domains')));
         } else {
@@ -500,7 +500,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
 
     // Language choice, if we have multiple languages on site
     if ($doing_langs) {
-        $lang_list = new ocp_tempcode();
+        $lang_list = new Tempcode();
         $no_lang_set = (is_null($language)) || ($language == '');
         $allow_no_lang_set = (get_value('allow_no_lang_selection') === '1');
         if ($allow_no_lang_set) {
@@ -544,7 +544,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
                 }
             }
             //$fields->attach(form_input_tick(do_lang_tempcode('AUTO_NOTIFICATION_CONTRIB_CONTENT'),do_lang_tempcode('DESCRIPTION_AUTO_NOTIFICATION_CONTRIB_CONTENT'),'auto_monitor_contrib_content',$auto_monitor_contrib_content==1));  Now on notifications tab, even though it is technically an account setting
-            $usergroup_list = new ocp_tempcode();
+            $usergroup_list = new Tempcode();
             $lgroups = $GLOBALS['OCF_DRIVER']->get_usergroup_list(true, true);
             foreach ($lgroups as $key => $val) {
                 if ($key != db_get_first_id()) {
@@ -561,7 +561,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
         // Prepare list of usergroups, if maybe we are gonna let (a) usergroup-change field(s)
         $group_count = $GLOBALS['FORUM_DB']->query_select_value('f_groups', 'COUNT(*)');
         $rows = $GLOBALS['FORUM_DB']->query_select('f_groups', array('id', 'g_name', 'g_hidden', 'g_open_membership'), ($group_count > 200) ? array('g_is_private_club' => 0) : null, 'ORDER BY g_order');
-        $_groups = new ocp_tempcode();
+        $_groups = new Tempcode();
         $default_primary_group = get_first_default_group();
         $current_primary_group = null;
         foreach ($rows as $group) {
@@ -595,7 +595,7 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
 
         // Secondary usergroups
         if (ocf_field_editable('secondary_groups', $special_type)) {
-            $_groups2 = new ocp_tempcode();
+            $_groups2 = new Tempcode();
             $members_groups = is_null($member_id) ? array() : ocf_get_members_groups($member_id, false, false, false);
             foreach ($rows as $group) {
                 if (($group['g_hidden'] == 1) && (!array_key_exists($group['id'], $members_groups)) && (!has_privilege(get_member(), 'see_hidden_groups'))) {
@@ -652,8 +652,8 @@ function ocf_get_member_fields_settings($mini_mode = true, $member_id = null, $g
  */
 function ocf_get_member_fields_profile($mini_mode = true, $member_id = null, $groups = null, $custom_fields = null)
 {
-    $fields = new ocp_tempcode();
-    $hidden = new ocp_tempcode();
+    $fields = new Tempcode();
+    $hidden = new Tempcode();
 
     if (is_null($groups)) {
         $groups = is_null($member_id) ? ocf_get_all_default_groups(true) : $GLOBALS['OCF_DRIVER']->get_members_groups($member_id);
@@ -696,7 +696,7 @@ function ocf_get_member_fields_profile($mini_mode = true, $member_id = null, $gr
         } else {
             $value = $custom_field['cf_default'];
         }
-        $result = new ocp_tempcode();
+        $result = new Tempcode();
         $_description = escape_html(get_translated_text($custom_field['cf_description'], $GLOBALS['FORUM_DB']));
         $field_cat = '';
         $matches = array();
@@ -715,7 +715,7 @@ function ocf_get_member_fields_profile($mini_mode = true, $member_id = null, $gr
         $result = $ob->get_field_inputter($custom_field['trans_name'], $_description, $custom_field, $value, !$existing_field);
 
         if (!array_key_exists($field_cat, $field_groups)) {
-            $field_groups[$field_cat] = new ocp_tempcode();
+            $field_groups[$field_cat] = new Tempcode();
         }
 
         if (is_array($result)) {

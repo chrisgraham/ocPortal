@@ -117,7 +117,7 @@ class Module_admin_actionlog
             return $this->view_action();
         }
 
-        return new ocp_tempcode();
+        return new Tempcode();
     }
 
     /**
@@ -129,7 +129,7 @@ class Module_admin_actionlog
     {
         require_code('form_templates');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
 
         // Possible selections for member filter
         $_member_choice_list = array();
@@ -159,7 +159,7 @@ class Module_admin_actionlog
                 }
             }
         }
-        $member_choice_list = new ocp_tempcode();
+        $member_choice_list = new Tempcode();
         $member_choice_list->attach(form_input_list_entry('-1', true, do_lang_tempcode('_ALL')));
         foreach ($_member_choice_list as $id => $user_actions) {
             list($username, $action_count) = $user_actions;
@@ -184,7 +184,7 @@ class Module_admin_actionlog
             }
         }
         asort($_action_type_list);
-        $action_type_list = new ocp_tempcode();
+        $action_type_list = new Tempcode();
         $action_type_list->attach(form_input_list_entry('', true, do_lang_tempcode('_ALL')));
         foreach ($_action_type_list as $lang_id => $lang) {
             $action_type_list->attach(form_input_list_entry($lang_id, false, $lang));
@@ -307,7 +307,7 @@ class Module_admin_actionlog
 
         require_code('actionlog');
 
-        $fields = new ocp_tempcode();
+        $fields = new Tempcode();
         $pos = 0;
         while ((count($rows) != 0) && (($pos - $start) < $max)) {
             $best = 0; // Initialise type to integer
