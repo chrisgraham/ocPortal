@@ -70,7 +70,7 @@ class Hook_whats_news_calendar
             list($privacy_join, $privacy_where) = get_privacy_where_clause('event', 'e', $GLOBALS['FORUM_DRIVER']->get_guest_id());
         }
 
-        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_events e ' . $privacy_where . ' WHERE e_add_date>' . strval($cutoff_time) . ' AND e_member_calendar IS NULL AND (' . $or_list . ')' . $privacy_where . ' ORDER BY e_add_date DESC', $max);
+        $rows = $GLOBALS['SITE_DB']->query('SELECT * FROM ' . $GLOBALS['SITE_DB']->get_table_prefix() . 'calendar_events e ' . $privacy_join . ' WHERE e_add_date>' . strval($cutoff_time) . ' AND e_member_calendar IS NULL AND (' . $or_list . ')' . $privacy_where . ' ORDER BY e_add_date DESC', $max);
         if (count($rows) == $max) {
             return array();
         }
