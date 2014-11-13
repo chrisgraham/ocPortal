@@ -508,7 +508,7 @@ class Hook_addon_registry_core
 			'themes/default/images/na.png',
 			'themes/default/images/poll/index.html',
 			'themes/default/images/poll/poll_l.png',
-			'themes/default/images/poll/poll_m.gif',
+			'themes/default/images/poll/poll_m.png',
 			'themes/default/images/poll/poll_r.png',
 			'themes/default/images/rating.png',
 			'themes/default/images/results/index.html',
