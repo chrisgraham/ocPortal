@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_blocks
+class Hook_cleanup_blocks
 {
     /**
      * Find details about this cleanup hook.

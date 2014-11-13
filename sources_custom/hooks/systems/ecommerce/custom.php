@@ -56,7 +56,7 @@ function handle_custom_purchase($purchase_id, $details, $type_code)
 /**
  * Points Store product hook.
  */
-class Hook_custom
+class Hook_ecommerce_custom
 {
     /**
      * Get the products handled by this eCommerce hook.

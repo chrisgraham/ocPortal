@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_image_thumbs
+class Hook_cleanup_image_thumbs
 {
     /**
      * Find details about this cleanup hook.

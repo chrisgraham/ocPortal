@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_comments
+class Hook_snippet_comments
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

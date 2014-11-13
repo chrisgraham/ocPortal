@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_broken_urls
+class Hook_cleanup_broken_urls
 {
     /**
      * Find details about this cleanup hook.

@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_css_compile__text
+class Hook_snippet_css_compile__text
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

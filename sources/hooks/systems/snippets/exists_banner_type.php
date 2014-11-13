@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_exists_banner_type
+class Hook_snippet_exists_banner_type
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

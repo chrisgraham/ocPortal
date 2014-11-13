@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_exists_emoticon
+class Hook_snippet_exists_emoticon
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

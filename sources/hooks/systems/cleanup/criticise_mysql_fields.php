@@ -50,7 +50,7 @@ function list_to_map_2($map_value, $list)
 /**
  * OcCLE command hook.
  */
-class Hook_criticise_mysql_fields
+class Hook_cleanup_criticise_mysql_fields
 {
     /**
      * Find details about this cleanup hook.

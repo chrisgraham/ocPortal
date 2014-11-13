@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_im_friends_rejig
+class Hook_snippet_im_friends_rejig
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

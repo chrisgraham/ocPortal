@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_rating
+class Hook_snippet_rating
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

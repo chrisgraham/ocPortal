@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_admin_theme_images
+class Hook_cleanup_admin_theme_images
 {
     /**
      * Find details about this cleanup hook.

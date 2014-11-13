@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_profile_tab
+class Hook_snippet_profile_tab
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

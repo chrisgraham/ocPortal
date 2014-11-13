@@ -136,7 +136,7 @@ function handle_usergroup_subscription($purchase_id, $details, $type_code, $paym
 /**
  * eCommerce product hook.
  */
-class Hook_usergroup
+class Hook_ecommerce_usergroup
 {
     /**
      * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).

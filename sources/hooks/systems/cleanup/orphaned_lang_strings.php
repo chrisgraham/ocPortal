@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_orphaned_lang_strings
+class Hook_cleanup_orphaned_lang_strings
 {
     /**
      * Find details about this cleanup hook.

@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_backup_size
+class Hook_snippet_backup_size
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

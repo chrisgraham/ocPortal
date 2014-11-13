@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_occle
+class Hook_snippet_occle
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

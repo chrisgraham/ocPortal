@@ -23,7 +23,7 @@
 /**
  * Hook class.
  */
-class Hook_mysql
+class Hook_cleanup_mysql
 {
     /**
      * Find details about this cleanup hook.

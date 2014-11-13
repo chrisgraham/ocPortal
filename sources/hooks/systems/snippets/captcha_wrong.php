@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_captcha_wrong
+class Hook_snippet_captcha_wrong
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

@@ -121,7 +121,7 @@ class Module_admin_cleanup
         $fields_optimise = new Tempcode();
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/cleanup/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
+            $object = object_factory('Hook_cleanup_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }

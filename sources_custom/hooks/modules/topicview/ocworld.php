@@ -16,7 +16,7 @@
 /**
  * Hook class.
  */
-class Hook_ocworld
+class Hook_topicview_ocworld
 {
     /**
      * Execute the module.

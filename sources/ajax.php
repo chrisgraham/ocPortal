@@ -625,7 +625,7 @@ function snippet_script()
     header('Content-Type: text/plain; charset=' . get_charset());
     $hook = filter_naughty_harsh(get_param('snippet'));
     require_code('hooks/systems/snippets/' . $hook, true);
-    $object = object_factory('Hook_' . $hook);
+    $object = object_factory('Hook_snippet_' . $hook);
     $tempcode = $object->run();
     $tempcode->handle_symbol_preprocessing();
     $out = $tempcode->evaluate();

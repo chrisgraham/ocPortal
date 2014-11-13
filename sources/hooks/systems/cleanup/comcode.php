@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_comcode
+class Hook_cleanup_comcode
 {
     /**
      * Find details about this cleanup hook.

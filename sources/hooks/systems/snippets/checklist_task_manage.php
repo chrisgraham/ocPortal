@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_checklist_task_manage
+class Hook_snippet_checklist_task_manage
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

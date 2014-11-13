@@ -84,7 +84,7 @@ function get_sales_permission_map($row, $member)
 /**
  * Points Store product hook.
  */
-class Hook_permission
+class Hook_ecommerce_permission
 {
     /**
      * Get the products handled by this eCommerce hook.

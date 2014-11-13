@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_tax
+class Hook_ecommerce_tax
 {
     /**
      * Function for administrators to pick an identifier (only used by admins, usually the identifier would be picked via some other means in the wider ocPortal codebase).

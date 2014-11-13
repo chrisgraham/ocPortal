@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_page_stats
+class Hook_cleanup_page_stats
 {
     /**
      * Find details about this cleanup hook.

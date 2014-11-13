@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_management_menu
+class Hook_snippet_management_menu
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

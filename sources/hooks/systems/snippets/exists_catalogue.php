@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_exists_catalogue
+class Hook_snippet_exists_catalogue
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

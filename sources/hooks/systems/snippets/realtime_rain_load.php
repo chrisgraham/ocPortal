@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_realtime_rain_load
+class Hook_snippet_realtime_rain_load
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

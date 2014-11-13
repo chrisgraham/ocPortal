@@ -50,7 +50,7 @@ function handle_support_credits($purchase_id, $details, $type_code)
 /**
  * eCommerce product hook.
  */
-class Hook_support_credits
+class Hook_ecommerce_support_credits
 {
     /**
      * Get the products handled by this eCommerce hook.

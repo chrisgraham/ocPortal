@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_password_strength
+class Hook_snippet_password_strength
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

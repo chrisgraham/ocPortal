@@ -17,7 +17,7 @@
  * @copyright   ocProducts Ltd
  * @package     shopping
  */
-class Hook_catalogue_items
+class Hook_ecommerce_catalogue_items
 {
     /**
      * Get the products handled by this eCommerce hook.

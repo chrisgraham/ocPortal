@@ -278,7 +278,7 @@ function find_all_products($site_lang = false)
     $products = array();
     foreach (array_keys($_hooks) as $hook) {
         require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($hook));
-        $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
+        $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($hook), true);
         if (is_null($object)) {
             continue;
         }
@@ -307,7 +307,7 @@ function find_product($search, $site_lang = false, $search_item_names = false)
     $_hooks = find_all_hooks('systems', 'ecommerce');
     foreach (array_keys($_hooks) as $hook) {
         require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($hook));
-        $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
+        $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($hook), true);
         if (is_null($object)) {
             continue;
         }
@@ -347,7 +347,7 @@ function find_product_row($search, $site_lang = false, $search_item_names = fals
     $_hooks = find_all_hooks('systems', 'ecommerce');
     foreach (array_keys($_hooks) as $hook) {
         require_code('hooks/systems/ecommerce/' . filter_naughty_harsh($hook));
-        $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
+        $object = object_factory('Hook_ecommerce_' . filter_naughty_harsh($hook), true);
         if (is_null($object)) {
             continue;
         }

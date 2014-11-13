@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_orphaned_uploads
+class Hook_cleanup_orphaned_uploads
 {
     /**
      * Find details about this cleanup hook.

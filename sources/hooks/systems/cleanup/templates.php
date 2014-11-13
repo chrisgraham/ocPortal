@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_templates
+class Hook_cleanup_templates
 {
     /**
      * Find details about this cleanup hook.

@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_language
+class Hook_cleanup_language
 {
     /**
      * Find details about this cleanup hook.

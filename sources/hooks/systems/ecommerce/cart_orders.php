@@ -63,7 +63,7 @@ function handle_product_orders($purchase_id, $details, $type_code, $payment_stat
 /**
  * eCommerce product hook.
  */
-class Hook_cart_orders
+class Hook_ecommerce_cart_orders
 {
     /**
      * Get the products handled by this eCommerce hook.

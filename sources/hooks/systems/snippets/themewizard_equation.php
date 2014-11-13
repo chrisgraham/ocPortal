@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_themewizard_equation
+class Hook_snippet_themewizard_equation
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

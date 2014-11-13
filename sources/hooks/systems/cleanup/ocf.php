@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_ocf
+class Hook_cleanup_ocf
 {
     /**
      * Find details about this cleanup hook.

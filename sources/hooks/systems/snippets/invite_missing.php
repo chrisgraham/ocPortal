@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_invite_missing
+class Hook_snippet_invite_missing
 {
     /**
      * Run function for snippet hooks. Generates XHTML to insert into a page using AJAX.

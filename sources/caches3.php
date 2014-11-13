@@ -75,7 +75,7 @@ function ocportal_cleanup($caches = null)
         foreach ($caches as $cache) {
             if (array_key_exists($cache, $hooks)) {
                 require_code('hooks/systems/cleanup/' . filter_naughty_harsh($cache));
-                $object = object_factory('Hook_' . filter_naughty_harsh($cache), true);
+                $object = object_factory('Hook_cleanup_' . filter_naughty_harsh($cache), true);
                 if (is_null($object)) {
                     continue;
                 }
@@ -87,7 +87,7 @@ function ocportal_cleanup($caches = null)
     } else {
         foreach (array_keys($hooks) as $hook) {
             require_code('hooks/systems/cleanup/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_' . filter_naughty_harsh($hook), true);
+            $object = object_factory('Hook_cleanup_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }
