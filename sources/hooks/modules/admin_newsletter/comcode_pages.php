@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_whats_news_comcode_pages
+class Hook_whatsnew_comcode_pages
 {
     /**
      * Run function for newsletter hooks.

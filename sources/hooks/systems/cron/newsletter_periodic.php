@@ -113,7 +113,7 @@ class Hook_cron_newsletter_periodic
         $_hooks = find_all_hooks('modules', 'admin_newsletter');
         foreach (array_keys($_hooks) as $hook) {
             require_code('hooks/modules/admin_newsletter/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_whats_news_' . filter_naughty_harsh($hook), true);
+            $object = object_factory('Hook_whatsnew_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }

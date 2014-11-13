@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_whats_news_wiki
+class Hook_whatsnew_wiki
 {
     /**
      * Run function for newsletter hooks.

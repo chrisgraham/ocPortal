@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_whats_news_ocf_forumview
+class Hook_whatsnew_ocf_forumview
 {
     /**
      * Find selectable (filterable) categories.

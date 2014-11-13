@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_whats_news_downloads
+class Hook_whatsnew_downloads
 {
     /**
      * Find selectable (filterable) categories.

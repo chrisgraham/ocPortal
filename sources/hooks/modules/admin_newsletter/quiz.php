@@ -21,7 +21,7 @@
 /**
  * Hook class.
  */
-class Hook_whats_news_quiz
+class Hook_whatsnew_quiz
 {
     /**
      * Run function for newsletter hooks.

@@ -174,7 +174,7 @@ class Module_admin_newsletter extends Standard_crud_module
         }
 
         if ($type == 'whatsnew') {
-            return $this->automatic_whats_new();
+            return $this->automatic_whatsnew();
         }
         if ($type == 'new') {
             return $this->send_gui();
@@ -855,7 +855,7 @@ class Module_admin_newsletter extends Standard_crud_module
      *
      * @return tempcode                 The UI
      */
-    public function automatic_whats_new()
+    public function automatic_whatsnew()
     {
         $lang = choose_language($this->title);
         if (is_object($lang)) {
@@ -893,7 +893,7 @@ class Module_admin_newsletter extends Standard_crud_module
             $chosen_categories = '';
             foreach (array_keys($_hooks) as $hook) {
                 require_code('hooks/modules/admin_newsletter/' . filter_naughty_harsh($hook));
-                $object = object_factory('Hook_whats_news_' . filter_naughty_harsh($hook), true);
+                $object = object_factory('Hook_whatsnew_' . filter_naughty_harsh($hook), true);
                 if (is_null($object)) {
                     continue;
                 }
@@ -1007,7 +1007,7 @@ class Module_admin_newsletter extends Standard_crud_module
 
         $in_full = post_param_integer('in_full', 0);
         $chosen_categories = post_param('chosen_categories');
-        $message = $this->_generate_whats_new_comcode($chosen_categories, $in_full, $lang, $cutoff_time);
+        $message = $this->_generate_whatsnew_comcode($chosen_categories, $in_full, $lang, $cutoff_time);
 
         return $this->send_gui($message);
     }
@@ -1021,7 +1021,7 @@ class Module_admin_newsletter extends Standard_crud_module
      * @param  TIME                     When to cut off content from
      * @return tempcode                 The Comcode, in template form
      */
-    public function _generate_whats_new_comcode($chosen_categories, $in_full, $lang, $cutoff_time)
+    public function _generate_whatsnew_comcode($chosen_categories, $in_full, $lang, $cutoff_time)
     {
         $_hooks = find_all_hooks('modules', 'admin_newsletter');
 
@@ -1031,7 +1031,7 @@ class Module_admin_newsletter extends Standard_crud_module
         $catarr = explode("\n", $chosen_categories);
         foreach (array_keys($_hooks) as $hook) {
             require_code('hooks/modules/admin_newsletter/' . filter_naughty_harsh($hook));
-            $object = object_factory('Hook_whats_news_' . filter_naughty_harsh($hook), true);
+            $object = object_factory('Hook_whatsnew_' . filter_naughty_harsh($hook), true);
             if (is_null($object)) {
                 continue;
             }
@@ -1519,7 +1519,7 @@ class Module_admin_newsletter extends Standard_crud_module
             $extra_post_data['make_periodic'] = '1';
 
             // Re-generate preview from latest chosen_categories
-            $message = $this->_generate_whats_new_comcode(post_param('chosen_categories', ''), $in_full, $lang, get_input_date('cutoff'));
+            $message = $this->_generate_whatsnew_comcode(post_param('chosen_categories', ''), $in_full, $lang, get_input_date('cutoff'));
         }
 
         $address = $GLOBALS['FORUM_DRIVER']->get_member_email_address(get_member());
